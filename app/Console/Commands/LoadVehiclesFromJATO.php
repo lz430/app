@@ -141,6 +141,10 @@ class LoadVehiclesFromJATO extends Command
 
                                     // save options
                                     foreach ($options['options'] as $option) {
+                                        if (empty($option['optionName']) && empty($option['optionDescription'])) {
+                                            continue;
+                                        }
+
                                         $vehicleVersion->options()->updateOrCreate([
                                             'jato_option_id' => $option['optionId'],
                                             'version_id' => $vehicleVersion->id,
