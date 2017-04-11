@@ -9,9 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class SavedVehicle extends Model
 {
     protected $fillable = [
-        'name',
-        'jato_vehicle_id',
-        'jato_uid',
+        'version_id',
+        'user_id',
     ];
 
     public function user()

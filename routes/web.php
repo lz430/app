@@ -2,6 +2,8 @@
 
 use App\JATO\Make;
 use App\JATO\Version;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -34,3 +36,33 @@ Route::post('/step-2', function () {
         ->with('selectedOptionIds', request()->get('option_ids'))
         ->with('version', $version);
 });
+
+Route::post('/save', function () {
+    /** @var \App\User $user */
+    $user = \App\User::firstOrCreate([
+        'email' => request()->get('email'),
+    ], [
+        'email' => request()->get('email'),
+        'name' => '',
+        'password' => Hash::make(str_random(8))
+    ]);
+
+    /** @var \App\SavedVehicle $savedVehicle */
+    $savedVehicle = \App\SavedVehicle::create([
+        'user_id' => $user->id,
+        'version_id' => request()->get('version_id')
+    ]);
+
+    $savedVehicle->options()->sync(request()->get('option_ids'));
+
+    Auth::loginUsingId($user->id);
+
+    return redirect()->to('/garage');
+});
+
+Route::get('/garage', function () {
+    $user = Auth::user();
+
+    // TODO: eager load
+    return view('garage')->with('savedVehicles', $user->savedVehicles);
+})->middleware('auth');
