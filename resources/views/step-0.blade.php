@@ -21,10 +21,6 @@
                 margin: 0;
             }
 
-            .full-height {
-                height: 100vh;
-            }
-
             .flex-center {
                 align-items: center;
                 display: flex;
@@ -43,6 +39,7 @@
 
             .content {
                 text-align: center;
+                margin: 30px;
             }
 
             .title {
@@ -74,7 +71,7 @@
         </script>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
+        <div class="flex-center position-ref">
             @if (Route::has('login'))
                 <div class="top-right links">
                     @if (Auth::check())
@@ -91,7 +88,10 @@
                     Deliver My Ride
                 </div>
 
-                <div id="configurator" data-makes='{!! json_encode($makes) !!}'></div>
+                <form method="post" action="/step-0">
+                    {{ csrf_field() }}
+                    <div id="configurator" data-makes='{!! json_encode($makes) !!}'></div>
+                </form>
             </div>
         </div>
 

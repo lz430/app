@@ -28,7 +28,7 @@ class ModelSelector extends React.Component {
 
         return (
             <label>Model
-                <select>
+                <select name="model_id">
                     {
                         this.state.selectedMake.models.map((model) => (
                             <option key={ model.id } value={ model.id }>{ model.name }</option>
@@ -41,7 +41,7 @@ class ModelSelector extends React.Component {
 
     render() {
         return (
-            <form>
+            <div>
                 <label>Choose Make
                     <select onChange={this.onSelectMake}>
                         <option>Any</option>
@@ -58,7 +58,7 @@ class ModelSelector extends React.Component {
                 <label>Enter ZIP Code
                     <input type="text" name="zip"/>
                 </label>
-            </form>
+            </div>
         )
     }
 }
