@@ -79,16 +79,35 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    Deliver My Ride
                 </div>
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+                <form method="post" action="/start">
+                    {{ csrf_field() }}
+                    <label>
+                        Make
+                        <select name="make">
+                            @foreach($makes as $id => $name)
+                            <option value="{{ $id }}">{{ $name }}</option>
+                            @endforeach
+                        </select>
+                    </label>
+
+                    <label>
+                        Model
+                        <select name="model">
+                            @foreach($models as $id => $name)
+                            <option value="{{ $id }}">{{ $name }}</option>
+                            @endforeach
+                        </select>
+                    </label>
+
+                    <label>
+                        Zip
+                        <input type="text" name="zip">
+                    </label>
+                </form>
+
             </div>
         </div>
     </body>
