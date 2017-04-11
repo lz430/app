@@ -87,8 +87,7 @@ class LoadVehiclesFromJATO extends Command
                                     /** @var Version $vehicleVersion */
                                     $vehicleVersion = $vehicleModel->versions()->updateOrCreate([
                                         'jato_uid' => $version['uid'],
-                                        'jato_vehicle_id' => $version['vehicleId'],
-                                        'jato_model_id' => $version['modelId'],
+                                        'year' => $version['modelYear'],
                                     ], [
                                         'jato_vehicle_id' => $version['vehicleId'],
                                         'jato_uid' => $version['uid'],

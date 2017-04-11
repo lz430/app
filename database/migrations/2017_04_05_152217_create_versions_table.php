@@ -13,7 +13,7 @@ class CreateVersionsTable extends Migration
             $table->unsignedBigInteger('jato_vehicle_id');
             $table->unsignedBigInteger('jato_uid');
             $table->unsignedBigInteger('jato_model_id');
-            $table->unique(['jato_vehicle_id', 'jato_uid', 'jato_model_id'], 'jato_model_version');
+            $table->unique(['jato_uid', 'year']);
             $table->string('year');
             $table->string('name')->nullable();
             $table->string('trim_name');
