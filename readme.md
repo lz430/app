@@ -10,6 +10,11 @@ php artisan jato:load
 php artisan db:seed --class=DummySavedVehicleSeeder
 ```
 
+## JATO API Tests
+```
+phpunit tests/API
+```
+
 ## Notes
 > Option Types
 ```

@@ -242,9 +242,9 @@ class ClientTest extends TestCase
     }
 
     /** @test */
-    public function can_get_vehicle_versions_by_id()
+    public function can_get_vehicle_version_by_id()
     {
-        static::$client->getVehicleVersionsById('61539620000131');
+        static::$client->getVehicleVersionById('61539620000131');
     }
 
     /** @test */
