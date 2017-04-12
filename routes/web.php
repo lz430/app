@@ -14,35 +14,35 @@ Route::get('/', function () {
 });
 
 Route::post('/step-0', function () {
-    $versions = Version::where('model_id', request()->get('model_id'))->get();
+    $versions = Version::where('model_id', request()->input('model_id'))->get();
 
     return view('step-1-versions')->with('versions', $versions);
 });
 
 Route::post('/step-1', function () {
-    $options = \App\JATO\VersionOption::where('version_id', request()->get('version_id'))->get();
+    $options = \App\JATO\VersionOption::where('version_id', request()->input('version_id'))->get();
 
     return view('step-2-options')
         ->with('options', $options)
-        ->with('versionId', request()->get('version_id'));
+        ->with('versionId', request()->input('version_id'));
 });
 
 Route::post('/step-2', function () {
-    $options = \App\JATO\VersionOption::where('version_id', request()->get('version_id'))->get();
-    $version = Version::findOrFail(request()->get('version_id'));
+    $options = \App\JATO\VersionOption::where('version_id', request()->input('version_id'))->get();
+    $version = Version::findOrFail(request()->input('version_id'));
 
     return view('step-3-buy-or-save')
         ->with('options', $options)
-        ->with('selectedOptionIds', request()->get('option_ids'))
+        ->with('selectedOptionIds', request()->input('option_ids'))
         ->with('version', $version);
 });
 
 Route::post('/save', function () {
     /** @var \App\User $user */
     $user = \App\User::firstOrCreate([
-        'email' => request()->get('email'),
+        'email' => request()->input('email'),
     ], [
-        'email' => request()->get('email'),
+        'email' => request()->input('email'),
         'name' => '',
         'password' => Hash::make(str_random(8))
     ]);
@@ -50,10 +50,10 @@ Route::post('/save', function () {
     /** @var \App\SavedVehicle $savedVehicle */
     $savedVehicle = \App\SavedVehicle::create([
         'user_id' => $user->id,
-        'version_id' => request()->get('version_id')
+        'version_id' => request()->input('version_id')
     ]);
 
-    $savedVehicle->options()->sync(request()->get('option_ids'));
+    $savedVehicle->options()->sync(request()->input('option_ids'));
 
     Auth::loginUsingId($user->id);
 

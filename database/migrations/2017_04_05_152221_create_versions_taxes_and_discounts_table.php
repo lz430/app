@@ -8,7 +8,7 @@ class CreateVersionsTaxesAndDiscountsTable extends Migration
 {
     public function up()
     {
-        Schema::create('versions_taxes_and_discounts', function (Blueprint $table) {
+        Schema::create('version_taxes_and_discounts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->decimal('amount');
@@ -21,6 +21,6 @@ class CreateVersionsTaxesAndDiscountsTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('versions_taxes_and_discounts');
+        Schema::dropIfExists('version_taxes_and_discounts');
     }
 }
