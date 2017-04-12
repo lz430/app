@@ -7,9 +7,6 @@ use Dotenv\Dotenv;
 use Tests\TestCase;
 
 /**
- * Class ClientTest
- * @package Tests\Feature
- *
  * Tests that the actual JATO API is working
  */
 class ClientTest extends TestCase
