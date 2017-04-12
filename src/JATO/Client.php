@@ -51,7 +51,7 @@ class Client
         return json_decode((string) $this->guzzleClient->request('GET', 'manufacturers')->getBody(), true)['results'];
     }
 
-    public function makesByManufacturerName($manufacturerName)
+    public function makesByManufacturerUrlName($manufacturerName)
     {
         return json_decode(
             (string) $this->guzzleClient->request('GET', "manufacturers/$manufacturerName/makes")->getBody(),

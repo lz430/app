@@ -43,9 +43,9 @@ class ClientTest extends TestCase
     }
 
     /** @test */
-    public function can_get_makes_by_manufacturer_name()
+    public function can_get_makes_by_manufacturer_url_name()
     {
-        static::$client->makesByManufacturerName('nissan');
+        static::$client->makesByManufacturerUrlName('nissan');
     }
 
     /** @test */
