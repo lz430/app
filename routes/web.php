@@ -57,12 +57,18 @@ Route::post('/save', function () {
 
     Auth::loginUsingId($user->id);
 
-    return redirect()->to('/garage');
+    return redirect()->to('/home');
 });
 
-Route::get('/garage', function () {
-    $user = Auth::user();
+Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+Route::post('login', 'Auth\LoginController@login');
 
-    // TODO: eager load
-    return view('garage')->with('savedVehicles', $user->savedVehicles);
-})->middleware('auth');
+Route::get('auth/email-authenticate/{token}', [
+    'as' => 'auth.email-authenticate',
+    'uses' => 'Auth\LoginController@authenticateEmail'
+]);
+
+Route::get('home', [
+    'as' => 'home',
+    'uses' => 'HomeController@index'
+]);
