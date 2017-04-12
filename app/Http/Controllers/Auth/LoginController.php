@@ -32,7 +32,7 @@ class LoginController extends Controller
 
         Mail::send('auth.emails.email-login', ['url' => $url], function (Message $message) {
             $message->from('noreply@delivermyride.com', config('name'));
-            $message->to(request()->input('email'))->subject(config('name') . ' Login');
+            $message->to(request()->input('email'))->subject(config('name') . ' Garage');
         });
 
         return 'Login email sent. Go check your email.';

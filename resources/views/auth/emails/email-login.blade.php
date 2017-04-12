@@ -1,1 +1,1 @@
-Log in to MyApp here: <a href="{{ $url }}">{{ $url }}</a>
+View your Garage here: <a href="{{ $url }}">{{ $url }}</a>

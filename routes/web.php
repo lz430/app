@@ -2,8 +2,10 @@
 
 use App\JATO\Make;
 use App\JATO\Version;
+use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -55,9 +57,14 @@ Route::post('/save', function () {
 
     $savedVehicle->options()->sync(request()->input('option_ids'));
 
+    Mail::send('auth.emails.email-login', ['url' => route('home')], function (Message $message) {
+        $message->from('noreply@delivermyride.com', config('name'));
+        $message->to(request()->input('email'))->subject(config('name') . ' Garage');
+    });
+
     Auth::loginUsingId($user->id);
 
-    return redirect()->to('/home');
+    return redirect()->to('home');
 });
 
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
