@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Deliver My Ride</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -19,10 +19,6 @@
                 font-weight: 100;
                 height: 100vh;
                 margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
             }
 
             .flex-center {
@@ -43,6 +39,7 @@
 
             .content {
                 text-align: center;
+                margin: 30px;
             }
 
             .title {
@@ -59,13 +56,22 @@
                 text-transform: uppercase;
             }
 
+            label,
+            input,
+            select {
+                margin: 15px;
+            }
+
             .m-b-md {
                 margin-bottom: 30px;
             }
         </style>
+        <script>
+            window.Laravel = {!! json_encode(['csrfToken' => csrf_token()]) !!};
+        </script>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
+        <div class="flex-center position-ref">
             @if (Route::has('login'))
                 <div class="top-right links">
                     @if (Auth::check())
@@ -82,33 +88,13 @@
                     Deliver My Ride
                 </div>
 
-                <form method="post" action="/start">
+                <form method="post" action="/step-0">
                     {{ csrf_field() }}
-                    <label>
-                        Make
-                        <select name="make">
-                            @foreach($makes as $id => $name)
-                            <option value="{{ $id }}">{{ $name }}</option>
-                            @endforeach
-                        </select>
-                    </label>
-
-                    <label>
-                        Model
-                        <select name="model">
-                            @foreach($models as $id => $name)
-                            <option value="{{ $id }}">{{ $name }}</option>
-                            @endforeach
-                        </select>
-                    </label>
-
-                    <label>
-                        Zip
-                        <input type="text" name="zip">
-                    </label>
+                    <div id="configurator" data-makes='{!! json_encode($makes) !!}'></div>
                 </form>
-
             </div>
         </div>
+
+        <script src="{{ mix('/js/app.js') }}"></script>
     </body>
 </html>
