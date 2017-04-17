@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Mail;
 
 class SavedVehicleController extends Controller
 {
+    public function index()
+    {
+        return view('home')->with('savedVehicles', Auth::user()->savedVehicles);
+    }
+
     public function store()
     {
         /** @var \App\User $user */

@@ -55,5 +55,5 @@ Route::get('auth/email-authenticate/{token}', [
 
 Route::get('home', [
     'as' => 'home',
-    'uses' => 'HomeController@index'
+    'uses' => 'SavedVehicleController@index'
 ]);
