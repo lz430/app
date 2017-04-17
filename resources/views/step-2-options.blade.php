@@ -3,6 +3,8 @@
 @section('title', 'Select options')
 
 @section('content')
+    <div id="configured" data-version='{!! json_encode($version) !!}' data-options='[]'></div>
+
     <div class="step-2">
         <form method="post" action="/step-2">
             {{ csrf_field() }}

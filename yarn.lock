@@ -4435,6 +4435,10 @@ process@^0.11.0, process@^0.11.1:
   version "0.11.9"
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.9.tgz#7bd5ad21aa6253e7da8682264f1e11d11c0318c1"
 
+promise-polyfill@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-6.0.2.tgz#d9c86d3dc4dc2df9016e88946defd69b49b41162"
+
 promise.pipe@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/promise.pipe/-/promise.pipe-3.0.0.tgz#b8f729867f54353996e6d8e86f3bbd56882e32a6"
@@ -5902,7 +5906,7 @@ weinre@^2.0.0-pre-I0Z7U9OV:
     nopt "3.0.x"
     underscore "1.7.x"
 
-whatwg-fetch@>=0.10.0:
+whatwg-fetch@>=0.10.0, whatwg-fetch@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.3.tgz#9c84ec2dcf68187ff00bc64e1274b442176e1c84"
 
