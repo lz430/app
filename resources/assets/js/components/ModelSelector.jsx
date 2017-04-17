@@ -19,7 +19,7 @@ class ModelSelector extends React.Component {
         if (!this.state.selectedMake) {
             return (
                 <label>Choose Model
-                    <select disabled>
+                    <select className="form-control" disabled>
                         <option>Any</option>
                     </select>
                 </label>
@@ -28,7 +28,7 @@ class ModelSelector extends React.Component {
 
         return (
             <label>Model
-                <select name="model_id">
+                <select className="form-control" name="model_id">
                     {
                         this.state.selectedMake.models.map((model) => (
                             <option key={ model.id } value={ model.id }>{ model.name }</option>
@@ -43,7 +43,7 @@ class ModelSelector extends React.Component {
         return (
             <div>
                 <label>Choose Make
-                    <select onChange={this.onSelectMake}>
+                    <select className="form-control" onChange={this.onSelectMake}>
                         <option>Any</option>
                         {
                             this.props.makes.map((make) => (
@@ -56,7 +56,7 @@ class ModelSelector extends React.Component {
                 { this.renderModelSelect() }
 
                 <label>Enter ZIP Code
-                    <input type="text" name="zip"/>
+                    <input className="form-control" type="text" name="zip"/>
                 </label>
             </div>
         )

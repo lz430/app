@@ -28690,7 +28690,7 @@ var ModelSelector = function (_React$Component) {
                     'Choose Model',
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'select',
-                        { disabled: true },
+                        { className: 'form-control', disabled: true },
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'option',
                             null,
@@ -28706,7 +28706,7 @@ var ModelSelector = function (_React$Component) {
                 'Model',
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'select',
-                    { name: 'model_id' },
+                    { className: 'form-control', name: 'model_id' },
                     this.state.selectedMake.models.map(function (model) {
                         return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'option',
@@ -28729,7 +28729,7 @@ var ModelSelector = function (_React$Component) {
                     'Choose Make',
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'select',
-                        { onChange: this.onSelectMake },
+                        { className: 'form-control', onChange: this.onSelectMake },
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'option',
                             null,
@@ -28749,7 +28749,7 @@ var ModelSelector = function (_React$Component) {
                     'label',
                     null,
                     'Enter ZIP Code',
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', name: 'zip' })
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { className: 'form-control', type: 'text', name: 'zip' })
                 )
             );
         }

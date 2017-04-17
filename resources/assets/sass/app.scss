@@ -7,3 +7,45 @@
 
 // Bootstrap
 @import 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
+
+// Temporary Styles
+.step-0 {
+  text-align: center;
+  
+  label {
+    margin: 15px;
+  }
+}
+
+.step-1 {
+  text-align: center;
+
+  form {
+    display: inline-block;
+
+    button {
+      margin: 15px;
+    }
+  }
+}
+
+.step-2 {
+  margin: 15px;
+
+  &__option {
+    border-radius: 5px;
+    border: 1px solid gray;
+    padding: 15px;
+  }
+}
+
+.step-3 {
+  margin: 0 auto;
+  width: 500px;
+
+  &__option {
+    border-radius: 5px;
+    border: 1px solid gray;
+    padding: 15px;
+  }
+}

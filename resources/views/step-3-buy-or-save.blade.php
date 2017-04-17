@@ -3,56 +3,65 @@
 @section('title', 'Buy or Save')
 
 @section('content')
-    <pre>
-        {{ json_encode($version, JSON_PRETTY_PRINT) }}
-    </pre>
+    <div class="step-3">
+        <h1>{{ $version->description }}</h1>
 
-    <form method="post" action="/buy">
-        {{ csrf_field() }}
+        <h2>msrp: ${{ $version->msrp }}</h2>
 
-        @foreach ($options as $option)
-            <div style="border: 1px solid black;padding: 15px;">
-                <label><strong>{{ $option->name }}</strong>
-                    <input disabled {{ in_array($option->id, $selectedOptionIds) ? 'checked' : '' }} type="checkbox" name="option_ids[]" value="{{ $option->id }}">
+        <details>
+            <pre>
+                {{ json_encode($version, JSON_PRETTY_PRINT) }}
+            </pre>
+        </details>
+
+        <form method="post" action="/buy">
+            {{ csrf_field() }}
+
+            @foreach ($options as $option)
+                <div class="step-3__option {{ in_array($option->id, $selectedOptionIds) ? '' : 'hide' }}">
+                    <label>
+                        <input disabled {{ in_array($option->id, $selectedOptionIds) ? 'checked' : '' }} type="checkbox" name="option_ids[]" value="{{ $option->id }}">
+                        <strong>{{ $option->name }}</strong>
+                    </label>
+                </div>
+            @endforeach
+
+            @foreach ($options as $option)
+                @if (in_array($option->id, $selectedOptionIds))
+                    <input type="hidden" name="option_ids[]" value="{{ $option->id }}">
+                @endif
+            @endforeach
+
+            <input type="hidden" name="version_id" value="{{ $version->id }}">
+
+            <label>
+                <button class="btn btn-primary" type="submit">Make this my ride</button>
+            </label>
+        </form>
+
+        <br>
+        <br>
+
+        <form method="post" action="/save">
+            {{ csrf_field() }}
+
+            <div class="form-group">
+                <label>Share your car with yourself, or come back later to view it
+                    <br>
+                    <input class="form-control" type="email" name="email" required>
                 </label>
             </div>
 
-            <br>
-        @endforeach
+            @foreach ($options as $option)
+                @if (in_array($option->id, $selectedOptionIds))
+                    <input type="hidden" name="option_ids[]" value="{{ $option->id }}">
+                @endif
+            @endforeach
 
-        @foreach ($options as $option)
-            @if (in_array($option->id, $selectedOptionIds))
-                <input type="hidden" name="option_ids[]" value="{{ $option->id }}">
-            @endif
-        @endforeach
+            <input type="hidden" name="version_id" value="{{ $version->id }}">
 
-        <input type="hidden" name="version_id" value="{{ $version->id }}">
-
-        <label>Make this my ride
-            <button type="submit">Buy</button>
-        </label>
-    </form>
-
-    <br>
-    <br>
-
-    <form method="post" action="/save">
-        {{ csrf_field() }}
-
-        <label>Share your car with yourself, or come back later to view it
-            <br>
-            <input type="email" name="email" required>
-        </label>
-
-        @foreach ($options as $option)
-            @if (in_array($option->id, $selectedOptionIds))
-                <input type="hidden" name="option_ids[]" value="{{ $option->id }}">
-            @endif
-        @endforeach
-
-        <input type="hidden" name="version_id" value="{{ $version->id }}">
-
-        <button type="submit" formaction="/save">Save</button>
-    </form>
+            <button class="btn btn-primary" type="submit" formaction="/save">Save</button>
+        </form>
+    </div>
 @endsection
 
