@@ -8,10 +8,10 @@
                 <div class="saved-vehicle">
                     <div class="saved-vehicle__title">{{ $savedVehicle->version->description }}</div>
 
-                    <form style="display: inline;" method="POST" action="{{ route('savedVehicle.destroy', [$savedVehicle->id])  }}">
+                    <form style="display: inline;" onclick="this.submit()" method="POST" action="{{ route('savedVehicle.destroy', [$savedVehicle->id])  }}">
                         {{ csrf_field() }}
                         {{ method_field('DELETE') }}
-                        <button class="btn btn-danger pull-right" type="submit">Remove</button>
+                        <span class="pull-right" style="cursor: pointer">Remove</span>
                     </form>
 
                     <details>
