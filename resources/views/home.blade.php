@@ -8,6 +8,10 @@
                 <div class="saved-vehicle">
                     <div class="saved-vehicle__title">{{ $savedVehicle->version->description }}</div>
 
+                    <div class="text-center">
+                        <img src="https://sslphotos.jato.com/PHOTO300{{ $savedVehicle->version->photo_path }}">
+                    </div>
+
                     <form style="display: inline;" onclick="this.submit()" method="POST" action="{{ route('savedVehicle.destroy', [$savedVehicle->id])  }}">
                         {{ csrf_field() }}
                         {{ method_field('DELETE') }}

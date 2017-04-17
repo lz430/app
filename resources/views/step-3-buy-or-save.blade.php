@@ -8,6 +8,10 @@
 
         <h2>msrp: ${{ $version->msrp }}</h2>
 
+        <div class="text-center">
+            <img src="https://sslphotos.jato.com/PHOTO300{{ $version->photo_path }}">
+        </div>
+
         <details>
             <pre>
                 {{ json_encode($version, JSON_PRETTY_PRINT) }}
