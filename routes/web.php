@@ -12,9 +12,11 @@ Route::get('', function () {
 });
 
 Route::post('step-0', function () {
-    $versions = Version::where('model_id', request()->input('model_id'))->get();
+    $versionsGrouped = Version::where('model_id', request()->input('model_id'))
+        ->get()
+        ->groupBy('trim_name');
 
-    return view('step-1-versions')->with('versions', $versions);
+    return view('step-1-versions')->with('versionsGrouped', $versionsGrouped);
 });
 
 Route::post('step-1', function () {
