@@ -28,6 +28,12 @@
   }
 }
 
+// Component - Bottom Border
+@mixin border-bottom {
+  border-bottom: 1px solid transparentize(black, .9);
+  padding-bottom: 15px;
+}
+
 // Component - List Item
 @mixin list-items {
   display: flex;
@@ -35,7 +41,7 @@
   padding: 25px 0;
 
   &__item {
-    border-bottom: 1px solid transparentize(black, .9);
+    @include border-bottom;
     color: $brand-primary;
     cursor: pointer;
     flex-basis: 45%;
@@ -68,12 +74,16 @@
 }
 
 .step-3 {
-  margin: 0 auto;
-  width: 500px;
+  details {
+    @include border-bottom;
+    color: $brand-primary;
+    cursor: pointer;
+    padding: 25px 0;
+  }
 
-  &__option {
-    border-radius: 5px;
-    border: 1px solid gray;
-    padding: 15px;
+  .options {
+    &__option {
+      padding: 15px;
+    }
   }
 }
