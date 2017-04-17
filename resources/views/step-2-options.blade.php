@@ -3,25 +3,28 @@
 @section('title', 'Select options')
 
 @section('content')
-    <form method="post" action="/step-2">
-        {{ csrf_field() }}
+    <div class="step-2">
+        <form method="post" action="/step-2">
+            {{ csrf_field() }}
 
-        @foreach($options as $option)
-            <div style="border: 1px solid black;padding: 15px;">
-                <label><strong>{{ $option->name }}</strong>
-                    <input type="checkbox" name="option_ids[]" value="{{ $option->id }}">
-                </label>
+            @foreach($options as $option)
+                <div class="step-2__option">
+                    <label>
+                        <input type="checkbox" name="option_ids[]" value="{{ $option->id }}">
+                        <strong>{{ $option->name }}</strong>
+                    </label>
+
+                    <br>
+
+                    {!! $option->description !!}
+                </div>
 
                 <br>
+            @endforeach
 
-                {!! $option->description !!}
-            </div>
+            <input type="hidden" name="version_id" value="{{ $versionId }}">
 
-            <br>
-        @endforeach
-
-        <input type="hidden" name="version_id" value="{{ $versionId }}">
-
-        <button type="submit">Continue</button>
-    </form>
+            <button class="btn btn-primary" type="submit">Continue</button>
+        </form>
+    </div>
 @endsection
