@@ -11,6 +11,7 @@
 // Temporary Styles
 .step-0 {
   text-align: center;
+  @extend .well;
   
   label {
     margin: 15px;
