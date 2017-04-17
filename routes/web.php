@@ -2,11 +2,6 @@
 
 use App\JATO\Make;
 use App\JATO\Version;
-use App\SavedVehicle;
-use Illuminate\Mail\Message;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::get('', function () {
@@ -40,36 +35,18 @@ Route::post('step-2', function () {
         ->with('version', $version);
 });
 
-Route::post('save', function () {
-    /** @var \App\User $user */
-    $user = \App\User::firstOrCreate([
-        'email' => request()->input('email'),
-    ], [
-        'email' => request()->input('email'),
-        'name' => '',
-        'password' => Hash::make(str_random(8))
-    ]);
-
-    /** @var SavedVehicle $savedVehicle */
-    $savedVehicle = SavedVehicle::create([
-        'user_id' => $user->id,
-        'version_id' => request()->input('version_id')
-    ]);
-
-    $savedVehicle->options()->sync(request()->input('option_ids'));
-
-    Mail::send('auth.emails.email-login', ['url' => route('home')], function (Message $message) {
-        $message->from('noreply@delivermyride.com', config('name'));
-        $message->to(request()->input('email'))->subject(config('name') . ' Garage');
-    });
-
-    Auth::loginUsingId($user->id);
-
-    return redirect()->to('home');
-});
-
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
+
+Route::post('saved-vehicle', [
+    'as' => 'savedVehicle.store',
+    'uses' => 'SavedVehicleController@store'
+]);
+
+Route::delete('saved-vehicle/{id}', [
+    'as' => 'savedVehicle.destroy',
+    'uses' => 'SavedVehicleController@destroy'
+])->middleware('auth');
 
 Route::get('auth/email-authenticate/{token}', [
     'as' => 'auth.email-authenticate',

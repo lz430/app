@@ -42,7 +42,7 @@
         <br>
         <br>
 
-        <form method="post" action="/save">
+        <form method="post" action="{{ route('savedVehicle.store') }}">
             {{ csrf_field() }}
 
             <div class="form-group">
@@ -60,7 +60,7 @@
 
             <input type="hidden" name="version_id" value="{{ $version->id }}">
 
-            <button class="btn btn-primary" type="submit" formaction="/save">Save</button>
+            <button class="btn btn-primary" type="submit">Save</button>
         </form>
     </div>
 @endsection

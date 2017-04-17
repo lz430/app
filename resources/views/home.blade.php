@@ -11,7 +11,8 @@
                     @foreach ($savedVehicles as $savedVehicle)
                         <strong>{{ $savedVehicle->version->description }}</strong>
 
-                        <form style="display: inline;" action="/garage/{{ $savedVehicle->id }}">
+                        <form style="display: inline;" method="POST" action="{{ route('savedVehicle.destroy', [$savedVehicle->id])  }}">
+                            {{ csrf_field() }}
                             {{ method_field('DELETE') }}
                             <button class="btn btn-danger" type="submit">Remove</button>
                         </form>
