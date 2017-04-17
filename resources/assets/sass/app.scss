@@ -13,21 +13,6 @@
 
 // Temporary Styles
 
-// Nav Bar
-.navbar-brand {
-  padding: 0;
-
-  svg {
-    height: 100%;
-  }
-}
-
-.step-0 {
-  &__selector {
-    margin-bottom: 30px;
-  }
-}
-
 // Component - Bottom Border
 @mixin border-bottom {
   border-bottom: 1px solid transparentize(black, .9);
@@ -57,6 +42,29 @@
   }
 }
 
+// Details Component
+details {
+  @include border-bottom;
+  color: $brand-primary;
+  cursor: pointer;
+  padding: 25px 0;
+}
+
+// Nav Bar
+.navbar-brand {
+  padding: 0;
+
+  svg {
+    height: 100%;
+  }
+}
+
+.step-0 {
+  &__selector {
+    margin-bottom: 30px;
+  }
+}
+
 .step-1 {
   .items {
     @include list-items;
@@ -74,16 +82,18 @@
 }
 
 .step-3 {
-  details {
-    @include border-bottom;
-    color: $brand-primary;
-    cursor: pointer;
-    padding: 25px 0;
-  }
-
   .options {
     &__option {
       padding: 15px;
     }
+  }
+}
+
+.saved-vehicle {
+  margin: 15px 0;
+
+  &__title {
+    display: inline;
+    font-size: 2rem;
   }
 }

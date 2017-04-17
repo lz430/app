@@ -14,7 +14,10 @@ Route::get('', function () {
 Route::post('step-0', function () {
     $versionsGrouped = Version::where('model_id', request()->input('model_id'))
         ->get()
-        ->groupBy('trim_name');
+        ->groupBy('trim_name')
+        ->map(function ($group) {
+            return $group->groupBy('body_style');
+        });
 
     return view('step-1-versions')->with('versionsGrouped', $versionsGrouped);
 });
