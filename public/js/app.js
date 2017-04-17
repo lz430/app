@@ -27754,10 +27754,13 @@ __webpack_require__(109);
 
 
 
-var root = document.getElementById('configurator');
-var makes = JSON.parse(root.dataset.makes);
+var configurator = document.getElementById('configurator');
 
-__WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__components_ModelSelector__["a" /* default */], { makes: makes }), root);
+if (configurator) {
+    var makes = JSON.parse(configurator.dataset.makes);
+
+    __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__components_ModelSelector__["a" /* default */], { makes: makes }), configurator);
+}
 
 /***/ }),
 /* 90 */

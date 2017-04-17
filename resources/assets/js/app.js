@@ -4,10 +4,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ModelSelector from './components/ModelSelector';
 
-const root = document.getElementById('configurator');
-const makes = JSON.parse(root.dataset.makes);
+const configurator = document.getElementById('configurator');
 
-ReactDOM.render(
-    <ModelSelector makes={makes} />,
-    root
-);
+if (configurator) {
+    const makes = JSON.parse(configurator.dataset.makes);
+
+    ReactDOM.render(
+        <ModelSelector makes={makes} />,
+        configurator
+    );
+}

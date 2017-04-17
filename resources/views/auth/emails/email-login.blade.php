@@ -1,0 +1,1 @@
+View your Garage here: <a href="{{ $url }}">{{ $url }}</a>
