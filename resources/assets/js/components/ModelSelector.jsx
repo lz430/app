@@ -1,63 +1,69 @@
 import React from 'react';
-import _ from 'lodash';
+import Select from 'react-select';
 
 class ModelSelector extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { selectedMake: null };
+        this.state = { selectedMake: null, selectedModelId: null };
 
         this.onSelectMake = this.onSelectMake.bind(this);
+        this.onSelectModel = this.onSelectModel.bind(this);
     };
 
-    onSelectMake(event) {
-        this.setState({selectedMake: _.find(this.props.makes, (make) => {
-            return make.id === parseInt(event.target.value);
-        })});
+    onSelectMake(make) {
+        this.setState({selectedMake: make});
+    };
+
+    onSelectModel(model) {
+        this.setState({selectedModelId: model ? model.id : null});
     };
 
     renderModelSelect() {
-        if (!this.state.selectedMake) {
-            return (
-                <label>Choose Model
-                    <select className="form-control" disabled>
-                        <option>Any</option>
-                    </select>
-                </label>
-            );
-        }
-
         return (
-            <label>Model
-                <select className="form-control" name="model_id">
-                    {
-                        this.state.selectedMake.models.map((model) => (
-                            <option key={ model.id } value={ model.id }>{ model.name }</option>
-                        ))
-                    }
-                </select>
-            </label>
+            <div>
+                <label htmlFor="model_id">Choose model</label>
+                <Select
+                    name="model_id"
+                    value={this.state.selectedModelId ? this.state.selectedModelId : null}
+                    options={this.state.selectedMake ? this.state.selectedMake.models : []}
+                    labelKey="name"
+                    valueKey="id"
+                    placeholder=""
+                    onChange={this.onSelectModel}
+                />
+            </div>
         );
     }
 
     render() {
         return (
             <div>
-                <label>Choose Make
-                    <select className="form-control" onChange={this.onSelectMake}>
-                        <option>Any</option>
-                        {
-                            this.props.makes.map((make) => (
-                                <option key={ make.id } value={ make.id }>{ make.name }</option>
-                            ))
-                        }
-                    </select>
-                </label>
+                <div className="form-group">
+                    <div className="col-lg-12 step-0__selector">
+                        <label>Choose make</label>
+                        <Select
+                            value={this.state.selectedMake ? this.state.selectedMake.id : null}
+                            options={this.props.makes}
+                            labelKey="name"
+                            valueKey="id"
+                            placeholder=""
+                            onChange={this.onSelectMake}
+                        />
+                    </div>
+                </div>
 
-                { this.renderModelSelect() }
+                <div className="form-group">
+                    <div className="col-lg-12 step-0__selector">
+                        { this.renderModelSelect() }
+                    </div>
+                </div>
 
-                <label>Enter ZIP Code
-                    <input className="form-control" type="text" name="zip"/>
-                </label>
+                <div className="form-group">
+                    <div className="col-lg-8 step-0__selector">
+                        <label htmlFor="zip">Enter ZIP code</label>
+                        <input id="zip" className="form-control" type="text" name="zip"/>
+                    </div>
+                </div>
             </div>
         )
     }

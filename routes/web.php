@@ -56,4 +56,4 @@ Route::get('auth/email-authenticate/{token}', [
 Route::get('home', [
     'as' => 'home',
     'uses' => 'SavedVehicleController@index'
-]);
+])->middleware('auth');

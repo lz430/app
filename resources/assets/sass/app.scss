@@ -8,13 +8,23 @@
 // Bootstrap
 @import 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
 
+// React Select
+@import 'node_modules/react-select/scss/default';
+
 // Temporary Styles
+
+// Nav Bar
+.navbar-brand {
+  padding: 0;
+
+  svg {
+    height: 100%;
+  }
+}
+
 .step-0 {
-  text-align: center;
-  @extend .well;
-  
-  label {
-    margin: 15px;
+  &__selector {
+    margin-bottom: 30px;
   }
 }
 

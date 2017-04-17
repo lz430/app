@@ -4,13 +4,17 @@
 
 @section('content')
     <div class="step-0">
-        <div class="row">
-            <div class="col-lg-12">
-                <form method="post" action="/step-0">
-                    {{ csrf_field() }}
+        <form method="post" action="/step-0">
+            {{ csrf_field() }}
+            <div class="row">
+                <div class="col-lg-6">
                     <div id="configurator" data-makes='{!! json_encode($makes) !!}'></div>
-                </form>
+                </div>
             </div>
-        </div>
+
+            <hr>
+
+            <button class="btn btn-primary pull-right" type="submit">Next</button>
+        </form>
     </div>
 @endsection
