@@ -15,12 +15,13 @@ class SendGarageLink extends Mailable
     public function __construct($url)
     {
         $this->url = $url;
-        $this->from('noreply@delivermyride.com', config('name'));
-        $this->subject(config('name') . ' Garage');
     }
 
     public function build()
     {
+        $this->from('noreply@delivermyride.com', config('name'));
+        $this->subject(config('name') . ' Garage');
+
         return $this->view('auth.emails.email-login');
     }
 }
