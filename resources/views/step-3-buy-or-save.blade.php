@@ -6,33 +6,8 @@
     <div id="configured" data-version='{!! json_encode($version) !!}' data-options='{!! json_encode($selectedOptions) !!}'></div>
 
     <div class="step-3">
-        <h1>{{ $version->description }}</h1>
-
-        <h2>msrp: ${{ $version->msrp }}</h2>
-
-        <div class="text-center">
-            <img src="https://sslphotos.jato.com/PHOTO300{{ $version->photo_path }}">
-        </div>
-
-        <details>
-            <pre>
-                {{ json_encode($version, JSON_PRETTY_PRINT) }}
-            </pre>
-        </details>
-
         <form method="post" action="/buy">
             {{ csrf_field() }}
-
-            <div class="options">
-                @foreach ($options as $option)
-                    <div class="options__option {{ in_array($option->id, $selectedOptionIds) ? '' : 'hide' }}">
-                        <label>
-                            <input disabled {{ in_array($option->id, $selectedOptionIds) ? 'checked' : '' }} type="checkbox" name="option_ids[]" value="{{ $option->id }}">
-                            <strong>{{ $option->name }}</strong>
-                        </label>
-                    </div>
-                @endforeach
-            </div>
 
             @foreach ($options as $option)
                 @if (in_array($option->id, $selectedOptionIds))

@@ -34,7 +34,7 @@ Route::post('step-1', function () {
 
 Route::post('step-2', function () {
     $options = VersionOption::where('version_id', request()->input('version_id'))->get();
-    $version = Version::findOrFail(request()->input('version_id'));
+    $version = Version::with('taxesAndDiscounts')->findOrFail(request()->input('version_id'));
 
     return view('step-3-buy-or-save')
         ->with('options', $options)
