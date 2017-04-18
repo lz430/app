@@ -53,6 +53,11 @@ Route::post('buy-request', [
     'uses' => 'BuyRequestController@store'
 ]);
 
+Route::get('buy-request/thanks', [
+    'as' => 'buyRequest.thanks',
+    'uses' => 'BuyRequestController@thanks'
+]);
+
 Route::post('saved-vehicle', [
     'as' => 'savedVehicle.store',
     'uses' => 'SavedVehicleController@store'
