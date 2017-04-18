@@ -9,7 +9,7 @@
         <form method="post" action="/step-2">
             {{ csrf_field() }}
 
-            @foreach($options as $option)
+            @foreach ($options as $option)
                 <div class="step-2__option">
                     <label>
                         <input type="checkbox" name="option_ids[]" value="{{ $option->id }}">
