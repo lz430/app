@@ -17,12 +17,16 @@ class UserAccessTest extends TestCase
     /** @test */
     public function saved_car_creates_new_user_and_redirected_to_home()
     {
+        Mail::fake();
+
         $version = factory(Version::class)->create();
 
         $response = $this->post(route('savedVehicle.store', [
             'email' => 'logan@tighten.co',
             'version_id' => $version->id
         ]));
+
+        Mail::assertSent(EmailLoginMailable::class);
 
         $this->assertDatabaseHas('users', [
             'email' => 'logan@tighten.co'
