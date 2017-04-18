@@ -22,7 +22,7 @@ class Configured extends React.Component {
             <div>
                 options: {
                     this.props.options.map((option) => {
-                        return (<div key={option.id}>{option.name} ({option.msrp})</div>)
+                        return (<div key={option.id}>{option.name} ({option.msrp})</div>);
                     })
                 }
             </div>
