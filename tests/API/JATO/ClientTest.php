@@ -21,7 +21,7 @@ class ClientTest extends TestCase
     {
         (new Dotenv(__DIR__ . '/../../../'))->load();
 
-        static::$client = new Client();
+        static::$client = new Client(env('JATO_USERNAME'), env('JATO_PASSWORD'));
     }
 
     /** @test */

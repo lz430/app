@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendGarageLink;
 use App\SavedVehicle;
 use App\User;
-use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -35,10 +35,7 @@ class SavedVehicleController extends Controller
 
         $savedVehicle->options()->sync(request()->input('option_ids'));
 
-        Mail::send('auth.emails.email-login', ['url' => route('home')], function (Message $message) {
-            $message->from('noreply@delivermyride.com', config('name'));
-            $message->to(request()->input('email'))->subject(config('name') . ' Garage');
-        });
+        Mail::to(request()->input('email'))->send(new SendGarageLink(route('home')));
 
         Auth::loginUsingId($user->id);
 

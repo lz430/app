@@ -23,7 +23,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(\App\JATO\Manufacturer::class, function (Faker\Generator $faker) {
+$factory->define(App\JATO\Manufacturer::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->unique()->company,
         'url_name' => $faker->unique()->slug,
@@ -31,27 +31,30 @@ $factory->define(\App\JATO\Manufacturer::class, function (Faker\Generator $faker
     ];
 });
 
-$factory->define(\App\JATO\Make::class, function (Faker\Generator $faker) {
+$factory->define(App\JATO\Make::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->unique()->company,
         'url_name' => $faker->unique()->slug,
         'is_current' => $faker->boolean(),
+        'manufacturer_id' => factory(App\JATO\Manufacturer::class)->create()->id
     ];
 });
 
-$factory->define(\App\JATO\VehicleModel::class, function (Faker\Generator $faker) {
+$factory->define(App\JATO\VehicleModel::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->unique()->company,
         'url_name' => $faker->unique()->slug,
         'is_current' => $faker->boolean(),
+        'make_id' => factory(App\JATO\Make::class)->create()->id
     ];
 });
 
-$factory->define(\App\JATO\Version::class, function (Faker\Generator $faker) {
+$factory->define(App\JATO\Version::class, function (Faker\Generator $faker) {
     return [
         'jato_vehicle_id' => $faker->randomElement(['75644520050520', '718410620150406', '740002220150406']),
         'jato_uid' => $faker->randomNumber(),
         'jato_model_id' => $faker->randomNumber(),
+        'model_id' => factory(App\JATO\VehicleModel::class)->create()->id,
         'year' => $faker->year,
         'name' => $faker->name,
         'trim_name' => $faker->name,
@@ -75,14 +78,14 @@ $factory->define(\App\JATO\Version::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(\App\JATO\VersionTaxAndDiscount::class, function (Faker\Generator $faker) {
+$factory->define(App\JATO\VersionTaxAndDiscount::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->unique()->word,
         'amount' => $faker->randomFloat(2, -5000, 5000),
     ];
 });
 
-$factory->define(\App\JATO\VersionOption::class, function (Faker\Generator $faker) {
+$factory->define(App\JATO\VersionOption::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->colorName,
         'state' => $faker->randomElement(['Required', 'Available']),
@@ -95,7 +98,7 @@ $factory->define(\App\JATO\VersionOption::class, function (Faker\Generator $fake
     ];
 });
 
-$factory->define(\App\SavedVehicle::class, function (Faker\Generator $faker) {
+$factory->define(App\SavedVehicle::class, function (Faker\Generator $faker) {
     $manufacturer = factory(App\JATO\Manufacturer::class)->create();
     $make = $manufacturer->makes()->save(factory(App\JATO\Make::class)->make());
     $model = $make->models()->save(factory(App\JATO\VehicleModel::class)->make());

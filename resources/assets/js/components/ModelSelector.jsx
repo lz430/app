@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import PropTypes from 'prop-types';
 
 class ModelSelector extends React.Component {
     constructor(props) {
@@ -68,5 +69,9 @@ class ModelSelector extends React.Component {
         )
     }
 }
+
+ModelSelector.propTypes = {
+    makes: PropTypes.array.isRequired,
+};
 
 export default ModelSelector;

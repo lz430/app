@@ -28,6 +28,13 @@ class Version extends Model
         'is_current',
     ];
 
+    protected $casts = [
+        'msrp' => 'float',
+        'invoice' => 'float',
+        'fuel_econ_city' => 'integer',
+        'fuel_econ_hwy' => 'integer',
+    ];
+
     public function model()
     {
         return $this->belongsTo(VehicleModel::class, 'model_id');
