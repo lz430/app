@@ -6,10 +6,12 @@ use App\JATO\VersionOption;
 use Illuminate\Support\Facades\Route;
 
 Route::get('', function () {
+    $makes = Make::select('id', 'name')->with(['models' => function ($query) {
+        $query->select('id', 'name', 'make_id');
+    }])->get();
+
     return view('step-0')
-        ->with('makes', Make::select('id', 'name')->with(['models' => function ($query) {
-            $query->select('id', 'name', 'make_id');
-        }])->get());
+        ->with('makes', $makes);
 });
 
 Route::post('step-0', function () {
