@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\JATO\Version;
-use App\Mail\EmailLoginMailable;
+use App\Mail\SendGarageLink;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Mail\Mailable;
@@ -26,7 +26,7 @@ class UserAccessTest extends TestCase
             'version_id' => $version->id
         ]));
 
-        Mail::assertSent(EmailLoginMailable::class);
+        Mail::assertSent(SendGarageLink::class);
 
         $this->assertDatabaseHas('users', [
             'email' => 'logan@tighten.co'
@@ -49,7 +49,7 @@ class UserAccessTest extends TestCase
         ]);
 
         $url = null;
-        Mail::assertSent(EmailLoginMailable::class, function (Mailable $mail) use (&$url) {
+        Mail::assertSent(SendGarageLink::class, function (Mailable $mail) use (&$url) {
             return $url = $mail->url;
         });
 

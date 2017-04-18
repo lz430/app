@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\EmailLogin;
 use App\Http\Controllers\Controller;
-use App\Mail\EmailLoginMailable;
+use App\Mail\SendGarageLink;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +31,7 @@ class LoginController extends Controller
             'token' => $emailLogin->token
         ]);
 
-        Mail::to(request()->input('email'))->send(new EmailLoginMailable($url));
+        Mail::to(request()->input('email'))->send(new SendGarageLink($url));
 
         return 'Login email sent. Go check your email.';
     }

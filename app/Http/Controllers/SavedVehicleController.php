@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\EmailLoginMailable;
+use App\Mail\SendGarageLink;
 use App\SavedVehicle;
 use App\User;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +35,7 @@ class SavedVehicleController extends Controller
 
         $savedVehicle->options()->sync(request()->input('option_ids'));
 
-        Mail::to(request()->input('email'))->send(new EmailLoginMailable(route('home')));
+        Mail::to(request()->input('email'))->send(new SendGarageLink(route('home')));
 
         Auth::loginUsingId($user->id);
 
