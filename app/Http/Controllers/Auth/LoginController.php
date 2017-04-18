@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\EmailLogin;
 use App\Http\Controllers\Controller;
+use App\Mail\SendGarageLink;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Auth;
@@ -30,10 +31,7 @@ class LoginController extends Controller
             'token' => $emailLogin->token
         ]);
 
-        Mail::send('auth.emails.email-login', ['url' => $url], function (Message $message) {
-            $message->from('noreply@delivermyride.com', config('name'));
-            $message->to(request()->input('email'))->subject(config('name') . ' Garage');
-        });
+        Mail::to(request()->input('email'))->send(new SendGarageLink($url));
 
         return 'Login email sent. Go check your email.';
     }
@@ -43,6 +41,8 @@ class LoginController extends Controller
         $emailLogin = EmailLogin::validFromToken($token);
 
         Auth::login($emailLogin->user);
+
+        EmailLogin::where('email', $emailLogin->email)->delete();
 
         return redirect('home');
     }

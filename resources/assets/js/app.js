@@ -1,16 +1,35 @@
 require('./bootstrap');
 
 import React from 'react';
+import Configured from "./components/Configured";
 import ReactDOM from 'react-dom';
 import ModelSelector from './components/ModelSelector';
 
-const configurator = document.getElementById('configurator');
+/**
+ * ModelSelector
+ */
+const modelSelector = document.getElementById('model-selector');
 
-if (configurator) {
-    const makes = JSON.parse(configurator.dataset.makes);
+if (modelSelector) {
+    const makes = JSON.parse(modelSelector.dataset.makes);
 
     ReactDOM.render(
         <ModelSelector makes={makes} />,
-        configurator
+        modelSelector
+    );
+}
+
+/**
+ * Configured
+ */
+const configured = document.getElementById('configured');
+
+if (configured) {
+    const version = JSON.parse(configured.dataset.version);
+    const options = JSON.parse(configured.dataset.options);
+
+    ReactDOM.render(
+        <Configured version={version} options={options} />,
+        configured
     );
 }

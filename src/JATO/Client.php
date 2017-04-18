@@ -8,18 +8,18 @@ class Client
 {
     private $guzzleClient;
 
-    public function __construct()
+    public function __construct($username, $password)
     {
         $this->guzzleClient = new GuzzleClient();
-        $this->authorize();
+        $this->authorize($username, $password);
     }
 
-    private function authorize()
+    private function authorize($username, $password)
     {
         $response = json_decode((string) $this->guzzleClient->request('POST', 'https://auth.jatoflex.com/oauth/token', [
             'form_params' => [
-                'username' => env('JATO_USERNAME'),
-                'password' => env('JATO_PASSWORD'),
+                'username' => $username,
+                'password' => $password,
                 'grant_type' => 'password',
             ]
         ])->getBody(), true);

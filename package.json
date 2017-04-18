@@ -17,10 +17,14 @@
     "jquery": "^3.1.1",
     "laravel-mix": "0.*",
     "lodash": "^4.17.4",
+    "promise-polyfill": "^6.0.2",
     "react": "^15.5.3",
     "react-dom": "^15.5.3",
     "react-select": "^1.0.0-rc.3",
-    "vue": "^2.1.10"
+    "vue": "^2.1.10",
+    "whatwg-fetch": "^2.0.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "prop-types": "^15.5.8"
+  }
 }

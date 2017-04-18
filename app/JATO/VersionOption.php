@@ -20,6 +20,11 @@ class VersionOption extends Model
         'jato_vehicle_id',
     ];
 
+    protected $casts = [
+        'msrp' => 'float',
+        'invoice' => 'float',
+    ];
+
     public function version()
     {
         return $this->belongsTo(Version::class);
