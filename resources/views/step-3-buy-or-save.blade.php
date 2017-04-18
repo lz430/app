@@ -18,7 +18,7 @@
             </pre>
         </details>
 
-        <form method="post" action="/buy">
+        <form method="post" action="{{ route('buyRequest.store') }}">
             {{ csrf_field() }}
 
             <div class="options">

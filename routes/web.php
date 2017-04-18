@@ -43,6 +43,11 @@ Route::post('step-2', function () {
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 
+Route::post('buy-request', [
+    'as' => 'buyRequest.store',
+    'uses' => 'BuyRequestController@store'
+]);
+
 Route::post('saved-vehicle', [
     'as' => 'savedVehicle.store',
     'uses' => 'SavedVehicleController@store'
