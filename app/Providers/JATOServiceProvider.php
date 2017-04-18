@@ -10,7 +10,7 @@ class JATOServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(Client::class, function ($app) {
-            return new Client(config('jato.username'), config('jato.password'));
+            return new Client(config('services.jato.username'), config('services.jato.password'));
         });
     }
 }
