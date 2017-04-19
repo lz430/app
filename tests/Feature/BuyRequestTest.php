@@ -6,6 +6,7 @@ use App\JATO\Version;
 use App\Mail\SendGarageLink;
 use App\Mail\SendRepBuyRequest;
 use App\Mail\SendUserBuyRequest;
+use App\SavedVehicle;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Mail\Mailable;
@@ -21,11 +22,14 @@ class BuyRequestTest extends TestCase
     {
         Mail::fake();
 
-        $version = factory(Version::class)->create();
+        $user = factory(User::class)->create();
+
+        $this->be($user);
 
         $response = $this->post(route('buyRequest.store', [
-            'email' => 'logan@tighten.co',
-            'version_id' => $version->id
+            'savedVehicleId' => factory(SavedVehicle::class)->create([
+                'user_id' => $user->id
+            ])->id,
         ]));
 
         Mail::assertSent(SendUserBuyRequest::class);

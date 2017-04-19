@@ -39,7 +39,9 @@ class SavedVehicleController extends Controller
 
         Auth::loginUsingId($user->id);
 
-        return redirect()->to('home');
+        return request()->isJson()
+            ? response()->json($savedVehicle->id)
+            : redirect()->to('home');
     }
 
     public function destroy($id)

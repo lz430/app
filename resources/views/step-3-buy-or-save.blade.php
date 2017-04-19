@@ -8,7 +8,7 @@
     <div class="step-3">
         <br>
 
-        <form method="post">
+        <form>
             {{ csrf_field() }}
 
             @foreach ($options as $option)
@@ -31,12 +31,32 @@
 
                         <br>
 
-                        <button class="btn btn-primary" type="submit" formaction="{{ route('buyRequest.store') }}">Make this my ride</button>
-                        <button class="btn btn-primary" type="submit" formaction="{{ route('savedVehicle.store') }}">Save to garage</button>
+                        {{-- Store savedVehicle using ajax. Then redirect to create page w/ id of savedVehicle in query string --}}
+                        <a class="btn btn-primary" onclick="(function saveVehicle() {
+                            fetch('{{ route('savedVehicle.store') }}', {
+                                    credentials: 'same-origin',
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRF-TOKEN': window.Laravel.csrfToken,
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        email: document.getElementById('email').value,
+                                        version_id: {{ $version->id }},
+                                    }),
+                                })
+                                .then(function(response) {
+                                    return response.json();
+                                }).then(function(savedVehicleId) {
+                                    window.location = '{{ route('buyRequest.create') }}?savedVehicleId=' + savedVehicleId;
+                                });
+                        })()">Make this my ride</a>
+
+                        {{-- Directly store the savedVehicle --}}
+                        <button class="btn btn-primary" type="submit" formmethod="post" formaction="{{ route('savedVehicle.store') }}">Save to garage</button>
                     </div>
                 </div>
             </div>
         </form>
     </div>
 @endsection
-
