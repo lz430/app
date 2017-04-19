@@ -22,8 +22,12 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-lg-6">
-                        <label for="email">Email</label>
-                        <input id="email" class="form-control" type="email" name="email" required>
+                        @if (!\Illuminate\Support\Facades\Auth::check())
+                            <label for="email">Email</label>
+                            <input id="email" class="form-control" type="email" name="email" required>
+                        @else
+                            <input id="email" type="hidden" name="email" value="{{ \Illuminate\Support\Facades\Auth::user()->email }}" required>
+                        @endif
 
                         <br>
 

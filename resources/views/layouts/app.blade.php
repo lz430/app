@@ -50,8 +50,12 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
-                        @if (!request()->is('login'))
+                        @if (!request()->is('login') && \Illuminate\Support\Facades\Auth::check())
                             <li><a href="{{ route('home') }}">My Garage</a></li>
+                        @endif
+
+                        @if (!\Illuminate\Support\Facades\Auth::check())
+                            <li><a href="{{ route('login') }}">Login</a></li>
                         @endif
                     </ul>
                 </div>

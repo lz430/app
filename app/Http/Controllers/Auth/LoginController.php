@@ -33,7 +33,7 @@ class LoginController extends Controller
 
         Mail::to(request()->input('email'))->send(new SendGarageLink($url));
 
-        return 'Login email sent. Go check your email.';
+        return view('auth.login-email-sent');
     }
 
     public function authenticateEmail($token)
