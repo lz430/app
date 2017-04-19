@@ -2,14 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\JATO\Version;
-use App\Mail\SendGarageLink;
 use App\Mail\SendRepBuyRequest;
 use App\Mail\SendUserBuyRequest;
 use App\SavedVehicle;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 

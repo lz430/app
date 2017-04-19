@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\JATO\Version;
-use App\JATO\VersionOption;
 use App\Mail\SendRepBuyRequest;
 use App\Mail\SendUserBuyRequest;
 use App\SavedVehicle;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class BuyRequestController extends Controller
