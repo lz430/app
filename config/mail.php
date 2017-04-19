@@ -120,4 +120,6 @@ return [
         ],
     ],
 
+    'rep-email' => env('REP_EMAIL')
+
 ];
