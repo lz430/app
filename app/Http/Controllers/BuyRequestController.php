@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BuyRequest;
 use App\Mail\SendRepBuyRequest;
 use App\Mail\SendUserBuyRequest;
 use App\SavedVehicle;
@@ -39,7 +40,10 @@ class BuyRequestController extends Controller
 
         // TODO: get more info about user required to make purchase
 
-        // TODO: save buy request to database
+        BuyRequest::create([
+            'user_id' => auth()->user()->id,
+            'saved_vehicle_id' => $savedVehicle->id,
+        ]);
 
         Mail::to(config('mail.rep-email'))->send(new SendRepBuyRequest($savedVehicle));
         Mail::to(Auth::user()->email)->send(new SendUserBuyRequest($savedVehicle));

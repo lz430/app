@@ -23,14 +23,21 @@ class BuyRequestTest extends TestCase
 
         $this->be($user);
 
+        $savedVehicle = factory(SavedVehicle::class)->create([
+            'user_id' => $user->id
+        ]);
+
         $response = $this->post(route('buyRequest.store', [
-            'savedVehicleId' => factory(SavedVehicle::class)->create([
-                'user_id' => $user->id
-            ])->id,
+            'savedVehicleId' => $savedVehicle->id,
         ]));
 
-        Mail::assertSent(SendUserBuyRequest::class);
         Mail::assertSent(SendRepBuyRequest::class);
+        Mail::assertSent(SendUserBuyRequest::class);
+
+        $this->assertDatabaseHas('buy_requests', [
+            'user_id' => $user->id,
+            'saved_vehicle_id' => $savedVehicle->id,
+        ]);
 
         $response->assertRedirect(route('buyRequest.thanks'));
     }

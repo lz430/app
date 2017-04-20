@@ -21,4 +21,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(SavedVehicle::class);
     }
+
+    public function buyRequest()
+    {
+        return $this->hasMany(BuyRequest::class);
+    }
 }
