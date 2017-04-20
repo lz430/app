@@ -537,7 +537,8 @@
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(0);
+__webpack_require__(0);
+(function webpackMissingModule() { throw new Error("Cannot find module \"resources/assets/js/app.js\""); }());
 
 
 /***/ })

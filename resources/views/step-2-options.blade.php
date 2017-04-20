@@ -3,7 +3,7 @@
 @section('title', 'Select options')
 
 @section('content')
-    <div id="configured" data-version='{!! json_encode($version) !!}' data-options='[]'></div>
+    <Configured data-version='{!! json_encode($version) !!}' data-options='[]'></Configured>
 
     <div class="step-2">
         <form method="post" action="/step-2">

@@ -3,7 +3,7 @@
 @section('title', 'Buy')
 
 @section('content')
-    <div id="configured" data-version='{!! json_encode($version) !!}' data-options='{!! json_encode($selectedOptions) !!}'></div>
+    <Configured data-version='{!! json_encode($version) !!}' data-options='{!! json_encode($selectedOptions) !!}'></Configured>
 
     <div class="buy-request-create">
         <form method="post">
