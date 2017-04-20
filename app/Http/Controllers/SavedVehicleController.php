@@ -18,6 +18,10 @@ class SavedVehicleController extends Controller
 
     public function store()
     {
+        $this->validate(request(), [
+            'email' => 'required|email',
+        ]);
+
         /** @var \App\User $user */
         $user = User::firstOrCreate([
             'email' => request()->input('email'),

@@ -37,6 +37,7 @@
                                     credentials: 'same-origin',
                                     method: 'POST',
                                     headers: {
+                                        'X-Requested-With': 'XMLHttpRequest',
                                         'X-CSRF-TOKEN': window.Laravel.csrfToken,
                                         'Content-Type': 'application/json'
                                     },
@@ -45,10 +46,23 @@
                                         version_id: {{ $version->id }},
                                     }),
                                 })
+                                .then(function (response) {
+                                    if (response.status >= 200 && response.status < 300) {
+                                        return response;
+                                    } else {
+                                        return response.json().then(function (json) {
+                                            var error = new Error(Object.values(json).toString());
+                                            error.response = response;
+                                            throw error;
+                                        });
+                                    }
+                                })
                                 .then(function(response) {
                                     return response.json();
                                 }).then(function(savedVehicleId) {
                                     window.location = '{{ route('buyRequest.create') }}?savedVehicleId=' + savedVehicleId;
+                                }).catch(function (error) {
+                                    alert(error);
                                 });
                         })()">Make this my ride</a>
 
