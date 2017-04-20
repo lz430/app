@@ -37,7 +37,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        {!!  file_get_contents(__DIR__ . '/../../../public/images/dmr-logo.svg') !!}
+                        <img class="navbar-brand__logo" src="/images/dmr-logo.svg">
                     </a>
                 </div>
 

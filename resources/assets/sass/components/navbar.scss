@@ -1,7 +1,12 @@
-.navbar-brand {
-  padding: 0;
+@import '../variables';
 
-  svg {
-    height: 100%;
+.navbar-brand {
+  $padding: 16;
+
+  padding-bottom: $padding + px;
+  padding-top: $padding + px;
+
+  &__logo {
+    height: ($navbar-height - $padding) + px;
   }
 }
