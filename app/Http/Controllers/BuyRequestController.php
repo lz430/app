@@ -23,10 +23,8 @@ class BuyRequestController extends Controller
         )->findOrFail(request('savedVehicleId'));
 
         return view('buyRequest.create')
-            ->with('savedVehicleId', $savedVehicle->id)
-            ->with('selectedOptions', $savedVehicle->options)
-            ->with('selectedOptionIds', $savedVehicle->options->pluck('id'))
-            ->with('version', $savedVehicle->version);
+            ->with('savedVehicle', $savedVehicle)
+            ->with('selectedOptionIds', $savedVehicle->options->pluck('id'));
     }
 
     public function store()

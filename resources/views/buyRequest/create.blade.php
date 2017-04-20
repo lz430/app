@@ -3,7 +3,7 @@
 @section('title', 'Buy')
 
 @section('content')
-    <Configured data-version='{!! json_encode($version) !!}' data-options='{!! json_encode($selectedOptions) !!}'></Configured>
+    <Configured data-version='{!! json_encode($savedVehicle->version) !!}' data-options='{!! json_encode($savedVehicle->options) !!}'></Configured>
 
     <div class="buy-request-create">
         <form method="post">
@@ -13,14 +13,14 @@
                 <input type="hidden" name="option_ids[]" value="{{ $selectedOptionId }}">
             @endforeach
 
-            <input type="hidden" name="version_id" value="{{ $version->id }}">
+            <input type="hidden" name="version_id" value="{{ $savedVehicle->version->id }}">
 
             <br>
             <br>
 
             collect / confirm user info here
 
-            <button class="btn btn-primary" type="submit" formaction="{{ route('buyRequest.store', ['savedVehicleId' => $savedVehicleId]) }}">Buy</button>
+            <button class="btn btn-primary" type="submit" formaction="{{ route('buyRequest.store', ['savedVehicleId' => $savedVehicle->id]) }}">Buy</button>
         </form>
     </div>
 @endsection
