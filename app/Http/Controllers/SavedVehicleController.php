@@ -13,7 +13,7 @@ class SavedVehicleController extends Controller
 {
     public function index()
     {
-        return view('home')->with('savedVehicles', Auth::user()->savedVehicles);
+        return view('home')->with('savedVehicles', auth()->user()->savedVehicles);
     }
 
     public function store()
@@ -41,7 +41,7 @@ class SavedVehicleController extends Controller
 
         Mail::to(request()->input('email'))->send(new SendGarageLink(route('home')));
 
-        Auth::loginUsingId($user->id);
+        auth()->loginUsingId($user->id);
 
         return request()->isJson()
             ? response()->json($savedVehicle->id)
@@ -50,7 +50,7 @@ class SavedVehicleController extends Controller
 
     public function destroy($id)
     {
-        Auth::user()->savedVehicles()->findOrFail($id)->delete();
+        auth()->user()->savedVehicles()->findOrFail($id)->delete();
 
         return redirect()->back();
     }

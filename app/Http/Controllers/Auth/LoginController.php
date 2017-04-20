@@ -40,7 +40,7 @@ class LoginController extends Controller
     {
         $emailLogin = EmailLogin::validFromToken($token);
 
-        Auth::login($emailLogin->user);
+        auth()->login($emailLogin->user);
 
         EmailLogin::where('email', $emailLogin->email)->delete();
 

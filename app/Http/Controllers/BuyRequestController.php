@@ -7,7 +7,6 @@ use App\Mail\SendRepBuyRequest;
 use App\Mail\SendUserBuyRequest;
 use App\SavedVehicle;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class BuyRequestController extends Controller
@@ -46,7 +45,7 @@ class BuyRequestController extends Controller
         ]);
 
         Mail::to(config('mail.rep-email'))->send(new SendRepBuyRequest($savedVehicle));
-        Mail::to(Auth::user()->email)->send(new SendUserBuyRequest($savedVehicle));
+        Mail::to(auth()->user()->email)->send(new SendUserBuyRequest($savedVehicle));
 
         return redirect()->to(route('buyRequest.thanks'));
     }
