@@ -2,42 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\BuyRequest;
 use App\Mail\SendRepBuyRequest;
 use App\Mail\SendUserBuyRequest;
 use App\SavedVehicle;
-use App\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class BuyRequestController extends Controller
 {
-    public function store()
+    public function create(Request $request)
     {
-        // TODO: we will get much more information about the user before doing this
-
-        /** @var \App\User $user */
-        $user = User::firstOrCreate([
-            'email' => request()->input('email'),
-        ], [
-            'email' => request()->input('email'),
-            'name' => '',
-            'password' => Hash::make(str_random(8))
+        $this->validate(request(), [
+            'savedVehicleId' => 'required|exists:saved_vehicles,id'
         ]);
 
-        /** @var SavedVehicle $savedVehicle */
-        $savedVehicle = SavedVehicle::create([
-            'user_id' => $user->id,
-            'version_id' => request()->input('version_id')
+        $savedVehicle = SavedVehicle::with(
+            'version.taxesAndDiscounts',
+            'options'
+        )->findOrFail(request('savedVehicleId'));
+
+        return view('buyRequest.create')
+            ->with('savedVehicle', $savedVehicle)
+            ->with('selectedOptionIds', $savedVehicle->options->pluck('id'));
+    }
+
+    public function store()
+    {
+        $this->validate(request(), [
+            'savedVehicleId' => 'required|exists:saved_vehicles,id',
+        ]);
+
+        $savedVehicle = SavedVehicle::findOrFail(request('savedVehicleId'));
+
+        // TODO: get more info about user required to make purchase
+
+        BuyRequest::create([
+            'user_id' => auth()->user()->id,
+            'saved_vehicle_id' => $savedVehicle->id,
         ]);
 
         Mail::to(config('mail.rep-email'))->send(new SendRepBuyRequest($savedVehicle));
-        Mail::to($user->email)->send(new SendUserBuyRequest($savedVehicle));
+        Mail::to(auth()->user()->email)->send(new SendUserBuyRequest($savedVehicle));
 
         return redirect()->to(route('buyRequest.thanks'));
-    }
-
-    public function thanks()
-    {
-        return view('buyRequest.thanks');
     }
 }

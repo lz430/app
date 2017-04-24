@@ -37,10 +37,11 @@ Route::post('step-1', function () {
 Route::post('step-2', function () {
     $options = VersionOption::where('version_id', request()->input('version_id'))->get();
     $version = Version::with('taxesAndDiscounts')->findOrFail(request()->input('version_id'));
+    $selectedOptions = VersionOption::whereIn('id', request()->input('option_ids', []))->get();
 
     return view('step-3-buy-or-save')
         ->with('options', $options)
-        ->with('selectedOptions', VersionOption::whereIn('id', request()->input('option_ids'))->get())
+        ->with('selectedOptions', $selectedOptions)
         ->with('selectedOptionIds', request()->input('option_ids'))
         ->with('version', $version);
 });
@@ -48,15 +49,19 @@ Route::post('step-2', function () {
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 
+Route::get('buy-request/create', [
+    'as' => 'buyRequest.create',
+    'uses' => 'BuyRequestController@create'
+])->middleware('auth');
+
 Route::post('buy-request', [
     'as' => 'buyRequest.store',
     'uses' => 'BuyRequestController@store'
-]);
+])->middleware('auth');
 
-Route::get('buy-request/thanks', [
-    'as' => 'buyRequest.thanks',
-    'uses' => 'BuyRequestController@thanks'
-]);
+Route::get('buy-request/thanks', function () {
+    return view('buyRequest.thanks');
+})->name('buyRequest.thanks');
 
 Route::post('saved-vehicle', [
     'as' => 'savedVehicle.store',

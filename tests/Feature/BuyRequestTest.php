@@ -2,13 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\JATO\Version;
-use App\Mail\SendGarageLink;
 use App\Mail\SendRepBuyRequest;
 use App\Mail\SendUserBuyRequest;
+use App\SavedVehicle;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
@@ -21,15 +19,25 @@ class BuyRequestTest extends TestCase
     {
         Mail::fake();
 
-        $version = factory(Version::class)->create();
+        $user = factory(User::class)->create();
+
+        $this->be($user);
+
+        $savedVehicle = factory(SavedVehicle::class)->create([
+            'user_id' => $user->id
+        ]);
 
         $response = $this->post(route('buyRequest.store', [
-            'email' => 'logan@tighten.co',
-            'version_id' => $version->id
+            'savedVehicleId' => $savedVehicle->id,
         ]));
 
-        Mail::assertSent(SendUserBuyRequest::class);
         Mail::assertSent(SendRepBuyRequest::class);
+        Mail::assertSent(SendUserBuyRequest::class);
+
+        $this->assertDatabaseHas('buy_requests', [
+            'user_id' => $user->id,
+            'saved_vehicle_id' => $savedVehicle->id,
+        ]);
 
         $response->assertRedirect(route('buyRequest.thanks'));
     }

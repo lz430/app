@@ -33,14 +33,14 @@ class LoginController extends Controller
 
         Mail::to(request()->input('email'))->send(new SendGarageLink($url));
 
-        return 'Login email sent. Go check your email.';
+        return view('auth.login-email-sent');
     }
 
     public function authenticateEmail($token)
     {
         $emailLogin = EmailLogin::validFromToken($token);
 
-        Auth::login($emailLogin->user);
+        auth()->login($emailLogin->user);
 
         EmailLogin::where('email', $emailLogin->email)->delete();
 

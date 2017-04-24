@@ -37,7 +37,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        {!!  file_get_contents(__DIR__ . '/../../../public/images/dmr-logo.svg') !!}
+                        <img class="navbar-brand__logo" src="/images/dmr-logo.svg">
                     </a>
                 </div>
 
@@ -50,8 +50,12 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
-                        @if (!request()->is('login'))
+                        @if (!request()->is('login') && auth()->check())
                             <li><a href="{{ route('home') }}">My Garage</a></li>
+                        @endif
+
+                        @if (!auth()->check())
+                            <li><a href="{{ route('login') }}">Login</a></li>
                         @endif
                     </ul>
                 </div>

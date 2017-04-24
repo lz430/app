@@ -11,85 +11,12 @@
 // React Select
 @import 'node_modules/react-select/scss/default';
 
-// Temporary Styles
+@import 'components/saved-vehicle';
+@import 'components/details';
+@import 'components/navbar';
 
-// Component - Bottom Border
-@mixin border-bottom {
-  border-bottom: 1px solid transparentize(black, .9);
-  padding-bottom: 15px;
-}
-
-// Component - List Item
-@mixin list-items {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 25px 0;
-
-  &__item {
-    @include border-bottom;
-    color: $brand-primary;
-    cursor: pointer;
-    flex-basis: 45%;
-    margin: 0 5% 0 0;
-    padding: 5px 0 5px 5px;
-
-    &:after {
-      content: '>';
-      float: right;
-      padding-left: 10px;
-      padding-right: 5px;
-    }
-  }
-}
-
-// Details Component
-details {
-  @include border-bottom;
-  color: $brand-primary;
-  cursor: pointer;
-  padding: 25px 0;
-}
-
-// Nav Bar
-.navbar-brand {
-  padding: 0;
-
-  svg {
-    height: 100%;
-  }
-}
-
-.step-0 {
-  &__selector {
-    margin-bottom: 30px;
-  }
-}
-
-.step-1 {
-  .items {
-    @include list-items;
-  }
-}
-
-.step-2 {
-  margin: 15px;
-
-  &__option {
-    border-radius: 5px;
-    border: 1px solid gray;
-    padding: 15px;
-  }
-}
-
-.step-3 {
-
-}
-
-.saved-vehicle {
-  margin: 15px 0;
-
-  &__title {
-    display: inline;
-    font-size: 2rem;
-  }
-}
+// Steps
+@import 'components/steps/step-0';
+@import 'components/steps/step-1';
+@import 'components/steps/step-2';
+@import 'components/steps/step-3';

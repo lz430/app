@@ -13,11 +13,15 @@ class SavedVehicleController extends Controller
 {
     public function index()
     {
-        return view('home')->with('savedVehicles', Auth::user()->savedVehicles);
+        return view('home')->with('savedVehicles', auth()->user()->savedVehicles);
     }
 
     public function store()
     {
+        $this->validate(request(), [
+            'email' => 'required|email',
+        ]);
+
         /** @var \App\User $user */
         $user = User::firstOrCreate([
             'email' => request()->input('email'),
@@ -37,14 +41,16 @@ class SavedVehicleController extends Controller
 
         Mail::to(request()->input('email'))->send(new SendGarageLink(route('home')));
 
-        Auth::loginUsingId($user->id);
+        auth()->loginUsingId($user->id);
 
-        return redirect()->to('home');
+        return request()->isJson()
+            ? response()->json($savedVehicle->id)
+            : redirect()->to('home');
     }
 
     public function destroy($id)
     {
-        Auth::user()->savedVehicles()->findOrFail($id)->delete();
+        auth()->user()->savedVehicles()->findOrFail($id)->delete();
 
         return redirect()->back();
     }
