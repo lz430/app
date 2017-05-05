@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\EmailLogin;
 use App\Http\Controllers\Controller;
 use App\Mail\SendGarageLink;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Auth;
@@ -13,8 +14,6 @@ use Illuminate\Support\Facades\Mail;
 class LoginController extends Controller
 {
     use AuthenticatesUsers;
-
-    protected $redirectTo = '/home';
 
     public function __construct()
     {
@@ -25,7 +24,10 @@ class LoginController extends Controller
     {
         $this->validate(request(), ['email' => 'required|email|exists:users']);
 
-        $emailLogin = EmailLogin::createForEmail(request()->input('email'));
+        $emailLogin = EmailLogin::create([
+            'email' => request()->input('email'),
+            'token' => str_random(20)
+        ]);
 
         $url = route('auth.email-authenticate', [
             'token' => $emailLogin->token
@@ -38,7 +40,9 @@ class LoginController extends Controller
 
     public function authenticateEmail($token)
     {
-        $emailLogin = EmailLogin::validFromToken($token);
+        $emailLogin = EmailLogin::where('token', $token)
+            ->where('created_at', '>', Carbon::parse('-15 minutes'))
+            ->firstOrFail();
 
         auth()->login($emailLogin->user);
 

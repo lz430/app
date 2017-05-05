@@ -14,25 +14,6 @@ class Client
         $this->authorize($username, $password);
     }
 
-    private function authorize($username, $password)
-    {
-        $response = json_decode((string) $this->guzzleClient->request('POST', 'https://auth.jatoflex.com/oauth/token', [
-            'form_params' => [
-                'username' => $username,
-                'password' => $password,
-                'grant_type' => 'password',
-            ]
-        ])->getBody(), true);
-
-        $this->guzzleClient = new GuzzleClient([
-            'base_uri' => 'https://api.jatoflex.com/api/en-us/',
-            'headers' => [
-                'Authorization' => $response['token_type'] . ' ' . $response['access_token'],
-                'Subscription-Key' => 'e37102e58e4f42bf927743e6e92c41c3'
-            ]
-        ]);
-    }
-
     public function makes()
     {
         return json_decode((string) $this->guzzleClient->request('GET', 'makes')->getBody(), true);
@@ -81,5 +62,24 @@ class Client
             )->getBody(),
             true
         );
+    }
+
+    private function authorize($username, $password)
+    {
+        $response = json_decode((string) $this->guzzleClient->request('POST', 'https://auth.jatoflex.com/oauth/token', [
+            'form_params' => [
+                'username' => $username,
+                'password' => $password,
+                'grant_type' => 'password',
+            ]
+        ])->getBody(), true);
+
+        $this->guzzleClient = new GuzzleClient([
+            'base_uri' => 'https://api.jatoflex.com/api/en-us/',
+            'headers' => [
+                'Authorization' => $response['token_type'] . ' ' . $response['access_token'],
+                'Subscription-Key' => 'e37102e58e4f42bf927743e6e92c41c3'
+            ]
+        ]);
     }
 }
