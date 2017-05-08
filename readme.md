@@ -1,8 +1,20 @@
 # Deliver My Ride
+## Requirements
+- PHP >= 5.6
+- Composer
+- Node
+- Yarn
+- Cross-env
+  - `npm install -g cross-env`
 
-## Install Dependencies
+## Install Project Dependencies
 ```
-composer install
+composer install && yarn
+```
+
+## Run front-end tasks
+```
+yarn run dev
 ```
 
 ## Create .env file
