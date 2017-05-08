@@ -26,6 +26,32 @@ class LoadVehiclesFromJATO extends Command
         $this->client = $client;
     }
 
+    public function handle()
+    {
+        $versionsPromises = [];
+
+        foreach ($this->client->manufacturers() as $manufacturerResponse) {
+            $manufacturer = $this->saveManufacturer($manufacturerResponse);
+
+            foreach ($this->client->makesByManufacturerUrlName($manufacturer->url_name) as $makeResponse) {
+                $vehicleMake = $this->saveManufacturerMake($manufacturer, $makeResponse);
+
+                foreach ($this->client->modelsByMakeName($vehicleMake->url_name) as $modelResponse) {
+                    $vehicleModel = $this->saveMakeModel($vehicleMake, $modelResponse);
+
+                    $versionsPromises[] = $this->client->modelsVersionsByModelNameAsync($vehicleModel->url_name)
+                        ->then(function (ResponseInterface $response) use ($vehicleModel) {
+                            foreach (json_decode((string) $response->getBody(), true)['results'] as $version) {
+                                $this->saveModelVersionAndOptionsAndTaxesAndDiscounts($vehicleModel, $version);
+                            }
+                        });
+                }
+            }
+        }
+
+        $this->resolvePromises($versionsPromises);
+    }
+
     private function saveManufacturer(array $manufacturer)
     {
         $this->info('Saving Manufacturer: ' . $manufacturer['manufacturerName']);
@@ -173,31 +199,5 @@ class LoadVehiclesFromJATO extends Command
                 'Error retrieving options for vehicleID: ' . $version['vehicleId']
             );
         }
-    }
-
-    public function handle()
-    {
-        $versionsPromises = [];
-
-        foreach ($this->client->manufacturers() as $manufacturerResponse) {
-            $manufacturer = $this->saveManufacturer($manufacturerResponse);
-
-            foreach ($this->client->makesByManufacturerUrlName($manufacturer->url_name) as $makeResponse) {
-                $vehicleMake = $this->saveManufacturerMake($manufacturer, $makeResponse);
-
-                foreach ($this->client->modelsByMakeName($vehicleMake->url_name) as $modelResponse) {
-                    $vehicleModel = $this->saveMakeModel($vehicleMake, $modelResponse);
-
-                    $versionsPromises[] = $this->client->modelsVersionsByModelNameAsync($vehicleModel->url_name)
-                        ->then(function (ResponseInterface $response) use ($vehicleModel) {
-                            foreach (json_decode((string) $response->getBody(), true)['results'] as $version) {
-                                $this->saveModelVersionAndOptionsAndTaxesAndDiscounts($vehicleModel, $version);
-                            }
-                        });
-                }
-            }
-        }
-
-        $this->resolvePromises($versionsPromises);
     }
 }
