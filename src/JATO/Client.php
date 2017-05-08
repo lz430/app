@@ -64,6 +64,17 @@ class Client
         );
     }
 
+    public function decodeVin($vin)
+    {
+        return json_decode(
+            (string) $this->guzzleClient->request(
+                'GET',
+                "vin/decode/$vin"
+            )->getBody(),
+            true
+        );
+    }
+
     private function authorize($username, $password)
     {
         $response = json_decode((string) $this->guzzleClient->request('POST', 'https://auth.jatoflex.com/oauth/token', [
