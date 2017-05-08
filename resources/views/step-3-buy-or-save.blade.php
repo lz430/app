@@ -33,36 +33,13 @@
 
                         {{-- Store savedVehicle using ajax. Then redirect to create page w/ id of savedVehicle in query string --}}
                         <a class="btn btn-primary" onclick="(function saveVehicle() {
-                            fetch('{{ route('savedVehicle.store') }}', {
-                                    credentials: 'same-origin',
-                                    method: 'POST',
-                                    headers: {
-                                        'X-Requested-With': 'XMLHttpRequest',
-                                        'X-CSRF-TOKEN': window.Laravel.csrfToken,
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({
-                                        email: document.getElementById('email').value,
-                                        version_id: {{ $version->id }},
-                                    }),
-                                })
-                                .then(function (response) {
-                                    if (response.status >= 200 && response.status < 300) {
-                                        return response;
-                                    } else {
-                                        return response.json().then(function (json) {
-                                            var error = new Error(Object.values(json).toString());
-                                            error.response = response;
-                                            throw error;
-                                        });
-                                    }
-                                })
-                                .then(function(response) {
-                                    return response.json();
-                                }).then(function(savedVehicleId) {
-                                    window.location = '{{ route('buyRequest.create') }}?savedVehicleId=' + savedVehicleId;
+                            window.axios.post('{{ route('savedVehicle.store') }}', {
+                                    email: document.getElementById('email').value,
+                                    version_id: {{ $version->id }},
+                                }).then(function(response) {
+                                    window.location = '{{ route('buyRequest.create') }}?savedVehicleId=' + response.data;
                                 }).catch(function (error) {
-                                    alert(error);
+                                    alert(error.response.data.email[0] ? error.response.data.email[0] : 'something went wrong');
                                 });
                         })()">Make this my ride</a>
 
