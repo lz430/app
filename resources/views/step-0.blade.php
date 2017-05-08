@@ -8,7 +8,7 @@
             {{ csrf_field() }}
             <div class="row">
                 <div class="col-lg-6">
-                    <ModelSelector data-makes='{!! json_encode($makes) !!}'></ModelSelector>
+                    <ModelSelector data-makes="{{ json_encode($makes) }}"></ModelSelector>
                 </div>
             </div>
 

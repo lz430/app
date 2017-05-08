@@ -16254,6 +16254,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 window.axios = __webpack_require__(212);
 
+window.axios.defaults.headers.post['Content-Type'] = 'application/json';
 window.axios.defaults.headers.common['X-CSRF-TOKEN'] = window.Laravel.csrfToken;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 

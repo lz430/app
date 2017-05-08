@@ -3,7 +3,7 @@
 @section('title', 'Buy or Save')
 
 @section('content')
-    <Configured data-version='{!! json_encode($version) !!}' data-options='{!! json_encode($selectedOptions) !!}'></Configured>
+    <Configured data-version="{{ json_encode($version) }}" data-options="{{ json_encode($selectedOptions) }}"></Configured>
 
     <div class="step-3">
         <br>
