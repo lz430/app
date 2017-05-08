@@ -11,7 +11,6 @@ composer install
 cp .env.example .env
 ```
 
-
 ## Generate Application Key
 ```
 php artisan key:generate
