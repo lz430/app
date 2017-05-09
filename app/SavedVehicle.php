@@ -4,9 +4,10 @@ namespace App;
 
 use App\JATO\Version;
 use App\JATO\VersionOption;
+use DeliverMyRide\HasOptions;
 use Illuminate\Database\Eloquent\Model;
 
-class SavedVehicle extends Model
+class SavedVehicle extends Model implements HasOptions
 {
     protected $fillable = [
         'version_id',
