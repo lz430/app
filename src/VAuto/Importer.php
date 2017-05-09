@@ -102,11 +102,29 @@ class Importer
                             $versionDeal,
                             $keyedData['Photos']
                         );
+
+                        $this->saveVersionDealOptions(
+                            $versionDeal,
+                            $keyedData['Features']
+                        );
                     }
                 });
             } catch (ClientException $e) {
                 $this->info("Unable to decode vin: {$keyedData['VIN']}");
             }
+        }
+    }
+
+    private function saveVersionDealOptions(VersionDeal $versionDeal, string $options)
+    {
+        foreach (collect(explode('|', $options))->filter(function ($option) {
+            return $option !== '';
+        }) as $option) {
+            $versionDeal->options()->updateOrCreate([
+                'option' => $option
+            ], [
+                'option' => $option
+            ]);
         }
     }
 
@@ -156,7 +174,6 @@ class Importer
             'inventory_date' => Carbon::createFromFormat('m/d/Y', $keyedData['Inventory Date']),
             'certified' => $keyedData['Certified'] === 'Yes',
             'description' => $keyedData['Description'],
-            'features' => $keyedData['Features'],
             'fuel_econ_city' => $keyedData['City MPG'] !== '' ? $keyedData['City MPG'] : null,
             'fuel_econ_hwy' => $keyedData['Highway MPG'] !== '' ? $keyedData['Highway MPG'] : null,
             'dealer_name' => $keyedData['Dealer Name'],
