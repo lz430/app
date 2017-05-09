@@ -14,4 +14,9 @@ class VersionDeal extends Model
     {
         return $this->belongsTo(Version::class);
     }
+
+    public function photos()
+    {
+        return $this->hasMany(VersionDealPhoto::class);
+    }
 }
