@@ -27,5 +27,7 @@ class MoveFeaturesToVersionDealsOptions extends Migration
         Schema::table('version_deals', function (Blueprint $table) {
             $table->longText('features')->nullable();
         });
+        
+        Schema::dropIfExists('version_deal_options');
     }
 }
