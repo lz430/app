@@ -48,6 +48,8 @@ class CreateVersionDealsTable extends Migration
 
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+        
         Schema::dropIfExists('version_deals');
     }
 }
