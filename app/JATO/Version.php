@@ -2,6 +2,7 @@
 
 namespace App\JATO;
 
+use App\VersionDeal;
 use Illuminate\Database\Eloquent\Model;
 
 class Version extends Model
@@ -48,5 +49,10 @@ class Version extends Model
     public function taxesAndDiscounts()
     {
         return $this->hasMany(VersionTaxAndDiscount::class);
+    }
+
+    public function deals()
+    {
+        return $this->hasMany(VersionDeal::class);
     }
 }

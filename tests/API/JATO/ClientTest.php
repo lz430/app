@@ -59,4 +59,10 @@ class ClientTest extends TestCase
     {
         static::$client->optionsByVehicleId('61539620000131');
     }
+
+    /** @test */
+    public function can_decode_vin()
+    {
+        static::$client->decodeVin('2C4RC1BG4HR710602');
+    }
 }

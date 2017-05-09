@@ -39,4 +39,8 @@ return [
         'username' => env('JATO_USERNAME'),
         'password' => env('JATO_PASSWORD'),
     ],
+
+    'vauto' => [
+        'uploads_path' => env('VAUTO_UPLOADS_PATH')
+    ]
 ];
