@@ -94,6 +94,7 @@ file;
             new BufferedOutput()
         );
 
+        /** Loads Deals */
         $this->assertDatabaseHas('version_deals', [
             'version_id' => 1,
             'vin' => 'ZACCJBBB2HPF21828'
@@ -112,6 +113,11 @@ file;
         /** Loads Photos (as https) */
         $this->assertDatabaseHas('version_deal_photos', [
             'url' => 'https://vehiclephotos.vauto.com/53/fe/66/83-3b4f-4da9-9f01-1734905d230b/image-1.jpg'
+        ]);
+
+        /** Loads Options */
+        $this->assertDatabaseHas('version_deal_options', [
+            'option' => '18" x 7.0" Aluminum Wheels'
         ]);
     }
 }

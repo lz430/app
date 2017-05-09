@@ -12,6 +12,8 @@
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
+use Carbon\Carbon;
+
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     static $password;
 
@@ -36,9 +38,7 @@ $factory->define(App\JATO\Make::class, function (Faker\Generator $faker) {
         'name' => $faker->unique()->company,
         'url_name' => $faker->unique()->slug,
         'is_current' => $faker->boolean(),
-        'manufacturer_id' => function () {
-            return factory(App\JATO\Manufacturer::class)->create()->id;
-        }
+        'manufacturer_id' => factory(App\JATO\Manufacturer::class),
     ];
 });
 
@@ -47,9 +47,7 @@ $factory->define(App\JATO\VehicleModel::class, function (Faker\Generator $faker)
         'name' => $faker->unique()->company,
         'url_name' => $faker->unique()->slug,
         'is_current' => $faker->boolean(),
-        'make_id' => function () {
-            return factory(App\JATO\Make::class)->create()->id;
-        }
+        'make_id' => factory(App\JATO\Make::class),
     ];
 });
 
@@ -58,9 +56,7 @@ $factory->define(App\JATO\Version::class, function (Faker\Generator $faker) {
         'jato_vehicle_id' => $faker->randomElement(['75644520050520', '718410620150406', '740002220150406']),
         'jato_uid' => $faker->randomNumber(),
         'jato_model_id' => $faker->randomNumber(),
-        'model_id' => function () {
-            return factory(App\JATO\VehicleModel::class)->create()->id;
-        },
+        'model_id' => factory(App\JATO\VehicleModel::class),
         'year' => $faker->year,
         'name' => $faker->name,
         'trim_name' => $faker->name,
@@ -105,15 +101,42 @@ $factory->define(App\JATO\VersionOption::class, function (Faker\Generator $faker
 });
 
 $factory->define(App\SavedVehicle::class, function (Faker\Generator $faker) {
-    $manufacturer = factory(App\JATO\Manufacturer::class)->create();
-    $make = $manufacturer->makes()->save(factory(App\JATO\Make::class)->make());
-    $model = $make->models()->save(factory(App\JATO\VehicleModel::class)->make());
-    $version = $model->versions()->save(factory(App\JATO\Version::class)->make());
-
     return [
-        'user_id' => function () {
-            return factory(App\User::class)->create()->id;
-        },
-        'version_id' => $version->id,
+        'user_id' => factory(App\User::class),
+        'version_id' => factory(\App\JATO\Version::class),
+    ];
+});
+
+$factory->define(App\VersionDeal::class, function (Faker\Generator $faker) {
+    return [
+        'file_hash' => $faker->md5,
+        'dealer_id' => 'MP4164',
+        'stock_number' => 'AH2844A',
+        'vin' => '3C4NJDBB4HT628358',
+        'new' => true,
+        'year' => 2017,
+        'make' => 'Jeep',
+        'model' => 'Compass',
+        'model_code' => 'MPJM74',
+        'body' => '4D Sport Utility',
+        'transmission' => 'CVT',
+        'series' => 'Latitude',
+        'series_detail' => null,
+        'door_count' => 4,
+        'odometer' => null,
+        'engine' => '2.4L I4 MultiAir',
+        'fuel' => 'Gasoline',
+        'color' => 'White Clearcoat',
+        'interior_color' => 'Ski Gray/Black',
+        'price' => 27242.00,
+        'msrp' => 29475.00,
+        'inventory_date' => Carbon::now(),
+        'certified' => false,
+        'description' => '$2,509 off MSRP! Factory MSRP: $31,510 4WD, ABS brakes, Compass, Electronic Stability Control, Heated door mirrors, Illuminated entry, Low tire pressure warning, Remote keyless entry, Traction control. 2017 Jeep Compass LatitudeReviews:  * Appealing baby-Grand Cherokee styling; optional flip-down tailgate speakers make tailgating a bit more fun; above-average off-road capability with Freedom Drive II; attractively priced. Source: Edmunds   ',
+        'fuel_econ_city' => 22,
+        'fuel_econ_hwy' => null,
+        'dealer_name' => 'Suburban Chrysler Jeep Dodge of Troy',
+        'days_old' => 11,
+        'version_id' => factory(App\JATO\Version::class),
     ];
 });
