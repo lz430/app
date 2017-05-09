@@ -20,4 +20,9 @@ class VersionDeal extends Model implements HasOptions
     {
         return $this->hasMany(VersionDealOption::class);
     }
+
+    public function photos()
+    {
+        return $this->hasMany(VersionDealPhoto::class);
+    }
 }

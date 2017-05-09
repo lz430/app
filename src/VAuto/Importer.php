@@ -3,6 +3,7 @@
 namespace DeliverMyRide\Vauto;
 
 use App\JATO\Version;
+use App\VersionDeal;
 use Carbon\Carbon;
 use DeliverMyRide\JATO\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -94,12 +95,31 @@ class Importer
                         'jato_uid',
                         collect($decoded['versions'])->pluck('uid')
                     )->get() as $version) {
-                        $this->saveVersionDeal($version, $fileHash, $keyedData);
+                        /** @var VersionDeal $versionDeal */
+                        $versionDeal = $this->saveVersionDeal($version, $fileHash, $keyedData);
+
+                        $this->saveVersionDealPhotos(
+                            $versionDeal,
+                            $keyedData['Photos']
+                        );
                     }
                 });
             } catch (ClientException $e) {
                 $this->info("Unable to decode vin: {$keyedData['VIN']}");
             }
+        }
+    }
+
+    private function saveVersionDealPhotos(VersionDeal $versionDeal, string $photos)
+    {
+        foreach (collect(explode('|', $photos))->map(function ($url) {
+            return str_replace('http://', 'https://', $url);
+        }) as $url) {
+            $versionDeal->photos()->updateOrCreate([
+                'url' => $url
+            ], [
+                'url' => $url
+            ]);
         }
     }
 

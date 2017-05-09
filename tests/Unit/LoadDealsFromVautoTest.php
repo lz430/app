@@ -108,5 +108,10 @@ file;
             'version_id' => 3,
             'vin' => 'ZACCJBBB2HPF21828'
         ]);
+
+        /** Loads Photos (as https) */
+        $this->assertDatabaseHas('version_deal_photos', [
+            'url' => 'https://vehiclephotos.vauto.com/53/fe/66/83-3b4f-4da9-9f01-1734905d230b/image-1.jpg'
+        ]);
     }
 }
