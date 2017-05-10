@@ -130,15 +130,9 @@ class Importer
 
     private function saveVersionDealPhotos(VersionDeal $versionDeal, string $photos)
     {
-        foreach (collect(explode('|', $photos))->map(function ($url) {
-            return str_replace('http://', 'https://', $url);
-        }) as $url) {
-            $versionDeal->photos()->updateOrCreate([
-                'url' => $url
-            ], [
-                'url' => $url
-            ]);
-        }
+        collect(explode('|', $photos))->each(function ($photoUrl) use ($versionDeal) {
+            $versionDeal->photos()->firstOrCreate(['url' => str_replace('http', 'https', $photoUrl)]);
+        });
     }
 
     private function saveVersionDeal(Version $version, string $fileHash, array $keyedData)
