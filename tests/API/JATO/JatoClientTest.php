@@ -9,7 +9,7 @@ use Tests\TestCase;
 /**
  * Tests that the actual JATO API is working
  */
-class ClientTest extends TestCase
+class JatoClientTest extends TestCase
 {
     /** @var $client JatoClient */
     private static $client;
