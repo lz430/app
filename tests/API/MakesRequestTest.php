@@ -22,4 +22,12 @@ class MakesRequestTest extends TestCase
         $response->assertJsonFragment(['name' => 'BMW']);
         $response->assertJsonFragment(['type' => 'makes']);
     }
+
+    /** @test */
+    public function it_shows_the_body_styles_data()
+    {
+        $response = $this->get('api/v1/body-styles');
+
+        $response->assertJsonFragment(['style' => 'Coupe']);
+    }
 }
