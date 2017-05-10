@@ -11,7 +11,6 @@ class AddApiTokenToUsersTable extends Migration
         Schema::table('users', function (Blueprint $table) {
             // Sqlite requires a default value be specified
             $table->string('api_token', 60)->after('remember_token')->unique()->default('some_api_token');
-            ;
         });
     }
     

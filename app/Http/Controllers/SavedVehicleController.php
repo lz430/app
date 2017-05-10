@@ -20,7 +20,7 @@ class SavedVehicleController extends Controller
     {
         $this->validate(request(), [
             'email' => 'required|email',
-            'version_id' => 'required'
+            'version_id' => 'required',
         ]);
 
         /** @var \App\User $user */
