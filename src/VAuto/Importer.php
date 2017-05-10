@@ -190,7 +190,7 @@ class Importer
     {
         if (self::HEADERS !== $headers) {
             throw new MismatchedHeadersException(
-                implode(', ', $headers) . 'does not match expeced headers: ' . implode(', ', self::HEADERS)
+                implode(', ', $headers) . ' does not match expected headers: ' . implode(', ', self::HEADERS)
             );
         }
     }
