@@ -9,30 +9,30 @@ class User extends Authenticatable
 {
     use Notifiable;
     
-    protected static function boot()
-    {
-        parent::boot();
-    
-        static::creating(function ($user) {
-            $user->api_token = str_random(60);
-        });
-    }
-
     protected $fillable = [
         'name', 'email', 'password',
     ];
-
+    
     protected $hidden = [
         'password', 'remember_token',
     ];
-
+    
     public function savedVehicles()
     {
         return $this->hasMany(SavedVehicle::class);
     }
-
+    
     public function buyRequest()
     {
         return $this->hasMany(BuyRequest::class);
+    }
+    
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($user) {
+            $user->api_token = str_random(60);
+        });
     }
 }
