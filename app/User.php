@@ -8,6 +8,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable;
+    
+    protected static function boot()
+    {
+        parent::boot();
+    
+        static::creating(function ($user) {
+            $user->api_token = str_random(60);
+        });
+    }
 
     protected $fillable = [
         'name', 'email', 'password',

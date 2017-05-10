@@ -24,12 +24,12 @@ class UserRegistrationTest extends TestCase
         ];
         
         $response = $this->post(route('savedVehicle.store'), $parameters);
-    
+        
         // The user is created
         $this->assertDatabaseHas('users', ['email' => 'somenewuser@example.com']);
         
         // The user has an API token
-        $this->assertNotEmpty(User::first()->api_token);
+        $this->assertNotEmpty(User::where('email', 'somenewuser@example.com')->first()->api_token);
         
         // The vehicle is saved
         $this->assertDatabaseHas('saved_vehicles', ['version_id' => $version->id]);

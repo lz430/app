@@ -29,8 +29,7 @@ class SavedVehicleController extends Controller
         ], [
             'email' => request()->input('email'),
             'name' => '',
-            'password' => Hash::make(str_random(8)),
-            'api_token' => str_random(60)
+            'password' => Hash::make(str_random(8))
         ]);
 
         /** @var SavedVehicle $savedVehicle */
