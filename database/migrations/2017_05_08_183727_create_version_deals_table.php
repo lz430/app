@@ -34,7 +34,6 @@ class CreateVersionDealsTable extends Migration
             $table->date('inventory_date');
             $table->boolean('certified')->nullable();
             $table->longText('description')->nullable();
-            $table->longText('features')->nullable();
             $table->integer('fuel_econ_city')->nullable();
             $table->integer('fuel_econ_hwy')->nullable();
             $table->string('dealer_name');
@@ -48,8 +47,6 @@ class CreateVersionDealsTable extends Migration
 
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
-        
         Schema::dropIfExists('version_deals');
     }
 }
