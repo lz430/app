@@ -37,6 +37,12 @@ class DealComparerTest extends TestCase
     }
 
     /** @test */
+    public function does_not_throw_empty_params()
+    {
+        new DealComparer();
+    }
+
+    /** @test */
     public function gets_100_percent_on_matching_year()
     {
         $dealComparer = new DealComparer(['year' => 100]);

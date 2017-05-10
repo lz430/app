@@ -17,61 +17,57 @@ class DealComparer
 
     public function __construct(array $weights = [])
     {
-        if (!$this->checkValidWeights($weights)) {
-            throw new InvalidArgumentException;
-        }
+        if (empty($weights)) {
+            $this->weights = array_fill_keys(self::PARAMETERS, 100 / count(self::PARAMETERS));
+        } else {
+            $this->ensureValidWeights($weights);
 
-        $this->weights = !empty($weights)
-            ? $weights
-            /** Default equal weights */
-            : array_fill_keys(self::PARAMETERS, 100 / count(self::PARAMETERS));
+            $this->weights = $weights;
+        }
     }
 
     public function getPercentMatch(HasOptions $versionOrSavedVehicle, VersionDeal $versionDeal)
     {
+        $version = $this->versionFromVersionOrSavedVehicle($versionOrSavedVehicle);
+
         return array_sum([
-            $this->year($versionOrSavedVehicle, $versionDeal),
-            $this->trim($versionOrSavedVehicle, $versionDeal)
+            $this->year($version, $versionDeal),
+            $this->trim($version, $versionDeal),
         ]);
     }
 
-    private function checkValidWeights(array $weights)
+    private function versionFromVersionOrSavedVehicle($versionOrSavedVehicle) : Version
     {
-        /** Add up to 100 and is a subset of parameter options */
-        return !array_diff(array_keys($weights), self::PARAMETERS) && array_sum(array_values($weights)) === 100;
+        if ($versionOrSavedVehicle instanceof Version) {
+            return $versionOrSavedVehicle;
+        }
+
+        if ($versionOrSavedVehicle instanceof SavedVehicle) {
+            return $versionOrSavedVehicle->version;
+        }
+
+        throw new InvalidArgumentException;
     }
 
-    private function trim(HasOptions $versionOrSavedVehicle, VersionDeal $versionDeal)
+    private function ensureValidWeights(array $weights)
     {
-        return $this->prop($versionOrSavedVehicle, 'trim_name') === $versionDeal->series
+        /** Is a subset of parameter options and adds up to 100 */
+        if (!empty(array_diff(array_keys($weights), self::PARAMETERS)) || array_sum(array_values($weights)) !== 100) {
+            throw new InvalidArgumentException;
+        }
+    }
+
+    private function trim(Version $version, VersionDeal $versionDeal)
+    {
+        return $version->trim_name === $versionDeal->series
             ? $this->weights['trim']
             : 0;
     }
 
-    private function year(HasOptions $versionOrSavedVehicle, VersionDeal $versionDeal)
+    private function year(Version $version, VersionDeal $versionDeal)
     {
-        $differenceInYears = abs($this->prop($versionOrSavedVehicle, 'year') - $versionDeal->year);
+        $differenceInYears = abs($version->year - $versionDeal->year);
 
         return max(0, $this->weights['year'] - $differenceInYears);
-    }
-
-    /**
-     * Access property on a Version or SavedVehicle transparently
-     *
-     * @param HasOptions $versionOrSavedVehicle
-     * @param string $property
-     * @return mixed
-     */
-    private function prop(HasOptions $versionOrSavedVehicle, string $property)
-    {
-        if ($versionOrSavedVehicle instanceof Version) {
-            return $versionOrSavedVehicle->{$property};
-        }
-
-        if ($versionOrSavedVehicle instanceof SavedVehicle) {
-            return $versionOrSavedVehicle->version->{$property};
-        }
-
-        return null;
     }
 }
