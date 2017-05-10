@@ -8,7 +8,7 @@ use App\JATO\VehicleModel;
 use App\JATO\Version;
 use App\JATO\VersionOption;
 use App\JATO\VersionTaxAndDiscount;
-use DeliverMyRide\JATO\Client;
+use DeliverMyRide\JATO\JatoClient;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Psr7\Response;
 use function GuzzleHttp\Psr7\stream_for;
@@ -52,7 +52,7 @@ class LoadVehiclesFromJATOTest extends TestCase
                 ]]]))));
         });
 
-        $client = Mockery::mock(Client::class, [
+        $client = Mockery::mock(JatoClient::class, [
             'manufacturers' => [[
                 'manufacturerName' => 'test manufacturer',
                 'urlManufacturerName' => 'test-manufacturer',
@@ -87,7 +87,7 @@ class LoadVehiclesFromJATOTest extends TestCase
             'modelsVersionsByModelNameAsync' => $promise,
         ]);
 
-        App::instance(Client::class, $client);
+        App::instance(JatoClient::class, $client);
 
         $this->app->make(Kernel::class)->handle(
             new ArrayInput(['command' => 'jato:load']),

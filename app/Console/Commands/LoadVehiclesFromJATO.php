@@ -6,7 +6,7 @@ use App\JATO\Make;
 use App\JATO\Manufacturer;
 use App\JATO\VehicleModel;
 use App\JATO\Version;
-use DeliverMyRide\JATO\Client;
+use DeliverMyRide\JATO\JatoClient;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Promise\EachPromise;
 use Illuminate\Console\Command;
@@ -19,7 +19,7 @@ class LoadVehiclesFromJATO extends Command
     protected $description = 'Load vehicles from JATO.';
     private $client;
 
-    public function __construct(Client $client)
+    public function __construct(JatoClient $client)
     {
         parent::__construct();
 

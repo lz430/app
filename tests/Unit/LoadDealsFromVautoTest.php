@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use App\JATO\Version;
-use DeliverMyRide\JATO\Client;
+use DeliverMyRide\JATO\JatoClient;
 use DeliverMyRide\Vauto\Importer;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Filesystem\Filesystem;
@@ -38,7 +38,7 @@ file;
             ]
         ]);
 
-        $client = Mockery::mock(Client::class, [
+        $client = Mockery::mock(JatoClient::class, [
             'decodeVin' => [
                 "vin" => "2C4RC1BG4HR710602",
                 "plant" => "Windsor Assembly - Windsor, Canada",

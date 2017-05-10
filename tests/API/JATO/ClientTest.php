@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use DeliverMyRide\JATO\Client;
+use DeliverMyRide\JATO\JatoClient;
 use Dotenv\Dotenv;
 use Tests\TestCase;
 
@@ -11,7 +11,7 @@ use Tests\TestCase;
  */
 class ClientTest extends TestCase
 {
-    /** @var $client Client */
+    /** @var $client JatoClient */
     private static $client;
 
     /**
@@ -21,7 +21,7 @@ class ClientTest extends TestCase
     {
         (new Dotenv(__DIR__ . '/../../../'))->load();
 
-        static::$client = new Client(env('JATO_USERNAME'), env('JATO_PASSWORD'));
+        static::$client = new JatoClient(env('JATO_USERNAME'), env('JATO_PASSWORD'));
     }
 
     /** @test */

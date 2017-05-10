@@ -5,7 +5,7 @@ namespace DeliverMyRide\Vauto;
 use App\JATO\Version;
 use App\VersionDeal;
 use Carbon\Carbon;
-use DeliverMyRide\JATO\Client;
+use DeliverMyRide\JATO\JatoClient;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
@@ -53,7 +53,7 @@ class Importer
     private $client;
     private $info;
 
-    public function __construct(Filesystem $filesystem, Client $client)
+    public function __construct(Filesystem $filesystem, JatoClient $client)
     {
         $this->filesystem = $filesystem;
         $this->client = $client;
