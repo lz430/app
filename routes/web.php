@@ -63,10 +63,7 @@ Route::get('buy-request/thanks', function () {
     return view('buyRequest.thanks');
 })->name('buyRequest.thanks');
 
-Route::post('saved-vehicle', [
-    'as' => 'savedVehicle.store',
-    'uses' => 'SavedVehicleController@store'
-]);
+Route::post('saved-vehicle', 'SavedVehicleController@store')->name('savedVehicle.store');
 
 Route::delete('saved-vehicle/{id}', [
     'as' => 'savedVehicle.destroy',

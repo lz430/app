@@ -20,6 +20,7 @@ class SavedVehicleController extends Controller
     {
         $this->validate(request(), [
             'email' => 'required|email',
+            'version_id' => 'required'
         ]);
 
         /** @var \App\User $user */
@@ -28,7 +29,8 @@ class SavedVehicleController extends Controller
         ], [
             'email' => request()->input('email'),
             'name' => '',
-            'password' => Hash::make(str_random(8))
+            'password' => Hash::make(str_random(8)),
+            'api_token' => str_random(60)
         ]);
 
         /** @var SavedVehicle $savedVehicle */
