@@ -4,14 +4,10 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class MoveFeaturesToVersionDealsOptions extends Migration
+class CreateVersionDealOptionsTable extends Migration
 {
     public function up()
     {
-        Schema::table('version_deals', function (Blueprint $table) {
-            $table->dropColumn('features');
-        });
-
         Schema::create('version_deal_options', function (Blueprint $table) {
             $table->increments('id');
             $table->string('option');
@@ -24,10 +20,6 @@ class MoveFeaturesToVersionDealsOptions extends Migration
 
     public function down()
     {
-        Schema::table('version_deals', function (Blueprint $table) {
-            $table->longText('features')->nullable();
-        });
-        
         Schema::dropIfExists('version_deal_options');
     }
 }
