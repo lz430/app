@@ -19,6 +19,7 @@ class MakesController extends Controller
             ->collection($makes)
             ->withResourceName(self::RESOURCE_NAME)
             ->transformWith(self::TRANSFORMER)
+            ->parseIncludes(request('includes'))
             ->respond();
     }
 }

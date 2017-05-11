@@ -14,11 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::group(['prefix' => 'v1'], function () {
-    Route::get('makes', 'API\V1\MakesController@index');
-    Route::get('body-styles', 'API\V1\BodyStylesController@index');
+Route::group(['namespace' => 'V1', 'prefix' => 'v1'], function () {
+    Route::get('makes', 'MakesController@index')->name('makes.index');
+    Route::get('models', 'VehicleModelsController@index')->name('vehicleModels.index');
+    Route::get('body-styles', 'BodyStylesController@index')->name('bodyStyles.index');
 });
