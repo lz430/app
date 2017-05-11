@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API\V1;
 
 use App\JATO\VehicleModel;
 use App\Transformers\V1\VehicleModelsTransformer;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class VehicleModelsController extends Controller
