@@ -20,4 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'v1'], function () {
     Route::get('makes', 'API\V1\MakesController@index');
+    Route::get('body-styles', 'API\V1\BodyStylesController@index');
 });

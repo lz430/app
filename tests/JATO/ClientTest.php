@@ -19,7 +19,7 @@ class ClientTest extends TestCase
      */
     public static function setUpBeforeClass()
     {
-        (new Dotenv(__DIR__ . '/../../../'))->load();
+        (new Dotenv(__DIR__ . '/../../'))->load();
 
         static::$client = new Client(env('JATO_USERNAME'), env('JATO_PASSWORD'));
     }
