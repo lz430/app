@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Transformers\V1;
+namespace App\Transformers;
 
 use App\JATO\Make;
 use App\JATO\VehicleModel;

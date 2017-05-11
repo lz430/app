@@ -61,7 +61,7 @@ class MakesRequestTest extends TestCase
     /** @test */
     public function it_shows_the_body_styles_data()
     {
-        $response = $this->get('api/v1/body-styles');
+        $response = $this->get(route('bodyStyles.index'));
 
         $response->assertJsonFragment(['style' => 'Coupe']);
     }
