@@ -6,7 +6,7 @@ use App\JATO\Make;
 use App\JATO\Manufacturer;
 use App\JATO\VehicleModel;
 use App\JATO\Version;
-use DeliverMyRide\JATO\JatoClient;
+use DeliverMyRide\JATO\Client as JatoClient;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Promise\EachPromise;
 use Illuminate\Console\Command;

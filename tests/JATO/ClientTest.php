@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use DeliverMyRide\JATO\JatoClient;
+use DeliverMyRide\JATO\Client;
 use Dotenv\Dotenv;
 use Tests\TestCase;
 
 /**
  * Tests that the actual JATO API is working
  */
-class JatoClientTest extends TestCase
+class ClientTest extends TestCase
 {
     /** @var $client Client */
     private static $client;
@@ -21,7 +21,7 @@ class JatoClientTest extends TestCase
     {
         (new Dotenv(__DIR__ . '/../../'))->load();
 
-        static::$client = new JatoClient(env('JATO_USERNAME'), env('JATO_PASSWORD'));
+        static::$client = new Client(env('JATO_USERNAME'), env('JATO_PASSWORD'));
     }
 
     /** @test */

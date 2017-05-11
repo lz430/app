@@ -4,7 +4,7 @@ namespace DeliverMyRide\JATO;
 
 use GuzzleHttp\Client as GuzzleClient;
 
-class JatoClient
+class Client
 {
     private $guzzleClient;
 

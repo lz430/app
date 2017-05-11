@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use App\JATO\Version;
-use DeliverMyRide\JATO\JatoClient;
+use DeliverMyRide\JATO\Client;
 use DeliverMyRide\Vauto\Importer;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Filesystem\Filesystem;
@@ -39,7 +39,7 @@ file;
         ]);
 
         $client = Mockery::mock(
-            JatoClient::class,
+            Client::class,
             json_decode(file_get_contents(__DIR__ . '/stubs/decodedVin.json'), true)
         );
 
