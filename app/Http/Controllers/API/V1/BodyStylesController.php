@@ -18,7 +18,7 @@ class BodyStylesController extends Controller
             ->collection(BodyStyles::ALL)
             ->withResourceName(self::RESOURCE_NAME)
             ->transformWith(self::TRANSFORMER)
-            ->serializeWith(new DataArraySerializer())
+            ->serializeWith(new DataArraySerializer)
             ->respond();
     }
 }
