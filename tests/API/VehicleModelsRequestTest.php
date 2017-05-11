@@ -14,7 +14,7 @@ class VehicleModelsRequestTest extends TestCase
     public function it_shows_the_vehicle_models_data()
     {
         factory(VehicleModel::class)->create([
-            'name' => 'somename'
+            'name' => 'somename',
         ]);
         
         $response = $this->get(route('vehicleModels.index'));

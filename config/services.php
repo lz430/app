@@ -41,6 +41,6 @@ return [
     ],
 
     'vauto' => [
-        'uploads_path' => env('VAUTO_UPLOADS_PATH')
-    ]
+        'uploads_path' => env('VAUTO_UPLOADS_PATH'),
+    ],
 ];

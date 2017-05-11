@@ -120,6 +120,6 @@ return [
         ],
     ],
 
-    'rep-email' => env('REP_EMAIL')
+    'rep-email' => env('REP_EMAIL'),
 
 ];

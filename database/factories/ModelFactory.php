@@ -70,7 +70,7 @@ $factory->define(App\JATO\Version::class, function (Faker\Generator $faker) {
         'photo_path' => $faker->randomElement([
             '/SSCUSA/RAM/PROMASTER/2017/4BU.JPG',
             '/SSCUSA/RAM/PROMASTER/2014/2BT.JPG',
-            '/SSCUSA/DODGE/RAM PICKUP/2004/2PU.JPG'
+            '/SSCUSA/DODGE/RAM PICKUP/2004/2PU.JPG',
         ]),
         'fuel_econ_city' => $faker->numberBetween(10, 29),
         'fuel_econ_hwy' => $faker->numberBetween(30, 50),
@@ -96,7 +96,7 @@ $factory->define(App\JATO\VersionOption::class, function (Faker\Generator $faker
         'option_code' => $faker->text(5),
         'option_type' => $faker->randomElement(['O', 'C', 'I', 'P', 'B', 'A']),
         'msrp' => $faker->randomFloat(2, 4000, 6000),
-        'invoice' => $faker->randomFloat(2, 2000, 3900)
+        'invoice' => $faker->randomFloat(2, 2000, 3900),
     ];
 });
 

@@ -10,10 +10,10 @@ class VersionTaxAndDiscount extends Model
 
     protected $fillable = [
         'name',
-        'amount'
+        'amount',
     ];
 
     protected $casts = [
-        'amount' => 'float'
+        'amount' => 'float',
     ];
 }

@@ -24,7 +24,7 @@ class BuyRequestTest extends TestCase
         $this->be($user);
 
         $savedVehicle = factory(SavedVehicle::class)->create([
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
 
         $response = $this->post(route('buyRequest.store', [
