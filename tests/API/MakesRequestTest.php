@@ -44,13 +44,13 @@ class MakesRequestTest extends TestCase
                     'type',
                     'attributes',
                     'relationships',
-                ]
+                ],
             ],
             'included' => [
                 [
                     'type',
-                ]
-            ]
+                ],
+            ],
         ]);
         $response->assertJsonFragment(['name' => 'BMW']);
         $response->assertJsonFragment(['name' => 'i8']);

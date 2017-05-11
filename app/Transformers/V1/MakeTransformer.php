@@ -9,7 +9,7 @@ use League\Fractal\TransformerAbstract;
 class MakeTransformer extends TransformerAbstract
 {
     protected $availableIncludes = [
-        'models'
+        'models',
     ];
     
     /**
