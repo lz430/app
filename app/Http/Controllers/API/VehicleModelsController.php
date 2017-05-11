@@ -4,11 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\JATO\VehicleModel;
-use App\Transformers\VehicleModelsTransformer;
+use App\Transformers\VehicleModelTransformer;
 
 class VehicleModelsController extends Controller
 {
-    private const TRANSFORMER = VehicleModelsTransformer::class;
+    private const TRANSFORMER = VehicleModelTransformer::class;
     private const RESOURCE_NAME = 'models';
     
     public function index()

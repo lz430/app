@@ -1678,16 +1678,16 @@
         },
         {
             "name": "spatie/fractalistic",
-            "version": "2.1.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/fractalistic.git",
-                "reference": "1fa9dacc1d5fc8e51951eb2bb419afa7e5bf5452"
+                "reference": "2be0733adf87cb2b4f49ea477c4032fd369e4f2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/fractalistic/zipball/1fa9dacc1d5fc8e51951eb2bb419afa7e5bf5452",
-                "reference": "1fa9dacc1d5fc8e51951eb2bb419afa7e5bf5452",
+                "url": "https://api.github.com/repos/spatie/fractalistic/zipball/2be0733adf87cb2b4f49ea477c4032fd369e4f2e",
+                "reference": "2be0733adf87cb2b4f49ea477c4032fd369e4f2e",
                 "shasum": ""
             },
             "require": {
@@ -1725,7 +1725,7 @@
                 "spatie",
                 "transform"
             ],
-            "time": "2017-05-04T06:25:39+00:00"
+            "time": "2017-05-10T19:13:37+00:00"
         },
         {
             "name": "spatie/laravel-fractal",
