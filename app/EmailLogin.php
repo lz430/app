@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace app;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -18,9 +18,10 @@ class EmailLogin extends Model
     {
         return self::create([
             'email' => $email,
-            'token' => str_random(20)
+            'token' => str_random(20),
         ]);
     }
+
     public static function validFromToken($token)
     {
         return self::where('token', $token)
