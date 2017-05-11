@@ -3,8 +3,8 @@
 namespace API;
 
 use App\JATO\Make;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 
 class MakesRequestTest extends TestCase
 {

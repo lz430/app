@@ -9,11 +9,11 @@ use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
 use Illuminate\Support\Facades\App;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Mockery;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class LoadDealsFromVautoTest extends TestCase
 {
@@ -34,57 +34,32 @@ file;
 
         $filesystem = Mockery::mock(Filesystem::class, [
             'files' => [
-                $filePath
+                $filePath,
             ]
         ]);
 
-        $client = Mockery::mock(Client::class, [
-            'decodeVin' => [
-                "vin" => "2C4RC1BG4HR710602",
-                "plant" => "Windsor Assembly - Windsor, Canada",
-                "modelYear" => "2017",
-                "manufacturer" => "FCA",
-                "make" => "Chrysler",
-                "model" => "Pacifica",
-                "trims" => "Touring Plus; Touring-L",
-                "bodyStyle" => "4 Door Minivan",
-                "cabType" => null,
-                "driveLine" => "FWD",
-                "engine" => "3.6L V6",
-                "engineCode" => "ERC",
-                "fuelType" => "Unleaded",
-                "versions" => [
-                    [
-                        "vinVersion_ID" => 152875,
-                        "vehicle_ID" => 769724120170220,
-                        "uid" => 7697241,
-                        "versionName" => "Touring-L",
-                        "builtOptions" => null,
-                        "isCurrent" => true,
-                        "modelCode" => "RUCH53/2_L",
-                        "trimName" => "Touring-L",
-                    ],
-                ]
-            ]
-        ]);
+        $client = Mockery::mock(
+            Client::class,
+            json_decode(file_get_contents(__DIR__ . '/stubs/decodedVin.json'), true)
+        );
 
         /** Create versions to match against */
         factory(Version::class)->create([
             'id' => 1,
             'jato_uid' => 7697241,
-            'year' => 2015
+            'year' => 2015,
         ]);
 
         factory(Version::class)->create([
             'id' => 2,
             'jato_uid' => 7697241,
-            'year' => 2016
+            'year' => 2016,
         ]);
 
         factory(Version::class)->create([
             'id' => 3,
             'jato_uid' => 7697241,
-            'year' => 2017
+            'year' => 2017,
         ]);
 
         App::instance(Importer::class, new Importer($filesystem, $client));
@@ -97,27 +72,27 @@ file;
         /** Loads Deals */
         $this->assertDatabaseHas('version_deals', [
             'version_id' => 1,
-            'vin' => 'ZACCJBBB2HPF21828'
+            'vin' => 'ZACCJBBB2HPF21828',
         ]);
 
         $this->assertDatabaseHas('version_deals', [
             'version_id' => 2,
-            'vin' => 'ZACCJBBB2HPF21828'
+            'vin' => 'ZACCJBBB2HPF21828',
         ]);
 
         $this->assertDatabaseHas('version_deals', [
             'version_id' => 3,
-            'vin' => 'ZACCJBBB2HPF21828'
+            'vin' => 'ZACCJBBB2HPF21828',
         ]);
 
         /** Loads Photos (as https) */
         $this->assertDatabaseHas('version_deal_photos', [
-            'url' => 'https://vehiclephotos.vauto.com/53/fe/66/83-3b4f-4da9-9f01-1734905d230b/image-1.jpg'
+            'url' => 'https://vehiclephotos.vauto.com/53/fe/66/83-3b4f-4da9-9f01-1734905d230b/image-1.jpg',
         ]);
 
         /** Loads Options */
         $this->assertDatabaseHas('version_deal_options', [
-            'option' => '18" x 7.0" Aluminum Wheels'
+            'option' => '18" x 7.0" Aluminum Wheels',
         ]);
     }
 }

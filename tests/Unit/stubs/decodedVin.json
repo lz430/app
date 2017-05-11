@@ -1,0 +1,29 @@
+{
+  "decodeVin": {
+    "vin": "2C4RC1BG4HR710602",
+    "plant": "Windsor Assembly - Windsor, Canada",
+    "modelYear": "2017",
+    "manufacturer": "FCA",
+    "make": "Chrysler",
+    "model": "Pacifica",
+    "trims": "Touring Plus; Touring-L",
+    "bodyStyle": "4 Door Minivan",
+    "cabType": null,
+    "driveLine": "FWD",
+    "engine": "3.6L V6",
+    "engineCode": "ERC",
+    "fuelType": "Unleaded",
+    "versions": [
+      {
+        "vinVersion_ID": 152875,
+        "vehicle_ID": 769724120170220,
+        "uid": 7697241,
+        "versionName": "Touring-L",
+        "builtOptions": null,
+        "isCurrent": true,
+        "modelCode": "RUCH53\/2_L",
+        "trimName": "Touring-L"
+      }
+    ]
+  }
+}

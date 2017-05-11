@@ -130,15 +130,9 @@ class Importer
 
     private function saveVersionDealPhotos(VersionDeal $versionDeal, string $photos)
     {
-        foreach (collect(explode('|', $photos))->map(function ($url) {
-            return str_replace('http://', 'https://', $url);
-        }) as $url) {
-            $versionDeal->photos()->updateOrCreate([
-                'url' => $url
-            ], [
-                'url' => $url
-            ]);
-        }
+        collect(explode('|', $photos))->each(function ($photoUrl) use ($versionDeal) {
+            $versionDeal->photos()->firstOrCreate(['url' => str_replace('http', 'https', $photoUrl)]);
+        });
     }
 
     private function saveVersionDeal(Version $version, string $fileHash, array $keyedData)
@@ -190,7 +184,7 @@ class Importer
     {
         if (self::HEADERS !== $headers) {
             throw new MismatchedHeadersException(
-                implode(', ', $headers) . 'does not match expeced headers: ' . implode(', ', self::HEADERS)
+                implode(', ', $headers) . ' does not match expected headers: ' . implode(', ', self::HEADERS)
             );
         }
     }
