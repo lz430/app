@@ -28,7 +28,7 @@ class SavedVehiclesTest extends TestCase
             ['Authorization' => "Bearer {$user->api_token}"]);
         
         $response->assertStatus(200);
-        $response->assertJsonFragment(['version_id' => "1"]);
+        $response->assertJsonFragment(['version_id' => '1']);
         $response->assertJsonStructure([
             'data' => [
                 [
