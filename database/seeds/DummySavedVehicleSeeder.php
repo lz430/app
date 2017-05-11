@@ -7,7 +7,7 @@ class DummySavedVehicleSeeder extends Seeder
 {
     public function run()
     {
-        factory(\App\SavedVehicle::class, 10)->create()
+        factory(App\SavedVehicle::class, 10)->create()
             ->each(function ($savedVehicle) {
                 // Add options to saved vehicle.
                 /** @var \Illuminate\Support\Collection $options */
@@ -18,7 +18,7 @@ class DummySavedVehicleSeeder extends Seeder
 
                 // Add taxes and discounts to saved vehicle.
                 $savedVehicle->version->taxesAndDiscounts()
-                    ->saveMany(factory(\App\JATO\VersionTaxAndDiscount::class, 3)->make());
+                    ->saveMany(factory(App\JATO\VersionTaxAndDiscount::class, 3)->make());
             });
     }
 }

@@ -103,7 +103,7 @@ $factory->define(App\JATO\VersionOption::class, function (Faker\Generator $faker
 $factory->define(App\SavedVehicle::class, function (Faker\Generator $faker) {
     return [
         'user_id' => factory(App\User::class),
-        'version_id' => factory(\App\JATO\Version::class),
+        'version_id' => factory(App\JATO\Version::class),
     ];
 });
 
