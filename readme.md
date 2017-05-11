@@ -50,7 +50,7 @@ php artisan db:seed --class=DummySavedVehicleSeeder
 
 ## JATO API Tests
 ```
-phpunit tests/API
+phpunit tests/JATO
 ```
 
 ## Notes

@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\JATO\Make;
 use App\JATO\Manufacturer;
 use App\JATO\VehicleModel;
 use App\JATO\Version;
