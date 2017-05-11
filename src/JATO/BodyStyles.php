@@ -4,31 +4,30 @@ namespace DeliverMyRide\JATO;
 
 class BodyStyles
 {
-    /** TODO: add icon urls */
     public const ALL = [
         [
             'style' => 'Convertible',
-            'icon' => '',
+            'icon' => self::BASE_PATH . 'convertible.svg',
         ],
         [
             'style' => 'Coupe',
-            'icon' => '',
+            'icon' => self::BASE_PATH . 'coupe.svg',
         ],
         [
             'style' => 'Sedan',
-            'icon' => '',
+            'icon' => self::BASE_PATH . 'sedan.svg',
         ],
         [
             'style' => 'Sport Utility Vehicle',
-            'icon' => '',
+            'icon' => self::BASE_PATH . 'suv.svg',
         ],
         [
             'style' => 'Wagon',
-            'icon' => '',
+            'icon' => self::BASE_PATH . 'wagon.svg',
         ],
         [
             'style' => 'Hatchback',
-            'icon' => '',
+            'icon' => self::BASE_PATH . 'hatchback.svg',
         ],
         [
             'style' => 'Mini Mpv',
@@ -36,10 +35,6 @@ class BodyStyles
         ],
         [
             'style' => 'Cargo Van',
-            'icon' => '',
-        ],
-        [
-            'style' => 'Convertible',
             'icon' => '',
         ],
         [
@@ -52,11 +47,11 @@ class BodyStyles
         ],
         [
             'style' => 'Minivan',
-            'icon' => '',
+            'icon' => self::BASE_PATH . 'minivan.svg',
         ],
         [
             'style' => 'Pickup',
-            'icon' => '',
+            'icon' => self::BASE_PATH . 'pickup.svg',
         ],
         [
             'style' => 'Passenger Van',
@@ -64,7 +59,7 @@ class BodyStyles
         ],
         [
             'style' => 'Crossover',
-            'icon' => '',
+            'icon' => self::BASE_PATH . 'crossover.svg',
         ],
         [
             'style' => 'Micro Car',
@@ -84,7 +79,9 @@ class BodyStyles
         ],
         [
             'style' => 'Van',
-            'icon' => '',
+            'icon' => self::BASE_PATH . 'van.svg',
         ],
     ];
+
+    private const BASE_PATH = '/images/body-styles/';
 }
