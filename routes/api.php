@@ -17,4 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::group(['namespace' => 'V1', 'prefix' => 'v1'], function () {
     Route::get('makes', 'MakesController@index')->name('makes.index');
     Route::get('models', 'VehicleModelsController@index')->name('vehicleModels.index');
+Route::get('body-styles', 'API\V1\BodyStylesController@index');
 });

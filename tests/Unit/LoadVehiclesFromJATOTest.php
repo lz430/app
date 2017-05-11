@@ -14,11 +14,11 @@ use GuzzleHttp\Psr7\Response;
 use function GuzzleHttp\Psr7\stream_for;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\App;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Mockery;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class LoadVehiclesFromJATOTest extends TestCase
 {

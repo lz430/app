@@ -57,4 +57,12 @@ class MakesRequestTest extends TestCase
         $response->assertJsonFragment(['type' => 'makes']);
         $response->assertJsonFragment(['type' => 'models']);
     }
+
+/** @test */
+    public function it_shows_the_body_styles_data()
+    {
+        $response = $this->get('api/v1/body-styles');
+
+        $response->assertJsonFragment(['style' => 'Coupe']);
+    }
 }
