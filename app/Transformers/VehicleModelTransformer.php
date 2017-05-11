@@ -5,7 +5,7 @@ namespace App\Transformers;
 use App\JATO\VehicleModel;
 use League\Fractal\TransformerAbstract;
 
-class VehicleModelsTransformer extends TransformerAbstract
+class VehicleModelTransformer extends TransformerAbstract
 {
     /**
      * @param VehicleModel $model
