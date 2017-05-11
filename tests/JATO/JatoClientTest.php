@@ -11,7 +11,7 @@ use Tests\TestCase;
  */
 class JatoClientTest extends TestCase
 {
-    /** @var $client JatoClient */
+    /** @var $client Client */
     private static $client;
 
     /**
@@ -19,7 +19,7 @@ class JatoClientTest extends TestCase
      */
     public static function setUpBeforeClass()
     {
-        (new Dotenv(__DIR__ . '/../../../'))->load();
+        (new Dotenv(__DIR__ . '/../../'))->load();
 
         static::$client = new JatoClient(env('JATO_USERNAME'), env('JATO_PASSWORD'));
     }
