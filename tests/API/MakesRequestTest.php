@@ -14,7 +14,7 @@ class MakesRequestTest extends TestCase
     public function it_shows_the_makes_data()
     {
         factory(Make::class)->create([
-            'name' => "BMW"
+            'name' => 'BMW',
         ]);
         
         $response = $this->get('api/v1/makes');

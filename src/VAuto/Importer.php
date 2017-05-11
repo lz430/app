@@ -121,9 +121,9 @@ class Importer
             return $option !== '';
         }) as $option) {
             $versionDeal->options()->updateOrCreate([
-                'option' => $option
+                'option' => $option,
             ], [
-                'option' => $option
+                'option' => $option,
             ]);
         }
     }

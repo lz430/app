@@ -23,13 +23,13 @@ class UserAccessTest extends TestCase
 
         $response = $this->post(route('savedVehicle.store', [
             'email' => 'logan@tighten.co',
-            'version_id' => $version->id
+            'version_id' => $version->id,
         ]));
 
         Mail::assertSent(SendGarageLink::class);
 
         $this->assertDatabaseHas('users', [
-            'email' => 'logan@tighten.co'
+            'email' => 'logan@tighten.co',
         ]);
 
         $response->assertRedirect(route('home'));
@@ -41,7 +41,7 @@ class UserAccessTest extends TestCase
         Mail::fake();
 
         factory(User::class)->create([
-            'email' => 'logan@tighten.co'
+            'email' => 'logan@tighten.co',
         ]);
 
         $this->post('/login', [

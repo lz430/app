@@ -35,7 +35,7 @@ file;
         $filesystem = Mockery::mock(Filesystem::class, [
             'files' => [
                 $filePath,
-            ]
+            ],
         ]);
 
         $client = Mockery::mock(

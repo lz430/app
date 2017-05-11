@@ -29,27 +29,30 @@ class LoadVehiclesFromJATOTest extends TestCase
     {
         $promise = new Promise(function () use (&$promise) {
             $promise->resolve((new Response())->withBody(stream_for(json_encode([
-                'results' => [[
-                    'vehicleId' => 1,
-                    'uid' => 1,
-                    'modelId' => 1,
-                    'modelYear' => 2017,
-                    'versionName' => 'test version',
-                    'trimName' => 'test trim',
-                    'headerDescription' => 'test description',
-                    'drivenWheels' => 4,
-                    'numberOfDoors' => 4,
-                    'transmissionType' => 'Automatic',
-                    'msrp' => 20000,
-                    'invoice' => 19000,
-                    'bodyStyleName' => 'test body style',
-                    'photoPath' => '/test/photo/path',
-                    'fuelEconCity' => 20,
-                    'fuelEconHwy' => 25,
-                    'manufacturerCode' => 'TEST',
-                    'delivery' => 500,
-                    'isCurrent' => true,
-                ]]]))));
+                'results' => [
+                    [
+                        'vehicleId' => 1,
+                        'uid' => 1,
+                        'modelId' => 1,
+                        'modelYear' => 2017,
+                        'versionName' => 'test version',
+                        'trimName' => 'test trim',
+                        'headerDescription' => 'test description',
+                        'drivenWheels' => 4,
+                        'numberOfDoors' => 4,
+                        'transmissionType' => 'Automatic',
+                        'msrp' => 20000,
+                        'invoice' => 19000,
+                        'bodyStyleName' => 'test body style',
+                        'photoPath' => '/test/photo/path',
+                        'fuelEconCity' => 20,
+                        'fuelEconHwy' => 25,
+                        'manufacturerCode' => 'TEST',
+                        'delivery' => 500,
+                        'isCurrent' => true,
+                    ],
+                ],
+            ]))));
         });
 
         $client = Mockery::mock(Client::class, [
@@ -71,7 +74,7 @@ class LoadVehiclesFromJATOTest extends TestCase
             'optionsByVehicleId' => [
                 'taxes' => [[
                     'item1' => 'test tax',
-                    'item2' => 100
+                    'item2' => 100,
                 ]],
                 'options' => [[
                     'optionId' => 1,

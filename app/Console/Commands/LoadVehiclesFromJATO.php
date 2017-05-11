@@ -57,7 +57,7 @@ class LoadVehiclesFromJATO extends Command
         $this->info('Saving Manufacturer: ' . $manufacturer['manufacturerName']);
 
         return Manufacturer::updateOrCreate([
-            'url_name' => $manufacturer['urlManufacturerName']
+            'url_name' => $manufacturer['urlManufacturerName'],
         ], [
             'name' => $manufacturer['manufacturerName'],
             'url_name' => $manufacturer['urlManufacturerName'],
@@ -83,7 +83,7 @@ class LoadVehiclesFromJATO extends Command
         $this->info('Saving Make Model: ' . $model['modelName']);
 
         return $make->models()->updateOrCreate([
-            'url_name' => $model['urlModelName']
+            'url_name' => $model['urlModelName'],
         ], [
             'name' => $model['modelName'],
             'url_name' => $model['urlModelName'],
@@ -178,7 +178,7 @@ class LoadVehiclesFromJATO extends Command
             'concurrency' => 5,
             'fulfilled' => function ($ModelAndVersionsResponse) {
                 $this->info('Versions data loading complete.');
-            }
+            },
         ]))->promise()->wait();
     }
 

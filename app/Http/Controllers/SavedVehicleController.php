@@ -29,13 +29,13 @@ class SavedVehicleController extends Controller
         ], [
             'email' => request()->input('email'),
             'name' => '',
-            'password' => Hash::make(str_random(8))
+            'password' => Hash::make(str_random(8)),
         ]);
 
         /** @var SavedVehicle $savedVehicle */
         $savedVehicle = SavedVehicle::create([
             'user_id' => $user->id,
-            'version_id' => request()->input('version_id')
+            'version_id' => request()->input('version_id'),
         ]);
 
         $savedVehicle->options()->sync(request()->input('option_ids'));

@@ -14,7 +14,7 @@ class BuyRequestController extends Controller
     public function create(Request $request)
     {
         $this->validate(request(), [
-            'savedVehicleId' => 'required|exists:saved_vehicles,id'
+            'savedVehicleId' => 'required|exists:saved_vehicles,id',
         ]);
 
         $savedVehicle = SavedVehicle::with(

@@ -16,7 +16,7 @@ class MakeTransformer extends TransformerAbstract
     {
         return [
             'id' => $make->id,
-            'name'=> $make->name
+            'name'=> $make->name,
         ];
     }
 }

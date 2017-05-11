@@ -10,7 +10,7 @@ class BodyStyleTransformer extends TransformerAbstract
     {
         return [
             'style' => $bodyStyle['style'],
-            'icon' => $bodyStyle['icon']
+            'icon' => $bodyStyle['icon'],
         ];
     }
 }
