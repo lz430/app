@@ -3,6 +3,7 @@
 namespace API;
 
 use App\JATO\Make;
+use App\JATO\VehicleModel;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
@@ -17,10 +18,44 @@ class MakesRequestTest extends TestCase
             'name' => 'BMW',
         ]);
         
-        $response = $this->get('api/v1/makes');
+        $response = $this->get(route('makes.index'));
         
         $response->assertJsonFragment(['name' => 'BMW']);
         $response->assertJsonFragment(['type' => 'makes']);
+    }
+    
+    /** @test */
+    public function it_includes_models_data_if_requested_via_query_parameters()
+    {
+        $make = factory(Make::class)->create([
+            'name' => "BMW",
+        ]);
+        
+        factory(VehicleModel::class)->create([
+            'name' => 'i8',
+            'make_id' => $make->id,
+        ]);
+        
+        $response = $this->get(route('makes.index', ['includes' => 'models']));
+        
+        $response->assertJsonStructure([
+            'data' => [
+                [
+                    'type',
+                    'attributes',
+                    'relationships',
+                ]
+            ],
+            'included' => [
+                [
+                    'type',
+                ]
+            ]
+        ]);
+        $response->assertJsonFragment(['name' => 'BMW']);
+        $response->assertJsonFragment(['name' => 'i8']);
+        $response->assertJsonFragment(['type' => 'makes']);
+        $response->assertJsonFragment(['type' => 'models']);
     }
 
     /** @test */

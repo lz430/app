@@ -18,6 +18,7 @@
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
+            'apiToken' => auth()->user()->api_token ?? null
         ]) !!};
     </script>
 </head>
