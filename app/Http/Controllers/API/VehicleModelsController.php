@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\API\V1;
+namespace App\Http\Controllers\API;
 
-use App\JATO\VehicleModel;
-use App\Transformers\V1\VehicleModelsTransformer;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\JATO\VehicleModel;
+use App\Transformers\VehicleModelsTransformer;
 
 class VehicleModelsController extends Controller
 {

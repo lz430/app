@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\API\V1;
+namespace App\Http\Controllers\API;
 
-use App\JATO\Make;
-use App\Transformers\V1\MakeTransformer;
 use App\Http\Controllers\Controller;
+use App\JATO\Make;
+use App\Transformers\MakeTransformer;
 
 class MakesController extends Controller
 {

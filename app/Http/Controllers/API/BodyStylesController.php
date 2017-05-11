@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\API\V1;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Transformers\V1\BodyStyleTransformer;
+use App\Transformers\BodyStyleTransformer;
 use DeliverMyRide\JATO\BodyStyles;
 use League\Fractal\Serializer\DataArraySerializer;
 
