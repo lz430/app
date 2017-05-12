@@ -69,7 +69,7 @@ file;
 
         $this->app->make(Kernel::class)->handle(
             new ArrayInput(['command' => 'vauto:load']),
-            $output = new BufferedOutput()
+            $output = new BufferedOutput
         );
 
         /** Loads Deals */

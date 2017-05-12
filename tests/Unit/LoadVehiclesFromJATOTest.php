@@ -29,7 +29,7 @@ class LoadVehiclesFromJATOTest extends TestCase
     public function loads_data_properly()
     {
         $promise = new Promise(function () use (&$promise) {
-            $promise->resolve((new Response())->withBody(stream_for(
+            $promise->resolve((new Response)->withBody(stream_for(
                 file_get_contents(__DIR__ . '/stubs/modelsVersionsByModelName.json')
             )));
         });
@@ -53,7 +53,7 @@ class LoadVehiclesFromJATOTest extends TestCase
 
         $this->app->make(Kernel::class)->handle(
             new ArrayInput(['command' => 'jato:load']),
-            new BufferedOutput()
+            $output = new BufferedOutput
         );
 
         $this->assertGreaterThanOrEqual(1, Manufacturer::where('name', 'test manufacturer')->count());

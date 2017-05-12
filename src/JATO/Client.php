@@ -10,7 +10,7 @@ class Client
 
     public function __construct($username, $password)
     {
-        $this->guzzleClient = new GuzzleClient();
+        $this->guzzleClient = new GuzzleClient;
         $this->authorize($username, $password);
     }
 
