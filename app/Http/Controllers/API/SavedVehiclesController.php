@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
 use App\Transformers\SavedVehicleTransformer;
-use Illuminate\Http\Request;
 
-class SavedVehiclesController extends Controller
+class SavedVehiclesController extends BaseAPIController
 {
     const RESOURCE_NAME = 'saved-vehicles';
     const TRANSFORMER = SavedVehicleTransformer::class;
