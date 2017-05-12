@@ -49,9 +49,6 @@ class LoadVehiclesFromJATO extends Command
                         });
                 }
             }
-
-            if ($id > 3)
-            break;
         }
 
         $this->resolvePromises($versionsPromises);
