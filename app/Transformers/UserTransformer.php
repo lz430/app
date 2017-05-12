@@ -13,7 +13,7 @@ class UserTransformer extends TransformerAbstract
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'apiToken' => $user->api_token,
+            'api_token' => $user->api_token,
         ];
     }
 }

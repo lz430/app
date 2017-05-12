@@ -13,7 +13,7 @@ class UsersController extends Controller
     const RESOURCE_NAME = 'users';
     const TRANSFORMER = UserTransformer::class;
     
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $this->validate($request, ['email' => 'required|email|unique:users']);
         

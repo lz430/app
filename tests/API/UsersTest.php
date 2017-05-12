@@ -13,7 +13,7 @@ class UsersTest extends TestCase
     /** @test */
     public function it_responds_unprocessable_if_validation_fails()
     {
-        $response = $this->postJson(route('users.create'));
+        $response = $this->postJson(route('users.store'));
         
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         
@@ -23,12 +23,12 @@ class UsersTest extends TestCase
     /** @test */
     public function it_creates_a_new_user_and_sets_the_api_token_if_the_request_is_valid()
     {
-        $response = $this->postJson(route('users.create'), ['email' => 'newuser@example.com']);
+        $response = $this->postJson(route('users.store'), ['email' => 'newuser@example.com']);
     
         $response->assertStatus(Response::HTTP_CREATED);
     
-        $response->assertSee('apiToken');
+        $response->assertSee('api_token');
     
-        $this->assertNotEmpty($response->decodeResponseJson()['data']['attributes']['apiToken']);
+        $this->assertNotEmpty($response->decodeResponseJson()['data']['attributes']['api_token']);
     }
 }
