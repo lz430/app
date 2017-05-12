@@ -102,29 +102,11 @@ class Importer
                             $versionDeal,
                             $keyedData['Photos']
                         );
-
-                        $this->saveVersionDealOptions(
-                            $versionDeal,
-                            $keyedData['Features']
-                        );
                     }
                 });
             } catch (ClientException $e) {
                 $this->info("Unable to decode vin: {$keyedData['VIN']}");
             }
-        }
-    }
-
-    private function saveVersionDealOptions(VersionDeal $versionDeal, string $options)
-    {
-        foreach (collect(explode('|', $options))->filter(function ($option) {
-            return $option !== '';
-        }) as $option) {
-            $versionDeal->options()->updateOrCreate([
-                'option' => $option,
-            ], [
-                'option' => $option,
-            ]);
         }
     }
 

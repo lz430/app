@@ -2,11 +2,12 @@
 
 namespace Tests\Unit;
 
+use App\JATO\Equipment;
 use App\JATO\Make;
 use App\JATO\Manufacturer;
 use App\JATO\VehicleModel;
 use App\JATO\Version;
-use App\JATO\VersionOption;
+use App\JATO\Option;
 use App\JATO\VersionTaxAndDiscount;
 use DeliverMyRide\JATO\Client;
 use GuzzleHttp\Promise\Promise;
@@ -28,65 +29,23 @@ class LoadVehiclesFromJATOTest extends TestCase
     public function loads_data_properly()
     {
         $promise = new Promise(function () use (&$promise) {
-            $promise->resolve((new Response())->withBody(stream_for(json_encode([
-                'results' => [
-                    [
-                        'vehicleId' => 1,
-                        'uid' => 1,
-                        'modelId' => 1,
-                        'modelYear' => 2017,
-                        'versionName' => 'test version',
-                        'trimName' => 'test trim',
-                        'headerDescription' => 'test description',
-                        'drivenWheels' => 4,
-                        'numberOfDoors' => 4,
-                        'transmissionType' => 'Automatic',
-                        'msrp' => 20000,
-                        'invoice' => 19000,
-                        'bodyStyleName' => 'test body style',
-                        'photoPath' => '/test/photo/path',
-                        'fuelEconCity' => 20,
-                        'fuelEconHwy' => 25,
-                        'manufacturerCode' => 'TEST',
-                        'delivery' => 500,
-                        'isCurrent' => true,
-                    ],
-                ],
-            ]))));
+            $promise->resolve((new Response())->withBody(stream_for(
+                file_get_contents(__DIR__ . '/stubs/modelsVersionsByModelName.json')
+            )));
         });
 
         $client = Mockery::mock(Client::class, [
-            'manufacturers' => [[
-                'manufacturerName' => 'test manufacturer',
-                'urlManufacturerName' => 'test-manufacturer',
-                'isCurrent' => true,
-            ]],
-            'makesByManufacturerUrlName' => [[
-                'makeName' => 'test make',
-                'urlMakeName' => 'test-make',
-                'isCurrent' => true,
-            ]],
-            'modelsByMakeName' => [[
-                'modelName' => 'test model',
-                'urlModelName' => 'test-model',
-                'isCurrent' => true,
-            ]],
-            'optionsByVehicleId' => [
-                'taxes' => [[
-                    'item1' => 'test tax',
-                    'item2' => 100,
-                ]],
-                'options' => [[
-                    'optionId' => 1,
-                    'optionName' => 'test option',
-                    'optionState' => 'Available',
-                    'optionDescription' => 'a test option',
-                    'optionCode' => 'TEST',
-                    'optionType' => 'O',
-                    'msrp' => 500,
-                    'invoicePrice' => 400,
-                ]],
-            ],
+            'manufacturers' => json_decode(file_get_contents(__DIR__ . '/stubs/manufacturers.json'), true),
+            'makesByManufacturerUrlName' => json_decode(
+                file_get_contents(__DIR__ . '/stubs/makesByManufacturerUrlName.json'),
+                true
+            ),
+            'modelsByMakeName' => json_decode(file_get_contents(__DIR__ . '/stubs/modelsByMakeName.json'), true),
+            'optionsByVehicleId' => json_decode(file_get_contents(__DIR__ . '/stubs/optionsByVehicleId.json'), true),
+            'equipmentByVehicleId' => json_decode(
+                file_get_contents(__DIR__ . '/stubs/equipmentByVehicleId.json'),
+                true
+            ),
             'modelsVersionsByModelNameAsync' => $promise,
         ]);
 
@@ -101,7 +60,8 @@ class LoadVehiclesFromJATOTest extends TestCase
         $this->assertGreaterThanOrEqual(1, Make::where('name', 'test make')->count());
         $this->assertGreaterThanOrEqual(1, VehicleModel::where('name', 'test model')->count());
         $this->assertGreaterThanOrEqual(1, Version::where('name', 'test version')->count());
-        $this->assertEquals(100, VersionTaxAndDiscount::where('name', 'test tax')->first()->amount);
-        $this->assertEquals(500, VersionOption::where('name', 'test option')->first()->msrp);
+        $this->assertGreaterThanOrEqual(1, Equipment::where('name', 'test equipment')->count());
+        $this->assertGreaterThanOrEqual(1, Option::where('name', 'test option')->count());
+        $this->assertGreaterThanOrEqual(1, VersionTaxAndDiscount::where('name', 'test tax')->count());
     }
 }

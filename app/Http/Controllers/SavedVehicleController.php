@@ -38,8 +38,6 @@ class SavedVehicleController extends Controller
             'version_id' => request()->input('version_id'),
         ]);
 
-        $savedVehicle->options()->sync(request()->input('option_ids'));
-
         Mail::to(request()->input('email'))->send(new SendGarageLink(route('home')));
 
         auth()->loginUsingId($user->id);

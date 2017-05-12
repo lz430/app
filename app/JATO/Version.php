@@ -3,32 +3,11 @@
 namespace App\JATO;
 
 use App\VersionDeal;
-use DeliverMyRide\HasOptions;
 use Illuminate\Database\Eloquent\Model;
 
-class Version extends Model implements HasOptions
+class Version extends Model
 {
-    protected $fillable = [
-        'jato_vehicle_id',
-        'jato_uid',
-        'jato_model_id',
-        'year',
-        'name',
-        'trim_name',
-        'description',
-        'driven_wheels',
-        'doors',
-        'transmission_type',
-        'msrp',
-        'invoice',
-        'body_style',
-        'photo_path',
-        'fuel_econ_city',
-        'fuel_econ_hwy',
-        'manufacturer_code',
-        'delivery_price',
-        'is_current',
-    ];
+    protected $guarded = ['id'];
 
     protected $casts = [
         'msrp' => 'float',
@@ -44,7 +23,12 @@ class Version extends Model implements HasOptions
 
     public function options()
     {
-        return $this->hasMany(VersionOption::class);
+        return $this->hasMany(Option::class, 'jato_vehicle_id');
+    }
+
+    public function equipment()
+    {
+        return $this->hasMany(Equipment::class, 'jato_vehicle_id');
     }
 
     public function taxesAndDiscounts()

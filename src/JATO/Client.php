@@ -64,6 +64,17 @@ class Client
         );
     }
 
+    public function equipmentByVehicleId($vehicleId)
+    {
+        return json_decode(
+            (string) $this->guzzleClient->request(
+                'GET',
+                "equipment/$vehicleId"
+            )->getBody(),
+            true
+        );
+    }
+
     public function decodeVin($vin)
     {
         return json_decode(
