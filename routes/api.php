@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('users', 'UsersController@store')->name('users.store');
 Route::get('makes', 'MakesController@index')->name('makes.index');
 Route::get('models', 'VehicleModelsController@index')->name('vehicleModels.index');
 Route::get('body-styles', 'BodyStylesController@index')->name('bodyStyles.index');
