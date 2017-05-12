@@ -108,7 +108,7 @@ class LoadVehiclesFromJATO extends Command
             'jato_uid' => $version['uid'],
             'jato_model_id' => $version['modelId'],
             'year' => $version['modelYear'],
-            'name' => !in_array($version['versionName'], ['-', ''])
+            'name' => ! in_array($version['versionName'], ['-', ''])
                 ? $version['versionName']
                 : null,
             'trim_name' => $version['trimName'],
@@ -126,7 +126,7 @@ class LoadVehiclesFromJATO extends Command
             'fuel_econ_hwy' => $version['fuelEconHwy'] !== ''
                 ? $version['fuelEconHwy']
                 : null,
-            'manufacturer_code' => !in_array($version['manufacturerCode'], ['-', ''])
+            'manufacturer_code' => ! in_array($version['manufacturerCode'], ['-', ''])
                 ? $version['manufacturerCode']
                 : null,
             'delivery_price' => $version['delivery'] !== ''
