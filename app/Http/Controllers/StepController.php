@@ -11,13 +11,7 @@ class StepController extends Controller
 {
     public function initiate()
     {
-        $makes = Make::select('id', 'name')->with([
-            'models' => function ($query) {
-                $query->select('id', 'name', 'make_id');
-            },
-        ])->get();
-
-        return view('step-0')->with('makes', $makes);
+        return view('initiate');
     }
 
     public function stepZero()

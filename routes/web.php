@@ -5,10 +5,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 
-Route::get('', 'StepController@initiate');
-Route::post('step-0', 'StepController@stepZero');
-Route::post('step-1', 'StepController@stepOne');
-Route::post('step-2', 'StepController@stepTwo');
+Route::get('', 'WelcomeController@index');
 
 Route::post('saved-vehicle', 'SavedVehicleController@store')
     ->name('savedVehicle.store');

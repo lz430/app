@@ -13,14 +13,12 @@
     "axios": "^0.16.1",
     "babel-polyfill": "^6.23.0",
     "babel-preset-react": "^6.24.1",
-    "bootstrap-sass": "^3.3.7",
     "jquery": "^3.1.1",
     "laravel-mix": "0.*",
-    "lodash": "^4.17.4",
     "prop-types": "^15.5.8",
     "react": "^15.5.3",
     "react-dom": "^15.5.3",
-    "react-select": "^1.0.0-rc.3"
+    "ramda": "^0.23.0"
   },
   "dependencies": {}
 }
