@@ -1,21 +1,23 @@
-
-// Fonts
-@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
-
 // Variables
 @import 'variables';
 
-// Bootstrap
-@import 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
+// Font
+body {
+  color: $text-color;
+  font-family: 'Open Sans', serif;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+}
 
-// React Select
-@import 'node_modules/react-select/scss/default';
+// Overall layout
+@import 'layout';
+@import 'components/footer';
 
-@import 'components/saved-vehicle';
-@import 'components/details';
-@import 'components/navbar';
+// Normal Components
+@import 'components/nav';
+@import 'components/triplet';
 
-// Steps
+// Step Components
 @import 'components/steps/step-0';
 @import 'components/steps/step-1';
 @import 'components/steps/step-2';

@@ -1,0 +1,20 @@
+@import '../variables';
+
+.nav {
+  background-color: $color-background-primary;
+  display: flex;
+  height: $nav-height;
+  padding: 15px;
+
+  &__logo {
+    flex: 1;
+  }
+
+  &__search {
+    flex: 1;
+  }
+
+  &__links {
+    flex: 1;
+  }
+}

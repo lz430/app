@@ -1,0 +1,27 @@
+.triplet-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+  .triplet {
+    flex: 1;
+    padding: 15px;
+
+    &__title {
+      font-size: 1.5rem;
+      padding: 15px;
+      text-align: center;
+    }
+
+    &__description {
+      padding: 15px;
+      text-align: center;
+    }
+
+    &__attribution {
+      font-weight: bold;
+      padding: 15px;
+      text-align: center;
+    }
+  }
+}

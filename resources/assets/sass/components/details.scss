@@ -1,9 +1,0 @@
-@import '../variables';
-@import '../mixins/border-bottom';
-
-details {
-  @include border-bottom;
-  color: $brand-primary;
-  cursor: pointer;
-  padding: 25px 0;
-}
