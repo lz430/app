@@ -12,7 +12,7 @@ class DummySavedVehicleSeeder extends Seeder
                 // Add options to saved vehicle.
                 /** @var \Illuminate\Support\Collection $options */
                 $options = $savedVehicle->version->options()
-                    ->saveMany(factory(App\JATO\VersionOption::class, 10)->make());
+                    ->saveMany(factory(App\JATO\Option::class, 10)->make());
 
                 $savedVehicle->options()->sync($options->take(5));
 

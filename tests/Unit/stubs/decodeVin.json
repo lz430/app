@@ -1,5 +1,4 @@
 {
-  "decodeVin": {
     "vin": "2C4RC1BG4HR710602",
     "plant": "Windsor Assembly - Windsor, Canada",
     "modelYear": "2017",
@@ -25,5 +24,4 @@
         "trimName": "Touring-L"
       }
     ]
-  }
 }

@@ -3,11 +3,9 @@
 namespace App;
 
 use App\JATO\Version;
-use App\JATO\VersionOption;
-use DeliverMyRide\HasOptions;
 use Illuminate\Database\Eloquent\Model;
 
-class SavedVehicle extends Model implements HasOptions
+class SavedVehicle extends Model
 {
     protected $fillable = [
         'version_id',
@@ -22,10 +20,5 @@ class SavedVehicle extends Model implements HasOptions
     public function version()
     {
         return $this->belongsTo(Version::class);
-    }
-
-    public function options()
-    {
-        return $this->belongsToMany(VersionOption::class)->withTimestamps();
     }
 }

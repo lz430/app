@@ -30,7 +30,7 @@ class MakeTransformer extends TransformerAbstract
         
         return $this->collection(
             $models,
-            new VehicleModelTransformer()
+            new VehicleModelTransformer
         )->setResourceKey('models');
     }
 }

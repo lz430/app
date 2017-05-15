@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\JATO\Equipment;
 use App\JATO\Make;
 use App\JATO\Manufacturer;
+use App\JATO\Option;
 use App\JATO\VehicleModel;
 use App\JATO\Version;
 use DeliverMyRide\JATO\Client as JatoClient;
@@ -30,7 +32,7 @@ class LoadVehiclesFromJATO extends Command
     {
         $versionsPromises = [];
 
-        foreach ($this->client->manufacturers() as $manufacturerResponse) {
+        foreach ($this->client->manufacturers() as $id => $manufacturerResponse) {
             $manufacturer = $this->saveManufacturer($manufacturerResponse);
 
             foreach ($this->client->makesByManufacturerUrlName($manufacturer->url_name) as $makeResponse) {
@@ -103,7 +105,7 @@ class LoadVehiclesFromJATO extends Command
             'jato_uid' => $version['uid'],
             'jato_model_id' => $version['modelId'],
             'year' => $version['modelYear'],
-            'name' => !in_array($version['versionName'], ['-', ''])
+            'name' => ! in_array($version['versionName'], ['-', ''])
                 ? $version['versionName']
                 : null,
             'trim_name' => $version['trimName'],
@@ -121,7 +123,7 @@ class LoadVehiclesFromJATO extends Command
             'fuel_econ_hwy' => $version['fuelEconHwy'] !== ''
                 ? $version['fuelEconHwy']
                 : null,
-            'manufacturer_code' => !in_array($version['manufacturerCode'], ['-', ''])
+            'manufacturer_code' => ! in_array($version['manufacturerCode'], ['-', ''])
                 ? $version['manufacturerCode']
                 : null,
             'delivery_price' => $version['delivery'] !== ''
@@ -152,22 +154,41 @@ class LoadVehiclesFromJATO extends Command
         $this->info("Saving Version Options: $version->name");
 
         foreach ($options as $option) {
-            if (empty($option['optionName']) && empty($option['optionDescription'])) {
-                continue;
-            }
-
-            $version->options()->updateOrCreate([
+            Option::updateOrCreate([
                 'jato_option_id' => $option['optionId'],
-                'version_id' => $version->id,
+                'jato_vehicle_id' => $version->id,
             ], [
                 'name' => $option['optionName'],
-                'state' => $option['optionState'],
-                'description' => $option['optionDescription'],
-                'option_code' => $option['optionCode'],
-                'option_type' => $option['optionType'],
+                'code' => $option['optionCode'],
+                'type' => $option['optionType'],
                 'msrp' => $option['msrp'],
                 'invoice' => $option['invoicePrice'],
-                'version_id' => $version->id,
+                'discount' => $option['discount'],
+                'state' => $option['optionState'],
+                'state_translation' => $option['optionStateTranslation'],
+                'description' => $option['optionDescription'],
+            ]);
+        }
+    }
+
+    private function saveVersionEquipment(Version $version, $equipments)
+    {
+        $this->info("Saving Version Equipment: $version->name");
+
+        foreach ($equipments as $equipment) {
+            Equipment::updateOrCreate([
+                'jato_option_id' => $equipment['optionId'],
+                'jato_vehicle_id' => $version->id,
+            ], [
+                'jato_option_id' => $equipment['optionId'],
+                'jato_vehicle_id' => $version->id,
+                'jato_schema_id' => $equipment['schemaId'],
+                'jato_category_id' => $equipment['categoryId'],
+                'category' => $equipment['category'],
+                'name' => $equipment['name'],
+                'location' => $equipment['location'],
+                'availability' => $equipment['availability'],
+                'value' => $equipment['value'],
             ]);
         }
     }
@@ -188,15 +209,17 @@ class LoadVehiclesFromJATO extends Command
             $vehicleVersion = $this->saveModelVersion($vehicleModel, $version);
 
             $options = $this->client->optionsByVehicleId($vehicleVersion->jato_vehicle_id);
+            $equipment = $this->client->equipmentByVehicleId($vehicleVersion->jato_vehicle_id);
 
             $this->saveVersionTaxesAndDiscounts($vehicleVersion, $options['taxes']);
             $this->saveVersionOptions($vehicleVersion, $options['options']);
+            $this->saveVersionEquipment($vehicleVersion, $equipment['results']);
         } catch (QueryException $e) {
-            $this->info('Duplicate Version (Ignoring).');
+            $this->info('Duplicate information (Ignoring).');
             $this->info($e->getMessage());
         } catch (ServerException $e) {
             $this->error(
-                'Error retrieving options for vehicleID: ' . $version['vehicleId']
+                'Error retrieving information for vehicleID: ' . $version['vehicleId']
             );
         }
     }
