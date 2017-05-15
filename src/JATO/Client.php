@@ -10,7 +10,7 @@ class Client
 
     public function __construct($username, $password)
     {
-        $this->guzzleClient = new GuzzleClient();
+        $this->guzzleClient = new GuzzleClient;
         $this->authorize($username, $password);
     }
 
@@ -59,6 +59,17 @@ class Client
             (string) $this->guzzleClient->request(
                 'GET',
                 "options/$vehicleId"
+            )->getBody(),
+            true
+        );
+    }
+
+    public function equipmentByVehicleId($vehicleId)
+    {
+        return json_decode(
+            (string) $this->guzzleClient->request(
+                'GET',
+                "equipment/$vehicleId"
             )->getBody(),
             true
         );

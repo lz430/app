@@ -3,10 +3,9 @@
 namespace App;
 
 use App\JATO\Version;
-use DeliverMyRide\HasOptions;
 use Illuminate\Database\Eloquent\Model;
 
-class VersionDeal extends Model implements HasOptions
+class VersionDeal extends Model
 {
     protected $guarded = [];
     protected $dates = ['inventory_date'];

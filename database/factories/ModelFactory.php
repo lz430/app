@@ -87,7 +87,7 @@ $factory->define(App\JATO\VersionTaxAndDiscount::class, function (Faker\Generato
     ];
 });
 
-$factory->define(App\JATO\VersionOption::class, function (Faker\Generator $faker) {
+$factory->define(App\JATO\Option::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->colorName,
         'state' => $faker->randomElement(['Required', 'Available']),

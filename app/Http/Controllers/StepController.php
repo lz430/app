@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\JATO\Make;
 use App\JATO\Version;
-use App\JATO\VersionOption;
+use App\JATO\Option;
 use Illuminate\Http\Request;
 
 class StepController extends Controller
@@ -34,7 +34,7 @@ class StepController extends Controller
 
     public function stepOne()
     {
-        $options = VersionOption::where('version_id', request()->input('version_id'))->get();
+        $options = Option::where('version_id', request()->input('version_id'))->get();
 
         return view('step-2-options')
             ->with('options', $options)
@@ -44,9 +44,9 @@ class StepController extends Controller
 
     public function stepTwo()
     {
-        $options = VersionOption::where('version_id', request()->input('version_id'))->get();
+        $options = Option::where('version_id', request()->input('version_id'))->get();
         $version = Version::with('taxesAndDiscounts')->findOrFail(request()->input('version_id'));
-        $selectedOptions = VersionOption::whereIn('id', request()->input('option_ids', []))->get();
+        $selectedOptions = Option::whereIn('id', request()->input('option_ids', []))->get();
 
         return view('step-3-buy-or-save')
             ->with('options', $options)

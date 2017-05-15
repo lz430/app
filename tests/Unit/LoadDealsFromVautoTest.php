@@ -40,7 +40,9 @@ file;
 
         $client = Mockery::mock(
             Client::class,
-            json_decode(file_get_contents(__DIR__ . '/stubs/decodedVin.json'), true)
+            [
+                'decodeVin' => json_decode(file_get_contents(__DIR__ . '/stubs/decodeVin.json'), true)
+            ]
         );
 
         /** Create versions to match against */
@@ -64,9 +66,10 @@ file;
 
         App::instance(Importer::class, new Importer($filesystem, $client));
 
+
         $this->app->make(Kernel::class)->handle(
             new ArrayInput(['command' => 'vauto:load']),
-            new BufferedOutput()
+            $output = new BufferedOutput
         );
 
         /** Loads Deals */
@@ -88,11 +91,6 @@ file;
         /** Loads Photos (as https) */
         $this->assertDatabaseHas('version_deal_photos', [
             'url' => 'https://vehiclephotos.vauto.com/53/fe/66/83-3b4f-4da9-9f01-1734905d230b/image-1.jpg',
-        ]);
-
-        /** Loads Options */
-        $this->assertDatabaseHas('version_deal_options', [
-            'option' => '18" x 7.0" Aluminum Wheels',
         ]);
     }
 }

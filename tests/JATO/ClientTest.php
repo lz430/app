@@ -61,6 +61,16 @@ class ClientTest extends TestCase
     }
 
     /** @test */
+    public function can_get_equipment_by_vehicle_id()
+    {
+        file_put_contents(__DIR__ . '/../../spec.json', json_encode([
+            'options' => static::$client->optionsByVehicleId('61539620000131'),
+            'equipment' => static::$client->equipmentByVehicleId('61539620000131'),
+        ]));
+        echo 'done';
+    }
+
+    /** @test */
     public function can_decode_vin()
     {
         static::$client->decodeVin('2C4RC1BG4HR710602');
