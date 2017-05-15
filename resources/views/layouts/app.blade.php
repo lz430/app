@@ -34,11 +34,11 @@
 
             <div class="nav__links">
                 <!-- Authentication Links -->
-                @if (!request()->is('login') && auth()->check())
+                @if (! request()->is('login') && auth()->check())
                     <a href="{{ route('home') }}">My Garage</a>
                 @endif
 
-                @if (!auth()->check())
+                @if (! auth()->check())
                     <a href="{{ route('login') }}">Login</a>
                 @endif
             </div>
