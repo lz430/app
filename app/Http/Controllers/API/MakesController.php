@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
 use App\JATO\Make;
 use App\Transformers\MakeTransformer;
 
-class MakesController extends Controller
+class MakesController extends BaseAPIController
 {
     private const TRANSFORMER = MakeTransformer::class;
     private const RESOURCE_NAME = 'makes';

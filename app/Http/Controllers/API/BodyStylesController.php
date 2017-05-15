@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
 use App\Transformers\BodyStyleTransformer;
 use DeliverMyRide\JATO\BodyStyles;
 use League\Fractal\Serializer\DataArraySerializer;
 
-class BodyStylesController extends Controller
+class BodyStylesController extends BaseAPIController
 {
     private const TRANSFORMER = BodyStyleTransformer::class;
     private const RESOURCE_NAME = 'body-styles';
