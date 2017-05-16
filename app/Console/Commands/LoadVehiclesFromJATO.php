@@ -178,10 +178,10 @@ class LoadVehiclesFromJATO extends Command
         foreach ($equipments as $equipment) {
             Equipment::updateOrCreate([
                 'jato_option_id' => $equipment['optionId'],
-                'jato_vehicle_id' => $version->id,
+                'jato_vehicle_id' => $version->jato_vehicle_id,
             ], [
                 'jato_option_id' => $equipment['optionId'],
-                'jato_vehicle_id' => $version->id,
+                'jato_vehicle_id' => $version->jato_vehicle_id,
                 'jato_schema_id' => $equipment['schemaId'],
                 'jato_category_id' => $equipment['categoryId'],
                 'category' => $equipment['category'],

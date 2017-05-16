@@ -60,7 +60,13 @@ class LoadVehiclesFromJATOTest extends TestCase
         $this->assertGreaterThanOrEqual(1, Make::where('name', 'test make')->count());
         $this->assertGreaterThanOrEqual(1, VehicleModel::where('name', 'test model')->count());
         $this->assertGreaterThanOrEqual(1, Version::where('name', 'test version')->count());
-        $this->assertGreaterThanOrEqual(1, Equipment::where('name', 'test equipment')->count());
+        $this->assertGreaterThanOrEqual(
+            1,
+            Equipment::where(
+                'jato_vehicle_id',
+                Version::where('name', 'test version')->first()->jato_vehicle_id
+            )->count()
+        );
         $this->assertGreaterThanOrEqual(1, Option::where('name', 'test option')->count());
         $this->assertGreaterThanOrEqual(1, VersionTaxAndDiscount::where('name', 'test tax')->count());
     }
