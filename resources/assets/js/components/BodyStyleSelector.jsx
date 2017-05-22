@@ -7,10 +7,10 @@ class BodyStyleSelector extends React.Component {
             <div>
                 { this.props.bodyStyles.map((bodyStyle) => {
                     return (
-                        <div key={bodyStyle.style}>
+                        <div onClick={ this.props.onSelectBodyStyle.bind(null, bodyStyle.style) } key={ bodyStyle.style }>
                             { bodyStyle.style }
                             <br/>
-                            <img src={bodyStyle.icon}/>
+                            <img src={ bodyStyle.icon }/>
                         </div>
                     );
                 }) }

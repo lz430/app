@@ -21,6 +21,7 @@ class MakeTransformer extends TransformerAbstract
         return [
             'id' => $make->id,
             'name'=> $make->name,
+            'logo' => Make::LOGOS[$make->url_name] ?? '',
         ];
     }
     

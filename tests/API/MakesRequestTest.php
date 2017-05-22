@@ -15,13 +15,14 @@ class MakesRequestTest extends TestCase
     public function it_shows_the_makes_data()
     {
         factory(Make::class)->create([
-            'name' => 'BMW',
+            'name' => 'test-make',
         ]);
         
         $response = $this->get(route('makes.index'));
         
-        $response->assertJsonFragment(['name' => 'BMW']);
+        $response->assertJsonFragment(['name' => 'test-make']);
         $response->assertJsonFragment(['type' => 'makes']);
+        $response->assertJsonFragment(['logo' => '']);
     }
     
     /** @test */
