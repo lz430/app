@@ -17,9 +17,7 @@
             Configure your new vehicle...
         </div>
 
-        <Configurator>
-            <BodyStyleSelector></BodyStyleSelector>
-        </Configurator>
+        <Configurator></Configurator>
     </div>
 
     <div class="section">

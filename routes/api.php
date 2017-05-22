@@ -19,7 +19,6 @@ Route::get('models', 'VehicleModelsController@index')->name('vehicleModels.index
 Route::get('body-styles', 'BodyStylesController@index')->name('bodyStyles.index');
 
 Route::group(['middleware' => 'auth:api'], function () {
-    Route::get('saved-vehicles',
-        'SavedVehiclesController@index')->name('savedVehicles.index');
+    Route::get('saved-vehicles', 'SavedVehiclesController@index')->name('savedVehicles.index');
     Route::patch('users/{user}', 'UsersController@update')->name('users.update');
 });

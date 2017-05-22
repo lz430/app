@@ -51,7 +51,7 @@ class ClientTest extends TestCase
     /** @test */
     public function can_get_model_versions_by_model_name()
     {
-        static::$client->modelsVersionsByModelName('xterra');
+        static::$client->modelsVersionsByModelName('altima');
     }
 
     /** @test */
@@ -63,11 +63,7 @@ class ClientTest extends TestCase
     /** @test */
     public function can_get_equipment_by_vehicle_id()
     {
-        file_put_contents(__DIR__ . '/../../spec.json', json_encode([
-            'options' => static::$client->optionsByVehicleId('61539620000131'),
-            'equipment' => static::$client->equipmentByVehicleId('61539620000131'),
-        ]));
-        echo 'done';
+        static::$client->equipmentByVehicleId('728959220170104');
     }
 
     /** @test */

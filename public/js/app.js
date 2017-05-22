@@ -14848,13 +14848,15 @@ var BodyStyleSelector = function (_React$Component) {
     _createClass(BodyStyleSelector, [{
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 null,
                 this.props.bodyStyles.map(function (bodyStyle) {
                     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
-                        { key: bodyStyle.style },
+                        { onClick: _this2.props.onSelectBodyStyle.bind(null, bodyStyle.style), key: bodyStyle.style },
                         bodyStyle.style,
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { src: bodyStyle.icon })
@@ -14885,7 +14887,10 @@ BodyStyleSelector.propTypes = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(137);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BodyStyleSelector__ = __webpack_require__(224);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_api__ = __webpack_require__(226);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__MakeSelector__ = __webpack_require__(518);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_api__ = __webpack_require__(226);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios__ = __webpack_require__(205);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_axios__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -14893,6 +14898,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
 
 
 
@@ -14907,23 +14914,32 @@ var Configurator = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Configurator.__proto__ || Object.getPrototypeOf(Configurator)).call(this, props));
 
         _this.state = {
-            step: 0,
-            bodyStyles: null,
-            selectedBodyStyle: null
+            step: 'style',
+            styles: null,
+            makes: null
         };
 
         _this.stepMap = {
-            0: {
-                title: 'Select vehicle style',
+            'style': {
+                title: 'Vehicle Style',
                 render: function render() {
-                    return _this.state.bodyStyles ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__BodyStyleSelector__["a" /* default */], { bodyStyles: _this.state.bodyStyles, onSelectBodyStyle: console.log }) : 'loading';
+                    return _this.state.styles ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__BodyStyleSelector__["a" /* default */], { bodyStyles: _this.state.styles, onSelectBodyStyle: _this.onSelectStyle }) : 'loading';
+                }
+            },
+            'brand': {
+                title: 'Vehicle Brand',
+                render: function render() {
+                    return _this.state.styles ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__MakeSelector__["a" /* default */], { makes: _this.state.makes, onSelectMake: _this.onSelectBrand }) : 'loading';
                 }
             }
         };
 
+        _this.setStepStyle = _this.setStepStyle.bind(_this);
+        _this.setStepBrand = _this.setStepBrand.bind(_this);
         _this.currentStep = _this.currentStep.bind(_this);
         _this.renderStep = _this.renderStep.bind(_this);
-        _this.onSelectBodyStyle = _this.onSelectBodyStyle.bind(_this);
+        _this.onSelectStyle = _this.onSelectStyle.bind(_this);
+        _this.onSelectBrand = _this.onSelectBrand.bind(_this);
         return _this;
     }
 
@@ -14932,16 +14948,24 @@ var Configurator = function (_React$Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            __WEBPACK_IMPORTED_MODULE_2__src_api__["a" /* default */].getBodyStyles().then(function (response) {
+            __WEBPACK_IMPORTED_MODULE_4_axios___default.a.all([__WEBPACK_IMPORTED_MODULE_3__src_api__["a" /* default */].getBodyStyles(), __WEBPACK_IMPORTED_MODULE_3__src_api__["a" /* default */].getMakes()]).then(__WEBPACK_IMPORTED_MODULE_4_axios___default.a.spread(function (styles, makes) {
                 _this2.setState({
-                    bodyStyles: response.data.data
+                    styles: styles.data.data,
+                    makes: makes.data.data
                 });
-            });
+            }));
         }
     }, {
-        key: 'onSelectBodyStyle',
-        value: function onSelectBodyStyle(bodyStyle) {
-            this.setState({ selectedBodyStyle: bodyStyle });
+        key: 'onSelectStyle',
+        value: function onSelectStyle(bodyStyle) {
+            // send to style page
+            console.log(bodyStyle);
+        }
+    }, {
+        key: 'onSelectBrand',
+        value: function onSelectBrand(id) {
+            // send to brand page
+            console.log(id);
         }
     }, {
         key: 'renderStep',
@@ -14954,6 +14978,16 @@ var Configurator = function (_React$Component) {
             return this.stepMap[this.state.step];
         }
     }, {
+        key: 'setStepStyle',
+        value: function setStepStyle() {
+            this.setState({ step: 'style' });
+        }
+    }, {
+        key: 'setStepBrand',
+        value: function setStepBrand() {
+            this.setState({ step: 'brand' });
+        }
+    }, {
         key: 'render',
         value: function render() {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -14962,7 +14996,18 @@ var Configurator = function (_React$Component) {
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'h2',
                     null,
-                    this.currentStep().title
+                    'Start here...'
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'button',
+                    { onClick: this.setStepStyle },
+                    'Vehicle Style'
+                ),
+                'Or',
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'button',
+                    { onClick: this.setStepBrand },
+                    'Vehicle Brand'
                 ),
                 this.renderStep()
             );
@@ -14982,6 +15027,9 @@ var Configurator = function (_React$Component) {
 var api = {
     getBodyStyles: function getBodyStyles() {
         return window.axios.get('/api/body-styles');
+    },
+    getMakes: function getMakes() {
+        return window.axios.get('/api/makes');
     }
 };
 
@@ -33866,6 +33914,75 @@ module.exports = traverseAllChildren;
 __webpack_require__(203);
 module.exports = __webpack_require__(204);
 
+
+/***/ }),
+/* 515 */,
+/* 516 */,
+/* 517 */,
+/* 518 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(137);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(428);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+var MakeSelector = function (_React$Component) {
+    _inherits(MakeSelector, _React$Component);
+
+    function MakeSelector() {
+        _classCallCheck(this, MakeSelector);
+
+        return _possibleConstructorReturn(this, (MakeSelector.__proto__ || Object.getPrototypeOf(MakeSelector)).apply(this, arguments));
+    }
+
+    _createClass(MakeSelector, [{
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                null,
+                this.props.makes.map(function (make) {
+                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { onClick: _this2.props.onSelectMake.bind(null, make.id), key: make.id },
+                        make.attributes.name,
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { src: make.attributes.logo })
+                    );
+                })
+            );
+        }
+    }]);
+
+    return MakeSelector;
+}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+
+MakeSelector.propTypes = {
+    makes: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+        id: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
+        attributes: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+            name: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
+            logo: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired
+        })
+    })).isRequired,
+    onSelectMake: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.func.isRequired
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (MakeSelector);
 
 /***/ })
 /******/ ]);
