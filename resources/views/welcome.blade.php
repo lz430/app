@@ -14,7 +14,7 @@
 
     <div class="section">
         <div class="section__title section__title--medium">
-            Configure your new vehicle...
+            Start here...
         </div>
 
         <Configurator></Configurator>

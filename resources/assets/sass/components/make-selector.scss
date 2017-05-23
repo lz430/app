@@ -1,0 +1,37 @@
+@import '../variables';
+
+.make-selector {
+  text-align: center;
+
+  &__title {
+    background: $color-background-primary;
+    display: inline-flex;
+    padding: 10px;
+  }
+
+  &__makes {
+    align-content: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  &__make {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    height: 125px;
+    justify-content: center;
+    max-height: 125px;
+    max-width: 125px;
+    min-width: 125px;
+    padding: 15px;
+    text-align: center;
+    width: 125px;
+
+    &--selected {
+      outline: 1px solid red;
+    }
+  }
+}
