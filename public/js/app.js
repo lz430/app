@@ -14861,12 +14861,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(92);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__StyleSelector__ = __webpack_require__(828);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__MakeSelector__ = __webpack_require__(227);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_api__ = __webpack_require__(228);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios__ = __webpack_require__(139);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ramda__ = __webpack_require__(633);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ramda___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_ramda__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_api__ = __webpack_require__(228);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -14874,9 +14869,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-
-
 
 
 
@@ -14893,14 +14885,11 @@ var Configurator = function (_React$Component) {
         _this.state = {
             styles: null,
             makes: null,
-            selectedStyles: [],
-            selectedMakes: []
+            selectedStyles: []
         };
 
         _this.redirectToFilterPage = _this.redirectToFilterPage.bind(_this);
-        _this.renderStartOrContinue = _this.renderStartOrContinue.bind(_this);
         _this.onSelectStyle = _this.onSelectStyle.bind(_this);
-        _this.onSelectMake = _this.onSelectMake.bind(_this);
         return _this;
     }
 
@@ -14909,61 +14898,28 @@ var Configurator = function (_React$Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            __WEBPACK_IMPORTED_MODULE_4_axios___default.a.all([__WEBPACK_IMPORTED_MODULE_3__src_api__["a" /* default */].getBodyStyles(), __WEBPACK_IMPORTED_MODULE_3__src_api__["a" /* default */].getMakes()]).then(__WEBPACK_IMPORTED_MODULE_4_axios___default.a.spread(function (styles, makes) {
+            __WEBPACK_IMPORTED_MODULE_2__src_api__["a" /* default */].getBodyStyles().then(function (styles) {
                 _this2.setState({
-                    styles: styles.data.data,
-                    makes: makes.data.data
+                    styles: styles.data.data
                 });
-            }));
+            });
         }
     }, {
         key: 'redirectToFilterPage',
-        value: function redirectToFilterPage() {
-            window.location = '/filter?styles=' + this.state.selectedStyles.join().toString() + '&makes=' + this.state.selectedMakes.join().toString();
+        value: function redirectToFilterPage(style) {
+            window.location = '/filter?style=' + style;
         }
     }, {
         key: 'onSelectStyle',
         value: function onSelectStyle(style) {
-            this.setState({
-                selectedStyles: __WEBPACK_IMPORTED_MODULE_5_ramda___default.a.contains(style, this.state.selectedStyles) ? __WEBPACK_IMPORTED_MODULE_5_ramda___default.a.reject(__WEBPACK_IMPORTED_MODULE_5_ramda___default.a.equals(style), this.state.selectedStyles) : __WEBPACK_IMPORTED_MODULE_5_ramda___default.a.append(style, this.state.selectedStyles)
-            });
-        }
-    }, {
-        key: 'onSelectMake',
-        value: function onSelectMake(id) {
-            this.setState({
-                selectedMakes: __WEBPACK_IMPORTED_MODULE_5_ramda___default.a.contains(id, this.state.selectedMakes) ? __WEBPACK_IMPORTED_MODULE_5_ramda___default.a.reject(__WEBPACK_IMPORTED_MODULE_5_ramda___default.a.equals(id), this.state.selectedMakes) : __WEBPACK_IMPORTED_MODULE_5_ramda___default.a.append(id, this.state.selectedMakes)
-            });
-        }
-    }, {
-        key: 'renderStartOrContinue',
-        value: function renderStartOrContinue() {
-            var readyToContinue = this.state.selectedMakes.length >= 1 && this.state.selectedStyles.length >= 1;
-
-            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'div',
-                { className: 'configurator__heading' },
-                readyToContinue ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'button',
-                    {
-                        onClick: this.redirectToFilterPage,
-                        className: 'configurator__button'
-                    },
-                    'Continue'
-                ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'div',
-                    { className: 'configurator__title' },
-                    'Start here'
-                )
-            );
+            this.redirectToFilterPage(style);
         }
     }, {
         key: 'render',
         value: function render() {
-            return this.state.styles && this.state.makes ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            return this.state.styles ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { className: 'configurator' },
-                this.renderStartOrContinue(),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
                     { className: 'configurator__selectors' },
@@ -14971,11 +14927,6 @@ var Configurator = function (_React$Component) {
                         styles: this.state.styles,
                         selectedStyles: this.state.selectedStyles,
                         onSelectStyle: this.onSelectStyle
-                    }),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__MakeSelector__["a" /* default */], {
-                        makes: this.state.makes,
-                        selectedMakes: this.state.selectedMakes,
-                        onSelectMake: this.onSelectMake
                     })
                 )
             ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -14992,94 +14943,7 @@ var Configurator = function (_React$Component) {
 /* harmony default export */ __webpack_exports__["a"] = (Configurator);
 
 /***/ }),
-/* 227 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(92);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(178);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ramda__ = __webpack_require__(633);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ramda___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ramda__);
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-
-
-
-
-var MakeSelector = function (_React$Component) {
-    _inherits(MakeSelector, _React$Component);
-
-    function MakeSelector() {
-        _classCallCheck(this, MakeSelector);
-
-        var _this = _possibleConstructorReturn(this, (MakeSelector.__proto__ || Object.getPrototypeOf(MakeSelector)).call(this));
-
-        _this.renderMake = _this.renderMake.bind(_this);
-        return _this;
-    }
-
-    _createClass(MakeSelector, [{
-        key: 'renderMake',
-        value: function renderMake(make) {
-            var selected = __WEBPACK_IMPORTED_MODULE_2_ramda___default.a.contains(make.id, this.props.selectedMakes);
-            var className = 'make-selector__make ' + (selected ? 'make-selector__make--selected' : '');
-
-            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'div',
-                {
-                    className: className,
-                    onClick: this.props.onSelectMake.bind(null, make.id),
-                    key: make.id
-                },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { src: make.attributes.logo })
-            );
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'div',
-                { className: 'make-selector' },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'div',
-                    { className: 'make-selector__title' },
-                    'Select Several Brands To Compare'
-                ),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'div',
-                    { className: 'make-selector__makes' },
-                    this.props.makes.map(this.renderMake)
-                )
-            );
-        }
-    }]);
-
-    return MakeSelector;
-}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
-
-MakeSelector.propTypes = {
-    makes: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
-        id: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
-        attributes: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
-            name: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
-            logo: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired
-        })
-    })).isRequired,
-    selectedMakes: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string).isRequired,
-    onSelectMake: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.func.isRequired
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (MakeSelector);
-
-/***/ }),
+/* 227 */,
 /* 228 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -45585,7 +45449,7 @@ var StyleSelector = function (_React$Component) {
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
                     { className: 'style-selector__title' },
-                    'Select 1 Style'
+                    'Select Style'
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',

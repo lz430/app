@@ -29,7 +29,7 @@ class StyleSelector extends React.Component {
     render() {
         return (
             <div className="style-selector">
-                <div className="style-selector__title">Select 1 Style</div>
+                <div className="style-selector__title">Select Style</div>
 
                 <div className="style-selector__styles">
                     {this.props.styles.map(this.renderStyle)}

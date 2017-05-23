@@ -1,9 +1,6 @@
 import React from 'react';
 import StyleSelector from './StyleSelector';
-import MakeSelector from './MakeSelector';
 import api from '../src/api';
-import axios from 'axios';
-import R from 'ramda';
 
 class Configurator extends React.Component {
     constructor(props) {
@@ -13,86 +10,36 @@ class Configurator extends React.Component {
             styles: null,
             makes: null,
             selectedStyles: [],
-            selectedMakes: [],
         };
 
         this.redirectToFilterPage = this.redirectToFilterPage.bind(this);
-        this.renderStartOrContinue = this.renderStartOrContinue.bind(this);
         this.onSelectStyle = this.onSelectStyle.bind(this);
-        this.onSelectMake = this.onSelectMake.bind(this);
     }
 
     componentDidMount() {
-        axios.all([api.getBodyStyles(), api.getMakes()]).then(
-            axios.spread((styles, makes) => {
-                this.setState({
-                    styles: styles.data.data,
-                    makes: makes.data.data,
-                });
-            })
-        );
+        api.getBodyStyles().then((styles) => {
+            this.setState({
+                styles: styles.data.data,
+            });
+        });
     }
 
-    redirectToFilterPage() {
-        window.location = `/filter?styles=${this.state.selectedStyles
-            .join()
-            .toString()}&makes=${this.state.selectedMakes.join().toString()}`;
+    redirectToFilterPage(style) {
+        window.location = `/filter?style=${style}`;
     }
 
     onSelectStyle(style) {
-        this.setState({
-            selectedStyles: R.contains(style, this.state.selectedStyles)
-                ? R.reject(R.equals(style), this.state.selectedStyles)
-                : R.append(style, this.state.selectedStyles),
-        });
-    }
-
-    onSelectMake(id) {
-        this.setState({
-            selectedMakes: R.contains(id, this.state.selectedMakes)
-                ? R.reject(R.equals(id), this.state.selectedMakes)
-                : R.append(id, this.state.selectedMakes),
-        });
-    }
-
-    renderStartOrContinue() {
-        let readyToContinue =
-            this.state.selectedMakes.length >= 1 &&
-            this.state.selectedStyles.length >= 1;
-
-        return (
-            <div className="configurator__heading">
-                {readyToContinue
-                    ? <button
-                          onClick={this.redirectToFilterPage}
-                          className="configurator__button"
-                      >
-                          Continue
-                      </button>
-                    : <div className="configurator__title">
-                          Start here
-                      </div>}
-            </div>
-        );
+        this.redirectToFilterPage(style);
     }
 
     render() {
-        return this.state.styles && this.state.makes
+        return this.state.styles
             ? <div className="configurator">
-
-                  {this.renderStartOrContinue()}
-
                   <div className="configurator__selectors">
                       <StyleSelector
                           styles={this.state.styles}
                           selectedStyles={this.state.selectedStyles}
                           onSelectStyle={this.onSelectStyle}
-                      />
-
-                      <MakeSelector
-                          makes={this.state.makes}
-                          selectedMakes={this.state.selectedMakes}
-                          onSelectMake={this.onSelectMake}
                       />
                   </div>
               </div>
