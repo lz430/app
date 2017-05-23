@@ -1,8 +1,23 @@
-.configurator {
-  display: flex;
+@import '../mixins/button';
 
-  & > .style-selector,
-  & > .make-selector {
-    width: 50%;
+.configurator {
+  &__heading {
+    height: 50px;
+    margin: 25px;
+    max-height: 50px;
+    min-height: 50px;
+    text-align: center;
+  }
+
+  &__button {
+    @include button;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+  }
+
+  &__selectors {
+    display: flex;
   }
 }
