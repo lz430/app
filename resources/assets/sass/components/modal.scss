@@ -1,0 +1,17 @@
+@import '../variables';
+
+.modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: calc(100vh - 20px);
+  width: calc(100vw - 20px);
+  margin: 10px;
+  background-color: $color-background-primary;
+  overflow: scroll;
+
+  &__close {
+    float: right;
+    font-size: 2rem;
+  }
+}

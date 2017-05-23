@@ -7,6 +7,8 @@ Route::post('login', 'Auth\LoginController@login');
 
 Route::get('', 'WelcomeController@index');
 
+Route::get('filter', 'FilterController@index')->name('filter');
+
 Route::post('saved-vehicle', 'SavedVehicleController@store')
     ->name('savedVehicle.store');
 
