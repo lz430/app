@@ -16,9 +16,6 @@ body {
 // Normal Components
 @import 'components/nav';
 @import 'components/triplet';
-
-// Step Components
-@import 'components/steps/step-0';
-@import 'components/steps/step-1';
-@import 'components/steps/step-2';
-@import 'components/steps/step-3';
+@import 'components/configurator';
+@import 'components/style-selector';
+@import 'components/make-selector';

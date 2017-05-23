@@ -1,0 +1,8 @@
+.configurator {
+  display: flex;
+
+  & > .style-selector,
+  & > .make-selector {
+    width: 50%;
+  }
+}
