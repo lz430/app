@@ -53,4 +53,9 @@ class Make extends Model
     {
         return $this->hasMany(VehicleModel::class, 'make_id');
     }
+    
+    public function versions()
+    {
+        return $this->hasManyThrough(Version::class, VehicleModel::class, 'make_id', 'model_id', 'id');
+    }
 }
