@@ -16,6 +16,8 @@ class Configurator extends React.Component {
             selectedMakes: [],
         };
 
+        this.redirectToFilterPage = this.redirectToFilterPage.bind(this);
+        this.renderStartOrContinue = this.renderStartOrContinue.bind(this);
         this.onSelectStyle = this.onSelectStyle.bind(this);
         this.onSelectMake = this.onSelectMake.bind(this);
     }
@@ -29,6 +31,12 @@ class Configurator extends React.Component {
                 });
             })
         );
+    }
+
+    redirectToFilterPage() {
+        window.location = `/filter?styles=${this.state.selectedStyles
+            .join()
+            .toString()}&makes=${this.state.selectedMakes.join().toString()}`;
     }
 
     onSelectStyle(style) {
@@ -47,20 +55,46 @@ class Configurator extends React.Component {
         });
     }
 
+    renderStartOrContinue() {
+        let readyToContinue =
+            this.state.selectedMakes.length >= 1 &&
+            this.state.selectedStyles.length >= 1;
+
+        return (
+            <div className="configurator__heading">
+                {readyToContinue
+                    ? <button
+                          onClick={this.redirectToFilterPage}
+                          className="configurator__button"
+                      >
+                          Continue
+                      </button>
+                    : <div className="configurator__title">
+                          Start here
+                      </div>}
+            </div>
+        );
+    }
+
     render() {
         return this.state.styles && this.state.makes
             ? <div className="configurator">
-                  <StyleSelector
-                      styles={this.state.styles}
-                      selectedStyles={this.state.selectedStyles}
-                      onSelectStyle={this.onSelectStyle}
-                  />
 
-                  <MakeSelector
-                      makes={this.state.makes}
-                      selectedMakes={this.state.selectedMakes}
-                      onSelectMake={this.onSelectMake}
-                  />
+                  {this.renderStartOrContinue()}
+
+                  <div className="configurator__selectors">
+                      <StyleSelector
+                          styles={this.state.styles}
+                          selectedStyles={this.state.selectedStyles}
+                          onSelectStyle={this.onSelectStyle}
+                      />
+
+                      <MakeSelector
+                          makes={this.state.makes}
+                          selectedMakes={this.state.selectedMakes}
+                          onSelectMake={this.onSelectMake}
+                      />
+                  </div>
               </div>
             : <div>'Loading'</div>;
     }

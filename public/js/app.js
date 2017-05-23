@@ -14897,6 +14897,8 @@ var Configurator = function (_React$Component) {
             selectedMakes: []
         };
 
+        _this.redirectToFilterPage = _this.redirectToFilterPage.bind(_this);
+        _this.renderStartOrContinue = _this.renderStartOrContinue.bind(_this);
         _this.onSelectStyle = _this.onSelectStyle.bind(_this);
         _this.onSelectMake = _this.onSelectMake.bind(_this);
         return _this;
@@ -14915,6 +14917,11 @@ var Configurator = function (_React$Component) {
             }));
         }
     }, {
+        key: 'redirectToFilterPage',
+        value: function redirectToFilterPage() {
+            window.location = '/filter?styles=' + this.state.selectedStyles.join().toString() + '&makes=' + this.state.selectedMakes.join().toString();
+        }
+    }, {
         key: 'onSelectStyle',
         value: function onSelectStyle(style) {
             this.setState({
@@ -14929,21 +14936,48 @@ var Configurator = function (_React$Component) {
             });
         }
     }, {
+        key: 'renderStartOrContinue',
+        value: function renderStartOrContinue() {
+            var readyToContinue = this.state.selectedMakes.length >= 1 && this.state.selectedStyles.length >= 1;
+
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'configurator__heading' },
+                readyToContinue ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'button',
+                    {
+                        onClick: this.redirectToFilterPage,
+                        className: 'configurator__button'
+                    },
+                    'Continue'
+                ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'configurator__title' },
+                    'Start here'
+                )
+            );
+        }
+    }, {
         key: 'render',
         value: function render() {
             return this.state.styles && this.state.makes ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { className: 'configurator' },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__StyleSelector__["a" /* default */], {
-                    styles: this.state.styles,
-                    selectedStyles: this.state.selectedStyles,
-                    onSelectStyle: this.onSelectStyle
-                }),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__MakeSelector__["a" /* default */], {
-                    makes: this.state.makes,
-                    selectedMakes: this.state.selectedMakes,
-                    onSelectMake: this.onSelectMake
-                })
+                this.renderStartOrContinue(),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'configurator__selectors' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__StyleSelector__["a" /* default */], {
+                        styles: this.state.styles,
+                        selectedStyles: this.state.selectedStyles,
+                        onSelectStyle: this.onSelectStyle
+                    }),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__MakeSelector__["a" /* default */], {
+                        makes: this.state.makes,
+                        selectedMakes: this.state.selectedMakes,
+                        onSelectMake: this.onSelectMake
+                    })
+                )
             ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 null,

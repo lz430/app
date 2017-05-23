@@ -13,10 +13,6 @@
     </div>
 
     <div class="section">
-        <div class="section__title section__title--medium">
-            Start here...
-        </div>
-
         <Configurator></Configurator>
     </div>
 
