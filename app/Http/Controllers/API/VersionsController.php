@@ -6,6 +6,7 @@ use App\JATO\Make;
 use App\JATO\Version;
 use App\Transformers\VersionTransformer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class VersionsController extends BaseAPIController
@@ -16,21 +17,16 @@ class VersionsController extends BaseAPIController
     public function index(Request $request)
     {
         $this->validate($request, [
-            'make_ids' => 'required|string',
-            'body_styles' => 'required|string',
+            'make_ids' => 'required|array',
+            'body_styles' => 'required|array',
         ]);
-        
-        $make_ids = explode(',', $request->get('make_ids'));
-        $body_styles = explode(',', $request->get('body_styles'));
-        
-        // Title case body styles to correspond to casing in the versions table
-        $styles = collect($body_styles)->transform(function ($body_style) {
-            return ucwords($body_style);
-        })->toArray();
-        
-        $makes = Make::whereIn('id', $make_ids)->get();
-        
-        $versions = $makes->flatMap->versions->whereIn('body_style', $styles)->unique();
+
+        $versions = Version::whereIn(
+            DB::raw('lower(body_style)'),
+            array_map('strtolower', request('body_styles'))
+        )->whereHas('model', function ($query) {
+            $query->whereIn('make_id', request('make_ids'));
+        })->get();
     
         return fractal()
             ->collection($versions)

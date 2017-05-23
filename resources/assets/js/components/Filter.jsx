@@ -2,12 +2,17 @@ import React from 'react';
 import MakeSelector from './MakeSelector';
 import R from 'ramda';
 import api from '../src/api';
+import qs from 'qs';
 
 class Filter extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            selectedBodyStyle: R.prop(
+                'style',
+                qs.parse(window.location.search.slice(1))
+            ),
             selectedMakes: [],
             makes: null,
             showModal: true,
@@ -34,22 +39,34 @@ class Filter extends React.Component {
     }
 
     closeModal() {
-        this.setState({
-            showModal: false,
-        })
+        this.setState(
+            {
+                showModal: false,
+            },
+            this.getDeals
+        );
+    }
 
-
+    getDeals() {
+        api
+            .getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle])
+            .then(deals => {
+                console.log(deals.data.data);
+                // TODO: we should save the deals, and render them to the page
+            });
     }
 
     renderModal() {
-        return <div className="filter modal">
-            <div className="modal__close" onClick={this.closeModal}>X</div>
-            <MakeSelector
-                makes={this.state.makes}
-                onSelectMake={this.onSelectMake}
-                selectedMakes={this.state.selectedMakes}
-            />
-        </div>;
+        return (
+            <div className="filter modal">
+                <div className="modal__close" onClick={this.closeModal}>X</div>
+                <MakeSelector
+                    makes={this.state.makes}
+                    onSelectMake={this.onSelectMake}
+                    selectedMakes={this.state.selectedMakes}
+                />
+            </div>
+        );
     }
 
     render() {
