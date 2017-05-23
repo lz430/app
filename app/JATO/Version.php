@@ -28,7 +28,7 @@ class Version extends Model
 
     public function equipment()
     {
-        return $this->hasMany(Equipment::class, 'jato_vehicle_id');
+        return $this->hasMany(Equipment::class, 'jato_vehicle_id', 'jato_vehicle_id');
     }
 
     public function taxesAndDiscounts()

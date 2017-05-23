@@ -15,19 +15,27 @@ class VersionsController extends BaseAPIController
     
     public function index(Request $request)
     {
-        $fractal = fractal();
+        $this->validate($request, [
+            'make_ids' => 'required|string',
+            'body_styles' => 'required|string',
+        ]);
         
-        if ($request->has('ids')) {
-            $versions = Version::whereIn('id', explode(',', $request->get('ids')))->get();
-        } else {
-            $paginator = Version::paginate(20);
-            $versions = $paginator->getCollection();
-            $fractal->paginateWith(new IlluminatePaginatorAdapter($paginator));
-        }
+        $make_ids = explode(',', $request->get('make_ids'));
+        $body_styles = explode(',', $request->get('body_styles'));
         
-        return $fractal->collection($versions)
+        // Title case body styles to correspond to casing in the versions table
+        $styles = collect($body_styles)->transform(function ($body_style) {
+            return ucwords($body_style);
+        })->toArray();
+        
+        $makes = Make::whereIn('id', $make_ids)->get();
+        
+        $versions = $makes->flatMap->versions->whereIn('body_style', $styles)->unique();
+    
+        return fractal()
+            ->collection($versions)
             ->withResourceName(self::RESOURCE_NAME)
             ->transformWith(self::TRANSFORMER)
-            ->parseIncludes($request->get('includes'))->respond();
+            ->respond();
     }
 }
