@@ -6,7 +6,6 @@ use App\Transformers\DealTransformer;
 use App\VersionDeal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use League\Fractal\Serializer\DataArraySerializer;
 
 class DealsController extends BaseAPIController
 {
@@ -27,15 +26,12 @@ class DealsController extends BaseAPIController
             )->whereHas('model', function ($query) {
                 $query->whereIn('make_id', request('make_ids'));
             });
-        });
+        })->get();
 
-        $deals = $request->get('includes') == 'versions' ? $deals->with('version')->get() : $deals->get();
-        
         return fractal()
             ->collection($deals)
             ->withResourceName(self::RESOURCE_NAME)
             ->transformWith(self::TRANSFORMER)
-            ->serializeWith(new DataArraySerializer)
             ->parseIncludes($request->get('includes'))
             ->respond();
     }
