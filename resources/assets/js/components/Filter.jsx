@@ -1,5 +1,6 @@
 import React from 'react';
 import MakeSelector from './MakeSelector';
+import Deals from './Deals';
 import R from 'ramda';
 import api from '../src/api';
 import qs from 'qs';
@@ -7,7 +8,6 @@ import qs from 'qs';
 class Filter extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             selectedBodyStyle: R.prop(
                 'style',
@@ -16,8 +16,9 @@ class Filter extends React.Component {
             selectedMakes: [],
             makes: null,
             showModal: true,
+            deals: null,
+            versions: null,
         };
-
         this.onSelectMake = this.onSelectMake.bind(this);
         this.closeModal = this.closeModal.bind(this);
     }
@@ -49,11 +50,17 @@ class Filter extends React.Component {
 
     getDeals() {
         api
-            .getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle])
+            .getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], 'versions')
             .then(deals => {
-                console.log(deals.data.data);
-                // TODO: we should save the deals, and render them to the page
+                this.setState({
+                    deals: deals.data.data.sort(this.orderByPriceDecending),
+                    versions: deals.data.data.included,
+                });
             });
+    }
+
+    orderByPriceDecending(first, next) {
+        return first.attributes.price - next.attributes.price;
     }
 
     renderModal() {
@@ -69,10 +76,24 @@ class Filter extends React.Component {
         );
     }
 
+    renderDeals() {
+        return (
+            this.state.deals.length > 0
+                ? <div><Deals deals={this.state.deals}></Deals></div>
+                : <div><p>No Results</p></div>
+        );
+    }
+
     render() {
-        return this.state.makes && this.state.showModal
-            ? this.renderModal()
-            : <div>'Loading'</div>;
+        if(this.state.makes && this.state.showModal) {
+            return this.renderModal();
+        }
+
+        if(this.state.deals) {
+            return this.renderDeals();
+        }
+
+        return <div>'Loading'</div>;
     }
 }
 

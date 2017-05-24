@@ -32,6 +32,7 @@ class DealsController extends BaseAPIController
             ->collection($deals)
             ->withResourceName(self::RESOURCE_NAME)
             ->transformWith(self::TRANSFORMER)
+            ->parseIncludes($request->get('includes'))
             ->respond();
     }
 }
