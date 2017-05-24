@@ -17,6 +17,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('buy-request', 'BuyRequestController@store')->name('buyRequest.store');
     Route::delete('saved-vehicle/{id}', 'SavedVehicleController@destroy')->name('savedVehicle.destroy');
     Route::get('home', 'SavedVehicleController@index')->name('home');
+
+    /** Purchase Flow */
+    Route::get('purchase', 'PurchaseController@index')->name('purchase');
 });
 
 Route::get('buy-request/thanks', function () {

@@ -2,5 +2,7 @@
 
 .footer {
   background-color: $color-background-primary;
+  height: $footer-height;
+  max-height: $footer-height;
   text-align: center;
 }
