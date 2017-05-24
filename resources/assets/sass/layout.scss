@@ -1,4 +1,5 @@
-@import 'variables';
+@import './mixins/border-bottom';
+@import './variables';
 
 body {
   display: flex;
@@ -12,10 +13,12 @@ body {
 }
 
 .section {
-  border-bottom: 1px solid $color-section-bottom-border;
+  @include border-bottom;
+  $section-padding: 50px;
+
   display: flex;
   flex-wrap: wrap;
-  padding: 50px;
+  padding: $section-padding;
 
   &__title {
     font-size: 2rem;
@@ -33,11 +36,15 @@ body {
     }
   }
 
-  &:nth-child(odd) {
-    background-color: $color-background-primary;
+  &--stretch {
+    min-height: calc(100vh - #{$nav-height} - #{$footer-height} - #{$section-padding * 2});
   }
 
   &:nth-child(even) {
+    background-color: $color-background-primary;
+  }
+
+  &:nth-child(odd) {
     background-color: $color-background-secondary;
   }
 }

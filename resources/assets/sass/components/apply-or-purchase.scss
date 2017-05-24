@@ -1,0 +1,13 @@
+@import '../mixins/button';
+
+.apply-or-purchase {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  &__button {
+    @include button;
+    margin: 25px;
+  }
+}

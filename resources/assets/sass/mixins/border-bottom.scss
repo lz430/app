@@ -1,0 +1,5 @@
+@import '../variables';
+
+@mixin border-bottom {
+  border-bottom: 1px solid $color-section-bottom-border;
+}
