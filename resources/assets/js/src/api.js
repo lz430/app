@@ -5,11 +5,12 @@ const api = {
     getMakes: () => {
         return window.axios.get('/api/makes');
     },
-    getDeals: (make_ids, body_styles) => {
+    getDeals: (make_ids, body_styles, includes) => {
         return window.axios.get('/api/deals', {
             params: {
                 make_ids,
                 body_styles,
+                includes,
             },
         });
     },
