@@ -19,7 +19,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('home', 'SavedVehicleController@index')->name('home');
 
     /** Purchase Flow */
-    Route::get('purchase', 'PurchaseController@index')->name('purchase');
+    Route::get('apply-or-purchase', 'ApplyOrPurchaseController@applyOrPurchase')->name('applyOrPurchase');
+    Route::post('purchase', 'ApplyOrPurchaseController@purchase')->name('purchase');
 });
 
 Route::get('buy-request/thanks', function () {
