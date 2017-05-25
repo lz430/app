@@ -10,7 +10,7 @@ class Deals extends React.Component {
     render() {
         const deals = this.props.deals;
 
-        return <div className="deals-container">
+        return <div className="deals">
             {deals.map((deal, index) => {
                 return <Deal deal={deal} key={index}></Deal>
             })}

@@ -7,21 +7,16 @@ class Deal extends React.Component {
 
     render() {
         const deal = this.props.deal;
-        return <div className="deal-container">
-            <p>price</p>
-            <p>{deal.attributes.price}</p>
-            <p>year</p>
-            <p>{deal.attributes.year}</p>
-            <p>make</p>
-            <p>{deal.attributes.make}</p>
-            <p>model</p>
-            <p>{deal.attributes.model}</p>
-            <p>vin</p>
-            <p>{deal.attributes.vin}</p>
-            <p>color</p>
-            <p>{deal.attributes.color}</p>
-            <p>certified</p>
-            <p>{deal.attributes.certified}</p>
+        return <div className="deal">
+            <div className="deal__basic-info">
+                <p>2018 Toyota<br/>4 Runner Sports Utility Vehicle<br /><strong>$34,000 MSRP</strong></p>
+            </div>
+            <img className="deal__image" src="https://vehiclephotos.vauto.com/a0/4f/0f/99-47aa-4260-a37f-0d027f5713e4/image-1.jpg" />
+            <div className="deal__buttons">
+                <button>Details</button>
+                <button>Compare</button>
+            </div>
+
         </div>
     }
 }

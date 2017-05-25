@@ -53,14 +53,14 @@ class Filter extends React.Component {
             .getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], 'versions')
             .then(deals => {
                 this.setState({
-                    deals: deals.data.data.sort(this.orderByPriceDecending),
+                    deals: R.sort(this.priceDesc, deals.data.data),
                     versions: deals.data.data.included,
                 });
             });
     }
 
-    orderByPriceDecending(first, next) {
-        return first.attributes.price - next.attributes.price;
+    priceDesc(a, b) {
+        return a.attributes.price > b.attributes.price;
     }
 
     renderModal() {
