@@ -19567,6 +19567,7 @@ var Configurator = function (_React$Component) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_util__ = __webpack_require__(836);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -19574,6 +19575,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -19587,42 +19589,44 @@ var Deal = function (_React$Component) {
     }
 
     _createClass(Deal, [{
-        key: "render",
+        key: 'render',
         value: function render() {
             var deal = this.props.deal;
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                "div",
-                { className: "deal" },
+                'div',
+                { className: 'deal' },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    "div",
-                    { className: "deal__basic-info" },
+                    'div',
+                    { className: 'deal__basic-info' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        "p",
+                        'p',
                         null,
-                        "2018 Toyota",
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
-                        "4 Runner Sports Utility Vehicle",
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
+                        deal.year + ' ' + deal.make + ' ' + deal.model,
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            "strong",
+                            'strong',
                             null,
-                            "$34,000 MSRP"
+                            __WEBPACK_IMPORTED_MODULE_1__src_util__["a" /* default */].moneyFormat(deal.msrp),
+                            ' MSRP'
                         )
                     )
                 ),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("img", { className: "deal__image", src: "https://vehiclephotos.vauto.com/a0/4f/0f/99-47aa-4260-a37f-0d027f5713e4/image-1.jpg" }),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', {
+                    className: 'deal__image',
+                    src: deal.photos.data[0].url
+                }),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    "div",
-                    { className: "deal__buttons" },
+                    'div',
+                    { className: 'deal__buttons' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        "button",
+                        'button',
                         null,
-                        "Details"
+                        'Details'
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        "button",
+                        'button',
                         null,
-                        "Compare"
+                        'Compare'
                     )
                 )
             );
@@ -19673,7 +19677,7 @@ var Deals = function (_React$Component) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { className: 'deals' },
-                deals.map(function (deal, index) {
+                deals.data.map(function (deal, index) {
                     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Deal__["a" /* default */], { deal: deal, key: index });
                 })
             );
@@ -19682,6 +19686,16 @@ var Deals = function (_React$Component) {
 
     return Deals;
 }(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+
+Deals.propTypes = {
+    deals: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+        year: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.required,
+        msrp: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.number.required,
+        make: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.required,
+        model: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.required,
+        id: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.required
+    })
+};
 
 /* harmony default export */ __webpack_exports__["a"] = (Deals);
 
@@ -19727,8 +19741,7 @@ var Filter = function (_React$Component) {
             selectedMakes: [],
             makes: null,
             showModal: true,
-            deals: null,
-            versions: null
+            deals: null
         };
         _this.onSelectMake = _this.onSelectMake.bind(_this);
         _this.closeModal = _this.closeModal.bind(_this);
@@ -19765,17 +19778,16 @@ var Filter = function (_React$Component) {
         value: function getDeals() {
             var _this3 = this;
 
-            __WEBPACK_IMPORTED_MODULE_4__src_api__["a" /* default */].getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], 'versions').then(function (deals) {
+            __WEBPACK_IMPORTED_MODULE_4__src_api__["a" /* default */].getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], 'photos').then(function (deals) {
                 _this3.setState({
-                    deals: __WEBPACK_IMPORTED_MODULE_3_ramda___default.a.sort(_this3.priceDesc, deals.data.data),
-                    versions: deals.data.data.included
+                    deals: deals.data
                 });
             });
         }
     }, {
         key: 'priceDesc',
         value: function priceDesc(a, b) {
-            return a.attributes.price > b.attributes.price;
+            return a.msrp > b.msrp;
         }
     }, {
         key: 'renderModal',
@@ -19798,7 +19810,7 @@ var Filter = function (_React$Component) {
     }, {
         key: 'renderDeals',
         value: function renderDeals() {
-            return this.state.deals.length > 0 ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            return this.state.deals ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 null,
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Deals__["a" /* default */], { deals: this.state.deals })
@@ -19819,7 +19831,7 @@ var Filter = function (_React$Component) {
                 return this.renderModal();
             }
 
-            if (this.state.deals) {
+            if (this.state.deals.data.length > 0) {
                 return this.renderDeals();
             }
 
@@ -46470,6 +46482,28 @@ module.exports = traverseAllChildren;
 __webpack_require__(322);
 module.exports = __webpack_require__(323);
 
+
+/***/ }),
+/* 833 */,
+/* 834 */,
+/* 835 */,
+/* 836 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var util = {
+    moneyFormat: function moneyFormat(num) {
+        var formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0
+        });
+
+        return formatter.format(num);
+    }
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (util);
 
 /***/ })
 /******/ ]);

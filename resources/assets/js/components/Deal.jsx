@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import util from '../src/util'
 
 class Deal extends React.Component {
     constructor(props) {
@@ -7,17 +8,25 @@ class Deal extends React.Component {
 
     render() {
         const deal = this.props.deal;
-        return <div className="deal">
-            <div className="deal__basic-info">
-                <p>2018 Toyota<br/>4 Runner Sports Utility Vehicle<br /><strong>$34,000 MSRP</strong></p>
-            </div>
-            <img className="deal__image" src="https://vehiclephotos.vauto.com/a0/4f/0f/99-47aa-4260-a37f-0d027f5713e4/image-1.jpg" />
-            <div className="deal__buttons">
-                <button>Details</button>
-                <button>Compare</button>
-            </div>
+        return (
+            <div className="deal">
+                <div className="deal__basic-info">
+                    <p>{`${deal.year} ${deal.make} ${deal.model}`}
+                        <br />
+                        <strong>{util.moneyFormat(deal.msrp)} MSRP</strong>
+                    </p>
+                </div>
+                <img
+                    className="deal__image"
+                    src={deal.photos.data[0].url}
+                />
+                <div className="deal__buttons">
+                    <button>Details</button>
+                    <button>Compare</button>
+                </div>
 
-        </div>
+            </div>
+        );
     }
 }
 
