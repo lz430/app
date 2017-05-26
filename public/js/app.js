@@ -19810,7 +19810,7 @@ var Filter = function (_React$Component) {
     }, {
         key: 'renderDeals',
         value: function renderDeals() {
-            return this.state.deals ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            return this.state.deals.data.length > 0 ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 null,
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Deals__["a" /* default */], { deals: this.state.deals })
@@ -19831,7 +19831,7 @@ var Filter = function (_React$Component) {
                 return this.renderModal();
             }
 
-            if (this.state.deals.data.length > 0) {
+            if (this.state.deals) {
                 return this.renderDeals();
             }
 

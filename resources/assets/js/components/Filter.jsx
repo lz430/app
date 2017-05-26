@@ -76,18 +76,18 @@ class Filter extends React.Component {
 
     renderDeals() {
         return (
-            this.state.deals
+            this.state.deals.data.length > 0
                 ? <div><Deals deals={this.state.deals}></Deals></div>
                 : <div><p>No Results</p></div>
         );
     }
 
     render() {
-        if(this.state.makes && this.state.showModal) {
+        if (this.state.makes && this.state.showModal) {
             return this.renderModal();
         }
 
-        if(this.state.deals.data.length > 0) {
+        if (this.state.deals) {
             return this.renderDeals();
         }
 
