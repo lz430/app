@@ -1,4 +1,5 @@
 import React from 'react';
+import R from 'ramda';
 import util from '../src/util'
 
 class Deal extends React.Component {
@@ -18,7 +19,7 @@ class Deal extends React.Component {
                 </div>
                 <img
                     className="deal__image"
-                    src={deal.photos.data[0].url}
+                    src={R.propOr('/images/dmr-logo.svg', 'url', deal.photos.data[0])}
                 />
                 <div className="deal__buttons">
                     <button>Details</button>

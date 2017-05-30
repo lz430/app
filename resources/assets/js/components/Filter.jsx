@@ -49,7 +49,7 @@ class Filter extends React.Component {
 
     getDeals() {
         api
-            .getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], 'photos')
+            .getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], ['photos'])
             .then(deals => {
                 this.setState({
                     deals: deals.data,
@@ -76,7 +76,7 @@ class Filter extends React.Component {
 
     renderDeals() {
         return (
-            this.state.deals.data.length > 0
+            this.state.deals.data.length
                 ? <div><Deals deals={this.state.deals}></Deals></div>
                 : <div><p>No Results</p></div>
         );
