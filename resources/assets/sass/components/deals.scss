@@ -1,0 +1,31 @@
+@import '../variables';
+@import '../mixins/button';
+
+.deals {
+  display: flex;
+  flex-wrap: wrap;
+
+  .deal {
+    background-color: $color-background-secondary;
+    margin: 0 20px 10px 0;
+    width: 250px;
+
+    &__basic-info {
+      margin: 10px;
+    }
+
+    &__image {
+      width: inherit;
+      min-height: 188px;
+    }
+
+    &__buttons {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  button {
+    @include button;
+  }
+}

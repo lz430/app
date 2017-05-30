@@ -2,20 +2,23 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import Deal from './Deal'
 
-class Deals extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+const Deals = ({deals}) => {
+    return <div className="deals">
+        {deals.data.map((deal, index) => {
+            return <Deal deal={deal} key={index}></Deal>
+        })}
+    </div>
+};
 
-    render() {
-        const deals = this.props.deals;
+Deals.propTypes = {
+    deals: PropTypes.shape({
+        year: PropTypes.string.required,
+        msrp: PropTypes.number.required,
+        make: PropTypes.string.required,
+        model: PropTypes.string.required,
+        id: PropTypes.string.required
+    })
+};
 
-        return <div className="deals-container">
-            {deals.map((deal, index) => {
-                return <Deal deal={deal} key={index}></Deal>
-            })}
-        </div>
-    }
-}
 
 export default Deals;

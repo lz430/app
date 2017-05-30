@@ -1,4 +1,6 @@
-import React from 'react'
+import React from 'react';
+import R from 'ramda';
+import util from '../src/util'
 
 class Deal extends React.Component {
     constructor(props) {
@@ -7,22 +9,25 @@ class Deal extends React.Component {
 
     render() {
         const deal = this.props.deal;
-        return <div className="deal-container">
-            <p>price</p>
-            <p>{deal.attributes.price}</p>
-            <p>year</p>
-            <p>{deal.attributes.year}</p>
-            <p>make</p>
-            <p>{deal.attributes.make}</p>
-            <p>model</p>
-            <p>{deal.attributes.model}</p>
-            <p>vin</p>
-            <p>{deal.attributes.vin}</p>
-            <p>color</p>
-            <p>{deal.attributes.color}</p>
-            <p>certified</p>
-            <p>{deal.attributes.certified}</p>
-        </div>
+        return (
+            <div className="deal">
+                <div className="deal__basic-info">
+                    <p>{`${deal.year} ${deal.make} ${deal.model}`}
+                        <br />
+                        <strong>{util.moneyFormat(deal.msrp)} MSRP</strong>
+                    </p>
+                </div>
+                <img
+                    className="deal__image"
+                    src={R.propOr('/images/dmr-logo.svg', 'url', deal.photos.data[0])}
+                />
+                <div className="deal__buttons">
+                    <button>Details</button>
+                    <button>Compare</button>
+                </div>
+
+            </div>
+        );
     }
 }
 

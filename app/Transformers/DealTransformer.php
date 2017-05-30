@@ -9,6 +9,7 @@ class DealTransformer extends TransformerAbstract
 {
     protected $availableIncludes = [
         'versions',
+        'photos',
     ];
     
     public function transform(VersionDeal $deal)
@@ -50,5 +51,11 @@ class DealTransformer extends TransformerAbstract
     {
         return $this->item($deal->version, new VersionTransformer)
             ->setResourceKey('versions');
+    }
+    
+    public function includePhotos(VersionDeal $deal)
+    {
+        return $this->collection($deal->photos, new PhotoTransformer)
+            ->setResourceKey('photos');
     }
 }

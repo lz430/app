@@ -17,7 +17,6 @@ class Filter extends React.Component {
             makes: null,
             showModal: true,
             deals: null,
-            versions: null,
         };
         this.onSelectMake = this.onSelectMake.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -50,17 +49,16 @@ class Filter extends React.Component {
 
     getDeals() {
         api
-            .getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], 'versions')
+            .getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], ['photos'])
             .then(deals => {
                 this.setState({
-                    deals: deals.data.data.sort(this.orderByPriceDecending),
-                    versions: deals.data.data.included,
+                    deals: deals.data,
                 });
             });
     }
 
-    orderByPriceDecending(first, next) {
-        return first.attributes.price - next.attributes.price;
+    priceDesc(a, b) {
+        return a.msrp > b.msrp;
     }
 
     renderModal() {
@@ -78,18 +76,18 @@ class Filter extends React.Component {
 
     renderDeals() {
         return (
-            this.state.deals.length > 0
+            this.state.deals.data.length
                 ? <div><Deals deals={this.state.deals}></Deals></div>
                 : <div><p>No Results</p></div>
         );
     }
 
     render() {
-        if(this.state.makes && this.state.showModal) {
+        if (this.state.makes && this.state.showModal) {
             return this.renderModal();
         }
 
-        if(this.state.deals) {
+        if (this.state.deals) {
             return this.renderDeals();
         }
 
