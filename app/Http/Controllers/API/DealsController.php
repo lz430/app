@@ -29,6 +29,10 @@ class DealsController extends BaseAPIController
             });
         })->orderBy('msrp', 'asc')->get();
 
+        if (in_array('photos', $request->get('includes'))) {
+            $deals->load('photos');
+        }
+        
         return fractal()
             ->collection($deals)
             ->withResourceName(self::RESOURCE_NAME)
