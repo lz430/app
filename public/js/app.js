@@ -19567,7 +19567,9 @@ var Configurator = function (_React$Component) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_util__ = __webpack_require__(349);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ramda__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ramda___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_ramda__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_util__ = __webpack_require__(349);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -19575,6 +19577,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -19606,14 +19609,14 @@ var Deal = function (_React$Component) {
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'strong',
                             null,
-                            __WEBPACK_IMPORTED_MODULE_1__src_util__["a" /* default */].moneyFormat(deal.msrp),
+                            __WEBPACK_IMPORTED_MODULE_2__src_util__["a" /* default */].moneyFormat(deal.msrp),
                             ' MSRP'
                         )
                     )
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', {
                     className: 'deal__image',
-                    src: deal.photos.data[0].url
+                    src: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.propOr('/images/dmr-logo.svg', 'url', deal.photos.data[0])
                 }),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
@@ -19648,44 +19651,21 @@ var Deal = function (_React$Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(163);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Deal__ = __webpack_require__(344);
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 
 
 
+var Deals = function Deals(_ref) {
+    var deals = _ref.deals;
 
-var Deals = function (_React$Component) {
-    _inherits(Deals, _React$Component);
-
-    function Deals(props) {
-        _classCallCheck(this, Deals);
-
-        return _possibleConstructorReturn(this, (Deals.__proto__ || Object.getPrototypeOf(Deals)).call(this, props));
-    }
-
-    _createClass(Deals, [{
-        key: 'render',
-        value: function render() {
-            var deals = this.props.deals;
-
-            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                'div',
-                { className: 'deals' },
-                deals.data.map(function (deal, index) {
-                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Deal__["a" /* default */], { deal: deal, key: index });
-                })
-            );
-        }
-    }]);
-
-    return Deals;
-}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'div',
+        { className: 'deals' },
+        deals.data.map(function (deal, index) {
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Deal__["a" /* default */], { deal: deal, key: index });
+        })
+    );
+};
 
 Deals.propTypes = {
     deals: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
@@ -19778,7 +19758,7 @@ var Filter = function (_React$Component) {
         value: function getDeals() {
             var _this3 = this;
 
-            __WEBPACK_IMPORTED_MODULE_4__src_api__["a" /* default */].getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], 'photos').then(function (deals) {
+            __WEBPACK_IMPORTED_MODULE_4__src_api__["a" /* default */].getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], ['photos']).then(function (deals) {
                 _this3.setState({
                     deals: deals.data
                 });
@@ -19810,7 +19790,7 @@ var Filter = function (_React$Component) {
     }, {
         key: 'renderDeals',
         value: function renderDeals() {
-            return this.state.deals.data.length > 0 ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            return this.state.deals.data.length ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 null,
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Deals__["a" /* default */], { deals: this.state.deals })
