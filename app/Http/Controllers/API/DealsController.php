@@ -29,7 +29,9 @@ class DealsController extends BaseAPIController
             });
         })->orderBy('msrp', 'asc')->get();
 
-        if (in_array('photos', $request->get('includes'))) {
+        $includes = request('includes', []);
+
+        if (in_array('photos', $includes)) {
             $deals->load('photos');
         }
         
@@ -38,7 +40,7 @@ class DealsController extends BaseAPIController
             ->withResourceName(self::RESOURCE_NAME)
             ->transformWith(self::TRANSFORMER)
             ->serializeWith(new DataArraySerializer)
-            ->parseIncludes($request->get('includes'))
+            ->parseIncludes($includes)
             ->respond();
     }
 }
