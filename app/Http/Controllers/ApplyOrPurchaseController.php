@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DealPurchasedDMR;
+use App\Mail\DealPurchasedUser;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 class ApplyOrPurchaseController extends Controller
@@ -26,6 +29,9 @@ class ApplyOrPurchaseController extends Controller
             $this->validate(request(), [
                 'deal_id' => 'required|exists:version_deals,id'
             ]);
+
+            Mail::to(config('mail.dmr.address'))->send(new DealPurchasedDMR);
+            Mail::to(auth()->user())->send(new DealPurchasedUser);
 
             return view('purchase');
         } catch (ValidationException $e) {
@@ -53,8 +59,6 @@ class ApplyOrPurchaseController extends Controller
             $this->validate(request(), [
                 'deal_id' => 'required|exists:version_deals,id',
             ]);
-
-            // TODO: send email to user (receipt) and dmr
 
             return view('apply');
         } catch (ValidationException $e) {
