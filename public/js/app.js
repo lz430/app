@@ -12150,12 +12150,13 @@ var api = {
     getMakes: function getMakes() {
         return window.axios.get('/api/makes');
     },
-    getDeals: function getDeals(make_ids, body_styles, includes) {
+    getDeals: function getDeals(make_ids, body_styles, includes, sort) {
         return window.axios.get('/api/deals', {
             params: {
                 make_ids: make_ids,
                 body_styles: body_styles,
-                includes: includes
+                includes: includes,
+                sort: sort
             }
         });
     }
@@ -19609,8 +19610,7 @@ var Deal = function (_React$Component) {
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'strong',
                             null,
-                            __WEBPACK_IMPORTED_MODULE_2__src_util__["a" /* default */].moneyFormat(deal.msrp),
-                            ' MSRP'
+                            __WEBPACK_IMPORTED_MODULE_2__src_util__["a" /* default */].moneyFormat(deal.price)
                         )
                     )
                 ),
@@ -19729,12 +19729,14 @@ var Filter = function (_React$Component) {
             showModal: true,
             deals: null,
             fallbackLogoImage: '/images/dmr-logo.svg',
-            fallbackDealImage: '/images/dmr-logo.svg'
+            fallbackDealImage: '/images/dmr-logo.svg',
+            sortStatus: 'asc',
+            sorted: 'price'
         };
         _this.onSelectMake = _this.onSelectMake.bind(_this);
         _this.closeModal = _this.closeModal.bind(_this);
-        _this.sortAsc = _this.sortAsc.bind(_this);
-        _this.sortDesc = _this.sortDesc.bind(_this);
+        _this.toggleSort = _this.toggleSort.bind(_this);
+        _this.sortParam = _this.sortParam.bind(_this);
         return _this;
     }
 
@@ -19768,24 +19770,29 @@ var Filter = function (_React$Component) {
         value: function getDeals() {
             var _this3 = this;
 
-            __WEBPACK_IMPORTED_MODULE_4__src_api__["a" /* default */].getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], ['photos']).then(function (deals) {
+            var sort = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'price';
+
+            __WEBPACK_IMPORTED_MODULE_4__src_api__["a" /* default */].getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], ['photos'], sort).then(function (deals) {
                 _this3.setState({
                     deals: deals.data.data
                 });
             });
         }
     }, {
-        key: 'sortAsc',
-        value: function sortAsc() {
-            this.setState({
-                deals: __WEBPACK_IMPORTED_MODULE_3_ramda___default.a.sortWith([__WEBPACK_IMPORTED_MODULE_3_ramda___default.a.ascend(__WEBPACK_IMPORTED_MODULE_3_ramda___default.a.prop('msrp'))])(this.state.deals)
-            });
+        key: 'sortParam',
+        value: function sortParam(column) {
+            return this.state.sortStatus === 'desc' ? "-" + column : column;
         }
     }, {
-        key: 'sortDesc',
-        value: function sortDesc() {
+        key: 'toggleSort',
+        value: function toggleSort(column) {
+            var _this4 = this;
+
             this.setState({
-                deals: __WEBPACK_IMPORTED_MODULE_3_ramda___default.a.sortWith([__WEBPACK_IMPORTED_MODULE_3_ramda___default.a.descend(__WEBPACK_IMPORTED_MODULE_3_ramda___default.a.prop('msrp'))])(this.state.deals)
+                sorted: column,
+                sortStatus: this.state.sortStatus === 'asc' ? 'desc' : 'asc'
+            }, function () {
+                _this4.getDeals(_this4.sortParam(column));
             });
         }
     }, {
@@ -19818,13 +19825,18 @@ var Filter = function (_React$Component) {
                     { className: 'filter__options' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
-                        { onClick: this.sortAsc },
-                        'MSRP low to high'
+                        { onClick: this.toggleSort.bind(this, 'price') },
+                        ' Price'
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
-                        { onClick: this.sortDesc },
-                        'MSRP high to low'
+                        { onClick: this.toggleSort.bind(this, 'year') },
+                        ' Year'
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'button',
+                        { onClick: this.toggleSort.bind(this, 'make') },
+                        ' A-Z'
                     )
                 ),
                 this.state.deals.length ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Deals__["a" /* default */], {

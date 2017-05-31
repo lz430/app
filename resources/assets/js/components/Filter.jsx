@@ -19,11 +19,13 @@ class Filter extends React.Component {
             deals: null,
             fallbackLogoImage: '/images/dmr-logo.svg',
             fallbackDealImage: '/images/dmr-logo.svg',
+            sortStatus: 'asc',
+            sorted: 'price'
         };
         this.onSelectMake = this.onSelectMake.bind(this);
         this.closeModal = this.closeModal.bind(this);
-        this.sortAsc = this.sortAsc.bind(this);
-        this.sortDesc = this.sortDesc.bind(this);
+        this.toggleSort = this.toggleSort.bind(this);
+        this.sortParam = this.sortParam.bind(this);
     }
 
     componentDidMount() {
@@ -51,9 +53,9 @@ class Filter extends React.Component {
         );
     }
 
-    getDeals() {
+    getDeals(sort = 'price') {
         api
-            .getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], ['photos'])
+            .getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], ['photos'], sort)
             .then(deals => {
                 this.setState({
                     deals: deals.data.data,
@@ -61,15 +63,16 @@ class Filter extends React.Component {
             });
     }
 
-    sortAsc() {
-        this.setState({
-            deals: R.sortWith([R.ascend(R.prop('msrp'))])(this.state.deals)
-        });
+    sortParam(column) {
+        return this.state.sortStatus === 'desc' ? "-" + column : column;
     }
 
-    sortDesc() {
+    toggleSort(column) {
         this.setState({
-            deals: R.sortWith([R.descend(R.prop('msrp'))])(this.state.deals)
+            sorted: column,
+            sortStatus: this.state.sortStatus === 'asc' ? 'desc' : 'asc'
+        }, () => {
+            this.getDeals(this.sortParam(column))
         });
     }
 
@@ -91,8 +94,10 @@ class Filter extends React.Component {
         return (
             <div className="filter">
                 <div className="filter__options">
-                    <button onClick={this.sortAsc}>MSRP low to high</button>
-                    <button onClick={this.sortDesc}>MSRP high to low</button>
+                    <button onClick={this.toggleSort.bind(this, 'price')}> Price</button>
+                    <button onClick={this.toggleSort.bind(this, 'year')}> Year</button>
+                    <button onClick={this.toggleSort.bind(this, 'make')}> A-Z</button>
+
                 </div>
                 {this.state.deals.length
                 ? <Deals

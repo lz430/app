@@ -14,7 +14,7 @@ class Deal extends React.Component {
                 <div className="deal__basic-info">
                     <p>{`${deal.year} ${deal.make} ${deal.model}`}
                         <br />
-                        <strong>{util.moneyFormat(deal.msrp)} MSRP</strong>
+                        <strong>{util.moneyFormat(deal.price)}</strong>
                     </p>
                 </div>
                 <img
