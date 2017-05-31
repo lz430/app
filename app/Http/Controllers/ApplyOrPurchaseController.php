@@ -4,18 +4,23 @@ namespace App\Http\Controllers;
 
 use App\VersionDeal;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
 
 class ApplyOrPurchaseController extends Controller
 {
     public function applyOrPurchase()
     {
         try {
+            $this->validate(request(), [
+                'deal_id' => 'required|exists:version_deals,id'
+            ]);
+
             $deal = VersionDeal::findOrFail(request('deal_id'));
 
             return view('apply-or-purchase')
                 ->with('deal', $deal);
-        } catch (ModelNotFoundException $e) {
-            dd('deal_id is required');
+        } catch (ModelNotFoundException | ValidationException $e) {
+            return abort(404);
         }
     }
 
