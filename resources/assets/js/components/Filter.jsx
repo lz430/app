@@ -1,9 +1,11 @@
 import React from 'react';
 import MakeSelector from './MakeSelector';
 import Deals from './Deals';
+import Sortbar from './Sortbar';
 import R from 'ramda';
 import api from '../src/api';
 import qs from 'qs';
+
 
 class Filter extends React.Component {
     constructor(props) {
@@ -20,12 +22,13 @@ class Filter extends React.Component {
             fallbackLogoImage: '/images/dmr-logo.svg',
             fallbackDealImage: '/images/dmr-logo.svg',
             sortStatus: 'asc',
-            sorted: 'price'
+            sortColumn: 'price'
         };
         this.onSelectMake = this.onSelectMake.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.toggleSort = this.toggleSort.bind(this);
         this.sortParam = this.sortParam.bind(this);
+        this.renderDeals = this.renderDeals.bind(this);
     }
 
     componentDidMount() {
@@ -69,7 +72,7 @@ class Filter extends React.Component {
 
     toggleSort(column) {
         this.setState({
-            sorted: column,
+            sortColumn: column,
             sortStatus: this.state.sortStatus === 'asc' ? 'desc' : 'asc'
         }, () => {
             this.getDeals(this.sortParam(column))
@@ -90,23 +93,17 @@ class Filter extends React.Component {
         );
     }
 
-    renderSortIcon(column) {
-        return this.state.sorted === column
-            ? <img className="button__icon" src={this.state.sortStatus === 'desc'
-                ? "/images/zondicons/cheveron-up.svg"
-                : "/images/zondicons/cheveron-down.svg"} />
-            : '';
-    }
-
     renderDeals() {
         return (
             <div className="filter">
-                <div className="filter__options">
-                    <button className="button" onClick={this.toggleSort.bind(this, 'price')}>{this.renderSortIcon('price')}Price</button>
-                    <button className="button" onClick={this.toggleSort.bind(this, 'year')}>{this.renderSortIcon('year')}Year</button>
-                    <button className="button" onClick={this.toggleSort.bind(this, 'make')}>{this.renderSortIcon('make')}A-Z</button>
-
-                </div>
+               <Sortbar
+                   results_count={this.state.deals.length}
+                   onPriceClick={this.toggleSort.bind(this, 'price')}
+                   onYearClick={this.toggleSort.bind(this, 'year')}
+                   onAtoZClick={this.toggleSort.bind(this, 'make')}
+                   sortColumn={this.state.sortColumn}
+                   sortStatus={this.state.sortStatus}
+               />
                 {this.state.deals.length
                 ? <Deals
                         deals={this.state.deals}
