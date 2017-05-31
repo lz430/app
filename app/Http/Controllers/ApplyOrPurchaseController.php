@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ApplicationSubmittedDMR;
+use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
 use App\Mail\DealPurchasedUser;
 use Illuminate\Support\Facades\Mail;
@@ -59,6 +61,9 @@ class ApplyOrPurchaseController extends Controller
             $this->validate(request(), [
                 'deal_id' => 'required|exists:version_deals,id',
             ]);
+
+            Mail::to(config('mail.dmr.address'))->send(new ApplicationSubmittedDMR);
+            Mail::to(auth()->user())->send(new ApplicationSubmittedUser);
 
             return view('apply');
         } catch (ValidationException $e) {
