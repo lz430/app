@@ -6,5 +6,13 @@ mix.react('resources/assets/js/app.js', 'public/js')
 if (mix.config.inProduction) {
     mix.version();
 } else {
-    mix.browserSync('localhost');
+    mix.browserSync({
+        proxy: 'localhost',
+        notify: {
+            styles: {
+                top: 'auto',
+                bottom: '0'
+            }
+        }
+    });
 }
