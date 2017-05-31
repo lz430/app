@@ -17,9 +17,13 @@ class Filter extends React.Component {
             makes: null,
             showModal: true,
             deals: null,
+            fallbackLogoImage: '/images/dmr-logo.svg',
+            fallbackDealImage: '/images/dmr-logo.svg',
         };
         this.onSelectMake = this.onSelectMake.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.sortAsc = this.sortAsc.bind(this);
+        this.sortDesc = this.sortDesc.bind(this);
     }
 
     componentDidMount() {
@@ -52,13 +56,21 @@ class Filter extends React.Component {
             .getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], ['photos'])
             .then(deals => {
                 this.setState({
-                    deals: deals.data,
+                    deals: deals.data.data,
                 });
             });
     }
 
-    priceDesc(a, b) {
-        return a.msrp > b.msrp;
+    sortAsc() {
+        this.setState({
+            deals: R.sortWith([R.ascend(R.prop('msrp'))])(this.state.deals)
+        });
+    }
+
+    sortDesc() {
+        this.setState({
+            deals: R.sortWith([R.descend(R.prop('msrp'))])(this.state.deals)
+        });
     }
 
     renderModal() {
@@ -69,6 +81,7 @@ class Filter extends React.Component {
                     makes={this.state.makes}
                     onSelectMake={this.onSelectMake}
                     selectedMakes={this.state.selectedMakes}
+                    fallbackLogoImage={this.state.fallbackLogoImage}
                 />
             </div>
         );
@@ -76,9 +89,19 @@ class Filter extends React.Component {
 
     renderDeals() {
         return (
-            this.state.deals.data.length
-                ? <div><Deals deals={this.state.deals}></Deals></div>
-                : <div><p>No Results</p></div>
+            <div className="filter">
+                <div className="filter__options">
+                    <button onClick={this.sortAsc}>MSRP low to high</button>
+                    <button onClick={this.sortDesc}>MSRP high to low</button>
+                </div>
+                {this.state.deals.length
+                ? <Deals
+                        deals={this.state.deals}
+                        fallbackDealImage={this.state.fallbackDealImage}
+                  />
+                : <p>No Results</p>}
+
+            </div>
         );
     }
 

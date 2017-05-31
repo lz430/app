@@ -19,7 +19,7 @@ class Deal extends React.Component {
                 </div>
                 <img
                     className="deal__image"
-                    src={R.propOr('/images/dmr-logo.svg', 'url', deal.photos.data[0])}
+                    src={R.propOr(this.props.fallbackDealImage, 'url', deal.photos.data[0])}
                 />
                 <div className="deal__buttons">
                     <button>Details</button>

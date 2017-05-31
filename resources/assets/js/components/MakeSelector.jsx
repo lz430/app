@@ -7,6 +7,19 @@ class MakeSelector extends React.Component {
         super();
 
         this.renderMake = this.renderMake.bind(this);
+        this.getLogoFor = this.getLogoFor.bind(this);
+    }
+
+    logoMissing() {
+        return R.has('logo') && R.propEq('logo', '');
+    }
+
+    getLogoFor(make) {
+        return R.ifElse(
+            this.logoMissing(make.attributes),
+            () => this.props.fallbackLogoImage,
+            R.prop('logo'),
+        ).bind(this)(make.attributes);
     }
 
     renderMake(make) {
@@ -19,7 +32,7 @@ class MakeSelector extends React.Component {
                 onClick={this.props.onSelectMake.bind(null, make.id)}
                 key={make.id}
             >
-                <img src={make.attributes.logo} />
+                <img src={this.getLogoFor(make)} />
             </div>
         );
     }
@@ -51,6 +64,7 @@ MakeSelector.propTypes = {
     ).isRequired,
     selectedMakes: PropTypes.arrayOf(PropTypes.string).isRequired,
     onSelectMake: PropTypes.func.isRequired,
+    fallbackLogoImage: PropTypes.string.isRequired,
 };
 
 export default MakeSelector;
