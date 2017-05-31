@@ -19623,12 +19623,12 @@ var Deal = function (_React$Component) {
                     { className: 'deal__buttons' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
-                        null,
+                        { className: 'button' },
                         'Details'
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
-                        null,
+                        { className: 'button' },
                         'Compare'
                     )
                 )
@@ -19815,6 +19815,11 @@ var Filter = function (_React$Component) {
             );
         }
     }, {
+        key: 'renderSortIcon',
+        value: function renderSortIcon(column) {
+            return this.state.sorted === column ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { className: 'button__icon', src: this.state.sortStatus === 'desc' ? "/images/zondicons/cheveron-up.svg" : "/images/zondicons/cheveron-down.svg" }) : '';
+        }
+    }, {
         key: 'renderDeals',
         value: function renderDeals() {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -19825,18 +19830,21 @@ var Filter = function (_React$Component) {
                     { className: 'filter__options' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
-                        { onClick: this.toggleSort.bind(this, 'price') },
-                        ' Price'
+                        { className: 'button', onClick: this.toggleSort.bind(this, 'price') },
+                        this.renderSortIcon('price'),
+                        'Price'
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
-                        { onClick: this.toggleSort.bind(this, 'year') },
-                        ' Year'
+                        { className: 'button', onClick: this.toggleSort.bind(this, 'year') },
+                        this.renderSortIcon('year'),
+                        'Year'
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
-                        { onClick: this.toggleSort.bind(this, 'make') },
-                        ' A-Z'
+                        { className: 'button', onClick: this.toggleSort.bind(this, 'make') },
+                        this.renderSortIcon('make'),
+                        'A-Z'
                     )
                 ),
                 this.state.deals.length ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Deals__["a" /* default */], {

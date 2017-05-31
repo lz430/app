@@ -90,13 +90,21 @@ class Filter extends React.Component {
         );
     }
 
+    renderSortIcon(column) {
+        return this.state.sorted === column
+            ? <img className="button__icon" src={this.state.sortStatus === 'desc'
+                ? "/images/zondicons/cheveron-up.svg"
+                : "/images/zondicons/cheveron-down.svg"} />
+            : '';
+    }
+
     renderDeals() {
         return (
             <div className="filter">
                 <div className="filter__options">
-                    <button onClick={this.toggleSort.bind(this, 'price')}> Price</button>
-                    <button onClick={this.toggleSort.bind(this, 'year')}> Year</button>
-                    <button onClick={this.toggleSort.bind(this, 'make')}> A-Z</button>
+                    <button className="button" onClick={this.toggleSort.bind(this, 'price')}>{this.renderSortIcon('price')}Price</button>
+                    <button className="button" onClick={this.toggleSort.bind(this, 'year')}>{this.renderSortIcon('year')}Year</button>
+                    <button className="button" onClick={this.toggleSort.bind(this, 'make')}>{this.renderSortIcon('make')}A-Z</button>
 
                 </div>
                 {this.state.deals.length

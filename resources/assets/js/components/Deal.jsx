@@ -22,8 +22,8 @@ class Deal extends React.Component {
                     src={R.propOr(this.props.fallbackDealImage, 'url', deal.photos.data[0])}
                 />
                 <div className="deal__buttons">
-                    <button>Details</button>
-                    <button>Compare</button>
+                    <button className="button">Details</button>
+                    <button className="button">Compare</button>
                 </div>
 
             </div>
