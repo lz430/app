@@ -1,6 +1,6 @@
 import React from 'react';
 import R from 'ramda';
-import util from '../src/util';
+import util from '../src/util'
 
 class Deal extends React.Component {
     constructor(props) {
@@ -15,20 +15,16 @@ class Deal extends React.Component {
                     <p>
                         <a href={`apply-or-purchase?deal_id=${deal.id}`}>{`${deal.year} ${deal.make} ${deal.model}`}</a>
                         <br />
-                        <strong>{util.moneyFormat(deal.msrp)} MSRP</strong>
+                        <strong>{util.moneyFormat(deal.price)}</strong>
                     </p>
                 </div>
                 <img
                     className="deal__image"
-                    src={R.propOr(
-                        '/images/dmr-logo.svg',
-                        'url',
-                        deal.photos.data[0]
-                    )}
+                    src={R.propOr(this.props.fallbackDealImage, 'url', deal.photos.data[0])}
                 />
                 <div className="deal__buttons">
-                    <button>Details</button>
-                    <button>Compare</button>
+                    <button className="button">Details</button>
+                    <button className="button">Compare</button>
                 </div>
 
             </div>
