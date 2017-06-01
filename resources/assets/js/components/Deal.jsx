@@ -12,7 +12,8 @@ class Deal extends React.Component {
         return (
             <div className="deal">
                 <div className="deal__basic-info">
-                    <p>{`${deal.year} ${deal.make} ${deal.model}`}
+                    <p>
+                        <a href={`apply-or-purchase?deal_id=${deal.id}`}>{`${deal.year} ${deal.make} ${deal.model}`}</a>
                         <br />
                         <strong>{util.moneyFormat(deal.price)}</strong>
                     </p>

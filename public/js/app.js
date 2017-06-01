@@ -19605,7 +19605,11 @@ var Deal = function (_React$Component) {
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'p',
                         null,
-                        deal.year + ' ' + deal.make + ' ' + deal.model,
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'a',
+                            { href: 'apply-or-purchase?deal_id=' + deal.id },
+                            deal.year + ' ' + deal.make + ' ' + deal.model
+                        ),
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'strong',

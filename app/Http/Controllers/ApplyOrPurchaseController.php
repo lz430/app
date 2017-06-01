@@ -2,51 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use App\VersionDeal;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Mail\ApplicationSubmittedDMR;
+use App\Mail\ApplicationSubmittedUser;
+use App\Mail\DealPurchasedDMR;
+use App\Mail\DealPurchasedUser;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 
 class ApplyOrPurchaseController extends Controller
 {
     public function applyOrPurchase()
     {
         try {
-            $deal = VersionDeal::findOrFail(request('deal_id'));
+            $this->validate(request(), [
+                'deal_id' => 'required|exists:version_deals,id'
+            ]);
 
             return view('apply-or-purchase')
-                ->with('deal', $deal);
-        } catch (ModelNotFoundException $e) {
-            dd('deal_id is required');
+                ->with('deal_id', request('deal_id'));
+        } catch (ValidationException $e) {
+            return abort(404);
         }
     }
 
     public function purchase()
     {
-        $this->validate(request(), [
-            'deal_id' => 'required|exists:version_deals,id'
-        ]);
+        try {
+            $this->validate(request(), [
+                'deal_id' => 'required|exists:version_deals,id'
+            ]);
 
-        return view('purchase');
+            Mail::to(config('mail.dmr.address'))->send(new DealPurchasedDMR);
+            Mail::to(auth()->user())->send(new DealPurchasedUser);
+
+            return view('purchase');
+        } catch (ValidationException $e) {
+            return abort(404);
+        }
     }
 
     public function viewApply()
     {
-        $this->validate(request(), [
-            'deal_id' => 'required|exists:version_deals,id',
-        ]);
+        try {
+            $this->validate(request(), [
+                'deal_id' => 'required|exists:version_deals,id',
+            ]);
 
-        return view('view-apply')
-            ->with('deal_id', request('deal_id'));
+            return view('view-apply')
+                ->with('deal_id', request('deal_id'));
+        } catch (ValidationException $e) {
+            return abort(404);
+        }
     }
 
     public function apply()
     {
-        $this->validate(request(), [
-            'deal_id' => 'required|exists:version_deals,id',
-        ]);
-        // TODO: add validations
+        try {
+            $this->validate(request(), [
+                'deal_id' => 'required|exists:version_deals,id',
+            ]);
 
-        // TODO: send email to user (receipt) and dmr
+            Mail::to(config('mail.dmr.address'))->send(new ApplicationSubmittedDMR);
+            Mail::to(auth()->user())->send(new ApplicationSubmittedUser);
 
-        return view('apply');
+            return view('apply');
+        } catch (ValidationException $e) {
+            return abort(404);
+        }
     }
 }
