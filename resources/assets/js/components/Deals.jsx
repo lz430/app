@@ -1,17 +1,21 @@
-import React from 'react'
+import React from 'react';
 import PropTypes from 'prop-types';
-import Deal from './Deal'
+import Deal from './Deal';
 
-const Deals = ({deals, fallbackDealImage},) => {
-    return <div className="deals">
-        {deals.map((deal, index) => {
-            return <Deal
-                deal={deal}
-                key={index}
-                fallbackDealImage={fallbackDealImage}
-            />
-        })}
-    </div>
+const Deals = ({ deals, fallbackDealImage }) => {
+    return (
+        <div className="deals">
+                {deals.map((deal, index) => {
+                    return (
+                        <Deal
+                            deal={deal}
+                            key={index}
+                            fallbackDealImage={fallbackDealImage}
+                        />
+                    );
+                })}
+            </div>
+    );
 };
 
 Deals.propTypes = {
@@ -24,7 +28,7 @@ Deals.propTypes = {
             id: PropTypes.number.isRequired,
         })
     ),
-    fallbackDealImage: PropTypes.string.isRequired
+    fallbackDealImage: PropTypes.string.isRequired,
 };
 
 export default Deals;

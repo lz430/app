@@ -1,0 +1,14 @@
+.results {
+  display: flex;
+
+  &__deals {
+    flex: 4;
+  }
+
+  &__sidebar {
+    flex: 1;
+    background-color: $color-sidebar-background-primary;
+    height: inherit;
+    margin-right: 10px;
+  }
+}
