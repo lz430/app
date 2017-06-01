@@ -1,0 +1,28 @@
+@import '../mixins/button';
+
+.sortbar {
+  display: flex;
+
+  &__count {
+    flex: 1;
+    justify-self: flex-start;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-self: flex-end;
+    justify-content: flex-end;
+    flex: 2;
+  }
+
+  &__button {
+    @include button;
+    height: 50px;
+    margin: 5px;
+  }
+
+  &__icon {
+    height: 20px;
+    width: 20px;
+  }
+}

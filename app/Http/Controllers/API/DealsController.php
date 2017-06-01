@@ -18,18 +18,32 @@ class DealsController extends BaseAPIController
         $this->validate($request, [
             'make_ids' => 'required|array',
             'body_styles' => 'required|array',
+            'sort' => 'string',
         ]);
+        
+        $sortParams = collect(explode(',', $request->get('sort')))->reduce(function ($columns, $item) {
+            $minus = strpos($item, '-') === 0;
+            $column = $minus ? substr($item, 1) : $item;
+            $columns[$column] = $minus ? 'desc' : 'asc';
+            return $columns;
+        }, []);
 
-        $deals = VersionDeal::whereHas('version', function ($query) {
+        $dealsQuery = VersionDeal::whereHas('version', function ($query) {
             $query->whereIn(
                 DB::raw('lower(body_style)'),
                 array_map('strtolower', request('body_styles'))
             )->whereHas('model', function ($query) {
                 $query->whereIn('make_id', request('make_ids'));
             });
-        })->orderBy('msrp', 'asc')->get();
-
-        if (in_array('photos', $request->get('includes'))) {
+        });
+        
+        foreach ($sortParams as $column => $ascDesc) {
+            $dealsQuery->orderBy($column, $ascDesc);
+        }
+        
+        $deals = $dealsQuery->get();
+        
+        if (in_array('photos', $request->get('includes', []))) {
             $deals->load('photos');
         }
         
@@ -38,7 +52,7 @@ class DealsController extends BaseAPIController
             ->withResourceName(self::RESOURCE_NAME)
             ->transformWith(self::TRANSFORMER)
             ->serializeWith(new DataArraySerializer)
-            ->parseIncludes($request->get('includes'))
+            ->parseIncludes($request->get('includes', []))
             ->respond();
     }
 }

@@ -33,5 +33,9 @@
     &--selected {
       outline: 1px solid red;
     }
+
+    img {
+      width: inherit;
+    }
   }
 }
