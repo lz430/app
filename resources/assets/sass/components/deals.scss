@@ -5,8 +5,8 @@
   display: flex;
   flex-flow: row wrap;
   background-color: $color-background-primary;
-  justify-content: center;
-
+  justify-content: flex-start;
+  padding-left: 20px;
 
   .deal {
     background-color: #ffffff;
@@ -27,10 +27,6 @@
     &__buttons {
       display: flex;
       justify-content: space-around;
-      .details {
-        color: white;
-        background-color: #4D92DF;
-      }
     }
   }
 

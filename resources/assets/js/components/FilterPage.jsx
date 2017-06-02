@@ -7,7 +7,7 @@ import R from 'ramda';
 import api from '../src/api';
 import qs from 'qs';
 
-class Filter extends React.Component {
+class FilterPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -103,11 +103,11 @@ class Filter extends React.Component {
 
     renderDeals() {
         return (
-            <div className="results">
-                <div className="results__sidebar">
+            <div className="filter-page">
+                <div className="filter-page__sidebar">
                     <FilterResults />
                 </div>
-                <div className="results__deals">
+                <div className="filter-page__deals">
                     <Sortbar
                         results_count={this.state.deals.length}
                         onPriceClick={this.toggleSort.bind(this, 'price')}
@@ -140,4 +140,4 @@ class Filter extends React.Component {
     }
 }
 
-export default Filter;
+export default FilterPage;

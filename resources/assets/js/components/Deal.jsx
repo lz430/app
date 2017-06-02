@@ -24,8 +24,8 @@ class Deal extends React.Component {
                 </div>
 
                 <div className="deal__buttons">
-                    <button className="button details">Details</button>
-                    <button className="button compare">Compare</button>
+                    <button className="button button--small button--blue">Details</button>
+                    <button className="button button--small">Compare</button>
                 </div>
 
             </div>
