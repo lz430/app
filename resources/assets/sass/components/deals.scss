@@ -6,13 +6,12 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
-  padding-left: 20px;
 
   .deal {
     background-color: $color-background-secondary;
     border-radius: 8px;
     flex: 1;
-    margin: 10px 20px 10px 0;
+    margin: 10px 15px;
     min-width: 250px;
     padding: 10px;
 
