@@ -11,23 +11,23 @@
   }
 
   &__sidebar {
-    flex: 1;
     background-color: $color-sidebar-background-primary;
+    flex: 1;
     height: inherit;
     margin-right: 10px;
   }
 
   .zipcode-finder {
-    color: $color-text-white;
     background-color: $color-sidebar-background-secondary;
-    padding: 15px;
+    color: $color-text-white;
     display: flex;
+    padding: 15px;
 
     &__info {
-      display: flex;
-      flex-flow: column nowrap;
       align-content: center;
+      display: flex;
       flex: 1;
+      flex-flow: column nowrap;
     }
 
     &__code {
@@ -35,8 +35,8 @@
     }
 
     &__buttons {
-      display: flex;
       align-items: center;
+      display: flex;
       flex: 1;
     }
 
@@ -47,10 +47,10 @@
 
   .sidebar-filters {
     &__header {
-      padding: 5px 15px;
       background-color: $color-sidebar-background-secondary-dark;
-      text-transform: uppercase;
       color: $text-color;
+      padding: 5px 15px;
+      text-transform: uppercase;
     }
 
     &__filter {
@@ -60,8 +60,8 @@
     }
 
     &__icon {
-      width: 10px;
       fill: $color-text-white;
+      width: 10px;
     }
   }
 }

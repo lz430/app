@@ -10,9 +10,9 @@
 
   &__buttons {
     display: flex;
-    justify-self: flex-end;
-    justify-content: flex-end;
     flex: 2;
+    justify-content: flex-end;
+    justify-self: flex-end;
   }
 
   &__button {

@@ -2,26 +2,27 @@
 @import '../mixins/button';
 
 .deals {
+  background-color: $color-background-primary;
   display: flex;
   flex-flow: row wrap;
-  background-color: $color-background-primary;
   justify-content: flex-start;
   padding-left: 20px;
 
   .deal {
-    background-color: #ffffff;
-    margin: 10px 20px 10px 0;
-    padding: 10px;
-    width: 250px;
+    background-color: $color-background-secondary;
     border-radius: 8px;
+    flex: 1;
+    margin: 10px 20px 10px 0;
+    min-width: 250px;
+    padding: 10px;
 
     &__basic-info {
       margin: 10px;
     }
 
     &__image {
-      width: inherit;
       min-height: 188px;
+      width: 100%;
     }
 
     &__buttons {
