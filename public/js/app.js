@@ -20077,14 +20077,18 @@ var SidebarFilter = function (_React$Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(81);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_svg_inline__ = __webpack_require__(318);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_svg_inline___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_svg_inline__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__zondicons__ = __webpack_require__(356);
+
+
 
 
 
 var renderSortIcon = function renderSortIcon(sortStatus, sortColumn, column) {
-    return sortColumn === column ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', {
-        className: 'sortbar__icon',
-        src: sortStatus === 'desc' ? '/images/zondicons/cheveron-down.svg' : '/images/zondicons/cheveron-up.svg'
-    }) : '';
+    var icon = sortStatus === 'desc' ? 'cheveron-down' : 'cheveron-up';
+
+    return sortColumn === column ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_svg_inline___default.a, { className: 'sortbar__icon', svg: __WEBPACK_IMPORTED_MODULE_3__zondicons__["a" /* default */][icon] }) : '';
 };
 
 var Sortbar = function Sortbar(_ref) {
