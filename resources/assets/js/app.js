@@ -3,7 +3,7 @@ require('./bootstrap');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Configurator from './components/Configurator';
-import FilterPage from './components/FilterPage';
+import FilterPage from './pages/FilterPage';
 
 /**
  * Configurator
