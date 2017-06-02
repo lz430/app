@@ -1,4 +1,7 @@
 /node_modules
+/public/fonts
+/resources/assets/js/body-styles.js
+/resources/assets/js/zondicons.js
 /public/storage
 /public/hot
 /storage/*.key

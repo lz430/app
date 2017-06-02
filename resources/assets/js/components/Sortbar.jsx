@@ -1,16 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import SVGInline from 'react-svg-inline';
+import zondicons from '../zondicons';
 
 const renderSortIcon = (sortStatus, sortColumn, column) => {
+    const icon = sortStatus === 'desc' ? 'cheveron-down' : 'cheveron-up';
+
     return sortColumn === column
-        ? <img
-              className="sortbar__icon"
-              src={
-                  sortStatus === 'desc'
-                      ? '/images/zondicons/cheveron-down.svg'
-                      : '/images/zondicons/cheveron-up.svg'
-              }
-          />
+        ? <SVGInline className="sortbar__icon" svg={zondicons[icon]} />
         : '';
 };
 
