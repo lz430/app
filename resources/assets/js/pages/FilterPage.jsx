@@ -89,7 +89,7 @@ class FilterPage extends React.Component {
 
     renderModal() {
         return (
-            <div className="filter modal">
+            <div className="modal">
                 <div className="modal__close" onClick={this.closeModal}>X</div>
                 <MakeSelector
                     makes={this.state.makes}

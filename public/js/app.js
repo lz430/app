@@ -19627,12 +19627,12 @@ var Deal = function (_React$Component) {
                     { className: 'deal__buttons' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
-                        { className: 'button button--small button--blue' },
+                        { className: 'deal__button deal__button--small deal__button--blue deal__button' },
                         'Details'
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
-                        { className: 'button button--small' },
+                        { className: 'deal__button deal__button--small' },
                         'Compare'
                     )
                 )
@@ -46597,7 +46597,7 @@ var ZipcodeFinder = function (_React$Component) {
                     { className: 'zipcode-finder__buttons' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
-                        { className: 'zipcode-finder__button zipcode-finder__button--blue zipcode-finder__button--small' },
+                        { className: 'zipcode-finder__button zipcode-finder__button--blue zipcode-finder__button--small zipcode-finder__button--no-border' },
                         'Update'
                     )
                 )
@@ -46734,7 +46734,7 @@ var FilterPage = function (_React$Component) {
         value: function renderModal() {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
-                { className: 'filter modal' },
+                { className: 'modal' },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
                     { className: 'modal__close', onClick: this.closeModal },

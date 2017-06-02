@@ -6,20 +6,22 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
+  padding: 20px 40px;
 
   .deal {
     background-color: $color-background-secondary;
-    border-radius: 8px;
+    border-radius: 6px;
     flex: 1;
-    margin: 10px 15px;
+    margin: 5px;
     min-width: 250px;
-    padding: 10px;
 
     &__basic-info {
-      margin: 10px;
+      padding: 5px 15px 0;
     }
 
     &__image {
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
       min-height: 188px;
       width: 100%;
     }
@@ -27,10 +29,15 @@
     &__buttons {
       display: flex;
       justify-content: space-around;
+      margin: 5px 0 25px;
+      padding: 0 10px;
     }
-  }
 
-  .button {
-    @include button;
+    &__button {
+      @include button;
+      flex: 1;
+      justify-content: center;
+      margin: 0 5px;
+    }
   }
 }

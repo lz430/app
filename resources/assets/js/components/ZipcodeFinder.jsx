@@ -14,7 +14,7 @@ class ZipcodeFinder extends React.Component {
                     <div className="zipcode-finder__code">90040</div>
                 </div>
                 <div className="zipcode-finder__buttons">
-                    <button className="zipcode-finder__button zipcode-finder__button--blue zipcode-finder__button--small">
+                    <button className="zipcode-finder__button zipcode-finder__button--blue zipcode-finder__button--small zipcode-finder__button--no-border">
                         Update
                     </button>
                 </div>
