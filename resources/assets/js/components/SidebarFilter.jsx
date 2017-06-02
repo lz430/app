@@ -1,4 +1,6 @@
 import React from 'react';
+import SVGInline from "react-svg-inline"
+import zondicons from '../../../../public/zondicons';
 
 class SidebarFilter extends React.Component {
     constructor(props) {
@@ -8,7 +10,8 @@ class SidebarFilter extends React.Component {
     render() {
         return (
             <div className="sidebar-filters__filter">
-                <img className="sidebar-filters__icon" src="images/zondicons/cheveron-down.svg"/> {this.props.title}
+                <SVGInline className="sidebar-filters__icon" svg={ zondicons['cheveron-down'] } />
+                {this.props.title}
             </div>
         );
     }

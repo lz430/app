@@ -7,27 +7,27 @@ class BodyStyles
     public const ALL = [
         [
             'style' => 'Convertible',
-            'icon' => self::BASE_PATH . 'convertible.svg',
+            'icon' => 'convertible',
         ],
         [
             'style' => 'Coupe',
-            'icon' => self::BASE_PATH . 'coupe.svg',
+            'icon' => 'coupe',
         ],
         [
             'style' => 'Sedan',
-            'icon' => self::BASE_PATH . 'sedan.svg',
+            'icon' => 'sedan',
         ],
         [
             'style' => 'Sport Utility Vehicle',
-            'icon' => self::BASE_PATH . 'suv.svg',
+            'icon' => 'suv',
         ],
         [
             'style' => 'Wagon',
-            'icon' => self::BASE_PATH . 'wagon.svg',
+            'icon' => 'wagon',
         ],
         [
             'style' => 'Hatchback',
-            'icon' => self::BASE_PATH . 'hatchback.svg',
+            'icon' => 'hatchback',
         ],
         [
             'style' => 'Mini Mpv',
@@ -47,11 +47,11 @@ class BodyStyles
         ],
         [
             'style' => 'Minivan',
-            'icon' => self::BASE_PATH . 'minivan.svg',
+            'icon' => 'minivan',
         ],
         [
             'style' => 'Pickup',
-            'icon' => self::BASE_PATH . 'pickup.svg',
+            'icon' => 'pickup',
         ],
         [
             'style' => 'Passenger Van',
@@ -59,7 +59,7 @@ class BodyStyles
         ],
         [
             'style' => 'Crossover',
-            'icon' => self::BASE_PATH . 'crossover.svg',
+            'icon' => 'crossover',
         ],
         [
             'style' => 'Micro Car',
@@ -79,7 +79,7 @@ class BodyStyles
         ],
         [
             'style' => 'Van',
-            'icon' => self::BASE_PATH . 'van.svg',
+            'icon' => 'van',
         ],
     ];
 
