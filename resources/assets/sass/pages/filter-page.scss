@@ -1,0 +1,17 @@
+@import '../variables';
+@import '../mixins/button';
+@import '../mixins/border-bottom';
+
+.filter-page {
+  display: flex;
+
+  &__deals {
+    flex: 4;
+  }
+
+  &__sidebar {
+    background-color: $color-sidebar-background-primary;
+    flex: 1;
+    height: inherit;
+  }
+}

@@ -1,0 +1,22 @@
+@import '../variables';
+@import '../mixins/border-bottom';
+
+.sidebar-filters {
+  &__header {
+    background-color: $color-sidebar-background-secondary-dark;
+    color: $text-color;
+    padding: 5px 15px;
+    text-transform: uppercase;
+  }
+
+  &__filter {
+    @include border-bottom;
+    color: $color-text-white;
+    padding: 5px 15px;
+  }
+
+  &__icon {
+    fill: $color-text-white;
+    width: 10px;
+  }
+}

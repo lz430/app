@@ -2,7 +2,7 @@ import React from 'react';
 import MakeSelector from './MakeSelector';
 import Deals from './Deals';
 import Sortbar from './Sortbar';
-import FilterResults from './FilterResults';
+import FilterPanel from './FilterPanel';
 import R from 'ramda';
 import api from '../src/api';
 import qs from 'qs';
@@ -105,7 +105,7 @@ class FilterPage extends React.Component {
         return (
             <div className="filter-page">
                 <div className="filter-page__sidebar">
-                    <FilterResults />
+                    <FilterPanel />
                 </div>
                 <div className="filter-page__deals">
                     <Sortbar

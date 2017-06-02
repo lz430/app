@@ -20,8 +20,12 @@ body {
 @import 'components/style-selector';
 @import 'components/make-selector';
 @import 'components/modal';
-@import 'components/filter-page';
 @import 'components/sortbar';
 @import 'components/deals';
 @import 'components/apply-or-purchase';
 @import 'components/application-form';
+@import 'components/zipcode-finder';
+@import 'components/sidebar-filters';
+
+// Pages
+@import 'pages/filter-page';

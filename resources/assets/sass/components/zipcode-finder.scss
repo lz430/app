@@ -1,0 +1,30 @@
+@import '../variables';
+@import '../mixins/button';
+
+.zipcode-finder {
+  background-color: $color-sidebar-background-secondary;
+  color: $color-text-white;
+  display: flex;
+  padding: 15px;
+
+  &__info {
+    align-content: center;
+    display: flex;
+    flex: 1;
+    flex-flow: column nowrap;
+  }
+
+  &__code {
+    font-size: 1.1rem;
+  }
+
+  &__buttons {
+    align-items: center;
+    display: flex;
+    flex: 1;
+  }
+
+  &__button {
+    @include button;
+  }
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import SidebarFilter from "./SidebarFilter";
 
-class FilterResults extends React.Component {
+class FilterPanel extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -36,4 +36,4 @@ class FilterResults extends React.Component {
     }
 }
 
-export default FilterResults;
+export default FilterPanel;

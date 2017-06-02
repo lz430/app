@@ -25,4 +25,8 @@
     background-color: $color-button-secondary;
     color: $color-text-white;
   }
+
+  &--no-border {
+    border: 2px solid transparent;
+  }
 }
