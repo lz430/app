@@ -2,35 +2,42 @@
 @import '../mixins/button';
 
 .deals {
+  background-color: $color-background-primary;
   display: flex;
   flex-flow: row wrap;
-  background-color: $color-background-primary;
   justify-content: flex-start;
-  padding-left: 20px;
+  padding: 20px 40px;
 
   .deal {
-    background-color: #ffffff;
-    margin: 10px 20px 10px 0;
-    padding: 10px;
-    width: 250px;
-    border-radius: 8px;
+    background-color: $color-background-secondary;
+    border-radius: 6px;
+    flex: 1;
+    margin: 5px;
+    min-width: 250px;
 
     &__basic-info {
-      margin: 10px;
+      padding: 5px 15px 0;
     }
 
     &__image {
-      width: inherit;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
       min-height: 188px;
+      width: 100%;
     }
 
     &__buttons {
       display: flex;
       justify-content: space-around;
+      margin: 5px 0 25px;
+      padding: 0 10px;
     }
-  }
 
-  .button {
-    @include button;
+    &__button {
+      @include button;
+      flex: 1;
+      justify-content: center;
+      margin: 0 5px;
+    }
   }
 }

@@ -1,0 +1,16 @@
+@import '../variables';
+@import '../mixins/button';
+@import '../mixins/border-bottom';
+
+.filter-page {
+  display: flex;
+
+  &__deals {
+    flex: 4;
+  }
+
+  &__filter-panel {
+    background-color: $color-sidebar-background-primary;
+    flex: 1;
+  }
+}

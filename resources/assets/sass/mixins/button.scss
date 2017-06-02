@@ -16,13 +16,17 @@
   }
 
   &--small {
+    font-size: .8rem;
     padding: 5px 20px;
     text-transform: none;
-    font-size: .8rem;
   }
 
   &--blue {
-    color: white;
-    background-color: #4D92DF;
+    background-color: $color-button-secondary;
+    color: $color-text-white;
+  }
+
+  &--no-border {
+    border: 2px solid transparent;
   }
 }

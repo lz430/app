@@ -15,6 +15,7 @@ class Deal extends React.Component {
                     className="deal__image"
                     src={R.propOr(this.props.fallbackDealImage, 'url', deal.photos.data[0])}
                 />
+
                 <div className="deal__basic-info">
                     <p>
                         <a href={`apply-or-purchase?deal_id=${deal.id}`}>{`${deal.year} ${deal.make} ${deal.model}`}</a>
@@ -24,10 +25,9 @@ class Deal extends React.Component {
                 </div>
 
                 <div className="deal__buttons">
-                    <button className="button button--small button--blue">Details</button>
-                    <button className="button button--small">Compare</button>
+                    <button className="deal__button deal__button--small deal__button--blue deal__button">Details</button>
+                    <button className="deal__button deal__button--small">Compare</button>
                 </div>
-
             </div>
         );
     }

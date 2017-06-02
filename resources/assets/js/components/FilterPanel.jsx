@@ -1,7 +1,8 @@
 import React from 'react';
-import SidebarFilter from "./SidebarFilter";
+import SidebarFilter from './SidebarFilter';
+import ZipcodeFinder from './ZipcodeFinder'
 
-class FilterResults extends React.Component {
+class FilterPanel extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -9,17 +10,8 @@ class FilterResults extends React.Component {
     render() {
         return (
             <div>
-                <div className="zipcode-finder">
-                    <div className="zipcode-finder__info">
-                        <div>Zip Code</div>
-                        <div className="zipcode-finder__code">90040</div>
-                    </div>
-                    <div className="zipcode-finder__buttons">
-                        <button className="zipcode-finder__button zipcode-finder__button--blue zipcode-finder__button--small">
-                            Update
-                        </button>
-                    </div>
-                </div>
+                <ZipcodeFinder onUpdate={console.log}/>
+
                 <div className="sidebar-filters">
                     <div className="sidebar-filters__header">
                         Filter Results
@@ -36,4 +28,4 @@ class FilterResults extends React.Component {
     }
 }
 
-export default FilterResults;
+export default FilterPanel;
