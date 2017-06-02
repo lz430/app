@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import R from 'ramda';
 import SVGInline from "react-svg-inline"
-import icons from '../../../../public/icons';
+import bodyStyleIcons from '../body-styles';
 
 class StyleSelector extends React.Component {
     constructor() {
@@ -21,7 +21,7 @@ class StyleSelector extends React.Component {
                 onClick={this.props.onSelectStyle.bind(null, style.style)}
                 key={style.style}
             >
-                {icons[style.icon] ? <SVGInline svg={ icons[style.icon] } /> : ''}
+                {bodyStyleIcons[style.icon] ? <SVGInline svg={ bodyStyleIcons[style.icon] } /> : ''}
 
                 <div className="style-selector__name">{style.style}</div>
             </div>

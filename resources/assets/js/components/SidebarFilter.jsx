@@ -1,6 +1,6 @@
 import React from 'react';
 import SVGInline from "react-svg-inline"
-import zondicons from '../../../../public/zondicons';
+import zondicons from '../zondicons';
 
 class SidebarFilter extends React.Component {
     constructor(props) {
