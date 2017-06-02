@@ -3,7 +3,7 @@ require('./bootstrap');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Configurator from './components/Configurator';
-import Filter from './components/Filter';
+import FilterPage from './components/FilterPage';
 
 /**
  * Configurator
@@ -18,9 +18,9 @@ Array.from(document.getElementsByTagName('Configurator')).map((element) => {
 /**
  * Filter
  */
-Array.from(document.getElementsByTagName('Filter')).map((element) => {
+Array.from(document.getElementsByTagName('FilterPage')).map((element) => {
     ReactDOM.render(
-        <Filter />,
+        <FilterPage />,
         element
     );
 });

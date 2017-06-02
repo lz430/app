@@ -3,12 +3,17 @@
 
 .deals {
   display: flex;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
+  background-color: $color-background-primary;
+  justify-content: flex-start;
+  padding-left: 20px;
 
   .deal {
-    background-color: $color-background-secondary;
-    margin: 0 20px 10px 0;
+    background-color: #ffffff;
+    margin: 10px 20px 10px 0;
+    padding: 10px;
     width: 250px;
+    border-radius: 8px;
 
     &__basic-info {
       margin: 10px;
@@ -21,7 +26,7 @@
 
     &__buttons {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
     }
   }
 

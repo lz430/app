@@ -2,12 +2,12 @@ import React from 'react';
 import MakeSelector from './MakeSelector';
 import Deals from './Deals';
 import Sortbar from './Sortbar';
+import FilterResults from './FilterResults';
 import R from 'ramda';
 import api from '../src/api';
 import qs from 'qs';
 
-
-class Filter extends React.Component {
+class FilterPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -22,7 +22,7 @@ class Filter extends React.Component {
             fallbackLogoImage: '/images/dmr-logo.svg',
             fallbackDealImage: '/images/dmr-logo.svg',
             sortStatus: 'asc',
-            sortColumn: 'price'
+            sortColumn: 'price',
         };
         this.onSelectMake = this.onSelectMake.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -58,7 +58,12 @@ class Filter extends React.Component {
 
     getDeals(sort = 'price') {
         api
-            .getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], ['photos'], sort)
+            .getDeals(
+                this.state.selectedMakes,
+                [this.state.selectedBodyStyle],
+                ['photos'],
+                sort
+            )
             .then(deals => {
                 this.setState({
                     deals: deals.data.data,
@@ -67,16 +72,19 @@ class Filter extends React.Component {
     }
 
     sortParam(column) {
-        return this.state.sortStatus === 'desc' ? "-" + column : column;
+        return this.state.sortStatus === 'desc' ? '-' + column : column;
     }
 
     toggleSort(column) {
-        this.setState({
-            sortColumn: column,
-            sortStatus: this.state.sortStatus === 'asc' ? 'desc' : 'asc'
-        }, () => {
-            this.getDeals(this.sortParam(column))
-        });
+        this.setState(
+            {
+                sortColumn: column,
+                sortStatus: this.state.sortStatus === 'asc' ? 'desc' : 'asc',
+            },
+            () => {
+                this.getDeals(this.sortParam(column));
+            }
+        );
     }
 
     renderModal() {
@@ -95,22 +103,26 @@ class Filter extends React.Component {
 
     renderDeals() {
         return (
-            <div className="filter">
-               <Sortbar
-                   results_count={this.state.deals.length}
-                   onPriceClick={this.toggleSort.bind(this, 'price')}
-                   onYearClick={this.toggleSort.bind(this, 'year')}
-                   onAtoZClick={this.toggleSort.bind(this, 'make')}
-                   sortColumn={this.state.sortColumn}
-                   sortStatus={this.state.sortStatus}
-               />
-                {this.state.deals.length
-                ? <Deals
-                        deals={this.state.deals}
-                        fallbackDealImage={this.state.fallbackDealImage}
-                  />
-                : <p>No Results</p>}
-
+            <div className="filter-page">
+                <div className="filter-page__sidebar">
+                    <FilterResults />
+                </div>
+                <div className="filter-page__deals">
+                    <Sortbar
+                        results_count={this.state.deals.length}
+                        onPriceClick={this.toggleSort.bind(this, 'price')}
+                        onYearClick={this.toggleSort.bind(this, 'year')}
+                        onAtoZClick={this.toggleSort.bind(this, 'make')}
+                        sortColumn={this.state.sortColumn}
+                        sortStatus={this.state.sortStatus}
+                    />
+                    {this.state.deals.length
+                        ? <Deals
+                              deals={this.state.deals}
+                              fallbackDealImage={this.state.fallbackDealImage}
+                          />
+                        : <p>No Results</p>}
+                </div>
             </div>
         );
     }
@@ -128,4 +140,4 @@ class Filter extends React.Component {
     }
 }
 
-export default Filter;
+export default FilterPage;

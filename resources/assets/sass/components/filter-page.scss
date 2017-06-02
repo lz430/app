@@ -1,0 +1,67 @@
+@import '../variables';
+@import '../mixins/button';
+@import '../mixins/border-bottom';
+
+
+.filter-page {
+  display: flex;
+
+  &__deals {
+    flex: 4;
+  }
+
+  &__sidebar {
+    flex: 1;
+    background-color: $color-sidebar-background-primary;
+    height: inherit;
+    margin-right: 10px;
+  }
+
+  .zipcode-finder {
+    color: $color-text-white;
+    background-color: $color-sidebar-background-secondary;
+    padding: 15px;
+    display: flex;
+
+    &__info {
+      display: flex;
+      flex-flow: column nowrap;
+      align-content: center;
+      flex: 1;
+    }
+
+    &__code {
+      font-size: 1.1rem;
+    }
+
+    &__buttons {
+      display: flex;
+      align-items: center;
+      flex: 1;
+    }
+
+    &__button {
+      @include button;
+    }
+  }
+
+  .sidebar-filters {
+    &__header {
+      padding: 5px 15px;
+      background-color: $color-sidebar-background-secondary-dark;
+      text-transform: uppercase;
+      color: $text-color;
+    }
+
+    &__filter {
+      color: $color-text-white;
+      padding: 5px 15px;
+      @include border-bottom;
+    }
+
+    &__icon {
+      width: 10px;
+      fill: $color-text-white;
+    }
+  }
+}

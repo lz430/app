@@ -2,6 +2,6 @@
 
 @section('content')
     <div class="section">
-        <Filter></Filter>
+        <FilterPage></FilterPage>
     </div>
 @endsection

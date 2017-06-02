@@ -11,6 +11,10 @@ class Deal extends React.Component {
         const deal = this.props.deal;
         return (
             <div className="deal">
+                <img
+                    className="deal__image"
+                    src={R.propOr(this.props.fallbackDealImage, 'url', deal.photos.data[0])}
+                />
                 <div className="deal__basic-info">
                     <p>
                         <a href={`apply-or-purchase?deal_id=${deal.id}`}>{`${deal.year} ${deal.make} ${deal.model}`}</a>
@@ -18,13 +22,10 @@ class Deal extends React.Component {
                         <strong>{util.moneyFormat(deal.price)}</strong>
                     </p>
                 </div>
-                <img
-                    className="deal__image"
-                    src={R.propOr(this.props.fallbackDealImage, 'url', deal.photos.data[0])}
-                />
+
                 <div className="deal__buttons">
-                    <button className="button">Details</button>
-                    <button className="button">Compare</button>
+                    <button className="button button--small button--blue">Details</button>
+                    <button className="button button--small">Compare</button>
                 </div>
 
             </div>
