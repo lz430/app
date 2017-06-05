@@ -22,9 +22,9 @@ export function receiveMakes() {
     }
 }
 
-export function selectMake(make_id) {
+export function toggleMake(make_id) {
     return {
-        type: ActionTypes.SELECT_MAKE,
+        type: ActionTypes.TOGGLE_MAKE,
         make_id,
     }
 }

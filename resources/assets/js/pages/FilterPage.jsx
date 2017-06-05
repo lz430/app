@@ -19,7 +19,6 @@ class FilterPage extends React.Component {
             showModal: true,
         };
 
-        this.onSelectMake = this.onSelectMake.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.toggleSort = this.toggleSort.bind(this);
         this.sortParam = this.sortParam.bind(this);
@@ -54,14 +53,6 @@ class FilterPage extends React.Component {
                 });
             }
         );
-    }
-
-    onSelectMake(id) {
-        this.setState({
-            selectedMakes: R.contains(id, this.state.selectedMakes)
-                ? R.reject(R.equals(id), this.state.selectedMakes)
-                : R.append(id, this.state.selectedMakes),
-        });
     }
 
     closeModal() {

@@ -21,10 +21,11 @@ const initialState = {
 };
 
 export default () => {
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
     const store = createStore(
         reducer,
         initialState,
-        compose(
+        composeEnhancers(
             applyMiddleware(reduxThunk)
         )
     );

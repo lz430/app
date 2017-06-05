@@ -33,7 +33,7 @@ class MakeSelector extends React.Component {
         return (
             <div
                 className={className}
-                onClick={() => this.props.selectMake(make.id)}
+                onClick={() => this.props.toggleMake(make.id)}
                 key={make.id}
             >
                 <img src={this.getLogoFor(make)} />

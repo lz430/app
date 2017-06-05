@@ -6,7 +6,7 @@ const reducer = (state, action) => {
         case ActionTypes.RECEIVE_MAKES: return Object.assign({}, state, {
             makes: action.data.data.data,
         });
-        case ActionTypes.SELECT_MAKE: return Object.assign({}, state, {
+        case ActionTypes.TOGGLE_MAKE: return Object.assign({}, state, {
             selectedMakes: R.contains(action.make_id, state.selectedMakes)
                 ? R.reject(R.equals(action.make_id), state.selectedMakes)
                 : R.append(action.make_id, state.selectedMakes),
