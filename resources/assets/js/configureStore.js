@@ -1,7 +1,7 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
 import reducer from 'reducers/index';
-import { getMakes } from 'actions/index';
+import { requestMakes } from 'actions/index';
 import R from 'ramda';
 import qs from 'qs';
 
@@ -16,7 +16,7 @@ const initialState = {
     deals: null,
     fallbackLogoImage: '/images/dmr-logo.svg',
     fallbackDealImage: '/images/dmr-logo.svg',
-    sortStatus: 'asc',
+    sortAscDesc: 'asc',
     sortColumn: 'price',
 };
 
@@ -30,7 +30,7 @@ export default () => {
         )
     );
 
-    store.dispatch(getMakes());
+    store.dispatch(requestMakes());
 
     return store;
 }

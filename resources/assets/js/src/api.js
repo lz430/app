@@ -1,3 +1,7 @@
+const sort = (column, ascOrDesc) => {
+    return ascOrDesc === 'desc' ? '-' + column : column;
+};
+
 const api = {
     getBodyStyles: () => {
         return window.axios.get('/api/body-styles');
@@ -5,13 +9,13 @@ const api = {
     getMakes: () => {
         return window.axios.get('/api/makes');
     },
-    getDeals: (make_ids, body_styles, includes, sort, page) => {
+    getDeals: ({makeIds, bodyStyles, includes, sortColumn, ascOrDesc, page}) => {
         return window.axios.get('/api/deals', {
             params: {
-                make_ids,
-                body_styles,
+                make_ids: makeIds,
+                body_styles: bodyStyles,
                 includes,
-                sort,
+                sort: sort(sortColumn, ascOrDesc),
                 page,
             },
         });

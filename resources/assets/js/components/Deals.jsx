@@ -3,27 +3,29 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Deal from 'components/Deal';
 import debounce from 'lodash.debounce';
+import { connect } from 'react-redux';
+import * as Actions from 'actions';
 
 class Deals extends React.Component {
     constructor() {
         super();
     }
 
-    componentDidMount() {
-        const element = ReactDOM.findDOMNode(this);
-        const subscribeToScroll = e => {
-            this.props.loadMoreDeals();
-        };
-
-        element.addEventListener(
-            'scroll',
-            debounce(subscribeToScroll, 500, {
-                maxWait: 1000,
-                leading: true,
-                trailing: false,
-            })
-        );
-    }
+    // componentDidMount() {
+    //     const element = ReactDOM.findDOMNode(this);
+    //     const subscribeToScroll = e => {
+    //         this.props.loadMoreDeals();
+    //     };
+    //
+    //     element.addEventListener(
+    //         'scroll',
+    //         debounce(subscribeToScroll, 500, {
+    //             maxWait: 1000,
+    //             leading: true,
+    //             trailing: false,
+    //         })
+    //     );
+    // }
 
     render() {
         return (
@@ -33,7 +35,7 @@ class Deals extends React.Component {
                         <Deal
                             deal={deal}
                             key={index}
-                            fallbackDealImage={this.props.fallbackDealImage}
+                            // fallbackDealImage={this.props.fallbackDealImage}
                         />
                     );
                 })}
@@ -42,18 +44,23 @@ class Deals extends React.Component {
     }
 }
 
-Deals.propTypes = {
-    deals: PropTypes.arrayOf(
-        PropTypes.shape({
-            year: PropTypes.string.isRequired,
-            msrp: PropTypes.number.isRequired,
-            make: PropTypes.string.isRequired,
-            model: PropTypes.string.isRequired,
-            id: PropTypes.number.isRequired,
-        })
-    ),
-    fallbackDealImage: PropTypes.string.isRequired,
-    loadMoreDeals: PropTypes.func.isRequired,
-};
-
-export default Deals;
+// Deals.propTypes = {
+//     deals: PropTypes.arrayOf(
+//         PropTypes.shape({
+//             year: PropTypes.string.isRequired,
+//             msrp: PropTypes.number.isRequired,
+//             make: PropTypes.string.isRequired,
+//             model: PropTypes.string.isRequired,
+//             id: PropTypes.number.isRequired,
+//         })
+//     ),
+//     fallbackDealImage: PropTypes.string.isRequired,
+//     loadMoreDeals: PropTypes.func.isRequired,
+// };
+function mapStateToProps(state) {
+    return {
+        deals: state.deals,
+        fallbackDealImage: state.fallbackDealImage,
+    }
+}
+export default connect(mapStateToProps, Actions)(Deals);

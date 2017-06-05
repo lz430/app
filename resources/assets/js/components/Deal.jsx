@@ -14,7 +14,7 @@ class Deal extends React.Component {
                 <img
                     className="deal__image"
                     src={R.propOr(
-                        this.props.fallbackDealImage,
+                        '', // this.props.fallbackDealImage
                         'url',
                         deal.photos.data[0]
                     )}
