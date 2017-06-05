@@ -1,22 +1,46 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import Deal from './Deal';
+import Deal from 'components/Deal';
+import debounce from 'lodash.debounce';
 
-const Deals = ({ deals, fallbackDealImage }) => {
-    return (
-        <div className="deals">
-                {deals.map((deal, index) => {
+class Deals extends React.Component {
+    constructor() {
+        super();
+    }
+
+    componentDidMount() {
+        const element = ReactDOM.findDOMNode(this);
+        const subscribeToScroll = e => {
+            this.props.loadMoreDeals();
+        };
+
+        element.addEventListener(
+            'scroll',
+            debounce(subscribeToScroll, 500, {
+                maxWait: 1000,
+                leading: true,
+                trailing: false,
+            })
+        );
+    }
+
+    render() {
+        return (
+            <div className="deals">
+                {this.props.deals.map((deal, index) => {
                     return (
                         <Deal
                             deal={deal}
                             key={index}
-                            fallbackDealImage={fallbackDealImage}
+                            fallbackDealImage={this.props.fallbackDealImage}
                         />
                     );
                 })}
             </div>
-    );
-};
+        );
+    }
+}
 
 Deals.propTypes = {
     deals: PropTypes.arrayOf(
@@ -29,6 +53,7 @@ Deals.propTypes = {
         })
     ),
     fallbackDealImage: PropTypes.string.isRequired,
+    loadMoreDeals: PropTypes.func.isRequired,
 };
 
 export default Deals;

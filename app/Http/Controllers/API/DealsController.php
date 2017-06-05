@@ -41,7 +41,7 @@ class DealsController extends BaseAPIController
             $dealsQuery->orderBy($column, $ascDesc);
         }
         
-        $deals = $dealsQuery->get();
+        $deals = $dealsQuery->paginate(15);
         
         if (in_array('photos', $request->get('includes', []))) {
             $deals->load('photos');

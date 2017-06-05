@@ -1,6 +1,6 @@
 import React from 'react';
-import StyleSelector from './StyleSelector';
-import api from '../src/api';
+import StyleSelector from 'components/StyleSelector';
+import api from 'src/api';
 
 class Configurator extends React.Component {
     constructor(props) {
@@ -17,7 +17,7 @@ class Configurator extends React.Component {
     }
 
     componentDidMount() {
-        api.getBodyStyles().then((styles) => {
+        api.getBodyStyles().then(styles => {
             this.setState({
                 styles: styles.data.data,
             });

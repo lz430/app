@@ -1,5 +1,7 @@
 @import '../variables';
-@import '../mixins/border-bottom';
+
+$icon-margin: 10px;
+$icon-size: 20px;
 
 .sidebar-filters {
   &__header {
@@ -10,13 +12,28 @@
   }
 
   &__filter {
-    @include border-bottom;
+    border-bottom: 1px solid $color-sidebar-background-secondary;
     color: $color-text-white;
-    padding: 5px 15px;
   }
 
-  &__icon svg {
+  &__filter-title {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    padding: 15px 15px 15px 0;
+    user-select: none;
+  }
+
+  &__filter-body {
+    border-top: 1px solid $color-sidebar-background-secondary;
+    margin-left: $icon-margin + $icon-size + $icon-margin;
+  }
+
+  &__icon {
     fill: $color-text-white;
-    width: 20px;
+    height: $icon-size;
+    margin-left: $icon-margin;
+    margin-right: $icon-margin;
+    width: $icon-size;
   }
 }

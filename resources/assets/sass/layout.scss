@@ -1,5 +1,10 @@
-@import './mixins/border-bottom';
 @import './variables';
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
 
 body {
   display: flex;
@@ -13,7 +18,7 @@ body {
 }
 
 .section {
-  @include border-bottom;
+  border-bottom: 1px solid $color-section-bottom-border;
   $section-padding: 50px;
 
   display: flex;

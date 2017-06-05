@@ -29,4 +29,8 @@
   &--no-border {
     border: 2px solid transparent;
   }
+
+  &--dark-bg {
+    color: $color-text-white;
+  }
 }

@@ -1,11 +1,11 @@
 import React from 'react';
-import MakeSelector from '../components/MakeSelector';
-import Deals from '../components/Deals';
-import Sortbar from '../components/Sortbar';
-import FilterPanel from '../components/FilterPanel';
 import R from 'ramda';
-import api from '../src/api';
+import api from 'src/api';
 import qs from 'qs';
+import MakeSelector from 'components/MakeSelector';
+import Deals from 'components/Deals';
+import Sortbar from 'components/Sortbar';
+import FilterPanel from 'components/FilterPanel';
 
 class FilterPage extends React.Component {
     constructor(props) {
@@ -18,6 +18,7 @@ class FilterPage extends React.Component {
             selectedMakes: [],
             makes: null,
             showModal: true,
+            dealPage: 0,
             deals: null,
             fallbackLogoImage: '/images/dmr-logo.svg',
             fallbackDealImage: '/images/dmr-logo.svg',
@@ -29,6 +30,7 @@ class FilterPage extends React.Component {
         this.toggleSort = this.toggleSort.bind(this);
         this.sortParam = this.sortParam.bind(this);
         this.renderDeals = this.renderDeals.bind(this);
+        this.loadMoreDeals = this.loadMoreDeals.bind(this);
     }
 
     componentDidMount() {
@@ -37,6 +39,23 @@ class FilterPage extends React.Component {
                 makes: makes.data.data,
             });
         });
+    }
+
+    loadMoreDeals() {
+        this.setState(
+            {
+                dealPage: this.state.dealPage + 1,
+            },
+            () => {
+                this.getDeals(
+                    this.sortParam(this.state.sortColumn)
+                ).then(deals => {
+                    this.setState({
+                        deals: R.concat(this.state.deals, deals.data.data),
+                    });
+                });
+            }
+        );
     }
 
     onSelectMake(id) {
@@ -52,23 +71,24 @@ class FilterPage extends React.Component {
             {
                 showModal: false,
             },
-            this.getDeals
+            () => {
+                this.getDeals().then(deals => {
+                    this.setState({
+                        deals: deals.data.data,
+                    });
+                });
+            }
         );
     }
 
-    getDeals(sort = 'price') {
-        api
-            .getDeals(
-                this.state.selectedMakes,
-                [this.state.selectedBodyStyle],
-                ['photos'],
-                sort
-            )
-            .then(deals => {
-                this.setState({
-                    deals: deals.data.data,
-                });
-            });
+    getDeals(sort = 'price', page = this.state.dealPage) {
+        return api.getDeals(
+            this.state.selectedMakes,
+            [this.state.selectedBodyStyle],
+            ['photos'],
+            sort,
+            page
+        );
     }
 
     sortParam(column) {
@@ -82,7 +102,12 @@ class FilterPage extends React.Component {
                 sortStatus: this.state.sortStatus === 'asc' ? 'desc' : 'asc',
             },
             () => {
-                this.getDeals(this.sortParam(column));
+                this.getDeals(this.sortParam(column)).then(deals => {
+                    this.setState({
+                        deals: deals.data.data,
+                        dealPage: 0,
+                    });
+                });
             }
         );
     }
@@ -118,6 +143,7 @@ class FilterPage extends React.Component {
                     />
                     {this.state.deals.length
                         ? <Deals
+                              loadMoreDeals={this.loadMoreDeals}
                               deals={this.state.deals}
                               fallbackDealImage={this.state.fallbackDealImage}
                           />

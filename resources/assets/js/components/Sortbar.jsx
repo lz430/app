@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SVGInline from 'react-svg-inline';
-import zondicons from '../zondicons';
+import zondicons from 'zondicons';
 
 const renderSortIcon = (sortStatus, sortColumn, column) => {
     const icon = sortStatus === 'desc' ? 'cheveron-down' : 'cheveron-up';
