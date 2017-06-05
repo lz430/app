@@ -5,6 +5,7 @@
   background-color: $color-sidebar-background-secondary;
   color: $color-text-white;
   display: flex;
+  height: $sortbar-height;
   padding: 5px 15px;
 
   &__info {

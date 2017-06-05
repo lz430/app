@@ -1,5 +1,11 @@
 @import './variables';
 
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
 body {
   display: flex;
   flex-direction: column;

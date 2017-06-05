@@ -1,7 +1,10 @@
 @import '../mixins/button';
+@import '../variables';
 
 .sortbar {
   display: flex;
+  height: $sortbar-height;
+  max-height: $sortbar-height;
 
   &__count {
     flex: 1;

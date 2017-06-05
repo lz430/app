@@ -2,13 +2,12 @@
 
 .nav {
   align-items: center;
-  $padding: 15px;
-
   background-color: $color-background-primary;
   border-bottom: 1px solid $color-section-bottom-border;
   display: flex;
-  height: calc(#{$nav-height} - #{$padding * 2});
-  padding: $padding;
+  height: $nav-height;
+  max-height: $nav-height;
+  padding: 15px;
 
   &__logo {
     align-items: center;

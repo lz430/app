@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 841);
+/******/ 	return __webpack_require__(__webpack_require__.s = 842);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -561,7 +561,7 @@ module.exports = !__webpack_require__(8)(function(){
 /***/ (function(module, exports, __webpack_require__) {
 
 var anObject       = __webpack_require__(6)
-  , IE8_DOM_DEFINE = __webpack_require__(213)
+  , IE8_DOM_DEFINE = __webpack_require__(214)
   , toPrimitive    = __webpack_require__(44)
   , dP             = Object.defineProperty;
 
@@ -582,7 +582,7 @@ exports.f = __webpack_require__(13) ? Object.defineProperty : function definePro
 /***/ (function(module, exports, __webpack_require__) {
 
 var _isArray = __webpack_require__(59);
-var _isTransformer = __webpack_require__(174);
+var _isTransformer = __webpack_require__(175);
 
 
 /**
@@ -644,7 +644,7 @@ module.exports = function _dispatchable(methodNames, xf, fn) {
 var _prodInvariant = __webpack_require__(9);
 
 var DOMProperty = __webpack_require__(61);
-var ReactDOMComponentFlags = __webpack_require__(301);
+var ReactDOMComponentFlags = __webpack_require__(302);
 
 var invariant = __webpack_require__(4);
 
@@ -1080,7 +1080,7 @@ var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
 var _map = __webpack_require__(123);
 var _reduce = __webpack_require__(34);
-var _xmap = __webpack_require__(649);
+var _xmap = __webpack_require__(650);
 var curryN = __webpack_require__(21);
 var keys = __webpack_require__(47);
 
@@ -1805,7 +1805,7 @@ var pIE            = __webpack_require__(89)
   , toIObject      = __webpack_require__(28)
   , toPrimitive    = __webpack_require__(44)
   , has            = __webpack_require__(22)
-  , IE8_DOM_DEFINE = __webpack_require__(213)
+  , IE8_DOM_DEFINE = __webpack_require__(214)
   , gOPD           = Object.getOwnPropertyDescriptor;
 
 exports.f = __webpack_require__(13) ? gOPD : function getOwnPropertyDescriptor(O, P){
@@ -1824,7 +1824,7 @@ exports.f = __webpack_require__(13) ? gOPD : function getOwnPropertyDescriptor(O
 // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
 var has         = __webpack_require__(22)
   , toObject    = __webpack_require__(20)
-  , IE_PROTO    = __webpack_require__(153)('IE_PROTO')
+  , IE_PROTO    = __webpack_require__(154)('IE_PROTO')
   , ObjectProto = Object.prototype;
 
 module.exports = Object.getPrototypeOf || function(O){
@@ -1839,8 +1839,8 @@ module.exports = Object.getPrototypeOf || function(O){
 /* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _xwrap = __webpack_require__(271);
-var bind = __webpack_require__(246);
+var _xwrap = __webpack_require__(272);
+var bind = __webpack_require__(247);
 var isArrayLike = __webpack_require__(94);
 
 
@@ -1921,7 +1921,7 @@ module.exports = (function() {
 var debugTool = null;
 
 if (true) {
-  var ReactDebugTool = __webpack_require__(785);
+  var ReactDebugTool = __webpack_require__(786);
   debugTool = ReactDebugTool;
 }
 
@@ -2136,7 +2136,7 @@ module.exports = function(it, S){
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var _equals = __webpack_require__(624);
+var _equals = __webpack_require__(625);
 
 
 /**
@@ -2198,7 +2198,7 @@ module.exports = function _arity(n, fn) {
 
 var _curry1 = __webpack_require__(2);
 var _has = __webpack_require__(23);
-var _isArguments = __webpack_require__(264);
+var _isArguments = __webpack_require__(265);
 
 
 /**
@@ -2345,9 +2345,9 @@ module.exports = _curry3(_reduce);
 var _prodInvariant = __webpack_require__(9),
     _assign = __webpack_require__(12);
 
-var CallbackQueue = __webpack_require__(299);
+var CallbackQueue = __webpack_require__(300);
 var PooledClass = __webpack_require__(73);
-var ReactFeatureFlags = __webpack_require__(304);
+var ReactFeatureFlags = __webpack_require__(305);
 var ReactReconciler = __webpack_require__(85);
 var Transaction = __webpack_require__(133);
 
@@ -2653,10 +2653,10 @@ module.exports = function(fn, that, length){
 /* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Map     = __webpack_require__(229)
+var Map     = __webpack_require__(230)
   , $export = __webpack_require__(1)
   , shared  = __webpack_require__(112)('metadata')
-  , store   = shared.store || (shared.store = new (__webpack_require__(232)));
+  , store   = shared.store || (shared.store = new (__webpack_require__(233)));
 
 var getOrCreateMetadataMap = function(target, targetKey, create){
   var targetMetadata = store.get(target);
@@ -2717,7 +2717,7 @@ if(__webpack_require__(13)){
     , fails               = __webpack_require__(8)
     , $export             = __webpack_require__(1)
     , $typed              = __webpack_require__(113)
-    , $buffer             = __webpack_require__(160)
+    , $buffer             = __webpack_require__(161)
     , ctx                 = __webpack_require__(52)
     , anInstance          = __webpack_require__(62)
     , propertyDesc        = __webpack_require__(57)
@@ -2728,26 +2728,26 @@ if(__webpack_require__(13)){
     , toIndex             = __webpack_require__(69)
     , toPrimitive         = __webpack_require__(44)
     , has                 = __webpack_require__(22)
-    , same                = __webpack_require__(226)
+    , same                = __webpack_require__(227)
     , classof             = __webpack_require__(87)
     , isObject            = __webpack_require__(10)
     , toObject            = __webpack_require__(20)
-    , isArrayIter         = __webpack_require__(145)
+    , isArrayIter         = __webpack_require__(146)
     , create              = __webpack_require__(64)
     , getPrototypeOf      = __webpack_require__(33)
     , gOPN                = __webpack_require__(65).f
-    , getIterFn           = __webpack_require__(162)
+    , getIterFn           = __webpack_require__(163)
     , uid                 = __webpack_require__(70)
     , wks                 = __webpack_require__(11)
     , createArrayMethod   = __webpack_require__(42)
     , createArrayIncludes = __webpack_require__(103)
-    , speciesConstructor  = __webpack_require__(154)
-    , ArrayIterators      = __webpack_require__(163)
+    , speciesConstructor  = __webpack_require__(155)
+    , ArrayIterators      = __webpack_require__(164)
     , Iterators           = __webpack_require__(78)
     , $iterDetect         = __webpack_require__(109)
     , setSpecies          = __webpack_require__(68)
-    , arrayFill           = __webpack_require__(138)
-    , arrayCopyWithin     = __webpack_require__(206)
+    , arrayFill           = __webpack_require__(139)
+    , arrayCopyWithin     = __webpack_require__(207)
     , $DP                 = __webpack_require__(14)
     , $GOPD               = __webpack_require__(32)
     , dP                  = $DP.f
@@ -3818,22 +3818,22 @@ module.exports = false;
 
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
 var anObject    = __webpack_require__(6)
-  , dPs         = __webpack_require__(219)
-  , enumBugKeys = __webpack_require__(141)
-  , IE_PROTO    = __webpack_require__(153)('IE_PROTO')
+  , dPs         = __webpack_require__(220)
+  , enumBugKeys = __webpack_require__(142)
+  , IE_PROTO    = __webpack_require__(154)('IE_PROTO')
   , Empty       = function(){ /* empty */ }
   , PROTOTYPE   = 'prototype';
 
 // Create object with fake `null` prototype: use iframe Object with cleared prototype
 var createDict = function(){
   // Thrash, waste and sodomy: IE GC bug
-  var iframe = __webpack_require__(140)('iframe')
+  var iframe = __webpack_require__(141)('iframe')
     , i      = enumBugKeys.length
     , lt     = '<'
     , gt     = '>'
     , iframeDocument;
   iframe.style.display = 'none';
-  __webpack_require__(143).appendChild(iframe);
+  __webpack_require__(144).appendChild(iframe);
   iframe.src = 'javascript:'; // eslint-disable-line no-script-url
   // createDict = iframe.contentWindow.Object;
   // html.removeChild(iframe);
@@ -3864,8 +3864,8 @@ module.exports = Object.create || function create(O, Properties){
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-var $keys      = __webpack_require__(221)
-  , hiddenKeys = __webpack_require__(141).concat('length', 'prototype');
+var $keys      = __webpack_require__(222)
+  , hiddenKeys = __webpack_require__(142).concat('length', 'prototype');
 
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
   return $keys(O, hiddenKeys);
@@ -3876,8 +3876,8 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys       = __webpack_require__(221)
-  , enumBugKeys = __webpack_require__(141);
+var $keys       = __webpack_require__(222)
+  , enumBugKeys = __webpack_require__(142);
 
 module.exports = Object.keys || function keys(O){
   return $keys(O, enumBugKeys);
@@ -3938,7 +3938,7 @@ module.exports = function(key){
 /* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _indexOf = __webpack_require__(263);
+var _indexOf = __webpack_require__(264);
 
 
 module.exports = function _contains(a, list) {
@@ -4125,7 +4125,7 @@ var warning = __webpack_require__(5);
 var canDefineProperty = __webpack_require__(136);
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 
-var REACT_ELEMENT_TYPE = __webpack_require__(319);
+var REACT_ELEMENT_TYPE = __webpack_require__(320);
 
 var RESERVED_PROPS = {
   key: true,
@@ -4507,11 +4507,11 @@ module.exports = function(key){
 /***/ (function(module, exports, __webpack_require__) {
 
 var ctx         = __webpack_require__(52)
-  , call        = __webpack_require__(215)
-  , isArrayIter = __webpack_require__(145)
+  , call        = __webpack_require__(216)
+  , isArrayIter = __webpack_require__(146)
   , anObject    = __webpack_require__(6)
   , toLength    = __webpack_require__(18)
-  , getIterFn   = __webpack_require__(162)
+  , getIterFn   = __webpack_require__(163)
   , BREAK       = {}
   , RETURN      = {};
 var exports = module.exports = function(iterable, entries, fn, that, ITERATOR){
@@ -4557,7 +4557,7 @@ module.exports = function(it, tag, stat){
 var $export = __webpack_require__(1)
   , defined = __webpack_require__(38)
   , fails   = __webpack_require__(8)
-  , spaces  = __webpack_require__(158)
+  , spaces  = __webpack_require__(159)
   , space   = '[' + spaces + ']'
   , non     = '\u200b\u0085'
   , ltrim   = RegExp('^' + space + space + '*')
@@ -4613,7 +4613,7 @@ if (true) {
   // By explicitly using `prop-types` you are opting into new development behavior.
   // http://fb.me/prop-types-in-prod
   var throwOnDirectAccess = true;
-  module.exports = __webpack_require__(237)(isValidElement, throwOnDirectAccess);
+  module.exports = __webpack_require__(238)(isValidElement, throwOnDirectAccess);
 } else {
   // By explicitly using `prop-types` you are opting into new production behavior.
   // http://fb.me/prop-types-in-prod
@@ -4698,11 +4698,11 @@ module.exports = _curry2(function max(a, b) { return b > a ? b : a; });
 
 
 
-var DOMNamespaces = __webpack_require__(181);
+var DOMNamespaces = __webpack_require__(182);
 var setInnerHTML = __webpack_require__(135);
 
-var createMicrosoftUnsafeLocalFunction = __webpack_require__(188);
-var setTextContent = __webpack_require__(317);
+var createMicrosoftUnsafeLocalFunction = __webpack_require__(189);
+var setTextContent = __webpack_require__(318);
 
 var ELEMENT_NODE_TYPE = 1;
 var DOCUMENT_FRAGMENT_NODE_TYPE = 11;
@@ -4821,7 +4821,7 @@ module.exports = DOMLazyTree;
 
 
 
-var ReactRef = __webpack_require__(799);
+var ReactRef = __webpack_require__(800);
 var ReactInstrumentation = __webpack_require__(35);
 
 var warning = __webpack_require__(5);
@@ -4996,16 +4996,16 @@ module.exports = ReactReconciler;
 
 var _assign = __webpack_require__(12);
 
-var ReactChildren = __webpack_require__(829);
-var ReactComponent = __webpack_require__(196);
-var ReactPureComponent = __webpack_require__(834);
-var ReactClass = __webpack_require__(830);
-var ReactDOMFactories = __webpack_require__(831);
+var ReactChildren = __webpack_require__(830);
+var ReactComponent = __webpack_require__(197);
+var ReactPureComponent = __webpack_require__(835);
+var ReactClass = __webpack_require__(831);
+var ReactDOMFactories = __webpack_require__(832);
 var ReactElement = __webpack_require__(74);
-var ReactPropTypes = __webpack_require__(832);
-var ReactVersion = __webpack_require__(835);
+var ReactPropTypes = __webpack_require__(833);
+var ReactVersion = __webpack_require__(836);
 
-var onlyChild = __webpack_require__(838);
+var onlyChild = __webpack_require__(839);
 var warning = __webpack_require__(5);
 
 var createElement = ReactElement.createElement;
@@ -5014,7 +5014,7 @@ var cloneElement = ReactElement.cloneElement;
 
 if (true) {
   var canDefineProperty = __webpack_require__(136);
-  var ReactElementValidator = __webpack_require__(320);
+  var ReactElementValidator = __webpack_require__(321);
   var didWarnPropTypesDeprecated = false;
   createElement = ReactElementValidator.createElement;
   createFactory = ReactElementValidator.createFactory;
@@ -5551,7 +5551,7 @@ module.exports = _curry2(function path(paths, obj) {
 
 var _curry2 = __webpack_require__(0);
 var map = __webpack_require__(29);
-var prop = __webpack_require__(175);
+var prop = __webpack_require__(176);
 
 
 /**
@@ -5584,7 +5584,7 @@ module.exports = _curry2(function pluck(p, list) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
-var _toString = __webpack_require__(636);
+var _toString = __webpack_require__(637);
 
 
 /**
@@ -5646,11 +5646,11 @@ module.exports = _curry1(function toString(val) { return _toString(val, []); });
 var _prodInvariant = __webpack_require__(9);
 
 var EventPluginRegistry = __webpack_require__(130);
-var EventPluginUtils = __webpack_require__(182);
-var ReactErrorUtils = __webpack_require__(186);
+var EventPluginUtils = __webpack_require__(183);
+var ReactErrorUtils = __webpack_require__(187);
 
-var accumulateInto = __webpack_require__(311);
-var forEachAccumulated = __webpack_require__(312);
+var accumulateInto = __webpack_require__(312);
+var forEachAccumulated = __webpack_require__(313);
 var invariant = __webpack_require__(4);
 
 /**
@@ -5927,10 +5927,10 @@ module.exports = EventPluginHub;
 
 
 var EventPluginHub = __webpack_require__(99);
-var EventPluginUtils = __webpack_require__(182);
+var EventPluginUtils = __webpack_require__(183);
 
-var accumulateInto = __webpack_require__(311);
-var forEachAccumulated = __webpack_require__(312);
+var accumulateInto = __webpack_require__(312);
+var forEachAccumulated = __webpack_require__(313);
 var warning = __webpack_require__(5);
 
 var getListener = EventPluginHub.getListener;
@@ -6120,7 +6120,7 @@ module.exports = ReactInstanceMap;
 
 var SyntheticEvent = __webpack_require__(55);
 
-var getEventTarget = __webpack_require__(191);
+var getEventTarget = __webpack_require__(192);
 
 /**
  * @interface UIEvent
@@ -6208,7 +6208,7 @@ var global            = __webpack_require__(7)
   , fails             = __webpack_require__(8)
   , $iterDetect       = __webpack_require__(109)
   , setToStringTag    = __webpack_require__(79)
-  , inheritIfRequired = __webpack_require__(144);
+  , inheritIfRequired = __webpack_require__(145);
 
 module.exports = function(NAME, wrapper, methods, common, IS_MAP, IS_WEAK){
   var Base  = global[NAME]
@@ -6460,244 +6460,244 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
-  F: __webpack_require__(562),
-  T: __webpack_require__(563),
-  __: __webpack_require__(564),
+  F: __webpack_require__(563),
+  T: __webpack_require__(564),
+  __: __webpack_require__(565),
   add: __webpack_require__(115),
-  addIndex: __webpack_require__(565),
-  adjust: __webpack_require__(241),
-  all: __webpack_require__(566),
-  allPass: __webpack_require__(567),
+  addIndex: __webpack_require__(566),
+  adjust: __webpack_require__(242),
+  all: __webpack_require__(567),
+  allPass: __webpack_require__(568),
   always: __webpack_require__(82),
-  and: __webpack_require__(242),
-  any: __webpack_require__(243),
-  anyPass: __webpack_require__(568),
-  ap: __webpack_require__(165),
-  aperture: __webpack_require__(569),
-  append: __webpack_require__(570),
-  apply: __webpack_require__(244),
-  applySpec: __webpack_require__(571),
-  ascend: __webpack_require__(572),
+  and: __webpack_require__(243),
+  any: __webpack_require__(244),
+  anyPass: __webpack_require__(569),
+  ap: __webpack_require__(166),
+  aperture: __webpack_require__(570),
+  append: __webpack_require__(571),
+  apply: __webpack_require__(245),
+  applySpec: __webpack_require__(572),
+  ascend: __webpack_require__(573),
   assoc: __webpack_require__(116),
-  assocPath: __webpack_require__(245),
-  binary: __webpack_require__(573),
-  bind: __webpack_require__(246),
-  both: __webpack_require__(574),
-  call: __webpack_require__(575),
-  chain: __webpack_require__(166),
-  clamp: __webpack_require__(576),
-  clone: __webpack_require__(577),
-  comparator: __webpack_require__(578),
-  complement: __webpack_require__(579),
-  compose: __webpack_require__(167),
-  composeK: __webpack_require__(247),
-  composeP: __webpack_require__(580),
-  concat: __webpack_require__(168),
-  cond: __webpack_require__(581),
-  construct: __webpack_require__(582),
-  constructN: __webpack_require__(248),
-  contains: __webpack_require__(583),
-  converge: __webpack_require__(249),
-  countBy: __webpack_require__(584),
+  assocPath: __webpack_require__(246),
+  binary: __webpack_require__(574),
+  bind: __webpack_require__(247),
+  both: __webpack_require__(575),
+  call: __webpack_require__(576),
+  chain: __webpack_require__(167),
+  clamp: __webpack_require__(577),
+  clone: __webpack_require__(578),
+  comparator: __webpack_require__(579),
+  complement: __webpack_require__(580),
+  compose: __webpack_require__(168),
+  composeK: __webpack_require__(248),
+  composeP: __webpack_require__(581),
+  concat: __webpack_require__(169),
+  cond: __webpack_require__(582),
+  construct: __webpack_require__(583),
+  constructN: __webpack_require__(249),
+  contains: __webpack_require__(584),
+  converge: __webpack_require__(250),
+  countBy: __webpack_require__(585),
   curry: __webpack_require__(117),
   curryN: __webpack_require__(21),
-  dec: __webpack_require__(585),
-  descend: __webpack_require__(586),
-  defaultTo: __webpack_require__(250),
-  difference: __webpack_require__(251),
-  differenceWith: __webpack_require__(252),
-  dissoc: __webpack_require__(253),
-  dissocPath: __webpack_require__(587),
-  divide: __webpack_require__(588),
-  drop: __webpack_require__(254),
-  dropLast: __webpack_require__(589),
-  dropLastWhile: __webpack_require__(590),
-  dropRepeats: __webpack_require__(591),
-  dropRepeatsWith: __webpack_require__(255),
-  dropWhile: __webpack_require__(592),
-  either: __webpack_require__(593),
-  empty: __webpack_require__(256),
-  eqBy: __webpack_require__(594),
-  eqProps: __webpack_require__(595),
+  dec: __webpack_require__(586),
+  descend: __webpack_require__(587),
+  defaultTo: __webpack_require__(251),
+  difference: __webpack_require__(252),
+  differenceWith: __webpack_require__(253),
+  dissoc: __webpack_require__(254),
+  dissocPath: __webpack_require__(588),
+  divide: __webpack_require__(589),
+  drop: __webpack_require__(255),
+  dropLast: __webpack_require__(590),
+  dropLastWhile: __webpack_require__(591),
+  dropRepeats: __webpack_require__(592),
+  dropRepeatsWith: __webpack_require__(256),
+  dropWhile: __webpack_require__(593),
+  either: __webpack_require__(594),
+  empty: __webpack_require__(257),
+  eqBy: __webpack_require__(595),
+  eqProps: __webpack_require__(596),
   equals: __webpack_require__(45),
-  evolve: __webpack_require__(596),
-  filter: __webpack_require__(169),
-  find: __webpack_require__(597),
-  findIndex: __webpack_require__(598),
-  findLast: __webpack_require__(599),
-  findLastIndex: __webpack_require__(600),
-  flatten: __webpack_require__(601),
+  evolve: __webpack_require__(597),
+  filter: __webpack_require__(170),
+  find: __webpack_require__(598),
+  findIndex: __webpack_require__(599),
+  findLast: __webpack_require__(600),
+  findLastIndex: __webpack_require__(601),
+  flatten: __webpack_require__(602),
   flip: __webpack_require__(118),
-  forEach: __webpack_require__(602),
-  forEachObjIndexed: __webpack_require__(603),
-  fromPairs: __webpack_require__(604),
-  groupBy: __webpack_require__(605),
-  groupWith: __webpack_require__(606),
-  gt: __webpack_require__(607),
-  gte: __webpack_require__(608),
-  has: __webpack_require__(609),
-  hasIn: __webpack_require__(610),
-  head: __webpack_require__(611),
-  identical: __webpack_require__(257),
-  identity: __webpack_require__(170),
-  ifElse: __webpack_require__(612),
-  inc: __webpack_require__(613),
-  indexBy: __webpack_require__(614),
-  indexOf: __webpack_require__(615),
-  init: __webpack_require__(616),
-  insert: __webpack_require__(617),
-  insertAll: __webpack_require__(618),
-  intersection: __webpack_require__(653),
-  intersectionWith: __webpack_require__(654),
-  intersperse: __webpack_require__(655),
-  into: __webpack_require__(656),
-  invert: __webpack_require__(657),
-  invertObj: __webpack_require__(658),
+  forEach: __webpack_require__(603),
+  forEachObjIndexed: __webpack_require__(604),
+  fromPairs: __webpack_require__(605),
+  groupBy: __webpack_require__(606),
+  groupWith: __webpack_require__(607),
+  gt: __webpack_require__(608),
+  gte: __webpack_require__(609),
+  has: __webpack_require__(610),
+  hasIn: __webpack_require__(611),
+  head: __webpack_require__(612),
+  identical: __webpack_require__(258),
+  identity: __webpack_require__(171),
+  ifElse: __webpack_require__(613),
+  inc: __webpack_require__(614),
+  indexBy: __webpack_require__(615),
+  indexOf: __webpack_require__(616),
+  init: __webpack_require__(617),
+  insert: __webpack_require__(618),
+  insertAll: __webpack_require__(619),
+  intersection: __webpack_require__(654),
+  intersectionWith: __webpack_require__(655),
+  intersperse: __webpack_require__(656),
+  into: __webpack_require__(657),
+  invert: __webpack_require__(658),
+  invertObj: __webpack_require__(659),
   invoker: __webpack_require__(93),
-  is: __webpack_require__(272),
+  is: __webpack_require__(273),
   isArrayLike: __webpack_require__(94),
-  isEmpty: __webpack_require__(659),
-  isNil: __webpack_require__(660),
-  join: __webpack_require__(661),
-  juxt: __webpack_require__(273),
+  isEmpty: __webpack_require__(660),
+  isNil: __webpack_require__(661),
+  join: __webpack_require__(662),
+  juxt: __webpack_require__(274),
   keys: __webpack_require__(47),
-  keysIn: __webpack_require__(662),
-  last: __webpack_require__(274),
-  lastIndexOf: __webpack_require__(663),
-  length: __webpack_require__(275),
+  keysIn: __webpack_require__(663),
+  last: __webpack_require__(275),
+  lastIndexOf: __webpack_require__(664),
+  length: __webpack_require__(276),
   lens: __webpack_require__(124),
-  lensIndex: __webpack_require__(664),
-  lensPath: __webpack_require__(665),
-  lensProp: __webpack_require__(666),
+  lensIndex: __webpack_require__(665),
+  lensPath: __webpack_require__(666),
+  lensProp: __webpack_require__(667),
   lift: __webpack_require__(125),
-  liftN: __webpack_require__(276),
-  lt: __webpack_require__(667),
-  lte: __webpack_require__(668),
+  liftN: __webpack_require__(277),
+  lt: __webpack_require__(668),
+  lte: __webpack_require__(669),
   map: __webpack_require__(29),
-  mapAccum: __webpack_require__(669),
-  mapAccumRight: __webpack_require__(670),
-  mapObjIndexed: __webpack_require__(671),
-  match: __webpack_require__(672),
-  mathMod: __webpack_require__(673),
+  mapAccum: __webpack_require__(670),
+  mapAccumRight: __webpack_require__(671),
+  mapObjIndexed: __webpack_require__(672),
+  match: __webpack_require__(673),
+  mathMod: __webpack_require__(674),
   max: __webpack_require__(83),
-  maxBy: __webpack_require__(674),
-  mean: __webpack_require__(277),
-  median: __webpack_require__(675),
-  memoize: __webpack_require__(676),
-  merge: __webpack_require__(677),
-  mergeAll: __webpack_require__(678),
-  mergeWith: __webpack_require__(679),
-  mergeWithKey: __webpack_require__(278),
-  min: __webpack_require__(680),
-  minBy: __webpack_require__(681),
-  modulo: __webpack_require__(682),
-  multiply: __webpack_require__(279),
+  maxBy: __webpack_require__(675),
+  mean: __webpack_require__(278),
+  median: __webpack_require__(676),
+  memoize: __webpack_require__(677),
+  merge: __webpack_require__(678),
+  mergeAll: __webpack_require__(679),
+  mergeWith: __webpack_require__(680),
+  mergeWithKey: __webpack_require__(279),
+  min: __webpack_require__(681),
+  minBy: __webpack_require__(682),
+  modulo: __webpack_require__(683),
+  multiply: __webpack_require__(280),
   nAry: __webpack_require__(126),
-  negate: __webpack_require__(683),
-  none: __webpack_require__(684),
-  not: __webpack_require__(280),
+  negate: __webpack_require__(684),
+  none: __webpack_require__(685),
+  not: __webpack_require__(281),
   nth: __webpack_require__(95),
-  nthArg: __webpack_require__(685),
-  objOf: __webpack_require__(281),
-  of: __webpack_require__(686),
-  omit: __webpack_require__(687),
-  once: __webpack_require__(688),
-  or: __webpack_require__(282),
-  over: __webpack_require__(283),
-  pair: __webpack_require__(689),
-  partial: __webpack_require__(690),
-  partialRight: __webpack_require__(691),
-  partition: __webpack_require__(692),
+  nthArg: __webpack_require__(686),
+  objOf: __webpack_require__(282),
+  of: __webpack_require__(687),
+  omit: __webpack_require__(688),
+  once: __webpack_require__(689),
+  or: __webpack_require__(283),
+  over: __webpack_require__(284),
+  pair: __webpack_require__(690),
+  partial: __webpack_require__(691),
+  partialRight: __webpack_require__(692),
+  partition: __webpack_require__(693),
   path: __webpack_require__(96),
-  pathEq: __webpack_require__(693),
-  pathOr: __webpack_require__(694),
-  pathSatisfies: __webpack_require__(695),
-  pick: __webpack_require__(696),
-  pickAll: __webpack_require__(284),
-  pickBy: __webpack_require__(697),
-  pipe: __webpack_require__(285),
-  pipeK: __webpack_require__(698),
-  pipeP: __webpack_require__(286),
+  pathEq: __webpack_require__(694),
+  pathOr: __webpack_require__(695),
+  pathSatisfies: __webpack_require__(696),
+  pick: __webpack_require__(697),
+  pickAll: __webpack_require__(285),
+  pickBy: __webpack_require__(698),
+  pipe: __webpack_require__(286),
+  pipeK: __webpack_require__(699),
+  pipeP: __webpack_require__(287),
   pluck: __webpack_require__(97),
-  prepend: __webpack_require__(287),
-  product: __webpack_require__(699),
-  project: __webpack_require__(700),
-  prop: __webpack_require__(175),
-  propEq: __webpack_require__(701),
-  propIs: __webpack_require__(702),
-  propOr: __webpack_require__(703),
-  propSatisfies: __webpack_require__(704),
-  props: __webpack_require__(705),
-  range: __webpack_require__(706),
+  prepend: __webpack_require__(288),
+  product: __webpack_require__(700),
+  project: __webpack_require__(701),
+  prop: __webpack_require__(176),
+  propEq: __webpack_require__(702),
+  propIs: __webpack_require__(703),
+  propOr: __webpack_require__(704),
+  propSatisfies: __webpack_require__(705),
+  props: __webpack_require__(706),
+  range: __webpack_require__(707),
   reduce: __webpack_require__(48),
   reduceBy: __webpack_require__(127),
-  reduceRight: __webpack_require__(288),
-  reduceWhile: __webpack_require__(707),
-  reduced: __webpack_require__(708),
+  reduceRight: __webpack_require__(289),
+  reduceWhile: __webpack_require__(708),
+  reduced: __webpack_require__(709),
   reject: __webpack_require__(128),
-  remove: __webpack_require__(709),
-  repeat: __webpack_require__(710),
-  replace: __webpack_require__(711),
+  remove: __webpack_require__(710),
+  repeat: __webpack_require__(711),
+  replace: __webpack_require__(712),
   reverse: __webpack_require__(129),
-  scan: __webpack_require__(712),
-  sequence: __webpack_require__(289),
-  set: __webpack_require__(713),
+  scan: __webpack_require__(713),
+  sequence: __webpack_require__(290),
+  set: __webpack_require__(714),
   slice: __webpack_require__(72),
-  sort: __webpack_require__(714),
-  sortBy: __webpack_require__(715),
-  sortWith: __webpack_require__(716),
-  split: __webpack_require__(717),
-  splitAt: __webpack_require__(718),
-  splitEvery: __webpack_require__(719),
-  splitWhen: __webpack_require__(720),
-  subtract: __webpack_require__(721),
-  sum: __webpack_require__(290),
-  symmetricDifference: __webpack_require__(722),
-  symmetricDifferenceWith: __webpack_require__(723),
-  tail: __webpack_require__(176),
-  take: __webpack_require__(291),
-  takeLast: __webpack_require__(724),
-  takeLastWhile: __webpack_require__(725),
-  takeWhile: __webpack_require__(726),
-  tap: __webpack_require__(727),
-  test: __webpack_require__(728),
-  times: __webpack_require__(292),
-  toLower: __webpack_require__(729),
-  toPairs: __webpack_require__(730),
-  toPairsIn: __webpack_require__(731),
+  sort: __webpack_require__(715),
+  sortBy: __webpack_require__(716),
+  sortWith: __webpack_require__(717),
+  split: __webpack_require__(718),
+  splitAt: __webpack_require__(719),
+  splitEvery: __webpack_require__(720),
+  splitWhen: __webpack_require__(721),
+  subtract: __webpack_require__(722),
+  sum: __webpack_require__(291),
+  symmetricDifference: __webpack_require__(723),
+  symmetricDifferenceWith: __webpack_require__(724),
+  tail: __webpack_require__(177),
+  take: __webpack_require__(292),
+  takeLast: __webpack_require__(725),
+  takeLastWhile: __webpack_require__(726),
+  takeWhile: __webpack_require__(727),
+  tap: __webpack_require__(728),
+  test: __webpack_require__(729),
+  times: __webpack_require__(293),
+  toLower: __webpack_require__(730),
+  toPairs: __webpack_require__(731),
+  toPairsIn: __webpack_require__(732),
   toString: __webpack_require__(98),
-  toUpper: __webpack_require__(732),
-  transduce: __webpack_require__(733),
-  transpose: __webpack_require__(734),
-  traverse: __webpack_require__(735),
-  trim: __webpack_require__(736),
-  tryCatch: __webpack_require__(737),
-  type: __webpack_require__(177),
-  unapply: __webpack_require__(738),
-  unary: __webpack_require__(739),
-  uncurryN: __webpack_require__(740),
-  unfold: __webpack_require__(741),
-  union: __webpack_require__(742),
-  unionWith: __webpack_require__(743),
-  uniq: __webpack_require__(178),
-  uniqBy: __webpack_require__(293),
-  uniqWith: __webpack_require__(179),
-  unless: __webpack_require__(744),
-  unnest: __webpack_require__(745),
-  until: __webpack_require__(746),
-  update: __webpack_require__(294),
-  useWith: __webpack_require__(295),
-  values: __webpack_require__(296),
-  valuesIn: __webpack_require__(747),
-  view: __webpack_require__(748),
-  when: __webpack_require__(749),
-  where: __webpack_require__(297),
-  whereEq: __webpack_require__(750),
-  without: __webpack_require__(751),
-  xprod: __webpack_require__(752),
-  zip: __webpack_require__(753),
-  zipObj: __webpack_require__(754),
-  zipWith: __webpack_require__(755)
+  toUpper: __webpack_require__(733),
+  transduce: __webpack_require__(734),
+  transpose: __webpack_require__(735),
+  traverse: __webpack_require__(736),
+  trim: __webpack_require__(737),
+  tryCatch: __webpack_require__(738),
+  type: __webpack_require__(178),
+  unapply: __webpack_require__(739),
+  unary: __webpack_require__(740),
+  uncurryN: __webpack_require__(741),
+  unfold: __webpack_require__(742),
+  union: __webpack_require__(743),
+  unionWith: __webpack_require__(744),
+  uniq: __webpack_require__(179),
+  uniqBy: __webpack_require__(294),
+  uniqWith: __webpack_require__(180),
+  unless: __webpack_require__(745),
+  unnest: __webpack_require__(746),
+  until: __webpack_require__(747),
+  update: __webpack_require__(295),
+  useWith: __webpack_require__(296),
+  values: __webpack_require__(297),
+  valuesIn: __webpack_require__(748),
+  view: __webpack_require__(749),
+  when: __webpack_require__(750),
+  where: __webpack_require__(298),
+  whereEq: __webpack_require__(751),
+  without: __webpack_require__(752),
+  xprod: __webpack_require__(753),
+  zip: __webpack_require__(754),
+  zipObj: __webpack_require__(755),
+  zipWith: __webpack_require__(756)
 };
 
 
@@ -7000,7 +7000,7 @@ module.exports = _curry2(function lens(getter, setter) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
-var liftN = __webpack_require__(276);
+var liftN = __webpack_require__(277);
 
 
 /**
@@ -7092,7 +7092,7 @@ var _curryN = __webpack_require__(119);
 var _dispatchable = __webpack_require__(15);
 var _has = __webpack_require__(23);
 var _reduce = __webpack_require__(34);
-var _xreduceBy = __webpack_require__(650);
+var _xreduceBy = __webpack_require__(651);
 
 
 /**
@@ -7153,9 +7153,9 @@ module.exports = _curryN(4, [], _dispatchable([], _xreduceBy,
 /* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _complement = __webpack_require__(260);
+var _complement = __webpack_require__(261);
 var _curry2 = __webpack_require__(0);
-var filter = __webpack_require__(169);
+var filter = __webpack_require__(170);
 
 
 /**
@@ -7503,11 +7503,11 @@ module.exports = EventPluginRegistry;
 var _assign = __webpack_require__(12);
 
 var EventPluginRegistry = __webpack_require__(130);
-var ReactEventEmitterMixin = __webpack_require__(789);
-var ViewportMetrics = __webpack_require__(310);
+var ReactEventEmitterMixin = __webpack_require__(790);
+var ViewportMetrics = __webpack_require__(311);
 
-var getVendorPrefixedEventName = __webpack_require__(824);
-var isEventSupported = __webpack_require__(192);
+var getVendorPrefixedEventName = __webpack_require__(825);
+var isEventSupported = __webpack_require__(193);
 
 /**
  * Summary of `ReactBrowserEventEmitter` event handling:
@@ -7834,9 +7834,9 @@ module.exports = ReactBrowserEventEmitter;
 
 
 var SyntheticUIEvent = __webpack_require__(102);
-var ViewportMetrics = __webpack_require__(310);
+var ViewportMetrics = __webpack_require__(311);
 
-var getEventModifierState = __webpack_require__(190);
+var getEventModifierState = __webpack_require__(191);
 
 /**
  * @interface MouseEvent
@@ -8269,12 +8269,12 @@ module.exports = escapeTextContentForBrowser;
 
 
 var ExecutionEnvironment = __webpack_require__(19);
-var DOMNamespaces = __webpack_require__(181);
+var DOMNamespaces = __webpack_require__(182);
 
 var WHITESPACE_TEST = /^[ \r\n\t\f]/;
 var NONVISIBLE_TEST = /<(!--|link|noscript|meta|script|style)[ \r\n\t\f\/>]/;
 
-var createMicrosoftUnsafeLocalFunction = __webpack_require__(188);
+var createMicrosoftUnsafeLocalFunction = __webpack_require__(189);
 
 // SVG temp container for IE lacking innerHTML
 var reusableSVGContainer;
@@ -8387,13 +8387,40 @@ module.exports = canDefineProperty;
 
 /***/ }),
 /* 137 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(31);
-var normalizeHeaderName = __webpack_require__(340);
+var normalizeHeaderName = __webpack_require__(341);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -8486,7 +8513,7 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(91)))
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8507,7 +8534,7 @@ module.exports = function fill(value /*, start = 0, end = @length */){
 };
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8521,7 +8548,7 @@ module.exports = function(object, index, value){
 };
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(10)
@@ -8533,7 +8560,7 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 141 */
+/* 142 */
 /***/ (function(module, exports) {
 
 // IE 8- don't enum bug keys
@@ -8542,7 +8569,7 @@ module.exports = (
 ).split(',');
 
 /***/ }),
-/* 142 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var MATCH = __webpack_require__(11)('match');
@@ -8559,17 +8586,17 @@ module.exports = function(KEY){
 };
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(7).document && document.documentElement;
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject       = __webpack_require__(10)
-  , setPrototypeOf = __webpack_require__(152).set;
+  , setPrototypeOf = __webpack_require__(153).set;
 module.exports = function(that, target, C){
   var P, S = target.constructor;
   if(S !== C && typeof S == 'function' && (P = S.prototype) !== C.prototype && isObject(P) && setPrototypeOf){
@@ -8578,7 +8605,7 @@ module.exports = function(that, target, C){
 };
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // check on default Array iterator
@@ -8591,7 +8618,7 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.2.2 IsArray(argument)
@@ -8601,7 +8628,7 @@ module.exports = Array.isArray || function isArray(arg){
 };
 
 /***/ }),
-/* 147 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8620,7 +8647,7 @@ module.exports = function(Constructor, NAME, next){
 };
 
 /***/ }),
-/* 148 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8631,7 +8658,7 @@ var LIBRARY        = __webpack_require__(63)
   , hide           = __webpack_require__(25)
   , has            = __webpack_require__(22)
   , Iterators      = __webpack_require__(78)
-  , $iterCreate    = __webpack_require__(147)
+  , $iterCreate    = __webpack_require__(148)
   , setToStringTag = __webpack_require__(79)
   , getPrototypeOf = __webpack_require__(33)
   , ITERATOR       = __webpack_require__(11)('iterator')
@@ -8696,7 +8723,7 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED
 };
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ (function(module, exports) {
 
 // 20.2.2.14 Math.expm1(x)
@@ -8711,7 +8738,7 @@ module.exports = (!$expm1
 } : $expm1;
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ (function(module, exports) {
 
 // 20.2.2.28 Math.sign(x)
@@ -8720,11 +8747,11 @@ module.exports = Math.sign || function sign(x){
 };
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global    = __webpack_require__(7)
-  , macrotask = __webpack_require__(159).set
+  , macrotask = __webpack_require__(160).set
   , Observer  = global.MutationObserver || global.WebKitMutationObserver
   , process   = global.process
   , Promise   = global.Promise
@@ -8793,7 +8820,7 @@ module.exports = function(){
 };
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Works with __proto__ only. Old v8 can't work with null proto objects.
@@ -8823,7 +8850,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var shared = __webpack_require__(112)('keys')
@@ -8833,7 +8860,7 @@ module.exports = function(key){
 };
 
 /***/ }),
-/* 154 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.3.20 SpeciesConstructor(O, defaultConstructor)
@@ -8846,7 +8873,7 @@ module.exports = function(O, D){
 };
 
 /***/ }),
-/* 155 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var toInteger = __webpack_require__(58)
@@ -8868,7 +8895,7 @@ module.exports = function(TO_STRING){
 };
 
 /***/ }),
-/* 156 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // helper for String#{startsWith, endsWith, includes}
@@ -8881,7 +8908,7 @@ module.exports = function(that, searchString, NAME){
 };
 
 /***/ }),
-/* 157 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8899,20 +8926,20 @@ module.exports = function repeat(count){
 };
 
 /***/ }),
-/* 158 */
+/* 159 */
 /***/ (function(module, exports) {
 
 module.exports = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003' +
   '\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
 
 /***/ }),
-/* 159 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var ctx                = __webpack_require__(52)
   , invoke             = __webpack_require__(107)
-  , html               = __webpack_require__(143)
-  , cel                = __webpack_require__(140)
+  , html               = __webpack_require__(144)
+  , cel                = __webpack_require__(141)
   , global             = __webpack_require__(7)
   , process            = global.process
   , setTask            = global.setImmediate
@@ -8986,7 +9013,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 160 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9003,7 +9030,7 @@ var global         = __webpack_require__(7)
   , toLength       = __webpack_require__(18)
   , gOPN           = __webpack_require__(65).f
   , dP             = __webpack_require__(14).f
-  , arrayFill      = __webpack_require__(138)
+  , arrayFill      = __webpack_require__(139)
   , setToStringTag = __webpack_require__(79)
   , ARRAY_BUFFER   = 'ArrayBuffer'
   , DATA_VIEW      = 'DataView'
@@ -9265,13 +9292,13 @@ exports[ARRAY_BUFFER] = $ArrayBuffer;
 exports[DATA_VIEW] = $DataView;
 
 /***/ }),
-/* 161 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global         = __webpack_require__(7)
   , core           = __webpack_require__(51)
   , LIBRARY        = __webpack_require__(63)
-  , wksExt         = __webpack_require__(228)
+  , wksExt         = __webpack_require__(229)
   , defineProperty = __webpack_require__(14).f;
 module.exports = function(name){
   var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
@@ -9279,7 +9306,7 @@ module.exports = function(name){
 };
 
 /***/ }),
-/* 162 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var classof   = __webpack_require__(87)
@@ -9292,13 +9319,13 @@ module.exports = __webpack_require__(51).getIteratorMethod = function(it){
 };
 
 /***/ }),
-/* 163 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var addToUnscopables = __webpack_require__(76)
-  , step             = __webpack_require__(216)
+  , step             = __webpack_require__(217)
   , Iterators        = __webpack_require__(78)
   , toIObject        = __webpack_require__(28);
 
@@ -9306,7 +9333,7 @@ var addToUnscopables = __webpack_require__(76)
 // 22.1.3.13 Array.prototype.keys()
 // 22.1.3.29 Array.prototype.values()
 // 22.1.3.30 Array.prototype[@@iterator]()
-module.exports = __webpack_require__(148)(Array, 'Array', function(iterated, kind){
+module.exports = __webpack_require__(149)(Array, 'Array', function(iterated, kind){
   this._t = toIObject(iterated); // target
   this._i = 0;                   // next index
   this._k = kind;                // kind
@@ -9332,7 +9359,7 @@ addToUnscopables('values');
 addToUnscopables('entries');
 
 /***/ }),
-/* 164 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9405,7 +9432,7 @@ function shallowEqual(objA, objB) {
 module.exports = shallowEqual;
 
 /***/ }),
-/* 165 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _concat = __webpack_require__(41);
@@ -9448,13 +9475,13 @@ module.exports = _curry2(function ap(applicative, fn) {
 
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _makeFlat = __webpack_require__(268);
-var _xchain = __webpack_require__(639);
+var _makeFlat = __webpack_require__(269);
+var _xchain = __webpack_require__(640);
 var map = __webpack_require__(29);
 
 
@@ -9489,10 +9516,10 @@ module.exports = _curry2(_dispatchable(['chain'], _xchain, function chain(fn, mo
 
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var pipe = __webpack_require__(285);
+var pipe = __webpack_require__(286);
 var reverse = __webpack_require__(129);
 
 
@@ -9529,7 +9556,7 @@ module.exports = function compose() {
 
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -9576,15 +9603,15 @@ module.exports = _curry2(function concat(a, b) {
 
 
 /***/ }),
-/* 169 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _filter = __webpack_require__(262);
-var _isObject = __webpack_require__(267);
+var _filter = __webpack_require__(263);
+var _isObject = __webpack_require__(268);
 var _reduce = __webpack_require__(34);
-var _xfilter = __webpack_require__(644);
+var _xfilter = __webpack_require__(645);
 var keys = __webpack_require__(47);
 
 
@@ -9630,11 +9657,11 @@ module.exports = _curry2(_dispatchable(['filter'], _xfilter, function(pred, filt
 
 
 /***/ }),
-/* 170 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
-var _identity = __webpack_require__(173);
+var _identity = __webpack_require__(174);
 
 
 /**
@@ -9660,17 +9687,17 @@ module.exports = _curry1(_identity);
 
 
 /***/ }),
-/* 171 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _objectAssign = __webpack_require__(629);
+var _objectAssign = __webpack_require__(630);
 
 module.exports =
   typeof Object.assign === 'function' ? Object.assign : _objectAssign;
 
 
 /***/ }),
-/* 172 */
+/* 173 */
 /***/ (function(module, exports) {
 
 module.exports = function _containsWith(pred, x, list) {
@@ -9688,14 +9715,14 @@ module.exports = function _containsWith(pred, x, list) {
 
 
 /***/ }),
-/* 173 */
+/* 174 */
 /***/ (function(module, exports) {
 
 module.exports = function _identity(x) { return x; };
 
 
 /***/ }),
-/* 174 */
+/* 175 */
 /***/ (function(module, exports) {
 
 module.exports = function _isTransformer(obj) {
@@ -9704,7 +9731,7 @@ module.exports = function _isTransformer(obj) {
 
 
 /***/ }),
-/* 175 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -9732,7 +9759,7 @@ module.exports = _curry2(function prop(p, obj) { return obj[p]; });
 
 
 /***/ }),
-/* 176 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _checkForMethod = __webpack_require__(92);
@@ -9771,7 +9798,7 @@ module.exports = _curry1(_checkForMethod('tail', slice(1, Infinity)));
 
 
 /***/ }),
-/* 177 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -9808,11 +9835,11 @@ module.exports = _curry1(function type(val) {
 
 
 /***/ }),
-/* 178 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var identity = __webpack_require__(170);
-var uniqBy = __webpack_require__(293);
+var identity = __webpack_require__(171);
+var uniqBy = __webpack_require__(294);
 
 
 /**
@@ -9836,10 +9863,10 @@ module.exports = uniqBy(identity);
 
 
 /***/ }),
-/* 179 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _containsWith = __webpack_require__(172);
+var _containsWith = __webpack_require__(173);
 var _curry2 = __webpack_require__(0);
 
 
@@ -9882,7 +9909,7 @@ module.exports = _curry2(function uniqWith(pred, list) {
 
 
 /***/ }),
-/* 180 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9899,13 +9926,13 @@ module.exports = _curry2(function uniqWith(pred, list) {
 
 
 var DOMLazyTree = __webpack_require__(84);
-var Danger = __webpack_require__(762);
+var Danger = __webpack_require__(763);
 var ReactDOMComponentTree = __webpack_require__(16);
 var ReactInstrumentation = __webpack_require__(35);
 
-var createMicrosoftUnsafeLocalFunction = __webpack_require__(188);
+var createMicrosoftUnsafeLocalFunction = __webpack_require__(189);
 var setInnerHTML = __webpack_require__(135);
-var setTextContent = __webpack_require__(317);
+var setTextContent = __webpack_require__(318);
 
 function getNodeAfter(parentNode, node) {
   // Special case for text components, which return [open, close] comments
@@ -10112,7 +10139,7 @@ var DOMChildrenOperations = {
 module.exports = DOMChildrenOperations;
 
 /***/ }),
-/* 181 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10137,7 +10164,7 @@ var DOMNamespaces = {
 module.exports = DOMNamespaces;
 
 /***/ }),
-/* 182 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10155,7 +10182,7 @@ module.exports = DOMNamespaces;
 
 var _prodInvariant = __webpack_require__(9);
 
-var ReactErrorUtils = __webpack_require__(186);
+var ReactErrorUtils = __webpack_require__(187);
 
 var invariant = __webpack_require__(4);
 var warning = __webpack_require__(5);
@@ -10368,7 +10395,7 @@ var EventPluginUtils = {
 module.exports = EventPluginUtils;
 
 /***/ }),
-/* 183 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10432,7 +10459,7 @@ var KeyEscapeUtils = {
 module.exports = KeyEscapeUtils;
 
 /***/ }),
-/* 184 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10450,8 +10477,8 @@ module.exports = KeyEscapeUtils;
 
 var _prodInvariant = __webpack_require__(9);
 
-var ReactPropTypesSecret = __webpack_require__(309);
-var propTypesFactory = __webpack_require__(236);
+var ReactPropTypesSecret = __webpack_require__(310);
+var propTypesFactory = __webpack_require__(237);
 
 var React = __webpack_require__(86);
 var PropTypes = propTypesFactory(React.isValidElement);
@@ -10575,7 +10602,7 @@ var LinkedValueUtils = {
 module.exports = LinkedValueUtils;
 
 /***/ }),
-/* 185 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10626,7 +10653,7 @@ var ReactComponentEnvironment = {
 module.exports = ReactComponentEnvironment;
 
 /***/ }),
-/* 186 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10707,7 +10734,7 @@ if (true) {
 module.exports = ReactErrorUtils;
 
 /***/ }),
-/* 187 */
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10948,7 +10975,7 @@ var ReactUpdateQueue = {
 module.exports = ReactUpdateQueue;
 
 /***/ }),
-/* 188 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10985,7 +11012,7 @@ var createMicrosoftUnsafeLocalFunction = function (func) {
 module.exports = createMicrosoftUnsafeLocalFunction;
 
 /***/ }),
-/* 189 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11040,7 +11067,7 @@ function getEventCharCode(nativeEvent) {
 module.exports = getEventCharCode;
 
 /***/ }),
-/* 190 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11088,7 +11115,7 @@ function getEventModifierState(nativeEvent) {
 module.exports = getEventModifierState;
 
 /***/ }),
-/* 191 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11128,7 +11155,7 @@ function getEventTarget(nativeEvent) {
 module.exports = getEventTarget;
 
 /***/ }),
-/* 192 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11193,7 +11220,7 @@ function isEventSupported(eventNameSuffix, capture) {
 module.exports = isEventSupported;
 
 /***/ }),
-/* 193 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11240,7 +11267,7 @@ function shouldUpdateReactComponent(prevElement, nextElement) {
 module.exports = shouldUpdateReactComponent;
 
 /***/ }),
-/* 194 */
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11622,7 +11649,7 @@ if (true) {
 module.exports = validateDOMNesting;
 
 /***/ }),
-/* 195 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11781,7 +11808,7 @@ SVGInline.cleanupSvg = function (svg) {
 exports.default = SVGInline;
 
 /***/ }),
-/* 196 */
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11799,7 +11826,7 @@ exports.default = SVGInline;
 
 var _prodInvariant = __webpack_require__(75);
 
-var ReactNoopUpdateQueue = __webpack_require__(197);
+var ReactNoopUpdateQueue = __webpack_require__(198);
 
 var canDefineProperty = __webpack_require__(136);
 var emptyObject = __webpack_require__(90);
@@ -11904,7 +11931,7 @@ if (true) {
 module.exports = ReactComponent;
 
 /***/ }),
-/* 197 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12005,33 +12032,6 @@ var ReactNoopUpdateQueue = {
 module.exports = ReactNoopUpdateQueue;
 
 /***/ }),
-/* 198 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
 /* 199 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -12039,12 +12039,12 @@ module.exports = g;
 
 
 var utils = __webpack_require__(31);
-var settle = __webpack_require__(332);
-var buildURL = __webpack_require__(335);
-var parseHeaders = __webpack_require__(341);
-var isURLSameOrigin = __webpack_require__(339);
+var settle = __webpack_require__(333);
+var buildURL = __webpack_require__(336);
+var parseHeaders = __webpack_require__(342);
+var isURLSameOrigin = __webpack_require__(340);
 var createError = __webpack_require__(202);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(334);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(335);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -12140,7 +12140,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(337);
+      var cookies = __webpack_require__(338);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -12262,7 +12262,7 @@ module.exports = function isCancel(value) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(331);
+var enhanceError = __webpack_require__(332);
 
 /**
  * Create an Error with the specified message, config, error code, and response.
@@ -12309,13 +12309,14 @@ var api = {
     getMakes: function getMakes() {
         return window.axios.get('/api/makes');
     },
-    getDeals: function getDeals(make_ids, body_styles, includes, sort) {
+    getDeals: function getDeals(make_ids, body_styles, includes, sort, page) {
         return window.axios.get('/api/deals', {
             params: {
                 make_ids: make_ids,
                 body_styles: body_styles,
                 includes: includes,
-                sort: sort
+                sort: sort,
+                page: page
             }
         });
     }
@@ -12325,6 +12326,13 @@ var api = {
 
 /***/ }),
 /* 205 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({ "add-outline": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M11 9h4v2h-4v4H9v-4H5V9h4V5h2v4zm-1 11a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z\"/></svg>", "add-solid": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M11 9V5H9v4H5v2h4v4h2v-4h4V9h-4zm-1 11a10 10 0 1 1 0-20 10 10 0 0 1 0 20z\"/></svg>", "adjust": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 2v16a8 8 0 1 0 0-16zm0 18a10 10 0 1 1 0-20 10 10 0 0 1 0 20z\"/></svg>", "airplane": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M8.4 12H2.8L1 15H0V5h1l1.8 3h5.6L6 0h2l4.8 8H18a2 2 0 1 1 0 4h-5.2L8 20H6l2.4-8z\"/></svg>", "album": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 0h20v20H0V0zm10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm0-5a3 3 0 1 1 0-6 3 3 0 0 1 0 6z\"/></svg>", "align-center": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M1 1h18v2H1V1zm0 8h18v2H1V9zm0 8h18v2H1v-2zM4 5h12v2H4V5zm0 8h12v2H4v-2z\"/></svg>", "align-justified": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M1 1h18v2H1V1zm0 8h18v2H1V9zm0 8h18v2H1v-2zM1 5h18v2H1V5zm0 8h18v2H1v-2z\"/></svg>", "align-left": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M1 1h18v2H1V1zm0 8h18v2H1V9zm0 8h18v2H1v-2zM1 5h12v2H1V5zm0 8h12v2H1v-2z\"/></svg>", "align-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M1 1h18v2H1V1zm0 8h18v2H1V9zm0 8h18v2H1v-2zM7 5h12v2H7V5zm0 8h12v2H7v-2z\"/></svg>", "anchor": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M4.34 15.66A7.97 7.97 0 0 0 9 17.94V10H5V8h4V5.83a3 3 0 1 1 2 0V8h4v2h-4v7.94a7.97 7.97 0 0 0 4.66-2.28l-1.42-1.42h5.66l-2.83 2.83a10 10 0 0 1-14.14 0L.1 14.24h5.66l-1.42 1.42zM10 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z\"/></svg>", "announcement": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M3 6c0-1.1.9-2 2-2h8l4-4h2v16h-2l-4-4H5a2 2 0 0 1-2-2H1V6h2zm8 9v5H8l-1.67-5H5v-2h8v2h-2z\"/></svg>", "apparel": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M7 0H6L0 3v6l4-1v12h12V8l4 1V3l-6-3h-1a3 3 0 0 1-6 0z\"/></svg>", "arrow-down": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"9 16.172 2.929 10.101 1.515 11.515 10 20 10.707 19.293 18.485 11.515 17.071 10.101 11 16.172 11 0 9 0\"/></svg>", "arrow-left": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"3.828 9 9.899 2.929 8.485 1.515 0 10 .707 10.707 8.485 18.485 9.899 17.071 3.828 11 20 11 20 9 3.828 9\"/></svg>", "arrow-outline-down": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-2-8V5h4v5h3l-5 5-5-5h3z\"/></svg>", "arrow-outline-left": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 10a10 10 0 1 1 20 0 10 10 0 0 1-20 0zm2 0a8 8 0 1 0 16 0 8 8 0 0 0-16 0zm8-2h5v4h-5v3l-5-5 5-5v3z\"/></svg>", "arrow-outline-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M20 10a10 10 0 1 1-20 0 10 10 0 0 1 20 0zm-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0zm-8 2H5V8h5V5l5 5-5 5v-3z\"/></svg>", "arrow-outline-up": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 0a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm2 8v5H8v-5H5l5-5 5 5h-3z\"/></svg>", "arrow-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"16.172 9 10.101 2.929 11.515 1.515 20 10 19.293 10.707 11.515 18.485 10.101 17.071 16.172 11 0 11 0 9\"/></svg>", "arrow-thick-down": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M7 10V2h6v8h5l-8 8-8-8h5z\"/></svg>", "arrow-thick-left": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"10 13 18 13 18 7 10 7 10 2 2 10 10 18 10 13\"/></svg>", "arrow-thick-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"10 7 2 7 2 13 10 13 10 18 18 10 10 2 10 7\"/></svg>", "arrow-thick-up": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"7 10 7 18 13 18 13 10 18 10 10 2 2 10 7 10\"/></svg>", "arrow-up": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"9 3.828 2.929 9.899 1.515 8.485 10 0 10.707 .707 18.485 8.485 17.071 9.899 11 3.828 11 20 9 20 9 3.828\"/></svg>", "artist": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M15.75 8l-3.74-3.75a3.99 3.99 0 0 1 6.82-3.08A4 4 0 0 1 15.75 8zM1.85 15.3l9.2-9.19 2.83 2.83-9.2 9.2-2.82-2.84zm-1.4 2.83l2.11-2.12 1.42 1.42-2.12 2.12-1.42-1.42zM10 15l2-2v7h-2v-5z\"/></svg>", "at-symbol": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M13.6 13.47A4.99 4.99 0 0 1 5 10a5 5 0 0 1 8-4V5h2v6.5a1.5 1.5 0 0 0 3 0V10a8 8 0 1 0-4.42 7.16l.9 1.79A10 10 0 1 1 20 10h-.18.17v1.5a3.5 3.5 0 0 1-6.4 1.97zM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z\"/></svg>", "attachment": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M15 3H7a7 7 0 1 0 0 14h8v-2H7A5 5 0 0 1 7 5h8a3 3 0 0 1 0 6H7a1 1 0 0 1 0-2h8V7H7a3 3 0 1 0 0 6h8a5 5 0 0 0 0-10z\"/></svg>", "backspace": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 10l7-7h13v14H7l-7-7zm14.41 0l2.13-2.12-1.42-1.42L13 8.6l-2.12-2.13-1.42 1.42L11.6 10l-2.13 2.12 1.42 1.42L13 11.4l2.12 2.13 1.42-1.42L14.4 10z\"/></svg>", "backward-step": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M4 5h3v10H4V5zm12 0v10l-9-5 9-5z\"/></svg>", "backward": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M19 5v10l-9-5 9-5zm-9 0v10l-9-5 9-5z\"/></svg>", "badge": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 12a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-3a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm4 2.75V20l-4-4-4 4v-8.25a6.97 6.97 0 0 0 8 0z\"/></svg>", "battery-full": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 6c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6zm2 0v8h16V6H2zm1 1h4v6H3V7zm5 0h4v6H8V7zm5 0h4v6h-4V7z\"/></svg>", "battery-half": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 6c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6zm2 0v8h16V6H2zm1 1h4v6H3V7zm5 0h4v6H8V7z\"/></svg>", "battery-low": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 6c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6zm2 0v8h16V6H2zm1 1h4v6H3V7z\"/></svg>", "beverage": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M9 18v-7L0 2V0h20v2l-9 9v7l5 1v1H4v-1l5-1zm2-10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z\"/></svg>", "block": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M16.32 5.1A8 8 0 0 1 5.09 16.32L16.32 5.08zm-1.41-1.42A8 8 0 0 0 3.68 14.91L14.91 3.68zM0 10a10 10 0 1 0 20 0 10 10 0 0 0-20 0z\"/></svg>", "bluetooth": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M9.41 0l6 6-4 4 4 4-6 6H9v-7.59l-3.3 3.3-1.4-1.42L8.58 10l-4.3-4.3 1.42-1.4L9 7.58V0h.41zM11 4.41V7.6L12.59 6 11 4.41zM12.59 14L11 12.41v3.18L12.59 14z\"/></svg>", "bolt": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M13 8V0L8.11 5.87 3 12h4v8L17 8h-4z\"/></svg>", "book-reference": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M6 4H5a1 1 0 1 1 0-2h11V1a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V5a1 1 0 0 0-1-1h-7v8l-2-2-2 2V4z\"/></svg>", "bookmark copy 2": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"18 12 18 13 8 13 8 18 2 12 8 6 8 11 16 11 16 2 18 2\"/></svg>", "bookmark copy 3": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"3.5 13 12 13 12 18 18 12 12 6 12 11 4 11 4 2 2 2 2 13\"/></svg>", "bookmark-outline-add": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2 2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v18l-8-4-8 4V2zm2 0v15l6-3 6 3V2H4zm5 5V5h2v2h2v2h-2v2H9V9H7V7h2z\"/></svg>", "bookmark-outline": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2 2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v18l-8-4-8 4V2zm2 0v15l6-3 6 3V2H4z\"/></svg>", "bookmark": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2 2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v18l-8-4-8 4V2z\"/></svg>", "border-all": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M11 11v6h6v-6h-6zm0-2h6V3h-6v6zm-2 2H3v6h6v-6zm0-2V3H3v6h6zm-8 9V1h18v18H1v-1z\"/></svg>", "border-bottom": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M1 1h2v2H1V1zm0 4h2v2H1V5zm0 4h2v2H1V9zm0 4h2v2H1v-2zm0 4h18v2H1v-2zM5 1h2v2H5V1zm0 8h2v2H5V9zm4-8h2v2H9V1zm0 4h2v2H9V5zm0 4h2v2H9V9zm0 4h2v2H9v-2zm4-12h2v2h-2V1zm0 8h2v2h-2V9zm4-8h2v2h-2V1zm0 4h2v2h-2V5zm0 4h2v2h-2V9zm0 4h2v2h-2v-2z\"/></svg>", "border-horizontal": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M1 1h2v2H1V1zm0 4h2v2H1V5zm0 4h18v2H1V9zm0 4h2v2H1v-2zm0 4h2v2H1v-2zM5 1h2v2H5V1zm0 16h2v2H5v-2zM9 1h2v2H9V1zm0 4h2v2H9V5zm0 8h2v2H9v-2zm0 4h2v2H9v-2zm4-16h2v2h-2V1zm0 16h2v2h-2v-2zm4-16h2v2h-2V1zm0 4h2v2h-2V5zm0 8h2v2h-2v-2zm0 4h2v2h-2v-2z\"/></svg>", "border-inner": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M9 9V1h2v8h8v2h-8v8H9v-8H1V9h8zM1 1h2v2H1V1zm0 4h2v2H1V5zm0 8h2v2H1v-2zm0 4h2v2H1v-2zM5 1h2v2H5V1zm0 16h2v2H5v-2zm8-16h2v2h-2V1zm0 16h2v2h-2v-2zm4-16h2v2h-2V1zm0 4h2v2h-2V5zm0 8h2v2h-2v-2zm0 4h2v2h-2v-2z\"/></svg>", "border-left": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M1 1h2v18H1V1zm4 0h2v2H5V1zm0 8h2v2H5V9zm0 8h2v2H5v-2zM9 1h2v2H9V1zm0 4h2v2H9V5zm0 4h2v2H9V9zm0 4h2v2H9v-2zm0 4h2v2H9v-2zm4-16h2v2h-2V1zm0 8h2v2h-2V9zm0 8h2v2h-2v-2zm4-16h2v2h-2V1zm0 4h2v2h-2V5zm0 4h2v2h-2V9zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2z\"/></svg>", "border-none": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M1 1h2v2H1V1zm0 4h2v2H1V5zm0 4h2v2H1V9zm0 4h2v2H1v-2zm0 4h2v2H1v-2zM5 1h2v2H5V1zm0 8h2v2H5V9zm0 8h2v2H5v-2zM9 1h2v2H9V1zm0 4h2v2H9V5zm0 4h2v2H9V9zm0 4h2v2H9v-2zm0 4h2v2H9v-2zm4-16h2v2h-2V1zm0 8h2v2h-2V9zm0 8h2v2h-2v-2zm4-16h2v2h-2V1zm0 4h2v2h-2V5zm0 4h2v2h-2V9zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2z\"/></svg>", "border-outer": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2 19H1V1h18v18H2zm1-2h14V3H3v14zm10-8h2v2h-2V9zM9 9h2v2H9V9zM5 9h2v2H5V9zm4-4h2v2H9V5zm0 8h2v2H9v-2z\"/></svg>", "border-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M5 1h2v2H5V1zm0 8h2v2H5V9zm0 8h2v2H5v-2zM9 1h2v2H9V1zm0 4h2v2H9V5zm0 4h2v2H9V9zm0 4h2v2H9v-2zm0 4h2v2H9v-2zm4-16h2v2h-2V1zm0 8h2v2h-2V9zm0 8h2v2h-2v-2zM1 1h2v2H1V1zm0 4h2v2H1V5zm0 4h2v2H1V9zm0 4h2v2H1v-2zm0 4h2v2H1v-2zM17 1h2v18h-2V1z\"/></svg>", "border-top": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M1 1h18v2H1V1zm0 4h2v2H1V5zm0 4h2v2H1V9zm0 4h2v2H1v-2zm0 4h2v2H1v-2zm4-8h2v2H5V9zm0 8h2v2H5v-2zM9 5h2v2H9V5zm0 4h2v2H9V9zm0 4h2v2H9v-2zm0 4h2v2H9v-2zm4-8h2v2h-2V9zm0 8h2v2h-2v-2zm4-12h2v2h-2V5zm0 4h2v2h-2V9zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2z\"/></svg>", "border-vertical": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M1 1h2v2H1V1zm0 4h2v2H1V5zm0 4h2v2H1V9zm0 4h2v2H1v-2zm0 4h2v2H1v-2zM5 1h2v2H5V1zm0 8h2v2H5V9zm0 8h2v2H5v-2zM9 1h2v18H9V1zm4 0h2v2h-2V1zm0 8h2v2h-2V9zm0 8h2v2h-2v-2zm4-16h2v2h-2V1zm0 4h2v2h-2V5zm0 4h2v2h-2V9zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2z\"/></svg>", "box": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v2H0V2zm1 3h18v13a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5zm6 2v2h6V7H7z\"/></svg>", "brightness-down": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 13a3 3 0 1 1 0-6 3 3 0 0 1 0 6zM9 4a1 1 0 1 1 2 0 1 1 0 1 1-2 0zm4.54 1.05a1 1 0 1 1 1.41 1.41 1 1 0 1 1-1.41-1.41zM16 9a1 1 0 1 1 0 2 1 1 0 1 1 0-2zm-1.05 4.54a1 1 0 1 1-1.41 1.41 1 1 0 1 1 1.41-1.41zM11 16a1 1 0 1 1-2 0 1 1 0 1 1 2 0zm-4.54-1.05a1 1 0 1 1-1.41-1.41 1 1 0 1 1 1.41 1.41zM4 11a1 1 0 1 1 0-2 1 1 0 1 1 0 2zm1.05-4.54a1 1 0 1 1 1.41-1.41 1 1 0 1 1-1.41 1.41z\"/></svg>", "brightness-up": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 14a4 4 0 1 1 0-8 4 4 0 0 1 0 8zM9 1a1 1 0 1 1 2 0v2a1 1 0 1 1-2 0V1zm6.65 1.94a1 1 0 1 1 1.41 1.41l-1.4 1.4a1 1 0 1 1-1.41-1.41l1.4-1.4zM18.99 9a1 1 0 1 1 0 2h-1.98a1 1 0 1 1 0-2h1.98zm-1.93 6.65a1 1 0 1 1-1.41 1.41l-1.4-1.4a1 1 0 1 1 1.41-1.41l1.4 1.4zM11 18.99a1 1 0 1 1-2 0v-1.98a1 1 0 1 1 2 0v1.98zm-6.65-1.93a1 1 0 1 1-1.41-1.41l1.4-1.4a1 1 0 1 1 1.41 1.41l-1.4 1.4zM1.01 11a1 1 0 1 1 0-2h1.98a1 1 0 1 1 0 2H1.01zm1.93-6.65a1 1 0 1 1 1.41-1.41l1.4 1.4a1 1 0 1 1-1.41 1.41l-1.4-1.4z\"/></svg>", "bug": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M15.3 14.89l2.77 2.77a1 1 0 0 1 0 1.41 1 1 0 0 1-1.41 0l-2.59-2.58A5.99 5.99 0 0 1 11 18V9.04a1 1 0 0 0-2 0V18a5.98 5.98 0 0 1-3.07-1.51l-2.59 2.58a1 1 0 0 1-1.41 0 1 1 0 0 1 0-1.41l2.77-2.77A5.95 5.95 0 0 1 4.07 13H1a1 1 0 1 1 0-2h3V8.41L.93 5.34a1 1 0 0 1 0-1.41 1 1 0 0 1 1.41 0l2.1 2.1h11.12l2.1-2.1a1 1 0 0 1 1.41 0 1 1 0 0 1 0 1.41L16 8.41V11h3a1 1 0 1 1 0 2h-3.07c-.1.67-.32 1.31-.63 1.89zM15 5H5a5 5 0 1 1 10 0z\"/></svg>", "buoy": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M17.16 6.42a8.03 8.03 0 0 0-3.58-3.58l-1.34 2.69a5.02 5.02 0 0 1 2.23 2.23l2.69-1.34zm0 7.16l-2.69-1.34a5.02 5.02 0 0 1-2.23 2.23l1.34 2.69a8.03 8.03 0 0 0 3.58-3.58zM6.42 2.84a8.03 8.03 0 0 0-3.58 3.58l2.69 1.34a5.02 5.02 0 0 1 2.23-2.23L6.42 2.84zM2.84 13.58a8.03 8.03 0 0 0 3.58 3.58l1.34-2.69a5.02 5.02 0 0 1-2.23-2.23l-2.69 1.34zM10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-7a3 3 0 1 0 0-6 3 3 0 0 0 0 6z\"/></svg>", "calculator": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2 2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm3 1v2h10V3H5zm0 4v2h2V7H5zm4 0v2h2V7H9zm4 0v2h2V7h-2zm-8 4v2h2v-2H5zm4 0v2h2v-2H9zm4 0v6h2v-6h-2zm-8 4v2h2v-2H5zm4 0v2h2v-2H9z\"/></svg>", "calendar": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M1 4c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4zm2 2v12h14V6H3zm2-6h2v2H5V0zm8 0h2v2h-2V0zM5 9h2v2H5V9zm0 4h2v2H5v-2zm4-4h2v2H9V9zm0 4h2v2H9v-2zm4-4h2v2h-2V9zm0 4h2v2h-2v-2z\"/></svg>", "camera": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 6c0-1.1.9-2 2-2h3l2-2h6l2 2h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6zm10 10a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-2a3 3 0 1 1 0-6 3 3 0 0 1 0 6z\"/></svg>", "chart-bar": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M1 10h3v10H1V10zM6 0h3v20H6V0zm5 8h3v12h-3V8zm5-4h3v16h-3V4z\"/></svg>", "chart-pie": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M19.95 11A10 10 0 1 1 9 .05V11h10.95zm-.08-2.6H11.6V.13a10 10 0 0 1 8.27 8.27z\"/></svg>", "chart": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M4.13 12H4a2 2 0 1 0 1.8 1.11L7.86 10a2.03 2.03 0 0 0 .65-.07l1.55 1.55a2 2 0 1 0 3.72-.37L15.87 8H16a2 2 0 1 0-1.8-1.11L12.14 10a2.03 2.03 0 0 0-.65.07L9.93 8.52a2 2 0 1 0-3.72.37L4.13 12zM0 4c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4z\"/></svg>", "chat-bubble-dots": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 15l-4 4v-4H2a2 2 0 0 1-2-2V3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-8zM5 7v2h2V7H5zm4 0v2h2V7H9zm4 0v2h2V7h-2z\"/></svg>", "checkmark-outline": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM6.7 9.29L9 11.6l4.3-4.3 1.4 1.42L9 14.4l-3.7-3.7 1.4-1.42z\"/></svg>", "checkmark": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"0 11 2 9 7 14 18 3 20 5 7 18\"/></svg>", "cheveron-down": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"9.293 12.95 10 13.657 15.657 8 14.243 6.586 10 10.828 5.757 6.586 4.343 8\"/></svg>", "cheveron-left": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"7.05 9.293 6.343 10 12 15.657 13.414 14.243 9.172 10 13.414 5.757 12 4.343\"/></svg>", "cheveron-outline-down": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M20 10a10 10 0 1 1-20 0 10 10 0 0 1 20 0zM10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-.7 10.54L5.75 9l1.41-1.41L10 10.4l2.83-2.82L14.24 9 10 13.24l-.7-.7z\"/></svg>", "cheveron-outline-left": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm8-10a8 8 0 1 0-16 0 8 8 0 0 0 16 0zM7.46 9.3L11 5.75l1.41 1.41L9.6 10l2.82 2.83L11 14.24 6.76 10l.7-.7z\"/></svg>", "cheveron-outline-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 0a10 10 0 1 1 0 20 10 10 0 0 1 0-20zM2 10a8 8 0 1 0 16 0 8 8 0 0 0-16 0zm10.54.7L9 14.25l-1.41-1.41L10.4 10 7.6 7.17 9 5.76 13.24 10l-.7.7z\"/></svg>", "cheveron-outline-up": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 10a10 10 0 1 1 20 0 10 10 0 0 1-20 0zm10 8a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm.7-10.54L14.25 11l-1.41 1.41L10 9.6 7.17 12.4 5.76 11 10 6.76l.7.7z\"/></svg>", "cheveron-right": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"12.95 10.707 13.657 10 8 4.343 6.586 5.757 10.828 10 6.586 14.243 8 15.657 12.95 10.707\"/></svg>", "cheveron-up": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"10.707 7.05 10 6.343 4.343 12 5.757 13.414 10 9.172 14.243 13.414 15.657 12\"/></svg>", "clipboard": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M7.03 2.6a3 3 0 0 1 5.94 0L15 3v1h1a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2h1V3l2.03-.4zM5 6H4v12h12V6h-1v1H5V6zm5-2a1 1 0 1 0 0-2 1 1 0 0 0 0 2z\"/></svg>", "close-outline": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm1.41-1.41A8 8 0 1 0 15.66 4.34 8 8 0 0 0 4.34 15.66zm9.9-8.49L11.41 10l2.83 2.83-1.41 1.41L10 11.41l-2.83 2.83-1.41-1.41L8.59 10 5.76 7.17l1.41-1.41L10 8.59l2.83-2.83 1.41 1.41z\"/></svg>", "close-solid": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm1.41-1.41A8 8 0 1 0 15.66 4.34 8 8 0 0 0 4.34 15.66zM11.41 10l2.83 2.83-1.41 1.41L10 11.41l-2.83 2.83-1.41-1.41L8.59 10 5.76 7.17l1.41-1.41L10 8.59l2.83-2.83 1.41 1.41L11.41 10z\"/></svg>", "close": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"10 8.586 2.929 1.515 1.515 2.929 8.586 10 1.515 17.071 2.929 18.485 10 11.414 17.071 18.485 18.485 17.071 11.414 10 18.485 2.929 17.071 1.515 10 8.586\"/></svg>", "cloud-upload": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z\"/></svg>", "cloud": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1z\"/></svg>", "code": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M.7 9.3L5.5 4.5l1.4 1.42L2.84 10l4.07 4.07-1.41 1.42L0 10l.7-.7zm18.6 1.4l.7-.7-5.49-5.49-1.4 1.42L17.16 10l-4.07 4.07 1.41 1.42 4.78-4.78z\"/></svg>", "coffee": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M4 11H2a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h2V1h14v10a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4zm0-2V5H2v4h2zm-2 8v-1h18v1l-4 2H6l-4-2z\"/></svg>", "cog copy": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M3.94 6.5L2.22 3.64l1.42-1.42L6.5 3.94c.52-.3 1.1-.54 1.7-.7L9 0h2l.8 3.24c.6.16 1.18.4 1.7.7l2.86-1.72 1.42 1.42-1.72 2.86c.3.52.54 1.1.7 1.7L20 9v2l-3.24.8c-.16.6-.4 1.18-.7 1.7l1.72 2.86-1.42 1.42-2.86-1.72c-.52.3-1.1.54-1.7.7L11 20H9l-.8-3.24c-.6-.16-1.18-.4-1.7-.7l-2.86 1.72-1.42-1.42 1.72-2.86c-.3-.52-.54-1.1-.7-1.7L0 11V9l3.24-.8c.16-.6.4-1.18.7-1.7zM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z\"/></svg>", "color-palette": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M9 20v-1.7l.01-.24L15.07 12h2.94c1.1 0 1.99.89 1.99 2v4a2 2 0 0 1-2 2H9zm0-3.34V5.34l2.08-2.07a1.99 1.99 0 0 1 2.82 0l2.83 2.83a2 2 0 0 1 0 2.82L9 16.66zM0 1.99C0 .9.89 0 2 0h4a2 2 0 0 1 2 2v16c0 1.1-.89 2-2 2H2a2 2 0 0 1-2-2V2zM4 17a1 1 0 1 0 0-2 1 1 0 0 0 0 2z\"/></svg>", "compose": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2 4v14h14v-6l2-2v10H0V2h10L8 4H2zm10.3-.3l4 4L8 16H4v-4l8.3-8.3zm1.4-1.4L16 0l4 4-2.3 2.3-4-4z\"/></svg>", "computer-desktop": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M7 17H2a2 2 0 0 1-2-2V2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2h-5l4 2v1H3v-1l4-2zM2 2v11h16V2H2z\"/></svg>", "computer-laptop": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M18 16h2v1a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1v-1h2V4c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v12zM4 4v9h12V4H4zm4 11v1h4v-1H8z\"/></svg>", "conversation": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M17 11v3l-3-3H8a2 2 0 0 1-2-2V2c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-1zm-3 2v2a2 2 0 0 1-2 2H6l-3 3v-3H2a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h2v3a4 4 0 0 0 4 4h6z\"/></svg>", "copy": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M6 6V2c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h4zm2 0h4a2 2 0 0 1 2 2v4h4V2H8v4zM2 8v10h10V8H2z\"/></svg>", "credit-card": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M18 6V4H2v2h16zm0 4H2v6h16v-6zM0 4c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm4 8h4v2H4v-2z\"/></svg>", "currency-dollar": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm1-5h1a3 3 0 0 0 0-6H7.99a1 1 0 0 1 0-2H14V5h-3V3H9v2H8a3 3 0 1 0 0 6h4a1 1 0 1 1 0 2H6v2h3v2h2v-2z\"/></svg>", "dashboard": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm-5.6-4.29a9.95 9.95 0 0 1 11.2 0 8 8 0 1 0-11.2 0zm6.12-7.64l3.02-3.02 1.41 1.41-3.02 3.02a2 2 0 1 1-1.41-1.41z\"/></svg>", "date-add": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M15 2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2h2V0h2v2h6V0h2v2zM3 6v12h14V6H3zm6 5V9h2v2h2v2h-2v2H9v-2H7v-2h2z\"/></svg>", "dial-pad": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M5 4a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm5 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm5 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zM5 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm5 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm5 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zM5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm5 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm5-6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z\"/></svg>", "directions": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 0l10 10-10 10L0 10 10 0zM6 10v3h2v-3h3v3l4-4-4-4v3H8a2 2 0 0 0-2 2z\"/></svg>", "document-add": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M9 10V8h2v2h2v2h-2v2H9v-2H7v-2h2zm-5 8h12V6h-4V2H4v16zm-2 1V0h12l4 4v16H2v-1z\"/></svg>", "document": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M4 18h12V6h-4V2H4v16zm-2 1V0h12l4 4v16H2v-1z\"/></svg>", "dots-horizontal-double": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z\"/></svg>", "dots-horizontal-triple": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-6a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4z\"/></svg>", "download": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z\"/></svg>", "duplicate": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M6 6V2c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h4zm2 0h4a2 2 0 0 1 2 2v4h4V2H8v4zM2 8v10h10V8H2zm4 4v-2h2v2h2v2H8v2H6v-2H4v-2h2z\"/></svg>", "edit-crop": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M14 16H6a2 2 0 0 1-2-2V6H0V4h4V0h2v14h14v2h-4v4h-2v-4zm0-3V6H7V4h7a2 2 0 0 1 2 2v7h-2z\"/></svg>", "edit-cut": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M9.77 11.5l5.34 3.91c.44.33 1.24.59 1.79.59H20L6.89 6.38A3.5 3.5 0 1 0 5.5 8.37L7.73 10 5.5 11.63a3.5 3.5 0 1 0 1.38 1.99l2.9-2.12zM3.5 7a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM15.1 4.59A3.53 3.53 0 0 1 16.9 4H20l-7.5 5.5L10.45 8l4.65-3.41z\"/></svg>", "edit-pencil": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M12.3 3.7l4 4L4 20H0v-4L12.3 3.7zm1.4-1.4L16 0l4 4-2.3 2.3-4-4z\"/></svg>", "education": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M3.33 8L10 12l10-6-10-6L0 6h10v2H3.33zM0 8v8l2-2.22V9.2L0 8zm10 12l-5-3-2-1.2v-6l7 4.2 7-4.2v6L10 20z\"/></svg>", "envelope": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M18 2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2h16zm-4.37 9.1L20 16v-2l-5.12-3.9L20 6V4l-10 8L0 4v2l5.12 4.1L0 14v2l6.37-4.9L10 14l3.63-2.9z\"/></svg>", "exclamation-outline": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 5h2v6H9V5zm0 8h2v2H9v-2z\"/></svg>", "exclamation-solid": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zM9 5v6h2V5H9zm0 8v2h2v-2H9z\"/></svg>", "explore": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zM7.88 7.88l-3.54 7.78 7.78-3.54 3.54-7.78-7.78 3.54zM10 11a1 1 0 1 1 0-2 1 1 0 0 1 0 2z\"/></svg>", "factory": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10.5 20H0V7l5 3.33V7l5 3.33V7l5 3.33V0h5v20h-9.5z\"/></svg>", "film": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 4c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm6 0v12h8V4H6zM2 5v2h2V5H2zm0 4v2h2V9H2zm0 4v2h2v-2H2zm14-8v2h2V5h-2zm0 4v2h2V9h-2zm0 4v2h2v-2h-2zM8 7l5 3-5 3V7z\"/></svg>", "filter": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M12 12l8-8V0H0v4l8 8v8l4-4v-4z\"/></svg>", "flag": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"7.667 12 2 12 2 20 0 20 0 0 1 0 12 0 12.333 2 20 2 17 8 20 14 8 14 7.667 12\"/></svg>", "flashlight": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M13 7v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7L5 5V3h10v2l-2 2zM9 8v1a1 1 0 1 0 2 0V8a1 1 0 0 0-2 0zM5 0h10v2H5V0z\"/></svg>", "folder-outline-add": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 4c0-1.1.9-2 2-2h7l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2 2v10h16V6H2zm7 4V8h2v2h2v2h-2v2H9v-2H7v-2h2z\"/></svg>", "folder-outline": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 4c0-1.1.9-2 2-2h7l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2 2v10h16V6H2z\"/></svg>", "folder": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 4c0-1.1.9-2 2-2h7l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4z\"/></svg>", "format-bold": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M3 19V1h8a5 5 0 0 1 3.88 8.16A5.5 5.5 0 0 1 11.5 19H3zm7.5-8H7v5h3.5a2.5 2.5 0 1 0 0-5zM7 4v4h3a2 2 0 1 0 0-4H7z\"/></svg>", "format-font-size": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M16 9v8h-2V9h-4V7h10v2h-4zM8 5v12H6V5H0V3h15v2H8z\"/></svg>", "format-italic": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M8 1h9v2H8V1zm3 2h3L8 17H5l6-14zM2 17h9v2H2v-2z\"/></svg>", "format-underline": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M16 9A6 6 0 1 1 4 9V1h3v8a3 3 0 0 0 6 0V1h3v8zM2 17h16v2H2v-2z\"/></svg>", "forward-step": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M13 5h3v10h-3V5zM4 5l9 5-9 5V5z\"/></svg>", "forward": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M1 5l9 5-9 5V5zm9 0l9 5-9 5V5z\"/></svg>", "gift": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M14.83 4H20v6h-1v10H1V10H0V4h5.17A3 3 0 0 1 10 .76 3 3 0 0 1 14.83 4zM8 10H3v8h5v-8zm4 0v8h5v-8h-5zM8 6H2v2h6V6zm4 0v2h6V6h-6zM8 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm4 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z\"/></svg>", "globe": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm2-2.25a8 8 0 0 0 4-2.46V9a2 2 0 0 1-2-2V3.07a7.95 7.95 0 0 0-3-1V3a2 2 0 0 1-2 2v1a2 2 0 0 1-2 2v2h3a2 2 0 0 1 2 2v5.75zm-4 0V15a2 2 0 0 1-2-2v-1h-.5A1.5 1.5 0 0 1 4 10.5V8H2.25A8.01 8.01 0 0 0 8 17.75z\"/></svg>", "hand-stop": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M17 16a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4.01V4a1 1 0 0 1 1-1 1 1 0 0 1 1 1v6h1V2a1 1 0 0 1 1-1 1 1 0 0 1 1 1v8h1V1a1 1 0 1 1 2 0v9h1V2a1 1 0 0 1 1-1 1 1 0 0 1 1 1v13h1V9a1 1 0 0 1 1-1h1v8z\"/></svg>", "hard-drive": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2 2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10.4 5.6A5 5 0 1 0 15 12V5l-2.6 2.6zM10 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zM6 3v2h4V3H6zM4 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 16a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm12 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0-16a1 1 0 1 0 0-2 1 1 0 0 0 0 2z\"/></svg>", "headphones": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M16 8A6 6 0 1 0 4 8v11H2a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2V8a8 8 0 1 1 16 0v3a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2V8zm-4 2h3v10h-3V10zm-7 0h3v10H5V10z\"/></svg>", "heart": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.78 7.77L10 18.78l8.39-8.4a5.5 5.5 0 0 0-7.78-7.77l-.61.61z\"/></svg>", "home": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"8 20 3 20 3 10 0 10 10 0 20 10 17 10 17 20 12 20 12 14 8 14 8 20\"/></svg>", "hour-glass": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M3 18a7 7 0 0 1 4-6.33V8.33A7 7 0 0 1 3 2H1V0h18v2h-2a7 7 0 0 1-4 6.33v3.34A7 7 0 0 1 17 18h2v2H1v-2h2zM5 2a5 5 0 0 0 4 4.9V10h2V6.9A5 5 0 0 0 15 2H5z\"/></svg>", "inbox-check": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm14 12h4V2H2v12h4c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2zM5 9l2-2 2 2 4-4 2 2-6 6-4-4z\"/></svg>", "inbox-download": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm14 12h4V2H2v12h4c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2zM9 8V5h2v3h3l-4 4-4-4h3z\"/></svg>", "inbox-full": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M14 14h4V2H2v12h4c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2zM0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4 2h12v2H4V4zm0 3h12v2H4V7zm0 3h12v2H4v-2z\"/></svg>", "inbox": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm14 12h4V2H2v12h4c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2z\"/></svg>", "indent-decrease": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M1 1h18v2H1V1zm6 8h12v2H7V9zm-6 8h18v2H1v-2zM7 5h12v2H7V5zm0 8h12v2H7v-2zM5 6v8l-4-4 4-4z\"/></svg>", "indent-increase": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M1 1h18v2H1V1zm6 8h12v2H7V9zm-6 8h18v2H1v-2zM7 5h12v2H7V5zm0 8h12v2H7v-2zM1 6l4 4-4 4V6z\"/></svg>", "information-outline": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z\"/></svg>", "information-solid": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zM9 11v4h2V9H9v2zm0-6v2h2V5H9z\"/></svg>", "key": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M12.26 11.74L10 14H8v2H6v2l-2 2H0v-4l8.26-8.26a6 6 0 1 1 4 4zm4.86-4.62A3 3 0 0 0 15 2a3 3 0 0 0-2.12.88l4.24 4.24z\"/></svg>", "keyboard": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 6c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6zm2 0v2h2V6H2zm1 3v2h2V9H3zm-1 3v2h2v-2H2zm3 0v2h10v-2H5zm11 0v2h2v-2h-2zM6 9v2h2V9H6zm3 0v2h2V9H9zm3 0v2h2V9h-2zm3 0v2h2V9h-2zM5 6v2h2V6H5zm3 0v2h2V6H8zm3 0v2h2V6h-2zm3 0v2h4V6h-4z\"/></svg>", "layers": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 1l10 6-10 6L0 7l10-6zm6.67 10L20 13l-10 6-10-6 3.33-2L10 15l6.67-4z\"/></svg>", "library": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 6l10-6 10 6v2H0V6zm0 12h20v2H0v-2zm2-2h16v2H2v-2zm0-8h4v8H2V8zm6 0h4v8H8V8zm6 0h4v8h-4V8z\"/></svg>", "light-bulb": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M7 13.33a7 7 0 1 1 6 0V16H7v-2.67zM7 17h6v1.5c0 .83-.67 1.5-1.5 1.5h-3A1.5 1.5 0 0 1 7 18.5V17zm2-5.1V14h2v-2.1a5 5 0 1 0-2 0z\"/></svg>", "link": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M9.26 13a2 2 0 0 1 .01-2.01A3 3 0 0 0 9 5H5a3 3 0 0 0 0 6h.08a6.06 6.06 0 0 0 0 2H5A5 5 0 0 1 5 3h4a5 5 0 0 1 .26 10zm1.48-6a2 2 0 0 1-.01 2.01A3 3 0 0 0 11 15h4a3 3 0 0 0 0-6h-.08a6.06 6.06 0 0 0 0-2H15a5 5 0 0 1 0 10h-4a5 5 0 0 1-.26-10z\"/></svg>", "list-add": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M15 9h-3v2h3v3h2v-3h3V9h-3V6h-2v3zM0 3h10v2H0V3zm0 8h10v2H0v-2zm0-4h10v2H0V7zm0 8h10v2H0v-2z\"/></svg>", "list": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M1 4h2v2H1V4zm4 0h14v2H5V4zM1 9h2v2H1V9zm4 0h14v2H5V9zm-4 5h2v2H1v-2zm4 0h14v2H5v-2z\"/></svg>", "load-balancer": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M17 12h-6v4h1v4H8v-4h1v-4H3v4h1v4H0v-4h1v-4a2 2 0 0 1 2-2h6V6H7V0h6v6h-2v4h6a2 2 0 0 1 2 2v4h1v4h-4v-4h1v-4z\"/></svg>", "location-current": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"0 0 20 8 12 12 10 20\"/></svg>", "location-food": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M18 11v7a2 2 0 0 1-4 0v-5h-2V3a3 3 0 0 1 3-3h3v11zM4 10a2 2 0 0 1-2-2V1a1 1 0 0 1 2 0v4h1V1a1 1 0 0 1 2 0v4h1V1a1 1 0 0 1 2 0v7a2 2 0 0 1-2 2v8a2 2 0 0 1-4 0v-8z\"/></svg>", "location-gas-station": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M13 18h1v2H0v-2h1V2c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v16zM3 2v6h8V2H3zm10 8h1a2 2 0 0 1 2 2v3a1 1 0 0 0 2 0v-5l-2-2V6l-2-2 1-1 5 5v7a3 3 0 0 1-6 0v-3h-1v-2z\"/></svg>", "location-hotel": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2 12h18v6h-2v-2H2v2H0V2h2v10zm8-6h8a2 2 0 0 1 2 2v3H10V6zm-4 5a3 3 0 1 1 0-6 3 3 0 0 1 0 6z\"/></svg>", "location-marina": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M8 1.88V0h2v16h10l-4 4H2l-2-4h8v-2H0v-.26A24.03 24.03 0 0 0 8 1.88zM19.97 14H10v-.36A11.94 11.94 0 0 0 10 .36v-.2A16.01 16.01 0 0 1 19.97 14z\"/></svg>", "location-park": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M5.33 12.77A4 4 0 1 1 3 5.13V5a4 4 0 0 1 5.71-3.62 3.5 3.5 0 0 1 6.26 1.66 2.5 2.5 0 0 1 2 2.08 4 4 0 1 1-2.7 7.49A5.02 5.02 0 0 1 12 14.58V18l2 1v1H6v-1l2-1v-3l-2.67-2.23zM5 10l3 3v-3H5z\"/></svg>", "location-restroom": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M12 16H9l2-4.5V9c0-1.1.9-2 2-2h2a2 2 0 0 1 2 2v2.5l2 4.5h-3v4h-4v-4zm-5-3h2V9a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v4h2v7h4v-7zM5 6a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm9 0a3 3 0 1 1 0-6 3 3 0 0 1 0 6z\"/></svg>", "location-shopping": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M16 6v2h2l2 12H0L2 8h2V6a6 6 0 1 1 12 0zm-2 0a4 4 0 1 0-8 0v2h8V6zM4 10v2h2v-2H4zm10 0v2h2v-2h-2z\"/></svg>", "location": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 20S3 10.87 3 7a7 7 0 1 1 14 0c0 3.87-7 13-7 13zm0-11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z\"/></svg>", "lock-closed": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z\"/></svg>", "lock-open": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M4 8V6a6 6 0 1 1 12 0h-3v2h4a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z\"/></svg>", "map": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 0l6 4 8-4 6 4v16l-6-4-8 4-6-4V0zm7 6v11l6-3V3L7 6z\"/></svg>", "menu": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z\"/></svg>", "mic": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M9 18v-1.06A8 8 0 0 1 2 9h2a6 6 0 1 0 12 0h2a8 8 0 0 1-7 7.94V18h3v2H6v-2h3zM6 4a4 4 0 1 1 8 0v5a4 4 0 1 1-8 0V4z\"/></svg>", "minus-outline": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm5-9v2H5V9h10z\"/></svg>", "minus-solid": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm5-11H5v2h10V9z\"/></svg>", "mobile-devices": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M17 6V5h-2V2H3v14h5v4h3.25H11a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6zm-5.75 14H3A2 2 0 0 1 1 18V2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-5.75zM11 8v8h6V8h-6zm3 11a1 1 0 1 0 0-2 1 1 0 0 0 0 2z\"/></svg>", "mood-happy": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM6.5 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm7 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm2.16 3a6 6 0 0 1-11.32 0h11.32z\"/></svg>", "mood-sad": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM6.5 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm7 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm2.16 6H4.34a6 6 0 0 1 11.32 0z\"/></svg>", "mouse": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M4 9V6A6 6 0 0 1 9 .08V9H4zm0 2v3a6 6 0 1 0 12 0v-3H4zm12-2V6a6 6 0 0 0-5-5.92V9h5z\"/></svg>", "music-notes": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M20 2.5V0L6 2v12.17A3 3 0 0 0 5 14H3a3 3 0 0 0 0 6h2a3 3 0 0 0 3-3V5.71L18 4.3v7.88a3 3 0 0 0-1-.17h-2a3 3 0 0 0 0 6h2a3 3 0 0 0 3-3V2.5z\"/></svg>", "navigation-more": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M4 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z\"/></svg>", "network": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm7.75-8a8.01 8.01 0 0 0 0-4h-3.82a28.81 28.81 0 0 1 0 4h3.82zm-.82 2h-3.22a14.44 14.44 0 0 1-.95 3.51A8.03 8.03 0 0 0 16.93 14zm-8.85-2h3.84a24.61 24.61 0 0 0 0-4H8.08a24.61 24.61 0 0 0 0 4zm.25 2c.41 2.4 1.13 4 1.67 4s1.26-1.6 1.67-4H8.33zm-6.08-2h3.82a28.81 28.81 0 0 1 0-4H2.25a8.01 8.01 0 0 0 0 4zm.82 2a8.03 8.03 0 0 0 4.17 3.51c-.42-.96-.74-2.16-.95-3.51H3.07zm13.86-8a8.03 8.03 0 0 0-4.17-3.51c.42.96.74 2.16.95 3.51h3.22zm-8.6 0h3.34c-.41-2.4-1.13-4-1.67-4S8.74 3.6 8.33 6zM3.07 6h3.22c.2-1.35.53-2.55.95-3.51A8.03 8.03 0 0 0 3.07 6z\"/></svg>", "news-paper": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M16 2h4v15a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V0h16v2zm0 2v13a1 1 0 0 0 1 1 1 1 0 0 0 1-1V4h-2zM2 2v15a1 1 0 0 0 1 1h11.17a2.98 2.98 0 0 1-.17-1V2H2zm2 8h8v2H4v-2zm0 4h8v2H4v-2zM4 4h8v4H4V4z\"/></svg>", "notification": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M4 8a6 6 0 0 1 4.03-5.67 2 2 0 1 1 3.95 0A6 6 0 0 1 16 8v6l3 2v1H1v-1l3-2V8zm8 10a2 2 0 1 1-4 0h4z\"/></svg>", "notifications-outline": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M6 8v7h8V8a4 4 0 1 0-8 0zm2.03-5.67a2 2 0 1 1 3.95 0A6 6 0 0 1 16 8v6l3 2v1H1v-1l3-2V8a6 6 0 0 1 4.03-5.67zM12 18a2 2 0 1 1-4 0h4z\"/></svg>", "paste": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10.5 20H2a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2h1V3l2.03-.4a3 3 0 0 1 5.94 0L13 3v1h1a2 2 0 0 1 2 2v1h-2V6h-1v1H3V6H2v12h5v2h3.5zM8 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm2 4h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2zm0 2v8h8v-8h-8z\"/></svg>", "pause-outline": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM7 6h2v8H7V6zm4 0h2v8h-2V6z\"/></svg>", "pause-solid": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zM7 6v8h2V6H7zm4 0v8h2V6h-2z\"/></svg>", "pause": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M5 4h3v12H5V4zm7 0h3v12h-3V4z\"/></svg>", "pen-tool": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M11 9.27V0l6 11-4 6H7l-4-6L9 0v9.27a2 2 0 1 0 2 0zM6 18h8v2H6v-2z\"/></svg>", "phone": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M20 18.35V19a1 1 0 0 1-1 1h-2A17 17 0 0 1 0 3V1a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4c0 .56-.31 1.31-.7 1.7L3.16 8.84c1.52 3.6 4.4 6.48 8 8l2.12-2.12c.4-.4 1.15-.71 1.7-.71h4.02a1 1 0 0 1 .99 1v3.35z\"/></svg>", "photo": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 4c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm11 9l-3-3-6 6h16l-5-5-2 2zm4-4a2 2 0 1 0 0-4 2 2 0 0 0 0 4z\"/></svg>", "pin": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"11 12 17 12 17 11 14 10 14 2 17 1 17 0 3 0 3 1 6 2 6 10 3 11 3 12 9 12 9 19 10 20 11 19 11 12\"/></svg>", "play-outline": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM7 6l8 4-8 4V6z\"/></svg>", "play": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"4 4 16 10 4 16\"/></svg>", "playlist": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M16 17a3 3 0 0 1-3 3h-2a3 3 0 0 1 0-6h2a3 3 0 0 1 1 .17V1l6-1v4l-4 .67V17zM0 3h12v2H0V3zm0 4h12v2H0V7zm0 4h12v2H0v-2zm0 4h6v2H0v-2z\"/></svg>", "plugin": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M20 14v4a2 2 0 0 1-2 2h-4v-2a2 2 0 0 0-2-2 2 2 0 0 0-2 2v2H6a2 2 0 0 1-2-2v-4H2a2 2 0 0 1-2-2 2 2 0 0 1 2-2h2V6c0-1.1.9-2 2-2h4V2a2 2 0 0 1 2-2 2 2 0 0 1 2 2v2h4a2 2 0 0 1 2 2v4h-2a2 2 0 0 0-2 2 2 2 0 0 0 2 2h2z\"/></svg>", "portfolio": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M9 12H1v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6h-8v2H9v-2zm0-1H0V5c0-1.1.9-2 2-2h4V2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1h4c1.1 0 2 .89 2 2v6h-9V9H9v2zm3-8V2H8v1h4z\"/></svg>", "printer": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M4 16H0V6h20v10h-4v4H4v-4zm2-4v6h8v-6H6zM4 0h12v5H4V0zM2 8v2h2V8H2zm4 0v2h2V8H6z\"/></svg>", "pylon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M17.4 18H20v2H0v-2h2.6L8 0h4l5.4 18zm-3.2-4H5.8l-1.2 4h10.8l-1.2-4zm-2.4-8H8.2L7 10h6l-1.2-4z\"/></svg>", "question": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm2-13c0 .28-.21.8-.42 1L10 9.58c-.57.58-1 1.6-1 2.42v1h2v-1c0-.29.21-.8.42-1L13 9.42c.57-.58 1-1.6 1-2.42a4 4 0 1 0-8 0h2a2 2 0 1 1 4 0zm-3 8v2h2v-2H9z\"/></svg>", "queue": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 2h20v4H0V2zm0 8h20v2H0v-2zm0 6h20v2H0v-2z\"/></svg>", "radar copy 2": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M12 10a2 2 0 0 1-3.41 1.41A2 2 0 0 1 10 8V0a9.97 9.97 0 0 1 10 10h-8zm7.9 1.41A10 10 0 1 1 8.59.1v2.03a8 8 0 1 0 9.29 9.29h2.02zm-4.07 0a6 6 0 1 1-7.25-7.25v2.1a3.99 3.99 0 0 0-1.4 6.57 4 4 0 0 0 6.56-1.42h2.1z\"/></svg>", "radio": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M20 9v9a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h13.8L.74 1.97 1.26.03 20 5.06V9zm-5 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 8v2h16V8H2zm1.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm5 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm6.5-1a2 2 0 1 1 0-4 2 2 0 0 1 0 4z\"/></svg>", "refresh": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 3v2a5 5 0 0 0-3.54 8.54l-1.41 1.41A7 7 0 0 1 10 3zm4.95 2.05A7 7 0 0 1 10 17v-2a5 5 0 0 0 3.54-8.54l1.41-1.41zM10 20l-4-4 4-4v8zm0-12V0l4 4-4 4z\"/></svg>", "reload": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M14.66 15.66A8 8 0 1 1 17 10h-2a6 6 0 1 0-1.76 4.24l1.42 1.42zM12 10h8l-4 4-4-4z\"/></svg>", "reply-all": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M18 17v-2.99A4 4 0 0 0 14 10h-3v5L5 9l6-6v5h3a6 6 0 0 1 6 6v3h-2zM6 6V3L0 9l6 6v-3L3 9l3-3z\"/></svg>", "reply": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M15 17v-2.99A4 4 0 0 0 11 10H8v5L2 9l6-6v5h3a6 6 0 0 1 6 6v3h-2z\"/></svg>", "repost": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M5 4c-1.1 0-2 .89-2 2v6H0l4 4 4-4H5V6h7l2-2H5zm10 4h-3l4-4 4 4h-3v6a2 2 0 0 1-2 2H6l2-2h7V8z\"/></svg>", "save-disk": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 2C0 .9.9 0 2 0h14l4 4v14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm5 0v6h10V2H5zm6 1h3v4h-3V3z\"/></svg>", "screen-full": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2.8 15.8L0 13v7h7l-2.8-2.8 4.34-4.32-1.42-1.42L2.8 15.8zM17.2 4.2L20 7V0h-7l2.8 2.8-4.34 4.32 1.42 1.42L17.2 4.2zm-1.4 13L13 20h7v-7l-2.8 2.8-4.32-4.34-1.42 1.42 4.33 4.33zM4.2 2.8L7 0H0v7l2.8-2.8 4.32 4.34 1.42-1.42L4.2 2.8z\"/></svg>", "search": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><g fill=\"none\" fill-rule=\"evenodd\"><path fill-rule=\"nonzero\" d=\"M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z\"/></g></svg>", "send": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 0l20 10L0 20V0zm0 8v4l10-2L0 8z\"/></svg>", "servers": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm0 7c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V9zm0 7c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2zM12 2v2h2V2h-2zm4 0v2h2V2h-2zm-4 7v2h2V9h-2zm4 0v2h2V9h-2zm-4 7v2h2v-2h-2zm4 0v2h2v-2h-2z\"/></svg>", "share-01": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M4 10c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2v-8zm2 0v8h8v-8h-2V8H8v2H6zm3-6.17V16h2V3.83l3.07 3.07 1.42-1.41L10 0l-.7.7L4.5 5.5l1.42 1.4L9 3.84z\"/></svg>", "shield": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M19 11a7.5 7.5 0 0 1-3.5 5.94L10 20l-5.5-3.06A7.5 7.5 0 0 1 1 11V3c3.38 0 6.5-1.12 9-3 2.5 1.89 5.62 3 9 3v8zm-9 1.08l2.92 2.04-1.03-3.41 2.84-2.15-3.56-.08L10 5.12 8.83 8.48l-3.56.08L8.1 10.7l-1.03 3.4L10 12.09z\"/></svg>", "shopping-cart": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M4 2h16l-3 9H4a1 1 0 1 0 0 2h13v2H4a3 3 0 0 1 0-6h.33L3 5 2 2H0V0h3a1 1 0 0 1 1 1v1zm1 18a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm10 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z\"/></svg>", "show-sidebar": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M7 3H2v14h5V3zm2 0v14h9V3H9zM0 3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3zm3 1h3v2H3V4zm0 3h3v2H3V7zm0 3h3v2H3v-2z\"/></svg>", "shuffle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M6.59 12.83L4.4 15c-.58.58-1.59 1-2.4 1H0v-2h2c.29 0 .8-.2 1-.41l2.17-2.18 1.42 1.42zM16 4V1l4 4-4 4V6h-2c-.29 0-.8.2-1 .41l-2.17 2.18L9.4 7.17 11.6 5c.58-.58 1.59-1 2.41-1h2zm0 10v-3l4 4-4 4v-3h-2c-.82 0-1.83-.42-2.41-1l-8.6-8.59C2.8 6.21 2.3 6 2 6H0V4h2c.82 0 1.83.42 2.41 1l8.6 8.59c.2.2.7.41.99.41h2z\"/></svg>", "star-full": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><polygon points=\"10 15 4.122 18.09 5.245 11.545 .489 6.91 7.061 5.955 10 0 12.939 5.955 19.511 6.91 14.755 11.545 15.878 18.09\"/></svg>", "station": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M9 11.73a2 2 0 1 1 2 0V20H9v-8.27zm5.24 2.51l-1.41-1.41A3.99 3.99 0 0 0 10 6a4 4 0 0 0-2.83 6.83l-1.41 1.41a6 6 0 1 1 8.49 0zm2.83 2.83l-1.41-1.41a8 8 0 1 0-11.31 0l-1.42 1.41a10 10 0 1 1 14.14 0z\"/></svg>", "stethoscope": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M17 10.27V4.99a1 1 0 0 0-2 0V15a5 5 0 0 1-10 0v-1.08A6 6 0 0 1 0 8V2C0 .9.9 0 2 0h1a1 1 0 0 1 1 1 1 1 0 0 1-1 1H2v6a4 4 0 1 0 8 0V2H9a1 1 0 0 1-1-1 1 1 0 0 1 1-1h1a2 2 0 0 1 2 2v6a6 6 0 0 1-5 5.92V15a3 3 0 0 0 6 0V5a3 3 0 0 1 6 0v5.27a2 2 0 1 1-2 0z\"/></svg>", "store-front": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M18 9.87V20H2V9.87a4.25 4.25 0 0 0 3-.38V14h10V9.5a4.26 4.26 0 0 0 3 .37zM3 0h4l-.67 6.03A3.43 3.43 0 0 1 3 9C1.34 9 .42 7.73.95 6.15L3 0zm5 0h4l.7 6.3c.17 1.5-.91 2.7-2.42 2.7h-.56A2.38 2.38 0 0 1 7.3 6.3L8 0zm5 0h4l2.05 6.15C19.58 7.73 18.65 9 17 9a3.42 3.42 0 0 1-3.33-2.97L13 0z\"/></svg>", "stroke-width": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 0h20v5H0V0zm0 7h20v4H0V7zm0 6h20v3H0v-3zm0 5h20v2H0v-2z\"/></svg>", "swap": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M9 6a4 4 0 1 1 8 0v8h3l-4 4-4-4h3V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2v8a4 4 0 1 1-8 0V6H0l4-4 4 4H5v8a2 2 0 0 0 2 2 2 2 0 0 0 2-2V6z\"/></svg>", "tablet": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2 2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm2 0v14h12V2H4zm6 17a1 1 0 1 0 0-2 1 1 0 0 0 0 2z\"/></svg>", "tag": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 10V2l2-2h8l10 10-10 10L0 10zm4.5-4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z\"/></svg>", "target": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M17.94 11H13V9h4.94A8 8 0 0 0 11 2.06V7H9V2.06A8 8 0 0 0 2.06 9H7v2H2.06A8 8 0 0 0 9 17.94V13h2v4.94A8 8 0 0 0 17.94 11zM10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20z\"/></svg>", "text-box": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 0h6v6H0V0zm2 2v2h2V2H2zm12-2h6v6h-6V0zm2 2v2h2V2h-2zm-2 12h6v6h-6v-6zm2 2v2h2v-2h-2zM0 14h6v6H0v-6zm2 2v2h2v-2H2zM6 2h8v2H6V2zm0 14h8v2H6v-2zM16 6h2v8h-2V6zM2 6h2v8H2V6zm5 1h6v2H7V7zm2 2h2v4H9V9z\"/></svg>", "text-decoration": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M12 5h-2v12H8V3h8v2h-2v12h-2V5zM8 3a4 4 0 1 0 0 8V3z\"/></svg>", "thermometer": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M9 11.17V7h2v4.17a3 3 0 1 1-2 0zm-1-.63a4 4 0 1 0 4 0V4a2 2 0 1 0-4 0v6.53zM6 9.53V4a4 4 0 0 1 8 0v5.53A5.99 5.99 0 0 1 10 20 6 6 0 0 1 6 9.53z\"/></svg>", "thumbs-down": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M11 20a2 2 0 0 1-2-2v-6H2a2 2 0 0 1-2-2V8l2.3-6.12A3.11 3.11 0 0 1 5 0h8a2 2 0 0 1 2 2v8l-3 7v3h-1zm6-10V0h3v10h-3z\"/></svg>", "thumbs-up": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M11 0h1v3l3 7v8a2 2 0 0 1-2 2H5c-1.1 0-2.31-.84-2.7-1.88L0 12v-2a2 2 0 0 1 2-2h7V2a2 2 0 0 1 2-2zm6 10h3v10h-3V10z\"/></svg>", "ticket": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M20 12v5H0v-5a2 2 0 1 0 0-4V3h20v5a2 2 0 1 0 0 4zM3 5v10h14V5H3zm7 7.08l-2.92 2.04L8.1 10.7 5.27 8.56l3.56-.08L10 5.12l1.17 3.36 3.56.08-2.84 2.15 1.03 3.4L10 12.09z\"/></svg>", "time": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z\"/></svg>", "timer": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M16.32 7.1A8 8 0 1 1 9 4.06V2h2v2.06c1.46.18 2.8.76 3.9 1.62l1.46-1.46 1.42 1.42-1.46 1.45zM10 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12zM7 0h6v2H7V0zm5.12 8.46l1.42 1.42L10 13.4 8.59 12l3.53-3.54z\"/></svg>", "tools copy": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 0s8 7.58 8 12a8 8 0 1 1-16 0c0-1.5.91-3.35 2.12-5.15A3 3 0 0 0 10 6V0zM8 0a3 3 0 1 0 0 6V0z\"/></svg>", "translate": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M7.41 9l2.24 2.24-.83 2L6 10.4l-3.3 3.3-1.4-1.42L4.58 9l-.88-.88c-.53-.53-1-1.3-1.3-2.12h2.2c.15.28.33.53.51.7L6 7.6l.88-.88C7.48 6.1 8 4.84 8 4H0V2h5V0h2v2h5v2h-2c0 1.37-.74 3.15-1.7 4.12L7.4 9zm3.84 8L10 20H8l5-12h2l5 12h-2l-1.25-3h-5.5zm.83-2h3.84L14 10.4 12.08 15z\"/></svg>", "trash": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z\"/></svg>", "travel-bus": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M13 18H7v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1a2 2 0 0 1-2-2V2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2v1a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1zM4 5v6h5V5H4zm7 0v6h5V5h-5zM5 2v1h10V2H5zm.5 14a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm9 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z\"/></svg>", "travel-car": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2 14v-3H1a1 1 0 0 1-1-1 1 1 0 0 1 1-1h1l4-7h8l4 7h1a1 1 0 0 1 1 1 1 1 0 0 1-1 1h-1v6a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H5v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-3zm13.86-5L13 4H7L4.14 9h11.72zM5.5 14a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm9 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z\"/></svg>", "travel-taxi-cab": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M12 3h2l4 7h1a1 1 0 0 1 1 1 1 1 0 0 1-1 1h-1v6a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H5v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-6H1a1 1 0 0 1-1-1 1 1 0 0 1 1-1h1l4-7h2V1h4v2zm3.86 7L13 5H7l-2.86 5h11.72zM5.5 15a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm9 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z\"/></svg>", "travel-train": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M12 18H8l-2 2H3l2-2a2 2 0 0 1-2-2V2c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2l2 2h-3l-2-2zM5 5v6h10V5H5zm1.5 11a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm7 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM8 2v1h4V2H8z\"/></svg>", "travel-walk": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M11 7l1.44 2.16c.31.47 1.01.84 1.57.84H17V8h-3l-1.44-2.16a5.94 5.94 0 0 0-1.4-1.4l-1.32-.88a1.72 1.72 0 0 0-1.7-.04L4 6v5h2V7l2-1-3 14h2l2.35-7.65L11 14v6h2v-8l-2.7-2.7L11 7zm1-3a2 2 0 1 0 0-4 2 2 0 0 0 0 4z\"/></svg>", "travel": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M14 5h2v14H4V5h2V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1zm3 0h1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1V5zM3 5v14H2a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2h1zm5-1v1h4V4H8z\"/></svg>", "trophy": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M15 9a3 3 0 0 0 3-3h2a5 5 0 0 1-5.1 5 5 5 0 0 1-3.9 3.9V17l5 2v1H4v-1l5-2v-2.1A5 5 0 0 1 5.1 11H5a5 5 0 0 1-5-5h2a3 3 0 0 0 3 3V4H2v2H0V2h5V0h10v2h5v4h-2V4h-3v5z\"/></svg>", "tuning": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M17 16v4h-2v-4h-2v-3h6v3h-2zM1 9h6v3H1V9zm6-4h6v3H7V5zM3 0h2v8H3V0zm12 0h2v12h-2V0zM9 0h2v4H9V0zM3 12h2v8H3v-8zm6-4h2v12H9V8z\"/></svg>", "upload": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M13 10v6H7v-6H2l8-8 8 8h-5zM0 18h20v2H0v-2z\"/></svg>", "usb": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M15 8v2h-4V4h2l-3-4-3 4h2v8H5V9.73a2 2 0 1 0-2 0V12A2 2 0 0 0 5 14h4v2.27a2 2 0 1 0 2 0V12h4a2 2 0 0 0 2-2V8h1V4h-4v4h1z\"/></svg>", "user-add": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M2 6H0v2h2v2h2V8h2V6H4V4H2v2zm7 0a3 3 0 0 1 6 0v2a3 3 0 0 1-6 0V6zm11 9.14A15.93 15.93 0 0 0 12 13c-2.91 0-5.65.78-8 2.14V18h16v-2.86z\"/></svg>", "user-group": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><g fill=\"none\" fill-rule=\"evenodd\"><path fill-rule=\"nonzero\" d=\"M7 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 0 1 7 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 1 1-1.33 7.76 5.96 5.96 0 0 0 0-7.52C12.1.1 12.53 0 13 0z\"/></g></svg>", "user-solid-circle": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zM7 6v2a3 3 0 1 0 6 0V6a3 3 0 1 0-6 0zm-3.65 8.44a8 8 0 0 0 13.3 0 15.94 15.94 0 0 0-13.3 0z\"/></svg>", "user-solid-square": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm7 4v2a3 3 0 1 0 6 0V6a3 3 0 1 0-6 0zm11 9.14A15.93 15.93 0 0 0 10 13c-2.91 0-5.65.78-8 2.14V18h16v-2.86z\"/></svg>", "user": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M5 5a5 5 0 0 1 10 0v2A5 5 0 0 1 5 7V5zM0 16.68A19.9 19.9 0 0 1 10 14c3.64 0 7.06.97 10 2.68V20H0v-3.32z\"/></svg>", "vector": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M12 4h4.27a2 2 0 1 1 0 2h-2.14a9 9 0 0 1 4.84 7.25 2 2 0 1 1-2 .04 7 7 0 0 0-4.97-6V8H8v-.71a7 7 0 0 0-4.96 6 2 2 0 1 1-2-.04A9 9 0 0 1 5.86 6H3.73a2 2 0 1 1 0-2H8V3h4v1z\"/></svg>", "video-camera": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M16 7l4-4v14l-4-4v3a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v3zm-8 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z\"/></svg>", "view-carousel": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M16 16v2H4v-2H0V4h4V2h12v2h4v12h-4zM14 5.5V4H6v12h8V5.5zm2 .5v8h2V6h-2zM4 6H2v8h2V6z\"/></svg>", "view-column": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M12 4H8v12h4V4zm2 0v12h4V4h-4zM6 4H2v12h4V4zM0 2h20v16H0V2z\"/></svg>", "view-hide": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M12.81 4.36l-1.77 1.78a4 4 0 0 0-4.9 4.9l-2.76 2.75C2.06 12.79.96 11.49.2 10A11 11 0 0 1 12.8 4.36zm3.8 1.85c1.33 1 2.43 2.3 3.2 3.79a11 11 0 0 1-12.62 5.64l1.77-1.78a4 4 0 0 0 4.9-4.9l2.76-2.75zm-.25-3.99l1.42 1.42L3.64 17.78l-1.42-1.42L16.36 2.22z\"/></svg>", "view-list": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 3h20v2H0V3zm0 4h20v2H0V7zm0 4h20v2H0v-2zm0 4h20v2H0v-2z\"/></svg>", "view-show": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M.2 10a11 11 0 0 1 19.6 0A11 11 0 0 1 .2 10zm9.8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z\"/></svg>", "view-tile": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 0h9v9H0V0zm2 2v5h5V2H2zm-2 9h9v9H0v-9zm2 2v5h5v-5H2zm9-13h9v9h-9V0zm2 2v5h5V2h-5zm-2 9h9v9h-9v-9zm2 2v5h5v-5h-5z\"/></svg>", "volume-down": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M7 7H3v6h4l5 5V2L7 7zm8.54 6.54l-1.42-1.42a3 3 0 0 0 0-4.24l1.42-1.42a4.98 4.98 0 0 1 0 7.08z\"/></svg>", "volume-mute": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M9 7H5v6h4l5 5V2L9 7z\"/></svg>", "volume-off": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M15 8.59l-2.12-2.13-1.42 1.42L13.6 10l-2.13 2.12 1.42 1.42L15 11.4l2.12 2.13 1.42-1.42L16.4 10l2.13-2.12-1.42-1.42L15 8.6zM4 7H0v6h4l5 5V2L4 7z\"/></svg>", "volume-up": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M5 7H1v6h4l5 5V2L5 7zm11.36 9.36l-1.41-1.41a6.98 6.98 0 0 0 0-9.9l1.41-1.41a8.97 8.97 0 0 1 0 12.72zm-2.82-2.82l-1.42-1.42a3 3 0 0 0 0-4.24l1.42-1.42a4.98 4.98 0 0 1 0 7.08z\"/></svg>", "wallet": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 4c0-1.1.9-2 2-2h15a1 1 0 0 1 1 1v1H2v1h17a1 1 0 0 1 1 1v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm16.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z\"/></svg>", "watch": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M11 9h2v2H9V7h2v2zm-5.82 6.08a6.98 6.98 0 0 1 0-10.16L6 0h8l.82 4.92a6.98 6.98 0 0 1 0 10.16L14 20H6l-.82-4.92zM10 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10z\"/></svg>", "window-new": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M9 10V8h2v2h2v2h-2v2H9v-2H7v-2h2zM0 3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3zm2 2v12h16V5H2z\"/></svg>", "window-open": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3zm2 2v12h16V5H2zm8 3l4 5H6l4-5z\"/></svg>", "window": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M0 3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3zm2 2v12h16V5H2z\"/></svg>", "wrench": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M6.47 9.8A5 5 0 0 1 .2 3.22l3.95 3.95 2.82-2.83L3.03.41a5 5 0 0 1 6.4 6.68l10 10-2.83 2.83L6.47 9.8z\"/></svg>", "zoom-in": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path fill-rule=\"evenodd\" d=\"M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12zM7 7V5h2v2h2v2H9v2H7V9H5V7h2z\"/></svg>", "zoom-out": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path fill-rule=\"evenodd\" d=\"M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12zM5 7h6v2H5V7z\"/></svg>" });
+
+/***/ }),
+/* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var cof = __webpack_require__(37);
@@ -12334,7 +12342,7 @@ module.exports = function(it, msg){
 };
 
 /***/ }),
-/* 206 */
+/* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12366,7 +12374,7 @@ module.exports = [].copyWithin || function copyWithin(target/*= 0*/, start/*= 0,
 };
 
 /***/ }),
-/* 207 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var forOf = __webpack_require__(77);
@@ -12379,7 +12387,7 @@ module.exports = function(iter, ITERATOR){
 
 
 /***/ }),
-/* 208 */
+/* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var aFunction = __webpack_require__(24)
@@ -12412,7 +12420,7 @@ module.exports = function(that, callbackfn, aLen, memo, isRight){
 };
 
 /***/ }),
-/* 209 */
+/* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12442,7 +12450,7 @@ module.exports = Function.bind || function bind(that /*, args... */){
 };
 
 /***/ }),
-/* 210 */
+/* 211 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12454,8 +12462,8 @@ var dP          = __webpack_require__(14).f
   , anInstance  = __webpack_require__(62)
   , defined     = __webpack_require__(38)
   , forOf       = __webpack_require__(77)
-  , $iterDefine = __webpack_require__(148)
-  , step        = __webpack_require__(216)
+  , $iterDefine = __webpack_require__(149)
+  , step        = __webpack_require__(217)
   , setSpecies  = __webpack_require__(68)
   , DESCRIPTORS = __webpack_require__(13)
   , fastKey     = __webpack_require__(56).fastKey
@@ -12590,12 +12598,12 @@ module.exports = {
 };
 
 /***/ }),
-/* 211 */
+/* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/DavidBruant/Map-Set.prototype.toJSON
 var classof = __webpack_require__(87)
-  , from    = __webpack_require__(207);
+  , from    = __webpack_require__(208);
 module.exports = function(NAME){
   return function toJSON(){
     if(classof(this) != NAME)throw TypeError(NAME + "#toJSON isn't generic");
@@ -12604,7 +12612,7 @@ module.exports = function(NAME){
 };
 
 /***/ }),
-/* 212 */
+/* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12693,15 +12701,15 @@ module.exports = {
 };
 
 /***/ }),
-/* 213 */
+/* 214 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = !__webpack_require__(13) && !__webpack_require__(8)(function(){
-  return Object.defineProperty(__webpack_require__(140)('div'), 'a', {get: function(){ return 7; }}).a != 7;
+  return Object.defineProperty(__webpack_require__(141)('div'), 'a', {get: function(){ return 7; }}).a != 7;
 });
 
 /***/ }),
-/* 214 */
+/* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 20.1.2.3 Number.isInteger(number)
@@ -12712,7 +12720,7 @@ module.exports = function isInteger(it){
 };
 
 /***/ }),
-/* 215 */
+/* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // call something on iterator step with safe closing on error
@@ -12729,7 +12737,7 @@ module.exports = function(iterator, fn, value, entries){
 };
 
 /***/ }),
-/* 216 */
+/* 217 */
 /***/ (function(module, exports) {
 
 module.exports = function(done, value){
@@ -12737,7 +12745,7 @@ module.exports = function(done, value){
 };
 
 /***/ }),
-/* 217 */
+/* 218 */
 /***/ (function(module, exports) {
 
 // 20.2.2.20 Math.log1p(x)
@@ -12746,7 +12754,7 @@ module.exports = Math.log1p || function log1p(x){
 };
 
 /***/ }),
-/* 218 */
+/* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12785,7 +12793,7 @@ module.exports = !$assign || __webpack_require__(8)(function(){
 } : $assign;
 
 /***/ }),
-/* 219 */
+/* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var dP       = __webpack_require__(14)
@@ -12803,7 +12811,7 @@ module.exports = __webpack_require__(13) ? Object.defineProperties : function de
 };
 
 /***/ }),
-/* 220 */
+/* 221 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
@@ -12828,13 +12836,13 @@ module.exports.f = function getOwnPropertyNames(it){
 
 
 /***/ }),
-/* 221 */
+/* 222 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var has          = __webpack_require__(22)
   , toIObject    = __webpack_require__(28)
   , arrayIndexOf = __webpack_require__(103)(false)
-  , IE_PROTO     = __webpack_require__(153)('IE_PROTO');
+  , IE_PROTO     = __webpack_require__(154)('IE_PROTO');
 
 module.exports = function(object, names){
   var O      = toIObject(object)
@@ -12850,7 +12858,7 @@ module.exports = function(object, names){
 };
 
 /***/ }),
-/* 222 */
+/* 223 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getKeys   = __webpack_require__(66)
@@ -12871,7 +12879,7 @@ module.exports = function(isEntries){
 };
 
 /***/ }),
-/* 223 */
+/* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // all object keys, includes non-enumerable and symbols
@@ -12886,25 +12894,25 @@ module.exports = Reflect && Reflect.ownKeys || function ownKeys(it){
 };
 
 /***/ }),
-/* 224 */
+/* 225 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $parseFloat = __webpack_require__(7).parseFloat
   , $trim       = __webpack_require__(80).trim;
 
-module.exports = 1 / $parseFloat(__webpack_require__(158) + '-0') !== -Infinity ? function parseFloat(str){
+module.exports = 1 / $parseFloat(__webpack_require__(159) + '-0') !== -Infinity ? function parseFloat(str){
   var string = $trim(String(str), 3)
     , result = $parseFloat(string);
   return result === 0 && string.charAt(0) == '-' ? -0 : result;
 } : $parseFloat;
 
 /***/ }),
-/* 225 */
+/* 226 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $parseInt = __webpack_require__(7).parseInt
   , $trim     = __webpack_require__(80).trim
-  , ws        = __webpack_require__(158)
+  , ws        = __webpack_require__(159)
   , hex       = /^[\-+]?0[xX]/;
 
 module.exports = $parseInt(ws + '08') !== 8 || $parseInt(ws + '0x16') !== 22 ? function parseInt(str, radix){
@@ -12913,7 +12921,7 @@ module.exports = $parseInt(ws + '08') !== 8 || $parseInt(ws + '0x16') !== 22 ? f
 } : $parseInt;
 
 /***/ }),
-/* 226 */
+/* 227 */
 /***/ (function(module, exports) {
 
 // 7.2.9 SameValue(x, y)
@@ -12922,12 +12930,12 @@ module.exports = Object.is || function is(x, y){
 };
 
 /***/ }),
-/* 227 */
+/* 228 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://github.com/tc39/proposal-string-pad-start-end
 var toLength = __webpack_require__(18)
-  , repeat   = __webpack_require__(157)
+  , repeat   = __webpack_require__(158)
   , defined  = __webpack_require__(38);
 
 module.exports = function(that, maxLength, fillString, left){
@@ -12944,18 +12952,18 @@ module.exports = function(that, maxLength, fillString, left){
 
 
 /***/ }),
-/* 228 */
+/* 229 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports.f = __webpack_require__(11);
 
 /***/ }),
-/* 229 */
+/* 230 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var strong = __webpack_require__(210);
+var strong = __webpack_require__(211);
 
 // 23.1 Map Objects
 module.exports = __webpack_require__(104)('Map', function(get){
@@ -12973,7 +12981,7 @@ module.exports = __webpack_require__(104)('Map', function(get){
 }, strong, true);
 
 /***/ }),
-/* 230 */
+/* 231 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 21.2.5.3 get RegExp.prototype.flags()
@@ -12983,12 +12991,12 @@ if(__webpack_require__(13) && /./g.flags != 'g')__webpack_require__(14).f(RegExp
 });
 
 /***/ }),
-/* 231 */
+/* 232 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var strong = __webpack_require__(210);
+var strong = __webpack_require__(211);
 
 // 23.2 Set Objects
 module.exports = __webpack_require__(104)('Set', function(get){
@@ -13001,7 +13009,7 @@ module.exports = __webpack_require__(104)('Set', function(get){
 }, strong);
 
 /***/ }),
-/* 232 */
+/* 233 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13009,8 +13017,8 @@ module.exports = __webpack_require__(104)('Set', function(get){
 var each         = __webpack_require__(42)(0)
   , redefine     = __webpack_require__(26)
   , meta         = __webpack_require__(56)
-  , assign       = __webpack_require__(218)
-  , weak         = __webpack_require__(212)
+  , assign       = __webpack_require__(219)
+  , weak         = __webpack_require__(213)
   , isObject     = __webpack_require__(10)
   , getWeak      = meta.getWeak
   , isExtensible = Object.isExtensible
@@ -13063,7 +13071,7 @@ if(new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7){
 }
 
 /***/ }),
-/* 233 */
+/* 234 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13152,7 +13160,7 @@ var EventListener = {
 module.exports = EventListener;
 
 /***/ }),
-/* 234 */
+/* 235 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13184,7 +13192,7 @@ function focusNode(node) {
 module.exports = focusNode;
 
 /***/ }),
-/* 235 */
+/* 236 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13228,7 +13236,7 @@ function getActiveElement(doc) /*?DOMElement*/{
 module.exports = getActiveElement;
 
 /***/ }),
-/* 236 */
+/* 237 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13247,7 +13255,7 @@ module.exports = getActiveElement;
 // Therefore we re-export development-only version with all the PropTypes checks here.
 // However if one is migrating to the `prop-types` npm library, they will go through the
 // `index.js` entry point, and it will branch depending on the environment.
-var factory = __webpack_require__(237);
+var factory = __webpack_require__(238);
 module.exports = function(isValidElement) {
   // It is still allowed in 15.5.
   var throwOnDirectAccess = false;
@@ -13256,7 +13264,7 @@ module.exports = function(isValidElement) {
 
 
 /***/ }),
-/* 237 */
+/* 238 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13275,8 +13283,8 @@ var emptyFunction = __webpack_require__(40);
 var invariant = __webpack_require__(4);
 var warning = __webpack_require__(5);
 
-var ReactPropTypesSecret = __webpack_require__(238);
-var checkPropTypes = __webpack_require__(558);
+var ReactPropTypesSecret = __webpack_require__(239);
+var checkPropTypes = __webpack_require__(559);
 
 module.exports = function(isValidElement, throwOnDirectAccess) {
   /* global Symbol */
@@ -13775,7 +13783,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
 
 /***/ }),
-/* 238 */
+/* 239 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13796,7 +13804,7 @@ module.exports = ReactPropTypesSecret;
 
 
 /***/ }),
-/* 239 */
+/* 240 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13821,7 +13829,7 @@ module.exports = {
 
 
 /***/ }),
-/* 240 */
+/* 241 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14010,7 +14018,7 @@ exports.isBuffer = function (obj) {
 
 
 /***/ }),
-/* 241 */
+/* 242 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _concat = __webpack_require__(41);
@@ -14055,7 +14063,7 @@ module.exports = _curry3(function adjust(fn, idx, list) {
 
 
 /***/ }),
-/* 242 */
+/* 243 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -14086,12 +14094,12 @@ module.exports = _curry2(function and(a, b) {
 
 
 /***/ }),
-/* 243 */
+/* 244 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _xany = __webpack_require__(269);
+var _xany = __webpack_require__(270);
 
 
 /**
@@ -14132,7 +14140,7 @@ module.exports = _curry2(_dispatchable(['any'], _xany, function any(fn, list) {
 
 
 /***/ }),
-/* 244 */
+/* 245 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -14164,13 +14172,13 @@ module.exports = _curry2(function apply(fn, args) {
 
 
 /***/ }),
-/* 245 */
+/* 246 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
 var _has = __webpack_require__(23);
 var _isArray = __webpack_require__(59);
-var _isInteger = __webpack_require__(265);
+var _isInteger = __webpack_require__(266);
 var assoc = __webpack_require__(116);
 
 
@@ -14218,7 +14226,7 @@ module.exports = _curry3(function assocPath(path, val, obj) {
 
 
 /***/ }),
-/* 246 */
+/* 247 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _arity = __webpack_require__(46);
@@ -14255,11 +14263,11 @@ module.exports = _curry2(function bind(fn, thisObj) {
 
 
 /***/ }),
-/* 247 */
+/* 248 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var chain = __webpack_require__(166);
-var compose = __webpack_require__(167);
+var chain = __webpack_require__(167);
+var compose = __webpack_require__(168);
 var map = __webpack_require__(29);
 
 
@@ -14304,7 +14312,7 @@ module.exports = function composeK() {
 
 
 /***/ }),
-/* 248 */
+/* 249 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -14372,7 +14380,7 @@ module.exports = _curry2(function constructN(n, Fn) {
 
 
 /***/ }),
-/* 249 */
+/* 250 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -14422,7 +14430,7 @@ module.exports = _curry2(function converge(after, fns) {
 
 
 /***/ }),
-/* 250 */
+/* 251 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -14456,7 +14464,7 @@ module.exports = _curry2(function defaultTo(d, v) {
 
 
 /***/ }),
-/* 251 */
+/* 252 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _contains = __webpack_require__(71);
@@ -14498,10 +14506,10 @@ module.exports = _curry2(function difference(first, second) {
 
 
 /***/ }),
-/* 252 */
+/* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _containsWith = __webpack_require__(172);
+var _containsWith = __webpack_require__(173);
 var _curry3 = __webpack_require__(3);
 
 
@@ -14543,7 +14551,7 @@ module.exports = _curry3(function differenceWith(pred, first, second) {
 
 
 /***/ }),
-/* 253 */
+/* 254 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -14576,12 +14584,12 @@ module.exports = _curry2(function dissoc(prop, obj) {
 
 
 /***/ }),
-/* 254 */
+/* 255 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _xdrop = __webpack_require__(640);
+var _xdrop = __webpack_require__(641);
 var slice = __webpack_require__(72);
 
 
@@ -14615,13 +14623,13 @@ module.exports = _curry2(_dispatchable(['drop'], _xdrop, function drop(n, xs) {
 
 
 /***/ }),
-/* 255 */
+/* 256 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _xdropRepeatsWith = __webpack_require__(270);
-var last = __webpack_require__(274);
+var _xdropRepeatsWith = __webpack_require__(271);
+var last = __webpack_require__(275);
 
 
 /**
@@ -14664,13 +14672,13 @@ module.exports = _curry2(_dispatchable([], _xdropRepeatsWith, function dropRepea
 
 
 /***/ }),
-/* 256 */
+/* 257 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
-var _isArguments = __webpack_require__(264);
+var _isArguments = __webpack_require__(265);
 var _isArray = __webpack_require__(59);
-var _isObject = __webpack_require__(267);
+var _isObject = __webpack_require__(268);
 var _isString = __webpack_require__(122);
 
 
@@ -14717,7 +14725,7 @@ module.exports = _curry1(function empty(x) {
 
 
 /***/ }),
-/* 257 */
+/* 258 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -14759,11 +14767,11 @@ module.exports = _curry2(function identical(a, b) {
 
 
 /***/ }),
-/* 258 */
+/* 259 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _cloneRegExp = __webpack_require__(259);
-var type = __webpack_require__(177);
+var _cloneRegExp = __webpack_require__(260);
+var type = __webpack_require__(178);
 
 
 /**
@@ -14805,7 +14813,7 @@ module.exports = function _clone(value, refFrom, refTo, deep) {
 
 
 /***/ }),
-/* 259 */
+/* 260 */
 /***/ (function(module, exports) {
 
 module.exports = function _cloneRegExp(pattern) {
@@ -14818,7 +14826,7 @@ module.exports = function _cloneRegExp(pattern) {
 
 
 /***/ }),
-/* 260 */
+/* 261 */
 /***/ (function(module, exports) {
 
 module.exports = function _complement(f) {
@@ -14829,7 +14837,7 @@ module.exports = function _complement(f) {
 
 
 /***/ }),
-/* 261 */
+/* 262 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _arity = __webpack_require__(46);
@@ -14846,7 +14854,7 @@ module.exports = function _createPartialApplicator(concat) {
 
 
 /***/ }),
-/* 262 */
+/* 263 */
 /***/ (function(module, exports) {
 
 module.exports = function _filter(fn, list) {
@@ -14865,7 +14873,7 @@ module.exports = function _filter(fn, list) {
 
 
 /***/ }),
-/* 263 */
+/* 264 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var equals = __webpack_require__(45);
@@ -14928,7 +14936,7 @@ module.exports = function _indexOf(list, a, idx) {
 
 
 /***/ }),
-/* 264 */
+/* 265 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _has = __webpack_require__(23);
@@ -14943,7 +14951,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 265 */
+/* 266 */
 /***/ (function(module, exports) {
 
 /**
@@ -14960,7 +14968,7 @@ module.exports = Number.isInteger || function _isInteger(n) {
 
 
 /***/ }),
-/* 266 */
+/* 267 */
 /***/ (function(module, exports) {
 
 module.exports = function _isNumber(x) {
@@ -14969,7 +14977,7 @@ module.exports = function _isNumber(x) {
 
 
 /***/ }),
-/* 267 */
+/* 268 */
 /***/ (function(module, exports) {
 
 module.exports = function _isObject(x) {
@@ -14978,7 +14986,7 @@ module.exports = function _isObject(x) {
 
 
 /***/ }),
-/* 268 */
+/* 269 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isArrayLike = __webpack_require__(94);
@@ -15017,7 +15025,7 @@ module.exports = function _makeFlat(recursive) {
 
 
 /***/ }),
-/* 269 */
+/* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -15051,7 +15059,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 270 */
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -15084,7 +15092,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 271 */
+/* 272 */
 /***/ (function(module, exports) {
 
 module.exports = (function() {
@@ -15104,7 +15112,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 272 */
+/* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -15139,11 +15147,11 @@ module.exports = _curry2(function is(Ctor, val) {
 
 
 /***/ }),
-/* 273 */
+/* 274 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
-var converge = __webpack_require__(249);
+var converge = __webpack_require__(250);
 
 
 /**
@@ -15169,7 +15177,7 @@ module.exports = _curry1(function juxt(fns) {
 
 
 /***/ }),
-/* 274 */
+/* 275 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var nth = __webpack_require__(95);
@@ -15199,11 +15207,11 @@ module.exports = nth(-1);
 
 
 /***/ }),
-/* 275 */
+/* 276 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
-var _isNumber = __webpack_require__(266);
+var _isNumber = __webpack_require__(267);
 
 
 /**
@@ -15227,12 +15235,12 @@ module.exports = _curry1(function length(list) {
 
 
 /***/ }),
-/* 276 */
+/* 277 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _reduce = __webpack_require__(34);
-var ap = __webpack_require__(165);
+var ap = __webpack_require__(166);
 var curryN = __webpack_require__(21);
 var map = __webpack_require__(29);
 
@@ -15263,11 +15271,11 @@ module.exports = _curry2(function liftN(arity, fn) {
 
 
 /***/ }),
-/* 277 */
+/* 278 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
-var sum = __webpack_require__(290);
+var sum = __webpack_require__(291);
 
 
 /**
@@ -15291,7 +15299,7 @@ module.exports = _curry1(function mean(list) {
 
 
 /***/ }),
-/* 278 */
+/* 279 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -15346,7 +15354,7 @@ module.exports = _curry3(function mergeWithKey(fn, l, r) {
 
 
 /***/ }),
-/* 279 */
+/* 280 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -15376,7 +15384,7 @@ module.exports = _curry2(function multiply(a, b) { return a * b; });
 
 
 /***/ }),
-/* 280 */
+/* 281 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -15407,7 +15415,7 @@ module.exports = _curry1(function not(a) {
 
 
 /***/ }),
-/* 281 */
+/* 282 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -15441,7 +15449,7 @@ module.exports = _curry2(function objOf(key, val) {
 
 
 /***/ }),
-/* 282 */
+/* 283 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -15473,7 +15481,7 @@ module.exports = _curry2(function or(a, b) {
 
 
 /***/ }),
-/* 283 */
+/* 284 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -15518,7 +15526,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 284 */
+/* 285 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -15556,13 +15564,13 @@ module.exports = _curry2(function pickAll(names, obj) {
 
 
 /***/ }),
-/* 285 */
+/* 286 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _arity = __webpack_require__(46);
-var _pipe = __webpack_require__(631);
+var _pipe = __webpack_require__(632);
 var reduce = __webpack_require__(48);
-var tail = __webpack_require__(176);
+var tail = __webpack_require__(177);
 
 
 /**
@@ -15598,13 +15606,13 @@ module.exports = function pipe() {
 
 
 /***/ }),
-/* 286 */
+/* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _arity = __webpack_require__(46);
-var _pipeP = __webpack_require__(632);
+var _pipeP = __webpack_require__(633);
 var reduce = __webpack_require__(48);
-var tail = __webpack_require__(176);
+var tail = __webpack_require__(177);
 
 
 /**
@@ -15635,7 +15643,7 @@ module.exports = function pipeP() {
 
 
 /***/ }),
-/* 287 */
+/* 288 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _concat = __webpack_require__(41);
@@ -15665,7 +15673,7 @@ module.exports = _curry2(function prepend(el, list) {
 
 
 /***/ }),
-/* 288 */
+/* 289 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -15724,14 +15732,14 @@ module.exports = _curry3(function reduceRight(fn, acc, list) {
 
 
 /***/ }),
-/* 289 */
+/* 290 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var ap = __webpack_require__(165);
+var ap = __webpack_require__(166);
 var map = __webpack_require__(29);
-var prepend = __webpack_require__(287);
-var reduceRight = __webpack_require__(288);
+var prepend = __webpack_require__(288);
+var reduceRight = __webpack_require__(289);
 
 
 /**
@@ -15768,7 +15776,7 @@ module.exports = _curry2(function sequence(of, traversable) {
 
 
 /***/ }),
-/* 290 */
+/* 291 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var add = __webpack_require__(115);
@@ -15794,12 +15802,12 @@ module.exports = reduce(add, 0);
 
 
 /***/ }),
-/* 291 */
+/* 292 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _xtake = __webpack_require__(651);
+var _xtake = __webpack_require__(652);
 var slice = __webpack_require__(72);
 
 
@@ -15852,7 +15860,7 @@ module.exports = _curry2(_dispatchable(['take'], _xtake, function take(n, xs) {
 
 
 /***/ }),
-/* 292 */
+/* 293 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -15898,10 +15906,10 @@ module.exports = _curry2(function times(fn, n) {
 
 
 /***/ }),
-/* 293 */
+/* 294 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _Set = __webpack_require__(619);
+var _Set = __webpack_require__(620);
 var _curry2 = __webpack_require__(0);
 
 
@@ -15942,11 +15950,11 @@ module.exports = _curry2(function uniqBy(fn, list) {
 
 
 /***/ }),
-/* 294 */
+/* 295 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
-var adjust = __webpack_require__(241);
+var adjust = __webpack_require__(242);
 var always = __webpack_require__(82);
 
 
@@ -15978,7 +15986,7 @@ module.exports = _curry3(function update(idx, x, list) {
 
 
 /***/ }),
-/* 295 */
+/* 296 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -16028,7 +16036,7 @@ module.exports = _curry2(function useWith(fn, transformers) {
 
 
 /***/ }),
-/* 296 */
+/* 297 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -16065,7 +16073,7 @@ module.exports = _curry1(function values(obj) {
 
 
 /***/ }),
-/* 297 */
+/* 298 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -16117,7 +16125,7 @@ module.exports = _curry2(function where(spec, testObj) {
 
 
 /***/ }),
-/* 298 */
+/* 299 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16270,7 +16278,7 @@ var CSSProperty = {
 module.exports = CSSProperty;
 
 /***/ }),
-/* 299 */
+/* 300 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16394,7 +16402,7 @@ var CallbackQueue = function () {
 module.exports = PooledClass.addPoolingTo(CallbackQueue);
 
 /***/ }),
-/* 300 */
+/* 301 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16414,7 +16422,7 @@ var DOMProperty = __webpack_require__(61);
 var ReactDOMComponentTree = __webpack_require__(16);
 var ReactInstrumentation = __webpack_require__(35);
 
-var quoteAttributeValueForBrowser = __webpack_require__(825);
+var quoteAttributeValueForBrowser = __webpack_require__(826);
 var warning = __webpack_require__(5);
 
 var VALID_ATTRIBUTE_NAME_REGEX = new RegExp('^[' + DOMProperty.ATTRIBUTE_NAME_START_CHAR + '][' + DOMProperty.ATTRIBUTE_NAME_CHAR + ']*$');
@@ -16636,7 +16644,7 @@ var DOMPropertyOperations = {
 module.exports = DOMPropertyOperations;
 
 /***/ }),
-/* 301 */
+/* 302 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16659,7 +16667,7 @@ var ReactDOMComponentFlags = {
 module.exports = ReactDOMComponentFlags;
 
 /***/ }),
-/* 302 */
+/* 303 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16677,7 +16685,7 @@ module.exports = ReactDOMComponentFlags;
 
 var _assign = __webpack_require__(12);
 
-var LinkedValueUtils = __webpack_require__(184);
+var LinkedValueUtils = __webpack_require__(185);
 var ReactDOMComponentTree = __webpack_require__(16);
 var ReactUpdates = __webpack_require__(49);
 
@@ -16864,7 +16872,7 @@ function _handleChange(event) {
 module.exports = ReactDOMSelect;
 
 /***/ }),
-/* 303 */
+/* 304 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16899,7 +16907,7 @@ ReactEmptyComponent.injection = ReactEmptyComponentInjection;
 module.exports = ReactEmptyComponent;
 
 /***/ }),
-/* 304 */
+/* 305 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16926,7 +16934,7 @@ var ReactFeatureFlags = {
 module.exports = ReactFeatureFlags;
 
 /***/ }),
-/* 305 */
+/* 306 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16999,7 +17007,7 @@ var ReactHostComponent = {
 module.exports = ReactHostComponent;
 
 /***/ }),
-/* 306 */
+/* 307 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17015,11 +17023,11 @@ module.exports = ReactHostComponent;
 
 
 
-var ReactDOMSelection = __webpack_require__(780);
+var ReactDOMSelection = __webpack_require__(781);
 
 var containsNode = __webpack_require__(544);
-var focusNode = __webpack_require__(234);
-var getActiveElement = __webpack_require__(235);
+var focusNode = __webpack_require__(235);
+var getActiveElement = __webpack_require__(236);
 
 function isInDocument(node) {
   return containsNode(document.documentElement, node);
@@ -17128,7 +17136,7 @@ var ReactInputSelection = {
 module.exports = ReactInputSelection;
 
 /***/ }),
-/* 307 */
+/* 308 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17152,21 +17160,21 @@ var React = __webpack_require__(86);
 var ReactBrowserEventEmitter = __webpack_require__(131);
 var ReactCurrentOwner = __webpack_require__(50);
 var ReactDOMComponentTree = __webpack_require__(16);
-var ReactDOMContainerInfo = __webpack_require__(772);
-var ReactDOMFeatureFlags = __webpack_require__(774);
-var ReactFeatureFlags = __webpack_require__(304);
+var ReactDOMContainerInfo = __webpack_require__(773);
+var ReactDOMFeatureFlags = __webpack_require__(775);
+var ReactFeatureFlags = __webpack_require__(305);
 var ReactInstanceMap = __webpack_require__(101);
 var ReactInstrumentation = __webpack_require__(35);
-var ReactMarkupChecksum = __webpack_require__(794);
+var ReactMarkupChecksum = __webpack_require__(795);
 var ReactReconciler = __webpack_require__(85);
-var ReactUpdateQueue = __webpack_require__(187);
+var ReactUpdateQueue = __webpack_require__(188);
 var ReactUpdates = __webpack_require__(49);
 
 var emptyObject = __webpack_require__(90);
-var instantiateReactComponent = __webpack_require__(315);
+var instantiateReactComponent = __webpack_require__(316);
 var invariant = __webpack_require__(4);
 var setInnerHTML = __webpack_require__(135);
-var shouldUpdateReactComponent = __webpack_require__(193);
+var shouldUpdateReactComponent = __webpack_require__(194);
 var warning = __webpack_require__(5);
 
 var ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
@@ -17671,7 +17679,7 @@ var ReactMount = {
 module.exports = ReactMount;
 
 /***/ }),
-/* 308 */
+/* 309 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17716,7 +17724,7 @@ var ReactNodeTypes = {
 module.exports = ReactNodeTypes;
 
 /***/ }),
-/* 309 */
+/* 310 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17738,7 +17746,7 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 module.exports = ReactPropTypesSecret;
 
 /***/ }),
-/* 310 */
+/* 311 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17770,7 +17778,7 @@ var ViewportMetrics = {
 module.exports = ViewportMetrics;
 
 /***/ }),
-/* 311 */
+/* 312 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17833,7 +17841,7 @@ function accumulateInto(current, next) {
 module.exports = accumulateInto;
 
 /***/ }),
-/* 312 */
+/* 313 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17869,7 +17877,7 @@ function forEachAccumulated(arr, cb, scope) {
 module.exports = forEachAccumulated;
 
 /***/ }),
-/* 313 */
+/* 314 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17885,7 +17893,7 @@ module.exports = forEachAccumulated;
 
 
 
-var ReactNodeTypes = __webpack_require__(308);
+var ReactNodeTypes = __webpack_require__(309);
 
 function getHostComponentFromComposite(inst) {
   var type;
@@ -17904,7 +17912,7 @@ function getHostComponentFromComposite(inst) {
 module.exports = getHostComponentFromComposite;
 
 /***/ }),
-/* 314 */
+/* 315 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17942,7 +17950,7 @@ function getTextContentAccessor() {
 module.exports = getTextContentAccessor;
 
 /***/ }),
-/* 315 */
+/* 316 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17961,11 +17969,11 @@ module.exports = getTextContentAccessor;
 var _prodInvariant = __webpack_require__(9),
     _assign = __webpack_require__(12);
 
-var ReactCompositeComponent = __webpack_require__(769);
-var ReactEmptyComponent = __webpack_require__(303);
-var ReactHostComponent = __webpack_require__(305);
+var ReactCompositeComponent = __webpack_require__(770);
+var ReactEmptyComponent = __webpack_require__(304);
+var ReactHostComponent = __webpack_require__(306);
 
-var getNextDebugID = __webpack_require__(837);
+var getNextDebugID = __webpack_require__(838);
 var invariant = __webpack_require__(4);
 var warning = __webpack_require__(5);
 
@@ -18076,7 +18084,7 @@ _assign(ReactCompositeComponentWrapper.prototype, ReactCompositeComponent, {
 module.exports = instantiateReactComponent;
 
 /***/ }),
-/* 316 */
+/* 317 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18132,7 +18140,7 @@ function isTextInputElement(elem) {
 module.exports = isTextInputElement;
 
 /***/ }),
-/* 317 */
+/* 318 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18189,7 +18197,7 @@ if (ExecutionEnvironment.canUseDOM) {
 module.exports = setTextContent;
 
 /***/ }),
-/* 318 */
+/* 319 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18208,11 +18216,11 @@ module.exports = setTextContent;
 var _prodInvariant = __webpack_require__(9);
 
 var ReactCurrentOwner = __webpack_require__(50);
-var REACT_ELEMENT_TYPE = __webpack_require__(788);
+var REACT_ELEMENT_TYPE = __webpack_require__(789);
 
-var getIteratorFn = __webpack_require__(822);
+var getIteratorFn = __webpack_require__(823);
 var invariant = __webpack_require__(4);
-var KeyEscapeUtils = __webpack_require__(183);
+var KeyEscapeUtils = __webpack_require__(184);
 var warning = __webpack_require__(5);
 
 var SEPARATOR = '.';
@@ -18370,7 +18378,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 module.exports = traverseAllChildren;
 
 /***/ }),
-/* 319 */
+/* 320 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18395,7 +18403,7 @@ var REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol['for'] && Symbol
 module.exports = REACT_ELEMENT_TYPE;
 
 /***/ }),
-/* 320 */
+/* 321 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18422,10 +18430,10 @@ var ReactCurrentOwner = __webpack_require__(50);
 var ReactComponentTreeHook = __webpack_require__(30);
 var ReactElement = __webpack_require__(74);
 
-var checkReactTypeSpec = __webpack_require__(836);
+var checkReactTypeSpec = __webpack_require__(837);
 
 var canDefineProperty = __webpack_require__(136);
-var getIteratorFn = __webpack_require__(322);
+var getIteratorFn = __webpack_require__(323);
 var warning = __webpack_require__(5);
 
 function getDeclarationErrorAddendum() {
@@ -18653,7 +18661,7 @@ var ReactElementValidator = {
 module.exports = ReactElementValidator;
 
 /***/ }),
-/* 321 */
+/* 322 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18683,7 +18691,7 @@ if (true) {
 module.exports = ReactPropTypeLocationNames;
 
 /***/ }),
-/* 322 */
+/* 323 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18729,18 +18737,18 @@ function getIteratorFn(maybeIterable) {
 module.exports = getIteratorFn;
 
 /***/ }),
-/* 323 */
+/* 324 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_bootstrap__ = __webpack_require__(344);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_bootstrap__ = __webpack_require__(345);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_dom__ = __webpack_require__(756);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_dom__ = __webpack_require__(757);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_dom__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_components_Configurator__ = __webpack_require__(345);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_pages_FilterPage__ = __webpack_require__(354);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_components_Configurator__ = __webpack_require__(346);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_pages_FilterPage__ = __webpack_require__(355);
 
 
 
@@ -18762,19 +18770,19 @@ Array.from(document.getElementsByTagName('FilterPage')).map(function (element) {
 });
 
 /***/ }),
-/* 324 */
+/* 325 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 325 */
+/* 326 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(326);
+module.exports = __webpack_require__(327);
 
 /***/ }),
-/* 326 */
+/* 327 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18782,8 +18790,8 @@ module.exports = __webpack_require__(326);
 
 var utils = __webpack_require__(31);
 var bind = __webpack_require__(203);
-var Axios = __webpack_require__(328);
-var defaults = __webpack_require__(137);
+var Axios = __webpack_require__(329);
+var defaults = __webpack_require__(138);
 
 /**
  * Create an instance of Axios
@@ -18817,14 +18825,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(200);
-axios.CancelToken = __webpack_require__(327);
+axios.CancelToken = __webpack_require__(328);
 axios.isCancel = __webpack_require__(201);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(342);
+axios.spread = __webpack_require__(343);
 
 module.exports = axios;
 
@@ -18833,7 +18841,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 327 */
+/* 328 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18897,18 +18905,18 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 328 */
+/* 329 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var defaults = __webpack_require__(137);
+var defaults = __webpack_require__(138);
 var utils = __webpack_require__(31);
-var InterceptorManager = __webpack_require__(329);
-var dispatchRequest = __webpack_require__(330);
-var isAbsoluteURL = __webpack_require__(338);
-var combineURLs = __webpack_require__(336);
+var InterceptorManager = __webpack_require__(330);
+var dispatchRequest = __webpack_require__(331);
+var isAbsoluteURL = __webpack_require__(339);
+var combineURLs = __webpack_require__(337);
 
 /**
  * Create a new instance of Axios
@@ -18989,7 +18997,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 329 */
+/* 330 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19048,16 +19056,16 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 330 */
+/* 331 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(31);
-var transformData = __webpack_require__(333);
+var transformData = __webpack_require__(334);
 var isCancel = __webpack_require__(201);
-var defaults = __webpack_require__(137);
+var defaults = __webpack_require__(138);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -19134,7 +19142,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 331 */
+/* 332 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19160,7 +19168,7 @@ module.exports = function enhanceError(error, config, code, response) {
 
 
 /***/ }),
-/* 332 */
+/* 333 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19192,7 +19200,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 333 */
+/* 334 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19219,7 +19227,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 334 */
+/* 335 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19262,7 +19270,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 335 */
+/* 336 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19337,7 +19345,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 336 */
+/* 337 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19358,7 +19366,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 337 */
+/* 338 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19418,7 +19426,7 @@ module.exports = (
 
 
 /***/ }),
-/* 338 */
+/* 339 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19439,7 +19447,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 339 */
+/* 340 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19514,7 +19522,7 @@ module.exports = (
 
 
 /***/ }),
-/* 340 */
+/* 341 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19533,7 +19541,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 341 */
+/* 342 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19577,7 +19585,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 342 */
+/* 343 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19611,25 +19619,14 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 343 */
+/* 344 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony default export */ __webpack_exports__["a"] = ({
-    convertible: '<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version="1.1"\n\t xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"\n\t x="0px" y="0px" width="100.8px" height="36.8px" viewBox="0 0 100.8 36.8" style="enable-background:new 0 0 100.8 36.8;"\n\t xml:space="preserve">\n<style type="text/css">\n\t.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n\t.st1{fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class="st0" d="M38.3,4.3L38.3,4.3c-1.1,0.1-1.5,1-1.8,2l-0.7,2.2c-1,3.2,4.8,3.2,4.7,0.5l-0.2-2.9C40.2,5.1,39.3,4.3,38.3,4.3\n\tz"/>\n<path class="st1" d="M11.7,31.9c-5.3,0-10.9-3.6-11.1-3.7L0,27.8v-8.1l0.2-0.3c0.3-0.5,1-1.9,1-3l0.3-7.6l14.7-0.7\n\tc6.3-0.3,10.4,0.3,14.7,1c2.4,0.4,4.9,0.8,8,1l23.8,0c1.4,0,2.8-0.2,4.2-0.4c1.5-0.2,3-0.4,4.6-0.4c0.2,0,9.7,1.1,17.4,3\n\tc8.2,2.1,11,5.4,11.3,6.8l0.7,11.8l-1,0.2c-1.9,0.4-3.5,0.7-7.7,0.7h-4.4v-2.4h4.4c3.2,0,4.8-0.2,6.2-0.5l0-0.6l-0.5-8.9\n\tc-0.2-0.4-2.4-3-9.6-4.8c-7.5-1.9-16.8-3-16.9-3c-1.3,0-2.6,0.2-4.1,0.4c-1.5,0.2-3,0.4-4.6,0.4H38.7c-3.2-0.3-5.8-0.7-8.2-1\n\tc-4.1-0.7-8.1-1.3-14.2-1L3.8,11.1l-0.2,5.4c0,1.6-0.8,3.2-1.2,3.9v6.1c1.5,0.9,5.8,3.1,9.6,3l3.6,0v2.4H12\n\tC11.9,31.9,11.8,31.9,11.7,31.9z M75.1,31.9H28.1v-2.4h47.1V31.9z"/>\n<path class="st0" d="M2.4,15.3c0,1.2-0.1,2.4-0.1,3.1h1.5c1.9,0,4.5-1.5,4.6-3.1v-1.5H2.4L2.4,15.3L2.4,15.3z"/>\n<path class="st0" d="M91,18.1l2.3,4.1c0.7-0.4,1.8-0.7,2.7-0.7h0h0h0h0h0h0c1.2,0,2.4,0,3.6,0l0-0.2c-0.1-0.4-1.2-2.3-2.4-3.2\n\tC95.1,18.1,93.1,18.1,91,18.1z"/>\n<path class="st0" d="M29.6,31.9c-0.4,0.9-1,1.7-1.7,2.4h0c-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5c-0.7-0.7-1.3-1.5-1.7-2.4\n\th-1.2h-1.2v-1.2v-3c0-2.8,1.1-5.3,3-7.2c1.8-1.8,4.4-3,7.2-3h0c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v3v1.2h-1.2H29.6\n\tL29.6,31.9z M81.4,22.2c-3.3,0-6,2.7-6,6s2.7,6,6,6s6-2.7,6-6S84.7,22.2,81.4,22.2L81.4,22.2z M21.8,22.2c-3.3,0-6,2.7-6,6\n\ts2.7,6,6,6c3.3,0,6-2.7,6-6S25.1,22.2,21.8,22.2L21.8,22.2z M81.4,17.5L81.4,17.5c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2\n\tv3v1.2h-1.2h-1.2c-0.4,0.9-1,1.7-1.7,2.4c-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5h0c-0.7-0.7-1.3-1.5-1.7-2.4h-1.2h-1.2v-1.2\n\tv-3c0-2.8,1.1-5.3,3-7.2l0,0l0,0C76.1,18.7,78.6,17.5,81.4,17.5z"/>\n<circle class="st0" cx="81.4" cy="28.2" r="2.2"/>\n<rect x="37.1" y="14.8" class="st1" width="5.5" height="1.6"/>\n<circle class="st0" cx="21.8" cy="28.2" r="2.2"/>\n<polygon class="st0" points="35.3,24.7 35.3,26.7 68.7,26.7 "/>\n<rect x="96.9" y="25.6" class="st1" width="2.7" height="1.6"/>\n<path class="st0" d="M96.5,25.1h-1.2c-0.5,0-0.8,0.4-0.8,0.8v0.9c0,0.5,0.4,0.8,0.8,0.8h1.2c0.5,0,0.8-0.4,0.8-0.8v-0.9\n\tC97.4,25.4,97,25.1,96.5,25.1z"/>\n<path class="st0" d="M1.9,27.6v3.4h8.7v-0.3C7,30.3,3.3,28.4,1.9,27.6z"/>\n<path class="st0" d="M22.6,3.8L22.6,3.8c-1.1,0.1-1.5,1-1.8,2L20.1,8C20,8.1,20,8.3,20,8.5c1.6,0.1,3.2,0.2,4.7,0.4\n\tc0-0.1,0-0.3,0-0.4l-0.2-2.9C24.5,4.5,23.6,3.7,22.6,3.8z"/>\n<path class="st0" d="M72,9.5c0,0-11.7-7.1-16.5-8.6c-0.6-0.2-1.2-0.3-1.8-0.5l0,0c-0.6-0.1-1.3-0.3-1.9-0.4l-0.4,2.3\n\tc6.1,1.5,8.4,5.3,13.7,8.5c0.8,0.5,4.8,0.2,5.7,0.7L72,9.5z"/>\n<path class="st0" d="M60.6,10L60.6,10c-0.7,0.7-1,1.5-1.1,2.4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc0.4,0,0.8-0.2,1-0.6c0.2-0.4,0.2-0.8,0-1.2c-0.5-0.8-1.3-1.6-2.5-2.1C61.4,9.6,60.9,9.7,60.6,10z"/>\n<path class="st1" d="M62.7,14.8c-0.2,0-0.5-0.1-0.6-0.3l-1.5-2c-0.3-0.4-0.2-0.9,0.2-1.1c0.4-0.3,0.9-0.2,1.1,0.2l1.5,2\n\tc0.3,0.4,0.2,0.9-0.2,1.1C63.1,14.7,62.9,14.8,62.7,14.8z"/>\n</svg>\n',
-    coupe: '<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version="1.1"\n\t xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"\n\t x="0px" y="0px" width="99.3px" height="35.7px" viewBox="0 0 99.3 35.7" style="enable-background:new 0 0 99.3 35.7;"\n\t xml:space="preserve">\n<style type="text/css">\n\t.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n\t.st1{fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class="st0" d="M3.4,13.6c0,1.2-0.1,2.4-0.1,3.1h1.5c1.9,0,4.5-1.5,4.6-3.1v-1.5H3.3L3.4,13.6L3.4,13.6z"/>\n<path class="st0" d="M2.6,27v3.4h8.7V30C7.7,29.7,4.1,27.8,2.6,27z"/>\n<path class="st0" d="M22,8.7c9.3-3.9,10.9-4.9,21.2-5.1c7.4-0.1,12.4,2.5,17.8,5.7L61,9.3l0,0c-0.9,0.8-1.3,1.9-1.4,3.1l-34.4-1.3\n\tC25.2,11.2,23,10.9,22,8.7z"/>\n<path class="st0" d="M61.8,10.2L61.8,10.2c-0.7,0.7-1,1.5-1.1,2.4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc0.4,0,0.8-0.2,1-0.6c0.2-0.4,0.2-0.8,0-1.2c-0.5-0.8-1.3-1.6-2.5-2.1C62.6,9.7,62.1,9.8,61.8,10.2z"/>\n<path class="st1" d="M63.9,14.9c-0.2,0-0.5-0.1-0.6-0.3l-1.5-2c-0.3-0.4-0.2-0.9,0.2-1.1c0.4-0.3,0.9-0.2,1.1,0.2l1.5,2\n\tc0.3,0.4,0.2,0.9-0.2,1.1C64.3,14.9,64.1,14.9,63.9,14.9z"/>\n<path class="st1" d="M11.7,30.9c-5.3,0-10.9-3.6-11.1-3.7L0,26.8v-7.4L0.4,19c0.5-0.5,1.6-1.9,1.6-2.8l0.3-7.6l8-0.8\n\tC23.9,1.4,29.2,0.1,42.9,0c9.3,0,15,3.3,21.6,7.1c1.5,0.9,3.1,1.8,4.8,2.8c1.8,0.1,10.8,0.4,17.9,2.2c6.6,1.7,10.8,3.9,11.3,6\n\tl0.7,11.8l-1,0.2c-1.9,0.4-3.5,0.7-7.7,0.7h-0.7v-2.4h0.7c3.2,0,4.8-0.2,6.2-0.5l0-0.6l-0.5-8.9c-0.2-0.3-2.4-2.2-9.6-4.1\n\tc-7.4-1.9-17.5-2.2-17.6-2.2l-0.5-0.1c-1.8-1-3.5-2-5.1-2.9C56.8,5.3,51.6,2.3,43,2.4c-13.4,0.1-18.5,1.3-31.9,7.7l-0.4,0.1\n\tl-6.1,0.6l-0.2,5.4c0,1.7-1.3,3.3-1.9,4.1v5.2c1.5,0.9,5.8,3.1,9.6,3l2,0v2.4h-2C11.9,30.9,11.8,30.9,11.7,30.9z M73.3,30.9H27.9\n\tv-2.4h45.4V30.9z"/>\n<g>\n\t<path class="st0" d="M81.6,16.5L81.6,16.5c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v3v1.2h-1.2h-2.6c0.6-1.1,1-2.4,1-3.7\n\t\tc0-4.1-3.3-7.4-7.4-7.4c-4.1,0-7.4,3.3-7.4,7.4c0,1.3,0.4,2.6,1,3.7h-2.6h-1.2v-1.2v-3c0-2.8,1.1-5.3,3-7.2l0,0l0,0\n\t\tC76.2,17.6,78.8,16.5,81.6,16.5z"/>\n\t<path class="st0" d="M75.5,21.1c1.6-1.6,3.7-2.5,6.1-2.5c2.4,0,4.5,1,6.1,2.5l0,0c1.6,1.6,2.5,3.7,2.5,6.1c0,2.4-1,4.5-2.5,6.1h0\n\t\tc-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5c-1.6-1.6-2.5-3.7-2.5-6.1C73,24.8,73.9,22.6,75.5,21.1L75.5,21.1L75.5,21.1z\n\t\t M81.6,21.1c-3.3,0-6,2.7-6,6s2.7,6,6,6c3.3,0,6-2.7,6-6S84.9,21.1,81.6,21.1z"/>\n\t<circle class="st0" cx="81.6" cy="27.2" r="2.2"/>\n</g>\n<polygon class="st0" points="34.7,23.8 34.7,25.8 68.4,25.8 "/>\n<path class="st0" d="M89.4,16.5l2.3,4.1c0.7-0.4,1.8-0.7,2.7-0.7h0h0h0h0h0h0c1.2,0,2.4,0,3.6,0l0-0.2c-0.1-0.4-1.2-2.3-2.4-3.2\n\tC93.5,16.5,91.4,16.5,89.4,16.5z"/>\n<rect x="95.3" y="23.9" class="st1" width="2.7" height="1.6"/>\n<path class="st0" d="M94.8,23.4h-1.2c-0.5,0-0.8,0.4-0.8,0.8v0.9c0,0.5,0.4,0.8,0.8,0.8h1.2c0.5,0,0.8-0.4,0.8-0.8v-0.9\n\tC95.7,23.8,95.3,23.4,94.8,23.4z"/>\n<rect x="36.3" y="14" class="st1" width="5.5" height="1.6"/>\n<g>\n\t<path class="st0" d="M20.9,16.5L20.9,16.5c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v3v1.2h-1.2h-2.6c0.6-1.1,1-2.4,1-3.7\n\t\tc0-4.1-3.3-7.4-7.4-7.4c-4.1,0-7.4,3.3-7.4,7.4c0,1.3,0.4,2.6,1,3.7H12h-1.2v-1.2v-3c0-2.8,1.1-5.3,3-7.2l0,0l0,0\n\t\tC15.6,17.6,18.1,16.5,20.9,16.5z"/>\n\t<path class="st0" d="M14.9,21.1c1.6-1.6,3.7-2.5,6.1-2.5c2.4,0,4.5,1,6.1,2.5l0,0c1.6,1.6,2.5,3.7,2.5,6.1c0,2.4-1,4.5-2.5,6.1h0\n\t\tc-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5c-1.6-1.6-2.5-3.7-2.5-6.1C12.3,24.8,13.3,22.6,14.9,21.1L14.9,21.1L14.9,21.1z\n\t\t M20.9,21.1c-3.3,0-6,2.7-6,6s2.7,6,6,6c3.3,0,6-2.7,6-6S24.3,21.1,20.9,21.1z"/>\n\t<circle class="st0" cx="20.9" cy="27.2" r="2.2"/>\n</g>\n</svg>\n',
-    crossover: '<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version="1.1"\n\t xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"\n\t x="0px" y="0px" width="108.9px" height="42.8px" viewBox="0 0 108.9 42.8" style="enable-background:new 0 0 108.9 42.8;"\n\t xml:space="preserve">\n<style type="text/css">\n\t.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n\t.st1{fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class="st0" d="M69.1,13.1l-47.2-1.3l-1-3.3c3.2-1.1,6.4-2.1,9.5-2.8C37.9,3.9,46.2,4,53.8,4c5.8,0.5,11.5,2.8,16.8,5.6l0,0\n\tl0,0c-0.9,0.9-1.4,1.9-1.4,3.1C69.1,12.8,69.1,13,69.1,13.1z"/>\n<path class="st1" d="M8.7,35.3c-5.4,0-8.3-3.5-8.5-3.7L0,31.3v-8.8l0.4-0.4c0.5-0.5,1.6-1.9,1.6-2.8c0-0.9,0.1-2.9,0.1-4.8\n\tc0-1.5,0.1-2.9,0.1-3.8l0-1l5.4-0.7C25.8,1.3,36.2,0,53.9,0c9.7,0.9,18.5,5.7,26.7,10.7c0.6,0.1,1.3,0.1,2.1,0.2\n\tc13,1.2,25.1,3,26.2,8l0,15.6l-0.9,0.2c-1.7,0.4-3.5,0.6-7.1,0.6h-3.3v-2.4h3.3c3,0,4.5-0.2,5.7-0.4V19.2c-0.6-2.4-8.7-4.5-24.1-5.9\n\tc-1-0.1-1.8-0.2-2.4-0.2l-0.5-0.2C71.6,8,63,3.2,53.8,2.4c-17.3,0-27.5,1.3-45.3,9l-0.3,0.1l-3.6,0.4c0,0.8,0,1.8-0.1,2.8\n\tc0,1.9-0.1,3.9-0.1,4.8c0,1.7-1.3,3.3-1.9,4.1v6.9c0.8,0.7,3,2.6,6.7,2.5l2.5,0v2.4H9.1C9,35.3,8.9,35.3,8.7,35.3z M79.5,35.3H29.1\n\tv-2.4h50.5V35.3z"/>\n<path class="st0" d="M71.3,10.4L71.3,10.4c-0.7,0.7-1,1.5-1.1,2.4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4H74\n\tc0.4,0,0.8-0.2,1-0.6c0.2-0.4,0.2-0.8,0-1.2c-0.5-0.8-1.3-1.6-2.5-2.1C72.1,10,71.6,10.1,71.3,10.4z"/>\n<path class="st1" d="M73.5,15.2c-0.2,0-0.5-0.1-0.6-0.3l-1.5-2c-0.3-0.4-0.2-0.9,0.2-1.1c0.4-0.3,0.9-0.2,1.1,0.2l1.5,2\n\tc0.3,0.4,0.2,0.9-0.2,1.1C73.8,15.1,73.6,15.2,73.5,15.2z"/>\n<path class="st0" d="M2.5,19.3H4c1.9,0,4.5-1.5,4.6-3.1v-1.5H2.5C2.5,16.2,2.5,17.7,2.5,19.3z"/>\n<path class="st0" d="M99.5,17.9l2.8,5c0.9-0.5,2.3-0.9,3.3-0.9h0h0h0h0h0h0c0.7,0,1.4,0,2.1,0c0-2,0.2-2.2-1.6-3.6L99.5,17.9z"/>\n<rect x="49.4" y="15.8" class="st1" width="5.5" height="1.6"/>\n<rect x="24.8" y="15.2" class="st1" width="5.5" height="1.6"/>\n<polygon class="st0" points="35.4,27.6 35.4,29.6 72.7,29.6 "/>\n<path class="st0" d="M107.2,24.9c-1.7,0-2.5,0-4.2,0c-0.9,0.9-0.9,2.1-0.9,3.2c1.7,0,3.4,0,5.1,0C107.2,27,107.2,25.9,107.2,24.9z"\n\t/>\n<path class="st0" d="M104,31.9c-0.3-0.7-0.3-1.6-0.3-2.3c1.7,0,1.8,0,3.5,0v2.3H104z"/>\n<path class="st0" d="M13.3,40.4c-1.5-1.3-2.7-3.1-3.2-5.1H9.5H8.3v-1.2v-3.5c0-3.2,1.3-6,3.4-8.1c2.1-2.1,5-3.4,8.1-3.4h0\n\tc3.2,0,6,1.3,8.1,3.4l0,0c2.1,2.1,3.4,5,3.4,8.1v3.5v1.2h-1.2h-0.6c-0.5,2-1.7,3.8-3.2,5.1c-1.8,1.5-4,2.4-6.5,2.4\n\tC17.4,42.8,15.1,41.9,13.3,40.4L13.3,40.4z M88.5,26c-3.7,0-6.7,3-6.7,6.7c0,3.7,3,6.7,6.7,6.7c3.7,0,6.7-3,6.7-6.7\n\tC95.2,29,92.2,26,88.5,26L88.5,26z M19.8,26c-3.7,0-6.7,3-6.7,6.7c0,3.7,3,6.7,6.7,6.7c3.7,0,6.7-3,6.7-6.7C26.6,29,23.6,26,19.8,26\n\tL19.8,26z M88.5,19.1L88.5,19.1c3.2,0,6,1.3,8.1,3.4l0,0c2.1,2.1,3.4,5,3.4,8.1v3.5v1.2h-1.2h-0.6c-0.5,2-1.7,3.8-3.2,5.1\n\tc-1.8,1.5-4,2.4-6.5,2.4c-2.5,0-4.8-0.9-6.5-2.4l0,0c-1.5-1.3-2.7-3.1-3.2-5.1h-0.6H77v-1.2v-3.5c0-3.2,1.3-6,3.4-8.1\n\tC82.4,20.4,85.3,19.1,88.5,19.1L88.5,19.1z M88.5,30.1c1.4,0,2.6,1.2,2.6,2.6s-1.2,2.6-2.6,2.6c-1.4,0-2.6-1.2-2.6-2.6\n\tS87.1,30.1,88.5,30.1L88.5,30.1z M19.8,30.1c-1.4,0-2.6,1.2-2.6,2.6s1.2,2.6,2.6,2.6c1.4,0,2.6-1.2,2.6-2.6S21.3,30.1,19.8,30.1z"/>\n</svg>\n',
-    hatchback: '<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version="1.1"\n\t xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"\n\t x="0px" y="0px" width="90.6px" height="34.3px" viewBox="0 0 90.6 34.3" style="enable-background:new 0 0 90.6 34.3;"\n\t xml:space="preserve">\n<style type="text/css">\n\t.st0{fill:#6D6E71;}\n\t.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class="st0" d="M6.4,30c-4.3,0-6-2.7-6.4-4.2l0-5.7l0.4-0.4C1,19.1,1.9,18,1.9,17.3L2,13.8c0.1-1.1,0.6-2.1,1.5-2.7l9.6-7\n\tl-1.2-1.9l1.5-0.5C16.9,0.6,19.2,0,25.1,0L44,0c2.9,0.3,5.3,0.7,7.3,1.3c4.1,1.3,13.4,6.9,15,7.8c1.2,0.2,6.9,1.1,13.2,2.7\n\tc7.6,1.9,10.1,5,10.4,6.3L90.6,29l-1,0.2c-1.8,0.4-3.2,0.7-7.1,0.7h-4.9v-2.4h4.9c2.9,0,4.3-0.1,5.6-0.4l0-0.5l-0.4-8.2\n\tc-0.2-0.3-2.2-2.7-8.7-4.4c-6.9-1.8-13.1-2.7-13.2-2.7l-0.4-0.2c-0.1-0.1-10.5-6.4-14.6-7.7c-1.9-0.6-4.1-1-6.7-1.2l-18.8,0\n\tc-4.7,0-6.9,0.4-9.6,1.1l0.8,1.2L4.9,13c-0.3,0.2-0.5,0.5-0.5,0.9l-0.2,3.4c0,1.5-1.2,3.1-1.9,3.8v4.3c0.2,0.5,1.1,2.3,4.3,2.2\n\tl3.2,0V30H6.7C6.6,30,6.5,30,6.4,30z M66.3,30H21.1v-2.4h45.1V30z"/>\n<path class="st1" d="M3.2,13.7l0,0.2l-0.2,2.9h3.3c0,0,2.1-2.4,2.1-3.8C8.4,13,6.1,12.9,3.2,13.7z"/>\n<path class="st1" d="M15,10.5c3.3-3.8,6.3-6.9,10.8-6.9c5,0,13.1,0,18.1,0C49,4,52.7,5.8,56.6,8l0,0l0,0c-0.8,0.8-1.3,1.8-1.3,2.9\n\tc0,0.4,0.1,0.7,0.2,1C45.7,12,21.8,12.4,15,10.5z"/>\n<path class="st1" d="M15.5,16.9L15.5,16.9c2.5,0,4.8,1,6.5,2.7l0,0c1.7,1.7,2.7,4,2.7,6.5v2.7V30h-1.2H21c0.6-1,1-2.2,1-3.4\n\tc0-3.6-2.9-6.5-6.5-6.5S9,22.9,9,26.5c0,1.3,0.4,2.4,1,3.4H7.5H6.3v-1.2v-2.7c0-2.5,1-4.8,2.7-6.5C10.7,17.9,13,16.9,15.5,16.9\n\tL15.5,16.9z M71.9,16.9L71.9,16.9c2.5,0,4.8,1,6.5,2.7l0,0c1.7,1.7,2.7,4,2.7,6.5v2.7V30h-1.2h-2.5c0.6-1,1-2.2,1-3.4\n\tc0-3.6-2.9-6.5-6.5-6.5c-3.6,0-6.5,2.9-6.5,6.5c0,1.3,0.4,2.4,1,3.4h-2.5h-1.2v-1.2v-2.7c0-2.5,1-4.8,2.7-6.5\n\tC67.1,17.9,69.4,16.9,71.9,16.9z"/>\n<rect x="33.2" y="14.7" class="st0" width="3.5" height="1.6"/>\n<path class="st1" d="M57.1,8.6L57.1,8.6c-0.7,0.7-1,1.5-1.1,2.4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc0.4,0,0.8-0.2,1-0.6c0.2-0.4,0.2-0.8,0-1.2c-0.5-0.8-1.3-1.6-2.5-2.1C57.9,8.2,57.5,8.3,57.1,8.6z"/>\n<path class="st0" d="M59.3,13.4c-0.2,0-0.5-0.1-0.6-0.3l-1.5-2c-0.3-0.4-0.2-0.9,0.2-1.1c0.4-0.3,0.9-0.2,1.1,0.2l1.5,2\n\tc0.3,0.4,0.2,0.9-0.2,1.1C59.6,13.3,59.5,13.4,59.3,13.4z"/>\n<polygon class="st1" points="15.5,3.5 6.6,10.3 12,10.3 16.5,4.6 "/>\n<path class="st1" d="M81.4,16.5l2.3,4.1c0.7-0.4,1.8-0.7,2.7-0.7h0h0h0h0h0h0c0.8,0,1.5,0,2.3,0l-0.1-1.4c-0.4-0.7-1-1.4-1.7-2H81.4\n\tz"/>\n<rect x="86.5" y="23.9" class="st0" width="2.7" height="1.6"/>\n<path class="st1" d="M86.1,23.4h-1.2c-0.5,0-0.8,0.4-0.8,0.8v0.9c0,0.5,0.4,0.8,0.8,0.8h1.2c0.5,0,0.8-0.4,0.8-0.8v-0.9\n\tC87,23.8,86.6,23.4,86.1,23.4z"/>\n<g>\n\t<path class="st1" d="M71.9,21.1c-1.5,0-2.8,0.6-3.8,1.6c-1,1-1.6,2.3-1.6,3.8c0,1.5,0.6,2.8,1.6,3.8c1,1,2.3,1.6,3.8,1.6\n\t\tc1.5,0,2.8-0.6,3.8-1.6c1-1,1.6-2.3,1.6-3.8c0-1.5-0.6-2.8-1.6-3.8C74.8,21.7,73.4,21.1,71.9,21.1L71.9,21.1z M66.4,21\n\t\tc1.4-1.4,3.4-2.3,5.5-2.3c2.2,0,4.1,0.9,5.5,2.3c1.4,1.4,2.3,3.4,2.3,5.5c0,2.2-0.9,4.1-2.3,5.5c-1.4,1.4-3.4,2.3-5.5,2.3\n\t\tc-2.2,0-4.1-0.9-5.5-2.3c-1.4-1.4-2.3-3.4-2.3-5.5C64.1,24.4,65,22.4,66.4,21L66.4,21z M15.5,21.1c-1.5,0-2.8,0.6-3.8,1.6\n\t\tc-1,1-1.6,2.3-1.6,3.8c0,1.5,0.6,2.8,1.6,3.8c1,1,2.3,1.6,3.8,1.6c1.5,0,2.8-0.6,3.8-1.6c1-1,1.6-2.3,1.6-3.8\n\t\tc0-1.5-0.6-2.8-1.6-3.8C18.3,21.7,17,21.1,15.5,21.1L15.5,21.1z M10,21c1.4-1.4,3.4-2.3,5.5-2.3s4.1,0.9,5.5,2.3\n\t\tc1.4,1.4,2.3,3.4,2.3,5.5c0,2.2-0.9,4.1-2.3,5.5c-1.4,1.4-3.4,2.3-5.5,2.3S11.4,33.5,10,32c-1.4-1.4-2.3-3.4-2.3-5.5\n\t\tC7.7,24.4,8.6,22.4,10,21z"/>\n\t<path class="st1" d="M15.5,24.6c-1.1,0-1.9,0.9-1.9,1.9c0,1.1,0.9,1.9,1.9,1.9c0.2,0,0.4,0,0.5-0.1c0.8-0.2,1.4-1,1.4-1.9\n\t\tC17.4,25.5,16.6,24.6,15.5,24.6z"/>\n\t<polygon class="st1" points="27.8,23.3 27.8,25.3 54.1,25.3 \t"/>\n\t<circle class="st1" cx="71.9" cy="26.5" r="1.9"/>\n</g>\n</svg>\n',
-    minivan: '<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version="1.1"\n\t xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"\n\t x="0px" y="0px" width="98.2px" height="40.7px" viewBox="0 0 98.2 40.7" style="enable-background:new 0 0 98.2 40.7;"\n\t xml:space="preserve">\n<style type="text/css">\n\t.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n\t.st1{fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class="st0" d="M52.6,4.1c2.3,0,4.7,0.6,6.9,1.3c5.6,1.7,13.6,7.3,18.4,10l-3.5,1.3c-0.3,0.1-0.6,0.2-0.9,0.1l-7.7-0.3\n\tc-0.4-0.6-0.9-1.3-1.2-1.7c-0.7-1.2-1.8-2.1-3.1-2.6c-0.8-0.3-1.8-0.1-2.4,0.5l0,0c-0.9,0.9-1.4,1.9-1.4,3.1c0,0.1,0,0.2,0,0.3\n\tl-36.5-1.2l-10.7-2.3l3.7-7.6c4-0.7,8.1-1.1,11.8-1.1C35.6,4.1,43,4,52.6,4.1z"/>\n<path class="st1" d="M7.6,35.8c-5.6,0-7.4-4.1-7.5-4.3L0,31.1v-7.4l0.2-0.3c0.3-0.5,1-1.9,1-3l0.4-5.5l4.9-9.4L6.1,2.8l1.1-0.2\n\tC10.6,1.8,19.1,0.2,26,0.2c2.2,0,4.9,0,7.8-0.1c6.5-0.1,13.8-0.2,19,0.1c9.4,0.5,17.4,5.5,25.1,10.3c1.3,0.8,2.6,1.6,3.8,2.4\n\tc0.7,0.2,1.5,0.4,2.4,0.6c5.8,1.5,13,3.3,14.1,8l0,0.1l-0.3,10.6l0.2,2.6l-1.6,0.4c-1.5,0.4-2.5,0.6-6.4,0.6h-5.2v-2.4h5.2\n\tc3.2,0,4.3-0.2,5.4-0.4l0-0.7l0.3-10.4c-0.9-3.2-7.7-5-12.3-6.1c-0.9-0.2-1.8-0.5-2.6-0.7L80.6,15c-1.3-0.8-2.7-1.6-4-2.5\n\tc-7.5-4.7-15.2-9.5-24-10c-5-0.3-12.4-0.2-18.8-0.1c-2.9,0-5.6,0.1-7.9,0.1c-6,0-13.4,1.3-17.2,2.1L9,5.9l-5.2,9.8l-0.2,4.7\n\tc0,1.6-0.8,3.2-1.2,3.9v6.5c0.4,0.6,1.9,2.7,5.5,2.6l1.6,0v2.4H7.9C7.8,35.8,7.7,35.8,7.6,35.8z M71.2,35.8H24.3v-2.4h46.9V35.8z"/>\n<path class="st0" d="M78,25.9c-1.7,0-3.3,0.7-4.4,1.8c-1.1,1.1-1.8,2.7-1.8,4.4c0,1.7,0.7,3.3,1.8,4.4l0,0c1.1,1.1,2.7,1.8,4.4,1.8\n\tc1.7,0,3.3-0.7,4.4-1.8c1.1-1.1,1.8-2.7,1.8-4.4c0-1.7-0.7-3.3-1.8-4.4l0,0C81.3,26.6,79.7,25.9,78,25.9L78,25.9z M72,26\n\tc1.6-1.6,3.7-2.5,6.1-2.5c2.4,0,4.5,1,6.1,2.5v0c1.6,1.6,2.5,3.7,2.5,6.1c0,2.4-1,4.5-2.5,6.1c-1.6,1.6-3.7,2.5-6.1,2.5\n\tc-2.4,0-4.5-1-6.1-2.5h0c-1.6-1.6-2.5-3.7-2.5-6.1C69.4,29.7,70.4,27.6,72,26L72,26z"/>\n<circle class="st0" cx="78" cy="32.1" r="2.2"/>\n<path class="st0" d="M78,21.4L78,21.4c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v3v1.2H87h-2.6c0.6-1.1,1-2.4,1-3.7\n\tc0-2-0.8-3.8-2.1-5.2v0c-1.3-1.3-3.2-2.1-5.2-2.1c-2,0-3.8,0.8-5.2,2.1l0,0c-1.3,1.3-2.1,3.2-2.1,5.2c0,1.4,0.4,2.6,1,3.7h-2.6h-1.2\n\tv-1.2v-3c0-2.8,1.1-5.3,3-7.2l0,0l0,0C72.7,22.6,75.3,21.4,78,21.4L78,21.4z M16.9,21.4L16.9,21.4c2.8,0,5.3,1.1,7.2,3l0,0l0,0\n\tc1.8,1.8,3,4.4,3,7.2v3v1.2h-1.2h-2c0.6-1.1,0.9-2.4,0.9-3.7c0-2.2-0.9-4.1-2.3-5.5v0c-1.4-1.4-3.4-2.3-5.5-2.3\n\tc-2.2,0-4.1,0.9-5.5,2.3l0,0C9.9,28,9,29.9,9,32.1c0,1.3,0.3,2.6,0.9,3.7h-2H6.7v-1.2v-3c0-2.8,1.1-5.3,3-7.2\n\tC11.5,22.6,14.1,21.4,16.9,21.4z"/>\n<path class="st0" d="M10.8,26c1.6-1.6,3.7-2.5,6.1-2.5c2.4,0,4.5,1,6.1,2.5v0c1.6,1.6,2.5,3.7,2.5,6.1c0,2.4-1,4.5-2.5,6.1\n\tc-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5h0c-1.6-1.6-2.5-3.7-2.5-6.1C8.3,29.7,9.2,27.6,10.8,26L10.8,26L10.8,26z M16.9,26.1\n\tc-3.3,0-6,2.7-6,6s2.7,6,6,6s6-2.7,6-6S20.2,26.1,16.9,26.1z"/>\n<circle class="st0" cx="16.9" cy="32.1" r="2.2"/>\n<path class="st0" d="M85.4,18.6l2.2,4.9c0.8-0.4,1.9-0.5,2.7-0.5l0,0l0,0l0,0l0,0l0,0l0,0c0.8,0.1,3.8-0.1,6.7,0.2L97,21.8\n\tc-0.1-0.5-0.4-0.9-0.7-1.4L85.4,18.6z"/>\n<rect x="44.4" y="18" class="st1" width="3.5" height="1.6"/>\n<rect x="24.3" y="17.2" class="st1" width="3.5" height="1.6"/>\n<path class="st0" d="M59.9,13.7L59.9,13.7c-0.7,0.7-1,1.5-1.1,2.4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc0.4,0,0.8-0.2,1-0.6c0.2-0.4,0.2-0.8,0-1.2c-0.5-0.8-1.3-1.6-2.5-2.1C60.7,13.3,60.2,13.4,59.9,13.7z"/>\n<path class="st1" d="M62.1,18.5c-0.2,0-0.5-0.1-0.6-0.3l-1.5-2c-0.3-0.4-0.2-0.9,0.2-1.1c0.4-0.3,0.9-0.2,1.1,0.2l1.5,2\n\tc0.3,0.4,0.2,0.9-0.2,1.1C62.4,18.5,62.2,18.5,62.1,18.5z"/>\n<path class="st0" d="M2.3,21.3h1.1c2.4,0,5.6-1.8,5.7-3.9v-1.9H2.6C2.5,17.4,2.4,19.8,2.3,21.3z"/>\n<rect x="93.7" y="29.5" class="st1" width="2.7" height="1.6"/>\n<path class="st0" d="M93.3,29h-1.2c-0.5,0-0.8,0.4-0.8,0.8v0.9c0,0.5,0.4,0.8,0.8,0.8h1.2c0.5,0,0.8-0.4,0.8-0.8v-0.9\n\tC94.1,29.4,93.8,29,93.3,29z"/>\n<polygon class="st0" points="29.1,28.6 29.1,30.7 66.5,30.7 "/>\n</svg>\n',
-    pickup: '<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version="1.1"\n\t xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"\n\t x="0px" y="0px" width="127.3px" height="45.2px" viewBox="0 0 127.3 45.2" style="enable-background:new 0 0 127.3 45.2;"\n\t xml:space="preserve">\n<style type="text/css">\n\t.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n\t.st1{fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class="st0" d="M49.8,3.6c9.6,0,16.9,0,26.6,0C81,4,84.6,6.3,88.1,9c-0.4,0.1-0.7,0.3-1,0.6l0,0c-0.9,0.9-1.4,3.4-1.4,4.7\n\tc-12.9,0-24.2,0-37.5,0.1L49.8,3.6z"/>\n<path class="st1" d="M12.5,37.8c-5.2,0-11.4-2.4-11.7-2.5L0,35V25l0.4-0.4c0.5-0.5,1.6-1.9,1.6-2.8l0.1-2c0.1-1.4,0.2-2.9,0.2-4.3\n\tc0-1,1.5-2.7,3-3.3l0.4-0.1h36l1.8-9.3C43.9,1.2,45.3,0,47,0l29.5,0c6.8,0.6,10.9,3.9,15.3,7.5c2,1.6,4.1,3.3,6.5,4.8\n\tc1.1,0.1,2.6,0.2,4.5,0.2c10.9,0.4,20.8,1.2,21.9,6l1.1,8.7c0.6,0.4,1.6,1.3,1.6,2.6v3.7c0,1-0.1,2.1-1,2.7\n\tc-1.7,1.1-3.7,1.5-7.7,1.5h-2.2v-2.4h2.2c3.4,0,5.1-0.3,6.4-1c0,0,0-0.2,0-0.7v-3.7c0-0.3-0.6-0.7-0.8-0.8l-0.6-0.3l-1.2-9.8\n\tc-0.8-3.3-13.5-3.8-19.6-4.1c-2-0.1-3.8-0.1-4.9-0.3l-0.5-0.2c-2.7-1.6-4.9-3.4-7-5.2c-4.2-3.4-7.9-6.4-13.9-6.9L47,2.4\n\tc-0.6,0-1.1,0.4-1.2,1l-2.2,11.2H5.9c-0.6,0.3-1.2,1.1-1.3,1.3c0,1.1-0.1,2.7-0.2,4.1l-0.1,1.9c0,1.7-1.3,3.3-1.9,4.1v7.4\n\tc1.8,0.6,6.7,2.1,10.5,2.1h3.2v2.4h-3.2C12.7,37.8,12.6,37.8,12.5,37.8z M99.6,37.8h-67v-2.4h67V37.8z"/>\n<polygon class="st0" points="124.6,28.9 123.7,19.8 121.1,19.8 121.1,28.9 "/>\n<rect x="70.3" y="16.5" class="st1" width="5.5" height="1.6"/>\n<path class="st0" d="M3.1,21.7h1.1c2.4,0,5.6-1.8,5.7-3.9v-1.9H3.4C3.4,17.9,3.2,20.2,3.1,21.7z"/>\n<path class="st0" d="M88,10.5L88,10.5c-0.7,0.7-1,3.1-1.1,4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc2.8,0-0.5-5.1-1.5-5.4C88.8,10,88.3,10.1,88,10.5z"/>\n<polygon class="st0" points="42.5,30.1 42.5,32.1 91.1,32.1 "/>\n<g>\n\t<path class="st1" d="M94.5,36.6h-1.6v-3.5c0-8.3,6.8-15.1,15.1-15.1s15.1,6.8,15.1,15.1v3.3h-1.6v-3.3c0-7.4-6.1-13.5-13.5-13.5\n\t\tc-7.4,0-13.5,6.1-13.5,13.5V36.6z"/>\n\t<circle class="st0" cx="108" cy="35.2" r="2.6"/>\n\t<path class="st1" d="M39.4,36.6h-1.6v-3.5c0-7.4-6.1-13.5-13.5-13.5c-7.4,0-13.5,6.1-13.5,13.5v3.2H9.2v-3.2\n\t\tC9.2,24.8,16,18,24.3,18s15.1,6.8,15.1,15.1V36.6z"/>\n\t<path class="st0" d="M108,21.6L108,21.6c3.2,0,6,1.3,8.1,3.4l0,0c2.1,2.1,3.4,5,3.4,8.1v3.5v1.2h-1.2h-0.6c-0.5,2-1.7,3.8-3.2,5.1\n\t\tc-1.8,1.5-4,2.4-6.5,2.4c-2.5,0-4.8-0.9-6.5-2.4l0,0c-1.5-1.3-2.7-3.1-3.2-5.1h-0.6h-1.2v-1.2v-3.5c0-3.2,1.3-6,3.4-8.1h0\n\t\tC101.9,22.9,104.8,21.6,108,21.6L108,21.6z M108,28.4c-3.7,0-6.7,3-6.7,6.7c0,3.7,3,6.7,6.7,6.7c3.7,0,6.7-3,6.7-6.7\n\t\tC114.7,31.5,111.7,28.4,108,28.4L108,28.4z M24.3,28.4c-3.7,0-6.7,3-6.7,6.7c0,3.7,3,6.7,6.7,6.7c3.7,0,6.7-3,6.7-6.7\n\t\tC31.1,31.5,28.1,28.4,24.3,28.4L24.3,28.4z M24.3,21.6L24.3,21.6c3.2,0,6,1.3,8.1,3.4l0,0c2.1,2.1,3.4,5,3.4,8.1v3.5v1.2h-1.2h-0.6\n\t\tc-0.5,2-1.7,3.8-3.2,5.1c-1.8,1.5-4,2.4-6.5,2.4c-2.5,0-4.8-0.9-6.5-2.4c-1.5-1.3-2.7-3.1-3.2-5.1H14h-1.2v-1.2v-3.5\n\t\tc0-3.2,1.3-6,3.4-8.1C18.3,22.9,21.2,21.6,24.3,21.6z"/>\n\t<circle class="st0" cx="24.3" cy="35.2" r="2.6"/>\n</g>\n<rect x="48.7" y="16.5" class="st1" width="5.5" height="1.6"/>\n</svg>\n',
-    sedan: '<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version="1.1"\n\t xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"\n\t x="0px" y="0px" width="105.8px" height="37.3px" viewBox="0 0 105.8 37.3" style="enable-background:new 0 0 105.8 37.3;"\n\t xml:space="preserve">\n<style type="text/css">\n\t.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n\t.st1{fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class="st0" d="M30,12.2c-2.3,0-8.7-0.5-12-2.4c5.1-2.8,14.4-6.2,19-6.2c4.1,0,9.2,0,13.2,0c6.3,0,11.6,2.3,16.7,5.1\n\tc-0.8,0.8-1.3,1.9-1.3,3.1c0,0.1,0,0.3,0,0.4H30z"/>\n<path class="st1" d="M11.7,32.5c-5.3,0-10.9-3.6-11.1-3.7L0,28.4v-8.1L0.2,20c0.3-0.5,1-1.9,1-3l0.3-7.5L6,8.6C12,5.8,27.8,0,38.8,0\n\th13.7c3.1,0.3,5.8,0.7,8,1.4C64.9,2.8,75,8.9,76.7,9.9c1.6,0.2,10.1,1.2,17,3c8.2,2.1,11,5.4,11.3,6.8l0.7,11.8l-1,0.2\n\tc-1.9,0.4-3.5,0.7-7.7,0.7h-4v-2.4h4c3.2,0,4.8-0.2,6.2-0.5l0-0.6l-0.5-8.9c-0.2-0.4-2.4-3-9.6-4.8c-7.5-1.9-16.8-3-16.9-3l-0.5-0.2\n\tc-0.1-0.1-11.5-7-16-8.4c-2-0.6-4.5-1.1-7.4-1.3l-13.6,0c-10.6,0-26.1,5.7-31.9,8.5l-0.3,0.1l-2.8,0.6L3.5,17c0,1.6-0.8,3.2-1.2,3.9\n\tV27c1.5,0.9,5.8,3.1,9.6,3l3.2,0v2.4H12C11.9,32.5,11.8,32.5,11.7,32.5z M79.6,32.5H28.5v-2.4h51.1V32.5z"/>\n<path class="st0" d="M2.4,15.8c0,1.2-0.1,2.4-0.1,3.1h1.5c1.9,0,4.5-1.5,4.6-3.1v-1.5H2.4L2.4,15.8L2.4,15.8z"/>\n<path class="st0" d="M95.9,18.7l2.3,4.1c0.7-0.4,1.8-0.7,2.7-0.7h0h0h0h0h0h0c1.2,0,2.4,0,3.6,0l0-0.2c-0.1-0.4-1.2-2.3-2.4-3.2\n\tC100,18.7,98,18.7,95.9,18.7z"/>\n<rect x="50.5" y="15.4" class="st1" width="5.5" height="1.6"/>\n<rect x="26" y="15.4" class="st1" width="5.5" height="1.6"/>\n<polygon class="st0" points="36.2,25.3 36.2,27.3 73.6,27.3 "/>\n<rect x="101.8" y="26.1" class="st1" width="2.7" height="1.6"/>\n<path class="st0" d="M101.4,25.6h-1.2c-0.5,0-0.8,0.4-0.8,0.8v0.9c0,0.5,0.4,0.8,0.8,0.8h1.2c0.5,0,0.8-0.4,0.8-0.8v-0.9\n\tC102.3,26,101.9,25.6,101.4,25.6z"/>\n<path class="st0" d="M67.8,9.4L67.8,9.4c-0.7,0.7-1,1.5-1.1,2.4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc0.4,0,0.8-0.2,1-0.6c0.2-0.4,0.2-0.8,0-1.2c-0.5-0.8-1.3-1.6-2.5-2.1C68.6,9,68.2,9.1,67.8,9.4z"/>\n<path class="st1" d="M70,14.2c-0.2,0-0.5-0.1-0.6-0.3l-1.5-2c-0.3-0.4-0.2-0.9,0.2-1.1c0.4-0.3,0.9-0.2,1.1,0.2l1.5,2\n\tc0.3,0.4,0.2,0.9-0.2,1.1C70.3,14.2,70.2,14.2,70,14.2z"/>\n<path class="st0" d="M1.9,28.1v3.4h8.7v-0.3C7,30.9,3.3,29,1.9,28.1z"/>\n<g>\n\t<path class="st0" d="M21.8,18.1L21.8,18.1c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v3v1.2h-1.2h-2.6c0.6-1.1,1-2.4,1-3.7\n\t\tc0-4.1-3.3-7.4-7.4-7.4c-4.1,0-7.4,3.3-7.4,7.4c0,1.3,0.4,2.6,1,3.7h-2.6h-1.2v-1.2v-3c0-2.8,1.1-5.3,3-7.2l0,0l0,0\n\t\tC16.5,19.2,19,18.1,21.8,18.1z"/>\n\t<path class="st0" d="M15.7,22.7c1.6-1.6,3.7-2.5,6.1-2.5c2.4,0,4.5,1,6.1,2.5l0,0c1.6,1.6,2.5,3.7,2.5,6.1c0,2.4-1,4.5-2.5,6.1h0\n\t\tc-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5c-1.6-1.6-2.5-3.7-2.5-6.1C13.2,26.4,14.2,24.2,15.7,22.7L15.7,22.7L15.7,22.7z\n\t\t M21.8,22.7c-3.3,0-6,2.7-6,6s2.7,6,6,6s6-2.7,6-6S25.1,22.7,21.8,22.7z"/>\n\t<circle class="st0" cx="21.8" cy="28.8" r="2.2"/>\n</g>\n<g>\n\t<path class="st0" d="M86.3,18.1L86.3,18.1c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v3v1.2h-1.2h-2.6c0.6-1.1,1-2.4,1-3.7\n\t\tc0-4.1-3.3-7.4-7.4-7.4c-4.1,0-7.4,3.3-7.4,7.4c0,1.3,0.4,2.6,1,3.7h-2.6h-1.2v-1.2v-3c0-2.8,1.1-5.3,3-7.2l0,0l0,0\n\t\tC81,19.2,83.5,18.1,86.3,18.1z"/>\n\t<path class="st0" d="M80.2,22.7c1.6-1.6,3.7-2.5,6.1-2.5c2.4,0,4.5,1,6.1,2.5l0,0c1.6,1.6,2.5,3.7,2.5,6.1c0,2.4-1,4.5-2.5,6.1h0\n\t\tc-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5c-1.6-1.6-2.5-3.7-2.5-6.1C77.7,26.4,78.7,24.2,80.2,22.7L80.2,22.7L80.2,22.7z\n\t\t M86.3,22.7c-3.3,0-6,2.7-6,6s2.7,6,6,6c3.3,0,6-2.7,6-6S89.6,22.7,86.3,22.7z"/>\n\t<circle class="st0" cx="86.3" cy="28.8" r="2.2"/>\n</g>\n</svg>\n',
-    suv: '<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version="1.1"\n\t xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"\n\t x="0px" y="0px" width="104.2px" height="45.2px" viewBox="0 0 104.2 45.2" style="enable-background:new 0 0 104.2 45.2;"\n\t xml:space="preserve">\n<style type="text/css">\n\t.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n\t.st1{fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class="st0" d="M42.1,3.6l11.2,0C57.9,4,61.6,6.3,65.1,9c-0.4,0.1-0.7,0.3-1,0.6l0,0c-0.9,0.9-1.4,3.4-1.4,4.7l-20.6,0V3.6z"/>\n<path class="st1" d="M12.7,37.8c-5.4,0-11.9-4.8-12.2-5.1L0,32.4V25l0.4-0.4c0.5-0.5,1.6-1.9,1.6-2.8l0.1-2c0.1-1.4,0.2-2.9,0.2-4.3\n\tc0-0.8,1.1-2.3,2.4-3C5.2,11,6.2,9.2,7.2,7.7c0.6-0.9,1.1-1.7,1.3-2.3l0.3-0.7C8.9,4.5,9,4.4,9,4.3c0,0,0-0.2-0.1-0.4L8.6,1.8l2-0.4\n\tc4-0.9,6.5-1.4,12.3-1.4l30.5,0c6.8,0.6,10.9,3.9,15.3,7.5c2,1.6,4.1,3.3,6.5,4.8c1.1,0.1,2.6,0.2,4.5,0.2c10.9,0.4,20.8,1.2,21.9,6\n\tl1.1,7.9c0.6,0.4,1.6,1.3,1.6,2.6v4.5c0,1-0.1,2.1-1,2.7c-1.7,1.1-3.7,1.5-7.7,1.5h-1.7v-2.4h1.7c3.4,0,5.1-0.3,6.4-1\n\tc0,0,0-0.2,0-0.7v-4.5c0-0.3-0.6-0.7-0.8-0.8l-0.6-0.3l-1.2-9c-0.8-3.4-13.5-3.8-19.6-4.1c-2-0.1-3.8-0.1-4.9-0.3l-0.5-0.2\n\tc-2.7-1.6-4.9-3.4-7-5.2C63,5.9,59.3,2.9,53.3,2.4l-30.4,0c-5.5,0-7.7,0.5-11.6,1.3c0.1,0.9,0.1,1.1-0.3,2l-0.3,0.6\n\tC10.4,7,9.8,7.9,9.2,8.9c-0.9,1.5-2.1,3.4-2.4,4.8l-0.1,0.6l-0.6,0.2c-0.7,0.2-1.4,1.1-1.5,1.4c0,1.1-0.1,2.7-0.2,4.1l-0.1,1.9\n\tc0,1.7-1.3,3.3-1.9,4.1v5.2c1.5,1.1,6.6,4.4,10.5,4.2l2.3,0v2.4h-2.2C12.8,37.8,12.7,37.8,12.7,37.8z M76.1,37.8H32v-2.4h44.1V37.8z\n\t"/>\n<path class="st0" d="M16.8,4.1c4-0.4,7.9-0.6,11.7-0.6h9.1v10.8H11.9L16.8,4.1z"/>\n<polygon class="st0" points="101.6,27.2 100.6,19.8 97.2,19.8 97.2,27.2 "/>\n<path class="st0" d="M17,42.8c-1.5-1.3-2.7-3.1-3.2-5.1h-0.6H12v-1.2v-3.5c0-3.2,1.3-6,3.4-8.1c2.1-2.1,5-3.4,8.1-3.4h0\n\tc3.2,0,6,1.3,8.1,3.4l0,0c2.1,2.1,3.4,5,3.4,8.1v3.5v1.2h-1.2h-0.6c-0.5,2-1.7,3.8-3.2,5.1c-1.8,1.5-4,2.4-6.5,2.4\n\tC21.1,45.2,18.8,44.3,17,42.8L17,42.8z M84.9,28.4c-3.7,0-6.7,3-6.7,6.7c0,3.7,3,6.7,6.7,6.7s6.7-3,6.7-6.7\n\tC91.6,31.5,88.6,28.4,84.9,28.4L84.9,28.4z M23.6,28.4c-3.7,0-6.7,3-6.7,6.7c0,3.7,3,6.7,6.7,6.7c3.7,0,6.7-3,6.7-6.7\n\tC30.3,31.5,27.3,28.4,23.6,28.4L23.6,28.4z M84.9,21.6L84.9,21.6c3.2,0,6,1.3,8.1,3.4l0,0c2.1,2.1,3.4,5,3.4,8.1v3.5v1.2h-1.2h-0.6\n\tc-0.5,2-1.7,3.8-3.2,5.1c-1.8,1.5-4,2.4-6.5,2.4c-2.5,0-4.8-0.9-6.5-2.4l0,0c-1.5-1.3-2.7-3.1-3.2-5.1h-0.6h-1.2v-1.2v-3.5\n\tc0-3.2,1.3-6,3.4-8.1C78.8,22.9,81.7,21.6,84.9,21.6z"/>\n<circle class="st0" cx="84.9" cy="35.2" r="2.6"/>\n<circle class="st0" cx="23.5" cy="35.2" r="2.6"/>\n<rect x="47.2" y="16.5" class="st1" width="5.5" height="1.6"/>\n<path class="st0" d="M3.1,21.7h1.1c2.4,0,5.6-1.8,5.7-3.9v-1.9H3.4C3.4,17.9,3.2,20.2,3.1,21.7z"/>\n<path class="st0" d="M64.9,10.5L64.9,10.5c-0.7,0.7-1,3.1-1.1,4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc2.8,0-0.5-5.1-1.5-5.4C65.7,10,65.2,10.2,64.9,10.5z"/>\n<polygon class="st0" points="41.7,30.1 41.7,32.1 70.5,32.1 "/>\n</svg>\n',
-    van: '<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version="1.1"\n\t xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"\n\t x="0px" y="0px" width="110.4px" height="47px" viewBox="0 0 110.4 47" style="enable-background:new 0 0 110.4 47;"\n\t xml:space="preserve">\n<style type="text/css">\n\t.st0{fill:#6D6E71;}\n\t.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class="st0" d="M7.6,40.7c-2.8,0-4.7-1.1-5.8-2c-1.2-1.1-1.7-2.1-1.8-2.3L0,36v-7.4l0.2-0.3c0,0,0.3-0.4,0.5-1\n\tc0.3-0.8,0.5-1.5,0.5-2c0-0.6,0.1-2,0.1-3.9c0.1-6,0.4-16,0.8-19.2L2.4,0h72.2l0.3,0.3c1.8,1.5,3.9,3.4,6.2,5.5\n\tc3.5,3.2,7.2,6.5,9.4,7.9c1.8,0.6,16.7,5.5,17.4,8.8c0.9,3.4,1,4,0.9,7.4c1,0.7,1.6,1.8,1.5,3l-0.1,4.1c0,1.7-1.2,3.2-3,3.5\n\tl-0.5,0.1c-1.1,0.1-4.2,0.2-6,0.2h-4v-2.4h4c2.3,0,4.9-0.1,5.7-0.2l0.4-0.1c0.6-0.1,1-0.6,1-1.2l0.1-4.1c0-0.5-0.3-0.9-0.7-1.1\n\tl-0.8-0.3l-0.1-0.9c0.1-3.9,0.1-4.1-0.8-7.5c-0.9-1.6-12.2-6.1-15.9-7.1l-0.3-0.1c-2.5-1.5-6.3-5-9.9-8.3c-2.1-1.9-4.1-3.7-5.7-5.1\n\tl-69.3,0C4,5.5,3.8,15.8,3.6,21.4c0,2-0.1,3.4-0.1,4c0,0.8-0.2,1.8-0.7,2.9c-0.2,0.4-0.4,0.8-0.5,1v6.5c0.1,0.3,0.5,0.7,1,1.2\n\tc1.1,1,2.6,1.5,4.5,1.4h6.7v2.4H7.9C7.8,40.7,7.7,40.7,7.6,40.7z M83.3,40.7H28.1v-2.4h55.2V40.7z"/>\n<path class="st1" d="M73.8,4.5c1.9,1.6,3.7,3.4,5.3,4.8c1.6,1.5,3.5,3.2,5.4,4.8c-0.6,0-1.1,0.3-1.5,0.7l0,0c-1,0.9-1.4,3.5-1.4,4.8\n\tc0,0.4,0.1,0.9,0.3,1.2h-2.1c-5,0-14.5-3.9-14.5-3.9V3.9h7.1C72.8,3.9,73.3,4.1,73.8,4.5z"/>\n<path class="st1" d="M83.7,15.6L83.7,15.6c-0.7,0.7-1,3.1-1.1,4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc2.8,0-0.5-5.1-1.5-5.4C84.5,15.2,84.1,15.3,83.7,15.6z"/>\n<path class="st1" d="M60.9,14.6c0,1.3-1.1,2.4-2.4,2.4H19c-0.4,0-0.8-0.1-1.2-0.3l-5.3-3.1c-0.8-0.4-1.2-1.2-1.2-2.1V4l0-0.1h47.3\n\tc1.3,0,2.4,1.1,2.4,2.4L60.9,14.6z"/>\n<rect x="63.8" y="20.7" class="st0" width="5.5" height="1.6"/>\n<rect x="55" y="19.3" class="st0" width="5.5" height="1.6"/>\n<rect x="10.5" y="20.4" class="st0" width="18.6" height="1.6"/>\n<path class="st1" d="M107.7,27.6c-2.7-1.5-7.8-4.2-8.5-5c-0.3-0.3-0.4-2.6-0.3-4.5c3.9,1.6,7.7,3.5,7.9,4.7\n\tC107.4,25.1,107.7,26,107.7,27.6L107.7,27.6z"/>\n<path class="st1" d="M2.4,25.2c2.1-0.5,4.4-2,4.5-3.8V7.2H2.9c-0.2,5-0.4,11.9-0.5,15.6c0.1,0.4,0.2,0.7,0.2,0.9\n\tC2.6,24.2,2.5,24.7,2.4,25.2z"/>\n<g>\n\t<path class="st1" d="M98.3,40.7c-0.4,1.4-1.2,2.7-2.2,3.8h0C94.6,46,92.4,47,90,47c-2.4,0-4.5-1-6.1-2.5c-1-1-1.8-2.3-2.2-3.8h-0.7\n\t\th-1.2v-1.2v-1.4c0-2.8,1.1-5.3,3-7.2c1.8-1.8,4.4-3,7.2-3h0c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v1.4v1.2H99H98.3\n\t\tL98.3,40.7z M90,33.1c-2.9,0-5.2,2.3-5.2,5.2c0,2.9,2.3,5.2,5.2,5.2c2.9,0,5.2-2.3,5.2-5.2C95.3,35.5,92.9,33.1,90,33.1z"/>\n\t<path class="st1" d="M21.3,27.9c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v1.4v1.2h-1.2h-0.7c-0.4,1.4-1.2,2.7-2.2,3.8h0\n\t\tC25.8,46,23.7,47,21.3,47c-2.4,0-4.5-1-6.1-2.5c-1-1-1.8-2.3-2.2-3.8h-0.7h-1.2v-1.2v-1.4c0-2.8,1.1-5.3,3-7.2\n\t\tC16,29.1,18.5,27.9,21.3,27.9L21.3,27.9L21.3,27.9z M21.3,33.1c-2.9,0-5.2,2.3-5.2,5.2c0,2.9,2.3,5.2,5.2,5.2s5.2-2.3,5.2-5.2\n\t\tC26.6,35.5,24.2,33.1,21.3,33.1z"/>\n\t<circle class="st1" cx="90" cy="38.4" r="2.2"/>\n\t<circle class="st1" cx="21.3" cy="38.4" r="2.2"/>\n</g>\n</svg>\n',
-    wagon: '<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version="1.1"\n\t xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"\n\t x="0px" y="0px" width="108.1px" height="37.4px" viewBox="0 0 108.1 37.4" style="enable-background:new 0 0 108.1 37.4;"\n\t xml:space="preserve">\n<style type="text/css">\n\t.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n\t.st1{fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class="st0" d="M23.1,12.2c-4.2,0-6.4-0.2-8.7-1c10.8-7.9,9.5-7.6,24-7.6c3.7,0,10,0,14.7,0c2.9,0,5.8,0.4,8.6,1.3\n\tc2.1,0.7,5,2.1,7.8,3.6c-0.1,0-0.1,0.1-0.2,0.2l0,0c-0.9,0.9-1.4,1.9-1.4,3.1c0,0.1,0,0.3,0,0.4H23.1z"/>\n<path class="st1" d="M11.7,32.5c-5.3,0-10.9-3.6-11.1-3.7L0,28.4v-8.1L0.2,20c0.3-0.5,1-1.9,1-3l0.3-5.6L12,4.2l-0.3-2.3l1.1-0.2\n\tC17.1,0.7,24.9,0,31.6,0l23.2,0c3.1,0.3,5.8,0.8,8,1.4c4.5,1.4,14.6,7.5,16.3,8.5c1.6,0.2,10.1,1.2,17,3c8.2,2.1,11,5.4,11.3,6.8\n\tl0.7,11.8l-1,0.2c-1.9,0.4-3.5,0.7-7.7,0.7h-4.2v-2.4h4.2c3.2,0,4.8-0.2,6.2-0.5l0-0.6l-0.5-8.9c-0.2-0.4-2.4-3-9.6-4.8\n\tc-7.5-1.9-16.8-3-16.9-3l-0.5-0.2c-0.1-0.1-11.5-7-16-8.4c-2-0.6-4.5-1.1-7.4-1.3l-23.1,0c-6,0-12.8,0.5-17.2,1.3l0.2,1.6L3.8,12.7\n\tl-0.2,4.3c0,1.6-0.8,3.2-1.2,3.9V27c1.5,0.9,5.7,3.1,9.6,3l7.3,0v2.4H12C11.9,32.5,11.8,32.5,11.7,32.5z M82.2,32.5H32.2v-2.4h49.9\n\tV32.5z"/>\n<path class="st0" d="M1.6,19h1.5c1.9,0,4.5-1.5,4.6-3.1v-1.5H1.6C1.6,15.9,1.6,17.4,1.6,19z"/>\n<path class="st0" d="M98.3,18.7l2.3,4.1c0.7-0.4,1.8-0.7,2.7-0.7h0h0h0h0h0h0c1.2,0,2.4,0,3.6,0l0-0.2c-0.1-0.4-1.2-2.3-2.4-3.2\n\tC102.4,18.7,100.4,18.7,98.3,18.7z"/>\n<rect x="52.8" y="15.4" class="st1" width="5.5" height="1.6"/>\n<rect x="29.9" y="15.4" class="st1" width="5.5" height="1.6"/>\n<polygon class="st0" points="38.6,25.3 38.6,27.3 76,27.3 "/>\n<rect x="104.2" y="26.1" class="st1" width="2.7" height="1.6"/>\n<path class="st0" d="M103.8,25.6h-1.2c-0.5,0-0.8,0.4-0.8,0.8v0.9c0,0.5,0.4,0.8,0.8,0.8h1.2c0.5,0,0.8-0.4,0.8-0.8v-0.9\n\tC104.6,26,104.2,25.6,103.8,25.6z"/>\n<path class="st0" d="M70.2,9.4L70.2,9.4c-0.7,0.7-1,1.5-1.1,2.4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc0.4,0,0.8-0.2,1-0.6c0.2-0.4,0.2-0.8,0-1.2c-0.5-0.8-1.3-1.6-2.5-2.1C71,9,70.5,9.1,70.2,9.4z"/>\n<path class="st1" d="M72.4,14.2c-0.2,0-0.5-0.1-0.6-0.3l-1.5-2c-0.3-0.4-0.2-0.9,0.2-1.1c0.4-0.3,0.9-0.2,1.1,0.2l1.5,2\n\tc0.3,0.4,0.2,0.9-0.2,1.1C72.7,14.2,72.5,14.2,72.4,14.2z"/>\n<path class="st0" d="M1.9,28.1v3.4h8.7v-0.3C7,30.9,3.3,29,1.9,28.1z"/>\n<g>\n\t<path class="st0" d="M25.7,18.1L25.7,18.1c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v3v1.2h-1.2h-2.6c0.6-1.1,1-2.4,1-3.7\n\t\tc0-4.1-3.3-7.4-7.4-7.4c-4.1,0-7.4,3.3-7.4,7.4c0,1.3,0.4,2.6,1,3.7h-2.6h-1.2v-1.2v-3c0-2.8,1.1-5.3,3-7.2l0,0l0,0\n\t\tC20.4,19.2,22.9,18.1,25.7,18.1z"/>\n\t<path class="st0" d="M19.7,22.7c1.6-1.6,3.7-2.5,6.1-2.5c2.4,0,4.5,1,6.1,2.5l0,0c1.6,1.6,2.5,3.7,2.5,6.1c0,2.4-1,4.5-2.5,6.1h0\n\t\tc-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5c-1.6-1.6-2.5-3.7-2.5-6.1C17.1,26.4,18.1,24.2,19.7,22.7L19.7,22.7L19.7,22.7z\n\t\t M25.7,22.8c-3.3,0-6,2.7-6,6s2.7,6,6,6s6-2.7,6-6S29,22.8,25.7,22.8z"/>\n\t<circle class="st0" cx="25.7" cy="28.8" r="2.2"/>\n</g>\n<g>\n\t<path class="st0" d="M88.7,18.1L88.7,18.1c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v3v1.2h-1.2H95c0.6-1.1,1-2.4,1-3.7\n\t\tc0-4.1-3.3-7.4-7.4-7.4c-4.1,0-7.4,3.3-7.4,7.4c0,1.3,0.4,2.6,1,3.7h-2.6h-1.2v-1.2v-3c0-2.8,1.1-5.3,3-7.2l0,0l0,0\n\t\tC83.3,19.2,85.9,18.1,88.7,18.1z"/>\n\t<path class="st0" d="M82.6,22.7c1.6-1.6,3.7-2.5,6.1-2.5c2.4,0,4.5,1,6.1,2.5l0,0c1.6,1.6,2.5,3.7,2.5,6.1c0,2.4-1,4.5-2.5,6.1h0\n\t\tc-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5c-1.6-1.6-2.5-3.7-2.5-6.1C80.1,26.4,81,24.2,82.6,22.7L82.6,22.7L82.6,22.7z\n\t\t M88.7,22.8c-3.3,0-6,2.7-6,6s2.7,6,6,6c3.3,0,6-2.7,6-6S92,22.8,88.7,22.8z"/>\n\t<circle class="st0" cx="88.7" cy="28.8" r="2.2"/>\n</g>\n</svg>\n'
-});
+/* harmony default export */ __webpack_exports__["a"] = ({ "convertible": "<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version=\"1.1\"\n\t xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:a=\"http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/\"\n\t x=\"0px\" y=\"0px\" width=\"100.8px\" height=\"36.8px\" viewBox=\"0 0 100.8 36.8\" style=\"enable-background:new 0 0 100.8 36.8;\"\n\t xml:space=\"preserve\">\n<style type=\"text/css\">\n\t.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n\t.st1{fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class=\"st0\" d=\"M38.3,4.3L38.3,4.3c-1.1,0.1-1.5,1-1.8,2l-0.7,2.2c-1,3.2,4.8,3.2,4.7,0.5l-0.2-2.9C40.2,5.1,39.3,4.3,38.3,4.3\n\tz\"/>\n<path class=\"st1\" d=\"M11.7,31.9c-5.3,0-10.9-3.6-11.1-3.7L0,27.8v-8.1l0.2-0.3c0.3-0.5,1-1.9,1-3l0.3-7.6l14.7-0.7\n\tc6.3-0.3,10.4,0.3,14.7,1c2.4,0.4,4.9,0.8,8,1l23.8,0c1.4,0,2.8-0.2,4.2-0.4c1.5-0.2,3-0.4,4.6-0.4c0.2,0,9.7,1.1,17.4,3\n\tc8.2,2.1,11,5.4,11.3,6.8l0.7,11.8l-1,0.2c-1.9,0.4-3.5,0.7-7.7,0.7h-4.4v-2.4h4.4c3.2,0,4.8-0.2,6.2-0.5l0-0.6l-0.5-8.9\n\tc-0.2-0.4-2.4-3-9.6-4.8c-7.5-1.9-16.8-3-16.9-3c-1.3,0-2.6,0.2-4.1,0.4c-1.5,0.2-3,0.4-4.6,0.4H38.7c-3.2-0.3-5.8-0.7-8.2-1\n\tc-4.1-0.7-8.1-1.3-14.2-1L3.8,11.1l-0.2,5.4c0,1.6-0.8,3.2-1.2,3.9v6.1c1.5,0.9,5.8,3.1,9.6,3l3.6,0v2.4H12\n\tC11.9,31.9,11.8,31.9,11.7,31.9z M75.1,31.9H28.1v-2.4h47.1V31.9z\"/>\n<path class=\"st0\" d=\"M2.4,15.3c0,1.2-0.1,2.4-0.1,3.1h1.5c1.9,0,4.5-1.5,4.6-3.1v-1.5H2.4L2.4,15.3L2.4,15.3z\"/>\n<path class=\"st0\" d=\"M91,18.1l2.3,4.1c0.7-0.4,1.8-0.7,2.7-0.7h0h0h0h0h0h0c1.2,0,2.4,0,3.6,0l0-0.2c-0.1-0.4-1.2-2.3-2.4-3.2\n\tC95.1,18.1,93.1,18.1,91,18.1z\"/>\n<path class=\"st0\" d=\"M29.6,31.9c-0.4,0.9-1,1.7-1.7,2.4h0c-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5c-0.7-0.7-1.3-1.5-1.7-2.4\n\th-1.2h-1.2v-1.2v-3c0-2.8,1.1-5.3,3-7.2c1.8-1.8,4.4-3,7.2-3h0c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v3v1.2h-1.2H29.6\n\tL29.6,31.9z M81.4,22.2c-3.3,0-6,2.7-6,6s2.7,6,6,6s6-2.7,6-6S84.7,22.2,81.4,22.2L81.4,22.2z M21.8,22.2c-3.3,0-6,2.7-6,6\n\ts2.7,6,6,6c3.3,0,6-2.7,6-6S25.1,22.2,21.8,22.2L21.8,22.2z M81.4,17.5L81.4,17.5c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2\n\tv3v1.2h-1.2h-1.2c-0.4,0.9-1,1.7-1.7,2.4c-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5h0c-0.7-0.7-1.3-1.5-1.7-2.4h-1.2h-1.2v-1.2\n\tv-3c0-2.8,1.1-5.3,3-7.2l0,0l0,0C76.1,18.7,78.6,17.5,81.4,17.5z\"/>\n<circle class=\"st0\" cx=\"81.4\" cy=\"28.2\" r=\"2.2\"/>\n<rect x=\"37.1\" y=\"14.8\" class=\"st1\" width=\"5.5\" height=\"1.6\"/>\n<circle class=\"st0\" cx=\"21.8\" cy=\"28.2\" r=\"2.2\"/>\n<polygon class=\"st0\" points=\"35.3,24.7 35.3,26.7 68.7,26.7 \"/>\n<rect x=\"96.9\" y=\"25.6\" class=\"st1\" width=\"2.7\" height=\"1.6\"/>\n<path class=\"st0\" d=\"M96.5,25.1h-1.2c-0.5,0-0.8,0.4-0.8,0.8v0.9c0,0.5,0.4,0.8,0.8,0.8h1.2c0.5,0,0.8-0.4,0.8-0.8v-0.9\n\tC97.4,25.4,97,25.1,96.5,25.1z\"/>\n<path class=\"st0\" d=\"M1.9,27.6v3.4h8.7v-0.3C7,30.3,3.3,28.4,1.9,27.6z\"/>\n<path class=\"st0\" d=\"M22.6,3.8L22.6,3.8c-1.1,0.1-1.5,1-1.8,2L20.1,8C20,8.1,20,8.3,20,8.5c1.6,0.1,3.2,0.2,4.7,0.4\n\tc0-0.1,0-0.3,0-0.4l-0.2-2.9C24.5,4.5,23.6,3.7,22.6,3.8z\"/>\n<path class=\"st0\" d=\"M72,9.5c0,0-11.7-7.1-16.5-8.6c-0.6-0.2-1.2-0.3-1.8-0.5l0,0c-0.6-0.1-1.3-0.3-1.9-0.4l-0.4,2.3\n\tc6.1,1.5,8.4,5.3,13.7,8.5c0.8,0.5,4.8,0.2,5.7,0.7L72,9.5z\"/>\n<path class=\"st0\" d=\"M60.6,10L60.6,10c-0.7,0.7-1,1.5-1.1,2.4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc0.4,0,0.8-0.2,1-0.6c0.2-0.4,0.2-0.8,0-1.2c-0.5-0.8-1.3-1.6-2.5-2.1C61.4,9.6,60.9,9.7,60.6,10z\"/>\n<path class=\"st1\" d=\"M62.7,14.8c-0.2,0-0.5-0.1-0.6-0.3l-1.5-2c-0.3-0.4-0.2-0.9,0.2-1.1c0.4-0.3,0.9-0.2,1.1,0.2l1.5,2\n\tc0.3,0.4,0.2,0.9-0.2,1.1C63.1,14.7,62.9,14.8,62.7,14.8z\"/>\n</svg>\n", "coupe": "<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version=\"1.1\"\n\t xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:a=\"http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/\"\n\t x=\"0px\" y=\"0px\" width=\"99.3px\" height=\"35.7px\" viewBox=\"0 0 99.3 35.7\" style=\"enable-background:new 0 0 99.3 35.7;\"\n\t xml:space=\"preserve\">\n<style type=\"text/css\">\n\t.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n\t.st1{fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class=\"st0\" d=\"M3.4,13.6c0,1.2-0.1,2.4-0.1,3.1h1.5c1.9,0,4.5-1.5,4.6-3.1v-1.5H3.3L3.4,13.6L3.4,13.6z\"/>\n<path class=\"st0\" d=\"M2.6,27v3.4h8.7V30C7.7,29.7,4.1,27.8,2.6,27z\"/>\n<path class=\"st0\" d=\"M22,8.7c9.3-3.9,10.9-4.9,21.2-5.1c7.4-0.1,12.4,2.5,17.8,5.7L61,9.3l0,0c-0.9,0.8-1.3,1.9-1.4,3.1l-34.4-1.3\n\tC25.2,11.2,23,10.9,22,8.7z\"/>\n<path class=\"st0\" d=\"M61.8,10.2L61.8,10.2c-0.7,0.7-1,1.5-1.1,2.4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc0.4,0,0.8-0.2,1-0.6c0.2-0.4,0.2-0.8,0-1.2c-0.5-0.8-1.3-1.6-2.5-2.1C62.6,9.7,62.1,9.8,61.8,10.2z\"/>\n<path class=\"st1\" d=\"M63.9,14.9c-0.2,0-0.5-0.1-0.6-0.3l-1.5-2c-0.3-0.4-0.2-0.9,0.2-1.1c0.4-0.3,0.9-0.2,1.1,0.2l1.5,2\n\tc0.3,0.4,0.2,0.9-0.2,1.1C64.3,14.9,64.1,14.9,63.9,14.9z\"/>\n<path class=\"st1\" d=\"M11.7,30.9c-5.3,0-10.9-3.6-11.1-3.7L0,26.8v-7.4L0.4,19c0.5-0.5,1.6-1.9,1.6-2.8l0.3-7.6l8-0.8\n\tC23.9,1.4,29.2,0.1,42.9,0c9.3,0,15,3.3,21.6,7.1c1.5,0.9,3.1,1.8,4.8,2.8c1.8,0.1,10.8,0.4,17.9,2.2c6.6,1.7,10.8,3.9,11.3,6\n\tl0.7,11.8l-1,0.2c-1.9,0.4-3.5,0.7-7.7,0.7h-0.7v-2.4h0.7c3.2,0,4.8-0.2,6.2-0.5l0-0.6l-0.5-8.9c-0.2-0.3-2.4-2.2-9.6-4.1\n\tc-7.4-1.9-17.5-2.2-17.6-2.2l-0.5-0.1c-1.8-1-3.5-2-5.1-2.9C56.8,5.3,51.6,2.3,43,2.4c-13.4,0.1-18.5,1.3-31.9,7.7l-0.4,0.1\n\tl-6.1,0.6l-0.2,5.4c0,1.7-1.3,3.3-1.9,4.1v5.2c1.5,0.9,5.8,3.1,9.6,3l2,0v2.4h-2C11.9,30.9,11.8,30.9,11.7,30.9z M73.3,30.9H27.9\n\tv-2.4h45.4V30.9z\"/>\n<g>\n\t<path class=\"st0\" d=\"M81.6,16.5L81.6,16.5c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v3v1.2h-1.2h-2.6c0.6-1.1,1-2.4,1-3.7\n\t\tc0-4.1-3.3-7.4-7.4-7.4c-4.1,0-7.4,3.3-7.4,7.4c0,1.3,0.4,2.6,1,3.7h-2.6h-1.2v-1.2v-3c0-2.8,1.1-5.3,3-7.2l0,0l0,0\n\t\tC76.2,17.6,78.8,16.5,81.6,16.5z\"/>\n\t<path class=\"st0\" d=\"M75.5,21.1c1.6-1.6,3.7-2.5,6.1-2.5c2.4,0,4.5,1,6.1,2.5l0,0c1.6,1.6,2.5,3.7,2.5,6.1c0,2.4-1,4.5-2.5,6.1h0\n\t\tc-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5c-1.6-1.6-2.5-3.7-2.5-6.1C73,24.8,73.9,22.6,75.5,21.1L75.5,21.1L75.5,21.1z\n\t\t M81.6,21.1c-3.3,0-6,2.7-6,6s2.7,6,6,6c3.3,0,6-2.7,6-6S84.9,21.1,81.6,21.1z\"/>\n\t<circle class=\"st0\" cx=\"81.6\" cy=\"27.2\" r=\"2.2\"/>\n</g>\n<polygon class=\"st0\" points=\"34.7,23.8 34.7,25.8 68.4,25.8 \"/>\n<path class=\"st0\" d=\"M89.4,16.5l2.3,4.1c0.7-0.4,1.8-0.7,2.7-0.7h0h0h0h0h0h0c1.2,0,2.4,0,3.6,0l0-0.2c-0.1-0.4-1.2-2.3-2.4-3.2\n\tC93.5,16.5,91.4,16.5,89.4,16.5z\"/>\n<rect x=\"95.3\" y=\"23.9\" class=\"st1\" width=\"2.7\" height=\"1.6\"/>\n<path class=\"st0\" d=\"M94.8,23.4h-1.2c-0.5,0-0.8,0.4-0.8,0.8v0.9c0,0.5,0.4,0.8,0.8,0.8h1.2c0.5,0,0.8-0.4,0.8-0.8v-0.9\n\tC95.7,23.8,95.3,23.4,94.8,23.4z\"/>\n<rect x=\"36.3\" y=\"14\" class=\"st1\" width=\"5.5\" height=\"1.6\"/>\n<g>\n\t<path class=\"st0\" d=\"M20.9,16.5L20.9,16.5c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v3v1.2h-1.2h-2.6c0.6-1.1,1-2.4,1-3.7\n\t\tc0-4.1-3.3-7.4-7.4-7.4c-4.1,0-7.4,3.3-7.4,7.4c0,1.3,0.4,2.6,1,3.7H12h-1.2v-1.2v-3c0-2.8,1.1-5.3,3-7.2l0,0l0,0\n\t\tC15.6,17.6,18.1,16.5,20.9,16.5z\"/>\n\t<path class=\"st0\" d=\"M14.9,21.1c1.6-1.6,3.7-2.5,6.1-2.5c2.4,0,4.5,1,6.1,2.5l0,0c1.6,1.6,2.5,3.7,2.5,6.1c0,2.4-1,4.5-2.5,6.1h0\n\t\tc-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5c-1.6-1.6-2.5-3.7-2.5-6.1C12.3,24.8,13.3,22.6,14.9,21.1L14.9,21.1L14.9,21.1z\n\t\t M20.9,21.1c-3.3,0-6,2.7-6,6s2.7,6,6,6c3.3,0,6-2.7,6-6S24.3,21.1,20.9,21.1z\"/>\n\t<circle class=\"st0\" cx=\"20.9\" cy=\"27.2\" r=\"2.2\"/>\n</g>\n</svg>\n", "crossover": "<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version=\"1.1\"\n\t xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:a=\"http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/\"\n\t x=\"0px\" y=\"0px\" width=\"108.9px\" height=\"42.8px\" viewBox=\"0 0 108.9 42.8\" style=\"enable-background:new 0 0 108.9 42.8;\"\n\t xml:space=\"preserve\">\n<style type=\"text/css\">\n\t.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n\t.st1{fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class=\"st0\" d=\"M69.1,13.1l-47.2-1.3l-1-3.3c3.2-1.1,6.4-2.1,9.5-2.8C37.9,3.9,46.2,4,53.8,4c5.8,0.5,11.5,2.8,16.8,5.6l0,0\n\tl0,0c-0.9,0.9-1.4,1.9-1.4,3.1C69.1,12.8,69.1,13,69.1,13.1z\"/>\n<path class=\"st1\" d=\"M8.7,35.3c-5.4,0-8.3-3.5-8.5-3.7L0,31.3v-8.8l0.4-0.4c0.5-0.5,1.6-1.9,1.6-2.8c0-0.9,0.1-2.9,0.1-4.8\n\tc0-1.5,0.1-2.9,0.1-3.8l0-1l5.4-0.7C25.8,1.3,36.2,0,53.9,0c9.7,0.9,18.5,5.7,26.7,10.7c0.6,0.1,1.3,0.1,2.1,0.2\n\tc13,1.2,25.1,3,26.2,8l0,15.6l-0.9,0.2c-1.7,0.4-3.5,0.6-7.1,0.6h-3.3v-2.4h3.3c3,0,4.5-0.2,5.7-0.4V19.2c-0.6-2.4-8.7-4.5-24.1-5.9\n\tc-1-0.1-1.8-0.2-2.4-0.2l-0.5-0.2C71.6,8,63,3.2,53.8,2.4c-17.3,0-27.5,1.3-45.3,9l-0.3,0.1l-3.6,0.4c0,0.8,0,1.8-0.1,2.8\n\tc0,1.9-0.1,3.9-0.1,4.8c0,1.7-1.3,3.3-1.9,4.1v6.9c0.8,0.7,3,2.6,6.7,2.5l2.5,0v2.4H9.1C9,35.3,8.9,35.3,8.7,35.3z M79.5,35.3H29.1\n\tv-2.4h50.5V35.3z\"/>\n<path class=\"st0\" d=\"M71.3,10.4L71.3,10.4c-0.7,0.7-1,1.5-1.1,2.4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4H74\n\tc0.4,0,0.8-0.2,1-0.6c0.2-0.4,0.2-0.8,0-1.2c-0.5-0.8-1.3-1.6-2.5-2.1C72.1,10,71.6,10.1,71.3,10.4z\"/>\n<path class=\"st1\" d=\"M73.5,15.2c-0.2,0-0.5-0.1-0.6-0.3l-1.5-2c-0.3-0.4-0.2-0.9,0.2-1.1c0.4-0.3,0.9-0.2,1.1,0.2l1.5,2\n\tc0.3,0.4,0.2,0.9-0.2,1.1C73.8,15.1,73.6,15.2,73.5,15.2z\"/>\n<path class=\"st0\" d=\"M2.5,19.3H4c1.9,0,4.5-1.5,4.6-3.1v-1.5H2.5C2.5,16.2,2.5,17.7,2.5,19.3z\"/>\n<path class=\"st0\" d=\"M99.5,17.9l2.8,5c0.9-0.5,2.3-0.9,3.3-0.9h0h0h0h0h0h0c0.7,0,1.4,0,2.1,0c0-2,0.2-2.2-1.6-3.6L99.5,17.9z\"/>\n<rect x=\"49.4\" y=\"15.8\" class=\"st1\" width=\"5.5\" height=\"1.6\"/>\n<rect x=\"24.8\" y=\"15.2\" class=\"st1\" width=\"5.5\" height=\"1.6\"/>\n<polygon class=\"st0\" points=\"35.4,27.6 35.4,29.6 72.7,29.6 \"/>\n<path class=\"st0\" d=\"M107.2,24.9c-1.7,0-2.5,0-4.2,0c-0.9,0.9-0.9,2.1-0.9,3.2c1.7,0,3.4,0,5.1,0C107.2,27,107.2,25.9,107.2,24.9z\"\n\t/>\n<path class=\"st0\" d=\"M104,31.9c-0.3-0.7-0.3-1.6-0.3-2.3c1.7,0,1.8,0,3.5,0v2.3H104z\"/>\n<path class=\"st0\" d=\"M13.3,40.4c-1.5-1.3-2.7-3.1-3.2-5.1H9.5H8.3v-1.2v-3.5c0-3.2,1.3-6,3.4-8.1c2.1-2.1,5-3.4,8.1-3.4h0\n\tc3.2,0,6,1.3,8.1,3.4l0,0c2.1,2.1,3.4,5,3.4,8.1v3.5v1.2h-1.2h-0.6c-0.5,2-1.7,3.8-3.2,5.1c-1.8,1.5-4,2.4-6.5,2.4\n\tC17.4,42.8,15.1,41.9,13.3,40.4L13.3,40.4z M88.5,26c-3.7,0-6.7,3-6.7,6.7c0,3.7,3,6.7,6.7,6.7c3.7,0,6.7-3,6.7-6.7\n\tC95.2,29,92.2,26,88.5,26L88.5,26z M19.8,26c-3.7,0-6.7,3-6.7,6.7c0,3.7,3,6.7,6.7,6.7c3.7,0,6.7-3,6.7-6.7C26.6,29,23.6,26,19.8,26\n\tL19.8,26z M88.5,19.1L88.5,19.1c3.2,0,6,1.3,8.1,3.4l0,0c2.1,2.1,3.4,5,3.4,8.1v3.5v1.2h-1.2h-0.6c-0.5,2-1.7,3.8-3.2,5.1\n\tc-1.8,1.5-4,2.4-6.5,2.4c-2.5,0-4.8-0.9-6.5-2.4l0,0c-1.5-1.3-2.7-3.1-3.2-5.1h-0.6H77v-1.2v-3.5c0-3.2,1.3-6,3.4-8.1\n\tC82.4,20.4,85.3,19.1,88.5,19.1L88.5,19.1z M88.5,30.1c1.4,0,2.6,1.2,2.6,2.6s-1.2,2.6-2.6,2.6c-1.4,0-2.6-1.2-2.6-2.6\n\tS87.1,30.1,88.5,30.1L88.5,30.1z M19.8,30.1c-1.4,0-2.6,1.2-2.6,2.6s1.2,2.6,2.6,2.6c1.4,0,2.6-1.2,2.6-2.6S21.3,30.1,19.8,30.1z\"/>\n</svg>\n", "hatchback": "<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version=\"1.1\"\n\t xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:a=\"http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/\"\n\t x=\"0px\" y=\"0px\" width=\"90.6px\" height=\"34.3px\" viewBox=\"0 0 90.6 34.3\" style=\"enable-background:new 0 0 90.6 34.3;\"\n\t xml:space=\"preserve\">\n<style type=\"text/css\">\n\t.st0{fill:#6D6E71;}\n\t.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class=\"st0\" d=\"M6.4,30c-4.3,0-6-2.7-6.4-4.2l0-5.7l0.4-0.4C1,19.1,1.9,18,1.9,17.3L2,13.8c0.1-1.1,0.6-2.1,1.5-2.7l9.6-7\n\tl-1.2-1.9l1.5-0.5C16.9,0.6,19.2,0,25.1,0L44,0c2.9,0.3,5.3,0.7,7.3,1.3c4.1,1.3,13.4,6.9,15,7.8c1.2,0.2,6.9,1.1,13.2,2.7\n\tc7.6,1.9,10.1,5,10.4,6.3L90.6,29l-1,0.2c-1.8,0.4-3.2,0.7-7.1,0.7h-4.9v-2.4h4.9c2.9,0,4.3-0.1,5.6-0.4l0-0.5l-0.4-8.2\n\tc-0.2-0.3-2.2-2.7-8.7-4.4c-6.9-1.8-13.1-2.7-13.2-2.7l-0.4-0.2c-0.1-0.1-10.5-6.4-14.6-7.7c-1.9-0.6-4.1-1-6.7-1.2l-18.8,0\n\tc-4.7,0-6.9,0.4-9.6,1.1l0.8,1.2L4.9,13c-0.3,0.2-0.5,0.5-0.5,0.9l-0.2,3.4c0,1.5-1.2,3.1-1.9,3.8v4.3c0.2,0.5,1.1,2.3,4.3,2.2\n\tl3.2,0V30H6.7C6.6,30,6.5,30,6.4,30z M66.3,30H21.1v-2.4h45.1V30z\"/>\n<path class=\"st1\" d=\"M3.2,13.7l0,0.2l-0.2,2.9h3.3c0,0,2.1-2.4,2.1-3.8C8.4,13,6.1,12.9,3.2,13.7z\"/>\n<path class=\"st1\" d=\"M15,10.5c3.3-3.8,6.3-6.9,10.8-6.9c5,0,13.1,0,18.1,0C49,4,52.7,5.8,56.6,8l0,0l0,0c-0.8,0.8-1.3,1.8-1.3,2.9\n\tc0,0.4,0.1,0.7,0.2,1C45.7,12,21.8,12.4,15,10.5z\"/>\n<path class=\"st1\" d=\"M15.5,16.9L15.5,16.9c2.5,0,4.8,1,6.5,2.7l0,0c1.7,1.7,2.7,4,2.7,6.5v2.7V30h-1.2H21c0.6-1,1-2.2,1-3.4\n\tc0-3.6-2.9-6.5-6.5-6.5S9,22.9,9,26.5c0,1.3,0.4,2.4,1,3.4H7.5H6.3v-1.2v-2.7c0-2.5,1-4.8,2.7-6.5C10.7,17.9,13,16.9,15.5,16.9\n\tL15.5,16.9z M71.9,16.9L71.9,16.9c2.5,0,4.8,1,6.5,2.7l0,0c1.7,1.7,2.7,4,2.7,6.5v2.7V30h-1.2h-2.5c0.6-1,1-2.2,1-3.4\n\tc0-3.6-2.9-6.5-6.5-6.5c-3.6,0-6.5,2.9-6.5,6.5c0,1.3,0.4,2.4,1,3.4h-2.5h-1.2v-1.2v-2.7c0-2.5,1-4.8,2.7-6.5\n\tC67.1,17.9,69.4,16.9,71.9,16.9z\"/>\n<rect x=\"33.2\" y=\"14.7\" class=\"st0\" width=\"3.5\" height=\"1.6\"/>\n<path class=\"st1\" d=\"M57.1,8.6L57.1,8.6c-0.7,0.7-1,1.5-1.1,2.4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc0.4,0,0.8-0.2,1-0.6c0.2-0.4,0.2-0.8,0-1.2c-0.5-0.8-1.3-1.6-2.5-2.1C57.9,8.2,57.5,8.3,57.1,8.6z\"/>\n<path class=\"st0\" d=\"M59.3,13.4c-0.2,0-0.5-0.1-0.6-0.3l-1.5-2c-0.3-0.4-0.2-0.9,0.2-1.1c0.4-0.3,0.9-0.2,1.1,0.2l1.5,2\n\tc0.3,0.4,0.2,0.9-0.2,1.1C59.6,13.3,59.5,13.4,59.3,13.4z\"/>\n<polygon class=\"st1\" points=\"15.5,3.5 6.6,10.3 12,10.3 16.5,4.6 \"/>\n<path class=\"st1\" d=\"M81.4,16.5l2.3,4.1c0.7-0.4,1.8-0.7,2.7-0.7h0h0h0h0h0h0c0.8,0,1.5,0,2.3,0l-0.1-1.4c-0.4-0.7-1-1.4-1.7-2H81.4\n\tz\"/>\n<rect x=\"86.5\" y=\"23.9\" class=\"st0\" width=\"2.7\" height=\"1.6\"/>\n<path class=\"st1\" d=\"M86.1,23.4h-1.2c-0.5,0-0.8,0.4-0.8,0.8v0.9c0,0.5,0.4,0.8,0.8,0.8h1.2c0.5,0,0.8-0.4,0.8-0.8v-0.9\n\tC87,23.8,86.6,23.4,86.1,23.4z\"/>\n<g>\n\t<path class=\"st1\" d=\"M71.9,21.1c-1.5,0-2.8,0.6-3.8,1.6c-1,1-1.6,2.3-1.6,3.8c0,1.5,0.6,2.8,1.6,3.8c1,1,2.3,1.6,3.8,1.6\n\t\tc1.5,0,2.8-0.6,3.8-1.6c1-1,1.6-2.3,1.6-3.8c0-1.5-0.6-2.8-1.6-3.8C74.8,21.7,73.4,21.1,71.9,21.1L71.9,21.1z M66.4,21\n\t\tc1.4-1.4,3.4-2.3,5.5-2.3c2.2,0,4.1,0.9,5.5,2.3c1.4,1.4,2.3,3.4,2.3,5.5c0,2.2-0.9,4.1-2.3,5.5c-1.4,1.4-3.4,2.3-5.5,2.3\n\t\tc-2.2,0-4.1-0.9-5.5-2.3c-1.4-1.4-2.3-3.4-2.3-5.5C64.1,24.4,65,22.4,66.4,21L66.4,21z M15.5,21.1c-1.5,0-2.8,0.6-3.8,1.6\n\t\tc-1,1-1.6,2.3-1.6,3.8c0,1.5,0.6,2.8,1.6,3.8c1,1,2.3,1.6,3.8,1.6c1.5,0,2.8-0.6,3.8-1.6c1-1,1.6-2.3,1.6-3.8\n\t\tc0-1.5-0.6-2.8-1.6-3.8C18.3,21.7,17,21.1,15.5,21.1L15.5,21.1z M10,21c1.4-1.4,3.4-2.3,5.5-2.3s4.1,0.9,5.5,2.3\n\t\tc1.4,1.4,2.3,3.4,2.3,5.5c0,2.2-0.9,4.1-2.3,5.5c-1.4,1.4-3.4,2.3-5.5,2.3S11.4,33.5,10,32c-1.4-1.4-2.3-3.4-2.3-5.5\n\t\tC7.7,24.4,8.6,22.4,10,21z\"/>\n\t<path class=\"st1\" d=\"M15.5,24.6c-1.1,0-1.9,0.9-1.9,1.9c0,1.1,0.9,1.9,1.9,1.9c0.2,0,0.4,0,0.5-0.1c0.8-0.2,1.4-1,1.4-1.9\n\t\tC17.4,25.5,16.6,24.6,15.5,24.6z\"/>\n\t<polygon class=\"st1\" points=\"27.8,23.3 27.8,25.3 54.1,25.3 \t\"/>\n\t<circle class=\"st1\" cx=\"71.9\" cy=\"26.5\" r=\"1.9\"/>\n</g>\n</svg>\n", "minivan": "<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version=\"1.1\"\n\t xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:a=\"http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/\"\n\t x=\"0px\" y=\"0px\" width=\"98.2px\" height=\"40.7px\" viewBox=\"0 0 98.2 40.7\" style=\"enable-background:new 0 0 98.2 40.7;\"\n\t xml:space=\"preserve\">\n<style type=\"text/css\">\n\t.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n\t.st1{fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class=\"st0\" d=\"M52.6,4.1c2.3,0,4.7,0.6,6.9,1.3c5.6,1.7,13.6,7.3,18.4,10l-3.5,1.3c-0.3,0.1-0.6,0.2-0.9,0.1l-7.7-0.3\n\tc-0.4-0.6-0.9-1.3-1.2-1.7c-0.7-1.2-1.8-2.1-3.1-2.6c-0.8-0.3-1.8-0.1-2.4,0.5l0,0c-0.9,0.9-1.4,1.9-1.4,3.1c0,0.1,0,0.2,0,0.3\n\tl-36.5-1.2l-10.7-2.3l3.7-7.6c4-0.7,8.1-1.1,11.8-1.1C35.6,4.1,43,4,52.6,4.1z\"/>\n<path class=\"st1\" d=\"M7.6,35.8c-5.6,0-7.4-4.1-7.5-4.3L0,31.1v-7.4l0.2-0.3c0.3-0.5,1-1.9,1-3l0.4-5.5l4.9-9.4L6.1,2.8l1.1-0.2\n\tC10.6,1.8,19.1,0.2,26,0.2c2.2,0,4.9,0,7.8-0.1c6.5-0.1,13.8-0.2,19,0.1c9.4,0.5,17.4,5.5,25.1,10.3c1.3,0.8,2.6,1.6,3.8,2.4\n\tc0.7,0.2,1.5,0.4,2.4,0.6c5.8,1.5,13,3.3,14.1,8l0,0.1l-0.3,10.6l0.2,2.6l-1.6,0.4c-1.5,0.4-2.5,0.6-6.4,0.6h-5.2v-2.4h5.2\n\tc3.2,0,4.3-0.2,5.4-0.4l0-0.7l0.3-10.4c-0.9-3.2-7.7-5-12.3-6.1c-0.9-0.2-1.8-0.5-2.6-0.7L80.6,15c-1.3-0.8-2.7-1.6-4-2.5\n\tc-7.5-4.7-15.2-9.5-24-10c-5-0.3-12.4-0.2-18.8-0.1c-2.9,0-5.6,0.1-7.9,0.1c-6,0-13.4,1.3-17.2,2.1L9,5.9l-5.2,9.8l-0.2,4.7\n\tc0,1.6-0.8,3.2-1.2,3.9v6.5c0.4,0.6,1.9,2.7,5.5,2.6l1.6,0v2.4H7.9C7.8,35.8,7.7,35.8,7.6,35.8z M71.2,35.8H24.3v-2.4h46.9V35.8z\"/>\n<path class=\"st0\" d=\"M78,25.9c-1.7,0-3.3,0.7-4.4,1.8c-1.1,1.1-1.8,2.7-1.8,4.4c0,1.7,0.7,3.3,1.8,4.4l0,0c1.1,1.1,2.7,1.8,4.4,1.8\n\tc1.7,0,3.3-0.7,4.4-1.8c1.1-1.1,1.8-2.7,1.8-4.4c0-1.7-0.7-3.3-1.8-4.4l0,0C81.3,26.6,79.7,25.9,78,25.9L78,25.9z M72,26\n\tc1.6-1.6,3.7-2.5,6.1-2.5c2.4,0,4.5,1,6.1,2.5v0c1.6,1.6,2.5,3.7,2.5,6.1c0,2.4-1,4.5-2.5,6.1c-1.6,1.6-3.7,2.5-6.1,2.5\n\tc-2.4,0-4.5-1-6.1-2.5h0c-1.6-1.6-2.5-3.7-2.5-6.1C69.4,29.7,70.4,27.6,72,26L72,26z\"/>\n<circle class=\"st0\" cx=\"78\" cy=\"32.1\" r=\"2.2\"/>\n<path class=\"st0\" d=\"M78,21.4L78,21.4c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v3v1.2H87h-2.6c0.6-1.1,1-2.4,1-3.7\n\tc0-2-0.8-3.8-2.1-5.2v0c-1.3-1.3-3.2-2.1-5.2-2.1c-2,0-3.8,0.8-5.2,2.1l0,0c-1.3,1.3-2.1,3.2-2.1,5.2c0,1.4,0.4,2.6,1,3.7h-2.6h-1.2\n\tv-1.2v-3c0-2.8,1.1-5.3,3-7.2l0,0l0,0C72.7,22.6,75.3,21.4,78,21.4L78,21.4z M16.9,21.4L16.9,21.4c2.8,0,5.3,1.1,7.2,3l0,0l0,0\n\tc1.8,1.8,3,4.4,3,7.2v3v1.2h-1.2h-2c0.6-1.1,0.9-2.4,0.9-3.7c0-2.2-0.9-4.1-2.3-5.5v0c-1.4-1.4-3.4-2.3-5.5-2.3\n\tc-2.2,0-4.1,0.9-5.5,2.3l0,0C9.9,28,9,29.9,9,32.1c0,1.3,0.3,2.6,0.9,3.7h-2H6.7v-1.2v-3c0-2.8,1.1-5.3,3-7.2\n\tC11.5,22.6,14.1,21.4,16.9,21.4z\"/>\n<path class=\"st0\" d=\"M10.8,26c1.6-1.6,3.7-2.5,6.1-2.5c2.4,0,4.5,1,6.1,2.5v0c1.6,1.6,2.5,3.7,2.5,6.1c0,2.4-1,4.5-2.5,6.1\n\tc-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5h0c-1.6-1.6-2.5-3.7-2.5-6.1C8.3,29.7,9.2,27.6,10.8,26L10.8,26L10.8,26z M16.9,26.1\n\tc-3.3,0-6,2.7-6,6s2.7,6,6,6s6-2.7,6-6S20.2,26.1,16.9,26.1z\"/>\n<circle class=\"st0\" cx=\"16.9\" cy=\"32.1\" r=\"2.2\"/>\n<path class=\"st0\" d=\"M85.4,18.6l2.2,4.9c0.8-0.4,1.9-0.5,2.7-0.5l0,0l0,0l0,0l0,0l0,0l0,0c0.8,0.1,3.8-0.1,6.7,0.2L97,21.8\n\tc-0.1-0.5-0.4-0.9-0.7-1.4L85.4,18.6z\"/>\n<rect x=\"44.4\" y=\"18\" class=\"st1\" width=\"3.5\" height=\"1.6\"/>\n<rect x=\"24.3\" y=\"17.2\" class=\"st1\" width=\"3.5\" height=\"1.6\"/>\n<path class=\"st0\" d=\"M59.9,13.7L59.9,13.7c-0.7,0.7-1,1.5-1.1,2.4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc0.4,0,0.8-0.2,1-0.6c0.2-0.4,0.2-0.8,0-1.2c-0.5-0.8-1.3-1.6-2.5-2.1C60.7,13.3,60.2,13.4,59.9,13.7z\"/>\n<path class=\"st1\" d=\"M62.1,18.5c-0.2,0-0.5-0.1-0.6-0.3l-1.5-2c-0.3-0.4-0.2-0.9,0.2-1.1c0.4-0.3,0.9-0.2,1.1,0.2l1.5,2\n\tc0.3,0.4,0.2,0.9-0.2,1.1C62.4,18.5,62.2,18.5,62.1,18.5z\"/>\n<path class=\"st0\" d=\"M2.3,21.3h1.1c2.4,0,5.6-1.8,5.7-3.9v-1.9H2.6C2.5,17.4,2.4,19.8,2.3,21.3z\"/>\n<rect x=\"93.7\" y=\"29.5\" class=\"st1\" width=\"2.7\" height=\"1.6\"/>\n<path class=\"st0\" d=\"M93.3,29h-1.2c-0.5,0-0.8,0.4-0.8,0.8v0.9c0,0.5,0.4,0.8,0.8,0.8h1.2c0.5,0,0.8-0.4,0.8-0.8v-0.9\n\tC94.1,29.4,93.8,29,93.3,29z\"/>\n<polygon class=\"st0\" points=\"29.1,28.6 29.1,30.7 66.5,30.7 \"/>\n</svg>\n", "pickup": "<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version=\"1.1\"\n\t xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:a=\"http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/\"\n\t x=\"0px\" y=\"0px\" width=\"127.3px\" height=\"45.2px\" viewBox=\"0 0 127.3 45.2\" style=\"enable-background:new 0 0 127.3 45.2;\"\n\t xml:space=\"preserve\">\n<style type=\"text/css\">\n\t.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n\t.st1{fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class=\"st0\" d=\"M49.8,3.6c9.6,0,16.9,0,26.6,0C81,4,84.6,6.3,88.1,9c-0.4,0.1-0.7,0.3-1,0.6l0,0c-0.9,0.9-1.4,3.4-1.4,4.7\n\tc-12.9,0-24.2,0-37.5,0.1L49.8,3.6z\"/>\n<path class=\"st1\" d=\"M12.5,37.8c-5.2,0-11.4-2.4-11.7-2.5L0,35V25l0.4-0.4c0.5-0.5,1.6-1.9,1.6-2.8l0.1-2c0.1-1.4,0.2-2.9,0.2-4.3\n\tc0-1,1.5-2.7,3-3.3l0.4-0.1h36l1.8-9.3C43.9,1.2,45.3,0,47,0l29.5,0c6.8,0.6,10.9,3.9,15.3,7.5c2,1.6,4.1,3.3,6.5,4.8\n\tc1.1,0.1,2.6,0.2,4.5,0.2c10.9,0.4,20.8,1.2,21.9,6l1.1,8.7c0.6,0.4,1.6,1.3,1.6,2.6v3.7c0,1-0.1,2.1-1,2.7\n\tc-1.7,1.1-3.7,1.5-7.7,1.5h-2.2v-2.4h2.2c3.4,0,5.1-0.3,6.4-1c0,0,0-0.2,0-0.7v-3.7c0-0.3-0.6-0.7-0.8-0.8l-0.6-0.3l-1.2-9.8\n\tc-0.8-3.3-13.5-3.8-19.6-4.1c-2-0.1-3.8-0.1-4.9-0.3l-0.5-0.2c-2.7-1.6-4.9-3.4-7-5.2c-4.2-3.4-7.9-6.4-13.9-6.9L47,2.4\n\tc-0.6,0-1.1,0.4-1.2,1l-2.2,11.2H5.9c-0.6,0.3-1.2,1.1-1.3,1.3c0,1.1-0.1,2.7-0.2,4.1l-0.1,1.9c0,1.7-1.3,3.3-1.9,4.1v7.4\n\tc1.8,0.6,6.7,2.1,10.5,2.1h3.2v2.4h-3.2C12.7,37.8,12.6,37.8,12.5,37.8z M99.6,37.8h-67v-2.4h67V37.8z\"/>\n<polygon class=\"st0\" points=\"124.6,28.9 123.7,19.8 121.1,19.8 121.1,28.9 \"/>\n<rect x=\"70.3\" y=\"16.5\" class=\"st1\" width=\"5.5\" height=\"1.6\"/>\n<path class=\"st0\" d=\"M3.1,21.7h1.1c2.4,0,5.6-1.8,5.7-3.9v-1.9H3.4C3.4,17.9,3.2,20.2,3.1,21.7z\"/>\n<path class=\"st0\" d=\"M88,10.5L88,10.5c-0.7,0.7-1,3.1-1.1,4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc2.8,0-0.5-5.1-1.5-5.4C88.8,10,88.3,10.1,88,10.5z\"/>\n<polygon class=\"st0\" points=\"42.5,30.1 42.5,32.1 91.1,32.1 \"/>\n<g>\n\t<path class=\"st1\" d=\"M94.5,36.6h-1.6v-3.5c0-8.3,6.8-15.1,15.1-15.1s15.1,6.8,15.1,15.1v3.3h-1.6v-3.3c0-7.4-6.1-13.5-13.5-13.5\n\t\tc-7.4,0-13.5,6.1-13.5,13.5V36.6z\"/>\n\t<circle class=\"st0\" cx=\"108\" cy=\"35.2\" r=\"2.6\"/>\n\t<path class=\"st1\" d=\"M39.4,36.6h-1.6v-3.5c0-7.4-6.1-13.5-13.5-13.5c-7.4,0-13.5,6.1-13.5,13.5v3.2H9.2v-3.2\n\t\tC9.2,24.8,16,18,24.3,18s15.1,6.8,15.1,15.1V36.6z\"/>\n\t<path class=\"st0\" d=\"M108,21.6L108,21.6c3.2,0,6,1.3,8.1,3.4l0,0c2.1,2.1,3.4,5,3.4,8.1v3.5v1.2h-1.2h-0.6c-0.5,2-1.7,3.8-3.2,5.1\n\t\tc-1.8,1.5-4,2.4-6.5,2.4c-2.5,0-4.8-0.9-6.5-2.4l0,0c-1.5-1.3-2.7-3.1-3.2-5.1h-0.6h-1.2v-1.2v-3.5c0-3.2,1.3-6,3.4-8.1h0\n\t\tC101.9,22.9,104.8,21.6,108,21.6L108,21.6z M108,28.4c-3.7,0-6.7,3-6.7,6.7c0,3.7,3,6.7,6.7,6.7c3.7,0,6.7-3,6.7-6.7\n\t\tC114.7,31.5,111.7,28.4,108,28.4L108,28.4z M24.3,28.4c-3.7,0-6.7,3-6.7,6.7c0,3.7,3,6.7,6.7,6.7c3.7,0,6.7-3,6.7-6.7\n\t\tC31.1,31.5,28.1,28.4,24.3,28.4L24.3,28.4z M24.3,21.6L24.3,21.6c3.2,0,6,1.3,8.1,3.4l0,0c2.1,2.1,3.4,5,3.4,8.1v3.5v1.2h-1.2h-0.6\n\t\tc-0.5,2-1.7,3.8-3.2,5.1c-1.8,1.5-4,2.4-6.5,2.4c-2.5,0-4.8-0.9-6.5-2.4c-1.5-1.3-2.7-3.1-3.2-5.1H14h-1.2v-1.2v-3.5\n\t\tc0-3.2,1.3-6,3.4-8.1C18.3,22.9,21.2,21.6,24.3,21.6z\"/>\n\t<circle class=\"st0\" cx=\"24.3\" cy=\"35.2\" r=\"2.6\"/>\n</g>\n<rect x=\"48.7\" y=\"16.5\" class=\"st1\" width=\"5.5\" height=\"1.6\"/>\n</svg>\n", "sedan": "<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version=\"1.1\"\n\t xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:a=\"http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/\"\n\t x=\"0px\" y=\"0px\" width=\"105.8px\" height=\"37.3px\" viewBox=\"0 0 105.8 37.3\" style=\"enable-background:new 0 0 105.8 37.3;\"\n\t xml:space=\"preserve\">\n<style type=\"text/css\">\n\t.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n\t.st1{fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class=\"st0\" d=\"M30,12.2c-2.3,0-8.7-0.5-12-2.4c5.1-2.8,14.4-6.2,19-6.2c4.1,0,9.2,0,13.2,0c6.3,0,11.6,2.3,16.7,5.1\n\tc-0.8,0.8-1.3,1.9-1.3,3.1c0,0.1,0,0.3,0,0.4H30z\"/>\n<path class=\"st1\" d=\"M11.7,32.5c-5.3,0-10.9-3.6-11.1-3.7L0,28.4v-8.1L0.2,20c0.3-0.5,1-1.9,1-3l0.3-7.5L6,8.6C12,5.8,27.8,0,38.8,0\n\th13.7c3.1,0.3,5.8,0.7,8,1.4C64.9,2.8,75,8.9,76.7,9.9c1.6,0.2,10.1,1.2,17,3c8.2,2.1,11,5.4,11.3,6.8l0.7,11.8l-1,0.2\n\tc-1.9,0.4-3.5,0.7-7.7,0.7h-4v-2.4h4c3.2,0,4.8-0.2,6.2-0.5l0-0.6l-0.5-8.9c-0.2-0.4-2.4-3-9.6-4.8c-7.5-1.9-16.8-3-16.9-3l-0.5-0.2\n\tc-0.1-0.1-11.5-7-16-8.4c-2-0.6-4.5-1.1-7.4-1.3l-13.6,0c-10.6,0-26.1,5.7-31.9,8.5l-0.3,0.1l-2.8,0.6L3.5,17c0,1.6-0.8,3.2-1.2,3.9\n\tV27c1.5,0.9,5.8,3.1,9.6,3l3.2,0v2.4H12C11.9,32.5,11.8,32.5,11.7,32.5z M79.6,32.5H28.5v-2.4h51.1V32.5z\"/>\n<path class=\"st0\" d=\"M2.4,15.8c0,1.2-0.1,2.4-0.1,3.1h1.5c1.9,0,4.5-1.5,4.6-3.1v-1.5H2.4L2.4,15.8L2.4,15.8z\"/>\n<path class=\"st0\" d=\"M95.9,18.7l2.3,4.1c0.7-0.4,1.8-0.7,2.7-0.7h0h0h0h0h0h0c1.2,0,2.4,0,3.6,0l0-0.2c-0.1-0.4-1.2-2.3-2.4-3.2\n\tC100,18.7,98,18.7,95.9,18.7z\"/>\n<rect x=\"50.5\" y=\"15.4\" class=\"st1\" width=\"5.5\" height=\"1.6\"/>\n<rect x=\"26\" y=\"15.4\" class=\"st1\" width=\"5.5\" height=\"1.6\"/>\n<polygon class=\"st0\" points=\"36.2,25.3 36.2,27.3 73.6,27.3 \"/>\n<rect x=\"101.8\" y=\"26.1\" class=\"st1\" width=\"2.7\" height=\"1.6\"/>\n<path class=\"st0\" d=\"M101.4,25.6h-1.2c-0.5,0-0.8,0.4-0.8,0.8v0.9c0,0.5,0.4,0.8,0.8,0.8h1.2c0.5,0,0.8-0.4,0.8-0.8v-0.9\n\tC102.3,26,101.9,25.6,101.4,25.6z\"/>\n<path class=\"st0\" d=\"M67.8,9.4L67.8,9.4c-0.7,0.7-1,1.5-1.1,2.4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc0.4,0,0.8-0.2,1-0.6c0.2-0.4,0.2-0.8,0-1.2c-0.5-0.8-1.3-1.6-2.5-2.1C68.6,9,68.2,9.1,67.8,9.4z\"/>\n<path class=\"st1\" d=\"M70,14.2c-0.2,0-0.5-0.1-0.6-0.3l-1.5-2c-0.3-0.4-0.2-0.9,0.2-1.1c0.4-0.3,0.9-0.2,1.1,0.2l1.5,2\n\tc0.3,0.4,0.2,0.9-0.2,1.1C70.3,14.2,70.2,14.2,70,14.2z\"/>\n<path class=\"st0\" d=\"M1.9,28.1v3.4h8.7v-0.3C7,30.9,3.3,29,1.9,28.1z\"/>\n<g>\n\t<path class=\"st0\" d=\"M21.8,18.1L21.8,18.1c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v3v1.2h-1.2h-2.6c0.6-1.1,1-2.4,1-3.7\n\t\tc0-4.1-3.3-7.4-7.4-7.4c-4.1,0-7.4,3.3-7.4,7.4c0,1.3,0.4,2.6,1,3.7h-2.6h-1.2v-1.2v-3c0-2.8,1.1-5.3,3-7.2l0,0l0,0\n\t\tC16.5,19.2,19,18.1,21.8,18.1z\"/>\n\t<path class=\"st0\" d=\"M15.7,22.7c1.6-1.6,3.7-2.5,6.1-2.5c2.4,0,4.5,1,6.1,2.5l0,0c1.6,1.6,2.5,3.7,2.5,6.1c0,2.4-1,4.5-2.5,6.1h0\n\t\tc-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5c-1.6-1.6-2.5-3.7-2.5-6.1C13.2,26.4,14.2,24.2,15.7,22.7L15.7,22.7L15.7,22.7z\n\t\t M21.8,22.7c-3.3,0-6,2.7-6,6s2.7,6,6,6s6-2.7,6-6S25.1,22.7,21.8,22.7z\"/>\n\t<circle class=\"st0\" cx=\"21.8\" cy=\"28.8\" r=\"2.2\"/>\n</g>\n<g>\n\t<path class=\"st0\" d=\"M86.3,18.1L86.3,18.1c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v3v1.2h-1.2h-2.6c0.6-1.1,1-2.4,1-3.7\n\t\tc0-4.1-3.3-7.4-7.4-7.4c-4.1,0-7.4,3.3-7.4,7.4c0,1.3,0.4,2.6,1,3.7h-2.6h-1.2v-1.2v-3c0-2.8,1.1-5.3,3-7.2l0,0l0,0\n\t\tC81,19.2,83.5,18.1,86.3,18.1z\"/>\n\t<path class=\"st0\" d=\"M80.2,22.7c1.6-1.6,3.7-2.5,6.1-2.5c2.4,0,4.5,1,6.1,2.5l0,0c1.6,1.6,2.5,3.7,2.5,6.1c0,2.4-1,4.5-2.5,6.1h0\n\t\tc-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5c-1.6-1.6-2.5-3.7-2.5-6.1C77.7,26.4,78.7,24.2,80.2,22.7L80.2,22.7L80.2,22.7z\n\t\t M86.3,22.7c-3.3,0-6,2.7-6,6s2.7,6,6,6c3.3,0,6-2.7,6-6S89.6,22.7,86.3,22.7z\"/>\n\t<circle class=\"st0\" cx=\"86.3\" cy=\"28.8\" r=\"2.2\"/>\n</g>\n</svg>\n", "suv": "<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version=\"1.1\"\n\t xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:a=\"http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/\"\n\t x=\"0px\" y=\"0px\" width=\"104.2px\" height=\"45.2px\" viewBox=\"0 0 104.2 45.2\" style=\"enable-background:new 0 0 104.2 45.2;\"\n\t xml:space=\"preserve\">\n<style type=\"text/css\">\n\t.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n\t.st1{fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class=\"st0\" d=\"M42.1,3.6l11.2,0C57.9,4,61.6,6.3,65.1,9c-0.4,0.1-0.7,0.3-1,0.6l0,0c-0.9,0.9-1.4,3.4-1.4,4.7l-20.6,0V3.6z\"/>\n<path class=\"st1\" d=\"M12.7,37.8c-5.4,0-11.9-4.8-12.2-5.1L0,32.4V25l0.4-0.4c0.5-0.5,1.6-1.9,1.6-2.8l0.1-2c0.1-1.4,0.2-2.9,0.2-4.3\n\tc0-0.8,1.1-2.3,2.4-3C5.2,11,6.2,9.2,7.2,7.7c0.6-0.9,1.1-1.7,1.3-2.3l0.3-0.7C8.9,4.5,9,4.4,9,4.3c0,0,0-0.2-0.1-0.4L8.6,1.8l2-0.4\n\tc4-0.9,6.5-1.4,12.3-1.4l30.5,0c6.8,0.6,10.9,3.9,15.3,7.5c2,1.6,4.1,3.3,6.5,4.8c1.1,0.1,2.6,0.2,4.5,0.2c10.9,0.4,20.8,1.2,21.9,6\n\tl1.1,7.9c0.6,0.4,1.6,1.3,1.6,2.6v4.5c0,1-0.1,2.1-1,2.7c-1.7,1.1-3.7,1.5-7.7,1.5h-1.7v-2.4h1.7c3.4,0,5.1-0.3,6.4-1\n\tc0,0,0-0.2,0-0.7v-4.5c0-0.3-0.6-0.7-0.8-0.8l-0.6-0.3l-1.2-9c-0.8-3.4-13.5-3.8-19.6-4.1c-2-0.1-3.8-0.1-4.9-0.3l-0.5-0.2\n\tc-2.7-1.6-4.9-3.4-7-5.2C63,5.9,59.3,2.9,53.3,2.4l-30.4,0c-5.5,0-7.7,0.5-11.6,1.3c0.1,0.9,0.1,1.1-0.3,2l-0.3,0.6\n\tC10.4,7,9.8,7.9,9.2,8.9c-0.9,1.5-2.1,3.4-2.4,4.8l-0.1,0.6l-0.6,0.2c-0.7,0.2-1.4,1.1-1.5,1.4c0,1.1-0.1,2.7-0.2,4.1l-0.1,1.9\n\tc0,1.7-1.3,3.3-1.9,4.1v5.2c1.5,1.1,6.6,4.4,10.5,4.2l2.3,0v2.4h-2.2C12.8,37.8,12.7,37.8,12.7,37.8z M76.1,37.8H32v-2.4h44.1V37.8z\n\t\"/>\n<path class=\"st0\" d=\"M16.8,4.1c4-0.4,7.9-0.6,11.7-0.6h9.1v10.8H11.9L16.8,4.1z\"/>\n<polygon class=\"st0\" points=\"101.6,27.2 100.6,19.8 97.2,19.8 97.2,27.2 \"/>\n<path class=\"st0\" d=\"M17,42.8c-1.5-1.3-2.7-3.1-3.2-5.1h-0.6H12v-1.2v-3.5c0-3.2,1.3-6,3.4-8.1c2.1-2.1,5-3.4,8.1-3.4h0\n\tc3.2,0,6,1.3,8.1,3.4l0,0c2.1,2.1,3.4,5,3.4,8.1v3.5v1.2h-1.2h-0.6c-0.5,2-1.7,3.8-3.2,5.1c-1.8,1.5-4,2.4-6.5,2.4\n\tC21.1,45.2,18.8,44.3,17,42.8L17,42.8z M84.9,28.4c-3.7,0-6.7,3-6.7,6.7c0,3.7,3,6.7,6.7,6.7s6.7-3,6.7-6.7\n\tC91.6,31.5,88.6,28.4,84.9,28.4L84.9,28.4z M23.6,28.4c-3.7,0-6.7,3-6.7,6.7c0,3.7,3,6.7,6.7,6.7c3.7,0,6.7-3,6.7-6.7\n\tC30.3,31.5,27.3,28.4,23.6,28.4L23.6,28.4z M84.9,21.6L84.9,21.6c3.2,0,6,1.3,8.1,3.4l0,0c2.1,2.1,3.4,5,3.4,8.1v3.5v1.2h-1.2h-0.6\n\tc-0.5,2-1.7,3.8-3.2,5.1c-1.8,1.5-4,2.4-6.5,2.4c-2.5,0-4.8-0.9-6.5-2.4l0,0c-1.5-1.3-2.7-3.1-3.2-5.1h-0.6h-1.2v-1.2v-3.5\n\tc0-3.2,1.3-6,3.4-8.1C78.8,22.9,81.7,21.6,84.9,21.6z\"/>\n<circle class=\"st0\" cx=\"84.9\" cy=\"35.2\" r=\"2.6\"/>\n<circle class=\"st0\" cx=\"23.5\" cy=\"35.2\" r=\"2.6\"/>\n<rect x=\"47.2\" y=\"16.5\" class=\"st1\" width=\"5.5\" height=\"1.6\"/>\n<path class=\"st0\" d=\"M3.1,21.7h1.1c2.4,0,5.6-1.8,5.7-3.9v-1.9H3.4C3.4,17.9,3.2,20.2,3.1,21.7z\"/>\n<path class=\"st0\" d=\"M64.9,10.5L64.9,10.5c-0.7,0.7-1,3.1-1.1,4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc2.8,0-0.5-5.1-1.5-5.4C65.7,10,65.2,10.2,64.9,10.5z\"/>\n<polygon class=\"st0\" points=\"41.7,30.1 41.7,32.1 70.5,32.1 \"/>\n</svg>\n", "van": "<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version=\"1.1\"\n\t xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:a=\"http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/\"\n\t x=\"0px\" y=\"0px\" width=\"110.4px\" height=\"47px\" viewBox=\"0 0 110.4 47\" style=\"enable-background:new 0 0 110.4 47;\"\n\t xml:space=\"preserve\">\n<style type=\"text/css\">\n\t.st0{fill:#6D6E71;}\n\t.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class=\"st0\" d=\"M7.6,40.7c-2.8,0-4.7-1.1-5.8-2c-1.2-1.1-1.7-2.1-1.8-2.3L0,36v-7.4l0.2-0.3c0,0,0.3-0.4,0.5-1\n\tc0.3-0.8,0.5-1.5,0.5-2c0-0.6,0.1-2,0.1-3.9c0.1-6,0.4-16,0.8-19.2L2.4,0h72.2l0.3,0.3c1.8,1.5,3.9,3.4,6.2,5.5\n\tc3.5,3.2,7.2,6.5,9.4,7.9c1.8,0.6,16.7,5.5,17.4,8.8c0.9,3.4,1,4,0.9,7.4c1,0.7,1.6,1.8,1.5,3l-0.1,4.1c0,1.7-1.2,3.2-3,3.5\n\tl-0.5,0.1c-1.1,0.1-4.2,0.2-6,0.2h-4v-2.4h4c2.3,0,4.9-0.1,5.7-0.2l0.4-0.1c0.6-0.1,1-0.6,1-1.2l0.1-4.1c0-0.5-0.3-0.9-0.7-1.1\n\tl-0.8-0.3l-0.1-0.9c0.1-3.9,0.1-4.1-0.8-7.5c-0.9-1.6-12.2-6.1-15.9-7.1l-0.3-0.1c-2.5-1.5-6.3-5-9.9-8.3c-2.1-1.9-4.1-3.7-5.7-5.1\n\tl-69.3,0C4,5.5,3.8,15.8,3.6,21.4c0,2-0.1,3.4-0.1,4c0,0.8-0.2,1.8-0.7,2.9c-0.2,0.4-0.4,0.8-0.5,1v6.5c0.1,0.3,0.5,0.7,1,1.2\n\tc1.1,1,2.6,1.5,4.5,1.4h6.7v2.4H7.9C7.8,40.7,7.7,40.7,7.6,40.7z M83.3,40.7H28.1v-2.4h55.2V40.7z\"/>\n<path class=\"st1\" d=\"M73.8,4.5c1.9,1.6,3.7,3.4,5.3,4.8c1.6,1.5,3.5,3.2,5.4,4.8c-0.6,0-1.1,0.3-1.5,0.7l0,0c-1,0.9-1.4,3.5-1.4,4.8\n\tc0,0.4,0.1,0.9,0.3,1.2h-2.1c-5,0-14.5-3.9-14.5-3.9V3.9h7.1C72.8,3.9,73.3,4.1,73.8,4.5z\"/>\n<path class=\"st1\" d=\"M83.7,15.6L83.7,15.6c-0.7,0.7-1,3.1-1.1,4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc2.8,0-0.5-5.1-1.5-5.4C84.5,15.2,84.1,15.3,83.7,15.6z\"/>\n<path class=\"st1\" d=\"M60.9,14.6c0,1.3-1.1,2.4-2.4,2.4H19c-0.4,0-0.8-0.1-1.2-0.3l-5.3-3.1c-0.8-0.4-1.2-1.2-1.2-2.1V4l0-0.1h47.3\n\tc1.3,0,2.4,1.1,2.4,2.4L60.9,14.6z\"/>\n<rect x=\"63.8\" y=\"20.7\" class=\"st0\" width=\"5.5\" height=\"1.6\"/>\n<rect x=\"55\" y=\"19.3\" class=\"st0\" width=\"5.5\" height=\"1.6\"/>\n<rect x=\"10.5\" y=\"20.4\" class=\"st0\" width=\"18.6\" height=\"1.6\"/>\n<path class=\"st1\" d=\"M107.7,27.6c-2.7-1.5-7.8-4.2-8.5-5c-0.3-0.3-0.4-2.6-0.3-4.5c3.9,1.6,7.7,3.5,7.9,4.7\n\tC107.4,25.1,107.7,26,107.7,27.6L107.7,27.6z\"/>\n<path class=\"st1\" d=\"M2.4,25.2c2.1-0.5,4.4-2,4.5-3.8V7.2H2.9c-0.2,5-0.4,11.9-0.5,15.6c0.1,0.4,0.2,0.7,0.2,0.9\n\tC2.6,24.2,2.5,24.7,2.4,25.2z\"/>\n<g>\n\t<path class=\"st1\" d=\"M98.3,40.7c-0.4,1.4-1.2,2.7-2.2,3.8h0C94.6,46,92.4,47,90,47c-2.4,0-4.5-1-6.1-2.5c-1-1-1.8-2.3-2.2-3.8h-0.7\n\t\th-1.2v-1.2v-1.4c0-2.8,1.1-5.3,3-7.2c1.8-1.8,4.4-3,7.2-3h0c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v1.4v1.2H99H98.3\n\t\tL98.3,40.7z M90,33.1c-2.9,0-5.2,2.3-5.2,5.2c0,2.9,2.3,5.2,5.2,5.2c2.9,0,5.2-2.3,5.2-5.2C95.3,35.5,92.9,33.1,90,33.1z\"/>\n\t<path class=\"st1\" d=\"M21.3,27.9c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v1.4v1.2h-1.2h-0.7c-0.4,1.4-1.2,2.7-2.2,3.8h0\n\t\tC25.8,46,23.7,47,21.3,47c-2.4,0-4.5-1-6.1-2.5c-1-1-1.8-2.3-2.2-3.8h-0.7h-1.2v-1.2v-1.4c0-2.8,1.1-5.3,3-7.2\n\t\tC16,29.1,18.5,27.9,21.3,27.9L21.3,27.9L21.3,27.9z M21.3,33.1c-2.9,0-5.2,2.3-5.2,5.2c0,2.9,2.3,5.2,5.2,5.2s5.2-2.3,5.2-5.2\n\t\tC26.6,35.5,24.2,33.1,21.3,33.1z\"/>\n\t<circle class=\"st1\" cx=\"90\" cy=\"38.4\" r=\"2.2\"/>\n\t<circle class=\"st1\" cx=\"21.3\" cy=\"38.4\" r=\"2.2\"/>\n</g>\n</svg>\n", "wagon": "<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In  -->\n<svg version=\"1.1\"\n\t xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:a=\"http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/\"\n\t x=\"0px\" y=\"0px\" width=\"108.1px\" height=\"37.4px\" viewBox=\"0 0 108.1 37.4\" style=\"enable-background:new 0 0 108.1 37.4;\"\n\t xml:space=\"preserve\">\n<style type=\"text/css\">\n\t.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#6D6E71;}\n\t.st1{fill:#6D6E71;}\n</style>\n<defs>\n</defs>\n<path class=\"st0\" d=\"M23.1,12.2c-4.2,0-6.4-0.2-8.7-1c10.8-7.9,9.5-7.6,24-7.6c3.7,0,10,0,14.7,0c2.9,0,5.8,0.4,8.6,1.3\n\tc2.1,0.7,5,2.1,7.8,3.6c-0.1,0-0.1,0.1-0.2,0.2l0,0c-0.9,0.9-1.4,1.9-1.4,3.1c0,0.1,0,0.3,0,0.4H23.1z\"/>\n<path class=\"st1\" d=\"M11.7,32.5c-5.3,0-10.9-3.6-11.1-3.7L0,28.4v-8.1L0.2,20c0.3-0.5,1-1.9,1-3l0.3-5.6L12,4.2l-0.3-2.3l1.1-0.2\n\tC17.1,0.7,24.9,0,31.6,0l23.2,0c3.1,0.3,5.8,0.8,8,1.4c4.5,1.4,14.6,7.5,16.3,8.5c1.6,0.2,10.1,1.2,17,3c8.2,2.1,11,5.4,11.3,6.8\n\tl0.7,11.8l-1,0.2c-1.9,0.4-3.5,0.7-7.7,0.7h-4.2v-2.4h4.2c3.2,0,4.8-0.2,6.2-0.5l0-0.6l-0.5-8.9c-0.2-0.4-2.4-3-9.6-4.8\n\tc-7.5-1.9-16.8-3-16.9-3l-0.5-0.2c-0.1-0.1-11.5-7-16-8.4c-2-0.6-4.5-1.1-7.4-1.3l-23.1,0c-6,0-12.8,0.5-17.2,1.3l0.2,1.6L3.8,12.7\n\tl-0.2,4.3c0,1.6-0.8,3.2-1.2,3.9V27c1.5,0.9,5.7,3.1,9.6,3l7.3,0v2.4H12C11.9,32.5,11.8,32.5,11.7,32.5z M82.2,32.5H32.2v-2.4h49.9\n\tV32.5z\"/>\n<path class=\"st0\" d=\"M1.6,19h1.5c1.9,0,4.5-1.5,4.6-3.1v-1.5H1.6C1.6,15.9,1.6,17.4,1.6,19z\"/>\n<path class=\"st0\" d=\"M98.3,18.7l2.3,4.1c0.7-0.4,1.8-0.7,2.7-0.7h0h0h0h0h0h0c1.2,0,2.4,0,3.6,0l0-0.2c-0.1-0.4-1.2-2.3-2.4-3.2\n\tC102.4,18.7,100.4,18.7,98.3,18.7z\"/>\n<rect x=\"52.8\" y=\"15.4\" class=\"st1\" width=\"5.5\" height=\"1.6\"/>\n<rect x=\"29.9\" y=\"15.4\" class=\"st1\" width=\"5.5\" height=\"1.6\"/>\n<polygon class=\"st0\" points=\"38.6,25.3 38.6,27.3 76,27.3 \"/>\n<rect x=\"104.2\" y=\"26.1\" class=\"st1\" width=\"2.7\" height=\"1.6\"/>\n<path class=\"st0\" d=\"M103.8,25.6h-1.2c-0.5,0-0.8,0.4-0.8,0.8v0.9c0,0.5,0.4,0.8,0.8,0.8h1.2c0.5,0,0.8-0.4,0.8-0.8v-0.9\n\tC104.6,26,104.2,25.6,103.8,25.6z\"/>\n<path class=\"st0\" d=\"M70.2,9.4L70.2,9.4c-0.7,0.7-1,1.5-1.1,2.4c0,0.3,0.1,0.6,0.3,0.8c0.2,0.2,0.5,0.4,0.8,0.4h2.6\n\tc0.4,0,0.8-0.2,1-0.6c0.2-0.4,0.2-0.8,0-1.2c-0.5-0.8-1.3-1.6-2.5-2.1C71,9,70.5,9.1,70.2,9.4z\"/>\n<path class=\"st1\" d=\"M72.4,14.2c-0.2,0-0.5-0.1-0.6-0.3l-1.5-2c-0.3-0.4-0.2-0.9,0.2-1.1c0.4-0.3,0.9-0.2,1.1,0.2l1.5,2\n\tc0.3,0.4,0.2,0.9-0.2,1.1C72.7,14.2,72.5,14.2,72.4,14.2z\"/>\n<path class=\"st0\" d=\"M1.9,28.1v3.4h8.7v-0.3C7,30.9,3.3,29,1.9,28.1z\"/>\n<g>\n\t<path class=\"st0\" d=\"M25.7,18.1L25.7,18.1c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v3v1.2h-1.2h-2.6c0.6-1.1,1-2.4,1-3.7\n\t\tc0-4.1-3.3-7.4-7.4-7.4c-4.1,0-7.4,3.3-7.4,7.4c0,1.3,0.4,2.6,1,3.7h-2.6h-1.2v-1.2v-3c0-2.8,1.1-5.3,3-7.2l0,0l0,0\n\t\tC20.4,19.2,22.9,18.1,25.7,18.1z\"/>\n\t<path class=\"st0\" d=\"M19.7,22.7c1.6-1.6,3.7-2.5,6.1-2.5c2.4,0,4.5,1,6.1,2.5l0,0c1.6,1.6,2.5,3.7,2.5,6.1c0,2.4-1,4.5-2.5,6.1h0\n\t\tc-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5c-1.6-1.6-2.5-3.7-2.5-6.1C17.1,26.4,18.1,24.2,19.7,22.7L19.7,22.7L19.7,22.7z\n\t\t M25.7,22.8c-3.3,0-6,2.7-6,6s2.7,6,6,6s6-2.7,6-6S29,22.8,25.7,22.8z\"/>\n\t<circle class=\"st0\" cx=\"25.7\" cy=\"28.8\" r=\"2.2\"/>\n</g>\n<g>\n\t<path class=\"st0\" d=\"M88.7,18.1L88.7,18.1c2.8,0,5.3,1.1,7.2,3l0,0l0,0c1.8,1.8,3,4.4,3,7.2v3v1.2h-1.2H95c0.6-1.1,1-2.4,1-3.7\n\t\tc0-4.1-3.3-7.4-7.4-7.4c-4.1,0-7.4,3.3-7.4,7.4c0,1.3,0.4,2.6,1,3.7h-2.6h-1.2v-1.2v-3c0-2.8,1.1-5.3,3-7.2l0,0l0,0\n\t\tC83.3,19.2,85.9,18.1,88.7,18.1z\"/>\n\t<path class=\"st0\" d=\"M82.6,22.7c1.6-1.6,3.7-2.5,6.1-2.5c2.4,0,4.5,1,6.1,2.5l0,0c1.6,1.6,2.5,3.7,2.5,6.1c0,2.4-1,4.5-2.5,6.1h0\n\t\tc-1.6,1.6-3.7,2.5-6.1,2.5c-2.4,0-4.5-1-6.1-2.5c-1.6-1.6-2.5-3.7-2.5-6.1C80.1,26.4,81,24.2,82.6,22.7L82.6,22.7L82.6,22.7z\n\t\t M88.7,22.8c-3.3,0-6,2.7-6,6s2.7,6,6,6c3.3,0,6-2.7,6-6S92,22.8,88.7,22.8z\"/>\n\t<circle class=\"st0\" cx=\"88.7\" cy=\"28.8\" r=\"2.2\"/>\n</g>\n</svg>\n" });
 
 /***/ }),
-/* 344 */
+/* 345 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19643,19 +19640,19 @@ module.exports = function spread(callback) {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = __webpack_require__(325);
+window.axios = __webpack_require__(326);
 window.axios.defaults.headers.post['Content-Type'] = 'application/json';
 window.axios.defaults.headers.common['X-CSRF-TOKEN'] = window.Laravel.csrfToken;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
-/* 345 */
+/* 346 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_components_StyleSelector__ = __webpack_require__(352);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_components_StyleSelector__ = __webpack_require__(353);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_src_api__ = __webpack_require__(204);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -19738,7 +19735,7 @@ var Configurator = function (_React$Component) {
 /* harmony default export */ __webpack_exports__["a"] = (Configurator);
 
 /***/ }),
-/* 346 */
+/* 347 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19746,7 +19743,7 @@ var Configurator = function (_React$Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ramda__ = __webpack_require__(114);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ramda___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_ramda__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_src_util__ = __webpack_require__(355);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_src_util__ = __webpack_require__(356);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -19824,58 +19821,103 @@ var Deal = function (_React$Component) {
 /* harmony default export */ __webpack_exports__["a"] = (Deal);
 
 /***/ }),
-/* 347 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(81);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_components_Deal__ = __webpack_require__(346);
-
-
-
-
-var Deals = function Deals(_ref) {
-    var deals = _ref.deals,
-        fallbackDealImage = _ref.fallbackDealImage;
-
-    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        { className: 'deals' },
-        deals.map(function (deal, index) {
-            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_components_Deal__["a" /* default */], {
-                deal: deal,
-                key: index,
-                fallbackDealImage: fallbackDealImage
-            });
-        })
-    );
-};
-
-Deals.propTypes = {
-    deals: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
-        year: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
-        msrp: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.number.isRequired,
-        make: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
-        model: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
-        id: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.number.isRequired
-    })),
-    fallbackDealImage: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (Deals);
-
-/***/ }),
 /* 348 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__ = __webpack_require__(350);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_components_ZipcodeFinder__ = __webpack_require__(353);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom__ = __webpack_require__(757);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_dom__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types__ = __webpack_require__(81);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_prop_types__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_components_Deal__ = __webpack_require__(347);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_debounce__ = __webpack_require__(558);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_lodash_debounce___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_lodash_debounce__);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+
+
+
+var Deals = function (_React$Component) {
+    _inherits(Deals, _React$Component);
+
+    function Deals() {
+        _classCallCheck(this, Deals);
+
+        return _possibleConstructorReturn(this, (Deals.__proto__ || Object.getPrototypeOf(Deals)).call(this));
+    }
+
+    _createClass(Deals, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            var element = __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.findDOMNode(this);
+            var subscribeToScroll = function subscribeToScroll(e) {
+                _this2.props.loadMoreDeals();
+            };
+
+            element.addEventListener('scroll', __WEBPACK_IMPORTED_MODULE_4_lodash_debounce___default()(subscribeToScroll, 500, {
+                maxWait: 1000,
+                leading: true,
+                trailing: false
+            }));
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
+
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'deals' },
+                this.props.deals.map(function (deal, index) {
+                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_components_Deal__["a" /* default */], {
+                        deal: deal,
+                        key: index,
+                        fallbackDealImage: _this3.props.fallbackDealImage
+                    });
+                })
+            );
+        }
+    }]);
+
+    return Deals;
+}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+
+Deals.propTypes = {
+    deals: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.shape({
+        year: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string.isRequired,
+        msrp: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.number.isRequired,
+        make: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string.isRequired,
+        model: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string.isRequired,
+        id: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.number.isRequired
+    })),
+    fallbackDealImage: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.string.isRequired,
+    loadMoreDeals: __WEBPACK_IMPORTED_MODULE_2_prop_types___default.a.func.isRequired
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Deals);
+
+/***/ }),
+/* 349 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__ = __webpack_require__(351);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_components_ZipcodeFinder__ = __webpack_require__(354);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -19929,7 +19971,7 @@ var FilterPanel = function (_React$Component) {
 /* harmony default export */ __webpack_exports__["a"] = (FilterPanel);
 
 /***/ }),
-/* 349 */
+/* 350 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20033,15 +20075,15 @@ MakeSelector.propTypes = {
 /* harmony default export */ __webpack_exports__["a"] = (MakeSelector);
 
 /***/ }),
-/* 350 */
+/* 351 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_svg_inline__ = __webpack_require__(195);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_svg_inline__ = __webpack_require__(196);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_svg_inline___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_svg_inline__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_zondicons__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_zondicons__ = __webpack_require__(205);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20107,7 +20149,7 @@ var SidebarFilter = function (_React$Component) {
 /* harmony default export */ __webpack_exports__["a"] = (SidebarFilter);
 
 /***/ }),
-/* 351 */
+/* 352 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20115,9 +20157,9 @@ var SidebarFilter = function (_React$Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(81);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_svg_inline__ = __webpack_require__(195);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_svg_inline__ = __webpack_require__(196);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_svg_inline___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_svg_inline__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_zondicons__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_zondicons__ = __webpack_require__(205);
 
 
 
@@ -20185,7 +20227,7 @@ Sortbar.propTypes = {
 /* harmony default export */ __webpack_exports__["a"] = (Sortbar);
 
 /***/ }),
-/* 352 */
+/* 353 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20195,9 +20237,9 @@ Sortbar.propTypes = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ramda__ = __webpack_require__(114);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ramda___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ramda__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_svg_inline__ = __webpack_require__(195);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_svg_inline__ = __webpack_require__(196);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_svg_inline___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_react_svg_inline__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_body_styles__ = __webpack_require__(343);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_body_styles__ = __webpack_require__(344);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20280,7 +20322,7 @@ StyleSelector.propTypes = {
 /* harmony default export */ __webpack_exports__["a"] = (StyleSelector);
 
 /***/ }),
-/* 353 */
+/* 354 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20351,7 +20393,7 @@ ZipcodeFinder.propTypes = {
 /* harmony default export */ __webpack_exports__["a"] = (ZipcodeFinder);
 
 /***/ }),
-/* 354 */
+/* 355 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20360,12 +20402,12 @@ ZipcodeFinder.propTypes = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ramda__ = __webpack_require__(114);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ramda___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_ramda__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_src_api__ = __webpack_require__(204);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_qs__ = __webpack_require__(559);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_qs__ = __webpack_require__(560);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_qs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_qs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_components_MakeSelector__ = __webpack_require__(349);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_components_Deals__ = __webpack_require__(347);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_components_Sortbar__ = __webpack_require__(351);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_components_FilterPanel__ = __webpack_require__(348);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_components_MakeSelector__ = __webpack_require__(350);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_components_Deals__ = __webpack_require__(348);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_components_Sortbar__ = __webpack_require__(352);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_components_FilterPanel__ = __webpack_require__(349);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20396,6 +20438,7 @@ var FilterPage = function (_React$Component) {
             selectedMakes: [],
             makes: null,
             showModal: true,
+            dealPage: 0,
             deals: null,
             fallbackLogoImage: '/images/dmr-logo.svg',
             fallbackDealImage: '/images/dmr-logo.svg',
@@ -20407,6 +20450,7 @@ var FilterPage = function (_React$Component) {
         _this.toggleSort = _this.toggleSort.bind(_this);
         _this.sortParam = _this.sortParam.bind(_this);
         _this.renderDeals = _this.renderDeals.bind(_this);
+        _this.loadMoreDeals = _this.loadMoreDeals.bind(_this);
         return _this;
     }
 
@@ -20422,6 +20466,21 @@ var FilterPage = function (_React$Component) {
             });
         }
     }, {
+        key: 'loadMoreDeals',
+        value: function loadMoreDeals() {
+            var _this3 = this;
+
+            this.setState({
+                dealPage: this.state.dealPage + 1
+            }, function () {
+                _this3.getDeals(_this3.sortParam(_this3.state.sortColumn)).then(function (deals) {
+                    _this3.setState({
+                        deals: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.concat(_this3.state.deals, deals.data.data)
+                    });
+                });
+            });
+        }
+    }, {
         key: 'onSelectMake',
         value: function onSelectMake(id) {
             this.setState({
@@ -20431,22 +20490,25 @@ var FilterPage = function (_React$Component) {
     }, {
         key: 'closeModal',
         value: function closeModal() {
+            var _this4 = this;
+
             this.setState({
                 showModal: false
-            }, this.getDeals);
+            }, function () {
+                _this4.getDeals().then(function (deals) {
+                    _this4.setState({
+                        deals: deals.data.data
+                    });
+                });
+            });
         }
     }, {
         key: 'getDeals',
         value: function getDeals() {
-            var _this3 = this;
-
             var sort = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'price';
+            var page = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.state.dealPage;
 
-            __WEBPACK_IMPORTED_MODULE_2_src_api__["a" /* default */].getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], ['photos'], sort).then(function (deals) {
-                _this3.setState({
-                    deals: deals.data.data
-                });
-            });
+            return __WEBPACK_IMPORTED_MODULE_2_src_api__["a" /* default */].getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], ['photos'], sort, page);
         }
     }, {
         key: 'sortParam',
@@ -20456,13 +20518,18 @@ var FilterPage = function (_React$Component) {
     }, {
         key: 'toggleSort',
         value: function toggleSort(column) {
-            var _this4 = this;
+            var _this5 = this;
 
             this.setState({
                 sortColumn: column,
                 sortStatus: this.state.sortStatus === 'asc' ? 'desc' : 'asc'
             }, function () {
-                _this4.getDeals(_this4.sortParam(column));
+                _this5.getDeals(_this5.sortParam(column)).then(function (deals) {
+                    _this5.setState({
+                        deals: deals.data.data,
+                        dealPage: 0
+                    });
+                });
             });
         }
     }, {
@@ -20507,6 +20574,7 @@ var FilterPage = function (_React$Component) {
                         sortStatus: this.state.sortStatus
                     }),
                     this.state.deals.length ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5_components_Deals__["a" /* default */], {
+                        loadMoreDeals: this.loadMoreDeals,
                         deals: this.state.deals,
                         fallbackDealImage: this.state.fallbackDealImage
                     }) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -20542,7 +20610,7 @@ var FilterPage = function (_React$Component) {
 /* harmony default export */ __webpack_exports__["a"] = (FilterPage);
 
 /***/ }),
-/* 355 */
+/* 356 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20561,279 +20629,6 @@ var util = {
 /* harmony default export */ __webpack_exports__["a"] = (util);
 
 /***/ }),
-/* 356 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = ({
-    'add-outline': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M11 9h4v2h-4v4H9v-4H5V9h4V5h2v4zm-1 11a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"/></svg>',
-    'add-solid': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M11 9V5H9v4H5v2h4v4h2v-4h4V9h-4zm-1 11a10 10 0 1 1 0-20 10 10 0 0 1 0 20z"/></svg>',
-    adjust: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 2v16a8 8 0 1 0 0-16zm0 18a10 10 0 1 1 0-20 10 10 0 0 1 0 20z"/></svg>',
-    airplane: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M8.4 12H2.8L1 15H0V5h1l1.8 3h5.6L6 0h2l4.8 8H18a2 2 0 1 1 0 4h-5.2L8 20H6l2.4-8z"/></svg>',
-    album: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 0h20v20H0V0zm10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm0-5a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>',
-    'align-center': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M1 1h18v2H1V1zm0 8h18v2H1V9zm0 8h18v2H1v-2zM4 5h12v2H4V5zm0 8h12v2H4v-2z"/></svg>',
-    'align-justified': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M1 1h18v2H1V1zm0 8h18v2H1V9zm0 8h18v2H1v-2zM1 5h18v2H1V5zm0 8h18v2H1v-2z"/></svg>',
-    'align-left': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M1 1h18v2H1V1zm0 8h18v2H1V9zm0 8h18v2H1v-2zM1 5h12v2H1V5zm0 8h12v2H1v-2z"/></svg>',
-    'align-right': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M1 1h18v2H1V1zm0 8h18v2H1V9zm0 8h18v2H1v-2zM7 5h12v2H7V5zm0 8h12v2H7v-2z"/></svg>',
-    anchor: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4.34 15.66A7.97 7.97 0 0 0 9 17.94V10H5V8h4V5.83a3 3 0 1 1 2 0V8h4v2h-4v7.94a7.97 7.97 0 0 0 4.66-2.28l-1.42-1.42h5.66l-2.83 2.83a10 10 0 0 1-14.14 0L.1 14.24h5.66l-1.42 1.42zM10 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>',
-    announcement: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M3 6c0-1.1.9-2 2-2h8l4-4h2v16h-2l-4-4H5a2 2 0 0 1-2-2H1V6h2zm8 9v5H8l-1.67-5H5v-2h8v2h-2z"/></svg>',
-    apparel: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M7 0H6L0 3v6l4-1v12h12V8l4 1V3l-6-3h-1a3 3 0 0 1-6 0z"/></svg>',
-    'arrow-down': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="9 16.172 2.929 10.101 1.515 11.515 10 20 10.707 19.293 18.485 11.515 17.071 10.101 11 16.172 11 0 9 0"/></svg>',
-    'arrow-left': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="3.828 9 9.899 2.929 8.485 1.515 0 10 .707 10.707 8.485 18.485 9.899 17.071 3.828 11 20 11 20 9 3.828 9"/></svg>',
-    'arrow-outline-down': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-2-8V5h4v5h3l-5 5-5-5h3z"/></svg>',
-    'arrow-outline-left': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 10a10 10 0 1 1 20 0 10 10 0 0 1-20 0zm2 0a8 8 0 1 0 16 0 8 8 0 0 0-16 0zm8-2h5v4h-5v3l-5-5 5-5v3z"/></svg>',
-    'arrow-outline-right': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M20 10a10 10 0 1 1-20 0 10 10 0 0 1 20 0zm-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0zm-8 2H5V8h5V5l5 5-5 5v-3z"/></svg>',
-    'arrow-outline-up': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 0a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm2 8v5H8v-5H5l5-5 5 5h-3z"/></svg>',
-    'arrow-right': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="16.172 9 10.101 2.929 11.515 1.515 20 10 19.293 10.707 11.515 18.485 10.101 17.071 16.172 11 0 11 0 9"/></svg>',
-    'arrow-thick-down': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M7 10V2h6v8h5l-8 8-8-8h5z"/></svg>',
-    'arrow-thick-left': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="10 13 18 13 18 7 10 7 10 2 2 10 10 18 10 13"/></svg>',
-    'arrow-thick-right': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="10 7 2 7 2 13 10 13 10 18 18 10 10 2 10 7"/></svg>',
-    'arrow-thick-up': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="7 10 7 18 13 18 13 10 18 10 10 2 2 10 7 10"/></svg>',
-    'arrow-up': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="9 3.828 2.929 9.899 1.515 8.485 10 0 10.707 .707 18.485 8.485 17.071 9.899 11 3.828 11 20 9 20 9 3.828"/></svg>',
-    artist: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M15.75 8l-3.74-3.75a3.99 3.99 0 0 1 6.82-3.08A4 4 0 0 1 15.75 8zM1.85 15.3l9.2-9.19 2.83 2.83-9.2 9.2-2.82-2.84zm-1.4 2.83l2.11-2.12 1.42 1.42-2.12 2.12-1.42-1.42zM10 15l2-2v7h-2v-5z"/></svg>',
-    'at-symbol': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13.6 13.47A4.99 4.99 0 0 1 5 10a5 5 0 0 1 8-4V5h2v6.5a1.5 1.5 0 0 0 3 0V10a8 8 0 1 0-4.42 7.16l.9 1.79A10 10 0 1 1 20 10h-.18.17v1.5a3.5 3.5 0 0 1-6.4 1.97zM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>',
-    attachment: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M15 3H7a7 7 0 1 0 0 14h8v-2H7A5 5 0 0 1 7 5h8a3 3 0 0 1 0 6H7a1 1 0 0 1 0-2h8V7H7a3 3 0 1 0 0 6h8a5 5 0 0 0 0-10z"/></svg>',
-    backspace: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 10l7-7h13v14H7l-7-7zm14.41 0l2.13-2.12-1.42-1.42L13 8.6l-2.12-2.13-1.42 1.42L11.6 10l-2.13 2.12 1.42 1.42L13 11.4l2.12 2.13 1.42-1.42L14.4 10z"/></svg>',
-    'backward-step': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 5h3v10H4V5zm12 0v10l-9-5 9-5z"/></svg>',
-    backward: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M19 5v10l-9-5 9-5zm-9 0v10l-9-5 9-5z"/></svg>',
-    badge: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 12a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-3a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm4 2.75V20l-4-4-4 4v-8.25a6.97 6.97 0 0 0 8 0z"/></svg>',
-    'battery-full': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 6c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6zm2 0v8h16V6H2zm1 1h4v6H3V7zm5 0h4v6H8V7zm5 0h4v6h-4V7z"/></svg>',
-    'battery-half': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 6c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6zm2 0v8h16V6H2zm1 1h4v6H3V7zm5 0h4v6H8V7z"/></svg>',
-    'battery-low': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 6c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6zm2 0v8h16V6H2zm1 1h4v6H3V7z"/></svg>',
-    beverage: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9 18v-7L0 2V0h20v2l-9 9v7l5 1v1H4v-1l5-1zm2-10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>',
-    block: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16.32 5.1A8 8 0 0 1 5.09 16.32L16.32 5.08zm-1.41-1.42A8 8 0 0 0 3.68 14.91L14.91 3.68zM0 10a10 10 0 1 0 20 0 10 10 0 0 0-20 0z"/></svg>',
-    bluetooth: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.41 0l6 6-4 4 4 4-6 6H9v-7.59l-3.3 3.3-1.4-1.42L8.58 10l-4.3-4.3 1.42-1.4L9 7.58V0h.41zM11 4.41V7.6L12.59 6 11 4.41zM12.59 14L11 12.41v3.18L12.59 14z"/></svg>',
-    bolt: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V0L8.11 5.87 3 12h4v8L17 8h-4z"/></svg>',
-    'book-reference': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M6 4H5a1 1 0 1 1 0-2h11V1a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V5a1 1 0 0 0-1-1h-7v8l-2-2-2 2V4z"/></svg>',
-    'bookmark copy 2': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="18 12 18 13 8 13 8 18 2 12 8 6 8 11 16 11 16 2 18 2"/></svg>',
-    'bookmark copy 3': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="3.5 13 12 13 12 18 18 12 12 6 12 11 4 11 4 2 2 2 2 13"/></svg>',
-    'bookmark-outline-add': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2 2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v18l-8-4-8 4V2zm2 0v15l6-3 6 3V2H4zm5 5V5h2v2h2v2h-2v2H9V9H7V7h2z"/></svg>',
-    'bookmark-outline': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2 2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v18l-8-4-8 4V2zm2 0v15l6-3 6 3V2H4z"/></svg>',
-    bookmark: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2 2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v18l-8-4-8 4V2z"/></svg>',
-    'border-all': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M11 11v6h6v-6h-6zm0-2h6V3h-6v6zm-2 2H3v6h6v-6zm0-2V3H3v6h6zm-8 9V1h18v18H1v-1z"/></svg>',
-    'border-bottom': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M1 1h2v2H1V1zm0 4h2v2H1V5zm0 4h2v2H1V9zm0 4h2v2H1v-2zm0 4h18v2H1v-2zM5 1h2v2H5V1zm0 8h2v2H5V9zm4-8h2v2H9V1zm0 4h2v2H9V5zm0 4h2v2H9V9zm0 4h2v2H9v-2zm4-12h2v2h-2V1zm0 8h2v2h-2V9zm4-8h2v2h-2V1zm0 4h2v2h-2V5zm0 4h2v2h-2V9zm0 4h2v2h-2v-2z"/></svg>',
-    'border-horizontal': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M1 1h2v2H1V1zm0 4h2v2H1V5zm0 4h18v2H1V9zm0 4h2v2H1v-2zm0 4h2v2H1v-2zM5 1h2v2H5V1zm0 16h2v2H5v-2zM9 1h2v2H9V1zm0 4h2v2H9V5zm0 8h2v2H9v-2zm0 4h2v2H9v-2zm4-16h2v2h-2V1zm0 16h2v2h-2v-2zm4-16h2v2h-2V1zm0 4h2v2h-2V5zm0 8h2v2h-2v-2zm0 4h2v2h-2v-2z"/></svg>',
-    'border-inner': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9 9V1h2v8h8v2h-8v8H9v-8H1V9h8zM1 1h2v2H1V1zm0 4h2v2H1V5zm0 8h2v2H1v-2zm0 4h2v2H1v-2zM5 1h2v2H5V1zm0 16h2v2H5v-2zm8-16h2v2h-2V1zm0 16h2v2h-2v-2zm4-16h2v2h-2V1zm0 4h2v2h-2V5zm0 8h2v2h-2v-2zm0 4h2v2h-2v-2z"/></svg>',
-    'border-left': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M1 1h2v18H1V1zm4 0h2v2H5V1zm0 8h2v2H5V9zm0 8h2v2H5v-2zM9 1h2v2H9V1zm0 4h2v2H9V5zm0 4h2v2H9V9zm0 4h2v2H9v-2zm0 4h2v2H9v-2zm4-16h2v2h-2V1zm0 8h2v2h-2V9zm0 8h2v2h-2v-2zm4-16h2v2h-2V1zm0 4h2v2h-2V5zm0 4h2v2h-2V9zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2z"/></svg>',
-    'border-none': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M1 1h2v2H1V1zm0 4h2v2H1V5zm0 4h2v2H1V9zm0 4h2v2H1v-2zm0 4h2v2H1v-2zM5 1h2v2H5V1zm0 8h2v2H5V9zm0 8h2v2H5v-2zM9 1h2v2H9V1zm0 4h2v2H9V5zm0 4h2v2H9V9zm0 4h2v2H9v-2zm0 4h2v2H9v-2zm4-16h2v2h-2V1zm0 8h2v2h-2V9zm0 8h2v2h-2v-2zm4-16h2v2h-2V1zm0 4h2v2h-2V5zm0 4h2v2h-2V9zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2z"/></svg>',
-    'border-outer': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2 19H1V1h18v18H2zm1-2h14V3H3v14zm10-8h2v2h-2V9zM9 9h2v2H9V9zM5 9h2v2H5V9zm4-4h2v2H9V5zm0 8h2v2H9v-2z"/></svg>',
-    'border-right': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 1h2v2H5V1zm0 8h2v2H5V9zm0 8h2v2H5v-2zM9 1h2v2H9V1zm0 4h2v2H9V5zm0 4h2v2H9V9zm0 4h2v2H9v-2zm0 4h2v2H9v-2zm4-16h2v2h-2V1zm0 8h2v2h-2V9zm0 8h2v2h-2v-2zM1 1h2v2H1V1zm0 4h2v2H1V5zm0 4h2v2H1V9zm0 4h2v2H1v-2zm0 4h2v2H1v-2zM17 1h2v18h-2V1z"/></svg>',
-    'border-top': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M1 1h18v2H1V1zm0 4h2v2H1V5zm0 4h2v2H1V9zm0 4h2v2H1v-2zm0 4h2v2H1v-2zm4-8h2v2H5V9zm0 8h2v2H5v-2zM9 5h2v2H9V5zm0 4h2v2H9V9zm0 4h2v2H9v-2zm0 4h2v2H9v-2zm4-8h2v2h-2V9zm0 8h2v2h-2v-2zm4-12h2v2h-2V5zm0 4h2v2h-2V9zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2z"/></svg>',
-    'border-vertical': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M1 1h2v2H1V1zm0 4h2v2H1V5zm0 4h2v2H1V9zm0 4h2v2H1v-2zm0 4h2v2H1v-2zM5 1h2v2H5V1zm0 8h2v2H5V9zm0 8h2v2H5v-2zM9 1h2v18H9V1zm4 0h2v2h-2V1zm0 8h2v2h-2V9zm0 8h2v2h-2v-2zm4-16h2v2h-2V1zm0 4h2v2h-2V5zm0 4h2v2h-2V9zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2z"/></svg>',
-    box: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v2H0V2zm1 3h18v13a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5zm6 2v2h6V7H7z"/></svg>',
-    'brightness-down': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 13a3 3 0 1 1 0-6 3 3 0 0 1 0 6zM9 4a1 1 0 1 1 2 0 1 1 0 1 1-2 0zm4.54 1.05a1 1 0 1 1 1.41 1.41 1 1 0 1 1-1.41-1.41zM16 9a1 1 0 1 1 0 2 1 1 0 1 1 0-2zm-1.05 4.54a1 1 0 1 1-1.41 1.41 1 1 0 1 1 1.41-1.41zM11 16a1 1 0 1 1-2 0 1 1 0 1 1 2 0zm-4.54-1.05a1 1 0 1 1-1.41-1.41 1 1 0 1 1 1.41 1.41zM4 11a1 1 0 1 1 0-2 1 1 0 1 1 0 2zm1.05-4.54a1 1 0 1 1 1.41-1.41 1 1 0 1 1-1.41 1.41z"/></svg>',
-    'brightness-up': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 14a4 4 0 1 1 0-8 4 4 0 0 1 0 8zM9 1a1 1 0 1 1 2 0v2a1 1 0 1 1-2 0V1zm6.65 1.94a1 1 0 1 1 1.41 1.41l-1.4 1.4a1 1 0 1 1-1.41-1.41l1.4-1.4zM18.99 9a1 1 0 1 1 0 2h-1.98a1 1 0 1 1 0-2h1.98zm-1.93 6.65a1 1 0 1 1-1.41 1.41l-1.4-1.4a1 1 0 1 1 1.41-1.41l1.4 1.4zM11 18.99a1 1 0 1 1-2 0v-1.98a1 1 0 1 1 2 0v1.98zm-6.65-1.93a1 1 0 1 1-1.41-1.41l1.4-1.4a1 1 0 1 1 1.41 1.41l-1.4 1.4zM1.01 11a1 1 0 1 1 0-2h1.98a1 1 0 1 1 0 2H1.01zm1.93-6.65a1 1 0 1 1 1.41-1.41l1.4 1.4a1 1 0 1 1-1.41 1.41l-1.4-1.4z"/></svg>',
-    bug: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M15.3 14.89l2.77 2.77a1 1 0 0 1 0 1.41 1 1 0 0 1-1.41 0l-2.59-2.58A5.99 5.99 0 0 1 11 18V9.04a1 1 0 0 0-2 0V18a5.98 5.98 0 0 1-3.07-1.51l-2.59 2.58a1 1 0 0 1-1.41 0 1 1 0 0 1 0-1.41l2.77-2.77A5.95 5.95 0 0 1 4.07 13H1a1 1 0 1 1 0-2h3V8.41L.93 5.34a1 1 0 0 1 0-1.41 1 1 0 0 1 1.41 0l2.1 2.1h11.12l2.1-2.1a1 1 0 0 1 1.41 0 1 1 0 0 1 0 1.41L16 8.41V11h3a1 1 0 1 1 0 2h-3.07c-.1.67-.32 1.31-.63 1.89zM15 5H5a5 5 0 1 1 10 0z"/></svg>',
-    buoy: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M17.16 6.42a8.03 8.03 0 0 0-3.58-3.58l-1.34 2.69a5.02 5.02 0 0 1 2.23 2.23l2.69-1.34zm0 7.16l-2.69-1.34a5.02 5.02 0 0 1-2.23 2.23l1.34 2.69a8.03 8.03 0 0 0 3.58-3.58zM6.42 2.84a8.03 8.03 0 0 0-3.58 3.58l2.69 1.34a5.02 5.02 0 0 1 2.23-2.23L6.42 2.84zM2.84 13.58a8.03 8.03 0 0 0 3.58 3.58l1.34-2.69a5.02 5.02 0 0 1-2.23-2.23l-2.69 1.34zM10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-7a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>',
-    calculator: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2 2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm3 1v2h10V3H5zm0 4v2h2V7H5zm4 0v2h2V7H9zm4 0v2h2V7h-2zm-8 4v2h2v-2H5zm4 0v2h2v-2H9zm4 0v6h2v-6h-2zm-8 4v2h2v-2H5zm4 0v2h2v-2H9z"/></svg>',
-    calendar: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M1 4c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4zm2 2v12h14V6H3zm2-6h2v2H5V0zm8 0h2v2h-2V0zM5 9h2v2H5V9zm0 4h2v2H5v-2zm4-4h2v2H9V9zm0 4h2v2H9v-2zm4-4h2v2h-2V9zm0 4h2v2h-2v-2z"/></svg>',
-    camera: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 6c0-1.1.9-2 2-2h3l2-2h6l2 2h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6zm10 10a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-2a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>',
-    'chart-bar': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M1 10h3v10H1V10zM6 0h3v20H6V0zm5 8h3v12h-3V8zm5-4h3v16h-3V4z"/></svg>',
-    'chart-pie': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M19.95 11A10 10 0 1 1 9 .05V11h10.95zm-.08-2.6H11.6V.13a10 10 0 0 1 8.27 8.27z"/></svg>',
-    chart: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4.13 12H4a2 2 0 1 0 1.8 1.11L7.86 10a2.03 2.03 0 0 0 .65-.07l1.55 1.55a2 2 0 1 0 3.72-.37L15.87 8H16a2 2 0 1 0-1.8-1.11L12.14 10a2.03 2.03 0 0 0-.65.07L9.93 8.52a2 2 0 1 0-3.72.37L4.13 12zM0 4c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4z"/></svg>',
-    'chat-bubble-dots': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 15l-4 4v-4H2a2 2 0 0 1-2-2V3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-8zM5 7v2h2V7H5zm4 0v2h2V7H9zm4 0v2h2V7h-2z"/></svg>',
-    'checkmark-outline': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM6.7 9.29L9 11.6l4.3-4.3 1.4 1.42L9 14.4l-3.7-3.7 1.4-1.42z"/></svg>',
-    checkmark: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="0 11 2 9 7 14 18 3 20 5 7 18"/></svg>',
-    'cheveron-down': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="9.293 12.95 10 13.657 15.657 8 14.243 6.586 10 10.828 5.757 6.586 4.343 8"/></svg>',
-    'cheveron-left': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="7.05 9.293 6.343 10 12 15.657 13.414 14.243 9.172 10 13.414 5.757 12 4.343"/></svg>',
-    'cheveron-outline-down': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M20 10a10 10 0 1 1-20 0 10 10 0 0 1 20 0zM10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-.7 10.54L5.75 9l1.41-1.41L10 10.4l2.83-2.82L14.24 9 10 13.24l-.7-.7z"/></svg>',
-    'cheveron-outline-left': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm8-10a8 8 0 1 0-16 0 8 8 0 0 0 16 0zM7.46 9.3L11 5.75l1.41 1.41L9.6 10l2.82 2.83L11 14.24 6.76 10l.7-.7z"/></svg>',
-    'cheveron-outline-right': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 0a10 10 0 1 1 0 20 10 10 0 0 1 0-20zM2 10a8 8 0 1 0 16 0 8 8 0 0 0-16 0zm10.54.7L9 14.25l-1.41-1.41L10.4 10 7.6 7.17 9 5.76 13.24 10l-.7.7z"/></svg>',
-    'cheveron-outline-up': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 10a10 10 0 1 1 20 0 10 10 0 0 1-20 0zm10 8a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm.7-10.54L14.25 11l-1.41 1.41L10 9.6 7.17 12.4 5.76 11 10 6.76l.7.7z"/></svg>',
-    'cheveron-right': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="12.95 10.707 13.657 10 8 4.343 6.586 5.757 10.828 10 6.586 14.243 8 15.657 12.95 10.707"/></svg>',
-    'cheveron-up': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="10.707 7.05 10 6.343 4.343 12 5.757 13.414 10 9.172 14.243 13.414 15.657 12"/></svg>',
-    clipboard: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M7.03 2.6a3 3 0 0 1 5.94 0L15 3v1h1a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2h1V3l2.03-.4zM5 6H4v12h12V6h-1v1H5V6zm5-2a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>',
-    'close-outline': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm1.41-1.41A8 8 0 1 0 15.66 4.34 8 8 0 0 0 4.34 15.66zm9.9-8.49L11.41 10l2.83 2.83-1.41 1.41L10 11.41l-2.83 2.83-1.41-1.41L8.59 10 5.76 7.17l1.41-1.41L10 8.59l2.83-2.83 1.41 1.41z"/></svg>',
-    'close-solid': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm1.41-1.41A8 8 0 1 0 15.66 4.34 8 8 0 0 0 4.34 15.66zM11.41 10l2.83 2.83-1.41 1.41L10 11.41l-2.83 2.83-1.41-1.41L8.59 10 5.76 7.17l1.41-1.41L10 8.59l2.83-2.83 1.41 1.41L11.41 10z"/></svg>',
-    close: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="10 8.586 2.929 1.515 1.515 2.929 8.586 10 1.515 17.071 2.929 18.485 10 11.414 17.071 18.485 18.485 17.071 11.414 10 18.485 2.929 17.071 1.515 10 8.586"/></svg>',
-    'cloud-upload': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z"/></svg>',
-    cloud: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1z"/></svg>',
-    code: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M.7 9.3L5.5 4.5l1.4 1.42L2.84 10l4.07 4.07-1.41 1.42L0 10l.7-.7zm18.6 1.4l.7-.7-5.49-5.49-1.4 1.42L17.16 10l-4.07 4.07 1.41 1.42 4.78-4.78z"/></svg>',
-    coffee: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 11H2a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h2V1h14v10a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4zm0-2V5H2v4h2zm-2 8v-1h18v1l-4 2H6l-4-2z"/></svg>',
-    'cog copy': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M3.94 6.5L2.22 3.64l1.42-1.42L6.5 3.94c.52-.3 1.1-.54 1.7-.7L9 0h2l.8 3.24c.6.16 1.18.4 1.7.7l2.86-1.72 1.42 1.42-1.72 2.86c.3.52.54 1.1.7 1.7L20 9v2l-3.24.8c-.16.6-.4 1.18-.7 1.7l1.72 2.86-1.42 1.42-2.86-1.72c-.52.3-1.1.54-1.7.7L11 20H9l-.8-3.24c-.6-.16-1.18-.4-1.7-.7l-2.86 1.72-1.42-1.42 1.72-2.86c-.3-.52-.54-1.1-.7-1.7L0 11V9l3.24-.8c.16-.6.4-1.18.7-1.7zM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>',
-    'color-palette': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9 20v-1.7l.01-.24L15.07 12h2.94c1.1 0 1.99.89 1.99 2v4a2 2 0 0 1-2 2H9zm0-3.34V5.34l2.08-2.07a1.99 1.99 0 0 1 2.82 0l2.83 2.83a2 2 0 0 1 0 2.82L9 16.66zM0 1.99C0 .9.89 0 2 0h4a2 2 0 0 1 2 2v16c0 1.1-.89 2-2 2H2a2 2 0 0 1-2-2V2zM4 17a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>',
-    compose: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2 4v14h14v-6l2-2v10H0V2h10L8 4H2zm10.3-.3l4 4L8 16H4v-4l8.3-8.3zm1.4-1.4L16 0l4 4-2.3 2.3-4-4z"/></svg>',
-    'computer-desktop': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M7 17H2a2 2 0 0 1-2-2V2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2h-5l4 2v1H3v-1l4-2zM2 2v11h16V2H2z"/></svg>',
-    'computer-laptop': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M18 16h2v1a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1v-1h2V4c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v12zM4 4v9h12V4H4zm4 11v1h4v-1H8z"/></svg>',
-    conversation: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M17 11v3l-3-3H8a2 2 0 0 1-2-2V2c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-1zm-3 2v2a2 2 0 0 1-2 2H6l-3 3v-3H2a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h2v3a4 4 0 0 0 4 4h6z"/></svg>',
-    copy: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M6 6V2c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h4zm2 0h4a2 2 0 0 1 2 2v4h4V2H8v4zM2 8v10h10V8H2z"/></svg>',
-    'credit-card': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M18 6V4H2v2h16zm0 4H2v6h16v-6zM0 4c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm4 8h4v2H4v-2z"/></svg>',
-    'currency-dollar': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm1-5h1a3 3 0 0 0 0-6H7.99a1 1 0 0 1 0-2H14V5h-3V3H9v2H8a3 3 0 1 0 0 6h4a1 1 0 1 1 0 2H6v2h3v2h2v-2z"/></svg>',
-    dashboard: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm-5.6-4.29a9.95 9.95 0 0 1 11.2 0 8 8 0 1 0-11.2 0zm6.12-7.64l3.02-3.02 1.41 1.41-3.02 3.02a2 2 0 1 1-1.41-1.41z"/></svg>',
-    'date-add': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M15 2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2h2V0h2v2h6V0h2v2zM3 6v12h14V6H3zm6 5V9h2v2h2v2h-2v2H9v-2H7v-2h2z"/></svg>',
-    'dial-pad': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm5 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm5 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zM5 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm5 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm5 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zM5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm5 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm5-6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>',
-    directions: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 0l10 10-10 10L0 10 10 0zM6 10v3h2v-3h3v3l4-4-4-4v3H8a2 2 0 0 0-2 2z"/></svg>',
-    'document-add': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9 10V8h2v2h2v2h-2v2H9v-2H7v-2h2zm-5 8h12V6h-4V2H4v16zm-2 1V0h12l4 4v16H2v-1z"/></svg>',
-    document: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 18h12V6h-4V2H4v16zm-2 1V0h12l4 4v16H2v-1z"/></svg>',
-    'dots-horizontal-double': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>',
-    'dots-horizontal-triple': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-6a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>',
-    download: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>',
-    duplicate: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M6 6V2c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h4zm2 0h4a2 2 0 0 1 2 2v4h4V2H8v4zM2 8v10h10V8H2zm4 4v-2h2v2h2v2H8v2H6v-2H4v-2h2z"/></svg>',
-    'edit-crop': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M14 16H6a2 2 0 0 1-2-2V6H0V4h4V0h2v14h14v2h-4v4h-2v-4zm0-3V6H7V4h7a2 2 0 0 1 2 2v7h-2z"/></svg>',
-    'edit-cut': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.77 11.5l5.34 3.91c.44.33 1.24.59 1.79.59H20L6.89 6.38A3.5 3.5 0 1 0 5.5 8.37L7.73 10 5.5 11.63a3.5 3.5 0 1 0 1.38 1.99l2.9-2.12zM3.5 7a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM15.1 4.59A3.53 3.53 0 0 1 16.9 4H20l-7.5 5.5L10.45 8l4.65-3.41z"/></svg>',
-    'edit-pencil': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.3 3.7l4 4L4 20H0v-4L12.3 3.7zm1.4-1.4L16 0l4 4-2.3 2.3-4-4z"/></svg>',
-    education: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M3.33 8L10 12l10-6-10-6L0 6h10v2H3.33zM0 8v8l2-2.22V9.2L0 8zm10 12l-5-3-2-1.2v-6l7 4.2 7-4.2v6L10 20z"/></svg>',
-    envelope: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M18 2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2h16zm-4.37 9.1L20 16v-2l-5.12-3.9L20 6V4l-10 8L0 4v2l5.12 4.1L0 14v2l6.37-4.9L10 14l3.63-2.9z"/></svg>',
-    'exclamation-outline': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 5h2v6H9V5zm0 8h2v2H9v-2z"/></svg>',
-    'exclamation-solid': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zM9 5v6h2V5H9zm0 8v2h2v-2H9z"/></svg>',
-    explore: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zM7.88 7.88l-3.54 7.78 7.78-3.54 3.54-7.78-7.78 3.54zM10 11a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>',
-    factory: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10.5 20H0V7l5 3.33V7l5 3.33V7l5 3.33V0h5v20h-9.5z"/></svg>',
-    film: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 4c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm6 0v12h8V4H6zM2 5v2h2V5H2zm0 4v2h2V9H2zm0 4v2h2v-2H2zm14-8v2h2V5h-2zm0 4v2h2V9h-2zm0 4v2h2v-2h-2zM8 7l5 3-5 3V7z"/></svg>',
-    filter: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12 12l8-8V0H0v4l8 8v8l4-4v-4z"/></svg>',
-    flag: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="7.667 12 2 12 2 20 0 20 0 0 1 0 12 0 12.333 2 20 2 17 8 20 14 8 14 7.667 12"/></svg>',
-    flashlight: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 7v11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7L5 5V3h10v2l-2 2zM9 8v1a1 1 0 1 0 2 0V8a1 1 0 0 0-2 0zM5 0h10v2H5V0z"/></svg>',
-    'folder-outline-add': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 4c0-1.1.9-2 2-2h7l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2 2v10h16V6H2zm7 4V8h2v2h2v2h-2v2H9v-2H7v-2h2z"/></svg>',
-    'folder-outline': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 4c0-1.1.9-2 2-2h7l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2 2v10h16V6H2z"/></svg>',
-    folder: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 4c0-1.1.9-2 2-2h7l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4z"/></svg>',
-    'format-bold': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M3 19V1h8a5 5 0 0 1 3.88 8.16A5.5 5.5 0 0 1 11.5 19H3zm7.5-8H7v5h3.5a2.5 2.5 0 1 0 0-5zM7 4v4h3a2 2 0 1 0 0-4H7z"/></svg>',
-    'format-font-size': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16 9v8h-2V9h-4V7h10v2h-4zM8 5v12H6V5H0V3h15v2H8z"/></svg>',
-    'format-italic': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M8 1h9v2H8V1zm3 2h3L8 17H5l6-14zM2 17h9v2H2v-2z"/></svg>',
-    'format-underline': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16 9A6 6 0 1 1 4 9V1h3v8a3 3 0 0 0 6 0V1h3v8zM2 17h16v2H2v-2z"/></svg>',
-    'forward-step': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 5h3v10h-3V5zM4 5l9 5-9 5V5z"/></svg>',
-    forward: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M1 5l9 5-9 5V5zm9 0l9 5-9 5V5z"/></svg>',
-    gift: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M14.83 4H20v6h-1v10H1V10H0V4h5.17A3 3 0 0 1 10 .76 3 3 0 0 1 14.83 4zM8 10H3v8h5v-8zm4 0v8h5v-8h-5zM8 6H2v2h6V6zm4 0v2h6V6h-6zM8 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm4 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>',
-    globe: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm2-2.25a8 8 0 0 0 4-2.46V9a2 2 0 0 1-2-2V3.07a7.95 7.95 0 0 0-3-1V3a2 2 0 0 1-2 2v1a2 2 0 0 1-2 2v2h3a2 2 0 0 1 2 2v5.75zm-4 0V15a2 2 0 0 1-2-2v-1h-.5A1.5 1.5 0 0 1 4 10.5V8H2.25A8.01 8.01 0 0 0 8 17.75z"/></svg>',
-    'hand-stop': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M17 16a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4.01V4a1 1 0 0 1 1-1 1 1 0 0 1 1 1v6h1V2a1 1 0 0 1 1-1 1 1 0 0 1 1 1v8h1V1a1 1 0 1 1 2 0v9h1V2a1 1 0 0 1 1-1 1 1 0 0 1 1 1v13h1V9a1 1 0 0 1 1-1h1v8z"/></svg>',
-    'hard-drive': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2 2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10.4 5.6A5 5 0 1 0 15 12V5l-2.6 2.6zM10 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zM6 3v2h4V3H6zM4 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 16a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm12 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0-16a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>',
-    headphones: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16 8A6 6 0 1 0 4 8v11H2a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2V8a8 8 0 1 1 16 0v3a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2V8zm-4 2h3v10h-3V10zm-7 0h3v10H5V10z"/></svg>',
-    heart: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.78 7.77L10 18.78l8.39-8.4a5.5 5.5 0 0 0-7.78-7.77l-.61.61z"/></svg>',
-    home: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="8 20 3 20 3 10 0 10 10 0 20 10 17 10 17 20 12 20 12 14 8 14 8 20"/></svg>',
-    'hour-glass': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M3 18a7 7 0 0 1 4-6.33V8.33A7 7 0 0 1 3 2H1V0h18v2h-2a7 7 0 0 1-4 6.33v3.34A7 7 0 0 1 17 18h2v2H1v-2h2zM5 2a5 5 0 0 0 4 4.9V10h2V6.9A5 5 0 0 0 15 2H5z"/></svg>',
-    'inbox-check': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm14 12h4V2H2v12h4c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2zM5 9l2-2 2 2 4-4 2 2-6 6-4-4z"/></svg>',
-    'inbox-download': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm14 12h4V2H2v12h4c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2zM9 8V5h2v3h3l-4 4-4-4h3z"/></svg>',
-    'inbox-full': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M14 14h4V2H2v12h4c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2zM0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4 2h12v2H4V4zm0 3h12v2H4V7zm0 3h12v2H4v-2z"/></svg>',
-    inbox: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm14 12h4V2H2v12h4c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2z"/></svg>',
-    'indent-decrease': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M1 1h18v2H1V1zm6 8h12v2H7V9zm-6 8h18v2H1v-2zM7 5h12v2H7V5zm0 8h12v2H7v-2zM5 6v8l-4-4 4-4z"/></svg>',
-    'indent-increase': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M1 1h18v2H1V1zm6 8h12v2H7V9zm-6 8h18v2H1v-2zM7 5h12v2H7V5zm0 8h12v2H7v-2zM1 6l4 4-4 4V6z"/></svg>',
-    'information-outline': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg>',
-    'information-solid': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zM9 11v4h2V9H9v2zm0-6v2h2V5H9z"/></svg>',
-    key: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.26 11.74L10 14H8v2H6v2l-2 2H0v-4l8.26-8.26a6 6 0 1 1 4 4zm4.86-4.62A3 3 0 0 0 15 2a3 3 0 0 0-2.12.88l4.24 4.24z"/></svg>',
-    keyboard: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 6c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6zm2 0v2h2V6H2zm1 3v2h2V9H3zm-1 3v2h2v-2H2zm3 0v2h10v-2H5zm11 0v2h2v-2h-2zM6 9v2h2V9H6zm3 0v2h2V9H9zm3 0v2h2V9h-2zm3 0v2h2V9h-2zM5 6v2h2V6H5zm3 0v2h2V6H8zm3 0v2h2V6h-2zm3 0v2h4V6h-4z"/></svg>',
-    layers: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 1l10 6-10 6L0 7l10-6zm6.67 10L20 13l-10 6-10-6 3.33-2L10 15l6.67-4z"/></svg>',
-    library: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 6l10-6 10 6v2H0V6zm0 12h20v2H0v-2zm2-2h16v2H2v-2zm0-8h4v8H2V8zm6 0h4v8H8V8zm6 0h4v8h-4V8z"/></svg>',
-    'light-bulb': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M7 13.33a7 7 0 1 1 6 0V16H7v-2.67zM7 17h6v1.5c0 .83-.67 1.5-1.5 1.5h-3A1.5 1.5 0 0 1 7 18.5V17zm2-5.1V14h2v-2.1a5 5 0 1 0-2 0z"/></svg>',
-    link: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.26 13a2 2 0 0 1 .01-2.01A3 3 0 0 0 9 5H5a3 3 0 0 0 0 6h.08a6.06 6.06 0 0 0 0 2H5A5 5 0 0 1 5 3h4a5 5 0 0 1 .26 10zm1.48-6a2 2 0 0 1-.01 2.01A3 3 0 0 0 11 15h4a3 3 0 0 0 0-6h-.08a6.06 6.06 0 0 0 0-2H15a5 5 0 0 1 0 10h-4a5 5 0 0 1-.26-10z"/></svg>',
-    'list-add': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M15 9h-3v2h3v3h2v-3h3V9h-3V6h-2v3zM0 3h10v2H0V3zm0 8h10v2H0v-2zm0-4h10v2H0V7zm0 8h10v2H0v-2z"/></svg>',
-    list: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M1 4h2v2H1V4zm4 0h14v2H5V4zM1 9h2v2H1V9zm4 0h14v2H5V9zm-4 5h2v2H1v-2zm4 0h14v2H5v-2z"/></svg>',
-    'load-balancer': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M17 12h-6v4h1v4H8v-4h1v-4H3v4h1v4H0v-4h1v-4a2 2 0 0 1 2-2h6V6H7V0h6v6h-2v4h6a2 2 0 0 1 2 2v4h1v4h-4v-4h1v-4z"/></svg>',
-    'location-current': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="0 0 20 8 12 12 10 20"/></svg>',
-    'location-food': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M18 11v7a2 2 0 0 1-4 0v-5h-2V3a3 3 0 0 1 3-3h3v11zM4 10a2 2 0 0 1-2-2V1a1 1 0 0 1 2 0v4h1V1a1 1 0 0 1 2 0v4h1V1a1 1 0 0 1 2 0v7a2 2 0 0 1-2 2v8a2 2 0 0 1-4 0v-8z"/></svg>',
-    'location-gas-station': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 18h1v2H0v-2h1V2c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v16zM3 2v6h8V2H3zm10 8h1a2 2 0 0 1 2 2v3a1 1 0 0 0 2 0v-5l-2-2V6l-2-2 1-1 5 5v7a3 3 0 0 1-6 0v-3h-1v-2z"/></svg>',
-    'location-hotel': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2 12h18v6h-2v-2H2v2H0V2h2v10zm8-6h8a2 2 0 0 1 2 2v3H10V6zm-4 5a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>',
-    'location-marina': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M8 1.88V0h2v16h10l-4 4H2l-2-4h8v-2H0v-.26A24.03 24.03 0 0 0 8 1.88zM19.97 14H10v-.36A11.94 11.94 0 0 0 10 .36v-.2A16.01 16.01 0 0 1 19.97 14z"/></svg>',
-    'location-park': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5.33 12.77A4 4 0 1 1 3 5.13V5a4 4 0 0 1 5.71-3.62 3.5 3.5 0 0 1 6.26 1.66 2.5 2.5 0 0 1 2 2.08 4 4 0 1 1-2.7 7.49A5.02 5.02 0 0 1 12 14.58V18l2 1v1H6v-1l2-1v-3l-2.67-2.23zM5 10l3 3v-3H5z"/></svg>',
-    'location-restroom': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12 16H9l2-4.5V9c0-1.1.9-2 2-2h2a2 2 0 0 1 2 2v2.5l2 4.5h-3v4h-4v-4zm-5-3h2V9a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v4h2v7h4v-7zM5 6a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm9 0a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>',
-    'location-shopping': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16 6v2h2l2 12H0L2 8h2V6a6 6 0 1 1 12 0zm-2 0a4 4 0 1 0-8 0v2h8V6zM4 10v2h2v-2H4zm10 0v2h2v-2h-2z"/></svg>',
-    location: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20S3 10.87 3 7a7 7 0 1 1 14 0c0 3.87-7 13-7 13zm0-11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>',
-    'lock-closed': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z"/></svg>',
-    'lock-open': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 8V6a6 6 0 1 1 12 0h-3v2h4a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z"/></svg>',
-    map: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 0l6 4 8-4 6 4v16l-6-4-8 4-6-4V0zm7 6v11l6-3V3L7 6z"/></svg>',
-    menu: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>',
-    mic: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9 18v-1.06A8 8 0 0 1 2 9h2a6 6 0 1 0 12 0h2a8 8 0 0 1-7 7.94V18h3v2H6v-2h3zM6 4a4 4 0 1 1 8 0v5a4 4 0 1 1-8 0V4z"/></svg>',
-    'minus-outline': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm5-9v2H5V9h10z"/></svg>',
-    'minus-solid': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm5-11H5v2h10V9z"/></svg>',
-    'mobile-devices': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M17 6V5h-2V2H3v14h5v4h3.25H11a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6zm-5.75 14H3A2 2 0 0 1 1 18V2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-5.75zM11 8v8h6V8h-6zm3 11a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>',
-    'mood-happy': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM6.5 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm7 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm2.16 3a6 6 0 0 1-11.32 0h11.32z"/></svg>',
-    'mood-sad': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM6.5 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm7 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm2.16 6H4.34a6 6 0 0 1 11.32 0z"/></svg>',
-    mouse: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 9V6A6 6 0 0 1 9 .08V9H4zm0 2v3a6 6 0 1 0 12 0v-3H4zm12-2V6a6 6 0 0 0-5-5.92V9h5z"/></svg>',
-    'music-notes': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M20 2.5V0L6 2v12.17A3 3 0 0 0 5 14H3a3 3 0 0 0 0 6h2a3 3 0 0 0 3-3V5.71L18 4.3v7.88a3 3 0 0 0-1-.17h-2a3 3 0 0 0 0 6h2a3 3 0 0 0 3-3V2.5z"/></svg>',
-    'navigation-more': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>',
-    network: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm7.75-8a8.01 8.01 0 0 0 0-4h-3.82a28.81 28.81 0 0 1 0 4h3.82zm-.82 2h-3.22a14.44 14.44 0 0 1-.95 3.51A8.03 8.03 0 0 0 16.93 14zm-8.85-2h3.84a24.61 24.61 0 0 0 0-4H8.08a24.61 24.61 0 0 0 0 4zm.25 2c.41 2.4 1.13 4 1.67 4s1.26-1.6 1.67-4H8.33zm-6.08-2h3.82a28.81 28.81 0 0 1 0-4H2.25a8.01 8.01 0 0 0 0 4zm.82 2a8.03 8.03 0 0 0 4.17 3.51c-.42-.96-.74-2.16-.95-3.51H3.07zm13.86-8a8.03 8.03 0 0 0-4.17-3.51c.42.96.74 2.16.95 3.51h3.22zm-8.6 0h3.34c-.41-2.4-1.13-4-1.67-4S8.74 3.6 8.33 6zM3.07 6h3.22c.2-1.35.53-2.55.95-3.51A8.03 8.03 0 0 0 3.07 6z"/></svg>',
-    'news-paper': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16 2h4v15a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V0h16v2zm0 2v13a1 1 0 0 0 1 1 1 1 0 0 0 1-1V4h-2zM2 2v15a1 1 0 0 0 1 1h11.17a2.98 2.98 0 0 1-.17-1V2H2zm2 8h8v2H4v-2zm0 4h8v2H4v-2zM4 4h8v4H4V4z"/></svg>',
-    notification: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 8a6 6 0 0 1 4.03-5.67 2 2 0 1 1 3.95 0A6 6 0 0 1 16 8v6l3 2v1H1v-1l3-2V8zm8 10a2 2 0 1 1-4 0h4z"/></svg>',
-    'notifications-outline': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M6 8v7h8V8a4 4 0 1 0-8 0zm2.03-5.67a2 2 0 1 1 3.95 0A6 6 0 0 1 16 8v6l3 2v1H1v-1l3-2V8a6 6 0 0 1 4.03-5.67zM12 18a2 2 0 1 1-4 0h4z"/></svg>',
-    paste: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10.5 20H2a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2h1V3l2.03-.4a3 3 0 0 1 5.94 0L13 3v1h1a2 2 0 0 1 2 2v1h-2V6h-1v1H3V6H2v12h5v2h3.5zM8 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm2 4h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2zm0 2v8h8v-8h-8z"/></svg>',
-    'pause-outline': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM7 6h2v8H7V6zm4 0h2v8h-2V6z"/></svg>',
-    'pause-solid': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zM7 6v8h2V6H7zm4 0v8h2V6h-2z"/></svg>',
-    pause: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>',
-    'pen-tool': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M11 9.27V0l6 11-4 6H7l-4-6L9 0v9.27a2 2 0 1 0 2 0zM6 18h8v2H6v-2z"/></svg>',
-    phone: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M20 18.35V19a1 1 0 0 1-1 1h-2A17 17 0 0 1 0 3V1a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4c0 .56-.31 1.31-.7 1.7L3.16 8.84c1.52 3.6 4.4 6.48 8 8l2.12-2.12c.4-.4 1.15-.71 1.7-.71h4.02a1 1 0 0 1 .99 1v3.35z"/></svg>',
-    photo: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 4c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm11 9l-3-3-6 6h16l-5-5-2 2zm4-4a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>',
-    pin: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="11 12 17 12 17 11 14 10 14 2 17 1 17 0 3 0 3 1 6 2 6 10 3 11 3 12 9 12 9 19 10 20 11 19 11 12"/></svg>',
-    'play-outline': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM7 6l8 4-8 4V6z"/></svg>',
-    play: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="4 4 16 10 4 16"/></svg>',
-    playlist: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16 17a3 3 0 0 1-3 3h-2a3 3 0 0 1 0-6h2a3 3 0 0 1 1 .17V1l6-1v4l-4 .67V17zM0 3h12v2H0V3zm0 4h12v2H0V7zm0 4h12v2H0v-2zm0 4h6v2H0v-2z"/></svg>',
-    plugin: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M20 14v4a2 2 0 0 1-2 2h-4v-2a2 2 0 0 0-2-2 2 2 0 0 0-2 2v2H6a2 2 0 0 1-2-2v-4H2a2 2 0 0 1-2-2 2 2 0 0 1 2-2h2V6c0-1.1.9-2 2-2h4V2a2 2 0 0 1 2-2 2 2 0 0 1 2 2v2h4a2 2 0 0 1 2 2v4h-2a2 2 0 0 0-2 2 2 2 0 0 0 2 2h2z"/></svg>',
-    portfolio: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9 12H1v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6h-8v2H9v-2zm0-1H0V5c0-1.1.9-2 2-2h4V2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1h4c1.1 0 2 .89 2 2v6h-9V9H9v2zm3-8V2H8v1h4z"/></svg>',
-    printer: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 16H0V6h20v10h-4v4H4v-4zm2-4v6h8v-6H6zM4 0h12v5H4V0zM2 8v2h2V8H2zm4 0v2h2V8H6z"/></svg>',
-    pylon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M17.4 18H20v2H0v-2h2.6L8 0h4l5.4 18zm-3.2-4H5.8l-1.2 4h10.8l-1.2-4zm-2.4-8H8.2L7 10h6l-1.2-4z"/></svg>',
-    question: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm2-13c0 .28-.21.8-.42 1L10 9.58c-.57.58-1 1.6-1 2.42v1h2v-1c0-.29.21-.8.42-1L13 9.42c.57-.58 1-1.6 1-2.42a4 4 0 1 0-8 0h2a2 2 0 1 1 4 0zm-3 8v2h2v-2H9z"/></svg>',
-    queue: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 2h20v4H0V2zm0 8h20v2H0v-2zm0 6h20v2H0v-2z"/></svg>',
-    'radar copy 2': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12 10a2 2 0 0 1-3.41 1.41A2 2 0 0 1 10 8V0a9.97 9.97 0 0 1 10 10h-8zm7.9 1.41A10 10 0 1 1 8.59.1v2.03a8 8 0 1 0 9.29 9.29h2.02zm-4.07 0a6 6 0 1 1-7.25-7.25v2.1a3.99 3.99 0 0 0-1.4 6.57 4 4 0 0 0 6.56-1.42h2.1z"/></svg>',
-    radio: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M20 9v9a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h13.8L.74 1.97 1.26.03 20 5.06V9zm-5 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 8v2h16V8H2zm1.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm5 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm6.5-1a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>',
-    refresh: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 3v2a5 5 0 0 0-3.54 8.54l-1.41 1.41A7 7 0 0 1 10 3zm4.95 2.05A7 7 0 0 1 10 17v-2a5 5 0 0 0 3.54-8.54l1.41-1.41zM10 20l-4-4 4-4v8zm0-12V0l4 4-4 4z"/></svg>',
-    reload: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M14.66 15.66A8 8 0 1 1 17 10h-2a6 6 0 1 0-1.76 4.24l1.42 1.42zM12 10h8l-4 4-4-4z"/></svg>',
-    'reply-all': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M18 17v-2.99A4 4 0 0 0 14 10h-3v5L5 9l6-6v5h3a6 6 0 0 1 6 6v3h-2zM6 6V3L0 9l6 6v-3L3 9l3-3z"/></svg>',
-    reply: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M15 17v-2.99A4 4 0 0 0 11 10H8v5L2 9l6-6v5h3a6 6 0 0 1 6 6v3h-2z"/></svg>',
-    repost: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4c-1.1 0-2 .89-2 2v6H0l4 4 4-4H5V6h7l2-2H5zm10 4h-3l4-4 4 4h-3v6a2 2 0 0 1-2 2H6l2-2h7V8z"/></svg>',
-    'save-disk': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 2C0 .9.9 0 2 0h14l4 4v14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm5 0v6h10V2H5zm6 1h3v4h-3V3z"/></svg>',
-    'screen-full': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.8 15.8L0 13v7h7l-2.8-2.8 4.34-4.32-1.42-1.42L2.8 15.8zM17.2 4.2L20 7V0h-7l2.8 2.8-4.34 4.32 1.42 1.42L17.2 4.2zm-1.4 13L13 20h7v-7l-2.8 2.8-4.32-4.34-1.42 1.42 4.33 4.33zM4.2 2.8L7 0H0v7l2.8-2.8 4.32 4.34 1.42-1.42L4.2 2.8z"/></svg>',
-    search: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><g fill="none" fill-rule="evenodd"><path fill-rule="nonzero" d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></g></svg>',
-    send: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 0l20 10L0 20V0zm0 8v4l10-2L0 8z"/></svg>',
-    servers: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm0 7c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V9zm0 7c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2zM12 2v2h2V2h-2zm4 0v2h2V2h-2zm-4 7v2h2V9h-2zm4 0v2h2V9h-2zm-4 7v2h2v-2h-2zm4 0v2h2v-2h-2z"/></svg>',
-    'share-01': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 10c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2v-8zm2 0v8h8v-8h-2V8H8v2H6zm3-6.17V16h2V3.83l3.07 3.07 1.42-1.41L10 0l-.7.7L4.5 5.5l1.42 1.4L9 3.84z"/></svg>',
-    shield: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M19 11a7.5 7.5 0 0 1-3.5 5.94L10 20l-5.5-3.06A7.5 7.5 0 0 1 1 11V3c3.38 0 6.5-1.12 9-3 2.5 1.89 5.62 3 9 3v8zm-9 1.08l2.92 2.04-1.03-3.41 2.84-2.15-3.56-.08L10 5.12 8.83 8.48l-3.56.08L8.1 10.7l-1.03 3.4L10 12.09z"/></svg>',
-    'shopping-cart': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 2h16l-3 9H4a1 1 0 1 0 0 2h13v2H4a3 3 0 0 1 0-6h.33L3 5 2 2H0V0h3a1 1 0 0 1 1 1v1zm1 18a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm10 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>',
-    'show-sidebar': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M7 3H2v14h5V3zm2 0v14h9V3H9zM0 3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3zm3 1h3v2H3V4zm0 3h3v2H3V7zm0 3h3v2H3v-2z"/></svg>',
-    shuffle: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M6.59 12.83L4.4 15c-.58.58-1.59 1-2.4 1H0v-2h2c.29 0 .8-.2 1-.41l2.17-2.18 1.42 1.42zM16 4V1l4 4-4 4V6h-2c-.29 0-.8.2-1 .41l-2.17 2.18L9.4 7.17 11.6 5c.58-.58 1.59-1 2.41-1h2zm0 10v-3l4 4-4 4v-3h-2c-.82 0-1.83-.42-2.41-1l-8.6-8.59C2.8 6.21 2.3 6 2 6H0V4h2c.82 0 1.83.42 2.41 1l8.6 8.59c.2.2.7.41.99.41h2z"/></svg>',
-    'star-full': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="10 15 4.122 18.09 5.245 11.545 .489 6.91 7.061 5.955 10 0 12.939 5.955 19.511 6.91 14.755 11.545 15.878 18.09"/></svg>',
-    station: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9 11.73a2 2 0 1 1 2 0V20H9v-8.27zm5.24 2.51l-1.41-1.41A3.99 3.99 0 0 0 10 6a4 4 0 0 0-2.83 6.83l-1.41 1.41a6 6 0 1 1 8.49 0zm2.83 2.83l-1.41-1.41a8 8 0 1 0-11.31 0l-1.42 1.41a10 10 0 1 1 14.14 0z"/></svg>',
-    stethoscope: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M17 10.27V4.99a1 1 0 0 0-2 0V15a5 5 0 0 1-10 0v-1.08A6 6 0 0 1 0 8V2C0 .9.9 0 2 0h1a1 1 0 0 1 1 1 1 1 0 0 1-1 1H2v6a4 4 0 1 0 8 0V2H9a1 1 0 0 1-1-1 1 1 0 0 1 1-1h1a2 2 0 0 1 2 2v6a6 6 0 0 1-5 5.92V15a3 3 0 0 0 6 0V5a3 3 0 0 1 6 0v5.27a2 2 0 1 1-2 0z"/></svg>',
-    'store-front': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M18 9.87V20H2V9.87a4.25 4.25 0 0 0 3-.38V14h10V9.5a4.26 4.26 0 0 0 3 .37zM3 0h4l-.67 6.03A3.43 3.43 0 0 1 3 9C1.34 9 .42 7.73.95 6.15L3 0zm5 0h4l.7 6.3c.17 1.5-.91 2.7-2.42 2.7h-.56A2.38 2.38 0 0 1 7.3 6.3L8 0zm5 0h4l2.05 6.15C19.58 7.73 18.65 9 17 9a3.42 3.42 0 0 1-3.33-2.97L13 0z"/></svg>',
-    'stroke-width': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 0h20v5H0V0zm0 7h20v4H0V7zm0 6h20v3H0v-3zm0 5h20v2H0v-2z"/></svg>',
-    swap: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9 6a4 4 0 1 1 8 0v8h3l-4 4-4-4h3V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2v8a4 4 0 1 1-8 0V6H0l4-4 4 4H5v8a2 2 0 0 0 2 2 2 2 0 0 0 2-2V6z"/></svg>',
-    tablet: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2 2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm2 0v14h12V2H4zm6 17a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>',
-    tag: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 10V2l2-2h8l10 10-10 10L0 10zm4.5-4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>',
-    target: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M17.94 11H13V9h4.94A8 8 0 0 0 11 2.06V7H9V2.06A8 8 0 0 0 2.06 9H7v2H2.06A8 8 0 0 0 9 17.94V13h2v4.94A8 8 0 0 0 17.94 11zM10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20z"/></svg>',
-    'text-box': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 0h6v6H0V0zm2 2v2h2V2H2zm12-2h6v6h-6V0zm2 2v2h2V2h-2zm-2 12h6v6h-6v-6zm2 2v2h2v-2h-2zM0 14h6v6H0v-6zm2 2v2h2v-2H2zM6 2h8v2H6V2zm0 14h8v2H6v-2zM16 6h2v8h-2V6zM2 6h2v8H2V6zm5 1h6v2H7V7zm2 2h2v4H9V9z"/></svg>',
-    'text-decoration': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12 5h-2v12H8V3h8v2h-2v12h-2V5zM8 3a4 4 0 1 0 0 8V3z"/></svg>',
-    thermometer: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9 11.17V7h2v4.17a3 3 0 1 1-2 0zm-1-.63a4 4 0 1 0 4 0V4a2 2 0 1 0-4 0v6.53zM6 9.53V4a4 4 0 0 1 8 0v5.53A5.99 5.99 0 0 1 10 20 6 6 0 0 1 6 9.53z"/></svg>',
-    'thumbs-down': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M11 20a2 2 0 0 1-2-2v-6H2a2 2 0 0 1-2-2V8l2.3-6.12A3.11 3.11 0 0 1 5 0h8a2 2 0 0 1 2 2v8l-3 7v3h-1zm6-10V0h3v10h-3z"/></svg>',
-    'thumbs-up': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M11 0h1v3l3 7v8a2 2 0 0 1-2 2H5c-1.1 0-2.31-.84-2.7-1.88L0 12v-2a2 2 0 0 1 2-2h7V2a2 2 0 0 1 2-2zm6 10h3v10h-3V10z"/></svg>',
-    ticket: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M20 12v5H0v-5a2 2 0 1 0 0-4V3h20v5a2 2 0 1 0 0 4zM3 5v10h14V5H3zm7 7.08l-2.92 2.04L8.1 10.7 5.27 8.56l3.56-.08L10 5.12l1.17 3.36 3.56.08-2.84 2.15 1.03 3.4L10 12.09z"/></svg>',
-    time: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z"/></svg>',
-    timer: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16.32 7.1A8 8 0 1 1 9 4.06V2h2v2.06c1.46.18 2.8.76 3.9 1.62l1.46-1.46 1.42 1.42-1.46 1.45zM10 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12zM7 0h6v2H7V0zm5.12 8.46l1.42 1.42L10 13.4 8.59 12l3.53-3.54z"/></svg>',
-    'tools copy': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 0s8 7.58 8 12a8 8 0 1 1-16 0c0-1.5.91-3.35 2.12-5.15A3 3 0 0 0 10 6V0zM8 0a3 3 0 1 0 0 6V0z"/></svg>',
-    translate: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M7.41 9l2.24 2.24-.83 2L6 10.4l-3.3 3.3-1.4-1.42L4.58 9l-.88-.88c-.53-.53-1-1.3-1.3-2.12h2.2c.15.28.33.53.51.7L6 7.6l.88-.88C7.48 6.1 8 4.84 8 4H0V2h5V0h2v2h5v2h-2c0 1.37-.74 3.15-1.7 4.12L7.4 9zm3.84 8L10 20H8l5-12h2l5 12h-2l-1.25-3h-5.5zm.83-2h3.84L14 10.4 12.08 15z"/></svg>',
-    trash: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z"/></svg>',
-    'travel-bus': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 18H7v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1a2 2 0 0 1-2-2V2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2v1a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1zM4 5v6h5V5H4zm7 0v6h5V5h-5zM5 2v1h10V2H5zm.5 14a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm9 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>',
-    'travel-car': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2 14v-3H1a1 1 0 0 1-1-1 1 1 0 0 1 1-1h1l4-7h8l4 7h1a1 1 0 0 1 1 1 1 1 0 0 1-1 1h-1v6a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H5v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-3zm13.86-5L13 4H7L4.14 9h11.72zM5.5 14a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm9 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>',
-    'travel-taxi-cab': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12 3h2l4 7h1a1 1 0 0 1 1 1 1 1 0 0 1-1 1h-1v6a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H5v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-6H1a1 1 0 0 1-1-1 1 1 0 0 1 1-1h1l4-7h2V1h4v2zm3.86 7L13 5H7l-2.86 5h11.72zM5.5 15a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm9 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>',
-    'travel-train': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12 18H8l-2 2H3l2-2a2 2 0 0 1-2-2V2c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2l2 2h-3l-2-2zM5 5v6h10V5H5zm1.5 11a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm7 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM8 2v1h4V2H8z"/></svg>',
-    'travel-walk': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M11 7l1.44 2.16c.31.47 1.01.84 1.57.84H17V8h-3l-1.44-2.16a5.94 5.94 0 0 0-1.4-1.4l-1.32-.88a1.72 1.72 0 0 0-1.7-.04L4 6v5h2V7l2-1-3 14h2l2.35-7.65L11 14v6h2v-8l-2.7-2.7L11 7zm1-3a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>',
-    travel: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M14 5h2v14H4V5h2V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1zm3 0h1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1V5zM3 5v14H2a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2h1zm5-1v1h4V4H8z"/></svg>',
-    trophy: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M15 9a3 3 0 0 0 3-3h2a5 5 0 0 1-5.1 5 5 5 0 0 1-3.9 3.9V17l5 2v1H4v-1l5-2v-2.1A5 5 0 0 1 5.1 11H5a5 5 0 0 1-5-5h2a3 3 0 0 0 3 3V4H2v2H0V2h5V0h10v2h5v4h-2V4h-3v5z"/></svg>',
-    tuning: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M17 16v4h-2v-4h-2v-3h6v3h-2zM1 9h6v3H1V9zm6-4h6v3H7V5zM3 0h2v8H3V0zm12 0h2v12h-2V0zM9 0h2v4H9V0zM3 12h2v8H3v-8zm6-4h2v12H9V8z"/></svg>',
-    upload: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 10v6H7v-6H2l8-8 8 8h-5zM0 18h20v2H0v-2z"/></svg>',
-    usb: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M15 8v2h-4V4h2l-3-4-3 4h2v8H5V9.73a2 2 0 1 0-2 0V12A2 2 0 0 0 5 14h4v2.27a2 2 0 1 0 2 0V12h4a2 2 0 0 0 2-2V8h1V4h-4v4h1z"/></svg>',
-    'user-add': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2 6H0v2h2v2h2V8h2V6H4V4H2v2zm7 0a3 3 0 0 1 6 0v2a3 3 0 0 1-6 0V6zm11 9.14A15.93 15.93 0 0 0 12 13c-2.91 0-5.65.78-8 2.14V18h16v-2.86z"/></svg>',
-    'user-group': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><g fill="none" fill-rule="evenodd"><path fill-rule="nonzero" d="M7 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 0 1 7 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 1 1-1.33 7.76 5.96 5.96 0 0 0 0-7.52C12.1.1 12.53 0 13 0z"/></g></svg>',
-    'user-solid-circle': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zM7 6v2a3 3 0 1 0 6 0V6a3 3 0 1 0-6 0zm-3.65 8.44a8 8 0 0 0 13.3 0 15.94 15.94 0 0 0-13.3 0z"/></svg>',
-    'user-solid-square': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm7 4v2a3 3 0 1 0 6 0V6a3 3 0 1 0-6 0zm11 9.14A15.93 15.93 0 0 0 10 13c-2.91 0-5.65.78-8 2.14V18h16v-2.86z"/></svg>',
-    user: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 5a5 5 0 0 1 10 0v2A5 5 0 0 1 5 7V5zM0 16.68A19.9 19.9 0 0 1 10 14c3.64 0 7.06.97 10 2.68V20H0v-3.32z"/></svg>',
-    vector: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12 4h4.27a2 2 0 1 1 0 2h-2.14a9 9 0 0 1 4.84 7.25 2 2 0 1 1-2 .04 7 7 0 0 0-4.97-6V8H8v-.71a7 7 0 0 0-4.96 6 2 2 0 1 1-2-.04A9 9 0 0 1 5.86 6H3.73a2 2 0 1 1 0-2H8V3h4v1z"/></svg>',
-    'video-camera': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16 7l4-4v14l-4-4v3a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v3zm-8 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>',
-    'view-carousel': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16 16v2H4v-2H0V4h4V2h12v2h4v12h-4zM14 5.5V4H6v12h8V5.5zm2 .5v8h2V6h-2zM4 6H2v8h2V6z"/></svg>',
-    'view-column': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12 4H8v12h4V4zm2 0v12h4V4h-4zM6 4H2v12h4V4zM0 2h20v16H0V2z"/></svg>',
-    'view-hide': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.81 4.36l-1.77 1.78a4 4 0 0 0-4.9 4.9l-2.76 2.75C2.06 12.79.96 11.49.2 10A11 11 0 0 1 12.8 4.36zm3.8 1.85c1.33 1 2.43 2.3 3.2 3.79a11 11 0 0 1-12.62 5.64l1.77-1.78a4 4 0 0 0 4.9-4.9l2.76-2.75zm-.25-3.99l1.42 1.42L3.64 17.78l-1.42-1.42L16.36 2.22z"/></svg>',
-    'view-list': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 3h20v2H0V3zm0 4h20v2H0V7zm0 4h20v2H0v-2zm0 4h20v2H0v-2z"/></svg>',
-    'view-show': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M.2 10a11 11 0 0 1 19.6 0A11 11 0 0 1 .2 10zm9.8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>',
-    'view-tile': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 0h9v9H0V0zm2 2v5h5V2H2zm-2 9h9v9H0v-9zm2 2v5h5v-5H2zm9-13h9v9h-9V0zm2 2v5h5V2h-5zm-2 9h9v9h-9v-9zm2 2v5h5v-5h-5z"/></svg>',
-    'volume-down': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M7 7H3v6h4l5 5V2L7 7zm8.54 6.54l-1.42-1.42a3 3 0 0 0 0-4.24l1.42-1.42a4.98 4.98 0 0 1 0 7.08z"/></svg>',
-    'volume-mute': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9 7H5v6h4l5 5V2L9 7z"/></svg>',
-    'volume-off': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M15 8.59l-2.12-2.13-1.42 1.42L13.6 10l-2.13 2.12 1.42 1.42L15 11.4l2.12 2.13 1.42-1.42L16.4 10l2.13-2.12-1.42-1.42L15 8.6zM4 7H0v6h4l5 5V2L4 7z"/></svg>',
-    'volume-up': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 7H1v6h4l5 5V2L5 7zm11.36 9.36l-1.41-1.41a6.98 6.98 0 0 0 0-9.9l1.41-1.41a8.97 8.97 0 0 1 0 12.72zm-2.82-2.82l-1.42-1.42a3 3 0 0 0 0-4.24l1.42-1.42a4.98 4.98 0 0 1 0 7.08z"/></svg>',
-    wallet: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 4c0-1.1.9-2 2-2h15a1 1 0 0 1 1 1v1H2v1h17a1 1 0 0 1 1 1v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm16.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>',
-    watch: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M11 9h2v2H9V7h2v2zm-5.82 6.08a6.98 6.98 0 0 1 0-10.16L6 0h8l.82 4.92a6.98 6.98 0 0 1 0 10.16L14 20H6l-.82-4.92zM10 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/></svg>',
-    'window-new': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9 10V8h2v2h2v2h-2v2H9v-2H7v-2h2zM0 3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3zm2 2v12h16V5H2z"/></svg>',
-    'window-open': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3zm2 2v12h16V5H2zm8 3l4 5H6l4-5z"/></svg>',
-    window: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3zm2 2v12h16V5H2z"/></svg>',
-    wrench: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M6.47 9.8A5 5 0 0 1 .2 3.22l3.95 3.95 2.82-2.83L3.03.41a5 5 0 0 1 6.4 6.68l10 10-2.83 2.83L6.47 9.8z"/></svg>',
-    'zoom-in': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12zM7 7V5h2v2h2v2H9v2H7V9H5V7h2z"/></svg>',
-    'zoom-out': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12zM5 7h6v2H5V7z"/></svg>'
-});
-
-/***/ }),
 /* 357 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -20842,7 +20637,7 @@ var util = {
 
 __webpack_require__(541);
 
-__webpack_require__(840);
+__webpack_require__(841);
 
 __webpack_require__(361);
 
@@ -20866,7 +20661,7 @@ define(String.prototype, "padRight", "".padEnd);
 "pop,reverse,shift,keys,values,entries,indexOf,every,some,forEach,map,filter,find,findIndex,includes,join,slice,concat,push,splice,unshift,sort,lastIndexOf,reduce,reduceRight,copyWithin,fill".split(",").forEach(function (key) {
   [][key] && define(Array, key, Function.call.bind([][key]));
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(198)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(137)))
 
 /***/ }),
 /* 358 */
@@ -22784,7 +22579,7 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(198)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(137)))
 
 /***/ }),
 /* 360 */
@@ -22853,7 +22648,7 @@ module.exports = __webpack_require__(51).RegExp.escape;
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(10)
-  , isArray  = __webpack_require__(146)
+  , isArray  = __webpack_require__(147)
   , SPECIES  = __webpack_require__(11)('species');
 
 module.exports = function(original){
@@ -22996,7 +22791,7 @@ $export($export.S, 'RegExp', {escape: function escape(it){ return $re(it); }});
 // 22.1.3.3 Array.prototype.copyWithin(target, start, end = this.length)
 var $export = __webpack_require__(1);
 
-$export($export.P, 'Array', {copyWithin: __webpack_require__(206)});
+$export($export.P, 'Array', {copyWithin: __webpack_require__(207)});
 
 __webpack_require__(76)('copyWithin');
 
@@ -23023,7 +22818,7 @@ $export($export.P + $export.F * !__webpack_require__(39)([].every, true), 'Array
 // 22.1.3.6 Array.prototype.fill(value, start = 0, end = this.length)
 var $export = __webpack_require__(1);
 
-$export($export.P, 'Array', {fill: __webpack_require__(138)});
+$export($export.P, 'Array', {fill: __webpack_require__(139)});
 
 __webpack_require__(76)('fill');
 
@@ -23109,11 +22904,11 @@ $export($export.P + $export.F * !STRICT, 'Array', {
 var ctx            = __webpack_require__(52)
   , $export        = __webpack_require__(1)
   , toObject       = __webpack_require__(20)
-  , call           = __webpack_require__(215)
-  , isArrayIter    = __webpack_require__(145)
+  , call           = __webpack_require__(216)
+  , isArrayIter    = __webpack_require__(146)
   , toLength       = __webpack_require__(18)
-  , createProperty = __webpack_require__(139)
-  , getIterFn      = __webpack_require__(162);
+  , createProperty = __webpack_require__(140)
+  , getIterFn      = __webpack_require__(163);
 
 $export($export.S + $export.F * !__webpack_require__(109)(function(iter){ Array.from(iter); }), 'Array', {
   // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
@@ -23172,7 +22967,7 @@ $export($export.P + $export.F * (NEGATIVE_ZERO || !__webpack_require__(39)($nati
 // 22.1.2.2 / 15.4.3.2 Array.isArray(arg)
 var $export = __webpack_require__(1);
 
-$export($export.S, 'Array', {isArray: __webpack_require__(146)});
+$export($export.S, 'Array', {isArray: __webpack_require__(147)});
 
 /***/ }),
 /* 381 */
@@ -23243,7 +23038,7 @@ $export($export.P + $export.F * !__webpack_require__(39)([].map, true), 'Array',
 "use strict";
 
 var $export        = __webpack_require__(1)
-  , createProperty = __webpack_require__(139);
+  , createProperty = __webpack_require__(140);
 
 // WebKit Array.of isn't generic
 $export($export.S + $export.F * __webpack_require__(8)(function(){
@@ -23268,7 +23063,7 @@ $export($export.S + $export.F * __webpack_require__(8)(function(){
 "use strict";
 
 var $export = __webpack_require__(1)
-  , $reduce = __webpack_require__(208);
+  , $reduce = __webpack_require__(209);
 
 $export($export.P + $export.F * !__webpack_require__(39)([].reduceRight, true), 'Array', {
   // 22.1.3.19 / 15.4.4.22 Array.prototype.reduceRight(callbackfn [, initialValue])
@@ -23284,7 +23079,7 @@ $export($export.P + $export.F * !__webpack_require__(39)([].reduceRight, true), 
 "use strict";
 
 var $export = __webpack_require__(1)
-  , $reduce = __webpack_require__(208);
+  , $reduce = __webpack_require__(209);
 
 $export($export.P + $export.F * !__webpack_require__(39)([].reduce, true), 'Array', {
   // 22.1.3.18 / 15.4.4.21 Array.prototype.reduce(callbackfn [, initialValue])
@@ -23300,7 +23095,7 @@ $export($export.P + $export.F * !__webpack_require__(39)([].reduce, true), 'Arra
 "use strict";
 
 var $export    = __webpack_require__(1)
-  , html       = __webpack_require__(143)
+  , html       = __webpack_require__(144)
   , cof        = __webpack_require__(37)
   , toIndex    = __webpack_require__(69)
   , toLength   = __webpack_require__(18)
@@ -23473,7 +23268,7 @@ if(new Date(NaN) + '' != INVALID_DATE){
 // 19.2.3.2 / 15.3.4.5 Function.prototype.bind(thisArg, args...)
 var $export = __webpack_require__(1);
 
-$export($export.P, 'Function', {bind: __webpack_require__(209)});
+$export($export.P, 'Function', {bind: __webpack_require__(210)});
 
 /***/ }),
 /* 397 */
@@ -23530,7 +23325,7 @@ NAME in FProto || __webpack_require__(13) && dP(FProto, NAME, {
 
 // 20.2.2.3 Math.acosh(x)
 var $export = __webpack_require__(1)
-  , log1p   = __webpack_require__(217)
+  , log1p   = __webpack_require__(218)
   , sqrt    = Math.sqrt
   , $acosh  = Math.acosh;
 
@@ -23583,7 +23378,7 @@ $export($export.S + $export.F * !($atanh && 1 / $atanh(-0) < 0), 'Math', {
 
 // 20.2.2.9 Math.cbrt(x)
 var $export = __webpack_require__(1)
-  , sign    = __webpack_require__(150);
+  , sign    = __webpack_require__(151);
 
 $export($export.S, 'Math', {
   cbrt: function cbrt(x){
@@ -23624,7 +23419,7 @@ $export($export.S, 'Math', {
 
 // 20.2.2.14 Math.expm1(x)
 var $export = __webpack_require__(1)
-  , $expm1  = __webpack_require__(149);
+  , $expm1  = __webpack_require__(150);
 
 $export($export.S + $export.F * ($expm1 != Math.expm1), 'Math', {expm1: $expm1});
 
@@ -23634,7 +23429,7 @@ $export($export.S + $export.F * ($expm1 != Math.expm1), 'Math', {expm1: $expm1})
 
 // 20.2.2.16 Math.fround(x)
 var $export   = __webpack_require__(1)
-  , sign      = __webpack_require__(150)
+  , sign      = __webpack_require__(151)
   , pow       = Math.pow
   , EPSILON   = pow(2, -52)
   , EPSILON32 = pow(2, -23)
@@ -23731,7 +23526,7 @@ $export($export.S, 'Math', {
 // 20.2.2.20 Math.log1p(x)
 var $export = __webpack_require__(1);
 
-$export($export.S, 'Math', {log1p: __webpack_require__(217)});
+$export($export.S, 'Math', {log1p: __webpack_require__(218)});
 
 /***/ }),
 /* 411 */
@@ -23753,7 +23548,7 @@ $export($export.S, 'Math', {
 // 20.2.2.28 Math.sign(x)
 var $export = __webpack_require__(1);
 
-$export($export.S, 'Math', {sign: __webpack_require__(150)});
+$export($export.S, 'Math', {sign: __webpack_require__(151)});
 
 /***/ }),
 /* 413 */
@@ -23761,7 +23556,7 @@ $export($export.S, 'Math', {sign: __webpack_require__(150)});
 
 // 20.2.2.30 Math.sinh(x)
 var $export = __webpack_require__(1)
-  , expm1   = __webpack_require__(149)
+  , expm1   = __webpack_require__(150)
   , exp     = Math.exp;
 
 // V8 near Chromium 38 has a problem with very small numbers
@@ -23781,7 +23576,7 @@ $export($export.S + $export.F * __webpack_require__(8)(function(){
 
 // 20.2.2.33 Math.tanh(x)
 var $export = __webpack_require__(1)
-  , expm1   = __webpack_require__(149)
+  , expm1   = __webpack_require__(150)
   , exp     = Math.exp;
 
 $export($export.S, 'Math', {
@@ -23814,7 +23609,7 @@ $export($export.S, 'Math', {
 var global            = __webpack_require__(7)
   , has               = __webpack_require__(22)
   , cof               = __webpack_require__(37)
-  , inheritIfRequired = __webpack_require__(144)
+  , inheritIfRequired = __webpack_require__(145)
   , toPrimitive       = __webpack_require__(44)
   , fails             = __webpack_require__(8)
   , gOPN              = __webpack_require__(65).f
@@ -23910,7 +23705,7 @@ $export($export.S, 'Number', {
 // 20.1.2.3 Number.isInteger(number)
 var $export = __webpack_require__(1);
 
-$export($export.S, 'Number', {isInteger: __webpack_require__(214)});
+$export($export.S, 'Number', {isInteger: __webpack_require__(215)});
 
 /***/ }),
 /* 420 */
@@ -23931,7 +23726,7 @@ $export($export.S, 'Number', {
 
 // 20.1.2.5 Number.isSafeInteger(number)
 var $export   = __webpack_require__(1)
-  , isInteger = __webpack_require__(214)
+  , isInteger = __webpack_require__(215)
   , abs       = Math.abs;
 
 $export($export.S, 'Number', {
@@ -23963,7 +23758,7 @@ $export($export.S, 'Number', {MIN_SAFE_INTEGER: -0x1fffffffffffff});
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export     = __webpack_require__(1)
-  , $parseFloat = __webpack_require__(224);
+  , $parseFloat = __webpack_require__(225);
 // 20.1.2.12 Number.parseFloat(string)
 $export($export.S + $export.F * (Number.parseFloat != $parseFloat), 'Number', {parseFloat: $parseFloat});
 
@@ -23972,7 +23767,7 @@ $export($export.S + $export.F * (Number.parseFloat != $parseFloat), 'Number', {p
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export   = __webpack_require__(1)
-  , $parseInt = __webpack_require__(225);
+  , $parseInt = __webpack_require__(226);
 // 20.1.2.13 Number.parseInt(string, radix)
 $export($export.S + $export.F * (Number.parseInt != $parseInt), 'Number', {parseInt: $parseInt});
 
@@ -23984,8 +23779,8 @@ $export($export.S + $export.F * (Number.parseInt != $parseInt), 'Number', {parse
 
 var $export      = __webpack_require__(1)
   , toInteger    = __webpack_require__(58)
-  , aNumberValue = __webpack_require__(205)
-  , repeat       = __webpack_require__(157)
+  , aNumberValue = __webpack_require__(206)
+  , repeat       = __webpack_require__(158)
   , $toFixed     = 1..toFixed
   , floor        = Math.floor
   , data         = [0, 0, 0, 0, 0, 0]
@@ -24103,7 +23898,7 @@ $export($export.P + $export.F * (!!$toFixed && (
 
 var $export      = __webpack_require__(1)
   , $fails       = __webpack_require__(8)
-  , aNumberValue = __webpack_require__(205)
+  , aNumberValue = __webpack_require__(206)
   , $toPrecision = 1..toPrecision;
 
 $export($export.P + $export.F * ($fails(function(){
@@ -24126,7 +23921,7 @@ $export($export.P + $export.F * ($fails(function(){
 // 19.1.3.1 Object.assign(target, source)
 var $export = __webpack_require__(1);
 
-$export($export.S + $export.F, 'Object', {assign: __webpack_require__(218)});
+$export($export.S + $export.F, 'Object', {assign: __webpack_require__(219)});
 
 /***/ }),
 /* 429 */
@@ -24142,7 +23937,7 @@ $export($export.S, 'Object', {create: __webpack_require__(64)});
 
 var $export = __webpack_require__(1);
 // 19.1.2.3 / 15.2.3.7 Object.defineProperties(O, Properties)
-$export($export.S + $export.F * !__webpack_require__(13), 'Object', {defineProperties: __webpack_require__(219)});
+$export($export.S + $export.F * !__webpack_require__(13), 'Object', {defineProperties: __webpack_require__(220)});
 
 /***/ }),
 /* 431 */
@@ -24186,7 +23981,7 @@ __webpack_require__(43)('getOwnPropertyDescriptor', function(){
 
 // 19.1.2.7 Object.getOwnPropertyNames(O)
 __webpack_require__(43)('getOwnPropertyNames', function(){
-  return __webpack_require__(220).f;
+  return __webpack_require__(221).f;
 });
 
 /***/ }),
@@ -24248,7 +24043,7 @@ __webpack_require__(43)('isSealed', function($isSealed){
 
 // 19.1.3.10 Object.is(value1, value2)
 var $export = __webpack_require__(1);
-$export($export.S, 'Object', {is: __webpack_require__(226)});
+$export($export.S, 'Object', {is: __webpack_require__(227)});
 
 /***/ }),
 /* 440 */
@@ -24298,7 +24093,7 @@ __webpack_require__(43)('seal', function($seal){
 
 // 19.1.3.19 Object.setPrototypeOf(O, proto)
 var $export = __webpack_require__(1);
-$export($export.S, 'Object', {setPrototypeOf: __webpack_require__(152).set});
+$export($export.S, 'Object', {setPrototypeOf: __webpack_require__(153).set});
 
 /***/ }),
 /* 444 */
@@ -24321,7 +24116,7 @@ if(test + '' != '[object z]'){
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export     = __webpack_require__(1)
-  , $parseFloat = __webpack_require__(224);
+  , $parseFloat = __webpack_require__(225);
 // 18.2.4 parseFloat(string)
 $export($export.G + $export.F * (parseFloat != $parseFloat), {parseFloat: $parseFloat});
 
@@ -24330,7 +24125,7 @@ $export($export.G + $export.F * (parseFloat != $parseFloat), {parseFloat: $parse
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export   = __webpack_require__(1)
-  , $parseInt = __webpack_require__(225);
+  , $parseInt = __webpack_require__(226);
 // 18.2.5 parseInt(string, radix)
 $export($export.G + $export.F * (parseInt != $parseInt), {parseInt: $parseInt});
 
@@ -24349,9 +24144,9 @@ var LIBRARY            = __webpack_require__(63)
   , aFunction          = __webpack_require__(24)
   , anInstance         = __webpack_require__(62)
   , forOf              = __webpack_require__(77)
-  , speciesConstructor = __webpack_require__(154)
-  , task               = __webpack_require__(159).set
-  , microtask          = __webpack_require__(151)()
+  , speciesConstructor = __webpack_require__(155)
+  , task               = __webpack_require__(160).set
+  , microtask          = __webpack_require__(152)()
   , PROMISE            = 'Promise'
   , TypeError          = global.TypeError
   , process            = global.process
@@ -24671,7 +24466,7 @@ var $export    = __webpack_require__(1)
   , anObject   = __webpack_require__(6)
   , isObject   = __webpack_require__(10)
   , fails      = __webpack_require__(8)
-  , bind       = __webpack_require__(209)
+  , bind       = __webpack_require__(210)
   , rConstruct = (__webpack_require__(7).Reflect || {}).construct;
 
 // MS Edge supports only 2 arguments and argumentsList argument is optional
@@ -24771,7 +24566,7 @@ var Enumerate = function(iterated){
     , key;
   for(key in iterated)keys.push(key);
 };
-__webpack_require__(147)(Enumerate, 'Object', function(){
+__webpack_require__(148)(Enumerate, 'Object', function(){
   var that = this
     , keys = that._k
     , key;
@@ -24879,7 +24674,7 @@ $export($export.S, 'Reflect', {
 // 26.1.11 Reflect.ownKeys(target)
 var $export = __webpack_require__(1);
 
-$export($export.S, 'Reflect', {ownKeys: __webpack_require__(223)});
+$export($export.S, 'Reflect', {ownKeys: __webpack_require__(224)});
 
 /***/ }),
 /* 459 */
@@ -24908,7 +24703,7 @@ $export($export.S, 'Reflect', {
 
 // 26.1.14 Reflect.setPrototypeOf(target, proto)
 var $export  = __webpack_require__(1)
-  , setProto = __webpack_require__(152);
+  , setProto = __webpack_require__(153);
 
 if(setProto)$export($export.S, 'Reflect', {
   setPrototypeOf: function setPrototypeOf(target, proto){
@@ -24963,7 +24758,7 @@ $export($export.S, 'Reflect', {set: set});
 /***/ (function(module, exports, __webpack_require__) {
 
 var global            = __webpack_require__(7)
-  , inheritIfRequired = __webpack_require__(144)
+  , inheritIfRequired = __webpack_require__(145)
   , dP                = __webpack_require__(14).f
   , gOPN              = __webpack_require__(65).f
   , isRegExp          = __webpack_require__(108)
@@ -25134,7 +24929,7 @@ __webpack_require__(105)('split', 2, function(defined, SPLIT, $split){
 
 "use strict";
 
-__webpack_require__(230);
+__webpack_require__(231);
 var anObject    = __webpack_require__(6)
   , $flags      = __webpack_require__(106)
   , DESCRIPTORS = __webpack_require__(13)
@@ -25218,7 +25013,7 @@ __webpack_require__(27)('bold', function(createHTML){
 "use strict";
 
 var $export = __webpack_require__(1)
-  , $at     = __webpack_require__(155)(false);
+  , $at     = __webpack_require__(156)(false);
 $export($export.P, 'String', {
   // 21.1.3.3 String.prototype.codePointAt(pos)
   codePointAt: function codePointAt(pos){
@@ -25235,11 +25030,11 @@ $export($export.P, 'String', {
 
 var $export   = __webpack_require__(1)
   , toLength  = __webpack_require__(18)
-  , context   = __webpack_require__(156)
+  , context   = __webpack_require__(157)
   , ENDS_WITH = 'endsWith'
   , $endsWith = ''[ENDS_WITH];
 
-$export($export.P + $export.F * __webpack_require__(142)(ENDS_WITH), 'String', {
+$export($export.P + $export.F * __webpack_require__(143)(ENDS_WITH), 'String', {
   endsWith: function endsWith(searchString /*, endPosition = @length */){
     var that = context(this, searchString, ENDS_WITH)
       , endPosition = arguments.length > 1 ? arguments[1] : undefined
@@ -25327,10 +25122,10 @@ $export($export.S + $export.F * (!!$fromCodePoint && $fromCodePoint.length != 1)
 // 21.1.3.7 String.prototype.includes(searchString, position = 0)
 
 var $export  = __webpack_require__(1)
-  , context  = __webpack_require__(156)
+  , context  = __webpack_require__(157)
   , INCLUDES = 'includes';
 
-$export($export.P + $export.F * __webpack_require__(142)(INCLUDES), 'String', {
+$export($export.P + $export.F * __webpack_require__(143)(INCLUDES), 'String', {
   includes: function includes(searchString /*, position = 0 */){
     return !!~context(this, searchString, INCLUDES)
       .indexOf(searchString, arguments.length > 1 ? arguments[1] : undefined);
@@ -25356,10 +25151,10 @@ __webpack_require__(27)('italics', function(createHTML){
 
 "use strict";
 
-var $at  = __webpack_require__(155)(true);
+var $at  = __webpack_require__(156)(true);
 
 // 21.1.3.27 String.prototype[@@iterator]()
-__webpack_require__(148)(String, 'String', function(iterated){
+__webpack_require__(149)(String, 'String', function(iterated){
   this._t = String(iterated); // target
   this._i = 0;                // next index
 // 21.1.5.2.1 %StringIteratorPrototype%.next()
@@ -25417,7 +25212,7 @@ var $export = __webpack_require__(1);
 
 $export($export.P, 'String', {
   // 21.1.3.13 String.prototype.repeat(count)
-  repeat: __webpack_require__(157)
+  repeat: __webpack_require__(158)
 });
 
 /***/ }),
@@ -25442,11 +25237,11 @@ __webpack_require__(27)('small', function(createHTML){
 
 var $export     = __webpack_require__(1)
   , toLength    = __webpack_require__(18)
-  , context     = __webpack_require__(156)
+  , context     = __webpack_require__(157)
   , STARTS_WITH = 'startsWith'
   , $startsWith = ''[STARTS_WITH];
 
-$export($export.P + $export.F * __webpack_require__(142)(STARTS_WITH), 'String', {
+$export($export.P + $export.F * __webpack_require__(143)(STARTS_WITH), 'String', {
   startsWith: function startsWith(searchString /*, position = 0 */){
     var that   = context(this, searchString, STARTS_WITH)
       , index  = toLength(Math.min(arguments.length > 1 ? arguments[1] : undefined, that.length))
@@ -25527,17 +25322,17 @@ var global         = __webpack_require__(7)
   , setToStringTag = __webpack_require__(79)
   , uid            = __webpack_require__(70)
   , wks            = __webpack_require__(11)
-  , wksExt         = __webpack_require__(228)
-  , wksDefine      = __webpack_require__(161)
+  , wksExt         = __webpack_require__(229)
+  , wksDefine      = __webpack_require__(162)
   , keyOf          = __webpack_require__(366)
   , enumKeys       = __webpack_require__(365)
-  , isArray        = __webpack_require__(146)
+  , isArray        = __webpack_require__(147)
   , anObject       = __webpack_require__(6)
   , toIObject      = __webpack_require__(28)
   , toPrimitive    = __webpack_require__(44)
   , createDesc     = __webpack_require__(57)
   , _create        = __webpack_require__(64)
-  , gOPNExt        = __webpack_require__(220)
+  , gOPNExt        = __webpack_require__(221)
   , $GOPD          = __webpack_require__(32)
   , $DP            = __webpack_require__(14)
   , $keys          = __webpack_require__(66)
@@ -25758,13 +25553,13 @@ setToStringTag(global.JSON, 'JSON', true);
 
 var $export      = __webpack_require__(1)
   , $typed       = __webpack_require__(113)
-  , buffer       = __webpack_require__(160)
+  , buffer       = __webpack_require__(161)
   , anObject     = __webpack_require__(6)
   , toIndex      = __webpack_require__(69)
   , toLength     = __webpack_require__(18)
   , isObject     = __webpack_require__(10)
   , ArrayBuffer  = __webpack_require__(7).ArrayBuffer
-  , speciesConstructor = __webpack_require__(154)
+  , speciesConstructor = __webpack_require__(155)
   , $ArrayBuffer = buffer.ArrayBuffer
   , $DataView    = buffer.DataView
   , $isView      = $typed.ABV && ArrayBuffer.isView
@@ -25808,7 +25603,7 @@ __webpack_require__(68)(ARRAY_BUFFER);
 
 var $export = __webpack_require__(1);
 $export($export.G + $export.W + $export.F * !__webpack_require__(113).ABV, {
-  DataView: __webpack_require__(160).DataView
+  DataView: __webpack_require__(161).DataView
 });
 
 /***/ }),
@@ -25907,7 +25702,7 @@ __webpack_require__(54)('Uint8', 1, function(init){
 
 "use strict";
 
-var weak = __webpack_require__(212);
+var weak = __webpack_require__(213);
 
 // 23.4 WeakSet Objects
 __webpack_require__(104)('WeakSet', function(get){
@@ -25943,7 +25738,7 @@ __webpack_require__(76)('includes');
 
 // https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-09/sept-25.md#510-globalasap-for-enqueuing-a-microtask
 var $export   = __webpack_require__(1)
-  , microtask = __webpack_require__(151)()
+  , microtask = __webpack_require__(152)()
   , process   = __webpack_require__(7).process
   , isNode    = __webpack_require__(37)(process) == 'process';
 
@@ -25975,7 +25770,7 @@ $export($export.S, 'Error', {
 // https://github.com/DavidBruant/Map-Set.prototype.toJSON
 var $export  = __webpack_require__(1);
 
-$export($export.P + $export.R, 'Map', {toJSON: __webpack_require__(211)('Map')});
+$export($export.P + $export.R, 'Map', {toJSON: __webpack_require__(212)('Map')});
 
 /***/ }),
 /* 507 */
@@ -26093,7 +25888,7 @@ __webpack_require__(13) && $export($export.P + __webpack_require__(110), 'Object
 
 // https://github.com/tc39/proposal-object-values-entries
 var $export  = __webpack_require__(1)
-  , $entries = __webpack_require__(222)(true);
+  , $entries = __webpack_require__(223)(true);
 
 $export($export.S, 'Object', {
   entries: function entries(it){
@@ -26107,10 +25902,10 @@ $export($export.S, 'Object', {
 
 // https://github.com/tc39/proposal-object-getownpropertydescriptors
 var $export        = __webpack_require__(1)
-  , ownKeys        = __webpack_require__(223)
+  , ownKeys        = __webpack_require__(224)
   , toIObject      = __webpack_require__(28)
   , gOPD           = __webpack_require__(32)
-  , createProperty = __webpack_require__(139);
+  , createProperty = __webpack_require__(140);
 
 $export($export.S, 'Object', {
   getOwnPropertyDescriptors: function getOwnPropertyDescriptors(object){
@@ -26179,7 +25974,7 @@ __webpack_require__(13) && $export($export.P + __webpack_require__(110), 'Object
 
 // https://github.com/tc39/proposal-object-values-entries
 var $export = __webpack_require__(1)
-  , $values = __webpack_require__(222)(false);
+  , $values = __webpack_require__(223)(false);
 
 $export($export.S, 'Object', {
   values: function values(it){
@@ -26197,7 +25992,7 @@ $export($export.S, 'Object', {
 var $export     = __webpack_require__(1)
   , global      = __webpack_require__(7)
   , core        = __webpack_require__(51)
-  , microtask   = __webpack_require__(151)()
+  , microtask   = __webpack_require__(152)()
   , OBSERVABLE  = __webpack_require__(11)('observable')
   , aFunction   = __webpack_require__(24)
   , anObject    = __webpack_require__(6)
@@ -26429,8 +26224,8 @@ metadata.exp({deleteMetadata: function deleteMetadata(metadataKey, target /*, ta
 /* 521 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Set                     = __webpack_require__(231)
-  , from                    = __webpack_require__(207)
+var Set                     = __webpack_require__(232)
+  , from                    = __webpack_require__(208)
   , metadata                = __webpack_require__(53)
   , anObject                = __webpack_require__(6)
   , getPrototypeOf          = __webpack_require__(33)
@@ -26560,7 +26355,7 @@ metadata.exp({metadata: function metadata(metadataKey, metadataValue){
 // https://github.com/DavidBruant/Map-Set.prototype.toJSON
 var $export  = __webpack_require__(1);
 
-$export($export.P + $export.R, 'Set', {toJSON: __webpack_require__(211)('Set')});
+$export($export.P + $export.R, 'Set', {toJSON: __webpack_require__(212)('Set')});
 
 /***/ }),
 /* 529 */
@@ -26570,7 +26365,7 @@ $export($export.P + $export.R, 'Set', {toJSON: __webpack_require__(211)('Set')})
 
 // https://github.com/mathiasbynens/String.prototype.at
 var $export = __webpack_require__(1)
-  , $at     = __webpack_require__(155)(true);
+  , $at     = __webpack_require__(156)(true);
 
 $export($export.P, 'String', {
   at: function at(pos){
@@ -26597,7 +26392,7 @@ var $RegExpStringIterator = function(regexp, string){
   this._s = string;
 };
 
-__webpack_require__(147)($RegExpStringIterator, 'RegExp String', function next(){
+__webpack_require__(148)($RegExpStringIterator, 'RegExp String', function next(){
   var match = this._r.exec(this._s);
   return {value: match, done: match === null};
 });
@@ -26622,7 +26417,7 @@ $export($export.P, 'String', {
 
 // https://github.com/tc39/proposal-string-pad-start-end
 var $export = __webpack_require__(1)
-  , $pad    = __webpack_require__(227);
+  , $pad    = __webpack_require__(228);
 
 $export($export.P, 'String', {
   padEnd: function padEnd(maxLength /*, fillString = ' ' */){
@@ -26638,7 +26433,7 @@ $export($export.P, 'String', {
 
 // https://github.com/tc39/proposal-string-pad-start-end
 var $export = __webpack_require__(1)
-  , $pad    = __webpack_require__(227);
+  , $pad    = __webpack_require__(228);
 
 $export($export.P, 'String', {
   padStart: function padStart(maxLength /*, fillString = ' ' */){
@@ -26676,13 +26471,13 @@ __webpack_require__(80)('trimRight', function($trim){
 /* 535 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(161)('asyncIterator');
+__webpack_require__(162)('asyncIterator');
 
 /***/ }),
 /* 536 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(161)('observable');
+__webpack_require__(162)('observable');
 
 /***/ }),
 /* 537 */
@@ -26697,7 +26492,7 @@ $export($export.S, 'System', {global: __webpack_require__(7)});
 /* 538 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var $iterators    = __webpack_require__(163)
+var $iterators    = __webpack_require__(164)
   , redefine      = __webpack_require__(26)
   , global        = __webpack_require__(7)
   , hide          = __webpack_require__(25)
@@ -26725,7 +26520,7 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(1)
-  , $task   = __webpack_require__(159);
+  , $task   = __webpack_require__(160);
 $export($export.G + $export.B, {
   setImmediate:   $task.set,
   clearImmediate: $task.clear
@@ -26859,18 +26654,18 @@ __webpack_require__(373);
 __webpack_require__(376);
 __webpack_require__(375);
 __webpack_require__(390);
-__webpack_require__(163);
+__webpack_require__(164);
 __webpack_require__(462);
 __webpack_require__(467);
-__webpack_require__(230);
+__webpack_require__(231);
 __webpack_require__(463);
 __webpack_require__(464);
 __webpack_require__(465);
 __webpack_require__(466);
 __webpack_require__(447);
-__webpack_require__(229);
-__webpack_require__(231);
+__webpack_require__(230);
 __webpack_require__(232);
+__webpack_require__(233);
 __webpack_require__(502);
 __webpack_require__(491);
 __webpack_require__(492);
@@ -27776,6 +27571,390 @@ module.exports = Array.isArray || function (arr) {
 /* 558 */
 /***/ (function(module, exports, __webpack_require__) {
 
+/* WEBPACK VAR INJECTION */(function(global) {/**
+ * lodash (Custom Build) <https://lodash.com/>
+ * Build: `lodash modularize exports="npm" -o ./`
+ * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+ * Released under MIT license <https://lodash.com/license>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ */
+
+/** Used as the `TypeError` message for "Functions" methods. */
+var FUNC_ERROR_TEXT = 'Expected a function';
+
+/** Used as references for various `Number` constants. */
+var NAN = 0 / 0;
+
+/** `Object#toString` result references. */
+var symbolTag = '[object Symbol]';
+
+/** Used to match leading and trailing whitespace. */
+var reTrim = /^\s+|\s+$/g;
+
+/** Used to detect bad signed hexadecimal string values. */
+var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
+
+/** Used to detect binary string values. */
+var reIsBinary = /^0b[01]+$/i;
+
+/** Used to detect octal string values. */
+var reIsOctal = /^0o[0-7]+$/i;
+
+/** Built-in method references without a dependency on `root`. */
+var freeParseInt = parseInt;
+
+/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var objectToString = objectProto.toString;
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeMax = Math.max,
+    nativeMin = Math.min;
+
+/**
+ * Gets the timestamp of the number of milliseconds that have elapsed since
+ * the Unix epoch (1 January 1970 00:00:00 UTC).
+ *
+ * @static
+ * @memberOf _
+ * @since 2.4.0
+ * @category Date
+ * @returns {number} Returns the timestamp.
+ * @example
+ *
+ * _.defer(function(stamp) {
+ *   console.log(_.now() - stamp);
+ * }, _.now());
+ * // => Logs the number of milliseconds it took for the deferred invocation.
+ */
+var now = function() {
+  return root.Date.now();
+};
+
+/**
+ * Creates a debounced function that delays invoking `func` until after `wait`
+ * milliseconds have elapsed since the last time the debounced function was
+ * invoked. The debounced function comes with a `cancel` method to cancel
+ * delayed `func` invocations and a `flush` method to immediately invoke them.
+ * Provide `options` to indicate whether `func` should be invoked on the
+ * leading and/or trailing edge of the `wait` timeout. The `func` is invoked
+ * with the last arguments provided to the debounced function. Subsequent
+ * calls to the debounced function return the result of the last `func`
+ * invocation.
+ *
+ * **Note:** If `leading` and `trailing` options are `true`, `func` is
+ * invoked on the trailing edge of the timeout only if the debounced function
+ * is invoked more than once during the `wait` timeout.
+ *
+ * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
+ * until to the next tick, similar to `setTimeout` with a timeout of `0`.
+ *
+ * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
+ * for details over the differences between `_.debounce` and `_.throttle`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Function
+ * @param {Function} func The function to debounce.
+ * @param {number} [wait=0] The number of milliseconds to delay.
+ * @param {Object} [options={}] The options object.
+ * @param {boolean} [options.leading=false]
+ *  Specify invoking on the leading edge of the timeout.
+ * @param {number} [options.maxWait]
+ *  The maximum time `func` is allowed to be delayed before it's invoked.
+ * @param {boolean} [options.trailing=true]
+ *  Specify invoking on the trailing edge of the timeout.
+ * @returns {Function} Returns the new debounced function.
+ * @example
+ *
+ * // Avoid costly calculations while the window size is in flux.
+ * jQuery(window).on('resize', _.debounce(calculateLayout, 150));
+ *
+ * // Invoke `sendMail` when clicked, debouncing subsequent calls.
+ * jQuery(element).on('click', _.debounce(sendMail, 300, {
+ *   'leading': true,
+ *   'trailing': false
+ * }));
+ *
+ * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
+ * var debounced = _.debounce(batchLog, 250, { 'maxWait': 1000 });
+ * var source = new EventSource('/stream');
+ * jQuery(source).on('message', debounced);
+ *
+ * // Cancel the trailing debounced invocation.
+ * jQuery(window).on('popstate', debounced.cancel);
+ */
+function debounce(func, wait, options) {
+  var lastArgs,
+      lastThis,
+      maxWait,
+      result,
+      timerId,
+      lastCallTime,
+      lastInvokeTime = 0,
+      leading = false,
+      maxing = false,
+      trailing = true;
+
+  if (typeof func != 'function') {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  wait = toNumber(wait) || 0;
+  if (isObject(options)) {
+    leading = !!options.leading;
+    maxing = 'maxWait' in options;
+    maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
+    trailing = 'trailing' in options ? !!options.trailing : trailing;
+  }
+
+  function invokeFunc(time) {
+    var args = lastArgs,
+        thisArg = lastThis;
+
+    lastArgs = lastThis = undefined;
+    lastInvokeTime = time;
+    result = func.apply(thisArg, args);
+    return result;
+  }
+
+  function leadingEdge(time) {
+    // Reset any `maxWait` timer.
+    lastInvokeTime = time;
+    // Start the timer for the trailing edge.
+    timerId = setTimeout(timerExpired, wait);
+    // Invoke the leading edge.
+    return leading ? invokeFunc(time) : result;
+  }
+
+  function remainingWait(time) {
+    var timeSinceLastCall = time - lastCallTime,
+        timeSinceLastInvoke = time - lastInvokeTime,
+        result = wait - timeSinceLastCall;
+
+    return maxing ? nativeMin(result, maxWait - timeSinceLastInvoke) : result;
+  }
+
+  function shouldInvoke(time) {
+    var timeSinceLastCall = time - lastCallTime,
+        timeSinceLastInvoke = time - lastInvokeTime;
+
+    // Either this is the first call, activity has stopped and we're at the
+    // trailing edge, the system time has gone backwards and we're treating
+    // it as the trailing edge, or we've hit the `maxWait` limit.
+    return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
+      (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
+  }
+
+  function timerExpired() {
+    var time = now();
+    if (shouldInvoke(time)) {
+      return trailingEdge(time);
+    }
+    // Restart the timer.
+    timerId = setTimeout(timerExpired, remainingWait(time));
+  }
+
+  function trailingEdge(time) {
+    timerId = undefined;
+
+    // Only invoke if we have `lastArgs` which means `func` has been
+    // debounced at least once.
+    if (trailing && lastArgs) {
+      return invokeFunc(time);
+    }
+    lastArgs = lastThis = undefined;
+    return result;
+  }
+
+  function cancel() {
+    if (timerId !== undefined) {
+      clearTimeout(timerId);
+    }
+    lastInvokeTime = 0;
+    lastArgs = lastCallTime = lastThis = timerId = undefined;
+  }
+
+  function flush() {
+    return timerId === undefined ? result : trailingEdge(now());
+  }
+
+  function debounced() {
+    var time = now(),
+        isInvoking = shouldInvoke(time);
+
+    lastArgs = arguments;
+    lastThis = this;
+    lastCallTime = time;
+
+    if (isInvoking) {
+      if (timerId === undefined) {
+        return leadingEdge(lastCallTime);
+      }
+      if (maxing) {
+        // Handle invocations in a tight loop.
+        timerId = setTimeout(timerExpired, wait);
+        return invokeFunc(lastCallTime);
+      }
+    }
+    if (timerId === undefined) {
+      timerId = setTimeout(timerExpired, wait);
+    }
+    return result;
+  }
+  debounced.cancel = cancel;
+  debounced.flush = flush;
+  return debounced;
+}
+
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return !!value && (type == 'object' || type == 'function');
+}
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return !!value && typeof value == 'object';
+}
+
+/**
+ * Checks if `value` is classified as a `Symbol` primitive or object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+ * @example
+ *
+ * _.isSymbol(Symbol.iterator);
+ * // => true
+ *
+ * _.isSymbol('abc');
+ * // => false
+ */
+function isSymbol(value) {
+  return typeof value == 'symbol' ||
+    (isObjectLike(value) && objectToString.call(value) == symbolTag);
+}
+
+/**
+ * Converts `value` to a number.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to process.
+ * @returns {number} Returns the number.
+ * @example
+ *
+ * _.toNumber(3.2);
+ * // => 3.2
+ *
+ * _.toNumber(Number.MIN_VALUE);
+ * // => 5e-324
+ *
+ * _.toNumber(Infinity);
+ * // => Infinity
+ *
+ * _.toNumber('3.2');
+ * // => 3.2
+ */
+function toNumber(value) {
+  if (typeof value == 'number') {
+    return value;
+  }
+  if (isSymbol(value)) {
+    return NAN;
+  }
+  if (isObject(value)) {
+    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
+    value = isObject(other) ? (other + '') : other;
+  }
+  if (typeof value != 'string') {
+    return value === 0 ? value : +value;
+  }
+  value = value.replace(reTrim, '');
+  var isBinary = reIsBinary.test(value);
+  return (isBinary || reIsOctal.test(value))
+    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
+    : (reIsBadHex.test(value) ? NAN : +value);
+}
+
+module.exports = debounce;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(137)))
+
+/***/ }),
+/* 559 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -27791,7 +27970,7 @@ module.exports = Array.isArray || function (arr) {
 if (true) {
   var invariant = __webpack_require__(4);
   var warning = __webpack_require__(5);
-  var ReactPropTypesSecret = __webpack_require__(238);
+  var ReactPropTypesSecret = __webpack_require__(239);
   var loggedTypeFailures = {};
 }
 
@@ -27841,15 +28020,15 @@ module.exports = checkPropTypes;
 
 
 /***/ }),
-/* 559 */
+/* 560 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var stringify = __webpack_require__(561);
-var parse = __webpack_require__(560);
-var formats = __webpack_require__(239);
+var stringify = __webpack_require__(562);
+var parse = __webpack_require__(561);
+var formats = __webpack_require__(240);
 
 module.exports = {
     formats: formats,
@@ -27859,13 +28038,13 @@ module.exports = {
 
 
 /***/ }),
-/* 560 */
+/* 561 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(240);
+var utils = __webpack_require__(241);
 
 var has = Object.prototype.hasOwnProperty;
 
@@ -28033,14 +28212,14 @@ module.exports = function (str, opts) {
 
 
 /***/ }),
-/* 561 */
+/* 562 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(240);
-var formats = __webpack_require__(239);
+var utils = __webpack_require__(241);
+var formats = __webpack_require__(240);
 
 var arrayPrefixGenerators = {
     brackets: function brackets(prefix) { // eslint-disable-line func-name-matching
@@ -28247,7 +28426,7 @@ module.exports = function (object, opts) {
 
 
 /***/ }),
-/* 562 */
+/* 563 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var always = __webpack_require__(82);
@@ -28272,7 +28451,7 @@ module.exports = always(false);
 
 
 /***/ }),
-/* 563 */
+/* 564 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var always = __webpack_require__(82);
@@ -28297,7 +28476,7 @@ module.exports = always(true);
 
 
 /***/ }),
-/* 564 */
+/* 565 */
 /***/ (function(module, exports) {
 
 /**
@@ -28330,7 +28509,7 @@ module.exports = {'@@functional/placeholder': true};
 
 
 /***/ }),
-/* 565 */
+/* 566 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _concat = __webpack_require__(41);
@@ -28379,12 +28558,12 @@ module.exports = _curry1(function addIndex(fn) {
 
 
 /***/ }),
-/* 566 */
+/* 567 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _xall = __webpack_require__(637);
+var _xall = __webpack_require__(638);
 
 
 /**
@@ -28424,7 +28603,7 @@ module.exports = _curry2(_dispatchable(['all'], _xall, function all(fn, list) {
 
 
 /***/ }),
-/* 567 */
+/* 568 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -28475,7 +28654,7 @@ module.exports = _curry1(function allPass(preds) {
 
 
 /***/ }),
-/* 568 */
+/* 569 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -28527,13 +28706,13 @@ module.exports = _curry1(function anyPass(preds) {
 
 
 /***/ }),
-/* 569 */
+/* 570 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _aperture = __webpack_require__(620);
+var _aperture = __webpack_require__(621);
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _xaperture = __webpack_require__(638);
+var _xaperture = __webpack_require__(639);
 
 
 /**
@@ -28561,7 +28740,7 @@ module.exports = _curry2(_dispatchable([], _xaperture, _aperture));
 
 
 /***/ }),
-/* 570 */
+/* 571 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _concat = __webpack_require__(41);
@@ -28594,17 +28773,17 @@ module.exports = _curry2(function append(el, list) {
 
 
 /***/ }),
-/* 571 */
+/* 572 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
-var apply = __webpack_require__(244);
+var apply = __webpack_require__(245);
 var curryN = __webpack_require__(21);
 var map = __webpack_require__(29);
 var max = __webpack_require__(83);
 var pluck = __webpack_require__(97);
 var reduce = __webpack_require__(48);
-var values = __webpack_require__(296);
+var values = __webpack_require__(297);
 
 
 /**
@@ -28644,7 +28823,7 @@ module.exports = _curry1(function applySpec(spec) {
 
 
 /***/ }),
-/* 572 */
+/* 573 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -28679,7 +28858,7 @@ module.exports = _curry3(function ascend(fn, a, b) {
 
 
 /***/ }),
-/* 573 */
+/* 574 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -28719,12 +28898,12 @@ module.exports = _curry1(function binary(fn) {
 
 
 /***/ }),
-/* 574 */
+/* 575 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _isFunction = __webpack_require__(120);
-var and = __webpack_require__(242);
+var and = __webpack_require__(243);
 var lift = __webpack_require__(125);
 
 
@@ -28766,7 +28945,7 @@ module.exports = _curry2(function both(f, g) {
 
 
 /***/ }),
-/* 575 */
+/* 576 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var curry = __webpack_require__(117);
@@ -28809,7 +28988,7 @@ module.exports = curry(function call(fn) {
 
 
 /***/ }),
-/* 576 */
+/* 577 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -28845,10 +29024,10 @@ module.exports = _curry3(function clamp(min, max, value) {
 
 
 /***/ }),
-/* 577 */
+/* 578 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _clone = __webpack_require__(258);
+var _clone = __webpack_require__(259);
 var _curry1 = __webpack_require__(2);
 
 
@@ -28881,7 +29060,7 @@ module.exports = _curry1(function clone(value) {
 
 
 /***/ }),
-/* 578 */
+/* 579 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -28915,11 +29094,11 @@ module.exports = _curry1(function comparator(pred) {
 
 
 /***/ }),
-/* 579 */
+/* 580 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var lift = __webpack_require__(125);
-var not = __webpack_require__(280);
+var not = __webpack_require__(281);
 
 
 /**
@@ -28948,10 +29127,10 @@ module.exports = lift(not);
 
 
 /***/ }),
-/* 580 */
+/* 581 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var pipeP = __webpack_require__(286);
+var pipeP = __webpack_require__(287);
 var reverse = __webpack_require__(129);
 
 
@@ -28998,7 +29177,7 @@ module.exports = function composeP() {
 
 
 /***/ }),
-/* 581 */
+/* 582 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _arity = __webpack_require__(46);
@@ -29051,11 +29230,11 @@ module.exports = _curry1(function cond(pairs) {
 
 
 /***/ }),
-/* 582 */
+/* 583 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
-var constructN = __webpack_require__(248);
+var constructN = __webpack_require__(249);
 
 
 /**
@@ -29095,7 +29274,7 @@ module.exports = _curry1(function construct(Fn) {
 
 
 /***/ }),
-/* 583 */
+/* 584 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _contains = __webpack_require__(71);
@@ -29126,7 +29305,7 @@ module.exports = _curry2(_contains);
 
 
 /***/ }),
-/* 584 */
+/* 585 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var reduceBy = __webpack_require__(127);
@@ -29160,7 +29339,7 @@ module.exports = reduceBy(function(acc, elem) { return acc + 1; }, 0);
 
 
 /***/ }),
-/* 585 */
+/* 586 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var add = __webpack_require__(115);
@@ -29185,7 +29364,7 @@ module.exports = add(-1);
 
 
 /***/ }),
-/* 586 */
+/* 587 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -29220,12 +29399,12 @@ module.exports = _curry3(function descend(fn, a, b) {
 
 
 /***/ }),
-/* 587 */
+/* 588 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var assoc = __webpack_require__(116);
-var dissoc = __webpack_require__(253);
+var dissoc = __webpack_require__(254);
 
 
 /**
@@ -29261,7 +29440,7 @@ module.exports = _curry2(function dissocPath(path, obj) {
 
 
 /***/ }),
-/* 588 */
+/* 589 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -29293,13 +29472,13 @@ module.exports = _curry2(function divide(a, b) { return a / b; });
 
 
 /***/ }),
-/* 589 */
+/* 590 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _dropLast = __webpack_require__(622);
-var _xdropLast = __webpack_require__(641);
+var _dropLast = __webpack_require__(623);
+var _xdropLast = __webpack_require__(642);
 
 
 /**
@@ -29327,13 +29506,13 @@ module.exports = _curry2(_dispatchable([], _xdropLast, _dropLast));
 
 
 /***/ }),
-/* 590 */
+/* 591 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _dropLastWhile = __webpack_require__(623);
-var _xdropLastWhile = __webpack_require__(642);
+var _dropLastWhile = __webpack_require__(624);
+var _xdropLastWhile = __webpack_require__(643);
 
 
 /**
@@ -29362,13 +29541,13 @@ module.exports = _curry2(_dispatchable([], _xdropLastWhile, _dropLastWhile));
 
 
 /***/ }),
-/* 591 */
+/* 592 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
 var _dispatchable = __webpack_require__(15);
-var _xdropRepeatsWith = __webpack_require__(270);
-var dropRepeatsWith = __webpack_require__(255);
+var _xdropRepeatsWith = __webpack_require__(271);
+var dropRepeatsWith = __webpack_require__(256);
 var equals = __webpack_require__(45);
 
 
@@ -29394,12 +29573,12 @@ module.exports = _curry1(_dispatchable([], _xdropRepeatsWith(equals), dropRepeat
 
 
 /***/ }),
-/* 592 */
+/* 593 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _xdropWhile = __webpack_require__(643);
+var _xdropWhile = __webpack_require__(644);
 
 
 /**
@@ -29438,13 +29617,13 @@ module.exports = _curry2(_dispatchable(['dropWhile'], _xdropWhile, function drop
 
 
 /***/ }),
-/* 593 */
+/* 594 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _isFunction = __webpack_require__(120);
 var lift = __webpack_require__(125);
-var or = __webpack_require__(282);
+var or = __webpack_require__(283);
 
 
 /**
@@ -29484,7 +29663,7 @@ module.exports = _curry2(function either(f, g) {
 
 
 /***/ }),
-/* 594 */
+/* 595 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -29514,7 +29693,7 @@ module.exports = _curry3(function eqBy(f, x, y) {
 
 
 /***/ }),
-/* 595 */
+/* 596 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -29548,7 +29727,7 @@ module.exports = _curry3(function eqProps(prop, obj1, obj2) {
 
 
 /***/ }),
-/* 596 */
+/* 597 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -29596,12 +29775,12 @@ module.exports = _curry2(function evolve(transformations, object) {
 
 
 /***/ }),
-/* 597 */
+/* 598 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _xfind = __webpack_require__(645);
+var _xfind = __webpack_require__(646);
 
 
 /**
@@ -29641,12 +29820,12 @@ module.exports = _curry2(_dispatchable(['find'], _xfind, function find(fn, list)
 
 
 /***/ }),
-/* 598 */
+/* 599 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _xfindIndex = __webpack_require__(646);
+var _xfindIndex = __webpack_require__(647);
 
 
 /**
@@ -29685,12 +29864,12 @@ module.exports = _curry2(_dispatchable([], _xfindIndex, function findIndex(fn, l
 
 
 /***/ }),
-/* 599 */
+/* 600 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _xfindLast = __webpack_require__(647);
+var _xfindLast = __webpack_require__(648);
 
 
 /**
@@ -29727,12 +29906,12 @@ module.exports = _curry2(_dispatchable([], _xfindLast, function findLast(fn, lis
 
 
 /***/ }),
-/* 600 */
+/* 601 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _xfindLastIndex = __webpack_require__(648);
+var _xfindLastIndex = __webpack_require__(649);
 
 
 /**
@@ -29770,11 +29949,11 @@ module.exports = _curry2(_dispatchable([], _xfindLastIndex, function findLastInd
 
 
 /***/ }),
-/* 601 */
+/* 602 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
-var _makeFlat = __webpack_require__(268);
+var _makeFlat = __webpack_require__(269);
 
 
 /**
@@ -29798,7 +29977,7 @@ module.exports = _curry1(_makeFlat(true));
 
 
 /***/ }),
-/* 602 */
+/* 603 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _checkForMethod = __webpack_require__(92);
@@ -29851,7 +30030,7 @@ module.exports = _curry2(_checkForMethod('forEach', function forEach(fn, list) {
 
 
 /***/ }),
-/* 603 */
+/* 604 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -29893,7 +30072,7 @@ module.exports = _curry2(function forEachObjIndexed(fn, obj) {
 
 
 /***/ }),
-/* 604 */
+/* 605 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -29927,7 +30106,7 @@ module.exports = _curry1(function fromPairs(pairs) {
 
 
 /***/ }),
-/* 605 */
+/* 606 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _checkForMethod = __webpack_require__(92);
@@ -29984,7 +30163,7 @@ module.exports = _curry2(_checkForMethod('groupBy', reduceBy(function(acc, item)
 
 
 /***/ }),
-/* 606 */
+/* 607 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -30032,7 +30211,7 @@ module.exports = _curry2(function(fn, list) {
 
 
 /***/ }),
-/* 607 */
+/* 608 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -30063,7 +30242,7 @@ module.exports = _curry2(function gt(a, b) { return a > b; });
 
 
 /***/ }),
-/* 608 */
+/* 609 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -30094,7 +30273,7 @@ module.exports = _curry2(function gte(a, b) { return a >= b; });
 
 
 /***/ }),
-/* 609 */
+/* 610 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -30129,7 +30308,7 @@ module.exports = _curry2(_has);
 
 
 /***/ }),
-/* 610 */
+/* 611 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -30167,7 +30346,7 @@ module.exports = _curry2(function hasIn(prop, obj) {
 
 
 /***/ }),
-/* 611 */
+/* 612 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var nth = __webpack_require__(95);
@@ -30198,7 +30377,7 @@ module.exports = nth(0);
 
 
 /***/ }),
-/* 612 */
+/* 613 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -30240,7 +30419,7 @@ module.exports = _curry3(function ifElse(condition, onTrue, onFalse) {
 
 
 /***/ }),
-/* 613 */
+/* 614 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var add = __webpack_require__(115);
@@ -30265,7 +30444,7 @@ module.exports = add(1);
 
 
 /***/ }),
-/* 614 */
+/* 615 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var reduceBy = __webpack_require__(127);
@@ -30297,11 +30476,11 @@ module.exports = reduceBy(function(acc, elem) { return elem; }, null);
 
 
 /***/ }),
-/* 615 */
+/* 616 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var _indexOf = __webpack_require__(263);
+var _indexOf = __webpack_require__(264);
 var _isArray = __webpack_require__(59);
 
 
@@ -30332,7 +30511,7 @@ module.exports = _curry2(function indexOf(target, xs) {
 
 
 /***/ }),
-/* 616 */
+/* 617 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var slice = __webpack_require__(72);
@@ -30366,7 +30545,7 @@ module.exports = slice(0, -1);
 
 
 /***/ }),
-/* 617 */
+/* 618 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -30399,7 +30578,7 @@ module.exports = _curry3(function insert(idx, elt, list) {
 
 
 /***/ }),
-/* 618 */
+/* 619 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -30432,7 +30611,7 @@ module.exports = _curry3(function insertAll(idx, elts, list) {
 
 
 /***/ }),
-/* 619 */
+/* 620 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _contains = __webpack_require__(71);
@@ -30609,7 +30788,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 620 */
+/* 621 */
 /***/ (function(module, exports) {
 
 module.exports = function _aperture(n, list) {
@@ -30625,7 +30804,7 @@ module.exports = function _aperture(n, list) {
 
 
 /***/ }),
-/* 621 */
+/* 622 */
 /***/ (function(module, exports) {
 
 module.exports = function _arrayFromIterator(iter) {
@@ -30639,10 +30818,10 @@ module.exports = function _arrayFromIterator(iter) {
 
 
 /***/ }),
-/* 622 */
+/* 623 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var take = __webpack_require__(291);
+var take = __webpack_require__(292);
 
 module.exports = function dropLast(n, xs) {
   return take(n < xs.length ? xs.length - n : 0, xs);
@@ -30650,7 +30829,7 @@ module.exports = function dropLast(n, xs) {
 
 
 /***/ }),
-/* 623 */
+/* 624 */
 /***/ (function(module, exports) {
 
 module.exports = function dropLastWhile(pred, list) {
@@ -30663,15 +30842,15 @@ module.exports = function dropLastWhile(pred, list) {
 
 
 /***/ }),
-/* 624 */
+/* 625 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _arrayFromIterator = __webpack_require__(621);
-var _functionName = __webpack_require__(627);
+var _arrayFromIterator = __webpack_require__(622);
+var _functionName = __webpack_require__(628);
 var _has = __webpack_require__(23);
-var identical = __webpack_require__(257);
+var identical = __webpack_require__(258);
 var keys = __webpack_require__(47);
-var type = __webpack_require__(177);
+var type = __webpack_require__(178);
 
 
 module.exports = function _equals(a, b, stackA, stackB) {
@@ -30778,10 +30957,10 @@ module.exports = function _equals(a, b, stackA, stackB) {
 
 
 /***/ }),
-/* 625 */
+/* 626 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _forceReduced = __webpack_require__(626);
+var _forceReduced = __webpack_require__(627);
 var _reduce = __webpack_require__(34);
 var _xfBase = __webpack_require__(17);
 var isArrayLike = __webpack_require__(94);
@@ -30816,7 +30995,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 626 */
+/* 627 */
 /***/ (function(module, exports) {
 
 module.exports = function _forceReduced(x) {
@@ -30828,7 +31007,7 @@ module.exports = function _forceReduced(x) {
 
 
 /***/ }),
-/* 627 */
+/* 628 */
 /***/ (function(module, exports) {
 
 module.exports = function _functionName(f) {
@@ -30839,7 +31018,7 @@ module.exports = function _functionName(f) {
 
 
 /***/ }),
-/* 628 */
+/* 629 */
 /***/ (function(module, exports) {
 
 module.exports = function _isRegExp(x) {
@@ -30848,7 +31027,7 @@ module.exports = function _isRegExp(x) {
 
 
 /***/ }),
-/* 629 */
+/* 630 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _has = __webpack_require__(23);
@@ -30878,14 +31057,14 @@ module.exports = function _objectAssign(target) {
 
 
 /***/ }),
-/* 630 */
+/* 631 */
 /***/ (function(module, exports) {
 
 module.exports = function _of(x) { return [x]; };
 
 
 /***/ }),
-/* 631 */
+/* 632 */
 /***/ (function(module, exports) {
 
 module.exports = function _pipe(f, g) {
@@ -30896,7 +31075,7 @@ module.exports = function _pipe(f, g) {
 
 
 /***/ }),
-/* 632 */
+/* 633 */
 /***/ (function(module, exports) {
 
 module.exports = function _pipeP(f, g) {
@@ -30910,7 +31089,7 @@ module.exports = function _pipeP(f, g) {
 
 
 /***/ }),
-/* 633 */
+/* 634 */
 /***/ (function(module, exports) {
 
 module.exports = function _quote(s) {
@@ -30929,14 +31108,14 @@ module.exports = function _quote(s) {
 
 
 /***/ }),
-/* 634 */
+/* 635 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _assign = __webpack_require__(171);
-var _identity = __webpack_require__(173);
-var _isTransformer = __webpack_require__(174);
+var _assign = __webpack_require__(172);
+var _identity = __webpack_require__(174);
+var _isTransformer = __webpack_require__(175);
 var isArrayLike = __webpack_require__(94);
-var objOf = __webpack_require__(281);
+var objOf = __webpack_require__(282);
 
 
 module.exports = (function() {
@@ -30983,7 +31162,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 635 */
+/* 636 */
 /***/ (function(module, exports) {
 
 /**
@@ -31011,13 +31190,13 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 636 */
+/* 637 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _contains = __webpack_require__(71);
 var _map = __webpack_require__(123);
-var _quote = __webpack_require__(633);
-var _toISOString = __webpack_require__(635);
+var _quote = __webpack_require__(634);
+var _toISOString = __webpack_require__(636);
 var keys = __webpack_require__(47);
 var reject = __webpack_require__(128);
 
@@ -31063,7 +31242,7 @@ module.exports = function _toString(x, seen) {
 
 
 /***/ }),
-/* 637 */
+/* 638 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -31097,7 +31276,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 638 */
+/* 639 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _concat = __webpack_require__(41);
@@ -31139,11 +31318,11 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 639 */
+/* 640 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var _flatCat = __webpack_require__(625);
+var _flatCat = __webpack_require__(626);
 var map = __webpack_require__(29);
 
 
@@ -31153,7 +31332,7 @@ module.exports = _curry2(function _xchain(f, xf) {
 
 
 /***/ }),
-/* 640 */
+/* 641 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -31180,7 +31359,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 641 */
+/* 642 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -31220,7 +31399,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 642 */
+/* 643 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -31261,7 +31440,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 643 */
+/* 644 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -31290,7 +31469,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 644 */
+/* 645 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -31313,7 +31492,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 645 */
+/* 646 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -31347,7 +31526,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 646 */
+/* 647 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -31383,7 +31562,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 647 */
+/* 648 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -31411,7 +31590,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 648 */
+/* 649 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -31442,7 +31621,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 649 */
+/* 650 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -31465,7 +31644,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 650 */
+/* 651 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curryN = __webpack_require__(119);
@@ -31511,7 +31690,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 651 */
+/* 652 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -31537,7 +31716,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 652 */
+/* 653 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -31561,14 +31740,14 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 653 */
+/* 654 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _contains = __webpack_require__(71);
 var _curry2 = __webpack_require__(0);
-var _filter = __webpack_require__(262);
+var _filter = __webpack_require__(263);
 var flip = __webpack_require__(118);
-var uniq = __webpack_require__(178);
+var uniq = __webpack_require__(179);
 
 
 /**
@@ -31602,12 +31781,12 @@ module.exports = _curry2(function intersection(list1, list2) {
 
 
 /***/ }),
-/* 654 */
+/* 655 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _containsWith = __webpack_require__(172);
+var _containsWith = __webpack_require__(173);
 var _curry3 = __webpack_require__(3);
-var uniqWith = __webpack_require__(179);
+var uniqWith = __webpack_require__(180);
 
 
 /**
@@ -31667,7 +31846,7 @@ module.exports = _curry3(function intersectionWith(pred, list1, list2) {
 
 
 /***/ }),
-/* 655 */
+/* 656 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _checkForMethod = __webpack_require__(92);
@@ -31708,14 +31887,14 @@ module.exports = _curry2(_checkForMethod('intersperse', function intersperse(sep
 
 
 /***/ }),
-/* 656 */
+/* 657 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _clone = __webpack_require__(258);
+var _clone = __webpack_require__(259);
 var _curry3 = __webpack_require__(3);
-var _isTransformer = __webpack_require__(174);
+var _isTransformer = __webpack_require__(175);
 var _reduce = __webpack_require__(34);
-var _stepCat = __webpack_require__(634);
+var _stepCat = __webpack_require__(635);
 
 
 /**
@@ -31763,7 +31942,7 @@ module.exports = _curry3(function into(acc, xf, list) {
 
 
 /***/ }),
-/* 657 */
+/* 658 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -31811,7 +31990,7 @@ module.exports = _curry1(function invert(obj) {
 
 
 /***/ }),
-/* 658 */
+/* 659 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -31860,11 +32039,11 @@ module.exports = _curry1(function invertObj(obj) {
 
 
 /***/ }),
-/* 659 */
+/* 660 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
-var empty = __webpack_require__(256);
+var empty = __webpack_require__(257);
 var equals = __webpack_require__(45);
 
 
@@ -31895,7 +32074,7 @@ module.exports = _curry1(function isEmpty(x) {
 
 
 /***/ }),
-/* 660 */
+/* 661 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -31922,7 +32101,7 @@ module.exports = _curry1(function isNil(x) { return x == null; });
 
 
 /***/ }),
-/* 661 */
+/* 662 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var invoker = __webpack_require__(93);
@@ -31951,7 +32130,7 @@ module.exports = invoker(1, 'join');
 
 
 /***/ }),
-/* 662 */
+/* 663 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -31988,7 +32167,7 @@ module.exports = _curry1(function keysIn(obj) {
 
 
 /***/ }),
-/* 663 */
+/* 664 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -32032,13 +32211,13 @@ module.exports = _curry2(function lastIndexOf(target, xs) {
 
 
 /***/ }),
-/* 664 */
+/* 665 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
 var lens = __webpack_require__(124);
 var nth = __webpack_require__(95);
-var update = __webpack_require__(294);
+var update = __webpack_require__(295);
 
 
 /**
@@ -32067,11 +32246,11 @@ module.exports = _curry1(function lensIndex(n) {
 
 
 /***/ }),
-/* 665 */
+/* 666 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
-var assocPath = __webpack_require__(245);
+var assocPath = __webpack_require__(246);
 var lens = __webpack_require__(124);
 var path = __webpack_require__(96);
 
@@ -32106,13 +32285,13 @@ module.exports = _curry1(function lensPath(p) {
 
 
 /***/ }),
-/* 666 */
+/* 667 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
 var assoc = __webpack_require__(116);
 var lens = __webpack_require__(124);
-var prop = __webpack_require__(175);
+var prop = __webpack_require__(176);
 
 
 /**
@@ -32141,7 +32320,7 @@ module.exports = _curry1(function lensProp(k) {
 
 
 /***/ }),
-/* 667 */
+/* 668 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -32172,7 +32351,7 @@ module.exports = _curry2(function lt(a, b) { return a < b; });
 
 
 /***/ }),
-/* 668 */
+/* 669 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -32203,7 +32382,7 @@ module.exports = _curry2(function lte(a, b) { return a <= b; });
 
 
 /***/ }),
-/* 669 */
+/* 670 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -32258,7 +32437,7 @@ module.exports = _curry3(function mapAccum(fn, acc, list) {
 
 
 /***/ }),
-/* 670 */
+/* 671 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -32315,7 +32494,7 @@ module.exports = _curry3(function mapAccumRight(fn, acc, list) {
 
 
 /***/ }),
-/* 671 */
+/* 672 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -32353,7 +32532,7 @@ module.exports = _curry2(function mapObjIndexed(fn, obj) {
 
 
 /***/ }),
-/* 672 */
+/* 673 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -32386,11 +32565,11 @@ module.exports = _curry2(function match(rx, str) {
 
 
 /***/ }),
-/* 673 */
+/* 674 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var _isInteger = __webpack_require__(265);
+var _isInteger = __webpack_require__(266);
 
 
 /**
@@ -32433,7 +32612,7 @@ module.exports = _curry2(function mathMod(m, p) {
 
 
 /***/ }),
-/* 674 */
+/* 675 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -32469,11 +32648,11 @@ module.exports = _curry3(function maxBy(f, a, b) {
 
 
 /***/ }),
-/* 675 */
+/* 676 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
-var mean = __webpack_require__(277);
+var mean = __webpack_require__(278);
 
 
 /**
@@ -32506,7 +32685,7 @@ module.exports = _curry1(function median(list) {
 
 
 /***/ }),
-/* 676 */
+/* 677 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _arity = __webpack_require__(46);
@@ -32554,10 +32733,10 @@ module.exports = _curry1(function memoize(fn) {
 
 
 /***/ }),
-/* 677 */
+/* 678 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _assign = __webpack_require__(171);
+var _assign = __webpack_require__(172);
 var _curry2 = __webpack_require__(0);
 
 
@@ -32590,10 +32769,10 @@ module.exports = _curry2(function merge(l, r) {
 
 
 /***/ }),
-/* 678 */
+/* 679 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _assign = __webpack_require__(171);
+var _assign = __webpack_require__(172);
 var _curry1 = __webpack_require__(2);
 
 
@@ -32620,11 +32799,11 @@ module.exports = _curry1(function mergeAll(list) {
 
 
 /***/ }),
-/* 679 */
+/* 680 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
-var mergeWithKey = __webpack_require__(278);
+var mergeWithKey = __webpack_require__(279);
 
 
 /**
@@ -32659,7 +32838,7 @@ module.exports = _curry3(function mergeWith(fn, l, r) {
 
 
 /***/ }),
-/* 680 */
+/* 681 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -32686,7 +32865,7 @@ module.exports = _curry2(function min(a, b) { return b < a ? b : a; });
 
 
 /***/ }),
-/* 681 */
+/* 682 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -32722,7 +32901,7 @@ module.exports = _curry3(function minBy(f, a, b) {
 
 
 /***/ }),
-/* 682 */
+/* 683 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -32757,7 +32936,7 @@ module.exports = _curry2(function modulo(a, b) { return a % b; });
 
 
 /***/ }),
-/* 683 */
+/* 684 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -32781,14 +32960,14 @@ module.exports = _curry1(function negate(n) { return -n; });
 
 
 /***/ }),
-/* 684 */
+/* 685 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _complement = __webpack_require__(260);
+var _complement = __webpack_require__(261);
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _xany = __webpack_require__(269);
-var any = __webpack_require__(243);
+var _xany = __webpack_require__(270);
+var any = __webpack_require__(244);
 
 
 /**
@@ -32817,7 +32996,7 @@ module.exports = _curry2(_complement(_dispatchable(['any'], _xany, any)));
 
 
 /***/ }),
-/* 685 */
+/* 686 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -32852,11 +33031,11 @@ module.exports = _curry1(function nthArg(n) {
 
 
 /***/ }),
-/* 686 */
+/* 687 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
-var _of = __webpack_require__(630);
+var _of = __webpack_require__(631);
 
 
 /**
@@ -32881,7 +33060,7 @@ module.exports = _curry1(_of);
 
 
 /***/ }),
-/* 687 */
+/* 688 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _contains = __webpack_require__(71);
@@ -32916,7 +33095,7 @@ module.exports = _curry2(function omit(names, obj) {
 
 
 /***/ }),
-/* 688 */
+/* 689 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _arity = __webpack_require__(46);
@@ -32957,7 +33136,7 @@ module.exports = _curry1(function once(fn) {
 
 
 /***/ }),
-/* 689 */
+/* 690 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -32983,11 +33162,11 @@ module.exports = _curry2(function pair(fst, snd) { return [fst, snd]; });
 
 
 /***/ }),
-/* 690 */
+/* 691 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _concat = __webpack_require__(41);
-var _createPartialApplicator = __webpack_require__(261);
+var _createPartialApplicator = __webpack_require__(262);
 
 
 /**
@@ -33022,11 +33201,11 @@ module.exports = _createPartialApplicator(_concat);
 
 
 /***/ }),
-/* 691 */
+/* 692 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _concat = __webpack_require__(41);
-var _createPartialApplicator = __webpack_require__(261);
+var _createPartialApplicator = __webpack_require__(262);
 var flip = __webpack_require__(118);
 
 
@@ -33058,11 +33237,11 @@ module.exports = _createPartialApplicator(flip(_concat));
 
 
 /***/ }),
-/* 692 */
+/* 693 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var filter = __webpack_require__(169);
-var juxt = __webpack_require__(273);
+var filter = __webpack_require__(170);
+var juxt = __webpack_require__(274);
 var reject = __webpack_require__(128);
 
 
@@ -33093,7 +33272,7 @@ module.exports = juxt([filter, reject]);
 
 
 /***/ }),
-/* 693 */
+/* 694 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -33131,11 +33310,11 @@ module.exports = _curry3(function pathEq(_path, val, obj) {
 
 
 /***/ }),
-/* 694 */
+/* 695 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
-var defaultTo = __webpack_require__(250);
+var defaultTo = __webpack_require__(251);
 var path = __webpack_require__(96);
 
 
@@ -33164,7 +33343,7 @@ module.exports = _curry3(function pathOr(d, p, obj) {
 
 
 /***/ }),
-/* 695 */
+/* 696 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -33196,7 +33375,7 @@ module.exports = _curry3(function pathSatisfies(pred, propPath, obj) {
 
 
 /***/ }),
-/* 696 */
+/* 697 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -33234,7 +33413,7 @@ module.exports = _curry2(function pick(names, obj) {
 
 
 /***/ }),
-/* 697 */
+/* 698 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -33272,10 +33451,10 @@ module.exports = _curry2(function pickBy(test, obj) {
 
 
 /***/ }),
-/* 698 */
+/* 699 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var composeK = __webpack_require__(247);
+var composeK = __webpack_require__(248);
 var reverse = __webpack_require__(129);
 
 /**
@@ -33321,10 +33500,10 @@ module.exports = function pipeK() {
 
 
 /***/ }),
-/* 699 */
+/* 700 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var multiply = __webpack_require__(279);
+var multiply = __webpack_require__(280);
 var reduce = __webpack_require__(48);
 
 
@@ -33347,13 +33526,13 @@ module.exports = reduce(multiply, 1);
 
 
 /***/ }),
-/* 700 */
+/* 701 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _map = __webpack_require__(123);
-var identity = __webpack_require__(170);
-var pickAll = __webpack_require__(284);
-var useWith = __webpack_require__(295);
+var identity = __webpack_require__(171);
+var pickAll = __webpack_require__(285);
+var useWith = __webpack_require__(296);
 
 
 /**
@@ -33379,7 +33558,7 @@ module.exports = useWith(_map, [pickAll, identity]); // passing `identity` gives
 
 
 /***/ }),
-/* 701 */
+/* 702 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -33416,11 +33595,11 @@ module.exports = _curry3(function propEq(name, val, obj) {
 
 
 /***/ }),
-/* 702 */
+/* 703 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
-var is = __webpack_require__(272);
+var is = __webpack_require__(273);
 
 
 /**
@@ -33449,7 +33628,7 @@ module.exports = _curry3(function propIs(type, name, obj) {
 
 
 /***/ }),
-/* 703 */
+/* 704 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -33488,7 +33667,7 @@ module.exports = _curry3(function propOr(val, p, obj) {
 
 
 /***/ }),
-/* 704 */
+/* 705 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -33518,7 +33697,7 @@ module.exports = _curry3(function propSatisfies(pred, name, obj) {
 
 
 /***/ }),
-/* 705 */
+/* 706 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -33559,11 +33738,11 @@ module.exports = _curry2(function props(ps, obj) {
 
 
 /***/ }),
-/* 706 */
+/* 707 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var _isNumber = __webpack_require__(266);
+var _isNumber = __webpack_require__(267);
 
 
 /**
@@ -33597,7 +33776,7 @@ module.exports = _curry2(function range(from, to) {
 
 
 /***/ }),
-/* 707 */
+/* 708 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curryN = __webpack_require__(119);
@@ -33642,7 +33821,7 @@ module.exports = _curryN(4, [], function _reduceWhile(pred, fn, a, list) {
 
 
 /***/ }),
-/* 708 */
+/* 709 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -33676,7 +33855,7 @@ module.exports = _curry1(_reduced);
 
 
 /***/ }),
-/* 709 */
+/* 710 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -33709,12 +33888,12 @@ module.exports = _curry3(function remove(start, count, list) {
 
 
 /***/ }),
-/* 710 */
+/* 711 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var always = __webpack_require__(82);
-var times = __webpack_require__(292);
+var times = __webpack_require__(293);
 
 
 /**
@@ -33745,7 +33924,7 @@ module.exports = _curry2(function repeat(value, n) {
 
 
 /***/ }),
-/* 711 */
+/* 712 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -33777,7 +33956,7 @@ module.exports = _curry3(function replace(regex, replacement, str) {
 
 
 /***/ }),
-/* 712 */
+/* 713 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -33817,12 +33996,12 @@ module.exports = _curry3(function scan(fn, acc, list) {
 
 
 /***/ }),
-/* 713 */
+/* 714 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
 var always = __webpack_require__(82);
-var over = __webpack_require__(283);
+var over = __webpack_require__(284);
 
 
 /**
@@ -33853,7 +34032,7 @@ module.exports = _curry3(function set(lens, v, x) {
 
 
 /***/ }),
-/* 714 */
+/* 715 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -33885,7 +34064,7 @@ module.exports = _curry2(function sort(comparator, list) {
 
 
 /***/ }),
-/* 715 */
+/* 716 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -33933,7 +34112,7 @@ module.exports = _curry2(function sortBy(fn, list) {
 
 
 /***/ }),
-/* 716 */
+/* 717 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -33985,7 +34164,7 @@ module.exports = _curry2(function sortWith(fns, list) {
 
 
 /***/ }),
-/* 717 */
+/* 718 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var invoker = __webpack_require__(93);
@@ -34015,11 +34194,11 @@ module.exports = invoker(1, 'split');
 
 
 /***/ }),
-/* 718 */
+/* 719 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var length = __webpack_require__(275);
+var length = __webpack_require__(276);
 var slice = __webpack_require__(72);
 
 
@@ -34047,7 +34226,7 @@ module.exports = _curry2(function splitAt(index, array) {
 
 
 /***/ }),
-/* 719 */
+/* 720 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -34085,7 +34264,7 @@ module.exports = _curry2(function splitEvery(n, list) {
 
 
 /***/ }),
-/* 720 */
+/* 721 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -34125,7 +34304,7 @@ module.exports = _curry2(function splitWhen(pred, list) {
 
 
 /***/ }),
-/* 721 */
+/* 722 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -34160,12 +34339,12 @@ module.exports = _curry2(function subtract(a, b) {
 
 
 /***/ }),
-/* 722 */
+/* 723 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var concat = __webpack_require__(168);
-var difference = __webpack_require__(251);
+var concat = __webpack_require__(169);
+var difference = __webpack_require__(252);
 
 
 /**
@@ -34192,12 +34371,12 @@ module.exports = _curry2(function symmetricDifference(list1, list2) {
 
 
 /***/ }),
-/* 723 */
+/* 724 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
-var concat = __webpack_require__(168);
-var differenceWith = __webpack_require__(252);
+var concat = __webpack_require__(169);
+var differenceWith = __webpack_require__(253);
 
 
 /**
@@ -34228,11 +34407,11 @@ module.exports = _curry3(function symmetricDifferenceWith(pred, list1, list2) {
 
 
 /***/ }),
-/* 724 */
+/* 725 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var drop = __webpack_require__(254);
+var drop = __webpack_require__(255);
 
 
 /**
@@ -34263,7 +34442,7 @@ module.exports = _curry2(function takeLast(n, xs) {
 
 
 /***/ }),
-/* 725 */
+/* 726 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -34301,12 +34480,12 @@ module.exports = _curry2(function takeLastWhile(fn, list) {
 
 
 /***/ }),
-/* 726 */
+/* 727 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(15);
-var _xtakeWhile = __webpack_require__(652);
+var _xtakeWhile = __webpack_require__(653);
 
 
 /**
@@ -34346,7 +34525,7 @@ module.exports = _curry2(_dispatchable(['takeWhile'], _xtakeWhile, function take
 
 
 /***/ }),
-/* 727 */
+/* 728 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -34377,12 +34556,12 @@ module.exports = _curry2(function tap(fn, x) {
 
 
 /***/ }),
-/* 728 */
+/* 729 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _cloneRegExp = __webpack_require__(259);
+var _cloneRegExp = __webpack_require__(260);
 var _curry2 = __webpack_require__(0);
-var _isRegExp = __webpack_require__(628);
+var _isRegExp = __webpack_require__(629);
 var toString = __webpack_require__(98);
 
 
@@ -34412,7 +34591,7 @@ module.exports = _curry2(function test(pattern, str) {
 
 
 /***/ }),
-/* 729 */
+/* 730 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var invoker = __webpack_require__(93);
@@ -34437,7 +34616,7 @@ module.exports = invoker(0, 'toLowerCase');
 
 
 /***/ }),
-/* 730 */
+/* 731 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -34474,7 +34653,7 @@ module.exports = _curry1(function toPairs(obj) {
 
 
 /***/ }),
-/* 731 */
+/* 732 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -34511,7 +34690,7 @@ module.exports = _curry1(function toPairsIn(obj) {
 
 
 /***/ }),
-/* 732 */
+/* 733 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var invoker = __webpack_require__(93);
@@ -34536,11 +34715,11 @@ module.exports = invoker(0, 'toUpperCase');
 
 
 /***/ }),
-/* 733 */
+/* 734 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _reduce = __webpack_require__(34);
-var _xwrap = __webpack_require__(271);
+var _xwrap = __webpack_require__(272);
 var curryN = __webpack_require__(21);
 
 
@@ -34594,7 +34773,7 @@ module.exports = curryN(4, function transduce(xf, fn, acc, list) {
 
 
 /***/ }),
-/* 734 */
+/* 735 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -34645,12 +34824,12 @@ module.exports = _curry1(function transpose(outerlist) {
 
 
 /***/ }),
-/* 735 */
+/* 736 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
 var map = __webpack_require__(29);
-var sequence = __webpack_require__(289);
+var sequence = __webpack_require__(290);
 
 
 /**
@@ -34685,7 +34864,7 @@ module.exports = _curry3(function traverse(of, f, traversable) {
 
 
 /***/ }),
-/* 736 */
+/* 737 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -34727,7 +34906,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 737 */
+/* 738 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _arity = __webpack_require__(46);
@@ -34768,7 +34947,7 @@ module.exports = _curry2(function _tryCatch(tryer, catcher) {
 
 
 /***/ }),
-/* 738 */
+/* 739 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -34806,7 +34985,7 @@ module.exports = _curry1(function unapply(fn) {
 
 
 /***/ }),
-/* 739 */
+/* 740 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -34846,7 +35025,7 @@ module.exports = _curry1(function unary(fn) {
 
 
 /***/ }),
-/* 740 */
+/* 741 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -34890,7 +35069,7 @@ module.exports = _curry2(function uncurryN(depth, fn) {
 
 
 /***/ }),
-/* 741 */
+/* 742 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -34933,13 +35112,13 @@ module.exports = _curry2(function unfold(fn, seed) {
 
 
 /***/ }),
-/* 742 */
+/* 743 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _concat = __webpack_require__(41);
 var _curry2 = __webpack_require__(0);
-var compose = __webpack_require__(167);
-var uniq = __webpack_require__(178);
+var compose = __webpack_require__(168);
+var uniq = __webpack_require__(179);
 
 
 /**
@@ -34963,12 +35142,12 @@ module.exports = _curry2(compose(uniq, _concat));
 
 
 /***/ }),
-/* 743 */
+/* 744 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _concat = __webpack_require__(41);
 var _curry3 = __webpack_require__(3);
-var uniqWith = __webpack_require__(179);
+var uniqWith = __webpack_require__(180);
 
 
 /**
@@ -34999,7 +35178,7 @@ module.exports = _curry3(function unionWith(pred, list1, list2) {
 
 
 /***/ }),
-/* 744 */
+/* 745 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -35036,11 +35215,11 @@ module.exports = _curry3(function unless(pred, whenFalseFn, x) {
 
 
 /***/ }),
-/* 745 */
+/* 746 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _identity = __webpack_require__(173);
-var chain = __webpack_require__(166);
+var _identity = __webpack_require__(174);
+var chain = __webpack_require__(167);
 
 
 /**
@@ -35064,7 +35243,7 @@ module.exports = chain(_identity);
 
 
 /***/ }),
-/* 746 */
+/* 747 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -35099,7 +35278,7 @@ module.exports = _curry3(function until(pred, fn, init) {
 
 
 /***/ }),
-/* 747 */
+/* 748 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
@@ -35136,7 +35315,7 @@ module.exports = _curry1(function valuesIn(obj) {
 
 
 /***/ }),
-/* 748 */
+/* 749 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -35178,7 +35357,7 @@ module.exports = (function() {
 
 
 /***/ }),
-/* 749 */
+/* 750 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -35218,13 +35397,13 @@ module.exports = _curry3(function when(pred, whenTrueFn, x) {
 
 
 /***/ }),
-/* 750 */
+/* 751 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
 var equals = __webpack_require__(45);
 var map = __webpack_require__(29);
-var where = __webpack_require__(297);
+var where = __webpack_require__(298);
 
 
 /**
@@ -35260,7 +35439,7 @@ module.exports = _curry2(function whereEq(spec, testObj) {
 
 
 /***/ }),
-/* 751 */
+/* 752 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _contains = __webpack_require__(71);
@@ -35294,7 +35473,7 @@ module.exports = _curry2(function(xs, list) {
 
 
 /***/ }),
-/* 752 */
+/* 753 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -35337,7 +35516,7 @@ module.exports = _curry2(function xprod(a, b) { // = xprodWith(prepend); (takes 
 
 
 /***/ }),
-/* 753 */
+/* 754 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -35375,7 +35554,7 @@ module.exports = _curry2(function zip(a, b) {
 
 
 /***/ }),
-/* 754 */
+/* 755 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -35411,7 +35590,7 @@ module.exports = _curry2(function zipObj(keys, values) {
 
 
 /***/ }),
-/* 755 */
+/* 756 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
@@ -35454,17 +35633,17 @@ module.exports = _curry3(function zipWith(fn, a, b) {
 
 
 /***/ }),
-/* 756 */
+/* 757 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(770);
+module.exports = __webpack_require__(771);
 
 
 /***/ }),
-/* 757 */
+/* 758 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35543,7 +35722,7 @@ var ARIADOMPropertyConfig = {
 module.exports = ARIADOMPropertyConfig;
 
 /***/ }),
-/* 758 */
+/* 759 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35561,7 +35740,7 @@ module.exports = ARIADOMPropertyConfig;
 
 var ReactDOMComponentTree = __webpack_require__(16);
 
-var focusNode = __webpack_require__(234);
+var focusNode = __webpack_require__(235);
 
 var AutoFocusUtils = {
   focusDOMComponent: function () {
@@ -35572,7 +35751,7 @@ var AutoFocusUtils = {
 module.exports = AutoFocusUtils;
 
 /***/ }),
-/* 759 */
+/* 760 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35590,9 +35769,9 @@ module.exports = AutoFocusUtils;
 
 var EventPropagators = __webpack_require__(100);
 var ExecutionEnvironment = __webpack_require__(19);
-var FallbackCompositionState = __webpack_require__(765);
-var SyntheticCompositionEvent = __webpack_require__(808);
-var SyntheticInputEvent = __webpack_require__(811);
+var FallbackCompositionState = __webpack_require__(766);
+var SyntheticCompositionEvent = __webpack_require__(809);
+var SyntheticInputEvent = __webpack_require__(812);
 
 var END_KEYCODES = [9, 13, 27, 32]; // Tab, Return, Esc, Space
 var START_KEYCODE = 229;
@@ -35962,7 +36141,7 @@ var BeforeInputEventPlugin = {
 module.exports = BeforeInputEventPlugin;
 
 /***/ }),
-/* 760 */
+/* 761 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35978,12 +36157,12 @@ module.exports = BeforeInputEventPlugin;
 
 
 
-var CSSProperty = __webpack_require__(298);
+var CSSProperty = __webpack_require__(299);
 var ExecutionEnvironment = __webpack_require__(19);
 var ReactInstrumentation = __webpack_require__(35);
 
 var camelizeStyleName = __webpack_require__(543);
-var dangerousStyleValue = __webpack_require__(818);
+var dangerousStyleValue = __webpack_require__(819);
 var hyphenateStyleName = __webpack_require__(550);
 var memoizeStringOnly = __webpack_require__(553);
 var warning = __webpack_require__(5);
@@ -36176,7 +36355,7 @@ var CSSPropertyOperations = {
 module.exports = CSSPropertyOperations;
 
 /***/ }),
-/* 761 */
+/* 762 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36199,9 +36378,9 @@ var ReactDOMComponentTree = __webpack_require__(16);
 var ReactUpdates = __webpack_require__(49);
 var SyntheticEvent = __webpack_require__(55);
 
-var getEventTarget = __webpack_require__(191);
-var isEventSupported = __webpack_require__(192);
-var isTextInputElement = __webpack_require__(316);
+var getEventTarget = __webpack_require__(192);
+var isEventSupported = __webpack_require__(193);
+var isTextInputElement = __webpack_require__(317);
 
 var eventTypes = {
   change: {
@@ -36527,7 +36706,7 @@ var ChangeEventPlugin = {
 module.exports = ChangeEventPlugin;
 
 /***/ }),
-/* 762 */
+/* 763 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36580,7 +36759,7 @@ var Danger = {
 module.exports = Danger;
 
 /***/ }),
-/* 763 */
+/* 764 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36611,7 +36790,7 @@ var DefaultEventPluginOrder = ['ResponderEventPlugin', 'SimpleEventPlugin', 'Tap
 module.exports = DefaultEventPluginOrder;
 
 /***/ }),
-/* 764 */
+/* 765 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36716,7 +36895,7 @@ var EnterLeaveEventPlugin = {
 module.exports = EnterLeaveEventPlugin;
 
 /***/ }),
-/* 765 */
+/* 766 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36736,7 +36915,7 @@ var _assign = __webpack_require__(12);
 
 var PooledClass = __webpack_require__(73);
 
-var getTextContentAccessor = __webpack_require__(314);
+var getTextContentAccessor = __webpack_require__(315);
 
 /**
  * This helper class stores information about text content of a target node,
@@ -36816,7 +36995,7 @@ PooledClass.addPoolingTo(FallbackCompositionState);
 module.exports = FallbackCompositionState;
 
 /***/ }),
-/* 766 */
+/* 767 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37057,7 +37236,7 @@ var HTMLDOMPropertyConfig = {
 module.exports = HTMLDOMPropertyConfig;
 
 /***/ }),
-/* 767 */
+/* 768 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37075,10 +37254,10 @@ module.exports = HTMLDOMPropertyConfig;
 
 var ReactReconciler = __webpack_require__(85);
 
-var instantiateReactComponent = __webpack_require__(315);
-var KeyEscapeUtils = __webpack_require__(183);
-var shouldUpdateReactComponent = __webpack_require__(193);
-var traverseAllChildren = __webpack_require__(318);
+var instantiateReactComponent = __webpack_require__(316);
+var KeyEscapeUtils = __webpack_require__(184);
+var shouldUpdateReactComponent = __webpack_require__(194);
+var traverseAllChildren = __webpack_require__(319);
 var warning = __webpack_require__(5);
 
 var ReactComponentTreeHook;
@@ -37217,7 +37396,7 @@ module.exports = ReactChildReconciler;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(91)))
 
 /***/ }),
-/* 768 */
+/* 769 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37233,8 +37412,8 @@ module.exports = ReactChildReconciler;
 
 
 
-var DOMChildrenOperations = __webpack_require__(180);
-var ReactDOMIDOperations = __webpack_require__(775);
+var DOMChildrenOperations = __webpack_require__(181);
+var ReactDOMIDOperations = __webpack_require__(776);
 
 /**
  * Abstracts away all functionality of the reconciler that requires knowledge of
@@ -37252,7 +37431,7 @@ var ReactComponentBrowserEnvironment = {
 module.exports = ReactComponentBrowserEnvironment;
 
 /***/ }),
-/* 769 */
+/* 770 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37272,22 +37451,22 @@ var _prodInvariant = __webpack_require__(9),
     _assign = __webpack_require__(12);
 
 var React = __webpack_require__(86);
-var ReactComponentEnvironment = __webpack_require__(185);
+var ReactComponentEnvironment = __webpack_require__(186);
 var ReactCurrentOwner = __webpack_require__(50);
-var ReactErrorUtils = __webpack_require__(186);
+var ReactErrorUtils = __webpack_require__(187);
 var ReactInstanceMap = __webpack_require__(101);
 var ReactInstrumentation = __webpack_require__(35);
-var ReactNodeTypes = __webpack_require__(308);
+var ReactNodeTypes = __webpack_require__(309);
 var ReactReconciler = __webpack_require__(85);
 
 if (true) {
-  var checkReactTypeSpec = __webpack_require__(817);
+  var checkReactTypeSpec = __webpack_require__(818);
 }
 
 var emptyObject = __webpack_require__(90);
 var invariant = __webpack_require__(4);
-var shallowEqual = __webpack_require__(164);
-var shouldUpdateReactComponent = __webpack_require__(193);
+var shallowEqual = __webpack_require__(165);
+var shouldUpdateReactComponent = __webpack_require__(194);
 var warning = __webpack_require__(5);
 
 var CompositeTypes = {
@@ -38159,7 +38338,7 @@ var ReactCompositeComponent = {
 module.exports = ReactCompositeComponent;
 
 /***/ }),
-/* 770 */
+/* 771 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38178,15 +38357,15 @@ module.exports = ReactCompositeComponent;
 
 
 var ReactDOMComponentTree = __webpack_require__(16);
-var ReactDefaultInjection = __webpack_require__(787);
-var ReactMount = __webpack_require__(307);
+var ReactDefaultInjection = __webpack_require__(788);
+var ReactMount = __webpack_require__(308);
 var ReactReconciler = __webpack_require__(85);
 var ReactUpdates = __webpack_require__(49);
-var ReactVersion = __webpack_require__(802);
+var ReactVersion = __webpack_require__(803);
 
-var findDOMNode = __webpack_require__(819);
-var getHostComponentFromComposite = __webpack_require__(313);
-var renderSubtreeIntoContainer = __webpack_require__(826);
+var findDOMNode = __webpack_require__(820);
+var getHostComponentFromComposite = __webpack_require__(314);
+var renderSubtreeIntoContainer = __webpack_require__(827);
 var warning = __webpack_require__(5);
 
 ReactDefaultInjection.inject();
@@ -38263,9 +38442,9 @@ if (true) {
 
 if (true) {
   var ReactInstrumentation = __webpack_require__(35);
-  var ReactDOMUnknownPropertyHook = __webpack_require__(784);
-  var ReactDOMNullInputValuePropHook = __webpack_require__(778);
-  var ReactDOMInvalidARIAHook = __webpack_require__(777);
+  var ReactDOMUnknownPropertyHook = __webpack_require__(785);
+  var ReactDOMNullInputValuePropHook = __webpack_require__(779);
+  var ReactDOMInvalidARIAHook = __webpack_require__(778);
 
   ReactInstrumentation.debugTool.addHook(ReactDOMUnknownPropertyHook);
   ReactInstrumentation.debugTool.addHook(ReactDOMNullInputValuePropHook);
@@ -38275,7 +38454,7 @@ if (true) {
 module.exports = ReactDOM;
 
 /***/ }),
-/* 771 */
+/* 772 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38296,31 +38475,31 @@ module.exports = ReactDOM;
 var _prodInvariant = __webpack_require__(9),
     _assign = __webpack_require__(12);
 
-var AutoFocusUtils = __webpack_require__(758);
-var CSSPropertyOperations = __webpack_require__(760);
+var AutoFocusUtils = __webpack_require__(759);
+var CSSPropertyOperations = __webpack_require__(761);
 var DOMLazyTree = __webpack_require__(84);
-var DOMNamespaces = __webpack_require__(181);
+var DOMNamespaces = __webpack_require__(182);
 var DOMProperty = __webpack_require__(61);
-var DOMPropertyOperations = __webpack_require__(300);
+var DOMPropertyOperations = __webpack_require__(301);
 var EventPluginHub = __webpack_require__(99);
 var EventPluginRegistry = __webpack_require__(130);
 var ReactBrowserEventEmitter = __webpack_require__(131);
-var ReactDOMComponentFlags = __webpack_require__(301);
+var ReactDOMComponentFlags = __webpack_require__(302);
 var ReactDOMComponentTree = __webpack_require__(16);
-var ReactDOMInput = __webpack_require__(776);
-var ReactDOMOption = __webpack_require__(779);
-var ReactDOMSelect = __webpack_require__(302);
-var ReactDOMTextarea = __webpack_require__(782);
+var ReactDOMInput = __webpack_require__(777);
+var ReactDOMOption = __webpack_require__(780);
+var ReactDOMSelect = __webpack_require__(303);
+var ReactDOMTextarea = __webpack_require__(783);
 var ReactInstrumentation = __webpack_require__(35);
-var ReactMultiChild = __webpack_require__(795);
-var ReactServerRenderingTransaction = __webpack_require__(800);
+var ReactMultiChild = __webpack_require__(796);
+var ReactServerRenderingTransaction = __webpack_require__(801);
 
 var emptyFunction = __webpack_require__(40);
 var escapeTextContentForBrowser = __webpack_require__(134);
 var invariant = __webpack_require__(4);
-var isEventSupported = __webpack_require__(192);
-var shallowEqual = __webpack_require__(164);
-var validateDOMNesting = __webpack_require__(194);
+var isEventSupported = __webpack_require__(193);
+var shallowEqual = __webpack_require__(165);
+var validateDOMNesting = __webpack_require__(195);
 var warning = __webpack_require__(5);
 
 var Flags = ReactDOMComponentFlags;
@@ -39281,7 +39460,7 @@ _assign(ReactDOMComponent.prototype, ReactDOMComponent.Mixin, ReactMultiChild.Mi
 module.exports = ReactDOMComponent;
 
 /***/ }),
-/* 772 */
+/* 773 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39297,7 +39476,7 @@ module.exports = ReactDOMComponent;
 
 
 
-var validateDOMNesting = __webpack_require__(194);
+var validateDOMNesting = __webpack_require__(195);
 
 var DOC_NODE_TYPE = 9;
 
@@ -39319,7 +39498,7 @@ function ReactDOMContainerInfo(topLevelWrapper, node) {
 module.exports = ReactDOMContainerInfo;
 
 /***/ }),
-/* 773 */
+/* 774 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39384,7 +39563,7 @@ _assign(ReactDOMEmptyComponent.prototype, {
 module.exports = ReactDOMEmptyComponent;
 
 /***/ }),
-/* 774 */
+/* 775 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39408,7 +39587,7 @@ var ReactDOMFeatureFlags = {
 module.exports = ReactDOMFeatureFlags;
 
 /***/ }),
-/* 775 */
+/* 776 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39424,7 +39603,7 @@ module.exports = ReactDOMFeatureFlags;
 
 
 
-var DOMChildrenOperations = __webpack_require__(180);
+var DOMChildrenOperations = __webpack_require__(181);
 var ReactDOMComponentTree = __webpack_require__(16);
 
 /**
@@ -39447,7 +39626,7 @@ var ReactDOMIDOperations = {
 module.exports = ReactDOMIDOperations;
 
 /***/ }),
-/* 776 */
+/* 777 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39466,8 +39645,8 @@ module.exports = ReactDOMIDOperations;
 var _prodInvariant = __webpack_require__(9),
     _assign = __webpack_require__(12);
 
-var DOMPropertyOperations = __webpack_require__(300);
-var LinkedValueUtils = __webpack_require__(184);
+var DOMPropertyOperations = __webpack_require__(301);
+var LinkedValueUtils = __webpack_require__(185);
 var ReactDOMComponentTree = __webpack_require__(16);
 var ReactUpdates = __webpack_require__(49);
 
@@ -39737,7 +39916,7 @@ function _handleChange(event) {
 module.exports = ReactDOMInput;
 
 /***/ }),
-/* 777 */
+/* 778 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39835,7 +40014,7 @@ var ReactDOMInvalidARIAHook = {
 module.exports = ReactDOMInvalidARIAHook;
 
 /***/ }),
-/* 778 */
+/* 779 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39883,7 +40062,7 @@ var ReactDOMNullInputValuePropHook = {
 module.exports = ReactDOMNullInputValuePropHook;
 
 /***/ }),
-/* 779 */
+/* 780 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39903,7 +40082,7 @@ var _assign = __webpack_require__(12);
 
 var React = __webpack_require__(86);
 var ReactDOMComponentTree = __webpack_require__(16);
-var ReactDOMSelect = __webpack_require__(302);
+var ReactDOMSelect = __webpack_require__(303);
 
 var warning = __webpack_require__(5);
 var didWarnInvalidOptionChildren = false;
@@ -40011,7 +40190,7 @@ var ReactDOMOption = {
 module.exports = ReactDOMOption;
 
 /***/ }),
-/* 780 */
+/* 781 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40029,8 +40208,8 @@ module.exports = ReactDOMOption;
 
 var ExecutionEnvironment = __webpack_require__(19);
 
-var getNodeForCharacterOffset = __webpack_require__(823);
-var getTextContentAccessor = __webpack_require__(314);
+var getNodeForCharacterOffset = __webpack_require__(824);
+var getTextContentAccessor = __webpack_require__(315);
 
 /**
  * While `isCollapsed` is available on the Selection object and `collapsed`
@@ -40228,7 +40407,7 @@ var ReactDOMSelection = {
 module.exports = ReactDOMSelection;
 
 /***/ }),
-/* 781 */
+/* 782 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40247,13 +40426,13 @@ module.exports = ReactDOMSelection;
 var _prodInvariant = __webpack_require__(9),
     _assign = __webpack_require__(12);
 
-var DOMChildrenOperations = __webpack_require__(180);
+var DOMChildrenOperations = __webpack_require__(181);
 var DOMLazyTree = __webpack_require__(84);
 var ReactDOMComponentTree = __webpack_require__(16);
 
 var escapeTextContentForBrowser = __webpack_require__(134);
 var invariant = __webpack_require__(4);
-var validateDOMNesting = __webpack_require__(194);
+var validateDOMNesting = __webpack_require__(195);
 
 /**
  * Text nodes violate a couple assumptions that React makes about components:
@@ -40397,7 +40576,7 @@ _assign(ReactDOMTextComponent.prototype, {
 module.exports = ReactDOMTextComponent;
 
 /***/ }),
-/* 782 */
+/* 783 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40416,7 +40595,7 @@ module.exports = ReactDOMTextComponent;
 var _prodInvariant = __webpack_require__(9),
     _assign = __webpack_require__(12);
 
-var LinkedValueUtils = __webpack_require__(184);
+var LinkedValueUtils = __webpack_require__(185);
 var ReactDOMComponentTree = __webpack_require__(16);
 var ReactUpdates = __webpack_require__(49);
 
@@ -40562,7 +40741,7 @@ function _handleChange(event) {
 module.exports = ReactDOMTextarea;
 
 /***/ }),
-/* 783 */
+/* 784 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40703,7 +40882,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 784 */
+/* 785 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40820,7 +40999,7 @@ var ReactDOMUnknownPropertyHook = {
 module.exports = ReactDOMUnknownPropertyHook;
 
 /***/ }),
-/* 785 */
+/* 786 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40837,8 +41016,8 @@ module.exports = ReactDOMUnknownPropertyHook;
 
 
 
-var ReactInvalidSetStateWarningHook = __webpack_require__(793);
-var ReactHostOperationHistoryHook = __webpack_require__(791);
+var ReactInvalidSetStateWarningHook = __webpack_require__(794);
+var ReactHostOperationHistoryHook = __webpack_require__(792);
 var ReactComponentTreeHook = __webpack_require__(30);
 var ExecutionEnvironment = __webpack_require__(19);
 
@@ -41184,7 +41363,7 @@ if (/[?&]react_perf\b/.test(url)) {
 module.exports = ReactDebugTool;
 
 /***/ }),
-/* 786 */
+/* 787 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41257,7 +41436,7 @@ var ReactDefaultBatchingStrategy = {
 module.exports = ReactDefaultBatchingStrategy;
 
 /***/ }),
-/* 787 */
+/* 788 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41273,25 +41452,25 @@ module.exports = ReactDefaultBatchingStrategy;
 
 
 
-var ARIADOMPropertyConfig = __webpack_require__(757);
-var BeforeInputEventPlugin = __webpack_require__(759);
-var ChangeEventPlugin = __webpack_require__(761);
-var DefaultEventPluginOrder = __webpack_require__(763);
-var EnterLeaveEventPlugin = __webpack_require__(764);
-var HTMLDOMPropertyConfig = __webpack_require__(766);
-var ReactComponentBrowserEnvironment = __webpack_require__(768);
-var ReactDOMComponent = __webpack_require__(771);
+var ARIADOMPropertyConfig = __webpack_require__(758);
+var BeforeInputEventPlugin = __webpack_require__(760);
+var ChangeEventPlugin = __webpack_require__(762);
+var DefaultEventPluginOrder = __webpack_require__(764);
+var EnterLeaveEventPlugin = __webpack_require__(765);
+var HTMLDOMPropertyConfig = __webpack_require__(767);
+var ReactComponentBrowserEnvironment = __webpack_require__(769);
+var ReactDOMComponent = __webpack_require__(772);
 var ReactDOMComponentTree = __webpack_require__(16);
-var ReactDOMEmptyComponent = __webpack_require__(773);
-var ReactDOMTreeTraversal = __webpack_require__(783);
-var ReactDOMTextComponent = __webpack_require__(781);
-var ReactDefaultBatchingStrategy = __webpack_require__(786);
-var ReactEventListener = __webpack_require__(790);
-var ReactInjection = __webpack_require__(792);
-var ReactReconcileTransaction = __webpack_require__(798);
-var SVGDOMPropertyConfig = __webpack_require__(803);
-var SelectEventPlugin = __webpack_require__(804);
-var SimpleEventPlugin = __webpack_require__(805);
+var ReactDOMEmptyComponent = __webpack_require__(774);
+var ReactDOMTreeTraversal = __webpack_require__(784);
+var ReactDOMTextComponent = __webpack_require__(782);
+var ReactDefaultBatchingStrategy = __webpack_require__(787);
+var ReactEventListener = __webpack_require__(791);
+var ReactInjection = __webpack_require__(793);
+var ReactReconcileTransaction = __webpack_require__(799);
+var SVGDOMPropertyConfig = __webpack_require__(804);
+var SelectEventPlugin = __webpack_require__(805);
+var SimpleEventPlugin = __webpack_require__(806);
 
 var alreadyInjected = false;
 
@@ -41348,7 +41527,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 788 */
+/* 789 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41373,7 +41552,7 @@ var REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol['for'] && Symbol
 module.exports = REACT_ELEMENT_TYPE;
 
 /***/ }),
-/* 789 */
+/* 790 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41411,7 +41590,7 @@ var ReactEventEmitterMixin = {
 module.exports = ReactEventEmitterMixin;
 
 /***/ }),
-/* 790 */
+/* 791 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41429,13 +41608,13 @@ module.exports = ReactEventEmitterMixin;
 
 var _assign = __webpack_require__(12);
 
-var EventListener = __webpack_require__(233);
+var EventListener = __webpack_require__(234);
 var ExecutionEnvironment = __webpack_require__(19);
 var PooledClass = __webpack_require__(73);
 var ReactDOMComponentTree = __webpack_require__(16);
 var ReactUpdates = __webpack_require__(49);
 
-var getEventTarget = __webpack_require__(191);
+var getEventTarget = __webpack_require__(192);
 var getUnboundedScrollPosition = __webpack_require__(548);
 
 /**
@@ -41571,7 +41750,7 @@ var ReactEventListener = {
 module.exports = ReactEventListener;
 
 /***/ }),
-/* 791 */
+/* 792 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41610,7 +41789,7 @@ var ReactHostOperationHistoryHook = {
 module.exports = ReactHostOperationHistoryHook;
 
 /***/ }),
-/* 792 */
+/* 793 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41628,11 +41807,11 @@ module.exports = ReactHostOperationHistoryHook;
 
 var DOMProperty = __webpack_require__(61);
 var EventPluginHub = __webpack_require__(99);
-var EventPluginUtils = __webpack_require__(182);
-var ReactComponentEnvironment = __webpack_require__(185);
-var ReactEmptyComponent = __webpack_require__(303);
+var EventPluginUtils = __webpack_require__(183);
+var ReactComponentEnvironment = __webpack_require__(186);
+var ReactEmptyComponent = __webpack_require__(304);
 var ReactBrowserEventEmitter = __webpack_require__(131);
-var ReactHostComponent = __webpack_require__(305);
+var ReactHostComponent = __webpack_require__(306);
 var ReactUpdates = __webpack_require__(49);
 
 var ReactInjection = {
@@ -41649,7 +41828,7 @@ var ReactInjection = {
 module.exports = ReactInjection;
 
 /***/ }),
-/* 793 */
+/* 794 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41691,7 +41870,7 @@ var ReactInvalidSetStateWarningHook = {
 module.exports = ReactInvalidSetStateWarningHook;
 
 /***/ }),
-/* 794 */
+/* 795 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41707,7 +41886,7 @@ module.exports = ReactInvalidSetStateWarningHook;
 
 
 
-var adler32 = __webpack_require__(816);
+var adler32 = __webpack_require__(817);
 
 var TAG_END = /\/?>/;
 var COMMENT_START = /^<\!\-\-/;
@@ -41746,7 +41925,7 @@ var ReactMarkupChecksum = {
 module.exports = ReactMarkupChecksum;
 
 /***/ }),
-/* 795 */
+/* 796 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41764,16 +41943,16 @@ module.exports = ReactMarkupChecksum;
 
 var _prodInvariant = __webpack_require__(9);
 
-var ReactComponentEnvironment = __webpack_require__(185);
+var ReactComponentEnvironment = __webpack_require__(186);
 var ReactInstanceMap = __webpack_require__(101);
 var ReactInstrumentation = __webpack_require__(35);
 
 var ReactCurrentOwner = __webpack_require__(50);
 var ReactReconciler = __webpack_require__(85);
-var ReactChildReconciler = __webpack_require__(767);
+var ReactChildReconciler = __webpack_require__(768);
 
 var emptyFunction = __webpack_require__(40);
-var flattenChildren = __webpack_require__(820);
+var flattenChildren = __webpack_require__(821);
 var invariant = __webpack_require__(4);
 
 /**
@@ -42201,7 +42380,7 @@ var ReactMultiChild = {
 module.exports = ReactMultiChild;
 
 /***/ }),
-/* 796 */
+/* 797 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42300,7 +42479,7 @@ var ReactOwner = {
 module.exports = ReactOwner;
 
 /***/ }),
-/* 797 */
+/* 798 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42330,7 +42509,7 @@ if (true) {
 module.exports = ReactPropTypeLocationNames;
 
 /***/ }),
-/* 798 */
+/* 799 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42348,13 +42527,13 @@ module.exports = ReactPropTypeLocationNames;
 
 var _assign = __webpack_require__(12);
 
-var CallbackQueue = __webpack_require__(299);
+var CallbackQueue = __webpack_require__(300);
 var PooledClass = __webpack_require__(73);
 var ReactBrowserEventEmitter = __webpack_require__(131);
-var ReactInputSelection = __webpack_require__(306);
+var ReactInputSelection = __webpack_require__(307);
 var ReactInstrumentation = __webpack_require__(35);
 var Transaction = __webpack_require__(133);
-var ReactUpdateQueue = __webpack_require__(187);
+var ReactUpdateQueue = __webpack_require__(188);
 
 /**
  * Ensures that, when possible, the selection range (currently selected text
@@ -42513,7 +42692,7 @@ PooledClass.addPoolingTo(ReactReconcileTransaction);
 module.exports = ReactReconcileTransaction;
 
 /***/ }),
-/* 799 */
+/* 800 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42530,7 +42709,7 @@ module.exports = ReactReconcileTransaction;
 
 
 
-var ReactOwner = __webpack_require__(796);
+var ReactOwner = __webpack_require__(797);
 
 var ReactRef = {};
 
@@ -42607,7 +42786,7 @@ ReactRef.detachRefs = function (instance, element) {
 module.exports = ReactRef;
 
 /***/ }),
-/* 800 */
+/* 801 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42628,7 +42807,7 @@ var _assign = __webpack_require__(12);
 var PooledClass = __webpack_require__(73);
 var Transaction = __webpack_require__(133);
 var ReactInstrumentation = __webpack_require__(35);
-var ReactServerUpdateQueue = __webpack_require__(801);
+var ReactServerUpdateQueue = __webpack_require__(802);
 
 /**
  * Executed within the scope of the `Transaction` instance. Consider these as
@@ -42702,7 +42881,7 @@ PooledClass.addPoolingTo(ReactServerRenderingTransaction);
 module.exports = ReactServerRenderingTransaction;
 
 /***/ }),
-/* 801 */
+/* 802 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42721,7 +42900,7 @@ module.exports = ReactServerRenderingTransaction;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ReactUpdateQueue = __webpack_require__(187);
+var ReactUpdateQueue = __webpack_require__(188);
 
 var warning = __webpack_require__(5);
 
@@ -42846,7 +43025,7 @@ var ReactServerUpdateQueue = function () {
 module.exports = ReactServerUpdateQueue;
 
 /***/ }),
-/* 802 */
+/* 803 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42865,7 +43044,7 @@ module.exports = ReactServerUpdateQueue;
 module.exports = '15.5.4';
 
 /***/ }),
-/* 803 */
+/* 804 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43172,7 +43351,7 @@ Object.keys(ATTRS).forEach(function (key) {
 module.exports = SVGDOMPropertyConfig;
 
 /***/ }),
-/* 804 */
+/* 805 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43191,12 +43370,12 @@ module.exports = SVGDOMPropertyConfig;
 var EventPropagators = __webpack_require__(100);
 var ExecutionEnvironment = __webpack_require__(19);
 var ReactDOMComponentTree = __webpack_require__(16);
-var ReactInputSelection = __webpack_require__(306);
+var ReactInputSelection = __webpack_require__(307);
 var SyntheticEvent = __webpack_require__(55);
 
-var getActiveElement = __webpack_require__(235);
-var isTextInputElement = __webpack_require__(316);
-var shallowEqual = __webpack_require__(164);
+var getActiveElement = __webpack_require__(236);
+var isTextInputElement = __webpack_require__(317);
+var shallowEqual = __webpack_require__(165);
 
 var skipSelectionChangeEvent = ExecutionEnvironment.canUseDOM && 'documentMode' in document && document.documentMode <= 11;
 
@@ -43368,7 +43547,7 @@ var SelectEventPlugin = {
 module.exports = SelectEventPlugin;
 
 /***/ }),
-/* 805 */
+/* 806 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43387,23 +43566,23 @@ module.exports = SelectEventPlugin;
 
 var _prodInvariant = __webpack_require__(9);
 
-var EventListener = __webpack_require__(233);
+var EventListener = __webpack_require__(234);
 var EventPropagators = __webpack_require__(100);
 var ReactDOMComponentTree = __webpack_require__(16);
-var SyntheticAnimationEvent = __webpack_require__(806);
-var SyntheticClipboardEvent = __webpack_require__(807);
+var SyntheticAnimationEvent = __webpack_require__(807);
+var SyntheticClipboardEvent = __webpack_require__(808);
 var SyntheticEvent = __webpack_require__(55);
-var SyntheticFocusEvent = __webpack_require__(810);
-var SyntheticKeyboardEvent = __webpack_require__(812);
+var SyntheticFocusEvent = __webpack_require__(811);
+var SyntheticKeyboardEvent = __webpack_require__(813);
 var SyntheticMouseEvent = __webpack_require__(132);
-var SyntheticDragEvent = __webpack_require__(809);
-var SyntheticTouchEvent = __webpack_require__(813);
-var SyntheticTransitionEvent = __webpack_require__(814);
+var SyntheticDragEvent = __webpack_require__(810);
+var SyntheticTouchEvent = __webpack_require__(814);
+var SyntheticTransitionEvent = __webpack_require__(815);
 var SyntheticUIEvent = __webpack_require__(102);
-var SyntheticWheelEvent = __webpack_require__(815);
+var SyntheticWheelEvent = __webpack_require__(816);
 
 var emptyFunction = __webpack_require__(40);
-var getEventCharCode = __webpack_require__(189);
+var getEventCharCode = __webpack_require__(190);
 var invariant = __webpack_require__(4);
 
 /**
@@ -43601,7 +43780,7 @@ var SimpleEventPlugin = {
 module.exports = SimpleEventPlugin;
 
 /***/ }),
-/* 806 */
+/* 807 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43645,7 +43824,7 @@ SyntheticEvent.augmentClass(SyntheticAnimationEvent, AnimationEventInterface);
 module.exports = SyntheticAnimationEvent;
 
 /***/ }),
-/* 807 */
+/* 808 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43688,7 +43867,7 @@ SyntheticEvent.augmentClass(SyntheticClipboardEvent, ClipboardEventInterface);
 module.exports = SyntheticClipboardEvent;
 
 /***/ }),
-/* 808 */
+/* 809 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43729,7 +43908,7 @@ SyntheticEvent.augmentClass(SyntheticCompositionEvent, CompositionEventInterface
 module.exports = SyntheticCompositionEvent;
 
 /***/ }),
-/* 809 */
+/* 810 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43770,7 +43949,7 @@ SyntheticMouseEvent.augmentClass(SyntheticDragEvent, DragEventInterface);
 module.exports = SyntheticDragEvent;
 
 /***/ }),
-/* 810 */
+/* 811 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43811,7 +43990,7 @@ SyntheticUIEvent.augmentClass(SyntheticFocusEvent, FocusEventInterface);
 module.exports = SyntheticFocusEvent;
 
 /***/ }),
-/* 811 */
+/* 812 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43853,7 +44032,7 @@ SyntheticEvent.augmentClass(SyntheticInputEvent, InputEventInterface);
 module.exports = SyntheticInputEvent;
 
 /***/ }),
-/* 812 */
+/* 813 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43871,9 +44050,9 @@ module.exports = SyntheticInputEvent;
 
 var SyntheticUIEvent = __webpack_require__(102);
 
-var getEventCharCode = __webpack_require__(189);
-var getEventKey = __webpack_require__(821);
-var getEventModifierState = __webpack_require__(190);
+var getEventCharCode = __webpack_require__(190);
+var getEventKey = __webpack_require__(822);
+var getEventModifierState = __webpack_require__(191);
 
 /**
  * @interface KeyboardEvent
@@ -43942,7 +44121,7 @@ SyntheticUIEvent.augmentClass(SyntheticKeyboardEvent, KeyboardEventInterface);
 module.exports = SyntheticKeyboardEvent;
 
 /***/ }),
-/* 813 */
+/* 814 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43960,7 +44139,7 @@ module.exports = SyntheticKeyboardEvent;
 
 var SyntheticUIEvent = __webpack_require__(102);
 
-var getEventModifierState = __webpack_require__(190);
+var getEventModifierState = __webpack_require__(191);
 
 /**
  * @interface TouchEvent
@@ -43992,7 +44171,7 @@ SyntheticUIEvent.augmentClass(SyntheticTouchEvent, TouchEventInterface);
 module.exports = SyntheticTouchEvent;
 
 /***/ }),
-/* 814 */
+/* 815 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44036,7 +44215,7 @@ SyntheticEvent.augmentClass(SyntheticTransitionEvent, TransitionEventInterface);
 module.exports = SyntheticTransitionEvent;
 
 /***/ }),
-/* 815 */
+/* 816 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44095,7 +44274,7 @@ SyntheticMouseEvent.augmentClass(SyntheticWheelEvent, WheelEventInterface);
 module.exports = SyntheticWheelEvent;
 
 /***/ }),
-/* 816 */
+/* 817 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44144,7 +44323,7 @@ function adler32(data) {
 module.exports = adler32;
 
 /***/ }),
-/* 817 */
+/* 818 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44162,8 +44341,8 @@ module.exports = adler32;
 
 var _prodInvariant = __webpack_require__(9);
 
-var ReactPropTypeLocationNames = __webpack_require__(797);
-var ReactPropTypesSecret = __webpack_require__(309);
+var ReactPropTypeLocationNames = __webpack_require__(798);
+var ReactPropTypesSecret = __webpack_require__(310);
 
 var invariant = __webpack_require__(4);
 var warning = __webpack_require__(5);
@@ -44237,7 +44416,7 @@ module.exports = checkReactTypeSpec;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(91)))
 
 /***/ }),
-/* 818 */
+/* 819 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44253,7 +44432,7 @@ module.exports = checkReactTypeSpec;
 
 
 
-var CSSProperty = __webpack_require__(298);
+var CSSProperty = __webpack_require__(299);
 var warning = __webpack_require__(5);
 
 var isUnitlessNumber = CSSProperty.isUnitlessNumber;
@@ -44321,7 +44500,7 @@ function dangerousStyleValue(name, value, component) {
 module.exports = dangerousStyleValue;
 
 /***/ }),
-/* 819 */
+/* 820 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44343,7 +44522,7 @@ var ReactCurrentOwner = __webpack_require__(50);
 var ReactDOMComponentTree = __webpack_require__(16);
 var ReactInstanceMap = __webpack_require__(101);
 
-var getHostComponentFromComposite = __webpack_require__(313);
+var getHostComponentFromComposite = __webpack_require__(314);
 var invariant = __webpack_require__(4);
 var warning = __webpack_require__(5);
 
@@ -44386,7 +44565,7 @@ function findDOMNode(componentOrElement) {
 module.exports = findDOMNode;
 
 /***/ }),
-/* 820 */
+/* 821 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44403,8 +44582,8 @@ module.exports = findDOMNode;
 
 
 
-var KeyEscapeUtils = __webpack_require__(183);
-var traverseAllChildren = __webpack_require__(318);
+var KeyEscapeUtils = __webpack_require__(184);
+var traverseAllChildren = __webpack_require__(319);
 var warning = __webpack_require__(5);
 
 var ReactComponentTreeHook;
@@ -44468,7 +44647,7 @@ module.exports = flattenChildren;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(91)))
 
 /***/ }),
-/* 821 */
+/* 822 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44484,7 +44663,7 @@ module.exports = flattenChildren;
 
 
 
-var getEventCharCode = __webpack_require__(189);
+var getEventCharCode = __webpack_require__(190);
 
 /**
  * Normalization of deprecated HTML5 `key` values
@@ -44575,7 +44754,7 @@ function getEventKey(nativeEvent) {
 module.exports = getEventKey;
 
 /***/ }),
-/* 822 */
+/* 823 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44621,7 +44800,7 @@ function getIteratorFn(maybeIterable) {
 module.exports = getIteratorFn;
 
 /***/ }),
-/* 823 */
+/* 824 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44700,7 +44879,7 @@ function getNodeForCharacterOffset(root, offset) {
 module.exports = getNodeForCharacterOffset;
 
 /***/ }),
-/* 824 */
+/* 825 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44806,7 +44985,7 @@ function getVendorPrefixedEventName(eventName) {
 module.exports = getVendorPrefixedEventName;
 
 /***/ }),
-/* 825 */
+/* 826 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44837,7 +45016,7 @@ function quoteAttributeValueForBrowser(value) {
 module.exports = quoteAttributeValueForBrowser;
 
 /***/ }),
-/* 826 */
+/* 827 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44853,12 +45032,12 @@ module.exports = quoteAttributeValueForBrowser;
 
 
 
-var ReactMount = __webpack_require__(307);
+var ReactMount = __webpack_require__(308);
 
 module.exports = ReactMount.renderSubtreeIntoContainer;
 
 /***/ }),
-/* 827 */
+/* 828 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44922,7 +45101,7 @@ var KeyEscapeUtils = {
 module.exports = KeyEscapeUtils;
 
 /***/ }),
-/* 828 */
+/* 829 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -45039,7 +45218,7 @@ var PooledClass = {
 module.exports = PooledClass;
 
 /***/ }),
-/* 829 */
+/* 830 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -45055,11 +45234,11 @@ module.exports = PooledClass;
 
 
 
-var PooledClass = __webpack_require__(828);
+var PooledClass = __webpack_require__(829);
 var ReactElement = __webpack_require__(74);
 
 var emptyFunction = __webpack_require__(40);
-var traverseAllChildren = __webpack_require__(839);
+var traverseAllChildren = __webpack_require__(840);
 
 var twoArgumentPooler = PooledClass.twoArgumentPooler;
 var fourArgumentPooler = PooledClass.fourArgumentPooler;
@@ -45235,7 +45414,7 @@ var ReactChildren = {
 module.exports = ReactChildren;
 
 /***/ }),
-/* 830 */
+/* 831 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -45254,10 +45433,10 @@ module.exports = ReactChildren;
 var _prodInvariant = __webpack_require__(75),
     _assign = __webpack_require__(12);
 
-var ReactComponent = __webpack_require__(196);
+var ReactComponent = __webpack_require__(197);
 var ReactElement = __webpack_require__(74);
-var ReactPropTypeLocationNames = __webpack_require__(321);
-var ReactNoopUpdateQueue = __webpack_require__(197);
+var ReactPropTypeLocationNames = __webpack_require__(322);
+var ReactNoopUpdateQueue = __webpack_require__(198);
 
 var emptyObject = __webpack_require__(90);
 var invariant = __webpack_require__(4);
@@ -45963,7 +46142,7 @@ var ReactClass = {
 module.exports = ReactClass;
 
 /***/ }),
-/* 831 */
+/* 832 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -45988,7 +46167,7 @@ var ReactElement = __webpack_require__(74);
  */
 var createDOMFactory = ReactElement.createFactory;
 if (true) {
-  var ReactElementValidator = __webpack_require__(320);
+  var ReactElementValidator = __webpack_require__(321);
   createDOMFactory = ReactElementValidator.createFactory;
 }
 
@@ -46138,7 +46317,7 @@ var ReactDOMFactories = {
 module.exports = ReactDOMFactories;
 
 /***/ }),
-/* 832 */
+/* 833 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46157,12 +46336,12 @@ module.exports = ReactDOMFactories;
 var _require = __webpack_require__(74),
     isValidElement = _require.isValidElement;
 
-var factory = __webpack_require__(236);
+var factory = __webpack_require__(237);
 
 module.exports = factory(isValidElement);
 
 /***/ }),
-/* 833 */
+/* 834 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46184,7 +46363,7 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 module.exports = ReactPropTypesSecret;
 
 /***/ }),
-/* 834 */
+/* 835 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46202,8 +46381,8 @@ module.exports = ReactPropTypesSecret;
 
 var _assign = __webpack_require__(12);
 
-var ReactComponent = __webpack_require__(196);
-var ReactNoopUpdateQueue = __webpack_require__(197);
+var ReactComponent = __webpack_require__(197);
+var ReactNoopUpdateQueue = __webpack_require__(198);
 
 var emptyObject = __webpack_require__(90);
 
@@ -46231,7 +46410,7 @@ ReactPureComponent.prototype.isPureReactComponent = true;
 module.exports = ReactPureComponent;
 
 /***/ }),
-/* 835 */
+/* 836 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46250,7 +46429,7 @@ module.exports = ReactPureComponent;
 module.exports = '15.5.4';
 
 /***/ }),
-/* 836 */
+/* 837 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46268,8 +46447,8 @@ module.exports = '15.5.4';
 
 var _prodInvariant = __webpack_require__(75);
 
-var ReactPropTypeLocationNames = __webpack_require__(321);
-var ReactPropTypesSecret = __webpack_require__(833);
+var ReactPropTypeLocationNames = __webpack_require__(322);
+var ReactPropTypesSecret = __webpack_require__(834);
 
 var invariant = __webpack_require__(4);
 var warning = __webpack_require__(5);
@@ -46343,7 +46522,7 @@ module.exports = checkReactTypeSpec;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(91)))
 
 /***/ }),
-/* 837 */
+/* 838 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46369,7 +46548,7 @@ function getNextDebugID() {
 module.exports = getNextDebugID;
 
 /***/ }),
-/* 838 */
+/* 839 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46412,7 +46591,7 @@ function onlyChild(children) {
 module.exports = onlyChild;
 
 /***/ }),
-/* 839 */
+/* 840 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46431,11 +46610,11 @@ module.exports = onlyChild;
 var _prodInvariant = __webpack_require__(75);
 
 var ReactCurrentOwner = __webpack_require__(50);
-var REACT_ELEMENT_TYPE = __webpack_require__(319);
+var REACT_ELEMENT_TYPE = __webpack_require__(320);
 
-var getIteratorFn = __webpack_require__(322);
+var getIteratorFn = __webpack_require__(323);
 var invariant = __webpack_require__(4);
-var KeyEscapeUtils = __webpack_require__(827);
+var KeyEscapeUtils = __webpack_require__(828);
 var warning = __webpack_require__(5);
 
 var SEPARATOR = '.';
@@ -46593,7 +46772,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 module.exports = traverseAllChildren;
 
 /***/ }),
-/* 840 */
+/* 841 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -47333,14 +47512,14 @@ module.exports = traverseAllChildren;
   typeof self === "object" ? self : this
 );
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(198)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(137)))
 
 /***/ }),
-/* 841 */
+/* 842 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(323);
-module.exports = __webpack_require__(324);
+__webpack_require__(324);
+module.exports = __webpack_require__(325);
 
 
 /***/ })
