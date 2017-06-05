@@ -1,11 +1,11 @@
 import React from 'react';
-import MakeSelector from '../components/MakeSelector';
-import Deals from '../components/Deals';
-import Sortbar from '../components/Sortbar';
-import FilterPanel from '../components/FilterPanel';
 import R from 'ramda';
-import api from '../src/api';
+import api from 'src/api';
 import qs from 'qs';
+import MakeSelector from 'components/MakeSelector';
+import Deals from 'components/Deals';
+import Sortbar from 'components/Sortbar';
+import FilterPanel from 'components/FilterPanel';
 
 class FilterPage extends React.Component {
     constructor(props) {

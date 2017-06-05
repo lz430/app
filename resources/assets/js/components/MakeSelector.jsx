@@ -18,7 +18,7 @@ class MakeSelector extends React.Component {
         return R.ifElse(
             this.logoMissing(make.attributes),
             () => this.props.fallbackLogoImage,
-            R.prop('logo'),
+            R.prop('logo')
         ).bind(this)(make.attributes);
     }
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import SidebarFilter from './SidebarFilter';
-import ZipcodeFinder from './ZipcodeFinder'
+import SidebarFilter from 'components/SidebarFilter';
+import ZipcodeFinder from 'components/ZipcodeFinder';
 
 class FilterPanel extends React.Component {
     constructor(props) {
@@ -10,18 +10,18 @@ class FilterPanel extends React.Component {
     render() {
         return (
             <div>
-                <ZipcodeFinder onUpdate={console.log}/>
+                <ZipcodeFinder onUpdate={console.log} />
 
                 <div className="sidebar-filters">
                     <div className="sidebar-filters__header">
                         Filter Results
                     </div>
-                    <SidebarFilter title="Vehicle Style"/>
-                    <SidebarFilter title="Brand"/>
-                    <SidebarFilter title="Fuel"/>
-                    <SidebarFilter title="Transmission"/>
-                    <SidebarFilter title="Seating"/>
-                    <SidebarFilter title="Convenience"/>
+                    <SidebarFilter title="Vehicle Style" />
+                    <SidebarFilter title="Brand" />
+                    <SidebarFilter title="Fuel" />
+                    <SidebarFilter title="Transmission" />
+                    <SidebarFilter title="Seating" />
+                    <SidebarFilter title="Convenience" />
                 </div>
             </div>
         );

@@ -1,20 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Deal from './Deal';
+import Deal from 'components/Deal';
 
 const Deals = ({ deals, fallbackDealImage }) => {
     return (
         <div className="deals">
-                {deals.map((deal, index) => {
-                    return (
-                        <Deal
-                            deal={deal}
-                            key={index}
-                            fallbackDealImage={fallbackDealImage}
-                        />
-                    );
-                })}
-            </div>
+            {deals.map((deal, index) => {
+                return (
+                    <Deal
+                        deal={deal}
+                        key={index}
+                        fallbackDealImage={fallbackDealImage}
+                    />
+                );
+            })}
+        </div>
     );
 };
 

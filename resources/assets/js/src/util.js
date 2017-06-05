@@ -1,5 +1,5 @@
 const util = {
-    moneyFormat: (num) => {
+    moneyFormat: num => {
         const formatter = new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
@@ -7,7 +7,7 @@ const util = {
         });
 
         return formatter.format(num);
-    }
+    },
 };
 
 export default util;
