@@ -1,12 +1,11 @@
 @import '../variables';
-@import '../mixins/border-bottom';
 
 .nav {
-  @include border-bottom;
+  align-items: center;
   $padding: 15px;
 
-  align-items: center;
   background-color: $color-background-primary;
+  border-bottom: 1px solid $color-section-bottom-border;
   display: flex;
   height: calc(#{$nav-height} - #{$padding * 2});
   padding: $padding;

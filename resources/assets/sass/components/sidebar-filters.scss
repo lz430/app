@@ -1,5 +1,4 @@
 @import '../variables';
-@import '../mixins/border-bottom';
 
 .sidebar-filters {
   &__header {
@@ -10,13 +9,17 @@
   }
 
   &__filter {
-    @include border-bottom;
+    align-items: center;
+    border-bottom: 1px solid $color-sidebar-background-secondary;
     color: $color-text-white;
-    padding: 5px 15px;
+    display: flex;
+    padding: 15px;
   }
 
-  &__icon svg {
+  &__icon {
     fill: $color-text-white;
+    height: 20px;
+    margin-right: 10px;
     width: 20px;
   }
 }
