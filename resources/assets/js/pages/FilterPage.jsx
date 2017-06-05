@@ -42,15 +42,20 @@ class FilterPage extends React.Component {
     }
 
     loadMoreDeals() {
-        this.setState({
-            dealPage: this.state.dealPage + 1,
-        }, () => {
-            this.getDeals(this.sortParam(this.state.sortColumn)).then(deals => {
-                this.setState({
-                    deals: R.concat(this.state.deals, deals.data.data),
+        this.setState(
+            {
+                dealPage: this.state.dealPage + 1,
+            },
+            () => {
+                this.getDeals(
+                    this.sortParam(this.state.sortColumn)
+                ).then(deals => {
+                    this.setState({
+                        deals: R.concat(this.state.deals, deals.data.data),
+                    });
                 });
-            });
-        });
+            }
+        );
     }
 
     onSelectMake(id) {
@@ -77,14 +82,13 @@ class FilterPage extends React.Component {
     }
 
     getDeals(sort = 'price', page = this.state.dealPage) {
-        return api
-            .getDeals(
-                this.state.selectedMakes,
-                [this.state.selectedBodyStyle],
-                ['photos'],
-                sort,
-                page
-            );
+        return api.getDeals(
+            this.state.selectedMakes,
+            [this.state.selectedBodyStyle],
+            ['photos'],
+            sort,
+            page
+        );
     }
 
     sortParam(column) {

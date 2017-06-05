@@ -11,21 +11,18 @@ class Deals extends React.Component {
 
     componentDidMount() {
         const element = ReactDOM.findDOMNode(this);
-        const subscribeToScroll = (e) => {
+        const subscribeToScroll = e => {
             this.props.loadMoreDeals();
         };
 
         element.addEventListener(
             'scroll',
-            debounce(
-                subscribeToScroll,
-                500,
-                {
-                    maxWait: 1000,
-                    leading: true,
-                    trailing: false,
-                },
-            ));
+            debounce(subscribeToScroll, 500, {
+                maxWait: 1000,
+                leading: true,
+                trailing: false,
+            })
+        );
     }
 
     render() {
