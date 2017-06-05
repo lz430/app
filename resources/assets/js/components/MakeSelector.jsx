@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import R from 'ramda';
+import * as ActionTypes from 'actiontypes/index';
+import * as Actions from 'actions/index';
 
 class MakeSelector extends React.Component {
     constructor() {
@@ -29,7 +33,7 @@ class MakeSelector extends React.Component {
         return (
             <div
                 className={className}
-                onClick={this.props.onSelectMake.bind(null, make.id)}
+                onClick={() => this.props.selectMake(make.id)}
                 key={make.id}
             >
                 <img src={this.getLogoFor(make)} />
@@ -52,19 +56,27 @@ class MakeSelector extends React.Component {
     }
 }
 
-MakeSelector.propTypes = {
-    makes: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            attributes: PropTypes.shape({
-                name: PropTypes.string.isRequired,
-                logo: PropTypes.string.isRequired,
-            }),
-        })
-    ).isRequired,
-    selectedMakes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onSelectMake: PropTypes.func.isRequired,
-    fallbackLogoImage: PropTypes.string.isRequired,
+// MakeSelector.propTypes = {
+//     makes: PropTypes.arrayOf(
+//         PropTypes.shape({
+//             id: PropTypes.string.isRequired,
+//             attributes: PropTypes.shape({
+//                 name: PropTypes.string.isRequired,
+//                 logo: PropTypes.string.isRequired,
+//             }),
+//         })
+//     ).isRequired,
+//     selectedMakes: PropTypes.arrayOf(PropTypes.string).isRequired,
+//     fallbackLogoImage: PropTypes.string.isRequired,
+// };
+
+
+const mapStateToProps = (state) => {
+    return {
+        makes: state.makes,
+        selectedMakes: state.selectedMakes,
+        fallbackLogoImage: state.fallbackLogoImage,
+    }
 };
 
-export default MakeSelector;
+export default connect(mapStateToProps, Actions)(MakeSelector);

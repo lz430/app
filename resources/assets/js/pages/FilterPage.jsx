@@ -6,25 +6,19 @@ import MakeSelector from 'components/MakeSelector';
 import Deals from 'components/Deals';
 import Sortbar from 'components/Sortbar';
 import FilterPanel from 'components/FilterPanel';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as Actions from 'actions/index';
+
 
 class FilterPage extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            selectedBodyStyle: R.prop(
-                'style',
-                qs.parse(window.location.search.slice(1))
-            ),
-            selectedMakes: [],
-            makes: null,
             showModal: true,
-            dealPage: 0,
-            deals: null,
-            fallbackLogoImage: '/images/dmr-logo.svg',
-            fallbackDealImage: '/images/dmr-logo.svg',
-            sortStatus: 'asc',
-            sortColumn: 'price',
         };
+
         this.onSelectMake = this.onSelectMake.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.toggleSort = this.toggleSort.bind(this);
@@ -34,11 +28,15 @@ class FilterPage extends React.Component {
     }
 
     componentDidMount() {
-        api.getMakes().then(makes => {
-            this.setState({
-                makes: makes.data.data,
-            });
-        });
+        // api.getMakes().then(makes => {
+        //     this.setState({
+        //         makes: makes.data.data,
+        //     }, () => {
+        //         store.dispatch(sortDeals());
+        //     });
+        // });
+
+
     }
 
     loadMoreDeals() {
@@ -72,11 +70,15 @@ class FilterPage extends React.Component {
                 showModal: false,
             },
             () => {
-                this.getDeals().then(deals => {
-                    this.setState({
-                        deals: deals.data.data,
-                    });
-                });
+                // this.props.actions.getDeals({
+                //     sort: 'price',
+                //     make_ids: this.props.makes
+                // })
+                // this.getDeals().then(deals => {
+                //     this.setState({
+                //         deals: deals.data.data,
+                //     });
+                // });
             }
         );
     }
@@ -117,10 +119,10 @@ class FilterPage extends React.Component {
             <div className="modal">
                 <div className="modal__close" onClick={this.closeModal}>X</div>
                 <MakeSelector
-                    makes={this.state.makes}
-                    onSelectMake={this.onSelectMake}
-                    selectedMakes={this.state.selectedMakes}
-                    fallbackLogoImage={this.state.fallbackLogoImage}
+                    // makes={this.props.makes}
+                    // onSelectMake={this.props.actions.selectMake}
+                    // selectedMakes={this.state.selectedMakes}
+                    // fallbackLogoImage={this.state.fallbackLogoImage}
                 />
             </div>
         );
@@ -128,42 +130,54 @@ class FilterPage extends React.Component {
 
     renderDeals() {
         return (
-            <div className="filter-page">
-                <div className="filter-page__filter-panel">
-                    <FilterPanel />
+                <div className="filter-page">
+                    {/*<div className="filter-page__filter-panel">*/}
+                        {/*<FilterPanel />*/}
+                    {/*</div>*/}
+                    <div className="filter-page__deals">
+                        {/*<Sortbar*/}
+                            {/*results_count={this.props.deals.length}*/}
+                            {/*onPriceClick={this.props.actions.sortDeals}*/}
+                            {/*onYearClick={this.props.actions.sortDeals}*/}
+                            {/*onAtoZClick={this.props.actions.sortDeals}*/}
+                            {/*sortColumn={this.props.sortColumn}*/}
+                            {/*sortStatus={this.props.sortStatus}*/}
+                        {/*/>*/}
+                        {/*{this.state.deals.length*/}
+                            {/*? <Deals*/}
+                                  {/*loadMoreDeals={this.loadMoreDeals}*/}
+                                  {/*deals={this.state.deals}*/}
+                                  {/*fallbackDealImage={*/}
+                                      {/*this.state.fallbackDealImage*/}
+                                  {/*}*/}
+                              {/*/>*/}
+                            {/*: <p>No Results</p>}*/}
+                    </div>
                 </div>
-                <div className="filter-page__deals">
-                    <Sortbar
-                        results_count={this.state.deals.length}
-                        onPriceClick={this.toggleSort.bind(this, 'price')}
-                        onYearClick={this.toggleSort.bind(this, 'year')}
-                        onAtoZClick={this.toggleSort.bind(this, 'make')}
-                        sortColumn={this.state.sortColumn}
-                        sortStatus={this.state.sortStatus}
-                    />
-                    {this.state.deals.length
-                        ? <Deals
-                              loadMoreDeals={this.loadMoreDeals}
-                              deals={this.state.deals}
-                              fallbackDealImage={this.state.fallbackDealImage}
-                          />
-                        : <p>No Results</p>}
-                </div>
-            </div>
         );
     }
 
     render() {
-        if (this.state.makes && this.state.showModal) {
+        if (this.props.makes && this.state.showModal) {
             return this.renderModal();
         }
 
-        if (this.state.deals) {
-            return this.renderDeals();
-        }
+        // if (this.state.deals) {
+        //     return this.renderDeals();
+        // }
 
         return <div>'Loading'</div>;
     }
 }
 
-export default FilterPage;
+const mapStateToProps = (state) => {
+    return state;
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        actions: bindActionCreators(ActionTypes, dispatch),
+    };
+};
+
+export default connect(mapStateToProps, Actions)(FilterPage);
