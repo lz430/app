@@ -20302,7 +20302,7 @@ var ZipcodeFinder = function (_React$Component) {
                     { className: 'zipcode-finder__buttons' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
-                        { className: 'zipcode-finder__button zipcode-finder__button--blue zipcode-finder__button--small zipcode-finder__button--no-border' },
+                        { className: 'zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg' },
                         'Update'
                     )
                 )
