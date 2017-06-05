@@ -1,5 +1,8 @@
 @import '../variables';
 
+$icon-margin: 10px;
+$icon-size: 20px;
+
 .sidebar-filters {
   &__header {
     background-color: $color-sidebar-background-secondary-dark;
@@ -9,17 +12,28 @@
   }
 
   &__filter {
-    align-items: center;
     border-bottom: 1px solid $color-sidebar-background-secondary;
     color: $color-text-white;
+  }
+
+  &__filter-title {
+    align-items: center;
+    cursor: pointer;
     display: flex;
-    padding: 15px;
+    padding: 15px 15px 15px 0;
+    user-select: none;
+  }
+
+  &__filter-body {
+    border-top: 1px solid $color-sidebar-background-secondary;
+    margin-left: $icon-margin + $icon-size + $icon-margin;
   }
 
   &__icon {
     fill: $color-text-white;
-    height: 20px;
-    margin-right: 10px;
-    width: 20px;
+    height: $icon-size;
+    margin-left: $icon-margin;
+    margin-right: $icon-margin;
+    width: $icon-size;
   }
 }

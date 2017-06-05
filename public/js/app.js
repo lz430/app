@@ -20060,20 +20060,43 @@ var SidebarFilter = function (_React$Component) {
     function SidebarFilter(props) {
         _classCallCheck(this, SidebarFilter);
 
-        return _possibleConstructorReturn(this, (SidebarFilter.__proto__ || Object.getPrototypeOf(SidebarFilter)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (SidebarFilter.__proto__ || Object.getPrototypeOf(SidebarFilter)).call(this, props));
+
+        _this.state = {
+            open: false
+        };
+
+        _this.toggle = _this.toggle.bind(_this);
+        return _this;
     }
 
     _createClass(SidebarFilter, [{
+        key: 'toggle',
+        value: function toggle() {
+            this.setState({
+                open: !this.state.open
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { className: 'sidebar-filters__filter' },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_svg_inline___default.a, {
-                    className: 'sidebar-filters__icon',
-                    svg: __WEBPACK_IMPORTED_MODULE_2_zondicons__["a" /* default */]['cheveron-down']
-                }),
-                this.props.title
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'sidebar-filters__filter-title', onClick: this.toggle },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_svg_inline___default.a, {
+                        className: 'sidebar-filters__icon',
+                        svg: this.state.open ? __WEBPACK_IMPORTED_MODULE_2_zondicons__["a" /* default */]['cheveron-up'] : __WEBPACK_IMPORTED_MODULE_2_zondicons__["a" /* default */]['cheveron-down']
+                    }),
+                    this.props.title
+                ),
+                this.state.open ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'sidebar-filters__filter-body' },
+                    'body'
+                ) : ''
             );
         }
     }]);
