@@ -1,7 +1,7 @@
 import 'bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Configurator from 'components/Configurator';
+import Configurator from 'containers/Configurator';
 import FilterPage from 'containers/FilterPage';
 import { Provider } from 'react-redux';
 import store from 'configureStore';

@@ -1,0 +1,38 @@
+@import '../variables';
+
+.filter-style-selector {
+  text-align: center;
+
+  &__styles {
+    align-content: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  &__style {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    height: 75px;
+    justify-content: flex-end;
+    margin: 10px 0;
+    min-height: 75px;
+    min-width: 50%;
+    text-align: center;
+    width: 50%;
+
+    &--selected {
+      outline: 1px solid red;
+    }
+  }
+
+  &__icon {
+  }
+
+  &__name {
+    font-size: .7rem;
+    width: 100%;
+  }
+}

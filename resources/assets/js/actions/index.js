@@ -1,4 +1,5 @@
 import api from 'src/api';
+import util from 'src/util';
 import * as ActionTypes from 'actiontypes/index';
 
 export function requestMakes() {
@@ -10,9 +11,9 @@ export function requestMakes() {
             });
         });
 
-        return {
+        dispatch({
             type: ActionTypes.REQUEST_MAKES,
-        };
+        });
     };
 }
 
@@ -40,7 +41,7 @@ export function requestDeals() {
         api
             .getDeals({
                 makeIds: getState().selectedMakes,
-                bodyStyles: [getState().selectedBodyStyle],
+                bodyStyles: getState().selectedStyles,
                 includes: ['photos'],
                 sortColumn: getState().sortColumn,
                 sortAscending: getState().sortAscending,
@@ -53,9 +54,9 @@ export function requestDeals() {
                 });
             });
 
-        return {
+        dispatch({
             type: ActionTypes.REQUEST_DEALS,
-        };
+        });
     };
 }
 
@@ -64,7 +65,7 @@ export function requestMoreDeals() {
         api
             .getDeals({
                 makeIds: getState().selectedMakes,
-                bodyStyles: [getState().selectedBodyStyle],
+                bodyStyles: getState().selectedStyles,
                 includes: ['photos'],
                 sortColumn: getState().sortColumn,
                 sortAscending: getState().sortAscending,
@@ -77,9 +78,9 @@ export function requestMoreDeals() {
                 });
             });
 
-        return {
+        dispatch({
             type: ActionTypes.REQUEST_MORE_DEALS,
-        };
+        });
     };
 }
 
@@ -87,5 +88,53 @@ export function sortDeals(sort) {
     return {
         type: ActionTypes.SORT_DEALS,
         sort,
+    };
+}
+
+export function receiveBodyStyles(deals) {
+    return {
+        type: ActionTypes.RECEIVE_BODY_STYLES,
+        data: deals,
+    };
+}
+
+export function requestBodyStyles() {
+    return (dispatch) => {
+        api
+            .getBodyStyles()
+            .then(data => {
+                dispatch(receiveBodyStyles(data));
+            });
+
+        dispatch({
+            type: ActionTypes.REQUEST_BODY_STYLES,
+        });
+    };
+}
+
+export function toggleStyle(style) {
+    return (dispatch, getState) => {
+        const selectedStyles = util.toggleItem(getState().selectedStyles, style);
+
+        api
+            .getDeals({
+                makeIds: getState().selectedMakes,
+                bodyStyles: selectedStyles,
+                includes: ['photos'],
+                sortColumn: getState().sortColumn,
+                sortAscending: getState().sortAscending,
+                page: 1,
+            })
+            .then(data => {
+                dispatch({
+                    type: ActionTypes.RECEIVE_DEALS,
+                    data: data,
+                });
+            });
+
+        dispatch({
+            type: ActionTypes.TOGGLE_STYLE,
+            selectedStyles: selectedStyles,
+        });
     };
 }

@@ -1,5 +1,6 @@
 import * as ActionTypes from 'actiontypes/index';
 import R from 'ramda';
+import util from 'src/util';
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -31,9 +32,15 @@ const reducer = (state, action) => {
             });
         case ActionTypes.TOGGLE_MAKE:
             return Object.assign({}, state, {
-                selectedMakes: R.contains(action.make_id, state.selectedMakes)
-                    ? R.reject(R.equals(action.make_id), state.selectedMakes)
-                    : R.append(action.make_id, state.selectedMakes),
+                selectedMakes: util.toggleItem(state.selectedMakes, action.make_id),
+            });
+        case ActionTypes.RECEIVE_BODY_STYLES:
+            return Object.assign({}, state, {
+                bodyStyles: action.data.data.data,
+            });
+        case ActionTypes.TOGGLE_STYLE:
+            return Object.assign({}, state, {
+                selectedStyles: action.selectedStyles,
             });
     }
 

@@ -1,15 +1,16 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
 import reducer from 'reducers/index';
-import { requestMakes } from 'actions/index';
+import { requestMakes, requestBodyStyles } from 'actions/index';
 import R from 'ramda';
 import qs from 'qs';
 
 const initialState = {
-    selectedBodyStyle: R.prop(
+    selectedStyles: [R.prop(
         'style',
         qs.parse(window.location.search.slice(1))
-    ),
+    )],
+    bodyStyles: null,
     selectedMakes: [],
     makes: null,
     dealPage: 1,
@@ -31,6 +32,7 @@ export default () => {
     );
 
     store.dispatch(requestMakes());
+    store.dispatch(requestBodyStyles());
 
     return store;
 };

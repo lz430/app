@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Transformers\DealTransformer;
 use App\VersionDeal;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
@@ -17,8 +18,8 @@ class DealsController extends BaseAPIController
     public function index(Request $request)
     {
         $this->validate($request, [
-            'make_ids' => 'required|array',
-            'body_styles' => 'required|array',
+            'make_ids' => 'sometimes|required|array',
+            'body_styles' => 'sometimes|required|array',
             'sort' => 'string',
         ]);
         
@@ -29,19 +30,25 @@ class DealsController extends BaseAPIController
             return $columns;
         }, []);
 
-        $dealsQuery = VersionDeal::whereHas('version', function ($query) {
-            $query->whereIn(
-                DB::raw('lower(body_style)'),
-                array_map('strtolower', request('body_styles'))
-            )->whereHas('model', function ($query) {
-                $query->whereIn('make_id', request('make_ids'));
+        $dealsQuery = VersionDeal::whereHas('version', function (Builder $query) {
+            if (request()->has('body_styles')) {
+                $query->whereIn(
+                    DB::raw('lower(body_style)'),
+                    array_map('strtolower', request('body_styles'))
+                );
+            }
+
+            $query->whereHas('model', function (Builder $query) {
+                if (request()->has('make_ids')) {
+                    $query->whereIn('make_id', request('make_ids'));
+                }
             });
         });
         
         foreach ($sortParams as $column => $ascDesc) {
             $dealsQuery->orderBy($column, $ascDesc);
         }
-        
+
         $deals = $dealsQuery->paginate(15);
         
         if (in_array('photos', $request->get('includes', []))) {
