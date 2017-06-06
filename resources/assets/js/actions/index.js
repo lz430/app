@@ -158,3 +158,31 @@ export function toggleStyle(style) {
         });
     };
 }
+
+export function toggleFuelType(fuelType) {
+    return (dispatch, getState) => {
+        const selectedFuelTypes = util.toggleItem(getState().selectedFuelTypes, fuelType);
+
+        api
+            .getDeals({
+                makeIds: getState().selectedMakes,
+                bodyStyles: getState().selectedStyles,
+                fuelTypes: selectedFuelTypes,
+                includes: ['photos'],
+                sortColumn: getState().sortColumn,
+                sortAscending: getState().sortAscending,
+                page: 1,
+            })
+            .then(data => {
+                dispatch({
+                    type: ActionTypes.RECEIVE_DEALS,
+                    data: data,
+                });
+            });
+
+        dispatch({
+            type: ActionTypes.TOGGLE_FUEL_TYPE,
+            selectedFuelTypes: selectedFuelTypes,
+        });
+    };
+}

@@ -11,6 +11,8 @@ const initialState = {
         qs.parse(window.location.search.slice(1))
     )],
     bodyStyles: null,
+    fuelTypes: null,
+    selectedFuelTypes: [],
     selectedMakes: [],
     makes: null,
     dealPage: 1,

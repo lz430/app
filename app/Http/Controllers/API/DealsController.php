@@ -20,6 +20,7 @@ class DealsController extends BaseAPIController
         $this->validate($request, [
             'make_ids' => 'sometimes|required|array',
             'body_styles' => 'sometimes|required|array',
+            'fuel_types' => 'sometimes|required|array',
             'sort' => 'string',
         ]);
         
@@ -44,7 +45,16 @@ class DealsController extends BaseAPIController
                 }
             });
         });
-        
+
+        $dealsQueryCopy = clone $dealsQuery;
+
+        if (request()->has('fuel_types')) {
+            $dealsQuery->whereIn(
+                DB::raw('lower(fuel)'),
+                array_map('strtolower', request('fuel_types'))
+            );
+        }
+
         foreach ($sortParams as $column => $ascDesc) {
             $dealsQuery->orderBy($column, $ascDesc);
         }
@@ -62,6 +72,7 @@ class DealsController extends BaseAPIController
             ->serializeWith(new DataArraySerializer)
             ->paginateWith(new IlluminatePaginatorAdapter($deals))
             ->parseIncludes($request->get('includes', []))
+            ->addMeta(['fuelTypes' => $dealsQueryCopy->groupBy('fuel')->pluck('fuel')])
             ->respond();
     }
 }
