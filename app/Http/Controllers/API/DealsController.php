@@ -26,14 +26,6 @@ class DealsController extends BaseAPIController
         ]);
         
         $dealsQuery = $this->getQueryByMakesAndBodyStyles($request);
-
-        /**
-         * Copy the query directly after makes and body styles
-         * so we can get meta information before lower level filters
-         * being applied.
-         */
-        $dealsQueryCopy = clone $dealsQuery;
-
         $dealsQuery = $this->filterQueryByFuelTypes($dealsQuery, $request);
         $dealsQuery = Sort::sortQuery($dealsQuery, request('sort', 'price'));
         $dealsQuery = $this->eagerLoadIncludes($dealsQuery, $request);
@@ -48,7 +40,7 @@ class DealsController extends BaseAPIController
             ->paginateWith(new IlluminatePaginatorAdapter($deals))
             ->parseIncludes($request->get('includes', []))
             ->addMeta([
-                'fuelTypes' => $dealsQueryCopy->groupBy('fuel')->pluck('fuel')
+                'fuelTypes' => VersionDeal::select('fuel')->groupBy('fuel')->get()->pluck('fuel'),
             ])
             ->respond();
     }
