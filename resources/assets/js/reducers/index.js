@@ -10,6 +10,7 @@ const reducer = (state, action) => {
             });
         case ActionTypes.RECEIVE_DEALS:
             return Object.assign({}, state, {
+                fuelTypes: action.data.data.meta.fuelTypes,
                 deals: action.data.data.data,
                 dealsPagination: action.data.data.meta.pagination,
                 dealPage: R.min(
@@ -41,6 +42,10 @@ const reducer = (state, action) => {
         case ActionTypes.TOGGLE_STYLE:
             return Object.assign({}, state, {
                 selectedStyles: action.selectedStyles,
+            });
+        case ActionTypes.TOGGLE_FUEL_TYPE:
+            return Object.assign({}, state, {
+                selectedFuelTypes: action.selectedFuelTypes,
             });
     }
 

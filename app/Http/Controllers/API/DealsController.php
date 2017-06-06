@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Transformers\DealTransformer;
 use App\VersionDeal;
+use DeliverMyRide\JsonApi\Sort;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,40 +21,16 @@ class DealsController extends BaseAPIController
         $this->validate($request, [
             'make_ids' => 'sometimes|required|array',
             'body_styles' => 'sometimes|required|array',
-            'sort' => 'string',
+            'fuel_types' => 'sometimes|required|array',
+            'sort' => 'sometimes|required|string',
         ]);
         
-        $sortParams = collect(explode(',', $request->get('sort')))->reduce(function ($columns, $item) {
-            $minus = strpos($item, '-') === 0;
-            $column = $minus ? substr($item, 1) : $item;
-            $columns[$column] = $minus ? 'desc' : 'asc';
-            return $columns;
-        }, []);
-
-        $dealsQuery = VersionDeal::whereHas('version', function (Builder $query) {
-            if (request()->has('body_styles')) {
-                $query->whereIn(
-                    DB::raw('lower(body_style)'),
-                    array_map('strtolower', request('body_styles'))
-                );
-            }
-
-            $query->whereHas('model', function (Builder $query) {
-                if (request()->has('make_ids')) {
-                    $query->whereIn('make_id', request('make_ids'));
-                }
-            });
-        });
-        
-        foreach ($sortParams as $column => $ascDesc) {
-            $dealsQuery->orderBy($column, $ascDesc);
-        }
+        $dealsQuery = $this->getQueryByMakesAndBodyStyles($request);
+        $dealsQuery = $this->filterQueryByFuelTypes($dealsQuery, $request);
+        $dealsQuery = Sort::sortQuery($dealsQuery, request('sort', 'price'));
+        $dealsQuery = $this->eagerLoadIncludes($dealsQuery, $request);
 
         $deals = $dealsQuery->paginate(15);
-        
-        if (in_array('photos', $request->get('includes', []))) {
-            $deals->load('photos');
-        }
         
         return fractal()
             ->collection($deals)
@@ -62,6 +39,48 @@ class DealsController extends BaseAPIController
             ->serializeWith(new DataArraySerializer)
             ->paginateWith(new IlluminatePaginatorAdapter($deals))
             ->parseIncludes($request->get('includes', []))
+            ->addMeta([
+                'fuelTypes' => VersionDeal::select('fuel')->groupBy('fuel')->get()->pluck('fuel'),
+            ])
             ->respond();
+    }
+
+    private function eagerLoadIncludes(Builder $query, Request $request) : Builder
+    {
+        if (in_array('photos', $request->get('includes', []))) {
+            $query->with('photos');
+        }
+
+        return $query;
+    }
+
+    private function filterQueryByFuelTypes(Builder $query, Request $request) : Builder
+    {
+        if (request()->has('fuel_types')) {
+            $query->whereIn(
+                DB::raw('lower(fuel)'),
+                array_map('strtolower', request('fuel_types'))
+            );
+        }
+
+        return $query;
+    }
+
+    private function getQueryByMakesAndBodyStyles(Request $request) : Builder
+    {
+        return VersionDeal::whereHas('version', function (Builder $query) use ($request) {
+            if ($request->has('body_styles')) {
+                $query->whereIn(
+                    DB::raw('lower(body_style)'),
+                    array_map('strtolower', request('body_styles'))
+                );
+            }
+
+            $query->whereHas('model', function (Builder $query) use ($request) {
+                if ($request->has('make_ids')) {
+                    $query->whereIn('make_id', request('make_ids'));
+                }
+            });
+        });
     }
 }

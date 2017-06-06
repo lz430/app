@@ -12,6 +12,7 @@ const api = {
     getDeals: ({
         makeIds,
         bodyStyles,
+        fuelTypes,
         includes,
         sortColumn,
         sortAscending,
@@ -21,6 +22,7 @@ const api = {
             params: {
                 make_ids: makeIds,
                 body_styles: bodyStyles,
+                fuel_types: fuelTypes,
                 includes,
                 sort: sort(sortColumn, sortAscending),
                 page,
