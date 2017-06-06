@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import R from 'ramda';
-import * as ActionTypes from 'actiontypes/index';
 import * as Actions from 'actions/index';
 
 class MakeSelector extends React.Component {
@@ -56,27 +54,26 @@ class MakeSelector extends React.Component {
     }
 }
 
-// MakeSelector.propTypes = {
-//     makes: PropTypes.arrayOf(
-//         PropTypes.shape({
-//             id: PropTypes.string.isRequired,
-//             attributes: PropTypes.shape({
-//                 name: PropTypes.string.isRequired,
-//                 logo: PropTypes.string.isRequired,
-//             }),
-//         })
-//     ).isRequired,
-//     selectedMakes: PropTypes.arrayOf(PropTypes.string).isRequired,
-//     fallbackLogoImage: PropTypes.string.isRequired,
-// };
+MakeSelector.propTypes = {
+    makes: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            attributes: PropTypes.shape({
+                name: PropTypes.string.isRequired,
+                logo: PropTypes.string.isRequired,
+            }),
+        })
+    ).isRequired,
+    selectedMakes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    fallbackLogoImage: PropTypes.string.isRequired,
+};
 
-
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         makes: state.makes,
         selectedMakes: state.selectedMakes,
         fallbackLogoImage: state.fallbackLogoImage,
-    }
+    };
 };
 
 export default connect(mapStateToProps, Actions)(MakeSelector);

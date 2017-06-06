@@ -53,14 +53,11 @@ class Sortbar extends React.Component {
     }
 }
 
-// Sortbar.propTypes = {
-//     results_count: PropTypes.number.isRequired,
-//     onPriceClick: PropTypes.func.isRequired,
-//     onAtoZClick: PropTypes.func.isRequired,
-//     onYearClick: PropTypes.func.isRequired,
-//     sortColumn: PropTypes.oneOf(['price', 'make', 'year']).isRequired,
-//     sortStatus: PropTypes.oneOf(['asc', 'desc']).isRequired,
-// };
+Sortbar.propTypes = {
+    results_count: PropTypes.number.isRequired,
+    sortColumn: PropTypes.oneOf(['price', 'make', 'year']).isRequired,
+    sortAscending: PropTypes.bool.isRequired,
+};
 
 function mapStateToProps(state) {
     return {

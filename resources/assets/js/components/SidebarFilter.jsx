@@ -1,6 +1,8 @@
 import React from 'react';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
+import * as Actions from 'actions/index';
+import { connect } from 'react-redux';
 
 class SidebarFilter extends React.Component {
     constructor(props) {
@@ -47,4 +49,4 @@ class SidebarFilter extends React.Component {
     }
 }
 
-export default SidebarFilter;
+export default connect(null, Actions)(SidebarFilter);

@@ -1,5 +1,5 @@
 const sort = (column, sortAscending) => {
-    return sortAscending ? column : '-' + column ;
+    return sortAscending ? column : '-' + column;
 };
 
 const api = {
@@ -9,7 +9,14 @@ const api = {
     getMakes: () => {
         return window.axios.get('/api/makes');
     },
-    getDeals: ({makeIds, bodyStyles, includes, sortColumn, sortAscending, page}) => {
+    getDeals: ({
+        makeIds,
+        bodyStyles,
+        includes,
+        sortColumn,
+        sortAscending,
+        page,
+    }) => {
         return window.axios.get('/api/deals', {
             params: {
                 make_ids: makeIds,

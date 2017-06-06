@@ -2,11 +2,9 @@ import 'bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Configurator from 'components/Configurator';
-import FilterPage from 'pages/FilterPage';
+import FilterPage from 'containers/FilterPage';
 import { Provider } from 'react-redux';
 import store from 'configureStore';
-import R from 'ramda';
-import qs from 'qs';
 
 const filterStore = store();
 
