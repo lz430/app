@@ -5,7 +5,7 @@ $icon-size: 20px;
 
 .sidebar-filters {
   height: calc(100vh - #{$nav-height} - #{$sortbar-height} - #{$footer-height});
-  overflow-y: scroll;
+  overflow-y: auto;
 
   &__header {
     background-color: $color-sidebar-background-secondary-dark;

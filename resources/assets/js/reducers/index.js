@@ -32,7 +32,7 @@ const reducer = (state, action) => {
             });
         case ActionTypes.TOGGLE_MAKE:
             return Object.assign({}, state, {
-                selectedMakes: util.toggleItem(state.selectedMakes, action.make_id),
+                selectedMakes: action.selectedMakes,
             });
         case ActionTypes.RECEIVE_BODY_STYLES:
             return Object.assign({}, state, {
