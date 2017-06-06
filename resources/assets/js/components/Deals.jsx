@@ -7,25 +7,21 @@ import { connect } from 'react-redux';
 import * as Actions from 'actions';
 
 class Deals extends React.Component {
-    constructor() {
-        super();
-    }
+    componentDidMount() {
+        const element = ReactDOM.findDOMNode(this);
+        const subscribeToScroll = e => {
+            this.props.requestMoreDeals();
+        };
 
-    // componentDidMount() {
-    //     const element = ReactDOM.findDOMNode(this);
-    //     const subscribeToScroll = e => {
-    //         this.props.loadMoreDeals();
-    //     };
-    //
-    //     element.addEventListener(
-    //         'scroll',
-    //         debounce(subscribeToScroll, 500, {
-    //             maxWait: 1000,
-    //             leading: true,
-    //             trailing: false,
-    //         })
-    //     );
-    // }
+        element.addEventListener(
+            'scroll',
+            debounce(subscribeToScroll, 500, {
+                maxWait: 1000,
+                leading: true,
+                trailing: false,
+            })
+        );
+    }
 
     render() {
         return (
@@ -62,7 +58,7 @@ function mapStateToProps(state) {
     return {
         deals: state.deals,
         fallbackDealImage: state.fallbackDealImage,
-    }
+    };
 }
 
 export default connect(mapStateToProps, Actions)(Deals);

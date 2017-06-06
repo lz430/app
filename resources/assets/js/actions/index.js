@@ -43,7 +43,7 @@ export function requestDeals() {
             includes: ['photos'],
             sortColumn: getState().sortColumn,
             sortAscending: getState().sortAscending,
-            page: getState().page,
+            page: 1,
         }).then((data) => {
             dispatch({
                 type: ActionTypes.RECEIVE_DEALS,
@@ -53,6 +53,29 @@ export function requestDeals() {
 
         return {
             type: ActionTypes.GET_DEALS,
+        }
+    };
+}
+
+
+export function requestMoreDeals() {
+    return (dispatch, getState) => {
+        api.getDeals({
+            makeIds: getState().selectedMakes,
+            bodyStyles: [getState().selectedBodyStyle],
+            includes: ['photos'],
+            sortColumn: getState().sortColumn,
+            sortAscending: getState().sortAscending,
+            page: getState().dealPage + 1,
+        }).then((data) => {
+            dispatch({
+                type: ActionTypes.RECEIVE_MORE_DEALS,
+                data: data,
+            })
+        });
+
+        return {
+            type: ActionTypes.REQUEST_MORE_DEALS,
         }
     };
 }

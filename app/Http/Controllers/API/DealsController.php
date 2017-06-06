@@ -6,6 +6,7 @@ use App\Transformers\DealTransformer;
 use App\VersionDeal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Serializer\DataArraySerializer;
 
 class DealsController extends BaseAPIController
@@ -52,6 +53,7 @@ class DealsController extends BaseAPIController
             ->withResourceName(self::RESOURCE_NAME)
             ->transformWith(self::TRANSFORMER)
             ->serializeWith(new DataArraySerializer)
+            ->paginateWith(new IlluminatePaginatorAdapter($deals))
             ->parseIncludes($request->get('includes', []))
             ->respond();
     }

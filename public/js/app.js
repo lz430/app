@@ -5372,6 +5372,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["toggleMake"] = toggleMake;
 /* harmony export (immutable) */ __webpack_exports__["receiveDeals"] = receiveDeals;
 /* harmony export (immutable) */ __webpack_exports__["requestDeals"] = requestDeals;
+/* harmony export (immutable) */ __webpack_exports__["requestMoreDeals"] = requestMoreDeals;
 /* harmony export (immutable) */ __webpack_exports__["sortDeals"] = sortDeals;
 
 
@@ -5418,7 +5419,7 @@ function requestDeals() {
             includes: ['photos'],
             sortColumn: getState().sortColumn,
             sortAscending: getState().sortAscending,
-            page: getState().page
+            page: 1
         }).then(function (data) {
             dispatch({
                 type: __WEBPACK_IMPORTED_MODULE_1_actiontypes_index__["d" /* RECEIVE_DEALS */],
@@ -5432,9 +5433,31 @@ function requestDeals() {
     };
 }
 
+function requestMoreDeals() {
+    return function (dispatch, getState) {
+        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals({
+            makeIds: getState().selectedMakes,
+            bodyStyles: [getState().selectedBodyStyle],
+            includes: ['photos'],
+            sortColumn: getState().sortColumn,
+            sortAscending: getState().sortAscending,
+            page: getState().dealPage + 1
+        }).then(function (data) {
+            dispatch({
+                type: __WEBPACK_IMPORTED_MODULE_1_actiontypes_index__["f" /* RECEIVE_MORE_DEALS */],
+                data: data
+            });
+        });
+
+        return {
+            type: __WEBPACK_IMPORTED_MODULE_1_actiontypes_index__["g" /* REQUEST_MORE_DEALS */]
+        };
+    };
+}
+
 function sortDeals(sort) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_1_actiontypes_index__["f" /* SORT_DEALS */],
+        type: __WEBPACK_IMPORTED_MODULE_1_actiontypes_index__["h" /* SORT_DEALS */],
         sort: sort
     };
 }
@@ -8615,18 +8638,22 @@ module.exports = defaults;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return SORT_DEALS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return SORT_DEALS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return GET_DEALS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return GET_MAKES; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RECEIVE_MAKES; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return RECEIVE_DEALS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return TOGGLE_MAKE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return REQUEST_MORE_DEALS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return RECEIVE_MORE_DEALS; });
 var SORT_DEALS = 'SORT_DEALS';
 var GET_DEALS = 'GET_DEALS';
 var GET_MAKES = 'GET_MAKES';
 var RECEIVE_MAKES = 'RECEIVE_MAKES';
 var RECEIVE_DEALS = 'RECEIVE_DEALS';
 var TOGGLE_MAKE = 'TOGGLE_MAKE';
+var REQUEST_MORE_DEALS = 'REQUEST_MORE_DEALS';
+var RECEIVE_MORE_DEALS = 'RECEIVE_MORE_DEALS';
 
 /***/ }),
 /* 142 */
@@ -20911,29 +20938,29 @@ var Deals = function (_React$Component) {
     function Deals() {
         _classCallCheck(this, Deals);
 
-        return _possibleConstructorReturn(this, (Deals.__proto__ || Object.getPrototypeOf(Deals)).call(this));
+        return _possibleConstructorReturn(this, (Deals.__proto__ || Object.getPrototypeOf(Deals)).apply(this, arguments));
     }
 
-    // componentDidMount() {
-    //     const element = ReactDOM.findDOMNode(this);
-    //     const subscribeToScroll = e => {
-    //         this.props.loadMoreDeals();
-    //     };
-    //
-    //     element.addEventListener(
-    //         'scroll',
-    //         debounce(subscribeToScroll, 500, {
-    //             maxWait: 1000,
-    //             leading: true,
-    //             trailing: false,
-    //         })
-    //     );
-    // }
-
     _createClass(Deals, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            var element = __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.findDOMNode(this);
+            var subscribeToScroll = function subscribeToScroll(e) {
+                _this2.props.requestMoreDeals();
+            };
+
+            element.addEventListener('scroll', __WEBPACK_IMPORTED_MODULE_4_lodash_debounce___default()(subscribeToScroll, 500, {
+                maxWait: 1000,
+                leading: true,
+                trailing: false
+            }));
+        }
+    }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
@@ -20942,7 +20969,7 @@ var Deals = function (_React$Component) {
                     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_components_Deal__["a" /* default */], {
                         deal: deal,
                         key: index,
-                        fallbackDealImage: _this2.props.fallbackDealImage
+                        fallbackDealImage: _this3.props.fallbackDealImage
                     });
                 })
             );
@@ -21034,7 +21061,7 @@ var FilterPanel = function (_React$Component) {
     return FilterPanel;
 }(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
 
-/* unused harmony default export */ var _unused_webpack_default_export = (FilterPanel);
+/* harmony default export */ __webpack_exports__["a"] = (FilterPanel);
 
 /***/ }),
 /* 366 */
@@ -21554,7 +21581,8 @@ var initialState = {
     selectedBodyStyle: __WEBPACK_IMPORTED_MODULE_4_ramda___default.a.prop('style', __WEBPACK_IMPORTED_MODULE_5_qs___default.a.parse(window.location.search.slice(1))),
     selectedMakes: [],
     makes: null,
-    dealPage: 0,
+    dealPage: 1,
+    dealsPagination: null,
     deals: null,
     fallbackLogoImage: '/images/dmr-logo.svg',
     fallbackDealImage: '/images/dmr-logo.svg',
@@ -21621,84 +21649,19 @@ var FilterPage = function (_React$Component) {
         };
 
         _this.closeModal = _this.closeModal.bind(_this);
-        _this.toggleSort = _this.toggleSort.bind(_this);
-        _this.renderDeals = _this.renderDeals.bind(_this);
-        _this.loadMoreDeals = _this.loadMoreDeals.bind(_this);
         return _this;
     }
 
     _createClass(FilterPage, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            // api.getMakes().then(makes => {
-            //     this.setState({
-            //         makes: makes.data.data,
-            //     }, () => {
-            //         store.dispatch(sortDeals());
-            //     });
-            // });
-        }
-    }, {
-        key: 'loadMoreDeals',
-        value: function loadMoreDeals() {
-            var _this2 = this;
-
-            this.setState({
-                dealPage: this.state.dealPage + 1
-            }, function () {
-                _this2.getDeals(_this2.sortParam(_this2.state.sortColumn)).then(function (deals) {
-                    _this2.setState({
-                        deals: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.concat(_this2.state.deals, deals.data.data)
-                    });
-                });
-            });
-        }
-    }, {
         key: 'closeModal',
         value: function closeModal() {
-            var _this3 = this;
+            var _this2 = this;
 
             if (this.props.selectedMakes.length > 0) {
-                this.setState({
-                    showModal: false
-                }, function () {
-                    _this3.props.requestDeals();
-                    // this.props.actions.getDeals({
-                    //     sort: 'price',
-                    //     make_ids: this.props.makes
-                    // })
-                    // this.getDeals().then(deals => {
-                    //     this.setState({
-                    //         deals: deals.data.data,
-                    //     });
-                    // });
+                this.setState({ showModal: false }, function () {
+                    return _this2.props.requestDeals();
                 });
             }
-        }
-    }, {
-        key: 'getDeals',
-        value: function getDeals() {
-            var sort = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'price';
-            var page = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.state.dealPage;
-
-            return __WEBPACK_IMPORTED_MODULE_2_src_api__["a" /* default */].getDeals(this.state.selectedMakes, [this.state.selectedBodyStyle], ['photos'], sort, page);
-        }
-    }, {
-        key: 'toggleSort',
-        value: function toggleSort(column) {
-            var _this4 = this;
-
-            this.setState({
-                sortColumn: column,
-                sortStatus: this.state.sortStatus === 'asc' ? 'desc' : 'asc'
-            }, function () {
-                _this4.getDeals(_this4.sortParam(column)).then(function (deals) {
-                    _this4.setState({
-                        deals: deals.data.data,
-                        dealPage: 0
-                    });
-                });
-            });
         }
     }, {
         key: 'renderModal',
@@ -21722,15 +21685,14 @@ var FilterPage = function (_React$Component) {
                 { className: 'filter-page' },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
+                    { className: 'filter-page__filter-panel' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_components_FilterPanel__["a" /* default */], null)
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
                     { className: 'filter-page__deals' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_components_Sortbar__["a" /* default */], null),
-                    this.props.deals.length ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5_components_Deals__["a" /* default */]
-                    // loadMoreDeals={this.loadMoreDeals}
-                    // deals={this.state.deals}
-                    // fallbackDealImage={
-                    //     this.state.fallbackDealImage
-                    // }
-                    , null) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    this.props.deals.length ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5_components_Deals__["a" /* default */], null) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'p',
                         null,
                         'No Results'
@@ -21781,12 +21743,19 @@ var reducer = function reducer(state, action) {
             });
         case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["d" /* RECEIVE_DEALS */]:
             return Object.assign({}, state, {
-                deals: action.data.data.data
+                deals: action.data.data.data,
+                dealsPagination: action.data.data.meta.pagination,
+                dealPage: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.min(action.data.data.meta.pagination.current_page, action.data.data.meta.pagination.total_pages)
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["f" /* SORT_DEALS */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["h" /* SORT_DEALS */]:
             return Object.assign({}, state, {
                 sortColumn: action.sort,
                 sortAscending: !state.sortAscending
+            });
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["f" /* RECEIVE_MORE_DEALS */]:
+            return Object.assign({}, state, {
+                deals: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.concat(action.data.data.data, state.deals),
+                dealPage: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.min(action.data.data.meta.pagination.current_page, action.data.data.meta.pagination.total_pages)
             });
         case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["c" /* TOGGLE_MAKE */]:
             return Object.assign({}, state, {
