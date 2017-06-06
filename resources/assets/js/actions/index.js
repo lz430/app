@@ -24,9 +24,29 @@ export function receiveMakes() {
 }
 
 export function toggleMake(make_id) {
-    return {
-        type: ActionTypes.TOGGLE_MAKE,
-        make_id,
+    return (dispatch, getState) => {
+        const selectedMakes = util.toggleItem(getState().selectedMakes, make_id);
+
+        api
+            .getDeals({
+                makeIds: selectedMakes,
+                bodyStyles: getState().selectedStyles,
+                includes: ['photos'],
+                sortColumn: getState().sortColumn,
+                sortAscending: getState().sortAscending,
+                page: 1,
+            })
+            .then(data => {
+                dispatch({
+                    type: ActionTypes.RECEIVE_DEALS,
+                    data: data,
+                });
+            });
+
+        dispatch({
+            type: ActionTypes.TOGGLE_MAKE,
+            selectedMakes,
+        });
     };
 }
 

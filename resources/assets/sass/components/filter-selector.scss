@@ -1,0 +1,13 @@
+@import '../variables';
+
+.filter-selector {
+  &__selector {
+    margin-top: 5px;
+  }
+
+  &__checkbox {
+    border: 1px solid $color-sidebar-background-secondary;
+    padding: 3px;
+    margin-right: 5px;
+  }
+}
