@@ -9,7 +9,6 @@ import FilterPanel from 'components/FilterPanel';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 
-
 class FilterPage extends React.Component {
     constructor(props) {
         super(props);
@@ -32,8 +31,6 @@ class FilterPage extends React.Component {
         //         store.dispatch(sortDeals());
         //     });
         // });
-
-
     }
 
     loadMoreDeals() {
@@ -60,7 +57,7 @@ class FilterPage extends React.Component {
                     showModal: false,
                 },
                 () => {
-                    this.props.requestDeals()
+                    this.props.requestDeals();
                     // this.props.actions.getDeals({
                     //     sort: 'price',
                     //     make_ids: this.props.makes
@@ -85,8 +82,6 @@ class FilterPage extends React.Component {
         );
     }
 
-
-
     toggleSort(column) {
         this.setState(
             {
@@ -108,42 +103,30 @@ class FilterPage extends React.Component {
         return (
             <div className="modal">
                 <div className="modal__close" onClick={this.closeModal}>X</div>
-                <MakeSelector
-                    // makes={this.props.makes}
-                    // onSelectMake={this.props.actions.selectMake}
-                    // selectedMakes={this.state.selectedMakes}
-                    // fallbackLogoImage={this.state.fallbackLogoImage}
-                />
+                <MakeSelector />
             </div>
         );
     }
 
     renderDeals() {
         return (
-                <div className="filter-page">
-                    {/*<div className="filter-page__filter-panel">*/}
-                        {/*<FilterPanel />*/}
-                    {/*</div>*/}
-                    <div className="filter-page__deals">
-                        {/*<Sortbar*/}
-                            {/*results_count={this.props.deals.length}*/}
-                            {/*onPriceClick={this.props.actions.sortDeals}*/}
-                            {/*onYearClick={this.props.actions.sortDeals}*/}
-                            {/*onAtoZClick={this.props.actions.sortDeals}*/}
-                            {/*sortColumn={this.props.sortColumn}*/}
-                            {/*sortStatus={this.props.sortStatus}*/}
-                        {/*/>*/}
-                        {this.props.deals.length
-                            ? <Deals
-                                  // loadMoreDeals={this.loadMoreDeals}
-                                  // deals={this.state.deals}
-                                  // fallbackDealImage={
-                                  //     this.state.fallbackDealImage
-                                  // }
-                              />
-                            : <p>No Results</p>}
-                    </div>
+            <div className="filter-page">
+                {/*<div className="filter-page__filter-panel">*/}
+                {/*<FilterPanel />*/}
+                {/*</div>*/}
+                <div className="filter-page__deals">
+                    <Sortbar />
+                    {this.props.deals.length
+                        ? <Deals
+                          // loadMoreDeals={this.loadMoreDeals}
+                          // deals={this.state.deals}
+                          // fallbackDealImage={
+                          //     this.state.fallbackDealImage
+                          // }
+                          />
+                        : <p>No Results</p>}
                 </div>
+            </div>
         );
     }
 

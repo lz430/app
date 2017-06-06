@@ -35,7 +35,7 @@ class Deals extends React.Component {
                         <Deal
                             deal={deal}
                             key={index}
-                            // fallbackDealImage={this.props.fallbackDealImage}
+                            fallbackDealImage={this.props.fallbackDealImage}
                         />
                     );
                 })}
@@ -57,10 +57,12 @@ class Deals extends React.Component {
 //     fallbackDealImage: PropTypes.string.isRequired,
 //     loadMoreDeals: PropTypes.func.isRequired,
 // };
+
 function mapStateToProps(state) {
     return {
         deals: state.deals,
         fallbackDealImage: state.fallbackDealImage,
     }
 }
+
 export default connect(mapStateToProps, Actions)(Deals);

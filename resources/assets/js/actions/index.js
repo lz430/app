@@ -42,7 +42,7 @@ export function requestDeals() {
             bodyStyles: [getState().selectedBodyStyle],
             includes: ['photos'],
             sortColumn: getState().sortColumn,
-            sortAscDesc: getState().sortAscDesc,
+            sortAscending: getState().sortAscending,
             page: getState().page,
         }).then((data) => {
             dispatch({
@@ -57,9 +57,10 @@ export function requestDeals() {
     };
 }
 
-export function sortDeals() {
+export function sortDeals(sort) {
     return {
         type: ActionTypes.SORT_DEALS,
+        sort
     }
 }
 

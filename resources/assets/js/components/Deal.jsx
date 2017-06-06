@@ -3,10 +3,6 @@ import R from 'ramda';
 import util from 'src/util';
 
 class Deal extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const deal = this.props.deal;
         return (
@@ -14,7 +10,7 @@ class Deal extends React.Component {
                 <img
                     className="deal__image"
                     src={R.propOr(
-                        '', // this.props.fallbackDealImage
+                        this.props.fallbackDealImage,
                         'url',
                         deal.photos.data[0]
                     )}

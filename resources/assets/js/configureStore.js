@@ -16,8 +16,8 @@ const initialState = {
     deals: null,
     fallbackLogoImage: '/images/dmr-logo.svg',
     fallbackDealImage: '/images/dmr-logo.svg',
-    sortAscDesc: 'asc',
     sortColumn: 'price',
+    sortAscending: true,
 };
 
 export default () => {
