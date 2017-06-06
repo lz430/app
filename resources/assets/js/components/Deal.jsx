@@ -3,10 +3,6 @@ import R from 'ramda';
 import util from 'src/util';
 
 class Deal extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const deal = this.props.deal;
         return (

@@ -2,55 +2,69 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
+import { connect } from 'react-redux';
+import * as Actions from 'actions';
 
-const renderSortIcon = (sortStatus, sortColumn, column) => {
-    const icon = sortStatus === 'desc' ? 'cheveron-down' : 'cheveron-up';
+class Sortbar extends React.Component {
+    renderIcon(column) {
+        const icon = this.props.sortAscending ? 'cheveron-up' : 'cheveron-down';
+        return this.props.sortColumn === column
+            ? <SVGInline className="sortbar__icon" svg={zondicons[icon]} />
+            : '';
+    }
 
-    return sortColumn === column
-        ? <SVGInline className="sortbar__icon" svg={zondicons[icon]} />
-        : '';
-};
-
-const Sortbar = ({
-    results_count,
-    onPriceClick,
-    onYearClick,
-    onAtoZClick,
-    sortStatus,
-    sortColumn,
-}) => {
-    const renderIcon = renderSortIcon.bind(undefined, sortStatus, sortColumn);
-
-    return (
-        <div className="sortbar">
-            <div className="results">
-                {results_count} Results sorted by
+    render() {
+        return (
+            <div className="sortbar">
+                <div className="results">
+                    {this.props.results_count} Results sorted by
+                </div>
+                <div className="sortbar__buttons">
+                    <button
+                        className="sortbar__button"
+                        onClick={() => {
+                            this.props.sortDeals('price');
+                            this.props.requestDeals();
+                        }}
+                    >
+                        {this.renderIcon('price')} Price
+                    </button>
+                    <button
+                        className="sortbar__button"
+                        onClick={() => {
+                            this.props.sortDeals('year');
+                            this.props.requestDeals();
+                        }}
+                    >
+                        {this.renderIcon('year')} Year
+                    </button>
+                    <button
+                        className="sortbar__button"
+                        onClick={() => {
+                            this.props.sortDeals('make');
+                            this.props.requestDeals();
+                        }}
+                    >
+                        {this.renderIcon('make')} A-Z
+                    </button>
+                </div>
             </div>
-            <div className="sortbar__buttons">
-                <button className="sortbar__button" onClick={onPriceClick}>
-                    {renderIcon('price')}
-                    Price
-                </button>
-                <button className="sortbar__button" onClick={onYearClick}>
-                    {renderIcon('year')}
-                    Year
-                </button>
-                <button className="sortbar__button" onClick={onAtoZClick}>
-                    {renderIcon('make')}
-                    A-Z
-                </button>
-            </div>
-        </div>
-    );
-};
+        );
+    }
+}
 
 Sortbar.propTypes = {
     results_count: PropTypes.number.isRequired,
-    onPriceClick: PropTypes.func.isRequired,
-    onAtoZClick: PropTypes.func.isRequired,
-    onYearClick: PropTypes.func.isRequired,
     sortColumn: PropTypes.oneOf(['price', 'make', 'year']).isRequired,
-    sortStatus: PropTypes.oneOf(['asc', 'desc']).isRequired,
+    sortAscending: PropTypes.bool.isRequired,
 };
 
-export default Sortbar;
+function mapStateToProps(state) {
+    return {
+        results_count: state.deals.length,
+        sortColumn: state.sortColumn,
+        sortAscending: state.sortAscending,
+    };
+}
+
+export default connect(mapStateToProps, Actions)(Sortbar);

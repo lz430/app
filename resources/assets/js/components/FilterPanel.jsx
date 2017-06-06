@@ -1,6 +1,9 @@
 import React from 'react';
 import SidebarFilter from 'components/SidebarFilter';
 import ZipcodeFinder from 'components/ZipcodeFinder';
+import FilterStyleSelector from 'components/FilterStyleSelector';
+import { connect } from 'react-redux';
+import * as Actions from 'actions/index';
 
 class FilterPanel extends React.Component {
     constructor(props) {
@@ -16,16 +19,42 @@ class FilterPanel extends React.Component {
                     <div className="sidebar-filters__header">
                         Filter Results
                     </div>
-                    <SidebarFilter title="Vehicle Style" />
-                    <SidebarFilter title="Brand" />
-                    <SidebarFilter title="Fuel" />
-                    <SidebarFilter title="Transmission" />
-                    <SidebarFilter title="Seating" />
-                    <SidebarFilter title="Convenience" />
+                    <SidebarFilter title="Vehicle Style">
+                        {() => (
+                            <FilterStyleSelector
+                                styles={this.props.bodyStyles}
+                                selectedStyles={this.props.selectedStyles}
+                                onSelectStyle={this.props.toggleStyle}
+                            />
+                        )}
+                    </SidebarFilter>
+                    <SidebarFilter title="Brand">
+                        {() => 'body'}
+                    </SidebarFilter>
+                    <SidebarFilter title="Fuel">
+                        {() => 'body'}
+                    </SidebarFilter>
+                    <SidebarFilter title="Transmission">
+                        {() => 'body'}
+                    </SidebarFilter>
+                    <SidebarFilter title="Seating">
+                        {() => 'body'}
+                    </SidebarFilter>
+                    <SidebarFilter title="Convenience">
+                        {() => 'body'}
+                    </SidebarFilter>
                 </div>
             </div>
         );
     }
 }
 
-export default FilterPanel;
+const mapStateToProps = state => {
+    return {
+        bodyStyles: state.bodyStyles,
+        selectedStyles: state.selectedStyles,
+        fallbackLogoImage: state.fallbackLogoImage,
+    };
+};
+
+export default connect(mapStateToProps, Actions)(FilterPanel);

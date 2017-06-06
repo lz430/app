@@ -1,6 +1,7 @@
 import React from 'react';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
+import PropTypes from 'prop-types';
 
 class SidebarFilter extends React.Component {
     constructor(props) {
@@ -22,29 +23,27 @@ class SidebarFilter extends React.Component {
     render() {
         return (
             <div className="sidebar-filters__filter">
-                <div
-                    className="sidebar-filters__filter-title"
-                    onClick={this.toggle}
-                >
-                    <SVGInline
-                        className="sidebar-filters__icon"
-                        svg={
-                            this.state.open
-                                ? zondicons['cheveron-up']
-                                : zondicons['cheveron-down']
-                        }
-                    />
-                    {this.props.title}
+                <div className="sidebar-filters__filter-title" onClick={this.toggle}>
+                    <SVGInline className="sidebar-filters__icon" svg={
+                        this.state.open
+                            ? zondicons['cheveron-up']
+                            : zondicons['cheveron-down']
+                    }/> {this.props.title}
                 </div>
 
                 {this.state.open
                     ? <div className="sidebar-filters__filter-body">
-                          body
-                      </div>
+                        {this.props.children()}
+                    </div>
                     : ''}
             </div>
         );
     }
 }
+
+SidebarFilter.propTypes = {
+    title: PropTypes.string.isRequired,
+    children: PropTypes.func.isRequired,
+};
 
 export default SidebarFilter;

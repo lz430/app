@@ -3,16 +3,14 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Deal from 'components/Deal';
 import debounce from 'lodash.debounce';
+import { connect } from 'react-redux';
+import * as Actions from 'actions';
 
 class Deals extends React.Component {
-    constructor() {
-        super();
-    }
-
     componentDidMount() {
         const element = ReactDOM.findDOMNode(this);
         const subscribeToScroll = e => {
-            this.props.loadMoreDeals();
+            this.props.requestMoreDeals();
         };
 
         element.addEventListener(
@@ -53,7 +51,13 @@ Deals.propTypes = {
         })
     ),
     fallbackDealImage: PropTypes.string.isRequired,
-    loadMoreDeals: PropTypes.func.isRequired,
 };
 
-export default Deals;
+function mapStateToProps(state) {
+    return {
+        deals: state.deals,
+        fallbackDealImage: state.fallbackDealImage,
+    };
+}
+
+export default connect(mapStateToProps, Actions)(Deals);

@@ -1,3 +1,5 @@
+import R from 'ramda';
+
 const util = {
     moneyFormat: num => {
         const formatter = new Intl.NumberFormat('en-US', {
@@ -7,6 +9,11 @@ const util = {
         });
 
         return formatter.format(num);
+    },
+    toggleItem: (items, item) => {
+        return R.contains(item, items)
+            ? R.reject(R.equals(item), items)
+            : R.append(item, items);
     },
 };
 

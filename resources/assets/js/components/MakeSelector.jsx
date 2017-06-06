@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import R from 'ramda';
+import * as Actions from 'actions/index';
 
 class MakeSelector extends React.Component {
     constructor() {
@@ -29,7 +31,7 @@ class MakeSelector extends React.Component {
         return (
             <div
                 className={className}
-                onClick={this.props.onSelectMake.bind(null, make.id)}
+                onClick={() => this.props.toggleMake(make.id)}
                 key={make.id}
             >
                 <img src={this.getLogoFor(make)} />
@@ -63,8 +65,15 @@ MakeSelector.propTypes = {
         })
     ).isRequired,
     selectedMakes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onSelectMake: PropTypes.func.isRequired,
     fallbackLogoImage: PropTypes.string.isRequired,
 };
 
-export default MakeSelector;
+const mapStateToProps = state => {
+    return {
+        makes: state.makes,
+        selectedMakes: state.selectedMakes,
+        fallbackLogoImage: state.fallbackLogoImage,
+    };
+};
+
+export default connect(mapStateToProps, Actions)(MakeSelector);
