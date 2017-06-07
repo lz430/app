@@ -51,6 +51,14 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 selectedTransmissionType: action.selectedTransmissionType,
             });
+        case ActionTypes.SELECT_DEAL:
+            return Object.assign({}, state, {
+                selectedDeal: action.selectedDeal,
+            });
+        case ActionTypes.CLEAR_SELECTED_DEAL:
+            return Object.assign({}, state, {
+                selectedDeal: null,
+            });
     }
 
     return state;

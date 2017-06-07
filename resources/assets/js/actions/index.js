@@ -203,3 +203,16 @@ export function chooseTransmissionType(transmissionType) {
         });
     };
 }
+
+export function selectDeal(deal) {
+    return {
+        type: ActionTypes.SELECT_DEAL,
+        selectedDeal: deal,
+    };
+}
+
+export function clearSelectedDeal() {
+    return {
+        type: ActionTypes.SELECT_DEAL,
+    };
+}
