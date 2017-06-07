@@ -42,10 +42,6 @@ class BodyStyles
             ],
             'icon' => 'hatchback',
         ],
-//        [
-//            'style' => 'Mini Mpv',
-//            'icon' => '',
-//        ],
         'cargo van' => [
             'style' => 'Cargo Van',
             'subStyles' => [
@@ -53,14 +49,6 @@ class BodyStyles
             ],
             'icon' => '',
         ],
-//        [
-//            'style' => 'Combi',
-//            'icon' => '',
-//        ],
-//        [
-//            'style' => 'Roadster',
-//            'icon' => '',
-//        ],
         'minivan' => [
             'style' => 'Minivan',
             'icon' => 'minivan',
@@ -83,25 +71,5 @@ class BodyStyles
             'style' => 'Crossover',
             'icon' => 'crossover',
         ],
-//        [
-//            'style' => 'Micro Car',
-//            'icon' => '',
-//        ],
-//        [
-//            'style' => 'Targa',
-//            'icon' => '',
-//        ],
-//        [
-//            'style' => 'Chassis Cab',
-//            'icon' => '',
-//        ],
-//        [
-//            'style' => 'Cutaway',
-//            'icon' => '',
-//        ],
-//        [
-//            'style' => 'Van',
-//            'icon' => 'van',
-//        ],
     ];
 }
