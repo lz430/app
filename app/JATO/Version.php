@@ -3,7 +3,9 @@
 namespace App\JATO;
 
 use App\VersionDeal;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Version extends Model
 {
@@ -39,5 +41,17 @@ class Version extends Model
     public function deals()
     {
         return $this->hasMany(VersionDeal::class);
+    }
+    
+    public function scopeFilterByBodyStyle(Builder $query, $bodyStyles) : Builder
+    {
+        if (! is_array($bodyStyles)) {
+            $bodyStyles = [$bodyStyles];
+        }
+        
+        return $query->whereIn(
+            DB::raw('lower(body_style)'),
+            array_map('strtolower', $bodyStyles)
+        );
     }
 }

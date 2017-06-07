@@ -18,7 +18,7 @@ Route::get('makes', 'MakesController@index')->name('makes.index');
 Route::get('models', 'VehicleModelsController@index')->name('vehicleModels.index');
 Route::get('body-styles', 'BodyStylesController@index')->name('bodyStyles.index');
 Route::get('versions', 'VersionsController@index')->name('versions.index');
-Route::get('deals', 'DealsController@index')->name('deals.index');
+Route::get('deals', 'DealsController@getDeals')->name('deals.index');
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('saved-vehicles', 'SavedVehiclesController@index')->name('savedVehicles.index');
