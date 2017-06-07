@@ -5,8 +5,6 @@ $offset-top: 150px;
 $offset-horizontal: 50px;
 $header-height: 100px;
 
-
-
 .modal {
   &__overlay {
     background: $color-black;
@@ -30,7 +28,7 @@ $header-height: 100px;
   }
 
   &__body {
-    height: calc(100vh - #{$offset-top - $header-height});
+    height: calc(100vh - #{$offset-top + $header-height});
     overflow-y: auto;
   }
 
