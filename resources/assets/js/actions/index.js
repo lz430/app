@@ -86,6 +86,8 @@ export function requestMoreDeals() {
             .getDeals({
                 makeIds: getState().selectedMakes,
                 bodyStyles: getState().selectedStyles,
+                fuelTypes: getState().selectedFuelTypes,
+                transmissionType: getState().selectedTransmissionType,
                 includes: ['photos'],
                 sortColumn: getState().sortColumn,
                 sortAscending: getState().sortAscending,
@@ -183,6 +185,37 @@ export function toggleFuelType(fuelType) {
         dispatch({
             type: ActionTypes.TOGGLE_FUEL_TYPE,
             selectedFuelTypes: selectedFuelTypes,
+        });
+    };
+}
+
+export function chooseTransmissionType(transmissionType) {
+    return (dispatch, getState) => {
+        const selectedTransmissionType = getState().selectedTransmissionType === transmissionType
+            ? null
+            : transmissionType;
+
+        api
+            .getDeals({
+                makeIds: getState().selectedMakes,
+                bodyStyles: getState().selectedStyles,
+                fuelTypes: getState().selectedFuelTypes,
+                transmissionType: selectedTransmissionType,
+                includes: ['photos'],
+                sortColumn: getState().sortColumn,
+                sortAscending: getState().sortAscending,
+                page: 1,
+            })
+            .then(data => {
+                dispatch({
+                    type: ActionTypes.RECEIVE_DEALS,
+                    data: data,
+                });
+            });
+
+        dispatch({
+            type: ActionTypes.CHOOSE_TRANSMISSION_TYPE,
+            selectedTransmissionType: selectedTransmissionType,
         });
     };
 }

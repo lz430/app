@@ -4536,6 +4536,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["requestBodyStyles"] = requestBodyStyles;
 /* harmony export (immutable) */ __webpack_exports__["toggleStyle"] = toggleStyle;
 /* harmony export (immutable) */ __webpack_exports__["toggleFuelType"] = toggleFuelType;
+/* harmony export (immutable) */ __webpack_exports__["chooseTransmissionType"] = chooseTransmissionType;
 
 
 
@@ -4619,6 +4620,8 @@ function requestMoreDeals() {
         __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals({
             makeIds: getState().selectedMakes,
             bodyStyles: getState().selectedStyles,
+            fuelTypes: getState().selectedFuelTypes,
+            transmissionType: getState().selectedTransmissionType,
             includes: ['photos'],
             sortColumn: getState().sortColumn,
             sortAscending: getState().sortAscending,
@@ -4709,6 +4712,33 @@ function toggleFuelType(fuelType) {
         dispatch({
             type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["l" /* TOGGLE_FUEL_TYPE */],
             selectedFuelTypes: selectedFuelTypes
+        });
+    };
+}
+
+function chooseTransmissionType(transmissionType) {
+    return function (dispatch, getState) {
+        var selectedTransmissionType = getState().selectedTransmissionType === transmissionType ? null : transmissionType;
+
+        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals({
+            makeIds: getState().selectedMakes,
+            bodyStyles: getState().selectedStyles,
+            fuelTypes: getState().selectedFuelTypes,
+            transmissionType: selectedTransmissionType,
+            includes: ['photos'],
+            sortColumn: getState().sortColumn,
+            sortAscending: getState().sortAscending,
+            page: 1
+        }).then(function (data) {
+            dispatch({
+                type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["c" /* RECEIVE_DEALS */],
+                data: data
+            });
+        });
+
+        dispatch({
+            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["m" /* CHOOSE_TRANSMISSION_TYPE */],
+            selectedTransmissionType: selectedTransmissionType
         });
     };
 }
@@ -12621,6 +12651,7 @@ module.exports = function bind(fn, thisArg) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return RECEIVE_BODY_STYLES; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return TOGGLE_STYLE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return TOGGLE_FUEL_TYPE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return CHOOSE_TRANSMISSION_TYPE; });
 var SORT_DEALS = 'SORT_DEALS';
 var REQUEST_DEALS = 'REQUEST_DEALS';
 var REQUEST_MAKES = 'REQUEST_MAKES';
@@ -12633,6 +12664,7 @@ var REQUEST_BODY_STYLES = 'REQUEST_BODY_STYLES';
 var RECEIVE_BODY_STYLES = 'RECEIVE_BODY_STYLES';
 var TOGGLE_STYLE = 'TOGGLE_STYLE';
 var TOGGLE_FUEL_TYPE = 'TOGGLE_FUEL_TYPE';
+var CHOOSE_TRANSMISSION_TYPE = 'CHOOSE_TRANSMISSION_TYPE';
 
 /***/ }),
 /* 209 */
@@ -12749,6 +12781,7 @@ var api = {
         var makeIds = _ref.makeIds,
             bodyStyles = _ref.bodyStyles,
             fuelTypes = _ref.fuelTypes,
+            transmissionType = _ref.transmissionType,
             includes = _ref.includes,
             sortColumn = _ref.sortColumn,
             sortAscending = _ref.sortAscending,
@@ -12759,6 +12792,7 @@ var api = {
                 make_ids: makeIds,
                 body_styles: bodyStyles,
                 fuel_types: fuelTypes,
+                transmission_type: transmissionType,
                 includes: includes,
                 sort: sort(sortColumn, sortAscending),
                 page: page
@@ -21093,10 +21127,9 @@ function mapStateToProps(state) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_components_FilterStyleSelector__ = __webpack_require__(886);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_components_FilterMakeSelector__ = __webpack_require__(889);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_components_FilterFuelTypeSelector__ = __webpack_require__(890);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_react_redux__ = __webpack_require__(88);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_actions_index__ = __webpack_require__(77);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ramda__ = __webpack_require__(83);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ramda___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_ramda__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_components_FilterTransmissionTypeSelector__ = __webpack_require__(891);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_react_redux__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_actions_index__ = __webpack_require__(77);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21178,7 +21211,11 @@ var FilterPanel = function (_React$Component) {
                         __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__["a" /* default */],
                         { title: 'Transmission' },
                         function () {
-                            return 'body';
+                            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_components_FilterTransmissionTypeSelector__["a" /* default */], {
+                                transmissionTypes: _this2.props.transmissionTypes,
+                                selectedTransmissionType: _this2.props.selectedTransmissionType,
+                                onSelectTransmissionType: _this2.props.chooseTransmissionType
+                            });
                         }
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -21208,6 +21245,8 @@ var mapStateToProps = function mapStateToProps(state) {
         makes: state.makes,
         fuelTypes: state.fuelTypes,
         selectedFuelTypes: state.selectedFuelTypes,
+        transmissionTypes: state.transmissionTypes,
+        selectedTransmissionType: state.selectedTransmissionType,
         bodyStyles: state.bodyStyles,
         selectedStyles: state.selectedStyles,
         selectedMakes: state.selectedMakes,
@@ -21215,7 +21254,7 @@ var mapStateToProps = function mapStateToProps(state) {
     };
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6_react_redux__["b" /* connect */])(mapStateToProps, __WEBPACK_IMPORTED_MODULE_7_actions_index__)(FilterPanel));
+/* harmony default export */ __webpack_exports__["a"] = (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_7_react_redux__["b" /* connect */])(mapStateToProps, __WEBPACK_IMPORTED_MODULE_8_actions_index__)(FilterPanel));
 
 /***/ }),
 /* 365 */
@@ -21633,6 +21672,8 @@ var initialState = {
     selectedStyles: [__WEBPACK_IMPORTED_MODULE_4_ramda___default.a.prop('style', __WEBPACK_IMPORTED_MODULE_5_qs___default.a.parse(window.location.search.slice(1)))],
     bodyStyles: null,
     fuelTypes: null,
+    transmissionTypes: ['automatic', 'manual'],
+    selectedTransmissionType: null,
     selectedFuelTypes: [],
     selectedMakes: [],
     makes: null,
@@ -21897,7 +21938,7 @@ var reducer = function reducer(state, action) {
             });
         case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["f" /* RECEIVE_MORE_DEALS */]:
             return Object.assign({}, state, {
-                deals: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.concat(action.data.data.data, state.deals),
+                deals: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.concat(state.deals, action.data.data.data),
                 dealPage: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.min(action.data.data.meta.pagination.current_page, action.data.data.meta.pagination.total_pages)
             });
         case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["d" /* TOGGLE_MAKE */]:
@@ -21915,6 +21956,10 @@ var reducer = function reducer(state, action) {
         case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["l" /* TOGGLE_FUEL_TYPE */]:
             return Object.assign({}, state, {
                 selectedFuelTypes: action.selectedFuelTypes
+            });
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["m" /* CHOOSE_TRANSMISSION_TYPE */]:
+            return Object.assign({}, state, {
+                selectedTransmissionType: action.selectedTransmissionType
             });
     }
 
@@ -48389,6 +48434,85 @@ FilterFuelTypeSelector.propTypes = {
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (FilterFuelTypeSelector);
+
+/***/ }),
+/* 891 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ramda__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ramda___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ramda__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_svg_inline__ = __webpack_require__(200);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_svg_inline___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_react_svg_inline__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_zondicons__ = __webpack_require__(211);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+
+
+
+var FilterTransmissionTypeSelector = function (_React$Component) {
+    _inherits(FilterTransmissionTypeSelector, _React$Component);
+
+    function FilterTransmissionTypeSelector() {
+        _classCallCheck(this, FilterTransmissionTypeSelector);
+
+        return _possibleConstructorReturn(this, (FilterTransmissionTypeSelector.__proto__ || Object.getPrototypeOf(FilterTransmissionTypeSelector)).apply(this, arguments));
+    }
+
+    _createClass(FilterTransmissionTypeSelector, [{
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'filter-selector' },
+                this.props.transmissionTypes.map(function (transmissionType, index) {
+                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        {
+                            key: index,
+                            className: 'filter-selector__selector',
+                            onClick: _this2.props.onSelectTransmissionType.bind(null, transmissionType)
+                        },
+                        transmissionType === _this2.props.selectedTransmissionType ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'div',
+                            {
+                                className: 'filter-selector__radio'
+                            },
+                            'radio'
+                        ) : '',
+                        ' ',
+                        transmissionType
+                    );
+                })
+            );
+        }
+    }]);
+
+    return FilterTransmissionTypeSelector;
+}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+
+FilterTransmissionTypeSelector.propTypes = {
+    transmissionTypes: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string).isRequired,
+    selectedTransmissionType: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.oneOf(['automatic', 'manual']),
+    onSelectTransmissionType: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.func.isRequired
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (FilterTransmissionTypeSelector);
 
 /***/ })
 /******/ ]);

@@ -12,6 +12,8 @@ const initialState = {
     )],
     bodyStyles: null,
     fuelTypes: null,
+    transmissionTypes: ['automatic', 'manual'],
+    selectedTransmissionType: null,
     selectedFuelTypes: [],
     selectedMakes: [],
     makes: null,

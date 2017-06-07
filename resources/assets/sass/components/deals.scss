@@ -13,9 +13,9 @@
   .deal {
     background-color: $color-background-secondary;
     border-radius: 6px;
-    flex: 1;
     margin: 5px;
-    min-width: 250px;
+    max-width: 300px;
+    min-width: 300px;
 
     &__basic-info {
       padding: 5px 15px 0;
