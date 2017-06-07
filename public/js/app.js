@@ -4533,6 +4533,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["requestMoreDeals"] = requestMoreDeals;
 /* harmony export (immutable) */ __webpack_exports__["sortDeals"] = sortDeals;
 /* harmony export (immutable) */ __webpack_exports__["receiveBodyStyles"] = receiveBodyStyles;
+/* harmony export (immutable) */ __webpack_exports__["receiveMoreDeals"] = receiveMoreDeals;
 /* harmony export (immutable) */ __webpack_exports__["requestBodyStyles"] = requestBodyStyles;
 /* harmony export (immutable) */ __webpack_exports__["toggleStyle"] = toggleStyle;
 /* harmony export (immutable) */ __webpack_exports__["toggleFuelType"] = toggleFuelType;
@@ -4541,24 +4542,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+var withStateDefaults = function withStateDefaults(state, changed) {
+    return Object.assign({}, {
+        makeIds: state.selectedMakes,
+        bodyStyles: state.selectedStyles,
+        fuelTypes: state.selectedFuelTypes,
+        transmissionType: state.selectedTransmissionType,
+        includes: ['photos'],
+        sortColumn: state.sortColumn,
+        sortAscending: state.sortAscending,
+        page: 1
+    }, changed);
+};
+
 function requestMakes() {
     return function (dispatch) {
         __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getMakes().then(function (data) {
-            dispatch({
-                type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["a" /* RECEIVE_MAKES */],
-                data: data
-            });
+            dispatch(receiveMakes(data));
         });
 
         dispatch({
-            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["b" /* REQUEST_MAKES */]
+            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["a" /* REQUEST_MAKES */]
         });
     };
 }
 
-function receiveMakes() {
+function receiveMakes(data) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["a" /* RECEIVE_MAKES */]
+        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["b" /* RECEIVE_MAKES */],
+        data: data
     };
 }
 
@@ -4566,47 +4578,30 @@ function toggleMake(make_id) {
     return function (dispatch, getState) {
         var selectedMakes = __WEBPACK_IMPORTED_MODULE_1_src_util__["a" /* default */].toggleItem(getState().selectedMakes, make_id);
 
-        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals({
-            makeIds: selectedMakes,
-            bodyStyles: getState().selectedStyles,
-            includes: ['photos'],
-            sortColumn: getState().sortColumn,
-            sortAscending: getState().sortAscending,
-            page: 1
-        }).then(function (data) {
-            dispatch({
-                type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["c" /* RECEIVE_DEALS */],
-                data: data
-            });
+        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals(withStateDefaults(getState(), {
+            makeIds: selectedMakes
+        })).then(function (data) {
+            dispatch(receiveDeals(data));
         });
 
         dispatch({
-            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["d" /* TOGGLE_MAKE */],
+            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["c" /* TOGGLE_MAKE */],
             selectedMakes: selectedMakes
         });
     };
 }
 
-function receiveDeals() {
+function receiveDeals(data) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["c" /* RECEIVE_DEALS */]
+        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["d" /* RECEIVE_DEALS */],
+        data: data
     };
 }
 
 function requestDeals() {
     return function (dispatch, getState) {
-        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals({
-            makeIds: getState().selectedMakes,
-            bodyStyles: getState().selectedStyles,
-            includes: ['photos'],
-            sortColumn: getState().sortColumn,
-            sortAscending: getState().sortAscending,
-            page: 1
-        }).then(function (data) {
-            dispatch({
-                type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["c" /* RECEIVE_DEALS */],
-                data: data
-            });
+        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals(withStateDefaults(getState())).then(function (data) {
+            dispatch(receiveDeals(data));
         });
 
         dispatch({
@@ -4617,38 +4612,35 @@ function requestDeals() {
 
 function requestMoreDeals() {
     return function (dispatch, getState) {
-        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals({
-            makeIds: getState().selectedMakes,
-            bodyStyles: getState().selectedStyles,
-            fuelTypes: getState().selectedFuelTypes,
-            transmissionType: getState().selectedTransmissionType,
-            includes: ['photos'],
-            sortColumn: getState().sortColumn,
-            sortAscending: getState().sortAscending,
+        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals(withStateDefaults(getState(), {
             page: getState().dealPage + 1
-        }).then(function (data) {
-            dispatch({
-                type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["f" /* RECEIVE_MORE_DEALS */],
-                data: data
-            });
+        })).then(function (data) {
+            dispatch(receiveMoreDeals(data));
         });
 
         dispatch({
-            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["g" /* REQUEST_MORE_DEALS */]
+            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["f" /* REQUEST_MORE_DEALS */]
         });
     };
 }
 
 function sortDeals(sort) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["h" /* SORT_DEALS */],
+        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["g" /* SORT_DEALS */],
         sort: sort
     };
 }
 
 function receiveBodyStyles(deals) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["i" /* RECEIVE_BODY_STYLES */],
+        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["h" /* RECEIVE_BODY_STYLES */],
+        data: deals
+    };
+}
+
+function receiveMoreDeals(deals) {
+    return {
+        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["i" /* RECEIVE_MORE_DEALS */],
         data: deals
     };
 }
@@ -4669,18 +4661,10 @@ function toggleStyle(style) {
     return function (dispatch, getState) {
         var selectedStyles = __WEBPACK_IMPORTED_MODULE_1_src_util__["a" /* default */].toggleItem(getState().selectedStyles, style);
 
-        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals({
-            makeIds: getState().selectedMakes,
-            bodyStyles: selectedStyles,
-            includes: ['photos'],
-            sortColumn: getState().sortColumn,
-            sortAscending: getState().sortAscending,
-            page: 1
-        }).then(function (data) {
-            dispatch({
-                type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["c" /* RECEIVE_DEALS */],
-                data: data
-            });
+        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals(withStateDefaults(getState(), {
+            bodyStyles: selectedStyles
+        })).then(function (data) {
+            dispatch(receiveDeals(data));
         });
 
         dispatch({
@@ -4694,19 +4678,10 @@ function toggleFuelType(fuelType) {
     return function (dispatch, getState) {
         var selectedFuelTypes = __WEBPACK_IMPORTED_MODULE_1_src_util__["a" /* default */].toggleItem(getState().selectedFuelTypes, fuelType);
 
-        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals({
-            makeIds: getState().selectedMakes,
-            bodyStyles: getState().selectedStyles,
-            fuelTypes: selectedFuelTypes,
-            includes: ['photos'],
-            sortColumn: getState().sortColumn,
-            sortAscending: getState().sortAscending,
-            page: 1
-        }).then(function (data) {
-            dispatch({
-                type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["c" /* RECEIVE_DEALS */],
-                data: data
-            });
+        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals(withStateDefaults(getState(), {
+            fuelTypes: selectedFuelTypes
+        })).then(function (data) {
+            dispatch(receiveDeals(data));
         });
 
         dispatch({
@@ -4720,20 +4695,10 @@ function chooseTransmissionType(transmissionType) {
     return function (dispatch, getState) {
         var selectedTransmissionType = getState().selectedTransmissionType === transmissionType ? null : transmissionType;
 
-        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals({
-            makeIds: getState().selectedMakes,
-            bodyStyles: getState().selectedStyles,
-            fuelTypes: getState().selectedFuelTypes,
-            transmissionType: selectedTransmissionType,
-            includes: ['photos'],
-            sortColumn: getState().sortColumn,
-            sortAscending: getState().sortAscending,
-            page: 1
-        }).then(function (data) {
-            dispatch({
-                type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["c" /* RECEIVE_DEALS */],
-                data: data
-            });
+        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals(withStateDefaults(getState(), {
+            transmissionType: selectedTransmissionType
+        })).then(function (data) {
+            dispatch(receiveDeals(data));
         });
 
         dispatch({
@@ -12639,16 +12604,16 @@ module.exports = function bind(fn, thisArg) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return SORT_DEALS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return SORT_DEALS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return REQUEST_DEALS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return REQUEST_MAKES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RECEIVE_MAKES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return RECEIVE_DEALS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return TOGGLE_MAKE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return REQUEST_MORE_DEALS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return RECEIVE_MORE_DEALS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return REQUEST_MAKES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return RECEIVE_MAKES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return RECEIVE_DEALS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return TOGGLE_MAKE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return REQUEST_MORE_DEALS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return RECEIVE_MORE_DEALS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return REQUEST_BODY_STYLES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return RECEIVE_BODY_STYLES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return RECEIVE_BODY_STYLES; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return TOGGLE_STYLE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return TOGGLE_FUEL_TYPE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return CHOOSE_TRANSMISSION_TYPE; });
@@ -21920,32 +21885,32 @@ var FilterPage = function (_React$Component) {
 
 var reducer = function reducer(state, action) {
     switch (action.type) {
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["a" /* RECEIVE_MAKES */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["b" /* RECEIVE_MAKES */]:
             return Object.assign({}, state, {
                 makes: action.data.data.data
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["c" /* RECEIVE_DEALS */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["d" /* RECEIVE_DEALS */]:
             return Object.assign({}, state, {
                 fuelTypes: action.data.data.meta.fuelTypes,
                 deals: action.data.data.data,
                 dealsPagination: action.data.data.meta.pagination,
                 dealPage: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.min(action.data.data.meta.pagination.current_page, action.data.data.meta.pagination.total_pages)
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["h" /* SORT_DEALS */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["g" /* SORT_DEALS */]:
             return Object.assign({}, state, {
                 sortColumn: action.sort,
                 sortAscending: !state.sortAscending
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["f" /* RECEIVE_MORE_DEALS */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["i" /* RECEIVE_MORE_DEALS */]:
             return Object.assign({}, state, {
                 deals: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.concat(state.deals, action.data.data.data),
                 dealPage: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.min(action.data.data.meta.pagination.current_page, action.data.data.meta.pagination.total_pages)
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["d" /* TOGGLE_MAKE */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["c" /* TOGGLE_MAKE */]:
             return Object.assign({}, state, {
                 selectedMakes: action.selectedMakes
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["i" /* RECEIVE_BODY_STYLES */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["h" /* RECEIVE_BODY_STYLES */]:
             return Object.assign({}, state, {
                 bodyStyles: action.data.data.data
             });

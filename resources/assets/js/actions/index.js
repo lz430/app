@@ -2,13 +2,27 @@ import api from 'src/api';
 import util from 'src/util';
 import * as ActionTypes from 'actiontypes/index';
 
+const withStateDefaults = (state, changed) => {
+    return Object.assign(
+        {},
+        {
+            makeIds: state.selectedMakes,
+            bodyStyles: state.selectedStyles,
+            fuelTypes: state.selectedFuelTypes,
+            transmissionType: state.selectedTransmissionType,
+            includes: ['photos'],
+            sortColumn: state.sortColumn,
+            sortAscending: state.sortAscending,
+            page: 1,
+        },
+        changed
+    );
+};
+
 export function requestMakes() {
     return dispatch => {
         api.getMakes().then(data => {
-            dispatch({
-                type: ActionTypes.RECEIVE_MAKES,
-                data: data,
-            });
+            dispatch(receiveMakes((data)));
         });
 
         dispatch({
@@ -17,30 +31,28 @@ export function requestMakes() {
     };
 }
 
-export function receiveMakes() {
+export function receiveMakes(data) {
     return {
         type: ActionTypes.RECEIVE_MAKES,
+        data: data,
     };
 }
 
 export function toggleMake(make_id) {
     return (dispatch, getState) => {
-        const selectedMakes = util.toggleItem(getState().selectedMakes, make_id);
+        const selectedMakes = util.toggleItem(
+            getState().selectedMakes,
+            make_id
+        );
 
         api
-            .getDeals({
-                makeIds: selectedMakes,
-                bodyStyles: getState().selectedStyles,
-                includes: ['photos'],
-                sortColumn: getState().sortColumn,
-                sortAscending: getState().sortAscending,
-                page: 1,
-            })
+            .getDeals(
+                withStateDefaults(getState(), {
+                    makeIds: selectedMakes,
+                })
+            )
             .then(data => {
-                dispatch({
-                    type: ActionTypes.RECEIVE_DEALS,
-                    data: data,
-                });
+                dispatch(receiveDeals(data));
             });
 
         dispatch({
@@ -50,29 +62,18 @@ export function toggleMake(make_id) {
     };
 }
 
-export function receiveDeals() {
+export function receiveDeals(data) {
     return {
         type: ActionTypes.RECEIVE_DEALS,
+        data: data,
     };
 }
 
 export function requestDeals() {
     return (dispatch, getState) => {
-        api
-            .getDeals({
-                makeIds: getState().selectedMakes,
-                bodyStyles: getState().selectedStyles,
-                includes: ['photos'],
-                sortColumn: getState().sortColumn,
-                sortAscending: getState().sortAscending,
-                page: 1,
-            })
-            .then(data => {
-                dispatch({
-                    type: ActionTypes.RECEIVE_DEALS,
-                    data: data,
-                });
-            });
+        api.getDeals(withStateDefaults(getState())).then(data => {
+            dispatch(receiveDeals(data));
+        });
 
         dispatch({
             type: ActionTypes.REQUEST_DEALS,
@@ -83,21 +84,13 @@ export function requestDeals() {
 export function requestMoreDeals() {
     return (dispatch, getState) => {
         api
-            .getDeals({
-                makeIds: getState().selectedMakes,
-                bodyStyles: getState().selectedStyles,
-                fuelTypes: getState().selectedFuelTypes,
-                transmissionType: getState().selectedTransmissionType,
-                includes: ['photos'],
-                sortColumn: getState().sortColumn,
-                sortAscending: getState().sortAscending,
-                page: getState().dealPage + 1,
-            })
+            .getDeals(
+                withStateDefaults(getState(), {
+                    page: getState().dealPage + 1,
+                })
+            )
             .then(data => {
-                dispatch({
-                    type: ActionTypes.RECEIVE_MORE_DEALS,
-                    data: data,
-                });
+                dispatch(receiveMoreDeals(data));
             });
 
         dispatch({
@@ -120,13 +113,18 @@ export function receiveBodyStyles(deals) {
     };
 }
 
+export function receiveMoreDeals(deals) {
+    return {
+        type: ActionTypes.RECEIVE_MORE_DEALS,
+        data: deals,
+    };
+}
+
 export function requestBodyStyles() {
-    return (dispatch) => {
-        api
-            .getBodyStyles()
-            .then(data => {
-                dispatch(receiveBodyStyles(data));
-            });
+    return dispatch => {
+        api.getBodyStyles().then(data => {
+            dispatch(receiveBodyStyles(data));
+        });
 
         dispatch({
             type: ActionTypes.REQUEST_BODY_STYLES,
@@ -136,22 +134,19 @@ export function requestBodyStyles() {
 
 export function toggleStyle(style) {
     return (dispatch, getState) => {
-        const selectedStyles = util.toggleItem(getState().selectedStyles, style);
+        const selectedStyles = util.toggleItem(
+            getState().selectedStyles,
+            style
+        );
 
         api
-            .getDeals({
-                makeIds: getState().selectedMakes,
-                bodyStyles: selectedStyles,
-                includes: ['photos'],
-                sortColumn: getState().sortColumn,
-                sortAscending: getState().sortAscending,
-                page: 1,
-            })
+            .getDeals(
+                withStateDefaults(getState(), {
+                    bodyStyles: selectedStyles,
+                })
+            )
             .then(data => {
-                dispatch({
-                    type: ActionTypes.RECEIVE_DEALS,
-                    data: data,
-                });
+                dispatch(receiveDeals(data));
             });
 
         dispatch({
@@ -163,23 +158,19 @@ export function toggleStyle(style) {
 
 export function toggleFuelType(fuelType) {
     return (dispatch, getState) => {
-        const selectedFuelTypes = util.toggleItem(getState().selectedFuelTypes, fuelType);
+        const selectedFuelTypes = util.toggleItem(
+            getState().selectedFuelTypes,
+            fuelType
+        );
 
         api
-            .getDeals({
-                makeIds: getState().selectedMakes,
-                bodyStyles: getState().selectedStyles,
-                fuelTypes: selectedFuelTypes,
-                includes: ['photos'],
-                sortColumn: getState().sortColumn,
-                sortAscending: getState().sortAscending,
-                page: 1,
-            })
+            .getDeals(
+                withStateDefaults(getState(), {
+                    fuelTypes: selectedFuelTypes,
+                })
+            )
             .then(data => {
-                dispatch({
-                    type: ActionTypes.RECEIVE_DEALS,
-                    data: data,
-                });
+                dispatch(receiveDeals(data));
             });
 
         dispatch({
@@ -191,26 +182,19 @@ export function toggleFuelType(fuelType) {
 
 export function chooseTransmissionType(transmissionType) {
     return (dispatch, getState) => {
-        const selectedTransmissionType = getState().selectedTransmissionType === transmissionType
+        const selectedTransmissionType = getState().selectedTransmissionType ===
+            transmissionType
             ? null
             : transmissionType;
 
         api
-            .getDeals({
-                makeIds: getState().selectedMakes,
-                bodyStyles: getState().selectedStyles,
-                fuelTypes: getState().selectedFuelTypes,
-                transmissionType: selectedTransmissionType,
-                includes: ['photos'],
-                sortColumn: getState().sortColumn,
-                sortAscending: getState().sortAscending,
-                page: 1,
-            })
+            .getDeals(
+                withStateDefaults(getState(), {
+                    transmissionType: selectedTransmissionType,
+                })
+            )
             .then(data => {
-                dispatch({
-                    type: ActionTypes.RECEIVE_DEALS,
-                    data: data,
-                });
+                dispatch(receiveDeals(data));
             });
 
         dispatch({
