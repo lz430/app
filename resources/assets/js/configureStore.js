@@ -15,6 +15,7 @@ const initialState = {
     selectedTransmissionType: null,
     selectedFuelTypes: [],
     selectedMakes: [],
+    selectedDeal: null,
     makes: null,
     dealPage: 1,
     dealsPagination: null,

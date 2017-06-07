@@ -3,6 +3,7 @@ import R from 'ramda';
 import Modal from 'components/Modal';
 import MakeSelector from 'components/MakeSelector';
 import Deals from 'components/Deals';
+import DealDetails from 'components/DealDetails';
 import Sortbar from 'components/Sortbar';
 import FilterPanel from 'components/FilterPanel';
 import { connect } from 'react-redux';
@@ -27,15 +28,32 @@ class FilterPage extends React.Component {
         }
     }
 
-    renderModal() {
+    renderMakeSelectionModal() {
         return (
             <Modal
                 onClose={this.closeModal}
-                title='Select brand preference'
-                subtitle='Please select one or more brands that you are considering'
-                closeText='Show available options'
+                title="Select brand preference"
+                subtitle="Please select one or more brands that you are considering"
+                closeText="Show available options"
             >
-                {() => <MakeSelector/>}
+                {() => <MakeSelector />}
+            </Modal>
+        );
+    }
+
+    renderSelectedDealModal() {
+        return (
+            <Modal
+                onClose={this.props.clearSelectedDeal}
+                title={this.props.selectedDeal.model}
+                subtitle={
+                    this.props.selectedDeal.year +
+                        ' ' +
+                        this.props.selectedDeal.make
+                }
+                closeText="Back to results"
+            >
+                {() => <DealDetails />}
             </Modal>
         );
     }
@@ -55,15 +73,19 @@ class FilterPage extends React.Component {
     }
 
     render() {
-        if (this.props.makes && this.state.showModal) {
-            return this.renderModal();
-        }
+        return (
+            <div>
+                {this.props.makes && this.state.showModal
+                    ? this.renderMakeSelectionModal()
+                    : ''}
 
-        if (this.props.deals) {
-            return this.renderDeals();
-        }
+                {this.props.deals ? this.renderDeals() : ''}
 
-        return <div>'Loading'</div>;
+                {this.props.selectedDeal ? this.renderSelectedDealModal() : ''}
+            </div>
+        );
+
+        // return <div>'Loading'</div>;
     }
 }
 

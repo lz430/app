@@ -1,6 +1,8 @@
 import React from 'react';
 import R from 'ramda';
 import util from 'src/util';
+import { connect } from 'react-redux';
+import * as Actions from 'actions/index';
 
 class Deal extends React.Component {
     render() {
@@ -27,7 +29,10 @@ class Deal extends React.Component {
                 </div>
 
                 <div className="deal__buttons">
-                    <button className="deal__button deal__button--small deal__button--blue deal__button">
+                    <button
+                        onClick={this.props.selectDeal.bind(null, deal)}
+                        className="deal__button deal__button--small deal__button--blue deal__button"
+                    >
                         Details
                     </button>
                     <button className="deal__button deal__button--small">
@@ -39,4 +44,10 @@ class Deal extends React.Component {
     }
 }
 
-export default Deal;
+const mapStateToProps = state => {
+    return {
+        selectedDeal: state.selectedDeal,
+    };
+};
+
+export default connect(mapStateToProps, Actions)(Deal);
