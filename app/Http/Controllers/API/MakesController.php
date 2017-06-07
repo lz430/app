@@ -12,7 +12,7 @@ class MakesController extends BaseAPIController
     
     public function index()
     {
-        $makes = Make::all();
+        $makes = Make::whiteListed()->get();
         
         return fractal()
             ->collection($makes)

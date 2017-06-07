@@ -15,14 +15,26 @@ class MakesRequestTest extends TestCase
     public function it_shows_the_makes_data()
     {
         factory(Make::class)->create([
-            'name' => 'test-make',
+            'name' => 'dodge',
         ]);
         
         $response = $this->get(route('makes.index'));
         
-        $response->assertJsonFragment(['name' => 'test-make']);
+        $response->assertJsonFragment(['name' => 'dodge']);
         $response->assertJsonFragment(['type' => 'makes']);
         $response->assertJsonFragment(['logo' => '']);
+    }
+
+    /** @test */
+    public function it_only_shows_whitelisted_makes()
+    {
+        factory(Make::class)->create([
+            'name' => 'non-existent make',
+        ]);
+
+        $response = $this->get(route('makes.index'));
+
+        $response->assertJson(['data' => []]);
     }
     
     /** @test */

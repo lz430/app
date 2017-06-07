@@ -3,9 +3,46 @@
 namespace App\JATO;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Make extends Model
 {
+    public const MAKE_WHITELIST = [
+        'acura',
+        'alfa romeo',
+        'aston martin',
+        'audi',
+        'bmw',
+        'buick',
+        'cadillac',
+        'chevrolet',
+        'chrysler',
+        'dodge',
+        'fiat',
+        'ford',
+        'genesis',
+        'gmc',
+        'honda',
+        'hyundai',
+        'infiniti',
+        'jaguar',
+        'jeep',
+        'kia',
+        'land rover',
+        'lexus',
+        'lincoln',
+        'mercedes-benz',
+        'mini',
+        'mitsubishi',
+        'nissan',
+        'porsche',
+        'ram',
+        'subaru',
+        'toyota',
+        'volkswagon',
+        'volvo',
+    ];
+
     public const LOGOS = [
         'acura' => self::BASE_PATH . 'acura.jpg',
         'audi' => self::BASE_PATH . 'audi.jpg',
@@ -53,9 +90,17 @@ class Make extends Model
     {
         return $this->hasMany(VehicleModel::class, 'make_id');
     }
-    
+
     public function versions()
     {
         return $this->hasManyThrough(Version::class, VehicleModel::class, 'make_id', 'model_id', 'id');
+    }
+
+    public function scopeWhitelisted()
+    {
+        return self::whereIn(
+            DB::raw('lower(name)'),
+            array_map('strtolower', self::MAKE_WHITELIST)
+        );
     }
 }
