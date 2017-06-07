@@ -1,5 +1,6 @@
 import React from 'react';
 import R from 'ramda';
+import Modal from 'components/Modal';
 import MakeSelector from 'components/MakeSelector';
 import Deals from 'components/Deals';
 import Sortbar from 'components/Sortbar';
@@ -28,10 +29,14 @@ class FilterPage extends React.Component {
 
     renderModal() {
         return (
-            <div className="modal">
-                <div className="modal__close" onClick={this.closeModal}>X</div>
-                <MakeSelector />
-            </div>
+            <Modal
+                onClose={this.closeModal}
+                title='Select brand preference'
+                subtitle='Please select one or more brands that you are considering'
+                closeText='Show available options'
+            >
+                {() => <MakeSelector/>}
+            </Modal>
         );
     }
 
