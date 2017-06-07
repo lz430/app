@@ -155,4 +155,38 @@ class DealsTest extends TestCase
 
         $this->assertEquals(count($response->decodeResponseJson()['data']), 1);
     }
+
+    /** @test */
+    public function it_returns_sub_style_deals()
+    {
+        $make = factory(Make::class)->create([
+            'name' => 'some-make',
+        ]);
+        $vehicleModel = $make->models()->save(factory(VehicleModel::class)->make());
+        /** @var Version $version */
+        $parentVersion = $vehicleModel->versions()->save(factory(Version::class)->make([
+            'body_style' => 'Convertible',
+        ]));
+        $subVersion = $vehicleModel->versions()->save(factory(Version::class)->make([
+            'body_style' => 'Targa',
+        ]));
+        $parentVersion->deals()->save(
+            factory(VersionDeal::class)->make([
+                'id' => 1,
+            ])
+        );
+        $subVersion->deals()->save(
+            factory(VersionDeal::class)->make([
+                'id' => 2,
+            ])
+        );
+
+        $response = $this->getJson(route('deals.index', [
+            'body_styles' => ['convertible'],
+        ]));
+
+        $response->assertStatus(200);
+
+        $this->assertEquals(2, count($response->decodeResponseJson()['data']));
+    }
 }

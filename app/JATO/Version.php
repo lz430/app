@@ -3,6 +3,7 @@
 namespace App\JATO;
 
 use App\VersionDeal;
+use DeliverMyRide\JATO\BodyStyles;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -48,10 +49,20 @@ class Version extends Model
         if (! is_array($bodyStyles)) {
             $bodyStyles = [$bodyStyles];
         }
-        
+
+        /**
+         * Add subStyles (Sub-categories of body styles)
+         */
+        $bodyStylesWithSubStyles = array_map(
+            'strtolower',
+            array_reduce($bodyStyles, function ($acc, $bodyStyle) {
+                return array_merge($acc, BodyStyles::ALL[strtolower($bodyStyle)]['subStyles'] ?? []);
+            }, $bodyStyles)
+        );
+
         return $query->whereIn(
             DB::raw('lower(body_style)'),
-            array_map('strtolower', $bodyStyles)
+            array_map('strtolower', $bodyStylesWithSubStyles)
         );
     }
 }
