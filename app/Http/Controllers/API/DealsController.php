@@ -16,7 +16,7 @@ class DealsController extends BaseAPIController
     private const TRANSFORMER = DealTransformer::class;
     private const RESOURCE_NAME = 'deals';
     
-    public function index(Request $request)
+    public function getDeals(Request $request)
     {
         $this->validate($request, [
             'make_ids' => 'sometimes|required|array',
@@ -40,7 +40,7 @@ class DealsController extends BaseAPIController
             ->paginateWith(new IlluminatePaginatorAdapter($deals))
             ->parseIncludes($request->get('includes', []))
             ->addMeta([
-                'fuelTypes' => VersionDeal::select('fuel')->groupBy('fuel')->get()->pluck('fuel'),
+                'fuelTypes' => VersionDeal::allFuelTypes(),
             ])
             ->respond();
     }
@@ -56,11 +56,8 @@ class DealsController extends BaseAPIController
 
     private function filterQueryByFuelTypes(Builder $query, Request $request) : Builder
     {
-        if (request()->has('fuel_types')) {
-            $query->whereIn(
-                DB::raw('lower(fuel)'),
-                array_map('strtolower', request('fuel_types'))
-            );
+        if ($request->has('fuel_types')) {
+            $query->filterByFuelType(request('fuel_types'));
         }
 
         return $query;
@@ -70,15 +67,12 @@ class DealsController extends BaseAPIController
     {
         return VersionDeal::whereHas('version', function (Builder $query) use ($request) {
             if ($request->has('body_styles')) {
-                $query->whereIn(
-                    DB::raw('lower(body_style)'),
-                    array_map('strtolower', request('body_styles'))
-                );
+                $query->filterByBodyStyle(request('body_styles'));
             }
 
             $query->whereHas('model', function (Builder $query) use ($request) {
                 if ($request->has('make_ids')) {
-                    $query->whereIn('make_id', request('make_ids'));
+                    $query->filterByMake(request('make_ids'));
                 }
             });
         });
