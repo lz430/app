@@ -42,10 +42,6 @@ class MakeSelector extends React.Component {
     render() {
         return (
             <div className="make-selector">
-                <div className="make-selector__title">
-                    Select Several Brands To Compare
-                </div>
-
                 <div className="make-selector__makes">
                     {this.props.makes.map(this.renderMake)}
                 </div>

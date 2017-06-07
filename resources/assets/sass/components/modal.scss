@@ -1,17 +1,68 @@
 @import '../variables';
+@import '../mixins/button';
+
+$offset-top: 150px;
+$offset-horizontal: 50px;
+$header-height: 100px;
+
+
 
 .modal {
-  background-color: $color-background-primary;
-  height: calc(100vh - 20px);
-  left: 0;
-  margin: 10px;
-  overflow: scroll;
-  position: absolute;
-  top: 0;
-  width: calc(100vw - 20px);
+  &__overlay {
+    background: $color-black;
+    height: 100vh;
+    left: 0;
+    opacity: .5;
+    position: absolute;
+    top: 0;
+    width: 100vw;
+  }
+
+  &__content {
+    background-color: $color-background-primary;
+    height: calc(100vh - #{$offset-top});
+    left: 50px;
+    opacity: 1;
+    overflow: scroll;
+    position: absolute;
+    top: 60px;
+    width: calc(100vw - #{$offset-horizontal * 2});
+  }
+
+  &__body {
+    height: calc(100vh - #{$offset-top - $header-height});
+    overflow-y: auto;
+  }
+
+  &__header {
+    background-color: $color-background-secondary;
+    display: flex;
+    height: $header-height;
+    padding: 20px;
+  }
+
+  &__titles {
+    flex: 2;
+  }
+
+  &__title {
+    font-size: 1.2rem;
+  }
+
+  &__subtitle {
+    //
+  }
 
   &__close {
-    float: right;
+    align-content: center;
+    align-self: center;
+    display: flex;
+    flex: 1;
     font-size: 2rem;
+    justify-content: flex-end;
+  }
+
+  &__close-button {
+    @include button;
   }
 }

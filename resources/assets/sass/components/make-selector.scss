@@ -3,12 +3,6 @@
 .make-selector {
   text-align: center;
 
-  &__title {
-    background: $color-background-primary;
-    display: inline-flex;
-    padding: 10px;
-  }
-
   &__makes {
     align-content: flex-start;
     display: flex;
