@@ -4,9 +4,10 @@ import ZipcodeFinder from 'components/ZipcodeFinder';
 import FilterStyleSelector from 'components/FilterStyleSelector';
 import FilterMakeSelector from 'components/FilterMakeSelector';
 import FilterFuelTypeSelector from 'components/FilterFuelTypeSelector';
+import FilterTransmissionTypeSelector
+    from 'components/FilterTransmissionTypeSelector';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
-import R from 'ramda';
 
 class FilterPanel extends React.Component {
     constructor(props) {
@@ -50,7 +51,17 @@ class FilterPanel extends React.Component {
                         )}
                     </SidebarFilter>
                     <SidebarFilter title="Transmission">
-                        {() => 'body'}
+                        {() => (
+                            <FilterTransmissionTypeSelector
+                                transmissionTypes={this.props.transmissionTypes}
+                                selectedTransmissionType={
+                                    this.props.selectedTransmissionType
+                                }
+                                onSelectTransmissionType={
+                                    this.props.chooseTransmissionType
+                                }
+                            />
+                        )}
                     </SidebarFilter>
                     <SidebarFilter title="Seating">
                         {() => 'body'}
@@ -69,6 +80,8 @@ const mapStateToProps = state => {
         makes: state.makes,
         fuelTypes: state.fuelTypes,
         selectedFuelTypes: state.selectedFuelTypes,
+        transmissionTypes: state.transmissionTypes,
+        selectedTransmissionType: state.selectedTransmissionType,
         bodyStyles: state.bodyStyles,
         selectedStyles: state.selectedStyles,
         selectedMakes: state.selectedMakes,

@@ -22,7 +22,11 @@ class FilterStyleSelector extends React.Component {
                 key={style.style}
             >
                 {bodyStyleIcons[style.icon]
-                    ? <SVGInline width="50px" className="filter-style-selector__icon" svg={bodyStyleIcons[style.icon]} />
+                    ? <SVGInline
+                          width="50px"
+                          className="filter-style-selector__icon"
+                          svg={bodyStyleIcons[style.icon]}
+                      />
                     : ''}
 
                 <div className="filter-style-selector__name">{style.style}</div>

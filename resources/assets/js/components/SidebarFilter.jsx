@@ -23,18 +23,26 @@ class SidebarFilter extends React.Component {
     render() {
         return (
             <div className="sidebar-filters__filter">
-                <div className="sidebar-filters__filter-title" onClick={this.toggle}>
-                    <SVGInline className="sidebar-filters__icon" svg={
-                        this.state.open
-                            ? zondicons['cheveron-up']
-                            : zondicons['cheveron-down']
-                    }/> {this.props.title}
+                <div
+                    className="sidebar-filters__filter-title"
+                    onClick={this.toggle}
+                >
+                    <SVGInline
+                        className="sidebar-filters__icon"
+                        svg={
+                            this.state.open
+                                ? zondicons['cheveron-up']
+                                : zondicons['cheveron-down']
+                        }
+                    />
+                    {' '}
+                    {this.props.title}
                 </div>
 
                 {this.state.open
                     ? <div className="sidebar-filters__filter-body">
-                        {this.props.children()}
-                    </div>
+                          {this.props.children()}
+                      </div>
                     : ''}
             </div>
         );

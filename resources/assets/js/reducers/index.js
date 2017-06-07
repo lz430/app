@@ -25,7 +25,7 @@ const reducer = (state, action) => {
             });
         case ActionTypes.RECEIVE_MORE_DEALS:
             return Object.assign({}, state, {
-                deals: R.concat(action.data.data.data, state.deals),
+                deals: R.concat(state.deals, action.data.data.data),
                 dealPage: R.min(
                     action.data.data.meta.pagination.current_page,
                     action.data.data.meta.pagination.total_pages
@@ -46,6 +46,10 @@ const reducer = (state, action) => {
         case ActionTypes.TOGGLE_FUEL_TYPE:
             return Object.assign({}, state, {
                 selectedFuelTypes: action.selectedFuelTypes,
+            });
+        case ActionTypes.CHOOSE_TRANSMISSION_TYPE:
+            return Object.assign({}, state, {
+                selectedTransmissionType: action.selectedTransmissionType,
             });
     }
 

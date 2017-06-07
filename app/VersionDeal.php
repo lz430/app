@@ -43,6 +43,30 @@ class VersionDeal extends Model
             array_map('strtolower', $fuelTypes)
         );
     }
-    
-    
+
+    public function scopeFilterByAutomaticTransmission(Builder $query) : Builder
+    {
+        return $query->where(
+            'transmission',
+            'like',
+            '%auto%'
+        )->orWhere(
+            'transmission',
+            'like',
+            '%cvt%'
+        );
+    }
+
+    public function scopeFilterByManualTransmission(Builder $query) : Builder
+    {
+        return $query->where(
+            'transmission',
+            'not like',
+            '%auto%'
+        )->where(
+            'transmission',
+            'not like',
+            '%cvt%'
+        );
+    }
 }

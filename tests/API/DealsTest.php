@@ -123,4 +123,36 @@ class DealsTest extends TestCase
 
         $this->assertEquals(count($response->decodeResponseJson()['data']), 1);
     }
+
+    /** @test */
+    public function it_filters_by_transmission_types()
+    {
+        $make = factory(Make::class)->create([
+            'name' => 'some-make',
+        ]);
+        $vehicleModel = $make->models()->save(factory(VehicleModel::class)->make());
+        /** @var Version $version */
+        $version = $vehicleModel->versions()->save(factory(Version::class)->make([
+            'body_style' => 'Cargo Van',
+        ]));
+        $version->deals()->saveMany([
+            factory(VersionDeal::class)->make([
+                'transmission' => '9-Speed 948TE Automatic',
+            ]),
+            factory(VersionDeal::class)->make([
+                'transmission' => '9-Speed Automatic',
+            ]),
+            factory(VersionDeal::class)->make([
+                'transmission' => '6-Speed',
+            ]),
+        ]);
+
+        $response = $this->getJson(route('deals.index', [
+            'make_ids' => [$make->id, 2, 3],
+            'sort' => 'price',
+            'transmission_type' => 'manual',
+        ]));
+
+        $this->assertEquals(count($response->decodeResponseJson()['data']), 1);
+    }
 }

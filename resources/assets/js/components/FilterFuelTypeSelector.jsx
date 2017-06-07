@@ -13,16 +13,20 @@ class FilterFuelTypeSelector extends React.Component {
                         <div
                             key={index}
                             className="filter-selector__selector"
-                            onClick={this.props.onSelectFuelType.bind(null, fuelType)}
+                            onClick={this.props.onSelectFuelType.bind(
+                                null,
+                                fuelType
+                            )}
                         >
                             {R.contains(fuelType, this.props.selectedFuelTypes)
-                                 ? <SVGInline
+                                ? <SVGInline
                                       width="15px"
                                       className="filter-selector__checkbox"
                                       svg={zondicons['checkmark']}
                                   />
-                                : ''
-                            } {fuelType}
+                                : ''}
+                            {' '}
+                            {fuelType}
                         </div>
                     );
                 })}
@@ -32,12 +36,8 @@ class FilterFuelTypeSelector extends React.Component {
 }
 
 FilterFuelTypeSelector.propTypes = {
-    fuelTypes: PropTypes.arrayOf(
-        PropTypes.string,
-    ).isRequired,
-    selectedFuelTypes: PropTypes.arrayOf(
-        PropTypes.string,
-    ).isRequired,
+    fuelTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    selectedFuelTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
     onSelectFuelType: PropTypes.func.isRequired,
 };
 
