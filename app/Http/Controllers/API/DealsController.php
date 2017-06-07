@@ -21,12 +21,14 @@ class DealsController extends BaseAPIController
             'make_ids' => 'sometimes|required|array',
             'body_styles' => 'sometimes|required|array',
             'fuel_types' => 'sometimes|required|array',
+            'transmission_type' => 'sometimes|required|string|in:automatic,manual',
             'sort' => 'sometimes|required|string',
         ]);
         
         $dealsQuery = $this->getQueryByMakesAndBodyStyles($request);
         $dealsQuery = $this->filterQueryByFuelTypes($dealsQuery, $request);
-        $dealsQuery = Sort::sortQuery($dealsQuery, request('sort', 'price'));
+        $dealsQuery = $this->filterQueryByTransmissionType($dealsQuery, $request);
+        $dealsQuery = Sort::sortQuery($dealsQuery, $request->get('sort', 'price'));
         $dealsQuery = $this->eagerLoadIncludes($dealsQuery, $request);
 
         $deals = $dealsQuery->paginate(15);
@@ -56,7 +58,7 @@ class DealsController extends BaseAPIController
     private function filterQueryByFuelTypes(Builder $query, Request $request) : Builder
     {
         if ($request->has('fuel_types')) {
-            $query->filterByFuelType(request('fuel_types'));
+            $query->filterByFuelType($request->get('fuel_types'));
         }
 
         return $query;
@@ -66,14 +68,25 @@ class DealsController extends BaseAPIController
     {
         return VersionDeal::whereHas('version', function (Builder $query) use ($request) {
             if ($request->has('body_styles')) {
-                $query->filterByBodyStyle(request('body_styles'));
+                $query->filterByBodyStyle($request->get('body_styles'));
             }
 
             $query->whereHas('model', function (Builder $query) use ($request) {
                 if ($request->has('make_ids')) {
-                    $query->filterByMake(request('make_ids'));
+                    $query->filterByMake($request->get('make_ids'));
                 }
             });
         });
+    }
+
+    private function filterQueryByTransmissionType(Builder $query, Request $request) : Builder
+    {
+        if ($request->has('transmission_type')) {
+            $request->get('transmission_type') === 'manual'
+                ? $query->filterByManualTransmission()
+                : $query->filterByAutomaticTransmission();
+        }
+
+        return $query;
     }
 }
