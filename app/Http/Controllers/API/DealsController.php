@@ -7,7 +7,6 @@ use App\VersionDeal;
 use DeliverMyRide\JsonApi\Sort;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Serializer\DataArraySerializer;
 

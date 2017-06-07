@@ -43,6 +43,4 @@ class VersionDeal extends Model
             array_map('strtolower', $fuelTypes)
         );
     }
-    
-    
 }
