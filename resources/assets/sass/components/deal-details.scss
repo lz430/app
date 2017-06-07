@@ -1,0 +1,23 @@
+@import '../variables';
+
+.deal-details {
+  padding: 15px;
+
+  &__primary-image {
+    height: 50%;
+    width: 50%;
+  }
+
+  &__thumbnail-images {
+    width: 50%;
+  }
+
+  &__thumbnail-image {
+    margin-right: 2px;
+    width: 50px;
+
+    &--selected {
+      border: 1px solid $color-blue;
+    }
+  }
+}
