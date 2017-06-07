@@ -4,7 +4,8 @@ import ZipcodeFinder from 'components/ZipcodeFinder';
 import FilterStyleSelector from 'components/FilterStyleSelector';
 import FilterMakeSelector from 'components/FilterMakeSelector';
 import FilterFuelTypeSelector from 'components/FilterFuelTypeSelector';
-import FilterTransmissionTypeSelector from 'components/FilterTransmissionTypeSelector';
+import FilterTransmissionTypeSelector
+    from 'components/FilterTransmissionTypeSelector';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 
@@ -53,8 +54,12 @@ class FilterPanel extends React.Component {
                         {() => (
                             <FilterTransmissionTypeSelector
                                 transmissionTypes={this.props.transmissionTypes}
-                                selectedTransmissionType={this.props.selectedTransmissionType}
-                                onSelectTransmissionType={this.props.chooseTransmissionType}
+                                selectedTransmissionType={
+                                    this.props.selectedTransmissionType
+                                }
+                                onSelectTransmissionType={
+                                    this.props.chooseTransmissionType
+                                }
                             />
                         )}
                     </SidebarFilter>

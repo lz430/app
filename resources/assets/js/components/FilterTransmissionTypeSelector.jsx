@@ -13,14 +13,19 @@ class FilterTransmissionTypeSelector extends React.Component {
                         <div
                             key={index}
                             className="filter-selector__selector"
-                            onClick={this.props.onSelectTransmissionType.bind(null, transmissionType)}
+                            onClick={this.props.onSelectTransmissionType.bind(
+                                null,
+                                transmissionType
+                            )}
                         >
-                            {transmissionType === this.props.selectedTransmissionType
-                                 ? <div
-                                      className="filter-selector__radio"
-                                >radio</div>
-                                : ''
-                            } {transmissionType}
+                            {transmissionType ===
+                                this.props.selectedTransmissionType
+                                ? <div className="filter-selector__radio">
+                                      radio
+                                  </div>
+                                : ''}
+                            {' '}
+                            {transmissionType}
                         </div>
                     );
                 })}
@@ -30,13 +35,8 @@ class FilterTransmissionTypeSelector extends React.Component {
 }
 
 FilterTransmissionTypeSelector.propTypes = {
-    transmissionTypes: PropTypes.arrayOf(
-        PropTypes.string,
-    ).isRequired,
-    selectedTransmissionType: PropTypes.oneOf([
-        'automatic',
-        'manual',
-    ]),
+    transmissionTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    selectedTransmissionType: PropTypes.oneOf(['automatic', 'manual']),
     onSelectTransmissionType: PropTypes.func.isRequired,
 };
 

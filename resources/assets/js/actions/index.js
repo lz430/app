@@ -22,7 +22,7 @@ const withStateDefaults = (state, changed) => {
 export function requestMakes() {
     return dispatch => {
         api.getMakes().then(data => {
-            dispatch(receiveMakes((data)));
+            dispatch(receiveMakes(data));
         });
 
         dispatch({

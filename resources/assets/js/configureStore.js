@@ -6,10 +6,9 @@ import R from 'ramda';
 import qs from 'qs';
 
 const initialState = {
-    selectedStyles: [R.prop(
-        'style',
-        qs.parse(window.location.search.slice(1))
-    )],
+    selectedStyles: [
+        R.prop('style', qs.parse(window.location.search.slice(1))),
+    ],
     bodyStyles: null,
     fuelTypes: null,
     transmissionTypes: ['automatic', 'manual'],
