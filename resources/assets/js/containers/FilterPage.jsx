@@ -5,6 +5,7 @@ import MakeSelector from 'components/MakeSelector';
 import Deals from 'components/Deals';
 import DealDetails from 'components/DealDetails';
 import Sortbar from 'components/Sortbar';
+import Filterbar from 'components/Filterbar';
 import FilterPanel from 'components/FilterPanel';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
@@ -66,6 +67,7 @@ class FilterPage extends React.Component {
                 </div>
                 <div className="filter-page__deals">
                     <Sortbar />
+                    <Filterbar />
                     {this.props.deals.length ? <Deals /> : <p>No Results</p>}
                 </div>
             </div>

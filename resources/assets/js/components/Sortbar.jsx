@@ -9,19 +9,28 @@ class Sortbar extends React.Component {
     renderIcon(column) {
         const icon = this.props.sortAscending ? 'cheveron-up' : 'cheveron-down';
         return this.props.sortColumn === column
-            ? <SVGInline className="sortbar__icon" svg={zondicons[icon]} />
+            ? <SVGInline
+                  height="15px"
+                  width="15px"
+                  className="sortbar__icon"
+                  svg={zondicons[icon]}
+              />
             : '';
     }
 
     render() {
         return (
             <div className="sortbar">
-                <div className="results">
-                    {this.props.results_count} Results sorted by
+                <div className="sortbar__count">
+                    <span className="sortbar__count-number">
+                        {this.props.results_count}
+                    </span>
+                    {' '}
+                    results
                 </div>
                 <div className="sortbar__buttons">
                     <button
-                        className="sortbar__button"
+                        className="sortbar__button sortbar__button--small"
                         onClick={() => {
                             this.props.sortDeals('price');
                             this.props.requestDeals();
@@ -30,7 +39,7 @@ class Sortbar extends React.Component {
                         {this.renderIcon('price')} Price
                     </button>
                     <button
-                        className="sortbar__button"
+                        className="sortbar__button sortbar__button--small"
                         onClick={() => {
                             this.props.sortDeals('year');
                             this.props.requestDeals();
@@ -39,7 +48,7 @@ class Sortbar extends React.Component {
                         {this.renderIcon('year')} Year
                     </button>
                     <button
-                        className="sortbar__button"
+                        className="sortbar__button sortbar__button--small"
                         onClick={() => {
                             this.props.sortDeals('make');
                             this.props.requestDeals();

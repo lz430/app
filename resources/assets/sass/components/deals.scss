@@ -3,9 +3,10 @@
 
 .deals {
   background-color: $color-background-primary;
+  border-bottom: 1px solid $color-section-bottom-border;
   display: flex;
   flex-flow: row wrap;
-  height: calc(100vh - #{$nav-height} - #{$sortbar-height} - #{$footer-height});
+  height: calc(100vh - #{$nav-height + $sortbar-height + $footer-height + $filterbar-height});
   justify-content: flex-start;
   overflow-y: scroll;
   padding: 20px 40px;
