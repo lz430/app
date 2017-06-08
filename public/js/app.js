@@ -19972,8 +19972,6 @@ Array.from(document.getElementsByTagName('FilterPage')).map(function (element) {
     ), element);
 });
 
-if (false) module.hot.accept();
-
 /***/ }),
 /* 342 */
 /***/ (function(module, exports) {
@@ -22039,7 +22037,7 @@ var Sortbar = function (_React$Component) {
                 { className: 'sortbar' },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
-                    { className: 'results' },
+                    { className: 'sortbar__count' },
                     this.props.results_count,
                     ' Results sorted by'
                 ),
@@ -22315,14 +22313,6 @@ var initialState = {
 /* harmony default export */ __webpack_exports__["a"] = (function () {
     var composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || __WEBPACK_IMPORTED_MODULE_0_redux__["b" /* compose */];
     var store = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_redux__["c" /* createStore */])(__WEBPACK_IMPORTED_MODULE_2_reducers_index__["a" /* default */], initialState, composeEnhancers(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_redux__["d" /* applyMiddleware */])(__WEBPACK_IMPORTED_MODULE_1_redux_thunk___default.a)));
-
-    if (false) {
-        // Enable Webpack hot module replacement for reducers
-        module.hot.accept('./reducers', function () {
-            var nextRootReducer = require('./reducers/index');
-            store.replaceReducer(nextRootReducer);
-        });
-    }
 
     store.dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_actions_index__["requestMakes"])());
     store.dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_actions_index__["requestBodyStyles"])());

@@ -16,7 +16,7 @@ class Sortbar extends React.Component {
     render() {
         return (
             <div className="sortbar">
-                <div className="results">
+                <div className="sortbar__count">
                     {this.props.results_count} Results sorted by
                 </div>
                 <div className="sortbar__buttons">

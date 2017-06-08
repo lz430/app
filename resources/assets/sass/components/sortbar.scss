@@ -7,8 +7,11 @@
   max-height: $sortbar-height;
 
   &__count {
+    align-items: center;
+    display: flex;
     flex: 1;
-    justify-self: flex-start;
+    font-size: 1.1rem;
+    margin-left: 10px;
   }
 
   &__buttons {
