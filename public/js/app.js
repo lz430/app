@@ -21577,6 +21577,8 @@ var FilterFuelTypeSelector = function (_React$Component) {
                 'div',
                 { className: 'filter-selector' },
                 this.props.fuelTypes.map(function (fuelType, index) {
+                    var className = _this2.props.selectedFuelType === fuelType ? 'filter-selector__radio filter-selector__radio--selected' : 'filter-selector__radio';
+
                     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
                         {
@@ -21584,11 +21586,7 @@ var FilterFuelTypeSelector = function (_React$Component) {
                             className: 'filter-selector__selector',
                             onClick: _this2.props.onChooseFuelType.bind(null, fuelType)
                         },
-                        _this2.props.selectedFuelType === fuelType ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_react_svg_inline___default.a, {
-                            width: '15px',
-                            className: 'filter-selector__checkbox',
-                            svg: __WEBPACK_IMPORTED_MODULE_4_zondicons__["a" /* default */]['checkmark']
-                        }) : '',
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: className }),
                         ' ',
                         fuelType
                     );
@@ -21663,9 +21661,10 @@ var FilterMakeSelector = function (_React$Component) {
                         },
                         __WEBPACK_IMPORTED_MODULE_2_ramda___default.a.contains(make.id, _this2.props.selectedMakes) ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_react_svg_inline___default.a, {
                             width: '15px',
-                            className: 'filter-selector__checkbox',
+                            height: '15px',
+                            className: 'filter-selector__checkbox filter-selector__checkbox--selected',
                             svg: __WEBPACK_IMPORTED_MODULE_4_zondicons__["a" /* default */]['checkmark']
-                        }) : '',
+                        }) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'filter-selector__checkbox' }),
                         make.attributes.name
                     );
                 })
@@ -21968,6 +21967,8 @@ var FilterTransmissionTypeSelector = function (_React$Component) {
                 'div',
                 { className: 'filter-selector' },
                 this.props.transmissionTypes.map(function (transmissionType, index) {
+                    var className = _this2.props.selectedTransmissionType === transmissionType ? 'filter-selector__radio filter-selector__radio--selected' : 'filter-selector__radio';
+
                     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
                         {
@@ -21975,11 +21976,7 @@ var FilterTransmissionTypeSelector = function (_React$Component) {
                             className: 'filter-selector__selector',
                             onClick: _this2.props.onSelectTransmissionType.bind(null, transmissionType)
                         },
-                        transmissionType === _this2.props.selectedTransmissionType ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'div',
-                            { className: 'filter-selector__radio' },
-                            'radio'
-                        ) : '',
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: className }),
                         ' ',
                         transmissionType
                     );

@@ -9,6 +9,11 @@ class FilterTransmissionTypeSelector extends React.Component {
         return (
             <div className="filter-selector">
                 {this.props.transmissionTypes.map((transmissionType, index) => {
+                    const className = this.props.selectedTransmissionType ===
+                        transmissionType
+                        ? 'filter-selector__radio filter-selector__radio--selected'
+                        : 'filter-selector__radio';
+
                     return (
                         <div
                             key={index}
@@ -18,14 +23,7 @@ class FilterTransmissionTypeSelector extends React.Component {
                                 transmissionType
                             )}
                         >
-                            {transmissionType ===
-                                this.props.selectedTransmissionType
-                                ? <div className="filter-selector__radio">
-                                      radio
-                                  </div>
-                                : ''}
-                            {' '}
-                            {transmissionType}
+                            <div className={className} /> {transmissionType}
                         </div>
                     );
                 })}

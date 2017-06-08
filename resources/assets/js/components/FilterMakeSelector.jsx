@@ -21,10 +21,11 @@ class FilterMakeSelector extends React.Component {
                             {R.contains(make.id, this.props.selectedMakes)
                                 ? <SVGInline
                                       width="15px"
-                                      className="filter-selector__checkbox"
+                                      height="15px"
+                                      className="filter-selector__checkbox filter-selector__checkbox--selected"
                                       svg={zondicons['checkmark']}
                                   />
-                                : ''}
+                                : <div className="filter-selector__checkbox" />}
                             {make.attributes.name}
                         </div>
                     );

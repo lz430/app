@@ -47,10 +47,7 @@ class Filterbar extends React.Component {
         return (
             <div
                 className="filterbar__filter"
-                onClick={this.props.chooseFuelType.bind(
-                    null,
-                    fuelType
-                )}
+                onClick={this.props.chooseFuelType.bind(null, fuelType)}
             >
                 {fuelType} {this.renderX()}
             </div>
@@ -97,9 +94,7 @@ class Filterbar extends React.Component {
                     {this.props.selectedStyles.map(this.renderFilterStyles)}
                     {this.props.selectedMakes.map(this.renderFilterMakes)}
                     {this.props.selectedFuelType
-                        ? this.renderFilterFuelType(
-                            this.props.selectedFuelType
-                        )
+                        ? this.renderFilterFuelType(this.props.selectedFuelType)
                         : ''}
                     {this.props.selectedTransmissionType
                         ? this.renderFilterTransmissionType(

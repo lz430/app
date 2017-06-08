@@ -158,8 +158,7 @@ export function toggleStyle(style) {
 
 export function chooseFuelType(fuelType) {
     return (dispatch, getState) => {
-        const selectedFuelType = getState().selectedFuelType ===
-        fuelType
+        const selectedFuelType = getState().selectedFuelType === fuelType
             ? null
             : fuelType;
 

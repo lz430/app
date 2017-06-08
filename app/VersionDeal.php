@@ -34,7 +34,7 @@ class VersionDeal extends Model
 
     public static function allFuelTypes()
     {
-        return self::select('fuel')->groupBy('fuel')->get()->pluck('fuel');
+        return self::select('fuel')->where('fuel', '!=', '')->groupBy('fuel')->get()->pluck('fuel');
     }
     
     public function scopeFilterByFuelType(Builder $query, $fuelType) : Builder

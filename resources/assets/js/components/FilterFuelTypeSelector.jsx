@@ -9,6 +9,10 @@ class FilterFuelTypeSelector extends React.Component {
         return (
             <div className="filter-selector">
                 {this.props.fuelTypes.map((fuelType, index) => {
+                    const className = this.props.selectedFuelType === fuelType
+                        ? 'filter-selector__radio filter-selector__radio--selected'
+                        : 'filter-selector__radio';
+
                     return (
                         <div
                             key={index}
@@ -18,15 +22,7 @@ class FilterFuelTypeSelector extends React.Component {
                                 fuelType
                             )}
                         >
-                            {this.props.selectedFuelType === fuelType
-                                ? <SVGInline
-                                      width="15px"
-                                      className="filter-selector__checkbox"
-                                      svg={zondicons['checkmark']}
-                                  />
-                                : ''}
-                            {' '}
-                            {fuelType}
+                            <div className={className} /> {fuelType}
                         </div>
                     );
                 })}
