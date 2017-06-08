@@ -3755,7 +3755,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["receiveMoreDeals"] = receiveMoreDeals;
 /* harmony export (immutable) */ __webpack_exports__["requestBodyStyles"] = requestBodyStyles;
 /* harmony export (immutable) */ __webpack_exports__["toggleStyle"] = toggleStyle;
-/* harmony export (immutable) */ __webpack_exports__["toggleFuelType"] = toggleFuelType;
+/* harmony export (immutable) */ __webpack_exports__["chooseFuelType"] = chooseFuelType;
 /* harmony export (immutable) */ __webpack_exports__["chooseTransmissionType"] = chooseTransmissionType;
 /* harmony export (immutable) */ __webpack_exports__["selectDeal"] = selectDeal;
 /* harmony export (immutable) */ __webpack_exports__["clearSelectedDeal"] = clearSelectedDeal;
@@ -3768,7 +3768,7 @@ var withStateDefaults = function withStateDefaults(state, changed) {
     return Object.assign({}, {
         makeIds: state.selectedMakes,
         bodyStyles: state.selectedStyles,
-        fuelTypes: state.selectedFuelTypes,
+        fuelType: state.selectedFuelType,
         transmissionType: state.selectedTransmissionType,
         includes: ['photos'],
         sortColumn: state.sortColumn,
@@ -3896,19 +3896,19 @@ function toggleStyle(style) {
     };
 }
 
-function toggleFuelType(fuelType) {
+function chooseFuelType(fuelType) {
     return function (dispatch, getState) {
-        var selectedFuelTypes = __WEBPACK_IMPORTED_MODULE_1_src_util__["a" /* default */].toggleItem(getState().selectedFuelTypes, fuelType);
+        var selectedFuelType = getState().selectedFuelType === fuelType ? null : fuelType;
 
         __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals(withStateDefaults(getState(), {
-            fuelTypes: selectedFuelTypes
+            fuelType: selectedFuelType
         })).then(function (data) {
             dispatch(receiveDeals(data));
         });
 
         dispatch({
-            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["l" /* TOGGLE_FUEL_TYPE */],
-            selectedFuelTypes: selectedFuelTypes
+            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["l" /* CHOOSE_FUEL_TYPE */],
+            selectedFuelType: selectedFuelType
         });
     };
 }
@@ -3948,7 +3948,7 @@ function clearAllFilters() {
         __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals(withStateDefaults(getState(), {
             makeIds: [],
             bodyStyles: [],
-            fuelTypes: [],
+            fuelType: null,
             transmissionType: null
         })).then(function (data) {
             dispatch(receiveDeals(data));
@@ -12947,7 +12947,7 @@ module.exports = function bind(fn, thisArg) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return REQUEST_BODY_STYLES; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return RECEIVE_BODY_STYLES; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return TOGGLE_STYLE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return TOGGLE_FUEL_TYPE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return CHOOSE_FUEL_TYPE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return CHOOSE_TRANSMISSION_TYPE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return SELECT_DEAL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return CLEAR_SELECTED_DEAL; });
@@ -12963,7 +12963,7 @@ var RECEIVE_MORE_DEALS = 'RECEIVE_MORE_DEALS';
 var REQUEST_BODY_STYLES = 'REQUEST_BODY_STYLES';
 var RECEIVE_BODY_STYLES = 'RECEIVE_BODY_STYLES';
 var TOGGLE_STYLE = 'TOGGLE_STYLE';
-var TOGGLE_FUEL_TYPE = 'TOGGLE_FUEL_TYPE';
+var CHOOSE_FUEL_TYPE = 'CHOOSE_FUEL_TYPE';
 var CHOOSE_TRANSMISSION_TYPE = 'CHOOSE_TRANSMISSION_TYPE';
 var SELECT_DEAL = 'SELECT_DEAL';
 var CLEAR_SELECTED_DEAL = 'CLEAR_SELECTED_DEAL';
@@ -13006,7 +13006,7 @@ var api = {
     getDeals: function getDeals(_ref) {
         var makeIds = _ref.makeIds,
             bodyStyles = _ref.bodyStyles,
-            fuelTypes = _ref.fuelTypes,
+            fuelType = _ref.fuelType,
             transmissionType = _ref.transmissionType,
             includes = _ref.includes,
             sortColumn = _ref.sortColumn,
@@ -13017,7 +13017,7 @@ var api = {
             params: {
                 make_ids: makeIds,
                 body_styles: bodyStyles,
-                fuel_types: fuelTypes,
+                fuel_type: fuelType,
                 transmission_type: transmissionType,
                 includes: includes,
                 sort: sort(sortColumn, sortAscending),
@@ -21582,9 +21582,9 @@ var FilterFuelTypeSelector = function (_React$Component) {
                         {
                             key: index,
                             className: 'filter-selector__selector',
-                            onClick: _this2.props.onSelectFuelType.bind(null, fuelType)
+                            onClick: _this2.props.onChooseFuelType.bind(null, fuelType)
                         },
-                        __WEBPACK_IMPORTED_MODULE_2_ramda___default.a.contains(fuelType, _this2.props.selectedFuelTypes) ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_react_svg_inline___default.a, {
+                        _this2.props.selectedFuelType === fuelType ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_react_svg_inline___default.a, {
                             width: '15px',
                             className: 'filter-selector__checkbox',
                             svg: __WEBPACK_IMPORTED_MODULE_4_zondicons__["a" /* default */]['checkmark']
@@ -21602,8 +21602,8 @@ var FilterFuelTypeSelector = function (_React$Component) {
 
 FilterFuelTypeSelector.propTypes = {
     fuelTypes: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string).isRequired,
-    selectedFuelTypes: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string).isRequired,
-    onSelectFuelType: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.func.isRequired
+    selectedFuelType: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string,
+    onChooseFuelType: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.func.isRequired
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (FilterFuelTypeSelector);
@@ -21774,8 +21774,8 @@ var FilterPanel = function (_React$Component) {
                         function () {
                             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5_components_FilterFuelTypeSelector__["a" /* default */], {
                                 fuelTypes: _this2.props.fuelTypes,
-                                selectedFuelTypes: _this2.props.selectedFuelTypes,
-                                onSelectFuelType: _this2.props.toggleFuelType
+                                selectedFuelType: _this2.props.selectedFuelType,
+                                onChooseFuelType: _this2.props.chooseFuelType
                             });
                         }
                     ),
@@ -21816,7 +21816,7 @@ var mapStateToProps = function mapStateToProps(state) {
     return {
         makes: state.makes,
         fuelTypes: state.fuelTypes,
-        selectedFuelTypes: state.selectedFuelTypes,
+        selectedFuelType: state.selectedFuelType,
         transmissionTypes: state.transmissionTypes,
         selectedTransmissionType: state.selectedTransmissionType,
         bodyStyles: state.bodyStyles,
@@ -22604,7 +22604,7 @@ var initialState = {
     fuelTypes: null,
     transmissionTypes: ['automatic', 'manual'],
     selectedTransmissionType: null,
-    selectedFuelTypes: [],
+    selectedFuelType: null,
     selectedMakes: [],
     selectedDeal: null,
     makes: null,
@@ -22905,9 +22905,9 @@ var reducer = function reducer(state, action) {
             return Object.assign({}, state, {
                 selectedStyles: action.selectedStyles
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["l" /* TOGGLE_FUEL_TYPE */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["l" /* CHOOSE_FUEL_TYPE */]:
             return Object.assign({}, state, {
-                selectedFuelTypes: action.selectedFuelTypes
+                selectedFuelType: action.selectedFuelType
             });
         case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["m" /* CHOOSE_TRANSMISSION_TYPE */]:
             return Object.assign({}, state, {
@@ -49200,6 +49200,20 @@ var Filterbar = function (_React$Component) {
             );
         }
     }, {
+        key: 'renderFilterFuelType',
+        value: function renderFilterFuelType(fuelType) {
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                {
+                    className: 'filterbar__filter',
+                    onClick: this.props.chooseFuelType.bind(null, fuelType)
+                },
+                fuelType,
+                ' ',
+                this.renderX()
+            );
+        }
+    }, {
         key: 'renderFilterStyles',
         value: function renderFilterStyles(style, index) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -49248,6 +49262,7 @@ var Filterbar = function (_React$Component) {
                     { className: 'filterbar__filters' },
                     this.props.selectedStyles.map(this.renderFilterStyles),
                     this.props.selectedMakes.map(this.renderFilterMakes),
+                    this.props.selectedFuelType ? this.renderFilterFuelType(this.props.selectedFuelType) : '',
                     this.props.selectedTransmissionType ? this.renderFilterTransmissionType(this.props.selectedTransmissionType) : ''
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -49278,7 +49293,7 @@ function mapStateToProps(state) {
         makes: state.makes,
         selectedMakes: state.selectedMakes,
         selectedTransmissionType: state.selectedTransmissionType,
-        selectedFuelTypes: state.selectedFuelTypes
+        selectedFuelType: state.selectedFuelType
     };
 }
 

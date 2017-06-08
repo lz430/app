@@ -37,16 +37,9 @@ class VersionDeal extends Model
         return self::select('fuel')->groupBy('fuel')->get()->pluck('fuel');
     }
     
-    public function scopeFilterByFuelType(Builder $query, $fuelTypes) : Builder
+    public function scopeFilterByFuelType(Builder $query, $fuelType) : Builder
     {
-        if (! is_array($fuelTypes)) {
-            $fuelTypes = [$fuelTypes];
-        }
-        
-        return $query->whereIn(
-            DB::raw('lower(fuel)'),
-            array_map('strtolower', $fuelTypes)
-        );
+        return $query->where('fuel', $fuelType);
     }
 
     public function scopeFilterByAutomaticTransmission(Builder $query) : Builder

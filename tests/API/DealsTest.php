@@ -96,7 +96,7 @@ class DealsTest extends TestCase
     }
 
     /** @test */
-    public function it_filters_by_fuel_types()
+    public function it_filters_by_fuel_type()
     {
         $make = factory(Make::class)->create([
             'name' => 'some-make',
@@ -118,10 +118,10 @@ class DealsTest extends TestCase
         $response = $this->getJson(route('deals.index', [
             'make_ids' => [$make->id, 2, 3],
             'sort' => 'price',
-            'fuel_types' => ['fuel type B'],
+            'fuel_type' => 'fuel type B',
         ]));
 
-        $this->assertEquals(count($response->decodeResponseJson()['data']), 1);
+        $this->assertEquals(1, count($response->decodeResponseJson()['data']));
     }
 
     /** @test */

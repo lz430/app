@@ -43,6 +43,20 @@ class Filterbar extends React.Component {
         );
     }
 
+    renderFilterFuelType(fuelType) {
+        return (
+            <div
+                className="filterbar__filter"
+                onClick={this.props.chooseFuelType.bind(
+                    null,
+                    fuelType
+                )}
+            >
+                {fuelType} {this.renderX()}
+            </div>
+        );
+    }
+
     renderFilterStyles(style, index) {
         return (
             <div
@@ -82,6 +96,11 @@ class Filterbar extends React.Component {
                 <div className="filterbar__filters">
                     {this.props.selectedStyles.map(this.renderFilterStyles)}
                     {this.props.selectedMakes.map(this.renderFilterMakes)}
+                    {this.props.selectedFuelType
+                        ? this.renderFilterFuelType(
+                            this.props.selectedFuelType
+                        )
+                        : ''}
                     {this.props.selectedTransmissionType
                         ? this.renderFilterTransmissionType(
                               this.props.selectedTransmissionType
@@ -111,7 +130,7 @@ function mapStateToProps(state) {
         makes: state.makes,
         selectedMakes: state.selectedMakes,
         selectedTransmissionType: state.selectedTransmissionType,
-        selectedFuelTypes: state.selectedFuelTypes,
+        selectedFuelType: state.selectedFuelType,
     };
 }
 

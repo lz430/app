@@ -8,7 +8,7 @@ const withStateDefaults = (state, changed) => {
         {
             makeIds: state.selectedMakes,
             bodyStyles: state.selectedStyles,
-            fuelTypes: state.selectedFuelTypes,
+            fuelType: state.selectedFuelType,
             transmissionType: state.selectedTransmissionType,
             includes: ['photos'],
             sortColumn: state.sortColumn,
@@ -156,17 +156,17 @@ export function toggleStyle(style) {
     };
 }
 
-export function toggleFuelType(fuelType) {
+export function chooseFuelType(fuelType) {
     return (dispatch, getState) => {
-        const selectedFuelTypes = util.toggleItem(
-            getState().selectedFuelTypes,
-            fuelType
-        );
+        const selectedFuelType = getState().selectedFuelType ===
+        fuelType
+            ? null
+            : fuelType;
 
         api
             .getDeals(
                 withStateDefaults(getState(), {
-                    fuelTypes: selectedFuelTypes,
+                    fuelType: selectedFuelType,
                 })
             )
             .then(data => {
@@ -174,8 +174,8 @@ export function toggleFuelType(fuelType) {
             });
 
         dispatch({
-            type: ActionTypes.TOGGLE_FUEL_TYPE,
-            selectedFuelTypes: selectedFuelTypes,
+            type: ActionTypes.CHOOSE_FUEL_TYPE,
+            selectedFuelType: selectedFuelType,
         });
     };
 }
@@ -224,7 +224,7 @@ export function clearAllFilters() {
                 withStateDefaults(getState(), {
                     makeIds: [],
                     bodyStyles: [],
-                    fuelTypes: [],
+                    fuelType: null,
                     transmissionType: null,
                 })
             )
