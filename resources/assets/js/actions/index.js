@@ -216,3 +216,24 @@ export function clearSelectedDeal() {
         type: ActionTypes.SELECT_DEAL,
     };
 }
+
+export function clearAllFilters() {
+    return (dispatch, getState) => {
+        api
+            .getDeals(
+                withStateDefaults(getState(), {
+                    makeIds: [],
+                    bodyStyles: [],
+                    fuelTypes: [],
+                    transmissionType: null,
+                })
+            )
+            .then(data => {
+                dispatch(receiveDeals(data));
+            });
+
+        dispatch({
+            type: ActionTypes.CLEAR_ALL_FILTERS,
+        });
+    };
+}

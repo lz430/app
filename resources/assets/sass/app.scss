@@ -2,10 +2,13 @@
 @import 'variables';
 
 // Font
+html {
+  font-size: $font-size-base;
+}
+
 body {
   color: $text-color;
   font-family: 'Open Sans', serif;
-  font-size: $font-size-base;
   line-height: $line-height-base;
 }
 
@@ -21,6 +24,7 @@ body {
 @import 'components/make-selector';
 @import 'components/modal';
 @import 'components/sortbar';
+@import 'components/filterbar';
 @import 'components/deals';
 @import 'components/apply-or-purchase';
 @import 'components/application-form';

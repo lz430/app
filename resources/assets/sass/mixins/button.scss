@@ -1,6 +1,7 @@
 @import '../variables';
 
 @mixin button {
+  align-items: center;
   background: transparent;
   border: 2px solid $color-background-primary;
   color: $text-color;
@@ -16,8 +17,8 @@
   }
 
   &--small {
-    font-size: .8rem;
-    padding: 5px 20px;
+    font-size: .9rem;
+    padding: 5px 15px;
     text-transform: none;
   }
 

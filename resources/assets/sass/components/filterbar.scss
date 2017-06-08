@@ -1,0 +1,48 @@
+@import '../mixins/button';
+@import '../variables';
+
+.filterbar {
+  align-items: center;
+  border-bottom: 1px solid $color-section-bottom-border;
+  display: flex;
+  height: $filterbar-height;
+  max-height: $filterbar-height;
+  padding: 15px;
+
+  &__filter-icon {
+    fill: $color-sidebar-background-primary;
+    height: 20px;
+    margin-right: 5px;
+    width: 20px;
+  }
+
+  &__filters {
+    align-items: center;
+    display: flex;
+    overflow-x: auto;
+  }
+
+  &__filter {
+    background: $color-background-primary;
+    margin: 5px;
+    padding: 3px 8px;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  &__filter-x {
+    fill: $text-color;
+    padding: 3px;
+    stroke: darken($text-color, 10%);
+    stroke-width: 2;
+  }
+
+  &__clear {
+    color: $color-blue;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 10px;
+    text-align: right;
+    white-space: nowrap;
+  }
+}
