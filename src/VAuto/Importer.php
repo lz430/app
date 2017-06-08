@@ -2,6 +2,7 @@
 
 namespace DeliverMyRide\Vauto;
 
+use App\Feature;
 use App\JATO\Version;
 use App\VersionDeal;
 use Carbon\Carbon;
@@ -97,6 +98,15 @@ class Importer
                     )->get() as $version) {
                         /** @var VersionDeal $versionDeal */
                         $versionDeal = $this->saveVersionDeal($version, $fileHash, $keyedData);
+                        
+                        $features = collect(explode('|', $keyedData['Features']));
+                        $features->map(function ($feature) use ($versionDeal) {
+                            $f = Feature::firstOrCreate([
+                                'feature' => $feature,
+                            ]);
+                            
+                            $f->deals()->save($versionDeal);
+                        });
 
                         $this->saveVersionDealPhotos(
                             $versionDeal,
