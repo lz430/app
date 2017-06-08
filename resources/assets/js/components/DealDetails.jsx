@@ -51,6 +51,7 @@ class DealDetails extends React.Component {
     }
 
     render() {
+        const deal = this.props.deal;
         const photos = this.props.deal.photos.data;
         return (
             <div className="deal-details">
@@ -60,6 +61,33 @@ class DealDetails extends React.Component {
 
                 <div className="deal-details__thumbnail-images">
                     {photos.map(this.renderThumbnailImage)}
+                </div>
+                <h2>Vehicle Information</h2>
+                <div className="deal-details__items">
+                    <div className="deal-details__item">
+                        <div>Color</div>
+                        <div>{deal.color}</div>
+                    </div>
+                    <div className="deal-details__item">
+                        <div>Interior Color</div>
+                        <div>{deal.interior_color}</div>
+                    </div>
+                    <div className="deal-details__item">
+                        <div>MPG</div>
+                        <div>{deal.fuel_econ_hwy}</div>
+                    </div>
+                    <div className="deal-details__item">
+                        <div>Vehicle Type</div>
+                        <div>{deal.body}</div>
+                    </div>
+                    <div className="deal-details__item">
+                        <div>Transmission</div>
+                        <div>{deal.transmission}</div>
+                    </div>
+                    <div className="deal-details__item">
+                        <div>Fuel Type</div>
+                        <div>{deal.fuel}</div>
+                    </div>
                 </div>
             </div>
         );
