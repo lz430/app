@@ -26,6 +26,11 @@ class VersionDeal extends Model
     {
         return $this->hasMany(VersionDealPhoto::class);
     }
+    
+    public function features()
+    {
+        return $this->belongsToMany(Feature::class);
+    }
 
     public static function allFuelTypes()
     {
