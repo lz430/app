@@ -20,4 +20,20 @@
       border: 1px solid $color-blue;
     }
   }
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+  }
+
+  &__item {
+    border-bottom: 1px solid $color-section-bottom-border;
+    display: flex;
+    justify-content: flex-start;
+
+    :nth-child(1) {
+      margin-right: auto;
+    }
+  }
 }
