@@ -19,6 +19,11 @@ class Feature extends Model
     {
         return $this->belongsToMany(VersionDeal::class);
     }
+    
+    public function scopeHasGroup($query)
+    {
+        return $query->whereNotNull('group');
+    }
 
     public static function getGroupForFeature(string $feature)
     {

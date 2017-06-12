@@ -39,7 +39,7 @@ class DealsController extends BaseAPIController
             ->transformWith(self::TRANSFORMER)
             ->serializeWith(new DataArraySerializer)
             ->paginateWith(new IlluminatePaginatorAdapter($deals))
-            ->parseIncludes($request->get('includes', []))
+            ->parseIncludes(implode(',', $request->get('includes', [])))
             ->addMeta([
                 'fuelTypes' => VersionDeal::allFuelTypes(),
             ])
@@ -50,6 +50,10 @@ class DealsController extends BaseAPIController
     {
         if (in_array('photos', $request->get('includes', []))) {
             $query->with('photos');
+        }
+    
+        if (in_array('features', $request->get('includes', []))) {
+            $query->with('features');
         }
 
         return $query;
