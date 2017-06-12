@@ -22,7 +22,7 @@
             ]) !!};
         </script>
     </head>
-    <body>
+    <body class="{{ $bodyClass ?? '' }}">
         <nav class="nav">
             <a class="nav__logo" href="{{ url('/') }}">
                 <img src="/images/dmr-logo.svg">

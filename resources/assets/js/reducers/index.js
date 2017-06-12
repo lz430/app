@@ -43,9 +43,9 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 selectedStyles: action.selectedStyles,
             });
-        case ActionTypes.TOGGLE_FUEL_TYPE:
+        case ActionTypes.CHOOSE_FUEL_TYPE:
             return Object.assign({}, state, {
-                selectedFuelTypes: action.selectedFuelTypes,
+                selectedFuelType: action.selectedFuelType,
             });
         case ActionTypes.CHOOSE_TRANSMISSION_TYPE:
             return Object.assign({}, state, {

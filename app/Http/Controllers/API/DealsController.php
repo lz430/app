@@ -20,13 +20,13 @@ class DealsController extends BaseAPIController
         $this->validate($request, [
             'make_ids' => 'sometimes|required|array',
             'body_styles' => 'sometimes|required|array',
-            'fuel_types' => 'sometimes|required|array',
+            'fuel_type' => 'sometimes|required|string',
             'transmission_type' => 'sometimes|required|string|in:automatic,manual',
             'sort' => 'sometimes|required|string',
         ]);
         
         $dealsQuery = $this->getQueryByMakesAndBodyStyles($request);
-        $dealsQuery = $this->filterQueryByFuelTypes($dealsQuery, $request);
+        $dealsQuery = $this->filterQueryByFuelType($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByTransmissionType($dealsQuery, $request);
         $dealsQuery = Sort::sortQuery($dealsQuery, $request->get('sort', 'price'));
         $dealsQuery = $this->eagerLoadIncludes($dealsQuery, $request);
@@ -55,10 +55,10 @@ class DealsController extends BaseAPIController
         return $query;
     }
 
-    private function filterQueryByFuelTypes(Builder $query, Request $request) : Builder
+    private function filterQueryByFuelType(Builder $query, Request $request) : Builder
     {
-        if ($request->has('fuel_types')) {
-            $query->filterByFuelType($request->get('fuel_types'));
+        if ($request->has('fuel_type')) {
+            $query->filterByFuelType($request->get('fuel_type'));
         }
 
         return $query;

@@ -34,14 +34,12 @@ class Configurator extends React.Component {
 
     render() {
         return this.state.styles
-            ? <div className="configurator">
-                  <div className="configurator__selectors">
-                      <StyleSelector
-                          styles={this.state.styles}
-                          selectedStyles={this.state.selectedStyles}
-                          onSelectStyle={this.onSelectStyle}
-                      />
-                  </div>
+            ? <div className="configurator__selectors">
+                  <StyleSelector
+                      styles={this.state.styles}
+                      selectedStyles={this.state.selectedStyles}
+                      onSelectStyle={this.onSelectStyle}
+                  />
               </div>
             : <div>'Loading'</div>;
     }

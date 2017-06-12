@@ -1,6 +1,8 @@
 @import '../mixins/button';
 
 .configurator {
+  margin: 0 auto;
+
   &__heading {
     height: 50px;
     margin: 25px;

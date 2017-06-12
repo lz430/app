@@ -45,11 +45,7 @@ body {
     min-height: calc(100vh - #{$nav-height} - #{$footer-height} - #{$section-padding * 2});
   }
 
-  &:nth-child(even) {
+  &--darker {
     background-color: $color-background-primary;
-  }
-
-  &:nth-child(odd) {
-    background-color: $color-background-secondary;
   }
 }

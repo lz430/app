@@ -45,8 +45,8 @@ class FilterPanel extends React.Component {
                         {() => (
                             <FilterFuelTypeSelector
                                 fuelTypes={this.props.fuelTypes}
-                                selectedFuelTypes={this.props.selectedFuelTypes}
-                                onSelectFuelType={this.props.toggleFuelType}
+                                selectedFuelType={this.props.selectedFuelType}
+                                onChooseFuelType={this.props.chooseFuelType}
                             />
                         )}
                     </SidebarFilter>
@@ -79,7 +79,7 @@ const mapStateToProps = state => {
     return {
         makes: state.makes,
         fuelTypes: state.fuelTypes,
-        selectedFuelTypes: state.selectedFuelTypes,
+        selectedFuelType: state.selectedFuelType,
         transmissionTypes: state.transmissionTypes,
         selectedTransmissionType: state.selectedTransmissionType,
         bodyStyles: state.bodyStyles,

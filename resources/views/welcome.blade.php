@@ -12,8 +12,8 @@
         </div>
     </div>
 
-    <div class="section">
-        <Configurator></Configurator>
+    <div class="section section--darker">
+        <Configurator class="configurator"></Configurator>
     </div>
 
     <div class="section">
@@ -40,7 +40,7 @@
         </div>
     </div>
 
-    <div class="section">
+    <div class="section section--darker">
         <div class="section__title">
             Our average customer saves 15.7% / $3,800 off MSRP.
         </div>

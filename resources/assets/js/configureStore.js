@@ -13,7 +13,7 @@ const initialState = {
     fuelTypes: null,
     transmissionTypes: ['automatic', 'manual'],
     selectedTransmissionType: null,
-    selectedFuelTypes: [],
+    selectedFuelType: null,
     selectedMakes: [],
     selectedDeal: null,
     makes: null,

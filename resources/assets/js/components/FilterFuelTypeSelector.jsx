@@ -9,24 +9,20 @@ class FilterFuelTypeSelector extends React.Component {
         return (
             <div className="filter-selector">
                 {this.props.fuelTypes.map((fuelType, index) => {
+                    const className = this.props.selectedFuelType === fuelType
+                        ? 'filter-selector__radio filter-selector__radio--selected'
+                        : 'filter-selector__radio';
+
                     return (
                         <div
                             key={index}
                             className="filter-selector__selector"
-                            onClick={this.props.onSelectFuelType.bind(
+                            onClick={this.props.onChooseFuelType.bind(
                                 null,
                                 fuelType
                             )}
                         >
-                            {R.contains(fuelType, this.props.selectedFuelTypes)
-                                ? <SVGInline
-                                      width="15px"
-                                      className="filter-selector__checkbox"
-                                      svg={zondicons['checkmark']}
-                                  />
-                                : ''}
-                            {' '}
-                            {fuelType}
+                            <div className={className} /> {fuelType}
                         </div>
                     );
                 })}
@@ -37,8 +33,8 @@ class FilterFuelTypeSelector extends React.Component {
 
 FilterFuelTypeSelector.propTypes = {
     fuelTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    selectedFuelTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onSelectFuelType: PropTypes.func.isRequired,
+    selectedFuelType: PropTypes.string,
+    onChooseFuelType: PropTypes.func.isRequired,
 };
 
 export default FilterFuelTypeSelector;
