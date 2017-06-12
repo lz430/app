@@ -8,6 +8,8 @@ use App\VersionDeal;
 use Carbon\Carbon;
 use DeliverMyRide\JATO\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
+use Illuminate\Database\QueryException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
 
@@ -100,12 +102,19 @@ class Importer
                         $versionDeal = $this->saveVersionDeal($version, $fileHash, $keyedData);
                         
                         $features = collect(explode('|', $keyedData['Features']));
-                        $features->map(function ($feature) use ($versionDeal) {
-                            $f = Feature::firstOrCreate([
-                                'feature' => $feature,
+                        $features->map(function ($featureName) use ($versionDeal) {
+                            $feature = Feature::updateOrCreate([
+                                'feature' => $featureName,
+                            ], [
+                                'feature' => $featureName,
+                                'group' => Feature::getGroupForFeature($featureName),
                             ]);
-                            
-                            $f->deals()->save($versionDeal);
+
+                            try {
+                                $feature->deals()->save($versionDeal);
+                            } catch (QueryException $e) {
+                                // Already saved.
+                            }
                         });
 
                         $this->saveVersionDealPhotos(
@@ -114,7 +123,7 @@ class Importer
                         );
                     }
                 });
-            } catch (ClientException $e) {
+            } catch (ClientException | ServerException $e) {
                 $this->info("Unable to decode vin: {$keyedData['VIN']}");
             }
         }
