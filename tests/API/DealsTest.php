@@ -1,13 +1,12 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\API;
 
 use App\JATO\Make;
 use App\JATO\VehicleModel;
 use App\JATO\Version;
 use App\VersionDeal;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class DealsTest extends TestCase
