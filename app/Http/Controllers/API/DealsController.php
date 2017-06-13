@@ -28,6 +28,7 @@ class DealsController extends BaseAPIController
         $dealsQuery = $this->getQueryByMakesAndBodyStyles($request);
         $dealsQuery = $this->filterQueryByFuelType($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByTransmissionType($dealsQuery, $request);
+        $dealsQuery = $this->filterQueryByFeatures($dealsQuery, $request);
         $dealsQuery = Sort::sortQuery($dealsQuery, $request->get('sort', 'price'));
         $dealsQuery = $this->eagerLoadIncludes($dealsQuery, $request);
 
@@ -39,7 +40,7 @@ class DealsController extends BaseAPIController
             ->transformWith(self::TRANSFORMER)
             ->serializeWith(new DataArraySerializer)
             ->paginateWith(new IlluminatePaginatorAdapter($deals))
-            ->parseIncludes(implode(',', $request->get('includes', [])))
+            ->parseIncludes($request->get('includes', []))
             ->addMeta([
                 'fuelTypes' => VersionDeal::allFuelTypes(),
             ])
@@ -91,6 +92,17 @@ class DealsController extends BaseAPIController
                 : $query->filterByAutomaticTransmission();
         }
 
+        return $query;
+    }
+    
+    private function filterQueryByFeatures(Builder $query, Request $request) : Builder
+    {
+        if ($request->has('features')) {
+            $query->whereHas('features', function ($subQuery) use ($request) {
+                $subQuery->whereIn('feature', $request->get('features'));
+            });
+        }
+        
         return $query;
     }
 }

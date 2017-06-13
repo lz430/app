@@ -2,6 +2,7 @@
 
 namespace Tests\API;
 
+use App\Feature;
 use App\JATO\Make;
 use App\JATO\VehicleModel;
 use App\JATO\Version;
@@ -187,5 +188,32 @@ class DealsTest extends TestCase
         $response->assertStatus(200);
 
         $this->assertEquals(2, count($response->decodeResponseJson()['data']));
+    }
+    
+    /** @test */
+    public function it_filters_by_feature_string()
+    {
+        $make = factory(Make::class)->create(['name' => 'some-make']);
+        
+        $vehicleModel = $make->models()->save(factory(VehicleModel::class)->make());
+        
+        $version = $vehicleModel->versions()->save(factory(Version::class)->make([
+            'body_style' => 'Cargo Van',
+        ]));
+        
+        $versionDeals = $version->deals()->saveMany(factory(VersionDeal::class, 3)->make());
+        
+        $versionDeals->first()->features()->save(factory(Feature::class)->make(['feature' => 'ABS']));
+        
+        $response = $this->getJson(route('deals.index', [
+            'make_ids' => [$make->id, 2, 3],
+            'body_styles' => ['cargo van', 'pickup'],
+            'includes' => ['features'],
+            'features' => ['ABS'],
+        ]));
+        
+        $response->assertStatus(200);
+        
+        $this->assertCount(1, $response->decodeResponseJson()['data']);
     }
 }

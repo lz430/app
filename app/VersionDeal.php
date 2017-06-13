@@ -41,7 +41,7 @@ class VersionDeal extends Model
     {
         return $query->where('fuel', $fuelType);
     }
-
+    
     public function scopeFilterByAutomaticTransmission(Builder $query) : Builder
     {
         return $query->where(
