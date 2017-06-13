@@ -189,6 +189,28 @@ class DealsTest extends TestCase
 
         $this->assertEquals(2, count($response->decodeResponseJson()['data']));
     }
+
+    /** @test */
+    public function it_returns_all_deals_if_no_features()
+    {
+        $make = factory(Make::class)->create(['name' => 'some-make']);
+
+        $vehicleModel = $make->models()->save(factory(VehicleModel::class)->make());
+
+        $version = $vehicleModel->versions()->save(factory(Version::class)->make());
+
+        $versionDeals = $version->deals()->saveMany(factory(VersionDeal::class, 3)->make());
+
+        $versionDeals->first()->features()->save(factory(Feature::class)->make(['feature' => 'ABS']));
+
+        $response = $this->getJson(route('deals.index', [
+            'make_ids' => [$make->id, 2, 3],
+        ]));
+
+        $response->assertStatus(200);
+
+        $this->assertCount(3, $response->decodeResponseJson()['data']);
+    }
     
     /** @test */
     public function it_filters_by_feature_string()
@@ -197,23 +219,51 @@ class DealsTest extends TestCase
         
         $vehicleModel = $make->models()->save(factory(VehicleModel::class)->make());
         
-        $version = $vehicleModel->versions()->save(factory(Version::class)->make([
-            'body_style' => 'Cargo Van',
-        ]));
+        $version = $vehicleModel->versions()->save(factory(Version::class)->make());
         
         $versionDeals = $version->deals()->saveMany(factory(VersionDeal::class, 3)->make());
-        
+
         $versionDeals->first()->features()->save(factory(Feature::class)->make(['feature' => 'ABS']));
-        
+
         $response = $this->getJson(route('deals.index', [
             'make_ids' => [$make->id, 2, 3],
-            'body_styles' => ['cargo van', 'pickup'],
-            'includes' => ['features'],
             'features' => ['ABS'],
         ]));
         
         $response->assertStatus(200);
         
+        $this->assertCount(1, $response->decodeResponseJson()['data']);
+    }
+
+    /** @test */
+    public function it_returns_only_deals_that_have_all_features()
+    {
+        $make = factory(Make::class)->create(['name' => 'some-make']);
+
+        $vehicleModel = $make->models()->save(factory(VehicleModel::class)->make());
+
+        $version = $vehicleModel->versions()->save(factory(Version::class)->make());
+
+        $versionDeals = $version->deals()->saveMany(factory(VersionDeal::class, 3)->make());
+
+        $absFeature = factory(Feature::class)->create(['feature' => 'ABS']);
+        $heatedSeatsFeature = factory(Feature::class)->create(['feature' => 'Heated seats']);
+
+        $versionDeals->first()->features()->attach($absFeature);
+
+        $versionDeals->get(1)->features()->attach($heatedSeatsFeature);
+
+        $versionDeals->get(2)->features()->attach($absFeature);
+        $versionDeals->get(2)->features()->attach($heatedSeatsFeature);
+
+        $response = $this->getJson(route('deals.index', [
+            'make_ids' => [$make->id, 2, 3],
+            'includes' => ['features'],
+            'features' => ['ABS', 'Heated seats'],
+        ]));
+
+        $response->assertStatus(200);
+
         $this->assertCount(1, $response->decodeResponseJson()['data']);
     }
 }

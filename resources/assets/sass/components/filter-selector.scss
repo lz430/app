@@ -11,6 +11,7 @@ $selector-icon-size: 23px;
   margin-right: 10px;
   padding: 3px;
   width: $selector-icon-size;
+  min-width: $selector-icon-size;
 
   &--selected {
     border-color: $color-blue;

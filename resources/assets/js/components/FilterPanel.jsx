@@ -4,10 +4,12 @@ import ZipcodeFinder from 'components/ZipcodeFinder';
 import FilterStyleSelector from 'components/FilterStyleSelector';
 import FilterMakeSelector from 'components/FilterMakeSelector';
 import FilterFuelTypeSelector from 'components/FilterFuelTypeSelector';
+import FilterFeatureSelector from 'components/FilterFeatureSelector';
 import FilterTransmissionTypeSelector
     from 'components/FilterTransmissionTypeSelector';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
+import R from 'ramda';
 
 class FilterPanel extends React.Component {
     constructor(props) {
@@ -64,9 +66,17 @@ class FilterPanel extends React.Component {
                         )}
                     </SidebarFilter>
                     <SidebarFilter title="Seating">
-                        {() => 'body'}
+                        {() => (
+                            <FilterFeatureSelector
+                                selectedFeatures={this.props.selectedFeatures}
+                                features={R.filter((feature) => {
+                                    return R.path(['attributes', 'group'], feature) === 'seating';
+                                }, this.props.features)}
+                                onSelectFeature={this.props.toggleFeature}
+                            />
+                        )}
                     </SidebarFilter>
-                    <SidebarFilter title="Convenience">
+                    <SidebarFilter title="Safety">
                         {() => 'body'}
                     </SidebarFilter>
                 </div>
@@ -86,6 +96,8 @@ const mapStateToProps = state => {
         selectedStyles: state.selectedStyles,
         selectedMakes: state.selectedMakes,
         fallbackLogoImage: state.fallbackLogoImage,
+        selectedFeatures: state.selectedFeatures,
+        features: state.features,
     };
 };
 
