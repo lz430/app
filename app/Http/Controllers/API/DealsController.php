@@ -28,6 +28,7 @@ class DealsController extends BaseAPIController
         $dealsQuery = $this->getQueryByMakesAndBodyStyles($request);
         $dealsQuery = $this->filterQueryByFuelType($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByTransmissionType($dealsQuery, $request);
+        $dealsQuery = $this->filterQueryByFeatures($dealsQuery, $request);
         $dealsQuery = Sort::sortQuery($dealsQuery, $request->get('sort', 'price'));
         $dealsQuery = $this->eagerLoadIncludes($dealsQuery, $request);
 
@@ -50,6 +51,10 @@ class DealsController extends BaseAPIController
     {
         if (in_array('photos', $request->get('includes', []))) {
             $query->with('photos');
+        }
+    
+        if (in_array('features', $request->get('includes', []))) {
+            $query->with('features');
         }
 
         return $query;
@@ -87,6 +92,17 @@ class DealsController extends BaseAPIController
                 : $query->filterByAutomaticTransmission();
         }
 
+        return $query;
+    }
+    
+    private function filterQueryByFeatures(Builder $query, Request $request) : Builder
+    {
+        if ($request->has('features')) {
+            $query->whereHas('features', function ($subQuery) use ($request) {
+                $subQuery->whereIn('feature', $request->get('features'));
+            });
+        }
+        
         return $query;
     }
 }

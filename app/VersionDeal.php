@@ -29,7 +29,7 @@ class VersionDeal extends Model
     
     public function features()
     {
-        return $this->belongsToMany(Feature::class);
+        return $this->belongsToMany(Feature::class)->hasGroup();
     }
 
     public static function allFuelTypes()
@@ -41,7 +41,7 @@ class VersionDeal extends Model
     {
         return $query->where('fuel', $fuelType);
     }
-
+    
     public function scopeFilterByAutomaticTransmission(Builder $query) : Builder
     {
         return $query->where(

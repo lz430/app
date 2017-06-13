@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\API;
 
 use App\JATO\Make;
 use App\JATO\VehicleModel;

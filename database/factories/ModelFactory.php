@@ -140,3 +140,10 @@ $factory->define(App\VersionDeal::class, function (Faker\Generator $faker) {
         'version_id' => factory(App\JATO\Version::class),
     ];
 });
+
+$factory->define(App\Feature::class, function (Faker\Generator $faker) {
+    return [
+        'feature' => $faker->sentence(3),
+        'group' => $faker->word,
+    ];
+});

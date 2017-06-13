@@ -1,6 +1,6 @@
 <?php
 
-namespace API;
+namespace Tests\API;
 
 use App\SavedVehicle;
 use App\User;

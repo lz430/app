@@ -8,8 +8,9 @@ use League\Fractal\TransformerAbstract;
 class DealTransformer extends TransformerAbstract
 {
     protected $availableIncludes = [
-        'versions',
+        'features',
         'photos',
+        'versions',
     ];
     
     public function transform(VersionDeal $deal)
@@ -57,5 +58,11 @@ class DealTransformer extends TransformerAbstract
     {
         return $this->collection($deal->photos, new PhotoTransformer)
             ->setResourceKey('photos');
+    }
+    
+    public function includeFeatures(VersionDeal $deal)
+    {
+        return $this->collection($deal->features, new FeatureTransformer)
+            ->setResourceKey('features');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\API;
+namespace Tests\API;
 
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
