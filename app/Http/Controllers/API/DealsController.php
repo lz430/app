@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Feature;
 use App\Transformers\DealTransformer;
 use App\VersionDeal;
 use DeliverMyRide\JsonApi\Sort;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Serializer\DataArraySerializer;
 
@@ -29,11 +31,12 @@ class DealsController extends BaseAPIController
         $dealsQuery = $this->filterQueryByFuelType($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByTransmissionType($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByFeatures($dealsQuery, $request);
-        $dealsQuery = Sort::sortQuery($dealsQuery, $request->get('sort', 'price'));
+        $dealsQueryCopy = clone $dealsQuery;
         $dealsQuery = $this->eagerLoadIncludes($dealsQuery, $request);
+        $dealsQuery = Sort::sortQuery($dealsQuery, $request->get('sort', 'price'));
 
         $deals = $dealsQuery->paginate(15);
-        
+
         return fractal()
             ->collection($deals)
             ->withResourceName(self::RESOURCE_NAME)
@@ -42,7 +45,15 @@ class DealsController extends BaseAPIController
             ->paginateWith(new IlluminatePaginatorAdapter($deals))
             ->parseIncludes($request->get('includes', []))
             ->addMeta([
-                'fuelTypes' => VersionDeal::allFuelTypes(),
+                'fuelTypes' => $dealsQueryCopy->select('fuel')->distinct()->get()->pluck('fuel'),
+                'features' => Feature::hasGroup()->whereIn(
+                    'id',
+                    DB::table('feature_version_deal')
+                        ->select('feature_id')
+                        ->distinct()
+                        ->whereIn('version_deal_id', $dealsQueryCopy->select('id')->distinct()->get()->pluck('id'))
+                        ->get()->pluck('feature_id')
+                )->select('feature')->distinct()->get()->pluck('feature'),
             ])
             ->respond();
     }
@@ -98,9 +109,11 @@ class DealsController extends BaseAPIController
     private function filterQueryByFeatures(Builder $query, Request $request) : Builder
     {
         if ($request->has('features')) {
-            $query->whereHas('features', function ($subQuery) use ($request) {
-                $subQuery->whereIn('feature', $request->get('features'));
-            });
+            foreach ($request->get('features') as $feature) {
+                $query->whereHas('features', function ($subQuery) use ($feature) {
+                    $subQuery->where('feature', $feature);
+                });
+            }
         }
         
         return $query;

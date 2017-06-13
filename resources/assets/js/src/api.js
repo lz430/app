@@ -9,11 +9,18 @@ const api = {
     getMakes: () => {
         return window.axios.get('/api/makes');
     },
+    getFeatures: () => {
+        return window.axios.get('/api/features');
+    },
+    getFuelTypes: () => {
+        return window.axios.get('/api/fuel-types');
+    },
     getDeals: ({
         makeIds,
         bodyStyles,
         fuelType,
         transmissionType,
+        features,
         includes,
         sortColumn,
         sortAscending,
@@ -25,6 +32,7 @@ const api = {
                 body_styles: bodyStyles,
                 fuel_type: fuelType,
                 transmission_type: transmissionType,
+                features,
                 includes,
                 sort: sort(sortColumn, sortAscending),
                 page,

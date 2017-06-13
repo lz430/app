@@ -2900,6 +2900,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__ = __webpack_require__(210);
 /* harmony export (immutable) */ __webpack_exports__["requestMakes"] = requestMakes;
 /* harmony export (immutable) */ __webpack_exports__["receiveMakes"] = receiveMakes;
+/* harmony export (immutable) */ __webpack_exports__["requestFeatures"] = requestFeatures;
+/* harmony export (immutable) */ __webpack_exports__["receiveFeatures"] = receiveFeatures;
+/* harmony export (immutable) */ __webpack_exports__["toggleFeature"] = toggleFeature;
 /* harmony export (immutable) */ __webpack_exports__["toggleMake"] = toggleMake;
 /* harmony export (immutable) */ __webpack_exports__["receiveDeals"] = receiveDeals;
 /* harmony export (immutable) */ __webpack_exports__["requestDeals"] = requestDeals;
@@ -2924,6 +2927,7 @@ var withStateDefaults = function withStateDefaults(state, changed) {
         bodyStyles: state.selectedStyles,
         fuelType: state.selectedFuelType,
         transmissionType: state.selectedTransmissionType,
+        features: state.selectedFeatures,
         includes: ['photos'],
         sortColumn: state.sortColumn,
         sortAscending: state.sortAscending,
@@ -2950,6 +2954,42 @@ function receiveMakes(data) {
     };
 }
 
+function requestFeatures() {
+    return function (dispatch) {
+        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getFeatures().then(function (data) {
+            dispatch(receiveFeatures(data));
+        });
+
+        dispatch({
+            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["c" /* REQUEST_FEATURES */]
+        });
+    };
+}
+
+function receiveFeatures(data) {
+    return {
+        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["d" /* RECEIVE_FEATURES */],
+        data: data
+    };
+}
+
+function toggleFeature(feature) {
+    return function (dispatch, getState) {
+        var selectedFeatures = __WEBPACK_IMPORTED_MODULE_1_src_util__["a" /* default */].toggleItem(getState().selectedFeatures, feature);
+
+        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals(withStateDefaults(getState(), {
+            features: selectedFeatures
+        })).then(function (data) {
+            dispatch(receiveDeals(data));
+        });
+
+        dispatch({
+            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["e" /* TOGGLE_FEATURE */],
+            selectedFeatures: selectedFeatures
+        });
+    };
+}
+
 function toggleMake(make_id) {
     return function (dispatch, getState) {
         var selectedMakes = __WEBPACK_IMPORTED_MODULE_1_src_util__["a" /* default */].toggleItem(getState().selectedMakes, make_id);
@@ -2961,7 +3001,7 @@ function toggleMake(make_id) {
         });
 
         dispatch({
-            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["c" /* TOGGLE_MAKE */],
+            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["f" /* TOGGLE_MAKE */],
             selectedMakes: selectedMakes
         });
     };
@@ -2969,7 +3009,7 @@ function toggleMake(make_id) {
 
 function receiveDeals(data) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["d" /* RECEIVE_DEALS */],
+        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["g" /* RECEIVE_DEALS */],
         data: data
     };
 }
@@ -2981,7 +3021,7 @@ function requestDeals() {
         });
 
         dispatch({
-            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["e" /* REQUEST_DEALS */]
+            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["h" /* REQUEST_DEALS */]
         });
     };
 }
@@ -2995,28 +3035,28 @@ function requestMoreDeals() {
         });
 
         dispatch({
-            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["f" /* REQUEST_MORE_DEALS */]
+            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["i" /* REQUEST_MORE_DEALS */]
         });
     };
 }
 
 function sortDeals(sort) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["g" /* SORT_DEALS */],
+        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["j" /* SORT_DEALS */],
         sort: sort
     };
 }
 
 function receiveBodyStyles(deals) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["h" /* RECEIVE_BODY_STYLES */],
+        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["k" /* RECEIVE_BODY_STYLES */],
         data: deals
     };
 }
 
 function receiveMoreDeals(deals) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["i" /* RECEIVE_MORE_DEALS */],
+        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["l" /* RECEIVE_MORE_DEALS */],
         data: deals
     };
 }
@@ -3028,7 +3068,7 @@ function requestBodyStyles() {
         });
 
         dispatch({
-            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["j" /* REQUEST_BODY_STYLES */]
+            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["m" /* REQUEST_BODY_STYLES */]
         });
     };
 }
@@ -3044,7 +3084,7 @@ function toggleStyle(style) {
         });
 
         dispatch({
-            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["k" /* TOGGLE_STYLE */],
+            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["n" /* TOGGLE_STYLE */],
             selectedStyles: selectedStyles
         });
     };
@@ -3061,7 +3101,7 @@ function chooseFuelType(fuelType) {
         });
 
         dispatch({
-            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["l" /* CHOOSE_FUEL_TYPE */],
+            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["o" /* CHOOSE_FUEL_TYPE */],
             selectedFuelType: selectedFuelType
         });
     };
@@ -3078,7 +3118,7 @@ function chooseTransmissionType(transmissionType) {
         });
 
         dispatch({
-            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["m" /* CHOOSE_TRANSMISSION_TYPE */],
+            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["p" /* CHOOSE_TRANSMISSION_TYPE */],
             selectedTransmissionType: selectedTransmissionType
         });
     };
@@ -3086,14 +3126,14 @@ function chooseTransmissionType(transmissionType) {
 
 function selectDeal(deal) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["n" /* SELECT_DEAL */],
+        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["q" /* SELECT_DEAL */],
         selectedDeal: deal
     };
 }
 
 function clearSelectedDeal() {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["n" /* SELECT_DEAL */]
+        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["q" /* SELECT_DEAL */]
     };
 }
 
@@ -3109,7 +3149,7 @@ function clearAllFilters() {
         });
 
         dispatch({
-            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["o" /* CLEAR_ALL_FILTERS */]
+            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["r" /* CLEAR_ALL_FILTERS */]
         });
     };
 }
@@ -12670,22 +12710,25 @@ module.exports = function bind(fn, thisArg) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return SORT_DEALS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return REQUEST_DEALS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return SORT_DEALS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return REQUEST_DEALS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return REQUEST_MAKES; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return RECEIVE_MAKES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return RECEIVE_DEALS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return TOGGLE_MAKE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return REQUEST_MORE_DEALS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return RECEIVE_MORE_DEALS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return REQUEST_BODY_STYLES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return RECEIVE_BODY_STYLES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return TOGGLE_STYLE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return CHOOSE_FUEL_TYPE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return CHOOSE_TRANSMISSION_TYPE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return SELECT_DEAL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return CLEAR_SELECTED_DEAL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return CLEAR_ALL_FILTERS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return RECEIVE_DEALS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return TOGGLE_MAKE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return REQUEST_MORE_DEALS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return RECEIVE_MORE_DEALS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return REQUEST_BODY_STYLES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return RECEIVE_BODY_STYLES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return REQUEST_FEATURES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return RECEIVE_FEATURES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return TOGGLE_FEATURE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return TOGGLE_STYLE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return CHOOSE_FUEL_TYPE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return CHOOSE_TRANSMISSION_TYPE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return SELECT_DEAL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return CLEAR_SELECTED_DEAL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return CLEAR_ALL_FILTERS; });
 var SORT_DEALS = 'SORT_DEALS';
 var REQUEST_DEALS = 'REQUEST_DEALS';
 var REQUEST_MAKES = 'REQUEST_MAKES';
@@ -12696,6 +12739,9 @@ var REQUEST_MORE_DEALS = 'REQUEST_MORE_DEALS';
 var RECEIVE_MORE_DEALS = 'RECEIVE_MORE_DEALS';
 var REQUEST_BODY_STYLES = 'REQUEST_BODY_STYLES';
 var RECEIVE_BODY_STYLES = 'RECEIVE_BODY_STYLES';
+var REQUEST_FEATURES = 'REQUEST_FEATURES';
+var RECEIVE_FEATURES = 'RECEIVE_FEATURES';
+var TOGGLE_FEATURE = 'TOGGLE_FEATURE';
 var TOGGLE_STYLE = 'TOGGLE_STYLE';
 var CHOOSE_FUEL_TYPE = 'CHOOSE_FUEL_TYPE';
 var CHOOSE_TRANSMISSION_TYPE = 'CHOOSE_TRANSMISSION_TYPE';
@@ -12726,11 +12772,18 @@ var api = {
     getMakes: function getMakes() {
         return window.axios.get('/api/makes');
     },
+    getFeatures: function getFeatures() {
+        return window.axios.get('/api/features');
+    },
+    getFuelTypes: function getFuelTypes() {
+        return window.axios.get('/api/fuel-types');
+    },
     getDeals: function getDeals(_ref) {
         var makeIds = _ref.makeIds,
             bodyStyles = _ref.bodyStyles,
             fuelType = _ref.fuelType,
             transmissionType = _ref.transmissionType,
+            features = _ref.features,
             includes = _ref.includes,
             sortColumn = _ref.sortColumn,
             sortAscending = _ref.sortAscending,
@@ -12742,6 +12795,7 @@ var api = {
                 body_styles: bodyStyles,
                 fuel_type: fuelType,
                 transmission_type: transmissionType,
+                features: features,
                 includes: includes,
                 sort: sort(sortColumn, sortAscending),
                 page: page
@@ -21421,9 +21475,12 @@ FilterMakeSelector.propTypes = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_components_FilterStyleSelector__ = __webpack_require__(368);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_components_FilterMakeSelector__ = __webpack_require__(366);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_components_FilterFuelTypeSelector__ = __webpack_require__(365);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_components_FilterTransmissionTypeSelector__ = __webpack_require__(369);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_react_redux__ = __webpack_require__(59);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_actions_index__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_components_FilterFeatureSelector__ = __webpack_require__(893);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_components_FilterTransmissionTypeSelector__ = __webpack_require__(369);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_react_redux__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_actions_index__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ramda__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ramda___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_ramda__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21431,6 +21488,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
 
 
 
@@ -21505,7 +21564,7 @@ var FilterPanel = function (_React$Component) {
                         __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__["a" /* default */],
                         { title: 'Transmission' },
                         function () {
-                            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_components_FilterTransmissionTypeSelector__["a" /* default */], {
+                            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_components_FilterTransmissionTypeSelector__["a" /* default */], {
                                 transmissionTypes: _this2.props.transmissionTypes,
                                 selectedTransmissionType: _this2.props.selectedTransmissionType,
                                 onSelectTransmissionType: _this2.props.chooseTransmissionType
@@ -21516,12 +21575,18 @@ var FilterPanel = function (_React$Component) {
                         __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__["a" /* default */],
                         { title: 'Seating' },
                         function () {
-                            return 'body';
+                            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_components_FilterFeatureSelector__["a" /* default */], {
+                                selectedFeatures: _this2.props.selectedFeatures,
+                                features: __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.filter(function (feature) {
+                                    return __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.path(['attributes', 'group'], feature) === 'seating';
+                                }, _this2.props.features),
+                                onSelectFeature: _this2.props.toggleFeature
+                            });
                         }
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__["a" /* default */],
-                        { title: 'Convenience' },
+                        { title: 'Safety' },
                         function () {
                             return 'body';
                         }
@@ -21544,11 +21609,13 @@ var mapStateToProps = function mapStateToProps(state) {
         bodyStyles: state.bodyStyles,
         selectedStyles: state.selectedStyles,
         selectedMakes: state.selectedMakes,
-        fallbackLogoImage: state.fallbackLogoImage
+        fallbackLogoImage: state.fallbackLogoImage,
+        selectedFeatures: state.selectedFeatures,
+        features: state.features
     };
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_7_react_redux__["b" /* connect */])(mapStateToProps, __WEBPACK_IMPORTED_MODULE_8_actions_index__)(FilterPanel));
+/* harmony default export */ __webpack_exports__["a"] = (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8_react_redux__["b" /* connect */])(mapStateToProps, __WEBPACK_IMPORTED_MODULE_9_actions_index__)(FilterPanel));
 
 /***/ }),
 /* 368 */
@@ -22492,12 +22559,14 @@ ZipcodeFinder.propTypes = {
 var initialState = {
     selectedStyles: [__WEBPACK_IMPORTED_MODULE_4_ramda___default.a.prop('style', __WEBPACK_IMPORTED_MODULE_5_qs___default.a.parse(window.location.search.slice(1)))],
     bodyStyles: null,
-    fuelTypes: null,
+    fuelTypes: ['Gasoline', 'Flex Fuel', 'Diesel'],
     transmissionTypes: ['automatic', 'manual'],
     selectedTransmissionType: null,
     selectedFuelType: null,
     selectedMakes: [],
     selectedDeal: null,
+    selectedFeatures: [],
+    features: null,
     makes: null,
     dealPage: 1,
     dealsPagination: null,
@@ -22514,6 +22583,7 @@ var initialState = {
 
     store.dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_actions_index__["requestMakes"])());
     store.dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_actions_index__["requestBodyStyles"])());
+    store.dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_actions_index__["requestFeatures"])());
 
     return store;
 });
@@ -22763,52 +22833,59 @@ var reducer = function reducer(state, action) {
             return Object.assign({}, state, {
                 makes: action.data.data.data
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["d" /* RECEIVE_DEALS */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["g" /* RECEIVE_DEALS */]:
             return Object.assign({}, state, {
-                fuelTypes: action.data.data.meta.fuelTypes,
                 deals: action.data.data.data,
                 dealsPagination: action.data.data.meta.pagination,
                 dealPage: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.min(action.data.data.meta.pagination.current_page, action.data.data.meta.pagination.total_pages)
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["g" /* SORT_DEALS */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["j" /* SORT_DEALS */]:
             return Object.assign({}, state, {
                 sortColumn: action.sort,
                 sortAscending: !state.sortAscending
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["i" /* RECEIVE_MORE_DEALS */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["l" /* RECEIVE_MORE_DEALS */]:
             return Object.assign({}, state, {
                 deals: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.concat(state.deals, action.data.data.data),
                 dealPage: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.min(action.data.data.meta.pagination.current_page, action.data.data.meta.pagination.total_pages)
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["c" /* TOGGLE_MAKE */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["f" /* TOGGLE_MAKE */]:
             return Object.assign({}, state, {
                 selectedMakes: action.selectedMakes
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["h" /* RECEIVE_BODY_STYLES */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["e" /* TOGGLE_FEATURE */]:
+            return Object.assign({}, state, {
+                selectedFeatures: action.selectedFeatures
+            });
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["k" /* RECEIVE_BODY_STYLES */]:
             return Object.assign({}, state, {
                 bodyStyles: action.data.data.data
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["k" /* TOGGLE_STYLE */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["d" /* RECEIVE_FEATURES */]:
+            return Object.assign({}, state, {
+                features: action.data.data.data
+            });
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["n" /* TOGGLE_STYLE */]:
             return Object.assign({}, state, {
                 selectedStyles: action.selectedStyles
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["l" /* CHOOSE_FUEL_TYPE */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["o" /* CHOOSE_FUEL_TYPE */]:
             return Object.assign({}, state, {
                 selectedFuelType: action.selectedFuelType
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["m" /* CHOOSE_TRANSMISSION_TYPE */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["p" /* CHOOSE_TRANSMISSION_TYPE */]:
             return Object.assign({}, state, {
                 selectedTransmissionType: action.selectedTransmissionType
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["n" /* SELECT_DEAL */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["q" /* SELECT_DEAL */]:
             return Object.assign({}, state, {
                 selectedDeal: action.selectedDeal
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["p" /* CLEAR_SELECTED_DEAL */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["s" /* CLEAR_SELECTED_DEAL */]:
             return Object.assign({}, state, {
                 selectedDeal: null
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["o" /* CLEAR_ALL_FILTERS */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["r" /* CLEAR_ALL_FILTERS */]:
             return Object.assign({}, state, {
                 selectedStyles: [],
                 selectedTransmissionType: null,
@@ -49011,6 +49088,91 @@ module.exports = function(module) {
 __webpack_require__(341);
 module.exports = __webpack_require__(342);
 
+
+/***/ }),
+/* 890 */,
+/* 891 */,
+/* 892 */,
+/* 893 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ramda__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ramda___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ramda__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_svg_inline__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_svg_inline___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_react_svg_inline__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_zondicons__ = __webpack_require__(81);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+
+
+
+var FilterFeatureSelector = function (_React$Component) {
+    _inherits(FilterFeatureSelector, _React$Component);
+
+    function FilterFeatureSelector() {
+        _classCallCheck(this, FilterFeatureSelector);
+
+        return _possibleConstructorReturn(this, (FilterFeatureSelector.__proto__ || Object.getPrototypeOf(FilterFeatureSelector)).apply(this, arguments));
+    }
+
+    _createClass(FilterFeatureSelector, [{
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'filter-selector' },
+                this.props.features.map(function (feature, index) {
+                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        {
+                            key: index,
+                            className: 'filter-selector__selector',
+                            onClick: _this2.props.onSelectFeature.bind(null, feature.attributes.feature)
+                        },
+                        __WEBPACK_IMPORTED_MODULE_2_ramda___default.a.contains(feature.attributes.feature, _this2.props.selectedFeatures) ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_react_svg_inline___default.a, {
+                            width: '15px',
+                            height: '15px',
+                            className: 'filter-selector__checkbox filter-selector__checkbox--selected',
+                            svg: __WEBPACK_IMPORTED_MODULE_4_zondicons__["a" /* default */]['checkmark']
+                        }) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'filter-selector__checkbox' }),
+                        feature.attributes.feature
+                    );
+                })
+            );
+        }
+    }]);
+
+    return FilterFeatureSelector;
+}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+
+FilterFeatureSelector.propTypes = {
+    features: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+        attributes: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+            feature: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
+            group: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired
+        })
+    }).isRequired).isRequired,
+    selectedFeatures: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string).isRequired,
+    onSelectFeature: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.func.isRequired
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (FilterFeatureSelector);
 
 /***/ })
 /******/ ]);

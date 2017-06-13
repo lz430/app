@@ -10,6 +10,7 @@ const withStateDefaults = (state, changed) => {
             bodyStyles: state.selectedStyles,
             fuelType: state.selectedFuelType,
             transmissionType: state.selectedTransmissionType,
+            features: state.selectedFeatures,
             includes: ['photos'],
             sortColumn: state.sortColumn,
             sortAscending: state.sortAscending,
@@ -35,6 +36,49 @@ export function receiveMakes(data) {
     return {
         type: ActionTypes.RECEIVE_MAKES,
         data: data,
+    };
+}
+
+export function requestFeatures() {
+    return dispatch => {
+        api.getFeatures().then(data => {
+            dispatch(receiveFeatures(data));
+        });
+
+        dispatch({
+            type: ActionTypes.REQUEST_FEATURES,
+        });
+    };
+}
+
+export function receiveFeatures(data) {
+    return {
+        type: ActionTypes.RECEIVE_FEATURES,
+        data: data,
+    };
+}
+
+export function toggleFeature(feature) {
+    return (dispatch, getState) => {
+        const selectedFeatures = util.toggleItem(
+            getState().selectedFeatures,
+            feature
+        );
+
+        api
+            .getDeals(
+                withStateDefaults(getState(), {
+                    features: selectedFeatures,
+                })
+            )
+            .then(data => {
+                dispatch(receiveDeals(data));
+            });
+
+        dispatch({
+            type: ActionTypes.TOGGLE_FEATURE,
+            selectedFeatures,
+        });
     };
 }
 

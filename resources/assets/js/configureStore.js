@@ -1,7 +1,7 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
 import reducer from 'reducers/index';
-import { requestMakes, requestBodyStyles } from 'actions/index';
+import { requestMakes, requestBodyStyles, requestFeatures } from 'actions/index';
 import R from 'ramda';
 import qs from 'qs';
 
@@ -10,12 +10,14 @@ const initialState = {
         R.prop('style', qs.parse(window.location.search.slice(1))),
     ],
     bodyStyles: null,
-    fuelTypes: null,
+    fuelTypes: ['Gasoline', 'Flex Fuel', 'Diesel'],
     transmissionTypes: ['automatic', 'manual'],
     selectedTransmissionType: null,
     selectedFuelType: null,
     selectedMakes: [],
     selectedDeal: null,
+    selectedFeatures: [],
+    features: null,
     makes: null,
     dealPage: 1,
     dealsPagination: null,
@@ -37,6 +39,7 @@ export default () => {
 
     store.dispatch(requestMakes());
     store.dispatch(requestBodyStyles());
+    store.dispatch(requestFeatures());
 
     return store;
 };
