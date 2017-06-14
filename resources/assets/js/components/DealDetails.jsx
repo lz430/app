@@ -14,6 +14,10 @@ class DealDetails extends React.Component {
         this.renderThumbnailImage = this.renderThumbnailImage.bind(this);
     }
 
+    componentDidMount() {
+        this.props.requestFuelImages(this.props.deal);
+    }
+
     selectFeaturedImage(index) {
         this.setState({
             featuredImage: this.props.deal.photos.data[index],

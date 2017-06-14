@@ -10,6 +10,8 @@ import FilterPanel from 'components/FilterPanel';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 
+import fuelapi from 'src/fuelapi';
+
 class FilterPage extends React.Component {
     constructor(props) {
         super(props);

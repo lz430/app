@@ -1,4 +1,5 @@
 import api from 'src/api';
+import fuelapi from 'src/fuelapi';
 import util from 'src/util';
 import * as ActionTypes from 'actiontypes/index';
 
@@ -277,6 +278,27 @@ export function clearAllFilters() {
 
         dispatch({
             type: ActionTypes.CLEAR_ALL_FILTERS,
+        });
+    };
+}
+
+export function requestFuelImages(deal) {
+    return (dispatch, getState) => {
+        fuelapi
+            .getVehicleId(
+                deal.year,
+                deal.make,
+                deal.model,
+                deal.series,
+            )
+            .then(data => {
+                fuelapi
+                    .getImagesByVehicleId(data[0].id)
+                    .then(images => console.log(images))
+            });
+
+        dispatch({
+            type: ActionTypes.REQUEST_FUEL_IMAGES,
         });
     };
 }
