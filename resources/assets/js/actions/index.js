@@ -280,3 +280,10 @@ export function clearAllFilters() {
         });
     };
 }
+
+export function setZipCode(zipcode) {
+    return {
+        type: ActionTypes.SET_ZIP_CODE,
+        zipcode: zipcode,
+    };
+}

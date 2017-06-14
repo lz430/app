@@ -18,7 +18,10 @@ class FilterFeatureSelector extends React.Component {
                                 feature.attributes.feature
                             )}
                         >
-                            {R.contains(feature.attributes.feature, this.props.selectedFeatures)
+                            {R.contains(
+                                feature.attributes.feature,
+                                this.props.selectedFeatures
+                            )
                                 ? <SVGInline
                                       width="15px"
                                       height="15px"
@@ -44,9 +47,7 @@ FilterFeatureSelector.propTypes = {
             }),
         }).isRequired
     ).isRequired,
-    selectedFeatures: PropTypes.arrayOf(
-        PropTypes.string,
-    ).isRequired,
+    selectedFeatures: PropTypes.arrayOf(PropTypes.string).isRequired,
     onSelectFeature: PropTypes.func.isRequired,
 };
 

@@ -73,6 +73,10 @@ const reducer = (state, action) => {
                 selectedFuelTypes: [],
                 selectedMakes: [],
             });
+        case ActionTypes.SET_ZIP_CODE:
+            return Object.assign({}, state, {
+                zipcode: action.zipcode,
+            });
     }
 
     return state;
