@@ -280,3 +280,17 @@ export function clearAllFilters() {
         });
     };
 }
+
+export function toggleCompare(deal) {
+    return (dispatch, getState) => {
+        const compareList = util.toggleItem(
+            getState().compareList,
+            deal
+        );
+
+        dispatch({
+            type: ActionTypes.TOGGLE_COMPARE,
+            compareList: compareList,
+        });
+    };
+}
