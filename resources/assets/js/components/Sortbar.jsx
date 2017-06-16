@@ -20,6 +20,7 @@ class Sortbar extends React.Component {
 
     render() {
         return (
+            <div className="sortbarcompare">
             <div className="sortbar">
                 <div className="sortbar__count">
                     <span className="sortbar__count-number">
@@ -58,6 +59,8 @@ class Sortbar extends React.Component {
                     </button>
                 </div>
             </div>
+                <div className="compare">Compare {this.props.compareList.length}</div>
+            </div>
         );
     }
 }
@@ -73,6 +76,7 @@ function mapStateToProps(state) {
         results_count: state.deals.length,
         sortColumn: state.sortColumn,
         sortAscending: state.sortAscending,
+        compareList: state.compareList,
     };
 }
 

@@ -73,6 +73,10 @@ const reducer = (state, action) => {
                 selectedFuelTypes: [],
                 selectedMakes: [],
             });
+        case ActionTypes.TOGGLE_COMPARE:
+            return Object.assign({}, state, {
+                compareList: action.compareList,
+            });
     }
 
     return state;

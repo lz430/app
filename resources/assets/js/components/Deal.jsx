@@ -35,7 +35,15 @@ class Deal extends React.Component {
                     >
                         Details
                     </button>
-                    <button className="deal__button deal__button--small">
+                    <button
+                        className={
+                            'deal__button deal__button--small ' +
+                                (R.contains(deal, this.props.compareList)
+                                    ? 'deal__button--blue'
+                                    : '')
+                        }
+                        onClick={this.props.toggleCompare.bind(null, deal)}
+                    >
                         Compare
                     </button>
                 </div>
@@ -47,6 +55,7 @@ class Deal extends React.Component {
 const mapStateToProps = state => {
     return {
         selectedDeal: state.selectedDeal,
+        compareList: state.compareList,
     };
 };
 

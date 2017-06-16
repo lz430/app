@@ -1,9 +1,15 @@
 @import '../mixins/button';
 @import '../variables';
 
-.sortbar {
-  border-bottom: 1px solid $color-section-bottom-border;
+.sortbarcompare {
   display: flex;
+  border-bottom: 1px solid $color-section-bottom-border;
+}
+
+.sortbar {
+  border-right: 2px solid $color-section-bottom-border;
+  display: flex;
+  flex: 7;
   height: $sortbar-height;
   max-height: $sortbar-height;
   padding: 5px 15px;
@@ -37,4 +43,11 @@
     fill: $text-color;
     margin-right: 3px;
   }
+}
+
+.compare {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-self: center;
 }
