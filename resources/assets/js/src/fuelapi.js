@@ -31,7 +31,12 @@ const fuel = {
         });
     },
     getImagesByVehicleId: vehicleID => {
-        return fuelAxios.get(`/vehicle/${vehicleID}`);
+        return fuelAxios.get(`/vehicle/${vehicleID}`, {
+            params: {
+                productID: 1,
+                productFormatIDs: 17,
+            }
+        });
     },
 };
 
