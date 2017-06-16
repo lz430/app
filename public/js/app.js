@@ -2350,7 +2350,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["selectDeal"] = selectDeal;
 /* harmony export (immutable) */ __webpack_exports__["clearSelectedDeal"] = clearSelectedDeal;
 /* harmony export (immutable) */ __webpack_exports__["clearAllFilters"] = clearAllFilters;
-/* harmony export (immutable) */ __webpack_exports__["toggleCompare"] = toggleCompare;
+/* harmony export (immutable) */ __webpack_exports__["setZipCode"] = setZipCode;
 
 
 
@@ -2588,14 +2588,10 @@ function clearAllFilters() {
     };
 }
 
-function toggleCompare(deal) {
-    return function (dispatch, getState) {
-        var compareList = __WEBPACK_IMPORTED_MODULE_1_src_util__["a" /* default */].toggleItem(getState().compareList, deal);
-
-        dispatch({
-            type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["s" /* TOGGLE_COMPARE */],
-            compareList: compareList
-        });
+function setZipCode(zipcode) {
+    return {
+        type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["s" /* SET_ZIP_CODE */],
+        zipcode: zipcode
     };
 }
 
@@ -12741,7 +12737,7 @@ module.exports = function bind(fn, thisArg) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return SELECT_DEAL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "t", function() { return CLEAR_SELECTED_DEAL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return CLEAR_ALL_FILTERS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return TOGGLE_COMPARE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return SET_ZIP_CODE; });
 var SORT_DEALS = 'SORT_DEALS';
 var REQUEST_DEALS = 'REQUEST_DEALS';
 var REQUEST_MAKES = 'REQUEST_MAKES';
@@ -12761,7 +12757,7 @@ var CHOOSE_TRANSMISSION_TYPE = 'CHOOSE_TRANSMISSION_TYPE';
 var SELECT_DEAL = 'SELECT_DEAL';
 var CLEAR_SELECTED_DEAL = 'CLEAR_SELECTED_DEAL';
 var CLEAR_ALL_FILTERS = 'CLEAR_ALL_FILTERS';
-var TOGGLE_COMPARE = 'TOGGLE_COMPARE';
+var SET_ZIP_CODE = 'SET_ZIP_CODE';
 
 /***/ }),
 /* 211 */
@@ -21013,10 +21009,7 @@ var Deal = function (_React$Component) {
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
-                        {
-                            className: 'deal__button deal__button--small ' + (__WEBPACK_IMPORTED_MODULE_1_ramda___default.a.contains(deal, this.props.compareList) ? 'deal__button--blue' : ''),
-                            onClick: this.props.toggleCompare.bind(null, deal)
-                        },
+                        { className: 'deal__button deal__button--small' },
                         'Compare'
                     )
                 )
@@ -21029,8 +21022,7 @@ var Deal = function (_React$Component) {
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
-        selectedDeal: state.selectedDeal,
-        compareList: state.compareList
+        selectedDeal: state.selectedDeal
     };
 };
 
@@ -22394,67 +22386,57 @@ var Sortbar = function (_React$Component) {
 
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
-                { className: 'sortbarcompare' },
+                { className: 'sortbar' },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
-                    { className: 'sortbar' },
+                    { className: 'sortbar__count' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'div',
-                        { className: 'sortbar__count' },
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'span',
-                            { className: 'sortbar__count-number' },
-                            this.props.results_count
-                        ),
-                        ' ',
-                        'results'
+                        'span',
+                        { className: 'sortbar__count-number' },
+                        this.props.results_count
                     ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'div',
-                        { className: 'sortbar__buttons' },
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'button',
-                            {
-                                className: 'sortbar__button sortbar__button--small',
-                                onClick: function onClick() {
-                                    _this2.props.sortDeals('price');
-                                    _this2.props.requestDeals();
-                                }
-                            },
-                            this.renderIcon('price'),
-                            ' Price'
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'button',
-                            {
-                                className: 'sortbar__button sortbar__button--small',
-                                onClick: function onClick() {
-                                    _this2.props.sortDeals('year');
-                                    _this2.props.requestDeals();
-                                }
-                            },
-                            this.renderIcon('year'),
-                            ' Year'
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'button',
-                            {
-                                className: 'sortbar__button sortbar__button--small',
-                                onClick: function onClick() {
-                                    _this2.props.sortDeals('make');
-                                    _this2.props.requestDeals();
-                                }
-                            },
-                            this.renderIcon('make'),
-                            ' A-Z'
-                        )
-                    )
+                    ' ',
+                    'results'
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
-                    { className: 'compare' },
-                    'Compare ',
-                    this.props.compareList.length
+                    { className: 'sortbar__buttons' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'button',
+                        {
+                            className: 'sortbar__button sortbar__button--small',
+                            onClick: function onClick() {
+                                _this2.props.sortDeals('price');
+                                _this2.props.requestDeals();
+                            }
+                        },
+                        this.renderIcon('price'),
+                        ' Price'
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'button',
+                        {
+                            className: 'sortbar__button sortbar__button--small',
+                            onClick: function onClick() {
+                                _this2.props.sortDeals('year');
+                                _this2.props.requestDeals();
+                            }
+                        },
+                        this.renderIcon('year'),
+                        ' Year'
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'button',
+                        {
+                            className: 'sortbar__button sortbar__button--small',
+                            onClick: function onClick() {
+                                _this2.props.sortDeals('make');
+                                _this2.props.requestDeals();
+                            }
+                        },
+                        this.renderIcon('make'),
+                        ' A-Z'
+                    )
                 )
             );
         }
@@ -22473,8 +22455,7 @@ function mapStateToProps(state) {
     return {
         results_count: state.deals.length,
         sortColumn: state.sortColumn,
-        sortAscending: state.sortAscending,
-        compareList: state.compareList
+        sortAscending: state.sortAscending
     };
 }
 
@@ -22584,6 +22565,8 @@ StyleSelector.propTypes = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_redux__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_actions_index__ = __webpack_require__(44);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22595,16 +22578,49 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+
+
 var ZipcodeFinder = function (_React$Component) {
     _inherits(ZipcodeFinder, _React$Component);
 
     function ZipcodeFinder() {
         _classCallCheck(this, ZipcodeFinder);
 
-        return _possibleConstructorReturn(this, (ZipcodeFinder.__proto__ || Object.getPrototypeOf(ZipcodeFinder)).call(this));
+        var _this = _possibleConstructorReturn(this, (ZipcodeFinder.__proto__ || Object.getPrototypeOf(ZipcodeFinder)).call(this));
+
+        _this.state = {
+            editing: false,
+            valid: false
+        };
+
+        _this.validateZip = _this.validateZip.bind(_this);
+        _this.toggleEditing = _this.toggleEditing.bind(_this);
+        return _this;
     }
 
     _createClass(ZipcodeFinder, [{
+        key: 'validateZip',
+        value: function validateZip() {
+            var zip = document.getElementById('zipcode_input').value;
+            var valid = zip.length === 5;
+            this.setState({
+                valid: valid
+            });
+
+            if (valid) {
+                this.props.setZipCode(zip);
+                document.getElementById('zipcode_input').value = '';
+                this.toggleEditing();
+            }
+        }
+    }, {
+        key: 'toggleEditing',
+        value: function toggleEditing() {
+            this.setState({
+                editing: !this.state.editing
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -22618,18 +22634,45 @@ var ZipcodeFinder = function (_React$Component) {
                         null,
                         'Zip Code'
                     ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    this.state.editing ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
+                        className: 'zipcode-finder__code',
+                        type: 'number',
+                        id: 'zipcode_input'
+                    }) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
                         { className: 'zipcode-finder__code' },
-                        '90040'
+                        this.props.zipcode
                     )
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
                     { className: 'zipcode-finder__buttons' },
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    this.state.editing ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        null,
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'button',
+                            {
+                                onClick: this.validateZip,
+                                className: 'zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg'
+                            },
+                            'Save'
+                        ),
+                        ' ',
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'button',
+                            {
+                                onClick: this.toggleEditing,
+                                className: 'zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg'
+                            },
+                            'Cancel'
+                        )
+                    ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
-                        { className: 'zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg' },
+                        {
+                            onClick: this.toggleEditing,
+                            className: 'zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg'
+                        },
                         'Update'
                     )
                 )
@@ -22644,7 +22687,13 @@ ZipcodeFinder.propTypes = {
     onUpdate: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.func.isRequired
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (ZipcodeFinder);
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        zipcode: state.zipcode
+    };
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_react_redux__["b" /* connect */])(mapStateToProps, __WEBPACK_IMPORTED_MODULE_3_actions_index__)(ZipcodeFinder));
 
 /***/ }),
 /* 378 */
@@ -22686,7 +22735,7 @@ var initialState = {
     fallbackDealImage: '/images/dmr-logo.svg',
     sortColumn: 'price',
     sortAscending: true,
-    compareList: []
+    zipcode: null
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (function () {
@@ -22840,13 +22889,24 @@ var FilterPage = function (_React$Component) {
     }
 
     _createClass(FilterPage, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            axios.get('http://ipinfo.io').then(function (data) {
+                _this2.props.setZipCode(data.data.postal);
+            }).catch(function (error) {
+                console.log('Error', error.message);
+            });
+        }
+    }, {
         key: 'closeModal',
         value: function closeModal() {
-            var _this2 = this;
+            var _this3 = this;
 
             if (this.props.selectedMakes.length > 0) {
                 this.setState({ showModal: false }, function () {
-                    return _this2.props.requestDeals();
+                    return _this3.props.requestDeals();
                 });
             }
         }
@@ -23004,9 +23064,9 @@ var reducer = function reducer(state, action) {
                 selectedFuelTypes: [],
                 selectedMakes: []
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["s" /* TOGGLE_COMPARE */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["s" /* SET_ZIP_CODE */]:
             return Object.assign({}, state, {
-                compareList: action.compareList
+                zipcode: action.zipcode
             });
     }
 

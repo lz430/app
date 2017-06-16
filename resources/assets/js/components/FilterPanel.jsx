@@ -69,8 +69,13 @@ class FilterPanel extends React.Component {
                         {() => (
                             <FilterFeatureSelector
                                 selectedFeatures={this.props.selectedFeatures}
-                                features={R.filter((feature) => {
-                                    return R.path(['attributes', 'group'], feature) === 'seating';
+                                features={R.filter(feature => {
+                                    return (
+                                        R.path(
+                                            ['attributes', 'group'],
+                                            feature
+                                        ) === 'seating'
+                                    );
                                 }, this.props.features)}
                                 onSelectFeature={this.props.toggleFeature}
                             />
