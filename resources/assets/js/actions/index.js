@@ -285,6 +285,27 @@ export function clearAllFilters() {
     };
 }
 
+export function toggleCompare(deal) {
+    return (dispatch, getState) => {
+        const compareList = util.toggleItem(
+            getState().compareList,
+            deal
+        );
+
+        dispatch({
+            type: ActionTypes.TOGGLE_COMPARE,
+            compareList: compareList,
+        });
+    };
+}
+
+export function setZipCode(zipcode) {
+    return {
+        type: ActionTypes.SET_ZIP_CODE,
+        zipcode: zipcode,
+    };
+}
+
 export function requestFuelImages(deal) {
     return dispatch => {
         fuelapi.getVehicleId(deal.year, deal.make, deal.model).then(data => {
@@ -309,6 +330,7 @@ export function requestFuelImages(deal) {
 
         dispatch({
             type: ActionTypes.REQUEST_FUEL_IMAGES,
+            compareList: compareList,
         });
     };
 }

@@ -23,6 +23,17 @@ class FilterPage extends React.Component {
         this.closeModal = this.closeModal.bind(this);
     }
 
+    componentDidMount() {
+        axios
+            .get('http://ipinfo.io')
+            .then(data => {
+                this.props.setZipCode(data.data.postal);
+            })
+            .catch(error => {
+                console.log('Error', error.message);
+            });
+    }
+
     closeModal() {
         if (this.props.selectedMakes.length > 0) {
             this.setState({ showModal: false }, () =>

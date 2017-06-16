@@ -30,6 +30,8 @@ const initialState = {
     fallbackDealImage: '/images/dmr-logo.svg',
     sortColumn: 'price',
     sortAscending: true,
+    compareList: [],
+    zipcode: null,
     imagesFromFuel: [],
 };
 

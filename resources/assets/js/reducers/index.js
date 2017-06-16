@@ -73,6 +73,14 @@ const reducer = (state, action) => {
                 selectedFuelTypes: [],
                 selectedMakes: [],
             });
+        case ActionTypes.TOGGLE_COMPARE:
+            return Object.assign({}, state, {
+                compareList: action.compareList,
+            });
+        case ActionTypes.SET_ZIP_CODE:
+            return Object.assign({}, state, {
+                zipcode: action.zipcode,
+            });
         case ActionTypes.RECEIVE_FUEL_IMAGES:
             return Object.assign({}, state, {
                 imagesFromFuel: action.images,
