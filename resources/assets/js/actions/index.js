@@ -256,8 +256,11 @@ export function selectDeal(deal) {
 }
 
 export function clearSelectedDeal() {
-    return {
-        type: ActionTypes.SELECT_DEAL,
+    return dispatch => {
+        dispatch(clearFuelImages());
+        dispatch({
+            type: ActionTypes.CLEAR_SELECTED_DEAL,
+        });
     };
 }
 
@@ -283,22 +286,42 @@ export function clearAllFilters() {
 }
 
 export function requestFuelImages(deal) {
-    return (dispatch, getState) => {
-        fuelapi
-            .getVehicleId(
-                deal.year,
-                deal.make,
-                deal.model,
-                deal.series,
-            )
-            .then(data => {
-                fuelapi
-                    .getImagesByVehicleId(data[0].id)
-                    .then(images => console.log(images))
-            });
+    return dispatch => {
+        fuelapi.getVehicleId(deal.year, deal.make, deal.model).then(data => {
+            const vehicleId = data.data[0].id || false;
+            if (vehicleId) {
+                fuelapi.getImagesByVehicleId(vehicleId).then(images => {
+                    const imageList = images.data.products['0'].productFormats[
+                        '0'
+                    ].assets.map((image, index) => {
+                        return { id: `fuel_${index}`, url: image.url };
+                    });
+                    if (imageList) {
+                        dispatch(receiveFuelImages(imageList));
+                    } else {
+                        // do nothing
+                    }
+                });
+            } else {
+                // do nothing
+            }
+        });
 
         dispatch({
             type: ActionTypes.REQUEST_FUEL_IMAGES,
         });
+    };
+}
+
+export function receiveFuelImages(images) {
+    return {
+        type: ActionTypes.RECEIVE_FUEL_IMAGES,
+        images: images,
+    };
+}
+
+export function clearFuelImages() {
+    return {
+        type: ActionTypes.CLEAR_FUEL_IMAGES,
     };
 }

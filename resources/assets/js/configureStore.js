@@ -1,7 +1,11 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
 import reducer from 'reducers/index';
-import { requestMakes, requestBodyStyles, requestFeatures } from 'actions/index';
+import {
+    requestMakes,
+    requestBodyStyles,
+    requestFeatures,
+} from 'actions/index';
 import R from 'ramda';
 import qs from 'qs';
 
@@ -26,6 +30,7 @@ const initialState = {
     fallbackDealImage: '/images/dmr-logo.svg',
     sortColumn: 'price',
     sortAscending: true,
+    imagesFromFuel: [],
 };
 
 export default () => {

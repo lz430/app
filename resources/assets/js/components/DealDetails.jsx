@@ -20,14 +20,21 @@ class DealDetails extends React.Component {
 
     selectFeaturedImage(index) {
         this.setState({
-            featuredImage: this.props.deal.photos.data[index],
+            featuredImage: this.allImages()[index],
         });
+    }
+
+    allImages() {
+        return R.concat(this.props.deal.photos.data, this.props.imagesFromFuel);
     }
 
     renderThumbnailImage(photo, index) {
         const imageClass =
             'deal-details__thumbnail-image ' +
-            (this.state.featuredImage.id === photo.id
+            (R.contains('fuel', photo.id)
+                ? 'deal-details__thumbnail-image--from-fuel '
+                : '') +
+            (this.state.featuredImage.url === photo.url
                 ? 'deal-details__thumbnail-image--selected'
                 : '');
 
@@ -64,7 +71,8 @@ class DealDetails extends React.Component {
                 <hr />
 
                 <div className="deal-details__thumbnail-images">
-                    {photos.map(this.renderThumbnailImage)}
+                    {this.allImages().map(this.renderThumbnailImage)}
+                    {/*{photos.concat(this.props.imagesFromFuel).map(this.renderThumbnailImage)}*/}
                 </div>
                 <h2>Vehicle Information</h2>
                 <div className="deal-details__items">
@@ -102,6 +110,7 @@ const mapStateToProps = state => {
     return {
         deal: state.selectedDeal,
         fallbackDealImage: state.fallbackDealImage,
+        imagesFromFuel: state.imagesFromFuel,
     };
 };
 

@@ -16,6 +16,10 @@
     margin-right: 2px;
     width: 50px;
 
+    &--from-fuel {
+      border: 2px solid $color-blue;
+    }
+
     &--selected {
       border: 1px solid $color-blue;
     }
