@@ -330,7 +330,6 @@ export function requestFuelImages(deal) {
 
         dispatch({
             type: ActionTypes.REQUEST_FUEL_IMAGES,
-            compareList: compareList,
         });
     };
 }
