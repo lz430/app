@@ -21,45 +21,47 @@ class Sortbar extends React.Component {
     render() {
         return (
             <div className="sortbarcompare">
-            <div className="sortbar">
-                <div className="sortbar__count">
-                    <span className="sortbar__count-number">
-                        {this.props.results_count}
-                    </span>
-                    {' '}
-                    results
+                <div className="sortbar">
+                    <div className="sortbar__count">
+                        <span className="sortbar__count-number">
+                            {this.props.results_count}
+                        </span>
+                        {' '}
+                        results
+                    </div>
+                    <div className="sortbar__buttons">
+                        <button
+                            className="sortbar__button sortbar__button--small"
+                            onClick={() => {
+                                this.props.sortDeals('price');
+                                this.props.requestDeals();
+                            }}
+                        >
+                            {this.renderIcon('price')} Price
+                        </button>
+                        <button
+                            className="sortbar__button sortbar__button--small"
+                            onClick={() => {
+                                this.props.sortDeals('year');
+                                this.props.requestDeals();
+                            }}
+                        >
+                            {this.renderIcon('year')} Year
+                        </button>
+                        <button
+                            className="sortbar__button sortbar__button--small"
+                            onClick={() => {
+                                this.props.sortDeals('make');
+                                this.props.requestDeals();
+                            }}
+                        >
+                            {this.renderIcon('make')} A-Z
+                        </button>
+                    </div>
                 </div>
-                <div className="sortbar__buttons">
-                    <button
-                        className="sortbar__button sortbar__button--small"
-                        onClick={() => {
-                            this.props.sortDeals('price');
-                            this.props.requestDeals();
-                        }}
-                    >
-                        {this.renderIcon('price')} Price
-                    </button>
-                    <button
-                        className="sortbar__button sortbar__button--small"
-                        onClick={() => {
-                            this.props.sortDeals('year');
-                            this.props.requestDeals();
-                        }}
-                    >
-                        {this.renderIcon('year')} Year
-                    </button>
-                    <button
-                        className="sortbar__button sortbar__button--small"
-                        onClick={() => {
-                            this.props.sortDeals('make');
-                            this.props.requestDeals();
-                        }}
-                    >
-                        {this.renderIcon('make')} A-Z
-                    </button>
+                <div className="compare">
+                    Compare {this.props.compareList.length}
                 </div>
-            </div>
-                <div className="compare">Compare {this.props.compareList.length}</div>
             </div>
         );
     }

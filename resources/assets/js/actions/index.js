@@ -287,10 +287,7 @@ export function clearAllFilters() {
 
 export function toggleCompare(deal) {
     return (dispatch, getState) => {
-        const compareList = util.toggleItem(
-            getState().compareList,
-            deal
-        );
+        const compareList = util.toggleItem(getState().compareList, deal);
 
         dispatch({
             type: ActionTypes.TOGGLE_COMPARE,
@@ -310,22 +307,20 @@ export function requestFuelImages(deal) {
     return dispatch => {
         fuelapi.getVehicleId(deal.year, deal.make, deal.model).then(data => {
             const vehicleId = data.data[0].id || false;
-            if (vehicleId) {
-                fuelapi.getImagesByVehicleId(vehicleId).then(images => {
-                    const imageList = images.data.products['0'].productFormats[
-                        '0'
-                    ].assets.map((image, index) => {
-                        return { id: `fuel_${index}`, url: image.url };
-                    });
-                    if (imageList) {
-                        dispatch(receiveFuelImages(imageList));
-                    } else {
-                        // do nothing
-                    }
+
+            if (!vehicleId) return;
+
+            fuelapi.getImagesByVehicleId(vehicleId).then(images => {
+                const imageList = images.data.products['0'].productFormats[
+                    '0'
+                ].assets.map((image, index) => {
+                    return { id: `fuel_${index}`, url: image.url };
                 });
-            } else {
-                // do nothing
-            }
+
+                if (!imageList) return;
+
+                dispatch(receiveFuelImages(imageList));
+            });
         });
 
         dispatch({

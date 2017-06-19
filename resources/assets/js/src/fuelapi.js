@@ -35,7 +35,7 @@ const fuel = {
             params: {
                 productID: 1,
                 productFormatIDs: 17,
-            }
+            },
         });
     },
 };
