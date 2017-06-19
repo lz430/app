@@ -6,6 +6,9 @@ $offset-horizontal: 50px;
 $header-height: 100px;
 
 .modal {
+  display: flex;
+  justify-content: center;
+
   &__overlay {
     background: $color-black;
     height: 100vh;
@@ -18,13 +21,12 @@ $header-height: 100px;
 
   &__content {
     background-color: $color-background-primary;
-    height: calc(100vh - #{$offset-top});
-    left: 50px;
+    max-height: calc(100vh - #{$offset-top});
+    max-width: calc(100vw - #{$offset-horizontal * 2});
     opacity: 1;
     overflow: scroll;
     position: absolute;
     top: 60px;
-    width: calc(100vw - #{$offset-horizontal * 2});
   }
 
   &__body {
