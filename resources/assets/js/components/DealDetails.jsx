@@ -63,42 +63,53 @@ class DealDetails extends React.Component {
 
     render() {
         const deal = this.props.deal;
-        const photos = this.props.deal.photos.data;
+
         return (
             <div className="deal-details">
-                {this.renderFeaturedImage()}
+                <div className="deal-details__images">
+                    {this.renderFeaturedImage()}
 
-                <hr />
+                    <hr />
 
-                <div className="deal-details__thumbnail-images">
-                    {this.allImages().map(this.renderThumbnailImage)}
-                    {/*{photos.concat(this.props.imagesFromFuel).map(this.renderThumbnailImage)}*/}
+                    <div className="deal-details__thumbnail-images">
+                        {this.allImages().map(this.renderThumbnailImage)}
+                    </div>
                 </div>
-                <h2>Vehicle Information</h2>
-                <div className="deal-details__items">
-                    <div className="deal-details__item">
-                        <div>Color</div>
-                        <div>{deal.color}</div>
-                    </div>
-                    <div className="deal-details__item">
-                        <div>Interior Color</div>
-                        <div>{deal.interior_color}</div>
-                    </div>
-                    <div className="deal-details__item">
-                        <div>MPG</div>
-                        <div>{deal.fuel_econ_hwy}</div>
-                    </div>
-                    <div className="deal-details__item">
-                        <div>Vehicle Type</div>
-                        <div>{deal.body}</div>
-                    </div>
-                    <div className="deal-details__item">
-                        <div>Transmission</div>
-                        <div>{deal.transmission}</div>
-                    </div>
-                    <div className="deal-details__item">
-                        <div>Fuel Type</div>
-                        <div>{deal.fuel}</div>
+
+                <div className="deal-details__information">
+                    <h2>
+                        Vehicle Information
+                        {' '}
+                        <span className="deal-details__vin">
+                            {deal.vin.substr(deal.vin.length - 8)}
+                        </span>
+                    </h2>
+
+                    <div className="deal-details__items">
+                        <div className="deal-details__item">
+                            <div>Color</div>
+                            <div>{deal.color}</div>
+                        </div>
+                        <div className="deal-details__item">
+                            <div>Interior Color</div>
+                            <div>{deal.interior_color}</div>
+                        </div>
+                        <div className="deal-details__item">
+                            <div>MPG</div>
+                            <div>{deal.fuel_econ_hwy}</div>
+                        </div>
+                        <div className="deal-details__item">
+                            <div>Vehicle Type</div>
+                            <div>{deal.body}</div>
+                        </div>
+                        <div className="deal-details__item">
+                            <div>Transmission</div>
+                            <div>{deal.transmission}</div>
+                        </div>
+                        <div className="deal-details__item">
+                            <div>Fuel Type</div>
+                            <div>{deal.fuel}</div>
+                        </div>
                     </div>
                 </div>
             </div>
