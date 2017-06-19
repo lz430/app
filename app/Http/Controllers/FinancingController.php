@@ -17,4 +17,9 @@ class FinancingController extends Controller
 
         return view('financing');
     }
+
+    public function showThankYou()
+    {
+        return view('thankyou');
+    }
 }

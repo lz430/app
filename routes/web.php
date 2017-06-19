@@ -9,6 +9,7 @@ Route::get('', 'WelcomeController@index');
 
 Route::get('filter', 'FilterController@index')->name('filter');
 
+Route::get('financing/thankyou', 'FinancingController@showThankYou' )->name('financingThankYou');
 Route::get('financing/{id}', 'FinancingController@show' )->name('financing');
 
 Route::post('saved-vehicle', 'SavedVehicleController@store')
