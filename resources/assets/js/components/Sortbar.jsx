@@ -19,6 +19,10 @@ class Sortbar extends React.Component {
     }
 
     render() {
+        const compareUrl =
+            '/compare?' +
+            this.props.compareList.map(deal => `deals[]=${deal.id}`).join('&');
+
         return (
             <div className="sortbarcompare">
                 <div className="sortbar">
@@ -60,7 +64,15 @@ class Sortbar extends React.Component {
                     </div>
                 </div>
                 <div className="compare">
-                    Compare {this.props.compareList.length}
+                    <a
+                        href={
+                            this.props.compareList.length >= 2
+                                ? compareUrl
+                                : '#'
+                        }
+                    >
+                        Compare {this.props.compareList.length}
+                    </a>
                 </div>
             </div>
         );

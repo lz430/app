@@ -22529,6 +22529,10 @@ var Sortbar = function (_React$Component) {
         value: function render() {
             var _this2 = this;
 
+            var compareUrl = '/compare?' + this.props.compareList.map(function (deal) {
+                return 'deals[]=' + deal.id;
+            }).join('&');
+
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { className: 'sortbarcompare' },
@@ -22590,8 +22594,14 @@ var Sortbar = function (_React$Component) {
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
                     { className: 'compare' },
-                    'Compare ',
-                    this.props.compareList.length
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'a',
+                        {
+                            href: this.props.compareList.length >= 2 ? compareUrl : '#'
+                        },
+                        'Compare ',
+                        this.props.compareList.length
+                    )
                 )
             );
         }
