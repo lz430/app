@@ -1,5 +1,8 @@
 @import '../variables';
 
+$make-height: 120px;
+$make-width: 120px;
+
 .make-selector {
   text-align: center;
 
@@ -14,20 +17,21 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    height: 125px;
     justify-content: center;
     margin: 50px;
-    max-height: 125px;
-    max-width: 125px;
+    max-width: $make-width;
     text-align: center;
-    width: 125px;
+    width: $make-width;
 
     &--selected {
       outline: red solid 1px;
     }
 
     img {
-      width: inherit;
+      height: $make-height;
+      max-height: $make-height;
+      max-width: $make-width;
+      width: $make-width;
     }
   }
 }

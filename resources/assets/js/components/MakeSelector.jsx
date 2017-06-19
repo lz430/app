@@ -25,8 +25,8 @@ class MakeSelector extends React.Component {
     }
 
     renderMake(make) {
-        let selected = R.contains(make.id, this.props.selectedMakes);
-        let className = `make-selector__make ${selected ? 'make-selector__make--selected' : ''}`;
+        const selected = R.contains(make.id, this.props.selectedMakes);
+        const className = `make-selector__make ${selected ? 'make-selector__make--selected' : ''}`;
 
         return (
             <div
@@ -35,6 +35,9 @@ class MakeSelector extends React.Component {
                 key={make.id}
             >
                 <img src={this.getLogoFor(make)} />
+                <div className="make-selector__make-name">
+                    {make.attributes.name}
+                </div>
             </div>
         );
     }
