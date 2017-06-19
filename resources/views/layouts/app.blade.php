@@ -12,7 +12,7 @@
         <title>@section('title', config('app.name'))</title>
 
         <!-- Styles -->
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
         <!-- Scripts -->
         <script>
@@ -53,8 +53,10 @@
                 Copyright © 2017 Deliver My Ride. All rights reserved.
             </p>
         </footer>
+
+        @include('footer')
         <!-- Scripts -->
-        <script src="{{ asset('js/app.js') }}"></script>
+        <script src="{{ mix('js/app.js') }}"></script>
         @if ( App::environment('staging') )
             <!-- Start of HubSpot Embed Code -->
             <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/3388780.js"></script>

@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Configurator from 'containers/Configurator';
 import FilterPage from 'containers/FilterPage';
+import Financing from 'containers/Financing';
 import { Provider } from 'react-redux';
 import store from 'configureStore';
 
@@ -25,4 +26,11 @@ Array.from(document.getElementsByTagName('FilterPage')).map(element => {
         </Provider>,
         element
     );
+});
+
+/**
+ * Financing
+ */
+Array.from(document.getElementsByTagName('Financing')).map(element => {
+    ReactDOM.render(<Financing />, element);
 });
