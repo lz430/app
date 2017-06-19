@@ -1,4 +1,5 @@
 import api from 'src/api';
+import fuelapi from 'src/fuelapi';
 import util from 'src/util';
 import * as ActionTypes from 'actiontypes/index';
 
@@ -255,8 +256,11 @@ export function selectDeal(deal) {
 }
 
 export function clearSelectedDeal() {
-    return {
-        type: ActionTypes.SELECT_DEAL,
+    return dispatch => {
+        dispatch(clearFuelImages());
+        dispatch({
+            type: ActionTypes.CLEAR_SELECTED_DEAL,
+        });
     };
 }
 
@@ -283,10 +287,7 @@ export function clearAllFilters() {
 
 export function toggleCompare(deal) {
     return (dispatch, getState) => {
-        const compareList = util.toggleItem(
-            getState().compareList,
-            deal
-        );
+        const compareList = util.toggleItem(getState().compareList, deal);
 
         dispatch({
             type: ActionTypes.TOGGLE_COMPARE,
@@ -299,5 +300,44 @@ export function setZipCode(zipcode) {
     return {
         type: ActionTypes.SET_ZIP_CODE,
         zipcode: zipcode,
+    };
+}
+
+export function requestFuelImages(deal) {
+    return dispatch => {
+        fuelapi.getVehicleId(deal.year, deal.make, deal.model).then(data => {
+            const vehicleId = data.data[0].id || false;
+
+            if (!vehicleId) return;
+
+            fuelapi.getImagesByVehicleId(vehicleId).then(images => {
+                const imageList = images.data.products['0'].productFormats[
+                    '0'
+                ].assets.map((image, index) => {
+                    return { id: `fuel_${index}`, url: image.url };
+                });
+
+                if (!imageList) return;
+
+                dispatch(receiveFuelImages(imageList));
+            });
+        });
+
+        dispatch({
+            type: ActionTypes.REQUEST_FUEL_IMAGES,
+        });
+    };
+}
+
+export function receiveFuelImages(images) {
+    return {
+        type: ActionTypes.RECEIVE_FUEL_IMAGES,
+        images: images,
+    };
+}
+
+export function clearFuelImages() {
+    return {
+        type: ActionTypes.CLEAR_FUEL_IMAGES,
     };
 }

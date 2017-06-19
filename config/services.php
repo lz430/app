@@ -43,4 +43,8 @@ return [
     'vauto' => [
         'uploads_path' => env('VAUTO_UPLOADS_PATH'),
     ],
+    
+    'fuel' => [
+        'api_key' => env('FUEL_API_KEY'),
+    ],
 ];
