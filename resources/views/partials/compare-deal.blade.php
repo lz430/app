@@ -12,9 +12,9 @@
         <button class="compare-deal__button compare-deal__button--small compare-deal__button--blue compare-deal__button">
             Buy Now
         </button>
-        <button class="compare-deal__button compare-deal__button--small compare-deal__button--blue compare-deal__button">
+        <a href="{{ $withoutDeal($deal->id) }}" class="compare-deal__button compare-deal__button--small compare-deal__button--blue compare-deal__button">
             Remove
-        </button>
+        </a>
     </div>
 
 

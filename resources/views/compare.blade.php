@@ -17,7 +17,7 @@
     </div>
     <div class="compare-deals">
     @foreach ($deals as $deal)
-        @include('partials.compare-deal', $deal)
+        @include('partials.compare-deal', ['deal' => $deal, 'withoutDeal' => $withoutDeal])
     @endforeach
     </div>
 @endsection
