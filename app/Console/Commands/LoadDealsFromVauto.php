@@ -26,4 +26,5 @@ class LoadDealsFromVauto extends Command
     {
         $this->importer->import();
     }
+
 }

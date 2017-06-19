@@ -3,6 +3,9 @@
 namespace DeliverMyRide\Vauto;
 
 use App\Feature;
+use App\JATO\Make;
+use App\JATO\Manufacturer;
+use App\JATO\VehicleModel;
 use App\JATO\Version;
 use App\VersionDeal;
 use Carbon\Carbon;
@@ -87,20 +90,76 @@ class Importer
 
     private function saveVersionDeals($handle, string $fileHash)
     {
+        $dealIds = [];
+
         while (($data = fgetcsv($handle)) !== false) {
             $keyedData = $this->keyedArray($data);
 
             try {
                 $decoded = $this->client->decodeVin($keyedData['VIN']);
 
-                DB::transaction(function () use ($decoded, $keyedData, $fileHash) {
+                DB::transaction(function () use ($decoded, $keyedData, $fileHash, &$dealIds) {
+                    // Get versions that match the Vin
+                    $versions = $this->client->modelsVersionsByModelName(
+                        str_replace(' ', '-', strtolower($keyedData['Model']))
+                    );
+
+                    // save manufacturer, make, model, then versions
+                    $manufacturerName = basename(array_first($versions[0]['links'], function ($link) {
+                        return $link['rel'] === 'getManufacturer';
+                    })['href']) ?? null;
+
+                    $makeName = basename(array_first($versions[0]['links'], function ($link) {
+                        return $link['rel'] === 'getMake';
+                    })['href']) ?? null;
+
+                    $modelName = basename(array_first($versions[0]['links'], function ($link) {
+                        return $link['rel'] === 'getModel';
+                    })['href']) ?? null;
+
+
+                    if (! $manufacturerName) {
+                        // log this and handle
+                    } elseif (! $modelName) {
+                        // log this and handle
+                    }
+
+                    // Get and save new manufacturer
+                    if (! $manufacturer = Manufacturer::where('url_name', $manufacturerName)->first()) {
+                        $manufacturer = $this->saveManufacturer(
+                            $this->client->manufacturerByName($manufacturerName)
+                        );
+                    }
+
+                    // Get and save new make
+                    if (! $make = Make::where('url_name', $makeName)->first()) {
+                        $make = $this->saveManufacturerMake(
+                            $manufacturer,
+                            $this->client->makeByName($makeName)
+                        );
+                    }
+
+                    // Get and save new model
+                    if (! $model = VehicleModel::where('url_name', $modelName)->first()) {
+                        $model = $this->saveMakeModel(
+                            $make,
+                            $this->client->modelByName($modelName)
+                        );
+                    }
+
+                    // Save new versions
+                    foreach ($versions as $version) {
+                        $this->saveModelVersionAndOptionsAndTaxesAndDiscounts($model, $version);
+                    }
+
                     foreach (Version::whereIn(
                         'jato_uid',
                         collect($decoded['versions'])->pluck('uid')
                     )->get() as $version) {
                         /** @var VersionDeal $versionDeal */
                         $versionDeal = $this->saveVersionDeal($version, $fileHash, $keyedData);
-                        
+                        $dealIds[] = $versionDeal->id;
+
                         $features = collect(explode('|', $keyedData['Features']));
                         $features->map(function ($featureName) use ($versionDeal) {
                             $feature = Feature::updateOrCreate([
@@ -124,9 +183,12 @@ class Importer
                     }
                 });
             } catch (ClientException | ServerException $e) {
-                $this->info("Unable to decode vin: {$keyedData['VIN']}");
+                // log and handle
+                $this->info($e->getMessage());
             }
         }
+
+        VersionDeal::whereNotIn('id', $dealIds)->delete();
     }
 
     private function saveVersionDealPhotos(VersionDeal $versionDeal, string $photos)
@@ -187,6 +249,123 @@ class Importer
             throw new MismatchedHeadersException(
                 implode(', ', $headers) . ' does not match expected headers: ' . implode(', ', self::HEADERS)
             );
+        }
+    }
+
+    private function saveModelVersion(VehicleModel $vehicleModel, array $version)
+    {
+        $this->info('Saving Model Version: ' . $version['vehicleId']);
+
+        return $vehicleModel->versions()->updateOrCreate([
+            'jato_uid' => $version['uid'],
+            'year' => $version['modelYear'],
+        ], [
+            'jato_vehicle_id' => $version['vehicleId'],
+            'jato_uid' => $version['uid'],
+            'jato_model_id' => $version['modelId'],
+            'year' => $version['modelYear'],
+            'name' => ! in_array($version['versionName'], ['-', ''])
+                ? $version['versionName']
+                : null,
+            'trim_name' => $version['trimName'],
+            'description' => rtrim($version['headerDescription'], ' -'),
+            'driven_wheels' => $version['drivenWheels'],
+            'doors' => $version['numberOfDoors'],
+            'transmission_type' => $version['transmissionType'],
+            'msrp' => $version['msrp'] !== '' ? $version['msrp'] : null,
+            'invoice' => $version['invoice'] !== '' ? $version['invoice'] : null,
+            'body_style' => $version['bodyStyleName'],
+            'photo_path' => $version['photoPath'],
+            'fuel_econ_city' => $version['fuelEconCity'] !== ''
+                ? $version['fuelEconCity']
+                : null,
+            'fuel_econ_hwy' => $version['fuelEconHwy'] !== ''
+                ? $version['fuelEconHwy']
+                : null,
+            'manufacturer_code' => ! in_array($version['manufacturerCode'], ['-', ''])
+                ? $version['manufacturerCode']
+                : null,
+            'delivery_price' => $version['delivery'] !== ''
+                ? $version['delivery']
+                : null,
+            'is_current' => $version['isCurrent'],
+        ]);
+    }
+
+    private function saveModelVersionAndOptionsAndTaxesAndDiscounts(VehicleModel $vehicleModel, array $version)
+    {
+        try {
+            $vehicleVersion = $this->saveModelVersion($vehicleModel, $version);
+
+            $options = $this->client->optionsByVehicleId($vehicleVersion->jato_vehicle_id);
+//            $equipment = $this->client->equipmentByVehicleId($vehicleVersion->jato_vehicle_id);
+
+            $this->saveVersionTaxesAndDiscounts($vehicleVersion, $options['taxes']);
+//            $this->saveVersionOptions($vehicleVersion, $options['options']);
+//            $this->saveVersionEquipment($vehicleVersion, $equipment['results']);
+        } catch (QueryException $e) {
+            $this->info('Duplicate information (Ignoring).');
+            $this->info($e->getMessage());
+        } catch (ServerException $e) {
+            $this->error(
+                'Error retrieving information for vehicleID: ' . $version['vehicleId']
+            );
+        }
+    }
+
+    private function saveManufacturer(array $manufacturer)
+    {
+        $this->info('Saving Manufacturer: ' . $manufacturer['manufacturerName']);
+
+        return Manufacturer::updateOrCreate([
+            'url_name' => $manufacturer['urlManufacturerName'],
+        ], [
+            'name' => $manufacturer['manufacturerName'],
+            'url_name' => $manufacturer['urlManufacturerName'],
+            'is_current' => $manufacturer['isCurrent'],
+        ]);
+    }
+
+    private function saveManufacturerMake(Manufacturer $manufacturer, array $make)
+    {
+        $this->info('Saving Manufacturer Make: ' . $make['makeName']);
+
+        return $manufacturer->makes()->updateOrCreate([
+            'url_name' => $make['urlMakeName'],
+        ], [
+            'name' => $make['makeName'],
+            'url_name' => $make['urlMakeName'],
+            'is_current' => $make['isCurrent'],
+        ]);
+    }
+
+    private function saveMakeModel(Make $make, array $model)
+    {
+        $this->info('Saving Make Model: ' . $model['modelName']);
+
+        return $make->models()->updateOrCreate([
+            'url_name' => $model['urlModelName'],
+        ], [
+            'name' => $model['modelName'],
+            'url_name' => $model['urlModelName'],
+            'is_current' => $model['isCurrent'],
+        ]);
+    }
+
+
+    private function saveVersionTaxesAndDiscounts(Version $version, array $taxesAndDiscounts)
+    {
+        $this->info("Saving Version Taxes and Discounts: $version->name");
+
+        foreach ($taxesAndDiscounts as $taxOrDiscount) {
+            $version->taxesAndDiscounts()->updateOrCreate([
+                'name' => $taxOrDiscount['item1'],
+                'version_id' => $version->id,
+            ], [
+                'name' => $taxOrDiscount['item1'],
+                'version_id' => $version->id,
+                'amount' => $taxOrDiscount['item2'],
+            ]);
         }
     }
 }
