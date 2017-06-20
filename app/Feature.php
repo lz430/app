@@ -17,7 +17,7 @@ class Feature extends Model
 
     public function deals()
     {
-        return $this->belongsToMany(VersionDeal::class);
+        return $this->belongsToMany(Deal::class);
     }
     
     public function scopeHasGroup($query)

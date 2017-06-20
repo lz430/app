@@ -2,7 +2,7 @@
 
 namespace App\JATO;
 
-use App\VersionDeal;
+use App\Deal;
 use DeliverMyRide\JATO\BodyStyles;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -41,7 +41,7 @@ class Version extends Model
 
     public function deals()
     {
-        return $this->hasMany(VersionDeal::class);
+        return $this->belongsToMany(Deal::class);
     }
     
     public function scopeFilterByBodyStyle(Builder $query, $bodyStyles) : Builder

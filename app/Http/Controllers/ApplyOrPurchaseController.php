@@ -15,7 +15,7 @@ class ApplyOrPurchaseController extends Controller
     {
         try {
             $this->validate(request(), [
-                'deal_id' => 'required|exists:version_deals,id'
+                'deal_id' => 'required|exists:deals,id'
             ]);
 
             return view('apply-or-purchase')
@@ -29,7 +29,7 @@ class ApplyOrPurchaseController extends Controller
     {
         try {
             $this->validate(request(), [
-                'deal_id' => 'required|exists:version_deals,id'
+                'deal_id' => 'required|exists:deals,id'
             ]);
 
             Mail::to(config('mail.dmr.address'))->send(new DealPurchasedDMR);
@@ -45,7 +45,7 @@ class ApplyOrPurchaseController extends Controller
     {
         try {
             $this->validate(request(), [
-                'deal_id' => 'required|exists:version_deals,id',
+                'deal_id' => 'required|exists:deals,id',
             ]);
 
             return view('view-apply')
@@ -59,7 +59,7 @@ class ApplyOrPurchaseController extends Controller
     {
         try {
             $this->validate(request(), [
-                'deal_id' => 'required|exists:version_deals,id',
+                'deal_id' => 'required|exists:deals,id',
             ]);
 
             Mail::to(config('mail.dmr.address'))->send(new ApplicationSubmittedDMR);

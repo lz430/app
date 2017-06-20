@@ -19,6 +19,16 @@ class Client
         return json_decode((string) $this->guzzleClient->request('GET', 'makes')->getBody(), true);
     }
 
+    public function makeByName($name)
+    {
+        return json_decode((string) $this->guzzleClient->request('GET', "makes/$name")->getBody(), true);
+    }
+
+    public function modelByName($name)
+    {
+        return json_decode((string) $this->guzzleClient->request('GET', "models/$name")->getBody(), true);
+    }
+
     public function modelsByMakeName($makeName)
     {
         return json_decode(
@@ -32,10 +42,23 @@ class Client
         return json_decode((string) $this->guzzleClient->request('GET', 'manufacturers')->getBody(), true)['results'];
     }
 
+    public function manufacturerByName($name)
+    {
+        return json_decode((string) $this->guzzleClient->request('GET', "manufacturers/$name")->getBody(), true);
+    }
+
     public function makesByManufacturerUrlName($manufacturerName)
     {
         return json_decode(
             (string) $this->guzzleClient->request('GET', "manufacturers/$manufacturerName/makes")->getBody(),
+            true
+        )['results'];
+    }
+
+    public function modelsVersionsByVehicleId($vehicleId)
+    {
+        return json_decode(
+            (string) $this->guzzleClient->request('GET', "versions/$vehicleId")->getBody(),
             true
         )['results'];
     }
@@ -59,6 +82,17 @@ class Client
             (string) $this->guzzleClient->request(
                 'GET',
                 "options/$vehicleId"
+            )->getBody(),
+            true
+        );
+    }
+
+    public function vehicleById($vehicleId)
+    {
+        return json_decode(
+            (string) $this->guzzleClient->request(
+                'GET',
+                "vehicle/$vehicleId"
             )->getBody(),
             true
         );

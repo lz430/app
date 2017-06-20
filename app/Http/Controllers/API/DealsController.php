@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Feature;
 use App\Transformers\DealTransformer;
-use App\VersionDeal;
+use App\Deal;
 use DeliverMyRide\JsonApi\Sort;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -48,10 +48,10 @@ class DealsController extends BaseAPIController
                 'fuelTypes' => $dealsQueryCopy->select('fuel')->distinct()->get()->pluck('fuel'),
                 'features' => Feature::hasGroup()->whereIn(
                     'id',
-                    DB::table('feature_version_deal')
+                    DB::table('deal_feature')
                         ->select('feature_id')
                         ->distinct()
-                        ->whereIn('version_deal_id', $dealsQueryCopy->select('id')->distinct()->get()->pluck('id'))
+                        ->whereIn('deal_id', $dealsQueryCopy->select('id')->distinct()->get()->pluck('id'))
                         ->get()->pluck('feature_id')
                 )->select('feature')->distinct()->get()->pluck('feature'),
             ])
@@ -82,7 +82,7 @@ class DealsController extends BaseAPIController
 
     private function getQueryByMakesAndBodyStyles(Request $request) : Builder
     {
-        return VersionDeal::whereHas('version', function (Builder $query) use ($request) {
+        return Deal::whereHas('versions', function (Builder $query) use ($request) {
             if ($request->has('body_styles')) {
                 $query->filterByBodyStyle($request->get('body_styles'));
             }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\VersionDeal;
+use App\Deal;
 
 class CompareController extends Controller
 {
@@ -12,7 +12,7 @@ class CompareController extends Controller
            'deals' => 'required|array|exists:version_deals,id',
         ]);
         
-        $deals = VersionDeal::whereIn('id', request('deals'))->with('photos', 'version.taxesAndDiscounts')->get();
+        $deals = Deal::whereIn('id', request('deals'))->with('photos', 'version.taxesAndDiscounts')->get();
         
         $withoutDeal = function ($dealId) {
             return route('compare', ['deals' => array_diff(request('deals'), [$dealId])]);
