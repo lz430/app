@@ -20416,6 +20416,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_containers_FilterPage__ = __webpack_require__(381);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_react_redux__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_configureStore__ = __webpack_require__(379);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_components_CompareTitleBar__ = __webpack_require__(896);
+
 
 
 
@@ -20442,6 +20444,13 @@ Array.from(document.getElementsByTagName('FilterPage')).map(function (element) {
         { store: filterStore },
         __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_containers_FilterPage__["a" /* default */], null)
     ), element);
+});
+
+/**
+ * CompareTitleBar
+ */
+Array.from(document.getElementsByTagName('CompareTitleBar')).map(function (element) {
+    __WEBPACK_IMPORTED_MODULE_2_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_components_CompareTitleBar__["a" /* default */], null), element);
 });
 
 /***/ }),
@@ -49724,6 +49733,104 @@ module.exports = function(module) {
 __webpack_require__(342);
 module.exports = __webpack_require__(343);
 
+
+/***/ }),
+/* 892 */,
+/* 893 */,
+/* 894 */,
+/* 895 */,
+/* 896 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+var CompareTitleBar = function (_React$Component) {
+    _inherits(CompareTitleBar, _React$Component);
+
+    function CompareTitleBar() {
+        _classCallCheck(this, CompareTitleBar);
+
+        var _this = _possibleConstructorReturn(this, (CompareTitleBar.__proto__ || Object.getPrototypeOf(CompareTitleBar)).call(this));
+
+        _this.state = {
+            selectedTab: 'cash'
+        };
+        return _this;
+    }
+
+    _createClass(CompareTitleBar, [{
+        key: 'selectTab',
+        value: function selectTab(selectedTab) {
+            this.setState({ selectedTab: selectedTab });
+        }
+    }, {
+        key: 'buttonClass',
+        value: function buttonClass(tabName) {
+            return 'title-bar__button title-bar__button--small ' + (tabName === this.state.selectedTab ? 'title-bar__button--blue' : '');
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'title-bar' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'title-bar__title' },
+                    'Vehicle Comparison'
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'title-bar__buttons' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'button',
+                        {
+                            onClick: this.selectTab.bind(this, 'cash'),
+                            className: this.buttonClass('cash')
+                        },
+                        'Cash'
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'button',
+                        {
+                            onClick: this.selectTab.bind(this, 'finance'),
+                            className: this.buttonClass('finance')
+                        },
+                        'Finance'
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'button',
+                        {
+                            onClick: this.selectTab.bind(this, 'lease'),
+                            className: this.buttonClass('lease')
+                        },
+                        'Lease'
+                    )
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'title-bar__content' },
+                    this.state.selectedTab
+                )
+            );
+        }
+    }]);
+
+    return CompareTitleBar;
+}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["a"] = (CompareTitleBar);
 
 /***/ })
 /******/ ]);
