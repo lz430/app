@@ -10,7 +10,9 @@ class Client
 
     public function __construct($username, $password)
     {
-        $this->guzzleClient = new GuzzleClient;
+        $this->guzzleClient = new GuzzleClient([
+            'connect_timeout' => 5,
+        ]);
         $this->authorize($username, $password);
     }
 
