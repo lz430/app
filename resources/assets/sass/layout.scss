@@ -19,7 +19,7 @@ body {
 
 .section {
   border-bottom: 1px solid $color-section-bottom-border;
-  $section-padding: 50px;
+  $section-padding: 25px;
 
   display: flex;
   flex-wrap: wrap;
@@ -27,17 +27,20 @@ body {
 
   &__title {
     font-size: 2rem;
+    padding: 15px;
     text-align: center;
     width: 100%;
 
     &--small {
       font-size: 1.2rem;
-      padding: 15px;
     }
 
     &--medium {
       font-size: 1.5rem;
-      padding: 15px;
+    }
+
+    &--left {
+      text-align: left;
     }
   }
 

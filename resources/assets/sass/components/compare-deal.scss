@@ -1,0 +1,35 @@
+@import '../variables';
+@import '../mixins/button';
+
+.compare-deal {
+  background-color: $color-background-secondary;
+  border-radius: 6px;
+  margin: 5px;
+  max-width: 300px;
+  min-width: 300px;
+
+  &__basic-info {
+    padding: 5px 15px 0;
+  }
+
+  &__image {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    min-height: 188px;
+    width: 100%;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-around;
+    margin: 5px 0 25px;
+    padding: 0 10px;
+  }
+
+  &__button {
+    @include button;
+    flex: 1;
+    justify-content: center;
+    margin: 0 5px;
+  }
+}
