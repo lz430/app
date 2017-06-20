@@ -7,24 +7,24 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class VersionDeal extends Model
+class Deal extends Model
 {
     protected $guarded = [];
     protected $dates = ['inventory_date'];
 
-    public function version()
+    public function versions()
     {
-        return $this->belongsTo(Version::class);
+        return $this->belongsToMany(Version::class);
     }
 
     public function options()
     {
-        return $this->hasMany(VersionDealOption::class);
+        return $this->hasMany(DealOption::class);
     }
 
     public function photos()
     {
-        return $this->hasMany(VersionDealPhoto::class);
+        return $this->hasMany(DealPhoto::class);
     }
     
     public function features()

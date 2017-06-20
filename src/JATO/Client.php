@@ -55,6 +55,14 @@ class Client
         )['results'];
     }
 
+    public function modelsVersionsByVehicleId($vehicleId)
+    {
+        return json_decode(
+            (string) $this->guzzleClient->request('GET', "versions/$vehicleId")->getBody(),
+            true
+        )['results'];
+    }
+
     public function modelsVersionsByModelName($modelName)
     {
         return json_decode(
@@ -74,6 +82,17 @@ class Client
             (string) $this->guzzleClient->request(
                 'GET',
                 "options/$vehicleId"
+            )->getBody(),
+            true
+        );
+    }
+
+    public function vehicleById($vehicleId)
+    {
+        return json_decode(
+            (string) $this->guzzleClient->request(
+                'GET',
+                "vehicle/$vehicleId"
             )->getBody(),
             true
         );

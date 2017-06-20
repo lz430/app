@@ -14,7 +14,6 @@ class UserAccessTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /** @test */
     public function saved_car_creates_new_user_and_redirected_to_home()
     {
         Mail::fake();

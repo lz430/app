@@ -2,12 +2,12 @@
 
 namespace App\Transformers;
 
-use App\VersionDealPhoto;
+use App\DealPhoto;
 use League\Fractal\TransformerAbstract;
 
 class PhotoTransformer extends TransformerAbstract
 {
-    public function transform(VersionDealPhoto $photo)
+    public function transform(DealPhoto $photo)
     {
         return [
             'id' => $photo->id,

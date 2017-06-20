@@ -100,14 +100,7 @@ $factory->define(App\JATO\Option::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\SavedVehicle::class, function (Faker\Generator $faker) {
-    return [
-        'user_id' => factory(App\User::class),
-        'version_id' => factory(App\JATO\Version::class),
-    ];
-});
-
-$factory->define(App\VersionDeal::class, function (Faker\Generator $faker) {
+$factory->define(App\Deal::class, function (Faker\Generator $faker) {
     return [
         'file_hash' => $faker->md5,
         'dealer_id' => 'MP4164',
@@ -137,7 +130,6 @@ $factory->define(App\VersionDeal::class, function (Faker\Generator $faker) {
         'fuel_econ_hwy' => null,
         'dealer_name' => 'Suburban Chrysler Jeep Dodge of Troy',
         'days_old' => 11,
-        'version_id' => factory(App\JATO\Version::class),
     ];
 });
 

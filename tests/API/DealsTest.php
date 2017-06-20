@@ -6,7 +6,7 @@ use App\Feature;
 use App\JATO\Make;
 use App\JATO\VehicleModel;
 use App\JATO\Version;
-use App\VersionDeal;
+use App\Deal;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
@@ -25,7 +25,7 @@ class DealsTest extends TestCase
         $version = $vehicleModel->versions()->save(factory(Version::class)->make([
             'body_style' => 'Cargo Van',
         ]));
-        $version->deals()->save(factory(VersionDeal::class)->make());
+        $version->deals()->save(factory(Deal::class)->make());
         
         $response = $this->getJson(route('deals.index', [
             'make_ids' => [$make->id, 2, 3],
@@ -49,10 +49,10 @@ class DealsTest extends TestCase
             'body_style' => 'Cargo Van',
         ]));
         $version->deals()->saveMany([
-            factory(VersionDeal::class)->make([
+            factory(Deal::class)->make([
                 'msrp' => 4000,
             ]),
-            factory(VersionDeal::class)->make([
+            factory(Deal::class)->make([
                 'msrp' => 1000,
             ]),
         ]);
@@ -79,10 +79,10 @@ class DealsTest extends TestCase
             'body_style' => 'Cargo Van',
         ]));
         $version->deals()->saveMany([
-            factory(VersionDeal::class)->make([
+            factory(Deal::class)->make([
                 'fuel' => 'fuel type A',
             ]),
-            factory(VersionDeal::class)->make([
+            factory(Deal::class)->make([
                 'fuel' => 'fuel type B',
             ]),
         ]);
@@ -107,10 +107,10 @@ class DealsTest extends TestCase
             'body_style' => 'Cargo Van',
         ]));
         $version->deals()->saveMany([
-            factory(VersionDeal::class)->make([
+            factory(Deal::class)->make([
                 'fuel' => 'fuel type A',
             ]),
-            factory(VersionDeal::class)->make([
+            factory(Deal::class)->make([
                 'fuel' => 'fuel type B',
             ]),
         ]);
@@ -136,13 +136,13 @@ class DealsTest extends TestCase
             'body_style' => 'Cargo Van',
         ]));
         $version->deals()->saveMany([
-            factory(VersionDeal::class)->make([
+            factory(Deal::class)->make([
                 'transmission' => '9-Speed 948TE Automatic',
             ]),
-            factory(VersionDeal::class)->make([
+            factory(Deal::class)->make([
                 'transmission' => '9-Speed Automatic',
             ]),
-            factory(VersionDeal::class)->make([
+            factory(Deal::class)->make([
                 'transmission' => '6-Speed',
             ]),
         ]);
@@ -171,12 +171,12 @@ class DealsTest extends TestCase
             'body_style' => 'Targa',
         ]));
         $parentVersion->deals()->save(
-            factory(VersionDeal::class)->make([
+            factory(Deal::class)->make([
                 'id' => 1,
             ])
         );
         $subVersion->deals()->save(
-            factory(VersionDeal::class)->make([
+            factory(Deal::class)->make([
                 'id' => 2,
             ])
         );
@@ -199,9 +199,9 @@ class DealsTest extends TestCase
 
         $version = $vehicleModel->versions()->save(factory(Version::class)->make());
 
-        $versionDeals = $version->deals()->saveMany(factory(VersionDeal::class, 3)->make());
+        $versionDeals = $version->deals()->saveMany(factory(Deal::class, 3)->make());
 
-        $versionDeals->first()->features()->save(factory(Feature::class)->make(['feature' => 'ABS']));
+        $versionDeals->first()->features()->attach(factory(Feature::class)->make(['feature' => 'ABS']));
 
         $response = $this->getJson(route('deals.index', [
             'make_ids' => [$make->id, 2, 3],
@@ -217,21 +217,22 @@ class DealsTest extends TestCase
     {
         $make = factory(Make::class)->create(['name' => 'some-make']);
         
-        $vehicleModel = $make->models()->save(factory(VehicleModel::class)->make());
-        
-        $version = $vehicleModel->versions()->save(factory(Version::class)->make());
-        
-        $versionDeals = $version->deals()->saveMany(factory(VersionDeal::class, 3)->make());
+        $model = $make->models()->save(factory(VehicleModel::class)->make());
+        $version = $model->versions()->save(factory(Version::class)->make());
 
-        $versionDeals->first()->features()->save(factory(Feature::class)->make(['feature' => 'ABS']));
+        $deals = factory(Deal::class, 3)->create();
+
+        foreach ($deals as $deal) {
+            $version->deals()->attach($deal->id);
+        }
+
+        $deals->first()->features()->attach(factory(Feature::class)->create(['feature' => 'ABS']));
 
         $response = $this->getJson(route('deals.index', [
-            'make_ids' => [$make->id, 2, 3],
+            'make_ids' => [$make->id],
             'features' => ['ABS'],
         ]));
-        
-        $response->assertStatus(200);
-        
+
         $this->assertCount(1, $response->decodeResponseJson()['data']);
     }
 
@@ -240,21 +241,24 @@ class DealsTest extends TestCase
     {
         $make = factory(Make::class)->create(['name' => 'some-make']);
 
-        $vehicleModel = $make->models()->save(factory(VehicleModel::class)->make());
+        $model = $make->models()->save(factory(VehicleModel::class)->make());
+        $version = $model->versions()->save(factory(Version::class)->make());
 
-        $version = $vehicleModel->versions()->save(factory(Version::class)->make());
+        $deals = factory(Deal::class, 3)->create();
 
-        $versionDeals = $version->deals()->saveMany(factory(VersionDeal::class, 3)->make());
+        foreach ($deals as $deal) {
+            $version->deals()->attach($deal->id);
+        }
 
         $absFeature = factory(Feature::class)->create(['feature' => 'ABS']);
         $heatedSeatsFeature = factory(Feature::class)->create(['feature' => 'Heated seats']);
 
-        $versionDeals->first()->features()->attach($absFeature);
+        $deals->first()->features()->attach($absFeature);
 
-        $versionDeals->get(1)->features()->attach($heatedSeatsFeature);
+        $deals->get(1)->features()->attach($heatedSeatsFeature);
 
-        $versionDeals->get(2)->features()->attach($absFeature);
-        $versionDeals->get(2)->features()->attach($heatedSeatsFeature);
+        $deals->get(2)->features()->attach($absFeature);
+        $deals->get(2)->features()->attach($heatedSeatsFeature);
 
         $response = $this->getJson(route('deals.index', [
             'make_ids' => [$make->id, 2, 3],
