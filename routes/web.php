@@ -9,8 +9,7 @@ Route::get('', 'WelcomeController@index');
 
 Route::get('filter', 'FilterController@index')->name('filter');
 
-Route::post('saved-vehicle', 'SavedVehicleController@store')
-    ->name('savedVehicle.store');
+Route::get('compare', 'CompareController@index')->name('compare');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('buy-request/create', 'BuyRequestController@create')->name('buyRequest.create');
