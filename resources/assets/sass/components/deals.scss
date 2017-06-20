@@ -14,7 +14,9 @@
   .deal {
     background-color: $color-background-secondary;
     border-radius: 6px;
+    height: 350px;
     margin: 5px;
+    max-height: 350px;
     max-width: 300px;
     min-width: 300px;
 
