@@ -330,7 +330,7 @@ class Importer
             $this->info('Duplicate information (Ignoring).');
             $this->info($e->getMessage());
         } catch (ServerException $e) {
-            $this->error(
+            $this->info(
                 'Error retrieving information for vehicleID: ' . $version['vehicleId']
             );
         }
