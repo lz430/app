@@ -81,7 +81,14 @@ class Importer
 
     public function import()
     {
-        foreach ($this->filesystem->files(base_path(config('services.vauto.uploads_path'))) as $file) {
+        $csvFiles = array_filter(
+            $this->filesystem->files(realpath(base_path(config('services.vauto.uploads_path')))),
+            function ($file) {
+                return pathinfo($file, PATHINFO_EXTENSION) === 'csv';
+            }
+        );
+
+        foreach ($csvFiles as $file) {
             $handle = fopen($file, 'r');
 
             $this->checkHeaders(fgetcsv($handle));
