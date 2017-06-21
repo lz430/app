@@ -21,6 +21,11 @@ class Client
         return json_decode((string) $this->guzzleClient->request('GET', 'makes')->getBody(), true);
     }
 
+    public function incentivesByVehicleId($vehicleId)
+    {
+        return json_decode((string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId")->getBody(), true);
+    }
+
     public function makeByName($name)
     {
         return json_decode((string) $this->guzzleClient->request('GET', "makes/$name")->getBody(), true);

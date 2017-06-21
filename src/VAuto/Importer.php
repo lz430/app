@@ -3,6 +3,7 @@
 namespace DeliverMyRide\Vauto;
 
 use App\Feature;
+use App\Incentive;
 use App\JATO\Equipment;
 use App\JATO\Make;
 use App\JATO\Manufacturer;
@@ -204,6 +205,11 @@ class Importer
                             $keyedData['Photos']
                         );
                     }
+
+                    // Save Incentives (these require the versions to be saved)
+                    $this->saveIncentives(
+                        $versions[0]['vehicleId']
+                    );
                 });
             } catch (ClientException | ServerException $e) {
                 $this->info('Error: ' . $e->getMessage());
@@ -435,6 +441,56 @@ class Importer
                 'availability' => $equipment['availability'],
                 'value' => $equipment['value'],
             ]);
+        }
+    }
+
+    private function saveIncentives($vehicleId)
+    {
+        $incentives = $this->client->incentivesByVehicleId($vehicleId);
+
+        foreach ($incentives as $incentive) {
+            try {
+                $validFrom = new Carbon($incentive['validFrom']);
+                $validTo = new Carbon($incentive['validTo']);
+                $revisionDate = new Carbon($incentive['revisionDate']);
+            } catch (\Exception $e) {
+                // invalid dates
+            }
+
+            $this->info('Saving incentive: ' . $incentive['title']);
+
+            try {
+                $incentive = Incentive::create([
+                    'makeName' => $incentive['makeName'],
+                    'subProgramID' => $incentive['subProgramID'],
+                    'title' => $incentive['title'],
+                    'description' => $incentive['description'],
+                    'categoryID' => $incentive['categoryID'],
+                    'typeID' => $incentive['typeID'],
+                    'targetID' => $incentive['targetID'],
+                    'validFrom' => $validFrom ?? null,
+                    'validTo' => $validTo ?? null,
+                    'revisionNumber' => $incentive['revisionNumber'],
+                    'revisionDescription' => $incentive['revisionDescription'],
+                    'revisionDate' => $revisionDate ?? null,
+                    'restrictions' => $incentive['restrictions'],
+                    'comments' => $incentive['comments'],
+                    'statusName' => $incentive['statusName'],
+                    'statusID' => $incentive['statusID'],
+                    'cash' => $incentive['cash'],
+                    'cashRequirements' => $incentive['cashRequirements'],
+                    'categoryName' => $incentive['categoryName'],
+                    'targetName' => $incentive['targetName'],
+                    'typeName' => $incentive['typeName'],
+                    'states' => $incentive['states'],
+                ]);
+
+                $incentive->versions()->attach(
+                    Version::where('jato_vehicle_id', $vehicleId)->pluck('id')
+                );
+            } catch (QueryException $e) {
+                // duplicate
+            }
         }
     }
 }

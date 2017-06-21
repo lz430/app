@@ -26,9 +26,15 @@
         @foreach ($deal->versions()->first()->taxesAndDiscounts as $incentive)
             <div class="compare-deal__incentive">
                 {{ $incentive->name }}
-                {{ $incentive->amount }}
+                ${{ $incentive->amount }}
             </div>
         @endforeach
 
+        @foreach ($deal->versions()->first()->incentives as $incentive)
+            <div class="compare-deal__incentive">
+                {{ $incentive->title }}
+                ${{ $incentive->cash }}
+            </div>
+        @endforeach
     </div>
 </div>
