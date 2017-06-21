@@ -3,6 +3,7 @@
 namespace App\JATO;
 
 use App\Deal;
+use App\Incentive;
 use DeliverMyRide\JATO\BodyStyles;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +23,13 @@ class Version extends Model
     public function model()
     {
         return $this->belongsTo(VehicleModel::class, 'model_id');
+    }
+
+    public function incentives()
+    {
+        return $this->belongsToMany(
+            Incentive::class
+        );
     }
 
     public function options()

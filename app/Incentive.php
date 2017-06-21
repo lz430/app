@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\JATO\Version;
 use Illuminate\Database\Eloquent\Model;
 
 class Incentive extends Model
@@ -12,4 +13,11 @@ class Incentive extends Model
         'validTo',
         'revisionDate',
     ];
+
+    public function versions()
+    {
+        return $this->belongsToMany(
+            Version::class
+        );
+    }
 }

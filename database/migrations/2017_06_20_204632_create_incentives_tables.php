@@ -23,7 +23,7 @@ class CreateIncentivesTables extends Migration
             $table->string('revisionDescription')->nullable();
             $table->date('revisionDate')->nullable();
             $table->string('restrictions')->nullable();
-            $table->string('comments')->nullable();
+            $table->longText('comments')->nullable();
             $table->string('statusName');
             $table->string('statusID');
             $table->string('cash')->nullable();
@@ -31,24 +31,31 @@ class CreateIncentivesTables extends Migration
             $table->string('categoryName');
             $table->string('targetName')->nullable();
             $table->string('typeName')->nullable();
-            $table->string('states')->nullable();
-            $table->string('regions')->nullable();
+            $table->longText('states')->nullable();
             $table->unique(['subProgramID', 'title']);
             $table->timestamps();
         });
 
-        Schema::create('vehicle_incentives', function (Blueprint $table) {
+        Schema::table('versions', function (Blueprint $table) {
+            $table->unique(['jato_vehicle_id']);
+        });
+
+        Schema::create('incentive_version', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('incentive_id');
             $table->foreign('incentive_id')->references('id')->on('incentives')->onDelete('cascade');
-            $table->bigInteger('jato_vehicle_id');
-            $table->unique(['jato_vehicle_id', 'incentive_id']);
+            $table->unsignedInteger('version_id');
+            $table->foreign('version_id')->references('id')->on('versions')->onDelete('cascade');
+            $table->unique(['version_id', 'incentive_id']);
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('vehicle_incentives');
+        Schema::dropIfExists('incentive_version');
         Schema::dropIfExists('incentives');
+        Schema::table('versions', function (Blueprint $table) {
+            $table->dropUnique(['jato_vehicle_id']);
+        });
     }
 }
