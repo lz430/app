@@ -45,4 +45,15 @@
       margin: 0 5px;
     }
   }
+
+  &__show-more {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-top: 15px;
+  }
+
+  &__button {
+    @include button;
+  }
 }

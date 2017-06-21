@@ -45,15 +45,15 @@ class DealsController extends BaseAPIController
             ->paginateWith(new IlluminatePaginatorAdapter($deals))
             ->parseIncludes($request->get('includes', []))
             ->addMeta([
-                'fuelTypes' => $dealsQueryCopy->select('fuel')->distinct()->get()->pluck('fuel'),
+                'fuelTypes' => $dealsQueryCopy->select('fuel')->distinct()->pluck('fuel'),
                 'features' => Feature::hasGroup()->whereIn(
                     'id',
                     DB::table('deal_feature')
                         ->select('feature_id')
                         ->distinct()
-                        ->whereIn('deal_id', $dealsQueryCopy->select('id')->distinct()->get()->pluck('id'))
-                        ->get()->pluck('feature_id')
-                )->select('feature')->distinct()->get()->pluck('feature'),
+                        ->whereIn('deal_id', $dealsQueryCopy->select('id')->distinct()->pluck('id'))
+                        ->pluck('feature_id')
+                )->select('feature')->distinct()->pluck('feature'),
             ])
             ->respond();
     }

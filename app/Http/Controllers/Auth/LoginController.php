@@ -11,35 +11,11 @@ use Illuminate\Support\Facades\Mail;
 class LoginController extends Controller
 {
     use AuthenticatesUsers;
-
+    
+    protected $redirectTo = '/';
+    
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'logout']);
-    }
-
-    public function login()
-    {
-        $this->validate(request(), ['email' => 'required|email|exists:users']);
-
-        $emailLogin = EmailLogin::createForEmail(request()->input('email'));
-
-        $url = route('auth.email-authenticate', [
-            'token' => $emailLogin->token
-        ]);
-
-        Mail::to(request()->input('email'))->send(new SendGarageLink($url));
-
-        return view('auth.login-email-sent');
-    }
-
-    public function authenticateEmail($token)
-    {
-        $emailLogin = EmailLogin::validFromToken($token);
-
-        auth()->login($emailLogin->user);
-
-        EmailLogin::where('email', $emailLogin->email)->delete();
-
-        return redirect('home');
+        $this->middleware('guest')->except('logout');
     }
 }
