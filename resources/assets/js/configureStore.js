@@ -24,7 +24,7 @@ const initialState = {
     features: null,
     makes: null,
     dealPage: 1,
-    dealsPagination: null,
+    dealPageTotal: 1,
     deals: null,
     fallbackLogoImage: '/images/dmr-logo.svg',
     fallbackDealImage: '/images/dmr-logo.svg',
