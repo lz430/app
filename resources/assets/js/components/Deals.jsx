@@ -1,28 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Deal from 'components/Deal';
-import debounce from 'lodash.debounce';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
 
 class Deals extends React.Component {
-    componentDidMount() {
-        const element = ReactDOM.findDOMNode(this);
-        const subscribeToScroll = e => {
-            this.props.requestMoreDeals();
-        };
-
-        element.addEventListener(
-            'scroll',
-            debounce(subscribeToScroll, 500, {
-                maxWait: 1000,
-                leading: true,
-                trailing: false,
-            })
-        );
-    }
-
     render() {
         return (
             <div className="deals">
@@ -35,6 +17,16 @@ class Deals extends React.Component {
                         />
                     );
                 })}
+                {this.props.dealPage === this.props.dealPageTotal
+                    ? ''
+                    : <div className="deals__show-more">
+                          <button
+                              onClick={this.props.requestMoreDeals}
+                              className="deals__button deals__button--blue"
+                          >
+                              Show More
+                          </button>
+                      </div>}
             </div>
         );
     }
@@ -50,12 +42,16 @@ Deals.propTypes = {
             id: PropTypes.number.isRequired,
         })
     ),
+    dealPage: PropTypes.number.isRequired,
+    dealPageTotal: PropTypes.number.isRequired,
     fallbackDealImage: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state) {
     return {
         deals: state.deals,
+        dealPage: state.dealPage,
+        dealPageTotal: state.dealPageTotal,
         fallbackDealImage: state.fallbackDealImage,
     };
 }

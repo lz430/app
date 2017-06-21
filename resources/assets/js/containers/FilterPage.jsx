@@ -99,8 +99,6 @@ class FilterPage extends React.Component {
                 {this.props.selectedDeal ? this.renderSelectedDealModal() : ''}
             </div>
         );
-
-        // return <div>'Loading'</div>;
     }
 }
 
