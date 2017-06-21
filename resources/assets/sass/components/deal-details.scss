@@ -12,6 +12,7 @@ $padding: 15px;
     padding: $padding;
     text-align: center;
     width: 100%;
+
     @media (min-width: $break-large) {
       width: 50%;
     }
@@ -20,6 +21,7 @@ $padding: 15px;
   &__information {
     padding: $padding;
     width: 100%;
+
     @media (min-width: $break-large) {
       width: 50%;
     }
@@ -35,6 +37,8 @@ $padding: 15px;
     display: flex;
     flex-wrap: wrap;
     margin: -5px;
+    min-height: 0;
+    min-width: 0;
   }
 
   &__thumbnail-image {
