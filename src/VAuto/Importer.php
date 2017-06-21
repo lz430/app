@@ -3,6 +3,7 @@
 namespace DeliverMyRide\Vauto;
 
 use App\Feature;
+use App\Incentive;
 use App\JATO\Equipment;
 use App\JATO\Make;
 use App\JATO\Manufacturer;
@@ -152,6 +153,11 @@ class Importer
                 }
 
                 DB::transaction(function () use ($versions, $versionDeal, $decoded, $keyedData, $fileHash, &$dealIds) {
+                    // Save Incentives
+                    $this->saveIncentives(
+                        $versions[0]['vehicleId']
+                    );
+
                     // Save new versions
                     $manufacturerName = basename($this->getLinkRel($versions[0]['links'], 'getManufacturer'));
                     $makeName = basename($this->getLinkRel($versions[0]['links'], 'getMake'));
@@ -434,6 +440,49 @@ class Importer
                 'location' => $equipment['location'],
                 'availability' => $equipment['availability'],
                 'value' => $equipment['value'],
+            ]);
+        }
+    }
+
+    private function saveIncentives($vehicleId)
+    {
+        $incentives = $this->client->incentivesByVehicleId($vehicleId);
+
+        foreach ($incentives as $incentive) {
+            try {
+                $validFrom = new Carbon($incentive['validFrom']);
+                $validTo = new Carbon($incentive['validTo']);
+                $revisionDate = new Carbon($incentive['revisionDate']);
+            } catch (\Exception $e) {
+                // invalid dates
+            }
+
+            $this->info('Saving incentive: ' . $incentive['title']);
+
+            Incentive::create([
+                'makeName' => $incentive['makeName'],
+                'subProgramID' => $incentive['subProgramID'],
+                'title' => $incentive['subProgramID'],
+                'description' => $incentive['description'],
+                'categoryID' => $incentive['categoryID'],
+                'typeID' => $incentive['typeID'],
+                'targetID' => $incentive['targetID'],
+                'validFrom' => $validFrom ?? null,
+                'validTo' => $validTo ?? null,
+                'revisionNumber' => $incentive['revisionNumber'],
+                'revisionDescription' => $incentive['revisionDescription'],
+                'revisionDate' => $revisionDate ?? null,
+                'restrictions' => $incentive['restrictions'],
+                'comments' => $incentive['comments'],
+                'statusName' => $incentive['statusName'],
+                'statusID' => $incentive['statusID'],
+                'cash' => $incentive['cash'],
+                'cashRequirements' => $incentive['cashRequirements'],
+                'categoryName' => $incentive['categoryName'],
+                'targetName' => $incentive['targetName'],
+                'typeName' => $incentive['typeName'],
+                'states' => $incentive['states'],
+                'regions' => $incentive['regions'],
             ]);
         }
     }
