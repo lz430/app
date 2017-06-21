@@ -1,6 +1,5 @@
 import * as ActionTypes from 'actiontypes/index';
 import R from 'ramda';
-import util from 'src/util';
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -11,7 +10,7 @@ const reducer = (state, action) => {
         case ActionTypes.RECEIVE_DEALS:
             return Object.assign({}, state, {
                 deals: action.data.data.data,
-                dealsPagination: action.data.data.meta.pagination,
+                dealPageTotal: action.data.data.meta.pagination.total_pages,
                 dealPage: R.min(
                     action.data.data.meta.pagination.current_page,
                     action.data.data.meta.pagination.total_pages
