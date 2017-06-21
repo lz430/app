@@ -40,11 +40,13 @@ class DealDetails extends React.Component {
                 : '');
 
         return (
-            <div key={index}><img
-                onClick={this.selectFeaturedImage.bind(this, index)}
-                className={imageClass}
-                src={R.propOr(this.props.fallbackDealImage, 'url', photo)}
-            /></div>
+            <div key={index}>
+                <img
+                    onClick={this.selectFeaturedImage.bind(this, index)}
+                    className={imageClass}
+                    src={R.propOr(this.props.fallbackDealImage, 'url', photo)}
+                />
+            </div>
         );
     }
 
