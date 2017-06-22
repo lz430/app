@@ -9,6 +9,33 @@ const fuelAxios = window.axios.create({
 delete fuelAxios.defaults.headers.common['X-CSRF-TOKEN'];
 
 const fuel = {
+    internalImageCodes: [
+        '039',
+        '040',
+        '051',
+        '052',
+        '053',
+        '057',
+        '059',
+        '061',
+        '062',
+        '063',
+        '064',
+        '065',
+        '066',
+        '086',
+        '087',
+        '088',
+        '111',
+        '113',
+        '115',
+        '122',
+        '123',
+        '126',
+        '130',
+        '140',
+        '147',
+    ],
     getVehicleId: (
         year,
         make,
@@ -30,7 +57,16 @@ const fuel = {
             },
         });
     },
-    getImagesByVehicleId: vehicleID => {
+    getExternalImages: (vehicleID, color = 'white') => {
+        return fuelAxios.get(`/vehicle/${vehicleID}`, {
+            params: {
+                productID: 2,
+                productFormatIDs: '6,8,12',
+                color,
+            },
+        });
+    },
+    getInternalImages: vehicleID => {
         return fuelAxios.get(`/vehicle/${vehicleID}`, {
             params: {
                 productID: 1,
