@@ -17,6 +17,11 @@
         </a>
     </div>
 
+    <div>
+        <p>MSRP: {{ money_format('%.2n', $deal->msrp) }}</p>
+        <p>DMR Price: {{ money_format('%.2n', $deal->msrp) }}</p>
+    </div>
+
 
     <div class="compare-deal__incentives">
         <div class="compare-deal__incentives--title">

@@ -21,6 +21,8 @@
                 'apiToken' => auth()->user()->api_token ?? null,
                 'fuelApiKey' => config('services.fuel.api_key')
             ]) !!};
+
+            window.user = {!! auth()->user() ? json_encode(auth()->user()) : 'null' !!};
         </script>
     </head>
     <body class="{{ $bodyClass ?? '' }}">
@@ -57,6 +59,8 @@
                 Copyright © 2017 Deliver My Ride. All rights reserved.
             </p>
         </footer>
+
+        @include('footer')
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}"></script>
         @if ( App::environment('staging') )

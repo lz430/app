@@ -52,15 +52,15 @@ class Feature extends Model
             return self::GROUP_SEATING;
         } elseif (str_contains($feature, [
             'technology',
-            'audio'
+            'audio',
         ])) {
             return self::GROUP_TECHNOLOGY;
         } elseif (str_contains($feature, [
-            'bed'
+            'bed',
         ])) {
             return self::GROUP_TRUCK;
         } elseif (str_contains($feature, [
-            'power'
+            'power',
         ])) {
             return self::COMFORT_AND_CONVENIENCE;
         }
