@@ -1,4 +1,6 @@
 import api from 'src/api';
+import fuelapi from 'src/fuelapi';
+import fuelcolor from 'src/fuel-color-map';
 import util from 'src/util';
 import * as ActionTypes from 'actiontypes/index';
 
@@ -255,8 +257,11 @@ export function selectDeal(deal) {
 }
 
 export function clearSelectedDeal() {
-    return {
-        type: ActionTypes.SELECT_DEAL,
+    return dispatch => {
+        dispatch(clearFuelImages());
+        dispatch({
+            type: ActionTypes.CLEAR_SELECTED_DEAL,
+        });
     };
 }
 
@@ -269,6 +274,7 @@ export function clearAllFilters() {
                     bodyStyles: [],
                     fuelType: null,
                     transmissionType: null,
+                    features: [],
                 })
             )
             .then(data => {
@@ -278,5 +284,95 @@ export function clearAllFilters() {
         dispatch({
             type: ActionTypes.CLEAR_ALL_FILTERS,
         });
+    };
+}
+
+export function toggleCompare(deal) {
+    return (dispatch, getState) => {
+        const compareList = util.toggleItem(getState().compareList, deal);
+
+        dispatch({
+            type: ActionTypes.TOGGLE_COMPARE,
+            compareList: compareList,
+        });
+    };
+}
+
+export function setZipCode(zipcode) {
+    return {
+        type: ActionTypes.SET_ZIP_CODE,
+        zipcode: zipcode,
+    };
+}
+
+export function requestFuelImages(deal) {
+    return dispatch => {
+        fuelapi.getVehicleId(deal.year, deal.make, deal.model).then(data => {
+            const vehicleId = data.data[0].id || false;
+
+            if (!vehicleId) return;
+
+            window.axios
+                .all([
+                    fuelapi.getExternalImages(
+                        vehicleId,
+                        fuelcolor.convert(deal.color)
+                    ),
+                    fuelapi.getInternalImages(vehicleId),
+                ])
+                .then(
+                    window.axios.spread((externalImages, internalImages) => {
+                        const external = externalImages.data.products.map(
+                            product =>
+                                product.productFormats.map(format => {
+                                    return {
+                                        id: format.id,
+                                        url: format.assets[0].url,
+                                    };
+                                })
+                        )[0];
+
+                        const internal = internalImages.data.products[0].productFormats[0].assets
+                            .filter(asset => {
+                                return (
+                                    fuelapi.internalImageCodes.indexOf(
+                                        asset.shotCode.code
+                                    ) !== -1
+                                );
+                            })
+                            .map((asset, index) => {
+                                return {
+                                    id: `fuel_${index}`,
+                                    url: asset.url,
+                                };
+                            });
+                        const imageList = external.concat(internal);
+
+                        if (!imageList) return;
+
+                        dispatch(receiveFuelImages(imageList));
+                    })
+                )
+                .catch(err => {
+                    console.log(err);
+                });
+        });
+
+        dispatch({
+            type: ActionTypes.REQUEST_FUEL_IMAGES,
+        });
+    };
+}
+
+export function receiveFuelImages(images) {
+    return {
+        type: ActionTypes.RECEIVE_FUEL_IMAGES,
+        images: images,
+    };
+}
+
+export function clearFuelImages() {
+    return {
+        type: ActionTypes.CLEAR_FUEL_IMAGES,
     };
 }

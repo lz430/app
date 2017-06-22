@@ -18,7 +18,8 @@
         <script>
             window.Laravel = {!! json_encode([
                 'csrfToken' => csrf_token(),
-                'apiToken' => auth()->user()->api_token ?? null
+                'apiToken' => auth()->user()->api_token ?? null,
+                'fuelApiKey' => config('services.fuel.api_key')
             ]) !!};
         </script>
     </head>
@@ -35,7 +36,10 @@
             <div class="nav__links">
                 <!-- Authentication Links -->
                 @if (! request()->is('login') && auth()->check())
-                    <a href="{{ route('home') }}">My Garage</a>
+                    <form name="logout" action="/logout" method="post">
+                        {{ csrf_field() }}
+                        <button>Logout</button>
+                    </form>
                 @endif
 
                 @if (! auth()->check())

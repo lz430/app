@@ -4,11 +4,11 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVersionDealsTable extends Migration
+class CreateDealsTableAndNormalizeVersionDeals extends Migration
 {
     public function up()
     {
-        Schema::create('version_deals', function (Blueprint $table) {
+        Schema::create('deals', function (Blueprint $table) {
             $table->increments('id');
             $table->string('file_hash');
             $table->string('dealer_id');
@@ -38,15 +38,44 @@ class CreateVersionDealsTable extends Migration
             $table->integer('fuel_econ_hwy')->nullable();
             $table->string('dealer_name');
             $table->integer('days_old');
+            $table->unique(['file_hash', 'vin']);
+            $table->timestamps();
+        });
+
+        Schema::create('deal_version', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('deal_id');
+            $table->foreign('deal_id')->references('id')->on('deals')->onDelete('cascade');
             $table->unsignedInteger('version_id');
             $table->foreign('version_id')->references('id')->on('versions')->onDelete('cascade');
-            $table->unique(['file_hash', 'dealer_id', 'stock_number', 'version_id']);
+            $table->unique(['deal_id', 'version_id']);
+        });
+
+        Schema::create('deal_photos', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('deal_id');
+            $table->foreign('deal_id')->references('id')->on('deals')->onDelete('cascade');
+            $table->string('url');
+            $table->unique(['deal_id', 'url']);
+            $table->timestamps();
+        });
+
+        Schema::create('deal_feature', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('deal_id');
+            $table->foreign('deal_id')->references('id')->on('deals')->onDelete('cascade');
+            $table->unsignedInteger('feature_id');
+            $table->foreign('feature_id')->references('id')->on('features')->onDelete('cascade');
+            $table->unique(['deal_id', 'feature_id']);
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('version_deals');
+        Schema::dropIfExists('deal_version');
+        Schema::dropIfExists('deal_photos');
+        Schema::dropIfExists('deal_feature');
+        Schema::dropIfExists('deals');
     }
 }

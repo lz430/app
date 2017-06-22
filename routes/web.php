@@ -1,25 +1,25 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::post('login', 'Auth\LoginController@login');
+Auth::routes();
 
-Route::get('', 'WelcomeController@index');
+Route::get('', 'WelcomeController@index')->name('home');
 
 Route::get('filter', 'FilterController@index')->name('filter');
 
-Route::get('financing/thankyou', 'FinancingController@showThankYou' )->name('financingThankYou');
-Route::get('financing/{id}', 'FinancingController@show' )->name('financing');
+Route::get('financing/{id}', 'FinancingController@show')->name('financing');
+Route::get('financing/thankyou', 'FinancingController@showThankYou')->name('financingThankYou');
 
 Route::post('saved-vehicle', 'SavedVehicleController@store')
     ->name('savedVehicle.store');
+Route::get('compare', 'CompareController@index')->name('compare');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('buy-request/create', 'BuyRequestController@create')->name('buyRequest.create');
     Route::post('buy-request', 'BuyRequestController@store')->name('buyRequest.store');
     Route::delete('saved-vehicle/{id}', 'SavedVehicleController@destroy')->name('savedVehicle.destroy');
-    Route::get('home', 'SavedVehicleController@index')->name('home');
 
     /** Purchase Flow */
     Route::get('apply-or-purchase', 'ApplyOrPurchaseController@applyOrPurchase')->name('applyOrPurchase');
@@ -31,6 +31,3 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('buy-request/thanks', function () {
     return view('buyRequest.thanks');
 })->name('buyRequest.thanks');
-
-Route::get('auth/email-authenticate/{token}',
-    'Auth\LoginController@authenticateEmail')->name('auth.email-authenticate');

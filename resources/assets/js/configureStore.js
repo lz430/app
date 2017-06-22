@@ -1,7 +1,11 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
 import reducer from 'reducers/index';
-import { requestMakes, requestBodyStyles, requestFeatures } from 'actions/index';
+import {
+    requestMakes,
+    requestBodyStyles,
+    requestFeatures,
+} from 'actions/index';
 import R from 'ramda';
 import qs from 'qs';
 
@@ -20,12 +24,15 @@ const initialState = {
     features: null,
     makes: null,
     dealPage: 1,
-    dealsPagination: null,
+    dealPageTotal: 1,
     deals: null,
     fallbackLogoImage: '/images/dmr-logo.svg',
     fallbackDealImage: '/images/dmr-logo.svg',
     sortColumn: 'price',
     sortAscending: true,
+    compareList: [],
+    zipcode: null,
+    imagesFromFuel: [],
 };
 
 export default () => {

@@ -31,6 +31,12 @@ class ClientTest extends TestCase
     }
 
     /** @test */
+    public function can_get_incentives()
+    {
+        static::$client->incentivesByVehicleId('712151020160411');
+    }
+
+    /** @test */
     public function can_get_models_by_make_name()
     {
         static::$client->modelsByMakeName('Nissan');

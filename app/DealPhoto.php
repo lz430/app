@@ -4,12 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VersionDealPhoto extends Model
+class DealPhoto extends Model
 {
     protected $fillable = ['url'];
 
     public function deal()
     {
-        return $this->belongsTo(VersionDeal::class);
+        return $this->belongsTo(Deal::class);
     }
 }

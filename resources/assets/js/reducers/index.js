@@ -1,6 +1,5 @@
 import * as ActionTypes from 'actiontypes/index';
 import R from 'ramda';
-import util from 'src/util';
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -11,7 +10,7 @@ const reducer = (state, action) => {
         case ActionTypes.RECEIVE_DEALS:
             return Object.assign({}, state, {
                 deals: action.data.data.data,
-                dealsPagination: action.data.data.meta.pagination,
+                dealPageTotal: action.data.data.meta.pagination.total_pages,
                 dealPage: R.min(
                     action.data.data.meta.pagination.current_page,
                     action.data.data.meta.pagination.total_pages
@@ -70,8 +69,25 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 selectedStyles: [],
                 selectedTransmissionType: null,
-                selectedFuelTypes: [],
+                selectedFuelType: null,
                 selectedMakes: [],
+                selectedFeatures: [],
+            });
+        case ActionTypes.TOGGLE_COMPARE:
+            return Object.assign({}, state, {
+                compareList: action.compareList,
+            });
+        case ActionTypes.SET_ZIP_CODE:
+            return Object.assign({}, state, {
+                zipcode: action.zipcode,
+            });
+        case ActionTypes.RECEIVE_FUEL_IMAGES:
+            return Object.assign({}, state, {
+                imagesFromFuel: action.images,
+            });
+        case ActionTypes.CLEAR_FUEL_IMAGES:
+            return Object.assign({}, state, {
+                imagesFromFuel: [],
             });
     }
 

@@ -33,7 +33,13 @@ body {
 @import 'components/filter-style-selector';
 @import 'components/filter-selector';
 @import 'components/deal-details';
+@import 'components/compare-deal';
 
 // Pages
 @import 'pages/filter-page';
 @import 'pages/financing';
+@import 'pages/compare';
+
+// Vendors
+@import '~slick-carousel/slick/slick.css';
+@import '~slick-carousel/slick/slick-theme.css';

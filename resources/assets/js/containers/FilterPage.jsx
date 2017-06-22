@@ -10,6 +10,8 @@ import FilterPanel from 'components/FilterPanel';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 
+import fuelapi from 'src/fuelapi';
+
 class FilterPage extends React.Component {
     constructor(props) {
         super(props);
@@ -19,6 +21,17 @@ class FilterPage extends React.Component {
         };
 
         this.closeModal = this.closeModal.bind(this);
+    }
+
+    componentDidMount() {
+        axios
+            .get('http://ipinfo.io')
+            .then(data => {
+                this.props.setZipCode(data.data.postal);
+            })
+            .catch(error => {
+                console.log('Error', error.message);
+            });
     }
 
     closeModal() {
@@ -86,8 +99,6 @@ class FilterPage extends React.Component {
                 {this.props.selectedDeal ? this.renderSelectedDealModal() : ''}
             </div>
         );
-
-        // return <div>'Loading'</div>;
     }
 }
 

@@ -13,7 +13,6 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\LoadVehiclesFromJATO::class,
         Commands\LoadDealsFromVauto::class,
     ];
 

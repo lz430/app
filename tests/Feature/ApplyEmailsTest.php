@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Mail\ApplicationSubmittedDMR;
 use App\Mail\ApplicationSubmittedUser;
 use App\User;
-use App\VersionDeal;
+use App\Deal;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
@@ -24,7 +24,7 @@ class ApplyEmailsTest extends TestCase
             'email' => 'test@example.com',
         ]);
 
-        $deal = factory(VersionDeal::class)->create();
+        $deal = factory(Deal::class)->create();
 
         $this->be($user);
 

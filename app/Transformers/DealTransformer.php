@@ -2,7 +2,7 @@
 
 namespace App\Transformers;
 
-use App\VersionDeal;
+use App\Deal;
 use League\Fractal\TransformerAbstract;
 
 class DealTransformer extends TransformerAbstract
@@ -13,7 +13,7 @@ class DealTransformer extends TransformerAbstract
         'versions',
     ];
     
-    public function transform(VersionDeal $deal)
+    public function transform(Deal $deal)
     {
         return [
             'id' => $deal->id,
@@ -48,19 +48,19 @@ class DealTransformer extends TransformerAbstract
         ];
     }
     
-    public function includeVersions(VersionDeal $deal)
+    public function includeVersions(Deal $deal)
     {
         return $this->item($deal->version, new VersionTransformer)
             ->setResourceKey('versions');
     }
     
-    public function includePhotos(VersionDeal $deal)
+    public function includePhotos(Deal $deal)
     {
         return $this->collection($deal->photos, new PhotoTransformer)
             ->setResourceKey('photos');
     }
     
-    public function includeFeatures(VersionDeal $deal)
+    public function includeFeatures(Deal $deal)
     {
         return $this->collection($deal->features, new FeatureTransformer)
             ->setResourceKey('features');
