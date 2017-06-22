@@ -30,7 +30,6 @@ Array.from(document.getElementsByTagName('FilterPage')).map(element => {
 });
 
 /**
-<<<<<<< HEAD
  * Financing
  */
 Array.from(document.getElementsByTagName('Financing')).map(element => {
