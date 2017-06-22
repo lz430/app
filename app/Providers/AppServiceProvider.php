@@ -24,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        setlocale(LC_MONETARY, 'en_US.UTF-8');
+
         if ($this->app->environment('local')) {
             $this->app->register(DebugbarServiceProvider::class);
         }
