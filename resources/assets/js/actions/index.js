@@ -1,5 +1,6 @@
 import api from 'src/api';
 import fuelapi from 'src/fuelapi';
+import fuelcolor from 'src/fuel-color-map';
 import util from 'src/util';
 import * as ActionTypes from 'actiontypes/index';
 
@@ -310,17 +311,50 @@ export function requestFuelImages(deal) {
 
             if (!vehicleId) return;
 
-            fuelapi.getImagesByVehicleId(vehicleId).then(images => {
-                const imageList = images.data.products['0'].productFormats[
-                    '0'
-                ].assets.map((image, index) => {
-                    return { id: `fuel_${index}`, url: image.url };
+            window.axios
+                .all([
+                    fuelapi.getExternalImages(
+                        vehicleId,
+                        fuelcolor.convert(deal.color)
+                    ),
+                    fuelapi.getInternalImages(vehicleId),
+                ])
+                .then(
+                    window.axios.spread((externalImages, internalImages) => {
+                        const external = externalImages.data.products.map(
+                            product =>
+                                product.productFormats.map(format => {
+                                    return {
+                                        id: format.id,
+                                        url: format.assets[0].url,
+                                    };
+                                })
+                        )[0];
+
+                        const internal = internalImages.data.products[0].productFormats[0].assets
+                            .filter(asset => {
+                                return (
+                                    fuelapi.internalImageCodes.indexOf(
+                                        asset.shotCode.code
+                                    ) !== -1
+                                );
+                            })
+                            .map((asset, index) => {
+                                return {
+                                    id: `fuel_${index}`,
+                                    url: asset.url,
+                                };
+                            });
+                        const imageList = external.concat(internal);
+
+                        if (!imageList) return;
+
+                        dispatch(receiveFuelImages(imageList));
+                    })
+                )
+                .catch(err => {
+                    console.log(err);
                 });
-
-                if (!imageList) return;
-
-                dispatch(receiveFuelImages(imageList));
-            });
         });
 
         dispatch({
