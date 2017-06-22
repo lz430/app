@@ -82,7 +82,20 @@ class FilterPanel extends React.Component {
                         )}
                     </SidebarFilter>
                     <SidebarFilter title="Safety">
-                        {() => 'body'}
+                        {() => (
+                            <FilterFeatureSelector
+                                selectedFeatures={this.props.selectedFeatures}
+                                features={R.filter(feature => {
+                                    return (
+                                        R.path(
+                                            ['attributes', 'group'],
+                                            feature
+                                        ) === 'safety'
+                                    );
+                                }, this.props.features)}
+                                onSelectFeature={this.props.toggleFeature}
+                            />
+                        )}
                     </SidebarFilter>
                 </div>
             </div>
