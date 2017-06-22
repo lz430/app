@@ -69,8 +69,9 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 selectedStyles: [],
                 selectedTransmissionType: null,
-                selectedFuelTypes: [],
+                selectedFuelType: null,
                 selectedMakes: [],
+                selectedFeatures: [],
             });
         case ActionTypes.TOGGLE_COMPARE:
             return Object.assign({}, state, {

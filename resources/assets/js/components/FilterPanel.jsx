@@ -82,8 +82,73 @@ class FilterPanel extends React.Component {
                         )}
                     </SidebarFilter>
                     <SidebarFilter title="Safety">
-                        {() => 'body'}
+                        {() => (
+                            <FilterFeatureSelector
+                                selectedFeatures={this.props.selectedFeatures}
+                                features={R.filter(feature => {
+                                    return (
+                                        R.path(
+                                            ['attributes', 'group'],
+                                            feature
+                                        ) === 'safety'
+                                    );
+                                }, this.props.features)}
+                                onSelectFeature={this.props.toggleFeature}
+                            />
+                        )}
                     </SidebarFilter>
+                    <SidebarFilter title="Technology">
+                        {() => (
+                            <FilterFeatureSelector
+                                selectedFeatures={this.props.selectedFeatures}
+                                features={R.filter(feature => {
+                                    return (
+                                        R.path(
+                                            ['attributes', 'group'],
+                                            feature
+                                        ) === 'technology'
+                                    );
+                                }, this.props.features)}
+                                onSelectFeature={this.props.toggleFeature}
+                            />
+                        )}
+                    </SidebarFilter>
+                    <SidebarFilter title="Comfort and Convenience">
+                        {() => (
+                            <FilterFeatureSelector
+                                selectedFeatures={this.props.selectedFeatures}
+                                features={R.filter(feature => {
+                                    return (
+                                        R.path(
+                                            ['attributes', 'group'],
+                                            feature
+                                        ) === 'comfort and convenience'
+                                    );
+                                }, this.props.features)}
+                                onSelectFeature={this.props.toggleFeature}
+                            />
+                        )}
+                    </SidebarFilter>
+                    {R.contains('Pickup', this.props.selectedStyles)
+                        ? <SidebarFilter title="Truck">
+                              {() => (
+                                  <FilterFeatureSelector
+                                      selectedFeatures={
+                                          this.props.selectedFeatures
+                                      }
+                                      features={R.filter(feature => {
+                                          return (
+                                              R.path(
+                                                  ['attributes', 'group'],
+                                                  feature
+                                              ) === 'truck'
+                                          );
+                                      }, this.props.features)}
+                                      onSelectFeature={this.props.toggleFeature}
+                                  />
+                              )}
+                          </SidebarFilter>
+                        : ''}
                 </div>
             </div>
         );

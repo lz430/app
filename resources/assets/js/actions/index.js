@@ -274,6 +274,7 @@ export function clearAllFilters() {
                     bodyStyles: [],
                     fuelType: null,
                     transmissionType: null,
+                    features: [],
                 })
             )
             .then(data => {

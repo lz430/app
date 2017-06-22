@@ -15,6 +15,7 @@ class Filterbar extends React.Component {
         this.renderFilterTransmissionType = this.renderFilterTransmissionType.bind(
             this
         );
+        this.renderFilterFeatures = this.renderFilterFeatures.bind(this);
         this.renderX = this.renderX.bind(this);
     }
 
@@ -80,6 +81,18 @@ class Filterbar extends React.Component {
         );
     }
 
+    renderFilterFeatures(feature, index) {
+        return (
+            <div
+                key={index}
+                className="filterbar__filter"
+                onClick={this.props.toggleFeature.bind(null, feature)}
+            >
+                {feature} {this.renderX()}
+            </div>
+        );
+    }
+
     render() {
         return (
             <div className="filterbar">
@@ -101,6 +114,7 @@ class Filterbar extends React.Component {
                               this.props.selectedTransmissionType
                           )
                         : ''}
+                    {this.props.selectedFeatures.map(this.renderFilterFeatures)}
                 </div>
 
                 <div className="filterbar__clear">
@@ -113,11 +127,21 @@ class Filterbar extends React.Component {
     }
 }
 
-// Filterbar.propTypes = {
-//     results_count: PropTypes.number.isRequired,
-//     sortColumn: PropTypes.oneOf(['price', 'make', 'year']).isRequired,
-//     sortAscending: PropTypes.bool.isRequired,
-// };
+Filterbar.propTypes = {
+    selectedStyles: PropTypes.arrayOf(PropTypes.string).isRequired,
+    makes: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            attributes: PropTypes.shape({
+                name: PropTypes.string.isRequired,
+            }),
+        })
+    ).isRequired,
+    selectedMakes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    selectedTransmissionType: PropTypes.string,
+    selectedFuelType: PropTypes.string,
+    selectedFeatures: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 
 function mapStateToProps(state) {
     return {
@@ -126,6 +150,7 @@ function mapStateToProps(state) {
         selectedMakes: state.selectedMakes,
         selectedTransmissionType: state.selectedTransmissionType,
         selectedFuelType: state.selectedFuelType,
+        selectedFeatures: state.selectedFeatures,
     };
 }
 
