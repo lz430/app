@@ -22922,6 +22922,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+var deal = DeliverMyRide.deal;
+
+var url = 'https://itl.routeone.net/XRD/turnKeyOcaStart.do?rteOneDmsId=F00PRZ&dealerId=AX0PG' + '&buyOrLease=1' + ('&vehicleYear=' + deal.year) + ('&vehicleMake=' + deal.make) + ('&vehicleModel=' + deal.model) + ('&contractTerms_vehiclestyle=' + deal.body) + ('&vehicle_vin=' + deal.vin) + ('&contractTerms_msrp=' + deal.msrp) + ('&vehicle_image_url=' + (deal.photos ? deal.photos[0].url : '')) + ('&dealership_name=' + deal.dealer_name);
+
 var Financing = function (_Component) {
     _inherits(Financing, _Component);
 
@@ -22932,29 +22936,28 @@ var Financing = function (_Component) {
     }
 
     _createClass(Financing, [{
-        key: 'shouldComponentUpdate',
-        value: function shouldComponentUpdate() {
-            return false;
-        }
-    }, {
         key: 'render',
         value: function render() {
-            var deal = DeliverMyRide.deal;
-
-            var url = 'https://itl.routeone.net/XRD/turnKeyOcaStart.do?rteOneDmsId=F00PRZ&dealerId=AX0PG' + ('&vehicleYear=' + deal.year) + ('&vehicleMake=' + deal.make) + ('&vehicleModel=' + deal.model) + ('&contractTerms_vehiclestyle=' + deal.body) + ('&vehicle_vin=' + deal.vin) + ('&contractTerms_msrp=' + deal.msrp) + ('&vehicle_image_url=' + (deal.photos ? deal.photos[0].url : '')) + ('&dealership_name=' + deal.dealer_name);
-
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
-                null,
+                { className: 'financing' },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'h1',
+                    'div',
                     null,
-                    'hi'
-                ),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('iframe', { src: url,
-                    frameborder: '0',
-                    width: '800',
-                    height: '1000' })
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'button',
+                        { onClick: function onClick() {
+                                window.location = '/financing/thankyou';
+                            } },
+                        'Nevermind, I want to pay cash'
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('iframe', { src: url,
+                        id: 'routeOne',
+                        frameBorder: '0',
+                        width: '800',
+                        height: '1000' })
+                )
             );
         }
     }]);
