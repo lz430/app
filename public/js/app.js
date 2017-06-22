@@ -22956,7 +22956,46 @@ var FilterPanel = function (_React$Component) {
                                 onSelectFeature: _this2.props.toggleFeature
                             });
                         }
-                    )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__["a" /* default */],
+                        { title: 'Technology' },
+                        function () {
+                            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_components_FilterFeatureSelector__["a" /* default */], {
+                                selectedFeatures: _this2.props.selectedFeatures,
+                                features: __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.filter(function (feature) {
+                                    return __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.path(['attributes', 'group'], feature) === 'technology';
+                                }, _this2.props.features),
+                                onSelectFeature: _this2.props.toggleFeature
+                            });
+                        }
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__["a" /* default */],
+                        { title: 'Comfort and Convenience' },
+                        function () {
+                            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_components_FilterFeatureSelector__["a" /* default */], {
+                                selectedFeatures: _this2.props.selectedFeatures,
+                                features: __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.filter(function (feature) {
+                                    return __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.path(['attributes', 'group'], feature) === 'comfort and convenience';
+                                }, _this2.props.features),
+                                onSelectFeature: _this2.props.toggleFeature
+                            });
+                        }
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.contains('Pickup', this.props.selectedStyles) ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__["a" /* default */],
+                        { title: 'Truck' },
+                        function () {
+                            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_components_FilterFeatureSelector__["a" /* default */], {
+                                selectedFeatures: _this2.props.selectedFeatures,
+                                features: __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.filter(function (feature) {
+                                    return __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.path(['attributes', 'group'], feature) === 'truck';
+                                }, _this2.props.features),
+                                onSelectFeature: _this2.props.toggleFeature
+                            });
+                        }
+                    ) : ''
                 )
             );
         }
