@@ -59,6 +59,8 @@
                 Copyright © 2017 Deliver My Ride. All rights reserved.
             </p>
         </footer>
+
+        @include('footer')
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}"></script>
         @if ( App::environment('staging') )
