@@ -22,11 +22,12 @@ class Financing extends Component {
 
                     <br />
 
-                    <iframe src={ url }
-                            id="routeOne"
-                            frameBorder="0"
-                            width="800"
-                            height="1000" />
+                    <iframe
+                        frameBorder="0"
+                        height="1000"
+                        id="routeOne"
+                        src={ url }
+                        width="800" />
                 </div>
             </div>
         );
