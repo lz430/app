@@ -22277,6 +22277,7 @@ var mapStateToProps = function mapStateToProps(state) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_actions_index__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_slick__ = __webpack_require__(884);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_slick___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_react_slick__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_src_util__ = __webpack_require__(216);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22284,6 +22285,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -22472,6 +22474,36 @@ var DealDetails = function (_React$Component) {
                                 'div',
                                 null,
                                 deal.fuel
+                            )
+                        )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        null,
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'p',
+                            null,
+                            'MSRP: ',
+                            __WEBPACK_IMPORTED_MODULE_5_src_util__["a" /* default */].moneyFormat(deal.msrp)
+                        ),
+                        window.user ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'p',
+                            null,
+                            'DMR Price: ',
+                            __WEBPACK_IMPORTED_MODULE_5_src_util__["a" /* default */].moneyFormat(deal.price)
+                        ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'div',
+                            null,
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                'a',
+                                { href: '/login' },
+                                'Login'
+                            ),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                'a',
+                                { href: '/register' },
+                                'Register'
                             )
                         )
                     )

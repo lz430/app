@@ -3,6 +3,7 @@ import R from 'ramda';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import Slider from 'react-slick';
+import util from 'src/util';
 
 class DealDetails extends React.Component {
     constructor(props) {
@@ -117,6 +118,18 @@ class DealDetails extends React.Component {
                             <div>Fuel Type</div>
                             <div>{deal.fuel}</div>
                         </div>
+                    </div>
+
+                    <div>
+                        <p>MSRP: {util.moneyFormat(deal.msrp)}</p>
+
+                        {window.user
+                            ? <p>DMR Price: {util.moneyFormat(deal.price)}</p>
+                            : <div>
+                                  <a href="/login">Login</a>
+                                  <br />
+                                  <a href="/register">Register</a>
+                              </div>}
                     </div>
                 </div>
             </div>
