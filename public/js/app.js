@@ -22486,11 +22486,25 @@ var DealDetails = function (_React$Component) {
                             'MSRP: ',
                             __WEBPACK_IMPORTED_MODULE_5_src_util__["a" /* default */].moneyFormat(deal.msrp)
                         ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        window.user ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'p',
                             null,
                             'DMR Price: ',
                             __WEBPACK_IMPORTED_MODULE_5_src_util__["a" /* default */].moneyFormat(deal.price)
+                        ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'div',
+                            null,
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                'a',
+                                { href: '/login' },
+                                'Login'
+                            ),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                'a',
+                                { href: '/register' },
+                                'Register'
+                            )
                         )
                     )
                 )

@@ -122,7 +122,14 @@ class DealDetails extends React.Component {
 
                     <div>
                         <p>MSRP: {util.moneyFormat(deal.msrp)}</p>
-                        <p>DMR Price: {util.moneyFormat(deal.price)}</p>
+
+                        {window.user
+                            ? <p>DMR Price: {util.moneyFormat(deal.price)}</p>
+                            : <div>
+                                  <a href="/login">Login</a>
+                                  <br />
+                                  <a href="/register">Register</a>
+                              </div>}
                     </div>
                 </div>
             </div>

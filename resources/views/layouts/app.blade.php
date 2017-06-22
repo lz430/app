@@ -21,6 +21,8 @@
                 'apiToken' => auth()->user()->api_token ?? null,
                 'fuelApiKey' => config('services.fuel.api_key')
             ]) !!};
+
+            window.user = {!! auth()->user() ? json_encode(auth()->user()) : 'null' !!};
         </script>
     </head>
     <body class="{{ $bodyClass ?? '' }}">
