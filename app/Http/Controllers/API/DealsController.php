@@ -7,6 +7,7 @@ use App\Transformers\DealTransformer;
 use App\Deal;
 use DeliverMyRide\JsonApi\Sort;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
@@ -25,9 +26,12 @@ class DealsController extends BaseAPIController
             'fuel_type' => 'sometimes|required|string',
             'transmission_type' => 'sometimes|required|string|in:automatic,manual',
             'sort' => 'sometimes|required|string',
+            'latitude' => 'sometimes|required_with:longitude|string',
+            'longitude' => 'sometimes|required_with:latitude|string',
         ]);
-        
+
         $dealsQuery = $this->getQueryByMakesAndBodyStyles($request);
+        $dealsQuery = $this->filterQueryByLocationDistance($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByFuelType($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByTransmissionType($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByFeatures($dealsQuery, $request);
@@ -66,6 +70,18 @@ class DealsController extends BaseAPIController
     
         if (in_array('features', $request->get('includes', []))) {
             $query->with('features');
+        }
+
+        return $query;
+    }
+
+    private function filterQueryByLocationDistance(Builder $query, Request $request) : Builder
+    {
+        if ($request->has('latitude') && $request->has('longitude')) {
+            $query->filterByLocationDistance(
+                $request->get('latitude'),
+                $request->get('longitude')
+            );
         }
 
         return $query;

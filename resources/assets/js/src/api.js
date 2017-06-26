@@ -25,6 +25,8 @@ const api = {
         sortColumn,
         sortAscending,
         page,
+        latitude,
+        longitude,
     }) => {
         return window.axios.get('/api/deals', {
             params: {
@@ -36,6 +38,8 @@ const api = {
                 includes,
                 sort: sort(sortColumn, sortAscending),
                 page,
+                latitude,
+                longitude,
             },
         });
     },
