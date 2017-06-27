@@ -413,3 +413,45 @@ export function clearFuelImages() {
         type: ActionTypes.CLEAR_FUEL_IMAGES,
     };
 }
+
+export function requestLocationInfo() {
+    return dispatch => {
+        window.axios
+            .get('http://ipinfo.io')
+            .then(data => {
+                dispatch(receiveLocationInfo(data));
+            })
+            .catch(error => {
+                console.log('Error', error.message);
+            });
+
+        dispatch({
+            type: ActionTypes.REQUEST_LOCATION_INFO,
+        });
+    };
+}
+
+export function receiveLocationInfo(data) {
+    return (dispatch, getState) => {
+        const zipcode = data.data.postal;
+        const [latitude, longitude] = data.data.loc.split(',');
+
+        api
+            .getDeals(
+                withStateDefaults(getState(), {
+                    latitude,
+                    longitude,
+                })
+            )
+            .then(data => {
+                dispatch(receiveDeals(data));
+            });
+
+        dispatch({
+            type: ActionTypes.RECEIVE_LOCATION_INFO,
+            zipcode,
+            latitude,
+            longitude,
+        });
+    };
+}

@@ -95,6 +95,12 @@ const reducer = (state, action) => {
                 fuelInternalImages: [],
                 imagesFromFuel: [],
             });
+        case ActionTypes.RECEIVE_LOCATION_INFO:
+            return Object.assign({}, state, {
+                zipcode: action.zipcode,
+                latitude: action.latitude,
+                longitude: action.longitude,
+            });
     }
 
     return state;

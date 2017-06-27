@@ -53,7 +53,7 @@ $factory->define(App\JATO\VehicleModel::class, function (Faker\Generator $faker)
 
 $factory->define(App\JATO\Version::class, function (Faker\Generator $faker) {
     return [
-        'jato_vehicle_id' => $faker->randomElement(['75644520050520', '718410620150406', '740002220150406']),
+        'jato_vehicle_id' => $faker->randomNumber(),
         'jato_uid' => $faker->randomNumber(),
         'jato_model_id' => $faker->randomNumber(),
         'model_id' => factory(App\JATO\VehicleModel::class),
@@ -137,5 +137,15 @@ $factory->define(App\Feature::class, function (Faker\Generator $faker) {
     return [
         'feature' => $faker->sentence(3),
         'group' => $faker->word,
+    ];
+});
+
+$factory->define(App\Dealer::class, function (Faker\Generator $faker) {
+    return [
+        'dealer_id' => $faker->randomNumber(),
+        'latitude' => $faker->latitude,
+        'longitude' => $faker->longitude,
+        'name' => $faker->company,
+        'max_delivery_miles' => $faker->randomNumber(),
     ];
 });
