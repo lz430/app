@@ -1,37 +1,79 @@
 @import '../variables';
 
-$make-height: 120px;
-$make-width: 120px;
+$make-height: calc(175px + 1rem);
+$make-width: calc(175px + 1rem);
+$make-img-size: 120px;
 
 .make-selector {
   text-align: center;
 
   &__makes {
     align-content: flex-start;
+    border-left: 1px solid $color-section-bottom-border;
+    border-right: 1px solid $color-section-bottom-border;
+    border-top: 1px solid $color-section-bottom-border;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    margin: 10px;
+
+    @media (min-width: $break-medium) {
+      border-style: none;
+    }
   }
 
   &__make {
     align-items: center;
+    background: $color-text-white;
+    border-bottom: 1px solid $color-section-bottom-border;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin: 50px;
-    max-width: $make-width;
+    flex-direction: row;
+    justify-content: flex-start;
+    max-width: 100%;
     text-align: center;
-    width: $make-width;
+    width: 100%;
+
+    @media (min-width: $break-medium) {
+      border-left: 1px solid $color-section-bottom-border;
+      border-right: 1px solid $color-section-bottom-border;
+      border-top: 1px solid $color-section-bottom-border;
+      flex-direction: column;
+      height: $make-height;
+      justify-content: center;
+      margin: 5px;
+      max-height: $make-height;
+      max-width: $make-width;
+      width: $make-width;
+    }
 
     &--selected {
       outline: red solid 1px;
     }
 
     img {
-      height: $make-height;
-      max-height: $make-height;
-      max-width: $make-width;
-      width: $make-width;
+      height: 50px;
+      max-height: 50px;
+      max-width: 50px;
+      width: 50px;
+
+      @media (min-width: $break-medium) {
+        height: $make-img-size;
+        max-height: $make-img-size;
+        max-width: $make-img-size;
+        width: $make-img-size;
+      }
+    }
+  }
+
+  &__make-name {
+    max-width: calc(100% - 25px);
+    padding-left: 15px;
+    text-align: left;
+    width: calc(100% - 25px);
+
+    @media (min-width: $break-medium) {
+      padding: 0;
+      text-align: center;
     }
   }
 }

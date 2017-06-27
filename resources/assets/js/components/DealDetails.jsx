@@ -27,7 +27,13 @@ class DealDetails extends React.Component {
     }
 
     allImages() {
-        return R.concat(this.props.deal.photos.data, R.concat(this.props.fuelExternalImages, this.props.fuelInternalImages));
+        return R.concat(
+            this.props.deal.photos.data,
+            R.concat(
+                this.props.fuelExternalImages,
+                this.props.fuelInternalImages
+            )
+        );
     }
 
     renderThumbnailImage(photo, index) {

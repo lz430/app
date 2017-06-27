@@ -24217,7 +24217,7 @@ var initialState = {
     dealPage: 1,
     dealPageTotal: 1,
     deals: null,
-    fallbackLogoImage: '/images/dmr-logo.svg',
+    fallbackLogoImage: '/images/dmr-logo-small.svg',
     fallbackDealImage: '/images/dmr-logo.svg',
     sortColumn: 'price',
     sortAscending: true,

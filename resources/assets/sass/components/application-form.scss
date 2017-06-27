@@ -11,10 +11,10 @@
     flex-direction: column;
     margin-top: 25px;
     text-align: left;
-    width: 33%;
+    width: 100%;
 
-    @media (max-width: $break-medium) {
-      width: 100%;
+    @media (min-width: $break-medium) {
+      width: 33%;
     }
   }
 
