@@ -6,6 +6,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-         $this->call(InitialJATOData::class);
+        $this->call(InitialJATOData::class);
+        $this->call(InitialVAUTOData::class);
     }
 }

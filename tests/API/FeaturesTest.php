@@ -3,16 +3,10 @@
 namespace Tests\API;
 
 use App\Feature;
-use App\JATO\Make;
-use App\JATO\VehicleModel;
-use App\JATO\Version;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class FeaturesTest extends TestCase
 {
-    use DatabaseMigrations;
-    
     /** @test */
     public function it_shows_all_features_that_a_user_can_filter_with()
     {

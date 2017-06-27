@@ -3,14 +3,12 @@
 namespace Tests\API;
 
 use App\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class UsersTest extends TestCase
 {
-    use DatabaseMigrations;
-    
+
     /** @test */
     public function it_responds_unprocessable_if_validation_fails()
     {

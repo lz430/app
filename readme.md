@@ -6,6 +6,9 @@
 - Yarn
 - Cross-env
   - `npm install -g cross-env`
+  
+## Create test database (uses mysql for tests)
+`delivermyride-testing`
 
 ## Install Project Dependencies
 ```

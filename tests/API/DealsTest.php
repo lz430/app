@@ -2,18 +2,17 @@
 
 namespace Tests\API;
 
+use App\Dealer;
 use App\Feature;
 use App\JATO\Make;
 use App\JATO\VehicleModel;
 use App\JATO\Version;
 use App\Deal;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Fluent;
 use Tests\TestCase;
 
 class DealsTest extends TestCase
 {
-    use DatabaseMigrations;
-    
     /** @test */
     public function it_returns_a_listing_of_deals_for_a_specific_make_and_body_style()
     {
@@ -240,7 +239,6 @@ class DealsTest extends TestCase
     public function it_returns_only_deals_that_have_all_features()
     {
         $make = factory(Make::class)->create(['name' => 'some-make']);
-
         $model = $make->models()->save(factory(VehicleModel::class)->make());
         $version = $model->versions()->save(factory(Version::class)->make());
 
@@ -269,5 +267,54 @@ class DealsTest extends TestCase
         $response->assertStatus(200);
 
         $this->assertCount(1, $response->decodeResponseJson()['data']);
+    }
+
+    /** @test */
+    public function it_can_restrict_deals_by_distance()
+    {
+        /** Distance from dealer to  is ~969 miles (Via Google Maps) */
+        $dealerLatLon = (new Fluent)->latitude(42.4511694)->longitude(-83.1277241);
+        $customerLatLon = (new Fluent)->latitude(32.263116)->longitude(-95.3072586);
+
+        $dealer = factory(Dealer::class)->create([
+            'latitude' => $dealerLatLon->latitude,
+            'longitude' => $dealerLatLon->longitude,
+        ]);
+
+        $make = factory(Make::class)->create(['name' => 'some-make']);
+        $model = $make->models()->save(factory(VehicleModel::class)->make());
+        $version = $model->versions()->save(factory(Version::class)->make());
+
+        $deal = factory(Deal::class)->create([
+            'dealer_id' => $dealer->dealer_id,
+        ]);
+
+        $version->deals()->attach($deal->id);
+
+        /**
+         * When max_delivery_miles = 1000
+         */
+        $dealer->max_delivery_miles = 1000;
+        $dealer->save();
+
+        $response = $this->getJson(route('deals.index', [
+            'latitude' => $customerLatLon->latitude,
+            'longitude' => $customerLatLon->longitude,
+        ]));
+
+        $this->assertCount(1, $response->decodeResponseJson()['data']);
+
+        /**
+         * When max_delivery_miles = 900
+         */
+        $dealer->max_delivery_miles = 900;
+        $dealer->save();
+
+        $response = $this->getJson(route('deals.index', [
+            'latitude' => $customerLatLon->latitude,
+            'longitude' => $customerLatLon->longitude,
+        ]));
+
+        $this->assertCount(0, $response->decodeResponseJson()['data']);
     }
 }

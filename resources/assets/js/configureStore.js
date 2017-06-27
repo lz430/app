@@ -5,6 +5,7 @@ import {
     requestMakes,
     requestBodyStyles,
     requestFeatures,
+    requestLocationInfo,
 } from 'actions/index';
 import R from 'ramda';
 import qs from 'qs';
@@ -32,6 +33,8 @@ const initialState = {
     sortAscending: true,
     compareList: [],
     zipcode: null,
+    latitude: null,
+    longitude: null,
     imagesFromFuel: [],
 };
 
@@ -44,6 +47,7 @@ export default () => {
         composeEnhancers(applyMiddleware(reduxThunk))
     );
 
+    store.dispatch(requestLocationInfo());
     store.dispatch(requestMakes());
     store.dispatch(requestBodyStyles());
     store.dispatch(requestFeatures());

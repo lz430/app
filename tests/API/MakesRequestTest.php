@@ -4,13 +4,11 @@ namespace Tests\API;
 
 use App\JATO\Make;
 use App\JATO\VehicleModel;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class MakesRequestTest extends TestCase
 {
-    use DatabaseMigrations;
-    
+
     /** @test */
     public function it_shows_the_makes_data()
     {
