@@ -27,7 +27,7 @@ class DealDetails extends React.Component {
     }
 
     allImages() {
-        return R.concat(this.props.deal.photos.data, this.props.imagesFromFuel);
+        return R.concat(this.props.deal.photos.data, R.concat(this.props.fuelExternalImages, this.props.fuelInternalImages));
     }
 
     renderThumbnailImage(photo, index) {
@@ -141,7 +141,8 @@ const mapStateToProps = state => {
     return {
         deal: state.selectedDeal,
         fallbackDealImage: state.fallbackDealImage,
-        imagesFromFuel: state.imagesFromFuel,
+        fuelExternalImages: state.fuelExternalImages,
+        fuelInternalImages: state.fuelInternalImages,
     };
 };
 

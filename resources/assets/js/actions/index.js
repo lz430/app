@@ -312,47 +312,77 @@ export function requestFuelImages(deal) {
 
             if (!vehicleId) return;
 
-            window.axios
-                .all([
-                    fuelapi.getExternalImages(
-                        vehicleId,
-                        fuelcolor.convert(deal.color)
-                    ),
-                    fuelapi.getInternalImages(vehicleId),
-                ])
+            fuelapi
+                .getExternalImages(vehicleId, fuelcolor.convert(deal.color))
                 .then(
-                    window.axios.spread((externalImages, internalImages) => {
-                        const external = externalImages.data.products.map(
-                            product =>
-                                product.productFormats.map(format => {
-                                    return {
-                                        id: format.id,
-                                        url: format.assets[0].url,
-                                    };
-                                })
-                        )[0];
-
-                        const internal = internalImages.data.products[0].productFormats[0].assets
-                            .filter(asset => {
-                                return (
-                                    fuelapi.internalImageCodes.indexOf(
-                                        asset.shotCode.code
-                                    ) !== -1
-                                );
-                            })
-                            .map((asset, index) => {
+                    data => {
+                        const externalImages = data.data.products.map(product =>
+                            product.productFormats.map(format => {
                                 return {
-                                    id: `fuel_${index}`,
-                                    url: asset.url,
+                                    id: `fuel_external_${format.id}`,
+                                    url: format.assets[0].url,
                                 };
+                            })
+                        )[0] || [];
+
+                        dispatch(receiveFuelExternalImages(externalImages));
+                    },
+                    () => {
+                        fuelapi
+                            .getExternalImages(vehicleId, 'white')
+                            .then(
+                                data => {
+                                    const externalImages = data.data.products.map(
+                                        product =>
+                                            product.productFormats.map(
+                                                format => {
+                                                    return {
+                                                        id: `fuel_external_${format.id}`,
+                                                        url: format.assets[0]
+                                                            .url,
+                                                    };
+                                                }
+                                            )
+                                    )[0] || [];
+
+                                    dispatch(
+                                        receiveFuelExternalImages(
+                                            externalImages
+                                        )
+                                    );
+                                },
+                                () => {
+                                    dispatch(receiveFuelExternalImages([]));
+                                }
+                            )
+                            .catch(err => {
+                                console.log(err);
                             });
-                        const imageList = external.concat(internal);
-
-                        if (!imageList) return;
-
-                        dispatch(receiveFuelImages(imageList));
-                    })
+                    }
                 )
+                .catch(err => {
+                    console.log(err);
+                });
+
+            fuelapi
+                .getInternalImages(vehicleId)
+                .then(data => {
+                    const internalImages = data.data.products[0].productFormats[0].assets
+                        .filter(asset => {
+                            return (
+                                fuelapi.internalImageCodes.indexOf(
+                                    asset.shotCode.code
+                                ) !== -1
+                            );
+                        })
+                        .map((asset, index) => {
+                            return {
+                                id: `fuel_${index}`,
+                                url: asset.url,
+                            };
+                        }) || [];
+                    dispatch(receiveFuelInternalImages(internalImages));
+                })
                 .catch(err => {
                     console.log(err);
                 });
@@ -364,9 +394,16 @@ export function requestFuelImages(deal) {
     };
 }
 
-export function receiveFuelImages(images) {
+export function receiveFuelExternalImages(images) {
     return {
-        type: ActionTypes.RECEIVE_FUEL_IMAGES,
+        type: ActionTypes.RECEIVE_FUEL_EXTERNAL_IMAGES,
+        images: images,
+    };
+}
+
+export function receiveFuelInternalImages(images) {
+    return {
+        type: ActionTypes.RECEIVE_FUEL_INTERNAL_IMAGES,
         images: images,
     };
 }

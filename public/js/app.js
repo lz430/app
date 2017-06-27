@@ -2355,7 +2355,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["toggleCompare"] = toggleCompare;
 /* harmony export (immutable) */ __webpack_exports__["setZipCode"] = setZipCode;
 /* harmony export (immutable) */ __webpack_exports__["requestFuelImages"] = requestFuelImages;
-/* harmony export (immutable) */ __webpack_exports__["receiveFuelImages"] = receiveFuelImages;
+/* harmony export (immutable) */ __webpack_exports__["receiveFuelExternalImages"] = receiveFuelExternalImages;
+/* harmony export (immutable) */ __webpack_exports__["receiveFuelInternalImages"] = receiveFuelInternalImages;
 /* harmony export (immutable) */ __webpack_exports__["clearFuelImages"] = clearFuelImages;
 /* harmony export (immutable) */ __webpack_exports__["requestLocationInfo"] = requestLocationInfo;
 /* harmony export (immutable) */ __webpack_exports__["receiveLocationInfo"] = receiveLocationInfo;
@@ -2629,30 +2630,49 @@ function requestFuelImages(deal) {
 
             if (!vehicleId) return;
 
-            window.axios.all([__WEBPACK_IMPORTED_MODULE_1_src_fuelapi__["a" /* default */].getExternalImages(vehicleId, __WEBPACK_IMPORTED_MODULE_2_src_fuel_color_map__["a" /* default */].convert(deal.color)), __WEBPACK_IMPORTED_MODULE_1_src_fuelapi__["a" /* default */].getInternalImages(vehicleId)]).then(window.axios.spread(function (externalImages, internalImages) {
-                var external = externalImages.data.products.map(function (product) {
+            __WEBPACK_IMPORTED_MODULE_1_src_fuelapi__["a" /* default */].getExternalImages(vehicleId, __WEBPACK_IMPORTED_MODULE_2_src_fuel_color_map__["a" /* default */].convert(deal.color)).then(function (data) {
+                var externalImages = data.data.products.map(function (product) {
                     return product.productFormats.map(function (format) {
                         return {
-                            id: format.id,
+                            id: 'fuel_external_' + format.id,
                             url: format.assets[0].url
                         };
                     });
-                })[0];
+                })[0] || [];
 
-                var internal = internalImages.data.products[0].productFormats[0].assets.filter(function (asset) {
+                dispatch(receiveFuelExternalImages(externalImages));
+            }, function () {
+                __WEBPACK_IMPORTED_MODULE_1_src_fuelapi__["a" /* default */].getExternalImages(vehicleId, 'white').then(function (data) {
+                    var externalImages = data.data.products.map(function (product) {
+                        return product.productFormats.map(function (format) {
+                            return {
+                                id: 'fuel_external_' + format.id,
+                                url: format.assets[0].url
+                            };
+                        });
+                    })[0] || [];
+
+                    dispatch(receiveFuelExternalImages(externalImages));
+                }, function () {
+                    dispatch(receiveFuelExternalImages([]));
+                }).catch(function (err) {
+                    console.log(err);
+                });
+            }).catch(function (err) {
+                console.log(err);
+            });
+
+            __WEBPACK_IMPORTED_MODULE_1_src_fuelapi__["a" /* default */].getInternalImages(vehicleId).then(function (data) {
+                var internalImages = data.data.products[0].productFormats[0].assets.filter(function (asset) {
                     return __WEBPACK_IMPORTED_MODULE_1_src_fuelapi__["a" /* default */].internalImageCodes.indexOf(asset.shotCode.code) !== -1;
                 }).map(function (asset, index) {
                     return {
                         id: 'fuel_' + index,
                         url: asset.url
                     };
-                });
-                var imageList = external.concat(internal);
-
-                if (!imageList) return;
-
-                dispatch(receiveFuelImages(imageList));
-            })).catch(function (err) {
+                }) || [];
+                dispatch(receiveFuelInternalImages(internalImages));
+            }).catch(function (err) {
                 console.log(err);
             });
         });
@@ -2663,16 +2683,23 @@ function requestFuelImages(deal) {
     };
 }
 
-function receiveFuelImages(images) {
+function receiveFuelExternalImages(images) {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_4_actiontypes_index__["w" /* RECEIVE_FUEL_IMAGES */],
+        type: __WEBPACK_IMPORTED_MODULE_4_actiontypes_index__["w" /* RECEIVE_FUEL_EXTERNAL_IMAGES */],
+        images: images
+    };
+}
+
+function receiveFuelInternalImages(images) {
+    return {
+        type: __WEBPACK_IMPORTED_MODULE_4_actiontypes_index__["x" /* RECEIVE_FUEL_INTERNAL_IMAGES */],
         images: images
     };
 }
 
 function clearFuelImages() {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_4_actiontypes_index__["x" /* CLEAR_FUEL_IMAGES */]
+        type: __WEBPACK_IMPORTED_MODULE_4_actiontypes_index__["y" /* CLEAR_FUEL_IMAGES */]
     };
 }
 
@@ -2685,7 +2712,7 @@ function requestLocationInfo() {
         });
 
         dispatch({
-            type: __WEBPACK_IMPORTED_MODULE_4_actiontypes_index__["y" /* REQUEST_LOCATION_INFO */]
+            type: __WEBPACK_IMPORTED_MODULE_4_actiontypes_index__["z" /* REQUEST_LOCATION_INFO */]
         });
     };
 }
@@ -2707,7 +2734,7 @@ function receiveLocationInfo(data) {
         });
 
         dispatch({
-            type: __WEBPACK_IMPORTED_MODULE_4_actiontypes_index__["z" /* RECEIVE_LOCATION_INFO */],
+            type: __WEBPACK_IMPORTED_MODULE_4_actiontypes_index__["A" /* RECEIVE_LOCATION_INFO */],
             zipcode: zipcode,
             latitude: latitude,
             longitude: longitude
@@ -13566,10 +13593,11 @@ module.exports = function bind(fn, thisArg) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "t", function() { return TOGGLE_COMPARE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "u", function() { return SET_ZIP_CODE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "v", function() { return REQUEST_FUEL_IMAGES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "w", function() { return RECEIVE_FUEL_IMAGES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "x", function() { return CLEAR_FUEL_IMAGES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "y", function() { return REQUEST_LOCATION_INFO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "z", function() { return RECEIVE_LOCATION_INFO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "x", function() { return RECEIVE_FUEL_INTERNAL_IMAGES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "w", function() { return RECEIVE_FUEL_EXTERNAL_IMAGES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "y", function() { return CLEAR_FUEL_IMAGES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "z", function() { return REQUEST_LOCATION_INFO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "A", function() { return RECEIVE_LOCATION_INFO; });
 var SORT_DEALS = 'SORT_DEALS';
 var REQUEST_DEALS = 'REQUEST_DEALS';
 var REQUEST_MAKES = 'REQUEST_MAKES';
@@ -13592,7 +13620,8 @@ var CLEAR_ALL_FILTERS = 'CLEAR_ALL_FILTERS';
 var TOGGLE_COMPARE = 'TOGGLE_COMPARE';
 var SET_ZIP_CODE = 'SET_ZIP_CODE';
 var REQUEST_FUEL_IMAGES = 'REQUEST_FUEL_IMAGES';
-var RECEIVE_FUEL_IMAGES = 'RECEIVE_FUEL_IMAGES';
+var RECEIVE_FUEL_INTERNAL_IMAGES = 'RECEIVE_FUEL_INTERNAL_IMAGES';
+var RECEIVE_FUEL_EXTERNAL_IMAGES = 'RECEIVE_FUEL_EXTERNAL_IMAGES';
 var CLEAR_FUEL_IMAGES = 'CLEAR_FUEL_IMAGES';
 var REQUEST_LOCATION_INFO = 'REQUEST_LOCATION_INFO';
 var RECEIVE_LOCATION_INFO = 'RECEIVE_LOCATION_INFO';
@@ -22381,7 +22410,7 @@ var DealDetails = function (_React$Component) {
     }, {
         key: 'allImages',
         value: function allImages() {
-            return __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.concat(this.props.deal.photos.data, this.props.imagesFromFuel);
+            return __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.concat(this.props.deal.photos.data, __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.concat(this.props.fuelExternalImages, this.props.fuelInternalImages));
         }
     }, {
         key: 'renderThumbnailImage',
@@ -22576,7 +22605,8 @@ var mapStateToProps = function mapStateToProps(state) {
     return {
         deal: state.selectedDeal,
         fallbackDealImage: state.fallbackDealImage,
-        imagesFromFuel: state.imagesFromFuel
+        fuelExternalImages: state.fuelExternalImages,
+        fuelInternalImages: state.fuelInternalImages
     };
 };
 
@@ -24191,9 +24221,10 @@ var initialState = {
     sortAscending: true,
     compareList: [],
     zipcode: null,
+    fuelInternalImages: [],
+    fuelExternalImages: [],
     latitude: null,
-    longitude: null,
-    imagesFromFuel: []
+    longitude: null
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (function () {
@@ -24591,15 +24622,21 @@ var reducer = function reducer(state, action) {
             return Object.assign({}, state, {
                 zipcode: action.zipcode
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["w" /* RECEIVE_FUEL_IMAGES */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["w" /* RECEIVE_FUEL_EXTERNAL_IMAGES */]:
             return Object.assign({}, state, {
-                imagesFromFuel: action.images
+                fuelExternalImages: action.images
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["x" /* CLEAR_FUEL_IMAGES */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["x" /* RECEIVE_FUEL_INTERNAL_IMAGES */]:
             return Object.assign({}, state, {
+                fuelInternalImages: action.images
+            });
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["y" /* CLEAR_FUEL_IMAGES */]:
+            return Object.assign({}, state, {
+                fuelExternalImages: [],
+                fuelInternalImages: [],
                 imagesFromFuel: []
             });
-        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["z" /* RECEIVE_LOCATION_INFO */]:
+        case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["A" /* RECEIVE_LOCATION_INFO */]:
             return Object.assign({}, state, {
                 zipcode: action.zipcode,
                 latitude: action.latitude,
@@ -24622,8 +24659,27 @@ var reducer = function reducer(state, action) {
 
 
 var colorMap = {
-    red: ['Velvet', 'Colorado Red', 'Flame Red Clearcoat', 'Ruby Flare Pearl', 'Deep Cherry Red Crystal'],
-    black: ['Diamond Black']
+    blue: ['Blue', 'Blue Pearl', 'Blue Streak', 'Chief Clearcoat', 'Cosmos Blue', 'Dark Blue Pearl Metallic', 'Graphite Blue Metallic', 'Laser Blue', 'True Blue'],
+
+    black: ['Black', 'Black', 'Black Clearcoat', 'Black Crystal', 'Black Granite Metallic', 'Brilliant Black', 'Brilliant Black Crystal Pearlcoat', 'Gloss Black', 'Diamond Black', 'Pitch Black', 'Pitch Black Clearcoat', 'Super Black', 'Tuxedo Black Metallic'],
+
+    red: ['Red', 'Candy Red Metallic Tinted Clearcoat', 'Cherry', 'Colorado Red', 'Deep Cherry Red Crystal', 'Deep Ruby Metallic', 'Flame Red Clearcoat', 'Race Red', 'Red', 'Red Clearcoat', 'Red Line', 'Redline 2 Coat Pearl', 'Redline Red', 'Toreador Red', 'Ruby Flare Pearl', 'Velvet'],
+
+    orange: ['Orange'],
+
+    purple: ['Purple'],
+
+    green: ['Green', 'Hypergreen Clearcoat', 'Natural Green Pearlcoat', 'Olive Green'],
+
+    gray: ['Gray', 'Dark Cordovan Pearl', 'Cordovan', 'Gray Clearcoat', 'Mineral Gray Metallic Clearcoat', 'Slate Gray Metallic', 'Sterling Gray Metallic', 'Granite', 'Granite Clearcoat Metallic', 'Granite Crystal Metallic Clearcoat', 'Grante Crys Met', 'Crystal Metallic', 'Glacier Metallic', 'Smokestone Metallic', 'Tungsten Metallic', 'Light Graystone Pearlcoat', 'Steel Metallic', 'Rhino Clearcoat'],
+
+    white: ['White', 'Alpine White', 'Anvil', 'Arctic White', 'Bright White', 'Bright White Clearcoat', 'Champagne Pearlcoat', 'White Clearcoat', 'White Gold Clearcoat', 'Lunar White Tri-Coat Pearl', 'Stone White Clearcoat', 'Ivory'],
+
+    yellow: ['Yellow', 'Baja Yellow', 'Solar Yellow', 'Yellow Jacket'],
+
+    silver: ['Silver', 'Billet Clearcoat', 'Billet Metallic', 'Billet Silver Metallic', 'Billet Silver Metallic Clearcoat', 'Bright Silver Clearcoat Metallic', 'Bright Silver Metallic Clearcoat', 'Ingot Silver Metallic', 'Molten Silver', 'Silver Birch'],
+
+    brown: ['Brown', 'Brown Metallic', 'Gobi Clearcoat', 'Light Brownstone Pearlcoat', 'Mocha Steel Metallic']
 };
 
 var fuelColor = {

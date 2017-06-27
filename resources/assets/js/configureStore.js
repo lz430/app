@@ -33,9 +33,10 @@ const initialState = {
     sortAscending: true,
     compareList: [],
     zipcode: null,
+    fuelInternalImages: [],
+    fuelExternalImages: [],
     latitude: null,
     longitude: null,
-    imagesFromFuel: [],
 };
 
 export default () => {
