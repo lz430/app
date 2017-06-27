@@ -35,7 +35,7 @@ class FilterPage extends React.Component {
                 onClose={this.closeModal}
                 title="Select brand preference"
                 subtitle="Please select one or more brands that you are considering"
-                closeText="Show available options"
+                closeText="Show available vehicles"
             >
                 {() => <MakeSelector />}
             </Modal>
@@ -52,7 +52,6 @@ class FilterPage extends React.Component {
                         ' ' +
                         this.props.selectedDeal.make
                 }
-                closeText="Back to results"
             >
                 {() => <DealDetails />}
             </Modal>

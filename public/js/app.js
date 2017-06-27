@@ -23635,6 +23635,9 @@ var mapStateToProps = function mapStateToProps(state) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_svg_inline__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_svg_inline___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_svg_inline__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_zondicons__ = __webpack_require__(67);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23642,6 +23645,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
 
 
 
@@ -23655,50 +23660,63 @@ var Modal = function (_React$Component) {
     }
 
     _createClass(Modal, [{
-        key: "render",
+        key: 'render',
         value: function render() {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                "div",
-                { className: "modal" },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("div", { className: "modal__overlay" }),
+                'div',
+                { className: 'modal' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'modal__overlay' }),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    "div",
-                    { className: "modal__content" },
+                    'div',
+                    { className: 'modal__content' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        "div",
-                        { className: "modal__header" },
+                        'div',
+                        { className: 'modal__header' },
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            "div",
-                            { className: "modal__titles" },
+                            'div',
+                            { className: 'modal__titles' },
                             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                "div",
-                                { className: "modal__title" },
+                                'div',
+                                { className: 'modal__title' },
                                 this.props.title
                             ),
                             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                "div",
-                                { className: "modal__subtitle" },
+                                'div',
+                                { className: 'modal__subtitle' },
                                 this.props.subtitle
                             )
                         ),
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            "div",
-                            {
-                                className: "modal__close",
-                                onClick: this.props.onClose
-                            },
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                                "button",
-                                { className: "modal__close-button modal__close-button--blue modal__close-button--small" },
-                                this.props.closeText
-                            )
+                            'div',
+                            { className: 'modal__close' },
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_svg_inline___default.a, {
+                                onClick: this.props.onClose,
+                                height: '20px',
+                                width: '20px',
+                                className: 'modal__close-x',
+                                svg: __WEBPACK_IMPORTED_MODULE_2_zondicons__["a" /* default */]['close']
+                            })
                         )
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        "div",
-                        { className: "modal__body" },
+                        'div',
+                        {
+                            className: 'modal__body ' + (this.props.closeText ? '' : 'modal__body--no-footer')
+                        },
                         this.props.children()
-                    )
+                    ),
+                    this.props.closeText ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { className: 'modal__footer' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'button',
+                            {
+                                onClick: this.props.onClose,
+                                className: 'modal__close-button modal__close-button--blue modal__close-button--small'
+                            },
+                            this.props.closeText
+                        )
+                    ) : ''
                 )
             );
         }
@@ -24217,7 +24235,7 @@ var initialState = {
     dealPage: 1,
     dealPageTotal: 1,
     deals: null,
-    fallbackLogoImage: '/images/dmr-logo.svg',
+    fallbackLogoImage: '/images/dmr-logo-small.svg',
     fallbackDealImage: '/images/dmr-logo.svg',
     sortColumn: 'price',
     sortAscending: true,
@@ -24400,7 +24418,7 @@ var FilterPage = function (_React$Component) {
                     onClose: this.closeModal,
                     title: 'Select brand preference',
                     subtitle: 'Please select one or more brands that you are considering',
-                    closeText: 'Show available options'
+                    closeText: 'Show available vehicles'
                 },
                 function () {
                     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_components_MakeSelector__["a" /* default */], null);
@@ -24415,8 +24433,7 @@ var FilterPage = function (_React$Component) {
                 {
                     onClose: this.props.clearSelectedDeal,
                     title: this.props.selectedDeal.model,
-                    subtitle: this.props.selectedDeal.year + ' ' + this.props.selectedDeal.make,
-                    closeText: 'Back to results'
+                    subtitle: this.props.selectedDeal.year + ' ' + this.props.selectedDeal.make
                 },
                 function () {
                     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5_components_DealDetails__["a" /* default */], null);
