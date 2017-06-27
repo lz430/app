@@ -81,12 +81,18 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 zipcode: action.zipcode,
             });
-        case ActionTypes.RECEIVE_FUEL_IMAGES:
+        case ActionTypes.RECEIVE_FUEL_EXTERNAL_IMAGES:
             return Object.assign({}, state, {
-                imagesFromFuel: action.images,
+                fuelExternalImages: action.images,
+            });
+        case ActionTypes.RECEIVE_FUEL_INTERNAL_IMAGES:
+            return Object.assign({}, state, {
+                fuelInternalImages: action.images,
             });
         case ActionTypes.CLEAR_FUEL_IMAGES:
             return Object.assign({}, state, {
+                fuelExternalImages: [],
+                fuelInternalImages: [],
                 imagesFromFuel: [],
             });
     }
