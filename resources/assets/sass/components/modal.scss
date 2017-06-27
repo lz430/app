@@ -4,6 +4,7 @@
 $offset-top: 150px;
 $offset-horizontal: 50px;
 $header-height: 100px;
+$footer-height: 60px;
 
 .modal {
   display: flex;
@@ -29,11 +30,6 @@ $header-height: 100px;
     top: 60px;
   }
 
-  &__body {
-    height: calc(100vh - #{$offset-top + $header-height});
-    overflow-y: auto;
-  }
-
   &__header {
     background-color: $color-background-secondary;
     display: flex;
@@ -41,12 +37,30 @@ $header-height: 100px;
     padding: 20px;
   }
 
+  &__body {
+    height: calc(100vh - #{$offset-top + $header-height + $footer-height});
+    overflow-y: auto;
+
+    &--no-footer {
+      height: calc(100vh - #{$offset-top + $header-height});
+    }
+  }
+
+  &__footer {
+    background-color: $color-background-secondary;
+    border-top: 1px solid $color-section-bottom-border;
+    display: flex;
+    height: $footer-height;
+    justify-content: center;
+    padding: 10px;
+  }
+
   &__titles {
-    flex: 2;
+    //
   }
 
   &__title {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
   }
 
   &__subtitle {
@@ -54,12 +68,14 @@ $header-height: 100px;
   }
 
   &__close {
-    align-content: center;
-    align-self: center;
-    display: flex;
-    flex: 1;
-    font-size: 2rem;
-    justify-content: flex-end;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+  }
+
+  &__close-x {
+    cursor: pointer;
+    fill: $text-color;
   }
 
   &__close-button {
