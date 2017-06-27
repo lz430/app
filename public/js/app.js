@@ -2378,7 +2378,9 @@ var withStateDefaults = function withStateDefaults(state, changed) {
         includes: ['photos'],
         sortColumn: state.sortColumn,
         sortAscending: state.sortAscending,
-        page: 1
+        page: 1,
+        latitude: state.latitude,
+        longitude: state.longitude
     }, changed);
 };
 

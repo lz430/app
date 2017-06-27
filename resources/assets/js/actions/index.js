@@ -17,6 +17,8 @@ const withStateDefaults = (state, changed) => {
             sortColumn: state.sortColumn,
             sortAscending: state.sortAscending,
             page: 1,
+            latitude: state.latitude,
+            longitude: state.longitude,
         },
         changed
     );
