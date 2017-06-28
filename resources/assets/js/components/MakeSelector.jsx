@@ -25,7 +25,9 @@ class MakeSelector extends React.Component {
     }
 
     renderMake(make) {
-        const selected = R.contains(make.id, this.props.selectedMakes);
+        const selected =
+            this.props.selectedMakes &&
+            R.contains(make.id, this.props.selectedMakes);
         const className = `make-selector__make ${selected ? 'make-selector__make--selected' : ''}`;
 
         return (
@@ -46,7 +48,9 @@ class MakeSelector extends React.Component {
         return (
             <div className="make-selector">
                 <div className="make-selector__makes">
-                    {this.props.makes.map(this.renderMake)}
+                    {this.props.makes
+                        ? this.props.makes.map(this.renderMake)
+                        : 'loading'}
                 </div>
             </div>
         );
@@ -62,8 +66,8 @@ MakeSelector.propTypes = {
                 logo: PropTypes.string.isRequired,
             }),
         })
-    ).isRequired,
-    selectedMakes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    ),
+    selectedMakes: PropTypes.arrayOf(PropTypes.string),
     fallbackLogoImage: PropTypes.string.isRequired,
 };
 

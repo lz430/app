@@ -1,5 +1,6 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
+import { persistStore, autoRehydrate } from 'redux-persist';
 import reducer from 'reducers/index';
 import {
     requestMakes,
@@ -11,6 +12,7 @@ import R from 'ramda';
 import qs from 'qs';
 
 const initialState = {
+    showMakeSelectorModal: true,
     selectedStyles: [
         R.prop('style', qs.parse(window.location.search.slice(1))),
     ],
@@ -42,11 +44,15 @@ const initialState = {
 export default () => {
     const composeEnhancers =
         window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
     const store = createStore(
         reducer,
         initialState,
-        composeEnhancers(applyMiddleware(reduxThunk))
+        composeEnhancers(applyMiddleware(reduxThunk)),
+        autoRehydrate()
     );
+
+    persistStore(store);
 
     store.dispatch(requestLocationInfo());
     store.dispatch(requestMakes());

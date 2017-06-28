@@ -1,8 +1,15 @@
 import * as ActionTypes from 'actiontypes/index';
 import R from 'ramda';
+import { REHYDRATE } from 'redux-persist/constants';
 
 const reducer = (state, action) => {
     switch (action.type) {
+        case REHYDRATE:
+            return Object.assign({}, state, action.payload);
+        case ActionTypes.CLOSE_MAKE_SELECTOR_MODAL:
+            return Object.assign({}, state, {
+                showMakeSelectorModal: false,
+            });
         case ActionTypes.RECEIVE_MAKES:
             return Object.assign({}, state, {
                 makes: action.data.data.data,

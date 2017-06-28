@@ -11,28 +11,10 @@ import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 
 class FilterPage extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            showModal: true,
-        };
-
-        this.closeModal = this.closeModal.bind(this);
-    }
-
-    closeModal() {
-        if (this.props.selectedMakes.length > 0) {
-            this.setState({ showModal: false }, () =>
-                this.props.requestDeals()
-            );
-        }
-    }
-
     renderMakeSelectionModal() {
         return (
             <Modal
-                onClose={this.closeModal}
+                onClose={this.props.closeMakeSelectorModal}
                 title="Select brand preference"
                 subtitle="Please select one or more brands that you are considering"
                 closeText="Show available vehicles"
@@ -76,7 +58,7 @@ class FilterPage extends React.Component {
     render() {
         return (
             <div>
-                {this.props.makes && this.state.showModal
+                {this.props.showMakeSelectorModal
                     ? this.renderMakeSelectionModal()
                     : ''}
 
