@@ -9535,6 +9535,9 @@ module.exports = defaults;
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ramda__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ramda___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_ramda__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_qs__ = __webpack_require__(614);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_qs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_qs__);
+
 
 
 var util = {
@@ -9549,6 +9552,9 @@ var util = {
     },
     toggleItem: function toggleItem(items, item) {
         return __WEBPACK_IMPORTED_MODULE_0_ramda___default.a.contains(item, items) ? __WEBPACK_IMPORTED_MODULE_0_ramda___default.a.reject(__WEBPACK_IMPORTED_MODULE_0_ramda___default.a.equals(item), items) : __WEBPACK_IMPORTED_MODULE_0_ramda___default.a.append(item, items);
+    },
+    getInitialBodyStyleFromUrl: function getInitialBodyStyleFromUrl() {
+        return __WEBPACK_IMPORTED_MODULE_0_ramda___default.a.prop('style', __WEBPACK_IMPORTED_MODULE_1_qs___default.a.parse(window.location.search.slice(1)));
     }
 };
 
@@ -22800,6 +22806,7 @@ var DealDetails = function (_React$Component) {
         };
 
         _this.renderThumbnailImage = _this.renderThumbnailImage.bind(_this);
+        _this.renderLoginRegister = _this.renderLoginRegister.bind(_this);
         return _this;
     }
 
@@ -22807,6 +22814,46 @@ var DealDetails = function (_React$Component) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             this.props.requestFuelImages(this.props.deal);
+        }
+    }, {
+        key: 'renderLoginRegister',
+        value: function renderLoginRegister() {
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'deal-details__login-register' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'deal-details__login-register-text' },
+                    'Get the best value from',
+                    ' ',
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'em',
+                        null,
+                        'Deliver My Ride'
+                    ),
+                    '. Login or Register to see the best price for you!'
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'deal-details__login-register-buttons' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'a',
+                        {
+                            className: 'deal-details__button deal-details__button--small deal-details__button--blue deal-details__button--capitalize',
+                            href: '/login?intended=filter'
+                        },
+                        'Login'
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'a',
+                        {
+                            className: 'deal-details__button deal-details__button--small deal-details__button--blue deal-details__button--capitalize',
+                            href: '/register?intended=filter'
+                        },
+                        'Register'
+                    )
+                )
+            );
         }
     }, {
         key: 'selectFeaturedImage',
@@ -22980,7 +23027,17 @@ var DealDetails = function (_React$Component) {
                     'div',
                     { className: 'deal-details__pricing' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'p',
+                        'div',
+                        null,
+                        'Pricing'
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        null,
+                        'cash / finance / lease'
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
                         null,
                         'MSRP: ',
                         __WEBPACK_IMPORTED_MODULE_5_src_util__["a" /* default */].moneyFormat(deal.msrp)
@@ -22990,21 +23047,7 @@ var DealDetails = function (_React$Component) {
                         null,
                         'DMR Price: ',
                         __WEBPACK_IMPORTED_MODULE_5_src_util__["a" /* default */].moneyFormat(deal.price)
-                    ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'div',
-                        null,
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'a',
-                            { href: '/login' },
-                            'Login'
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'a',
-                            { href: '/register' },
-                            'Register'
-                        )
-                    )
+                    ) : this.renderLoginRegister()
                 )
             );
         }
@@ -24620,11 +24663,7 @@ var mapStateToProps = function mapStateToProps(state) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_redux_persist__ = __webpack_require__(913);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_reducers_index__ = __webpack_require__(394);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_actions_index__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ramda__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ramda___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_ramda__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_qs__ = __webpack_require__(614);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_qs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_qs__);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_src_util__ = __webpack_require__(147);
 
 
 
@@ -24634,7 +24673,7 @@ var mapStateToProps = function mapStateToProps(state) {
 
 var initialState = {
     showMakeSelectorModal: true,
-    selectedStyles: [__WEBPACK_IMPORTED_MODULE_5_ramda___default.a.prop('style', __WEBPACK_IMPORTED_MODULE_6_qs___default.a.parse(window.location.search.slice(1)))],
+    selectedStyles: [__WEBPACK_IMPORTED_MODULE_5_src_util__["a" /* default */].getInitialBodyStyleFromUrl()],
     bodyStyles: null,
     fuelTypes: ['Gasoline', 'Flex Fuel', 'Diesel'],
     transmissionTypes: ['automatic', 'manual'],
@@ -25033,7 +25072,6 @@ var reducer = function reducer(state, action) {
             });
         case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["s" /* CLEAR_ALL_FILTERS */]:
             return Object.assign({}, state, {
-                selectedStyles: [],
                 selectedTransmissionType: null,
                 selectedFuelType: null,
                 selectedMakes: [],

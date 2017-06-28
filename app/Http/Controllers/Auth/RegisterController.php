@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -36,7 +37,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware(['guest', 'intended']);
     }
 
     /**
@@ -67,5 +68,14 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    protected function registered(Request $request, $user)
+    {
+        if ($request->session()->has('intended') && in_array($request->session()->get('intended'), [
+                'filter'
+            ])) {
+            $this->redirectTo = $request->session()->get('intended');
+        }
     }
 }

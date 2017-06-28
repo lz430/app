@@ -14,10 +14,38 @@ class DealDetails extends React.Component {
         };
 
         this.renderThumbnailImage = this.renderThumbnailImage.bind(this);
+        this.renderLoginRegister = this.renderLoginRegister.bind(this);
     }
 
     componentDidMount() {
         this.props.requestFuelImages(this.props.deal);
+    }
+
+    renderLoginRegister() {
+        return (
+            <div className="deal-details__login-register">
+                <div className="deal-details__login-register-text">
+                    Get the best value from
+                    {' '}
+                    <em>Deliver My Ride</em>
+                    . Login or Register to see the best price for you!
+                </div>
+                <div className="deal-details__login-register-buttons">
+                    <a
+                        className="deal-details__button deal-details__button--small deal-details__button--blue deal-details__button--capitalize"
+                        href="/login?intended=filter"
+                    >
+                        Login
+                    </a>
+                    <a
+                        className="deal-details__button deal-details__button--small deal-details__button--blue deal-details__button--capitalize"
+                        href="/register?intended=filter"
+                    >
+                        Register
+                    </a>
+                </div>
+            </div>
+        );
     }
 
     selectFeaturedImage(index) {
@@ -96,8 +124,8 @@ class DealDetails extends React.Component {
                             Vehicle Information
                             {' '}
                             <span className="deal-details__vin">
-                            {deal.vin.substr(deal.vin.length - 8)}
-                        </span>
+                                {deal.vin.substr(deal.vin.length - 8)}
+                            </span>
                         </h2>
 
                         <div className="deal-details__items">
@@ -130,15 +158,16 @@ class DealDetails extends React.Component {
                 </div>
 
                 <div className="deal-details__pricing">
-                    <p>MSRP: {util.moneyFormat(deal.msrp)}</p>
+                    <div>Pricing</div>
+                    <div>
+                        cash / finance / lease
+                    </div>
+
+                    <div>MSRP: {util.moneyFormat(deal.msrp)}</div>
 
                     {window.user
                         ? <p>DMR Price: {util.moneyFormat(deal.price)}</p>
-                        : <div>
-                              <a href="/login">Login</a>
-                              <br />
-                              <a href="/register">Register</a>
-                          </div>}
+                        : this.renderLoginRegister()}
                 </div>
             </div>
         );
