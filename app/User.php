@@ -17,14 +17,9 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
     
-    public function savedVehicles()
+    public function purchases()
     {
-        return $this->hasMany(SavedVehicle::class);
-    }
-    
-    public function buyRequest()
-    {
-        return $this->hasMany(BuyRequest::class);
+        return $this->hasMany(Purchased::class);
     }
     
     protected static function boot()
