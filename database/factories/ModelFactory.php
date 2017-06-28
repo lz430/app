@@ -149,3 +149,10 @@ $factory->define(App\Dealer::class, function (Faker\Generator $faker) {
         'max_delivery_miles' => $faker->randomNumber(),
     ];
 });
+
+$factory->define(App\Purchased::class, function (Faker\Generator $faker) {
+    return [
+        'deal_id' => factory(App\Deal::class)->create()->id,
+        'user_id' => factory(App\User::class)->create()->id,
+    ];
+});
