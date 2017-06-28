@@ -457,3 +457,9 @@ export function receiveLocationInfo(data) {
         });
     };
 }
+
+export function closeMakeSelectorModal() {
+    return {
+        type: ActionTypes.CLOSE_MAKE_SELECTOR_MODAL,
+    };
+}

@@ -1,36 +1,42 @@
 @import '../variables';
 
-$padding: 15px;
-
 .deal-details {
   display: flex;
-  flex-wrap: wrap;
-  max-width: 800px + ($padding * 6);
-  padding: $padding;
+  flex-direction: column;
+  max-width: 100%;
 
-  &__images {
-    padding: $padding;
-    text-align: center;
-    width: 100%;
+  @media (min-width: $break-medium) {
+    flex-direction: row;
+  }
 
-    @media (min-width: $break-large) {
-      width: 50%;
+  &__images-and-information {
+    @media (min-width: $break-medium) {
+      width: $break-medium * .6;
     }
   }
 
-  &__information {
-    padding: $padding;
-    width: 100%;
+  &__images {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
 
-    @media (min-width: $break-large) {
-      width: 50%;
+  &__information {
+    padding: 15px;
+  }
+
+  &__pricing {
+    background: darken($color-background-primary, 4);
+
+    @media (min-width: $break-medium) {
+      width: $break-medium * .4;
     }
   }
 
   &__primary-image {
-    max-height: 300px;
-    max-width: 400px;
-    width: 100%;
+    border: 1px solid $color-section-bottom-border;
+    margin: 15px 0;
+    width: calc(100% - 30px);
   }
 
   &__thumbnail-images {
@@ -73,4 +79,12 @@ $padding: 15px;
       margin-right: auto;
     }
   }
+}
+
+.slick-slider {
+  width: 85%;
+}
+
+.slick-arrow::before {
+  color: $text-color;
 }

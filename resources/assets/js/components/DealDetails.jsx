@@ -77,66 +77,68 @@ class DealDetails extends React.Component {
             infinite: false,
             lazyLoad: false,
             focusOnSelect: false,
-            slidesToShow: 5,
-            slidesToScroll: 5,
+            slidesToShow: 4,
+            slidesToScroll: 4,
         };
 
         return (
             <div className="deal-details">
-                <div className="deal-details__images">
-                    {this.renderFeaturedImage()}
-                    <Slider {...settings}>
-                        {this.allImages().map(this.renderThumbnailImage)}
-                    </Slider>
-                </div>
+                <div className="deal-details__images-and-information">
+                    <div className="deal-details__images">
+                        {this.renderFeaturedImage()}
+                        <Slider {...settings}>
+                            {this.allImages().map(this.renderThumbnailImage)}
+                        </Slider>
+                    </div>
 
-                <div className="deal-details__information">
-                    <h2>
-                        Vehicle Information
-                        {' '}
-                        <span className="deal-details__vin">
+                    <div className="deal-details__information">
+                        <h2>
+                            Vehicle Information
+                            {' '}
+                            <span className="deal-details__vin">
                             {deal.vin.substr(deal.vin.length - 8)}
                         </span>
-                    </h2>
+                        </h2>
 
-                    <div className="deal-details__items">
-                        <div className="deal-details__item">
-                            <div>Color</div>
-                            <div>{deal.color}</div>
-                        </div>
-                        <div className="deal-details__item">
-                            <div>Interior Color</div>
-                            <div>{deal.interior_color}</div>
-                        </div>
-                        <div className="deal-details__item">
-                            <div>MPG</div>
-                            <div>{deal.fuel_econ_hwy}</div>
-                        </div>
-                        <div className="deal-details__item">
-                            <div>Vehicle Type</div>
-                            <div>{deal.body}</div>
-                        </div>
-                        <div className="deal-details__item">
-                            <div>Transmission</div>
-                            <div>{deal.transmission}</div>
-                        </div>
-                        <div className="deal-details__item">
-                            <div>Fuel Type</div>
-                            <div>{deal.fuel}</div>
+                        <div className="deal-details__items">
+                            <div className="deal-details__item">
+                                <div>Color</div>
+                                <div>{deal.color}</div>
+                            </div>
+                            <div className="deal-details__item">
+                                <div>Interior Color</div>
+                                <div>{deal.interior_color}</div>
+                            </div>
+                            <div className="deal-details__item">
+                                <div>MPG</div>
+                                <div>{deal.fuel_econ_hwy}</div>
+                            </div>
+                            <div className="deal-details__item">
+                                <div>Vehicle Type</div>
+                                <div>{deal.body}</div>
+                            </div>
+                            <div className="deal-details__item">
+                                <div>Transmission</div>
+                                <div>{deal.transmission}</div>
+                            </div>
+                            <div className="deal-details__item">
+                                <div>Fuel Type</div>
+                                <div>{deal.fuel}</div>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div>
-                        <p>MSRP: {util.moneyFormat(deal.msrp)}</p>
+                <div className="deal-details__pricing">
+                    <p>MSRP: {util.moneyFormat(deal.msrp)}</p>
 
-                        {window.user
-                            ? <p>DMR Price: {util.moneyFormat(deal.price)}</p>
-                            : <div>
-                                  <a href="/login">Login</a>
-                                  <br />
-                                  <a href="/register">Register</a>
-                              </div>}
-                    </div>
+                    {window.user
+                        ? <p>DMR Price: {util.moneyFormat(deal.price)}</p>
+                        : <div>
+                              <a href="/login">Login</a>
+                              <br />
+                              <a href="/register">Register</a>
+                          </div>}
                 </div>
             </div>
         );

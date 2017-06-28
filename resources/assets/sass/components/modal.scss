@@ -39,7 +39,7 @@ $footer-height: 60px;
 
   &__body {
     height: calc(100vh - #{$offset-top + $header-height + $footer-height});
-    overflow-y: auto;
+    overflow-x: hidden;
 
     &--no-footer {
       height: calc(100vh - #{$offset-top + $header-height});
