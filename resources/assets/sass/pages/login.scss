@@ -37,6 +37,7 @@ $width: $break-small / 2;
   &__title {
     color: $text-color-dark;
     font-size: 1.2rem;
+    font-weight: bold;
   }
 
   // Inputs
@@ -52,6 +53,7 @@ $width: $break-small / 2;
   &__label {
     color: $text-color-dark;
     font-size: .9rem;
+    font-weight: bold;
   }
 
   &__input-and-error {
@@ -61,6 +63,7 @@ $width: $break-small / 2;
   &__input {
     border: 1px solid $color-section-bottom-border;
     border-radius: 2px;
+    margin-top: 2px;
     padding: 5px;
     width: 100%;
   }

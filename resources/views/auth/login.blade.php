@@ -16,7 +16,7 @@
                 <div class="login__sexy-line"></div>
 
                 <div class="login__group {{ $errors->has('email') ? 'login__group-has-error' : '' }}">
-                    <label for="email" class="login__label">E-Mail Address</label>
+                    <label for="email" class="login__label">Email</label>
 
                     <div class="login__input-and-error">
                         <input id="email" type="email" class="login__input" name="email" value="{{ old('email') }}" required autofocus>
