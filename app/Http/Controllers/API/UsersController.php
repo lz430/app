@@ -16,11 +16,13 @@ class UsersController extends BaseAPIController
     {
         $this->validate($request, [
             'email' => 'required|email|max:255|unique:users',
+            'phone_number' => 'required|max:255',
         ]);
         
         $user = User::create([
-            'email' => request()->input('email'),
-            'name' => '',
+            'email' => request('email'),
+            'name' => request('name'),
+            'phone_number' => request('phone_number'),
             'password' => bcrypt(str_random(8)),
         ]);
         
