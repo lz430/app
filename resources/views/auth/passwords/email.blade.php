@@ -7,7 +7,9 @@
     <div class="section section--no-header-or-footer section--darker">
         <div class="password-reset">
             <div class="password-reset__logo">
-                <img src="/images/dmr-logo.svg"/>
+                <a href="/">
+                    <img src="/images/dmr-logo.svg"/>
+                </a>
             </div>
             <form class="password-reset__form" role="form" method="POST" action="{{ route('password.email') }}">
                 {{ csrf_field() }}
