@@ -1,22 +1,95 @@
 import React from 'react';
 import R from 'ramda';
 import util from 'src/util';
+import fuelapi from 'src/fuelapi';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 
 class Deal extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            featuredImage: R.propOr(
+                props.fallbackDealImage,
+                'url',
+                props.deal.photos.data[1]
+                    ? props.deal.photos.data[0]
+                    : { url: props.fallbackDealImage }
+            ),
+        };
+    }
+    componentDidMount() {
+        if (this.props.deal.photos.data.length === 1) {
+            fuelapi
+                .getVehicleId(
+                    this.props.deal.year,
+                    this.props.deal.make,
+                    this.props.deal.model
+                )
+                .then(data => {
+                    fuelapi
+                        .getExternalImages(
+                            data.data[0].id,
+                            this.props.deal.color
+                        )
+                        .then(data => {
+                            const externalImages = data.data.products.map(
+                                product =>
+                                    product.productFormats.map(format => {
+                                        return {
+                                            id: `fuel_external_${format.id}`,
+                                            url: format.assets[0].url,
+                                        };
+                                    })
+                            )[0] || [];
+
+                            this.setState({
+                                featuredImage: R.propOr(
+                                    this.props.fallbackDealImage,
+                                    'url',
+                                    externalImages[0]
+                                ),
+                            });
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            fuelapi
+                                .getExternalImages(data.data[0].id, 'white')
+                                .then(data => {
+                                    const externalImages = data.data.products.map(
+                                        product =>
+                                            product.productFormats.map(
+                                                format => {
+                                                    return {
+                                                        id: `fuel_external_${format.id}`,
+                                                        url: format.assets[0]
+                                                            .url,
+                                                    };
+                                                }
+                                            )
+                                    )[0] || [];
+
+                                    this.setState({
+                                        featuredImage: R.propOr(
+                                            this.props.fallbackDealImage,
+                                            'url',
+                                            externalImages[0]
+                                        ),
+                                    });
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                });
+                        });
+                });
+        }
+    }
     render() {
         const deal = this.props.deal;
         return (
             <div className="deal">
-                <img
-                    className="deal__image"
-                    src={R.propOr(
-                        this.props.fallbackDealImage,
-                        'url',
-                        deal.photos.data[0]
-                    )}
-                />
+                <img className="deal__image" src={this.state.featuredImage} />
 
                 <div className="deal__basic-info">
                     <p>
