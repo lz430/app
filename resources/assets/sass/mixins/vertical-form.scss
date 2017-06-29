@@ -73,6 +73,13 @@
     max-width: $width;
   }
 
+  &__message {
+    color: $color-blue;
+    font-size: .9rem;
+    margin: 10px 0;
+    max-width: $width;
+  }
+
   &__buttons {
     margin-top: 10px;
     width: 100%;
