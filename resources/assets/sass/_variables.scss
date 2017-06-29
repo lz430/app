@@ -10,13 +10,15 @@ $color-sidebar-background-secondary-dark: #353c3e;
 $color-text-white: #fff;
 $color-black: #000;
 
-$color-blue: #4d92df;
+$color-blue: #3786a1;
+$color-error: #ac0000;
 
 // Typography
 $font-family-sans-serif: 'Open Sans', sans-serif;
 $font-size-base: 14px;
 $line-height-base: 1.6;
 $text-color: #8d9599;
+$text-color-dark: darken($text-color, 25);
 
 // Nav
 $nav-height: 75px;
