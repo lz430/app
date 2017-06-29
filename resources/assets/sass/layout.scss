@@ -48,6 +48,11 @@ body {
     min-height: calc(100vh - #{$nav-height} - #{$footer-height} - #{$section-padding * 2});
   }
 
+  &--no-header-or-footer {
+    border-bottom-style: none;
+    min-height: 100vh;
+  }
+
   &--darker {
     background-color: $color-background-primary;
   }

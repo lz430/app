@@ -1,0 +1,5 @@
+@import '../mixins/vertical-form';
+
+.register {
+  @include vertical-form;
+}

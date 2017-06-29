@@ -26,6 +26,7 @@
         </script>
     </head>
     <body class="{{ $bodyClass ?? '' }}">
+        @section('nav')
         <nav class="nav">
             <a class="nav__logo" href="{{ url('/') }}">
                 <img src="/images/dmr-logo.svg">
@@ -49,11 +50,13 @@
                 @endif
             </div>
         </nav>
+        @show
 
         <div class="content">
             @yield('content')
         </div>
 
+        @section('footer')
         <footer class="footer">
             <p>
                 Copyright © 2017 Deliver My Ride. All rights reserved.
@@ -61,6 +64,7 @@
         </footer>
 
         @include('footer')
+        @show
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}"></script>
         @if ( App::environment('staging') )
