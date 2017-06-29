@@ -7,7 +7,9 @@
     <div class="section section--no-header-or-footer section--darker">
         <div class="register">
             <div class="register__logo">
-                <img src="/images/dmr-logo.svg"/>
+                <a href="/">
+                    <img src="/images/dmr-logo.svg"/>
+                </a>
             </div>
             <form class="register__form" role="form" method="POST" action="{{ route('register') }}">
                 {{ csrf_field() }}

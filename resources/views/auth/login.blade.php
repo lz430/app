@@ -7,7 +7,9 @@
     <div class="section section--no-header-or-footer section--darker">
         <div class="login">
             <div class="login__logo">
-                <img src="/images/dmr-logo.svg"/>
+                <a href="/">
+                    <img src="/images/dmr-logo.svg"/>
+                </a>
             </div>
             <form class="login__form" role="form" method="POST" action="{{ route('login') }}">
                 {{ csrf_field() }}
