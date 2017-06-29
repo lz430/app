@@ -12,5 +12,11 @@ class TestUsersSeeder extends Seeder
             'email' => 'logan@tighten.co',
             'password' => bcrypt('password'),
         ]);
+    
+        User::create([
+            'name' => 'Jose Soto',
+            'email' => 'jose@tighten.co',
+            'password' => bcrypt('password'),
+        ]);
     }
 }
