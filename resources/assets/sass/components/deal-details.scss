@@ -96,12 +96,12 @@
 
   &__login-register-buttons {
     display: flex;
+    width: 100%;
   }
 
   &__button {
     @include button;
     flex: 1;
-    justify-content: center;
     margin: 5px;
   }
 }
