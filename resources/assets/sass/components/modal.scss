@@ -7,9 +7,6 @@ $header-height: 100px;
 $footer-height: 60px;
 
 .modal {
-  display: flex;
-  justify-content: center;
-
   &__overlay {
     background: $color-black;
     height: 100vh;
@@ -20,14 +17,21 @@ $footer-height: 60px;
     width: 100vw;
   }
 
+  &__wrapper {
+    display: flex;
+    justify-content: center;
+    max-height: calc(100vh - #{$offset-top});
+    position: absolute;
+    top: 60px;
+    width: 100vw;
+  }
+
   &__content {
     background-color: $color-background-primary;
-    max-height: calc(100vh - #{$offset-top});
+    max-height: 100%;
     max-width: calc(100vw - #{$offset-horizontal * 2});
     opacity: 1;
     overflow: scroll;
-    position: absolute;
-    top: 60px;
   }
 
   &__header {
@@ -35,6 +39,7 @@ $footer-height: 60px;
     display: flex;
     height: $header-height;
     padding: 20px;
+    position: relative;
   }
 
   &__body {

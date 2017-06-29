@@ -23948,55 +23948,59 @@ var Modal = function (_React$Component) {
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'modal__overlay' }),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
-                    { className: 'modal__content' },
+                    { className: 'modal__wrapper' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
-                        { className: 'modal__header' },
+                        { className: 'modal__content' },
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'div',
-                            { className: 'modal__titles' },
+                            { className: 'modal__header' },
                             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'div',
-                                { className: 'modal__title' },
-                                this.props.title
+                                { className: 'modal__titles' },
+                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'div',
+                                    { className: 'modal__title' },
+                                    this.props.title
+                                ),
+                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'div',
+                                    { className: 'modal__subtitle' },
+                                    this.props.subtitle
+                                )
                             ),
                             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'div',
-                                { className: 'modal__subtitle' },
-                                this.props.subtitle
+                                { className: 'modal__close' },
+                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_svg_inline___default.a, {
+                                    onClick: this.props.onClose,
+                                    height: '20px',
+                                    width: '20px',
+                                    className: 'modal__close-x',
+                                    svg: __WEBPACK_IMPORTED_MODULE_2_zondicons__["a" /* default */]['close']
+                                })
                             )
                         ),
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'div',
-                            { className: 'modal__close' },
-                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_svg_inline___default.a, {
-                                onClick: this.props.onClose,
-                                height: '20px',
-                                width: '20px',
-                                className: 'modal__close-x',
-                                svg: __WEBPACK_IMPORTED_MODULE_2_zondicons__["a" /* default */]['close']
-                            })
-                        )
-                    ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'div',
-                        {
-                            className: 'modal__body ' + (this.props.closeText ? '' : 'modal__body--no-footer')
-                        },
-                        this.props.children()
-                    ),
-                    this.props.closeText ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'div',
-                        { className: 'modal__footer' },
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'button',
                             {
-                                onClick: this.props.onClose,
-                                className: 'modal__close-button modal__close-button--blue modal__close-button--small'
+                                className: 'modal__body ' + (this.props.closeText ? '' : 'modal__body--no-footer')
                             },
-                            this.props.closeText
-                        )
-                    ) : ''
+                            this.props.children()
+                        ),
+                        this.props.closeText ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'div',
+                            { className: 'modal__footer' },
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                'button',
+                                {
+                                    onClick: this.props.onClose,
+                                    className: 'modal__close-button modal__close-button--blue modal__close-button--small'
+                                },
+                                this.props.closeText
+                            )
+                        ) : ''
+                    )
                 )
             );
         }
