@@ -1,4 +1,5 @@
 @import '../variables';
+@import '../mixins/button';
 
 .deal-details {
   display: flex;
@@ -79,8 +80,33 @@
       margin-right: auto;
     }
   }
+
+  // Login Or Register
+  &__login-register {
+    background: $color-background-primary;
+    border-radius: 4px;
+    margin: 15px;
+    padding: 10px;
+  }
+
+  &__login-register-text {
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  &__login-register-buttons {
+    display: flex;
+  }
+
+  &__button {
+    @include button;
+    flex: 1;
+    justify-content: center;
+    margin: 5px;
+  }
 }
 
+// Slick Slider
 .slick-slider {
   width: 85%;
 }

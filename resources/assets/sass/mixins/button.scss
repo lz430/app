@@ -11,6 +11,7 @@
   padding: 15px;
   text-transform: uppercase;
   border-radius: 5px;
+  text-decoration: none;
 
   &--invert {
     border: 2px solid $color-background-secondary;
@@ -33,5 +34,9 @@
 
   &--dark-bg {
     color: $color-text-white;
+  }
+
+  &--capitalize {
+    text-transform: capitalize;
   }
 }

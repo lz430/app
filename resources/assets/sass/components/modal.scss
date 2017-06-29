@@ -38,11 +38,11 @@ $footer-height: 60px;
   }
 
   &__body {
-    height: calc(100vh - #{$offset-top + $header-height + $footer-height});
+    max-height: calc(100vh - #{$offset-top + $header-height + $footer-height});
     overflow-x: hidden;
 
     &--no-footer {
-      height: calc(100vh - #{$offset-top + $header-height});
+      max-height: calc(100vh - #{$offset-top + $header-height});
     }
   }
 

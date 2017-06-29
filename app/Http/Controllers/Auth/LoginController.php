@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\EmailLogin;
 use App\Http\Controllers\Controller;
-use App\Mail\SendGarageLink;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -16,6 +14,15 @@ class LoginController extends Controller
     
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware(['guest', 'intended'])->except('logout');
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        if ($request->session()->has('intended') && in_array($request->session()->get('intended'), [
+                'filter'
+            ])) {
+            $this->redirectTo = $request->session()->get('intended');
+        }
     }
 }

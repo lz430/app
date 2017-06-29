@@ -8,14 +8,11 @@ import {
     requestFeatures,
     requestLocationInfo,
 } from 'actions/index';
-import R from 'ramda';
-import qs from 'qs';
+import util from 'src/util';
 
 const initialState = {
     showMakeSelectorModal: true,
-    selectedStyles: [
-        R.prop('style', qs.parse(window.location.search.slice(1))),
-    ],
+    selectedStyles: [util.getInitialBodyStyleFromUrl()],
     bodyStyles: null,
     fuelTypes: ['Gasoline', 'Flex Fuel', 'Diesel'],
     transmissionTypes: ['automatic', 'manual'],

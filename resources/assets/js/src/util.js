@@ -1,4 +1,5 @@
 import R from 'ramda';
+import qs from 'qs';
 
 const util = {
     moneyFormat: num => {
@@ -14,6 +15,9 @@ const util = {
         return R.contains(item, items)
             ? R.reject(R.equals(item), items)
             : R.append(item, items);
+    },
+    getInitialBodyStyleFromUrl: () => {
+        return R.prop('style', qs.parse(window.location.search.slice(1)));
     },
 };
 

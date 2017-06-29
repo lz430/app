@@ -74,7 +74,6 @@ const reducer = (state, action) => {
             });
         case ActionTypes.CLEAR_ALL_FILTERS:
             return Object.assign({}, state, {
-                selectedStyles: [],
                 selectedTransmissionType: null,
                 selectedFuelType: null,
                 selectedMakes: [],
