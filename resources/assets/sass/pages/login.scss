@@ -1,80 +1,9 @@
-@import '../mixins/button';
+@import '../mixins/vertical-form';
 @import '../mixins/link';
 
-$width: $break-small / 2;
-
 .login {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
+  @include vertical-form;
 
-  &__form {
-    align-items: center;
-    background: $color-background-secondary;
-    border: 1px solid $color-section-bottom-border;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-    max-width: $width;
-    padding: 15px;
-    width: $width;
-  }
-
-  &__sexy-line {
-    background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 100, from($color-section-bottom-border), to($color-background-secondary));
-    display: block;
-    height: 1px;
-    margin: 10px;
-    width: 100%;
-  }
-
-  &__logo {
-    margin-bottom: 15px;
-  }
-
-  &__title {
-    color: $text-color-dark;
-    font-size: 1.2rem;
-    font-weight: bold;
-  }
-
-  // Inputs
-  &__group {
-    margin: 5px 0;
-    width: 100%;
-  }
-
-  &__group-has-error {
-    //
-  }
-
-  &__label {
-    color: $text-color-dark;
-    font-size: .9rem;
-    font-weight: bold;
-  }
-
-  &__input-and-error {
-    //
-  }
-
-  &__input {
-    border: 1px solid $color-section-bottom-border;
-    border-radius: 2px;
-    margin-top: 2px;
-    padding: 5px;
-    width: 100%;
-  }
-
-  &__error {
-    color: $color-error;
-    font-size: .8rem;
-    max-width: $width;
-  }
-
-  // Remember and Forgot
   &__remember-and-forgot {
     align-items: center;
     display: flex;
@@ -92,22 +21,11 @@ $width: $break-small / 2;
   &__forgot {
     font-size: .8rem;
     width: 50%;
-
   }
 
   &__forgot-link {
     @include link;
 
     font-weight: bold;
-  }
-
-  &__buttons {
-    width: 100%;
-  }
-
-  &__button {
-    @include button;
-    justify-content: center;
-    width: 100%;
   }
 }

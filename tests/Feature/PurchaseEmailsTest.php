@@ -19,6 +19,7 @@ class PurchaseEmailsTest extends TestCase
 
         $user = factory(User::class)->create([
             'email' => 'test@example.com',
+            'phone_number' => 'test',
         ]);
 
         $deal = factory(Deal::class)->create();

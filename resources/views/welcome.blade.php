@@ -3,7 +3,7 @@
 @section('title', 'Deliver My Ride')
 
 @section('content')
-    <div class="section">
+    <div class="section section--darker">
         <div class="section__title">
             Simplify your next vehicle buy
         </div>
@@ -12,11 +12,11 @@
         </div>
     </div>
 
-    <div class="section section--darker">
+    <div class="section">
         <Configurator class="configurator"></Configurator>
     </div>
 
-    <div class="section">
+    <div class="section section--darker">
         <div class="section__title">
             How it works
         </div>
@@ -40,13 +40,13 @@
         </div>
     </div>
 
-    <div class="section section--darker">
+    <div class="section">
         <div class="section__title">
             Our average customer saves 15.7% / $3,800 off MSRP.
         </div>
     </div>
 
-    <div class="section">
+    <div class="section section--darker">
         <div class="section__title">
             What customers are saying about Deliver My Ride
         </div>

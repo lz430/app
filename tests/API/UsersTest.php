@@ -22,10 +22,12 @@ class UsersTest extends TestCase
     /** @test */
     public function it_creates_a_new_user_and_sets_the_api_token_if_the_request_is_valid()
     {
-        $response = $this->postJson(route('users.store'), ['email' => 'newuser@example.com']);
-    
-        $response->assertStatus(Response::HTTP_CREATED);
-    
+        $response = $this->postJson(route('users.store'), [
+            'name' => 'test',
+            'email' => 'newuser@example.com',
+            'phone_number' => 'test',
+        ]);
+
         $response->assertSee('api_token');
     
         $this->assertNotEmpty($response->decodeResponseJson()['data']['attributes']['api_token']);
@@ -37,13 +39,25 @@ class UsersTest extends TestCase
         $user1 = factory(User::class)->create();
         $user2 = factory(User::class)->create();
     
-        $response = $this->patchJson(route('users.update', ['user' => $user2->id]), ['name' => 'Sally'],
-            ['Authorization' => "Bearer {$user1->api_token}"]);
+        $response = $this->patchJson(
+            route(
+                'users.update',
+                ['user' => $user2->id]
+            ),
+            ['name' => 'Sally'],
+            ['Authorization' => "Bearer {$user1->api_token}"]
+        );
         
         $response->assertStatus(Response::HTTP_FORBIDDEN);
     
-        $response = $this->patchJson(route('users.update', ['user' => $user1->id]), ['name' => 'Sally'],
-            ['Authorization' => "Bearer {$user1->api_token}"]);
+        $response = $this->patchJson(
+            route(
+                'users.update',
+                ['user' => $user1->id]
+            ),
+            ['name' => 'Sally'],
+            ['Authorization' => "Bearer {$user1->api_token}"]
+        );
     
         $response->assertStatus(Response::HTTP_OK);
     }
