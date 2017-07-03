@@ -7,10 +7,13 @@ import {
     requestBodyStyles,
     requestFeatures,
     requestLocationInfo,
+    windowResize,
 } from 'actions/index';
 import util from 'src/util';
 
 const initialState = {
+    window: { width: window.innerWidth },
+    smallFiltersShown: false,
     showMakeSelectorModal: true,
     selectedStyles: [util.getInitialBodyStyleFromUrl()],
     bodyStyles: null,
@@ -55,6 +58,10 @@ export default () => {
     store.dispatch(requestMakes());
     store.dispatch(requestBodyStyles());
     store.dispatch(requestFeatures());
+
+    window.addEventListener('resize', () => {
+        store.dispatch(windowResize(window.innerWidth));
+    });
 
     return store;
 };

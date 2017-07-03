@@ -18,12 +18,14 @@ body {
 }
 
 .section {
-  border-bottom: 1px solid $color-section-bottom-border;
   $section-padding: 25px;
-
   display: flex;
   flex-wrap: wrap;
   padding: $section-padding;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $color-section-bottom-border;
+  }
 
   &__title {
     font-size: 2rem;

@@ -15,8 +15,12 @@ class Comparebar extends React.Component {
     }
 
     redirectToCompare() {
-        if(this.compareReady()) {
-            const compareUrl = '/compare?' + this.props.compareList.map(deal => `deals[]=${deal.id}`).join('&');
+        if (this.compareReady()) {
+            const compareUrl =
+                '/compare?' +
+                this.props.compareList
+                    .map(deal => `deals[]=${deal.id}`)
+                    .join('&');
             window.location.href = compareUrl;
         }
     }
@@ -34,32 +38,41 @@ class Comparebar extends React.Component {
         return (
             <div className="comparebar">
                 <div className="comparebar__deals">
-                {this.props.compareList.map((deal, index) => {
-                    return (
-                        <div key={index} className="comparebar__deal">
-                            <div className="comparebar__deal__info">
-                                <div className="comparebar__deal__title">{deal.year} {deal.make} {deal.model}</div>
-                                <div>{util.moneyFormat(deal.price)}</div>
+                    {this.props.compareList.map((deal, index) => {
+                        return (
+                            <div key={index} className="comparebar__deal">
+                                <div className="comparebar__deal__info">
+                                    <div className="comparebar__deal__title">
+                                        {deal.year} {deal.make} {deal.model}
+                                    </div>
+                                    <div>{util.moneyFormat(deal.price)}</div>
+                                </div>
+                                <SVGInline
+                                    onClick={this.props.toggleCompare.bind(
+                                        null,
+                                        deal
+                                    )}
+                                    width="15px"
+                                    height="15px"
+                                    className="comparebar__deal__remove"
+                                    svg={zondicons['close-solid']}
+                                />
                             </div>
-                            <SVGInline
-                                onClick={this.props.toggleCompare.bind(null, deal)}
-                                width="15px"
-                                height="15px"
-                                className="comparebar__deal__remove"
-                                svg={zondicons['close-solid']}
-                            />
-                        </div>
-                    );
-                })}
+                        );
+                    })}
                 </div>
-                <div onClick={this.redirectToCompare} className={this.compareButtonClass()}>
+                <div
+                    onClick={this.redirectToCompare}
+                    className={this.compareButtonClass()}
+                >
                     <SVGInline
                         width="15px"
                         height="15px"
                         className="comparebar__compare-button__arrow"
                         svg={zondicons['arrow-right']}
-                    /><br/>
-                        COMPARE
+                    />
+                    <br />
+                    COMPARE
                 </div>
             </div>
         );

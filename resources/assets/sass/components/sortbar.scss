@@ -1,23 +1,18 @@
 @import '../mixins/button';
 @import '../variables';
 
-.sortbarcompare {
-  display: flex;
-  border-bottom: 1px solid $color-section-bottom-border;
-}
-
 .sortbar {
-  border-right: 2px solid $color-section-bottom-border;
+  border-bottom: 1px solid $color-section-bottom-border;
   display: flex;
-  flex: 7;
   height: $sortbar-height;
   max-height: $sortbar-height;
-  padding: 5px 15px;
+  padding: 5px 10px 5px 0;
 
   &__count {
     align-items: center;
     display: flex;
     flex: 1;
+    padding-left: 10px;
   }
 
   &__count-number {
@@ -29,24 +24,65 @@
   &__buttons {
     align-items: center;
     display: flex;
-    flex: 2;
+    flex: 3;
     justify-content: flex-end;
   }
 
   &__button {
     @include button;
-    margin: 5px;
+
+    &:not(:last-of-type) {
+      margin-right: 10px;
+    }
   }
 
-  &__icon {
+  &__sort-icon {
     fill: $text-color;
     margin-right: 3px;
-  }
-}
 
-.compare {
-  align-self: center;
-  display: flex;
-  flex: 1;
-  justify-content: center;
+    &--right-side {
+      margin-left: 3px;
+      margin-right: 0;
+    }
+  }
+
+  &__dropdown {
+    background: $color-background-secondary;
+    border: 1px solid $color-section-bottom-border;
+    border-radius: 4px;
+    left: 10px;
+    padding: 15px;
+    position: absolute;
+    top: $sortbar-height - 3px;
+    width: calc(100% - 20px);
+  }
+
+  &__filter-toggle {
+    align-items: center;
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+  }
+
+  &__filter-toggle-text {
+    border-right: 1px solid $text-color;
+    color: $text-color-dark;
+    font-weight: bold;
+    padding-right: 10px;
+  }
+
+  &__filter-toggle-icon {
+    margin-bottom: -5px;
+    margin-right: 8px;
+    padding-left: 10px;
+  }
+
+  // Pixel perfect icons inside buttons
+  .SVGInline {
+    display: inline;
+
+    svg {
+      margin-bottom: -4px;
+    }
+  }
 }

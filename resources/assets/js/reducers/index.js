@@ -1,11 +1,25 @@
 import * as ActionTypes from 'actiontypes/index';
 import R from 'ramda';
 import { REHYDRATE } from 'redux-persist/constants';
+import util from 'src/util';
 
 const reducer = (state, action) => {
     switch (action.type) {
         case REHYDRATE:
             return Object.assign({}, state, action.payload);
+        case ActionTypes.WINDOW_RESIZE:
+            return Object.assign({}, state, {
+                window: action.window,
+                smallFiltersShown: util.windowIsLargerThanSmall(
+                    action.window.width
+                )
+                    ? false
+                    : state.smallFiltersShown,
+            });
+        case ActionTypes.TOGGLE_SMALL_FILTERS_SHOWN:
+            return Object.assign({}, state, {
+                smallFiltersShown: !state.smallFiltersShown,
+            });
         case ActionTypes.CLOSE_MAKE_SELECTOR_MODAL:
             return Object.assign({}, state, {
                 showMakeSelectorModal: false,

@@ -11,14 +11,6 @@
   text-decoration: none;
   text-align: center;
 
-  .SVGInline {
-    display: inline;
-
-    svg {
-      margin-bottom: -3px;
-    }
-  }
-
   &--invert {
     border: 2px solid $color-background-secondary;
   }

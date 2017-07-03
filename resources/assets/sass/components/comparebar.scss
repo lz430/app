@@ -3,11 +3,14 @@
 .comparebar {
   border-top: 3px solid $color-blue;
   display: flex;
+  height: $compare-bar-height;
+  max-height: $compare-bar-height;
 
   &__deals {
     display: flex;
     flex-direction: row;
     font-size: small;
+    margin-left: 5px;
     margin-right: auto;
   }
 
@@ -15,9 +18,10 @@
     border: 1px solid $color-section-bottom-border;
     border-radius: 4px;
     display: flex;
-    flex-basis: 200px;
     margin: 2px;
-    padding: 2px;
+    max-width: 175px;
+    padding: 5px 10px;
+    width: 175px;
 
     &__info {
       margin-right: auto;
@@ -25,6 +29,7 @@
 
     &__title {
       color: $color-blue;
+      font-weight: bold;
     }
 
     &__remove {
