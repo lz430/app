@@ -1,18 +1,12 @@
 @import '../mixins/button';
 @import '../variables';
 
-.sortbarcompare {
+.sortbar {
   border-bottom: 1px solid $color-section-bottom-border;
   display: flex;
-}
-
-.sortbar {
-  border-right: 2px solid $color-section-bottom-border;
-  display: flex;
-  flex: 7;
   height: $sortbar-height;
   max-height: $sortbar-height;
-  padding: 5px 15px 5px 0;
+  padding: 5px 10px 5px 0;
 
   &__count {
     align-items: center;
@@ -42,6 +36,7 @@
   &__sort-icon {
     fill: $text-color;
     margin-right: 3px;
+    margin-top: 5px;
   }
 
   &__filter-toggle {

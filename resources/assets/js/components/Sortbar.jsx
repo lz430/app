@@ -9,10 +9,11 @@ import util from 'src/util';
 class Sortbar extends React.Component {
     renderIcon(column) {
         const icon = this.props.sortAscending ? 'cheveron-up' : 'cheveron-down';
+
         return this.props.sortColumn === column
             ? <SVGInline
-                  height="15px"
-                  width="15px"
+                  height="18px"
+                  width="18px"
                   className="sortbar__sort-icon"
                   svg={zondicons[icon]}
               />
@@ -38,61 +39,44 @@ class Sortbar extends React.Component {
     }
 
     render() {
-        const compareUrl =
-            '/compare?' +
-            this.props.compareList.map(deal => `deals[]=${deal.id}`).join('&');
-
         return (
-            <div className="sortbarcompare">
-                <div className="sortbar">
-                    {this.renderFilterToggle()}
-                    <div className="sortbar__count">
-                        <span className="sortbar__count-number">
-                            {this.props.results_count}
-                        </span>
-                        {' '}
-                        results
-                    </div>
-                    <div className="sortbar__buttons">
-                        <button
-                            className="sortbar__button sortbar__button--small"
-                            onClick={() => {
-                                this.props.sortDeals('price');
-                                this.props.requestDeals();
-                            }}
-                        >
-                            {this.renderIcon('price')} Price
-                        </button>
-                        <button
-                            className="sortbar__button sortbar__button--small"
-                            onClick={() => {
-                                this.props.sortDeals('year');
-                                this.props.requestDeals();
-                            }}
-                        >
-                            {this.renderIcon('year')} Year
-                        </button>
-                        <button
-                            className="sortbar__button sortbar__button--small"
-                            onClick={() => {
-                                this.props.sortDeals('make');
-                                this.props.requestDeals();
-                            }}
-                        >
-                            {this.renderIcon('make')} A-Z
-                        </button>
-                    </div>
+            <div className="sortbar">
+                {this.renderFilterToggle()}
+                <div className="sortbar__count">
+                    <span className="sortbar__count-number">
+                        {this.props.results_count}
+                    </span>
+                    {' '}
+                    results
                 </div>
-                <div className="compare">
-                    <a
-                        href={
-                            this.props.compareList.length >= 2
-                                ? compareUrl
-                                : '#'
-                        }
+                <div className="sortbar__buttons">
+                    <button
+                        className="sortbar__button sortbar__button"
+                        onClick={() => {
+                            this.props.sortDeals('price');
+                            this.props.requestDeals();
+                        }}
                     >
-                        Compare {this.props.compareList.length}
-                    </a>
+                        {this.renderIcon('price')} Price
+                    </button>
+                    <button
+                        className="sortbar__button sortbar__button"
+                        onClick={() => {
+                            this.props.sortDeals('year');
+                            this.props.requestDeals();
+                        }}
+                    >
+                        {this.renderIcon('year')} Year
+                    </button>
+                    <button
+                        className="sortbar__button sortbar__button"
+                        onClick={() => {
+                            this.props.sortDeals('make');
+                            this.props.requestDeals();
+                        }}
+                    >
+                        {this.renderIcon('make')} A-Z
+                    </button>
                 </div>
             </div>
         );

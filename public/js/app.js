@@ -24443,9 +24443,10 @@ var Sortbar = function (_React$Component) {
         key: 'renderIcon',
         value: function renderIcon(column) {
             var icon = this.props.sortAscending ? 'cheveron-up' : 'cheveron-down';
+
             return this.props.sortColumn === column ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_svg_inline___default.a, {
-                height: '15px',
-                width: '15px',
+                height: '18px',
+                width: '18px',
                 className: 'sortbar__sort-icon',
                 svg: __WEBPACK_IMPORTED_MODULE_3_zondicons__["a" /* default */][icon]
             }) : '';
@@ -24478,79 +24479,59 @@ var Sortbar = function (_React$Component) {
         value: function render() {
             var _this2 = this;
 
-            var compareUrl = '/compare?' + this.props.compareList.map(function (deal) {
-                return 'deals[]=' + deal.id;
-            }).join('&');
-
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
-                { className: 'sortbarcompare' },
+                { className: 'sortbar' },
+                this.renderFilterToggle(),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
-                    { className: 'sortbar' },
-                    this.renderFilterToggle(),
+                    { className: 'sortbar__count' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'div',
-                        { className: 'sortbar__count' },
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'span',
-                            { className: 'sortbar__count-number' },
-                            this.props.results_count
-                        ),
-                        ' ',
-                        'results'
+                        'span',
+                        { className: 'sortbar__count-number' },
+                        this.props.results_count
                     ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'div',
-                        { className: 'sortbar__buttons' },
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'button',
-                            {
-                                className: 'sortbar__button sortbar__button--small',
-                                onClick: function onClick() {
-                                    _this2.props.sortDeals('price');
-                                    _this2.props.requestDeals();
-                                }
-                            },
-                            this.renderIcon('price'),
-                            ' Price'
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'button',
-                            {
-                                className: 'sortbar__button sortbar__button--small',
-                                onClick: function onClick() {
-                                    _this2.props.sortDeals('year');
-                                    _this2.props.requestDeals();
-                                }
-                            },
-                            this.renderIcon('year'),
-                            ' Year'
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'button',
-                            {
-                                className: 'sortbar__button sortbar__button--small',
-                                onClick: function onClick() {
-                                    _this2.props.sortDeals('make');
-                                    _this2.props.requestDeals();
-                                }
-                            },
-                            this.renderIcon('make'),
-                            ' A-Z'
-                        )
-                    )
+                    ' ',
+                    'results'
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
-                    { className: 'compare' },
+                    { className: 'sortbar__buttons' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'a',
+                        'button',
                         {
-                            href: this.props.compareList.length >= 2 ? compareUrl : '#'
+                            className: 'sortbar__button sortbar__button',
+                            onClick: function onClick() {
+                                _this2.props.sortDeals('price');
+                                _this2.props.requestDeals();
+                            }
                         },
-                        'Compare ',
-                        this.props.compareList.length
+                        this.renderIcon('price'),
+                        ' Price'
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'button',
+                        {
+                            className: 'sortbar__button sortbar__button',
+                            onClick: function onClick() {
+                                _this2.props.sortDeals('year');
+                                _this2.props.requestDeals();
+                            }
+                        },
+                        this.renderIcon('year'),
+                        ' Year'
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'button',
+                        {
+                            className: 'sortbar__button sortbar__button',
+                            onClick: function onClick() {
+                                _this2.props.sortDeals('make');
+                                _this2.props.requestDeals();
+                            }
+                        },
+                        this.renderIcon('make'),
+                        ' A-Z'
                     )
                 )
             );
