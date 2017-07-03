@@ -6,6 +6,7 @@ import Deals from 'components/Deals';
 import DealDetails from 'components/DealDetails';
 import Sortbar from 'components/Sortbar';
 import Filterbar from 'components/Filterbar';
+import Comparebar from 'components/Comparebar';
 import FilterPanel from 'components/FilterPanel';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
@@ -73,6 +74,7 @@ class FilterPage extends React.Component {
                 <Sortbar />
                 <Filterbar />
                 {this.props.deals.length ? <Deals /> : <p>No Results</p>}
+                <Comparebar />
             </div>
         );
     }
