@@ -1,0 +1,53 @@
+@import '../variables';
+
+.comparebar {
+  border-top: 3px solid $color-blue;
+  display: flex;
+
+  &__deals {
+    display: flex;
+    flex-direction: row;
+    font-size: small;
+    margin-right: auto;
+  }
+
+  &__deal {
+    border: 1px solid $color-section-bottom-border;
+    border-radius: 4px;
+    display: flex;
+    flex-basis: 200px;
+    margin: 2px;
+    padding: 2px;
+
+    &__info {
+      margin-right: auto;
+    }
+
+    &__title {
+      color: $color-blue;
+    }
+
+    &__remove {
+      align-self: center;
+      fill: lightgray;
+    }
+  }
+
+  &__compare-button {
+    background-color: $color-blue;
+    opacity: .6;
+    font-size: small;
+    max-width: 80px;
+    padding: 5px;
+    text-align: center;
+    color: $color-text-white;
+
+    &__ready {
+      opacity: 1;
+    }
+
+    &__arrow {
+      fill: $color-text-white;
+    }
+  }
+}
