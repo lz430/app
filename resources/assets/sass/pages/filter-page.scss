@@ -4,8 +4,8 @@
 .filter-page {
   display: flex;
   height: calc(100vh - #{$nav-height + $footer-height});
+  overflow: hidden;
   position: relative;
-  overflow-x: hidden;
 
   &__deals {
     height: 100%;
