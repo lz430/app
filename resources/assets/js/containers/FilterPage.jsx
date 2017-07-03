@@ -9,6 +9,7 @@ import Filterbar from 'components/Filterbar';
 import FilterPanel from 'components/FilterPanel';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
+import util from 'src/util';
 
 class FilterPage extends React.Component {
     renderMakeSelectionModal() {
@@ -40,17 +41,47 @@ class FilterPage extends React.Component {
         );
     }
 
+    renderFilterPanel() {
+        const className =
+            'filter-page__filter-panel ' +
+            (util.windowIsLargerThanSmall(this.props.window.width)
+                ? ''
+                : 'filter-page__filter-panel--small ' +
+                      (this.props.smallFiltersShown
+                          ? 'filter-page__filter-panel--small-filters-shown'
+                          : 'filter-page__filter-panel--small-filters-hidden'));
+
+        return (
+            <div className={className}>
+                <FilterPanel />
+            </div>
+        );
+    }
+
     renderDeals() {
+        const className =
+            'filter-page__deals ' +
+            (util.windowIsLargerThanSmall(this.props.window.width)
+                ? ''
+                : 'filter-page__deals--small ' +
+                      (this.props.smallFiltersShown
+                          ? 'filter-page__deals--small-filters-shown'
+                          : 'filter-page__deals--small-filters-hidden'));
+
+        return (
+            <div className={className}>
+                <Sortbar />
+                <Filterbar />
+                {this.props.deals.length ? <Deals /> : <p>No Results</p>}
+            </div>
+        );
+    }
+
+    renderFilterPanelAndDeals() {
         return (
             <div className="filter-page">
-                <div className="filter-page__filter-panel">
-                    <FilterPanel />
-                </div>
-                <div className="filter-page__deals">
-                    <Sortbar />
-                    <Filterbar />
-                    {this.props.deals.length ? <Deals /> : <p>No Results</p>}
-                </div>
+                {this.renderFilterPanel()}
+                {this.renderDeals()}
             </div>
         );
     }
@@ -62,7 +93,7 @@ class FilterPage extends React.Component {
                     ? this.renderMakeSelectionModal()
                     : ''}
 
-                {this.props.deals ? this.renderDeals() : ''}
+                {this.props.deals ? this.renderFilterPanelAndDeals() : ''}
 
                 {this.props.selectedDeal ? this.renderSelectedDealModal() : ''}
             </div>

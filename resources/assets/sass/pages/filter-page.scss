@@ -1,21 +1,57 @@
 @import '../variables';
 @import '../mixins/button';
 
-.filter-page-body {
-  height: 100vh;
-}
-
 .filter-page {
   display: flex;
-  width: 100vw;
+  height: calc(100vh - #{$nav-height + $footer-height});
+  position: relative;
+  overflow-x: hidden;
 
   &__deals {
-    width: calc(100vw - #{$sidebar-filters-width});
+    height: 100%;
+    left: 0;
+    position: absolute;
+    width: 100%;
+
+    &--small-filters-shown {
+      left: $sidebar-filters-width;
+    }
+
+    &--small-filters-hidden {
+      left: 0;
+    }
+
+    &--small {
+      transition: left 1s;
+    }
+
+    @media (min-width: $break-small) {
+      left: $sidebar-filters-width;
+      width: calc(100vw - #{$sidebar-filters-width});
+    }
   }
 
   &__filter-panel {
     background-color: $color-sidebar-background-primary;
-    border-bottom: 1px solid $color-section-bottom-border;
+    height: 100%;
+    position: absolute;
     width: $sidebar-filters-width;
+
+    @media (min-width: $break-small) {
+      left: 0;
+      //position: relative;
+    }
+
+    &--small-filters-shown {
+      left: 0;
+    }
+
+    &--small-filters-hidden {
+      left: -$sidebar-filters-width;
+    }
+
+    &--small {
+      transition: 1s;
+    }
   }
 }

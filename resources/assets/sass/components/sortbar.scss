@@ -2,8 +2,8 @@
 @import '../variables';
 
 .sortbarcompare {
-  display: flex;
   border-bottom: 1px solid $color-section-bottom-border;
+  display: flex;
 }
 
 .sortbar {
@@ -12,12 +12,13 @@
   flex: 7;
   height: $sortbar-height;
   max-height: $sortbar-height;
-  padding: 5px 15px;
+  padding: 5px 15px 5px 0;
 
   &__count {
     align-items: center;
     display: flex;
     flex: 1;
+    padding-left: 10px;
   }
 
   &__count-number {
@@ -38,9 +39,29 @@
     margin: 5px;
   }
 
-  &__icon {
+  &__sort-icon {
     fill: $text-color;
     margin-right: 3px;
+  }
+
+  &__filter-toggle {
+    align-items: center;
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+  }
+
+  &__filter-toggle-text {
+    border-right: 1px solid $text-color;
+    color: $text-color-dark;
+    font-weight: bold;
+    padding-right: 10px;
+  }
+
+  &__filter-toggle-icon {
+    margin-bottom: -5px;
+    margin-right: 8px;
+    padding-left: 10px;
   }
 }
 

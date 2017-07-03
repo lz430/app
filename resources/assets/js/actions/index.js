@@ -463,3 +463,18 @@ export function closeMakeSelectorModal() {
         type: ActionTypes.CLOSE_MAKE_SELECTOR_MODAL,
     };
 }
+
+export function windowResize(width) {
+    return {
+        type: ActionTypes.WINDOW_RESIZE,
+        window: {
+            width,
+        },
+    };
+}
+
+export function toggleSmallFiltersShown() {
+    return {
+        type: ActionTypes.TOGGLE_SMALL_FILTERS_SHOWN,
+    };
+}

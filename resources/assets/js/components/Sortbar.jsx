@@ -4,6 +4,7 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
+import util from 'src/util';
 
 class Sortbar extends React.Component {
     renderIcon(column) {
@@ -12,10 +13,28 @@ class Sortbar extends React.Component {
             ? <SVGInline
                   height="15px"
                   width="15px"
-                  className="sortbar__icon"
+                  className="sortbar__sort-icon"
                   svg={zondicons[icon]}
               />
             : '';
+    }
+
+    renderFilterToggle() {
+        return util.windowIsLargerThanSmall(this.props.window.width)
+            ? ''
+            : <div
+                  onClick={this.props.toggleSmallFiltersShown}
+                  className="sortbar__filter-toggle"
+              >
+                  <SVGInline
+                      height="20px"
+                      width="20px"
+                      className="sortbar__filter-toggle-icon"
+                      svg={zondicons['tuning']}
+                  />
+                  {' '}
+                  <span className="sortbar__filter-toggle-text">Filter</span>
+              </div>;
     }
 
     render() {
@@ -26,6 +45,7 @@ class Sortbar extends React.Component {
         return (
             <div className="sortbarcompare">
                 <div className="sortbar">
+                    {this.renderFilterToggle()}
                     <div className="sortbar__count">
                         <span className="sortbar__count-number">
                             {this.props.results_count}
@@ -83,6 +103,9 @@ Sortbar.propTypes = {
     results_count: PropTypes.number.isRequired,
     sortColumn: PropTypes.oneOf(['price', 'make', 'year']).isRequired,
     sortAscending: PropTypes.bool.isRequired,
+    window: PropTypes.shape({
+        width: PropTypes.number.isRequired,
+    }).isRequired,
 };
 
 function mapStateToProps(state) {
@@ -91,6 +114,7 @@ function mapStateToProps(state) {
         sortColumn: state.sortColumn,
         sortAscending: state.sortAscending,
         compareList: state.compareList,
+        window: state.window,
     };
 }
 

@@ -2,6 +2,10 @@ import R from 'ramda';
 import qs from 'qs';
 
 const util = {
+    windowIsLargerThanSmall: width => {
+        // variables.scss; $break-small: 576px;
+        return width > 576;
+    },
     moneyFormat: num => {
         const formatter = new Intl.NumberFormat('en-US', {
             style: 'currency',
