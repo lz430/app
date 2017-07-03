@@ -7,6 +7,16 @@ import * as Actions from 'actions';
 import util from 'src/util';
 
 class Sortbar extends React.Component {
+    constructor() {
+        super();
+
+        this.state = {
+            dropdownShown: false,
+        };
+
+        this.toggleDropdownShown = this.toggleDropdownShown.bind(this);
+    }
+
     renderIcon(column) {
         const icon = this.props.sortAscending ? 'cheveron-up' : 'cheveron-down';
 
@@ -38,6 +48,73 @@ class Sortbar extends React.Component {
               </div>;
     }
 
+    renderSortbarButtons() {
+        return (
+            <div className="sortbar__buttons">
+                <button
+                    className="sortbar__button sortbar__button"
+                    onClick={() => {
+                        this.props.sortDeals('price');
+                        this.props.requestDeals();
+                    }}
+                >
+                    {this.renderIcon('price')} Price
+                </button>
+                <button
+                    className="sortbar__button sortbar__button"
+                    onClick={() => {
+                        this.props.sortDeals('year');
+                        this.props.requestDeals();
+                    }}
+                >
+                    {this.renderIcon('year')} Year
+                </button>
+                <button
+                    className="sortbar__button sortbar__button"
+                    onClick={() => {
+                        this.props.sortDeals('make');
+                        this.props.requestDeals();
+                    }}
+                >
+                    {this.renderIcon('make')} A-Z
+                </button>
+            </div>
+        );
+    }
+
+    toggleDropdownShown() {
+        this.setState({
+            dropdownShown: !this.state.dropdownShown,
+        });
+    }
+
+    renderSortbarDropdown() {
+        const icon = this.state.dropdownShown ? 'cheveron-down' : 'cheveron-up';
+
+        return (
+            <div className="sortbar__buttons">
+                <button
+                    className="sortbar__button sortbar__button"
+                    onClick={this.toggleDropdownShown}
+                >
+                    Sort
+                    <SVGInline
+                        height="18px"
+                        width="18px"
+                        className="sortbar__sort-icon sortbar__sort-icon--right-side"
+                        svg={zondicons[icon]}
+                    />
+                </button>
+                {this.state.dropdownShown
+                    ? <div className="sortbar__dropdown">
+                          Sort Stuff
+                      </div>
+                    : ''}
+
+            </div>
+        );
+    }
+
     render() {
         return (
             <div className="sortbar">
@@ -49,35 +126,9 @@ class Sortbar extends React.Component {
                     {' '}
                     results
                 </div>
-                <div className="sortbar__buttons">
-                    <button
-                        className="sortbar__button sortbar__button"
-                        onClick={() => {
-                            this.props.sortDeals('price');
-                            this.props.requestDeals();
-                        }}
-                    >
-                        {this.renderIcon('price')} Price
-                    </button>
-                    <button
-                        className="sortbar__button sortbar__button"
-                        onClick={() => {
-                            this.props.sortDeals('year');
-                            this.props.requestDeals();
-                        }}
-                    >
-                        {this.renderIcon('year')} Year
-                    </button>
-                    <button
-                        className="sortbar__button sortbar__button"
-                        onClick={() => {
-                            this.props.sortDeals('make');
-                            this.props.requestDeals();
-                        }}
-                    >
-                        {this.renderIcon('make')} A-Z
-                    </button>
-                </div>
+                {util.windowIsLargerThanSmall(this.props.window.width)
+                    ? this.renderSortbarButtons()
+                    : this.renderSortbarDropdown()}
             </div>
         );
     }

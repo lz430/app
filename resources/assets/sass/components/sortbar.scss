@@ -24,19 +24,37 @@
   &__buttons {
     align-items: center;
     display: flex;
-    flex: 2;
+    flex: 3;
     justify-content: flex-end;
   }
 
   &__button {
     @include button;
-    margin: 5px;
+
+    &:not(:last-of-type) {
+      margin-right: 10px;
+    }
   }
 
   &__sort-icon {
     fill: $text-color;
     margin-right: 3px;
-    margin-top: 5px;
+
+    &--right-side {
+      margin-left: 3px;
+      margin-right: 0;
+    }
+  }
+
+  &__dropdown {
+    background: $color-background-secondary;
+    border: 1px solid $color-section-bottom-border;
+    border-radius: 4px;
+    left: 10px;
+    padding: 15px;
+    position: absolute;
+    top: $sortbar-height - 3px;
+    width: calc(100% - 20px);
   }
 
   &__filter-toggle {
@@ -58,11 +76,13 @@
     margin-right: 8px;
     padding-left: 10px;
   }
-}
 
-.compare {
-  align-self: center;
-  display: flex;
-  flex: 1;
-  justify-content: center;
+  // Pixel perfect icons inside buttons
+  .SVGInline {
+    display: inline;
+
+    svg {
+      margin-bottom: -4px;
+    }
+  }
 }

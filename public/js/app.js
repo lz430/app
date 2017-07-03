@@ -24436,7 +24436,14 @@ var Sortbar = function (_React$Component) {
     function Sortbar() {
         _classCallCheck(this, Sortbar);
 
-        return _possibleConstructorReturn(this, (Sortbar.__proto__ || Object.getPrototypeOf(Sortbar)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (Sortbar.__proto__ || Object.getPrototypeOf(Sortbar)).call(this));
+
+        _this.state = {
+            dropdownShown: false
+        };
+
+        _this.toggleDropdownShown = _this.toggleDropdownShown.bind(_this);
+        return _this;
     }
 
     _createClass(Sortbar, [{
@@ -24475,10 +24482,90 @@ var Sortbar = function (_React$Component) {
             );
         }
     }, {
-        key: 'render',
-        value: function render() {
+        key: 'renderSortbarButtons',
+        value: function renderSortbarButtons() {
             var _this2 = this;
 
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'sortbar__buttons' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'button',
+                    {
+                        className: 'sortbar__button sortbar__button',
+                        onClick: function onClick() {
+                            _this2.props.sortDeals('price');
+                            _this2.props.requestDeals();
+                        }
+                    },
+                    this.renderIcon('price'),
+                    ' Price'
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'button',
+                    {
+                        className: 'sortbar__button sortbar__button',
+                        onClick: function onClick() {
+                            _this2.props.sortDeals('year');
+                            _this2.props.requestDeals();
+                        }
+                    },
+                    this.renderIcon('year'),
+                    ' Year'
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'button',
+                    {
+                        className: 'sortbar__button sortbar__button',
+                        onClick: function onClick() {
+                            _this2.props.sortDeals('make');
+                            _this2.props.requestDeals();
+                        }
+                    },
+                    this.renderIcon('make'),
+                    ' A-Z'
+                )
+            );
+        }
+    }, {
+        key: 'toggleDropdownShown',
+        value: function toggleDropdownShown() {
+            this.setState({
+                dropdownShown: !this.state.dropdownShown
+            });
+        }
+    }, {
+        key: 'renderSortbarDropdown',
+        value: function renderSortbarDropdown() {
+            var icon = this.state.dropdownShown ? 'cheveron-down' : 'cheveron-up';
+
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'sortbar__buttons' },
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'button',
+                    {
+                        className: 'sortbar__button sortbar__button',
+                        onClick: this.toggleDropdownShown
+                    },
+                    'Sort',
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_svg_inline___default.a, {
+                        height: '18px',
+                        width: '18px',
+                        className: 'sortbar__sort-icon sortbar__sort-icon--right-side',
+                        svg: __WEBPACK_IMPORTED_MODULE_3_zondicons__["a" /* default */][icon]
+                    })
+                ),
+                this.state.dropdownShown ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'sortbar__dropdown' },
+                    'Sort Stuff'
+                ) : ''
+            );
+        }
+    }, {
+        key: 'render',
+        value: function render() {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { className: 'sortbar' },
@@ -24494,46 +24581,7 @@ var Sortbar = function (_React$Component) {
                     ' ',
                     'results'
                 ),
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                    'div',
-                    { className: 'sortbar__buttons' },
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'button',
-                        {
-                            className: 'sortbar__button sortbar__button',
-                            onClick: function onClick() {
-                                _this2.props.sortDeals('price');
-                                _this2.props.requestDeals();
-                            }
-                        },
-                        this.renderIcon('price'),
-                        ' Price'
-                    ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'button',
-                        {
-                            className: 'sortbar__button sortbar__button',
-                            onClick: function onClick() {
-                                _this2.props.sortDeals('year');
-                                _this2.props.requestDeals();
-                            }
-                        },
-                        this.renderIcon('year'),
-                        ' Year'
-                    ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'button',
-                        {
-                            className: 'sortbar__button sortbar__button',
-                            onClick: function onClick() {
-                                _this2.props.sortDeals('make');
-                                _this2.props.requestDeals();
-                            }
-                        },
-                        this.renderIcon('make'),
-                        ' A-Z'
-                    )
-                )
+                __WEBPACK_IMPORTED_MODULE_6_src_util__["a" /* default */].windowIsLargerThanSmall(this.props.window.width) ? this.renderSortbarButtons() : this.renderSortbarDropdown()
             );
         }
     }]);
