@@ -1,0 +1,41 @@
+@import '../variables';
+@import '../mixins/tabs';
+
+.compare-page {
+  width: 100%;
+
+  .title-bar {
+    @include tabs;
+    width: 100%;
+
+    &__title {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.arrow-buttons {
+  border: 1px solid $color-section-bottom-border;
+  border-radius: 4px;
+  display: flex;
+  float: right;
+  margin-top: -40px;
+}
+
+.arrow-button {
+  align-items: center;
+  display: block;
+  fill: $color-sidebar-background-secondary-dark;
+  flex: 1;
+  height: 40px;
+
+  &:first-child {
+    border-right: 1px solid $color-section-bottom-border;
+  }
+}
+
+.compare-deals {
+  display: flex;
+}
+
