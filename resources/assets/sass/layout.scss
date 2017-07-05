@@ -28,13 +28,15 @@ body {
   }
 
   &__title {
-    font-size: 2rem;
-    padding: 15px;
+    color: $text-color-dark;
+    font-size: xx-large;
+    font-weight: lighter;
+    margin-bottom: 10px;
     text-align: center;
     width: 100%;
 
     &--small {
-      font-size: 1.2rem;
+      font-size: medium;
     }
 
     &--medium {

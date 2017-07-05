@@ -5,10 +5,12 @@
 @section('content')
     <div class="section section--darker">
         <div class="section__title">
-            Simplify your next vehicle buy
+            Your New Ride Awaits
         </div>
         <div class="section__title section__title--small">
-            We put the dealership’s inventory at your fingertips while keeping the dealer under your thumb.
+            We put the dealership’s inventory at your fingertips
+            <br>
+            while keeping the dealer under your thumb.
         </div>
     </div>
 
