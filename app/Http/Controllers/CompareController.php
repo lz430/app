@@ -14,14 +14,9 @@ class CompareController extends Controller
 
         $deals = Deal::whereIn('id', request('deals'))->with(
             'photos',
-            'versions.taxesAndDiscounts',
             'versions.incentives'
         )->get();
-
-        $withoutDeal = function ($dealId) {
-            return route('compare', ['deals' => array_diff(request('deals'), [$dealId])]);
-        };
-
-        return view('compare')->with('deals', $deals)->with('withoutDeal', $withoutDeal);
+        
+        return view('compare')->with('deals', $deals);
     }
 }

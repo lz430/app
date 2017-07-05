@@ -4,12 +4,9 @@
 
 @section('content')
     <div class="section">
-        <CompareTitleBar class="compare-title-bar"/>
-
-    </div>
-    <div class="compare-deals">
-    @foreach ($deals as $deal)
-        @include('partials.compare-deal', ['deal' => $deal, 'withoutDeal' => $withoutDeal])
-    @endforeach
+        <ComparePage
+                class="compare-page"
+                deals="{{$deals}}"
+        ></ComparePage>
     </div>
 @endsection
