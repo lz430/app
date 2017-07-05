@@ -38,7 +38,7 @@
                     @if (! request()->is('login') && auth()->check())
                         <form name="logout" action="/logout" method="post">
                             {{ csrf_field() }}
-                            <button>Logout</button>
+                            <button class="nav__button nav__button--blue nav__button--small nav__button--no-border">Logout</button>
                         </form>
                     @endif
 
