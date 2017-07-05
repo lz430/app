@@ -1,0 +1,11 @@
+@import '../variables';
+
+@mixin constrained {
+  &__constrained {
+    margin: 0 auto;
+    max-width: $break-large;
+    width: 100%;
+
+    @content
+  }
+}

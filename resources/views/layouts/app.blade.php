@@ -28,26 +28,26 @@
     <body class="{{ $bodyClass ?? '' }}">
         @section('nav')
         <nav class="nav">
-            <a class="nav__logo" href="{{ url('/') }}">
-                <img src="/images/dmr-logo.svg">
-            </a>
+            <div class="nav__constrained">
+                <a class="nav__logo" href="{{ url('/') }}">
+                    <img src="/images/dmr-logo.svg">
+                </a>
 
-            <div class="nav__search">
-                <input type="text">
-            </div>
+                <div class="nav__links">
+                    <!-- Authentication Links -->
+                    @if (! request()->is('login') && auth()->check())
+                        <form name="logout" action="/logout" method="post">
+                            {{ csrf_field() }}
+                            <button>Logout</button>
+                        </form>
+                    @endif
 
-            <div class="nav__links">
-                <!-- Authentication Links -->
-                @if (! request()->is('login') && auth()->check())
-                    <form name="logout" action="/logout" method="post">
-                        {{ csrf_field() }}
-                        <button>Logout</button>
-                    </form>
-                @endif
-
-                @if (! auth()->check())
-                    <a href="{{ route('login') }}">Login</a>
-                @endif
+                    @if (! auth()->check())
+                        <a href="{{ route('login') }}">
+                            <button class="nav__button nav__button--blue nav__button--small nav__button--no-border">Login</button>
+                        </a>
+                    @endif
+                </div>
             </div>
         </nav>
         @show
