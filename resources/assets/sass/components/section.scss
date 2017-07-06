@@ -6,10 +6,6 @@
   flex-wrap: wrap;
   padding: $section-padding;
 
-  &:not(:last-child) {
-    border-bottom: 1px solid $color-section-bottom-border;
-  }
-
   &__title {
     color: $text-color-dark;
     font-size: xx-large;
@@ -41,6 +37,10 @@
     &--light {
       color: $color-text-white;
     }
+  }
+
+  &--no-padding {
+    padding: 0;
   }
 
   &--stretch {

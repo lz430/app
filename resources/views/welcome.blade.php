@@ -28,26 +28,59 @@
         </div>
     </div>
 
-    <div class="section section--darker">
-        <div class="section__title">
-            How it works
-        </div>
+    <div class="section section--no-padding">
+        <div class="welcome-steps">
+            <div class="welcome-steps__steps">
+                <div class="welcome-steps__title">
+                    Your New Ride Awaits
+                    <div class="welcome-steps__sexy-line"></div>
+                </div>
 
-        <div class="triplet-container">
-            <div class="triplet">
-                <div class="triplet__title">
-                    Configure Your Vehicle
+                <div class="welcome-steps__step-container">
+                    <div class="welcome-steps__step-number">1</div>
+                    <div class="welcome-steps__step">
+                        <div class="welcome-steps__step-title">
+                            Configure your vehicle
+                        </div>
+                        <div class="welcome-steps__step-description">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi cumque distinctio dolorem harum iste magni minima non nostrum.
+                        </div>
+                    </div>
+
+                    <div class="welcome-steps__step-number">2</div>
+                    <div class="welcome-steps__step">
+                        <div class="welcome-steps__step-title">
+                            Compare Instant Quotes
+                        </div>
+                        <div class="welcome-steps__step-description">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi cumque distinctio dolorem harum iste magni minima non nostrum.
+                        </div>
+                    </div>
+
+                    <div class="welcome-steps__step-number">3</div>
+                    <div class="welcome-steps__step">
+                        <div class="welcome-steps__step-title">
+                            Select & Buy
+                        </div>
+                        <div class="welcome-steps__step-description">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi cumque distinctio dolorem harum iste magni minima non nostrum.
+                        </div>
+                    </div>
+
+                    <div class="welcome-steps__step-number">4</div>
+                    <div class="welcome-steps__step">
+                        <div class="welcome-steps__step-title">
+                            We Deliver Your Ride
+                        </div>
+                        <div class="welcome-steps__step-description">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi cumque distinctio dolorem harum iste magni minima non nostrum.
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="triplet">
-                <div class="triplet__title">
-                    Compare Instant Quotes
-                </div>
-            </div>
-            <div class="triplet">
-                <div class="triplet__title">
-                    Finance & Delivery
-                </div>
+
+            <div class="welcome-steps__image">
+
             </div>
         </div>
     </div>

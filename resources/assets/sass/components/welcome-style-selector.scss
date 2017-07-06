@@ -2,6 +2,10 @@
 @import '../mixins/constrained';
 
 .welcome-style-selector {
+  $style-margin: 10px;
+  $style-width: ($break-large / 4) - ($style-margin * 2);
+  $style-height: 115px;
+
   @include constrained {
     display: flex;
     flex-wrap: wrap;
@@ -18,9 +22,6 @@
   }
 
   &__style {
-    $style-margin: 10px;
-    $style-width: ($break-large / 4) - ($style-margin * 2);
-    $style-height: 115px;
     align-items: center;
     border: 1px solid transparentize($color-section-bottom-border, .5);
     border-radius: 4px;
