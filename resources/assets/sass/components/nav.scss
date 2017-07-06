@@ -1,25 +1,32 @@
 @import '../variables';
+@import '../mixins/constrained';
+@import '../mixins/button';
 
 .nav {
-  align-items: center;
   background-color: $color-background-secondary;
   border-bottom: 1px solid $color-section-bottom-border;
-  display: flex;
+  border-top: 3px solid $color-blue;
   height: $nav-height;
   max-height: $nav-height;
-  padding: 15px;
+
+  @include constrained {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+  };
 
   &__logo {
     align-items: center;
     display: flex;
-    flex: 1;
-  }
-
-  &__search {
-    flex: 1;
   }
 
   &__links {
-    flex: 1;
+    align-items: center;
+    display: flex;
+  }
+
+  &__button {
+    @include button;
   }
 }

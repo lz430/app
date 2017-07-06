@@ -1,9 +1,19 @@
 @import '../variables';
 
 .footer {
-  background-color: $color-background-primary;
-  border-top: 1px solid $color-section-bottom-border;
+  align-items: center;
+  background-color: $color-sidebar-background-secondary-dark;
+  display: flex;
   height: $footer-height;
+  justify-content: center;
   max-height: $footer-height;
   text-align: center;
+
+  &__icon {
+    align-items: center;
+    display: flex;
+    fill: $color-text-white;
+    margin: 0 25px;
+    width: 25px;
+  }
 }

@@ -1,0 +1,74 @@
+@import '../variables';
+@import '../mixins/constrained';
+
+.section {
+  @include constrained;
+  $section-padding: 35px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: $section-padding;
+
+  &__title {
+    color: $text-color-dark;
+    font-size: xx-large;
+    font-weight: lighter;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 100%;
+
+    &--small {
+      font-size: 1.2rem;
+    }
+
+    &--medium {
+      font-size: 1.4rem;
+    }
+
+    &--left {
+      text-align: left;
+    }
+
+    &--uppercase {
+      text-transform: uppercase;
+    }
+
+    &--spaced {
+      letter-spacing: 1.25px;
+    }
+
+    &--light {
+      color: $color-text-white;
+    }
+
+    &--underline {
+      border-bottom: 1px solid transparentize($color-section-bottom-border, .5);
+      line-height: 3.5rem;
+    }
+  }
+
+  &--no-padding {
+    padding: 0;
+  }
+
+  &--stretch {
+    min-height: calc(100vh - #{$nav-height} - #{$footer-height} - #{$section-padding * 2});
+  }
+
+  &--no-header-or-footer {
+    border-bottom-style: none;
+    min-height: 100vh;
+  }
+
+  &--darker {
+    background-color: $color-background-primary;
+  }
+
+  &--darkest {
+    background-color: $color-sidebar-background-secondary-dark;
+  }
+
+  &--hero-bg {
+    background: $color-blue;
+    color: $color-text-white;
+  }
+}

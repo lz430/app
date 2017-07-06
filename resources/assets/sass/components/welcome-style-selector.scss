@@ -1,0 +1,51 @@
+@import '../mixins/button';
+@import '../mixins/constrained';
+
+.welcome-style-selector {
+  $style-margin: 10px;
+  $style-width: ($break-large / 4) - ($style-margin * 2);
+  $style-height: 115px;
+
+  @include constrained {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  };
+
+  &__selectors {
+    display: flex;
+  }
+
+  &__title {
+    padding: 10px;
+  }
+
+  &__style {
+    align-items: center;
+    border: 1px solid transparentize($color-section-bottom-border, .5);
+    border-radius: 4px;
+    color: $color-text-white;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    height: $style-height;
+    justify-content: center;
+    margin: $style-margin;
+    max-height: $style-height;
+    max-width: $style-width;
+    min-width: $style-width;
+    stroke: $color-blue;
+    text-align: center;
+    text-decoration: none;
+    width: $style-width;
+
+    svg path {
+      fill: transparent;
+    }
+  }
+
+  &__name {
+    padding-top: 10px;
+  }
+}
