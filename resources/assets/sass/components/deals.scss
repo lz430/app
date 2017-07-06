@@ -5,10 +5,14 @@
   background-color: $color-background-primary;
   display: flex;
   flex-flow: row wrap;
-  height: calc(100vh - #{$nav-height + $sortbar-height + $footer-height + $filterbar-height + $compare-bar-height});
+  height: calc(100vh - #{$nav-height + $sortbar-height + $footer-height + $compare-bar-height});
   justify-content: center;
   overflow-y: scroll;
   padding: 20px 40px;
+
+  @media (min-width: $break-medium) {
+    height: calc(100vh - #{$nav-height + $sortbar-height + $footer-height + $filterbar-height + $compare-bar-height});
+  }
 
   .deal {
     background-color: $color-background-secondary;
@@ -49,8 +53,8 @@
   &__show-more {
     display: flex;
     justify-content: center;
-    width: 100%;
     padding-top: 15px;
+    width: 100%;
   }
 
   &__button {

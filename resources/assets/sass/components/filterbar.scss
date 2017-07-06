@@ -4,10 +4,14 @@
 .filterbar {
   align-items: center;
   border-bottom: 1px solid $color-section-bottom-border;
-  display: flex;
+  display: none;
   height: $filterbar-height;
   max-height: $filterbar-height;
   padding: 15px;
+
+  @media (min-width: $break-medium) {
+    display: flex;
+  }
 
   &__filter-icon {
     fill: $color-sidebar-background-primary;
