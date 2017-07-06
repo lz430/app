@@ -1,8 +1,7 @@
 @import '../variables';
 
-.comparebar {
+.compare-bar {
   $compare-button-width: 80px;
-
   border-top: 3px solid $color-blue;
   bottom: 0;
   display: flex;
@@ -10,6 +9,11 @@
   max-height: $compare-bar-height;
   position: absolute;
   width: 100%;
+
+  &__deals-counter-bubble {
+    position: absolute;
+    width: $compare-button-width;
+  }
 
   &__deals {
     border-left: 2px solid transparent;

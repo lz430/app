@@ -5,7 +5,7 @@
   background-color: $color-background-primary;
   display: flex;
   flex-flow: row wrap;
-  height: calc(100vh - #{$nav-height + $sortbar-height + $footer-height + $compare-bar-height});
+  height: calc(100vh - #{$nav-height + $sortbar-height + $footer-height});
   justify-content: center;
   overflow-y: scroll;
   padding: 20px 40px;

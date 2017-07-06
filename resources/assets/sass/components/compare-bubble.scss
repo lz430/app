@@ -1,0 +1,42 @@
+@import '../variables';
+
+.compare-bubble {
+  $size: 40px;
+  align-items: center;
+  background: $color-blue;
+  border-radius: $size;
+  bottom: 0;
+  display: flex;
+  height: $size;
+  justify-content: center;
+  margin: 10px;
+  position: absolute;
+  right: 0;
+  width: $size;
+
+  &--shake {
+    animation: shake 1s;
+  }
+
+  &__count {
+    color: $color-text-white;
+  }
+
+  @keyframes shake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+
+    40%, 60% {
+      transform: translate3d(4px, 0, 0);
+    }
+  }
+}
