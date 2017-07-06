@@ -1,7 +1,6 @@
 import 'bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Configurator from 'containers/Configurator';
 import FilterPage from 'containers/FilterPage';
 import Financing from 'containers/Financing';
 import { Provider } from 'react-redux';
@@ -9,13 +8,6 @@ import store from 'configureStore';
 import ComparePage from 'containers/ComparePage';
 
 const filterStore = store();
-
-/**
- * Configurator
- */
-Array.from(document.getElementsByTagName('Configurator')).map(element => {
-    ReactDOM.render(<Configurator />, element);
-});
 
 /**
  * Filter

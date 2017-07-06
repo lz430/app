@@ -17,10 +17,10 @@ body {
 @import 'components/footer';
 
 // Normal Components
+@import 'components/section';
 @import 'components/nav';
 @import 'components/triplet';
-@import 'components/configurator';
-@import 'components/style-selector';
+@import 'components/welcome-style-selector';
 @import 'components/make-selector';
 @import 'components/modal';
 @import 'components/sortbar';

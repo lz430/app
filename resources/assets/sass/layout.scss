@@ -1,5 +1,3 @@
-@import './variables';
-
 *,
 *:before,
 *:after {
@@ -15,49 +13,4 @@ body {
 
 .content {
   flex: 1;
-}
-
-.section {
-  $section-padding: 25px;
-  display: flex;
-  flex-wrap: wrap;
-  padding: $section-padding;
-
-  &:not(:last-child) {
-    border-bottom: 1px solid $color-section-bottom-border;
-  }
-
-  &__title {
-    color: $text-color-dark;
-    font-size: xx-large;
-    font-weight: lighter;
-    margin-bottom: 10px;
-    text-align: center;
-    width: 100%;
-
-    &--small {
-      font-size: medium;
-    }
-
-    &--medium {
-      font-size: 1.5rem;
-    }
-
-    &--left {
-      text-align: left;
-    }
-  }
-
-  &--stretch {
-    min-height: calc(100vh - #{$nav-height} - #{$footer-height} - #{$section-padding * 2});
-  }
-
-  &--no-header-or-footer {
-    border-bottom-style: none;
-    min-height: 100vh;
-  }
-
-  &--darker {
-    background-color: $color-background-primary;
-  }
 }
