@@ -112,7 +112,7 @@ class Comparebar extends React.Component {
         const className = `compare-bubble ${this.state.shaking ? 'compare-bubble--shake' : ''}`;
 
         return this.props.compareList.length
-            ? <div className={className}>
+            ? <div className={className} onClick={this.redirectToCompare}>
                   <div className="compare-bubble__count">
                       {this.props.compareList.length}
                   </div>

@@ -22832,7 +22832,7 @@ var Comparebar = function (_React$Component) {
 
             return this.props.compareList.length ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
-                { className: className },
+                { className: className, onClick: this.redirectToCompare },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
                     { className: 'compare-bubble__count' },
