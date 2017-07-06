@@ -2,8 +2,12 @@
 @import '../mixins/constrained';
 
 .welcome-style-selector {
-  @include constrained;
-  text-align: center;
+  @include constrained {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  };
 
   &__selectors {
     display: flex;
@@ -11,12 +15,6 @@
 
   &__title {
     padding: 10px;
-  }
-
-  &__styles {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
   }
 
   &__style {
