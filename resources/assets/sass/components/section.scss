@@ -3,7 +3,7 @@
 
 .section {
   @include constrained;
-  $section-padding: 25px;
+  $section-padding: 35px;
   display: flex;
   flex-wrap: wrap;
   padding: $section-padding;
@@ -17,11 +17,11 @@
     width: 100%;
 
     &--small {
-      font-size: medium;
+      font-size: 1.2rem;
     }
 
     &--medium {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
     }
 
     &--left {
@@ -42,7 +42,7 @@
 
     &--underline {
       border-bottom: 1px solid transparentize($color-section-bottom-border, .5);
-      line-height: 3rem;
+      line-height: 3.5rem;
     }
   }
 
@@ -65,5 +65,10 @@
 
   &--darkest {
     background-color: $color-sidebar-background-secondary-dark;
+  }
+
+  &--hero-bg {
+    background: $color-blue;
+    color: $color-text-white;
   }
 }

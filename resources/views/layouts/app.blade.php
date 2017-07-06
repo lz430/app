@@ -58,9 +58,15 @@
 
         @section('footer')
         <footer class="footer">
-            <p>
-                Copyright © 2017 Deliver My Ride. All rights reserved.
-            </p>
+            <div class="footer__icon">
+                {!! file_get_contents(resource_path("assets/svg/social/twitter.svg")) !!}
+            </div>
+            <div class="footer__icon">
+                {!! file_get_contents(resource_path("assets/svg/social/facebook.svg")) !!}
+            </div>
+            <div class="footer__icon">
+                {!! file_get_contents(resource_path("assets/svg/social/google-plus.svg")) !!}
+            </div>
         </footer>
 
         @include('footer')

@@ -85,15 +85,15 @@
         </div>
     </div>
 
-    <div class="section">
-        <div class="section__title">
+    <div class="section section--hero-bg">
+        <div class="section__title section__title--light">
             Our average customer saves 15.7% / $3,800 off MSRP.
         </div>
     </div>
 
     <div class="section section--darker">
         <div class="section__constrained">
-            <div class="section__title section__title--left section__title--underline section__title--small">
+            <div class="section__title section__title--left section__title--underline section__title--medium">
                 What customers are saying about Deliver My Ride
             </div>
 
