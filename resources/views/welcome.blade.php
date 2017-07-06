@@ -92,56 +92,52 @@
     </div>
 
     <div class="section section--darker">
-        <div class="section__title">
-            What customers are saying about Deliver My Ride
-        </div>
+        <div class="section__constrained">
+            <div class="section__title section__title--left section__title--underline section__title--small">
+                What customers are saying about Deliver My Ride
+            </div>
 
-        <div class="triplet-container">
-            <div class="triplet">
-                <div class="triplet__title">
-                    Simple
+            <div class="triplets">
+                <div class="triplets__triplet">
+                    <div class="triplets__title">
+                        Simple
+                    </div>
+
+                    <div class="triplets__description">
+                        "This was the first car that I bought on my own and it was really easy. I never talked to the dealer and had my new Jeep dropped off at my office during lunch. They even bought my trade-in sight unseen."
+                    </div>
+
+                    <div class="triplets__attribution">
+                        <span class="triplets__attribution-name">Lori P.</span>, Birmingham, MI
+                    </div>
                 </div>
+                <div class="triplets__triplet">
+                    <div class="triplets__title">
+                        Timely
+                    </div>
 
-                <div class="triplet__description">
-                    "This was the first car that I bought on my own and it was really easy. I never talked to the dealer and had my new Jeep dropped off at my office during lunch. They even bought my trade-in sight unseen."
+                    <div class="triplets__description">
+                        "Shopping for a new car has always taken me a few hours. With to young kids, I don’t have hours to spend at a dealership. This process saved me time and aggravation. Really convenient."
+                    </div>
+
+                    <div class="triplets__attribution">
+                        <span class="triplets__attribution-name">Jason B.</span>, Traverse City, MI
+                    </div>
                 </div>
+                <div class="triplets__triplet">
+                    <div class="triplets__title">
+                        Convenient
+                    </div>
 
-                <div class="triplet__attribution">
-                    Lori P., Birmingham, MI
+                    <div class="triplets__description">
+                        "We knew exactly the color, style and equipment we wanted on a new Explorer.  Instead all of the dealerships to find our car, we used this site for the convenience of having them do all the work."
+                    </div>
+
+                    <div class="triplets__attribution">
+                        <span class="triplets__attribution-name">Julie S.</span>, Clarkston, MI
+                    </div>
                 </div>
             </div>
-            <div class="triplet">
-                <div class="triplet__title">
-                    Timely
-                </div>
-
-                <div class="triplet__description">
-                    "Shopping for a new car has always taken me a few hours. With to young kids, I don’t have hours to spend at a dealership. This process saved me time and aggravation. Really convenient."
-                </div>
-
-                <div class="triplet__attribution">
-                    Jason B., Traverse City, MI
-                </div>
-            </div>
-            <div class="triplet">
-                <div class="triplet__title">
-                    Convenient
-                </div>
-
-                <div class="triplet__description">
-                    "We knew exactly the color, style and equipment we wanted on a new Explorer.  Instead all of the dealerships to find our car, we used this site for the convenience of having them do all the work."
-                </div>
-
-                <div class="triplet__attribution">
-                    Julie S., Clarkston, MI
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <div class="section__title">
-            Deliver My Ride in the media
         </div>
     </div>
 @endsection

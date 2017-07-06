@@ -1,6 +1,8 @@
 @import '../variables';
+@import '../mixins/constrained';
 
 .section {
+  @include constrained;
   $section-padding: 25px;
   display: flex;
   flex-wrap: wrap;
@@ -36,6 +38,11 @@
 
     &--light {
       color: $color-text-white;
+    }
+
+    &--underline {
+      border-bottom: 1px solid transparentize($color-section-bottom-border, .5);
+      line-height: 3rem;
     }
   }
 
