@@ -3,20 +3,33 @@
 
 .compare-deal {
   background-color: $color-background-secondary;
+  border: 1px solid $color-grey;
   border-radius: 6px;
   margin: 5px;
   max-width: 300px;
   min-width: 300px;
-
-  &__basic-info {
-    padding: 5px 15px 0;
-  }
 
   &__image {
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
     min-height: 188px;
     width: 100%;
+  }
+
+  &__basic-info {
+    padding-left: 18px;
+
+    &__title {
+      color: $color-blue;
+    }
+
+    &__price {
+      color: $text-color-dark;
+      float: right;
+      font-size: x-large;
+      margin-top: -10px;
+      padding-right: 10px;
+    }
   }
 
   &__buttons {
@@ -31,5 +44,10 @@
     flex: 1;
     justify-content: center;
     margin: 0 5px;
+  }
+
+  &__incentives {
+    border-top: 1px solid $color-grey;
+    background-color: $color-darkgrey;
   }
 }

@@ -33,13 +33,6 @@ class ComparePage extends React.Component {
     renderDeal(deal, index) {
         return (
             <div key={index} className="compare-deal">
-                <div className="compare-deal__basic-info">
-                    {deal.year} {deal.make}
-                    <br />
-                    {deal.series} {deal.model}
-                    <br />
-                    {deal.price}
-                </div>
                 <img className="compare-deal__image" src={deal.photos[0].url} />
 
                 <div className="compare-deal__buttons">
@@ -53,12 +46,18 @@ class ComparePage extends React.Component {
                         Remove
                     </a>
                 </div>
-
-                <div>
-                    <p>MSRP: {util.moneyFormat(deal.msrp)}</p>
-                    <p>DMR Price: {util.moneyFormat(deal.msrp)}</p>
+                <div className="compare-deal__basic-info">
+                    <p className="compare-deal__basic-info__title">
+                        {deal.year} {deal.make} {deal.model}
+                    </p>
+                    <p>
+                        DMR Price
+                        {' '}
+                        <span className="compare-deal__basic-info__price">
+                            {util.moneyFormat(deal.price)}
+                        </span>
+                    </p>
                 </div>
-
                 <div className="compare-deal__incentives">
                     <div className="compare-deal__incentives--title">
                         Incentives

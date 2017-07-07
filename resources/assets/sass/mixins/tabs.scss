@@ -15,4 +15,18 @@
       color: $text-color-dark;
     }
   }
+
+  &__content {
+    color: $text-color-dark;
+    display: flex;
+    margin: 10px 0;
+
+    &__item {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      max-width: 300px;
+      padding-right: 50px;
+    }
+  }
 }
