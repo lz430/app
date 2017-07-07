@@ -27,6 +27,13 @@ const util = {
     getInitialBodyStyleFromUrl: () => {
         return R.prop('style', qs.parse(window.location.search.slice(1)));
     },
+    wasReferredFromHomePage: () => {
+        let temp = document.createElement('a');
+
+        temp.href = document.referrer;
+
+        return window.document.origin === temp.origin && temp.pathname === '/';
+    },
     numbersWithCommas: num => {
         const formatter = new Intl.NumberFormat('en-US', {
             style: 'decimal',
