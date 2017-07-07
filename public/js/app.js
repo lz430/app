@@ -26585,6 +26585,7 @@ var reducer = function reducer(state, action) {
             });
         case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["s" /* CLEAR_ALL_FILTERS */]:
             return Object.assign({}, state, {
+                selectedStyles: [],
                 selectedTransmissionType: null,
                 selectedFuelType: null,
                 selectedMakes: [],
