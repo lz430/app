@@ -108,6 +108,7 @@
 
     &__button {
       @include button;
+      border-style: none;
       color: $text-color-dark;
       flex: 1;
       font-weight: bold;

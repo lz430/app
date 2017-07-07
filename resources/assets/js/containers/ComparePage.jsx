@@ -94,11 +94,9 @@ class ComparePage extends React.Component {
                             {util.moneyFormat(deal.price)}
                         </div>
                     </div>
-                    <div>
-                        <button className="compare-deal__cta__button compare-deal__cta__button--small compare-deal__cta__button--blue">
-                            Buy Now
-                        </button>
-                    </div>
+                    <button className="compare-deal__cta__button compare-deal__cta__button--small compare-deal__cta__button--blue">
+                        Buy Now
+                    </button>
                 </div>
             </div>
         );
