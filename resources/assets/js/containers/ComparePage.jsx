@@ -110,13 +110,11 @@ class ComparePage extends React.Component {
                 <div className="arrow-buttons">
                     <SVGInline
                         width="40px"
-                        strokeWidth="12"
                         className="arrow-button"
                         svg={zondicons['cheveron-left']}
                     />
                     <SVGInline
                         width="40px"
-                        strokeWidth="12"
                         className="arrow-button"
                         svg={zondicons['cheveron-right']}
                     />
