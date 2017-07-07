@@ -5,13 +5,6 @@ namespace DeliverMyRide\JATO;
 class BodyStyles
 {
     public const ALL = [
-        'convertible' => [
-            'style' => 'Convertible',
-            'subStyles' => [
-                'Targa',
-            ],
-            'icon' => 'convertible',
-        ],
         'coupe' => [
             'style' => 'Coupe',
             'subStyles' => [
@@ -20,18 +13,22 @@ class BodyStyles
             ],
             'icon' => 'coupe',
         ],
+        'convertible' => [
+            'style' => 'Convertible',
+            'subStyles' => [
+                'Targa',
+            ],
+            'icon' => 'convertible',
+        ],
         'sedan' => [
             'style' => 'Sedan',
             'icon' => 'sedan',
-        ],
-        'sport utility vehicle' => [
-            'style' => 'Sport Utility Vehicle',
-            'icon' => 'suv',
         ],
         'wagon' => [
             'style' => 'Wagon',
             'subStyles' => [
                 'Combi',
+                'Crossover',
             ],
             'icon' => 'wagon',
         ],
@@ -39,19 +36,9 @@ class BodyStyles
             'style' => 'Hatchback',
             'subStyles' => [
                 'Mini Mpv',
+                'Crossover',
             ],
             'icon' => 'hatchback',
-        ],
-        'cargo van' => [
-            'style' => 'Cargo Van',
-            'subStyles' => [
-                'Cutaway',
-            ],
-            'icon' => '',
-        ],
-        'minivan' => [
-            'style' => 'Minivan',
-            'icon' => 'minivan',
         ],
         'pickup' => [
             'style' => 'Pickup',
@@ -60,16 +47,22 @@ class BodyStyles
             ],
             'icon' => 'pickup',
         ],
-        'passenger van' => [
-            'style' => 'Passenger Van',
+        'van' => [
+            'style' => 'Van',
             'subStyles' => [
                 'Van',
+                'Minivan',
+                'Passenger Van',
+                'Cutaway',
             ],
-            'icon' => '',
+            'icon' => 'minivan',
         ],
-        'crossover' => [
-            'style' => 'Crossover',
-            'icon' => 'crossover',
+        'sport utility vehicle' => [
+            'style' => 'Sport Utility Vehicle',
+            'subStyles' => [
+                'Crossover',
+            ],
+            'icon' => 'suv',
         ],
     ];
 }

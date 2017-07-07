@@ -61,7 +61,7 @@ class ComparePage extends React.Component {
                     <div className="compare-deal__incentive">
                         <input className="compare-deal__incentive__checkbox" type="checkbox"/>
                         <span className="compare-deal__incentive__name">Armed forces or family of armed forces</span>
-                        <span className="compare-deal__incentive__value">-$1000</span>
+                        <span className="compare-deal__incentive__value">-$1,000</span>
                     </div>
                     <div className="compare-deal__incentive">
                         <input className="compare-deal__incentive__checkbox" type="checkbox"/>
@@ -71,12 +71,12 @@ class ComparePage extends React.Component {
                     <div className="compare-deal__incentive">
                         <input className="compare-deal__incentive__checkbox" type="checkbox"/>
                         <span className="compare-deal__incentive__name">Other Incentive #2</span>
-                        <span className="compare-deal__incentive__value">-$2000</span>
+                        <span className="compare-deal__incentive__value">-$2,000</span>
                     </div>
                     <div className="compare-deal__incentive">
                         <input className="compare-deal__incentive__checkbox" type="checkbox"/>
                         <span className="compare-deal__incentive__name">Other Incentive #3</span>
-                        <span className="compare-deal__incentive__value">-$1500</span>
+                        <span className="compare-deal__incentive__value">-$1,500</span>
                     </div>
                     <div className="compare-deal__incentive">
                         <input className="compare-deal__incentive__checkbox" type="checkbox"/>

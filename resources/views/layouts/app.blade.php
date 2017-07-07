@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i" rel="stylesheet">
 
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -28,26 +28,26 @@
     <body class="{{ $bodyClass ?? '' }}">
         @section('nav')
         <nav class="nav">
-            <a class="nav__logo" href="{{ url('/') }}">
-                <img src="/images/dmr-logo.svg">
-            </a>
+            <div class="nav__constrained">
+                <a class="nav__logo" href="{{ url('/') }}">
+                    <img src="/images/dmr-logo.svg">
+                </a>
 
-            <div class="nav__search">
-                <input type="text">
-            </div>
+                <div class="nav__links">
+                    <!-- Authentication Links -->
+                    @if (! request()->is('login') && auth()->check())
+                        <form name="logout" action="/logout" method="post">
+                            {{ csrf_field() }}
+                            <button class="nav__button nav__button--blue nav__button--small nav__button--no-border">Logout</button>
+                        </form>
+                    @endif
 
-            <div class="nav__links">
-                <!-- Authentication Links -->
-                @if (! request()->is('login') && auth()->check())
-                    <form name="logout" action="/logout" method="post">
-                        {{ csrf_field() }}
-                        <button>Logout</button>
-                    </form>
-                @endif
-
-                @if (! auth()->check())
-                    <a href="{{ route('login') }}">Login</a>
-                @endif
+                    @if (! auth()->check())
+                        <a href="{{ route('login') }}">
+                            <button class="nav__button nav__button--blue nav__button--small nav__button--no-border">Login</button>
+                        </a>
+                    @endif
+                </div>
             </div>
         </nav>
         @show
@@ -58,9 +58,15 @@
 
         @section('footer')
         <footer class="footer">
-            <p>
-                Copyright © 2017 Deliver My Ride. All rights reserved.
-            </p>
+            <div class="footer__icon">
+                {!! file_get_contents(resource_path("assets/svg/social/twitter.svg")) !!}
+            </div>
+            <div class="footer__icon">
+                {!! file_get_contents(resource_path("assets/svg/social/facebook.svg")) !!}
+            </div>
+            <div class="footer__icon">
+                {!! file_get_contents(resource_path("assets/svg/social/google-plus.svg")) !!}
+            </div>
         </footer>
 
         @include('footer')
