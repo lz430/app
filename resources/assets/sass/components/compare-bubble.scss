@@ -12,15 +12,33 @@
   justify-content: center;
   margin: 10px;
   position: absolute;
-  right: 0;
+  right: 5px;
   width: $size;
 
   &--shake {
     animation: shake 1s;
   }
 
+  &__icon {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    fill: $color-text-white;
+  }
+
   &__count {
+    $small-size: 20px;
+    background: red;
+    border-radius: 50%;
+    box-shadow: -1px 1px 1px $color-black;
     color: $color-text-white;
+    font-size: small;
+    height: $small-size;
+    left: 10px;
+    position: relative;
+    text-align: center;
+    top: -15px;
+    width: $small-size;
   }
 
   @keyframes shake {
