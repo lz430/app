@@ -1,0 +1,31 @@
+@import '../variables';
+
+.tabs {
+  border-bottom: 1px solid $color-section-bottom-border;
+
+  &__tab {
+    cursor: pointer;
+    display: inline-block;
+    font-weight: bold;
+    margin: 0 20px -1px 0;
+
+    &--selected {
+      border-bottom: 2px solid $color-blue;
+      color: $text-color-dark;
+    }
+  }
+
+  &__content {
+    color: $text-color-dark;
+    display: flex;
+    margin: 10px 0;
+
+    &__item {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      max-width: 300px;
+      padding-right: 50px;
+    }
+  }
+}

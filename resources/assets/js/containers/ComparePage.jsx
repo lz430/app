@@ -10,9 +10,28 @@ class ComparePage extends React.Component {
         super(props);
         this.state = {
             deals: props.deals,
+            dealIndex: 0,
         };
         this.renderIncentive = this.renderIncentive.bind(this);
         this.renderDeal = this.renderDeal.bind(this);
+        this.getMarginLeft = this.getMarginLeft.bind(this);
+        this.slideLeft = this.slideLeft.bind(this);
+        this.slideRight = this.slideRight.bind(this);
+    }
+
+    slideLeft() {
+        this.setState({
+            dealIndex: Math.min(
+                this.state.dealIndex + 1,
+                this.props.deals.length - 1
+            ),
+        });
+    }
+
+    slideRight() {
+        this.setState({
+            dealIndex: Math.max(this.state.dealIndex - 1, 0),
+        });
     }
 
     removeDeal(deal) {
@@ -32,64 +51,142 @@ class ComparePage extends React.Component {
 
     renderDeal(deal, index) {
         return (
-            <div key={index} className="compare-deal">
-                <div className="compare-deal__basic-info">
-                    {deal.year} {deal.make}
-                    <br />
-                    {deal.series} {deal.model}
-                    <br />
-                    {deal.price}
-                </div>
+            <div key={index} className="compare-page-deals__deal">
                 <img className="compare-deal__image" src={deal.photos[0].url} />
 
                 <div className="compare-deal__buttons">
-                    <button className="compare-deal__button compare-deal__button--small compare-deal__button--blue compare-deal__button">
-                        Buy Now
+                    <button className="compare-deal__button compare-deal__button--small">
+                        View Details
                     </button>
                     <a
                         onClick={this.removeDeal.bind(this, deal)}
-                        className="compare-deal__button compare-deal__button--small compare-deal__button--blue compare-deal__button"
+                        className="compare-deal__button compare-deal__button--small"
                     >
                         Remove
                     </a>
                 </div>
+                <div className="compare-deal__basic-info">
+                    <p className="compare-deal__basic-info__title">
+                        {deal.year} {deal.make} {deal.model}
+                    </p>
 
-                <div>
-                    <p>MSRP: {util.moneyFormat(deal.msrp)}</p>
-                    <p>DMR Price: {util.moneyFormat(deal.msrp)}</p>
+                    DMR Price
+                    {' '}
+                    <span className="compare-deal__basic-info__price">
+                        {util.moneyFormat(deal.price)}
+                    </span>
                 </div>
-
                 <div className="compare-deal__incentives">
-                    <div className="compare-deal__incentives--title">
-                        Incentives
+                    <div className="compare-deal__incentive">
+                        <input
+                            className="compare-deal__incentive__checkbox"
+                            type="checkbox"
+                        />
+                        <span className="compare-deal__incentive__name">
+                            Armed forces or family of armed forces
+                        </span>
+                        <span className="compare-deal__incentive__value">
+                            -$1,000
+                        </span>
                     </div>
-                    {deal.versions[0].incentives.map(this.renderIncentive)}
+                    <div className="compare-deal__incentive">
+                        <input
+                            className="compare-deal__incentive__checkbox"
+                            type="checkbox"
+                        />
+                        <span className="compare-deal__incentive__name">
+                            Other Incentive #1
+                        </span>
+                        <span className="compare-deal__incentive__value">
+                            -$500
+                        </span>
+                    </div>
+                    <div className="compare-deal__incentive">
+                        <input
+                            className="compare-deal__incentive__checkbox"
+                            type="checkbox"
+                        />
+                        <span className="compare-deal__incentive__name">
+                            Other Incentive #2
+                        </span>
+                        <span className="compare-deal__incentive__value">
+                            -$2,000
+                        </span>
+                    </div>
+                    <div className="compare-deal__incentive">
+                        <input
+                            className="compare-deal__incentive__checkbox"
+                            type="checkbox"
+                        />
+                        <span className="compare-deal__incentive__name">
+                            Other Incentive #3
+                        </span>
+                        <span className="compare-deal__incentive__value">
+                            -$1,500
+                        </span>
+                    </div>
+                    <div className="compare-deal__incentive">
+                        <input
+                            className="compare-deal__incentive__checkbox"
+                            type="checkbox"
+                        />
+                        <span className="compare-deal__incentive__name">
+                            Other Incentive #4
+                        </span>
+                        <span className="compare-deal__incentive__value">
+                            -$200
+                        </span>
+                    </div>
+                    {/*{deal.versions[0].incentives.map(this.renderIncentive)}*/}
+                </div>
+                <div className="compare-deal__cta">
+                    <div className="compare-deal__cta__info">
+                        <div className="compare-deal__cta__title">
+                            Your DMR Price
+                        </div>
+                        <div className="compare-deal__cta__price">
+                            {util.moneyFormat(deal.price)}
+                        </div>
+                    </div>
+                    <button className="compare-deal__cta__button compare-deal__cta__button--small compare-deal__cta__button--blue">
+                        Buy Now
+                    </button>
                 </div>
             </div>
         );
     }
+
+    getMarginLeft() {
+        const dealPadding = 10;
+
+        return this.state.dealIndex * (-250 - dealPadding);
+    }
+
     render() {
         return (
-            <div className="title-bar">
-                <div className="title-bar__title">
+            <div className="compare-page">
+                <div className="compare-page-title-bar__title">
                     Vehicle Comparison
                 </div>
-                <div className="arrow-buttons">
+                <div className="compare-page__arrow-buttons">
                     <SVGInline
+                        onClick={this.slideLeft}
                         width="40px"
-                        strokeWidth="12"
-                        className="arrow-button"
+                        className="compare-page__arrow-button"
                         svg={zondicons['cheveron-left']}
                     />
                     <SVGInline
+                        onClick={this.slideRight}
                         width="40px"
-                        strokeWidth="12"
-                        className="arrow-button"
+                        className="compare-page__arrow-button"
                         svg={zondicons['cheveron-right']}
                     />
                 </div>
                 <CashFinanceLease />
-                <div className="compare-deals">
+                <div
+                    style={{ marginLeft: this.getMarginLeft() }}
+                    className="compare-page-deals"
+                >
                     {this.state.deals.map(this.renderDeal)}
                 </div>
             </div>
