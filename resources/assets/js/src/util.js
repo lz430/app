@@ -41,7 +41,7 @@ const util = {
         });
 
         return formatter.format(num);
-    }
+    },
 };
 
 export default util;
