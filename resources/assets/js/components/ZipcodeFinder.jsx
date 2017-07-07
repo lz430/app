@@ -11,20 +11,18 @@ class ZipcodeFinder extends React.Component {
             valid: false,
         };
 
-        this.validateZip = this.validateZip.bind(this);
+        this.saveZip = this.saveZip.bind(this);
+        this.isValid = this.isValid.bind(this);
         this.toggleEditing = this.toggleEditing.bind(this);
     }
 
-    validateZip() {
-        let zip = document.getElementById('zipcode_input').value;
-        let valid = zip.length === 5;
-        this.setState({
-            valid: valid,
-        });
+    isValid() {
+        return this.state.zip.length === 5 && this.state.zip.isNumeric();
+    }
 
-        if (valid) {
-            this.props.setZipCode(zip);
-            document.getElementById('zipcode_input').value = '';
+    saveZip() {
+        if (this.isValid()) {
+            this.props.setZipCode(this.state.zip);
             this.toggleEditing();
         }
     }
@@ -54,7 +52,7 @@ class ZipcodeFinder extends React.Component {
                     {this.state.editing
                         ? <div>
                               <button
-                                  onClick={this.validateZip}
+                                  onClick={this.saveZip}
                                   className="zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg"
                               >
                                   Save

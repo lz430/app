@@ -13,10 +13,11 @@
     display: flex;
     flex: 1;
     flex-flow: column nowrap;
+    justify-content: space-between;
   }
 
   &__code {
-    font-size: 1.1rem;
+    font-size: 1.4rem;
   }
 
   &__buttons {
