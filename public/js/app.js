@@ -22812,12 +22812,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var filterStore = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6_configureStore__["a" /* default */])();
-
 /**
  * Filter
  */
 Array.from(document.getElementsByTagName('FilterPage')).map(function (element) {
+    var filterStore = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6_configureStore__["a" /* default */])();
+
     __WEBPACK_IMPORTED_MODULE_2_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_5_react_redux__["a" /* Provider */],
         { store: filterStore },

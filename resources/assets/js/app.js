@@ -7,12 +7,12 @@ import { Provider } from 'react-redux';
 import store from 'configureStore';
 import ComparePage from 'containers/ComparePage';
 
-const filterStore = store();
-
 /**
  * Filter
  */
 Array.from(document.getElementsByTagName('FilterPage')).map(element => {
+    const filterStore = store();
+
     ReactDOM.render(
         <Provider store={filterStore}>
             <FilterPage />
