@@ -14,6 +14,24 @@ import R from 'ramda';
 class FilterPanel extends React.Component {
     constructor(props) {
         super(props);
+
+        this.getFeaturesByGroup = this.getFeaturesByGroup.bind(this);
+    }
+
+    getFeaturesByGroup(group) {
+        return R.filter(feature => {
+            return R.path(['attributes', 'group'], feature) === group;
+        }, this.props.features);
+    }
+
+    getCountOfSelectedFeatureByGroup(group) {
+        return R.intersection(
+            R.map(
+                R.path(['attributes', 'feature']),
+                this.getFeaturesByGroup(group)
+            ),
+            this.props.selectedFeatures
+        ).length;
     }
 
     render() {
@@ -25,7 +43,10 @@ class FilterPanel extends React.Component {
                     <div className="sidebar-filters__header">
                         Filter Results
                     </div>
-                    <SidebarFilter title="Vehicle Style">
+                    <SidebarFilter
+                        title="Vehicle Style"
+                        count={this.props.selectedStyles.length}
+                    >
                         {() => (
                             <FilterStyleSelector
                                 styles={this.props.bodyStyles}
@@ -34,7 +55,10 @@ class FilterPanel extends React.Component {
                             />
                         )}
                     </SidebarFilter>
-                    <SidebarFilter title="Brand">
+                    <SidebarFilter
+                        title="Brand"
+                        count={this.props.selectedMakes.length}
+                    >
                         {() => (
                             <FilterMakeSelector
                                 makes={this.props.makes}
@@ -43,7 +67,10 @@ class FilterPanel extends React.Component {
                             />
                         )}
                     </SidebarFilter>
-                    <SidebarFilter title="Fuel">
+                    <SidebarFilter
+                        title="Fuel"
+                        count={this.props.selectedFuelType ? 1 : 0}
+                    >
                         {() => (
                             <FilterFuelTypeSelector
                                 fuelTypes={this.props.fuelTypes}
@@ -52,7 +79,10 @@ class FilterPanel extends React.Component {
                             />
                         )}
                     </SidebarFilter>
-                    <SidebarFilter title="Transmission">
+                    <SidebarFilter
+                        title="Transmission"
+                        count={this.props.selectedTransmissionType ? 1 : 0}
+                    >
                         {() => (
                             <FilterTransmissionTypeSelector
                                 transmissionTypes={this.props.transmissionTypes}
@@ -65,85 +95,75 @@ class FilterPanel extends React.Component {
                             />
                         )}
                     </SidebarFilter>
-                    <SidebarFilter title="Seating">
+                    <SidebarFilter
+                        title="Seating"
+                        count={this.getCountOfSelectedFeatureByGroup('seating')}
+                    >
                         {() => (
                             <FilterFeatureSelector
                                 selectedFeatures={this.props.selectedFeatures}
-                                features={R.filter(feature => {
-                                    return (
-                                        R.path(
-                                            ['attributes', 'group'],
-                                            feature
-                                        ) === 'seating'
-                                    );
-                                }, this.props.features)}
+                                features={this.getFeaturesByGroup('seating')}
                                 onSelectFeature={this.props.toggleFeature}
                             />
                         )}
                     </SidebarFilter>
-                    <SidebarFilter title="Safety">
+                    <SidebarFilter
+                        title="Safety"
+                        count={this.getCountOfSelectedFeatureByGroup('safety')}
+                    >
                         {() => (
                             <FilterFeatureSelector
                                 selectedFeatures={this.props.selectedFeatures}
-                                features={R.filter(feature => {
-                                    return (
-                                        R.path(
-                                            ['attributes', 'group'],
-                                            feature
-                                        ) === 'safety'
-                                    );
-                                }, this.props.features)}
+                                features={this.getFeaturesByGroup('safety')}
                                 onSelectFeature={this.props.toggleFeature}
                             />
                         )}
                     </SidebarFilter>
-                    <SidebarFilter title="Technology">
+                    <SidebarFilter
+                        title="Technology"
+                        count={this.getCountOfSelectedFeatureByGroup(
+                            'technology'
+                        )}
+                    >
                         {() => (
                             <FilterFeatureSelector
                                 selectedFeatures={this.props.selectedFeatures}
-                                features={R.filter(feature => {
-                                    return (
-                                        R.path(
-                                            ['attributes', 'group'],
-                                            feature
-                                        ) === 'technology'
-                                    );
-                                }, this.props.features)}
+                                features={this.getFeaturesByGroup('technology')}
                                 onSelectFeature={this.props.toggleFeature}
                             />
                         )}
                     </SidebarFilter>
-                    <SidebarFilter title="Comfort and Convenience">
+                    <SidebarFilter
+                        title="Convenience"
+                        count={this.getCountOfSelectedFeatureByGroup(
+                            'comfort and convenience'
+                        )}
+                    >
                         {() => (
                             <FilterFeatureSelector
                                 selectedFeatures={this.props.selectedFeatures}
-                                features={R.filter(feature => {
-                                    return (
-                                        R.path(
-                                            ['attributes', 'group'],
-                                            feature
-                                        ) === 'comfort and convenience'
-                                    );
-                                }, this.props.features)}
+                                features={this.getFeaturesByGroup(
+                                    'comfort and convenience'
+                                )}
                                 onSelectFeature={this.props.toggleFeature}
                             />
                         )}
                     </SidebarFilter>
                     {R.contains('Pickup', this.props.selectedStyles)
-                        ? <SidebarFilter title="Truck">
+                        ? <SidebarFilter
+                              title="Truck"
+                              count={this.getCountOfSelectedFeatureByGroup(
+                                  'truck'
+                              )}
+                          >
                               {() => (
                                   <FilterFeatureSelector
                                       selectedFeatures={
                                           this.props.selectedFeatures
                                       }
-                                      features={R.filter(feature => {
-                                          return (
-                                              R.path(
-                                                  ['attributes', 'group'],
-                                                  feature
-                                              ) === 'truck'
-                                          );
-                                      }, this.props.features)}
+                                      features={this.getFeaturesByGroup(
+                                          'truck'
+                                      )}
                                       onSelectFeature={this.props.toggleFeature}
                                   />
                               )}
