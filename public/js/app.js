@@ -3026,6 +3026,13 @@ var util = {
     getInitialBodyStyleFromUrl: function getInitialBodyStyleFromUrl() {
         return __WEBPACK_IMPORTED_MODULE_0_ramda___default.a.prop('style', __WEBPACK_IMPORTED_MODULE_1_qs___default.a.parse(window.location.search.slice(1)));
     },
+    wasReferredFromHomePage: function wasReferredFromHomePage() {
+        var temp = document.createElement('a');
+
+        temp.href = document.referrer;
+
+        return window.document.origin === temp.origin && temp.pathname === '/';
+    },
     numbersWithCommas: function numbersWithCommas(num) {
         var formatter = new Intl.NumberFormat('en-US', {
             style: 'decimal',
@@ -22154,7 +22161,10 @@ function warnIfRemoveError(key) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(global) {var setImmediate = typeof global !== 'undefined' && typeof global.setImmediate !== 'undefined' ? global.setImmediate : function (fn, ms) {
+/* WEBPACK VAR INJECTION */(function(global) {var hasNativeSupport = typeof global !== 'undefined' && typeof global.setImmediate !== 'undefined';
+var setImmediate = hasNativeSupport ? function (fn, ms) {
+  return global.setImmediate(fn, ms);
+} : function (fn, ms) {
   return setTimeout(fn, ms);
 };
 
@@ -22547,12 +22557,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var filterStore = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6_configureStore__["a" /* default */])();
-
 /**
  * Filter
  */
 Array.from(document.getElementsByTagName('FilterPage')).map(function (element) {
+    var filterStore = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6_configureStore__["a" /* default */])();
+
     __WEBPACK_IMPORTED_MODULE_2_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
         __WEBPACK_IMPORTED_MODULE_5_react_redux__["a" /* Provider */],
         { store: filterStore },
@@ -23716,7 +23726,7 @@ var Comparebar = function (_React$Component) {
     }, {
         key: 'compareButtonClass',
         value: function compareButtonClass() {
-            return 'compare-bar__compare-button ' + (this.compareReady() ? 'compare-bar__compare-button__ready' : '');
+            return 'compare-bar__compare-button ' + (this.compareReady() ? '' : 'compare-bar__compare-button--not-ready');
         }
     }, {
         key: 'renderCompareBar',
@@ -23858,13 +23868,16 @@ var Deal = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (Deal.__proto__ || Object.getPrototypeOf(Deal)).call(this, props));
 
-        _this.state = {
-            featuredImage: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.propOr(props.fallbackDealImage, 'url', props.deal.photos.data[1] ? props.deal.photos.data[0] : { url: props.fallbackDealImage })
-        };
+        _this.getFeaturedImage = _this.getFeaturedImage.bind(_this);
         return _this;
     }
 
     _createClass(Deal, [{
+        key: 'getFeaturedImage',
+        value: function getFeaturedImage() {
+            return __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.propOr(this.props.fallbackDealImage, 'url', this.props.deal.photos.data[1] ? this.props.deal.photos.data[0] : { url: this.props.fallbackDealImage });
+        }
+    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
             var _this2 = this;
@@ -23913,26 +23926,23 @@ var Deal = function (_React$Component) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { className: 'deal' },
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { className: 'deal__image', src: this.state.featuredImage }),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { className: 'deal__image', src: this.getFeaturedImage() }),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
                     { className: 'deal__basic-info' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'p',
-                        null,
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'a',
-                            {
-                                href: 'apply-or-purchase?deal_id=' + deal.id
-                            },
-                            deal.year + ' ' + deal.make + ' ' + deal.model
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'strong',
-                            null,
-                            __WEBPACK_IMPORTED_MODULE_2_src_util__["a" /* default */].moneyFormat(deal.price)
-                        )
+                        'div',
+                        {
+                            onClick: this.props.selectDeal.bind(null, deal),
+                            className: 'deal__basic-info-year-and-model'
+                        },
+                        deal.year + ' ' + deal.make + ' ' + deal.model
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { className: 'deal__basic-info-msrp' },
+                        __WEBPACK_IMPORTED_MODULE_2_src_util__["a" /* default */].moneyFormat(deal.price),
+                        ' MSRP'
                     )
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -23944,7 +23954,7 @@ var Deal = function (_React$Component) {
                             onClick: this.props.selectDeal.bind(null, deal),
                             className: 'deal__button deal__button--small deal__button--blue deal__button'
                         },
-                        'Details'
+                        'View Details'
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
@@ -24648,10 +24658,25 @@ var FilterPanel = function (_React$Component) {
     function FilterPanel(props) {
         _classCallCheck(this, FilterPanel);
 
-        return _possibleConstructorReturn(this, (FilterPanel.__proto__ || Object.getPrototypeOf(FilterPanel)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (FilterPanel.__proto__ || Object.getPrototypeOf(FilterPanel)).call(this, props));
+
+        _this.getFeaturesByGroup = _this.getFeaturesByGroup.bind(_this);
+        return _this;
     }
 
     _createClass(FilterPanel, [{
+        key: 'getFeaturesByGroup',
+        value: function getFeaturesByGroup(group) {
+            return __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.filter(function (feature) {
+                return __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.path(['attributes', 'group'], feature) === group;
+            }, this.props.features);
+        }
+    }, {
+        key: 'getCountOfSelectedFeatureByGroup',
+        value: function getCountOfSelectedFeatureByGroup(group) {
+            return __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.intersection(__WEBPACK_IMPORTED_MODULE_10_ramda___default.a.map(__WEBPACK_IMPORTED_MODULE_10_ramda___default.a.path(['attributes', 'feature']), this.getFeaturesByGroup(group)), this.props.selectedFeatures).length;
+        }
+    }, {
         key: 'render',
         value: function render() {
             var _this2 = this;
@@ -24670,7 +24695,10 @@ var FilterPanel = function (_React$Component) {
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__["a" /* default */],
-                        { title: 'Vehicle Style' },
+                        {
+                            title: 'Vehicle Style',
+                            count: this.props.selectedStyles.length
+                        },
                         function () {
                             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_components_FilterStyleSelector__["a" /* default */], {
                                 styles: _this2.props.bodyStyles,
@@ -24681,7 +24709,10 @@ var FilterPanel = function (_React$Component) {
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__["a" /* default */],
-                        { title: 'Brand' },
+                        {
+                            title: 'Brand',
+                            count: this.props.selectedMakes.length
+                        },
                         function () {
                             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_components_FilterMakeSelector__["a" /* default */], {
                                 makes: _this2.props.makes,
@@ -24692,7 +24723,10 @@ var FilterPanel = function (_React$Component) {
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__["a" /* default */],
-                        { title: 'Fuel' },
+                        {
+                            title: 'Fuel',
+                            count: this.props.selectedFuelType ? 1 : 0
+                        },
                         function () {
                             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5_components_FilterFuelTypeSelector__["a" /* default */], {
                                 fuelTypes: _this2.props.fuelTypes,
@@ -24703,7 +24737,10 @@ var FilterPanel = function (_React$Component) {
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__["a" /* default */],
-                        { title: 'Transmission' },
+                        {
+                            title: 'Transmission',
+                            count: this.props.selectedTransmissionType ? 1 : 0
+                        },
                         function () {
                             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_components_FilterTransmissionTypeSelector__["a" /* default */], {
                                 transmissionTypes: _this2.props.transmissionTypes,
@@ -24714,65 +24751,70 @@ var FilterPanel = function (_React$Component) {
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__["a" /* default */],
-                        { title: 'Seating' },
+                        {
+                            title: 'Seating',
+                            count: this.getCountOfSelectedFeatureByGroup('seating')
+                        },
                         function () {
                             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_components_FilterFeatureSelector__["a" /* default */], {
                                 selectedFeatures: _this2.props.selectedFeatures,
-                                features: __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.filter(function (feature) {
-                                    return __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.path(['attributes', 'group'], feature) === 'seating';
-                                }, _this2.props.features),
+                                features: _this2.getFeaturesByGroup('seating'),
                                 onSelectFeature: _this2.props.toggleFeature
                             });
                         }
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__["a" /* default */],
-                        { title: 'Safety' },
+                        {
+                            title: 'Safety',
+                            count: this.getCountOfSelectedFeatureByGroup('safety')
+                        },
                         function () {
                             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_components_FilterFeatureSelector__["a" /* default */], {
                                 selectedFeatures: _this2.props.selectedFeatures,
-                                features: __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.filter(function (feature) {
-                                    return __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.path(['attributes', 'group'], feature) === 'safety';
-                                }, _this2.props.features),
+                                features: _this2.getFeaturesByGroup('safety'),
                                 onSelectFeature: _this2.props.toggleFeature
                             });
                         }
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__["a" /* default */],
-                        { title: 'Technology' },
+                        {
+                            title: 'Technology',
+                            count: this.getCountOfSelectedFeatureByGroup('technology')
+                        },
                         function () {
                             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_components_FilterFeatureSelector__["a" /* default */], {
                                 selectedFeatures: _this2.props.selectedFeatures,
-                                features: __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.filter(function (feature) {
-                                    return __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.path(['attributes', 'group'], feature) === 'technology';
-                                }, _this2.props.features),
+                                features: _this2.getFeaturesByGroup('technology'),
                                 onSelectFeature: _this2.props.toggleFeature
                             });
                         }
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__["a" /* default */],
-                        { title: 'Comfort and Convenience' },
+                        {
+                            title: 'Convenience',
+                            count: this.getCountOfSelectedFeatureByGroup('comfort and convenience')
+                        },
                         function () {
                             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_components_FilterFeatureSelector__["a" /* default */], {
                                 selectedFeatures: _this2.props.selectedFeatures,
-                                features: __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.filter(function (feature) {
-                                    return __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.path(['attributes', 'group'], feature) === 'comfort and convenience';
-                                }, _this2.props.features),
+                                features: _this2.getFeaturesByGroup('comfort and convenience'),
                                 onSelectFeature: _this2.props.toggleFeature
                             });
                         }
                     ),
                     __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.contains('Pickup', this.props.selectedStyles) ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         __WEBPACK_IMPORTED_MODULE_1_components_SidebarFilter__["a" /* default */],
-                        { title: 'Truck' },
+                        {
+                            title: 'Truck',
+                            count: this.getCountOfSelectedFeatureByGroup('truck')
+                        },
                         function () {
                             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_components_FilterFeatureSelector__["a" /* default */], {
                                 selectedFeatures: _this2.props.selectedFeatures,
-                                features: __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.filter(function (feature) {
-                                    return __WEBPACK_IMPORTED_MODULE_10_ramda___default.a.path(['attributes', 'group'], feature) === 'truck';
-                                }, _this2.props.features),
+                                features: _this2.getFeaturesByGroup('truck'),
                                 onSelectFeature: _this2.props.toggleFeature
                             });
                         }
@@ -25456,7 +25498,12 @@ var SidebarFilter = function (_React$Component) {
                         svg: this.state.open ? __WEBPACK_IMPORTED_MODULE_2_zondicons__["a" /* default */]['cheveron-up'] : __WEBPACK_IMPORTED_MODULE_2_zondicons__["a" /* default */]['cheveron-down']
                     }),
                     ' ',
-                    this.props.title
+                    this.props.title,
+                    this.props.count > 0 ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { className: 'sidebar-filters__count' },
+                        this.props.count
+                    ) : ''
                 ),
                 this.state.open ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
@@ -25472,7 +25519,8 @@ var SidebarFilter = function (_React$Component) {
 
 SidebarFilter.propTypes = {
     title: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.string.isRequired,
-    children: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.func.isRequired
+    children: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.func.isRequired,
+    count: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.number
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (SidebarFilter);
@@ -26377,7 +26425,20 @@ var Financing = function (_Component) {
 var reducer = function reducer(state, action) {
     switch (action.type) {
         case __WEBPACK_IMPORTED_MODULE_2_redux_persist_constants__["a" /* REHYDRATE */]:
-            return Object.assign({}, state, action.payload);
+            /**
+             * If the referrer is the home page, we should not rehydrate but let them "restart".
+             */
+            if (__WEBPACK_IMPORTED_MODULE_3_src_util__["a" /* default */].wasReferredFromHomePage()) {
+                return state;
+            }
+
+            /**
+             * If there is a style specified in the URL we should rehydrate with that style selected.
+             * So as not to confuse people coming from a specific link.
+             */
+            return Object.assign({}, state, action.payload, {
+                selectedStyles: [__WEBPACK_IMPORTED_MODULE_3_src_util__["a" /* default */].getInitialBodyStyleFromUrl()]
+            });
         case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["C" /* WINDOW_RESIZE */]:
             return Object.assign({}, state, {
                 window: action.window,
@@ -26449,6 +26510,7 @@ var reducer = function reducer(state, action) {
             });
         case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["s" /* CLEAR_ALL_FILTERS */]:
             return Object.assign({}, state, {
+                selectedStyles: [],
                 selectedTransmissionType: null,
                 selectedFuelType: null,
                 selectedMakes: [],

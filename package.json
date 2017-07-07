@@ -23,7 +23,6 @@
     "react-dom": "^15.5.3"
   },
   "dependencies": {
-    "react-input-range": "^1.1.4",
     "react-redux": "^5.0.5",
     "react-slick": "^0.14.11",
     "react-svg-inline": "^2.0.0",
