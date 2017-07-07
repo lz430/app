@@ -3863,6 +3863,13 @@ var util = {
     },
     getInitialBodyStyleFromUrl: function getInitialBodyStyleFromUrl() {
         return __WEBPACK_IMPORTED_MODULE_0_ramda___default.a.prop('style', __WEBPACK_IMPORTED_MODULE_1_qs___default.a.parse(window.location.search.slice(1)));
+    },
+    wasReferredFromHomePage: function wasReferredFromHomePage() {
+        var temp = document.createElement('a');
+
+        temp.href = document.referrer;
+
+        return window.document.origin === temp.origin && temp.pathname === '/';
     }
 };
 
@@ -26513,7 +26520,20 @@ var Financing = function (_Component) {
 var reducer = function reducer(state, action) {
     switch (action.type) {
         case __WEBPACK_IMPORTED_MODULE_2_redux_persist_constants__["a" /* REHYDRATE */]:
-            return Object.assign({}, state, action.payload);
+            /**
+             * If the referrer is the home page, we should not rehydrate but let them "restart".
+             */
+            if (__WEBPACK_IMPORTED_MODULE_3_src_util__["a" /* default */].wasReferredFromHomePage()) {
+                return state;
+            }
+
+            /**
+             * If there is a style specified in the URL we should rehydrate with that style selected.
+             * So as not to confuse people coming from a specific link.
+             */
+            return Object.assign({}, state, action.payload, {
+                selectedStyles: [__WEBPACK_IMPORTED_MODULE_3_src_util__["a" /* default */].getInitialBodyStyleFromUrl()]
+            });
         case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["C" /* WINDOW_RESIZE */]:
             return Object.assign({}, state, {
                 window: action.window,
