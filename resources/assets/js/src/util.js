@@ -23,6 +23,14 @@ const util = {
     getInitialBodyStyleFromUrl: () => {
         return R.prop('style', qs.parse(window.location.search.slice(1)));
     },
+    numbersWithCommas: num => {
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'decimal',
+            minimumFractionDigits: 0,
+        });
+
+        return formatter.format(num);
+    }
 };
 
 export default util;

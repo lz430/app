@@ -3859,6 +3859,14 @@ var util = {
     },
     getInitialBodyStyleFromUrl: function getInitialBodyStyleFromUrl() {
         return __WEBPACK_IMPORTED_MODULE_0_ramda___default.a.prop('style', __WEBPACK_IMPORTED_MODULE_1_qs___default.a.parse(window.location.search.slice(1)));
+    },
+    numbersWithCommas: function numbersWithCommas(num) {
+        var formatter = new Intl.NumberFormat('en-US', {
+            style: 'decimal',
+            minimumFractionDigits: 0
+        });
+
+        return formatter.format(num);
     }
 };
 
@@ -23786,6 +23794,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_src_util__ = __webpack_require__(57);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23795,7 +23804,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 
-// import InputRange from 'react-input-range';
+
 
 var CashFinanceLease = function (_React$Component) {
     _inherits(CashFinanceLease, _React$Component);
@@ -23874,7 +23883,7 @@ var CashFinanceLease = function (_React$Component) {
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'div',
                             { className: 'range-slider__badge' },
-                            this.state.milesPerYear
+                            __WEBPACK_IMPORTED_MODULE_1_src_util__["a" /* default */].numbersWithCommas(this.state.milesPerYear)
                         )
                     )
                 ),
@@ -26332,14 +26341,14 @@ var ComparePage = function (_React$Component) {
                     { className: 'compare-deal__buttons' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
-                        { className: 'compare-deal__button compare-deal__button--small compare-deal__button--blue compare-deal__button' },
-                        'Buy Now'
+                        { className: 'compare-deal__button compare-deal__button--small' },
+                        'View Details'
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'a',
                         {
                             onClick: this.removeDeal.bind(this, deal),
-                            className: 'compare-deal__button compare-deal__button--small compare-deal__button--blue compare-deal__button'
+                            className: 'compare-deal__button compare-deal__button--small'
                         },
                         'Remove'
                     )
@@ -26356,16 +26365,12 @@ var ComparePage = function (_React$Component) {
                         ' ',
                         deal.model
                     ),
+                    'DMR Price',
+                    ' ',
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'p',
-                        null,
-                        'DMR Price',
-                        ' ',
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'span',
-                            { className: 'compare-deal__basic-info__price' },
-                            __WEBPACK_IMPORTED_MODULE_4_src_util__["a" /* default */].moneyFormat(deal.price)
-                        )
+                        'span',
+                        { className: 'compare-deal__basic-info__price' },
+                        __WEBPACK_IMPORTED_MODULE_4_src_util__["a" /* default */].moneyFormat(deal.price)
                     )
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -26373,10 +26378,106 @@ var ComparePage = function (_React$Component) {
                     { className: 'compare-deal__incentives' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
-                        { className: 'compare-deal__incentives--title' },
-                        'Incentives'
+                        { className: 'compare-deal__incentive' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { className: 'compare-deal__incentive__checkbox', type: 'checkbox' }),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'span',
+                            { className: 'compare-deal__incentive__name' },
+                            'Armed forces or family of armed forces'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'span',
+                            { className: 'compare-deal__incentive__value' },
+                            '-$1000'
+                        )
                     ),
-                    deal.versions[0].incentives.map(this.renderIncentive)
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { className: 'compare-deal__incentive' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { className: 'compare-deal__incentive__checkbox', type: 'checkbox' }),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'span',
+                            { className: 'compare-deal__incentive__name' },
+                            'Other Incentive #1'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'span',
+                            { className: 'compare-deal__incentive__value' },
+                            '-$500'
+                        )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { className: 'compare-deal__incentive' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { className: 'compare-deal__incentive__checkbox', type: 'checkbox' }),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'span',
+                            { className: 'compare-deal__incentive__name' },
+                            'Other Incentive #2'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'span',
+                            { className: 'compare-deal__incentive__value' },
+                            '-$2000'
+                        )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { className: 'compare-deal__incentive' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { className: 'compare-deal__incentive__checkbox', type: 'checkbox' }),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'span',
+                            { className: 'compare-deal__incentive__name' },
+                            'Other Incentive #3'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'span',
+                            { className: 'compare-deal__incentive__value' },
+                            '-$1500'
+                        )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { className: 'compare-deal__incentive' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { className: 'compare-deal__incentive__checkbox', type: 'checkbox' }),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'span',
+                            { className: 'compare-deal__incentive__name' },
+                            'Other Incentive #4'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'span',
+                            { className: 'compare-deal__incentive__value' },
+                            '-$200'
+                        )
+                    )
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'compare-deal__cta' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { className: 'compare-deal__cta__info' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'div',
+                            { className: 'compare-deal__cta__title' },
+                            'Your DMR Price'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'div',
+                            { className: 'compare-deal__cta__price' },
+                            __WEBPACK_IMPORTED_MODULE_4_src_util__["a" /* default */].moneyFormat(deal.price)
+                        )
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        null,
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'button',
+                            { className: 'compare-deal__cta__button compare-deal__cta__button--small compare-deal__cta__button--blue' },
+                            'Buy Now'
+                        )
+                    )
                 )
             );
         }

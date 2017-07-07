@@ -17,17 +17,22 @@
   }
 
   &__basic-info {
+    color: $text-color-dark;
+    font-size: 1.6em;
+    padding-bottom: 10px;
     padding-left: 18px;
 
     &__title {
       color: $color-blue;
+      font-size: large;
+      font-weight: bold;
     }
 
     &__price {
       color: $text-color-dark;
       float: right;
-      font-size: x-large;
-      margin-top: -10px;
+      font-size: xx-large;
+      margin-top: -12px;
       padding-right: 10px;
     }
   }
@@ -41,13 +46,73 @@
 
   &__button {
     @include button;
+    color: $text-color-dark;
     flex: 1;
+    font-weight: bold;
     justify-content: center;
     margin: 0 5px;
   }
 
   &__incentives {
-    border-top: 1px solid $color-grey;
     background-color: $color-darkgrey;
+    border-top: 1px solid $color-grey;
+    color: $color-text-white;
+    height: 200px;
+    overflow-y: scroll;
+    padding: 15px 0;
+  }
+
+  &__incentive {
+    align-items: center;
+    display: flex;
+
+    &__checkbox {
+      margin: 20px;
+    }
+
+    &__name {
+      flex: 2;
+      margin-right: auto;
+    }
+
+    &__value {
+      flex: 1;
+      margin-right: 20px;
+      text-align: right;
+    }
+  }
+
+  &__cta {
+    background-color: $color-darkergrey;
+    color: $color-lightgrey;
+    display: flex;
+    flex-direction: column;
+    height: 120px;
+    padding: 20px;
+
+    &__info {
+      align-items: center;
+      display: flex;
+    }
+
+    &__title {
+      font-size: 1.2em;
+      margin-right: auto;
+    }
+
+    &__price {
+      color: $color-text-white;
+      font-size: xx-large;
+      margin-top: -12px;
+    }
+
+    &__button {
+      @include button;
+      color: $text-color-dark;
+      flex: 1;
+      font-weight: bold;
+      justify-content: center;
+      margin: 0 5px;
+    }
   }
 }

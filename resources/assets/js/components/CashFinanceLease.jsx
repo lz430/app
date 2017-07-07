@@ -1,5 +1,5 @@
 import React from 'react';
-// import InputRange from 'react-input-range';
+import util from 'src/util';
 
 class CashFinanceLease extends React.Component {
     constructor() {
@@ -49,7 +49,7 @@ class CashFinanceLease extends React.Component {
                                 })}
                         />
                         <div className="range-slider__badge">
-                            {this.state.milesPerYear}
+                            {util.numbersWithCommas(this.state.milesPerYear)}
                         </div>
                     </div>
                 </div>
