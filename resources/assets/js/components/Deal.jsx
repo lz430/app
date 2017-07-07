@@ -95,13 +95,15 @@ class Deal extends React.Component {
                 <img className="deal__image" src={this.getFeaturedImage()} />
 
                 <div className="deal__basic-info">
-                    <p>
-                        <a
-                            href={`apply-or-purchase?deal_id=${deal.id}`}
-                        >{`${deal.year} ${deal.make} ${deal.model}`}</a>
-                        <br />
-                        <strong>{util.moneyFormat(deal.price)}</strong>
-                    </p>
+                    <div
+                        onClick={this.props.selectDeal.bind(null, deal)}
+                        className="deal__basic-info-year-and-model"
+                    >
+                        {`${deal.year} ${deal.make} ${deal.model}`}
+                    </div>
+                    <div className="deal__basic-info-msrp">
+                        {util.moneyFormat(deal.price)} MSRP
+                    </div>
                 </div>
 
                 <div className="deal__buttons">
@@ -109,7 +111,7 @@ class Deal extends React.Component {
                         onClick={this.props.selectDeal.bind(null, deal)}
                         className="deal__button deal__button--small deal__button--blue deal__button"
                     >
-                        Details
+                        View Details
                     </button>
                     <button
                         className={

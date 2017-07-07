@@ -24104,21 +24104,18 @@ var Deal = function (_React$Component) {
                     'div',
                     { className: 'deal__basic-info' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'p',
-                        null,
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'a',
-                            {
-                                href: 'apply-or-purchase?deal_id=' + deal.id
-                            },
-                            deal.year + ' ' + deal.make + ' ' + deal.model
-                        ),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('br', null),
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'strong',
-                            null,
-                            __WEBPACK_IMPORTED_MODULE_2_src_util__["a" /* default */].moneyFormat(deal.price)
-                        )
+                        'div',
+                        {
+                            onClick: this.props.selectDeal.bind(null, deal),
+                            className: 'deal__basic-info-year-and-model'
+                        },
+                        deal.year + ' ' + deal.make + ' ' + deal.model
+                    ),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { className: 'deal__basic-info-msrp' },
+                        __WEBPACK_IMPORTED_MODULE_2_src_util__["a" /* default */].moneyFormat(deal.price),
+                        ' MSRP'
                     )
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -24130,7 +24127,7 @@ var Deal = function (_React$Component) {
                             onClick: this.props.selectDeal.bind(null, deal),
                             className: 'deal__button deal__button--small deal__button--blue deal__button'
                         },
-                        'Details'
+                        'View Details'
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
