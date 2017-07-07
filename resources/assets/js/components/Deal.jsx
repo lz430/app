@@ -9,16 +9,19 @@ class Deal extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            featuredImage: R.propOr(
-                props.fallbackDealImage,
-                'url',
-                props.deal.photos.data[1]
-                    ? props.deal.photos.data[0]
-                    : { url: props.fallbackDealImage }
-            ),
-        };
+        this.getFeaturedImage = this.getFeaturedImage.bind(this);
     }
+
+    getFeaturedImage() {
+        return R.propOr(
+            this.props.fallbackDealImage,
+            'url',
+            this.props.deal.photos.data[1]
+                ? this.props.deal.photos.data[0]
+                : { url: this.props.fallbackDealImage }
+        );
+    }
+
     componentDidMount() {
         if (this.props.deal.photos.data.length === 1) {
             fuelapi
@@ -89,7 +92,7 @@ class Deal extends React.Component {
         const deal = this.props.deal;
         return (
             <div className="deal">
-                <img className="deal__image" src={this.state.featuredImage} />
+                <img className="deal__image" src={this.getFeaturedImage()} />
 
                 <div className="deal__basic-info">
                     <p>
