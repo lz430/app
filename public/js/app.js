@@ -23899,7 +23899,7 @@ var Comparebar = function (_React$Component) {
     }, {
         key: 'compareButtonClass',
         value: function compareButtonClass() {
-            return 'compare-bar__compare-button ' + (this.compareReady() ? 'compare-bar__compare-button__ready' : '');
+            return 'compare-bar__compare-button ' + (this.compareReady() ? '' : 'compare-bar__compare-button--not-ready');
         }
     }, {
         key: 'renderCompareBar',

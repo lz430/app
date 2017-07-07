@@ -57,7 +57,7 @@ class Comparebar extends React.Component {
     }
 
     compareButtonClass() {
-        return `compare-bar__compare-button ${this.compareReady() ? 'compare-bar__compare-button__ready' : ''}`;
+        return `compare-bar__compare-button ${this.compareReady() ? '' : 'compare-bar__compare-button--not-ready'}`;
     }
 
     renderCompareBar() {

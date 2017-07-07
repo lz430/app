@@ -61,8 +61,8 @@
     text-align: center;
     width: $compare-button-width;
 
-    &__ready {
-      opacity: 1;
+    &--not-ready {
+      opacity: .6;
     }
 
     &__arrow {
