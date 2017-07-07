@@ -23785,11 +23785,21 @@ var Comparebar = function (_React$Component) {
 
             return this.props.compareList.length ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
-                { className: className, onClick: this.redirectToCompare },
+                null,
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
-                    { className: 'compare-bubble__count' },
-                    this.props.compareList.length
+                    { className: className, onClick: this.redirectToCompare },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_react_svg_inline___default.a, {
+                        width: '20px',
+                        height: '20px',
+                        className: 'compare-bubble__icon',
+                        svg: __WEBPACK_IMPORTED_MODULE_5_zondicons__["a" /* default */]['travel-car']
+                    }),
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'div',
+                        { className: 'compare-bubble__count' },
+                        this.props.compareList.length
+                    )
                 )
             ) : '';
         }
