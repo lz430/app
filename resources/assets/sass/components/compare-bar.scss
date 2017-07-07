@@ -30,18 +30,17 @@
     border-radius: 4px;
     display: flex;
     margin: 2px;
-    max-width: 175px;
-    min-width: 175px;
     padding: 5px 10px;
-    width: 175px;
 
     &__info {
       margin-right: auto;
+      padding-right: 10px;
     }
 
     &__title {
       color: $color-blue;
       font-weight: bold;
+      white-space: nowrap;
     }
 
     &__remove {
