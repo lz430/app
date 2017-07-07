@@ -37,6 +37,11 @@ class SidebarFilter extends React.Component {
                     />
                     {' '}
                     {this.props.title}
+                    {this.props.count > 0
+                        ? <div className="sidebar-filters__count">
+                              {this.props.count}
+                          </div>
+                        : ''}
                 </div>
 
                 {this.state.open
@@ -52,6 +57,7 @@ class SidebarFilter extends React.Component {
 SidebarFilter.propTypes = {
     title: PropTypes.string.isRequired,
     children: PropTypes.func.isRequired,
+    count: PropTypes.number,
 };
 
 export default SidebarFilter;
