@@ -1,17 +1,28 @@
 @import '../variables';
 
-.comparebar {
+.compare-bar {
+  $compare-button-width: 80px;
   border-top: 3px solid $color-blue;
+  bottom: 0;
   display: flex;
   height: $compare-bar-height;
   max-height: $compare-bar-height;
+  position: absolute;
+  width: 100%;
+
+  &__deals-counter-bubble {
+    position: absolute;
+    width: $compare-button-width;
+  }
 
   &__deals {
+    border-left: 2px solid transparent;
+    border-right: 5px solid transparent;
     display: flex;
     flex-direction: row;
     font-size: small;
-    margin-left: 5px;
-    margin-right: auto;
+    overflow-x: auto;
+    width: calc(100% - #{$compare-button-width});
   }
 
   &__deal {
@@ -20,6 +31,7 @@
     display: flex;
     margin: 2px;
     max-width: 175px;
+    min-width: 175px;
     padding: 5px 10px;
     width: 175px;
 
@@ -33,19 +45,22 @@
     }
 
     &__remove {
-      align-self: center;
-      fill: lightgray;
+      align-items: center;
+      cursor: pointer;
+      display: flex;
+      fill: lighten($text-color, 20%);
     }
   }
 
   &__compare-button {
     background-color: $color-blue;
-    opacity: .6;
-    font-size: small;
-    max-width: 80px;
-    padding: 5px;
-    text-align: center;
     color: $color-text-white;
+    cursor: pointer;
+    font-size: small;
+    max-width: $compare-button-width;
+    padding: 10px;
+    text-align: center;
+    width: $compare-button-width;
 
     &__ready {
       opacity: 1;
