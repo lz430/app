@@ -1,0 +1,21 @@
+@import '../variables';
+
+.range-slider {
+  display: flex;
+
+  input {
+    margin-right: auto;
+    width: 60%;
+  }
+
+  &__badge {
+    background-color: $color-grey;
+    border-radius: 20px;
+    color: $text-color-dark;
+    font-size: smaller;
+    height: 20px;
+    padding: 2px 10px;
+    text-align: right;
+    width: 80px;
+  }
+}

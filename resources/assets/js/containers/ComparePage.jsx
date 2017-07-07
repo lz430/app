@@ -10,9 +10,28 @@ class ComparePage extends React.Component {
         super(props);
         this.state = {
             deals: props.deals,
+            dealIndex: 0,
         };
         this.renderIncentive = this.renderIncentive.bind(this);
         this.renderDeal = this.renderDeal.bind(this);
+        this.getMarginLeft = this.getMarginLeft.bind(this);
+        this.slideLeft = this.slideLeft.bind(this);
+        this.slideRight = this.slideRight.bind(this);
+    }
+
+    slideLeft() {
+        this.setState({
+            dealIndex: Math.min(
+                this.state.dealIndex + 1,
+                this.props.deals.length - 1
+            ),
+        });
+    }
+
+    slideRight() {
+        this.setState({
+            dealIndex: Math.max(this.state.dealIndex - 1, 0),
+        });
     }
 
     removeDeal(deal) {
@@ -32,7 +51,7 @@ class ComparePage extends React.Component {
 
     renderDeal(deal, index) {
         return (
-            <div key={index} className="compare-deal">
+            <div key={index} className="compare-page-deals__deal">
                 <img className="compare-deal__image" src={deal.photos[0].url} />
 
                 <div className="compare-deal__buttons">
@@ -59,29 +78,64 @@ class ComparePage extends React.Component {
                 </div>
                 <div className="compare-deal__incentives">
                     <div className="compare-deal__incentive">
-                        <input className="compare-deal__incentive__checkbox" type="checkbox"/>
-                        <span className="compare-deal__incentive__name">Armed forces or family of armed forces</span>
-                        <span className="compare-deal__incentive__value">-$1,000</span>
+                        <input
+                            className="compare-deal__incentive__checkbox"
+                            type="checkbox"
+                        />
+                        <span className="compare-deal__incentive__name">
+                            Armed forces or family of armed forces
+                        </span>
+                        <span className="compare-deal__incentive__value">
+                            -$1,000
+                        </span>
                     </div>
                     <div className="compare-deal__incentive">
-                        <input className="compare-deal__incentive__checkbox" type="checkbox"/>
-                        <span className="compare-deal__incentive__name">Other Incentive #1</span>
-                        <span className="compare-deal__incentive__value">-$500</span>
+                        <input
+                            className="compare-deal__incentive__checkbox"
+                            type="checkbox"
+                        />
+                        <span className="compare-deal__incentive__name">
+                            Other Incentive #1
+                        </span>
+                        <span className="compare-deal__incentive__value">
+                            -$500
+                        </span>
                     </div>
                     <div className="compare-deal__incentive">
-                        <input className="compare-deal__incentive__checkbox" type="checkbox"/>
-                        <span className="compare-deal__incentive__name">Other Incentive #2</span>
-                        <span className="compare-deal__incentive__value">-$2,000</span>
+                        <input
+                            className="compare-deal__incentive__checkbox"
+                            type="checkbox"
+                        />
+                        <span className="compare-deal__incentive__name">
+                            Other Incentive #2
+                        </span>
+                        <span className="compare-deal__incentive__value">
+                            -$2,000
+                        </span>
                     </div>
                     <div className="compare-deal__incentive">
-                        <input className="compare-deal__incentive__checkbox" type="checkbox"/>
-                        <span className="compare-deal__incentive__name">Other Incentive #3</span>
-                        <span className="compare-deal__incentive__value">-$1,500</span>
+                        <input
+                            className="compare-deal__incentive__checkbox"
+                            type="checkbox"
+                        />
+                        <span className="compare-deal__incentive__name">
+                            Other Incentive #3
+                        </span>
+                        <span className="compare-deal__incentive__value">
+                            -$1,500
+                        </span>
                     </div>
                     <div className="compare-deal__incentive">
-                        <input className="compare-deal__incentive__checkbox" type="checkbox"/>
-                        <span className="compare-deal__incentive__name">Other Incentive #4</span>
-                        <span className="compare-deal__incentive__value">-$200</span>
+                        <input
+                            className="compare-deal__incentive__checkbox"
+                            type="checkbox"
+                        />
+                        <span className="compare-deal__incentive__name">
+                            Other Incentive #4
+                        </span>
+                        <span className="compare-deal__incentive__value">
+                            -$200
+                        </span>
                     </div>
                     {/*{deal.versions[0].incentives.map(this.renderIncentive)}*/}
                 </div>
@@ -101,26 +155,38 @@ class ComparePage extends React.Component {
             </div>
         );
     }
+
+    getMarginLeft() {
+        const dealPadding = 10;
+
+        return this.state.dealIndex * (-250 - dealPadding);
+    }
+
     render() {
         return (
-            <div className="title-bar">
-                <div className="title-bar__title">
+            <div className="compare-page">
+                <div className="compare-page-title-bar__title">
                     Vehicle Comparison
                 </div>
-                <div className="arrow-buttons">
+                <div className="compare-page__arrow-buttons">
                     <SVGInline
+                        onClick={this.slideLeft}
                         width="40px"
-                        className="arrow-button"
+                        className="compare-page__arrow-button"
                         svg={zondicons['cheveron-left']}
                     />
                     <SVGInline
+                        onClick={this.slideRight}
                         width="40px"
-                        className="arrow-button"
+                        className="compare-page__arrow-button"
                         svg={zondicons['cheveron-right']}
                     />
                 </div>
                 <CashFinanceLease />
-                <div className="compare-deals">
+                <div
+                    style={{ marginLeft: this.getMarginLeft() }}
+                    className="compare-page-deals"
+                >
                     {this.state.deals.map(this.renderDeal)}
                 </div>
             </div>

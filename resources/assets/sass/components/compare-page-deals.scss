@@ -1,0 +1,15 @@
+@import '../variables';
+
+.compare-page-deals {
+  $deal-width: 250px;
+  display: flex;
+  margin-top: 12px;
+  overflow-x: scroll;
+  width: 150%;
+
+  &__deal {
+    margin-right: 10px;
+    min-width: $deal-width;
+    width: $deal-width;
+  }
+}

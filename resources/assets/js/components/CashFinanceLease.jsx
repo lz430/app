@@ -19,13 +19,13 @@ class CashFinanceLease extends React.Component {
     }
 
     tabClassName(tabName) {
-        return `title-bar__tab ${tabName === this.state.selectedTab ? 'title-bar__tab--selected' : ''}`;
+        return `tabs__tab ${tabName === this.state.selectedTab ? 'tabs__tab--selected' : ''}`;
     }
 
     renderLeaseForm() {
         return (
-            <div className="title-bar__content">
-                <div className="title-bar__content__item">
+            <div className="tabs__content">
+                <div className="tabs__content__item">
                     <label htmlFor="down-payment">Down Payment</label>
                     <input
                         className="down-payment"
@@ -33,7 +33,7 @@ class CashFinanceLease extends React.Component {
                         name="down-payment"
                     />
                 </div>
-                <div className="title-bar__content__item">
+                <div className="tabs__content__item">
                     <label htmlFor="miles-year">Miles Per Year</label>
                     <div className="range-slider">
                         <input
@@ -53,7 +53,7 @@ class CashFinanceLease extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="title-bar__content__item">
+                <div className="tabs__content__item">
                     <label htmlFor="lease-term">Lease Term (Months)</label>
                     <div className="range-slider">
                         <input
@@ -78,7 +78,7 @@ class CashFinanceLease extends React.Component {
     render() {
         return (
             <div>
-                <div className="title-bar__tabs">
+                <div className="tabs">
                     <div
                         onClick={this.selectTab.bind(this, 'cash')}
                         className={this.tabClassName('cash')}
