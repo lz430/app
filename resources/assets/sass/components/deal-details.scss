@@ -20,12 +20,19 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
     margin: 0 15px;
+    overflow: hidden;
   }
 
   &__information {
     padding: 15px;
+  }
+
+  &__title {
+    border-bottom: 2px solid $color-section-bottom-border;
+    color: $text-color-dark;
+    font-size: 1.1rem;
+    padding-bottom: 10px;
   }
 
   &__pricing {
@@ -44,6 +51,7 @@
 
   &__thumbnail-images {
     display: flex;
+    margin-bottom: 10px;
     overflow-x: scroll;
     width: 100%;
   }
@@ -71,7 +79,9 @@
   }
 
   &__vin {
+    color: $text-color;
     float: right;
+    font-size: .8rem;
   }
 
   &__items {
@@ -80,9 +90,12 @@
   }
 
   &__item {
-    border-bottom: 1px solid $color-section-bottom-border;
+    border-bottom: 1px solid transparentize($color-section-bottom-border, .5);
+    color: $text-color-dark;
     display: flex;
+    font-size: .8rem;
     justify-content: flex-start;
+    padding: 8px;
 
     :nth-child(1) {
       margin-right: auto;

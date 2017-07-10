@@ -23766,10 +23766,9 @@ var DealDetails = function (_React$Component) {
                         'div',
                         { className: 'deal-details__information' },
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'h2',
-                            null,
+                            'div',
+                            { className: 'deal-details__title' },
                             'Vehicle Information',
-                            ' ',
                             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                                 'span',
                                 { className: 'deal-details__vin' },

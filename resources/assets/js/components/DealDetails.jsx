@@ -118,13 +118,12 @@ class DealDetails extends React.Component {
                     </div>
 
                     <div className="deal-details__information">
-                        <h2>
+                        <div className="deal-details__title">
                             Vehicle Information
-                            {' '}
                             <span className="deal-details__vin">
                                 {deal.vin.substr(deal.vin.length - 8)}
                             </span>
-                        </h2>
+                        </div>
 
                         <div className="deal-details__items">
                             <div className="deal-details__item">
