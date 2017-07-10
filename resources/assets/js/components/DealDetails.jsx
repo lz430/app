@@ -2,7 +2,6 @@ import React from 'react';
 import R from 'ramda';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
-import Slider from 'react-slick';
 import util from 'src/util';
 
 class DealDetails extends React.Component {
@@ -75,13 +74,12 @@ class DealDetails extends React.Component {
                 : '');
 
         return (
-            <div key={index}>
-                <img
-                    onClick={this.selectFeaturedImage.bind(this, index)}
-                    className={imageClass}
-                    src={R.propOr(this.props.fallbackDealImage, 'url', photo)}
-                />
-            </div>
+            <img
+                key={index}
+                onClick={this.selectFeaturedImage.bind(this, index)}
+                className={imageClass}
+                src={R.propOr(this.props.fallbackDealImage, 'url', photo)}
+            />
         );
     }
 
@@ -114,9 +112,9 @@ class DealDetails extends React.Component {
                 <div className="deal-details__images-and-information">
                     <div className="deal-details__images">
                         {this.renderFeaturedImage()}
-                        <Slider {...settings}>
+                        <div className="deal-details__thumbnail-images">
                             {this.allImages().map(this.renderThumbnailImage)}
-                        </Slider>
+                        </div>
                     </div>
 
                     <div className="deal-details__information">
