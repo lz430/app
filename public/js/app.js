@@ -26062,12 +26062,13 @@ var ZipcodeFinder = function (_React$Component) {
     _createClass(ZipcodeFinder, [{
         key: 'isValid',
         value: function isValid() {
-            console.log(this.state.zipcode);
             return this.state.zipcode.length === 5 && parseInt(this.state.zipcode).toString() === this.state.zipcode;
         }
     }, {
         key: 'saveZip',
-        value: function saveZip() {
+        value: function saveZip(event) {
+            if (event) event.preventDefault();
+
             if (this.isValid()) {
                 this.props.setZipCode(this.state.zipcode);
                 this.toggleEditing();
@@ -26103,13 +26104,18 @@ var ZipcodeFinder = function (_React$Component) {
                         null,
                         'Zip Code'
                     ),
-                    this.state.editing ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
-                        className: 'zipcode-finder__input ' + (valid ? '' : 'zipcode-finder__input--invalid'),
-                        type: 'number',
-                        pattern: '\\d*',
-                        value: this.state.zipcode,
-                        onChange: this.handleChange
-                    }) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    this.state.editing ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'form',
+                        { onSubmit: this.saveZip },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
+                            className: 'zipcode-finder__input ' + (valid ? '' : 'zipcode-finder__input--invalid'),
+                            type: 'number',
+                            pattern: '\\d*',
+                            autoFocus: true,
+                            value: this.state.zipcode,
+                            onChange: this.handleChange
+                        })
+                    ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
                         { className: 'zipcode-finder__zipcode' },
                         this.props.zipcode

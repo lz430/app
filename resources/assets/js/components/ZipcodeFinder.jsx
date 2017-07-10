@@ -21,14 +21,15 @@ class ZipcodeFinder extends React.Component {
     }
 
     isValid() {
-        console.log(this.state.zipcode);
         return (
             this.state.zipcode.length === 5 &&
             parseInt(this.state.zipcode).toString() === this.state.zipcode
         );
     }
 
-    saveZip() {
+    saveZip(event) {
+        if (event) event.preventDefault();
+
         if (this.isValid()) {
             this.props.setZipCode(this.state.zipcode);
             this.toggleEditing();
@@ -55,13 +56,16 @@ class ZipcodeFinder extends React.Component {
                 <div className="zipcode-finder__info">
                     <div>Zip Code</div>
                     {this.state.editing
-                        ? <input
-                              className={`zipcode-finder__input ${valid ? '' : 'zipcode-finder__input--invalid'}`}
-                              type="number"
-                              pattern="\d*"
-                              value={this.state.zipcode}
-                              onChange={this.handleChange}
-                          />
+                        ? <form onSubmit={this.saveZip}>
+                              <input
+                                  className={`zipcode-finder__input ${valid ? '' : 'zipcode-finder__input--invalid'}`}
+                                  type="number"
+                                  pattern="\d*"
+                                  autoFocus
+                                  value={this.state.zipcode}
+                                  onChange={this.handleChange}
+                              />
+                          </form>
                         : <div className="zipcode-finder__zipcode">
                               {this.props.zipcode}
                           </div>}
