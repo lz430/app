@@ -428,15 +428,20 @@ export function clearFuelImages() {
 }
 
 export function requestLocationInfo() {
-    return dispatch => {
-        window.axios
-            .get('http://ipinfo.io')
-            .then(data => {
-                dispatch(receiveLocationInfo(data));
-            })
-            .catch(error => {
-                console.log('Error', error.message);
-            });
+    return (dispatch, getState) => {
+        /**
+         * If we don't already have a loaded zipcode, try to get one from ipinfo.io
+         */
+        if (!getState().zipcode) {
+            window.axios
+                .get('http://ipinfo.io')
+                .then(data => {
+                    dispatch(receiveLocationInfo(data));
+                })
+                .catch(error => {
+                    console.log('Error', error.message);
+                });
+        }
 
         dispatch({
             type: ActionTypes.REQUEST_LOCATION_INFO,

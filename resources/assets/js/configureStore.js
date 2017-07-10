@@ -52,7 +52,9 @@ export default () => {
 
     persistStore(store);
 
-    store.dispatch(requestLocationInfo());
+    window.setTimeout(() => {
+        store.dispatch(requestLocationInfo());
+    });
     store.dispatch(requestMakes());
     store.dispatch(requestBodyStyles());
     store.dispatch(requestFeatures());

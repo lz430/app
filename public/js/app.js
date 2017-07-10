@@ -2646,12 +2646,17 @@ function clearFuelImages() {
 }
 
 function requestLocationInfo() {
-    return function (dispatch) {
-        window.axios.get('http://ipinfo.io').then(function (data) {
-            dispatch(receiveLocationInfo(data));
-        }).catch(function (error) {
-            console.log('Error', error.message);
-        });
+    return function (dispatch, getState) {
+        /**
+         * If we don't already have a loaded zipcode, try to get one from ipinfo.io
+         */
+        if (!getState().zipcode) {
+            window.axios.get('http://ipinfo.io').then(function (data) {
+                dispatch(receiveLocationInfo(data));
+            }).catch(function (error) {
+                console.log('Error', error.message);
+            });
+        }
 
         dispatch({
             type: __WEBPACK_IMPORTED_MODULE_4_actiontypes_index__["z" /* REQUEST_LOCATION_INFO */]
@@ -26237,7 +26242,9 @@ var initialState = {
 
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_redux_persist__["b" /* persistStore */])(store);
 
-    store.dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_actions_index__["requestLocationInfo"])());
+    window.setTimeout(function () {
+        store.dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_actions_index__["requestLocationInfo"])());
+    });
     store.dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_actions_index__["requestMakes"])());
     store.dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_actions_index__["requestBodyStyles"])());
     store.dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_actions_index__["requestFeatures"])());
