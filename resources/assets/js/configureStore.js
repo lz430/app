@@ -37,8 +37,6 @@ const initialState = {
     zipcode: null,
     fuelInternalImages: [],
     fuelExternalImages: [],
-    latitude: null,
-    longitude: null,
 };
 
 export default () => {

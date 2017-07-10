@@ -7,7 +7,7 @@ class InitialVAUTOData extends Seeder
 {
     public function run()
     {
-        Dealer::create([
+        Dealer::firstOrCreate([
             'dealer_id' => 'MP11392',
             'name' => 'Suburban Ford of Ferndale',
             'latitude' => 42.4511694,

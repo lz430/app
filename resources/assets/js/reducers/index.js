@@ -7,19 +7,35 @@ const reducer = (state, action) => {
     switch (action.type) {
         case REHYDRATE:
             /**
-             * If the referrer is the home page, we should not rehydrate but let them "restart".
+             * If the state is a different "shape"/schema we need to let them restart
              */
-            if (util.wasReferredFromHomePage()) {
+            if (!util.sameStateSchema(state, action.payload)) {
+                localStorage.clear();
+
                 return state;
             }
 
             /**
-             * If there is a style specified in the URL we should rehydrate with that style selected.
+             * If the referrer is the home page, we should not rehydrate but let them "restart".
+             */
+            if (util.wasReferredFromHomePage()) {
+                localStorage.clear();
+
+                return state;
+            }
+
+            /**
+             * If there is a style specified in the URL (and this isn't a refresh) we should rehydrate with that style selected.
              * So as not to confuse people coming from a specific link.
              */
-            return Object.assign({}, state, action.payload, {
-                selectedStyles: [util.getInitialBodyStyleFromUrl()],
-            });
+            const style = util.getInitialBodyStyleFromUrl();
+            if (style && window.document.referrer !== window.location.href) {
+                return Object.assign({}, state, action.payload, {
+                    selectedStyles: [util.getInitialBodyStyleFromUrl()],
+                });
+            }
+
+            return Object.assign({}, state, action.payload);
         case ActionTypes.WINDOW_RESIZE:
             return Object.assign({}, state, {
                 window: action.window,
@@ -132,8 +148,6 @@ const reducer = (state, action) => {
         case ActionTypes.RECEIVE_LOCATION_INFO:
             return Object.assign({}, state, {
                 zipcode: action.zipcode,
-                latitude: action.latitude,
-                longitude: action.longitude,
             });
     }
 

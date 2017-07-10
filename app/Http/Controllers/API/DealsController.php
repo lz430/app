@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Feature;
 use App\Transformers\DealTransformer;
 use App\Deal;
+use App\Zipcode;
 use DeliverMyRide\JsonApi\Sort;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
@@ -26,8 +27,7 @@ class DealsController extends BaseAPIController
             'fuel_type' => 'sometimes|required|string',
             'transmission_type' => 'sometimes|required|string|in:automatic,manual',
             'sort' => 'sometimes|required|string',
-            'latitude' => 'sometimes|required_with:longitude|string',
-            'longitude' => 'sometimes|required_with:latitude|string',
+            'zipcode' => 'sometimes|required|string',
         ]);
 
         $dealsQuery = $this->getQueryByMakesAndBodyStyles($request);
@@ -77,10 +77,10 @@ class DealsController extends BaseAPIController
 
     private function filterQueryByLocationDistance(Builder $query, Request $request) : Builder
     {
-        if ($request->has('latitude') && $request->has('longitude')) {
+        if ($request->has('zipcode') && $zipcode = Zipcode::where('zipcode', $request->get('zipcode'))->first()) {
             $query->filterByLocationDistance(
-                $request->get('latitude'),
-                $request->get('longitude')
+                $zipcode->latitude,
+                $zipcode->longitude
             );
         }
 

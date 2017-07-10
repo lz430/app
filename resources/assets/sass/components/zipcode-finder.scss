@@ -1,12 +1,13 @@
 @import '../variables';
 @import '../mixins/button';
+@import '../mixins/input';
 
 .zipcode-finder {
   background-color: $color-sidebar-background-secondary;
   color: $color-text-white;
   display: flex;
   height: $sortbar-height;
-  padding: 5px 15px;
+  padding: 5px 10px;
 
   &__info {
     align-content: center;
@@ -16,18 +17,59 @@
     justify-content: space-between;
   }
 
-  &__code {
+  &__input {
+    @include input;
+    width: 58px;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &--invalid {
+      border: 1px solid $color-error;
+    }
+  }
+
+  &__zipcode {
     font-size: 1.4rem;
   }
 
   &__buttons {
     align-items: center;
     display: flex;
-    flex: 1;
     justify-content: flex-end;
+    width: 70%;
   }
 
   &__button {
     @include button;
+    &:first-child {
+      margin-right: 5px;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &--inactive {
+      $inactive-color: transparentize($color-section-bottom-border, .5);
+      border: 1px solid $inactive-color;
+      color: $inactive-color;
+
+      svg {
+        fill: $inactive-color;
+      }
+    }
+  }
+
+  &__button-icon {
+    fill: $color-text-white;
+    margin-right: 5px;
+
+    svg {
+      margin-bottom: -1.5px;
+    }
   }
 }

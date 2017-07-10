@@ -42,6 +42,12 @@ const util = {
 
         return formatter.format(num);
     },
+    sameStateSchema(a, b) {
+        return (
+            JSON.stringify(Object.keys(a).sort()) ===
+            JSON.stringify(Object.keys(b).sort())
+        );
+    },
 };
 
 export default util;
