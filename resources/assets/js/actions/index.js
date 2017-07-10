@@ -17,8 +17,7 @@ const withStateDefaults = (state, changed) => {
             sortColumn: state.sortColumn,
             sortAscending: state.sortAscending,
             page: 1,
-            latitude: state.latitude,
-            longitude: state.longitude,
+            zipcode: state.zipcode,
         },
         changed
     );
@@ -301,9 +300,21 @@ export function toggleCompare(deal) {
 }
 
 export function setZipCode(zipcode) {
-    return {
-        type: ActionTypes.SET_ZIP_CODE,
-        zipcode: zipcode,
+    return (dispatch, getState) => {
+        api
+            .getDeals(
+                withStateDefaults(getState(), {
+                    zipcode,
+                })
+            )
+            .then(data => {
+                dispatch(receiveDeals(data));
+            });
+
+        dispatch({
+            type: ActionTypes.SET_ZIP_CODE,
+            zipcode: zipcode,
+        });
     };
 }
 
@@ -436,13 +447,11 @@ export function requestLocationInfo() {
 export function receiveLocationInfo(data) {
     return (dispatch, getState) => {
         const zipcode = data.data.postal;
-        const [latitude, longitude] = data.data.loc.split(',');
 
         api
             .getDeals(
                 withStateDefaults(getState(), {
-                    latitude,
-                    longitude,
+                    zipcode,
                 })
             )
             .then(data => {
@@ -452,8 +461,6 @@ export function receiveLocationInfo(data) {
         dispatch({
             type: ActionTypes.RECEIVE_LOCATION_INFO,
             zipcode,
-            latitude,
-            longitude,
         });
     };
 }

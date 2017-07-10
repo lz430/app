@@ -8,5 +8,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(InitialJATOData::class);
         $this->call(InitialVAUTOData::class);
+        $this->call(InitialZipCodesData::class);
     }
 }

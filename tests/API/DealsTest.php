@@ -8,6 +8,7 @@ use App\JATO\Make;
 use App\JATO\VehicleModel;
 use App\JATO\Version;
 use App\Deal;
+use App\Zipcode;
 use Illuminate\Support\Fluent;
 use Tests\TestCase;
 
@@ -272,9 +273,17 @@ class DealsTest extends TestCase
     /** @test */
     public function it_can_restrict_deals_by_distance()
     {
-        /** Distance from dealer to  is ~969 miles (Via Google Maps) */
+        /**
+         * Dealer: Suburban Ford of Ferndale, zipcode: 48220, lat: 42.4511694, lon: -83.1277241
+         * Customer: Logan Henson, zipcode: 75703, lat: 32.263116, lon: -95.3072586
+         * (75703 DB lookup -> lat: 32.2350970, lon:-95.3207790 )
+         * ---
+         * Distance from dealer to customer is ~969 miles (Via Google Maps)
+         */
+        Zipcode::create(['zipcode' => '75703', 'latitude' => '32.2350970', 'longitude' => '-95.3207790']);
+
         $dealerLatLon = (new Fluent)->latitude(42.4511694)->longitude(-83.1277241);
-        $customerLatLon = (new Fluent)->latitude(32.263116)->longitude(-95.3072586);
+        $customerZipcode = (new Fluent)->zipcode('75703');
 
         $dealer = factory(Dealer::class)->create([
             'latitude' => $dealerLatLon->latitude,
@@ -298,8 +307,7 @@ class DealsTest extends TestCase
         $dealer->save();
 
         $response = $this->getJson(route('deals.index', [
-            'latitude' => $customerLatLon->latitude,
-            'longitude' => $customerLatLon->longitude,
+            'zipcode' => $customerZipcode->zipcode,
         ]));
 
         $this->assertCount(1, $response->decodeResponseJson()['data']);
@@ -311,8 +319,7 @@ class DealsTest extends TestCase
         $dealer->save();
 
         $response = $this->getJson(route('deals.index', [
-            'latitude' => $customerLatLon->latitude,
-            'longitude' => $customerLatLon->longitude,
+            'zipcode' => $customerZipcode->zipcode,
         ]));
 
         $this->assertCount(0, $response->decodeResponseJson()['data']);
