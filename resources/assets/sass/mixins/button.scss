@@ -20,6 +20,11 @@
     color: $color-text-white;
   }
 
+  &--white {
+    background-color: $color-text-white;
+    color: $color-blue;
+  }
+
   &--small {
     font-size: .9rem;
   }
