@@ -94,6 +94,20 @@
     line-height: 2rem;
   }
 
+  &__dmr-buttons {
+    display: flex;
+  }
+
+  &__dmr-button {
+    @include button;
+    flex: 1;
+    margin: 15px;
+
+    &:first-child {
+      margin-right: 0;
+    }
+  }
+
   &__primary-image {
     border: 1px solid $color-section-bottom-border;
     margin: 15px 0;
