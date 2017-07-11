@@ -5,8 +5,14 @@ comparepage {
 }
 .compare-page {
   display: block;
+  margin: 0 auto;
+  max-width: 1100px;
   overflow: hidden;
   padding: $section-padding;
+
+  @media (max-width: $break-small) {
+    padding: 0;
+  }
 
   &__arrow-buttons {
     background-color: $color-text-white;
@@ -15,6 +21,10 @@ comparepage {
     display: flex;
     float: right;
     margin-top: -40px;
+
+    @media (max-width: $break-small) {
+      display: none;
+    }
   }
 
   &__arrow-button {
@@ -27,5 +37,16 @@ comparepage {
     &:first-child {
       border-right: 1px solid $color-section-bottom-border;
     }
+  }
+
+  &__swipe-notification {
+    display: none;
+
+    @media (max-width: $break-small) {
+      display: block;
+      margin: 10px auto;
+      width: 245px;
+    }
+
   }
 }

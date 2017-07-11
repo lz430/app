@@ -3,6 +3,10 @@
 .tabs {
   border-bottom: 1px solid $color-section-bottom-border;
 
+  @media (max-width: $break-small) {
+    padding-left: 10px;
+  }
+
   &__tab {
     cursor: pointer;
     display: inline-block;
@@ -20,12 +24,22 @@
     display: flex;
     margin: 10px 0;
 
+    @media (max-width: $break-small) {
+      flex-direction: column;
+      padding-left: 10px;
+    }
+
     &__item {
       display: flex;
       flex: 1;
       flex-direction: column;
       max-width: 300px;
       padding-right: 50px;
+
+      @media (max-width: $break-small) {
+        max-width: none;
+        padding-bottom: 30px;
+      }
     }
   }
 }

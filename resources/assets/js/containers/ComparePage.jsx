@@ -17,6 +17,77 @@ class ComparePage extends React.Component {
         this.getMarginLeft = this.getMarginLeft.bind(this);
         this.slideLeft = this.slideLeft.bind(this);
         this.slideRight = this.slideRight.bind(this);
+        this.dealClass = this.dealClass.bind(this);
+
+        document.addEventListener('keyup', event => {
+            const keyPressed = parseInt(event.keyCode, 10);
+
+            switch (keyPressed) {
+                case 37:
+                    this.slideLeft();
+                    break;
+                case 39:
+                    this.slideRight();
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        // ********************************************************
+        // ********************************************************
+        // Detect swipe left and swipe right
+        // Modified from https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
+        document.addEventListener(
+            'touchstart',
+            handleTouchStart.bind(this),
+            false
+        );
+        document.addEventListener(
+            'touchmove',
+            handleTouchMove.bind(this),
+            false
+        );
+
+        var xDown = null;
+        var yDown = null;
+
+        function handleTouchStart(evt) {
+            xDown = evt.touches[0].clientX;
+            yDown = evt.touches[0].clientY;
+        }
+
+        function handleTouchMove(evt) {
+            if (!xDown || !yDown) {
+                return;
+            }
+
+            var xUp = evt.touches[0].clientX;
+            var yUp = evt.touches[0].clientY;
+
+            var xDiff = xDown - xUp;
+            var yDiff = yDown - yUp;
+
+            if (Math.abs(xDiff) > Math.abs(yDiff)) {
+                /*most significant*/
+                if (xDiff > 0) {
+                    this.slideLeft();
+                } else {
+                    this.slideRight();
+                }
+            } else {
+                if (yDiff > 0) {
+                    /* up swipe */
+                } else {
+                    /* down swipe */
+                }
+            }
+            /* reset values */
+            xDown = null;
+            yDown = null;
+        }
+        // ********************************************************
+        // ********************************************************
     }
 
     slideLeft() {
@@ -49,9 +120,19 @@ class ComparePage extends React.Component {
         );
     }
 
+    dealClass(index) {
+        let className = 'compare-page-deals__deal';
+
+        if (index < this.state.dealIndex || index > this.state.dealIndex + 2) {
+            className += ' compare-page-deals__deal--opaque';
+        }
+
+        return className;
+    }
+
     renderDeal(deal, index) {
         return (
-            <div key={index} className="compare-page-deals__deal">
+            <div key={index} className={this.dealClass(index)}>
                 <img className="compare-deal__image" src={deal.photos[0].url} />
 
                 <div className="compare-deal__buttons">
@@ -66,15 +147,19 @@ class ComparePage extends React.Component {
                     </a>
                 </div>
                 <div className="compare-deal__basic-info">
-                    <p className="compare-deal__basic-info__title">
+                    <div className="compare-deal__basic-info__title">
                         {deal.year} {deal.make} {deal.model}
-                    </p>
+                    </div>
 
-                    DMR Price
-                    {' '}
-                    <span className="compare-deal__basic-info__price">
-                        {util.moneyFormat(deal.price)}
-                    </span>
+                    <div className="compare-deal__basic-info__content">
+                        <div className="compare-deal__basic-info__subtitle">
+                            DMR Price
+                        </div>
+
+                        <div className="compare-deal__basic-info__price">
+                            {util.moneyFormat(deal.price)}
+                        </div>
+                    </div>
                 </div>
                 <div className="compare-deal__incentives">
                     <div className="compare-deal__incentive">
@@ -159,7 +244,14 @@ class ComparePage extends React.Component {
     getMarginLeft() {
         const dealPadding = 10;
 
-        return this.state.dealIndex * (-250 - dealPadding);
+        const clientWidth = Math.max(
+            document.documentElement.clientWidth,
+            window.innerWidth || 0
+        );
+
+        const subtractWidth = clientWidth < 576 ? clientWidth : 300;
+
+        return this.state.dealIndex * (-subtractWidth - dealPadding);
     }
 
     render() {
@@ -183,6 +275,9 @@ class ComparePage extends React.Component {
                     />
                 </div>
                 <CashFinanceLease />
+                <div className="compare-page__swipe-notification">
+                    <em>Swipe to left to compare other vehicles.</em>
+                </div>
                 <div
                     style={{ marginLeft: this.getMarginLeft() }}
                     className="compare-page-deals"
