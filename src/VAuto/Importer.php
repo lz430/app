@@ -121,6 +121,11 @@ class Importer
                 continue;
             }
 
+            // skip deal if it is not new
+            if ($keyedData['New/Used'] !== 'N') {
+                continue;
+            }
+
             $versionDeal = $this->saveDeal($fileHash, $keyedData);
 
             try {
@@ -238,7 +243,7 @@ class Importer
             'dealer_id' => $keyedData['DealerId'],
             'stock_number' => $keyedData['Stock #'],
             'vin' => $keyedData['VIN'],
-            'new' => $keyedData['New/Used'] === 'Y',
+            'new' => $keyedData['New/Used'] === 'N',
             'year' => $keyedData['Year'],
             'make' => $keyedData['Make'],
             'model' => $keyedData['Model'],
