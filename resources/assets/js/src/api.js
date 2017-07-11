@@ -27,6 +27,7 @@ const api = {
         page,
         latitude,
         longitude,
+        zipcode,
     }) => {
         return window.axios.get('/api/deals', {
             params: {
@@ -40,6 +41,7 @@ const api = {
                 page,
                 latitude,
                 longitude,
+                zipcode,
             },
         });
     },

@@ -1,5 +1,6 @@
 @import '../variables';
 @import 'button';
+@import 'input';
 
 @mixin vertical-form {
   $width: $break-small / 2;
@@ -60,11 +61,7 @@
   }
 
   &__input {
-    border: 1px solid $color-section-bottom-border;
-    border-radius: 2px;
-    margin-top: 2px;
-    padding: 5px;
-    width: 100%;
+    @include input;
   }
 
   &__error {

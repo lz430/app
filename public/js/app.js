@@ -2295,8 +2295,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["closeMakeSelectorModal"] = closeMakeSelectorModal;
 /* harmony export (immutable) */ __webpack_exports__["windowResize"] = windowResize;
 /* harmony export (immutable) */ __webpack_exports__["toggleSmallFiltersShown"] = toggleSmallFiltersShown;
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 
 
 
@@ -2314,8 +2312,7 @@ var withStateDefaults = function withStateDefaults(state, changed) {
         sortColumn: state.sortColumn,
         sortAscending: state.sortAscending,
         page: 1,
-        latitude: state.latitude,
-        longitude: state.longitude
+        zipcode: state.zipcode
     }, changed);
 };
 
@@ -2554,9 +2551,17 @@ function toggleCompare(deal) {
 }
 
 function setZipCode(zipcode) {
-    return {
-        type: __WEBPACK_IMPORTED_MODULE_4_actiontypes_index__["u" /* SET_ZIP_CODE */],
-        zipcode: zipcode
+    return function (dispatch, getState) {
+        __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals(withStateDefaults(getState(), {
+            zipcode: zipcode
+        })).then(function (data) {
+            dispatch(receiveDeals(data));
+        });
+
+        dispatch({
+            type: __WEBPACK_IMPORTED_MODULE_4_actiontypes_index__["u" /* SET_ZIP_CODE */],
+            zipcode: zipcode
+        });
     };
 }
 
@@ -2641,12 +2646,17 @@ function clearFuelImages() {
 }
 
 function requestLocationInfo() {
-    return function (dispatch) {
-        window.axios.get('http://ipinfo.io').then(function (data) {
-            dispatch(receiveLocationInfo(data));
-        }).catch(function (error) {
-            console.log('Error', error.message);
-        });
+    return function (dispatch, getState) {
+        /**
+         * If we don't already have a loaded zipcode, try to get one from ipinfo.io
+         */
+        if (!getState().zipcode) {
+            window.axios.get('http://ipinfo.io').then(function (data) {
+                dispatch(receiveLocationInfo(data));
+            }).catch(function (error) {
+                console.log('Error', error.message);
+            });
+        }
 
         dispatch({
             type: __WEBPACK_IMPORTED_MODULE_4_actiontypes_index__["z" /* REQUEST_LOCATION_INFO */]
@@ -2658,23 +2668,15 @@ function receiveLocationInfo(data) {
     return function (dispatch, getState) {
         var zipcode = data.data.postal;
 
-        var _data$data$loc$split = data.data.loc.split(','),
-            _data$data$loc$split2 = _slicedToArray(_data$data$loc$split, 2),
-            latitude = _data$data$loc$split2[0],
-            longitude = _data$data$loc$split2[1];
-
         __WEBPACK_IMPORTED_MODULE_0_src_api__["a" /* default */].getDeals(withStateDefaults(getState(), {
-            latitude: latitude,
-            longitude: longitude
+            zipcode: zipcode
         })).then(function (data) {
             dispatch(receiveDeals(data));
         });
 
         dispatch({
             type: __WEBPACK_IMPORTED_MODULE_4_actiontypes_index__["A" /* RECEIVE_LOCATION_INFO */],
-            zipcode: zipcode,
-            latitude: latitude,
-            longitude: longitude
+            zipcode: zipcode
         });
     };
 }
@@ -3040,6 +3042,9 @@ var util = {
         });
 
         return formatter.format(num);
+    },
+    sameStateSchema: function sameStateSchema(a, b) {
+        return JSON.stringify(Object.keys(a).sort()) === JSON.stringify(Object.keys(b).sort());
     }
 };
 
@@ -25747,6 +25752,9 @@ function mapStateToProps(state) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_redux__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_actions_index__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_svg_inline__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_svg_inline___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_react_svg_inline__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_zondicons__ = __webpack_require__(48);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25760,36 +25768,40 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+
+
 var ZipcodeFinder = function (_React$Component) {
     _inherits(ZipcodeFinder, _React$Component);
 
-    function ZipcodeFinder() {
+    function ZipcodeFinder(props) {
         _classCallCheck(this, ZipcodeFinder);
 
-        var _this = _possibleConstructorReturn(this, (ZipcodeFinder.__proto__ || Object.getPrototypeOf(ZipcodeFinder)).call(this));
+        var _this = _possibleConstructorReturn(this, (ZipcodeFinder.__proto__ || Object.getPrototypeOf(ZipcodeFinder)).call(this, props));
 
         _this.state = {
             editing: false,
-            valid: false
+            zipcode: props.zipcode
         };
 
-        _this.validateZip = _this.validateZip.bind(_this);
+        _this.saveZip = _this.saveZip.bind(_this);
+        _this.isValid = _this.isValid.bind(_this);
         _this.toggleEditing = _this.toggleEditing.bind(_this);
+        _this.handleChange = _this.handleChange.bind(_this);
         return _this;
     }
 
     _createClass(ZipcodeFinder, [{
-        key: 'validateZip',
-        value: function validateZip() {
-            var zip = document.getElementById('zipcode_input').value;
-            var valid = zip.length === 5;
-            this.setState({
-                valid: valid
-            });
+        key: 'isValid',
+        value: function isValid() {
+            return this.state.zipcode.length === 5 && parseInt(this.state.zipcode).toString() === this.state.zipcode;
+        }
+    }, {
+        key: 'saveZip',
+        value: function saveZip(event) {
+            if (event) event.preventDefault();
 
-            if (valid) {
-                this.props.setZipCode(zip);
-                document.getElementById('zipcode_input').value = '';
+            if (this.isValid()) {
+                this.props.setZipCode(this.state.zipcode);
                 this.toggleEditing();
             }
         }
@@ -25801,8 +25813,17 @@ var ZipcodeFinder = function (_React$Component) {
             });
         }
     }, {
+        key: 'handleChange',
+        value: function handleChange(event) {
+            this.setState({
+                zipcode: event.target.value
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var valid = this.isValid();
+
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 { className: 'zipcode-finder' },
@@ -25814,13 +25835,20 @@ var ZipcodeFinder = function (_React$Component) {
                         null,
                         'Zip Code'
                     ),
-                    this.state.editing ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
-                        className: 'zipcode-finder__code',
-                        type: 'number',
-                        id: 'zipcode_input'
-                    }) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    this.state.editing ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'form',
+                        { onSubmit: this.saveZip },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
+                            className: 'zipcode-finder__input ' + (valid ? '' : 'zipcode-finder__input--invalid'),
+                            type: 'number',
+                            pattern: '\\d*',
+                            autoFocus: true,
+                            value: this.state.zipcode,
+                            onChange: this.handleChange
+                        })
+                    ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
-                        { className: 'zipcode-finder__code' },
+                        { className: 'zipcode-finder__zipcode' },
                         this.props.zipcode
                     )
                 ),
@@ -25833,19 +25861,30 @@ var ZipcodeFinder = function (_React$Component) {
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'button',
                             {
-                                onClick: this.validateZip,
-                                className: 'zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg'
-                            },
-                            'Save'
-                        ),
-                        ' ',
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                            'button',
-                            {
                                 onClick: this.toggleEditing,
                                 className: 'zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg'
                             },
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_react_svg_inline___default.a, {
+                                width: '12px',
+                                height: '12px',
+                                className: 'zipcode-finder__button-icon',
+                                svg: __WEBPACK_IMPORTED_MODULE_5_zondicons__["a" /* default */]['close']
+                            }),
                             'Cancel'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'button',
+                            {
+                                onClick: this.saveZip,
+                                className: 'zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg ' + (valid ? '' : 'zipcode-finder__button--inactive')
+                            },
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_react_svg_inline___default.a, {
+                                width: '12px',
+                                height: '12px',
+                                className: 'zipcode-finder__button-icon',
+                                svg: __WEBPACK_IMPORTED_MODULE_5_zondicons__["a" /* default */]['checkmark']
+                            }),
+                            'Save'
                         )
                     ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'button',
@@ -25919,9 +25958,7 @@ var initialState = {
     compareList: [],
     zipcode: null,
     fuelInternalImages: [],
-    fuelExternalImages: [],
-    latitude: null,
-    longitude: null
+    fuelExternalImages: []
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (function () {
@@ -25931,7 +25968,9 @@ var initialState = {
 
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_redux_persist__["b" /* persistStore */])(store);
 
-    store.dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_actions_index__["requestLocationInfo"])());
+    window.setTimeout(function () {
+        store.dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_actions_index__["requestLocationInfo"])());
+    });
     store.dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_actions_index__["requestMakes"])());
     store.dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_actions_index__["requestBodyStyles"])());
     store.dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_actions_index__["requestFeatures"])());
@@ -26565,19 +26604,35 @@ var reducer = function reducer(state, action) {
     switch (action.type) {
         case __WEBPACK_IMPORTED_MODULE_2_redux_persist_constants__["a" /* REHYDRATE */]:
             /**
-             * If the referrer is the home page, we should not rehydrate but let them "restart".
+             * If the state is a different "shape"/schema we need to let them restart
              */
-            if (__WEBPACK_IMPORTED_MODULE_3_src_util__["a" /* default */].wasReferredFromHomePage()) {
+            if (!__WEBPACK_IMPORTED_MODULE_3_src_util__["a" /* default */].sameStateSchema(state, action.payload)) {
+                localStorage.clear();
+
                 return state;
             }
 
             /**
-             * If there is a style specified in the URL we should rehydrate with that style selected.
+             * If the referrer is the home page, we should not rehydrate but let them "restart".
+             */
+            if (__WEBPACK_IMPORTED_MODULE_3_src_util__["a" /* default */].wasReferredFromHomePage()) {
+                localStorage.clear();
+
+                return state;
+            }
+
+            /**
+             * If there is a style specified in the URL (and this isn't a refresh) we should rehydrate with that style selected.
              * So as not to confuse people coming from a specific link.
              */
-            return Object.assign({}, state, action.payload, {
-                selectedStyles: [__WEBPACK_IMPORTED_MODULE_3_src_util__["a" /* default */].getInitialBodyStyleFromUrl()]
-            });
+            var style = __WEBPACK_IMPORTED_MODULE_3_src_util__["a" /* default */].getInitialBodyStyleFromUrl();
+            if (style && window.document.referrer !== window.location.href) {
+                return Object.assign({}, state, action.payload, {
+                    selectedStyles: [__WEBPACK_IMPORTED_MODULE_3_src_util__["a" /* default */].getInitialBodyStyleFromUrl()]
+                });
+            }
+
+            return Object.assign({}, state, action.payload);
         case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["C" /* WINDOW_RESIZE */]:
             return Object.assign({}, state, {
                 window: action.window,
@@ -26679,9 +26734,7 @@ var reducer = function reducer(state, action) {
             });
         case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["A" /* RECEIVE_LOCATION_INFO */]:
             return Object.assign({}, state, {
-                zipcode: action.zipcode,
-                latitude: action.latitude,
-                longitude: action.longitude
+                zipcode: action.zipcode
             });
     }
 
@@ -26723,7 +26776,8 @@ var api = {
             sortAscending = _ref.sortAscending,
             page = _ref.page,
             latitude = _ref.latitude,
-            longitude = _ref.longitude;
+            longitude = _ref.longitude,
+            zipcode = _ref.zipcode;
 
         return window.axios.get('/api/deals', {
             params: {
@@ -26736,7 +26790,8 @@ var api = {
                 sort: sort(sortColumn, sortAscending),
                 page: page,
                 latitude: latitude,
-                longitude: longitude
+                longitude: longitude,
+                zipcode: zipcode
             }
         });
     }
