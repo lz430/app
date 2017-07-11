@@ -19,18 +19,28 @@
   &__basic-info {
     color: $text-color-dark;
     font-size: 1.6em;
+    height: 110px;
     padding-bottom: 10px;
     padding-left: 18px;
+
+    &__content {
+      display: flex;
+    }
 
     &__title {
       color: $color-blue;
       font-size: large;
       font-weight: bold;
+      height: 50px;
+    }
+
+    &__subtitle {
+      font-size: 1.2rem;
+      margin-right: auto;
     }
 
     &__price {
       color: $text-color-dark;
-      float: right;
       font-size: xx-large;
       margin-top: -12px;
       padding-right: 10px;
@@ -60,6 +70,7 @@
     height: 200px;
     overflow-y: scroll;
     padding: 15px 0;
+    width: 100%;
   }
 
   &__incentive {
@@ -96,7 +107,7 @@
     }
 
     &__title {
-      font-size: 1.2em;
+      font-size: .9rem;
       margin-right: auto;
     }
 

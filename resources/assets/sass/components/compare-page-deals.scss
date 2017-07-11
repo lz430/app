@@ -1,15 +1,25 @@
 @import '../variables';
 
 .compare-page-deals {
-  $deal-width: 250px;
+  $deal-width: 300px;
   display: flex;
   margin-top: 12px;
-  overflow-x: scroll;
-  width: 150%;
+  transition: .5s;
 
   &__deal {
     margin-right: 10px;
-    min-width: $deal-width;
+    min-width: 100vw;
+    transition: 1s;
     width: $deal-width;
+
+    @media (min-width: $break-small) {
+      min-width: $deal-width;
+    }
+
+    &--opaque {
+      opacity: .5;
+    }
   }
 }
+
+

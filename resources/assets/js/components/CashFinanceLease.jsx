@@ -28,7 +28,7 @@ class CashFinanceLease extends React.Component {
                 <div className="tabs__content__item">
                     <label htmlFor="down-payment">Down Payment</label>
                     <input
-                        className="down-payment"
+                        className="compare-lease__down-payment"
                         type="number"
                         name="down-payment"
                     />
@@ -40,7 +40,7 @@ class CashFinanceLease extends React.Component {
                             name="miles-year"
                             type="range"
                             min="0"
-                            max="50000"
+                            max="100000"
                             step="5000"
                             defaultValue={this.state.milesPerYear}
                             onChange={el =>
@@ -60,7 +60,7 @@ class CashFinanceLease extends React.Component {
                             name="lease-term"
                             type="range"
                             min="0"
-                            max="60"
+                            max="72"
                             step="1"
                             defaultValue={this.state.leaseTerm}
                             onChange={el =>
