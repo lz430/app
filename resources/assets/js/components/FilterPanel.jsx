@@ -37,7 +37,7 @@ class FilterPanel extends React.Component {
     render() {
         return (
             <div>
-                <ZipcodeFinder onUpdate={console.log} />
+                <ZipcodeFinder/>
 
                 <div className="sidebar-filters">
                     <div className="sidebar-filters__header">
