@@ -43,8 +43,8 @@ class ComparePage extends React.Component {
         document.addEventListener(
             'touchstart',
             touchStartEvent => {
-                var xDown = touchStartEvent.touches[0].clientX;
-                var yDown = touchStartEvent.touches[0].clientY;
+                let xDown = touchStartEvent.touches[0].clientX;
+                let yDown = touchStartEvent.touches[0].clientY;
 
                 document.addEventListener(
                     'touchmove',
