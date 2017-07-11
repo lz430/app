@@ -288,6 +288,7 @@ class Importer
         return $vehicleModel->versions()->updateOrCreate([
             'jato_uid' => $version['uid'],
             'year' => $version['modelYear'],
+            'jato_model_id' => $version['modelId'],
         ], [
             'jato_vehicle_id' => $version['vehicleId'],
             'jato_uid' => $version['uid'],
