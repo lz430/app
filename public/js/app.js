@@ -26029,72 +26029,66 @@ var ComparePage = function (_React$Component) {
         _this.slideLeft = _this.slideLeft.bind(_this);
         _this.slideRight = _this.slideRight.bind(_this);
         _this.dealClass = _this.dealClass.bind(_this);
-
-        document.addEventListener('keyup', function (event) {
-            var keyPressed = parseInt(event.keyCode, 10);
-
-            switch (keyPressed) {
-                case 37:
-                    _this.slideLeft();
-                    break;
-                case 39:
-                    _this.slideRight();
-                    break;
-                default:
-                    break;
-            }
-        });
-
-        // ********************************************************
-        // ********************************************************
-        // Detect swipe left and swipe right
-        // Modified from https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
-        document.addEventListener('touchstart', handleTouchStart.bind(_this), false);
-        document.addEventListener('touchmove', handleTouchMove.bind(_this), false);
-
-        var xDown = null;
-        var yDown = null;
-
-        function handleTouchStart(evt) {
-            xDown = evt.touches[0].clientX;
-            yDown = evt.touches[0].clientY;
-        }
-
-        function handleTouchMove(evt) {
-            if (!xDown || !yDown) {
-                return;
-            }
-
-            var xUp = evt.touches[0].clientX;
-            var yUp = evt.touches[0].clientY;
-
-            var xDiff = xDown - xUp;
-            var yDiff = yDown - yUp;
-
-            if (Math.abs(xDiff) > Math.abs(yDiff)) {
-                /*most significant*/
-                if (xDiff > 0) {
-                    this.slideLeft();
-                } else {
-                    this.slideRight();
-                }
-            } else {
-                if (yDiff > 0) {
-                    /* up swipe */
-                } else {
-                        /* down swipe */
-                    }
-            }
-            /* reset values */
-            xDown = null;
-            yDown = null;
-        }
-        // ********************************************************
-        // ********************************************************
         return _this;
     }
 
     _createClass(ComparePage, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            document.addEventListener('keyup', function (event) {
+                var keyPressed = parseInt(event.keyCode, 10);
+
+                switch (keyPressed) {
+                    case 37:
+                        // left arrow
+                        _this2.slideLeft();
+                        break;
+                    case 39:
+                        // right arrow
+                        _this2.slideRight();
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            // ********************************************************
+            // ********************************************************
+            // Detect swipe left and swipe right
+            // Modified from https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
+            document.addEventListener('touchstart', function (touchStartEvent) {
+                var xDown = touchStartEvent.touches[0].clientX;
+                var yDown = touchStartEvent.touches[0].clientY;
+
+                document.addEventListener('touchmove', function (toucheEndEvent) {
+                    var deltaX = xDown - toucheEndEvent.touches[0].clientX;
+                    var deltaY = yDown - toucheEndEvent.touches[0].clientY;
+
+                    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                        /*most significant*/
+                        if (deltaX > 0) {
+                            _this2.slideLeft();
+                        } else {
+                            _this2.slideRight();
+                        }
+                    } else {
+                        if (deltaY > 0) {
+                            /* up swipe */
+                        } else {
+                                /* down swipe */
+                            }
+                    }
+
+                    xDown = null;
+                    yDown = null;
+                }, false);
+            }, false);
+            // ********************************************************
+            // ********************************************************
+        }
+    }, {
         key: 'slideLeft',
         value: function slideLeft() {
             this.setState({

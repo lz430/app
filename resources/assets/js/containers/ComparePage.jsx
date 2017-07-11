@@ -18,15 +18,17 @@ class ComparePage extends React.Component {
         this.slideLeft = this.slideLeft.bind(this);
         this.slideRight = this.slideRight.bind(this);
         this.dealClass = this.dealClass.bind(this);
+    }
 
+    componentDidMount() {
         document.addEventListener('keyup', event => {
             const keyPressed = parseInt(event.keyCode, 10);
 
             switch (keyPressed) {
-                case 37:
+                case 37: // left arrow
                     this.slideLeft();
                     break;
-                case 39:
+                case 39: // right arrow
                     this.slideRight();
                     break;
                 default:
@@ -40,52 +42,39 @@ class ComparePage extends React.Component {
         // Modified from https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
         document.addEventListener(
             'touchstart',
-            handleTouchStart.bind(this),
+            touchStartEvent => {
+                var xDown = touchStartEvent.touches[0].clientX;
+                var yDown = touchStartEvent.touches[0].clientY;
+
+                document.addEventListener(
+                    'touchmove',
+                    toucheEndEvent => {
+                        let deltaX = xDown - toucheEndEvent.touches[0].clientX;
+                        let deltaY = yDown - toucheEndEvent.touches[0].clientY;
+
+                        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                            /*most significant*/
+                            if (deltaX > 0) {
+                                this.slideLeft();
+                            } else {
+                                this.slideRight();
+                            }
+                        } else {
+                            if (deltaY > 0) {
+                                /* up swipe */
+                            } else {
+                                /* down swipe */
+                            }
+                        }
+
+                        xDown = null;
+                        yDown = null;
+                    },
+                    false
+                );
+            },
             false
         );
-        document.addEventListener(
-            'touchmove',
-            handleTouchMove.bind(this),
-            false
-        );
-
-        var xDown = null;
-        var yDown = null;
-
-        function handleTouchStart(evt) {
-            xDown = evt.touches[0].clientX;
-            yDown = evt.touches[0].clientY;
-        }
-
-        function handleTouchMove(evt) {
-            if (!xDown || !yDown) {
-                return;
-            }
-
-            var xUp = evt.touches[0].clientX;
-            var yUp = evt.touches[0].clientY;
-
-            var xDiff = xDown - xUp;
-            var yDiff = yDown - yUp;
-
-            if (Math.abs(xDiff) > Math.abs(yDiff)) {
-                /*most significant*/
-                if (xDiff > 0) {
-                    this.slideLeft();
-                } else {
-                    this.slideRight();
-                }
-            } else {
-                if (yDiff > 0) {
-                    /* up swipe */
-                } else {
-                    /* down swipe */
-                }
-            }
-            /* reset values */
-            xDown = null;
-            yDown = null;
-        }
         // ********************************************************
         // ********************************************************
     }
