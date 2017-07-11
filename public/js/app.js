@@ -2656,6 +2656,8 @@ function requestLocationInfo() {
             }).catch(function (error) {
                 console.log('Error', error.message);
             });
+        } else {
+            dispatch(requestDeals());
         }
 
         dispatch({
@@ -3028,7 +3030,17 @@ var util = {
     getInitialBodyStyleFromUrl: function getInitialBodyStyleFromUrl() {
         return __WEBPACK_IMPORTED_MODULE_0_ramda___default.a.prop('style', __WEBPACK_IMPORTED_MODULE_1_qs___default.a.parse(window.location.search.slice(1)));
     },
+    fromRefreshed: function fromRefreshed() {
+        return window.performance.navigation.type === 1;
+    },
+    fromBackForward: function fromBackForward() {
+        return window.performance.navigation.type === 2;
+    },
     wasReferredFromHomePage: function wasReferredFromHomePage() {
+        if (util.fromRefreshed() || util.fromBackForward()) {
+            return false;
+        }
+
         var temp = document.createElement('a');
 
         temp.href = document.referrer;
@@ -23573,7 +23585,7 @@ var Deal = function (_React$Component) {
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
                         { className: 'deal__basic-info-msrp' },
-                        __WEBPACK_IMPORTED_MODULE_2_src_util__["a" /* default */].moneyFormat(deal.price),
+                        __WEBPACK_IMPORTED_MODULE_2_src_util__["a" /* default */].moneyFormat(deal.msrp),
                         ' MSRP'
                     )
                 ),
@@ -23648,11 +23660,15 @@ var DealDetails = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (DealDetails.__proto__ || Object.getPrototypeOf(DealDetails)).call(this, props));
 
         _this.state = {
-            featuredImage: props.deal.photos.data[0]
+            featuredImage: props.deal.photos.data[0],
+            selectedTab: 'cash'
         };
 
         _this.renderThumbnailImage = _this.renderThumbnailImage.bind(_this);
         _this.renderLoginRegister = _this.renderLoginRegister.bind(_this);
+        _this.selectCashTab = _this.selectCashTab.bind(_this);
+        _this.selectFinanceTab = _this.selectFinanceTab.bind(_this);
+        _this.selectLeaseTab = _this.selectLeaseTab.bind(_this);
         return _this;
     }
 
@@ -23734,17 +23750,30 @@ var DealDetails = function (_React$Component) {
             });
         }
     }, {
+        key: 'selectCashTab',
+        value: function selectCashTab() {
+            this.setState({
+                selectedTab: 'cash'
+            });
+        }
+    }, {
+        key: 'selectFinanceTab',
+        value: function selectFinanceTab() {
+            this.setState({
+                selectedTab: 'finance'
+            });
+        }
+    }, {
+        key: 'selectLeaseTab',
+        value: function selectLeaseTab() {
+            this.setState({
+                selectedTab: 'lease'
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
             var deal = this.props.deal;
-            var settings = {
-                accessibility: true,
-                infinite: false,
-                lazyLoad: false,
-                focusOnSelect: false,
-                slidesToShow: 4,
-                slidesToScroll: 4
-            };
 
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
@@ -23870,26 +23899,62 @@ var DealDetails = function (_React$Component) {
                     { className: 'deal-details__pricing' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
-                        null,
-                        'Pricing'
+                        { className: 'deal-details__pricing-title-and-tabs' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'div',
+                            { className: 'deal-details__pricing-title' },
+                            'Pricing'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'div',
+                            { className: 'tabs tabs--no-bottom-border' },
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                'div',
+                                {
+                                    className: 'tabs__tab ' + (this.state.selectedTab === 'cash' ? 'tabs__tab--selected' : ''),
+                                    onClick: this.selectCashTab
+                                },
+                                'Cash'
+                            ),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                'div',
+                                {
+                                    className: 'tabs__tab ' + (this.state.selectedTab === 'finance' ? 'tabs__tab--selected' : ''),
+                                    onClick: this.selectFinanceTab
+                                },
+                                'Finance'
+                            ),
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                'div',
+                                {
+                                    className: 'tabs__tab ' + (this.state.selectedTab === 'lease' ? 'tabs__tab--selected' : ''),
+                                    onClick: this.selectLeaseTab
+                                },
+                                'Lease'
+                            )
+                        )
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
-                        null,
-                        'cash / finance / lease'
-                    ),
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'div',
-                        null,
-                        'MSRP: ',
-                        __WEBPACK_IMPORTED_MODULE_4_src_util__["a" /* default */].moneyFormat(deal.msrp)
-                    ),
-                    window.user ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'p',
-                        null,
-                        'DMR Price: ',
-                        __WEBPACK_IMPORTED_MODULE_4_src_util__["a" /* default */].moneyFormat(deal.price)
-                    ) : this.renderLoginRegister()
+                        { className: 'deal-details__pricing-body' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'div',
+                            { className: 'deal-details__msrp' },
+                            'MSRP',
+                            ' ',
+                            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                'span',
+                                { className: 'deal-details__msrp-amount' },
+                                __WEBPACK_IMPORTED_MODULE_4_src_util__["a" /* default */].moneyFormat(deal.msrp)
+                            )
+                        ),
+                        window.user ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'p',
+                            null,
+                            'DMR Price: ',
+                            __WEBPACK_IMPORTED_MODULE_4_src_util__["a" /* default */].moneyFormat(deal.price)
+                        ) : this.renderLoginRegister()
+                    )
                 )
             );
         }
@@ -23982,6 +24047,7 @@ Deals.propTypes = {
     deals: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
         year: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
         msrp: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.number.isRequired,
+        price: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.number.isRequired,
         make: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
         model: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
         id: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.number.isRequired
@@ -24309,7 +24375,7 @@ var FilterPanel = function (_React$Component) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 null,
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_components_ZipcodeFinder__["a" /* default */], { onUpdate: console.log }),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_components_ZipcodeFinder__["a" /* default */], null),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
                     { className: 'sidebar-filters' },
@@ -25523,7 +25589,7 @@ var ZipcodeFinder = function (_React$Component) {
 }(__WEBPACK_IMPORTED_MODULE_0_react___default.a.Component);
 
 ZipcodeFinder.propTypes = {
-    onUpdate: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.func.isRequired
+    zipcode: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string
 };
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -25553,11 +25619,13 @@ var mapStateToProps = function mapStateToProps(state) {
 
 
 
+var urlStyle = __WEBPACK_IMPORTED_MODULE_5_src_util__["a" /* default */].getInitialBodyStyleFromUrl();
+
 var initialState = {
     window: { width: window.innerWidth },
     smallFiltersShown: false,
     showMakeSelectorModal: true,
-    selectedStyles: [__WEBPACK_IMPORTED_MODULE_5_src_util__["a" /* default */].getInitialBodyStyleFromUrl()],
+    selectedStyles: urlStyle ? [urlStyle] : [],
     bodyStyles: null,
     fuelTypes: ['Gasoline', 'Flex Fuel', 'Diesel'],
     transmissionTypes: ['automatic', 'manual'],
@@ -26154,7 +26222,7 @@ var reducer = function reducer(state, action) {
             var style = __WEBPACK_IMPORTED_MODULE_3_src_util__["a" /* default */].getInitialBodyStyleFromUrl();
             if (style && window.document.referrer !== window.location.href) {
                 return Object.assign({}, state, action.payload, {
-                    selectedStyles: [__WEBPACK_IMPORTED_MODULE_3_src_util__["a" /* default */].getInitialBodyStyleFromUrl()]
+                    selectedStyles: [style]
                 });
             }
 

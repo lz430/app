@@ -36,11 +36,39 @@
   }
 
   &__pricing {
-    background: darken($color-background-primary, 4);
+    display: flex;
+    flex-direction: column;
 
     @media (min-width: $break-medium) {
       width: $break-medium * .4;
     }
+  }
+
+  &__pricing-title-and-tabs {
+    background: lighten($color-sidebar-background-secondary, 46%);
+    padding: 15px 15px 0;
+  }
+
+  &__pricing-title {
+    border-bottom: 1.5px solid transparentize($color-section-bottom-border, .5);
+    color: $text-color-dark;
+    font-size: 1.2rem;
+    padding-bottom: 5px;
+  }
+
+  &__pricing-body {
+    background: darken($color-background-primary, 4);
+    height: 100%;
+  }
+
+  &__msrp {
+    color: $text-color-dark;
+    font-size: 1.1rem;
+    padding: 10px 15px;
+  }
+
+  &__msrp-amount {
+    float: right;
   }
 
   &__primary-image {
@@ -104,10 +132,10 @@
 
   // Login Or Register
   &__login-register {
-    background: $color-background-primary;
+    background: $color-text-white;
     border-radius: 4px;
-    margin: 15px;
-    padding: 10px;
+    margin: 0 15px;
+    padding: 15px;
   }
 
   &__login-register-text {
