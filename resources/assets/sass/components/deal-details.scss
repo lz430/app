@@ -20,32 +20,68 @@
     align-items: center;
     display: flex;
     flex-direction: column;
+    margin: 0 15px;
+    overflow: hidden;
   }
 
   &__information {
     padding: 15px;
   }
 
+  &__title {
+    border-bottom: 2px solid $color-section-bottom-border;
+    color: $text-color-dark;
+    font-size: 1.1rem;
+    padding-bottom: 10px;
+  }
+
   &__pricing {
-    background: darken($color-background-primary, 4);
+    display: flex;
+    flex-direction: column;
 
     @media (min-width: $break-medium) {
       width: $break-medium * .4;
     }
   }
 
+  &__pricing-title-and-tabs {
+    background: lighten($color-sidebar-background-secondary, 46%);
+    padding: 15px 15px 0;
+  }
+
+  &__pricing-title {
+    border-bottom: 1.5px solid transparentize($color-section-bottom-border, .5);
+    color: $text-color-dark;
+    font-size: 1.2rem;
+    padding-bottom: 5px;
+  }
+
+  &__pricing-body {
+    background: darken($color-background-primary, 4);
+    height: 100%;
+  }
+
+  &__msrp {
+    color: $text-color-dark;
+    font-size: 1.1rem;
+    padding: 10px 15px;
+  }
+
+  &__msrp-amount {
+    float: right;
+  }
+
   &__primary-image {
     border: 1px solid $color-section-bottom-border;
     margin: 15px 0;
-    width: calc(100% - 30px);
+    width: 100%;
   }
 
   &__thumbnail-images {
     display: flex;
-    flex-wrap: wrap;
-    margin: -5px;
-    min-height: 0;
-    min-width: 0;
+    margin-bottom: 10px;
+    overflow-x: scroll;
+    width: 100%;
   }
 
   &__thumbnail-image {
@@ -53,17 +89,27 @@
     margin: 5px;
     width: 66px;
 
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
     &--from-fuel {
       border: 2px solid $color-sidebar-background-secondary-dark;
     }
 
     &--selected {
-      border: 1px solid $color-blue;
+      border: 2px solid $color-blue;
     }
   }
 
   &__vin {
+    color: $text-color;
     float: right;
+    font-size: .8rem;
   }
 
   &__items {
@@ -72,9 +118,12 @@
   }
 
   &__item {
-    border-bottom: 1px solid $color-section-bottom-border;
+    border-bottom: 1px solid transparentize($color-section-bottom-border, .5);
+    color: $text-color-dark;
     display: flex;
+    font-size: .8rem;
     justify-content: flex-start;
+    padding: 8px;
 
     :nth-child(1) {
       margin-right: auto;
@@ -83,10 +132,10 @@
 
   // Login Or Register
   &__login-register {
-    background: $color-background-primary;
+    background: $color-text-white;
     border-radius: 4px;
-    margin: 15px;
-    padding: 10px;
+    margin: 0 15px;
+    padding: 15px;
   }
 
   &__login-register-text {
@@ -104,13 +153,4 @@
     flex: 1;
     margin: 5px;
   }
-}
-
-// Slick Slider
-.slick-slider {
-  width: 85%;
-}
-
-.slick-arrow::before {
-  color: $text-color;
 }

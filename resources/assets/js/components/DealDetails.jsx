@@ -2,7 +2,6 @@ import React from 'react';
 import R from 'ramda';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
-import Slider from 'react-slick';
 import util from 'src/util';
 
 class DealDetails extends React.Component {
@@ -11,10 +10,14 @@ class DealDetails extends React.Component {
 
         this.state = {
             featuredImage: props.deal.photos.data[0],
+            selectedTab: 'cash',
         };
 
         this.renderThumbnailImage = this.renderThumbnailImage.bind(this);
         this.renderLoginRegister = this.renderLoginRegister.bind(this);
+        this.selectCashTab = this.selectCashTab.bind(this);
+        this.selectFinanceTab = this.selectFinanceTab.bind(this);
+        this.selectLeaseTab = this.selectLeaseTab.bind(this);
     }
 
     componentDidMount() {
@@ -75,13 +78,12 @@ class DealDetails extends React.Component {
                 : '');
 
         return (
-            <div key={index}>
-                <img
-                    onClick={this.selectFeaturedImage.bind(this, index)}
-                    className={imageClass}
-                    src={R.propOr(this.props.fallbackDealImage, 'url', photo)}
-                />
-            </div>
+            <img
+                key={index}
+                onClick={this.selectFeaturedImage.bind(this, index)}
+                className={imageClass}
+                src={R.propOr(this.props.fallbackDealImage, 'url', photo)}
+            />
         );
     }
 
@@ -98,35 +100,44 @@ class DealDetails extends React.Component {
         );
     }
 
+    selectCashTab() {
+        this.setState({
+            selectedTab: 'cash',
+        });
+    }
+
+    selectFinanceTab() {
+        this.setState({
+            selectedTab: 'finance',
+        });
+    }
+
+    selectLeaseTab() {
+        this.setState({
+            selectedTab: 'lease',
+        });
+    }
+
     render() {
         const deal = this.props.deal;
-        const settings = {
-            accessibility: true,
-            infinite: false,
-            lazyLoad: false,
-            focusOnSelect: false,
-            slidesToShow: 4,
-            slidesToScroll: 4,
-        };
 
         return (
             <div className="deal-details">
                 <div className="deal-details__images-and-information">
                     <div className="deal-details__images">
                         {this.renderFeaturedImage()}
-                        <Slider {...settings}>
+                        <div className="deal-details__thumbnail-images">
                             {this.allImages().map(this.renderThumbnailImage)}
-                        </Slider>
+                        </div>
                     </div>
 
                     <div className="deal-details__information">
-                        <h2>
+                        <div className="deal-details__title">
                             Vehicle Information
-                            {' '}
                             <span className="deal-details__vin">
                                 {deal.vin.substr(deal.vin.length - 8)}
                             </span>
-                        </h2>
+                        </div>
 
                         <div className="deal-details__items">
                             <div className="deal-details__item">
@@ -158,16 +169,45 @@ class DealDetails extends React.Component {
                 </div>
 
                 <div className="deal-details__pricing">
-                    <div>Pricing</div>
-                    <div>
-                        cash / finance / lease
+                    <div className="deal-details__pricing-title-and-tabs">
+                        <div className="deal-details__pricing-title">
+                            Pricing
+                        </div>
+                        <div className="tabs tabs--no-bottom-border">
+                            <div
+                                className={`tabs__tab ${this.state.selectedTab === 'cash' ? 'tabs__tab--selected' : ''}`}
+                                onClick={this.selectCashTab}
+                            >
+                                Cash
+                            </div>
+                            <div
+                                className={`tabs__tab ${this.state.selectedTab === 'finance' ? 'tabs__tab--selected' : ''}`}
+                                onClick={this.selectFinanceTab}
+                            >
+                                Finance
+                            </div>
+                            <div
+                                className={`tabs__tab ${this.state.selectedTab === 'lease' ? 'tabs__tab--selected' : ''}`}
+                                onClick={this.selectLeaseTab}
+                            >
+                                Lease
+                            </div>
+                        </div>
                     </div>
 
-                    <div>MSRP: {util.moneyFormat(deal.msrp)}</div>
+                    <div className="deal-details__pricing-body">
+                        <div className="deal-details__msrp">
+                            MSRP
+                            {' '}
+                            <span className="deal-details__msrp-amount">
+                                {util.moneyFormat(deal.msrp)}
+                            </span>
+                        </div>
 
-                    {window.user
-                        ? <p>DMR Price: {util.moneyFormat(deal.price)}</p>
-                        : this.renderLoginRegister()}
+                        {window.user
+                            ? <p>DMR Price: {util.moneyFormat(deal.price)}</p>
+                            : this.renderLoginRegister()}
+                    </div>
                 </div>
             </div>
         );
