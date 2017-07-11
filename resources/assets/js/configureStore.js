@@ -11,11 +11,13 @@ import {
 } from 'actions/index';
 import util from 'src/util';
 
+const urlStyle = util.getInitialBodyStyleFromUrl();
+
 const initialState = {
     window: { width: window.innerWidth },
     smallFiltersShown: false,
     showMakeSelectorModal: true,
-    selectedStyles: [util.getInitialBodyStyleFromUrl()],
+    selectedStyles: urlStyle ? [urlStyle] : [],
     bodyStyles: null,
     fuelTypes: ['Gasoline', 'Flex Fuel', 'Diesel'],
     transmissionTypes: ['automatic', 'manual'],

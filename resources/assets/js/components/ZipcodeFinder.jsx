@@ -111,7 +111,7 @@ class ZipcodeFinder extends React.Component {
 }
 
 ZipcodeFinder.propTypes = {
-    onUpdate: PropTypes.func.isRequired,
+    zipcode: PropTypes.string,
 };
 
 const mapStateToProps = state => {

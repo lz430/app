@@ -108,7 +108,7 @@ class DealsController extends BaseAPIController
                     $query->filterByMake($request->get('make_ids'));
                 }
             });
-        });
+        })->whereNotNull('price')->whereNotNull('msrp');
     }
 
     private function filterQueryByTransmissionType(Builder $query, Request $request) : Builder

@@ -27,7 +27,17 @@ const util = {
     getInitialBodyStyleFromUrl: () => {
         return R.prop('style', qs.parse(window.location.search.slice(1)));
     },
+    fromRefreshed: () => {
+        return window.performance.navigation.type === 1;
+    },
+    fromBackForward: () => {
+        return window.performance.navigation.type === 2;
+    },
     wasReferredFromHomePage: () => {
+        if (util.fromRefreshed() || util.fromBackForward()) {
+            return false;
+        }
+
         let temp = document.createElement('a');
 
         temp.href = document.referrer;

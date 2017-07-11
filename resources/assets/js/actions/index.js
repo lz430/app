@@ -441,6 +441,8 @@ export function requestLocationInfo() {
                 .catch(error => {
                     console.log('Error', error.message);
                 });
+        } else {
+            dispatch(requestDeals());
         }
 
         dispatch({
