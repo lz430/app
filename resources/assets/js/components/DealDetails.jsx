@@ -18,6 +18,7 @@ class DealDetails extends React.Component {
         this.selectCashTab = this.selectCashTab.bind(this);
         this.selectFinanceTab = this.selectFinanceTab.bind(this);
         this.selectLeaseTab = this.selectLeaseTab.bind(this);
+        this.renderDMRPrice = this.renderDMRPrice.bind(this);
     }
 
     componentDidMount() {
@@ -118,6 +119,19 @@ class DealDetails extends React.Component {
         });
     }
 
+    renderDMRPrice() {
+        const deal = this.props.deal;
+
+        return (
+            <div className="deal-details__dmr-price">
+                <div className="deal-details__dmr-price-label">DMR Price:</div>
+                <div className="deal-details__dmr-price-amount">
+                    {util.moneyFormat(deal.price)}
+                </div>
+            </div>
+        );
+    }
+
     render() {
         const deal = this.props.deal;
 
@@ -205,7 +219,7 @@ class DealDetails extends React.Component {
                         </div>
 
                         {window.user
-                            ? <p>DMR Price: {util.moneyFormat(deal.price)}</p>
+                            ? this.renderDMRPrice()
                             : this.renderLoginRegister()}
                     </div>
                 </div>

@@ -71,6 +71,29 @@
     float: right;
   }
 
+  &__dmr-price {
+    background: lighten($color-sidebar-background-secondary, 46%);
+    display: flex;
+    font-size: .9rem;
+    padding: 5px 15px;
+  }
+
+  &__dmr-price-label {
+    align-self: flex-end;
+    color: $text-color-dark;
+    flex: 1;
+    font-size: .9rem;
+  }
+
+  &__dmr-price-amount {
+    align-self: flex-start;
+    color: $text-color-dark;
+    float: right;
+    font-size: 1.6rem;
+    justify-self: flex-end;
+    line-height: 2rem;
+  }
+
   &__primary-image {
     border: 1px solid $color-section-bottom-border;
     margin: 15px 0;
