@@ -8,12 +8,12 @@
 
   &__deal {
     margin-right: 10px;
-    min-width: $deal-width;
+    min-width: 100vw;
     transition: 1s;
     width: $deal-width;
 
-    @media (max-width: $break-small) {
-      min-width: 100vw;
+    @media (min-width: $break-small) {
+      min-width: $deal-width;
     }
 
     &--opaque {
