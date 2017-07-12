@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="section section--stretch">
+    <div class="section">
         <div class="section__title">
             Something went wrong...
         </div>

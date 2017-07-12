@@ -13,10 +13,13 @@ $color-black: #000;
 $color-blue: #3786a1;
 $color-error: #ac0000;
 
-$color-lightgrey: #F6F6F7;
-$color-grey: #CED4D9;
-$color-darkgrey: #535D63;
-$color-darkergrey: #484D50;
+$color-lightgrey: #f6f6f7;
+$color-grey: #ced4d9;
+$color-darkgrey: #535d63;
+$color-darkergrey: #484d50;
+
+$color-facebook-blue: #3b5998;
+$color-twitter-blue: #4099ff;
 
 // Typography
 $font-family-sans-serif: 'Open Sans', sans-serif;
@@ -30,6 +33,7 @@ $nav-height: 75px;
 $footer-height: 75px;
 
 // Breakpoints
+$break-extra-small: 350px;
 $break-small: 576px;
 $break-medium: 768px;
 $break-large: 992px;

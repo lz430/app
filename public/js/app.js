@@ -22489,7 +22489,7 @@ var Comparebar = function (_React$Component) {
         value: function renderCompareBubble() {
             var className = 'compare-bubble ' + (this.state.shaking ? 'compare-bubble--shake' : '');
 
-            return this.props.compareList.length ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
                 null,
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -22507,7 +22507,7 @@ var Comparebar = function (_React$Component) {
                         this.props.compareList.length
                     )
                 )
-            ) : '';
+            );
         }
     }, {
         key: 'render',
@@ -25452,7 +25452,7 @@ var reducer = function reducer(state, action) {
              * So as not to confuse people coming from a specific link.
              */
             var style = __WEBPACK_IMPORTED_MODULE_3_src_util__["a" /* default */].getInitialBodyStyleFromUrl();
-            if (style && window.document.referrer !== window.location.href) {
+            if (style && !__WEBPACK_IMPORTED_MODULE_3_src_util__["a" /* default */].fromRefreshed()) {
                 return Object.assign({}, state, action.payload, {
                     selectedStyles: [style]
                 });

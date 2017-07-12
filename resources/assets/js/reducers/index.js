@@ -29,7 +29,7 @@ const reducer = (state, action) => {
              * So as not to confuse people coming from a specific link.
              */
             const style = util.getInitialBodyStyleFromUrl();
-            if (style && window.document.referrer !== window.location.href) {
+            if (style && !util.fromRefreshed()) {
                 return Object.assign({}, state, action.payload, {
                     selectedStyles: [style],
                 });

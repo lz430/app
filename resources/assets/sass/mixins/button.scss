@@ -27,6 +27,7 @@
 
   &--small {
     font-size: .9rem;
+    padding: 4px 15px;
   }
 
   &--no-border {
@@ -39,5 +40,23 @@
 
   &--capitalize {
     text-transform: capitalize;
+  }
+
+  &--facebook-blue {
+    background: $color-facebook-blue;
+    color: $color-text-white;
+  }
+
+  &--twitter-blue {
+    background: $color-twitter-blue;
+    color: $color-text-white;
+  }
+
+  svg {
+    fill: $color-text-white;
+    height: 12px;
+    margin-bottom: -1.5px;
+    margin-right: 5px;
+    width: 12px;
   }
 }

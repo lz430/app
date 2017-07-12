@@ -1,11 +1,47 @@
 @import '../variables';
 @import '../mixins/constrained';
+@import '../mixins/button';
 
 .section {
   @include constrained;
   display: flex;
   flex-wrap: wrap;
   padding: $section-padding;
+
+  &__buttons {
+    margin: 15px;
+  }
+
+  &__button {
+    @include button;
+    margin: 0 8px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &__title-icon {
+    fill: $color-blue;
+    height: 50px;
+    margin: 0 auto 15px;
+    width: 100%;
+
+    svg {
+      height: 100%;
+    }
+  }
+
+  &__image {
+    margin: 25px 0;
+    text-align: center;
+    width: 100%;
+
+    img {
+      border: 1px solid $color-section-bottom-border;
+      width: $break-extra-small;
+    }
+  }
 
   &__title {
     color: $text-color-dark;
@@ -14,6 +50,16 @@
     margin-bottom: 10px;
     text-align: center;
     width: 100%;
+
+    &--constrict-extra-small {
+      margin: 0 auto;
+      max-width: $break-extra-small;
+    }
+
+    &--constrict-small {
+      margin: 0 auto;
+      max-width: $break-small;
+    }
 
     &--small {
       font-size: 1.2rem;
@@ -53,8 +99,19 @@
     min-height: calc(100vh - #{$nav-height} - #{$footer-height});
   }
 
+  &--no-footer {
+    border-bottom-style: none;
+  }
+
+  &--no-footer &--stretch {
+    min-height: calc(100vh - #{$nav-height});
+  }
+
   &--no-header-or-footer {
     border-bottom-style: none;
+  }
+
+  &--no-header-or-footer &--stretch {
     min-height: 100vh;
   }
 
