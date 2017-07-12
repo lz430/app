@@ -22221,7 +22221,7 @@ var CashFinanceLease = function (_React$Component) {
                         'Down Payment'
                     ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', {
-                        className: 'down-payment',
+                        className: 'compare-lease__down-payment',
                         type: 'number',
                         name: 'down-payment'
                     })
@@ -22241,7 +22241,7 @@ var CashFinanceLease = function (_React$Component) {
                             name: 'miles-year',
                             type: 'range',
                             min: '0',
-                            max: '50000',
+                            max: '100000',
                             step: '5000',
                             defaultValue: this.state.milesPerYear,
                             onChange: function onChange(el) {
@@ -22272,7 +22272,7 @@ var CashFinanceLease = function (_React$Component) {
                             name: 'lease-term',
                             type: 'range',
                             min: '0',
-                            max: '60',
+                            max: '72',
                             step: '1',
                             defaultValue: this.state.leaseTerm,
                             onChange: function onChange(el) {
@@ -24860,10 +24860,67 @@ var ComparePage = function (_React$Component) {
         _this.getMarginLeft = _this.getMarginLeft.bind(_this);
         _this.slideLeft = _this.slideLeft.bind(_this);
         _this.slideRight = _this.slideRight.bind(_this);
+        _this.dealClass = _this.dealClass.bind(_this);
         return _this;
     }
 
     _createClass(ComparePage, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            document.addEventListener('keyup', function (event) {
+                var keyPressed = parseInt(event.keyCode, 10);
+
+                switch (keyPressed) {
+                    case 37:
+                        // left arrow
+                        _this2.slideLeft();
+                        break;
+                    case 39:
+                        // right arrow
+                        _this2.slideRight();
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            // ********************************************************
+            // ********************************************************
+            // Detect swipe left and swipe right
+            // Modified from https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
+            document.addEventListener('touchstart', function (touchStartEvent) {
+                var xDown = touchStartEvent.touches[0].clientX;
+                var yDown = touchStartEvent.touches[0].clientY;
+
+                document.addEventListener('touchmove', function (toucheEndEvent) {
+                    var deltaX = xDown - toucheEndEvent.touches[0].clientX;
+                    var deltaY = yDown - toucheEndEvent.touches[0].clientY;
+
+                    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                        /*most significant*/
+                        if (deltaX > 0) {
+                            _this2.slideLeft();
+                        } else {
+                            _this2.slideRight();
+                        }
+                    } else {
+                        if (deltaY > 0) {
+                            /* up swipe */
+                        } else {
+                                /* down swipe */
+                            }
+                    }
+
+                    xDown = null;
+                    yDown = null;
+                }, false);
+            }, false);
+            // ********************************************************
+            // ********************************************************
+        }
+    }, {
         key: 'slideLeft',
         value: function slideLeft() {
             this.setState({
@@ -24896,11 +24953,22 @@ var ComparePage = function (_React$Component) {
             );
         }
     }, {
+        key: 'dealClass',
+        value: function dealClass(index) {
+            var className = 'compare-page-deals__deal';
+
+            if (index < this.state.dealIndex || index > this.state.dealIndex + 2) {
+                className += ' compare-page-deals__deal--opaque';
+            }
+
+            return className;
+        }
+    }, {
         key: 'renderDeal',
         value: function renderDeal(deal, index) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
-                { key: index, className: 'compare-page-deals__deal' },
+                { key: index, className: this.dealClass(index) },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { className: 'compare-deal__image', src: deal.photos[0].url }),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
@@ -24923,7 +24991,7 @@ var ComparePage = function (_React$Component) {
                     'div',
                     { className: 'compare-deal__basic-info' },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'p',
+                        'div',
                         { className: 'compare-deal__basic-info__title' },
                         deal.year,
                         ' ',
@@ -24931,12 +24999,19 @@ var ComparePage = function (_React$Component) {
                         ' ',
                         deal.model
                     ),
-                    'DMR Price',
-                    ' ',
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                        'span',
-                        { className: 'compare-deal__basic-info__price' },
-                        __WEBPACK_IMPORTED_MODULE_4_src_util__["a" /* default */].moneyFormat(deal.price)
+                        'div',
+                        { className: 'compare-deal__basic-info__content' },
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'div',
+                            { className: 'compare-deal__basic-info__subtitle' },
+                            'DMR Price'
+                        ),
+                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                            'div',
+                            { className: 'compare-deal__basic-info__price' },
+                            __WEBPACK_IMPORTED_MODULE_4_src_util__["a" /* default */].moneyFormat(deal.price)
+                        )
                     )
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -25063,7 +25138,11 @@ var ComparePage = function (_React$Component) {
         value: function getMarginLeft() {
             var dealPadding = 10;
 
-            return this.state.dealIndex * (-250 - dealPadding);
+            var clientWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+
+            var subtractWidth = clientWidth < 576 ? clientWidth : 300;
+
+            return this.state.dealIndex * (-subtractWidth - dealPadding);
         }
     }, {
         key: 'render',
@@ -25093,6 +25172,15 @@ var ComparePage = function (_React$Component) {
                     })
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_components_CashFinanceLease__["a" /* default */], null),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'compare-page__swipe-notification' },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'em',
+                        null,
+                        'Swipe to left to compare other vehicles.'
+                    )
+                ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
                     {

@@ -5,16 +5,26 @@ comparepage {
 }
 .compare-page {
   display: block;
+  margin: 0 auto;
+  max-width: 1100px;
   overflow: hidden;
-  padding: $section-padding;
+  padding: 0;
+
+  @media (min-width: $break-small) {
+    padding: $section-padding;
+  }
 
   &__arrow-buttons {
-    background-color: $color-text-white;
-    border: 1px solid $color-section-bottom-border;
-    border-radius: 4px;
-    display: flex;
-    float: right;
-    margin-top: -40px;
+    display: none;
+
+    @media (min-width: $break-small) {
+      background-color: $color-text-white;
+      border: 1px solid $color-section-bottom-border;
+      border-radius: 4px;
+      display: flex;
+      float: right;
+      margin-top: -40px;
+    }
   }
 
   &__arrow-button {
@@ -27,5 +37,16 @@ comparepage {
     &:first-child {
       border-right: 1px solid $color-section-bottom-border;
     }
+  }
+
+  &__swipe-notification {
+    display: block;
+    margin: 10px auto;
+    width: 245px;
+
+    @media (min-width: $break-small) {
+      display: none;
+    }
+
   }
 }
