@@ -20,6 +20,7 @@ class DealDetails extends React.Component {
         this.selectLeaseTab = this.selectLeaseTab.bind(this);
         this.renderDMRPrice = this.renderDMRPrice.bind(this);
         this.renderCompareAndBuyNow = this.renderCompareAndBuyNow.bind(this);
+        this.startPurchaseFlow = this.startPurchaseFlow.bind(this);
     }
 
     componentDidMount() {
@@ -148,11 +149,59 @@ class DealDetails extends React.Component {
                 >
                     Compare
                 </button>
-                <button className="deal-details__dmr-button deal-details__dmr-button--blue deal-details__dmr-button--small">
+                <button
+                    type="button"
+                    onClick={this.startPurchaseFlow}
+                    className="deal-details__dmr-button deal-details__dmr-button--blue deal-details__dmr-button--small"
+                >
                     Buy Now
                 </button>
             </div>
         );
+    }
+
+    startPurchaseFlow() {
+        const deal = this.props.deal;
+
+        let form = document.createElement('form');
+        form.setAttribute('method', 'post');
+        form.setAttribute('action', '/apply-or-purchase');
+
+        let csrf = document.createElement('input');
+        csrf.setAttribute('name', '_token');
+        csrf.setAttribute('value', window.Laravel.csrfToken);
+
+        let deal_id = document.createElement('input');
+        deal_id.setAttribute('name', 'deal_id');
+        deal_id.setAttribute('value', deal.id);
+
+        [
+            {
+                name: 'Example incentive',
+                value: 500.50,
+            },
+        ].forEach((incentive, index) => {
+            let incentiveName = document.createElement('input');
+            incentiveName.setAttribute('name', `incentives[${index}][name]`);
+            incentiveName.setAttribute('value', incentive.name);
+            form.appendChild(incentiveName);
+
+            let incentiveValue = document.createElement('input');
+            incentiveValue.setAttribute('name', `incentives[${index}][value]`);
+            incentiveValue.setAttribute('value', incentive.value);
+            form.appendChild(incentiveValue);
+        });
+
+        let dmr_price = document.createElement('input');
+        dmr_price.setAttribute('name', 'dmr_price');
+        dmr_price.setAttribute('value', deal.price);
+
+        form.appendChild(csrf);
+        form.appendChild(deal_id);
+        form.appendChild(dmr_price);
+
+        document.body.appendChild(form);
+        form.submit();
     }
 
     render() {

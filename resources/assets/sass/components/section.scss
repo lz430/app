@@ -50,7 +50,7 @@
   }
 
   &--stretch {
-    min-height: calc(100vh - #{$nav-height} - #{$footer-height} - #{$section-padding * 2});
+    min-height: calc(100vh - #{$nav-height} - #{$footer-height});
   }
 
   &--no-header-or-footer {

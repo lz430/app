@@ -6,22 +6,45 @@ use App\Mail\ApplicationSubmittedDMR;
 use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
 use App\Mail\DealPurchasedUser;
+use App\Purchase;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 class ApplyOrPurchaseController extends Controller
 {
+    /**
+     * Create "Purchase" from deal and incentives
+     */
     public function applyOrPurchase()
     {
         try {
             $this->validate(request(), [
-                'deal_id' => 'required|exists:deals,id'
+                'deal_id' => 'required|exists:deals,id',
+                'incentives' => 'required|array',
+                'incentives.*.name' => 'required|string',
+                'incentives.*.value' => 'required|numeric',
+                'dmr_price' => 'required|numeric',
             ]);
 
+            /**
+             * dmr_price is the customer's "desired" price. i.e. after incentives etc have been applied.
+             */
+            $purchase = auth()->user()->purchases()->firstOrNew([
+                'deal_id' => request('deal_id'),
+                'dmr_price' => request('dmr_price'),
+            ]);
+            $purchase->incentives = json_encode(request('incentives'), JSON_NUMERIC_CHECK);
+            $purchase->save();
+
             return view('apply-or-purchase')
-                ->with('deal_id', request('deal_id'));
+                ->with('purchase', $purchase);
         } catch (ValidationException $e) {
-            return abort(404);
+            Log::notice('Invalid applyOrPurchase submission: ' . json_encode(request()->all()));
+
+            return abort(500);
         }
     }
 
@@ -29,14 +52,31 @@ class ApplyOrPurchaseController extends Controller
     {
         try {
             $this->validate(request(), [
-                'deal_id' => 'required|exists:deals,id'
+                'purchase_id' => 'required|exists:purchases,id'
             ]);
+
+            $purchase = Purchase::findOrFail(request('purchase_id'));
+
+            /**
+             * Disallow changing completed_at
+             */
+            if ($purchase->completed_at) {
+                return view('apply')
+                    ->with('purchase', $purchase);
+            }
+
+            /**
+             * Mark purchase as "completed" from the perspective of this website
+             */
+            $purchase->completed_at = Carbon::now();
+            $purchase->save();
 
             Mail::to(config('mail.dmr.address'))->send(new DealPurchasedDMR);
             Mail::to(auth()->user())->send(new DealPurchasedUser);
 
-            return view('purchase');
-        } catch (ValidationException $e) {
+            return view('purchase')
+                ->with('purchase', $purchase);
+        } catch (ValidationException | ModelNotFoundException $e) {
             return abort(404);
         }
     }
@@ -45,12 +85,12 @@ class ApplyOrPurchaseController extends Controller
     {
         try {
             $this->validate(request(), [
-                'deal_id' => 'required|exists:deals,id',
+                'purchase_id' => 'required|exists:purchases,id',
             ]);
 
             return view('view-apply')
-                ->with('deal_id', request('deal_id'));
-        } catch (ValidationException $e) {
+                ->with('purchase', Purchase::findOrFail(request('purchase_id')));
+        } catch (ValidationException | ModelNotFoundException $e) {
             return abort(404);
         }
     }
@@ -59,14 +99,34 @@ class ApplyOrPurchaseController extends Controller
     {
         try {
             $this->validate(request(), [
-                'deal_id' => 'required|exists:deals,id',
+                'name' => 'required|string|max:255',
+                'email' => 'required|email',
+                'purchase_id' => 'required|exists:purchases,id',
             ]);
 
-            Mail::to(config('mail.dmr.address'))->send(new ApplicationSubmittedDMR);
-            Mail::to(auth()->user())->send(new ApplicationSubmittedUser);
+            $purchase = Purchase::findOrFail(request('purchase_id'));
 
-            return view('apply');
-        } catch (ValidationException $e) {
+            /**
+             * Disallow changing completed_at
+             */
+            if ($purchase->completed_at) {
+                return view('apply')
+                    ->with('purchase', $purchase);
+            }
+
+            /**
+             * Mark purchase as "completed" from the perspective of this website
+             */
+            $purchase->completed_at = Carbon::now();
+            $purchase->save();
+
+            Mail::to(config('mail.dmr.address'))->send(new ApplicationSubmittedDMR);
+            Mail::to(request('email'))->send(new ApplicationSubmittedUser);
+
+            return view('apply')
+                ->with('purchase', $purchase);
+        } catch (ValidationException | ModelNotFoundException $e) {
+            dd($e);
             return abort(404);
         }
     }

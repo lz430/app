@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Mail\DealPurchasedDMR;
 use App\Mail\DealPurchasedUser;
+use App\Purchase;
 use App\User;
 use App\Deal;
 use Illuminate\Mail\Mailable;
@@ -22,12 +23,12 @@ class PurchaseEmailsTest extends TestCase
             'phone_number' => 'test',
         ]);
 
-        $deal = factory(Deal::class)->create();
+        $purchase = factory(Purchase::class)->create();
 
         $this->be($user);
 
         $response = $this->post(route('purchase', [
-            'deal_id' => $deal->id,
+            'purchase_id' => $purchase->id,
         ]));
 
         Mail::assertSent(DealPurchasedDMR::class, function (Mailable $mailable) {

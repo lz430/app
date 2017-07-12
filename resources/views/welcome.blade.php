@@ -21,7 +21,7 @@
 
         <div class="welcome-style-selector">
             <div class="welcome-style-selector__constrained">
-                @foreach($styles as $style)
+                @foreach ($styles as $style)
                     @include('partials.welcome-style', ['style' => $style])
                 @endforeach
             </div>

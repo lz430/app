@@ -19,7 +19,7 @@ class User extends Authenticatable
     
     public function purchases()
     {
-        return $this->hasMany(Purchased::class);
+        return $this->hasMany(Purchase::class);
     }
     
     protected static function boot()
