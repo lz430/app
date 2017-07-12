@@ -61,7 +61,7 @@ class ApplyOrPurchaseController extends Controller
              * Disallow changing completed_at
              */
             if ($purchase->completed_at) {
-                return view('apply')
+                return view('purchase')
                     ->with('purchase', $purchase);
             }
 
@@ -126,7 +126,6 @@ class ApplyOrPurchaseController extends Controller
             return view('apply')
                 ->with('purchase', $purchase);
         } catch (ValidationException | ModelNotFoundException $e) {
-            dd($e);
             return abort(404);
         }
     }
