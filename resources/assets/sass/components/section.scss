@@ -6,7 +6,13 @@
   @include constrained;
   display: flex;
   flex-wrap: wrap;
+  overflow: hidden;
   padding: $section-padding;
+  position: relative;
+
+  &__no-padding {
+    padding: 0;
+  }
 
   &__buttons {
     margin: 15px;
@@ -45,9 +51,8 @@
 
   &__title {
     color: $text-color-dark;
-    font-size: xx-large;
-    font-weight: lighter;
-    margin-bottom: 10px;
+    font-size: 3rem;
+    line-height: 3rem;
     text-align: center;
     width: 100%;
 
@@ -62,7 +67,8 @@
     }
 
     &--small {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
+      line-height: 2rem;
     }
 
     &--medium {
@@ -71,18 +77,6 @@
 
     &--left {
       text-align: left;
-    }
-
-    &--uppercase {
-      text-transform: uppercase;
-    }
-
-    &--spaced {
-      letter-spacing: 1.25px;
-    }
-
-    &--light {
-      color: $color-text-white;
     }
 
     &--underline {
@@ -121,10 +115,5 @@
 
   &--darkest {
     background-color: $color-sidebar-background-secondary-dark;
-  }
-
-  &--hero-bg {
-    background: $color-blue;
-    color: $color-text-white;
   }
 }

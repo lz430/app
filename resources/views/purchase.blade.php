@@ -13,9 +13,11 @@
             </div>
         </div>
 
+        @if ($photo)
         <div class="section__image">
-            <img src="{{ $purchase->deal->photos->first()->url }}">
+            <img src="{{ $photo->url }}">
         </div>
+        @endif
 
         <div class="section__title section__title--small section__title--constrict-small">
             If you enjoyed your experience using Deliver My Ride, it would be awesome if you could share it with your friends.

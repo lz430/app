@@ -6,9 +6,16 @@ html {
   font-size: $font-size-base;
 }
 
+@font-face {
+  font-family: 'Gotham Narrow Book';
+  src: url('/fonts/GothamNarrow-Book.woff') format('opentype');
+}
+
 body {
   color: $text-color;
-  font-family: 'Open Sans', serif;
+
+  font-family: Gotham Narrow Book, serif;
+  //font-family: 'Open Sans', serif;
   line-height: $line-height-base;
 }
 
@@ -44,6 +51,7 @@ body {
 @import 'components/range-slider';
 
 // Pages
+@import 'pages/welcome';
 @import 'pages/filter-page';
 @import 'pages/financing';
 @import 'pages/compare-page';

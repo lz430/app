@@ -18,16 +18,17 @@
   }
 
   &__description {
+    color: #70777c;
     margin-top: 15px;
     padding-right: 25px;
   }
 
   &__attribution {
-    font-weight: bold;
+    color: #888e94;
     margin-top: 15px;
   }
 
   &__attribution-name {
-    color: $color-blue;
+    color: $color-text-blue;
   }
 }

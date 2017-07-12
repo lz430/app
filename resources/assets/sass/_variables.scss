@@ -5,12 +5,16 @@ $color-section-bottom-border: #ccc;
 
 $color-sidebar-background-primary: #494e51;
 $color-sidebar-background-secondary: #5f686e;
-$color-sidebar-background-secondary-dark: #353c3e;
+$color-sidebar-background-secondary-dark: #343b3e;
 
 $color-text-white: #fff;
+$color-text-blue: #0e9dce;
 $color-black: #000;
 
 $color-blue: #3786a1;
+$color-dark-blue: #436d82;
+$color-light-blue: #65d1f6;
+$color-lighter-blue: #b9e4f3;
 $color-error: #ac0000;
 
 $color-lightgrey: #f6f6f7;
@@ -23,14 +27,14 @@ $color-twitter-blue: #4099ff;
 
 // Typography
 $font-family-sans-serif: 'Open Sans', sans-serif;
-$font-size-base: 14px;
+$font-size-base: 16px;
 $line-height-base: 1.6;
-$text-color: #8d9599;
+$text-color: #586368;
 $text-color-dark: darken($text-color, 25);
 
 // Nav
-$nav-height: 75px;
-$footer-height: 75px;
+$nav-height: 76px;
+$footer-height: 190px;
 
 // Breakpoints
 $break-extra-small: 350px;
@@ -46,4 +50,4 @@ $filterbar-height: 45px;
 $compare-bar-height: 60px;
 
 // Section
-$section-padding: 35px;
+$section-padding: 66px;

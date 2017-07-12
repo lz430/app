@@ -13,16 +13,16 @@ class BodyStyles
             ],
             'icon' => 'coupe',
         ],
+        'sedan' => [
+            'style' => 'Sedan',
+            'icon' => 'sedan',
+        ],
         'convertible' => [
             'style' => 'Convertible',
             'subStyles' => [
                 'Targa',
             ],
             'icon' => 'convertible',
-        ],
-        'sedan' => [
-            'style' => 'Sedan',
-            'icon' => 'sedan',
         ],
         'wagon' => [
             'style' => 'Wagon',

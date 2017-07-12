@@ -57,12 +57,17 @@ class ApplyOrPurchaseController extends Controller
 
             $purchase = Purchase::findOrFail(request('purchase_id'));
 
+            $photo = ($purchase->deal->photos && $purchase->deal->photos->first())
+                ? $purchase->deal->photos->first()
+                : null;
+
             /**
              * Disallow changing completed_at
              */
             if ($purchase->completed_at) {
                 return view('purchase')
-                    ->with('purchase', $purchase);
+                    ->with('purchase', $purchase)
+                    ->with('photo', $photo);
             }
 
             /**
@@ -75,7 +80,8 @@ class ApplyOrPurchaseController extends Controller
             Mail::to(auth()->user())->send(new DealPurchasedUser);
 
             return view('purchase')
-                ->with('purchase', $purchase);
+                ->with('purchase', $purchase)
+                ->with('photo', $photo);
         } catch (ValidationException | ModelNotFoundException $e) {
             return abort(404);
         }

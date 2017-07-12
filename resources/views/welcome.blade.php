@@ -3,7 +3,8 @@
 @section('title', 'Deliver My Ride')
 
 @section('content')
-    <div class="section section--darker">
+    <div class="section">
+        <div class="welcome__top"></div>
         <div class="section__title">
             Your New Ride Awaits
         </div>
@@ -14,8 +15,8 @@
         </div>
     </div>
 
-    <div class="section section--darkest">
-        <div class="section__title section__title--uppercase section__title--small section__title--light section__title--spaced">
+    <div class="welcome__select-a-vehicle-type section section--darkest section--no-padding">
+        <div class="welcome__select-a-vehicle-type-title">
             Select a vehicle type
         </div>
 
@@ -80,13 +81,16 @@
             </div>
 
             <div class="welcome-steps__image">
-
+                <!-- background -->
             </div>
         </div>
     </div>
 
-    <div class="section section--hero-bg">
-        <div class="section__title section__title--light">
+    <div class="section section--no-padding welcome__average-customer">
+        <div class="welcome__average-customer-bg">
+            <!-- background -->
+        </div>
+        <div class="welcome__average-customer-title">
             Our average customer saves 15.7% / $3,800 off MSRP.
         </div>
     </div>
@@ -100,7 +104,6 @@
             <div class="triplets">
                 <div class="triplets__triplet">
                     <div class="triplets__title">
-                        Simple
                     </div>
 
                     <div class="triplets__description">
@@ -113,7 +116,6 @@
                 </div>
                 <div class="triplets__triplet">
                     <div class="triplets__title">
-                        Timely
                     </div>
 
                     <div class="triplets__description">
@@ -126,7 +128,6 @@
                 </div>
                 <div class="triplets__triplet">
                     <div class="triplets__title">
-                        Convenient
                     </div>
 
                     <div class="triplets__description">

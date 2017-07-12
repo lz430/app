@@ -1,7 +1,8 @@
 @import '../variables';
 
 .welcome-steps {
-  $step-number-size: 33px;
+  $step-number-size: 41px;
+  background: $color-background-secondary;
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -10,20 +11,20 @@
     color: $text-color-dark;
     font-size: x-large;
     font-weight: lighter;
-    margin-top: 25px;
+    margin-top: 50px;
   }
 
   &__sexy-line {
     background: -webkit-gradient(radial, 0 50%, 0, 100 50%, 100, from(transparentize($color-section-bottom-border, .25)), to($color-background-secondary));
     display: block;
     height: 1px;
-    margin-bottom: 25px;
+    margin-bottom: 41px;
     width: 100%;
   }
 
   &__image {
-    //TODO: replace w/ image
-    background: $color-sidebar-background-secondary-dark;
+    background: url('/images/welcome-right.png') center;
+    background-size: cover;
     min-height: 300px;
     min-width: 100%;
     width: 100%;
@@ -35,10 +36,11 @@
   }
 
   &__steps {
+    font-size: 1.125rem;
     min-width: 100%;
-    padding-bottom: 25px;
+    padding-bottom: 100px;
     padding-left: 40px;
-    padding-right: 10px;
+    padding-right: 20px;
     width: 100%;
 
     @media (min-width: $break-large) {
@@ -60,16 +62,15 @@
   }
 
   &__step-number {
-    background: lighten($color-blue, 40%);
-    border: 1px solid lighten($color-blue, 20%);
+    align-items: center;
+    background: $color-lighter-blue;
+    border: 2px solid $color-light-blue;
     border-radius: $step-number-size;
     color: $text-color-dark;
-    font-weight: bold;
-    height: $step-number-size;
-    margin-top: 5px;
     display: flex;
+    height: $step-number-size;
     justify-content: center;
-    align-items: center;
+    margin-top: 5px;
     width: $step-number-size;
   }
 
@@ -81,6 +82,7 @@
   }
 
   &__step-description {
+    font-size: 1rem;
     margin-bottom: 20px;
     padding-left: 15px;
   }
