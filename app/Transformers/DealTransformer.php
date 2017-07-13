@@ -9,7 +9,6 @@ class DealTransformer extends TransformerAbstract
 {
     protected $availableIncludes = [
         'features',
-        'photos',
         'versions',
     ];
     
@@ -45,6 +44,7 @@ class DealTransformer extends TransformerAbstract
             'fuel_econ_hwy' => $deal->fuel_econ_hwy,
             'dealer_name' => $deal->dealer_name,
             'days_old' => $deal->days_old,
+            'photos' => $deal->photos,
         ];
     }
     
@@ -52,12 +52,6 @@ class DealTransformer extends TransformerAbstract
     {
         return $this->item($deal->version, new VersionTransformer)
             ->setResourceKey('versions');
-    }
-    
-    public function includePhotos(Deal $deal)
-    {
-        return $this->collection($deal->photos, new PhotoTransformer)
-            ->setResourceKey('photos');
     }
     
     public function includeFeatures(Deal $deal)

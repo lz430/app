@@ -1,6 +1,4 @@
 import api from 'src/api';
-import fuelapi from 'src/fuelapi';
-import fuelcolor from 'src/fuel-color-map';
 import util from 'src/util';
 import * as ActionTypes from 'actiontypes/index';
 
@@ -258,11 +256,8 @@ export function selectDeal(deal) {
 }
 
 export function clearSelectedDeal() {
-    return dispatch => {
-        dispatch(clearFuelImages());
-        dispatch({
-            type: ActionTypes.CLEAR_SELECTED_DEAL,
-        });
+    return {
+        type: ActionTypes.CLEAR_SELECTED_DEAL,
     };
 }
 
@@ -315,115 +310,6 @@ export function setZipCode(zipcode) {
             type: ActionTypes.SET_ZIP_CODE,
             zipcode: zipcode,
         });
-    };
-}
-
-export function requestFuelImages(deal) {
-    return dispatch => {
-        fuelapi.getVehicleId(deal.year, deal.make, deal.model).then(data => {
-            const vehicleId = data.data[0].id || false;
-
-            if (!vehicleId) return;
-
-            fuelapi
-                .getExternalImages(vehicleId, fuelcolor.convert(deal.color))
-                .then(
-                    data => {
-                        const externalImages = data.data.products.map(product =>
-                            product.productFormats.map(format => {
-                                return {
-                                    id: `fuel_external_${format.id}`,
-                                    url: format.assets[0].url,
-                                };
-                            })
-                        )[0] || [];
-
-                        dispatch(receiveFuelExternalImages(externalImages));
-                    },
-                    () => {
-                        fuelapi
-                            .getExternalImages(vehicleId, 'white')
-                            .then(
-                                data => {
-                                    const externalImages = data.data.products.map(
-                                        product =>
-                                            product.productFormats.map(
-                                                format => {
-                                                    return {
-                                                        id: `fuel_external_${format.id}`,
-                                                        url: format.assets[0]
-                                                            .url,
-                                                    };
-                                                }
-                                            )
-                                    )[0] || [];
-
-                                    dispatch(
-                                        receiveFuelExternalImages(
-                                            externalImages
-                                        )
-                                    );
-                                },
-                                () => {
-                                    dispatch(receiveFuelExternalImages([]));
-                                }
-                            )
-                            .catch(err => {
-                                console.log(err);
-                            });
-                    }
-                )
-                .catch(err => {
-                    console.log(err);
-                });
-
-            fuelapi
-                .getInternalImages(vehicleId)
-                .then(data => {
-                    const internalImages = data.data.products[0].productFormats[0].assets
-                        .filter(asset => {
-                            return (
-                                fuelapi.internalImageCodes.indexOf(
-                                    asset.shotCode.code
-                                ) !== -1
-                            );
-                        })
-                        .map((asset, index) => {
-                            return {
-                                id: `fuel_${index}`,
-                                url: asset.url,
-                            };
-                        }) || [];
-                    dispatch(receiveFuelInternalImages(internalImages));
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        });
-
-        dispatch({
-            type: ActionTypes.REQUEST_FUEL_IMAGES,
-        });
-    };
-}
-
-export function receiveFuelExternalImages(images) {
-    return {
-        type: ActionTypes.RECEIVE_FUEL_EXTERNAL_IMAGES,
-        images: images,
-    };
-}
-
-export function receiveFuelInternalImages(images) {
-    return {
-        type: ActionTypes.RECEIVE_FUEL_INTERNAL_IMAGES,
-        images: images,
-    };
-}
-
-export function clearFuelImages() {
-    return {
-        type: ActionTypes.CLEAR_FUEL_IMAGES,
     };
 }
 

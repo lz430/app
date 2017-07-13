@@ -8,14 +8,9 @@ class Deals extends React.Component {
     render() {
         return (
             <div className="deals">
+
                 {this.props.deals.map((deal, index) => {
-                    return (
-                        <Deal
-                            deal={deal}
-                            key={index}
-                            fallbackDealImage={this.props.fallbackDealImage}
-                        />
-                    );
+                    return <Deal deal={deal} key={index} />;
                 })}
                 {this.props.dealPage === this.props.dealPageTotal
                     ? ''
@@ -45,7 +40,6 @@ Deals.propTypes = {
     ),
     dealPage: PropTypes.number.isRequired,
     dealPageTotal: PropTypes.number.isRequired,
-    fallbackDealImage: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -53,7 +47,6 @@ function mapStateToProps(state) {
         deals: state.deals,
         dealPage: state.dealPage,
         dealPageTotal: state.dealPageTotal,
-        fallbackDealImage: state.fallbackDealImage,
     };
 }
 

@@ -19,9 +19,7 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        if ($request->session()->has('intended') && in_array($request->session()->get('intended'), [
-                'filter'
-            ])) {
+        if ($request->session()->has('intended')) {
             $this->redirectTo = $request->session()->get('intended');
         }
     }

@@ -64,10 +64,6 @@ class DealsController extends BaseAPIController
 
     private function eagerLoadIncludes(Builder $query, Request $request) : Builder
     {
-        if (in_array('photos', $request->get('includes', []))) {
-            $query->with('photos');
-        }
-    
         if (in_array('features', $request->get('includes', []))) {
             $query->with('features');
         }
@@ -108,7 +104,7 @@ class DealsController extends BaseAPIController
                     $query->filterByMake($request->get('make_ids'));
                 }
             });
-        })->whereNotNull('price')->whereNotNull('msrp');
+        })->whereNotNull('price')->whereNotNull('msrp')->with('photos');
     }
 
     private function filterQueryByTransmissionType(Builder $query, Request $request) : Builder

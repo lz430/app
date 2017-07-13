@@ -30,7 +30,7 @@ Array.from(document.getElementsByTagName('Financing')).map(element => {
 
 Array.from(document.getElementsByTagName('ComparePage')).map(element => {
     ReactDOM.render(
-        <ComparePage deals={JSON.parse(element.getAttribute('deals'))} />,
+        <ComparePage deals={JSON.parse(element.getAttribute('deals')).data} />,
         element
     );
 });
