@@ -29,7 +29,7 @@ class FilterStyleSelector extends React.Component {
                       />
                     : ''}
 
-                <div className="filter-style-selector__name">{style.style}</div>
+                <div className="filter-style-selector__name">{style.label}</div>
             </div>
         );
     }
