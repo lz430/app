@@ -1,4 +1,25 @@
+@import '../mixins/constrained';
+
+financing {
+  width: 100%;
+}
 .financing {
-  padding-top: 50px;
+  @include constrained;
   text-align: center;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    margin: 26px 25px 46px;
+  }
+
+  &__title {
+    color: $text-color-dark;
+    font-size: 1.5rem;
+  }
+
+  &__cash {
+    color: $color-text-blue;
+    cursor: pointer;
+  }
 }

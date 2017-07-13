@@ -25,7 +25,7 @@ Array.from(document.getElementsByTagName('FilterPage')).map(element => {
  * Financing
  */
 Array.from(document.getElementsByTagName('Financing')).map(element => {
-    ReactDOM.render(<Financing />, element);
+    ReactDOM.render(<Financing purchase={DeliverMyRide.purchase} />, element);
 });
 
 Array.from(document.getElementsByTagName('ComparePage')).map(element => {
