@@ -32,13 +32,10 @@ const initialState = {
     dealPageTotal: 1,
     deals: null,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
-    fallbackDealImage: '/images/dmr-logo.svg',
     sortColumn: 'price',
     sortAscending: true,
     compareList: [],
     zipcode: null,
-    fuelInternalImages: [],
-    fuelExternalImages: [],
 };
 
 export default () => {

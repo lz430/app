@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Deal;
+use App\Transformers\DealTransformer;
+use League\Fractal\Serializer\DataArraySerializer;
 
 class CompareController extends Controller
 {
@@ -16,7 +18,13 @@ class CompareController extends Controller
             'photos',
             'versions.incentives'
         )->get();
-        
-        return view('compare')->with('deals', $deals);
+    
+        $dealsTransformed = fractal()
+            ->collection($deals)
+            ->transformWith(DealTransformer::class)
+            ->serializeWith(new DataArraySerializer)
+            ->toJson();
+
+        return view('compare')->with('deals', $dealsTransformed);
     }
 }

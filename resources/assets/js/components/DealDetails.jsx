@@ -1,16 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import R from 'ramda';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import util from 'src/util';
+import fuelapi from 'src/fuelapi';
+import fuelcolor from 'src/fuel-color-map';
 
 class DealDetails extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            featuredImage: props.deal.photos.data[0],
+            featuredImage: props.deal.photos[0],
+            fuelExternalImages: [],
+            fuelInternalImages: [],
             selectedTab: 'cash',
+            fallbackDealImage: '/images/dmr-logo.svg',
         };
 
         this.renderThumbnailImage = this.renderThumbnailImage.bind(this);
@@ -21,10 +27,91 @@ class DealDetails extends React.Component {
         this.renderDMRPrice = this.renderDMRPrice.bind(this);
         this.renderCompareAndBuyNow = this.renderCompareAndBuyNow.bind(this);
         this.startPurchaseFlow = this.startPurchaseFlow.bind(this);
+        this.requestFuelImages = this.requestFuelImages.bind(this);
     }
 
     componentDidMount() {
-        this.props.requestFuelImages(this.props.deal);
+        this.requestFuelImages(this.props.deal);
+    }
+
+    requestFuelImages() {
+        const deal = this.props.deal;
+        fuelapi.getVehicleId(deal.year, deal.make, deal.model).then(data => {
+            const vehicleId = data.data[0].id || false;
+
+            if (!vehicleId) return;
+
+            fuelapi
+                .getExternalImages(vehicleId, fuelcolor.convert(deal.color))
+                .then(
+                    data => {
+                        const externalImages = data.data.products.map(product =>
+                            product.productFormats.map(format => {
+                                return {
+                                    id: `fuel_external_${format.id}`,
+                                    url: format.assets[0].url,
+                                };
+                            })
+                        )[0] || [];
+                        this.setState({ fuelExternalImages: externalImages });
+                    },
+                    () => {
+                        fuelapi
+                            .getExternalImages(vehicleId, 'white')
+                            .then(
+                                data => {
+                                    const externalImages = data.data.products.map(
+                                        product =>
+                                            product.productFormats.map(
+                                                format => {
+                                                    return {
+                                                        id: `fuel_external_${format.id}`,
+                                                        url: format.assets[0]
+                                                            .url,
+                                                    };
+                                                }
+                                            )
+                                    )[0] || [];
+                                    this.setState({
+                                        fuelExternalImages: externalImages,
+                                    });
+                                },
+                                () => {
+                                    this.setState({ fuelExternalImages: [] });
+                                }
+                            )
+                            .catch(err => {
+                                console.log(err);
+                            });
+                    }
+                )
+                .catch(err => {
+                    console.log(err);
+                });
+
+            fuelapi
+                .getInternalImages(vehicleId)
+                .then(data => {
+                    const internalImages = data.data.products[0].productFormats[0].assets
+                        .filter(asset => {
+                            return (
+                                fuelapi.internalImageCodes.indexOf(
+                                    asset.shotCode.code
+                                ) !== -1
+                            );
+                        })
+                        .map((asset, index) => {
+                            return {
+                                id: `fuel_${index}`,
+                                url: asset.url,
+                            };
+                        }) || [];
+                    this.setState({ fuelInternalImages: internalImages });
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        });
     }
 
     renderLoginRegister() {
@@ -39,13 +126,13 @@ class DealDetails extends React.Component {
                 <div className="deal-details__login-register-buttons">
                     <a
                         className="deal-details__button deal-details__button--small deal-details__button--blue deal-details__button--capitalize"
-                        href="/login?intended=filter"
+                        href={`/login?intended=${this.props.intendedRoute}`}
                     >
                         Login
                     </a>
                     <a
                         className="deal-details__button deal-details__button--small deal-details__button--blue deal-details__button--capitalize"
-                        href="/register?intended=filter"
+                        href={`/register?intended=${this.props.intendedRoute}`}
                     >
                         Register
                     </a>
@@ -62,10 +149,10 @@ class DealDetails extends React.Component {
 
     allImages() {
         return R.concat(
-            this.props.deal.photos.data,
+            this.props.deal.photos,
             R.concat(
-                this.props.fuelExternalImages,
-                this.props.fuelInternalImages
+                this.state.fuelExternalImages,
+                this.state.fuelInternalImages
             )
         );
     }
@@ -85,7 +172,7 @@ class DealDetails extends React.Component {
                 key={index}
                 onClick={this.selectFeaturedImage.bind(this, index)}
                 className={imageClass}
-                src={R.propOr(this.props.fallbackDealImage, 'url', photo)}
+                src={R.propOr(this.state.fallbackDealImage, 'url', photo)}
             />
         );
     }
@@ -95,7 +182,7 @@ class DealDetails extends React.Component {
             <img
                 className="deal-details__primary-image"
                 src={R.propOr(
-                    this.props.fallbackDealImage,
+                    this.state.fallbackDealImage,
                     'url',
                     this.state.featuredImage
                 )}
@@ -301,14 +388,27 @@ class DealDetails extends React.Component {
     }
 }
 
+DealDetails.propTypes = {
+    deal: PropTypes.shape({
+        year: PropTypes.string.isRequired,
+        msrp: PropTypes.number.isRequired,
+        price: PropTypes.number.isRequired,
+        make: PropTypes.string.isRequired,
+        model: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired,
+    }),
+    intendedRoute: PropTypes.string.isRequired,
+    toggleCompare: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = state => {
     return {
         deal: state.selectedDeal,
-        fallbackDealImage: state.fallbackDealImage,
-        fuelExternalImages: state.fuelExternalImages,
-        fuelInternalImages: state.fuelInternalImages,
         compareList: state.compareList,
     };
 };
 
-export default connect(mapStateToProps, Actions)(DealDetails);
+const connected = connect(mapStateToProps, Actions)(DealDetails);
+const raw = DealDetails;
+
+export { connected, raw };

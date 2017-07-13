@@ -3,7 +3,7 @@ import R from 'ramda';
 import Modal from 'components/Modal';
 import MakeSelector from 'components/MakeSelector';
 import Deals from 'components/Deals';
-import DealDetails from 'components/DealDetails';
+import { connected as DealDetails } from 'components/DealDetails';
 import Sortbar from 'components/Sortbar';
 import Filterbar from 'components/Filterbar';
 import Comparebar from 'components/Comparebar';
@@ -37,7 +37,7 @@ class FilterPage extends React.Component {
                         this.props.selectedDeal.make
                 }
             >
-                {() => <DealDetails />}
+                {() => <DealDetails intendedRoute="filter" />}
             </Modal>
         );
     }

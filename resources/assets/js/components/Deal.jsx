@@ -9,21 +9,25 @@ class Deal extends React.Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            fallbackDealImage: '/images/dmr-logo.svg',
+        };
+
         this.getFeaturedImage = this.getFeaturedImage.bind(this);
     }
 
     getFeaturedImage() {
         return R.propOr(
-            this.props.fallbackDealImage,
+            this.state.fallbackDealImage,
             'url',
-            this.props.deal.photos.data[1]
-                ? this.props.deal.photos.data[0]
-                : { url: this.props.fallbackDealImage }
+            this.props.deal.photos[1]
+                ? this.props.deal.photos[0]
+                : { url: this.state.fallbackDealImage }
         );
     }
 
     componentDidMount() {
-        if (this.props.deal.photos.data.length === 1) {
+        if (this.props.deal.photos.length === 1) {
             fuelapi
                 .getVehicleId(
                     this.props.deal.year,
@@ -49,7 +53,7 @@ class Deal extends React.Component {
 
                             this.setState({
                                 featuredImage: R.propOr(
-                                    this.props.fallbackDealImage,
+                                    this.state.fallbackDealImage,
                                     'url',
                                     externalImages[0]
                                 ),
@@ -75,7 +79,7 @@ class Deal extends React.Component {
 
                                     this.setState({
                                         featuredImage: R.propOr(
-                                            this.props.fallbackDealImage,
+                                            this.state.fallbackDealImage,
                                             'url',
                                             externalImages[0]
                                         ),
@@ -132,7 +136,6 @@ class Deal extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        selectedDeal: state.selectedDeal,
         compareList: state.compareList,
     };
 };
