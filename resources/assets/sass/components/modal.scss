@@ -3,8 +3,8 @@
 
 $offset-top: 150px;
 $offset-horizontal: 50px;
-$header-height: 100px;
-$footer-height: 60px;
+$modal-header-height: 100px;
+$modal-footer-height: 60px;
 
 .modal {
   &__overlay {
@@ -23,7 +23,7 @@ $footer-height: 60px;
     justify-content: center;
     max-height: calc(100vh - #{$offset-top});
     position: absolute;
-    top: 60px;
+    top: $modal-footer-height;
     width: 100vw;
     z-index: 1;
   }
@@ -39,17 +39,17 @@ $footer-height: 60px;
   &__header {
     background-color: $color-background-secondary;
     display: flex;
-    height: $header-height;
+    height: $modal-header-height;
     padding: 20px;
     position: relative;
   }
 
   &__body {
-    max-height: calc(100vh - #{$offset-top + $header-height + $footer-height});
+    max-height: calc(100vh - #{$offset-top + $modal-header-height + $modal-footer-height});
     overflow-x: hidden;
 
     &--no-footer {
-      max-height: calc(100vh - #{$offset-top + $header-height});
+      max-height: calc(100vh - #{$offset-top + $modal-header-height});
     }
   }
 
@@ -57,7 +57,7 @@ $footer-height: 60px;
     background-color: $color-background-secondary;
     border-top: 1px solid $color-section-bottom-border;
     display: flex;
-    height: $footer-height;
+    height: $modal-footer-height;
     justify-content: center;
     padding: 10px;
   }

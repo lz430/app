@@ -1,31 +1,51 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="section section--stretch">
-        <div class="section__title">
-            Apply for financing
-        </div>
-        <div class="section__title section__title--small">
-            <form method="post" action="{{ route('apply') }}" class="application-form">
+    <div class="section section--stretch section--darker">
+        <div class="view-apply">
+            <form class="view-apply__form" role="form" method="POST" action="{{ route('apply') }}">
                 {{ csrf_field() }}
-                <input type="hidden" name="deal_id" value="{{ $deal_id }}">
+                <input type="hidden" name="purchase_id" value="{{ $purchase->id }}">
 
-                <div class="application-form__input-group">
-                    <label class="application-form__label">First Name
-                        <input class="application-form__input-text" type="text" name="first_name">
-                    </label>
-                    <label class="application-form__label">Middle Name
-                        <input class="application-form__input-text" type="text" name="middle_name">
-                    </label>
-                    <label class="application-form__label">Last Name
-                        <input class="application-form__input-text" type="text" name="last_name">
-                    </label>
-                    <label class="application-form__label">Email Address
-                        <input class="application-form__input-text" type="email" name="email">
-                    </label>
+                <div class="view-apply__title">
+                    Apply for financing
                 </div>
 
-                <button type="submit" class="application-form__button">Apply</button>
+                <div class="view-apply__sexy-line"></div>
+
+                <div class="view-apply__group {{ $errors->has('name') ? 'view-apply__group-has-error' : '' }}">
+                    <label for="name" class="view-apply__label">Name</label>
+
+                    <div class="view-apply__input-and-error">
+                        <input id="name" type="text" class="view-apply__input" name="name" value="{{ old('name') }}" required autofocus>
+
+                        @if ($errors->has('name'))
+                            <span class="view-apply__error">
+                                <strong>{{ $errors->first('name') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="view-apply__group {{ $errors->has('email') ? 'view-apply__group-has-error' : '' }}">
+                    <label for="email" class="view-apply__label">Email</label>
+
+                    <div class="view-apply__input-and-error">
+                        <input id="email" type="email" class="view-apply__input" name="email" value="{{ old('email') }}" required autofocus>
+
+                        @if ($errors->has('email'))
+                            <span class="view-apply__error">
+                                <strong>{{ $errors->first('email') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="view-apply__buttons">
+                    <button type="submit" class="view-apply__button view-apply__button--blue view-apply__button--small">
+                        Apply
+                    </button>
+                </div>
             </form>
         </div>
     </div>

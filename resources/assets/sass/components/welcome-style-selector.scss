@@ -3,8 +3,9 @@
 
 .welcome-style-selector {
   $style-margin: 10px;
-  $style-width: ($break-large / 4) - ($style-margin * 2);
-  $style-height: 115px;
+  $style-width: 220px;
+  $style-height: 120px;
+  margin-top: 15px;
 
   @include constrained {
     display: flex;
@@ -17,35 +18,44 @@
     display: flex;
   }
 
-  &__title {
-    padding: 10px;
-  }
-
   &__style {
     align-items: center;
-    border: 1px solid transparentize($color-section-bottom-border, .5);
+    border: 1px solid transparentize($color-text-white, .8);
     border-radius: 4px;
     color: $color-text-white;
     display: flex;
     flex: 1;
     flex-direction: column;
     height: $style-height;
-    justify-content: center;
     margin: $style-margin;
     max-height: $style-height;
     max-width: $style-width;
     min-width: $style-width;
-    stroke: $color-blue;
+    stroke: $color-light-blue;
     text-align: center;
     text-decoration: none;
     width: $style-width;
 
+    svg {
+      height: 49px;
+      margin-top: 20px;
+      width: 140px;
+    }
+
     svg path {
-      fill: transparent;
+      fill: $color-light-blue;
+    }
+
+    &:hover {
+      background: $color-blue;
+
+      svg path {
+        fill: $color-text-white;
+      }
     }
   }
 
   &__name {
-    padding-top: 10px;
+    margin-top: 14px;
   }
 }

@@ -3,6 +3,8 @@
 namespace Tests;
 
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Database\Connection;
+use Illuminate\Database\DatabaseManager;
 
 trait DatabaseSetup
 {
@@ -28,10 +30,29 @@ trait DatabaseSetup
         $this->app[Kernel::class]->setArtisan(null);
     }
 
+    protected function dropAllTables()
+    {
+        /** @var DatabaseManager $database */
+        $database = $this->app->make('db');
+
+        foreach ($this->connectionsToTransact() as $name) {
+            $connection = $database->connection($name);
+            $builder = $connection->getSchemaBuilder();
+            $builder->disableForeignKeyConstraints();
+
+            foreach ($connection->select('SHOW TABLES') as $table) {
+                $builder->drop(get_object_vars($table)[key($table)]);
+            }
+
+            $builder->enableForeignKeyConstraints();
+        }
+    }
+
     protected function setupTestDatabase()
     {
         if (! static::$migrated) {
-            $this->artisan('migrate:refresh');
+            $this->dropAllTables();
+            $this->artisan('migrate');
             $this->app[Kernel::class]->setArtisan(null);
             static::$migrated = true;
         }

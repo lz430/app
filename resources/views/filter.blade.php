@@ -2,4 +2,6 @@
 
 @section('content')
     <FilterPage></FilterPage>
+    @section('footer')
+    @endsection
 @endsection

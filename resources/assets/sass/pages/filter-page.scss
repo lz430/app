@@ -2,8 +2,9 @@
 @import '../mixins/button';
 
 .filter-page {
+  background: $color-background-secondary;
   display: flex;
-  height: calc(100vh - #{$nav-height + $footer-height});
+  height: calc(100vh - #{$nav-height});
   overflow: hidden;
   position: relative;
 

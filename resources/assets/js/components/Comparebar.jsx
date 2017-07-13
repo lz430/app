@@ -111,21 +111,21 @@ class Comparebar extends React.Component {
     renderCompareBubble() {
         const className = `compare-bubble ${this.state.shaking ? 'compare-bubble--shake' : ''}`;
 
-        return this.props.compareList.length
-            ? <div>
-                  <div className={className} onClick={this.redirectToCompare}>
-                      <SVGInline
-                          width="20px"
-                          height="20px"
-                          className="compare-bubble__icon"
-                          svg={zondicons['travel-car']}
-                      />
-                      <div className="compare-bubble__count">
-                          {this.props.compareList.length}
-                      </div>
-                  </div>
-              </div>
-            : '';
+        return (
+            <div>
+                <div className={className} onClick={this.redirectToCompare}>
+                    <SVGInline
+                        width="20px"
+                        height="20px"
+                        className="compare-bubble__icon"
+                        svg={zondicons['travel-car']}
+                    />
+                    <div className="compare-bubble__count">
+                        {this.props.compareList.length}
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     render() {

@@ -4,10 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Purchased extends Model
+class Purchase extends Model
 {
-    protected $table = 'purchased';
-    
+    protected $guarded = [
+        'id',
+    ];
+
     public function deal()
     {
         return $this->belongsTo(Deal::class);

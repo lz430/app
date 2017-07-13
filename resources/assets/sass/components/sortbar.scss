@@ -37,12 +37,15 @@
   }
 
   &__sort-icon {
-    fill: $text-color;
     margin-right: 3px;
 
     &--right-side {
       margin-left: 3px;
       margin-right: 0;
+    }
+
+    svg {
+      fill: $text-color;
     }
   }
 

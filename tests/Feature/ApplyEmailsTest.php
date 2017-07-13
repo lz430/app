@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Mail\ApplicationSubmittedDMR;
 use App\Mail\ApplicationSubmittedUser;
+use App\Purchase;
 use App\User;
 use App\Deal;
 use Illuminate\Mail\Mailable;
@@ -21,12 +22,14 @@ class ApplyEmailsTest extends TestCase
             'email' => 'test@example.com',
         ]);
 
-        $deal = factory(Deal::class)->create();
+        $purchase = factory(Purchase::class)->create();
 
         $this->be($user);
 
         $response = $this->post(route('apply', [
-            'deal_id' => $deal->id,
+            'name' => 'test',
+            'email' => 'test-application-email@example.com',
+            'purchase_id' => $purchase->id,
         ]));
 
         Mail::assertSent(ApplicationSubmittedDMR::class, function (Mailable $mailable) {
@@ -34,7 +37,7 @@ class ApplyEmailsTest extends TestCase
         });
 
         Mail::assertSent(ApplicationSubmittedUser::class, function (Mailable $mailable) {
-            return $mailable->hasTo('test@example.com');
+            return $mailable->hasTo('test-application-email@example.com');
         });
 
         $response->assertSeeText('Thanks');

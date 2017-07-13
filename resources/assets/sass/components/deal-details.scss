@@ -71,6 +71,43 @@
     float: right;
   }
 
+  &__dmr-price {
+    background: lighten($color-sidebar-background-secondary, 46%);
+    display: flex;
+    font-size: .9rem;
+    padding: 5px 15px;
+  }
+
+  &__dmr-price-label {
+    align-self: flex-end;
+    color: $text-color-dark;
+    flex: 1;
+    font-size: .9rem;
+  }
+
+  &__dmr-price-amount {
+    align-self: flex-start;
+    color: $text-color-dark;
+    float: right;
+    font-size: 1.6rem;
+    justify-self: flex-end;
+    line-height: 2rem;
+  }
+
+  &__dmr-buttons {
+    display: flex;
+  }
+
+  &__dmr-button {
+    @include button;
+    flex: 1;
+    margin: 15px;
+
+    &:first-child {
+      margin-right: 0;
+    }
+  }
+
   &__primary-image {
     border: 1px solid $color-section-bottom-border;
     margin: 15px 0;
@@ -134,7 +171,7 @@
   &__login-register {
     background: $color-text-white;
     border-radius: 4px;
-    margin: 0 15px;
+    margin: 0 15px 15px;
     padding: 15px;
   }
 

@@ -151,9 +151,10 @@ $factory->define(App\Dealer::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Purchased::class, function (Faker\Generator $faker) {
+$factory->define(App\Purchase::class, function (Faker\Generator $faker) {
     return [
         'deal_id' => factory(App\Deal::class)->create()->id,
         'user_id' => factory(App\User::class)->create()->id,
+        'dmr_price' => 30000,
     ];
 });
