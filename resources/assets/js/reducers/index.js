@@ -24,17 +24,6 @@ const reducer = (state, action) => {
                 return state;
             }
 
-            /**
-             * If there is a style specified in the URL (and this isn't a refresh) we should rehydrate with that style selected.
-             * So as not to confuse people coming from a specific link.
-             */
-            const style = util.getInitialBodyStyleFromUrl();
-            if (style && !util.fromRefreshed()) {
-                return Object.assign({}, state, action.payload, {
-                    selectedStyles: [style],
-                });
-            }
-
             return Object.assign({}, state, action.payload);
         case ActionTypes.WINDOW_RESIZE:
             return Object.assign({}, state, {

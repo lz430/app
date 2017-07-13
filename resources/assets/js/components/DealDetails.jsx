@@ -34,84 +34,51 @@ class DealDetails extends React.Component {
         this.requestFuelImages(this.props.deal);
     }
 
-    requestFuelImages() {
-        const deal = this.props.deal;
-        fuelapi.getVehicleId(deal.year, deal.make, deal.model).then(data => {
-            const vehicleId = data.data[0].id || false;
-
-            if (!vehicleId) return;
-
-            fuelapi
-                .getExternalImages(vehicleId, fuelcolor.convert(deal.color))
-                .then(
-                    data => {
-                        const externalImages = data.data.products.map(product =>
-                            product.productFormats.map(format => {
-                                return {
-                                    id: `fuel_external_${format.id}`,
-                                    url: format.assets[0].url,
-                                };
-                            })
-                        )[0] || [];
-                        this.setState({ fuelExternalImages: externalImages });
-                    },
-                    () => {
-                        fuelapi
-                            .getExternalImages(vehicleId, 'white')
-                            .then(
-                                data => {
-                                    const externalImages = data.data.products.map(
-                                        product =>
-                                            product.productFormats.map(
-                                                format => {
-                                                    return {
-                                                        id: `fuel_external_${format.id}`,
-                                                        url: format.assets[0]
-                                                            .url,
-                                                    };
-                                                }
-                                            )
-                                    )[0] || [];
-                                    this.setState({
-                                        fuelExternalImages: externalImages,
-                                    });
-                                },
-                                () => {
-                                    this.setState({ fuelExternalImages: [] });
-                                }
-                            )
-                            .catch(err => {
-                                console.log(err);
-                            });
-                    }
-                )
-                .catch(err => {
-                    console.log(err);
-                });
-
-            fuelapi
-                .getInternalImages(vehicleId)
-                .then(data => {
-                    const internalImages = data.data.products[0].productFormats[0].assets
-                        .filter(asset => {
-                            return (
-                                fuelapi.internalImageCodes.indexOf(
-                                    asset.shotCode.code
-                                ) !== -1
-                            );
-                        })
-                        .map((asset, index) => {
-                            return {
-                                id: `fuel_${index}`,
-                                url: asset.url,
-                            };
-                        }) || [];
-                    this.setState({ fuelInternalImages: internalImages });
+    extractFuelImages(data) {
+        return (
+            data.data.products.map(product =>
+                product.productFormats.map(format => {
+                    return {
+                        id: `fuel_external_${format.id}`,
+                        url: format.assets[0].url,
+                    };
                 })
-                .catch(err => {
-                    console.log(err);
+            )[0] || []
+        );
+    }
+
+    async requestFuelImages() {
+        const deal = this.props.deal;
+
+        const vehicleId =
+            (await fuelapi.getVehicleId(deal.year, deal.make, deal.model))
+                .data[0].id || false;
+        if (!vehicleId) return;
+
+        try {
+            const externalImages = this.extractFuelImages(
+                await fuelapi.getExternalImages(
+                    vehicleId,
+                    fuelcolor.convert(deal.color)
+                )
+            );
+
+            this.setState({
+                fuelExternalImages: externalImages,
+            });
+        } catch (e) {
+            try {
+                const externalImages = this.extractFuelImages(
+                    await fuelapi.getExternalImages(vehicleId, 'white')
+                );
+
+                this.setState({
+                    fuelExternalImages: externalImages,
                 });
-        });
+            } catch (e) {
+                // No Fuel Images Available.
+            }
+        }
     }
 
     renderLoginRegister() {
