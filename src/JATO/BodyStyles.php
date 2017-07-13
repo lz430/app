@@ -28,7 +28,7 @@ class BodyStyles
             'icon' => 'convertible',
         ],
         'wagon' => [
-            'label' => 'Wagon',
+            'label' => 'Wagon / Crossover',
             'style' => 'Wagon',
             'subStyles' => [
                 'Combi',
@@ -65,7 +65,7 @@ class BodyStyles
             'icon' => 'minivan',
         ],
         'sport utility vehicle' => [
-            'label' => 'SUV / Crossover',
+            'label' => 'SUV',
             'style' => 'Sport Utility Vehicle',
             'subStyles' => [
                 'Crossover',

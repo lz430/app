@@ -29,6 +29,9 @@
   }
 
   &__icon {
+    svg, svg g {
+      fill: $color-text-white;
+    }
   }
 
   &__name {
