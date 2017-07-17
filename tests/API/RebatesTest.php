@@ -25,7 +25,7 @@ class RebatesTest extends TestCase
     /** @test */
     public function it_can_select_rebates_accurately()
     {
-        $client = new Client();
+        $client = new Client;
 
         $compatibilities = [
             [
@@ -70,7 +70,7 @@ class RebatesTest extends TestCase
 
         sort($selectedRebates);
         $this->assertEquals([
-            ['id' => 131400]
+            ['id' => 131400],
         ], $selectedRebates);
 
         sort($compatibleRebateIds);
@@ -158,7 +158,7 @@ class RebatesTest extends TestCase
     /** @test */
     public function it_can_select_single_rebate_that_is_not_compatible_with_others()
     {
-        $client = new Client();
+        $client = new Client;
 
         $compatibilities = [
             [
@@ -179,7 +179,7 @@ class RebatesTest extends TestCase
 
         sort($selectedRebates);
         $this->assertEquals([
-            ['id' => 111111]
+            ['id' => 111111],
         ], $selectedRebates);
 
         sort($compatibleRebateIds);

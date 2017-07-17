@@ -3,6 +3,7 @@
 namespace DeliverMyRide\MarketScan;
 
 use Carbon\Carbon;
+use Exception;
 use GuzzleHttp\Client as GuzzleClient;
 
 class Client
@@ -17,7 +18,7 @@ class Client
         $this->apiUrl = 'http://integration.marketscan.io/scan/rest/mscanservice.rst';
         $this->partnerID = '07957435-A7CC-4695-8922-109731B322C7';
         $this->accountNumber = '890000';
-        $this->client = new GuzzleClient();
+        $this->client = new GuzzleClient;
     }
 
     public function getVehicleIDByVIN($vin)
@@ -47,7 +48,7 @@ class Client
                             'RebateID' => $rebate['id'],
                         ];
                     }, $possibleRebates),
-                ]
+                ],
             ]
         );
 
@@ -124,7 +125,7 @@ class Client
                 }
 
                 if (! $jatoMakeName) {
-                    throw new \Exception('Missing mapping');
+                    throw new Exception('Missing mapping');
                 }
 
                 foreach ($manufacturer['CustomerTypes'] as $customerType) {
@@ -148,7 +149,7 @@ class Client
                     'IncludeExpired' => false,
                     'VehicleID' => $vehicleID,
                     'ZIP' => $zipcode,
-                ]
+                ],
             ]
         );
 
@@ -203,13 +204,13 @@ class Client
 
         $nextCompatibilities = [];
         foreach ($compatibilities as $compatibleRebateIds) {
-            if (!array_diff($withThisRebateIds, $compatibleRebateIds)) {
+            if (! array_diff($withThisRebateIds, $compatibleRebateIds)) {
                 // return new selected rebates and new compatibilityList
                 $nextCompatibilities = array_unique(array_merge($nextCompatibilities, $compatibleRebateIds));
             }
         }
 
-        if (!empty($nextCompatibilities)) {
+        if (! empty($nextCompatibilities)) {
             return [
                 array_merge($selectedRebates, [$rebate]),
                 $nextCompatibilities,
