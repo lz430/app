@@ -52,9 +52,8 @@ class Deal extends Model
         return $query->whereHas('dealer', function (Builder $q) use ($latitude, $longitude) {
             $q->whereRaw("
                ST_Distance_sphere(
-                    GeomFromText(concat('POINT(', longitude, ' ', latitude, ')'), 3857),
-                    GeomFromText(concat('POINT(', ?, ' ', ?, ')'), 3857),
-                    6371000
+                    point(longitude, latitude),
+                    point(?, ?)
                 ) * .000621371192 < max_delivery_miles
             ", [
                 $longitude,

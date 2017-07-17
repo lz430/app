@@ -279,6 +279,7 @@ class DealsTest extends TestCase
          * (75703 DB lookup -> lat: 32.2350970, lon:-95.3207790 )
          * ---
          * Distance from dealer to customer is ~969 miles (Via Google Maps)
+         * Testing within 5 miles of Google Maps
          */
         Zipcode::create(['zipcode' => '75703', 'latitude' => '32.2350970', 'longitude' => '-95.3207790']);
 
@@ -301,9 +302,9 @@ class DealsTest extends TestCase
         $version->deals()->attach($deal->id);
 
         /**
-         * When max_delivery_miles = 1000
+         * Outside max_delivery_miles
          */
-        $dealer->max_delivery_miles = 1000;
+        $dealer->max_delivery_miles = 974;
         $dealer->save();
 
         $response = $this->getJson(route('deals.index', [
@@ -313,9 +314,9 @@ class DealsTest extends TestCase
         $this->assertCount(1, $response->decodeResponseJson()['data']);
 
         /**
-         * When max_delivery_miles = 900
+         * Within max_delivery_miles
          */
-        $dealer->max_delivery_miles = 900;
+        $dealer->max_delivery_miles = 964;
         $dealer->save();
 
         $response = $this->getJson(route('deals.index', [
