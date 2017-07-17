@@ -325,7 +325,8 @@ export function requestLocationInfo() {
                     dispatch(receiveLocationInfo(data));
                 })
                 .catch(error => {
-                    console.log('Error', error.message);
+                    // If we have hit rate limit
+                    dispatch(requestDeals());
                 });
         } else {
             dispatch(requestDeals());
