@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
+use Laracasts\Utilities\JavaScript\JavaScriptFacade;
 
 class ApplyOrPurchaseController extends Controller
 {
@@ -94,8 +95,14 @@ class ApplyOrPurchaseController extends Controller
                 'purchase_id' => 'required|exists:purchases,id',
             ]);
 
+            $purchase = Purchase::with('deal')->findOrFail(request('purchase_id'));
+
+            JavaScriptFacade::put([
+                'purchase' => $purchase,
+            ]);
+
             return view('view-apply')
-                ->with('purchase', Purchase::findOrFail(request('purchase_id')));
+                ->with('purchase', $purchase);
         } catch (ValidationException | ModelNotFoundException $e) {
             return abort(404);
         }
