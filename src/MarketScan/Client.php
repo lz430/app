@@ -7,38 +7,81 @@ use GuzzleHttp\Client as GuzzleClient;
 
 class Client
 {
-    private $guzzleClient;
+    private $client;
     private $apiUrl;
     private $partnerID;
     private $accountNumber;
 
-    public function __construct($username, $password)
+    public function __construct()
     {
         $this->apiUrl = 'http://integration.marketscan.io/scan/rest/mscanservice.rst';
         $this->partnerID = '07957435-A7CC-4695-8922-109731B322C7';
         $this->accountNumber = '890000';
-
-        $this->guzzleClient = new GuzzleClient([
-            'connect_timeout' => 5,
-        ]);
+        $this->client = new GuzzleClient();
     }
 
-    private function getVehicleID()
+    public function getVehicleIDByVIN($vin)
     {
-        $vinResponse = $this->guzzleClient->get(
-            "$this->apiUrl/?GetVehiclesByVIN/$this->partnerID/$this->accountNumber/$this->vin/True"
+        $vinResponse = $this->client->get(
+            "$this->apiUrl/?GetVehiclesByVIN/$this->partnerID/$this->accountNumber/$vin/True"
         );
 
         return json_decode((string) $vinResponse->getBody(), true)[0]['ID'];
     }
 
-    public function getRebates()
+    public function getCompatibleRebates($vehicleID, $zipcode, $possibleRebates, $selectedRebates)
     {
-        $customerTypesResponse = $this->guzzleClient->get(
+        $compatibilityResponse = $this->client->post(
+            "$this->apiUrl/?GetRebatesCompatibilityParams/$this->partnerID/$this->accountNumber",
+            [
+                'json' => [
+                    'P' => [
+                        // 2017-07-07T17:09:37.366Z
+                        'DateTimeStamp' =>  Carbon::now()->toW3cString(),
+                        'IncludeExpired' => false,
+                        'VehicleID' => $vehicleID,
+                        'ZIP' => $zipcode,
+                    ],
+                    'RebateValues' => array_map(function ($rebate) {
+                        return [
+                            'RebateID' => $rebate['id'],
+                        ];
+                    }, $possibleRebates),
+                ]
+            ]
+        );
+
+        $compatibilities = array_map(function ($compatibilityList) {
+            return $compatibilityList['CompatibilityList'];
+        }, json_decode((string) $compatibilityResponse->getBody(), true)['Compatibilities']);
+
+        // we pick a rebate 1 at a time, after every selection we need to update the "compatible rebates list"
+        $compatibleRebatesList = array_values($possibleRebates);
+
+        $tempSelectedRebates = [];
+        $nextCompatibleRebatesListIds = array_map(function ($compatibleRebates) {
+            return $compatibleRebates['id'];
+        }, $compatibleRebatesList);
+
+        foreach ($selectedRebates as $selectedRebate) {
+            [$tempSelectedRebates, $nextCompatibleRebatesListIds] = $this->selectRebate(
+                $selectedRebate,
+                $tempSelectedRebates,
+                $compatibilities,
+                $nextCompatibleRebatesListIds
+            );
+        }
+
+        return [$tempSelectedRebates, $this->rebateIdsToRebates($nextCompatibleRebatesListIds, $compatibleRebatesList)];
+    }
+
+    public function getRebates($zipcode, $vin, $vehicleID, $selectedRebates = [])
+    {
+        $customerTypesResponse = $this->client->get(
             "$this->apiUrl/?GetManufacturers/$this->partnerID/$this->accountNumber"
         );
 
-// Special case is CustomerType ID 38, "Individual" is make "ANY"
+        // Special case is CustomerType ID 38, "Individual" is make "ANY"
         $MarketScanManufacturerNameToJatoMakeNameMap = [
             'General Motors' => 'GMC',
             'Chrysler' => 'Chrysler',
@@ -96,9 +139,7 @@ class Client
             ]
         );
 
-        $vehicleID = $this->getVehicleID();
-
-        $response = $this->guzzleClient->post(
+        $response = $this->client->post(
             "$this->apiUrl/?GetRebatesParams/$this->partnerID/$this->accountNumber",
             [
                 'json' => [
@@ -106,7 +147,7 @@ class Client
                     'DateTimeStamp' =>  Carbon::now()->toW3cString(),
                     'IncludeExpired' => false,
                     'VehicleID' => $vehicleID,
-                    'ZIP' => $this->zipcode,
+                    'ZIP' => $zipcode,
                 ]
             ]
         );
@@ -114,13 +155,16 @@ class Client
         $possibleRebates = collect(json_decode((string) $response->getBody(), true)['Rebates'])
             ->map(function ($rebate) use ($customerTypeIDToCustomerTypeNameMap) {
                 // add name to customer types
-                $customerTypesWithNames = array_map(function ($customerType) use ($customerTypeIDToCustomerTypeNameMap) {
-                    return [
-                        'customerTypeName' => $customerTypeIDToCustomerTypeNameMap[$customerType['ID']],
-                        'id' => $customerType['ID'],
-                        'autoSelect' => $customerType['AutoSelect'],
-                    ];
-                }, $rebate['CustomerTypes'] ?? []);
+                $customerTypesWithNames = array_map(
+                    function ($customerType) use ($customerTypeIDToCustomerTypeNameMap) {
+                        return [
+                            'customerTypeName' => $customerTypeIDToCustomerTypeNameMap[$customerType['ID']],
+                            'id' => $customerType['ID'],
+                            'autoSelect' => $customerType['AutoSelect'],
+                        ];
+                    },
+                    $rebate['CustomerTypes'] ?? []
+                );
 
                 $rebate['CustomerTypes'] = $customerTypesWithNames;
 
@@ -144,5 +188,49 @@ class Client
             });
 
         return array_values($possibleRebates->toArray());
+    }
+
+    public function selectRebate($rebate, $selectedRebates, $compatibilities, $compatibleRebateIds)
+    {
+        // if it is already in $selectedRebates do nothing
+        if (in_array($rebate, $selectedRebates)) {
+            return [$selectedRebates, $compatibleRebateIds];
+        }
+
+        $withThisRebateIds = array_map(function ($rebate) {
+            return $rebate['id'];
+        }, array_merge($selectedRebates, [$rebate]));
+
+        $nextCompatibilities = [];
+        foreach ($compatibilities as $compatibleRebateIds) {
+            if (!array_diff($withThisRebateIds, $compatibleRebateIds)) {
+                // return new selected rebates and new compatibilityList
+                $nextCompatibilities = array_unique(array_merge($nextCompatibilities, $compatibleRebateIds));
+            }
+        }
+
+        if (!empty($nextCompatibilities)) {
+            return [
+                array_merge($selectedRebates, [$rebate]),
+                $nextCompatibilities,
+            ];
+        } else {
+            // Not in any compatibility lists
+            if (count($withThisRebateIds) === 1) {
+                return [[$rebate], [$rebate['id']]];
+            }
+        }
+
+        // do nothing
+        return [$selectedRebates, $compatibleRebateIds];
+    }
+
+    private function rebateIdsToRebates($compatibilityIds, $compatibleRebatesList)
+    {
+        return array_map(function ($compID) use ($compatibleRebatesList) {
+            return array_first($compatibleRebatesList, function ($compatibleRebate) use ($compID) {
+                return $compID === $compatibleRebate['id'];
+            });
+        }, $compatibilityIds);
     }
 }

@@ -13085,6 +13085,10 @@ var TOGGLE_SMALL_FILTERS_SHOWN = 'TOGGLE_SMALL_FILTERS_SHOWN';
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_src_util__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_src_fuelapi__ = __webpack_require__(213);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_src_fuel_color_map__ = __webpack_require__(391);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_src_api__ = __webpack_require__(390);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_react_svg_inline__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_react_svg_inline___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_react_svg_inline__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_zondicons__ = __webpack_require__(41);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return connected; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return raw; });
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -13096,6 +13100,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
 
 
 
@@ -13119,7 +13126,10 @@ var DealDetails = function (_React$Component) {
             fuelExternalImages: [],
             fuelInternalImages: [],
             selectedTab: 'cash',
-            fallbackDealImage: '/images/dmr-logo.svg'
+            fallbackDealImage: '/images/dmr-logo.svg',
+            available_rebates: null,
+            compatible_rebate_ids: null,
+            selected_rebate_ids: []
         };
 
         _this.renderThumbnailImage = _this.renderThumbnailImage.bind(_this);
@@ -13131,13 +13141,25 @@ var DealDetails = function (_React$Component) {
         _this.renderCompareAndBuyNow = _this.renderCompareAndBuyNow.bind(_this);
         _this.startPurchaseFlow = _this.startPurchaseFlow.bind(_this);
         _this.requestFuelImages = _this.requestFuelImages.bind(_this);
+        _this.requestRebates = _this.requestRebates.bind(_this);
+        _this.renderRebates = _this.renderRebates.bind(_this);
+        _this.renderRebate = _this.renderRebate.bind(_this);
+        _this.toggleRebate = _this.toggleRebate.bind(_this);
         return _this;
     }
 
     _createClass(DealDetails, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
+            var _this2 = this;
+
             this.requestFuelImages(this.props.deal);
+            this.requestRebates(this.props.zipcode, this.props.deal.vin, []).then(function (response) {
+                _this2.setState({
+                    available_rebates: response.data.compatible_rebates,
+                    compatible_rebate_ids: __WEBPACK_IMPORTED_MODULE_2_ramda___default.a.map(__WEBPACK_IMPORTED_MODULE_2_ramda___default.a.prop('id'), response.data.compatible_rebates)
+                });
+            });
         }
     }, {
         key: 'extractFuelImages',
@@ -13150,6 +13172,11 @@ var DealDetails = function (_React$Component) {
                     };
                 });
             })[0] || [];
+        }
+    }, {
+        key: 'requestRebates',
+        value: function requestRebates(zipcode, vin, selected_rebate_ids) {
+            return __WEBPACK_IMPORTED_MODULE_8_src_api__["a" /* default */].getRebates(zipcode, vin, selected_rebate_ids);
         }
     }, {
         key: 'requestFuelImages',
@@ -13425,6 +13452,60 @@ var DealDetails = function (_React$Component) {
             form.submit();
         }
     }, {
+        key: 'toggleRebate',
+        value: function toggleRebate(rebate_id) {
+            var _this3 = this;
+
+            this.requestRebates(this.props.zipcode, this.props.deal.vin, __WEBPACK_IMPORTED_MODULE_5_src_util__["a" /* default */].toggleItem(this.state.selected_rebate_ids, rebate_id)).then(function (response) {
+                _this3.setState({
+                    compatible_rebate_ids: __WEBPACK_IMPORTED_MODULE_2_ramda___default.a.map(__WEBPACK_IMPORTED_MODULE_2_ramda___default.a.prop('id'), response.data.compatible_rebates),
+                    selected_rebate_ids: __WEBPACK_IMPORTED_MODULE_2_ramda___default.a.map(__WEBPACK_IMPORTED_MODULE_2_ramda___default.a.prop('id'), response.data.selected_rebates)
+                });
+            });
+        }
+    }, {
+        key: 'renderRebate',
+        value: function renderRebate(rebate, index) {
+            var isSelected = __WEBPACK_IMPORTED_MODULE_2_ramda___default.a.contains(rebate.id, this.state.selected_rebate_ids);
+            var isSelectable = __WEBPACK_IMPORTED_MODULE_2_ramda___default.a.contains(rebate.id, this.state.compatible_rebate_ids);
+            var checkboxClass = 'deal-details__rebate-checkbox deal-details__rebate-checkbox--inverted ' + (isSelected ? 'deal-details__rebate-checkbox--selected' : '');
+
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                {
+                    onClick: isSelectable ? this.toggleRebate.bind(this, rebate.id) : __WEBPACK_IMPORTED_MODULE_2_ramda___default.a.identity,
+                    className: 'deal-details__rebate ' + (isSelectable ? '' : 'deal-details__rebate--disabled'),
+                    key: index
+                },
+                isSelected ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_9_react_svg_inline___default.a, {
+                    width: '15px',
+                    height: '15px',
+                    className: checkboxClass,
+                    svg: __WEBPACK_IMPORTED_MODULE_10_zondicons__["a" /* default */]['checkmark']
+                }) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('div', { className: 'deal-details__rebate-checkbox' }),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'deal-details__rebate-rebate' },
+                    rebate.rebate
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                    'div',
+                    { className: 'deal-details__rebate-value' },
+                    '-',
+                    __WEBPACK_IMPORTED_MODULE_5_src_util__["a" /* default */].moneyFormat(rebate.value)
+                )
+            );
+        }
+    }, {
+        key: 'renderRebates',
+        value: function renderRebates() {
+            return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                { className: 'deal-details__rebates' },
+                this.state.available_rebates ? this.state.available_rebates.map(this.renderRebate) : ''
+            );
+        }
+    }, {
         key: 'render',
         value: function render() {
             var deal = this.props.deal;
@@ -13601,6 +13682,7 @@ var DealDetails = function (_React$Component) {
                                 __WEBPACK_IMPORTED_MODULE_5_src_util__["a" /* default */].moneyFormat(deal.msrp)
                             )
                         ),
+                        window.user ? this.renderRebates() : '',
                         window.user ? this.renderDMRPrice() : '',
                         window.user ? this.renderCompareAndBuyNow() : '',
                         !window.user ? this.renderLoginRegister() : ''
@@ -13620,7 +13702,8 @@ DealDetails.propTypes = {
         price: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.number.isRequired,
         make: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
         model: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
-        id: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.number.isRequired
+        id: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.number.isRequired,
+        vin: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired
     }),
     intendedRoute: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
     toggleCompare: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.func.isRequired
@@ -13629,7 +13712,8 @@ DealDetails.propTypes = {
 var mapStateToProps = function mapStateToProps(state) {
     return {
         deal: state.selectedDeal,
-        compareList: state.compareList
+        compareList: state.compareList,
+        zipcode: state.zipcode
     };
 };
 
@@ -25682,6 +25766,15 @@ var api = {
                 latitude: latitude,
                 longitude: longitude,
                 zipcode: zipcode
+            }
+        });
+    },
+    getRebates: function getRebates(zipcode, vin, selected_rebate_ids) {
+        return window.axios.get('/api/rebates', {
+            params: {
+                zipcode: zipcode,
+                vin: vin,
+                selected_rebate_ids: selected_rebate_ids
             }
         });
     }

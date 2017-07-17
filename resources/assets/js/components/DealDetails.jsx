@@ -6,6 +6,9 @@ import * as Actions from 'actions/index';
 import util from 'src/util';
 import fuelapi from 'src/fuelapi';
 import fuelcolor from 'src/fuel-color-map';
+import api from 'src/api';
+import SVGInline from 'react-svg-inline';
+import zondicons from 'zondicons';
 
 class DealDetails extends React.Component {
     constructor(props) {
@@ -17,6 +20,9 @@ class DealDetails extends React.Component {
             fuelInternalImages: [],
             selectedTab: 'cash',
             fallbackDealImage: '/images/dmr-logo.svg',
+            available_rebates: null,
+            compatible_rebate_ids: null,
+            selected_rebate_ids: [],
         };
 
         this.renderThumbnailImage = this.renderThumbnailImage.bind(this);
@@ -28,10 +34,27 @@ class DealDetails extends React.Component {
         this.renderCompareAndBuyNow = this.renderCompareAndBuyNow.bind(this);
         this.startPurchaseFlow = this.startPurchaseFlow.bind(this);
         this.requestFuelImages = this.requestFuelImages.bind(this);
+        this.requestRebates = this.requestRebates.bind(this);
+        this.renderRebates = this.renderRebates.bind(this);
+        this.renderRebate = this.renderRebate.bind(this);
+        this.toggleRebate = this.toggleRebate.bind(this);
     }
 
     componentDidMount() {
         this.requestFuelImages(this.props.deal);
+        this.requestRebates(
+            this.props.zipcode,
+            this.props.deal.vin,
+            []
+        ).then(response => {
+            this.setState({
+                available_rebates: response.data.compatible_rebates,
+                compatible_rebate_ids: R.map(
+                    R.prop('id'),
+                    response.data.compatible_rebates
+                ),
+            });
+        });
     }
 
     extractFuelImages(data) {
@@ -45,6 +68,10 @@ class DealDetails extends React.Component {
                 })
             )[0] || []
         );
+    }
+
+    requestRebates(zipcode, vin, selected_rebate_ids) {
+        return api.getRebates(zipcode, vin, selected_rebate_ids);
     }
 
     async requestFuelImages() {
@@ -258,6 +285,74 @@ class DealDetails extends React.Component {
         form.submit();
     }
 
+    toggleRebate(rebate_id) {
+        this.requestRebates(
+            this.props.zipcode,
+            this.props.deal.vin,
+            util.toggleItem(this.state.selected_rebate_ids, rebate_id)
+        ).then(response => {
+            this.setState({
+                compatible_rebate_ids: R.map(
+                    R.prop('id'),
+                    response.data.compatible_rebates
+                ),
+                selected_rebate_ids: R.map(
+                    R.prop('id'),
+                    response.data.selected_rebates
+                ),
+            });
+        });
+    }
+
+    renderRebate(rebate, index) {
+        const isSelected = R.contains(
+            rebate.id,
+            this.state.selected_rebate_ids
+        );
+        const isSelectable = R.contains(
+            rebate.id,
+            this.state.compatible_rebate_ids
+        );
+        const checkboxClass = `deal-details__rebate-checkbox deal-details__rebate-checkbox--inverted ${isSelected ? 'deal-details__rebate-checkbox--selected' : ''}`;
+
+        return (
+            <div
+                onClick={
+                    isSelectable
+                        ? this.toggleRebate.bind(this, rebate.id)
+                        : R.identity
+                }
+                className={`deal-details__rebate ${isSelectable ? '' : 'deal-details__rebate--disabled'}`}
+                key={index}
+            >
+                {isSelected
+                    ? <SVGInline
+                          width="15px"
+                          height="15px"
+                          className={checkboxClass}
+                          svg={zondicons['checkmark']}
+                      />
+                    : <div className="deal-details__rebate-checkbox" />}
+                <div className="deal-details__rebate-rebate">
+                    {rebate.rebate}
+                </div>
+                <div className="deal-details__rebate-value">
+                    -{util.moneyFormat(rebate.value)}
+                </div>
+            </div>
+        );
+    }
+
+    renderRebates() {
+        return (
+            <div className="deal-details__rebates">
+                {this.state.available_rebates
+                    ? this.state.available_rebates.map(this.renderRebate)
+                    : ''}
+            </div>
+        );
+    }
+
     render() {
         const deal = this.props.deal;
 
@@ -343,6 +438,8 @@ class DealDetails extends React.Component {
                             </span>
                         </div>
 
+                        {window.user ? this.renderRebates() : ''}
+
                         {window.user ? this.renderDMRPrice() : ''}
 
                         {window.user ? this.renderCompareAndBuyNow() : ''}
@@ -363,6 +460,7 @@ DealDetails.propTypes = {
         make: PropTypes.string.isRequired,
         model: PropTypes.string.isRequired,
         id: PropTypes.number.isRequired,
+        vin: PropTypes.string.isRequired,
     }),
     intendedRoute: PropTypes.string.isRequired,
     toggleCompare: PropTypes.func.isRequired,
@@ -372,6 +470,7 @@ const mapStateToProps = state => {
     return {
         deal: state.selectedDeal,
         compareList: state.compareList,
+        zipcode: state.zipcode,
     };
 };
 
