@@ -22,6 +22,7 @@ class ZipcodeFinder extends React.Component {
 
     isValid() {
         return (
+            this.state.zipcode &&
             this.state.zipcode.length === 5 &&
             parseInt(this.state.zipcode).toString() === this.state.zipcode
         );
@@ -62,12 +63,18 @@ class ZipcodeFinder extends React.Component {
                                   type="number"
                                   pattern="\d*"
                                   autoFocus
-                                  value={this.state.zipcode}
+                                  value={
+                                      this.state.zipcode
+                                          ? this.state.zipcode
+                                          : ''
+                                  }
                                   onChange={this.handleChange}
                               />
                           </form>
                         : <div className="zipcode-finder__zipcode">
-                              {this.props.zipcode}
+                              {this.props.zipcode
+                                  ? this.props.zipcode
+                                  : '_____'}
                           </div>}
                 </div>
                 <div className="zipcode-finder__buttons">
@@ -102,7 +109,7 @@ class ZipcodeFinder extends React.Component {
                               onClick={this.toggleEditing}
                               className="zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg"
                           >
-                              Update
+                              Update Zip
                           </button>}
                 </div>
             </div>
