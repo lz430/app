@@ -21,7 +21,7 @@ class Deal extends React.Component {
             this.state.fallbackDealImage,
             'url',
             this.props.deal.photos[1]
-                ? this.props.deal.photos[0]
+                ? this.props.deal.photos[1]
                 : { url: this.state.fallbackDealImage }
         );
     }
