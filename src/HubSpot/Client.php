@@ -44,6 +44,20 @@ class Client
         );
     }
     
+    public function updateContactByHubspotId($hubspot_id, $payload)
+    {
+        $hubspotPayload = $this->generateHubspotPayloadFrom($payload);
+    
+        return json_decode(
+            (string) $this->guzzleClient->request(
+                'POST',
+                "/contacts/v1/contact/vid/{$hubspot_id}/profile?hapikey=" . config('services.hubspot.api_key'),
+                ['json' => ['properties' => $hubspotPayload]]
+            )->getBody(),
+            true
+        );
+    }
+    
     public function getContacts()
     {
         return json_decode(

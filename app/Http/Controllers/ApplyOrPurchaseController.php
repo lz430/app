@@ -8,6 +8,7 @@ use App\Mail\DealPurchasedDMR;
 use App\Mail\DealPurchasedUser;
 use App\Purchase;
 use Carbon\Carbon;
+use DeliverMyRide\HubSpot\Client;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -79,6 +80,11 @@ class ApplyOrPurchaseController extends Controller
 
             Mail::to(config('mail.dmr.address'))->send(new DealPurchasedDMR);
             Mail::to(auth()->user())->send(new DealPurchasedUser);
+            
+            $hubspotClient = new Client;
+            $hubspotClient->updateContactByEmail(auth()->user()->email, [
+            
+            ]);
 
             return view('purchase')
                 ->with('purchase', $purchase)

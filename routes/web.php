@@ -8,6 +8,7 @@ Auth::routes();
 Route::get('', 'WelcomeController@index')->name('home');
 Route::get('filter', 'FilterController@index')->name('filter');
 Route::get('compare', 'CompareController@index')->name('compare');
+Route::post('hubspot', 'HubspotController@updateContact')->name('hubspot.contact.update');
 
 Route::group(['middleware' => 'auth'], function () {
     /** Purchase Flow */

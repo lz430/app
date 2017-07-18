@@ -2618,6 +2618,8 @@ function toggleStyle(style) {
             dispatch(receiveDeals(data));
         });
 
+        window.axios.post('/hubspot', { 'bodystyles1': selectedStyles.join() });
+
         dispatch({
             type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["n" /* TOGGLE_STYLE */],
             selectedStyles: selectedStyles
@@ -2709,6 +2711,8 @@ function setZipCode(zipcode) {
             dispatch(receiveDeals(data));
         });
 
+        window.axios.post('/hubspot', { zip: zipcode });
+
         dispatch({
             type: __WEBPACK_IMPORTED_MODULE_2_actiontypes_index__["u" /* SET_ZIP_CODE */],
             zipcode: zipcode
@@ -2726,6 +2730,7 @@ function requestLocationInfo() {
                 if (err) {
                     dispatch(requestDeals());
                 } else {
+                    window.axios.post('/hubspot', { zip: data.zip_code });
                     dispatch(receiveLocationInfo(data));
                 }
             });
@@ -22876,7 +22881,7 @@ var Deal = function (_React$Component) {
     _createClass(Deal, [{
         key: 'getFeaturedImage',
         value: function getFeaturedImage() {
-            return __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.propOr(this.state.fallbackDealImage, 'url', this.props.deal.photos[1] ? this.props.deal.photos[0] : { url: this.state.fallbackDealImage });
+            return __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.propOr(this.state.fallbackDealImage, 'url', this.props.deal.photos[1] ? this.props.deal.photos[1] : { url: this.state.fallbackDealImage });
         }
     }, {
         key: 'componentDidMount',

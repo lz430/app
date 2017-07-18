@@ -37,6 +37,12 @@ class CreateHubspotContact
             }
         }
         
-        $this->client->createContact($payload);
+        if ($hubspot_id = session()->get('hubspot_id')) {
+            $this->client->updateContactByHubspotId($hubspot_id, $payload);
+            return;
+        }
+        
+        $response = $this->client->createContact($payload);
+        session(['hubspot_id' => $response['vid']]);
     }
 }
