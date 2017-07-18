@@ -24604,11 +24604,9 @@ var ComparePage = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (ComparePage.__proto__ || Object.getPrototypeOf(ComparePage)).call(this, props));
 
-        props.deals.map(function (deal) {
-            return deal.photos.shift();
-        });
+        var deals = _this.shiftPhotos(props.deals);
         _this.state = {
-            deals: props.deals,
+            deals: deals,
             dealIndex: 0,
             selectedDeal: null
         };
@@ -24678,6 +24676,14 @@ var ComparePage = function (_React$Component) {
             }, false);
             // ********************************************************
             // ********************************************************
+        }
+    }, {
+        key: 'shiftPhotos',
+        value: function shiftPhotos(deals) {
+            deals.map(function (deal) {
+                return deal.photos.shift();
+            });
+            return deals;
         }
     }, {
         key: 'slideLeft',
