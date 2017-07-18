@@ -2,19 +2,20 @@
 
 namespace App\Events;
 
-use App\User;
+use App\Purchase;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class NewUserRegistered
+class NewPurchaseInitiated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user;
-    
-    public function __construct(User $user)
+    public $purchase;
+
+    public function __construct(Purchase $purchase)
     {
-        $this->user = $user;
+        $this->purchase = $purchase;
     }
 }

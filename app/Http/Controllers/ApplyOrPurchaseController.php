@@ -9,6 +9,7 @@ use App\Mail\DealPurchasedUser;
 use App\Purchase;
 use Carbon\Carbon;
 use DeliverMyRide\HubSpot\Client;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -17,6 +18,13 @@ use Laracasts\Utilities\JavaScript\JavaScriptFacade;
 
 class ApplyOrPurchaseController extends Controller
 {
+    protected $hubspotClient;
+    
+    public function __construct(Client $client)
+    {
+        $this->hubspotClient = $client;
+    }
+    
     /**
      * Create "Purchase" from deal and incentives
      */
@@ -41,7 +49,19 @@ class ApplyOrPurchaseController extends Controller
             $purchase->incentives = json_encode(request('incentives'), JSON_NUMERIC_CHECK);
             $purchase->save();
     
-            $purchase->load('deal');
+            $purchase->load('deal.versions');
+
+            try {
+                $this->hubspotClient->updateContactByEmail(auth()->user()->email, [
+                    'bodystyle1' => $purchase->deal->versions()->first()->body_style,
+                    'brand1' => $purchase->deal->make,
+                    'model1' => $purchase->deal->model,
+                    'color1' => $purchase->deal->color,
+                    'payment' => 'Finance',
+                ]);
+            } catch (Exception $exception) {
+                // issue with hubspot communication
+            }
     
             JavaScriptFacade::put([
                 'purchase' => $purchase,
@@ -86,11 +106,14 @@ class ApplyOrPurchaseController extends Controller
 
             Mail::to(config('mail.dmr.address'))->send(new DealPurchasedDMR);
             Mail::to(auth()->user())->send(new DealPurchasedUser);
-            
-            $hubspotClient = new Client;
-            $hubspotClient->updateContactByEmail(auth()->user()->email, [
-            
-            ]);
+    
+            try {
+                $this->hubspotClient->updateContactByEmail(auth()->user()->email, [
+                    'payment' => 'Cash',
+                ]);
+            } catch (Exception $exception) {
+                // issue with hubspot communication
+            }
 
             return view('purchase')
                 ->with('purchase', $purchase)

@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\NewUserRegistered' => [
             'App\Listeners\CreateHubspotContact',
         ],
+        'App\Events\NewPurchaseInitiated' => [
+            'App\Listeners\UpdateHubspotContact',
+        ],
     ];
 
     /**
