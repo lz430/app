@@ -64,29 +64,58 @@
 
   &__msrp {
     color: $text-color-dark;
-    font-size: 1.1rem;
-    padding: 10px 15px;
+    font-size: .9rem;
+    padding: 10px 15px 5px 15px;
   }
 
   &__msrp-amount {
     float: right;
+    font-size: .9rem;
+
+    &--strike {
+      text-decoration: line-through;
+    }
   }
 
+  // DMR Price
   &__dmr-price {
-    background: lighten($color-sidebar-background-secondary, 46%);
     display: flex;
     font-size: .9rem;
     padding: 5px 15px;
   }
 
   &__dmr-price-label {
-    align-self: flex-end;
+    align-self: center;
     color: $text-color-dark;
     flex: 1;
     font-size: .9rem;
   }
 
   &__dmr-price-amount {
+    align-self: flex-start;
+    color: $text-color-dark;
+    float: right;
+    font-size: 1.6rem;
+    justify-self: flex-end;
+    line-height: 2rem;
+  }
+
+  // Your DMR Price
+  &__your-dmr-price {
+    background: lighten($color-sidebar-background-secondary, 46%);
+    display: flex;
+    font-size: .9rem;
+    padding: 5px 15px;
+  }
+
+  &__your-dmr-price-label {
+    align-self: flex-end;
+    color: $text-color-dark;
+    flex: 1;
+    font-size: .9rem;
+  }
+
+  &__your-dmr-price-amount {
     align-self: flex-start;
     color: $text-color-dark;
     float: right;

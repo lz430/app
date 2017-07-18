@@ -33,6 +33,7 @@ class DealDetails extends React.Component {
         this.selectFinanceTab = this.selectFinanceTab.bind(this);
         this.selectLeaseTab = this.selectLeaseTab.bind(this);
         this.renderDMRPrice = this.renderDMRPrice.bind(this);
+        this.renderYourDMRPrice = this.renderYourDMRPrice.bind(this);
         this.renderCompareAndBuyNow = this.renderCompareAndBuyNow.bind(this);
         this.startPurchaseFlow = this.startPurchaseFlow.bind(this);
         this.requestFuelImages = this.requestFuelImages.bind(this);
@@ -40,6 +41,7 @@ class DealDetails extends React.Component {
         this.renderRebates = this.renderRebates.bind(this);
         this.renderRebate = this.renderRebate.bind(this);
         this.toggleRebate = this.toggleRebate.bind(this);
+        this.getDMRPriceAfterRebates = this.getDMRPriceAfterRebates.bind(this);
     }
 
     componentDidMount() {
@@ -207,15 +209,40 @@ class DealDetails extends React.Component {
     }
 
     renderDMRPrice() {
-        const deal = this.props.deal;
-
         return (
             <div className="deal-details__dmr-price">
                 <div className="deal-details__dmr-price-label">
-                    Your DMR Price:
+                    DMR Price:
                 </div>
                 <div className="deal-details__dmr-price-amount">
-                    {util.moneyFormat(deal.price)}
+                    {util.moneyFormat(this.props.deal.price)}
+                </div>
+            </div>
+        );
+    }
+
+    getSelectedRebates() {
+        return R.filter(rebate => {
+            return R.contains(rebate.id, this.state.selected_rebate_ids);
+        }, this.state.available_rebates);
+    }
+
+    getDMRPriceAfterRebates() {
+        const totalRebateAmount = R.compose(R.sum, R.map(R.prop('value')))(
+            this.getSelectedRebates()
+        );
+
+        return this.props.deal.price - totalRebateAmount;
+    }
+
+    renderYourDMRPrice() {
+        return (
+            <div className="deal-details__your-dmr-price">
+                <div className="deal-details__your-dmr-price-label">
+                    Your DMR Price:
+                </div>
+                <div className="deal-details__your-dmr-price-amount">
+                    {util.moneyFormat(this.getDMRPriceAfterRebates())}
                 </div>
             </div>
         );
@@ -260,26 +287,21 @@ class DealDetails extends React.Component {
         deal_id.setAttribute('name', 'deal_id');
         deal_id.setAttribute('value', deal.id);
 
-        [
-            {
-                name: 'Example incentive',
-                value: 500.50,
-            },
-        ].forEach((incentive, index) => {
-            let incentiveName = document.createElement('input');
-            incentiveName.setAttribute('name', `incentives[${index}][name]`);
-            incentiveName.setAttribute('value', incentive.name);
-            form.appendChild(incentiveName);
+        this.getSelectedRebates().forEach((rebate, index) => {
+            let rebateName = document.createElement('input');
+            rebateName.setAttribute('name', `rebates[${index}][rebate]`);
+            rebateName.setAttribute('value', rebate.rebate);
+            form.appendChild(rebateName);
 
-            let incentiveValue = document.createElement('input');
-            incentiveValue.setAttribute('name', `incentives[${index}][value]`);
-            incentiveValue.setAttribute('value', incentive.value);
-            form.appendChild(incentiveValue);
+            let rebateValue = document.createElement('input');
+            rebateValue.setAttribute('name', `rebates[${index}][value]`);
+            rebateValue.setAttribute('value', rebate.value);
+            form.appendChild(rebateValue);
         });
 
         let dmr_price = document.createElement('input');
         dmr_price.setAttribute('name', 'dmr_price');
-        dmr_price.setAttribute('value', deal.price);
+        dmr_price.setAttribute('value', this.getDMRPriceAfterRebates());
 
         form.appendChild(csrf);
         form.appendChild(deal_id);
@@ -459,14 +481,22 @@ class DealDetails extends React.Component {
                     <div className="deal-details__pricing-body">
                         <div className="deal-details__msrp">
                             MSRP
-                            <span className="deal-details__msrp-amount">
+                            <span
+                                className={`deal-details__msrp-amount ${window.user ? 'deal-details__msrp-amount--strike' : ''}`}
+                            >
                                 {util.moneyFormat(deal.msrp)}
                             </span>
                         </div>
 
-                        {window.user ? this.renderRebates() : ''}
-
                         {window.user ? this.renderDMRPrice() : ''}
+
+                        {window.user && this.state.available_rebates
+                            ? this.renderRebates()
+                            : ''}
+
+                        {window.user && this.state.available_rebates
+                            ? this.renderYourDMRPrice()
+                            : ''}
 
                         {window.user ? this.renderCompareAndBuyNow() : ''}
 

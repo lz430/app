@@ -13179,6 +13179,7 @@ var DealDetails = function (_React$Component) {
         _this.selectFinanceTab = _this.selectFinanceTab.bind(_this);
         _this.selectLeaseTab = _this.selectLeaseTab.bind(_this);
         _this.renderDMRPrice = _this.renderDMRPrice.bind(_this);
+        _this.renderYourDMRPrice = _this.renderYourDMRPrice.bind(_this);
         _this.renderCompareAndBuyNow = _this.renderCompareAndBuyNow.bind(_this);
         _this.startPurchaseFlow = _this.startPurchaseFlow.bind(_this);
         _this.requestFuelImages = _this.requestFuelImages.bind(_this);
@@ -13186,6 +13187,7 @@ var DealDetails = function (_React$Component) {
         _this.renderRebates = _this.renderRebates.bind(_this);
         _this.renderRebate = _this.renderRebate.bind(_this);
         _this.toggleRebate = _this.toggleRebate.bind(_this);
+        _this.getDMRPriceAfterRebates = _this.getDMRPriceAfterRebates.bind(_this);
         return _this;
     }
 
@@ -13345,20 +13347,52 @@ var DealDetails = function (_React$Component) {
     }, {
         key: 'renderDMRPrice',
         value: function renderDMRPrice() {
-            var deal = this.props.deal;
-
             return _react2.default.createElement(
                 'div',
                 { className: 'deal-details__dmr-price' },
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-details__dmr-price-label' },
-                    'Your DMR Price:'
+                    'DMR Price:'
                 ),
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-details__dmr-price-amount' },
-                    _util2.default.moneyFormat(deal.price)
+                    _util2.default.moneyFormat(this.props.deal.price)
+                )
+            );
+        }
+    }, {
+        key: 'getSelectedRebates',
+        value: function getSelectedRebates() {
+            var _this3 = this;
+
+            return _ramda2.default.filter(function (rebate) {
+                return _ramda2.default.contains(rebate.id, _this3.state.selected_rebate_ids);
+            }, this.state.available_rebates);
+        }
+    }, {
+        key: 'getDMRPriceAfterRebates',
+        value: function getDMRPriceAfterRebates() {
+            var totalRebateAmount = _ramda2.default.compose(_ramda2.default.sum, _ramda2.default.map(_ramda2.default.prop('value')))(this.getSelectedRebates());
+
+            return this.props.deal.price - totalRebateAmount;
+        }
+    }, {
+        key: 'renderYourDMRPrice',
+        value: function renderYourDMRPrice() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'deal-details__your-dmr-price' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deal-details__your-dmr-price-label' },
+                    'Your DMR Price:'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deal-details__your-dmr-price-amount' },
+                    _util2.default.moneyFormat(this.getDMRPriceAfterRebates())
                 )
             );
         }
@@ -13408,24 +13442,21 @@ var DealDetails = function (_React$Component) {
             deal_id.setAttribute('name', 'deal_id');
             deal_id.setAttribute('value', deal.id);
 
-            [{
-                name: 'Example incentive',
-                value: 500.50
-            }].forEach(function (incentive, index) {
-                var incentiveName = document.createElement('input');
-                incentiveName.setAttribute('name', 'incentives[' + index + '][name]');
-                incentiveName.setAttribute('value', incentive.name);
-                form.appendChild(incentiveName);
+            this.getSelectedRebates().forEach(function (rebate, index) {
+                var rebateName = document.createElement('input');
+                rebateName.setAttribute('name', 'rebates[' + index + '][rebate]');
+                rebateName.setAttribute('value', rebate.rebate);
+                form.appendChild(rebateName);
 
-                var incentiveValue = document.createElement('input');
-                incentiveValue.setAttribute('name', 'incentives[' + index + '][value]');
-                incentiveValue.setAttribute('value', incentive.value);
-                form.appendChild(incentiveValue);
+                var rebateValue = document.createElement('input');
+                rebateValue.setAttribute('name', 'rebates[' + index + '][value]');
+                rebateValue.setAttribute('value', rebate.value);
+                form.appendChild(rebateValue);
             });
 
             var dmr_price = document.createElement('input');
             dmr_price.setAttribute('name', 'dmr_price');
-            dmr_price.setAttribute('value', deal.price);
+            dmr_price.setAttribute('value', this.getDMRPriceAfterRebates());
 
             form.appendChild(csrf);
             form.appendChild(deal_id);
@@ -13437,7 +13468,7 @@ var DealDetails = function (_React$Component) {
     }, {
         key: 'toggleRebate',
         value: function toggleRebate(rebate_id) {
-            var _this3 = this;
+            var _this4 = this;
 
             var next_selected_rebate_ids = _util2.default.toggleItem(this.state.selected_rebate_ids, rebate_id);
             var all_possible_rebate_ids = _ramda2.default.map(_ramda2.default.prop('id'), this.state.available_rebates);
@@ -13453,7 +13484,7 @@ var DealDetails = function (_React$Component) {
                         carry_selected_rebate_ids = _carry[0],
                         carry_compatible_rebate_ids = _carry[1];
 
-                    return (0, _rebates.selectRebate)(selected_rebate_id, carry_selected_rebate_ids, _this3.state.compatibilities, carry_compatible_rebate_ids);
+                    return (0, _rebates.selectRebate)(selected_rebate_id, carry_selected_rebate_ids, _this4.state.compatibilities, carry_compatible_rebate_ids);
                 }, [[], all_possible_rebate_ids], next_selected_rebate_ids),
                     _R$reduce2 = _slicedToArray(_R$reduce, 2),
                     selected_rebate_ids = _R$reduce2[0],
@@ -13680,12 +13711,15 @@ var DealDetails = function (_React$Component) {
                             'MSRP',
                             _react2.default.createElement(
                                 'span',
-                                { className: 'deal-details__msrp-amount' },
+                                {
+                                    className: 'deal-details__msrp-amount ' + (window.user ? 'deal-details__msrp-amount--strike' : '')
+                                },
                                 _util2.default.moneyFormat(deal.msrp)
                             )
                         ),
-                        window.user ? this.renderRebates() : '',
                         window.user ? this.renderDMRPrice() : '',
+                        window.user && this.state.available_rebates ? this.renderRebates() : '',
+                        window.user && this.state.available_rebates ? this.renderYourDMRPrice() : '',
                         window.user ? this.renderCompareAndBuyNow() : '',
                         !window.user ? this.renderLoginRegister() : ''
                     )
