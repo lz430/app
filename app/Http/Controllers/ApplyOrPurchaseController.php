@@ -40,8 +40,14 @@ class ApplyOrPurchaseController extends Controller
             ]);
             $purchase->incentives = json_encode(request('incentives'), JSON_NUMERIC_CHECK);
             $purchase->save();
-
-            return view('apply-or-purchase')
+    
+            $purchase->load('deal');
+    
+            JavaScriptFacade::put([
+                'purchase' => $purchase,
+            ]);
+    
+            return view('view-apply')
                 ->with('purchase', $purchase);
         } catch (ValidationException $e) {
             Log::notice('Invalid applyOrPurchase submission: ' . json_encode(request()->all()));
@@ -89,26 +95,6 @@ class ApplyOrPurchaseController extends Controller
             return view('purchase')
                 ->with('purchase', $purchase)
                 ->with('photo', $photo);
-        } catch (ValidationException | ModelNotFoundException $e) {
-            return abort(404);
-        }
-    }
-
-    public function viewApply()
-    {
-        try {
-            $this->validate(request(), [
-                'purchase_id' => 'required|exists:purchases,id',
-            ]);
-
-            $purchase = Purchase::with('deal')->findOrFail(request('purchase_id'));
-
-            JavaScriptFacade::put([
-                'purchase' => $purchase,
-            ]);
-
-            return view('view-apply')
-                ->with('purchase', $purchase);
         } catch (ValidationException | ModelNotFoundException $e) {
             return abort(404);
         }
