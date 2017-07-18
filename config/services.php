@@ -47,4 +47,8 @@ return [
     'fuel' => [
         'api_key' => env('FUEL_API_KEY'),
     ],
+    
+    'hubspot' => [
+        'api_key' => env('HUBSPOT_API_KEY'),
+    ],
 ];
