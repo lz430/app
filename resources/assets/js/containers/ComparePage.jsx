@@ -10,6 +10,7 @@ import { raw as DealDetails } from 'components/DealDetails';
 class ComparePage extends React.Component {
     constructor(props) {
         super(props);
+        props.deals.map(deal => deal.photos.shift());
         this.state = {
             deals: props.deals,
             dealIndex: 0,

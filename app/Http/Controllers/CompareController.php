@@ -14,10 +14,12 @@ class CompareController extends Controller
            'deals' => 'required|array|exists:deals,id',
         ]);
 
-        $deals = Deal::whereIn('id', request('deals'))->with(
-            'photos',
-            'versions.incentives'
-        )->get();
+        $deals = Deal::whereIn('id', request('deals'))->with([
+            'photos'  => function ($query) {
+                $query->orderBy('id');
+            },
+            'versions.incentives',
+        ])->get();
     
         $dealsTransformed = fractal()
             ->collection($deals)

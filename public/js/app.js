@@ -24604,6 +24604,9 @@ var ComparePage = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (ComparePage.__proto__ || Object.getPrototypeOf(ComparePage)).call(this, props));
 
+        props.deals.map(function (deal) {
+            return deal.photos.shift();
+        });
         _this.state = {
             deals: props.deals,
             dealIndex: 0,
