@@ -28,6 +28,7 @@
     "react-dom": "^15.5.3"
   },
   "dependencies": {
+    "jsonp": "^0.2.1",
     "react-redux": "^5.0.5",
     "react-svg-inline": "^2.0.0",
     "redux": "^3.6.0",

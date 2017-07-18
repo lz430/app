@@ -1,6 +1,7 @@
 import api from 'src/api';
 import util from 'src/util';
 import * as ActionTypes from 'actiontypes/index';
+import jsonp from 'jsonp';
 
 const withStateDefaults = (state, changed) => {
     return Object.assign(
@@ -316,18 +317,16 @@ export function setZipCode(zipcode) {
 export function requestLocationInfo() {
     return (dispatch, getState) => {
         /**
-         * If we don't already have a loaded zipcode, try to get one from ipinfo.io
+         * If we don't already have a loaded zipcode, try to get one from freegeoip.net
          */
         if (!getState().zipcode) {
-            window.axios
-                .get('http://ipinfo.io')
-                .then(data => {
-                    dispatch(receiveLocationInfo(data));
-                })
-                .catch(error => {
-                    // If we have hit rate limit
+            jsonp('//freegeoip.net/json/', null, function(err, data) {
+                if (err) {
                     dispatch(requestDeals());
-                });
+                } else {
+                    dispatch(receiveLocationInfo(data));
+                }
+            });
         } else {
             dispatch(requestDeals());
         }
@@ -340,7 +339,7 @@ export function requestLocationInfo() {
 
 export function receiveLocationInfo(data) {
     return (dispatch, getState) => {
-        const zipcode = data.data.postal;
+        const zipcode = data.zip_code;
 
         api
             .getDeals(
