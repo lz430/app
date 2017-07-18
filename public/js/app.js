@@ -13089,8 +13089,11 @@ var TOGGLE_SMALL_FILTERS_SHOWN = 'TOGGLE_SMALL_FILTERS_SHOWN';
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_react_svg_inline__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_react_svg_inline___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_react_svg_inline__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_zondicons__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_src_rebates__ = __webpack_require__(911);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return connected; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return raw; });
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -13100,6 +13103,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -13128,6 +13132,7 @@ var DealDetails = function (_React$Component) {
             selectedTab: 'cash',
             fallbackDealImage: '/images/dmr-logo.svg',
             available_rebates: null,
+            compatibilities: null,
             compatible_rebate_ids: null,
             selected_rebate_ids: []
         };
@@ -13151,13 +13156,22 @@ var DealDetails = function (_React$Component) {
     _createClass(DealDetails, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
+            this.requestFuelImages(this.props.deal);
+
+            if (this.props.zipcode) {
+                this.requestRebates();
+            }
+        }
+    }, {
+        key: 'requestRebates',
+        value: function requestRebates() {
             var _this2 = this;
 
-            this.requestFuelImages(this.props.deal);
-            this.requestRebates(this.props.zipcode, this.props.deal.vin, []).then(function (response) {
+            __WEBPACK_IMPORTED_MODULE_8_src_api__["a" /* default */].getRebates(this.props.zipcode, this.props.deal.vin, []).then(function (response) {
                 _this2.setState({
-                    available_rebates: response.data.compatible_rebates,
-                    compatible_rebate_ids: __WEBPACK_IMPORTED_MODULE_2_ramda___default.a.map(__WEBPACK_IMPORTED_MODULE_2_ramda___default.a.prop('id'), response.data.compatible_rebates)
+                    available_rebates: response.data.rebates,
+                    compatibilities: response.data.compatibilities,
+                    compatible_rebate_ids: __WEBPACK_IMPORTED_MODULE_2_ramda___default.a.map(__WEBPACK_IMPORTED_MODULE_2_ramda___default.a.prop('id'), response.data.rebates)
                 });
             });
         }
@@ -13172,11 +13186,6 @@ var DealDetails = function (_React$Component) {
                     };
                 });
             })[0] || [];
-        }
-    }, {
-        key: 'requestRebates',
-        value: function requestRebates(zipcode, vin, selected_rebate_ids) {
-            return __WEBPACK_IMPORTED_MODULE_8_src_api__["a" /* default */].getRebates(zipcode, vin, selected_rebate_ids);
         }
     }, {
         key: 'requestFuelImages',
@@ -13456,12 +13465,31 @@ var DealDetails = function (_React$Component) {
         value: function toggleRebate(rebate_id) {
             var _this3 = this;
 
-            this.requestRebates(this.props.zipcode, this.props.deal.vin, __WEBPACK_IMPORTED_MODULE_5_src_util__["a" /* default */].toggleItem(this.state.selected_rebate_ids, rebate_id)).then(function (response) {
-                _this3.setState({
-                    compatible_rebate_ids: __WEBPACK_IMPORTED_MODULE_2_ramda___default.a.map(__WEBPACK_IMPORTED_MODULE_2_ramda___default.a.prop('id'), response.data.compatible_rebates),
-                    selected_rebate_ids: __WEBPACK_IMPORTED_MODULE_2_ramda___default.a.map(__WEBPACK_IMPORTED_MODULE_2_ramda___default.a.prop('id'), response.data.selected_rebates)
+            var next_selected_rebate_ids = __WEBPACK_IMPORTED_MODULE_5_src_util__["a" /* default */].toggleItem(this.state.selected_rebate_ids, rebate_id);
+            var all_possible_rebate_ids = __WEBPACK_IMPORTED_MODULE_2_ramda___default.a.map(__WEBPACK_IMPORTED_MODULE_2_ramda___default.a.prop('id'), this.state.available_rebates);
+
+            if (next_selected_rebate_ids.length === 0) {
+                this.setState({
+                    selected_rebate_ids: next_selected_rebate_ids,
+                    compatible_rebate_ids: all_possible_rebate_ids
                 });
-            });
+            } else {
+                var _R$reduce = __WEBPACK_IMPORTED_MODULE_2_ramda___default.a.reduce(function (carry, selected_rebate_id) {
+                    var _carry = _slicedToArray(carry, 2),
+                        carry_selected_rebate_ids = _carry[0],
+                        carry_compatible_rebate_ids = _carry[1];
+
+                    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_11_src_rebates__["a" /* selectRebate */])(selected_rebate_id, carry_selected_rebate_ids, _this3.state.compatibilities, carry_compatible_rebate_ids);
+                }, [[], all_possible_rebate_ids], next_selected_rebate_ids),
+                    _R$reduce2 = _slicedToArray(_R$reduce, 2),
+                    selected_rebate_ids = _R$reduce2[0],
+                    compatible_rebate_ids = _R$reduce2[1];
+
+                this.setState({
+                    selected_rebate_ids: selected_rebate_ids,
+                    compatible_rebate_ids: compatible_rebate_ids
+                });
+            }
         }
     }, {
         key: 'renderRebate',
@@ -23067,7 +23095,7 @@ var Comparebar = function (_React$Component) {
             if (this.compareReady()) {
                 window.location.href = '/compare?' + this.props.compareList.map(function (deal) {
                     return 'deals[]=' + deal.id;
-                }).join('&');
+                }).join('&') + ('&zipcode=' + this.props.zipcode);
             }
         }
     }, {
@@ -23178,7 +23206,8 @@ var Comparebar = function (_React$Component) {
 function mapStateToProps(state) {
     return {
         window: state.window,
-        compareList: state.compareList
+        compareList: state.compareList,
+        zipcode: state.zipcode
     };
 }
 
@@ -24932,8 +24961,10 @@ var initialState = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_src_util__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ramda__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ramda___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_ramda__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_components_Modal__ = __webpack_require__(212);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_components_DealDetails__ = __webpack_require__(211);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_qs__ = __webpack_require__(603);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_qs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_qs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_components_Modal__ = __webpack_require__(212);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_components_DealDetails__ = __webpack_require__(211);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24941,6 +24972,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -24962,7 +24994,8 @@ var ComparePage = function (_React$Component) {
         _this.state = {
             deals: props.deals,
             dealIndex: 0,
-            selectedDeal: null
+            selectedDeal: null,
+            zipcode: __WEBPACK_IMPORTED_MODULE_5_ramda___default.a.prop('zipcode', __WEBPACK_IMPORTED_MODULE_6_qs___default.a.parse(window.location.search.slice(1)))
         };
         _this.renderIncentive = _this.renderIncentive.bind(_this);
         _this.renderDeal = _this.renderDeal.bind(_this);
@@ -25097,21 +25130,22 @@ var ComparePage = function (_React$Component) {
             var _this3 = this;
 
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                __WEBPACK_IMPORTED_MODULE_6_components_Modal__["a" /* default */],
+                __WEBPACK_IMPORTED_MODULE_7_components_Modal__["a" /* default */],
                 {
                     onClose: this.closeModal,
                     title: this.state.selectedDeal.model,
                     subtitle: this.state.selectedDeal.year + ' ' + this.state.selectedDeal.make
                 },
                 function () {
-                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_components_DealDetails__["a" /* raw */], {
+                    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_8_components_DealDetails__["a" /* raw */], {
                         deal: _this3.state.selectedDeal,
                         compareList: _this3.state.deals,
                         intendedRoute: _this3.intendedRoute(),
                         toggleCompare: function toggleCompare() {
                             _this3.removeDeal(_this3.state.selectedDeal);
                             _this3.closeModal();
-                        }
+                        },
+                        zipcode: _this3.state.zipcode
                     });
                 }
             );
@@ -52061,6 +52095,51 @@ module.exports = function(module) {
 
 __webpack_require__(348);
 module.exports = __webpack_require__(349);
+
+
+/***/ }),
+/* 908 */,
+/* 909 */,
+/* 910 */,
+/* 911 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ramda__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ramda___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_ramda__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return selectRebate; });
+
+
+var selectRebate = function selectRebate(rebate_id, selectedRebateIds, compatibilities, compatibleRebateIds) {
+    // if it is already in selectedRebateIds do nothing
+    if (__WEBPACK_IMPORTED_MODULE_0_ramda___default.a.contains(rebate_id, selectedRebateIds)) {
+        return [selectedRebateIds, compatibleRebateIds];
+    }
+
+    var withThisRebateIds = __WEBPACK_IMPORTED_MODULE_0_ramda___default.a.concat(selectedRebateIds, [rebate_id]);
+
+    var nextCompatibilities = [];
+    __WEBPACK_IMPORTED_MODULE_0_ramda___default.a.forEach(function (compatibleRebateIdsGroup) {
+        // if with this rebate id is still a subset of a compatibility group, add everything in that group
+        if (__WEBPACK_IMPORTED_MODULE_0_ramda___default.a.difference(withThisRebateIds, compatibleRebateIdsGroup).length === 0) {
+            // return new selected rebates and new compatibilityList
+            nextCompatibilities = __WEBPACK_IMPORTED_MODULE_0_ramda___default.a.uniq(__WEBPACK_IMPORTED_MODULE_0_ramda___default.a.concat(nextCompatibilities, compatibleRebateIdsGroup));
+        }
+    }, compatibilities);
+
+    if (nextCompatibilities.length > 0) {
+        return [__WEBPACK_IMPORTED_MODULE_0_ramda___default.a.append(rebate_id, selectedRebateIds), nextCompatibilities];
+    } else {
+        // Not in any compatibility lists
+        if (withThisRebateIds.length === 1) {
+            return [[rebate_id], [rebate_id]];
+        }
+    }
+
+    // do nothing
+    return [selectedRebateIds, compatibleRebateIds];
+};
+
 
 
 /***/ })

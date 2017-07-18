@@ -30,7 +30,7 @@ class Client
         return json_decode((string) $vinResponse->getBody(), true)[0]['ID'];
     }
 
-    public function getCompatibleRebates($vehicleID, $zipcode, $possibleRebates, $selectedRebates)
+    public function getCompatibilities($vehicleID, $zipcode, $possibleRebates)
     {
         $compatibilityResponse = $this->client->post(
             "$this->apiUrl/?GetRebatesCompatibilityParams/$this->partnerID/$this->accountNumber",
@@ -52,28 +52,9 @@ class Client
             ]
         );
 
-        $compatibilities = array_map(function ($compatibilityList) {
+        return array_map(function ($compatibilityList) {
             return $compatibilityList['CompatibilityList'];
         }, json_decode((string) $compatibilityResponse->getBody(), true)['Compatibilities']);
-
-        // we pick a rebate 1 at a time, after every selection we need to update the "compatible rebates list"
-        $compatibleRebatesList = array_values($possibleRebates);
-
-        $tempSelectedRebates = [];
-        $nextCompatibleRebatesListIds = array_map(function ($compatibleRebates) {
-            return $compatibleRebates['id'];
-        }, $compatibleRebatesList);
-
-        foreach ($selectedRebates as $selectedRebate) {
-            [$tempSelectedRebates, $nextCompatibleRebatesListIds] = $this->selectRebate(
-                $selectedRebate,
-                $tempSelectedRebates,
-                $compatibilities,
-                $nextCompatibleRebatesListIds
-            );
-        }
-
-        return [$tempSelectedRebates, $this->rebateIdsToRebates($nextCompatibleRebatesListIds, $compatibleRebatesList)];
     }
 
     public function getRebates($zipcode, $vin, $vehicleID, $selectedRebates = [])
@@ -189,49 +170,5 @@ class Client
             });
 
         return array_values($possibleRebates->toArray());
-    }
-
-    public function selectRebate($rebate, $selectedRebates, $compatibilities, $compatibleRebateIds)
-    {
-        // if it is already in $selectedRebates do nothing
-        if (in_array($rebate, $selectedRebates)) {
-            return [$selectedRebates, $compatibleRebateIds];
-        }
-
-        $withThisRebateIds = array_map(function ($rebate) {
-            return $rebate['id'];
-        }, array_merge($selectedRebates, [$rebate]));
-
-        $nextCompatibilities = [];
-        foreach ($compatibilities as $compatibleRebateIds) {
-            if (! array_diff($withThisRebateIds, $compatibleRebateIds)) {
-                // return new selected rebates and new compatibilityList
-                $nextCompatibilities = array_unique(array_merge($nextCompatibilities, $compatibleRebateIds));
-            }
-        }
-
-        if (! empty($nextCompatibilities)) {
-            return [
-                array_merge($selectedRebates, [$rebate]),
-                $nextCompatibilities,
-            ];
-        } else {
-            // Not in any compatibility lists
-            if (count($withThisRebateIds) === 1) {
-                return [[$rebate], [$rebate['id']]];
-            }
-        }
-
-        // do nothing
-        return [$selectedRebates, $compatibleRebateIds];
-    }
-
-    private function rebateIdsToRebates($compatibilityIds, $compatibleRebatesList)
-    {
-        return array_map(function ($compID) use ($compatibleRebatesList) {
-            return array_first($compatibleRebatesList, function ($compatibleRebate) use ($compID) {
-                return $compID === $compatibleRebate['id'];
-            });
-        }, $compatibilityIds);
     }
 }

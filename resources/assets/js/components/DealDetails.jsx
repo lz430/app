@@ -9,6 +9,7 @@ import fuelcolor from 'src/fuel-color-map';
 import api from 'src/api';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
+import { selectRebate } from 'src/rebates';
 
 class DealDetails extends React.Component {
     constructor(props) {
@@ -21,6 +22,7 @@ class DealDetails extends React.Component {
             selectedTab: 'cash',
             fallbackDealImage: '/images/dmr-logo.svg',
             available_rebates: null,
+            compatibilities: null,
             compatible_rebate_ids: null,
             selected_rebate_ids: [],
         };
@@ -42,19 +44,25 @@ class DealDetails extends React.Component {
 
     componentDidMount() {
         this.requestFuelImages(this.props.deal);
-        this.requestRebates(
-            this.props.zipcode,
-            this.props.deal.vin,
-            []
-        ).then(response => {
-            this.setState({
-                available_rebates: response.data.compatible_rebates,
-                compatible_rebate_ids: R.map(
-                    R.prop('id'),
-                    response.data.compatible_rebates
-                ),
+
+        if (this.props.zipcode) {
+            this.requestRebates();
+        }
+    }
+
+    requestRebates() {
+        api
+            .getRebates(this.props.zipcode, this.props.deal.vin, [])
+            .then(response => {
+                this.setState({
+                    available_rebates: response.data.rebates,
+                    compatibilities: response.data.compatibilities,
+                    compatible_rebate_ids: R.map(
+                        R.prop('id'),
+                        response.data.rebates
+                    ),
+                });
             });
-        });
     }
 
     extractFuelImages(data) {
@@ -68,10 +76,6 @@ class DealDetails extends React.Component {
                 })
             )[0] || []
         );
-    }
-
-    requestRebates(zipcode, vin, selected_rebate_ids) {
-        return api.getRebates(zipcode, vin, selected_rebate_ids);
     }
 
     async requestFuelImages() {
@@ -286,22 +290,44 @@ class DealDetails extends React.Component {
     }
 
     toggleRebate(rebate_id) {
-        this.requestRebates(
-            this.props.zipcode,
-            this.props.deal.vin,
-            util.toggleItem(this.state.selected_rebate_ids, rebate_id)
-        ).then(response => {
+        const next_selected_rebate_ids = util.toggleItem(
+            this.state.selected_rebate_ids,
+            rebate_id
+        );
+        const all_possible_rebate_ids = R.map(
+            R.prop('id'),
+            this.state.available_rebates
+        );
+
+        if (next_selected_rebate_ids.length === 0) {
             this.setState({
-                compatible_rebate_ids: R.map(
-                    R.prop('id'),
-                    response.data.compatible_rebates
-                ),
-                selected_rebate_ids: R.map(
-                    R.prop('id'),
-                    response.data.selected_rebates
-                ),
+                selected_rebate_ids: next_selected_rebate_ids,
+                compatible_rebate_ids: all_possible_rebate_ids,
             });
-        });
+        } else {
+            const [selected_rebate_ids, compatible_rebate_ids] = R.reduce(
+                (carry, selected_rebate_id) => {
+                    const [
+                        carry_selected_rebate_ids,
+                        carry_compatible_rebate_ids,
+                    ] = carry;
+
+                    return selectRebate(
+                        selected_rebate_id,
+                        carry_selected_rebate_ids,
+                        this.state.compatibilities,
+                        carry_compatible_rebate_ids
+                    );
+                },
+                [[], all_possible_rebate_ids],
+                next_selected_rebate_ids
+            );
+
+            this.setState({
+                selected_rebate_ids,
+                compatible_rebate_ids,
+            });
+        }
     }
 
     renderRebate(rebate, index) {

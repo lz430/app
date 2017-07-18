@@ -48,7 +48,8 @@ class Comparebar extends React.Component {
                 '/compare?' +
                 this.props.compareList
                     .map(deal => `deals[]=${deal.id}`)
-                    .join('&');
+                    .join('&') +
+                `&zipcode=${this.props.zipcode}`;
         }
     }
 
@@ -139,6 +140,7 @@ function mapStateToProps(state) {
     return {
         window: state.window,
         compareList: state.compareList,
+        zipcode: state.zipcode,
     };
 }
 

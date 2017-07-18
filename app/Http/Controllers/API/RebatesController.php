@@ -15,35 +15,24 @@ class RebatesController extends Controller
         $this->validate(request(), [
             'zipcode' => 'required|string',
             'vin' => 'required|string',
-            'selected_rebate_ids' => 'sometimes|required|array',
         ]);
 
         $vin = request('vin');
         $zipcode = request('zipcode');
-        $vehicleId = $client->getVehicleIDByVIN(request('vin'));
 
-        $compatibleRebatesList = $client->getRebates(
+        $vehicleId = $client->getVehicleIDByVIN($vin);
+
+        $availableRebates = $client->getRebates(
             $zipcode,
             $vin,
             $vehicleId
         );
 
-        $selectedRebates = array_map(function ($selectedRebateId) use ($compatibleRebatesList) {
-            return array_first($compatibleRebatesList, function ($compatibleRebate) use ($selectedRebateId) {
-                return $selectedRebateId == $compatibleRebate['id'];
-            });
-        }, request('selected_rebate_ids', []));
-
-        [$selectedRebates, $compatibleRebates] = $client->getCompatibleRebates(
-            $vehicleId,
-            $zipcode,
-            $compatibleRebatesList,
-            $selectedRebates
-        );
+        $compatibilities = $client->getCompatibilities($vehicleId, $zipcode, $availableRebates);
 
         return response()->json([
-            'selected_rebates' => $selectedRebates,
-            'compatible_rebates' => $compatibleRebates,
+            'rebates' => $availableRebates,
+            'compatibilities' => $compatibilities,
         ]);
     }
 }
