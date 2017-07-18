@@ -15,21 +15,19 @@ class UpdateHubspotContact
     {
         $this->client = $client;
     }
-
-    /**
-     * Handle the event.
-     *
-     * @param  NewPurchaseInitiated  $event
-     * @return void
-     */
+    
     public function handle(NewPurchaseInitiated $event)
     {
-        $this->client->updateContactByEmail(auth()->user()->email, [
-            'bodystyle1' => $event->purchase->deal->versions()->first()->body_style,
-            'brand1' => $event->purchase->deal->make,
-            'model1' => $event->purchase->deal->model,
-            'color1' => $event->purchase->deal->color,
-            'payment' => 'Finance',
-        ]);
+        try {
+            $this->client->updateContactByEmail(auth()->user()->email, [
+                'bodystyle1' => $event->purchase->deal->versions()->first()->body_style,
+                'brand1' => $event->purchase->deal->make,
+                'model1' => $event->purchase->deal->model,
+                'color1' => $event->purchase->deal->color,
+                'payment' => 'Finance',
+            ]);
+        } catch (Exception $exception) {
+            // issue with hubspot communication
+        }
     }
 }

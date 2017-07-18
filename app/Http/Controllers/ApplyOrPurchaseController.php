@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewPurchaseInitiated;
 use App\Mail\ApplicationSubmittedDMR;
 use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
@@ -18,13 +19,6 @@ use Laracasts\Utilities\JavaScript\JavaScriptFacade;
 
 class ApplyOrPurchaseController extends Controller
 {
-    protected $hubspotClient;
-    
-    public function __construct(Client $client)
-    {
-        $this->hubspotClient = $client;
-    }
-    
     /**
      * Create "Purchase" from deal and incentives
      */
@@ -51,17 +45,7 @@ class ApplyOrPurchaseController extends Controller
     
             $purchase->load('deal.versions');
 
-            try {
-                $this->hubspotClient->updateContactByEmail(auth()->user()->email, [
-                    'bodystyle1' => $purchase->deal->versions()->first()->body_style,
-                    'brand1' => $purchase->deal->make,
-                    'model1' => $purchase->deal->model,
-                    'color1' => $purchase->deal->color,
-                    'payment' => 'Finance',
-                ]);
-            } catch (Exception $exception) {
-                // issue with hubspot communication
-            }
+            event(new NewPurchaseInitiated($purchase));
     
             JavaScriptFacade::put([
                 'purchase' => $purchase,
@@ -108,7 +92,8 @@ class ApplyOrPurchaseController extends Controller
             Mail::to(auth()->user())->send(new DealPurchasedUser);
     
             try {
-                $this->hubspotClient->updateContactByEmail(auth()->user()->email, [
+                $hubspotClient = new Client;
+                $hubspotClient->updateContactByEmail(auth()->user()->email, [
                     'payment' => 'Cash',
                 ]);
             } catch (Exception $exception) {
