@@ -25284,8 +25284,14 @@ var reducer = function reducer(state, action) {
                 makes: action.data.data.data
             });
         case __WEBPACK_IMPORTED_MODULE_0_actiontypes_index__["g" /* RECEIVE_DEALS */]:
+            var deals = action.data.data.data;
+            // Remove the first image from the VAuto image list
+            deals.map(function (deal) {
+                return deal.photos.shift();
+            });
+
             return Object.assign({}, state, {
-                deals: action.data.data.data,
+                deals: deals,
                 dealPageTotal: action.data.data.meta.pagination.total_pages,
                 dealPage: __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.min(action.data.data.meta.pagination.current_page, action.data.data.meta.pagination.total_pages)
             });
