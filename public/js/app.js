@@ -22876,7 +22876,7 @@ var Deal = function (_React$Component) {
     _createClass(Deal, [{
         key: 'getFeaturedImage',
         value: function getFeaturedImage() {
-            return __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.propOr(this.state.fallbackDealImage, 'url', this.props.deal.photos[1] ? this.props.deal.photos[1] : { url: this.state.fallbackDealImage });
+            return __WEBPACK_IMPORTED_MODULE_1_ramda___default.a.propOr(this.state.fallbackDealImage, 'url', this.props.deal.photos[1] ? this.props.deal.photos[0] : { url: this.state.fallbackDealImage });
         }
     }, {
         key: 'componentDidMount',
