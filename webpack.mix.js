@@ -23,8 +23,8 @@ if (mix.config.inProduction) {
         notify: {
             styles: {
                 top: 'auto',
-                bottom: '0'
-            }
-        }
+                bottom: '0',
+            },
+        },
     });
 }

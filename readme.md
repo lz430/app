@@ -56,6 +56,16 @@ php artisan db:seed --class=DummySavedVehicleSeeder
 phpunit tests/JATO
 ```
 
+## Javascript Tests
+```
+yarn run test
+```
+
+## Javascript Tests Watch
+```
+yarn run watch-test
+```
+
 ## Notes
 > Option Types
 ```
