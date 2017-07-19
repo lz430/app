@@ -1,22 +1,5 @@
 @import '../variables';
-
-$selector-icon-size: 23px;
-
-@mixin selector-icon() {
-  align-items: center;
-  border: 2px solid $color-sidebar-background-secondary;
-  display: inline-flex;
-  fill: $color-text-white;
-  height: $selector-icon-size;
-  margin-right: 10px;
-  padding: 3px;
-  width: $selector-icon-size;
-  min-width: $selector-icon-size;
-
-  &--selected {
-    border-color: $color-blue;
-  }
-}
+@import '../mixins/selector-icon';
 
 .filter-selector {
   &__selector {

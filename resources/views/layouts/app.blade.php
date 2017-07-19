@@ -18,7 +18,7 @@
             window.Laravel = {!! json_encode([
                 'csrfToken' => csrf_token(),
                 'apiToken' => auth()->user()->api_token ?? null,
-                'fuelApiKey' => config('services.fuel.api_key')
+                'fuelApiKey' => config('services.fuel.api_key'),
             ]) !!};
 
             window.user = {!! auth()->user() ? json_encode(auth()->user()) : 'null' !!};

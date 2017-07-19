@@ -8,12 +8,17 @@
     "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "npm run production",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "prettier": "prettier --single-quote --tab-width=4 --trailing-comma=es5 --write 'resources/assets/js/**/*.js*'"
+    "prettier": "prettier --single-quote --tab-width=4 --trailing-comma=es5 --write 'resources/assets/js/**/*.js*'",
+    "test": "jest",
+    "watch-test": "jest --watch"
   },
   "devDependencies": {
     "axios": "^0.16.1",
+    "babel-jest": "^20.0.3",
     "babel-polyfill": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "jest": "^20.0.4",
     "jquery": "^3.1.1",
     "laravel-mix": "^0.12",
     "prop-types": "^15.5.8",

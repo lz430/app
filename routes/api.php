@@ -20,6 +20,7 @@ Route::get('body-styles', 'BodyStylesController@index')->name('bodyStyles.index'
 Route::get('versions', 'VersionsController@index')->name('versions.index');
 Route::get('deals', 'DealsController@getDeals')->name('deals.index');
 Route::get('features', 'FeaturesController@index')->name('features.index');
+Route::get('rebates', 'RebatesController@getRebates')->name('rebates.getRebates');
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::patch('users/{user}', 'UsersController@update')->name('users.update');
