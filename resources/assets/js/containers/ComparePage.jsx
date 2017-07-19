@@ -11,9 +11,8 @@ import { raw as DealDetails } from 'components/DealDetails';
 class ComparePage extends React.Component {
     constructor(props) {
         super(props);
-        const deals = this.shiftPhotos(props.deals);
         this.state = {
-            deals: deals,
+            deals: props.deals,
             dealIndex: 0,
             selectedDeal: null,
             zipcode: R.prop(
@@ -88,11 +87,6 @@ class ComparePage extends React.Component {
         );
         // ********************************************************
         // ********************************************************
-    }
-
-    shiftPhotos(deals) {
-        deals.map(deal => deal.photos.shift());
-        return deals;
     }
 
     slideLeft() {

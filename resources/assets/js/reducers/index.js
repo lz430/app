@@ -47,12 +47,8 @@ const reducer = (state, action) => {
                 makes: action.data.data.data,
             });
         case ActionTypes.RECEIVE_DEALS:
-            const deals = action.data.data.data;
-            // Remove the first image from the VAuto image list
-            deals.map(deal => deal.photos.shift());
-
             return Object.assign({}, state, {
-                deals: deals,
+                deals: action.data.data.data,
                 dealPageTotal: action.data.data.meta.pagination.total_pages,
                 dealPage: R.min(
                     action.data.data.meta.pagination.current_page,

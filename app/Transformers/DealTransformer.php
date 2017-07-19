@@ -14,6 +14,7 @@ class DealTransformer extends TransformerAbstract
     
     public function transform(Deal $deal)
     {
+        $deal->photos->shift();
         return [
             'id' => $deal->id,
             'file_hash' => $deal->file_hash,
