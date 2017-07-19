@@ -92,8 +92,7 @@ class ApplyOrPurchaseController extends Controller
             Mail::to(auth()->user())->send(new DealPurchasedUser);
     
             try {
-                $hubspotClient = new Client;
-                $hubspotClient->updateContactByEmail(auth()->user()->email, [
+                (new Client)->updateContactByEmail(auth()->user()->email, [
                     'payment' => 'Cash',
                 ]);
             } catch (Exception $exception) {
