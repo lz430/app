@@ -13,11 +13,11 @@ class Client
     private $partnerID;
     private $accountNumber;
 
-    public function __construct()
+    public function __construct($url, $partnerID, $accountNumber)
     {
-        $this->apiUrl = 'http://integration.marketscan.io/scan/rest/mscanservice.rst';
-        $this->partnerID = '07957435-A7CC-4695-8922-109731B322C7';
-        $this->accountNumber = '890000';
+        $this->apiUrl = $url;
+        $this->partnerID = $partnerID;
+        $this->accountNumber = $accountNumber;
         $this->client = new GuzzleClient;
     }
 
