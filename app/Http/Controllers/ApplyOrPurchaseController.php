@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewPurchaseInitiated;
 use App\Mail\ApplicationSubmittedDMR;
 use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
 use App\Mail\DealPurchasedUser;
 use App\Purchase;
 use Carbon\Carbon;
+use DeliverMyRide\HubSpot\Client;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -39,8 +42,16 @@ class ApplyOrPurchaseController extends Controller
             ]);
             $purchase->rebates = json_encode(request('rebates'), JSON_NUMERIC_CHECK);
             $purchase->save();
+    
+            $purchase->load('deal.versions');
 
-            return view('apply-or-purchase')
+            event(new NewPurchaseInitiated($purchase));
+    
+            JavaScriptFacade::put([
+                'purchase' => $purchase,
+            ]);
+    
+            return view('view-apply')
                 ->with('purchase', $purchase);
         } catch (ValidationException $e) {
             Log::notice('Invalid applyOrPurchase submission: ' . json_encode(request()->all()));
@@ -79,30 +90,18 @@ class ApplyOrPurchaseController extends Controller
 
             Mail::to(config('mail.dmr.address'))->send(new DealPurchasedDMR);
             Mail::to(auth()->user())->send(new DealPurchasedUser);
+    
+            try {
+                (new Client)->updateContactByEmail(auth()->user()->email, [
+                    'payment' => 'Cash',
+                ]);
+            } catch (Exception $exception) {
+                // issue with hubspot communication
+            }
 
             return view('purchase')
                 ->with('purchase', $purchase)
                 ->with('photo', $photo);
-        } catch (ValidationException | ModelNotFoundException $e) {
-            return abort(404);
-        }
-    }
-
-    public function viewApply()
-    {
-        try {
-            $this->validate(request(), [
-                'purchase_id' => 'required|exists:purchases,id',
-            ]);
-
-            $purchase = Purchase::with('deal')->findOrFail(request('purchase_id'));
-
-            JavaScriptFacade::put([
-                'purchase' => $purchase,
-            ]);
-
-            return view('view-apply')
-                ->with('purchase', $purchase);
         } catch (ValidationException | ModelNotFoundException $e) {
             return abort(404);
         }
