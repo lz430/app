@@ -19,7 +19,6 @@
                 'csrfToken' => csrf_token(),
                 'apiToken' => auth()->user()->api_token ?? null,
                 'fuelApiKey' => config('services.fuel.api_key'),
-                'hubspotApiKey' => config('services.hubspot.api_key'),
             ]) !!};
 
             window.user = {!! auth()->user() ? json_encode(auth()->user()) : 'null' !!};
