@@ -324,7 +324,7 @@ export function requestLocationInfo() {
          * If we don't already have a loaded zipcode, try to get one from freegeoip.net
          */
         if (!getState().zipcode) {
-            jsonp('//freegeoip.net/json/', null, function (err, data) {
+            jsonp('//freegeoip.net/json/', null, function(err, data) {
                 if (err) {
                     dispatch(requestDeals());
                 } else {

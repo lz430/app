@@ -20,27 +20,27 @@ use Laracasts\Utilities\JavaScript\JavaScriptFacade;
 class ApplyOrPurchaseController extends Controller
 {
     /**
-     * Create "Purchase" from deal and incentives
+     * Create "Purchase" from deal and rebates
      */
     public function applyOrPurchase()
     {
         try {
             $this->validate(request(), [
                 'deal_id' => 'required|exists:deals,id',
-                'incentives' => 'required|array',
-                'incentives.*.name' => 'required|string',
-                'incentives.*.value' => 'required|numeric',
+                'rebates' => 'required|array',
+                'rebates.*.rebate' => 'required|string',
+                'rebates.*.value' => 'required|numeric',
                 'dmr_price' => 'required|numeric',
             ]);
 
             /**
-             * dmr_price is the customer's "desired" price. i.e. after incentives etc have been applied.
+             * dmr_price is the customer's "desired" price. i.e. after rebates etc have been applied.
              */
             $purchase = auth()->user()->purchases()->firstOrNew([
                 'deal_id' => request('deal_id'),
                 'dmr_price' => request('dmr_price'),
             ]);
-            $purchase->incentives = json_encode(request('incentives'), JSON_NUMERIC_CHECK);
+            $purchase->rebates = json_encode(request('rebates'), JSON_NUMERIC_CHECK);
             $purchase->save();
     
             $purchase->load('deal.versions');

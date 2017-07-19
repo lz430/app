@@ -178,6 +178,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\JATOServiceProvider::class,
+        App\Providers\MarketScanServiceProvider::class,
         Spatie\Fractal\FractalServiceProvider::class,
 
     ],

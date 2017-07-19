@@ -4,6 +4,7 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import util from 'src/util';
 import R from 'ramda';
+import qs from 'qs';
 import Modal from 'components/Modal';
 import { raw as DealDetails } from 'components/DealDetails';
 
@@ -14,6 +15,10 @@ class ComparePage extends React.Component {
             deals: props.deals,
             dealIndex: 0,
             selectedDeal: null,
+            zipcode: R.prop(
+                'zipcode',
+                qs.parse(window.location.search.slice(1))
+            ),
         };
         this.renderIncentive = this.renderIncentive.bind(this);
         this.renderDeal = this.renderDeal.bind(this);
@@ -162,6 +167,7 @@ class ComparePage extends React.Component {
                             this.removeDeal(this.state.selectedDeal);
                             this.closeModal();
                         }}
+                        zipcode={this.state.zipcode}
                     />
                 )}
             </Modal>

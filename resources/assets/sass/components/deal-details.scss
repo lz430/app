@@ -1,5 +1,6 @@
 @import '../variables';
 @import '../mixins/button';
+@import '../mixins/selector-icon';
 
 .deal-details {
   display: flex;
@@ -63,29 +64,58 @@
 
   &__msrp {
     color: $text-color-dark;
-    font-size: 1.1rem;
-    padding: 10px 15px;
+    font-size: .9rem;
+    padding: 10px 15px 5px 15px;
   }
 
   &__msrp-amount {
     float: right;
+    font-size: .9rem;
+
+    &--strike {
+      text-decoration: line-through;
+    }
   }
 
+  // DMR Price
   &__dmr-price {
-    background: lighten($color-sidebar-background-secondary, 46%);
     display: flex;
     font-size: .9rem;
     padding: 5px 15px;
   }
 
   &__dmr-price-label {
-    align-self: flex-end;
+    align-self: center;
     color: $text-color-dark;
     flex: 1;
     font-size: .9rem;
   }
 
   &__dmr-price-amount {
+    align-self: flex-start;
+    color: $text-color-dark;
+    float: right;
+    font-size: 1.6rem;
+    justify-self: flex-end;
+    line-height: 2rem;
+  }
+
+  // Your DMR Price
+  &__your-dmr-price {
+    background: lighten($color-sidebar-background-secondary, 46%);
+    display: flex;
+    font-size: .9rem;
+    padding: 5px 15px;
+  }
+
+  &__your-dmr-price-label {
+    align-self: flex-end;
+    color: $text-color-dark;
+    flex: 1;
+    font-size: .9rem;
+  }
+
+  &__your-dmr-price-amount {
     align-self: flex-start;
     color: $text-color-dark;
     float: right;
@@ -189,5 +219,37 @@
     @include button;
     flex: 1;
     margin: 5px;
+  }
+
+  &__rebates {
+    max-height: 160px;
+    overflow: scroll;
+  }
+
+  &__rebate {
+    align-items: center;
+    border-top: 1px solid $color-section-bottom-border;
+    cursor: pointer;
+    display: flex;
+    padding: 5px 15px;
+    width: 100%;
+
+    &--disabled {
+      color: lighten($text-color-dark, 60%);
+    }
+  }
+
+  &__rebate-checkbox {
+    @include selector-icon;
+    background: $color-text-white;
+  }
+
+  &__rebate-rebate {
+    flex: 1;
+    padding-right: 10px;
+  }
+
+  &__rebate-value {
+    justify-self: flex-end;
   }
 }
