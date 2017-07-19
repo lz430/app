@@ -1,17 +1,18 @@
 import R from 'ramda';
+import util from '../src/util';
 
 const selectRebate = (
     rebate_id,
-    selectedRebateIds,
-    compatibilities,
-    compatibleRebateIds
+    selected_rebate_ids,
+    available_rebate_ids,
+    compatibilities
 ) => {
     // if it is already in selectedRebateIds do nothing
-    if (R.contains(rebate_id, selectedRebateIds)) {
-        return [selectedRebateIds, compatibleRebateIds];
+    if (R.contains(rebate_id, selected_rebate_ids)) {
+        return [selected_rebate_ids, available_rebate_ids];
     }
 
-    const withThisRebateIds = R.concat(selectedRebateIds, [rebate_id]);
+    const withThisRebateIds = R.concat(selected_rebate_ids, [rebate_id]);
 
     let nextCompatibilities = [];
     R.forEach(compatibleRebateIdsGroup => {
@@ -28,7 +29,7 @@ const selectRebate = (
     }, compatibilities);
 
     if (nextCompatibilities.length > 0) {
-        return [R.append(rebate_id, selectedRebateIds), nextCompatibilities];
+        return [R.append(rebate_id, selected_rebate_ids), nextCompatibilities];
     } else {
         // Not in any compatibility lists
         if (withThisRebateIds.length === 1) {
@@ -37,7 +38,43 @@ const selectRebate = (
     }
 
     // do nothing
-    return [selectedRebateIds, compatibleRebateIds];
+    return [selected_rebate_ids, available_rebate_ids];
 };
 
-export { selectRebate };
+const toggleRebate = (
+    rebate_id,
+    selected_rebate_ids,
+    available_rebate_ids,
+    compatibilities
+) => {
+    const next_selected_rebate_ids = util.toggleItem(
+        selected_rebate_ids,
+        rebate_id
+    );
+
+    if (next_selected_rebate_ids.length === 0) {
+        return [next_selected_rebate_ids, available_rebate_ids];
+    } else {
+        const [selected_rebate_ids, compatible_rebate_ids] = R.reduce(
+            (carry, selected_rebate_id) => {
+                const [
+                    carry_selected_rebate_ids,
+                    carry_compatible_rebate_ids,
+                ] = carry;
+
+                return selectRebate(
+                    selected_rebate_id,
+                    carry_selected_rebate_ids,
+                    carry_compatible_rebate_ids,
+                    compatibilities
+                );
+            },
+            [[], available_rebate_ids],
+            next_selected_rebate_ids
+        );
+
+        return [selected_rebate_ids, compatible_rebate_ids];
+    }
+};
+
+export { selectRebate, toggleRebate };

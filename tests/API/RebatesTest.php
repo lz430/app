@@ -17,6 +17,7 @@ class RebatesTest extends TestCase
 
         $data = $response->decodeResponseJson();
 
+        $this->assertArrayHasKey('types', $data['rebates'][0]);
         $this->assertNotEmpty($data['rebates']);
         $this->assertNotEmpty($data['compatibilities']);
     }

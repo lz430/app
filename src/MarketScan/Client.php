@@ -8,6 +8,22 @@ use GuzzleHttp\Client as GuzzleClient;
 
 class Client
 {
+    private const TRANSACTION_TYPE_MAP = [
+        // SpecialLease
+        1 => ['lease'],
+        // StandardLease
+        2 => ['lease'],
+        // SpecialRetail
+        3 => ['cash', 'finance'],
+        // StandardRetail
+        4 => ['cash', 'finance'],
+        // Lease
+        10 => ['lease'],
+        // Retail
+        11 => ['cash', 'finance'],
+        // Any
+        1000 => ['cash', 'finance', 'lease'],
+    ];
     private $client;
     private $apiUrl;
     private $partnerID;
@@ -166,6 +182,7 @@ class Client
                     'id' => $rebate['ID'],
                     'rebate' => $rebate['NameDisplay'],
                     'value' => $rebate['Value']['Values'][0]['Value'],
+                    'types' => self::TRANSACTION_TYPE_MAP[$rebate['TransactionType']],
                 ];
             });
 

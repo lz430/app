@@ -1,4 +1,4 @@
-import { selectRebate } from '../src/rebates';
+import { selectRebate, toggleRebate } from '../src/rebates';
 import R from 'ramda';
 
 test('it_can_select_rebates_accurately', () => {
@@ -14,8 +14,8 @@ test('it_can_select_rebates_accurately', () => {
     let [selectedRebates, compatibleRebateIds] = selectRebate(
         131400,
         [],
-        compatibilities,
-        R.uniq(R.flatten(compatibilities))
+        R.uniq(R.flatten(compatibilities)),
+        compatibilities
     );
 
     expect([131400]).toEqual(selectedRebates.sort());
@@ -28,8 +28,8 @@ test('it_can_select_rebates_accurately', () => {
     [selectedRebates, compatibleRebateIds] = selectRebate(
         128013,
         selectedRebates,
-        compatibilities,
-        compatibleRebateIds
+        compatibleRebateIds,
+        compatibilities
     );
 
     expect([128013, 131400]).toEqual(selectedRebates.sort());
@@ -42,8 +42,8 @@ test('it_can_select_rebates_accurately', () => {
     [selectedRebates, compatibleRebateIds] = selectRebate(
         131387,
         selectedRebates,
-        compatibilities,
-        compatibleRebateIds
+        compatibleRebateIds,
+        compatibilities
     );
 
     expect([128013, 131387, 131400]).toEqual(selectedRebates.sort());
@@ -54,8 +54,8 @@ test('it_can_select_rebates_accurately', () => {
     [selectedRebates, compatibleRebateIds] = selectRebate(
         131387,
         selectedRebates,
-        compatibilities,
-        compatibleRebateIds
+        compatibleRebateIds,
+        compatibilities
     );
 
     expect([128013, 131387, 131400]).toEqual(selectedRebates.sort());
@@ -69,11 +69,38 @@ test('it_can_select_single_rebate_that_is_not_compatible_with_others', () => {
     const [selectedRebates, compatibleRebateIds] = selectRebate(
         111111,
         [],
-        compatibilities,
-        R.uniq(R.flatten(compatibilities))
+        R.flatten(compatibilities),
+        compatibilities
     );
 
     expect([111111]).toEqual(selectedRebates);
 
     expect([111111]).toEqual(compatibleRebateIds.sort());
+});
+
+test('it_can_toggle_rebates', () => {
+    const compatibilities = [[131400, 131388, 128013]];
+
+    let [selectedRebates, compatibleRebateIds] = toggleRebate(
+        131400,
+        [],
+        R.flatten(compatibilities),
+        compatibilities
+    );
+
+    expect(selectedRebates).toEqual([131400]);
+
+    expect(compatibleRebateIds.sort()).toEqual([131400, 131388, 128013].sort());
+
+    /** Now let's toggle it off **/
+    [selectedRebates, compatibleRebateIds] = toggleRebate(
+        131400,
+        [131400],
+        R.flatten(compatibilities),
+        compatibilities
+    );
+
+    expect(selectedRebates).toEqual([]);
+
+    expect(compatibleRebateIds.sort()).toEqual([131400, 131388, 128013].sort());
 });

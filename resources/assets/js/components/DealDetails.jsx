@@ -9,7 +9,7 @@ import fuelcolor from 'src/fuel-color-map';
 import api from 'src/api';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
-import { selectRebate } from 'src/rebates';
+import { toggleRebate } from 'src/rebates';
 
 class DealDetails extends React.Component {
     constructor(props) {
@@ -23,8 +23,12 @@ class DealDetails extends React.Component {
             fallbackDealImage: '/images/dmr-logo.svg',
             available_rebates: null,
             compatibilities: null,
-            compatible_rebate_ids: null,
-            selected_rebate_ids: [],
+            compatible_rebate_ids_cash: null,
+            compatible_rebate_ids_finance: null,
+            compatible_rebate_ids_lease: null,
+            selected_rebate_ids_cash: [],
+            selected_rebate_ids_finance: [],
+            selected_rebate_ids_lease: [],
         };
 
         this.renderThumbnailImage = this.renderThumbnailImage.bind(this);
@@ -52,17 +56,32 @@ class DealDetails extends React.Component {
         }
     }
 
+    toggleRebate(rebate_id) {
+        const [next_selected_rebate_ids, available_rebate_ids] = toggleRebate(
+            rebate_id,
+            this.state[`selected_rebate_ids_${this.state.selectedTab}`],
+            R.map(R.prop('id'), this.state.available_rebates),
+            this.state.compatibilities
+        );
+
+        this.setState({
+            [`selected_rebate_ids_${this.state.selectedTab}`]: next_selected_rebate_ids,
+            [`compatible_rebate_ids_${this.state.selectedTab}`]: available_rebate_ids,
+        });
+    }
+
     requestRebates() {
         api
             .getRebates(this.props.zipcode, this.props.deal.vin, [])
             .then(response => {
+                const rebate_ids = R.map(R.prop('id'), response.data.rebates);
+
                 this.setState({
                     available_rebates: response.data.rebates,
                     compatibilities: response.data.compatibilities,
-                    compatible_rebate_ids: R.map(
-                        R.prop('id'),
-                        response.data.rebates
-                    ),
+                    compatible_rebate_ids_cash: rebate_ids,
+                    compatible_rebate_ids_finance: rebate_ids,
+                    compatible_rebate_ids_lease: rebate_ids,
                 });
             });
     }
@@ -221,9 +240,18 @@ class DealDetails extends React.Component {
         );
     }
 
+    getRebates() {
+        return R.filter(rebate => {
+            return R.contains(this.state.selectedTab, rebate.types);
+        }, this.state.available_rebates);
+    }
+
     getSelectedRebates() {
         return R.filter(rebate => {
-            return R.contains(rebate.id, this.state.selected_rebate_ids);
+            return R.contains(
+                rebate.id,
+                this.state[`selected_rebate_ids_${this.state.selectedTab}`]
+            );
         }, this.state.available_rebates);
     }
 
@@ -311,55 +339,11 @@ class DealDetails extends React.Component {
         form.submit();
     }
 
-    toggleRebate(rebate_id) {
-        const next_selected_rebate_ids = util.toggleItem(
-            this.state.selected_rebate_ids,
-            rebate_id
-        );
-        const all_possible_rebate_ids = R.map(
-            R.prop('id'),
-            this.state.available_rebates
-        );
-
-        if (next_selected_rebate_ids.length === 0) {
-            this.setState({
-                selected_rebate_ids: next_selected_rebate_ids,
-                compatible_rebate_ids: all_possible_rebate_ids,
-            });
-        } else {
-            const [selected_rebate_ids, compatible_rebate_ids] = R.reduce(
-                (carry, selected_rebate_id) => {
-                    const [
-                        carry_selected_rebate_ids,
-                        carry_compatible_rebate_ids,
-                    ] = carry;
-
-                    return selectRebate(
-                        selected_rebate_id,
-                        carry_selected_rebate_ids,
-                        this.state.compatibilities,
-                        carry_compatible_rebate_ids
-                    );
-                },
-                [[], all_possible_rebate_ids],
-                next_selected_rebate_ids
-            );
-
-            this.setState({
-                selected_rebate_ids,
-                compatible_rebate_ids,
-            });
-        }
-    }
-
     renderRebate(rebate, index) {
-        const isSelected = R.contains(
-            rebate.id,
-            this.state.selected_rebate_ids
-        );
+        const isSelected = R.contains(rebate, this.getSelectedRebates());
         const isSelectable = R.contains(
             rebate.id,
-            this.state.compatible_rebate_ids
+            this.state[`compatible_rebate_ids_${this.state.selectedTab}`]
         );
         const checkboxClass = `deal-details__rebate-checkbox deal-details__rebate-checkbox--inverted ${isSelected ? 'deal-details__rebate-checkbox--selected' : ''}`;
 
@@ -395,7 +379,7 @@ class DealDetails extends React.Component {
         return (
             <div className="deal-details__rebates">
                 {this.state.available_rebates
-                    ? this.state.available_rebates.map(this.renderRebate)
+                    ? this.getRebates().map(this.renderRebate)
                     : ''}
             </div>
         );
