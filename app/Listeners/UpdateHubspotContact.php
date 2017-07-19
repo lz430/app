@@ -24,6 +24,7 @@ class UpdateHubspotContact
                 'brand1' => $event->purchase->deal->make,
                 'model1' => $event->purchase->deal->model,
                 'color1' => $event->purchase->deal->color,
+                'dealername' => $event->purchase->deal->dealer->name,
                 'payment' => 'Finance',
             ]);
         } catch (Exception $exception) {
