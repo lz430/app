@@ -96,7 +96,7 @@ class ApplyOrPurchaseController extends Controller
                     'payment' => 'Cash',
                 ]);
             } catch (Exception $exception) {
-                // issue with hubspot communication
+                Bugsnag::notifyException($exception);
             }
 
             return view('purchase')

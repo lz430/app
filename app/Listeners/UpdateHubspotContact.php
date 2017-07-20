@@ -28,7 +28,7 @@ class UpdateHubspotContact
                 'payment' => 'Finance',
             ]);
         } catch (Exception $exception) {
-            // issue with hubspot communication
+            Bugsnag::notifyException($exception);
         }
     }
 }
