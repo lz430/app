@@ -20,7 +20,7 @@ class CreateHubspotContact
         $payload = [];
         
         if ($event->user->email) {
-            $payload['email'] = $event->user->email
+            $payload['email'] = $event->user->email;
         }
     
         if ($event->user->phone) {
