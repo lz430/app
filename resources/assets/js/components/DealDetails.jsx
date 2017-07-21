@@ -427,10 +427,36 @@ class DealDetails extends React.Component {
         let csrf = document.createElement('input');
         csrf.setAttribute('name', '_token');
         csrf.setAttribute('value', window.Laravel.csrfToken);
+        form.appendChild(csrf);
+
+        let type = document.createElement('input');
+        type.setAttribute('name', 'type');
+        type.setAttribute('value', this.state.selectedTab);
+        form.appendChild(type);
+
+        if (this.state.selectedTab !== 'cash') {
+            let amount_financed = document.createElement('input');
+            amount_financed.setAttribute('name', 'amount_financed');
+            amount_financed.setAttribute(
+                'value',
+                this.state[`${this.state.selectedTab}_selected_term`]
+                    .amount_financed
+            );
+            form.appendChild(amount_financed);
+
+            let term = document.createElement('input');
+            term.setAttribute('name', 'term');
+            term.setAttribute(
+                'value',
+                this.state[`${this.state.selectedTab}_selected_term`].term
+            );
+            form.appendChild(term);
+        }
 
         let deal_id = document.createElement('input');
         deal_id.setAttribute('name', 'deal_id');
         deal_id.setAttribute('value', deal.id);
+        form.appendChild(deal_id);
 
         this.getSelectedRebates().forEach((rebate, index) => {
             let rebateName = document.createElement('input');
@@ -444,12 +470,14 @@ class DealDetails extends React.Component {
             form.appendChild(rebateValue);
         });
 
+        let msrp = document.createElement('input');
+        msrp.setAttribute('name', 'msrp');
+        msrp.setAttribute('value', this.props.deal.msrp);
+        form.appendChild(msrp);
+
         let dmr_price = document.createElement('input');
         dmr_price.setAttribute('name', 'dmr_price');
         dmr_price.setAttribute('value', this.getDMRPriceAfterRebates());
-
-        form.appendChild(csrf);
-        form.appendChild(deal_id);
         form.appendChild(dmr_price);
 
         document.body.appendChild(form);

@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Purchase extends Model
 {
+    public const CASH = 'cash';
+    public const FINANCE = 'finance';
+    public const LEASE = 'lease';
     protected $guarded = [
         'id',
     ];

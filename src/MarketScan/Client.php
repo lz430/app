@@ -75,6 +75,7 @@ class Client
                 'term' => $term['Term'],
                 'rate' => $term['Programs'][0]['BuyRate'],
                 'payment' => $term['Programs'][0]['Payment'],
+                'amount_financed' => $term['Programs'][0]['AmountFinanced'],
             ];
         }, json_decode((string) $retailResponse->getBody(), true)['Lease']['Terms'] ?? []);
     }
@@ -117,6 +118,7 @@ class Client
                 'term' => $term['Term'],
                 'rate' => $term['Programs'][0]['BuyRate'],
                 'payment' => $term['Programs'][0]['Payment'],
+                'amount_financed' => $term['Programs'][0]['AmountFinanced'],
             ];
         }, array_values(array_filter(
             json_decode((string) $retailResponse->getBody(), true)['Retail']['Terms'] ?? [],
