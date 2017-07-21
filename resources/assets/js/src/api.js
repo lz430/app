@@ -73,6 +73,17 @@ const api = {
             },
         });
     },
+    getFinanceTerms: (vin, zipcode, down_payment, msrp, price) => {
+        return window.axios.get('/api/finance', {
+            params: {
+                vin,
+                zipcode,
+                down_payment,
+                msrp,
+                price,
+            },
+        });
+    },
 };
 
 export default api;

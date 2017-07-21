@@ -51,7 +51,6 @@ class Client
         );
         $Market = ((string) $marketResponse->getBody());
 
-
         $retailResponse = $this->client->post(
             "$this->apiUrl/?RunScan/$this->partnerID/$this->accountNumber",
             [
@@ -79,6 +78,54 @@ class Client
             ];
         }, json_decode((string) $retailResponse->getBody(), true)['Lease']['Terms'] ?? []);
     }
+
+    public function getFinanceTerms($vin, $zipcode, $downPayment, $msrp, $price)
+    {
+        // StateFeeTax
+        $stateFeeTaxResponse = $this->client->get(
+            "$this->apiUrl/?GetStateFeeTax/$this->partnerID/$this->accountNumber/$zipcode"
+        );
+        $stateFeeTax = json_decode((string) $stateFeeTaxResponse->getBody(), true)[0]['StateFeeTax'];
+
+        // Market
+        $marketResponse = $this->client->get(
+            "$this->apiUrl/?GetMarketByZIP/$this->partnerID/$this->accountNumber/$zipcode"
+        );
+        $Market = ((string) $marketResponse->getBody());
+
+        $retailResponse = $this->client->post(
+            "$this->apiUrl/?RunScan/$this->partnerID/$this->accountNumber",
+            [
+                'json' => [
+                    'RetailPart' => [
+                        'CustomerCash' => $downPayment,
+                    ],
+                    'ScanMode' => 1,
+                    'Market' => $Market,
+                    'StateFeeTax' => $stateFeeTax,
+                    'Vehicle' => [
+                        'ID' => $this->getVehicleIDByVIN($vin),
+                        'TotalMSRP' => $msrp,
+                        'TotalDealerCost' => $price,
+                    ],
+                ],
+            ]
+        );
+
+        return array_map(function ($term) {
+            return [
+                'term' => $term['Term'],
+                'rate' => $term['Programs'][0]['BuyRate'],
+                'payment' => $term['Programs'][0]['Payment'],
+            ];
+        }, array_values(array_filter(
+            json_decode((string) $retailResponse->getBody(), true)['Retail']['Terms'] ?? [],
+            function ($term) {
+                return isset($term['Programs'][0]['BuyRate']);
+            }
+        )));
+    }
+
 
     public function getVehicleIDByVIN($vin)
     {

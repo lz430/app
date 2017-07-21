@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import util from 'src/util';
 import R from 'ramda';
 
-class Lease extends React.Component {
+class Finance extends React.Component {
     constructor(props) {
         super(props);
 
@@ -13,12 +13,13 @@ class Lease extends React.Component {
             termLengths: null,
         };
 
-        this.updateLeaseTerm = this.updateLeaseTerm.bind(this);
-        this.updateLeaseAnnualMileage = this.updateLeaseAnnualMileage.bind(
+        this.updateFinanceTerm = this.updateFinanceTerm.bind(this);
+        this.updateFinanceDownPayment = this.updateFinanceDownPayment.bind(
             this
         );
-        this.updateLeaseDownPayment = this.updateLeaseDownPayment.bind(this);
-        this.renderLeaseTermsSlider = this.renderLeaseTermsSlider.bind(this);
+        this.renderFinanceTermsSlider = this.renderFinanceTermsSlider.bind(
+            this
+        );
     }
 
     componentDidMount() {
@@ -26,7 +27,7 @@ class Lease extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        switch (String(props.leaseTerms)) {
+        switch (String(props.financeTerms)) {
             case 'null':
                 return this.setState({
                     shortestTermLength: null,
@@ -40,7 +41,7 @@ class Lease extends React.Component {
                     termLengths: [],
                 });
             default:
-                const termLengths = R.map(R.prop('term'), props.leaseTerms);
+                const termLengths = R.map(R.prop('term'), props.financeTerms);
 
                 this.setState({
                     shortestTermLength: Math.min(termLengths),
@@ -50,8 +51,8 @@ class Lease extends React.Component {
         }
     }
 
-    updateLeaseTerm(e) {
-        this.props.updateLeaseTerm(
+    updateFinanceTerm(e) {
+        this.props.updateFinanceTerm(
             util.getClosestNumberInRange(
                 parseInt(e.target.value),
                 this.state.termLengths
@@ -59,21 +60,17 @@ class Lease extends React.Component {
         );
     }
 
-    updateLeaseAnnualMileage(e) {
-        this.props.updateLeaseAnnualMileage(parseInt(e.target.value));
-    }
-
-    updateLeaseDownPayment(e) {
+    updateFinanceDownPayment(e) {
         const number = parseFloat(e.target.value);
 
         if (!isNaN(number)) {
-            this.props.updateLeaseDownPayment(number);
+            this.props.updateFinanceDownPayment(number);
         } else {
-            this.props.updateLeaseDownPayment(0);
+            this.props.updateFinanceDownPayment(0);
         }
     }
 
-    renderLeaseTermsSlider() {
+    renderFinanceTermsSlider() {
         switch (String(this.state.termLengths)) {
             case 'null':
                 return 'loading';
@@ -82,19 +79,21 @@ class Lease extends React.Component {
             default:
                 return (
                     <div>
-                        <label htmlFor="lease-term">Lease Term (Months)</label>
+                        <label htmlFor="finance-term">
+                            Finance Term (Months)
+                        </label>
                         <div className="range-slider">
                             <input
                                 className="range-slider__slider"
-                                name="lease-term"
+                                name="finance-term"
                                 type="range"
                                 min={this.state.shortestTermLength}
                                 max={this.state.longestTermLength}
-                                defaultValue={this.props.leaseTerm}
-                                onChange={this.updateLeaseTerm}
+                                defaultValue={this.props.financeTerm}
+                                onChange={this.updateFinanceTerm}
                             />
                             <div className="range-slider__badge">
-                                {this.props.leaseTerm}
+                                {this.props.financeTerm}
                             </div>
                         </div>
                     </div>
@@ -108,42 +107,20 @@ class Lease extends React.Component {
                 <div className="tabs__content-item">
                     <label htmlFor="down-payment">Down Payment</label>
                     <input
-                        className="lease__down-payment"
+                        className="finance__down-payment"
                         type="number"
                         min="0"
                         name="down-payment"
-                        value={this.props.leaseDownPayment}
-                        onChange={this.updateLeaseDownPayment}
+                        value={this.props.financeDownPayment}
+                        onChange={this.updateFinanceDownPayment}
                     />
                 </div>
                 <div className="tabs__content-item">
-                    <label className="lease__label" htmlFor="miles-year">
-                        Miles Per Year
-                    </label>
-                    <div className="range-slider">
-                        <input
-                            className="range-slider__slider"
-                            name="miles-year"
-                            type="range"
-                            min="5000"
-                            max="80000"
-                            step="5000"
-                            defaultValue={this.props.leaseAnnualMileage}
-                            onChange={this.updateLeaseAnnualMileage}
-                        />
-                        <div className="range-slider__badge">
-                            {util.numbersWithCommas(
-                                this.props.leaseAnnualMileage
-                            )}
-                        </div>
-                    </div>
-                </div>
-                <div className="tabs__content-item">
-                    {this.renderLeaseTermsSlider()}
+                    {this.renderFinanceTermsSlider()}
                 </div>
             </div>
         );
     }
 }
 
-export default Lease;
+export default Finance;

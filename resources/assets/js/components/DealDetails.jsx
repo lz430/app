@@ -12,6 +12,7 @@ import zondicons from 'zondicons';
 import { toggleRebate } from 'src/rebates';
 import Lease from 'components/Lease';
 import debounce from 'lodash.debounce';
+import Finance from './Finance';
 
 class DealDetails extends React.Component {
     constructor(props) {
@@ -32,12 +33,17 @@ class DealDetails extends React.Component {
             selected_rebate_ids_cash: [],
             selected_rebate_ids_finance: [],
             selected_rebate_ids_lease: [],
-            // Tab Specific States
-            annualMileage: 15000,
-            downPayment: 0,
+            // Lease Tab Specific States
+            lease_annual_mileage: 15000,
+            lease_down_payment: 0,
             lease_terms: null,
             lease_term: null,
-            selected_lease_term: null,
+            lease_selected_term: null,
+            // Finance Tab Specific States
+            finance_down_payment: 0,
+            finance_terms: null,
+            finance_term: null,
+            finance_selected_term: null,
         };
 
         this.renderThumbnailImage = this.renderThumbnailImage.bind(this);
@@ -57,9 +63,19 @@ class DealDetails extends React.Component {
         this.toggleRebate = this.toggleRebate.bind(this);
         this.getDMRPriceAfterRebates = this.getDMRPriceAfterRebates.bind(this);
         this.updateLeaseTerm = this.updateLeaseTerm.bind(this);
-        this.updateAnnualMileage = this.updateAnnualMileage.bind(this);
-        this.updateDownPayment = this.updateDownPayment.bind(this);
+        this.updateLeaseAnnualMileage = this.updateLeaseAnnualMileage.bind(
+            this
+        );
+        this.updateLeaseDownPayment = this.updateLeaseDownPayment.bind(this);
+        this.updateFinanceTerm = this.updateFinanceTerm.bind(this);
+        this.updateFinanceDownPayment = this.updateFinanceDownPayment.bind(
+            this
+        );
         this.debouncedRequestLeaseTerms = debounce(this.requestLeaseTerms, 500);
+        this.debouncedRequestFinanceTerms = debounce(
+            this.requestFinanceTerms,
+            500
+        );
     }
 
     componentDidMount() {
@@ -67,6 +83,7 @@ class DealDetails extends React.Component {
 
         if (this.props.zipcode) {
             this.requestRebates();
+            this.requestFinanceTerms(this.props.deal);
             this.requestLeaseTerms(this.props.deal);
         }
     }
@@ -76,8 +93,8 @@ class DealDetails extends React.Component {
             .getLeaseTerms(
                 this.props.deal.vin,
                 this.props.zipcode,
-                this.state.annualMileage,
-                this.state.downPayment,
+                this.state.lease_annual_mileage,
+                this.state.lease_down_payment,
                 this.props.deal.msrp,
                 this.getDMRPriceAfterRebates()
             )
@@ -85,7 +102,27 @@ class DealDetails extends React.Component {
                 this.setState({
                     lease_terms: response.data,
                     lease_term: R.propOr(null, 'term', response.data[0]),
-                    selected_lease_term: response.data[0]
+                    lease_selected_term: response.data[0]
+                        ? response.data[0]
+                        : null,
+                });
+            });
+    }
+
+    requestFinanceTerms() {
+        api
+            .getFinanceTerms(
+                this.props.deal.vin,
+                this.props.zipcode,
+                this.state.finance_down_payment,
+                this.props.deal.msrp,
+                this.getDMRPriceAfterRebates()
+            )
+            .then(response => {
+                this.setState({
+                    finance_terms: response.data,
+                    finance_term: R.propOr(null, 'term', response.data[0]),
+                    finance_selected_term: response.data[0]
                         ? response.data[0]
                         : null,
                 });
@@ -102,7 +139,7 @@ class DealDetails extends React.Component {
 
         this.setState(
             {
-                selected_lease_term: null,
+                lease_selected_term: null,
                 lease_terms: null,
                 [`selected_rebate_ids_${this.state.selectedTab}`]: next_selected_rebate_ids,
                 [`compatible_rebate_ids_${this.state.selectedTab}`]: available_rebate_ids,
@@ -326,7 +363,19 @@ class DealDetails extends React.Component {
     renderYourDMRPriceExtra() {
         switch (this.state.selectedTab) {
             case 'finance':
-                return '#todo';
+                switch (String(this.state.finance_terms)) {
+                    case 'null':
+                        return 'loading';
+                    case '':
+                        return 'no terms available';
+                    default:
+                        switch (this.state.finance_selected_term) {
+                            case null:
+                                return 'loading';
+                            default:
+                                return `at ${util.moneyFormat(this.state.finance_selected_term.payment)} / month`;
+                        }
+                }
             case 'lease':
                 switch (String(this.state.lease_terms)) {
                     case 'null':
@@ -334,11 +383,11 @@ class DealDetails extends React.Component {
                     case '':
                         return 'no terms available';
                     default:
-                        switch (this.state.selected_lease_term) {
+                        switch (this.state.lease_selected_term) {
                             case null:
                                 return 'loading';
                             default:
-                                return `at ${util.moneyFormat(this.state.selected_lease_term.payment)} / month`;
+                                return `at ${util.moneyFormat(this.state.lease_selected_term.payment)} / month`;
                         }
                 }
         }
@@ -456,47 +505,75 @@ class DealDetails extends React.Component {
     updateLeaseTerm(term) {
         this.setState({
             lease_term: term,
-            selected_lease_term: R.find(leaseTerm => {
+            lease_selected_term: R.find(leaseTerm => {
                 return leaseTerm.term === term;
             }, this.state.lease_terms),
         });
     }
 
-    updateAnnualMileage(annualMileage) {
+    updateFinanceTerm(term) {
+        this.setState({
+            finance_term: term,
+            finance_selected_term: R.find(financeTerm => {
+                return financeTerm.term === term;
+            }, this.state.finance_terms),
+        });
+    }
+
+    updateLeaseAnnualMileage(annual_mileage) {
         this.setState(
             {
-                annualMileage: annualMileage,
-                selected_lease_term: null,
+                lease_annual_mileage: annual_mileage,
+                lease_selected_term: null,
                 lease_terms: null,
             },
             this.debouncedRequestLeaseTerms
         );
     }
 
-    updateDownPayment(downPayment) {
+    updateLeaseDownPayment(downPayment) {
         this.setState(
             {
-                downPayment: downPayment,
-                selected_lease_term: null,
+                lease_down_payment: downPayment,
+                lease_selected_term: null,
                 lease_terms: null,
             },
             this.debouncedRequestLeaseTerms
+        );
+    }
+
+    updateFinanceDownPayment(downPayment) {
+        this.setState(
+            {
+                finance_down_payment: downPayment,
+                finance_selected_term: null,
+                finance_terms: null,
+            },
+            this.debouncedRequestFinanceTerms
         );
     }
 
     renderSelectedTab() {
         switch (this.state.selectedTab) {
             case 'finance':
-                return <div>Finance</div>;
+                return (
+                    <Finance
+                        financeTerms={this.state.finance_terms}
+                        financeTerm={this.state.finance_term}
+                        financeDownPayment={this.state.finance_down_payment}
+                        updateFinanceDownPayment={this.updateFinanceDownPayment}
+                        updateFinanceTerm={this.updateFinanceTerm}
+                    />
+                );
             case 'lease':
                 return (
                     <Lease
-                        annualMileage={this.state.annualMileage}
-                        terms={this.state.lease_terms}
-                        term={this.state.lease_term}
-                        downPayment={this.state.downPayment}
-                        updateAnnualMileage={this.updateAnnualMileage}
-                        updateDownPayment={this.updateDownPayment}
+                        leaseAnnualMileage={this.state.lease_annual_mileage}
+                        leaseTerms={this.state.lease_terms}
+                        leaseTerm={this.state.lease_term}
+                        leaseDownPayment={this.state.lease_down_payment}
+                        updateLeaseAnnualMileage={this.updateLeaseAnnualMileage}
+                        updateLeaseDownPayment={this.updateLeaseDownPayment}
                         updateLeaseTerm={this.updateLeaseTerm}
                     />
                 );

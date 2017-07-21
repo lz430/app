@@ -13192,6 +13192,10 @@ var _lodash = __webpack_require__(917);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _Finance = __webpack_require__(918);
+
+var _Finance2 = _interopRequireDefault(_Finance);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -13227,12 +13231,17 @@ var DealDetails = function (_React$Component) {
             selected_rebate_ids_cash: [],
             selected_rebate_ids_finance: [],
             selected_rebate_ids_lease: [],
-            // Tab Specific States
-            annualMileage: 15000,
-            downPayment: 0,
+            // Lease Tab Specific States
+            lease_annual_mileage: 15000,
+            lease_down_payment: 0,
             lease_terms: null,
             lease_term: null,
-            selected_lease_term: null
+            lease_selected_term: null,
+            // Finance Tab Specific States
+            finance_down_payment: 0,
+            finance_terms: null,
+            finance_term: null,
+            finance_selected_term: null
         };
 
         _this.renderThumbnailImage = _this.renderThumbnailImage.bind(_this);
@@ -13252,9 +13261,12 @@ var DealDetails = function (_React$Component) {
         _this.toggleRebate = _this.toggleRebate.bind(_this);
         _this.getDMRPriceAfterRebates = _this.getDMRPriceAfterRebates.bind(_this);
         _this.updateLeaseTerm = _this.updateLeaseTerm.bind(_this);
-        _this.updateAnnualMileage = _this.updateAnnualMileage.bind(_this);
-        _this.updateDownPayment = _this.updateDownPayment.bind(_this);
+        _this.updateLeaseAnnualMileage = _this.updateLeaseAnnualMileage.bind(_this);
+        _this.updateLeaseDownPayment = _this.updateLeaseDownPayment.bind(_this);
+        _this.updateFinanceTerm = _this.updateFinanceTerm.bind(_this);
+        _this.updateFinanceDownPayment = _this.updateFinanceDownPayment.bind(_this);
         _this.debouncedRequestLeaseTerms = (0, _lodash2.default)(_this.requestLeaseTerms, 500);
+        _this.debouncedRequestFinanceTerms = (0, _lodash2.default)(_this.requestFinanceTerms, 500);
         return _this;
     }
 
@@ -13265,6 +13277,7 @@ var DealDetails = function (_React$Component) {
 
             if (this.props.zipcode) {
                 this.requestRebates();
+                this.requestFinanceTerms(this.props.deal);
                 this.requestLeaseTerms(this.props.deal);
             }
         }
@@ -13273,11 +13286,24 @@ var DealDetails = function (_React$Component) {
         value: function requestLeaseTerms() {
             var _this2 = this;
 
-            _api2.default.getLeaseTerms(this.props.deal.vin, this.props.zipcode, this.state.annualMileage, this.state.downPayment, this.props.deal.msrp, this.getDMRPriceAfterRebates()).then(function (response) {
+            _api2.default.getLeaseTerms(this.props.deal.vin, this.props.zipcode, this.state.lease_annual_mileage, this.state.lease_down_payment, this.props.deal.msrp, this.getDMRPriceAfterRebates()).then(function (response) {
                 _this2.setState({
                     lease_terms: response.data,
                     lease_term: _ramda2.default.propOr(null, 'term', response.data[0]),
-                    selected_lease_term: response.data[0] ? response.data[0] : null
+                    lease_selected_term: response.data[0] ? response.data[0] : null
+                });
+            });
+        }
+    }, {
+        key: 'requestFinanceTerms',
+        value: function requestFinanceTerms() {
+            var _this3 = this;
+
+            _api2.default.getFinanceTerms(this.props.deal.vin, this.props.zipcode, this.state.finance_down_payment, this.props.deal.msrp, this.getDMRPriceAfterRebates()).then(function (response) {
+                _this3.setState({
+                    finance_terms: response.data,
+                    finance_term: _ramda2.default.propOr(null, 'term', response.data[0]),
+                    finance_selected_term: response.data[0] ? response.data[0] : null
                 });
             });
         }
@@ -13292,19 +13318,19 @@ var DealDetails = function (_React$Component) {
                 available_rebate_ids = _toggleRebate3[1];
 
             this.setState((_setState = {
-                selected_lease_term: null,
+                lease_selected_term: null,
                 lease_terms: null
             }, _defineProperty(_setState, 'selected_rebate_ids_' + this.state.selectedTab, next_selected_rebate_ids), _defineProperty(_setState, 'compatible_rebate_ids_' + this.state.selectedTab, available_rebate_ids), _setState), this.debouncedRequestLeaseTerms);
         }
     }, {
         key: 'requestRebates',
         value: function requestRebates() {
-            var _this3 = this;
+            var _this4 = this;
 
             _api2.default.getRebates(this.props.zipcode, this.props.deal.vin, []).then(function (response) {
                 var rebate_ids = _ramda2.default.map(_ramda2.default.prop('id'), response.data.rebates);
 
-                _this3.setState({
+                _this4.setState({
                     available_rebates: response.data.rebates,
                     compatibilities: response.data.compatibilities,
                     compatible_rebate_ids_cash: rebate_ids,
@@ -13463,19 +13489,19 @@ var DealDetails = function (_React$Component) {
     }, {
         key: 'getRebates',
         value: function getRebates() {
-            var _this4 = this;
+            var _this5 = this;
 
             return _ramda2.default.filter(function (rebate) {
-                return _ramda2.default.contains(_this4.state.selectedTab, rebate.types);
+                return _ramda2.default.contains(_this5.state.selectedTab, rebate.types);
             }, this.state.available_rebates);
         }
     }, {
         key: 'getSelectedRebates',
         value: function getSelectedRebates() {
-            var _this5 = this;
+            var _this6 = this;
 
             return _ramda2.default.filter(function (rebate) {
-                return _ramda2.default.contains(rebate.id, _this5.state['selected_rebate_ids_' + _this5.state.selectedTab]);
+                return _ramda2.default.contains(rebate.id, _this6.state['selected_rebate_ids_' + _this6.state.selectedTab]);
             }, this.state.available_rebates ? this.state.available_rebates : []);
         }
     }, {
@@ -13517,7 +13543,19 @@ var DealDetails = function (_React$Component) {
         value: function renderYourDMRPriceExtra() {
             switch (this.state.selectedTab) {
                 case 'finance':
-                    return '#todo';
+                    switch (String(this.state.finance_terms)) {
+                        case 'null':
+                            return 'loading';
+                        case '':
+                            return 'no terms available';
+                        default:
+                            switch (this.state.finance_selected_term) {
+                                case null:
+                                    return 'loading';
+                                default:
+                                    return 'at ' + _util2.default.moneyFormat(this.state.finance_selected_term.payment) + ' / month';
+                            }
+                    }
                 case 'lease':
                     switch (String(this.state.lease_terms)) {
                         case 'null':
@@ -13525,11 +13563,11 @@ var DealDetails = function (_React$Component) {
                         case '':
                             return 'no terms available';
                         default:
-                            switch (this.state.selected_lease_term) {
+                            switch (this.state.lease_selected_term) {
                                 case null:
                                     return 'loading';
                                 default:
-                                    return 'at ' + _util2.default.moneyFormat(this.state.selected_lease_term.payment) + ' / month';
+                                    return 'at ' + _util2.default.moneyFormat(this.state.lease_selected_term.payment) + ' / month';
                             }
                     }
             }
@@ -13650,47 +13688,68 @@ var DealDetails = function (_React$Component) {
         value: function updateLeaseTerm(term) {
             this.setState({
                 lease_term: term,
-                selected_lease_term: _ramda2.default.find(function (leaseTerm) {
+                lease_selected_term: _ramda2.default.find(function (leaseTerm) {
                     return leaseTerm.term === term;
                 }, this.state.lease_terms)
             });
         }
     }, {
-        key: 'updateAnnualMileage',
-        value: function updateAnnualMileage(annualMileage) {
+        key: 'updateFinanceTerm',
+        value: function updateFinanceTerm(term) {
             this.setState({
-                annualMileage: annualMileage,
-                selected_lease_term: null,
+                finance_term: term,
+                finance_selected_term: _ramda2.default.find(function (financeTerm) {
+                    return financeTerm.term === term;
+                }, this.state.finance_terms)
+            });
+        }
+    }, {
+        key: 'updateLeaseAnnualMileage',
+        value: function updateLeaseAnnualMileage(annual_mileage) {
+            this.setState({
+                lease_annual_mileage: annual_mileage,
+                lease_selected_term: null,
                 lease_terms: null
             }, this.debouncedRequestLeaseTerms);
         }
     }, {
-        key: 'updateDownPayment',
-        value: function updateDownPayment(downPayment) {
+        key: 'updateLeaseDownPayment',
+        value: function updateLeaseDownPayment(downPayment) {
             this.setState({
-                downPayment: downPayment,
-                selected_lease_term: null,
+                lease_down_payment: downPayment,
+                lease_selected_term: null,
                 lease_terms: null
             }, this.debouncedRequestLeaseTerms);
+        }
+    }, {
+        key: 'updateFinanceDownPayment',
+        value: function updateFinanceDownPayment(downPayment) {
+            this.setState({
+                finance_down_payment: downPayment,
+                finance_selected_term: null,
+                finance_terms: null
+            }, this.debouncedRequestFinanceTerms);
         }
     }, {
         key: 'renderSelectedTab',
         value: function renderSelectedTab() {
             switch (this.state.selectedTab) {
                 case 'finance':
-                    return _react2.default.createElement(
-                        'div',
-                        null,
-                        'Finance'
-                    );
+                    return _react2.default.createElement(_Finance2.default, {
+                        financeTerms: this.state.finance_terms,
+                        financeTerm: this.state.finance_term,
+                        financeDownPayment: this.state.finance_down_payment,
+                        updateFinanceDownPayment: this.updateFinanceDownPayment,
+                        updateFinanceTerm: this.updateFinanceTerm
+                    });
                 case 'lease':
                     return _react2.default.createElement(_Lease2.default, {
-                        annualMileage: this.state.annualMileage,
-                        terms: this.state.lease_terms,
-                        term: this.state.lease_term,
-                        downPayment: this.state.downPayment,
-                        updateAnnualMileage: this.updateAnnualMileage,
-                        updateDownPayment: this.updateDownPayment,
+                        leaseAnnualMileage: this.state.lease_annual_mileage,
+                        leaseTerms: this.state.lease_terms,
+                        leaseTerm: this.state.lease_term,
+                        leaseDownPayment: this.state.lease_down_payment,
+                        updateLeaseAnnualMileage: this.updateLeaseAnnualMileage,
+                        updateLeaseDownPayment: this.updateLeaseDownPayment,
                         updateLeaseTerm: this.updateLeaseTerm
                     });
             }
@@ -14107,6 +14166,17 @@ var api = {
                 vin: vin,
                 zipcode: zipcode,
                 annual_mileage: annual_mileage,
+                down_payment: down_payment,
+                msrp: msrp,
+                price: price
+            }
+        });
+    },
+    getFinanceTerms: function getFinanceTerms(vin, zipcode, down_payment, msrp, price) {
+        return window.axios.get('/api/finance', {
+            params: {
+                vin: vin,
+                zipcode: zipcode,
                 down_payment: down_payment,
                 msrp: msrp,
                 price: price
@@ -53432,8 +53502,8 @@ var Lease = function (_React$Component) {
         };
 
         _this.updateLeaseTerm = _this.updateLeaseTerm.bind(_this);
-        _this.updateAnnualMileage = _this.updateAnnualMileage.bind(_this);
-        _this.updateDownPayment = _this.updateDownPayment.bind(_this);
+        _this.updateLeaseAnnualMileage = _this.updateLeaseAnnualMileage.bind(_this);
+        _this.updateLeaseDownPayment = _this.updateLeaseDownPayment.bind(_this);
         _this.renderLeaseTermsSlider = _this.renderLeaseTermsSlider.bind(_this);
         return _this;
     }
@@ -53446,7 +53516,7 @@ var Lease = function (_React$Component) {
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(props) {
-            switch (String(props.terms)) {
+            switch (String(props.leaseTerms)) {
                 case 'null':
                     return this.setState({
                         shortestTermLength: null,
@@ -53460,7 +53530,7 @@ var Lease = function (_React$Component) {
                         termLengths: []
                     });
                 default:
-                    var termLengths = _ramda2.default.map(_ramda2.default.prop('term'), props.terms);
+                    var termLengths = _ramda2.default.map(_ramda2.default.prop('term'), props.leaseTerms);
 
                     this.setState({
                         shortestTermLength: Math.min(termLengths),
@@ -53475,19 +53545,19 @@ var Lease = function (_React$Component) {
             this.props.updateLeaseTerm(_util2.default.getClosestNumberInRange(parseInt(e.target.value), this.state.termLengths));
         }
     }, {
-        key: 'updateAnnualMileage',
-        value: function updateAnnualMileage(e) {
-            this.props.updateAnnualMileage(parseInt(e.target.value));
+        key: 'updateLeaseAnnualMileage',
+        value: function updateLeaseAnnualMileage(e) {
+            this.props.updateLeaseAnnualMileage(parseInt(e.target.value));
         }
     }, {
-        key: 'updateDownPayment',
-        value: function updateDownPayment(e) {
+        key: 'updateLeaseDownPayment',
+        value: function updateLeaseDownPayment(e) {
             var number = parseFloat(e.target.value);
 
             if (!isNaN(number)) {
-                this.props.updateDownPayment(number);
+                this.props.updateLeaseDownPayment(number);
             } else {
-                this.props.updateDownPayment(0);
+                this.props.updateLeaseDownPayment(0);
             }
         }
     }, {
@@ -53516,13 +53586,13 @@ var Lease = function (_React$Component) {
                                 type: 'range',
                                 min: this.state.shortestTermLength,
                                 max: this.state.longestTermLength,
-                                defaultValue: this.props.term,
+                                defaultValue: this.props.leaseTerm,
                                 onChange: this.updateLeaseTerm
                             }),
                             _react2.default.createElement(
                                 'div',
                                 { className: 'range-slider__badge' },
-                                this.props.term
+                                this.props.leaseTerm
                             )
                         )
                     );
@@ -53547,8 +53617,8 @@ var Lease = function (_React$Component) {
                         type: 'number',
                         min: '0',
                         name: 'down-payment',
-                        value: this.props.downPayment,
-                        onChange: this.updateDownPayment
+                        value: this.props.leaseDownPayment,
+                        onChange: this.updateLeaseDownPayment
                     })
                 ),
                 _react2.default.createElement(
@@ -53569,13 +53639,13 @@ var Lease = function (_React$Component) {
                             min: '5000',
                             max: '80000',
                             step: '5000',
-                            defaultValue: this.props.annualMileage,
-                            onChange: this.updateAnnualMileage
+                            defaultValue: this.props.leaseAnnualMileage,
+                            onChange: this.updateLeaseAnnualMileage
                         }),
                         _react2.default.createElement(
                             'div',
                             { className: 'range-slider__badge' },
-                            _util2.default.numbersWithCommas(this.props.annualMileage)
+                            _util2.default.numbersWithCommas(this.props.leaseAnnualMileage)
                         )
                     )
                 ),
@@ -53976,6 +54046,185 @@ function toNumber(value) {
 module.exports = debounce;
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(109)))
+
+/***/ }),
+/* 918 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(12);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(23);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _util = __webpack_require__(42);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _ramda = __webpack_require__(22);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Finance = function (_React$Component) {
+    _inherits(Finance, _React$Component);
+
+    function Finance(props) {
+        _classCallCheck(this, Finance);
+
+        var _this = _possibleConstructorReturn(this, (Finance.__proto__ || Object.getPrototypeOf(Finance)).call(this, props));
+
+        _this.state = {
+            shortestTermLength: null,
+            longestTermLength: null,
+            termLengths: null
+        };
+
+        _this.updateFinanceTerm = _this.updateFinanceTerm.bind(_this);
+        _this.updateFinanceDownPayment = _this.updateFinanceDownPayment.bind(_this);
+        _this.renderFinanceTermsSlider = _this.renderFinanceTermsSlider.bind(_this);
+        return _this;
+    }
+
+    _createClass(Finance, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.componentWillReceiveProps(this.props);
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(props) {
+            switch (String(props.financeTerms)) {
+                case 'null':
+                    return this.setState({
+                        shortestTermLength: null,
+                        longestTermLength: null,
+                        termLengths: null
+                    });
+                case '':
+                    return this.setState({
+                        shortestTermLength: null,
+                        longestTermLength: null,
+                        termLengths: []
+                    });
+                default:
+                    var termLengths = _ramda2.default.map(_ramda2.default.prop('term'), props.financeTerms);
+
+                    this.setState({
+                        shortestTermLength: Math.min(termLengths),
+                        longestTermLength: Math.max(termLengths),
+                        termLengths: termLengths
+                    });
+            }
+        }
+    }, {
+        key: 'updateFinanceTerm',
+        value: function updateFinanceTerm(e) {
+            this.props.updateFinanceTerm(_util2.default.getClosestNumberInRange(parseInt(e.target.value), this.state.termLengths));
+        }
+    }, {
+        key: 'updateFinanceDownPayment',
+        value: function updateFinanceDownPayment(e) {
+            var number = parseFloat(e.target.value);
+
+            if (!isNaN(number)) {
+                this.props.updateFinanceDownPayment(number);
+            } else {
+                this.props.updateFinanceDownPayment(0);
+            }
+        }
+    }, {
+        key: 'renderFinanceTermsSlider',
+        value: function renderFinanceTermsSlider() {
+            switch (String(this.state.termLengths)) {
+                case 'null':
+                    return 'loading';
+                case '':
+                    return 'no terms available';
+                default:
+                    return _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'label',
+                            { htmlFor: 'finance-term' },
+                            'Finance Term (Months)'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'range-slider' },
+                            _react2.default.createElement('input', {
+                                className: 'range-slider__slider',
+                                name: 'finance-term',
+                                type: 'range',
+                                min: this.state.shortestTermLength,
+                                max: this.state.longestTermLength,
+                                defaultValue: this.props.financeTerm,
+                                onChange: this.updateFinanceTerm
+                            }),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'range-slider__badge' },
+                                this.props.financeTerm
+                            )
+                        )
+                    );
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'tabs__content lease' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'tabs__content-item' },
+                    _react2.default.createElement(
+                        'label',
+                        { htmlFor: 'down-payment' },
+                        'Down Payment'
+                    ),
+                    _react2.default.createElement('input', {
+                        className: 'finance__down-payment',
+                        type: 'number',
+                        min: '0',
+                        name: 'down-payment',
+                        value: this.props.financeDownPayment,
+                        onChange: this.updateFinanceDownPayment
+                    })
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'tabs__content-item' },
+                    this.renderFinanceTermsSlider()
+                )
+            );
+        }
+    }]);
+
+    return Finance;
+}(_react2.default.Component);
+
+exports.default = Finance;
 
 /***/ })
 /******/ ]);
