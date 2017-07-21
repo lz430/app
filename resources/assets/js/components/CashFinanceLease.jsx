@@ -28,7 +28,7 @@ class CashFinanceLease extends React.Component {
                 <div className="tabs__content__item">
                     <label htmlFor="down-payment">Down Payment</label>
                     <input
-                        className="compare-lease__down-payment"
+                        className="lease__down-payment"
                         type="number"
                         name="down-payment"
                     />

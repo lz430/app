@@ -54,6 +54,25 @@ const api = {
             },
         });
     },
+    getLeaseTerms: (
+        vin,
+        zipcode,
+        annual_mileage,
+        down_payment,
+        msrp,
+        price
+    ) => {
+        return window.axios.get('/api/lease', {
+            params: {
+                vin,
+                zipcode,
+                annual_mileage,
+                down_payment,
+                msrp,
+                price,
+            },
+        });
+    },
 };
 
 export default api;

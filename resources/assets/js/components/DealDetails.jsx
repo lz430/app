@@ -10,6 +10,8 @@ import api from 'src/api';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import { toggleRebate } from 'src/rebates';
+import Lease from 'components/Lease';
+import debounce from 'lodash.debounce';
 
 class DealDetails extends React.Component {
     constructor(props) {
@@ -23,12 +25,19 @@ class DealDetails extends React.Component {
             fallbackDealImage: '/images/dmr-logo.svg',
             available_rebates: null,
             compatibilities: null,
+            // Tab Rebate States
             compatible_rebate_ids_cash: null,
             compatible_rebate_ids_finance: null,
             compatible_rebate_ids_lease: null,
             selected_rebate_ids_cash: [],
             selected_rebate_ids_finance: [],
             selected_rebate_ids_lease: [],
+            // Tab Specific States
+            annualMileage: 15000,
+            downPayment: 0,
+            lease_terms: null,
+            lease_term: null,
+            selected_lease_term: null,
         };
 
         this.renderThumbnailImage = this.renderThumbnailImage.bind(this);
@@ -44,8 +53,13 @@ class DealDetails extends React.Component {
         this.requestRebates = this.requestRebates.bind(this);
         this.renderRebates = this.renderRebates.bind(this);
         this.renderRebate = this.renderRebate.bind(this);
+        this.renderSelectedTab = this.renderSelectedTab.bind(this);
         this.toggleRebate = this.toggleRebate.bind(this);
         this.getDMRPriceAfterRebates = this.getDMRPriceAfterRebates.bind(this);
+        this.updateLeaseTerm = this.updateLeaseTerm.bind(this);
+        this.updateAnnualMileage = this.updateAnnualMileage.bind(this);
+        this.updateDownPayment = this.updateDownPayment.bind(this);
+        this.debouncedRequestLeaseTerms = debounce(this.requestLeaseTerms, 500);
     }
 
     componentDidMount() {
@@ -53,7 +67,29 @@ class DealDetails extends React.Component {
 
         if (this.props.zipcode) {
             this.requestRebates();
+            this.requestLeaseTerms(this.props.deal);
         }
+    }
+
+    requestLeaseTerms() {
+        api
+            .getLeaseTerms(
+                this.props.deal.vin,
+                this.props.zipcode,
+                this.state.annualMileage,
+                this.state.downPayment,
+                this.props.deal.msrp,
+                this.getDMRPriceAfterRebates()
+            )
+            .then(response => {
+                this.setState({
+                    lease_terms: response.data,
+                    lease_term: R.propOr(null, 'term', response.data[0]),
+                    selected_lease_term: response.data[0]
+                        ? response.data[0]
+                        : null,
+                });
+            });
     }
 
     toggleRebate(rebate_id) {
@@ -64,10 +100,15 @@ class DealDetails extends React.Component {
             this.state.compatibilities
         );
 
-        this.setState({
-            [`selected_rebate_ids_${this.state.selectedTab}`]: next_selected_rebate_ids,
-            [`compatible_rebate_ids_${this.state.selectedTab}`]: available_rebate_ids,
-        });
+        this.setState(
+            {
+                selected_lease_term: null,
+                lease_terms: null,
+                [`selected_rebate_ids_${this.state.selectedTab}`]: next_selected_rebate_ids,
+                [`compatible_rebate_ids_${this.state.selectedTab}`]: available_rebate_ids,
+            },
+            this.debouncedRequestLeaseTerms
+        );
     }
 
     requestRebates() {
@@ -100,18 +141,19 @@ class DealDetails extends React.Component {
     }
 
     async requestFuelImages() {
-        const deal = this.props.deal;
-
         const vehicleId =
-            (await fuelapi.getVehicleId(deal.year, deal.make, deal.model))
-                .data[0].id || false;
+            (await fuelapi.getVehicleId(
+                this.props.deal.year,
+                this.props.deal.make,
+                this.props.deal.model
+            )).data[0].id || false;
         if (!vehicleId) return;
 
         try {
             const externalImages = this.extractFuelImages(
                 await fuelapi.getExternalImages(
                     vehicleId,
-                    fuelcolor.convert(deal.color)
+                    fuelcolor.convert(this.props.deal.color)
                 )
             );
 
@@ -252,7 +294,7 @@ class DealDetails extends React.Component {
                 rebate.id,
                 this.state[`selected_rebate_ids_${this.state.selectedTab}`]
             );
-        }, this.state.available_rebates);
+        }, this.state.available_rebates ? this.state.available_rebates : []);
     }
 
     getDMRPriceAfterRebates() {
@@ -270,10 +312,36 @@ class DealDetails extends React.Component {
                     Your DMR Price:
                 </div>
                 <div className="deal-details__your-dmr-price-amount">
-                    {util.moneyFormat(this.getDMRPriceAfterRebates())}
+                    <div>
+                        {util.moneyFormat(this.getDMRPriceAfterRebates())}
+                    </div>
+                    <div className="deal-details__your-dmr-price-extra">
+                        {this.renderYourDMRPriceExtra()}
+                    </div>
                 </div>
             </div>
         );
+    }
+
+    renderYourDMRPriceExtra() {
+        switch (this.state.selectedTab) {
+            case 'finance':
+                return '#todo';
+            case 'lease':
+                switch (String(this.state.lease_terms)) {
+                    case 'null':
+                        return 'loading';
+                    case '':
+                        return 'no terms available';
+                    default:
+                        switch (this.state.selected_lease_term) {
+                            case null:
+                                return 'loading';
+                            default:
+                                return `at ${util.moneyFormat(this.state.selected_lease_term.payment)} / month`;
+                        }
+                }
+        }
     }
 
     renderCompareAndBuyNow() {
@@ -385,6 +453,56 @@ class DealDetails extends React.Component {
         );
     }
 
+    updateLeaseTerm(term) {
+        this.setState({
+            lease_term: term,
+            selected_lease_term: R.find(leaseTerm => {
+                return leaseTerm.term === term;
+            }, this.state.lease_terms),
+        });
+    }
+
+    updateAnnualMileage(annualMileage) {
+        this.setState(
+            {
+                annualMileage: annualMileage,
+                selected_lease_term: null,
+                lease_terms: null,
+            },
+            this.debouncedRequestLeaseTerms
+        );
+    }
+
+    updateDownPayment(downPayment) {
+        this.setState(
+            {
+                downPayment: downPayment,
+                selected_lease_term: null,
+                lease_terms: null,
+            },
+            this.debouncedRequestLeaseTerms
+        );
+    }
+
+    renderSelectedTab() {
+        switch (this.state.selectedTab) {
+            case 'finance':
+                return <div>Finance</div>;
+            case 'lease':
+                return (
+                    <Lease
+                        annualMileage={this.state.annualMileage}
+                        terms={this.state.lease_terms}
+                        term={this.state.lease_term}
+                        downPayment={this.state.downPayment}
+                        updateAnnualMileage={this.updateAnnualMileage}
+                        updateDownPayment={this.updateDownPayment}
+                        updateLeaseTerm={this.updateLeaseTerm}
+                    />
+                );
+        }
+    }
+
     render() {
         const deal = this.props.deal;
 
@@ -460,6 +578,10 @@ class DealDetails extends React.Component {
                                 Lease
                             </div>
                         </div>
+                    </div>
+
+                    <div className="deal-details__selected-tab">
+                        {this.renderSelectedTab()}
                     </div>
 
                     <div className="deal-details__pricing-body">

@@ -21,6 +21,7 @@ Route::get('versions', 'VersionsController@index')->name('versions.index');
 Route::get('deals', 'DealsController@getDeals')->name('deals.index');
 Route::get('features', 'FeaturesController@index')->name('features.index');
 Route::get('rebates', 'RebatesController@getRebates')->name('rebates.getRebates');
+Route::get('lease', 'LeaseController@getTerms')->name('lease.getTerms');
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::patch('users/{user}', 'UsersController@update')->name('users.update');
