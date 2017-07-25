@@ -9,6 +9,7 @@ use App\Mail\DealPurchasedUser;
 use App\Purchase;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
@@ -95,10 +96,11 @@ class ApplyOrPurchaseController extends Controller
                 'purchase_id' => 'required|exists:purchases,id',
             ]);
 
-            $purchase = Purchase::with('deal')->findOrFail(request('purchase_id'));
+            $purchase = Purchase::with('deal', 'deal.photos')->findOrFail(request('purchase_id'));
 
             JavaScriptFacade::put([
                 'purchase' => $purchase,
+                'user' => Auth::user(),
             ]);
 
             return view('view-apply')
