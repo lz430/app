@@ -8,7 +8,7 @@
   height: calc(100vh - #{$nav-height + $sortbar-height});
   justify-content: center;
   overflow-y: scroll;
-  padding: 20px 40px;
+  padding: 10px 40px 20px;
 
   @media (min-width: $break-medium) {
     height: calc(100vh - #{$nav-height + $sortbar-height + $filterbar-height + $compare-bar-height});
@@ -76,5 +76,10 @@
 
   &__button {
     @include button;
+  }
+
+  &__title {
+    width: 100%;
+    text-align: center;
   }
 }

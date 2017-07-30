@@ -23326,6 +23326,11 @@ var Deals = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 { className: 'deals' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deals__title' },
+                    'Dealer Inventory'
+                ),
                 this.props.deals.map(function (deal, index) {
                     return _react2.default.createElement(_Deal2.default, { deal: deal, key: index });
                 }),
