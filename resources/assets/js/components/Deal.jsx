@@ -11,92 +11,77 @@ class Deal extends React.Component {
 
         this.state = {
             fallbackDealImage: '/images/dmr-logo.svg',
+            fuelFeaturedImage: null,
         };
 
-        this.getFeaturedImage = this.getFeaturedImage.bind(this);
-    }
-
-    getFeaturedImage() {
-        return R.propOr(
-            this.state.fallbackDealImage,
-            'url',
-            this.props.deal.photos[1]
-                ? this.props.deal.photos[0]
-                : { url: this.state.fallbackDealImage }
-        );
+        this.requestFuelImages = this.requestFuelImages.bind(this);
     }
 
     componentDidMount() {
-        if (this.props.deal.photos.length === 1) {
-            fuelapi
-                .getVehicleId(
-                    this.props.deal.year,
-                    this.props.deal.make,
-                    this.props.deal.model
+        if (this.props.deal.photos.length === 0) {
+            this.requestFuelImages();
+        }
+    }
+
+    featuredImage() {
+        return R.propOr(
+            R.propOr(
+                this.state.fallbackDealImage,
+                'url',
+                this.state.fuelFeaturedImage
+            ),
+            'url',
+            this.props.deal.photos[0]
+        );
+    }
+
+    extractFuelImages(data) {
+        return (
+            data.data.products.map(product =>
+                product.productFormats.map(format => {
+                    return {
+                        id: `fuel_external_${format.id}`,
+                        url: format.assets[0].url,
+                    };
+                })
+            )[0] || []
+        );
+    }
+
+    async requestFuelImages() {
+        const deal = this.props.deal;
+
+        const vehicleId =
+            (await fuelapi.getVehicleId(deal.year, deal.make, deal.model))
+                .data[0].id || false;
+        if (!vehicleId) return;
+
+        try {
+            const externalImages = this.extractFuelImages(
+                await fuelapi.getExternalImages(
+                    vehicleId,
+                    fuelcolor.convert(deal.color)
                 )
-                .then(data => {
-                    fuelapi
-                        .getExternalImages(
-                            data.data[0].id,
-                            this.props.deal.color
-                        )
-                        .then(data => {
-                            const externalImages = data.data.products.map(
-                                product =>
-                                    product.productFormats.map(format => {
-                                        return {
-                                            id: `fuel_external_${format.id}`,
-                                            url: format.assets[0].url,
-                                        };
-                                    })
-                            )[0] || [];
+            );
 
-                            this.setState({
-                                featuredImage: R.propOr(
-                                    this.state.fallbackDealImage,
-                                    'url',
-                                    externalImages[0]
-                                ),
-                            });
-                        })
-                        .catch(err => {
-                            console.log(err);
-                            fuelapi
-                                .getExternalImages(data.data[0].id, 'white')
-                                .then(data => {
-                                    const externalImages = data.data.products.map(
-                                        product =>
-                                            product.productFormats.map(
-                                                format => {
-                                                    return {
-                                                        id: `fuel_external_${format.id}`,
-                                                        url: format.assets[0]
-                                                            .url,
-                                                    };
-                                                }
-                                            )
-                                    )[0] || [];
+            this.setState({ fuelFeaturedImage: externalImages[0] });
+        } catch (e) {
+            try {
+                const externalImages = this.extractFuelImages(
+                    await fuelapi.getExternalImages(vehicleId, 'white')
+                );
 
-                                    this.setState({
-                                        featuredImage: R.propOr(
-                                            this.state.fallbackDealImage,
-                                            'url',
-                                            externalImages[0]
-                                        ),
-                                    });
-                                })
-                                .catch(err => {
-                                    console.log(err);
-                                });
-                        });
-                });
+                this.setState({ fuelFeaturedImage: externalImages[0] });
+            } catch (e) {
+                // No Fuel Images Available.
+            }
         }
     }
     render() {
         const deal = this.props.deal;
         return (
             <div className="deal">
-                <img className="deal__image" src={this.getFeaturedImage()} />
+                <img className="deal__image" src={this.featuredImage()} />
 
                 <div className="deal__basic-info">
                     <div

@@ -23155,58 +23155,58 @@ var Deal = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Deal.__proto__ || Object.getPrototypeOf(Deal)).call(this, props));
 
         _this.state = {
-            fallbackDealImage: '/images/dmr-logo.svg'
+            fallbackDealImage: '/images/dmr-logo.svg',
+            fuelFeaturedImage: null
         };
 
-        _this.getFeaturedImage = _this.getFeaturedImage.bind(_this);
+        _this.requestFuelImages = _this.requestFuelImages.bind(_this);
         return _this;
     }
 
     _createClass(Deal, [{
-        key: 'getFeaturedImage',
-        value: function getFeaturedImage() {
-            return _ramda2.default.propOr(this.state.fallbackDealImage, 'url', this.props.deal.photos[1] ? this.props.deal.photos[0] : { url: this.state.fallbackDealImage });
-        }
-    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this2 = this;
-
-            if (this.props.deal.photos.length === 1) {
-                _fuelapi2.default.getVehicleId(this.props.deal.year, this.props.deal.make, this.props.deal.model).then(function (data) {
-                    _fuelapi2.default.getExternalImages(data.data[0].id, _this2.props.deal.color).then(function (data) {
-                        var externalImages = data.data.products.map(function (product) {
-                            return product.productFormats.map(function (format) {
-                                return {
-                                    id: 'fuel_external_' + format.id,
-                                    url: format.assets[0].url
-                                };
-                            });
-                        })[0] || [];
-
-                        _this2.setState({
-                            featuredImage: _ramda2.default.propOr(_this2.state.fallbackDealImage, 'url', externalImages[0])
-                        });
-                    }).catch(function (err) {
-                        console.log(err);
-                        _fuelapi2.default.getExternalImages(data.data[0].id, 'white').then(function (data) {
-                            var externalImages = data.data.products.map(function (product) {
-                                return product.productFormats.map(function (format) {
-                                    return {
-                                        id: 'fuel_external_' + format.id,
-                                        url: format.assets[0].url
-                                    };
-                                });
-                            })[0] || [];
-
-                            _this2.setState({
-                                featuredImage: _ramda2.default.propOr(_this2.state.fallbackDealImage, 'url', externalImages[0])
-                            });
-                        }).catch(function (err) {
-                            console.log(err);
-                        });
-                    });
+            if (this.props.deal.photos.length === 0) {
+                this.requestFuelImages();
+            }
+        }
+    }, {
+        key: 'featuredImage',
+        value: function featuredImage() {
+            return _ramda2.default.propOr(_ramda2.default.propOr(this.state.fallbackDealImage, 'url', this.state.fuelFeaturedImage), 'url', this.props.deal.photos[0]);
+        }
+    }, {
+        key: 'extractFuelImages',
+        value: function extractFuelImages(data) {
+            return data.data.products.map(function (product) {
+                return product.productFormats.map(function (format) {
+                    return {
+                        id: 'fuel_external_' + format.id,
+                        url: format.assets[0].url
+                    };
                 });
+            })[0] || [];
+        }
+    }, {
+        key: 'requestFuelImages',
+        value: async function requestFuelImages() {
+            var deal = this.props.deal;
+
+            var vehicleId = (await _fuelapi2.default.getVehicleId(deal.year, deal.make, deal.model)).data[0].id || false;
+            if (!vehicleId) return;
+
+            try {
+                var externalImages = this.extractFuelImages((await _fuelapi2.default.getExternalImages(vehicleId, fuelcolor.convert(deal.color))));
+
+                this.setState({ fuelFeaturedImage: externalImages[0] });
+            } catch (e) {
+                try {
+                    var _externalImages = this.extractFuelImages((await _fuelapi2.default.getExternalImages(vehicleId, 'white')));
+
+                    this.setState({ fuelFeaturedImage: _externalImages[0] });
+                } catch (e) {
+                    // No Fuel Images Available.
+                }
             }
         }
     }, {
@@ -23216,7 +23216,7 @@ var Deal = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 { className: 'deal' },
-                _react2.default.createElement('img', { className: 'deal__image', src: this.getFeaturedImage() }),
+                _react2.default.createElement('img', { className: 'deal__image', src: this.featuredImage() }),
                 _react2.default.createElement(
                     'div',
                     { className: 'deal__basic-info' },
