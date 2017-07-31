@@ -36,6 +36,7 @@ class ApplyOrPurchaseController extends Controller
                 'rebates.*.value' => 'required_with:rebates|numeric',
                 // Finance and lease values.
                 'term' => 'required_if:type,finance,lease|integer',
+                'down_payment' => 'required_if:type,finance,lease|integer',
                 'amount_financed' => 'required_if:type,finance,lease|numeric'
             ]);
 
@@ -53,6 +54,7 @@ class ApplyOrPurchaseController extends Controller
                 'dmr_price' => request('dmr_price'),
                 'msrp' => request('msrp'),
                 'term' => request('term'),
+                'down_payment' => request('down_payment'),
                 'amount_financed' => request('amount_financed'),
             ]);
 
