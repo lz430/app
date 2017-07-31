@@ -78,9 +78,10 @@ class Deal extends React.Component {
     render() {
         const deal = this.props.deal;
         const featuredImageUrl = this.featuredImageUrl();
-        const featureImageClass = featuredImageUrl !== this.state.fallbackDealImage
-            ? 'deal__image'
-            : 'deal__image deal__image--fallback';
+        const featureImageClass =
+            featuredImageUrl !== this.state.fallbackDealImage
+                ? 'deal__image'
+                : 'deal__image deal__image--fallback';
 
         return (
             <div className="deal">

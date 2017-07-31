@@ -80,7 +80,9 @@ class DealDetails extends React.Component {
                 this.getDMRPriceAfterRebates()
             )
             .then(response => {
-                if (!this._isMounted) { return; }
+                if (!this._isMounted) {
+                    return;
+                }
 
                 this.setState({
                     lease_terms: response.data,
@@ -102,7 +104,9 @@ class DealDetails extends React.Component {
                 this.getDMRPriceAfterRebates()
             )
             .then(response => {
-                if (!this._isMounted) { return false; }
+                if (!this._isMounted) {
+                    return false;
+                }
 
                 this.setState({
                     finance_terms: response.data,
@@ -139,7 +143,9 @@ class DealDetails extends React.Component {
         api
             .getRebates(this.props.zipcode, this.props.deal.vin, [])
             .then(response => {
-                if (!this._isMounted) { return; }
+                if (!this._isMounted) {
+                    return;
+                }
 
                 const rebate_ids = R.map(R.prop('id'), response.data.rebates);
 
@@ -176,7 +182,9 @@ class DealDetails extends React.Component {
 
         if (!vehicleId) return;
 
-        if (!this._isMounted) { return; }
+        if (!this._isMounted) {
+            return;
+        }
 
         try {
             const externalImages = this.extractFuelImages(

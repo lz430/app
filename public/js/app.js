@@ -13216,6 +13216,8 @@ var DealDetails = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (DealDetails.__proto__ || Object.getPrototypeOf(DealDetails)).call(this, props));
 
+        _this._isMounted = false;
+
         _this.state = {
             featuredImage: props.deal.photos[0],
             fuelExternalImages: [],
@@ -13252,6 +13254,7 @@ var DealDetails = function (_React$Component) {
     _createClass(DealDetails, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
+            this._isMounted = true;
             this.requestFuelImages(this.props.deal);
 
             if (this.props.zipcode) {
@@ -13261,11 +13264,20 @@ var DealDetails = function (_React$Component) {
             }
         }
     }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            this._isMounted = false;
+        }
+    }, {
         key: 'requestLeaseTerms',
         value: function requestLeaseTerms() {
             var _this2 = this;
 
             _api2.default.getLeaseTerms(this.props.deal.vin, this.props.zipcode, this.state.lease_annual_mileage, this.state.lease_down_payment, this.props.deal.msrp, this.getDMRPriceAfterRebates()).then(function (response) {
+                if (!_this2._isMounted) {
+                    return;
+                }
+
                 _this2.setState({
                     lease_terms: response.data,
                     lease_term: _ramda2.default.propOr(null, 'term', response.data[0]),
@@ -13279,6 +13291,10 @@ var DealDetails = function (_React$Component) {
             var _this3 = this;
 
             _api2.default.getFinanceTerms(this.props.deal.vin, this.props.zipcode, this.state.finance_down_payment, this.props.deal.msrp, this.getDMRPriceAfterRebates()).then(function (response) {
+                if (!_this3._isMounted) {
+                    return false;
+                }
+
                 _this3.setState({
                     finance_terms: response.data,
                     finance_term: _ramda2.default.propOr(null, 'term', response.data[0]),
@@ -13307,6 +13323,10 @@ var DealDetails = function (_React$Component) {
             var _this4 = this;
 
             _api2.default.getRebates(this.props.zipcode, this.props.deal.vin, []).then(function (response) {
+                if (!_this4._isMounted) {
+                    return;
+                }
+
                 var rebate_ids = _ramda2.default.map(_ramda2.default.prop('id'), response.data.rebates);
 
                 _this4.setState({
@@ -13334,7 +13354,12 @@ var DealDetails = function (_React$Component) {
         key: 'requestFuelImages',
         value: async function requestFuelImages() {
             var vehicleId = (await _fuelapi2.default.getVehicleId(this.props.deal.year, this.props.deal.make, this.props.deal.model)).data[0].id || false;
+
             if (!vehicleId) return;
+
+            if (!this._isMounted) {
+                return;
+            }
 
             try {
                 var externalImages = this.extractFuelImages((await _fuelapi2.default.getExternalImages(vehicleId, _fuelColorMap2.default.convert(this.props.deal.color))));
@@ -23706,8 +23731,6 @@ var Deal = function (_React$Component) {
             fallbackDealImage: '/images/dmr-logo.svg',
             fuelFeaturedImage: null
         };
-
-        _this.requestFuelImages = _this.requestFuelImages.bind(_this);
         return _this;
     }
 
@@ -23719,8 +23742,8 @@ var Deal = function (_React$Component) {
             }
         }
     }, {
-        key: 'featuredImage',
-        value: function featuredImage() {
+        key: 'featuredImageUrl',
+        value: function featuredImageUrl() {
             return _ramda2.default.propOr(_ramda2.default.propOr(this.state.fallbackDealImage, 'url', this.state.fuelFeaturedImage), 'url', this.props.deal.photos[0]);
         }
     }, {
@@ -23761,10 +23784,13 @@ var Deal = function (_React$Component) {
         key: 'render',
         value: function render() {
             var deal = this.props.deal;
+            var featuredImageUrl = this.featuredImageUrl();
+            var featureImageClass = featuredImageUrl !== this.state.fallbackDealImage ? 'deal__image' : 'deal__image deal__image--fallback';
+
             return _react2.default.createElement(
                 'div',
                 { className: 'deal' },
-                _react2.default.createElement('img', { className: 'deal__image', src: this.featuredImage() }),
+                _react2.default.createElement('img', { className: featureImageClass, src: featuredImageUrl }),
                 _react2.default.createElement(
                     'div',
                     { className: 'deal__basic-info' },
@@ -25627,18 +25653,6 @@ var Sortbar = function (_React$Component) {
                     },
                     this.renderIcon('year'),
                     ' Year'
-                ),
-                _react2.default.createElement(
-                    'button',
-                    {
-                        className: 'sortbar__button sortbar__button',
-                        onClick: function onClick() {
-                            _this2.props.sortDeals('make');
-                            _this2.props.requestDeals();
-                        }
-                    },
-                    this.renderIcon('make'),
-                    ' A-Z'
                 )
             );
         }
