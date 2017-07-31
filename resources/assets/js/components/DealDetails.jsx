@@ -17,6 +17,7 @@ import Finance from './Finance';
 class DealDetails extends React.Component {
     constructor(props) {
         super(props);
+        this._isMounted = false;
 
         this.state = {
             featuredImage: props.deal.photos[0],
@@ -54,6 +55,7 @@ class DealDetails extends React.Component {
     }
 
     componentDidMount() {
+        this._isMounted = true;
         this.requestFuelImages(this.props.deal);
 
         if (this.props.zipcode) {
@@ -61,6 +63,10 @@ class DealDetails extends React.Component {
             this.requestFinanceTerms(this.props.deal);
             this.requestLeaseTerms(this.props.deal);
         }
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     requestLeaseTerms() {
@@ -74,6 +80,10 @@ class DealDetails extends React.Component {
                 this.getDMRPriceAfterRebates()
             )
             .then(response => {
+                if (!this._isMounted) {
+                    return;
+                }
+
                 this.setState({
                     lease_terms: response.data,
                     lease_term: R.propOr(null, 'term', response.data[0]),
@@ -94,6 +104,10 @@ class DealDetails extends React.Component {
                 this.getDMRPriceAfterRebates()
             )
             .then(response => {
+                if (!this._isMounted) {
+                    return false;
+                }
+
                 this.setState({
                     finance_terms: response.data,
                     finance_term: R.propOr(null, 'term', response.data[0]),
@@ -129,6 +143,10 @@ class DealDetails extends React.Component {
         api
             .getRebates(this.props.zipcode, this.props.deal.vin, [])
             .then(response => {
+                if (!this._isMounted) {
+                    return;
+                }
+
                 const rebate_ids = R.map(R.prop('id'), response.data.rebates);
 
                 this.setState({
@@ -161,7 +179,12 @@ class DealDetails extends React.Component {
                 this.props.deal.make,
                 this.props.deal.model
             )).data[0].id || false;
+
         if (!vehicleId) return;
+
+        if (!this._isMounted) {
+            return;
+        }
 
         try {
             const externalImages = this.extractFuelImages(

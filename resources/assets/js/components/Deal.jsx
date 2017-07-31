@@ -13,8 +13,6 @@ class Deal extends React.Component {
             fallbackDealImage: '/images/dmr-logo.svg',
             fuelFeaturedImage: null,
         };
-
-        this.requestFuelImages = this.requestFuelImages.bind(this);
     }
 
     componentDidMount() {
@@ -23,7 +21,7 @@ class Deal extends React.Component {
         }
     }
 
-    featuredImage() {
+    featuredImageUrl() {
         return R.propOr(
             R.propOr(
                 this.state.fallbackDealImage,
@@ -79,9 +77,15 @@ class Deal extends React.Component {
     }
     render() {
         const deal = this.props.deal;
+        const featuredImageUrl = this.featuredImageUrl();
+        const featureImageClass =
+            featuredImageUrl !== this.state.fallbackDealImage
+                ? 'deal__image'
+                : 'deal__image deal__image--fallback';
+
         return (
             <div className="deal">
-                <img className="deal__image" src={this.featuredImage()} />
+                <img className={featureImageClass} src={featuredImageUrl} />
 
                 <div className="deal__basic-info">
                     <div
