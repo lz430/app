@@ -265,7 +265,7 @@ class Client
 
                 // filter out non-individual customer types
                 $forIndividual = array_first($rebate['CustomerTypes'], function ($customerType) {
-                        return $customerType['customerTypeName'] === 'Individual';
+                    return $customerType['customerTypeName'] === 'Individual';
                 }) > 0;
 
                 return $hasValue && $forIndividual;

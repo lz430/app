@@ -8,6 +8,8 @@ class Deals extends React.Component {
     render() {
         return (
             <div className="deals">
+                <div className="deals__title">Dealer Inventory</div>
+
                 {this.props.deals.map((deal, index) => {
                     return <Deal deal={deal} key={index} />;
                 })}
