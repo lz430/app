@@ -68,15 +68,6 @@ class Sortbar extends React.Component {
                 >
                     {this.renderIcon('year')} Year
                 </button>
-                <button
-                    className="sortbar__button sortbar__button"
-                    onClick={() => {
-                        this.props.sortDeals('make');
-                        this.props.requestDeals();
-                    }}
-                >
-                    {this.renderIcon('make')} A-Z
-                </button>
             </div>
         );
     }
