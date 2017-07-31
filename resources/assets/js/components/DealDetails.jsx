@@ -383,7 +383,7 @@ class DealDetails extends React.Component {
                 </button>
                 <button
                     type="button"
-                    onClick={this.startPurchaseFlow}
+                    onClick={() => this.startPurchaseFlow()}
                     className="deal-details__dmr-button deal-details__dmr-button--blue deal-details__dmr-button--small"
                 >
                     Buy Now
