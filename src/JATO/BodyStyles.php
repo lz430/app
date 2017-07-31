@@ -6,7 +6,7 @@ class BodyStyles
 {
     public const ALL = [
         'coupe' => [
-            'label' => 'Coupe',
+            'label' => 'Coupe (2 Door)',
             'style' => 'Coupe',
             'subStyles' => [
                 'Roadster',
@@ -15,7 +15,7 @@ class BodyStyles
             'icon' => 'coupe',
         ],
         'sedan' => [
-            'label' => 'Sedan',
+            'label' => 'Sedan (4 Door)',
             'style' => 'Sedan',
             'icon' => 'sedan',
         ],
@@ -28,7 +28,7 @@ class BodyStyles
             'icon' => 'convertible',
         ],
         'wagon' => [
-            'label' => 'Wagon / Crossover',
+            'label' => 'Crossover/Wagon',
             'style' => 'Wagon',
             'subStyles' => [
                 'Combi',
@@ -54,7 +54,7 @@ class BodyStyles
             'icon' => 'pickup',
         ],
         'van' => [
-            'label' => 'Van / Minivan',
+            'label' => 'Van/Minivan',
             'style' => 'Van',
             'subStyles' => [
                 'Van',
@@ -65,7 +65,7 @@ class BodyStyles
             'icon' => 'minivan',
         ],
         'sport utility vehicle' => [
-            'label' => 'SUV',
+            'label' => 'Sport Utility Vehicle (SUV)',
             'style' => 'Sport Utility Vehicle',
             'subStyles' => [
                 'Crossover',
