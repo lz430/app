@@ -42,8 +42,7 @@ class Sortbar extends React.Component {
                       width="20px"
                       className="sortbar__filter-toggle-icon"
                       svg={zondicons['tuning']}
-                  />
-                  {' '}
+                  />{' '}
                   <span className="sortbar__filter-toggle-text">Filter</span>
               </div>;
     }
@@ -106,11 +105,8 @@ class Sortbar extends React.Component {
                     />
                 </button>
                 {this.state.dropdownShown
-                    ? <div className="sortbar__dropdown">
-                          Sort Stuff
-                      </div>
+                    ? <div className="sortbar__dropdown">Sort Stuff</div>
                     : ''}
-
             </div>
         );
     }
@@ -122,8 +118,7 @@ class Sortbar extends React.Component {
                 <div className="sortbar__count">
                     <span className="sortbar__count-number">
                         {this.props.results_count}
-                    </span>
-                    {' '}
+                    </span>{' '}
                     results
                 </div>
                 {util.windowIsLargerThanSmall(this.props.window.width)

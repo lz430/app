@@ -154,11 +154,11 @@ class ComparePage extends React.Component {
                 title={this.state.selectedDeal.model}
                 subtitle={
                     this.state.selectedDeal.year +
-                        ' ' +
-                        this.state.selectedDeal.make
+                    ' ' +
+                    this.state.selectedDeal.make
                 }
             >
-                {() => (
+                {() =>
                     <DealDetails
                         deal={this.state.selectedDeal}
                         compareList={this.state.deals}
@@ -168,8 +168,7 @@ class ComparePage extends React.Component {
                             this.closeModal();
                         }}
                         zipcode={this.state.zipcode}
-                    />
-                )}
+                    />}
             </Modal>
         );
     }

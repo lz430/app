@@ -13,7 +13,9 @@ class FilterStyleSelector extends React.Component {
 
     renderStyle(style) {
         let selected = R.contains(style.style, this.props.selectedStyles);
-        let className = `filter-style-selector__style ${selected ? 'filter-style-selector__style--selected' : ''}`;
+        let className = `filter-style-selector__style ${selected
+            ? 'filter-style-selector__style--selected'
+            : ''}`;
 
         return (
             <div
@@ -29,7 +31,9 @@ class FilterStyleSelector extends React.Component {
                       />
                     : ''}
 
-                <div className="filter-style-selector__name">{style.label}</div>
+                <div className="filter-style-selector__name">
+                    {style.label}
+                </div>
             </div>
         );
     }

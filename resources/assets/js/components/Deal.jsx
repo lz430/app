@@ -41,15 +41,15 @@ class Deal extends React.Component {
                             this.props.deal.color
                         )
                         .then(data => {
-                            const externalImages = data.data.products.map(
-                                product =>
+                            const externalImages =
+                                data.data.products.map(product =>
                                     product.productFormats.map(format => {
                                         return {
                                             id: `fuel_external_${format.id}`,
                                             url: format.assets[0].url,
                                         };
                                     })
-                            )[0] || [];
+                                )[0] || [];
 
                             this.setState({
                                 featuredImage: R.propOr(
@@ -64,18 +64,19 @@ class Deal extends React.Component {
                             fuelapi
                                 .getExternalImages(data.data[0].id, 'white')
                                 .then(data => {
-                                    const externalImages = data.data.products.map(
-                                        product =>
+                                    const externalImages =
+                                        data.data.products.map(product =>
                                             product.productFormats.map(
                                                 format => {
                                                     return {
                                                         id: `fuel_external_${format.id}`,
-                                                        url: format.assets[0]
-                                                            .url,
+                                                        url:
+                                                            format.assets[0]
+                                                                .url,
                                                     };
                                                 }
                                             )
-                                    )[0] || [];
+                                        )[0] || [];
 
                                     this.setState({
                                         featuredImage: R.propOr(
@@ -120,9 +121,9 @@ class Deal extends React.Component {
                     <button
                         className={
                             'deal__button deal__button--small ' +
-                                (R.contains(deal, this.props.compareList)
-                                    ? 'deal__button--blue'
-                                    : '')
+                            (R.contains(deal, this.props.compareList)
+                                ? 'deal__button--blue'
+                                : '')
                         }
                         onClick={this.props.toggleCompare.bind(null, deal)}
                     >
