@@ -69,7 +69,6 @@ class ApplyOrPurchaseController extends Controller
             return view('view-apply')
                 ->with('purchase', $purchase);
         } catch (ValidationException $e) {
-            dd($e->validator->errors());
             Log::notice('Invalid applyOrPurchase submission: ' . json_encode(request()->all()));
 
             return abort(500);
