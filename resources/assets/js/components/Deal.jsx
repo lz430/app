@@ -105,9 +105,9 @@ class Deal extends React.Component {
                     <button
                         className={
                             'deal__button deal__button--small ' +
-                                (R.contains(deal, this.props.compareList)
-                                    ? 'deal__button--blue'
-                                    : '')
+                            (R.contains(deal, this.props.compareList)
+                                ? 'deal__button--blue'
+                                : '')
                         }
                         onClick={this.props.toggleCompare.bind(null, deal)}
                     >

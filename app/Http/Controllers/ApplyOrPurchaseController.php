@@ -26,11 +26,18 @@ class ApplyOrPurchaseController extends Controller
     {
         try {
             $this->validate(request(), [
+                'type' => 'required|in:cash,finance,lease',
                 'deal_id' => 'required|exists:deals,id',
-                'rebates' => 'required|array',
-                'rebates.*.rebate' => 'required|string',
-                'rebates.*.value' => 'required|numeric',
                 'dmr_price' => 'required|numeric',
+                'msrp' => 'required|numeric',
+                // Rebates.
+                'rebates' => 'array',
+                'rebates.*.rebate' => 'required_with:rebates|string',
+                'rebates.*.value' => 'required_with:rebates|numeric',
+                // Finance and lease values.
+                'term' => 'required_if:type,finance,lease|integer',
+                'down_payment' => 'required_if:type,finance,lease|integer',
+                'amount_financed' => 'required_if:type,finance,lease|numeric'
             ]);
 
             /**
@@ -38,9 +45,19 @@ class ApplyOrPurchaseController extends Controller
              */
             $purchase = auth()->user()->purchases()->firstOrNew([
                 'deal_id' => request('deal_id'),
-                'dmr_price' => request('dmr_price'),
+                'completed_at' => null,
             ]);
-            $purchase->rebates = json_encode(request('rebates'), JSON_NUMERIC_CHECK);
+
+            $purchase->fill([
+                'type' => request('type'),
+                'rebates' => json_encode(request('rebates', []), JSON_NUMERIC_CHECK),
+                'dmr_price' => request('dmr_price'),
+                'msrp' => request('msrp'),
+                'term' => request('term'),
+                'down_payment' => request('down_payment'),
+                'amount_financed' => request('amount_financed'),
+            ]);
+
             $purchase->save();
     
             $purchase->load('deal.versions');

@@ -195,7 +195,7 @@ export function toggleStyle(style) {
                 dispatch(receiveDeals(data));
             });
 
-        window.axios.post('/hubspot', {'bodystyles1': selectedStyles.join()});
+        window.axios.post('/hubspot', { bodystyles1: selectedStyles.join() });
 
         dispatch({
             type: ActionTypes.TOGGLE_STYLE,
@@ -206,9 +206,8 @@ export function toggleStyle(style) {
 
 export function chooseFuelType(fuelType) {
     return (dispatch, getState) => {
-        const selectedFuelType = getState().selectedFuelType === fuelType
-            ? null
-            : fuelType;
+        const selectedFuelType =
+            getState().selectedFuelType === fuelType ? null : fuelType;
 
         api
             .getDeals(
@@ -229,10 +228,10 @@ export function chooseFuelType(fuelType) {
 
 export function chooseTransmissionType(transmissionType) {
     return (dispatch, getState) => {
-        const selectedTransmissionType = getState().selectedTransmissionType ===
-            transmissionType
-            ? null
-            : transmissionType;
+        const selectedTransmissionType =
+            getState().selectedTransmissionType === transmissionType
+                ? null
+                : transmissionType;
 
         api
             .getDeals(
@@ -309,7 +308,7 @@ export function setZipCode(zipcode) {
                 dispatch(receiveDeals(data));
             });
 
-        window.axios.post('/hubspot', {zip: zipcode});
+        window.axios.post('/hubspot', { zip: zipcode });
 
         dispatch({
             type: ActionTypes.SET_ZIP_CODE,
@@ -328,7 +327,7 @@ export function requestLocationInfo() {
                 if (err) {
                     dispatch(requestDeals());
                 } else {
-                    window.axios.post('/hubspot', {zip: data.zip_code});
+                    window.axios.post('/hubspot', { zip: data.zip_code });
                     dispatch(receiveLocationInfo(data));
                 }
             });

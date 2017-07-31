@@ -6,6 +6,7 @@ $color-section-bottom-border: #ccc;
 $color-sidebar-background-primary: #494e51;
 $color-sidebar-background-secondary: #5f686e;
 $color-sidebar-background-secondary-dark: #343b3e;
+$color-sidebar-background-secondary-light: lighten($color-sidebar-background-secondary, 46%);
 
 $color-text-white: #fff;
 $color-text-blue: #0e9dce;

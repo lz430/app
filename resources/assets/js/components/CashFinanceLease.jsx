@@ -19,7 +19,9 @@ class CashFinanceLease extends React.Component {
     }
 
     tabClassName(tabName) {
-        return `tabs__tab ${tabName === this.state.selectedTab ? 'tabs__tab--selected' : ''}`;
+        return `tabs__tab ${tabName === this.state.selectedTab
+            ? 'tabs__tab--selected'
+            : ''}`;
     }
 
     renderLeaseForm() {
@@ -28,7 +30,7 @@ class CashFinanceLease extends React.Component {
                 <div className="tabs__content__item">
                     <label htmlFor="down-payment">Down Payment</label>
                     <input
-                        className="compare-lease__down-payment"
+                        className="lease__down-payment"
                         type="number"
                         name="down-payment"
                     />

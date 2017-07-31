@@ -29,7 +29,9 @@ class Modal extends React.Component {
                             </div>
                         </div>
                         <div
-                            className={`modal__body ${this.props.closeText ? '' : 'modal__body--no-footer'}`}
+                            className={`modal__body ${this.props.closeText
+                                ? ''
+                                : 'modal__body--no-footer'}`}
                         >
                             {this.props.children()}
                         </div>

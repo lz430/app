@@ -46,7 +46,7 @@
   }
 
   &__pricing-title-and-tabs {
-    background: lighten($color-sidebar-background-secondary, 46%);
+    background: $color-grey;
     padding: 15px 15px 0;
   }
 
@@ -58,7 +58,7 @@
   }
 
   &__pricing-body {
-    background: darken($color-background-primary, 4);
+    background: $color-sidebar-background-secondary-light;
     height: 100%;
   }
 
@@ -109,19 +109,23 @@
   }
 
   &__your-dmr-price-label {
-    align-self: flex-end;
+    align-self: center;
     color: $text-color-dark;
     flex: 1;
     font-size: .9rem;
   }
 
   &__your-dmr-price-amount {
-    align-self: flex-start;
+    align-self: center;
     color: $text-color-dark;
     float: right;
     font-size: 1.6rem;
     justify-self: flex-end;
     line-height: 2rem;
+  }
+
+  &__your-dmr-price-extra {
+    font-size: .9rem;
   }
 
   &__dmr-buttons {
@@ -251,5 +255,9 @@
 
   &__rebate-value {
     justify-self: flex-end;
+  }
+
+  &__selected-tab {
+    background: $color-sidebar-background-secondary-light;
   }
 }
