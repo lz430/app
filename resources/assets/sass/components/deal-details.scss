@@ -65,7 +65,7 @@
   &__msrp {
     color: $text-color-dark;
     font-size: .9rem;
-    padding: 10px 15px 5px 15px;
+    padding: 10px 15px 5px;
   }
 
   &__msrp-amount {
@@ -158,6 +158,7 @@
   &__thumbnail-image {
     height: 50px;
     margin: 5px;
+    min-width: 66px;
     width: 66px;
 
     &:first-child {
