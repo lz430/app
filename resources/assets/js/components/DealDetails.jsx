@@ -46,31 +46,6 @@ class DealDetails extends React.Component {
             finance_selected_term: null,
         };
 
-        this.renderThumbnailImage = this.renderThumbnailImage.bind(this);
-        this.renderLoginRegister = this.renderLoginRegister.bind(this);
-        this.selectCashTab = this.selectCashTab.bind(this);
-        this.selectFinanceTab = this.selectFinanceTab.bind(this);
-        this.selectLeaseTab = this.selectLeaseTab.bind(this);
-        this.renderDMRPrice = this.renderDMRPrice.bind(this);
-        this.renderYourDMRPrice = this.renderYourDMRPrice.bind(this);
-        this.renderCompareAndBuyNow = this.renderCompareAndBuyNow.bind(this);
-        this.startPurchaseFlow = this.startPurchaseFlow.bind(this);
-        this.requestFuelImages = this.requestFuelImages.bind(this);
-        this.requestRebates = this.requestRebates.bind(this);
-        this.renderRebates = this.renderRebates.bind(this);
-        this.renderRebate = this.renderRebate.bind(this);
-        this.renderSelectedTab = this.renderSelectedTab.bind(this);
-        this.toggleRebate = this.toggleRebate.bind(this);
-        this.getDMRPriceAfterRebates = this.getDMRPriceAfterRebates.bind(this);
-        this.updateLeaseTerm = this.updateLeaseTerm.bind(this);
-        this.updateLeaseAnnualMileage = this.updateLeaseAnnualMileage.bind(
-            this
-        );
-        this.updateLeaseDownPayment = this.updateLeaseDownPayment.bind(this);
-        this.updateFinanceTerm = this.updateFinanceTerm.bind(this);
-        this.updateFinanceDownPayment = this.updateFinanceDownPayment.bind(
-            this
-        );
         this.debouncedRequestLeaseTerms = debounce(this.requestLeaseTerms, 500);
         this.debouncedRequestFinanceTerms = debounce(
             this.requestFinanceTerms,
@@ -524,7 +499,7 @@ class DealDetails extends React.Component {
         return (
             <div className="deal-details__rebates">
                 {this.state.available_rebates
-                    ? this.getRebates().map(this.renderRebate)
+                    ? this.getRebates().map((rebate, index) => this.renderRebate(rebate, index))
                     : ''}
             </div>
         );
@@ -589,8 +564,8 @@ class DealDetails extends React.Component {
                         financeTerms={this.state.finance_terms}
                         financeTerm={this.state.finance_term}
                         financeDownPayment={this.state.finance_down_payment}
-                        updateFinanceDownPayment={this.updateFinanceDownPayment}
-                        updateFinanceTerm={this.updateFinanceTerm}
+                        updateFinanceDownPayment={(downPayment) => this.updateFinanceDownPayment(downPayment)}
+                        updateFinanceTerm={(term) => this.updateFinanceTerm(term)}
                     />
                 );
             case 'lease':
@@ -600,9 +575,9 @@ class DealDetails extends React.Component {
                         leaseTerms={this.state.lease_terms}
                         leaseTerm={this.state.lease_term}
                         leaseDownPayment={this.state.lease_down_payment}
-                        updateLeaseAnnualMileage={this.updateLeaseAnnualMileage}
-                        updateLeaseDownPayment={this.updateLeaseDownPayment}
-                        updateLeaseTerm={this.updateLeaseTerm}
+                        updateLeaseAnnualMileage={(annual_mileage) => this.updateLeaseAnnualMileage(annual_mileage)}
+                        updateLeaseDownPayment={(downPayment) => this.updateLeaseDownPayment(downPayment)}
+                        updateLeaseTerm={(term) => this.updateLeaseTerm(term)}
                     />
                 );
         }
@@ -617,7 +592,7 @@ class DealDetails extends React.Component {
                     <div className="deal-details__images">
                         {this.renderFeaturedImage()}
                         <div className="deal-details__thumbnail-images">
-                            {this.allImages().map(this.renderThumbnailImage)}
+                            {this.allImages().map((image, index) => this.renderThumbnailImage(image, index))}
                         </div>
                     </div>
 
@@ -666,19 +641,19 @@ class DealDetails extends React.Component {
                         <div className="tabs tabs--no-bottom-border">
                             <div
                                 className={`tabs__tab ${this.state.selectedTab === 'cash' ? 'tabs__tab--selected' : ''}`}
-                                onClick={this.selectCashTab}
+                                onClick={() => this.selectCashTab()}
                             >
                                 Cash
                             </div>
                             <div
                                 className={`tabs__tab ${this.state.selectedTab === 'finance' ? 'tabs__tab--selected' : ''}`}
-                                onClick={this.selectFinanceTab}
+                                onClick={() => this.selectFinanceTab()}
                             >
                                 Finance
                             </div>
                             <div
                                 className={`tabs__tab ${this.state.selectedTab === 'lease' ? 'tabs__tab--selected' : ''}`}
-                                onClick={this.selectLeaseTab}
+                                onClick={() => this.selectLeaseTab()}
                             >
                                 Lease
                             </div>
@@ -686,7 +661,7 @@ class DealDetails extends React.Component {
                     </div>
 
                     <div className="deal-details__selected-tab">
-                        {this.renderSelectedTab()}
+                        {window.user ? this.renderSelectedTab() : ''}
                     </div>
 
                     <div className="deal-details__pricing-body">
