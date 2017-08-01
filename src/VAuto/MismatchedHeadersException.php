@@ -1,6 +1,6 @@
 <?php
 
-namespace DeliverMyRide\Vauto;
+namespace DeliverMyRide\VAuto;
 
 use Exception;
 
