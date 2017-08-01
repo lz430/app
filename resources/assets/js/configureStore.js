@@ -14,12 +14,15 @@ import util from 'src/util';
 const urlStyle = util.getInitialBodyStyleFromUrl();
 
 const initialState = {
+    /** Version **/
+    0: '<- increment the number to purge LocalStorage',
+    /** End Version **/
     window: { width: window.innerWidth },
     smallFiltersShown: false,
     showMakeSelectorModal: true,
     selectedStyles: urlStyle ? [urlStyle] : [],
     bodyStyles: null,
-    fuelTypes: ['Gasoline', 'Flex Fuel', 'Diesel'],
+    fuelTypes: ['Gasoline', 'Flex Fuel', 'Diesel', 'Hybrid'],
     transmissionTypes: ['automatic', 'manual'],
     selectedTransmissionType: null,
     selectedFuelType: null,
