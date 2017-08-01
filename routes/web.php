@@ -14,6 +14,8 @@ Route::group(['middleware' => 'auth'], function () {
     /** Purchase Flow */
     Route::post('apply-or-purchase', 'ApplyOrPurchaseController@applyOrPurchase')->name('applyOrPurchase');
     Route::post('purchase', 'ApplyOrPurchaseController@purchase')->name('purchase');
+    Route::get('thank-you', 'ApplyOrPurchaseController@thankYou')->name('thank-you');
+    
     Route::get('apply', 'ApplyOrPurchaseController@viewApply')->name('viewApply');
     Route::post('apply', 'ApplyOrPurchaseController@apply')->name('apply');
 });

@@ -32,6 +32,13 @@ class Deal extends Model
     {
         return $this->belongsToMany(Feature::class)->hasGroup();
     }
+    
+    public function featuredPhoto()
+    {
+        return ($this->photos && $this->photos->first())
+            ? $this->photos->first()
+            : null;
+    }
 
     public static function allFuelTypes()
     {
