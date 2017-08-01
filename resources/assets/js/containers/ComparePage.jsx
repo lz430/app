@@ -303,6 +303,12 @@ class ComparePage extends React.Component {
     render() {
         return (
             <div className="compare-page">
+                <a href="/filter">
+                    <SVGInline
+                    width="10px"
+                    svg={zondicons['cheveron-left']}/>
+                    Back to Results
+                </a>
                 {this.state.selectedDeal ? this.renderSelectedDealModal() : ''}
                 <div className="compare-page-title-bar__title">
                     Vehicle Comparison
