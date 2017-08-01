@@ -303,7 +303,7 @@ class ComparePage extends React.Component {
     render() {
         return (
             <div className="compare-page">
-                <a href="filter">
+                <a href="/filter">
                     <SVGInline
                     width="10px"
                     svg={zondicons['cheveron-left']}/>
