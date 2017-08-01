@@ -26418,7 +26418,7 @@ var Financing = function (_Component) {
                         ),
                         _react2.default.createElement(
                             'form',
-                            { name: 'purchase', method: 'post', action: '/purchase' },
+                            { name: 'purchase', method: 'post', action: 'purchase' },
                             _react2.default.createElement('input', {
                                 type: 'hidden',
                                 name: '_token',
@@ -26428,6 +26428,11 @@ var Financing = function (_Component) {
                                 type: 'hidden',
                                 name: 'purchase_id',
                                 value: DeliverMyRide.purchase.id
+                            }),
+                            _react2.default.createElement('input', {
+                                type: 'hidden',
+                                name: 'method',
+                                value: 'cash'
                             }),
                             _react2.default.createElement(
                                 'a',

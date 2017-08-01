@@ -81,22 +81,17 @@ class ApplyOrPurchaseController extends Controller
     {
         try {
             $this->validate(request(), [
-                'purchase_id' => 'required|exists:purchases,id'
+                'purchase_id' => 'required|exists:purchases,id',
+                'method' => 'string',
             ]);
 
             $purchase = Purchase::findOrFail(request('purchase_id'));
-
-            $photo = ($purchase->deal->photos && $purchase->deal->photos->first())
-                ? $purchase->deal->photos->first()
-                : null;
 
             /**
              * Disallow changing completed_at
              */
             if ($purchase->completed_at) {
-                return view('purchase')
-                    ->with('purchase', $purchase)
-                    ->with('photo', $photo);
+                return redirect()->route('thank-you', ['method' => request('method')]);
             }
 
             /**
@@ -115,10 +110,8 @@ class ApplyOrPurchaseController extends Controller
             } catch (Exception $exception) {
                 Bugsnag::notifyException($exception);
             }
-
-            return view('purchase')
-                ->with('purchase', $purchase)
-                ->with('photo', $photo);
+    
+            return redirect()->route('thank-you', ['method' => request('method')]);
         } catch (ValidationException | ModelNotFoundException $e) {
             return abort(404);
         }
@@ -157,5 +150,16 @@ class ApplyOrPurchaseController extends Controller
         } catch (ValidationException | ModelNotFoundException $e) {
             return abort(404);
         }
+    }
+    
+    public function thankYou()
+    {
+        if (! $lastPurchase = auth()->user()->purchases->last()) {
+            return redirect()->route('home');
+        }
+
+        $photo = $lastPurchase->deal->featuredPhoto();
+        
+        return view('thank-you')->with(['purchase' => $lastPurchase, 'photo' => $photo]);
     }
 }

@@ -28,7 +28,7 @@ class Financing extends Component {
                     <div className="financing__header">
                         <div className="financing__title">Financing</div>
 
-                        <form name="purchase" method="post" action="/purchase">
+                        <form name="purchase" method="post" action="purchase">
                             <input
                                 type="hidden"
                                 name="_token"
@@ -38,6 +38,11 @@ class Financing extends Component {
                                 type="hidden"
                                 name="purchase_id"
                                 value={DeliverMyRide.purchase.id}
+                            />
+                            <input
+                                type="hidden"
+                                name="method"
+                                value="cash"
                             />
                             <a
                                 onClick={() => document.purchase.submit()}
