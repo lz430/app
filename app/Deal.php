@@ -18,6 +18,11 @@ class Deal extends Model
         return $this->belongsToMany(Version::class);
     }
 
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class);
+    }
+
     public function options()
     {
         return $this->hasMany(DealOption::class);
