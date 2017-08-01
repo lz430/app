@@ -34,7 +34,7 @@
 
                 <div class="nav__links">
                     <!-- Authentication Links -->
-                    @if (! request()->is('login') && auth()->check())
+                    @if (! request()->is('login') && auth()->check() && ! request()->routeIs('home'))
                         <form name="logout" action="/logout" method="post">
                             {{ csrf_field() }}
                             <button class="nav__button nav__button--blue nav__button--small nav__button--no-border">Logout</button>
