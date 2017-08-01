@@ -67,7 +67,7 @@ class Client
         return json_decode(
             (string) $this->guzzleClient->request('GET', "versions/$vehicleId")->getBody(),
             true
-        )['results'];
+        );
     }
 
     public function modelsVersionsByModelName($modelName)
