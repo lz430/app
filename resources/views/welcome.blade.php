@@ -3,6 +3,11 @@
 @section('title', 'Deliver My Ride')
 
 @section('content')
+    @if (session('status'))
+        <div class="password-reset__message password-reset__message--centered">
+            {{ session('status') }}
+        </div>
+    @endif
     <div class="section">
         <div class="welcome__top"></div>
         <div class="section__title">

@@ -34,8 +34,8 @@
 
                         @if ($errors->has('email'))
                             <span class="password-reset__error">
-                                    <strong>{{ $errors->first('email') }}</strong>
-                                </span>
+                                <strong>{{ $errors->first('email') }}</strong>
+                            </span>
                         @endif
                     </div>
                 </div>
