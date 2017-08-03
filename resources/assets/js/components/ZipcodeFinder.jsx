@@ -55,7 +55,7 @@ class ZipcodeFinder extends React.Component {
         return (
             <div className="zipcode-finder">
                 <div className="zipcode-finder__info">
-                    <div>Zip Code</div>
+                    <div>{this.props.city ? '' : 'Zip Code'}</div>
                     {this.state.editing
                         ? <form onSubmit={this.saveZip}>
                               <input
@@ -74,9 +74,7 @@ class ZipcodeFinder extends React.Component {
                               />
                           </form>
                         : <div className="zipcode-finder__zipcode">
-                              {this.props.zipcode
-                                  ? this.props.zipcode
-                                  : '_____'}
+                            {this.props.city || this.props.zipcode || '_____'}
                           </div>}
                 </div>
                 <div className="zipcode-finder__buttons">
@@ -113,7 +111,7 @@ class ZipcodeFinder extends React.Component {
                               onClick={this.toggleEditing}
                               className="zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg"
                           >
-                              Update Zip
+                              Change Zip
                           </button>}
                 </div>
             </div>
@@ -123,11 +121,13 @@ class ZipcodeFinder extends React.Component {
 
 ZipcodeFinder.propTypes = {
     zipcode: PropTypes.string,
+    city: PropTypes.string,
 };
 
 const mapStateToProps = state => {
     return {
         zipcode: state.zipcode,
+        city: state.city,
     };
 };
 

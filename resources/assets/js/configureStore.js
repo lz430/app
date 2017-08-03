@@ -39,6 +39,7 @@ const initialState = {
     sortAscending: true,
     compareList: [],
     zipcode: null,
+    city: null,
 };
 
 export default () => {

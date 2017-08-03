@@ -312,7 +312,7 @@ export function setZipCode(zipcode) {
 
         dispatch({
             type: ActionTypes.SET_ZIP_CODE,
-            zipcode: zipcode,
+            zipcode,
         });
     };
 }
@@ -344,6 +344,7 @@ export function requestLocationInfo() {
 export function receiveLocationInfo(data) {
     return (dispatch, getState) => {
         const zipcode = data.zip_code;
+        const city = data.city;
 
         api
             .getDeals(
@@ -358,6 +359,7 @@ export function receiveLocationInfo(data) {
         dispatch({
             type: ActionTypes.RECEIVE_LOCATION_INFO,
             zipcode,
+            city,
         });
     };
 }
