@@ -2885,6 +2885,7 @@ function requestLocationInfo() {
 function receiveLocationInfo(data) {
     return function (dispatch, getState) {
         var zipcode = data.zip_code;
+        var city = data.city;
 
         _api2.default.getDeals(withStateDefaults(getState(), {
             zipcode: zipcode
@@ -2894,7 +2895,8 @@ function receiveLocationInfo(data) {
 
         dispatch({
             type: ActionTypes.RECEIVE_LOCATION_INFO,
-            zipcode: zipcode
+            zipcode: zipcode,
+            city: city
         });
     };
 }
@@ -25563,7 +25565,7 @@ var ZipcodeFinder = function (_React$Component) {
                     _react2.default.createElement(
                         'div',
                         null,
-                        'Zip Code'
+                        this.props.city ? '' : 'Zip Code'
                     ),
                     this.state.editing ? _react2.default.createElement(
                         'form',
@@ -25579,7 +25581,7 @@ var ZipcodeFinder = function (_React$Component) {
                     ) : _react2.default.createElement(
                         'div',
                         { className: 'zipcode-finder__zipcode' },
-                        this.props.zipcode ? this.props.zipcode : '_____'
+                        this.props.city || this.props.zipcode || '_____'
                     )
                 ),
                 _react2.default.createElement(
@@ -25622,7 +25624,7 @@ var ZipcodeFinder = function (_React$Component) {
                             onClick: this.toggleEditing,
                             className: 'zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg'
                         },
-                        'Update Zip'
+                        'Change Zip'
                     )
                 )
             );
@@ -25633,12 +25635,14 @@ var ZipcodeFinder = function (_React$Component) {
 }(_react2.default.Component);
 
 ZipcodeFinder.propTypes = {
-    zipcode: _propTypes2.default.string
+    zipcode: _propTypes2.default.string,
+    city: _propTypes2.default.string
 };
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
-        zipcode: state.zipcode
+        zipcode: state.zipcode,
+        city: state.city
     };
 };
 
@@ -25702,7 +25706,8 @@ var initialState = {
     sortColumn: 'price',
     sortAscending: true,
     compareList: [],
-    zipcode: null
+    zipcode: null,
+    city: null
 };
 
 exports.default = function () {
@@ -26598,11 +26603,13 @@ var reducer = function reducer(state, action) {
             });
         case ActionTypes.SET_ZIP_CODE:
             return Object.assign({}, state, {
-                zipcode: action.zipcode
+                zipcode: action.zipcode,
+                city: null
             });
         case ActionTypes.RECEIVE_LOCATION_INFO:
             return Object.assign({}, state, {
-                zipcode: action.zipcode
+                zipcode: action.zipcode,
+                city: action.city
             });
     }
 

@@ -119,10 +119,12 @@ const reducer = (state, action) => {
         case ActionTypes.SET_ZIP_CODE:
             return Object.assign({}, state, {
                 zipcode: action.zipcode,
+                city: null,
             });
         case ActionTypes.RECEIVE_LOCATION_INFO:
             return Object.assign({}, state, {
                 zipcode: action.zipcode,
+                city: action.city,
             });
     }
 
