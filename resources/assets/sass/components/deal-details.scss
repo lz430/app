@@ -5,15 +5,16 @@
 .deal-details {
   display: flex;
   flex-direction: column;
-  max-width: 100%;
+  margin: 0 auto;
+  max-width: $break-large;
 
-  @media (min-width: $break-medium) {
+  @media (min-width: $break-large) {
     flex-direction: row;
   }
 
   &__images-and-information {
-    @media (min-width: $break-medium) {
-      width: $break-medium * .6;
+    @media (min-width: $break-large) {
+      width: $break-large * .6;
     }
   }
 
@@ -40,8 +41,8 @@
     display: flex;
     flex-direction: column;
 
-    @media (min-width: $break-medium) {
-      width: $break-medium * .4;
+    @media (min-width: $break-large) {
+      width: $break-large * .4;
     }
   }
 

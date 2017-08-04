@@ -8,6 +8,7 @@ use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
 use App\Mail\DealPurchasedUser;
 use App\Purchase;
+use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Carbon\Carbon;
 use DeliverMyRide\HubSpot\Client;
 use Exception;

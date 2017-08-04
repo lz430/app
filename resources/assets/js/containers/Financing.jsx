@@ -39,11 +39,7 @@ class Financing extends Component {
                                 name="purchase_id"
                                 value={DeliverMyRide.purchase.id}
                             />
-                            <input
-                                type="hidden"
-                                name="method"
-                                value="cash"
-                            />
+                            <input type="hidden" name="method" value="cash" />
                             <a
                                 onClick={() => document.purchase.submit()}
                                 className="financing__cash"

@@ -89,7 +89,7 @@ class Deal extends React.Component {
 
                 <div className="deal__basic-info">
                     <div
-                        onClick={this.props.selectDeal.bind(null, deal)}
+                        onClick={() => (window.location = `/deals/${deal.id}`)}
                         className="deal__basic-info-year-and-model"
                     >
                         {`${deal.year} ${deal.make} ${deal.model}`}
@@ -101,7 +101,7 @@ class Deal extends React.Component {
 
                 <div className="deal__buttons">
                     <button
-                        onClick={this.props.selectDeal.bind(null, deal)}
+                        onClick={() => (window.location = `/deals/${deal.id}`)}
                         className="deal__button deal__button--small deal__button--blue deal__button"
                     >
                         View Details

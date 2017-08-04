@@ -39,6 +39,6 @@ class PurchaseEmailsTest extends TestCase
             return $mailable->hasTo('test@example.com');
         });
 
-        $response->assertSeeText('Thanks');
+        $response->assertSeeText('thank-you');
     }
 }

@@ -6,7 +6,7 @@
             <div class="section__title-icon">
                 {!! file_get_contents(resource_path("assets/svg/zondicons/checkmark-outline.svg")) !!}
             </div>
-            Thanks you for your purchase!
+            Thank you for your purchase!
 
             <div class="section__title section__title--small section__title--constrict-extra-small">
                 We'll get in touch with you soon to work out delivery and payment details
