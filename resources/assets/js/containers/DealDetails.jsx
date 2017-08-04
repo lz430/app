@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import R from 'ramda';
-import { connect } from 'react-redux';
-import * as Actions from 'actions/index';
 import util from 'src/util';
 import fuelapi from 'src/fuelapi';
 import fuelcolor from 'src/fuel-color-map';
@@ -13,13 +11,17 @@ import { toggleRebate } from 'src/rebates';
 import Lease from 'components/Lease';
 import debounce from 'lodash.debounce';
 import Finance from 'components/Finance';
+import localStorageSync from 'src/localStorageSync';
 
 class DealDetails extends React.Component {
     constructor(props) {
         super(props);
-        this._isMounted = false;
 
         this.state = {
+            // Synced Data
+            compareList: localStorageSync.read('compareList'),
+            zipcode: localStorageSync.read('zipcode'),
+            // Component State
             featuredImage: props.deal.photos[0],
             fuelExternalImages: [],
             fuelInternalImages: [],
@@ -55,35 +57,26 @@ class DealDetails extends React.Component {
     }
 
     componentDidMount() {
-        this._isMounted = true;
         this.requestFuelImages(this.props.deal);
 
-        if (this.props.zipcode) {
+        if (this.state.zipcode) {
             this.requestRebates();
             this.requestFinanceTerms(this.props.deal);
             this.requestLeaseTerms(this.props.deal);
         }
     }
 
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
-
     requestLeaseTerms() {
         api
             .getLeaseTerms(
                 this.props.deal.vin,
-                this.props.zipcode,
+                this.state.zipcode,
                 this.state.lease_annual_mileage,
                 this.state.lease_down_payment,
                 this.props.deal.msrp,
                 this.getDMRPriceAfterRebates()
             )
             .then(response => {
-                if (!this._isMounted) {
-                    return;
-                }
-
                 this.setState({
                     lease_terms: response.data,
                     lease_term: R.propOr(null, 'term', response.data[0]),
@@ -98,16 +91,12 @@ class DealDetails extends React.Component {
         api
             .getFinanceTerms(
                 this.props.deal.vin,
-                this.props.zipcode,
+                this.state.zipcode,
                 this.state.finance_down_payment,
                 this.props.deal.msrp,
                 this.getDMRPriceAfterRebates()
             )
             .then(response => {
-                if (!this._isMounted) {
-                    return false;
-                }
-
                 this.setState({
                     finance_terms: response.data,
                     finance_term: R.propOr(null, 'term', response.data[0]),
@@ -141,12 +130,8 @@ class DealDetails extends React.Component {
 
     requestRebates() {
         api
-            .getRebates(this.props.zipcode, this.props.deal.vin, [])
+            .getRebates(this.state.zipcode, this.props.deal.vin, [])
             .then(response => {
-                if (!this._isMounted) {
-                    return;
-                }
-
                 const rebate_ids = R.map(R.prop('id'), response.data.rebates);
 
                 this.setState({
@@ -181,10 +166,6 @@ class DealDetails extends React.Component {
             )).data[0].id || false;
 
         if (!vehicleId) return;
-
-        if (!this._isMounted) {
-            return;
-        }
 
         try {
             const externalImages = this.extractFuelImages(
@@ -393,9 +374,20 @@ class DealDetails extends React.Component {
         }
     }
 
+    toggleCompare(deal) {
+        this.setState(
+            {
+                compareList: util.toggleItem(this.state.compareList, deal),
+            },
+            () => {
+                localStorageSync.write('compareList', this.state.compareList);
+            }
+        );
+    }
+
     renderCompareAndBuyNow() {
         const deal = this.props.deal;
-        const isBeingCompared = R.contains(deal, this.props.compareList);
+        const isBeingCompared = R.contains(deal, this.state.compareList);
         const compareClass = `deal-details__dmr-button deal-details__dmr-button--small deal-details__dmr-button--${isBeingCompared
             ? 'blue'
             : 'white'}`;
@@ -404,7 +396,7 @@ class DealDetails extends React.Component {
             <div className="deal-details__dmr-buttons">
                 <button
                     className={compareClass}
-                    onClick={this.props.toggleCompare.bind(null, deal)}
+                    onClick={this.toggleCompare.bind(this, deal)}
                 >
                     Compare
                 </button>
@@ -777,14 +769,6 @@ DealDetails.propTypes = {
         vin: PropTypes.string.isRequired,
     }),
     intendedRoute: PropTypes.string.isRequired,
-};
-
-const mapStateToProps = state => {
-    return {
-        deal: state.selectedDeal,
-        compareList: state.compareList,
-        zipcode: state.zipcode,
-    };
 };
 
 export default DealDetails;
