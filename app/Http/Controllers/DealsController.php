@@ -6,11 +6,13 @@ use App\Deal;
 use App\Transformers\DealTransformer;
 use League\Fractal\Serializer\DataArraySerializer;
 
-class DealController extends Controller
+class DealsController extends Controller
 {
     public function show(int $id)
     {
-        $deal = Deal::findOrFail($id);
+        $deal = Deal::with('features')->with(['photos' => function ($query) {
+            $query->orderBy('id');
+        },])->findOrFail($id);
 
         $dealTransformed = fractal($deal)
             ->transformWith(DealTransformer::class)

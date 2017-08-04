@@ -36,7 +36,6 @@ class DealsController extends BaseAPIController
         $dealsQuery = $this->filterQueryByTransmissionType($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByFeatures($dealsQuery, $request);
         $dealsQueryCopy = clone $dealsQuery;
-        $dealsQuery = $this->eagerLoadIncludes($dealsQuery, $request);
         $dealsQuery = Sort::sortQuery($dealsQuery, $request->get('sort', 'price'));
 
         $deals = $dealsQuery->paginate(15);
@@ -60,15 +59,6 @@ class DealsController extends BaseAPIController
                 )->select('feature')->distinct()->pluck('feature'),
             ])
             ->respond();
-    }
-
-    private function eagerLoadIncludes(Builder $query, Request $request) : Builder
-    {
-        if (in_array('features', $request->get('includes', []))) {
-            $query->with('features');
-        }
-
-        return $query;
     }
 
     private function filterQueryByLocationDistance(Builder $query, Request $request) : Builder
@@ -106,7 +96,7 @@ class DealsController extends BaseAPIController
             });
         })->whereNotNull('price')->whereNotNull('msrp')->with(['photos' => function ($query) {
             $query->orderBy('id');
-        },]);
+        },])->with('features');
     }
 
     private function filterQueryByTransmissionType(Builder $query, Request $request) : Builder
