@@ -3,7 +3,6 @@ import R from 'ramda';
 import Modal from 'components/Modal';
 import MakeSelector from 'components/MakeSelector';
 import Deals from 'components/Deals';
-import { connected as DealDetails } from 'components/DealDetails';
 import Sortbar from 'components/Sortbar';
 import Filterbar from 'components/Filterbar';
 import Comparebar from 'components/Comparebar';
@@ -22,22 +21,6 @@ class FilterPage extends React.Component {
                 closeText="Show available vehicles"
             >
                 {() => <MakeSelector />}
-            </Modal>
-        );
-    }
-
-    renderSelectedDealModal() {
-        return (
-            <Modal
-                onClose={this.props.clearSelectedDeal}
-                title={this.props.selectedDeal.model}
-                subtitle={
-                    this.props.selectedDeal.year +
-                    ' ' +
-                    this.props.selectedDeal.make
-                }
-            >
-                {() => <DealDetails intendedRoute="filter" />}
             </Modal>
         );
     }
@@ -96,8 +79,6 @@ class FilterPage extends React.Component {
                     : ''}
 
                 {this.props.deals ? this.renderFilterPanelAndDeals() : ''}
-
-                {this.props.selectedDeal ? this.renderSelectedDealModal() : ''}
             </div>
         );
     }

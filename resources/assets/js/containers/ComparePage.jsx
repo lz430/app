@@ -6,7 +6,6 @@ import util from 'src/util';
 import R from 'ramda';
 import qs from 'qs';
 import Modal from 'components/Modal';
-import { raw as DealDetails } from 'components/DealDetails';
 
 class ComparePage extends React.Component {
     constructor(props) {
@@ -14,7 +13,6 @@ class ComparePage extends React.Component {
         this.state = {
             deals: props.deals,
             dealIndex: 0,
-            selectedDeal: null,
             zipcode: R.prop(
                 'zipcode',
                 qs.parse(window.location.search.slice(1))
@@ -26,7 +24,6 @@ class ComparePage extends React.Component {
         this.slideLeft = this.slideLeft.bind(this);
         this.slideRight = this.slideRight.bind(this);
         this.dealClass = this.dealClass.bind(this);
-        this.closeModal = this.closeModal.bind(this);
         this.intendedRoute = this.intendedRoute.bind(this);
     }
 
@@ -129,14 +126,6 @@ class ComparePage extends React.Component {
         return className;
     }
 
-    selectDeal(deal) {
-        this.setState({ selectedDeal: deal });
-    }
-
-    closeModal() {
-        this.setState({ selectedDeal: null });
-    }
-
     intendedRoute() {
         return encodeURIComponent(
             `compare?${this.state.deals
@@ -147,32 +136,6 @@ class ComparePage extends React.Component {
         );
     }
 
-    renderSelectedDealModal() {
-        return (
-            <Modal
-                onClose={this.closeModal}
-                title={this.state.selectedDeal.model}
-                subtitle={
-                    this.state.selectedDeal.year +
-                    ' ' +
-                    this.state.selectedDeal.make
-                }
-            >
-                {() =>
-                    <DealDetails
-                        deal={this.state.selectedDeal}
-                        compareList={this.state.deals}
-                        intendedRoute={this.intendedRoute()}
-                        toggleCompare={() => {
-                            this.removeDeal(this.state.selectedDeal);
-                            this.closeModal();
-                        }}
-                        zipcode={this.state.zipcode}
-                    />}
-            </Modal>
-        );
-    }
-
     renderDeal(deal, index) {
         return (
             <div key={index} className={this.dealClass(index)}>
@@ -180,7 +143,7 @@ class ComparePage extends React.Component {
 
                 <div className="compare-deal__buttons">
                     <button
-                        onClick={this.selectDeal.bind(this, deal)}
+                        onClick={() => (window.location = `/deals/${deal.id}`)}
                         className="compare-deal__button compare-deal__button--small"
                     >
                         View Details
@@ -307,7 +270,6 @@ class ComparePage extends React.Component {
                     <SVGInline width="10px" svg={zondicons['cheveron-left']} />
                     Back to Results
                 </a>
-                {this.state.selectedDeal ? this.renderSelectedDealModal() : ''}
                 <div className="compare-page-title-bar__title">
                     Vehicle Comparison
                 </div>

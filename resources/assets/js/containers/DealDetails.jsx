@@ -12,7 +12,7 @@ import zondicons from 'zondicons';
 import { toggleRebate } from 'src/rebates';
 import Lease from 'components/Lease';
 import debounce from 'lodash.debounce';
-import Finance from './Finance';
+import Finance from 'components/Finance';
 
 class DealDetails extends React.Component {
     constructor(props) {
@@ -777,7 +777,6 @@ DealDetails.propTypes = {
         vin: PropTypes.string.isRequired,
     }),
     intendedRoute: PropTypes.string.isRequired,
-    toggleCompare: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
@@ -788,7 +787,4 @@ const mapStateToProps = state => {
     };
 };
 
-const connected = connect(mapStateToProps, Actions)(DealDetails);
-const raw = DealDetails;
-
-export { connected, raw };
+export default DealDetails;

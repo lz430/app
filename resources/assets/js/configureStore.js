@@ -27,7 +27,6 @@ const initialState = {
     selectedTransmissionType: null,
     selectedFuelType: null,
     selectedMakes: [],
-    selectedDeal: null,
     selectedFeatures: [],
     features: null,
     makes: null,
