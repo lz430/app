@@ -3,13 +3,14 @@
 namespace App;
 
 use App\JATO\Version;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\JoinClause;
-use Illuminate\Support\Facades\DB;
 
 class Deal extends Model
 {
+    const HOLD_HOURS = 48;
+    
     protected $guarded = [];
     protected $dates = ['inventory_date'];
 
@@ -112,5 +113,12 @@ class Deal extends Model
             'not like',
             '%cvt%'
         );
+    }
+    
+    public function scopeForSale(Builder $query) : Builder
+    {
+        return $query->whereDoesntHave('purchases', function (Builder $q) {
+            $q->where('completed_at', '>=', Carbon::now()->subHours(self::HOLD_HOURS));
+        });
     }
 }

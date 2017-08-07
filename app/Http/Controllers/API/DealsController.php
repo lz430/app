@@ -96,7 +96,7 @@ class DealsController extends BaseAPIController
             });
         })->whereNotNull('price')->whereNotNull('msrp')->with(['photos' => function ($query) {
             $query->orderBy('id');
-        },])->with('features');
+        },])->with('features')->forSale();
     }
 
     private function filterQueryByTransmissionType(Builder $query, Request $request) : Builder
