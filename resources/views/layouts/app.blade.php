@@ -91,8 +91,8 @@
         @show
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}"></script>
+        @stack('scripts')
         @if (App::environment(['staging', 'production']))
-            @stack('scripts')
 
             <!-- Start of HubSpot Embed Code -->
             <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/3388780.js"></script>
