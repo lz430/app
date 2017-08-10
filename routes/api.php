@@ -27,3 +27,7 @@ Route::get('finance', 'FinanceController@getTerms')->name('finance.getTerms');
 Route::group(['middleware' => 'auth:api'], function () {
     Route::patch('users/{user}', 'UsersController@update')->name('users.update');
 });
+
+Route::group(['prefix' => 'webhook'], function () {
+    Route::post('route-one', 'RouteOneWebhookController@handleWebhook')->name('route-one-webhook');
+});
