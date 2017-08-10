@@ -12,7 +12,7 @@
   &__info {
     align-content: center;
     display: flex;
-    flex: 1;
+    flex: 3;
     flex-flow: column nowrap;
     justify-content: space-between;
   }
@@ -39,12 +39,14 @@
   &__buttons {
     align-items: center;
     display: flex;
+    flex: 2;
     justify-content: flex-end;
-    width: 70%;
   }
 
   &__button {
     @include button;
+    font-size: .5rem;
+
     &:first-child {
       margin-right: 5px;
     }

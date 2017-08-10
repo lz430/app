@@ -26251,8 +26251,8 @@ var FilterPage = function (_React$Component) {
                 _react2.default.createElement(_Sortbar2.default, null),
                 _react2.default.createElement(_Filterbar2.default, null),
                 this.props.deals.length ? _react2.default.createElement(_Deals2.default, null) : _react2.default.createElement(
-                    'p',
-                    null,
+                    'div',
+                    { className: 'filter-page__no-results' },
                     'No Results'
                 ),
                 _react2.default.createElement(_Comparebar2.default, null)
