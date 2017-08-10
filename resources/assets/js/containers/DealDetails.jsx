@@ -19,8 +19,8 @@ class DealDetails extends React.Component {
 
         this.state = {
             // Synced Data
-            compareList: localStorageSync.read('compareList'),
-            zipcode: localStorageSync.read('zipcode'),
+            compareList: localStorageSync.read('compareList') || [],
+            zipcode: localStorageSync.read('zipcode') || null,
             // Component State
             featuredImage: props.deal.photos[0],
             fuelExternalImages: [],

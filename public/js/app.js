@@ -25336,8 +25336,8 @@ var DealDetails = function (_React$Component) {
 
         _this.state = {
             // Synced Data
-            compareList: _localStorageSync2.default.read('compareList'),
-            zipcode: _localStorageSync2.default.read('zipcode'),
+            compareList: _localStorageSync2.default.read('compareList') || [],
+            zipcode: _localStorageSync2.default.read('zipcode') || null,
             // Component State
             featuredImage: props.deal.photos[0],
             fuelExternalImages: [],
