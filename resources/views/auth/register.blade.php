@@ -1,5 +1,20 @@
 @extends('layouts.app')
 
+@push('scripts')
+    @if (App::environment(['staging', 'production']))
+        <script type="text/javascript">
+            var button = document.getElementById('registerButton');
+            button.addEventListener(
+                'click',
+                function() {
+                    fbq('track', 'CompleteRegistration', {});
+                },
+                false
+            );
+        </script>
+    @endif
+@endpush
+
 @section('content')
     @section('nav')
     @endsection
@@ -85,7 +100,7 @@
                 </div>
 
                 <div class="register__buttons">
-                    <button type="submit" class="register__button register__button--blue register__button--small">
+                    <button type="submit" id="registerButton" class="register__button register__button--blue register__button--small">
                         Create your account
                     </button>
                 </div>
