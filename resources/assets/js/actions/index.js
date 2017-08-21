@@ -195,7 +195,7 @@ export function toggleStyle(style) {
                 dispatch(receiveDeals(data));
             });
 
-        window.axios.post('/hubspot', { bodystyles1: selectedStyles.join() });
+        window.axios.post('/hubspot', { bodystyle1: selectedStyles.join() });
 
         dispatch({
             type: ActionTypes.TOGGLE_STYLE,
