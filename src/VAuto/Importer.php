@@ -158,6 +158,8 @@ class Importer
                      * all of that (checking for manufacturer -> make -> model as well).
                      */
                     if (! $version = Version::where('jato_vehicle_id', $jatoVersion['vehicleId'])->first()) {
+                        $this->saveEquipmentByVehicleId($jatoVersion['vehicleId']);
+                        
                         if (! $manufacturer = Manufacturer::where('name', $decoded['manufacturer'])->first()) {
                             // Save/Update manufacturer, make, model, then versions
                             $manufacturer = $this->saveManufacturer(
@@ -204,6 +206,18 @@ class Importer
         }
 
         Deal::where('file_hash', '!=', $fileHash)->whereDoesntHave('purchases')->delete();
+    }
+    
+    private function saveEquipmentByVehicleId(string $vehicleId)
+    {
+        $equipment = $this->client->equipmentByVehicleId($vehicleId);
+        foreach ($equipment['results'] as $result) {
+            try {
+                Equipment::create(['jato_vehicle_id' => $vehicleId, 'name' => $result['name']]);
+            } catch (QueryException $exception) {
+                // duplicate
+            }
+        }
     }
 
     private function saveVersionFeatures(Deal $deal, string $features)
