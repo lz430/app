@@ -7,7 +7,6 @@ import fuelcolor from 'src/fuel-color-map';
 import api from 'src/api';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
-import { toggleRebate } from 'src/rebates';
 import Lease from 'components/Lease';
 import debounce from 'lodash.debounce';
 import Finance from 'components/Finance';
