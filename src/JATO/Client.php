@@ -32,7 +32,7 @@ class Client
         return json_decode((string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId", [
             'query' => [
                 'zipCode' => $zipcode,
-                'category' => $this->categories[$category]
+                'category' => $this->categories[$category],
             ],
         ])->getBody(), true);
     }

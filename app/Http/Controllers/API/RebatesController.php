@@ -17,7 +17,7 @@ class RebatesController extends Controller
             'category' => 'required|string|in:cash,finance,lease',
             'zipcode' => 'required|string',
             'vin' => 'required|string',
-            'selected_rebate_ids' => 'array:int'
+            'selected_rebate_ids' => 'array:int',
         ]);
 
         $vin = request('vin');
