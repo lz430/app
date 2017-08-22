@@ -27,7 +27,6 @@ class DealDetails extends React.Component {
             selectedTab: 'cash',
             fallbackDealImage: '/images/dmr-logo.svg',
             available_rebates: null,
-            compatibilities: null,
             // Tab Rebate States
             compatible_rebate_ids_cash: null,
             compatible_rebate_ids_finance: null,
@@ -141,7 +140,6 @@ class DealDetails extends React.Component {
 
                 this.setState({
                     available_rebates: response.data.rebates,
-                    compatibilities: response.data.compatibilities,
                     compatible_rebate_ids_cash: rebate_ids,
                     compatible_rebate_ids_finance: rebate_ids,
                     compatible_rebate_ids_lease: rebate_ids,

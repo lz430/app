@@ -32,19 +32,17 @@ class Client
         return json_decode((string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId", [
             'query' => [
                 'zipCode' => $zipcode,
-                'category' => $this->categories[$category],
             ],
         ])->getBody(), true);
     }
 
-    public function incentivesByVehicleIdAndZipcodeWithSelected($category, $vehicleId, $zipcode, $selected)
+    public function incentivesByVehicleIdAndZipcodeWithSelected($vehicleId, $zipcode, $selected)
     {
         $first = array_first($selected);
 
         return json_decode((string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId/add/$first", [
             'query' => [
                 'zipCode' => $zipcode,
-                'category' => $this->categories[$category],
                 'addedPrograms' => implode(',', $selected),
             ],
         ])->getBody(), true);

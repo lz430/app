@@ -25306,8 +25306,6 @@ var _zondicons = __webpack_require__(37);
 
 var _zondicons2 = _interopRequireDefault(_zondicons);
 
-var _rebates = __webpack_require__(396);
-
 var _Lease = __webpack_require__(383);
 
 var _Lease2 = _interopRequireDefault(_Lease);
@@ -25353,7 +25351,6 @@ var DealDetails = function (_React$Component) {
             selectedTab: 'cash',
             fallbackDealImage: '/images/dmr-logo.svg',
             available_rebates: null,
-            compatibilities: null,
             // Tab Rebate States
             compatible_rebate_ids_cash: null,
             compatible_rebate_ids_finance: null,
@@ -25444,7 +25441,6 @@ var DealDetails = function (_React$Component) {
 
                 _this5.setState({
                     available_rebates: response.data.rebates,
-                    compatibilities: response.data.compatibilities,
                     compatible_rebate_ids_cash: rebate_ids,
                     compatible_rebate_ids_finance: rebate_ids,
                     compatible_rebate_ids_lease: rebate_ids
@@ -26625,84 +26621,7 @@ var localStorageSync = {
 exports.default = localStorageSync;
 
 /***/ }),
-/* 396 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.toggleRebate = exports.selectRebate = undefined;
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-var _ramda = __webpack_require__(18);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-var _util = __webpack_require__(27);
-
-var _util2 = _interopRequireDefault(_util);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var selectRebate = function selectRebate(rebate_id, selected_rebate_ids, available_rebate_ids, compatibilities) {
-    // if it is already in selectedRebateIds do nothing
-    if (_ramda2.default.contains(rebate_id, selected_rebate_ids)) {
-        return [selected_rebate_ids, available_rebate_ids];
-    }
-
-    var withThisRebateIds = _ramda2.default.concat(selected_rebate_ids, [rebate_id]);
-
-    var nextCompatibilities = [];
-    _ramda2.default.forEach(function (compatibleRebateIdsGroup) {
-        // if with this rebate id is still a subset of a compatibility group, add everything in that group
-        if (_ramda2.default.difference(withThisRebateIds, compatibleRebateIdsGroup).length === 0) {
-            // return new selected rebates and new compatibilityList
-            nextCompatibilities = _ramda2.default.uniq(_ramda2.default.concat(nextCompatibilities, compatibleRebateIdsGroup));
-        }
-    }, compatibilities);
-
-    if (nextCompatibilities.length > 0) {
-        return [_ramda2.default.append(rebate_id, selected_rebate_ids), nextCompatibilities];
-    } else {
-        // Not in any compatibility lists
-        if (withThisRebateIds.length === 1) {
-            return [[rebate_id], [rebate_id]];
-        }
-    }
-
-    // do nothing
-    return [selected_rebate_ids, available_rebate_ids];
-};
-
-var toggleRebate = function toggleRebate(rebate_id, selected_rebate_ids, available_rebate_ids, compatibilities) {
-    var next_selected_rebate_ids = _util2.default.toggleItem(selected_rebate_ids, rebate_id);
-
-    if (next_selected_rebate_ids.length === 0) {
-        return [next_selected_rebate_ids, available_rebate_ids];
-    } else {
-        var _R$reduce = _ramda2.default.reduce(function (carry, selected_rebate_id) {
-            var _carry = _slicedToArray(carry, 2),
-                carry_selected_rebate_ids = _carry[0],
-                carry_compatible_rebate_ids = _carry[1];
-
-            return selectRebate(selected_rebate_id, carry_selected_rebate_ids, carry_compatible_rebate_ids, compatibilities);
-        }, [[], available_rebate_ids], next_selected_rebate_ids),
-            _R$reduce2 = _slicedToArray(_R$reduce, 2),
-            _selected_rebate_ids = _R$reduce2[0],
-            compatible_rebate_ids = _R$reduce2[1];
-
-        return [_selected_rebate_ids, compatible_rebate_ids];
-    }
-};
-
-exports.selectRebate = selectRebate;
-exports.toggleRebate = toggleRebate;
-
-/***/ }),
+/* 396 */,
 /* 397 */
 /***/ (function(module, exports, __webpack_require__) {
 
