@@ -20,6 +20,16 @@ class FinanceController extends Controller
             'price' => 'required|numeric',
         ]);
 
+        /**
+         * Formula: EMI = ( P × r × (1+r)n ) / ((1+r)n − 1)
+         * EMI = Equated Monthly Installment
+         * P = Loan Amount - Down payment
+         * r = Annual Interest rate / 1200
+         * n = Term (Period or no.of year or months for loan repayment.)
+         */
+
+        $EMI = ((10000 - 1000) * (.04 / 1200) * ((1 + (.04 / 1200))^12)) / (((1+(.04 / 1200))^12) - 1);
+
         $terms = $client->getFinanceTerms(
             request('vin'),
             request('zipcode'),

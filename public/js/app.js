@@ -308,43 +308,45 @@ var emptyFunction = __webpack_require__(45);
 var warning = emptyFunction;
 
 if (true) {
-  var printWarning = function printWarning(format) {
-    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      args[_key - 1] = arguments[_key];
-    }
-
-    var argIndex = 0;
-    var message = 'Warning: ' + format.replace(/%s/g, function () {
-      return args[argIndex++];
-    });
-    if (typeof console !== 'undefined') {
-      console.error(message);
-    }
-    try {
-      // --- Welcome to debugging React ---
-      // This error was thrown as a convenience so that you can use this stack
-      // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) {}
-  };
-
-  warning = function warning(condition, format) {
-    if (format === undefined) {
-      throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
-    }
-
-    if (format.indexOf('Failed Composite propType: ') === 0) {
-      return; // Ignore CompositeComponent proptype check.
-    }
-
-    if (!condition) {
-      for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-        args[_key2 - 2] = arguments[_key2];
+  (function () {
+    var printWarning = function printWarning(format) {
+      for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        args[_key - 1] = arguments[_key];
       }
 
-      printWarning.apply(undefined, [format].concat(args));
-    }
-  };
+      var argIndex = 0;
+      var message = 'Warning: ' + format.replace(/%s/g, function () {
+        return args[argIndex++];
+      });
+      if (typeof console !== 'undefined') {
+        console.error(message);
+      }
+      try {
+        // --- Welcome to debugging React ---
+        // This error was thrown as a convenience so that you can use this stack
+        // to find the callsite that caused this warning to fire.
+        throw new Error(message);
+      } catch (x) {}
+    };
+
+    warning = function warning(condition, format) {
+      if (format === undefined) {
+        throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
+      }
+
+      if (format.indexOf('Failed Composite propType: ') === 0) {
+        return; // Ignore CompositeComponent proptype check.
+      }
+
+      if (!condition) {
+        for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+          args[_key2 - 2] = arguments[_key2];
+        }
+
+        printWarning.apply(undefined, [format].concat(args));
+      }
+    };
+  })();
 }
 
 module.exports = warning;
@@ -13012,9 +13014,10 @@ var api = {
             }
         });
     },
-    getRebates: function getRebates(zipcode, vin, selected_rebate_ids) {
+    getRebates: function getRebates(category, zipcode, vin, selected_rebate_ids) {
         return window.axios.get('/api/rebates', {
             params: {
+                category: category,
                 zipcode: zipcode,
                 vin: vin,
                 selected_rebate_ids: selected_rebate_ids
@@ -13859,11 +13862,18 @@ if(new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7){
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  * @typechecks
  */
@@ -25258,8 +25268,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(11);
@@ -25411,27 +25419,30 @@ var DealDetails = function (_React$Component) {
     }, {
         key: 'toggleRebate',
         value: function toggleRebate(rebate_id) {
-            var _setState;
+            var _this4 = this;
 
-            var _toggleRebate2 = (0, _rebates.toggleRebate)(rebate_id, this.state['selected_rebate_ids_' + this.state.selectedTab], _ramda2.default.map(_ramda2.default.prop('id'), this.state.available_rebates), this.state.compatibilities),
-                _toggleRebate3 = _slicedToArray(_toggleRebate2, 2),
-                next_selected_rebate_ids = _toggleRebate3[0],
-                available_rebate_ids = _toggleRebate3[1];
+            var next_selected_rebate_ids = _util2.default.toggleItem(this.state['selected_rebate_ids_' + this.state.selectedTab], rebate_id);
 
-            this.setState((_setState = {
-                lease_selected_term: null,
-                lease_terms: null
-            }, _defineProperty(_setState, 'selected_rebate_ids_' + this.state.selectedTab, next_selected_rebate_ids), _defineProperty(_setState, 'compatible_rebate_ids_' + this.state.selectedTab, available_rebate_ids), _setState), this.debouncedRequestLeaseTerms);
+            _api2.default.getRebates(this.state.selectedTab, this.state.zipcode, this.props.deal.vin, next_selected_rebate_ids).then(function (response) {
+                var _this4$setState;
+
+                var available_rebate_ids = _ramda2.default.filter(_ramda2.default.compose(_ramda2.default.not(), _ramda2.default.propEq('statusName', 'Excluded')), response.data.rebates);
+
+                _this4.setState((_this4$setState = {
+                    lease_selected_term: null,
+                    lease_terms: null
+                }, _defineProperty(_this4$setState, 'selected_rebate_ids_' + _this4.state.selectedTab, next_selected_rebate_ids), _defineProperty(_this4$setState, 'compatible_rebate_ids_' + _this4.state.selectedTab, available_rebate_ids), _this4$setState), _this4.debouncedRequestLeaseTerms);
+            });
         }
     }, {
         key: 'requestRebates',
         value: function requestRebates() {
-            var _this4 = this;
+            var _this5 = this;
 
-            _api2.default.getRebates(this.state.zipcode, this.props.deal.vin, []).then(function (response) {
+            _api2.default.getRebates(this.state.selectedTab, this.state.zipcode, this.props.deal.vin, []).then(function (response) {
                 var rebate_ids = _ramda2.default.map(_ramda2.default.prop('id'), response.data.rebates);
 
-                _this4.setState({
+                _this5.setState({
                     available_rebates: response.data.rebates,
                     compatibilities: response.data.compatibilities,
                     compatible_rebate_ids_cash: rebate_ids,
@@ -25590,19 +25601,19 @@ var DealDetails = function (_React$Component) {
     }, {
         key: 'getRebates',
         value: function getRebates() {
-            var _this5 = this;
+            var _this6 = this;
 
             return _ramda2.default.filter(function (rebate) {
-                return _ramda2.default.contains(_this5.state.selectedTab, rebate.types);
+                return _ramda2.default.contains(_this6.state.selectedTab, rebate.types);
             }, this.state.available_rebates);
         }
     }, {
         key: 'getSelectedRebates',
         value: function getSelectedRebates() {
-            var _this6 = this;
+            var _this7 = this;
 
             return _ramda2.default.filter(function (rebate) {
-                return _ramda2.default.contains(rebate.id, _this6.state['selected_rebate_ids_' + _this6.state.selectedTab]);
+                return _ramda2.default.contains(rebate.id, _this7.state['selected_rebate_ids_' + _this7.state.selectedTab]);
             }, this.state.available_rebates ? this.state.available_rebates : []);
         }
     }, {
@@ -25676,18 +25687,18 @@ var DealDetails = function (_React$Component) {
     }, {
         key: 'toggleCompare',
         value: function toggleCompare(deal) {
-            var _this7 = this;
+            var _this8 = this;
 
             this.setState({
                 compareList: _util2.default.toggleItem(this.state.compareList, deal)
             }, function () {
-                _localStorageSync2.default.write('compareList', _this7.state.compareList);
+                _localStorageSync2.default.write('compareList', _this8.state.compareList);
             });
         }
     }, {
         key: 'renderCompareAndBuyNow',
         value: function renderCompareAndBuyNow() {
-            var _this8 = this;
+            var _this9 = this;
 
             var deal = this.props.deal;
             var isBeingCompared = _ramda2.default.contains(deal, this.state.compareList);
@@ -25709,7 +25720,7 @@ var DealDetails = function (_React$Component) {
                     {
                         type: 'button',
                         onClick: function onClick() {
-                            return _this8.startPurchaseFlow();
+                            return _this9.startPurchaseFlow();
                         },
                         className: 'deal-details__dmr-button deal-details__dmr-button--blue deal-details__dmr-button--small'
                     },
@@ -25787,7 +25798,7 @@ var DealDetails = function (_React$Component) {
         key: 'renderRebate',
         value: function renderRebate(rebate, index) {
             var isSelected = _ramda2.default.contains(rebate, this.getSelectedRebates());
-            var isSelectable = _ramda2.default.contains(rebate.id, this.state['compatible_rebate_ids_' + this.state.selectedTab]);
+            var isSelectable = rebate.statusName !== 'Excluded';
             var checkboxClass = 'deal-details__rebate-checkbox deal-details__rebate-checkbox--inverted ' + (isSelected ? 'deal-details__rebate-checkbox--selected' : '');
 
             return _react2.default.createElement(
@@ -25819,13 +25830,13 @@ var DealDetails = function (_React$Component) {
     }, {
         key: 'renderRebates',
         value: function renderRebates() {
-            var _this9 = this;
+            var _this10 = this;
 
             return _react2.default.createElement(
                 'div',
                 { className: 'deal-details__rebates' },
                 this.state.available_rebates ? this.getRebates().map(function (rebate, index) {
-                    return _this9.renderRebate(rebate, index);
+                    return _this10.renderRebate(rebate, index);
                 }) : ''
             );
         }
@@ -25879,7 +25890,7 @@ var DealDetails = function (_React$Component) {
     }, {
         key: 'renderSelectedTab',
         value: function renderSelectedTab() {
-            var _this10 = this;
+            var _this11 = this;
 
             switch (this.state.selectedTab) {
                 case 'finance':
@@ -25888,10 +25899,10 @@ var DealDetails = function (_React$Component) {
                         financeTerm: this.state.finance_term,
                         financeDownPayment: this.state.finance_down_payment,
                         updateFinanceDownPayment: function updateFinanceDownPayment(downPayment) {
-                            return _this10.updateFinanceDownPayment(downPayment);
+                            return _this11.updateFinanceDownPayment(downPayment);
                         },
                         updateFinanceTerm: function updateFinanceTerm(term) {
-                            return _this10.updateFinanceTerm(term);
+                            return _this11.updateFinanceTerm(term);
                         }
                     });
                 case 'lease':
@@ -25901,13 +25912,13 @@ var DealDetails = function (_React$Component) {
                         leaseTerm: this.state.lease_term,
                         leaseDownPayment: this.state.lease_down_payment,
                         updateLeaseAnnualMileage: function updateLeaseAnnualMileage(annual_mileage) {
-                            return _this10.updateLeaseAnnualMileage(annual_mileage);
+                            return _this11.updateLeaseAnnualMileage(annual_mileage);
                         },
                         updateLeaseDownPayment: function updateLeaseDownPayment(downPayment) {
-                            return _this10.updateLeaseDownPayment(downPayment);
+                            return _this11.updateLeaseDownPayment(downPayment);
                         },
                         updateLeaseTerm: function updateLeaseTerm(term) {
-                            return _this10.updateLeaseTerm(term);
+                            return _this11.updateLeaseTerm(term);
                         }
                     });
             }
@@ -25915,7 +25926,7 @@ var DealDetails = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this11 = this;
+            var _this12 = this;
 
             var deal = this.props.deal;
 
@@ -25933,7 +25944,7 @@ var DealDetails = function (_React$Component) {
                             'div',
                             { className: 'deal-details__thumbnail-images' },
                             this.allImages().map(function (image, index) {
-                                return _this11.renderThumbnailImage(image, index);
+                                return _this12.renderThumbnailImage(image, index);
                             })
                         )
                     ),
@@ -26059,7 +26070,7 @@ var DealDetails = function (_React$Component) {
                                 {
                                     className: 'tabs__tab ' + (this.state.selectedTab === 'cash' ? 'tabs__tab--selected' : ''),
                                     onClick: function onClick() {
-                                        return _this11.selectCashTab();
+                                        return _this12.selectCashTab();
                                     }
                                 },
                                 'Cash'
@@ -26069,7 +26080,7 @@ var DealDetails = function (_React$Component) {
                                 {
                                     className: 'tabs__tab ' + (this.state.selectedTab === 'finance' ? 'tabs__tab--selected' : ''),
                                     onClick: function onClick() {
-                                        return _this11.selectFinanceTab();
+                                        return _this12.selectFinanceTab();
                                     }
                                 },
                                 'Finance'
@@ -26079,7 +26090,7 @@ var DealDetails = function (_React$Component) {
                                 {
                                     className: 'tabs__tab ' + (this.state.selectedTab === 'lease' ? 'tabs__tab--selected' : ''),
                                     onClick: function onClick() {
-                                        return _this11.selectLeaseTab();
+                                        return _this12.selectLeaseTab();
                                     }
                                 },
                                 'Lease'

@@ -108,29 +108,35 @@ class DealDetails extends React.Component {
     }
 
     toggleRebate(rebate_id) {
-        const [next_selected_rebate_ids, available_rebate_ids] = toggleRebate(
-            rebate_id,
+        const next_selected_rebate_ids = util.toggleItem(
             this.state[`selected_rebate_ids_${this.state.selectedTab}`],
-            R.map(R.prop('id'), this.state.available_rebates),
-            this.state.compatibilities
+            rebate_id
         );
 
-        this.setState(
-            {
-                lease_selected_term: null,
-                lease_terms: null,
-                [`selected_rebate_ids_${this.state
-                    .selectedTab}`]: next_selected_rebate_ids,
-                [`compatible_rebate_ids_${this.state
-                    .selectedTab}`]: available_rebate_ids,
-            },
-            this.debouncedRequestLeaseTerms
-        );
+        api.getRebates(this.state.selectedTab, this.state.zipcode, this.props.deal.vin, next_selected_rebate_ids)
+            .then((response) => {
+                const available_rebate_ids = R.filter(R.compose(
+                    R.not(),
+                    R.propEq('statusName', 'Excluded')
+                ), response.data.rebates);
+
+                this.setState(
+                    {
+                        lease_selected_term: null,
+                        lease_terms: null,
+                        [`selected_rebate_ids_${this.state
+                            .selectedTab}`]: next_selected_rebate_ids,
+                        [`compatible_rebate_ids_${this.state
+                            .selectedTab}`]: available_rebate_ids,
+                    },
+                    this.debouncedRequestLeaseTerms
+                );
+            });
     }
 
     requestRebates() {
         api
-            .getRebates(this.state.zipcode, this.props.deal.vin, [])
+            .getRebates(this.state.selectedTab, this.state.zipcode, this.props.deal.vin, [])
             .then(response => {
                 const rebate_ids = R.map(R.prop('id'), response.data.rebates);
 
@@ -491,10 +497,7 @@ class DealDetails extends React.Component {
 
     renderRebate(rebate, index) {
         const isSelected = R.contains(rebate, this.getSelectedRebates());
-        const isSelectable = R.contains(
-            rebate.id,
-            this.state[`compatible_rebate_ids_${this.state.selectedTab}`]
-        );
+        const isSelectable = rebate.statusName !== 'Excluded';
         const checkboxClass = `deal-details__rebate-checkbox deal-details__rebate-checkbox--inverted ${isSelected
             ? 'deal-details__rebate-checkbox--selected'
             : ''}`;
