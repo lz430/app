@@ -25,7 +25,7 @@ class UpdateHubspotContact
                 'model1' => $event->purchase->deal->model,
                 'color1' => $event->purchase->deal->color,
                 'dealername' => $event->purchase->deal->dealer->name,
-                'payment' => 'Finance',
+                'payment' => title_case($event->purchase->type),
             ]);
         } catch (Exception $exception) {
             Bugsnag::notifyException($exception);
