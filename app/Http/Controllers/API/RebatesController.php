@@ -32,20 +32,13 @@ class RebatesController extends Controller
                 $zipcode,
                 request('selected_rebate_ids')
             ))
-            : collect($JATOClient->incentivesByVehicleIdAndZipcode(request('category'), $vehicleId, $zipcode));
+            : collect($JATOClient->incentivesByVehicleIdAndZipcode($vehicleId, $zipcode));
 
         $availableRebates = $incentives
             ->filter(function ($incentive) {
                 return in_array($incentive['categoryName'], [
-                        "Retail Cash Programs",
-                        "Retail Financing",
-                        "Retail Lease",
-                    ]) && in_array($incentive['typeName'], [
-                        "Cash Back",
-                        "Cash on MSRP",
-                        "Bonus Cash",
-                        "Cash to Lessee",
-                    ]);
+                    "Retail Cash Programs",
+                ]);
             })->map(function ($incentive) {
                 return [
                     'id' => $incentive['subProgramId'],
@@ -53,10 +46,13 @@ class RebatesController extends Controller
                     'value' => $incentive['cash'],
                     'statusName' => $incentive['statusName'],
                     'types' => [
-                        "Retail Cash Programs" => 'cash',
-                        "Retail Financing" => 'finance',
-                        "Retail Lease" => 'lease',
-                    ][$incentive['categoryName']] ?? 'none',
+                        'Auto Show Cash' => ['cash', 'finance'],
+                        'Bonus Cash' => ['cash', 'finance'],
+                        'Cash Back' => ['cash', 'finance'],
+                        'Credit Card Rebate' => ['cash', 'finance'],
+                        'Cash on MSRP ' => ['cash', 'finance'],
+                        'Cash on Term APR' => ['finance'],
+                    ][$incentive['typeName']] ?? [],
                 ];
             })->values();
 

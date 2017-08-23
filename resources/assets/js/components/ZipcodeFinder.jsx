@@ -55,7 +55,9 @@ class ZipcodeFinder extends React.Component {
         return (
             <div className="zipcode-finder">
                 <div className="zipcode-finder__info">
-                    <div>{this.props.city ? '' : 'Zip Code'}</div>
+                    <div>
+                        {this.props.city ? '' : 'Zip Code'}
+                    </div>
                     {this.state.editing
                         ? <form onSubmit={this.saveZip}>
                               <input
@@ -74,7 +76,7 @@ class ZipcodeFinder extends React.Component {
                               />
                           </form>
                         : <div className="zipcode-finder__zipcode">
-                            {this.props.city || this.props.zipcode || '_____'}
+                              {this.props.city || this.props.zipcode || '_____'}
                           </div>}
                 </div>
                 <div className="zipcode-finder__buttons">

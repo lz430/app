@@ -111,12 +111,21 @@ class DealDetails extends React.Component {
             rebate_id
         );
 
-        api.getRebates(this.state.selectedTab, this.state.zipcode, this.props.deal.vin, next_selected_rebate_ids)
-            .then((response) => {
-                const available_rebate_ids = R.filter(R.compose(
-                    R.not(),
-                    R.propEq('statusName', 'Excluded')
-                ), response.data.rebates);
+        api
+            .getRebates(
+                this.state.selectedTab,
+                this.state.zipcode,
+                this.props.deal.vin,
+                next_selected_rebate_ids
+            )
+            .then(response => {
+                const available_rebate_ids = R.map(
+                    R.prop('id'),
+                    R.filter(
+                        R.compose(R.not(), R.propEq('statusName', 'Excluded')),
+                        response.data.rebates
+                    )
+                );
 
                 this.setState(
                     {
@@ -134,7 +143,12 @@ class DealDetails extends React.Component {
 
     requestRebates() {
         api
-            .getRebates(this.state.selectedTab, this.state.zipcode, this.props.deal.vin, [])
+            .getRebates(
+                this.state.selectedTab,
+                this.state.zipcode,
+                this.props.deal.vin,
+                []
+            )
             .then(response => {
                 const rebate_ids = R.map(R.prop('id'), response.data.rebates);
 
@@ -494,7 +508,10 @@ class DealDetails extends React.Component {
 
     renderRebate(rebate, index) {
         const isSelected = R.contains(rebate, this.getSelectedRebates());
-        const isSelectable = rebate.statusName !== 'Excluded';
+        const isSelectable = R.contains(
+            rebate.id,
+            this.state[`compatible_rebate_ids_${this.state.selectedTab}`]
+        );
         const checkboxClass = `deal-details__rebate-checkbox deal-details__rebate-checkbox--inverted ${isSelected
             ? 'deal-details__rebate-checkbox--selected'
             : ''}`;

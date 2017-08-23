@@ -27,7 +27,7 @@ class Client
         return json_decode((string) $this->guzzleClient->request('GET', 'makes')->getBody(), true);
     }
 
-    public function incentivesByVehicleIdAndZipcode($category, $vehicleId, $zipcode)
+    public function incentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
     {
         return json_decode((string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId", [
             'query' => [
