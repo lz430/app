@@ -22605,7 +22605,7 @@ var Deal = function (_React$Component) {
                             },
                             className: 'deal__basic-info-year-and-model'
                         },
-                        deal.year + ' ' + deal.make + ' ' + deal.model
+                        deal.year + ' ' + deal.make + ' ' + deal.model + ' ' + deal.series
                     ),
                     _react2.default.createElement(
                         'div',
