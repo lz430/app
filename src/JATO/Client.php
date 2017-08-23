@@ -2,11 +2,17 @@
 
 namespace DeliverMyRide\JATO;
 
+use Carbon\Carbon;
 use GuzzleHttp\Client as GuzzleClient;
 
 class Client
 {
     private $guzzleClient;
+    private $categories = [
+        'cash' => 1,
+        'finance' => 7,
+        'lease' => 8,
+    ];
 
     public function __construct($username, $password)
     {
@@ -21,9 +27,25 @@ class Client
         return json_decode((string) $this->guzzleClient->request('GET', 'makes')->getBody(), true);
     }
 
-    public function incentivesByVehicleId($vehicleId)
+    public function incentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
     {
-        return json_decode((string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId")->getBody(), true);
+        return json_decode((string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId", [
+            'query' => [
+                'zipCode' => $zipcode,
+            ],
+        ])->getBody(), true);
+    }
+
+    public function incentivesByVehicleIdAndZipcodeWithSelected($vehicleId, $zipcode, $selected)
+    {
+        $first = array_first($selected);
+
+        return json_decode((string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId/add/$first", [
+            'query' => [
+                'zipCode' => $zipcode,
+                'addedPrograms' => implode(',', $selected),
+            ],
+        ])->getBody(), true);
     }
 
     public function makeByName($name)

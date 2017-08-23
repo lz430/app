@@ -7,7 +7,6 @@ import fuelcolor from 'src/fuel-color-map';
 import api from 'src/api';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
-import { toggleRebate } from 'src/rebates';
 import Lease from 'components/Lease';
 import debounce from 'lodash.debounce';
 import Finance from 'components/Finance';
@@ -28,7 +27,6 @@ class DealDetails extends React.Component {
             selectedTab: 'cash',
             fallbackDealImage: '/images/dmr-logo.svg',
             available_rebates: null,
-            compatibilities: null,
             // Tab Rebate States
             compatible_rebate_ids_cash: null,
             compatible_rebate_ids_finance: null,
@@ -108,35 +106,54 @@ class DealDetails extends React.Component {
     }
 
     toggleRebate(rebate_id) {
-        const [next_selected_rebate_ids, available_rebate_ids] = toggleRebate(
-            rebate_id,
+        const next_selected_rebate_ids = util.toggleItem(
             this.state[`selected_rebate_ids_${this.state.selectedTab}`],
-            R.map(R.prop('id'), this.state.available_rebates),
-            this.state.compatibilities
+            rebate_id
         );
 
-        this.setState(
-            {
-                lease_selected_term: null,
-                lease_terms: null,
-                [`selected_rebate_ids_${this.state
-                    .selectedTab}`]: next_selected_rebate_ids,
-                [`compatible_rebate_ids_${this.state
-                    .selectedTab}`]: available_rebate_ids,
-            },
-            this.debouncedRequestLeaseTerms
-        );
+        api
+            .getRebates(
+                this.state.selectedTab,
+                this.state.zipcode,
+                this.props.deal.vin,
+                next_selected_rebate_ids
+            )
+            .then(response => {
+                const available_rebate_ids = R.map(
+                    R.prop('id'),
+                    R.filter(
+                        R.compose(R.not(), R.propEq('statusName', 'Excluded')),
+                        response.data.rebates
+                    )
+                );
+
+                this.setState(
+                    {
+                        lease_selected_term: null,
+                        lease_terms: null,
+                        [`selected_rebate_ids_${this.state
+                            .selectedTab}`]: next_selected_rebate_ids,
+                        [`compatible_rebate_ids_${this.state
+                            .selectedTab}`]: available_rebate_ids,
+                    },
+                    this.debouncedRequestLeaseTerms
+                );
+            });
     }
 
     requestRebates() {
         api
-            .getRebates(this.state.zipcode, this.props.deal.vin, [])
+            .getRebates(
+                this.state.selectedTab,
+                this.state.zipcode,
+                this.props.deal.vin,
+                []
+            )
             .then(response => {
                 const rebate_ids = R.map(R.prop('id'), response.data.rebates);
 
                 this.setState({
                     available_rebates: response.data.rebates,
-                    compatibilities: response.data.compatibilities,
                     compatible_rebate_ids_cash: rebate_ids,
                     compatible_rebate_ids_finance: rebate_ids,
                     compatible_rebate_ids_lease: rebate_ids,

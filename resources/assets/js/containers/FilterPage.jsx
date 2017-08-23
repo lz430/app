@@ -56,7 +56,9 @@ class FilterPage extends React.Component {
             <div className={className}>
                 <Sortbar />
                 <Filterbar />
-                {this.props.deals.length ? <Deals /> : <div className="filter-page__no-results">No Results</div>}
+                {this.props.deals.length
+                    ? <Deals />
+                    : <div className="filter-page__no-results">No Results</div>}
                 <Comparebar />
             </div>
         );
