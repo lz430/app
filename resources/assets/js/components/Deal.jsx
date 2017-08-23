@@ -92,7 +92,7 @@ class Deal extends React.Component {
                         onClick={() => (window.location = `/deals/${deal.id}`)}
                         className="deal__basic-info-year-and-model"
                     >
-                        {`${deal.year} ${deal.make} ${deal.model}`}
+                        {`${deal.year} ${deal.make} ${deal.model} ${deal.series}`}
                     </div>
                     <div className="deal__basic-info-msrp">
                         {util.moneyFormat(deal.msrp)} MSRP
