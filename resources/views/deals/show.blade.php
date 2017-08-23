@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Deliver My Ride')
+@section('title', $title)
 
 @section('content')
     <DealDetails
