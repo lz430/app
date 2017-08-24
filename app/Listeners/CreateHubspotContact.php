@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\NewUserRegistered;
+use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use DeliverMyRide\HubSpot\Client;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -17,32 +18,35 @@ class CreateHubspotContact
     
     public function handle(NewUserRegistered $event)
     {
-        $payload = [];
-        
-        if ($event->user->email) {
-            $payload['email'] = $event->user->email;
-        }
-    
-        if ($event->user->phone) {
-            $payload['phone'] = $event->user->phone;
-        }
+        $payload = [
+            'email' => $event->user->email ?? '',
+            'phone' => $event->user->phone ?? '',
+        ];
         
         if ($event->user->name) {
             $names = explode(' ', $event->user->name);
-            if ($names[0]) {
+            if (isset($names[0])) {
                 $payload['firstname'] = $names[0];
             }
-            if ($names[1]) {
+            if (isset($names[1])) {
                 $payload['lastname'] = $names[1];
             }
         }
         
         if ($hubspot_id = session()->get('hubspot_id')) {
-            $this->client->updateContactByHubspotId($hubspot_id, $payload);
-            return;
+            try {
+                $this->client->updateContactByHubspotId($hubspot_id, $payload);
+                return;
+            } catch (Exception $exception) {
+                Bugsnag::notifyException($exception);
+            }
         }
         
-        $response = $this->client->createContact($payload);
-        session(['hubspot_id' => $response['vid']]);
+        try {
+            $response = $this->client->createContact($payload);
+            session(['hubspot_id' => $response['vid']]);
+        } catch (Exception $exception) {
+            Bugsnag::notifyException($exception);
+        }
     }
 }

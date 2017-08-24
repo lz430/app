@@ -13,6 +13,8 @@ class DealsController extends Controller
         $deal = Deal::with('features')->with(['photos' => function ($query) {
             $query->orderBy('id');
         },])->findOrFail($id);
+        
+        $title = "$deal->year $deal->make $deal->model $deal->series";
 
         $dealTransformed = fractal($deal)
             ->transformWith(DealTransformer::class)
@@ -20,6 +22,7 @@ class DealsController extends Controller
             ->toJson();
 
         return view('deals.show')
-            ->with('deal', $dealTransformed);
+            ->with('deal', $dealTransformed)
+            ->with('title', $title);
     }
 }

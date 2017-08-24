@@ -1,5 +1,16 @@
 @extends('layouts.app')
 
+@push('scripts')
+    @if (App::environment(['staging', 'production']))
+        <script>
+            fbq('track', 'Purchase', {
+                value: {{ $purchase->dmr_price || 0 }},
+                currency: 'USD'
+            });
+        </script>
+    @endif
+@endpush
+
 @section('content')
     <div class="section section--no-footer">
         <div class="section__title">

@@ -45,9 +45,10 @@ const api = {
             },
         });
     },
-    getRebates: (zipcode, vin, selected_rebate_ids) => {
+    getRebates: (category, zipcode, vin, selected_rebate_ids) => {
         return window.axios.get('/api/rebates', {
             params: {
+                category,
                 zipcode,
                 vin,
                 selected_rebate_ids,
