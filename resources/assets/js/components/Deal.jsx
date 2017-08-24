@@ -78,10 +78,10 @@ class Deal extends React.Component {
     render() {
         const deal = this.props.deal;
         const featuredImageUrl = this.featuredImageUrl();
-        const featureImageClass =
-            featuredImageUrl !== this.state.fallbackDealImage
-                ? 'deal__image'
-                : 'deal__image deal__image--fallback';
+        const featureImageClass = featuredImageUrl !==
+            this.state.fallbackDealImage
+            ? 'deal__image'
+            : 'deal__image deal__image--fallback';
 
         return (
             <div className="deal">
@@ -109,9 +109,9 @@ class Deal extends React.Component {
                     <button
                         className={
                             'deal__button deal__button--small ' +
-                            (R.contains(deal, this.props.compareList)
-                                ? 'deal__button--blue'
-                                : '')
+                                (R.contains(deal, this.props.compareList)
+                                    ? 'deal__button--blue'
+                                    : '')
                         }
                         onClick={this.props.toggleCompare.bind(null, deal)}
                     >
