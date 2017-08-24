@@ -26328,7 +26328,7 @@ var Financing = function (_Component) {
         var _this = _possibleConstructorReturn(this, (Financing.__proto__ || Object.getPrototypeOf(Financing)).call(this, props));
 
         _this.state = {
-            url: 'https://itl.routeone.net/XRD/turnKeyOcaStart.do?rteOneDmsId=F00PRZ&dealerId=AX0PG' + '&buyOrLease=1' + ('&vehicleYear=' + props.purchase.deal.year) + ('&vehicleMake=' + props.purchase.deal.make) + ('&vehicleModel=' + props.purchase.deal.model) + ('&contractTerms_vehiclestyle=' + props.purchase.deal.body) + ('&vehicle_vin=' + props.purchase.deal.vin) + ('&contractTerms_msrp=' + props.purchase.deal.msrp) + ('&vehicle_image_url=' + (props.purchase.deal.photos ? props.purchase.deal.photos[0].url : '')) + ('&dealership_name=' + props.purchase.deal.dealer_name) + 'XrdNavigationUtils.beforeUnloadIsDisabled=true'
+            url: 'https://itl.routeone.net/XRD/turnKeyOcaStart.do?rteOneDmsId=F00PRZ&dealerId=AX0PG' + '&buyOrLease=1' + ('&vehicleYear=' + props.purchase.deal.year) + ('&vehicleMake=' + props.purchase.deal.make) + ('&vehicleModel=' + props.purchase.deal.model) + ('&contractTerms_vehiclestyle=' + props.purchase.deal.body) + ('&vehicle_vin=' + props.purchase.deal.vin) + ('&contractTerms_msrp=' + props.purchase.deal.msrp) + ('&vehicle_image_url=' + (props.purchase.deal.photos ? props.purchase.deal.photos[0].url : '')) + ('&dealership_name=' + props.purchase.deal.dealer_name)
         };
         return _this;
     }
@@ -26338,7 +26338,9 @@ var Financing = function (_Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            document.getElementById("routeOne").XrdNavigationUtils = { beforeUnloadIsDisabled: true };
+            document.getElementById('routeOne').XrdNavigationUtils = {
+                beforeUnloadIsDisabled: true
+            };
             window.setInterval(function () {
                 _api2.default.getApplicationStatus(_this2.props.purchase.id).then(function (response) {
                     if (response.data) {
