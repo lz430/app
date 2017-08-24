@@ -36,6 +36,33 @@ class Client
         ])->getBody(), true);
     }
 
+    public function bestCashIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
+    {
+        return json_decode((string) $this->guzzleClient->request('GET', "incentives/bestOffer/$vehicleId/cash", [
+            'query' => [
+                'zipCode' => $zipcode,
+            ],
+        ])->getBody(), true)['programs'] ?? [];
+    }
+
+    public function bestFinanceIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
+    {
+        return json_decode((string) $this->guzzleClient->request('GET', "incentives/bestOffer/$vehicleId/finance", [
+            'query' => [
+                'zipCode' => $zipcode,
+            ],
+        ])->getBody(), true)['programs'] ?? [];
+    }
+
+    public function bestLeaseIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
+    {
+        return json_decode((string) $this->guzzleClient->request('GET', "incentives/bestOffer/$vehicleId/lease", [
+            'query' => [
+                'zipCode' => $zipcode,
+            ],
+        ])->getBody(), true)['programs'] ?? [];
+    }
+
     public function incentivesByVehicleIdAndZipcodeWithSelected($vehicleId, $zipcode, $selected)
     {
         $first = array_first($selected);

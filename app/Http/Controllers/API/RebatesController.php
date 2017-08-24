@@ -4,14 +4,14 @@ namespace App\Http\Controllers\API;
 
 use App\Deal;
 use App\Http\Controllers\Controller;
-use DeliverMyRide\MarketScan\Client;
+use DeliverMyRide\JATO\Client;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class RebatesController extends Controller
 {
     use ValidatesRequests;
 
-    public function getRebates(Client $client, \DeliverMyRide\JATO\Client $JATOClient)
+    public function getRebates(Client $Client)
     {
         $this->validate(request(), [
             'category' => 'required|string|in:cash,finance,lease',
@@ -27,12 +27,12 @@ class RebatesController extends Controller
         $vehicleId = $version->jato_vehicle_id;
 
         $incentives = request()->has('selected_rebate_ids')
-            ? collect($JATOClient->incentivesByVehicleIdAndZipcodeWithSelected(
+            ? collect($Client->incentivesByVehicleIdAndZipcodeWithSelected(
                 $vehicleId,
                 $zipcode,
                 request('selected_rebate_ids')
             ))
-            : collect($JATOClient->incentivesByVehicleIdAndZipcode($vehicleId, $zipcode));
+            : collect($Client->incentivesByVehicleIdAndZipcode($vehicleId, $zipcode));
 
         $availableRebates = $incentives
             ->filter(function ($incentive) {
@@ -58,6 +58,46 @@ class RebatesController extends Controller
 
         return response()->json([
             'rebates' => $availableRebates,
+        ]);
+    }
+
+    public function getBestRebateIds(Client $Client)
+    {
+        $this->validate(request(), [
+            'category' => 'required|string|in:cash,finance,lease',
+            'zipcode' => 'required|string',
+            'vin' => 'required|string',
+        ]);
+
+        $vin = request('vin');
+        $zipcode = request('zipcode');
+
+        $version = Deal::where('vin', $vin)->with('versions')->firstOrFail()->versions->first();
+        $vehicleId = $version->jato_vehicle_id;
+
+        $incentives = /**
+         * @return \Illuminate\Support\Collection
+         */
+        (function () use ($Client, $vehicleId, $zipcode) {
+            switch (request('category')) {
+                case 'cash':
+                    return $Client->bestCashIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode);
+                case 'finance':
+                    return $Client->bestFinanceIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode);
+                case 'lease':
+                    return $Client->bestLeaseIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode);
+                default:
+                    return [];
+            }
+        })();
+
+        $bestRebateIds = collect($incentives)
+            ->map(function ($incentive) {
+                return $incentive['subPrgId'];
+            })->values();
+
+        return response()->json([
+            'ids' => $bestRebateIds,
         ]);
     }
 }
