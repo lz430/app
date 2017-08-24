@@ -42,7 +42,8 @@ class Sortbar extends React.Component {
                       width="20px"
                       className="sortbar__filter-toggle-icon"
                       svg={zondicons['tuning']}
-                  />{' '}
+                  />
+                  {' '}
                   <span className="sortbar__filter-toggle-text">Filter</span>
               </div>;
     }

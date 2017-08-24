@@ -131,10 +131,8 @@ class DealDetails extends React.Component {
                     {
                         lease_selected_term: null,
                         lease_terms: null,
-                        [`selected_rebate_ids_${this.state
-                            .selectedTab}`]: next_selected_rebate_ids,
-                        [`compatible_rebate_ids_${this.state
-                            .selectedTab}`]: available_rebate_ids,
+                        [`selected_rebate_ids_${this.state.selectedTab}`]: next_selected_rebate_ids,
+                        [`compatible_rebate_ids_${this.state.selectedTab}`]: available_rebate_ids,
                     },
                     this.debouncedRequestLeaseTerms
                 );
@@ -367,9 +365,7 @@ class DealDetails extends React.Component {
                             case null:
                                 return 'loading';
                             default:
-                                return `at ${util.moneyFormat(
-                                    this.state.finance_selected_term.payment
-                                )} / month`;
+                                return `at ${util.moneyFormat(this.state.finance_selected_term.payment)} / month`;
                         }
                 }
             case 'lease':
@@ -383,9 +379,7 @@ class DealDetails extends React.Component {
                             case null:
                                 return 'loading';
                             default:
-                                return `at ${util.moneyFormat(
-                                    this.state.lease_selected_term.payment
-                                )} / month`;
+                                return `at ${util.moneyFormat(this.state.lease_selected_term.payment)} / month`;
                         }
                 }
         }
@@ -405,9 +399,7 @@ class DealDetails extends React.Component {
     renderCompareAndBuyNow() {
         const deal = this.props.deal;
         const isBeingCompared = R.contains(deal, this.state.compareList);
-        const compareClass = `deal-details__dmr-button deal-details__dmr-button--small deal-details__dmr-button--${isBeingCompared
-            ? 'blue'
-            : 'white'}`;
+        const compareClass = `deal-details__dmr-button deal-details__dmr-button--small deal-details__dmr-button--${isBeingCompared ? 'blue' : 'white'}`;
 
         return (
             <div className="deal-details__dmr-buttons">
@@ -512,9 +504,7 @@ class DealDetails extends React.Component {
             rebate.id,
             this.state[`compatible_rebate_ids_${this.state.selectedTab}`]
         );
-        const checkboxClass = `deal-details__rebate-checkbox deal-details__rebate-checkbox--inverted ${isSelected
-            ? 'deal-details__rebate-checkbox--selected'
-            : ''}`;
+        const checkboxClass = `deal-details__rebate-checkbox deal-details__rebate-checkbox--inverted ${isSelected ? 'deal-details__rebate-checkbox--selected' : ''}`;
 
         return (
             <div
@@ -523,9 +513,7 @@ class DealDetails extends React.Component {
                         ? this.toggleRebate.bind(this, rebate.id)
                         : R.identity
                 }
-                className={`deal-details__rebate ${isSelectable
-                    ? ''
-                    : 'deal-details__rebate--disabled'}`}
+                className={`deal-details__rebate ${isSelectable ? '' : 'deal-details__rebate--disabled'}`}
                 key={index}
             >
                 {isSelected
@@ -710,28 +698,19 @@ class DealDetails extends React.Component {
                         </div>
                         <div className="tabs tabs--no-bottom-border">
                             <div
-                                className={`tabs__tab ${this.state
-                                    .selectedTab === 'cash'
-                                    ? 'tabs__tab--selected'
-                                    : ''}`}
+                                className={`tabs__tab ${this.state.selectedTab === 'cash' ? 'tabs__tab--selected' : ''}`}
                                 onClick={() => this.selectCashTab()}
                             >
                                 Cash
                             </div>
                             <div
-                                className={`tabs__tab ${this.state
-                                    .selectedTab === 'finance'
-                                    ? 'tabs__tab--selected'
-                                    : ''}`}
+                                className={`tabs__tab ${this.state.selectedTab === 'finance' ? 'tabs__tab--selected' : ''}`}
                                 onClick={() => this.selectFinanceTab()}
                             >
                                 Finance
                             </div>
                             <div
-                                className={`tabs__tab ${this.state
-                                    .selectedTab === 'lease'
-                                    ? 'tabs__tab--selected'
-                                    : ''}`}
+                                className={`tabs__tab ${this.state.selectedTab === 'lease' ? 'tabs__tab--selected' : ''}`}
                                 onClick={() => this.selectLeaseTab()}
                             >
                                 Lease
@@ -747,9 +726,7 @@ class DealDetails extends React.Component {
                         <div className="deal-details__msrp">
                             MSRP
                             <span
-                                className={`deal-details__msrp-amount ${window.user
-                                    ? 'deal-details__msrp-amount--strike'
-                                    : ''}`}
+                                className={`deal-details__msrp-amount ${window.user ? 'deal-details__msrp-amount--strike' : ''}`}
                             >
                                 {util.moneyFormat(deal.msrp)}
                             </span>

@@ -85,6 +85,13 @@ const api = {
             },
         });
     },
+    getApplicationStatus: purchaseId => {
+        return window.axios.get('/api/application-status', {
+            params: {
+                purchaseId,
+            },
+        });
+    },
 };
 
 export default api;

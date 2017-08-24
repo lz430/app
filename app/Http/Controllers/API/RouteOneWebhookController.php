@@ -31,9 +31,6 @@ class RouteOneWebhookController extends BaseAPIController
                 ->Contact
                 ->EMailAddress;
             
-            // @todo check if the application was declined
-            // @todo redirect the user to thank you page
-            
             $user = User::where('email', '=', $email)->firstOrFail();
             $purchase = Purchase::where('user_id', $user->id)->orderBy('id', 'desc')->firstOrFail();
             $purchase->update(['completed_at' => Carbon::now()]);

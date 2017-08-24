@@ -61,9 +61,7 @@ class ZipcodeFinder extends React.Component {
                     {this.state.editing
                         ? <form onSubmit={this.saveZip}>
                               <input
-                                  className={`zipcode-finder__input ${valid
-                                      ? ''
-                                      : 'zipcode-finder__input--invalid'}`}
+                                  className={`zipcode-finder__input ${valid ? '' : 'zipcode-finder__input--invalid'}`}
                                   type="number"
                                   pattern="\d*"
                                   autoFocus
@@ -96,9 +94,7 @@ class ZipcodeFinder extends React.Component {
                               </button>
                               <button
                                   onClick={this.saveZip}
-                                  className={`zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg ${valid
-                                      ? ''
-                                      : 'zipcode-finder__button--inactive'}`}
+                                  className={`zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg ${valid ? '' : 'zipcode-finder__button--inactive'}`}
                               >
                                   <SVGInline
                                       width="12px"
