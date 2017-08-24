@@ -33,7 +33,6 @@ $modal-footer-height: 60px;
     max-height: 100%;
     max-width: calc(100vw - #{$offset-horizontal * 2});
     opacity: 1;
-    overflow: scroll;
   }
 
   &__header {
@@ -47,6 +46,24 @@ $modal-footer-height: 60px;
   &__body {
     max-height: calc(100vh - #{$offset-top + $modal-header-height + $modal-footer-height});
     overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+      -webkit-appearance: none;
+      margin-right: 10px;
+      width: 9px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-clip: padding-box;
+      background-color: rgba(0,0,0,.5);
+      border: 1px solid rgba(0, 0, 0, 0);
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+
+    &::-webkit-scrollbar-corner {
+      background-color: transparent;
+    }
 
     &--no-footer {
       max-height: calc(100vh - #{$offset-top + $modal-header-height});
