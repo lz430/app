@@ -58,7 +58,9 @@ class Comparebar extends React.Component {
     }
 
     compareButtonClass() {
-        return `compare-bar__compare-button ${this.compareReady() ? '' : 'compare-bar__compare-button--not-ready'}`;
+        return `compare-bar__compare-button ${this.compareReady()
+            ? ''
+            : 'compare-bar__compare-button--not-ready'}`;
     }
 
     renderCompareBar() {
@@ -110,7 +112,9 @@ class Comparebar extends React.Component {
     }
 
     renderCompareBubble() {
-        const className = `compare-bubble ${this.state.shaking ? 'compare-bubble--shake' : ''}`;
+        const className = `compare-bubble ${this.state.shaking
+            ? 'compare-bubble--shake'
+            : ''}`;
 
         return (
             <div>

@@ -31,9 +31,9 @@ class FilterPage extends React.Component {
             (util.windowIsLargerThanSmall(this.props.window.width)
                 ? ''
                 : 'filter-page__filter-panel--small ' +
-                      (this.props.smallFiltersShown
-                          ? 'filter-page__filter-panel--small-filters-shown'
-                          : 'filter-page__filter-panel--small-filters-hidden'));
+                  (this.props.smallFiltersShown
+                      ? 'filter-page__filter-panel--small-filters-shown'
+                      : 'filter-page__filter-panel--small-filters-hidden'));
 
         return (
             <div className={className}>
@@ -48,9 +48,9 @@ class FilterPage extends React.Component {
             (util.windowIsLargerThanSmall(this.props.window.width)
                 ? ''
                 : 'filter-page__deals--small ' +
-                      (this.props.smallFiltersShown
-                          ? 'filter-page__deals--small-filters-shown'
-                          : 'filter-page__deals--small-filters-hidden'));
+                  (this.props.smallFiltersShown
+                      ? 'filter-page__deals--small-filters-shown'
+                      : 'filter-page__deals--small-filters-hidden'));
 
         return (
             <div className={className}>

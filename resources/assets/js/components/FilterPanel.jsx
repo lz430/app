@@ -5,8 +5,7 @@ import FilterStyleSelector from 'components/FilterStyleSelector';
 import FilterMakeSelector from 'components/FilterMakeSelector';
 import FilterFuelTypeSelector from 'components/FilterFuelTypeSelector';
 import FilterFeatureSelector from 'components/FilterFeatureSelector';
-import FilterTransmissionTypeSelector
-    from 'components/FilterTransmissionTypeSelector';
+import FilterTransmissionTypeSelector from 'components/FilterTransmissionTypeSelector';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import R from 'ramda';
@@ -47,43 +46,40 @@ class FilterPanel extends React.Component {
                         title="Vehicle Style"
                         count={this.props.selectedStyles.length}
                     >
-                        {() => (
+                        {() =>
                             <FilterStyleSelector
                                 styles={this.props.bodyStyles}
                                 selectedStyles={this.props.selectedStyles}
                                 onSelectStyle={this.props.toggleStyle}
-                            />
-                        )}
+                            />}
                     </SidebarFilter>
                     <SidebarFilter
                         title="Brand"
                         count={this.props.selectedMakes.length}
                     >
-                        {() => (
+                        {() =>
                             <FilterMakeSelector
                                 makes={this.props.makes}
                                 selectedMakes={this.props.selectedMakes}
                                 onSelectMake={this.props.toggleMake}
-                            />
-                        )}
+                            />}
                     </SidebarFilter>
                     <SidebarFilter
                         title="Fuel"
                         count={this.props.selectedFuelType ? 1 : 0}
                     >
-                        {() => (
+                        {() =>
                             <FilterFuelTypeSelector
                                 fuelTypes={this.props.fuelTypes}
                                 selectedFuelType={this.props.selectedFuelType}
                                 onChooseFuelType={this.props.chooseFuelType}
-                            />
-                        )}
+                            />}
                     </SidebarFilter>
                     <SidebarFilter
                         title="Transmission"
                         count={this.props.selectedTransmissionType ? 1 : 0}
                     >
-                        {() => (
+                        {() =>
                             <FilterTransmissionTypeSelector
                                 transmissionTypes={this.props.transmissionTypes}
                                 selectedTransmissionType={
@@ -92,32 +88,29 @@ class FilterPanel extends React.Component {
                                 onSelectTransmissionType={
                                     this.props.chooseTransmissionType
                                 }
-                            />
-                        )}
+                            />}
                     </SidebarFilter>
                     <SidebarFilter
                         title="Seating"
                         count={this.getCountOfSelectedFeatureByGroup('seating')}
                     >
-                        {() => (
+                        {() =>
                             <FilterFeatureSelector
                                 selectedFeatures={this.props.selectedFeatures}
                                 features={this.getFeaturesByGroup('seating')}
                                 onSelectFeature={this.props.toggleFeature}
-                            />
-                        )}
+                            />}
                     </SidebarFilter>
                     <SidebarFilter
                         title="Safety"
                         count={this.getCountOfSelectedFeatureByGroup('safety')}
                     >
-                        {() => (
+                        {() =>
                             <FilterFeatureSelector
                                 selectedFeatures={this.props.selectedFeatures}
                                 features={this.getFeaturesByGroup('safety')}
                                 onSelectFeature={this.props.toggleFeature}
-                            />
-                        )}
+                            />}
                     </SidebarFilter>
                     <SidebarFilter
                         title="Technology"
@@ -125,13 +118,12 @@ class FilterPanel extends React.Component {
                             'technology'
                         )}
                     >
-                        {() => (
+                        {() =>
                             <FilterFeatureSelector
                                 selectedFeatures={this.props.selectedFeatures}
                                 features={this.getFeaturesByGroup('technology')}
                                 onSelectFeature={this.props.toggleFeature}
-                            />
-                        )}
+                            />}
                     </SidebarFilter>
                     <SidebarFilter
                         title="Convenience"
@@ -139,15 +131,14 @@ class FilterPanel extends React.Component {
                             'comfort and convenience'
                         )}
                     >
-                        {() => (
+                        {() =>
                             <FilterFeatureSelector
                                 selectedFeatures={this.props.selectedFeatures}
                                 features={this.getFeaturesByGroup(
                                     'comfort and convenience'
                                 )}
                                 onSelectFeature={this.props.toggleFeature}
-                            />
-                        )}
+                            />}
                     </SidebarFilter>
                     {R.contains('Pickup', this.props.selectedStyles)
                         ? <SidebarFilter
@@ -156,7 +147,7 @@ class FilterPanel extends React.Component {
                                   'truck'
                               )}
                           >
-                              {() => (
+                              {() =>
                                   <FilterFeatureSelector
                                       selectedFeatures={
                                           this.props.selectedFeatures
@@ -165,8 +156,7 @@ class FilterPanel extends React.Component {
                                           'truck'
                                       )}
                                       onSelectFeature={this.props.toggleFeature}
-                                  />
-                              )}
+                                  />}
                           </SidebarFilter>
                         : ''}
                 </div>

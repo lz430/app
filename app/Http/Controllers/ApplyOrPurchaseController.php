@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewPurchaseInitiated;
+use App\Events\NewUserRegistered;
 use App\Mail\ApplicationSubmittedDMR;
 use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
 use App\Mail\DealPurchasedUser;
 use App\Purchase;
+use App\User;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Carbon\Carbon;
 use DeliverMyRide\HubSpot\Client;
@@ -42,9 +44,15 @@ class ApplyOrPurchaseController extends Controller
             ]);
 
             /**
+             * Create a new user and log them in
+             */
+            $user = User::create();
+            auth()->login($user);
+
+            /**
              * dmr_price is the customer's "desired" price. i.e. after rebates etc have been applied.
              */
-            $purchase = auth()->user()->purchases()->firstOrNew([
+            $purchase = $user->purchases()->firstOrNew([
                 'deal_id' => request('deal_id'),
                 'completed_at' => null,
             ]);
@@ -63,19 +71,60 @@ class ApplyOrPurchaseController extends Controller
     
             $purchase->load('deal.versions');
 
-            event(new NewPurchaseInitiated($purchase));
-    
-            JavaScriptFacade::put([
-                'purchase' => $purchase,
-            ]);
-    
-            return view('view-apply')
-                ->with('purchase', $purchase);
+            /**
+             * Get the users email
+             */
+            return redirect('request-email');
         } catch (ValidationException $e) {
             Log::notice('Invalid applyOrPurchase submission: ' . json_encode(request()->all()));
 
             return abort(500);
         }
+    }
+
+    public function requestEmail()
+    {
+        $purchase = auth()->user()->purchases()->latest()->firstOrFail();
+
+        return view('request-email')
+            ->with('purchase', $purchase);
+    }
+
+    public function receiveEmail()
+    {
+        $this->validate(request(), [
+            'email' => 'required|email',
+        ], [
+            'email' => 'Email is required',
+        ]);
+
+        /** @var User $user */
+        $user = auth()->user();
+
+        $user->email = request('email');
+        $user->save();
+
+        $purchase = $user->purchases()->with('deal')->latest()->firstOrFail();
+
+        event(new NewUserRegistered($user));
+        event(new NewPurchaseInitiated($purchase));
+
+        return (function () use ($purchase) {
+            switch ($purchase->type) {
+                case Purchase::CASH:
+                case Purchase::LEASE:
+                    return $this->handlePurchase($purchase);
+                case Purchase::FINANCE:
+                    JavaScriptFacade::put([
+                        'purchase' => $purchase,
+                    ]);
+
+                    return view('view-apply')
+                        ->with('purchase', $purchase);
+                default:
+                    return abort('500');
+            }
+        })();
     }
 
     public function purchase()
@@ -88,34 +137,39 @@ class ApplyOrPurchaseController extends Controller
 
             $purchase = Purchase::findOrFail(request('purchase_id'));
 
-            /**
-             * Disallow changing completed_at
-             */
-            if ($purchase->completed_at) {
-                return redirect()->route('thank-you', ['method' => request('method')]);
-            }
-
-            /**
-             * Mark purchase as "completed" from the perspective of this website
-             */
-            $purchase->completed_at = Carbon::now();
-            $purchase->save();
-
-            Mail::to(config('mail.dmr.address'))->send(new DealPurchasedDMR);
-            Mail::to(auth()->user())->send(new DealPurchasedUser);
-    
-            try {
-                (new Client)->updateContactByEmail(auth()->user()->email, [
-                    'payment' => 'Cash',
-                ]);
-            } catch (Exception $exception) {
-                Bugsnag::notifyException($exception);
-            }
-    
-            return redirect()->route('thank-you', ['method' => request('method')]);
+            return $this->handlePurchase($purchase);
         } catch (ValidationException | ModelNotFoundException $e) {
-            return abort(404);
+            return abort(500);
         }
+    }
+
+    private function handlePurchase(Purchase $purchase)
+    {
+        /**
+         * Disallow changing completed_at
+         */
+        if ($purchase->completed_at) {
+            return redirect()->route('thank-you', ['method' => request('method')]);
+        }
+
+        /**
+         * Mark purchase as "completed" from the perspective of this website
+         */
+        $purchase->completed_at = Carbon::now();
+        $purchase->save();
+
+        Mail::to(config('mail.dmr.address'))->send(new DealPurchasedDMR);
+        Mail::to(auth()->user())->send(new DealPurchasedUser);
+
+        try {
+            (new Client)->updateContactByEmail(auth()->user()->email, [
+                'payment' => title_case($purchase->type),
+            ]);
+        } catch (Exception $exception) {
+            Bugsnag::notifyException($exception);
+        }
+
+        return redirect()->route('thank-you', ['method' => request('method')]);
     }
 
     public function apply()
@@ -160,6 +214,8 @@ class ApplyOrPurchaseController extends Controller
         }
 
         $photo = $lastPurchase->deal->featuredPhoto();
+
+        auth()->logout();
         
         return view('thank-you')->with(['purchase' => $lastPurchase, 'photo' => $photo]);
     }

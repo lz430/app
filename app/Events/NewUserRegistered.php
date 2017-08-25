@@ -10,9 +10,8 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 class NewUserRegistered
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
     public $user;
-    
+
     public function __construct(User $user)
     {
         $this->user = $user;

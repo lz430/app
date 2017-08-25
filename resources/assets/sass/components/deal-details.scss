@@ -203,24 +203,6 @@
     }
   }
 
-  // Login Or Register
-  &__login-register {
-    background: $color-text-white;
-    border-radius: 4px;
-    margin: 0 15px 15px;
-    padding: 15px;
-  }
-
-  &__login-register-text {
-    margin-bottom: 15px;
-    text-align: center;
-  }
-
-  &__login-register-buttons {
-    display: flex;
-    width: 100%;
-  }
-
   &__button {
     @include button;
     flex: 1;
