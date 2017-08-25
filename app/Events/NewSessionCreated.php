@@ -2,18 +2,19 @@
 
 namespace App\Events;
 
-use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 
-class NewUserRegistered
+class NewSessionCreated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $user;
+    
+    public $request;
 
-    public function __construct(User $user)
+    public function __construct(Request $request)
     {
-        $this->user = $user;
+        $this->$request = $request;
     }
 }

@@ -2,8 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Deal;
+use App\Dealer;
 use App\Events\NewPurchaseInitiated;
-use App\Events\NewUserRegistered;
+use App\Events\UserDataChanged;
+use App\JATO\Version;
 use App\Purchase;
 use App\User;
 use Illuminate\Support\Facades\Event;
@@ -19,13 +22,15 @@ class HubspotTest extends TestCase
         $user = User::create();
         $this->actingAs($user);
         
-        factory(Purchase::class)->create([
+        $purchase = factory(Purchase::class)->create([
             'user_id' => $user->id,
         ]);
         
+        $purchase->deal->versions()->save(factory(Version::class)->make());
+        
         $this->post('receive-email', ['email' => 'test@example.com']);
-
-        Event::assertDispatched(NewUserRegistered::class);
+        
+        Event::assertDispatched(UserDataChanged::class);
         Event::assertDispatched(NewPurchaseInitiated::class);
     }
 }

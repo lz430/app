@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewPurchaseInitiated;
-use App\Events\NewUserRegistered;
+use App\Events\UserDataChanged;
 use App\Mail\ApplicationSubmittedDMR;
 use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
@@ -106,7 +106,7 @@ class ApplyOrPurchaseController extends Controller
 
         $purchase = $user->purchases()->with('deal')->latest()->firstOrFail();
 
-        event(new NewUserRegistered($user));
+        event(new UserDataChanged(['email' => $user->email]));
         event(new NewPurchaseInitiated($purchase));
 
         return (function () use ($purchase) {
