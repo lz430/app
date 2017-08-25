@@ -44,11 +44,10 @@ class ApplyOrPurchaseController extends Controller
             ]);
 
             /**
-             * Create user and log them in if they aren't already
+             * Create a new user and log them in
              */
-            $user = auth()->user() ?? tap(User::create(), function (User $user) {
-                auth()->login($user);
-            });
+            $user = User::create();
+            auth()->login($user);
 
             /**
              * dmr_price is the customer's "desired" price. i.e. after rebates etc have been applied.
