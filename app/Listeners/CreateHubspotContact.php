@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\NewSessionCreated;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use DeliverMyRide\HubSpot\Client;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
 
