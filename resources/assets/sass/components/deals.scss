@@ -35,13 +35,14 @@
   background-color: $color-background-secondary;
   border-radius: 6px;
   box-shadow: 0 0 3px 0 rgba(185, 185, 185, .9);
-  height: 350px;
+  display: flex;
+  flex-direction: column;
   margin: 5px;
-  max-height: 350px;
   max-width: 300px;
   min-width: 300px;
 
   &__basic-info {
+    flex: 1;
     margin: 15px 0;
     padding: 0 15px;
   }

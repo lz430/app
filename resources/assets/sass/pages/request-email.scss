@@ -1,5 +1,6 @@
 @import '../mixins/vertical-form';
+@import '../mixins/link';
 
-.register {
+.request-email {
   @include vertical-form;
 }

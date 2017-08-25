@@ -20,8 +20,6 @@
                 'apiToken' => auth()->user()->api_token ?? null,
                 'fuelApiKey' => config('services.fuel.api_key'),
             ]) !!};
-
-            window.user = {!! auth()->user() ? json_encode(auth()->user()) : 'null' !!};
         </script>
 
         @if (App::environment(['staging', 'production']))
@@ -50,22 +48,6 @@
                 <a class="nav__logo" href="{{ url('/') }}">
                     <img src="/images/dmr-logo.svg">
                 </a>
-
-                <div class="nav__links">
-                    <!-- Authentication Links -->
-                    @if (! request()->is('login') && auth()->check() && ! request()->routeIs('home'))
-                        <form name="logout" action="/logout" method="post">
-                            {{ csrf_field() }}
-                            <button class="nav__button nav__button--blue nav__button--small nav__button--no-border">Logout</button>
-                        </form>
-                    @endif
-
-                    @if (! auth()->check())
-                        <a href="{{ route('login') }}">
-                            <button class="nav__button nav__button--blue nav__button--small nav__button--no-border">Login</button>
-                        </a>
-                    @endif
-                </div>
             </div>
         </nav>
         @show
