@@ -2,7 +2,9 @@
 
 namespace App\Listeners;
 
+use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use DeliverMyRide\HubSpot\Client;
+use Exception;
 
 class UpdateHubspotContact
 {

@@ -7,6 +7,8 @@ use App\Dealer;
 use App\Events\NewPurchaseInitiated;
 use App\Events\UserDataChanged;
 use App\JATO\Version;
+use App\Listeners\CreateHubspotContact;
+use App\Listeners\UpdateHubspotContact;
 use App\Purchase;
 use App\User;
 use Illuminate\Support\Facades\Event;
@@ -32,5 +34,17 @@ class HubspotTest extends TestCase
         
         Event::assertDispatched(UserDataChanged::class);
         Event::assertDispatched(NewPurchaseInitiated::class);
+    }
+
+    /** @test */
+    public function it_fires_hubspot_update_events_via_the_hubspot_controller()
+    {
+        Event::fake();
+
+        $this->session(['hubspot_id' => 1]);
+
+        $this->post('hubspot', ['bodystyle1' => 'test']);
+
+        Event::assertDispatched(UpdateHubspotContact::class);
     }
 }

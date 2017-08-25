@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Listeners\CreateHubspotContact;
+use App\Listeners\UpdateHubspotContact;
 use DeliverMyRide\HubSpot\Client;
 use Illuminate\Http\Request;
 
@@ -17,13 +19,11 @@ class HubspotController extends Controller
     public function updateContact(Request $request)
     {
         if (! $request->session()->has('hubspot_id')) {
-            $response = $this->client->createContact($request->all());
-            session(['hubspot_id' => $response['vid']]);
-            return $response;
+            event(CreateHubspotContact::class, $request);
+        } elseif ($hubspot_id = $request->session()->get('hubspot_id')) {
+            event(UpdateHubspotContact::class, $request->json());
         }
-        
-        if ($hubspot_id = $request->session()->get('hubspot_id')) {
-            return $this->client->updateContactByHubspotId($hubspot_id, $request->all());
-        }
+
+        return response('ok');
     }
 }
