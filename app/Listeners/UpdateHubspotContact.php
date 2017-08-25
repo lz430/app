@@ -2,10 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\NewPurchaseInitiated;
 use DeliverMyRide\HubSpot\Client;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class UpdateHubspotContact
 {
@@ -16,19 +13,15 @@ class UpdateHubspotContact
         $this->client = $client;
     }
     
-    public function handle(NewPurchaseInitiated $event)
+    public function handle($event)
     {
-        try {
-            $this->client->updateContactByEmail(auth()->user()->email, [
-                'bodystyle1' => $event->purchase->deal->versions()->first()->body_style,
-                'brand1' => $event->purchase->deal->make,
-                'model1' => $event->purchase->deal->model,
-                'color1' => $event->purchase->deal->color,
-                'dealername' => $event->purchase->deal->dealer->name,
-                'payment' => title_case($event->purchase->type),
-            ]);
-        } catch (Exception $exception) {
-            Bugsnag::notifyException($exception);
+        if ($hubspot_id = session()->get('hubspot_id')) {
+            try {
+                $this->client->updateContactByHubspotId($hubspot_id, $event->payload);
+                return;
+            } catch (Exception $exception) {
+                Bugsnag::notifyException($exception);
+            }
         }
     }
 }

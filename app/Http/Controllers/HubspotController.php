@@ -16,7 +16,7 @@ class HubspotController extends Controller
     
     public function updateContact(Request $request)
     {
-        if (! auth()->check() && ! $request->session()->has('hubspot_id')) {
+        if (! $request->session()->has('hubspot_id')) {
             $response = $this->client->createContact($request->all());
             session(['hubspot_id' => $response['vid']]);
             return $response;
@@ -24,10 +24,6 @@ class HubspotController extends Controller
         
         if ($hubspot_id = $request->session()->get('hubspot_id')) {
             return $this->client->updateContactByHubspotId($hubspot_id, $request->all());
-        }
-        
-        if (auth()->user()->email) {
-            return $this->client->updateContactByEmail(auth()->user()->email, $request->all());
         }
     }
 }

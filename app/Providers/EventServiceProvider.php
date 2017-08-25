@@ -13,8 +13,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\NewUserRegistered' => [
+        'App\Events\NewSessionCreated' => [
             'App\Listeners\CreateHubspotContact',
+        ],
+        'App\Events\UserDataChanged' => [
+            'App\Listeners\UpdateHubspotContact',
         ],
         'App\Events\NewPurchaseInitiated' => [
             'App\Listeners\UpdateHubspotContact',

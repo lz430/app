@@ -12,10 +12,17 @@ class NewPurchaseInitiated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $purchase;
+    public $payload;
 
     public function __construct(Purchase $purchase)
     {
-        $this->purchase = $purchase;
+        $this->payload = [
+            'bodystyle1' => $purchase->deal->versions()->first()->body_style,
+            'brand1' => $purchase->deal->make,
+            'model1' => $purchase->deal->model,
+            'color1' => $purchase->deal->color,
+            'dealername' => $purchase->deal->dealer->name,
+            'payment' => title_case($purchase->type),
+        ];
     }
 }
