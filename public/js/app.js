@@ -3129,9 +3129,9 @@ function receiveBodyStyles(deals) {
     };
 }
 
-function receiveMoreDeals(deals) {
+function receiveMoreDeals(data) {
     return function (dispatch, getState) {
-        deals.map(function (deal) {
+        data.data.data.map(function (deal) {
             // If we have already received the rebates for the deal, don't request them again.
             if (getState().dealRebates.hasOwnProperty(deal.id)) return;
 
@@ -3145,7 +3145,7 @@ function receiveMoreDeals(deals) {
 
         dispatch({
             type: ActionTypes.RECEIVE_MORE_DEALS,
-            data: deals
+            data: data
         });
     };
 }

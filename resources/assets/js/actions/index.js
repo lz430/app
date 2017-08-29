@@ -182,9 +182,9 @@ export function receiveBodyStyles(deals) {
     };
 }
 
-export function receiveMoreDeals(deals) {
+export function receiveMoreDeals(data) {
     return (dispatch, getState) => {
-        deals.map(deal => {
+        data.data.data.map(deal => {
             // If we have already received the rebates for the deal, don't request them again.
             if (getState().dealRebates.hasOwnProperty(deal.id)) return;
 
@@ -200,7 +200,7 @@ export function receiveMoreDeals(deals) {
 
         dispatch({
             type: ActionTypes.RECEIVE_MORE_DEALS,
-            data: deals,
+            data: data,
         });
     };
 }
