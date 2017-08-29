@@ -2989,6 +2989,18 @@ var withStateDefaults = function withStateDefaults(state, changed) {
     }, changed);
 };
 
+var loadRebatesForDeal = function loadRebatesForDeal(dispatch, getState, deal) {
+    // If we have already received the rebates for the deal, don't request them again.
+    if (getState().dealRebates.hasOwnProperty(deal.id)) return;
+
+    _api2.default.getRebates(getState().zipcode, deal.vin).then(function (data) {
+        dispatch(receiveDealRebates({
+            data: data,
+            dealId: deal.id
+        }));
+    });
+};
+
 function requestMakes() {
     return function (dispatch) {
         _api2.default.getMakes().then(function (data) {
@@ -3063,17 +3075,7 @@ function toggleMake(make_id) {
 
 function receiveDeals(data) {
     return function (dispatch, getState) {
-        data.data.data.map(function (deal) {
-            // If we have already received the rebates for the deal, don't request them again.
-            if (getState().dealRebates.hasOwnProperty(deal.id)) return;
-
-            _api2.default.getRebates(getState().zipcode, deal.vin).then(function (data) {
-                dispatch(receiveDealRebates({
-                    data: data,
-                    dealId: deal.id
-                }));
-            });
-        });
+        data.data.data.map(loadRebatesForDeal.bind(null, dispatch, getState));
 
         dispatch({
             type: ActionTypes.RECEIVE_DEALS,
@@ -3131,17 +3133,7 @@ function receiveBodyStyles(deals) {
 
 function receiveMoreDeals(data) {
     return function (dispatch, getState) {
-        data.data.data.map(function (deal) {
-            // If we have already received the rebates for the deal, don't request them again.
-            if (getState().dealRebates.hasOwnProperty(deal.id)) return;
-
-            _api2.default.getRebates(getState().zipcode, deal.vin).then(function (data) {
-                dispatch(receiveDealRebates({
-                    data: data,
-                    dealId: deal.id
-                }));
-            });
-        });
+        data.data.data.map(loadRebatesForDeal.bind(null, dispatch, getState));
 
         dispatch({
             type: ActionTypes.RECEIVE_MORE_DEALS,
