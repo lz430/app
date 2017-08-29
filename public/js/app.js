@@ -2934,6 +2934,7 @@ exports.receiveFeatures = receiveFeatures;
 exports.toggleFeature = toggleFeature;
 exports.toggleMake = toggleMake;
 exports.receiveDeals = receiveDeals;
+exports.receiveDealRebates = receiveDealRebates;
 exports.requestDeals = requestDeals;
 exports.requestMoreDeals = requestMoreDeals;
 exports.sortDeals = sortDeals;
@@ -2951,6 +2952,7 @@ exports.receiveLocationInfo = receiveLocationInfo;
 exports.closeMakeSelectorModal = closeMakeSelectorModal;
 exports.windowResize = windowResize;
 exports.toggleSmallFiltersShown = toggleSmallFiltersShown;
+exports.selectTab = selectTab;
 
 var _api = __webpack_require__(146);
 
@@ -3060,8 +3062,29 @@ function toggleMake(make_id) {
 }
 
 function receiveDeals(data) {
+    return function (dispatch, getState) {
+        data.data.data.map(function (deal) {
+            // If we have already received the rebates for the deal, don't request them again.
+            if (getState().dealRebates.hasOwnProperty(deal.id)) return;
+
+            _api2.default.getRebates(getState().zipcode, deal.vin).then(function (data) {
+                dispatch(receiveDealRebates({
+                    data: data,
+                    dealId: deal.id
+                }));
+            });
+        });
+
+        dispatch({
+            type: ActionTypes.RECEIVE_DEALS,
+            data: data
+        });
+    };
+}
+
+function receiveDealRebates(data) {
     return {
-        type: ActionTypes.RECEIVE_DEALS,
+        type: ActionTypes.RECEIVE_DEAL_REBATES,
         data: data
     };
 }
@@ -3107,9 +3130,23 @@ function receiveBodyStyles(deals) {
 }
 
 function receiveMoreDeals(deals) {
-    return {
-        type: ActionTypes.RECEIVE_MORE_DEALS,
-        data: deals
+    return function (dispatch, getState) {
+        deals.map(function (deal) {
+            // If we have already received the rebates for the deal, don't request them again.
+            if (getState().dealRebates.hasOwnProperty(deal.id)) return;
+
+            _api2.default.getRebates(getState().zipcode, deal.vin).then(function (data) {
+                dispatch(receiveDealRebates({
+                    data: data,
+                    dealId: deal.id
+                }));
+            });
+        });
+
+        dispatch({
+            type: ActionTypes.RECEIVE_MORE_DEALS,
+            data: deals
+        });
     };
 }
 
@@ -3285,6 +3322,13 @@ function windowResize(width) {
 function toggleSmallFiltersShown() {
     return {
         type: ActionTypes.TOGGLE_SMALL_FILTERS_SHOWN
+    };
+}
+
+function selectTab(tab) {
+    return {
+        type: ActionTypes.SELECT_TAB,
+        data: tab
     };
 }
 
@@ -9638,10 +9682,9 @@ var api = {
             }
         });
     },
-    getRebates: function getRebates(category, zipcode, vin, selected_rebate_ids) {
+    getRebates: function getRebates(zipcode, vin, selected_rebate_ids) {
         return window.axios.get('/api/rebates', {
             params: {
-                category: category,
                 zipcode: zipcode,
                 vin: vin,
                 selected_rebate_ids: selected_rebate_ids
@@ -13209,6 +13252,8 @@ var RECEIVE_LOCATION_INFO = exports.RECEIVE_LOCATION_INFO = 'RECEIVE_LOCATION_IN
 var CLOSE_MAKE_SELECTOR_MODAL = exports.CLOSE_MAKE_SELECTOR_MODAL = 'CLOSE_MAKE_SELECTOR_MODAL';
 var WINDOW_RESIZE = exports.WINDOW_RESIZE = 'WINDOW_RESIZE';
 var TOGGLE_SMALL_FILTERS_SHOWN = exports.TOGGLE_SMALL_FILTERS_SHOWN = 'TOGGLE_SMALL_FILTERS_SHOWN';
+var RECEIVE_DEAL_REBATES = exports.RECEIVE_DEAL_REBATES = 'RECEIVE_DEAL_REBATES';
+var SELECT_TAB = exports.SELECT_TAB = 'SELECT_TAB';
 
 /***/ }),
 /* 212 */
@@ -22798,6 +22843,10 @@ var _fuelapi = __webpack_require__(213);
 
 var _fuelapi2 = _interopRequireDefault(_fuelapi);
 
+var _DealPrice = __webpack_require__(919);
+
+var _DealPrice2 = _interopRequireDefault(_DealPrice);
+
 var _reactRedux = __webpack_require__(56);
 
 var _index = __webpack_require__(47);
@@ -22885,7 +22934,6 @@ var Deal = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 { className: 'deal' },
-                _react2.default.createElement('img', { className: featureImageClass, src: featuredImageUrl }),
                 _react2.default.createElement(
                     'div',
                     { className: 'deal__basic-info' },
@@ -22906,9 +22954,23 @@ var Deal = function (_React$Component) {
                         ' MSRP'
                     )
                 ),
+                _react2.default.createElement('img', { className: featureImageClass, src: featuredImageUrl }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deal__price' },
+                    _react2.default.createElement(_DealPrice2.default, { deal: deal })
+                ),
                 _react2.default.createElement(
                     'div',
                     { className: 'deal__buttons' },
+                    _react2.default.createElement(
+                        'button',
+                        {
+                            className: 'deal__button deal__button--small ' + (_ramda2.default.contains(deal, this.props.compareList) ? 'deal__button--blue' : ''),
+                            onClick: this.props.toggleCompare.bind(null, deal)
+                        },
+                        'Compare'
+                    ),
                     _react2.default.createElement(
                         'button',
                         {
@@ -22918,14 +22980,6 @@ var Deal = function (_React$Component) {
                             className: 'deal__button deal__button--small deal__button--blue deal__button'
                         },
                         'View Details'
-                    ),
-                    _react2.default.createElement(
-                        'button',
-                        {
-                            className: 'deal__button deal__button--small ' + (_ramda2.default.contains(deal, this.props.compareList) ? 'deal__button--blue' : ''),
-                            onClick: this.props.toggleCompare.bind(null, deal)
-                        },
-                        'Compare'
                     )
                 )
             );
@@ -25069,6 +25123,7 @@ var initialState = {
     window: { width: window.innerWidth },
     smallFiltersShown: false,
     showMakeSelectorModal: true,
+    selectedTab: 'cash',
     selectedStyles: urlStyle ? [urlStyle] : [],
     bodyStyles: null,
     fuelTypes: ['Gasoline', 'Flex Fuel', 'Diesel', 'Hybrid'],
@@ -25077,6 +25132,8 @@ var initialState = {
     selectedFuelType: null,
     selectedMakes: [],
     selectedFeatures: [],
+    selectedRebates: [],
+    dealRebates: {},
     features: null,
     makes: null,
     dealPage: 1,
@@ -26727,10 +26784,22 @@ var reducer = function reducer(state, action) {
                 dealPageTotal: action.data.data.meta.pagination.total_pages,
                 dealPage: _ramda2.default.min(action.data.data.meta.pagination.current_page, action.data.data.meta.pagination.total_pages)
             });
+        case ActionTypes.RECEIVE_DEAL_REBATES:
+            var nextDealRebates = Object.assign({}, state.dealRebates);
+
+            nextDealRebates[action.data.dealId] = action.data.data.data.rebates;
+
+            return Object.assign({}, state, {
+                dealRebates: nextDealRebates
+            });
         case ActionTypes.SORT_DEALS:
             return Object.assign({}, state, {
                 sortColumn: action.sort,
                 sortAscending: !state.sortAscending
+            });
+        case ActionTypes.SELECT_TAB:
+            return Object.assign({}, state, {
+                selectedTab: action.data
             });
         case ActionTypes.RECEIVE_MORE_DEALS:
             return Object.assign({}, state, {
@@ -54147,6 +54216,232 @@ module.exports = function(module) {
 __webpack_require__(349);
 module.exports = __webpack_require__(350);
 
+
+/***/ }),
+/* 916 */,
+/* 917 */,
+/* 918 */,
+/* 919 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(11);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _ramda = __webpack_require__(22);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _util = __webpack_require__(36);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _fuelapi = __webpack_require__(213);
+
+var _fuelapi2 = _interopRequireDefault(_fuelapi);
+
+var _reactRedux = __webpack_require__(56);
+
+var _index = __webpack_require__(47);
+
+var Actions = _interopRequireWildcard(_index);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DealPrice = function (_React$Component) {
+    _inherits(DealPrice, _React$Component);
+
+    function DealPrice() {
+        _classCallCheck(this, DealPrice);
+
+        return _possibleConstructorReturn(this, (DealPrice.__proto__ || Object.getPrototypeOf(DealPrice)).apply(this, arguments));
+    }
+
+    _createClass(DealPrice, [{
+        key: 'renderCashPrice',
+        value: function renderCashPrice() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'deal-price__price' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deal-price__cash-label' },
+                    'Your cash price'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deal-price__cash-price' },
+                    _util2.default.moneyFormat(this.props.deal.price)
+                ),
+                _react2.default.createElement('div', { className: 'deal-price__hr' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deal-price__cash-msrp' },
+                    _util2.default.moneyFormat(this.props.deal.msrp),
+                    ' ',
+                    _react2.default.createElement(
+                        'span',
+                        { className: 'deal-price__cash-msrp-label' },
+                        'MSRP'
+                    )
+                )
+            );
+        }
+    }, {
+        key: 'renderFinancePrice',
+        value: function renderFinancePrice() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'deal-price__price' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deal-price__finance-lease-label' },
+                    'Average Monthly Finance Payment'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deal-price__finance-lease-price' },
+                    _util2.default.moneyFormat(this.props.deal.price)
+                ),
+                _react2.default.createElement('div', { className: 'deal-price__hr' })
+            );
+        }
+    }, {
+        key: 'renderLeasePrice',
+        value: function renderLeasePrice() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'deal-price__price' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deal-price__finance-lease-label' },
+                    'Average Monthly Lease Payment'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deal-price__finance-lease-price' },
+                    _util2.default.moneyFormat(this.props.deal.price)
+                ),
+                _react2.default.createElement('div', { className: 'deal-price__hr' })
+            );
+        }
+    }, {
+        key: 'renderSelectedTab',
+        value: function renderSelectedTab() {
+            switch (this.props.selectedTab) {
+                case 'cash':
+                    return this.renderCashPrice();
+                case 'finance':
+                    return this.renderFinancePrice();
+                case 'lease':
+                    return this.renderLeasePrice();
+            }
+        }
+    }, {
+        key: 'renderAppliedRebatesLink',
+        value: function renderAppliedRebatesLink() {
+            var _this2 = this;
+
+            if (!this.props.dealRebates.hasOwnProperty(this.props.deal.id)) {
+                return _react2.default.createElement(
+                    'div',
+                    null,
+                    'Loading...'
+                );
+            }
+
+            var rebates = this.props.dealRebates[this.props.deal.id];
+            var tabRebates = _ramda2.default.filter(function (rebate) {
+                return _ramda2.default.contains(_this2.props.selectedTab, rebate.types);
+            }, rebates);
+            var maxRebates = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), tabRebates));
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'deal-price__rebates-applied' },
+                _react2.default.createElement(
+                    'a',
+                    { href: '#' },
+                    '$0 rebates applied of ',
+                    _util2.default.moneyFormat(maxRebates),
+                    ' ',
+                    'available...'
+                )
+            );
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'deal-price' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'tabs' },
+                    _react2.default.createElement(
+                        'div',
+                        {
+                            onClick: this.props.selectTab.bind(null, 'cash'),
+                            className: 'tabs__tab ' + (this.props.selectedTab === 'cash' ? 'tabs__tab--selected' : '')
+                        },
+                        'Cash'
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        {
+                            onClick: this.props.selectTab.bind(null, 'finance'),
+                            className: 'tabs__tab ' + (this.props.selectedTab === 'finance' ? 'tabs__tab--selected' : '')
+                        },
+                        'Finance'
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        {
+                            onClick: this.props.selectTab.bind(null, 'lease'),
+                            className: 'tabs__tab ' + (this.props.selectedTab === 'lease' ? 'tabs__tab--selected' : '')
+                        },
+                        'Lease'
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'tabs__content' },
+                    this.renderSelectedTab()
+                ),
+                this.renderAppliedRebatesLink()
+            );
+        }
+    }]);
+
+    return DealPrice;
+}(_react2.default.Component);
+
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        selectedTab: state.selectedTab,
+        selectedRebates: state.selectedRebates,
+        dealRebates: state.dealRebates
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(DealPrice);
 
 /***/ })
 /******/ ]);

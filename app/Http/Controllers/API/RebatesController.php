@@ -14,7 +14,6 @@ class RebatesController extends Controller
     public function getRebates(Client $Client)
     {
         $this->validate(request(), [
-            'category' => 'required|string|in:cash,finance,lease',
             'zipcode' => 'required|string',
             'vin' => 'required|string',
             'selected_rebate_ids' => 'array:int',
@@ -54,6 +53,8 @@ class RebatesController extends Controller
                         'Cash on Term APR' => ['finance'],
                     ][$incentive['typeName']] ?? [],
                 ];
+            })->filter(function ($incentive) {
+                return ! empty($incentive['types']);
             })->values();
 
         return response()->json([

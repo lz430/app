@@ -55,10 +55,22 @@ const reducer = (state, action) => {
                     action.data.data.meta.pagination.total_pages
                 ),
             });
+        case ActionTypes.RECEIVE_DEAL_REBATES:
+            let nextDealRebates = Object.assign({}, state.dealRebates);
+
+            nextDealRebates[action.data.dealId] = action.data.data.data.rebates;
+
+            return Object.assign({}, state, {
+                dealRebates: nextDealRebates,
+            });
         case ActionTypes.SORT_DEALS:
             return Object.assign({}, state, {
                 sortColumn: action.sort,
                 sortAscending: !state.sortAscending,
+            });
+        case ActionTypes.SELECT_TAB:
+            return Object.assign({}, state, {
+                selectedTab: action.data,
             });
         case ActionTypes.RECEIVE_MORE_DEALS:
             return Object.assign({}, state, {
