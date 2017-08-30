@@ -6,6 +6,7 @@ use App\Feature;
 use App\Transformers\DealTransformer;
 use App\Deal;
 use App\Zipcode;
+use DeliverMyRide\JATO\Client;
 use DeliverMyRide\JsonApi\Sort;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
@@ -19,7 +20,7 @@ class DealsController extends BaseAPIController
     private const TRANSFORMER = DealTransformer::class;
     private const RESOURCE_NAME = 'deals';
     
-    public function getDeals(Request $request)
+    public function getDeals(Request $request, Client $client)
     {
         $this->validate($request, [
             'make_ids' => 'sometimes|required|array',

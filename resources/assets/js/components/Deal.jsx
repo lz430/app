@@ -2,6 +2,7 @@ import React from 'react';
 import R from 'ramda';
 import util from 'src/util';
 import fuelapi from 'src/fuelapi';
+import DealPrice from 'components/DealPrice';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 
@@ -85,8 +86,6 @@ class Deal extends React.Component {
 
         return (
             <div className="deal">
-                <img className={featureImageClass} src={featuredImageUrl} />
-
                 <div className="deal__basic-info">
                     <div
                         onClick={() => (window.location = `/deals/${deal.id}`)}
@@ -99,13 +98,13 @@ class Deal extends React.Component {
                     </div>
                 </div>
 
+                <img className={featureImageClass} src={featuredImageUrl} />
+
+                <div className="deal__price">
+                    <DealPrice deal={deal} />
+                </div>
+
                 <div className="deal__buttons">
-                    <button
-                        onClick={() => (window.location = `/deals/${deal.id}`)}
-                        className="deal__button deal__button--small deal__button--blue deal__button"
-                    >
-                        View Details
-                    </button>
                     <button
                         className={
                             'deal__button deal__button--small ' +
@@ -116,6 +115,12 @@ class Deal extends React.Component {
                         onClick={this.props.toggleCompare.bind(null, deal)}
                     >
                         Compare
+                    </button>
+                    <button
+                        onClick={() => (window.location = `/deals/${deal.id}`)}
+                        className="deal__button deal__button--small deal__button--blue deal__button"
+                    >
+                        View Details
                     </button>
                 </div>
             </div>
