@@ -5,7 +5,7 @@ import * as Actions from 'actions';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
-class Comparebar extends React.Component {
+class Comparebar extends React.PureComponent {
     constructor(props) {
         super(props);
 

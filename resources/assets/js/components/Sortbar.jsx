@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import * as Actions from 'actions';
 import util from 'src/util';
 
-class Sortbar extends React.Component {
+class Sortbar extends React.PureComponent {
     constructor() {
         super();
 

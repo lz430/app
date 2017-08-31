@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import R from 'ramda';
 import * as Actions from 'actions/index';
 
-class MakeSelector extends React.Component {
+class MakeSelector extends React.PureComponent {
     constructor() {
         super();
 

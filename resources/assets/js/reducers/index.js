@@ -100,9 +100,24 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 selectedStyles: action.selectedStyles,
             });
+        case ActionTypes.TOGGLE_REBATE:
+            return Object.assign({}, state, {
+                selectedRebates: util.toggleItem(
+                    state.selectedRebates,
+                    action.rebate
+                ),
+            });
         case ActionTypes.CHOOSE_FUEL_TYPE:
             return Object.assign({}, state, {
                 selectedFuelType: action.selectedFuelType,
+            });
+        case ActionTypes.UPDATE_DOWN_PAYMENT:
+            return Object.assign({}, state, {
+                downPayment: action.downPayment,
+            });
+        case ActionTypes.UPDATE_TERM_DURATION:
+            return Object.assign({}, state, {
+                termDuration: action.termDuration,
             });
         case ActionTypes.CHOOSE_TRANSMISSION_TYPE:
             return Object.assign({}, state, {

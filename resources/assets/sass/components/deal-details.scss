@@ -209,38 +209,6 @@
     margin: 5px;
   }
 
-  &__rebates {
-    max-height: 160px;
-    overflow: scroll;
-  }
-
-  &__rebate {
-    align-items: center;
-    border-top: 1px solid $color-section-bottom-border;
-    cursor: pointer;
-    display: flex;
-    padding: 5px 15px;
-    width: 100%;
-
-    &--disabled {
-      color: lighten($text-color-dark, 60%);
-    }
-  }
-
-  &__rebate-checkbox {
-    @include selector-icon;
-    background: $color-text-white;
-  }
-
-  &__rebate-rebate {
-    flex: 1;
-    padding-right: 10px;
-  }
-
-  &__rebate-value {
-    justify-self: flex-end;
-  }
-
   &__selected-tab {
     background: $color-sidebar-background-secondary-light;
   }

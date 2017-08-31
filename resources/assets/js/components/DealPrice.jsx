@@ -1,11 +1,40 @@
 import React from 'react';
 import R from 'ramda';
 import util from 'src/util';
-import fuelapi from 'src/fuelapi';
+import rebates from 'src/rebates';
+import formulas from 'src/formulas';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 
-class DealPrice extends React.Component {
+class DealPrice extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            availableRebates: null,
+            selectedRebates: [],
+        };
+    }
+
+    componentWillReceiveProps(props) {
+        if (!props.dealRebates.hasOwnProperty(props.deal.id)) return;
+
+        this.setState({
+            availableRebates: rebates.getAvailableRebatesForDealAndType(
+                props.dealRebates,
+                props.selectedRebates,
+                props.selectedTab,
+                props.deal
+            ),
+            selectedRebates: rebates.getSelectedRebatesForDealAndType(
+                props.dealRebates,
+                props.selectedRebates,
+                props.selectedTab,
+                props.deal
+            ),
+        });
+    }
+
     renderCashPrice() {
         return (
             <div className="deal-price__price">
@@ -26,10 +55,25 @@ class DealPrice extends React.Component {
         return (
             <div className="deal-price__price">
                 <div className="deal-price__finance-lease-label">
-                    Average Monthly Finance Payment
+                    Estimated Monthly Finance Payment
                 </div>
                 <div className="deal-price__finance-lease-price">
-                    {util.moneyFormat(this.props.deal.price)}
+                    {this.props.dealRebates.hasOwnProperty(this.props.deal.id)
+                        ? util.moneyFormat(
+                              Math.round(
+                                  formulas.calculateFinancedMonthlyPayments(
+                                      this.props.deal.price - R.sum(R.map(R.prop('value'), rebates.getSelectedRebatesForDealAndType(
+                                          this.props.dealRebates,
+                                          this.props.selectedRebates,
+                                          this.props.selectedTab,
+                                          this.props.deal
+                                      ))),
+                                      this.props.downPayment,
+                                      this.props.termDuration
+                                  )
+                              )
+                          )
+                        : 'Loading...'}
                 </div>
                 <div className="deal-price__hr" />
             </div>
@@ -40,10 +84,24 @@ class DealPrice extends React.Component {
         return (
             <div className="deal-price__price">
                 <div className="deal-price__finance-lease-label">
-                    Average Monthly Lease Payment
+                    Estimated Monthly Lease Payment
                 </div>
                 <div className="deal-price__finance-lease-price">
-                    {util.moneyFormat(this.props.deal.price)}
+                    {util.moneyFormat(
+                        Math.round(
+                            formulas.calculateLeasedMonthlyPayments(
+                                this.props.deal.price - R.sum(R.map(R.prop('value'), rebates.getSelectedRebatesForDealAndType(
+                                this.props.dealRebates,
+                                this.props.selectedRebates,
+                                this.props.selectedTab,
+                                this.props.deal
+                                ))),
+                                0,
+                                0,
+                                this.props.termDuration
+                            )
+                        )
+                    )}
                 </div>
                 <div className="deal-price__hr" />
             </div>
@@ -62,21 +120,25 @@ class DealPrice extends React.Component {
     }
 
     renderAppliedRebatesLink() {
-        if (!this.props.dealRebates.hasOwnProperty(this.props.deal.id)) {
+        if (!this.state.availableRebates) {
             return <div>Loading...</div>;
         }
 
-        const rebates = this.props.dealRebates[this.props.deal.id];
-        const tabRebates = R.filter(rebate => {
-            return R.contains(this.props.selectedTab, rebate.types);
-        }, rebates);
-        const maxRebates = R.sum(R.map(R.prop('value'), tabRebates));
+        const selectedAmount = R.sum(
+            R.map(R.prop('value'), this.state.selectedRebates)
+        );
+        const maxAmount = R.sum(
+            R.map(R.prop('value'), this.state.availableRebates)
+        );
 
         return (
             <div className="deal-price__rebates-applied">
-                <a href="#">
-                    $0 rebates applied of {util.moneyFormat(maxRebates)}{' '}
-                    available...
+                <a
+                    onClick={() => this.props.selectDeal(this.props.deal)}
+                    href="#"
+                >
+                    {util.moneyFormat(selectedAmount)} rebates applied of{' '}
+                    {util.moneyFormat(maxAmount)} available...
                 </a>
             </div>
         );
@@ -125,9 +187,11 @@ class DealPrice extends React.Component {
 
 const mapStateToProps = state => {
     return {
+        downPayment: state.downPayment,
+        termDuration: state.termDuration,
         selectedTab: state.selectedTab,
-        selectedRebates: state.selectedRebates,
         dealRebates: state.dealRebates,
+        selectedRebates: state.selectedRebates,
     };
 };
 

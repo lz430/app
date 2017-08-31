@@ -6,7 +6,7 @@ import R from 'ramda';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
 
-class Filterbar extends React.Component {
+class Filterbar extends React.PureComponent {
     constructor(props) {
         super(props);
 

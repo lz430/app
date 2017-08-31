@@ -4,7 +4,7 @@ import Deal from 'components/Deal';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
 
-class Deals extends React.Component {
+class Deals extends React.PureComponent {
     render() {
         return (
             <div className="deals">

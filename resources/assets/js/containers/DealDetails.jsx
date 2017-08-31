@@ -12,7 +12,7 @@ import debounce from 'lodash.debounce';
 import Finance from 'components/Finance';
 import localStorageSync from 'src/localStorageSync';
 
-class DealDetails extends React.Component {
+class DealDetails extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -113,7 +113,6 @@ class DealDetails extends React.Component {
 
         api
             .getRebates(
-                this.state.selectedTab,
                 this.state.zipcode,
                 this.props.deal.vin,
                 next_selected_rebate_ids
@@ -143,12 +142,7 @@ class DealDetails extends React.Component {
 
     requestRebates() {
         api
-            .getRebates(
-                this.state.selectedTab,
-                this.state.zipcode,
-                this.props.deal.vin,
-                []
-            )
+            .getRebates(this.state.zipcode, this.props.deal.vin)
             .then(response => {
                 const rebate_ids = R.map(R.prop('id'), response.data.rebates);
 

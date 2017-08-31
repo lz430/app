@@ -4,7 +4,7 @@ import R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
-class FilterFeatureSelector extends React.Component {
+class FilterFeatureSelector extends React.PureComponent {
     render() {
         return (
             <div className="filter-selector">

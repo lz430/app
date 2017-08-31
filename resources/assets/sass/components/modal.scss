@@ -65,6 +65,10 @@ $modal-footer-height: 60px;
       background-color: transparent;
     }
 
+    &--no-header {
+      max-height: calc(100vh - #{$offset-top + $modal-footer-height});
+    }
+
     &--no-footer {
       max-height: calc(100vh - #{$offset-top + $modal-header-height});
     }

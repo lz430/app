@@ -407,3 +407,37 @@ export function selectTab(tab) {
         data: tab,
     };
 }
+
+export function selectDeal(deal) {
+    return {
+        type: ActionTypes.SELECT_DEAL,
+        selectedDeal: deal,
+    };
+}
+
+export function clearSelectedDeal() {
+    return {
+        type: ActionTypes.CLEAR_SELECTED_DEAL,
+    };
+}
+
+export function toggleRebate(rebate) {
+    return {
+        type: ActionTypes.TOGGLE_REBATE,
+        rebate,
+    };
+}
+
+export function updateDownPayment(downPayment) {
+    return {
+        type: ActionTypes.UPDATE_DOWN_PAYMENT,
+        downPayment,
+    };
+}
+
+export function updateTermDuration(termDuration) {
+    return {
+        type: ActionTypes.UPDATE_TERM_DURATION,
+        termDuration,
+    };
+}

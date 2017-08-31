@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import R from 'ramda';
 
-class FilterPanel extends React.Component {
+class FilterPanel extends React.PureComponent {
     constructor(props) {
         super(props);
 

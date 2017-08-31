@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import util from 'src/util';
 import R from 'ramda';
 
-class Finance extends React.Component {
+class Finance extends React.PureComponent {
     constructor(props) {
         super(props);
 

@@ -45,42 +45,12 @@ const api = {
             },
         });
     },
-    getRebates: (zipcode, vin, selected_rebate_ids) => {
+    getRebates: (zipcode, vin, selected_rebate_ids = []) => {
         return window.axios.get('/api/rebates', {
             params: {
                 zipcode,
                 vin,
                 selected_rebate_ids,
-            },
-        });
-    },
-    getLeaseTerms: (
-        vin,
-        zipcode,
-        annual_mileage,
-        down_payment,
-        msrp,
-        price
-    ) => {
-        return window.axios.get('/api/lease', {
-            params: {
-                vin,
-                zipcode,
-                annual_mileage,
-                down_payment,
-                msrp,
-                price,
-            },
-        });
-    },
-    getFinanceTerms: (vin, zipcode, down_payment, msrp, price) => {
-        return window.axios.get('/api/finance', {
-            params: {
-                vin,
-                zipcode,
-                down_payment,
-                msrp,
-                price,
             },
         });
     },

@@ -3,7 +3,7 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import PropTypes from 'prop-types';
 
-class SidebarFilter extends React.Component {
+class SidebarFilter extends React.PureComponent {
     constructor(props) {
         super(props);
 

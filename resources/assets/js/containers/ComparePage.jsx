@@ -7,7 +7,7 @@ import R from 'ramda';
 import qs from 'qs';
 import Modal from 'components/Modal';
 
-class ComparePage extends React.Component {
+class ComparePage extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
