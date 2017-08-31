@@ -4,6 +4,7 @@
   $deal-width: 300px;
   display: flex;
   margin-top: 12px;
+  overflow-x: scroll;
   transition: .5s;
 
   &__deal {

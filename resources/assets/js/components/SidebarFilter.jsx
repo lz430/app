@@ -34,7 +34,8 @@ class SidebarFilter extends React.PureComponent {
                                 ? zondicons['cheveron-up']
                                 : zondicons['cheveron-down']
                         }
-                    />{' '}
+                    />
+                    {' '}
                     {this.props.title}
                     {this.props.count > 0
                         ? <div className="sidebar-filters__count">

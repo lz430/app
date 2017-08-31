@@ -10,7 +10,8 @@ import FilterPanel from 'components/FilterPanel';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import util from 'src/util';
-import CashFinanceLeaseCalculator from '../components/CashFinanceLeaseCalculator';
+import CashFinanceLeaseCalculator
+    from '../components/CashFinanceLeaseCalculator';
 
 class FilterPage extends React.PureComponent {
     renderMakeSelectionModal() {
@@ -43,9 +44,9 @@ class FilterPage extends React.PureComponent {
             (util.windowIsLargerThanSmall(this.props.window.width)
                 ? ''
                 : 'filter-page__filter-panel--small ' +
-                  (this.props.smallFiltersShown
-                      ? 'filter-page__filter-panel--small-filters-shown'
-                      : 'filter-page__filter-panel--small-filters-hidden'));
+                      (this.props.smallFiltersShown
+                          ? 'filter-page__filter-panel--small-filters-shown'
+                          : 'filter-page__filter-panel--small-filters-hidden'));
 
         return (
             <div className={className}>
@@ -60,9 +61,9 @@ class FilterPage extends React.PureComponent {
             (util.windowIsLargerThanSmall(this.props.window.width)
                 ? ''
                 : 'filter-page__deals--small ' +
-                  (this.props.smallFiltersShown
-                      ? 'filter-page__deals--small-filters-shown'
-                      : 'filter-page__deals--small-filters-hidden'));
+                      (this.props.smallFiltersShown
+                          ? 'filter-page__deals--small-filters-shown'
+                          : 'filter-page__deals--small-filters-hidden'));
 
         return (
             <div className={className}>

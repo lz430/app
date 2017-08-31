@@ -77,18 +77,14 @@ class Rebates extends React.PureComponent {
             rebate.id,
             this.state.compatibleRebateIds
         );
-        const checkboxClass = `rebates__checkbox rebates__checkbox--inverted ${isSelected
-            ? 'rebates__checkbox--selected'
-            : ''}`;
+        const checkboxClass = `rebates__checkbox rebates__checkbox--inverted ${isSelected ? 'rebates__checkbox--selected' : ''}`;
 
         return (
             <div
                 onClick={
                     isSelectable ? () => this.toggleRebate(rebate) : R.identity
                 }
-                className={`rebates__rebate ${isSelectable
-                    ? ''
-                    : 'rebates__rebate--disabled'}`}
+                className={`rebates__rebate ${isSelectable ? '' : 'rebates__rebate--disabled'}`}
                 key={index}
             >
                 {isSelected

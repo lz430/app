@@ -31,11 +31,7 @@ class Modal extends React.PureComponent {
                               </div>
                             : ''}
                         <div
-                            className={`modal__body ${this.props.closeText
-                                ? this.props.title
-                                  ? ''
-                                  : 'modal__body--no-header'
-                                : 'modal__body--no-footer'}`}
+                            className={`modal__body ${this.props.closeText ? (this.props.title ? '' : 'modal__body--no-header') : 'modal__body--no-footer'}`}
                         >
                             {this.props.children()}
                         </div>

@@ -6,8 +6,7 @@ class Financing extends Component {
         super(props);
 
         this.state = {
-            url:
-                'https://itl.routeone.net/XRD/turnKeyOcaStart.do?rteOneDmsId=F00PRZ&dealerId=AX0PG' +
+            url: 'https://itl.routeone.net/XRD/turnKeyOcaStart.do?rteOneDmsId=F00PRZ&dealerId=AX0PG' +
                 `&buyOrLease=1` +
                 `&vehicleYear=${props.purchase.deal.year}` +
                 `&vehicleMake=${props.purchase.deal.make}` +
@@ -15,9 +14,7 @@ class Financing extends Component {
                 `&contractTerms_vehiclestyle=${props.purchase.deal.body}` +
                 `&vehicle_vin=${props.purchase.deal.vin}` +
                 `&contractTerms_msrp=${props.purchase.deal.msrp}` +
-                `&vehicle_image_url=${props.purchase.deal.photos
-                    ? props.purchase.deal.photos[0].url
-                    : ''}` +
+                `&vehicle_image_url=${props.purchase.deal.photos ? props.purchase.deal.photos[0].url : ''}` +
                 `&dealership_name=${props.purchase.deal.dealer_name}`,
         };
     }

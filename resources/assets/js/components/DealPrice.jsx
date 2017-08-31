@@ -62,12 +62,19 @@ class DealPrice extends React.PureComponent {
                         ? util.moneyFormat(
                               Math.round(
                                   formulas.calculateFinancedMonthlyPayments(
-                                      this.props.deal.price - R.sum(R.map(R.prop('value'), rebates.getSelectedRebatesForDealAndType(
-                                          this.props.dealRebates,
-                                          this.props.selectedRebates,
-                                          this.props.selectedTab,
-                                          this.props.deal
-                                      ))),
+                                      this.props.deal.price -
+                                          R.sum(
+                                              R.map(
+                                                  R.prop('value'),
+                                                  rebates.getSelectedRebatesForDealAndType(
+                                                      this.props.dealRebates,
+                                                      this.props
+                                                          .selectedRebates,
+                                                      this.props.selectedTab,
+                                                      this.props.deal
+                                                  )
+                                              )
+                                          ),
                                       this.props.downPayment,
                                       this.props.termDuration
                                   )
@@ -90,12 +97,18 @@ class DealPrice extends React.PureComponent {
                     {util.moneyFormat(
                         Math.round(
                             formulas.calculateLeasedMonthlyPayments(
-                                this.props.deal.price - R.sum(R.map(R.prop('value'), rebates.getSelectedRebatesForDealAndType(
-                                this.props.dealRebates,
-                                this.props.selectedRebates,
-                                this.props.selectedTab,
-                                this.props.deal
-                                ))),
+                                this.props.deal.price -
+                                    R.sum(
+                                        R.map(
+                                            R.prop('value'),
+                                            rebates.getSelectedRebatesForDealAndType(
+                                                this.props.dealRebates,
+                                                this.props.selectedRebates,
+                                                this.props.selectedTab,
+                                                this.props.deal
+                                            )
+                                        )
+                                    ),
                                 0,
                                 0,
                                 this.props.termDuration
@@ -150,28 +163,19 @@ class DealPrice extends React.PureComponent {
                 <div className="tabs">
                     <div
                         onClick={this.props.selectTab.bind(null, 'cash')}
-                        className={`tabs__tab ${this.props.selectedTab ===
-                        'cash'
-                            ? 'tabs__tab--selected'
-                            : ''}`}
+                        className={`tabs__tab ${this.props.selectedTab === 'cash' ? 'tabs__tab--selected' : ''}`}
                     >
                         Cash
                     </div>
                     <div
                         onClick={this.props.selectTab.bind(null, 'finance')}
-                        className={`tabs__tab ${this.props.selectedTab ===
-                        'finance'
-                            ? 'tabs__tab--selected'
-                            : ''}`}
+                        className={`tabs__tab ${this.props.selectedTab === 'finance' ? 'tabs__tab--selected' : ''}`}
                     >
                         Finance
                     </div>
                     <div
                         onClick={this.props.selectTab.bind(null, 'lease')}
-                        className={`tabs__tab ${this.props.selectedTab ===
-                        'lease'
-                            ? 'tabs__tab--selected'
-                            : ''}`}
+                        className={`tabs__tab ${this.props.selectedTab === 'lease' ? 'tabs__tab--selected' : ''}`}
                     >
                         Lease
                     </div>

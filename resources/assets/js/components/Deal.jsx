@@ -79,10 +79,10 @@ class Deal extends React.PureComponent {
     render() {
         const deal = this.props.deal;
         const featuredImageUrl = this.featuredImageUrl();
-        const featureImageClass =
-            featuredImageUrl !== this.state.fallbackDealImage
-                ? 'deal__image'
-                : 'deal__image deal__image--fallback';
+        const featureImageClass = featuredImageUrl !==
+            this.state.fallbackDealImage
+            ? 'deal__image'
+            : 'deal__image deal__image--fallback';
 
         return (
             <div className="deal">
@@ -104,25 +104,7 @@ class Deal extends React.PureComponent {
                     <DealPrice deal={deal} />
                 </div>
 
-                <div className="deal__buttons">
-                    <button
-                        className={
-                            'deal__button deal__button--small ' +
-                            (R.contains(deal, this.props.compareList)
-                                ? 'deal__button--blue'
-                                : '')
-                        }
-                        onClick={this.props.toggleCompare.bind(null, deal)}
-                    >
-                        Compare
-                    </button>
-                    <button
-                        onClick={() => (window.location = `/deals/${deal.id}`)}
-                        className="deal__button deal__button--small deal__button--blue deal__button"
-                    >
-                        View Details
-                    </button>
-                </div>
+                {this.props.children}
             </div>
         );
     }

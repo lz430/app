@@ -13,40 +13,4 @@ comparepage {
   @media (min-width: $break-small) {
     padding: $section-padding;
   }
-
-  &__arrow-buttons {
-    display: none;
-
-    @media (min-width: $break-small) {
-      background-color: $color-text-white;
-      border: 1px solid $color-section-bottom-border;
-      border-radius: 4px;
-      display: flex;
-      float: right;
-      margin-top: -40px;
-    }
-  }
-
-  &__arrow-button {
-    align-items: center;
-    display: block;
-    fill: $color-sidebar-background-secondary-dark;
-    flex: 1;
-    height: 40px;
-
-    &:first-child {
-      border-right: 1px solid $color-section-bottom-border;
-    }
-  }
-
-  &__swipe-notification {
-    display: block;
-    margin: 10px auto;
-    width: 245px;
-
-    @media (min-width: $break-small) {
-      display: none;
-    }
-
-  }
 }

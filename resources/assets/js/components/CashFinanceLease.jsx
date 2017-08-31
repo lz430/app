@@ -19,9 +19,7 @@ class CashFinanceLease extends React.PureComponent {
     }
 
     tabClassName(tabName) {
-        return `tabs__tab ${tabName === this.state.selectedTab
-            ? 'tabs__tab--selected'
-            : ''}`;
+        return `tabs__tab ${tabName === this.state.selectedTab ? 'tabs__tab--selected' : ''}`;
     }
 
     renderLeaseForm() {

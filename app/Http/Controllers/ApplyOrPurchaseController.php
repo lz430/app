@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use DeliverMyRide\HubSpot\Client;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
@@ -97,12 +98,24 @@ class ApplyOrPurchaseController extends Controller
         ], [
             'email' => 'Email is required',
         ]);
-
-        /** @var User $user */
-        $user = auth()->user();
-
-        $user->email = request('email');
-        $user->save();
+        
+        $user = DB::transaction(function () {
+            if ($user = User::where('email', request('email'))->first()) {
+                auth()->user()->purchases()->each(function ($purchase) use ($user) {
+                    $purchase->user_id = $user->id;
+                    $purchase->save();
+                });
+        
+                auth()->user()->delete();
+                auth()->login($user);
+            } else {
+                $user = auth()->user();
+            }
+    
+            $user->email = request('email');
+            $user->save();
+            return $user;
+        });
 
         $purchase = $user->purchases()->with('deal')->latest()->firstOrFail();
 
