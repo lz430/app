@@ -235,8 +235,9 @@ export function toggleStyle(style) {
 
 export function chooseFuelType(fuelType) {
     return (dispatch, getState) => {
-        const selectedFuelType =
-            getState().selectedFuelType === fuelType ? null : fuelType;
+        const selectedFuelType = getState().selectedFuelType === fuelType
+            ? null
+            : fuelType;
 
         api
             .getDeals(
@@ -257,10 +258,10 @@ export function chooseFuelType(fuelType) {
 
 export function chooseTransmissionType(transmissionType) {
     return (dispatch, getState) => {
-        const selectedTransmissionType =
-            getState().selectedTransmissionType === transmissionType
-                ? null
-                : transmissionType;
+        const selectedTransmissionType = getState().selectedTransmissionType ===
+            transmissionType
+            ? null
+            : transmissionType;
 
         api
             .getDeals(
