@@ -9,11 +9,14 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use \Log;
 
 class RouteOneWebhookController extends BaseAPIController
 {
     public function handleWebhook(Request $request)
     {
+        Log::info('Route-One-Webhook-Request', [$request]);
+        
         if ($request->getContentType() !== 'xml') {
             return response()->json(['status' => 'error', 'message' => 'Invalid format. Please use XML.']);
         }
