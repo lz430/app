@@ -243,11 +243,8 @@ XML;
         $purchase = factory(Purchase::class)->create(['user_id' => $user->id]);
         $this->assertNull($purchase->completed_at);
         
-        $response = $this->post(
-            route('route-one-webhook'),
-            ['payload' => $this->sampleXML],
-            ['Content-Type' => 'text/xml; charset=UTF8']
-        );
+        $response = $this->call('POST', route('route-one-webhook'), [], [], [], ['CONTENT_TYPE' => 'text/xml'], $this->sampleXML);
+        
         $response->assertStatus(200);
         
         $purchase->refresh();
