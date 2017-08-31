@@ -21,8 +21,6 @@ Route::get('deals', 'DealsController@getDeals')->name('deals.index');
 Route::get('features', 'FeaturesController@index')->name('features.index');
 Route::get('rebates', 'RebatesController@getRebates')->name('rebates.getRebates');
 Route::get('rebates/best', 'RebatesController@getBestRebateIds')->name('rebates.getBestRebateIds');
-Route::get('lease', 'LeaseController@getTerms')->name('lease.getTerms');
-Route::get('finance', 'FinanceController@getTerms')->name('finance.getTerms');
 Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');
 
 Route::group(['prefix' => 'webhook'], function () {

@@ -2,6 +2,7 @@ import React from 'react';
 import R from 'ramda';
 import util from 'src/util';
 import rebates from 'src/rebates';
+import formulas from 'src/formulas';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 
@@ -54,10 +55,25 @@ class DealPrice extends React.PureComponent {
         return (
             <div className="deal-price__price">
                 <div className="deal-price__finance-lease-label">
-                    Average Monthly Finance Payment
+                    Estimated Monthly Finance Payment
                 </div>
                 <div className="deal-price__finance-lease-price">
-                    {util.moneyFormat(this.props.deal.price)}
+                    {this.props.dealRebates.hasOwnProperty(this.props.deal.id)
+                        ? util.moneyFormat(
+                              Math.round(
+                                  formulas.calculateFinancedMonthlyPayments(
+                                      this.props.deal.price - R.sum(R.map(R.prop('value'), rebates.getSelectedRebatesForDealAndType(
+                                          this.props.dealRebates,
+                                          this.props.selectedRebates,
+                                          this.props.selectedTab,
+                                          this.props.deal
+                                      ))),
+                                      this.props.downPayment,
+                                      this.props.termDuration
+                                  )
+                              )
+                          )
+                        : 'Loading...'}
                 </div>
                 <div className="deal-price__hr" />
             </div>
@@ -68,10 +84,24 @@ class DealPrice extends React.PureComponent {
         return (
             <div className="deal-price__price">
                 <div className="deal-price__finance-lease-label">
-                    Average Monthly Lease Payment
+                    Estimated Monthly Lease Payment
                 </div>
                 <div className="deal-price__finance-lease-price">
-                    {util.moneyFormat(this.props.deal.price)}
+                    {util.moneyFormat(
+                        Math.round(
+                            formulas.calculateLeasedMonthlyPayments(
+                                this.props.deal.price - R.sum(R.map(R.prop('value'), rebates.getSelectedRebatesForDealAndType(
+                                this.props.dealRebates,
+                                this.props.selectedRebates,
+                                this.props.selectedTab,
+                                this.props.deal
+                                ))),
+                                0,
+                                0,
+                                this.props.termDuration
+                            )
+                        )
+                    )}
                 </div>
                 <div className="deal-price__hr" />
             </div>
@@ -157,6 +187,8 @@ class DealPrice extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
+        downPayment: state.downPayment,
+        termDuration: state.termDuration,
         selectedTab: state.selectedTab,
         dealRebates: state.dealRebates,
         selectedRebates: state.selectedRebates,

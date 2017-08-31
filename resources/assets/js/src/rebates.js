@@ -7,7 +7,7 @@ const rebates = {
         type,
         deal
     ) => {
-        if (!(deal && dealRebates.hasOwnProperty(deal.id))) {
+        if (!(deal && dealRebates && dealRebates.hasOwnProperty(deal.id))) {
             return null;
         }
 
@@ -21,7 +21,7 @@ const rebates = {
         type,
         deal
     ) => {
-        if (!(deal && dealRebates.hasOwnProperty(deal.id))) {
+        if (!(deal && dealRebates && dealRebates.hasOwnProperty(deal.id))) {
             return [];
         }
 

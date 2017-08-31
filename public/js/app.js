@@ -6699,29 +6699,6 @@ var api = {
             }
         });
     },
-    getLeaseTerms: function getLeaseTerms(vin, zipcode, annual_mileage, down_payment, msrp, price) {
-        return window.axios.get('/api/lease', {
-            params: {
-                vin: vin,
-                zipcode: zipcode,
-                annual_mileage: annual_mileage,
-                down_payment: down_payment,
-                msrp: msrp,
-                price: price
-            }
-        });
-    },
-    getFinanceTerms: function getFinanceTerms(vin, zipcode, down_payment, msrp, price) {
-        return window.axios.get('/api/finance', {
-            params: {
-                vin: vin,
-                zipcode: zipcode,
-                down_payment: down_payment,
-                msrp: msrp,
-                price: price
-            }
-        });
-    },
     getApplicationStatus: function getApplicationStatus(purchaseId) {
         return window.axios.get('/api/application-status', {
             params: {
@@ -9840,7 +9817,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var rebates = {
     getAvailableRebatesForDealAndType: function getAvailableRebatesForDealAndType(dealRebates, selectedRebates, type, deal) {
-        if (!(deal && dealRebates.hasOwnProperty(deal.id))) {
+        if (!(deal && dealRebates && dealRebates.hasOwnProperty(deal.id))) {
             return null;
         }
 
@@ -9849,7 +9826,7 @@ var rebates = {
         }, dealRebates[deal.id]);
     },
     getSelectedRebatesForDealAndType: function getSelectedRebatesForDealAndType(dealRebates, selectedRebates, type, deal) {
-        if (!(deal && dealRebates.hasOwnProperty(deal.id))) {
+        if (!(deal && dealRebates && dealRebates.hasOwnProperty(deal.id))) {
             return [];
         }
 
@@ -23682,6 +23659,10 @@ var _rebates = __webpack_require__(148);
 
 var _rebates2 = _interopRequireDefault(_rebates);
 
+var _formulas = __webpack_require__(926);
+
+var _formulas2 = _interopRequireDefault(_formulas);
+
 var _reactRedux = __webpack_require__(26);
 
 var _index = __webpack_require__(24);
@@ -23762,12 +23743,12 @@ var DealPrice = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__finance-lease-label' },
-                    'Average Monthly Finance Payment'
+                    'Estimated Monthly Finance Payment'
                 ),
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__finance-lease-price' },
-                    _util2.default.moneyFormat(this.props.deal.price)
+                    this.props.dealRebates.hasOwnProperty(this.props.deal.id) ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(this.props.deal.price - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), this.props.downPayment, this.props.termDuration))) : 'Loading...'
                 ),
                 _react2.default.createElement('div', { className: 'deal-price__hr' })
             );
@@ -23781,12 +23762,12 @@ var DealPrice = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__finance-lease-label' },
-                    'Average Monthly Lease Payment'
+                    'Estimated Monthly Lease Payment'
                 ),
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__finance-lease-price' },
-                    _util2.default.moneyFormat(this.props.deal.price)
+                    _util2.default.moneyFormat(Math.round(_formulas2.default.calculateLeasedMonthlyPayments(this.props.deal.price - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), 0, 0, this.props.termDuration)))
                 ),
                 _react2.default.createElement('div', { className: 'deal-price__hr' })
             );
@@ -23887,6 +23868,8 @@ var DealPrice = function (_React$PureComponent) {
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
+        downPayment: state.downPayment,
+        termDuration: state.termDuration,
         selectedTab: state.selectedTab,
         dealRebates: state.dealRebates,
         selectedRebates: state.selectedRebates
@@ -25156,9 +25139,9 @@ var _rebates = __webpack_require__(148);
 
 var _rebates2 = _interopRequireDefault(_rebates);
 
-var _api = __webpack_require__(96);
+var _formulas = __webpack_require__(926);
 
-var _api2 = _interopRequireDefault(_api);
+var _formulas2 = _interopRequireDefault(_formulas);
 
 var _reactRedux = __webpack_require__(26);
 
@@ -25182,59 +25165,13 @@ var FinanceCalculator = function (_React$PureComponent) {
     function FinanceCalculator(props) {
         _classCallCheck(this, FinanceCalculator);
 
-        var _this = _possibleConstructorReturn(this, (FinanceCalculator.__proto__ || Object.getPrototypeOf(FinanceCalculator)).call(this, props));
-
-        _this.state = {
-            terms: null,
-            term: null
-        };
-        return _this;
+        return _possibleConstructorReturn(this, (FinanceCalculator.__proto__ || Object.getPrototypeOf(FinanceCalculator)).call(this, props));
     }
 
     _createClass(FinanceCalculator, [{
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            this._isMounted = false;
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-            this.updateTerms(nextProps);
-        }
-    }, {
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this._isMounted = true;
-            this.updateTerms(this.props);
-        }
-    }, {
-        key: 'updateTerms',
-        value: function updateTerms(props) {
-            var _this2 = this;
-
-            _api2.default.getFinanceTerms(props.deal.vin, props.zipcode, props.downPayment, props.deal.msrp, props.deal.price).then(function (response) {
-                if (!_this2._isMounted) return;
-
-                _this2.setState({
-                    terms: response.data,
-                    term: _ramda2.default.find(function (term) {
-                        return term.term === props.termDuration;
-                    }, response.data)
-                });
-            });
-        }
-    }, {
         key: 'updateDownPayment',
         value: function updateDownPayment(e) {
-            var _this3 = this;
-
-            var value = e.target.value;
-
-            this.setState({
-                term: null
-            }, function () {
-                _this3.props.updateDownPayment(Math.max(value, 0));
-            });
+            this.props.updateDownPayment(Math.max(e.target.value, 0));
         }
     }, {
         key: 'updateTermDuration',
@@ -25244,7 +25181,7 @@ var FinanceCalculator = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
-            var _this4 = this;
+            var _this2 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -25326,7 +25263,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { style: { float: 'right' } },
-                            _util2.default.moneyFormat(_ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)))
+                            this.props.availableRebates ? _util2.default.moneyFormat(_ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))) : 'Loading...'
                         )
                     ),
                     _react2.default.createElement(
@@ -25360,7 +25297,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { style: { float: 'right' } },
-                            this.state.term ? _util2.default.moneyFormat(this.state.term.amount_financed) : 'Loading...'
+                            this.props.availableRebates ? this.props.deal.price - this.props.downPayment - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))) : 'Loading...'
                         )
                     ),
                     _react2.default.createElement(
@@ -25382,7 +25319,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                                 name: 'down-payment',
                                 value: this.props.downPayment,
                                 onChange: function onChange(e) {
-                                    return _this4.updateDownPayment(e);
+                                    return _this2.updateDownPayment(e);
                                 }
                             })
                         )
@@ -25403,7 +25340,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                                 {
                                     value: this.props.termDuration,
                                     onChange: function onChange(e) {
-                                        return _this4.updateTermDuration(e);
+                                        return _this2.updateTermDuration(e);
                                     }
                                 },
                                 _react2.default.createElement(
@@ -25441,7 +25378,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'span',
                         { style: { float: 'right' } },
-                        this.state.term ? this.state.term.rate * 100 + '%' : 'Loading...'
+                        '4%'
                     )
                 ),
                 _react2.default.createElement(
@@ -25455,7 +25392,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'span',
                         { style: { float: 'right' } },
-                        this.state.term ? _util2.default.moneyFormat(this.state.term.payment) : 'Loading...'
+                        this.props.availableRebates ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(this.props.deal.price - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)), this.props.downPayment, this.props.termDuration))) : 'Loading...'
                     )
                 )
             );
@@ -25471,6 +25408,7 @@ function mapStateToProps(state) {
         downPayment: state.downPayment,
         deal: state.selectedDeal,
         termDuration: state.termDuration,
+        availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal),
         selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal)
     };
 }
@@ -25711,6 +25649,22 @@ var _util = __webpack_require__(19);
 
 var _util2 = _interopRequireDefault(_util);
 
+var _ramda = __webpack_require__(14);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _Rebates = __webpack_require__(215);
+
+var _Rebates2 = _interopRequireDefault(_Rebates);
+
+var _rebates = __webpack_require__(148);
+
+var _rebates2 = _interopRequireDefault(_rebates);
+
+var _formulas = __webpack_require__(926);
+
+var _formulas2 = _interopRequireDefault(_formulas);
+
 var _reactRedux = __webpack_require__(26);
 
 var _actions = __webpack_require__(24);
@@ -25730,19 +25684,145 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var LeaseCalculator = function (_React$PureComponent) {
     _inherits(LeaseCalculator, _React$PureComponent);
 
-    function LeaseCalculator() {
+    function LeaseCalculator(props) {
         _classCallCheck(this, LeaseCalculator);
 
-        return _possibleConstructorReturn(this, (LeaseCalculator.__proto__ || Object.getPrototypeOf(LeaseCalculator)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (LeaseCalculator.__proto__ || Object.getPrototypeOf(LeaseCalculator)).call(this, props));
     }
 
     _createClass(LeaseCalculator, [{
+        key: 'updateDownPayment',
+        value: function updateDownPayment(e) {
+            this.props.updateDownPayment(Math.max(e.target.value, 0));
+        }
+    }, {
+        key: 'updateTermDuration',
+        value: function updateTermDuration(e) {
+            this.props.updateTermDuration(Number(e.target.value));
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
             return _react2.default.createElement(
                 'div',
                 null,
-                'Lease Price:'
+                'Lease Price ',
+                _util2.default.moneyFormat(this.props.deal.price),
+                _react2.default.createElement('hr', null),
+                'Available Rebates and Incentives on Lease',
+                _react2.default.createElement(_Rebates2.default, null),
+                _react2.default.createElement('hr', null),
+                'Summary',
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'span',
+                            null,
+                            'MSRP'
+                        ),
+                        _react2.default.createElement(
+                            'span',
+                            { style: { float: 'right' } },
+                            _util2.default.moneyFormat(this.props.deal.msrp)
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'span',
+                            null,
+                            'Your Price'
+                        ),
+                        _react2.default.createElement(
+                            'span',
+                            { style: { float: 'right' } },
+                            _util2.default.moneyFormat(this.props.deal.price)
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'span',
+                            null,
+                            'Your Rebates and Incentives'
+                        ),
+                        _react2.default.createElement(
+                            'span',
+                            { style: { float: 'right' } },
+                            this.props.availableRebates ? _util2.default.moneyFormat(_ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))) : 'Loading...'
+                        )
+                    )
+                ),
+                _react2.default.createElement('hr', null),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    'Lease Summary',
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'span',
+                            null,
+                            'Term Duration'
+                        ),
+                        _react2.default.createElement(
+                            'span',
+                            { style: { float: 'right' } },
+                            _react2.default.createElement(
+                                'select',
+                                {
+                                    value: this.props.termDuration,
+                                    onChange: function onChange(e) {
+                                        return _this2.updateTermDuration(e);
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    'option',
+                                    { value: '60' },
+                                    '60'
+                                ),
+                                _react2.default.createElement(
+                                    'option',
+                                    { value: '48' },
+                                    '48'
+                                ),
+                                _react2.default.createElement(
+                                    'option',
+                                    { value: '36' },
+                                    '36'
+                                ),
+                                _react2.default.createElement(
+                                    'option',
+                                    { value: '24' },
+                                    '24'
+                                )
+                            )
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        'span',
+                        null,
+                        'Your Monthly Lease Payment'
+                    ),
+                    _react2.default.createElement(
+                        'span',
+                        { style: { float: 'right' } },
+                        this.props.availableRebates ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateLeasedMonthlyPayments(this.props.deal.price - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)), 0, 0, this.props.termDuration))) : 'Loading...'
+                    )
+                )
             );
         }
     }]);
@@ -25752,7 +25832,12 @@ var LeaseCalculator = function (_React$PureComponent) {
 
 function mapStateToProps(state) {
     return {
-        zipcode: state.zipcode
+        zipcode: state.zipcode,
+        downPayment: state.downPayment,
+        deal: state.selectedDeal,
+        termDuration: state.termDuration,
+        availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal),
+        selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal)
     };
 }
 
@@ -55570,6 +55655,57 @@ module.exports = function(module) {
 __webpack_require__(351);
 module.exports = __webpack_require__(352);
 
+
+/***/ }),
+/* 923 */,
+/* 924 */,
+/* 925 */,
+/* 926 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _ramda = __webpack_require__(14);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var formulas = {
+    /**
+     * Formula: EMI = ( P × r × (1+r)n ) / ((1+r)n − 1)
+     * EMI = Equated Monthly Installment
+     * P = Loan Amount - Down payment
+     * r = Annual Interest rate / 1200
+     * n = Term (Period or no.of year or months for loan repayment.)
+     * @param price
+     * @param downPayment
+     * @param term
+     * @return float|int
+     */
+    calculateFinancedMonthlyPayments: function calculateFinancedMonthlyPayments(price, downPayment, term) {
+        var interestRate = 4;
+
+        return (price - downPayment) * (interestRate / 1200 * Math.pow(1 + interestRate / 1200, term) / (Math.pow(1 + interestRate / 1200, term) - 1));
+    },
+
+    calculateLeasedMonthlyPayments: function calculateLeasedMonthlyPayments(price, downPayment, deliveryCost, term) {
+        var interestRate = 4;
+        var capitalizedCost = price + deliveryCost - downPayment;
+        var jatoResidualValue = 0.61;
+        var depreciation = (capitalizedCost - capitalizedCost * jatoResidualValue) / term;
+        var interest = (capitalizedCost + capitalizedCost * jatoResidualValue) * (interestRate / 2400);
+
+        return depreciation + interest;
+    }
+};
+
+exports.default = formulas;
 
 /***/ })
 /******/ ]);
