@@ -1,12 +1,16 @@
 import React from 'react';
 import util from 'src/util';
+import CashCalculator from 'components/CashCalculator';
+import FinanceCalculator from 'components/FinanceCalculator';
+import LeaseCalculator from 'components/LeaseCalculator';
+import { connect } from 'react-redux';
+import * as Actions from 'actions';
 
-class CashFinanceLease extends React.PureComponent {
+class CashFinanceLeaseCalculator extends React.PureComponent {
     constructor() {
         super();
 
         this.state = {
-            selectedTab: 'cash',
             milesPerYear: 10000,
             leaseTerm: 12,
         };
@@ -14,12 +18,19 @@ class CashFinanceLease extends React.PureComponent {
         this.tabClassName = this.tabClassName.bind(this);
     }
 
-    selectTab(selectedTab) {
-        this.setState({ selectedTab });
+    renderSelectedTab() {
+        switch (this.props.selectedTab) {
+            case 'cash':
+                return <CashCalculator />;
+            case 'finance':
+                return <FinanceCalculator />;
+            case 'lease':
+                return <LeaseCalculator />;
+        }
     }
 
     tabClassName(tabName) {
-        return `tabs__tab ${tabName === this.state.selectedTab
+        return `tabs__tab ${tabName === this.props.selectedTab
             ? 'tabs__tab--selected'
             : ''}`;
     }
@@ -79,33 +90,40 @@ class CashFinanceLease extends React.PureComponent {
 
     render() {
         return (
-            <div>
+            <div className="cash-finance-lease-calculator">
                 <div className="tabs">
                     <div
-                        onClick={this.selectTab.bind(this, 'cash')}
+                        onClick={this.props.selectTab.bind(this, 'cash')}
                         className={this.tabClassName('cash')}
                     >
                         Cash
                     </div>
                     <div
-                        onClick={this.selectTab.bind(this, 'finance')}
+                        onClick={this.props.selectTab.bind(this, 'finance')}
                         className={this.tabClassName('finance')}
                     >
                         Finance
                     </div>
                     <div
-                        onClick={this.selectTab.bind(this, 'lease')}
+                        onClick={this.props.selectTab.bind(this, 'lease')}
                         className={this.tabClassName('lease')}
                     >
                         Lease
                     </div>
                 </div>
-                {this.state.selectedTab === 'lease'
-                    ? this.renderLeaseForm()
-                    : ''}
+                <div className="tabs__content">
+                    {this.renderSelectedTab()}
+                </div>
             </div>
         );
     }
 }
 
-export default CashFinanceLease;
+function mapStateToProps(state) {
+    return {
+        zipcode: state.zipcode,
+        selectedTab: state.selectedTab,
+    };
+}
+
+export default connect(mapStateToProps, Actions)(CashFinanceLeaseCalculator);

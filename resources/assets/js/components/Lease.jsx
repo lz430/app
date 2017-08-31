@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import util from 'src/util';
 import R from 'ramda';
 
-class Lease extends React.Component {
+class Lease extends React.PureComponent {
     constructor(props) {
         super(props);
 

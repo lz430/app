@@ -4,7 +4,7 @@ import R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import bodyStyleIcons from 'body-styles';
 
-class FilterStyleSelector extends React.Component {
+class FilterStyleSelector extends React.PureComponent {
     constructor() {
         super();
 

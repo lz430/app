@@ -5,7 +5,7 @@ import * as Actions from 'actions/index';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
-class ZipcodeFinder extends React.Component {
+class ZipcodeFinder extends React.PureComponent {
     constructor(props) {
         super(props);
 

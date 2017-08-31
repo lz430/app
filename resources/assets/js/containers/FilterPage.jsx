@@ -10,8 +10,9 @@ import FilterPanel from 'components/FilterPanel';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import util from 'src/util';
+import CashFinanceLeaseCalculator from '../components/CashFinanceLeaseCalculator';
 
-class FilterPage extends React.Component {
+class FilterPage extends React.PureComponent {
     renderMakeSelectionModal() {
         return (
             <Modal
@@ -21,6 +22,17 @@ class FilterPage extends React.Component {
                 closeText="Show available vehicles"
             >
                 {() => <MakeSelector />}
+            </Modal>
+        );
+    }
+
+    renderDealRebatesModal() {
+        return (
+            <Modal
+                onClose={this.props.clearSelectedDeal}
+                closeText="Back to results"
+            >
+                {() => <CashFinanceLeaseCalculator />}
             </Modal>
         );
     }
@@ -79,6 +91,8 @@ class FilterPage extends React.Component {
                 {this.props.showMakeSelectorModal
                     ? this.renderMakeSelectionModal()
                     : ''}
+
+                {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}
 
                 {this.props.deals ? this.renderFilterPanelAndDeals() : ''}
             </div>

@@ -6,7 +6,7 @@ import DealPrice from 'components/DealPrice';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 
-class Deal extends React.Component {
+class Deal extends React.PureComponent {
     constructor(props) {
         super(props);
 
