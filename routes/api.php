@@ -25,10 +25,6 @@ Route::get('lease', 'LeaseController@getTerms')->name('lease.getTerms');
 Route::get('finance', 'FinanceController@getTerms')->name('finance.getTerms');
 Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');
 
-Route::group(['middleware' => 'auth:api'], function () {
-    Route::patch('users/{user}', 'UsersController@update')->name('users.update');
-});
-
 Route::group(['prefix' => 'webhook'], function () {
     Route::post('route-one', 'RouteOneWebhookController@handleWebhook')->name('route-one-webhook');
 });
