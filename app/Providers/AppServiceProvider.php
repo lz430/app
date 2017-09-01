@@ -28,10 +28,6 @@ class AppServiceProvider extends ServiceProvider
     {
         setlocale(LC_MONETARY, 'en_US.UTF-8');
 
-        if ($this->app->environment('local')) {
-            $this->app->register(DebugbarServiceProvider::class);
-        }
-    
         $this->app->alias('bugsnag.multi', Log::class);
         $this->app->alias('bugsnag.multi', LoggerInterface::class);
     }
