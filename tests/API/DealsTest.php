@@ -201,7 +201,7 @@ class DealsTest extends TestCase
 
         $versionDeals = $version->deals()->saveMany(factory(Deal::class, 3)->make());
 
-        $versionDeals->first()->features()->attach(factory(Feature::class)->make(['feature' => 'ABS']));
+        $versionDeals->first()->features()->attach(factory(Feature::class)->create(['feature' => 'ABS']));
 
         $response = $this->getJson(route('deals.index', [
             'make_ids' => [$make->id, 2, 3],
