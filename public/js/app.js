@@ -54842,6 +54842,14 @@ var _CompareBar = __webpack_require__(364);
 
 var _CompareBar2 = _interopRequireDefault(_CompareBar);
 
+var _reactSvgInline = __webpack_require__(35);
+
+var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
+
+var _zondicons = __webpack_require__(44);
+
+var _zondicons2 = _interopRequireDefault(_zondicons);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -55051,16 +55059,54 @@ var DealDetails = function (_React$PureComponent) {
 
             return _react2.default.createElement(
                 _Modal2.default,
-                {
-                    onClose: function onClose() {
-                        return _this2.hideModals();
-                    },
-                    title: 'Select brand preference',
-                    subtitle: 'Please select one or more brands that you are considering'
-                },
+                null,
                 _react2.default.createElement(
                     'div',
-                    null,
+                    { className: 'modal__content' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'modal__sticker-container' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal__sticker' },
+                            'Standard Features'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'modal__header' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal__titles modal__titles--center' },
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal__subtitle modal__subtitle--center' },
+                                _strings2.default.dealYearMake(this.props.deal)
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal__title modal_title--center' },
+                                _strings2.default.dealModelTrim(this.props.deal)
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal__close' },
+                            _react2.default.createElement(_reactSvgInline2.default, {
+                                onClick: function onClick() {
+                                    return _this2.hideModals();
+                                },
+                                height: '20px',
+                                width: '20px',
+                                className: 'modal__close-x',
+                                svg: _zondicons2.default['close']
+                            })
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deal-details__modal-body' },
                     _react2.default.createElement(
                         'ul',
                         null,
@@ -55082,16 +55128,54 @@ var DealDetails = function (_React$PureComponent) {
 
             return _react2.default.createElement(
                 _Modal2.default,
-                {
-                    onClose: function onClose() {
-                        return _this3.hideModals();
-                    },
-                    title: 'Select brand preference',
-                    subtitle: 'Please select one or more brands that you are considering'
-                },
+                null,
                 _react2.default.createElement(
                     'div',
-                    null,
+                    { className: 'modal__content' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'modal__sticker-container' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal__sticker' },
+                            'Additional Options'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'modal__header' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal__titles modal__titles--center' },
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal__subtitle modal__subtitle--center' },
+                                _strings2.default.dealYearMake(this.props.deal)
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal__title modal_title--center' },
+                                _strings2.default.dealModelTrim(this.props.deal)
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal__close' },
+                            _react2.default.createElement(_reactSvgInline2.default, {
+                                onClick: function onClick() {
+                                    return _this3.hideModals();
+                                },
+                                height: '20px',
+                                width: '20px',
+                                className: 'modal__close-x',
+                                svg: _zondicons2.default['close']
+                            })
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deal-details__modal-body' },
                     _react2.default.createElement(
                         'ul',
                         null,

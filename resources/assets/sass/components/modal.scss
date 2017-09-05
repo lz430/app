@@ -7,6 +7,18 @@ $modal-header-height: 100px;
 $modal-footer-height: 60px;
 
 .modal {
+  &__sticker-container {
+    background-color: $color-text-white;
+  }
+
+  &__sticker {
+    background-color: $color-darkergrey;
+    color: $color-text-white;
+    margin: 0 auto;
+    text-align: center;
+    width: 150px;
+  }
+
   &__overlay {
     background: $color-black;
     height: 100vh;
@@ -84,15 +96,24 @@ $modal-footer-height: 60px;
   }
 
   &__titles {
-    //
+
+    &--center {
+      margin: 0 auto;
+    }
   }
 
   &__title {
     font-size: 1.4rem;
+
+    &--center {
+      text-align: center;
+    }
   }
 
   &__subtitle {
-    //
+    &--center {
+      text-align: center;
+    }
   }
 
   &__close {

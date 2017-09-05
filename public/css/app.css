@@ -608,6 +608,18 @@ body {
   }
 }
 
+.modal__sticker-container {
+  background-color: #fff;
+}
+
+.modal__sticker {
+  background-color: #484d50;
+  color: #fff;
+  margin: 0 auto;
+  text-align: center;
+  width: 150px;
+}
+
 .modal__overlay {
   background: #000;
   height: 100vh;
@@ -694,8 +706,20 @@ body {
   padding: 10px;
 }
 
+.modal__titles--center {
+  margin: 0 auto;
+}
+
 .modal__title {
   font-size: 1.4rem;
+}
+
+.modal__title--center {
+  text-align: center;
+}
+
+.modal__subtitle--center {
+  text-align: center;
 }
 
 .modal__close {
@@ -1883,6 +1907,10 @@ body {
   margin-bottom: -1.5px;
   margin-right: 5px;
   width: 12px;
+}
+
+.deal-details__modal-body {
+  padding: 20px;
 }
 
 .rebates__rebate {
