@@ -9,10 +9,10 @@ class FilterTransmissionTypeSelector extends React.PureComponent {
         return (
             <div className="filter-selector">
                 {this.props.transmissionTypes.map((transmissionType, index) => {
-                    const className = this.props.selectedTransmissionType ===
-                        transmissionType
-                        ? 'filter-selector__radio filter-selector__radio--selected'
-                        : 'filter-selector__radio';
+                    const className =
+                        this.props.selectedTransmissionType === transmissionType
+                            ? 'filter-selector__radio filter-selector__radio--selected'
+                            : 'filter-selector__radio';
 
                     return (
                         <div

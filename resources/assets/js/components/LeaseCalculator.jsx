@@ -45,16 +45,18 @@ class LeaseCalculator extends React.PureComponent {
                     <div>
                         <span>Your Rebates and Incentives</span>
                         <span style={{ float: 'right' }}>
-                            {this.props.availableRebates
-                                ? util.moneyFormat(
-                                      R.sum(
-                                          R.map(
-                                              R.prop('value'),
-                                              this.props.selectedRebates
-                                          )
-                                      )
-                                  )
-                                : 'Loading...'}
+                            {this.props.availableRebates ? (
+                                util.moneyFormat(
+                                    R.sum(
+                                        R.map(
+                                            R.prop('value'),
+                                            this.props.selectedRebates
+                                        )
+                                    )
+                                )
+                            ) : (
+                                'Loading...'
+                            )}
                         </span>
                     </div>
                 </div>
@@ -79,24 +81,26 @@ class LeaseCalculator extends React.PureComponent {
                 <div>
                     <span>Your Monthly Lease Payment</span>
                     <span style={{ float: 'right' }}>
-                        {this.props.availableRebates
-                            ? util.moneyFormat(
-                                  Math.round(
-                                      formulas.calculateLeasedMonthlyPayments(
-                                          this.props.deal.price -
-                                              R.sum(
-                                                  R.map(
-                                                      R.prop('value'),
-                                                      this.props.selectedRebates
-                                                  )
-                                              ),
-                                          0,
-                                          0,
-                                          this.props.termDuration
-                                      )
-                                  )
-                              )
-                            : 'Loading...'}
+                        {this.props.availableRebates ? (
+                            util.moneyFormat(
+                                Math.round(
+                                    formulas.calculateLeasedMonthlyPayments(
+                                        this.props.deal.price -
+                                            R.sum(
+                                                R.map(
+                                                    R.prop('value'),
+                                                    this.props.selectedRebates
+                                                )
+                                            ),
+                                        0,
+                                        0,
+                                        this.props.termDuration
+                                    )
+                                )
+                            )
+                        ) : (
+                            'Loading...'
+                        )}
                     </span>
                 </div>
             </div>

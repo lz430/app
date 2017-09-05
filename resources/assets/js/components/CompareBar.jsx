@@ -5,7 +5,7 @@ import * as Actions from 'actions';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
-class Comparebar extends React.PureComponent {
+class CompareBar extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -58,12 +58,16 @@ class Comparebar extends React.PureComponent {
     }
 
     compareButtonClass() {
-        return `compare-bar__compare-button ${this.compareReady() ? '' : 'compare-bar__compare-button--not-ready'}`;
+        return `compare-bar__compare-button ${this.compareReady()
+            ? ''
+            : 'compare-bar__compare-button--not-ready'}`;
     }
 
     renderCompareBar() {
         return (
-            <div className="compare-bar">
+            <div
+                className={this.props.class ? this.props.class : 'compare-bar'}
+            >
                 <div className="compare-bar__deals">
                     {this.props.compareList.map((deal, index) => {
                         return (
@@ -73,9 +77,11 @@ class Comparebar extends React.PureComponent {
                                         {deal.year} {deal.make} {deal.model}
                                     </div>
                                     <div>
-                                        {deal.price
-                                            ? util.moneyFormat(deal.price)
-                                            : ''}
+                                        {deal.price ? (
+                                            util.moneyFormat(deal.price)
+                                        ) : (
+                                            ''
+                                        )}
                                     </div>
                                 </div>
                                 <SVGInline
@@ -110,7 +116,9 @@ class Comparebar extends React.PureComponent {
     }
 
     renderCompareBubble() {
-        const className = `compare-bubble ${this.state.shaking ? 'compare-bubble--shake' : ''}`;
+        const className = `compare-bubble ${this.state.shaking
+            ? 'compare-bubble--shake'
+            : ''}`;
 
         return (
             <div>
@@ -144,4 +152,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, Actions)(Comparebar);
+export default connect(mapStateToProps, Actions)(CompareBar);

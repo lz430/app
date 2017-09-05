@@ -79,34 +79,36 @@ class Deal extends React.PureComponent {
     render() {
         const deal = this.props.deal;
         const featuredImageUrl = this.featuredImageUrl();
-        const featureImageClass = featuredImageUrl !==
-            this.state.fallbackDealImage
-            ? 'deal__image'
-            : 'deal__image deal__image--fallback';
+        const featureImageClass =
+            featuredImageUrl !== this.state.fallbackDealImage
+                ? 'deal__image'
+                : 'deal__image deal__image--fallback';
 
         return (
             <div className="deal">
-                {this.props.hideImageAndTitle
-                    ? ''
-                    : <div>
-                          <div className="deal__basic-info">
-                              <div
-                                  onClick={() =>
-                                      (window.location = `/deals/${deal.id}`)}
-                                  className="deal__basic-info-year-and-model"
-                              >
-                                  {`${deal.year} ${deal.make} ${deal.model} ${deal.series}`}
-                              </div>
-                              <div className="deal__basic-info-msrp">
-                                  {util.moneyFormat(deal.msrp)} MSRP
-                              </div>
-                          </div>
+                {this.props.hideImageAndTitle ? (
+                    ''
+                ) : (
+                    <div>
+                        <div className="deal__basic-info">
+                            <div
+                                onClick={() =>
+                                    (window.location = `/deals/${deal.id}`)}
+                                className="deal__basic-info-year-and-model"
+                            >
+                                {`${deal.year} ${deal.make} ${deal.model} ${deal.series}`}
+                            </div>
+                            <div className="deal__basic-info-msrp">
+                                {util.moneyFormat(deal.msrp)} MSRP
+                            </div>
+                        </div>
 
-                          <img
-                              className={featureImageClass}
-                              src={featuredImageUrl}
-                          />
-                      </div>}
+                        <img
+                            className={featureImageClass}
+                            src={featuredImageUrl}
+                        />
+                    </div>
+                )}
 
                 <div className="deal__price">
                     <DealPrice deal={deal} />

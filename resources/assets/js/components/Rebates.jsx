@@ -77,27 +77,31 @@ class Rebates extends React.PureComponent {
             rebate.id,
             this.state.compatibleRebateIds
         );
-        const checkboxClass = `rebates__checkbox rebates__checkbox--inverted ${isSelected ? 'rebates__checkbox--selected' : ''}`;
+        const checkboxClass = `rebates__checkbox rebates__checkbox--inverted ${isSelected
+            ? 'rebates__checkbox--selected'
+            : ''}`;
 
         return (
             <div
                 onClick={
                     isSelectable ? () => this.toggleRebate(rebate) : R.identity
                 }
-                className={`rebates__rebate ${isSelectable ? '' : 'rebates__rebate--disabled'}`}
+                className={`rebates__rebate ${isSelectable
+                    ? ''
+                    : 'rebates__rebate--disabled'}`}
                 key={index}
             >
-                {isSelected
-                    ? <SVGInline
-                          width="15px"
-                          height="15px"
-                          className={checkboxClass}
-                          svg={zondicons['checkmark']}
-                      />
-                    : <div className="rebates__checkbox" />}
-                <div className="rebates__title">
-                    {rebate.rebate}
-                </div>
+                {isSelected ? (
+                    <SVGInline
+                        width="15px"
+                        height="15px"
+                        className={checkboxClass}
+                        svg={zondicons['checkmark']}
+                    />
+                ) : (
+                    <div className="rebates__checkbox" />
+                )}
+                <div className="rebates__title">{rebate.rebate}</div>
                 <div className="rebates__value">
                     -{util.moneyFormat(rebate.value)}
                 </div>
@@ -108,11 +112,13 @@ class Rebates extends React.PureComponent {
     render() {
         return (
             <div className="rebates">
-                {this.state.compatibleRebateIds
-                    ? this.props.availableRebates.map((rebate, index) =>
-                          this.renderRebate(rebate, index)
-                      )
-                    : 'Loading...'}
+                {this.state.compatibleRebateIds ? (
+                    this.props.availableRebates.map((rebate, index) =>
+                        this.renderRebate(rebate, index)
+                    )
+                ) : (
+                    'Loading...'
+                )}
             </div>
         );
     }

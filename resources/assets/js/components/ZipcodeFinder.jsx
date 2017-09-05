@@ -55,62 +55,66 @@ class ZipcodeFinder extends React.PureComponent {
         return (
             <div className="zipcode-finder">
                 <div className="zipcode-finder__info">
-                    <div>
-                        {this.props.city ? '' : 'Zip Code'}
-                    </div>
-                    {this.state.editing
-                        ? <form onSubmit={this.saveZip}>
-                              <input
-                                  className={`zipcode-finder__input ${valid ? '' : 'zipcode-finder__input--invalid'}`}
-                                  type="number"
-                                  pattern="\d*"
-                                  autoFocus
-                                  value={
-                                      this.state.zipcode
-                                          ? this.state.zipcode
-                                          : ''
-                                  }
-                                  onChange={this.handleChange}
-                              />
-                          </form>
-                        : <div className="zipcode-finder__zipcode">
-                              {this.props.city || this.props.zipcode || '_____'}
-                          </div>}
+                    <div>{this.props.city ? '' : 'Zip Code'}</div>
+                    {this.state.editing ? (
+                        <form onSubmit={this.saveZip}>
+                            <input
+                                className={`zipcode-finder__input ${valid
+                                    ? ''
+                                    : 'zipcode-finder__input--invalid'}`}
+                                type="number"
+                                pattern="\d*"
+                                autoFocus
+                                value={
+                                    this.state.zipcode ? this.state.zipcode : ''
+                                }
+                                onChange={this.handleChange}
+                            />
+                        </form>
+                    ) : (
+                        <div className="zipcode-finder__zipcode">
+                            {this.props.city || this.props.zipcode || '_____'}
+                        </div>
+                    )}
                 </div>
                 <div className="zipcode-finder__buttons">
-                    {this.state.editing
-                        ? <div>
-                              <button
-                                  onClick={this.toggleEditing}
-                                  className="zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg"
-                              >
-                                  <SVGInline
-                                      width="12px"
-                                      height="12px"
-                                      className="zipcode-finder__button-icon"
-                                      svg={zondicons['close']}
-                                  />
-                                  Cancel
-                              </button>
-                              <button
-                                  onClick={this.saveZip}
-                                  className={`zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg ${valid ? '' : 'zipcode-finder__button--inactive'}`}
-                              >
-                                  <SVGInline
-                                      width="12px"
-                                      height="12px"
-                                      className="zipcode-finder__button-icon"
-                                      svg={zondicons['checkmark']}
-                                  />
-                                  Save
-                              </button>
-                          </div>
-                        : <button
-                              onClick={this.toggleEditing}
-                              className="zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg"
-                          >
-                              Change Zip
-                          </button>}
+                    {this.state.editing ? (
+                        <div>
+                            <button
+                                onClick={this.toggleEditing}
+                                className="zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg"
+                            >
+                                <SVGInline
+                                    width="12px"
+                                    height="12px"
+                                    className="zipcode-finder__button-icon"
+                                    svg={zondicons['close']}
+                                />
+                                Cancel
+                            </button>
+                            <button
+                                onClick={this.saveZip}
+                                className={`zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg ${valid
+                                    ? ''
+                                    : 'zipcode-finder__button--inactive'}`}
+                            >
+                                <SVGInline
+                                    width="12px"
+                                    height="12px"
+                                    className="zipcode-finder__button-icon"
+                                    svg={zondicons['checkmark']}
+                                />
+                                Save
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            onClick={this.toggleEditing}
+                            className="zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg"
+                        >
+                            Change Zip
+                        </button>
+                    )}
                 </div>
             </div>
         );

@@ -5,8 +5,7 @@ import FilterStyleSelector from 'components/FilterStyleSelector';
 import FilterMakeSelector from 'components/FilterMakeSelector';
 import FilterFuelTypeSelector from 'components/FilterFuelTypeSelector';
 import FilterFeatureSelector from 'components/FilterFeatureSelector';
-import FilterTransmissionTypeSelector
-    from 'components/FilterTransmissionTypeSelector';
+import FilterTransmissionTypeSelector from 'components/FilterTransmissionTypeSelector';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import R from 'ramda';
@@ -149,26 +148,26 @@ class FilterPanel extends React.PureComponent {
                             />
                         )}
                     </SidebarFilter>
-                    {R.contains('Pickup', this.props.selectedStyles)
-                        ? <SidebarFilter
-                              title="Truck"
-                              count={this.getCountOfSelectedFeatureByGroup(
-                                  'truck'
-                              )}
-                          >
-                              {() => (
-                                  <FilterFeatureSelector
-                                      selectedFeatures={
-                                          this.props.selectedFeatures
-                                      }
-                                      features={this.getFeaturesByGroup(
-                                          'truck'
-                                      )}
-                                      onSelectFeature={this.props.toggleFeature}
-                                  />
-                              )}
-                          </SidebarFilter>
-                        : ''}
+                    {R.contains('Pickup', this.props.selectedStyles) ? (
+                        <SidebarFilter
+                            title="Truck"
+                            count={this.getCountOfSelectedFeatureByGroup(
+                                'truck'
+                            )}
+                        >
+                            {() => (
+                                <FilterFeatureSelector
+                                    selectedFeatures={
+                                        this.props.selectedFeatures
+                                    }
+                                    features={this.getFeaturesByGroup('truck')}
+                                    onSelectFeature={this.props.toggleFeature}
+                                />
+                            )}
+                        </SidebarFilter>
+                    ) : (
+                        ''
+                    )}
                 </div>
             </div>
         );

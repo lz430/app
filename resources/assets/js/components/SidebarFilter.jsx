@@ -30,25 +30,30 @@ class SidebarFilter extends React.PureComponent {
                     <SVGInline
                         className="sidebar-filters__icon"
                         svg={
-                            this.state.open
-                                ? zondicons['cheveron-up']
-                                : zondicons['cheveron-down']
+                            this.state.open ? (
+                                zondicons['cheveron-up']
+                            ) : (
+                                zondicons['cheveron-down']
+                            )
                         }
-                    />
-                    {' '}
+                    />{' '}
                     {this.props.title}
-                    {this.props.count > 0
-                        ? <div className="sidebar-filters__count">
-                              {this.props.count}
-                          </div>
-                        : ''}
+                    {this.props.count > 0 ? (
+                        <div className="sidebar-filters__count">
+                            {this.props.count}
+                        </div>
+                    ) : (
+                        ''
+                    )}
                 </div>
 
-                {this.state.open
-                    ? <div className="sidebar-filters__filter-body">
-                          {this.props.children()}
-                      </div>
-                    : ''}
+                {this.state.open ? (
+                    <div className="sidebar-filters__filter-body">
+                        {this.props.children()}
+                    </div>
+                ) : (
+                    ''
+                )}
             </div>
         );
     }

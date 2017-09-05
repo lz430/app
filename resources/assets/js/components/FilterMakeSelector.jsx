@@ -18,14 +18,16 @@ class FilterMakeSelector extends React.PureComponent {
                                 make.id
                             )}
                         >
-                            {R.contains(make.id, this.props.selectedMakes)
-                                ? <SVGInline
-                                      width="15px"
-                                      height="15px"
-                                      className="filter-selector__checkbox filter-selector__checkbox--selected"
-                                      svg={zondicons['checkmark']}
-                                  />
-                                : <div className="filter-selector__checkbox" />}
+                            {R.contains(make.id, this.props.selectedMakes) ? (
+                                <SVGInline
+                                    width="15px"
+                                    height="15px"
+                                    className="filter-selector__checkbox filter-selector__checkbox--selected"
+                                    svg={zondicons['checkmark']}
+                                />
+                            ) : (
+                                <div className="filter-selector__checkbox" />
+                            )}
                             {make.attributes.name}
                         </div>
                     );
