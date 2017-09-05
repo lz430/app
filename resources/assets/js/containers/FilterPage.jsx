@@ -22,7 +22,7 @@ class FilterPage extends React.PureComponent {
                 subtitle="Please select one or more brands that you are considering"
                 closeText="Show available vehicles"
             >
-                {() => <MakeSelector />}
+                <MakeSelector />
             </Modal>
         );
     }
@@ -33,7 +33,7 @@ class FilterPage extends React.PureComponent {
                 onClose={this.props.clearSelectedDeal}
                 closeText="Back to results"
             >
-                {() => <CashFinanceLeaseCalculator />}
+                <CashFinanceLeaseCalculator />
             </Modal>
         );
     }

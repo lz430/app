@@ -12,10 +12,8 @@ import DealDetails from 'containers/DealDetails';
  * Filter
  */
 Array.from(document.getElementsByTagName('FilterPage')).map(element => {
-    const filterStore = store();
-
     ReactDOM.render(
-        <Provider store={filterStore}>
+        <Provider store={store()}>
             <FilterPage />
         </Provider>,
         element
@@ -33,10 +31,8 @@ Array.from(document.getElementsByTagName('Financing')).map(element => {
  * ComparePage
  */
 Array.from(document.getElementsByTagName('ComparePage')).map(element => {
-    const compareStore = store();
-
     ReactDOM.render(
-        <Provider store={compareStore}>
+        <Provider store={store()}>
             <ComparePage
                 deals={JSON.parse(element.getAttribute('deals')).data}
             />
@@ -50,10 +46,12 @@ Array.from(document.getElementsByTagName('ComparePage')).map(element => {
  */
 Array.from(document.getElementsByTagName('DealDetails')).map(element => {
     ReactDOM.render(
-        <DealDetails
-            deal={JSON.parse(element.getAttribute('deal')).data}
-            intendedRoute={window.location.pathname}
-        />,
+        <Provider store={store()}>
+            <DealDetails
+                deal={JSON.parse(element.getAttribute('deal')).data}
+                intendedRoute={window.location.pathname}
+            />
+        </Provider>,
         element
     );
 });
