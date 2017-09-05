@@ -86,19 +86,27 @@ class Deal extends React.PureComponent {
 
         return (
             <div className="deal">
-                <div className="deal__basic-info">
-                    <div
-                        onClick={() => (window.location = `/deals/${deal.id}`)}
-                        className="deal__basic-info-year-and-model"
-                    >
-                        {`${deal.year} ${deal.make} ${deal.model} ${deal.series}`}
-                    </div>
-                    <div className="deal__basic-info-msrp">
-                        {util.moneyFormat(deal.msrp)} MSRP
-                    </div>
-                </div>
+                {this.props.hideImageAndTitle
+                    ? ''
+                    : <div>
+                          <div className="deal__basic-info">
+                              <div
+                                  onClick={() =>
+                                      (window.location = `/deals/${deal.id}`)}
+                                  className="deal__basic-info-year-and-model"
+                              >
+                                  {`${deal.year} ${deal.make} ${deal.model} ${deal.series}`}
+                              </div>
+                              <div className="deal__basic-info-msrp">
+                                  {util.moneyFormat(deal.msrp)} MSRP
+                              </div>
+                          </div>
 
-                <img className={featureImageClass} src={featuredImageUrl} />
+                          <img
+                              className={featureImageClass}
+                              src={featuredImageUrl}
+                          />
+                      </div>}
 
                 <div className="deal__price">
                     <DealPrice deal={deal} />

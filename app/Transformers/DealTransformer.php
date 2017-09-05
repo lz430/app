@@ -46,6 +46,8 @@ class DealTransformer extends TransformerAbstract
             'dealer_name' => $deal->dealer_name,
             'days_old' => $deal->days_old,
             'photos' => $deal->photos,
+            'versions' => $deal->versions,
+            'features' => $deal->features,
         ];
     }
     

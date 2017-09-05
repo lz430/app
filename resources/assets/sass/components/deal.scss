@@ -1,0 +1,56 @@
+@import '../variables';
+@import '../mixins/button';
+
+.deal {
+  background-color: $color-background-secondary;
+  border-radius: 6px;
+  box-shadow: 0 0 3px 0 rgba(185, 185, 185, .9);
+  height: fit-content;
+  margin: 5px;
+  max-width: 300px;
+  min-width: 300px;
+
+  &__basic-info {
+    margin: 15px 0;
+    padding: 0 15px;
+  }
+
+  &__basic-info-year-and-model {
+    color: $color-blue;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1.1rem;
+    line-height: 1.3rem;
+    text-decoration: none;
+  }
+
+  &__basic-info-msrp {
+    color: $text-color-dark;
+    display: block;
+    font-size: 1.15rem;
+  }
+
+  &__image {
+    height: 225px;
+    min-height: 225px;
+    width: 100%;
+
+    &--fallback {
+      padding: 25px;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-around;
+    margin: 5px 0 25px;
+    padding: 0 10px;
+  }
+
+  &__button {
+    @include button;
+    flex: 1;
+    justify-content: center;
+    margin: 0 5px;
+  }
+}
