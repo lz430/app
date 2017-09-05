@@ -18,12 +18,12 @@ class Deals extends React.PureComponent {
                                 <button
                                     className={
                                         'deal__button deal__button--small ' +
-                                            (R.contains(
-                                                deal,
-                                                this.props.compareList
-                                            )
-                                                ? 'deal__button--blue'
-                                                : '')
+                                        (R.contains(
+                                            deal,
+                                            this.props.compareList
+                                        )
+                                            ? 'deal__button--blue'
+                                            : '')
                                     }
                                     onClick={this.props.toggleCompare.bind(
                                         null,
@@ -43,16 +43,18 @@ class Deals extends React.PureComponent {
                         </Deal>
                     );
                 })}
-                {this.props.dealPage === this.props.dealPageTotal
-                    ? ''
-                    : <div className="deals__show-more">
-                          <button
-                              onClick={this.props.requestMoreDeals}
-                              className="deals__button deals__button--blue"
-                          >
-                              Show More
-                          </button>
-                      </div>}
+                {this.props.dealPage === this.props.dealPageTotal ? (
+                    ''
+                ) : (
+                    <div className="deals__show-more">
+                        <button
+                            onClick={this.props.requestMoreDeals}
+                            className="deals__button deals__button--blue"
+                        >
+                            Show More
+                        </button>
+                    </div>
+                )}
             </div>
         );
     }

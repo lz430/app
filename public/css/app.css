@@ -1803,7 +1803,13 @@ body {
 }
 
 .deal-details__dots {
-  margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-bottom: 20px;
 }
 
 .deal-details__buttons {
@@ -2217,6 +2223,10 @@ body {
   width: 100%;
 }
 
+.compare-bar--static {
+  position: static;
+}
+
 .compare-bar__deals-counter-bubble {
   position: absolute;
   width: 80px;
@@ -2304,7 +2314,7 @@ body {
       -ms-flex-pack: center;
           justify-content: center;
   margin: 10px;
-  position: absolute;
+  position: fixed;
   right: 5px;
   width: 40px;
 }

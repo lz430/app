@@ -106,14 +106,18 @@ class Filterbar extends React.PureComponent {
                 <div className="filterbar__filters">
                     {this.props.selectedStyles.map(this.renderFilterStyles)}
                     {this.props.selectedMakes.map(this.renderFilterMakes)}
-                    {this.props.selectedFuelType
-                        ? this.renderFilterFuelType(this.props.selectedFuelType)
-                        : ''}
-                    {this.props.selectedTransmissionType
-                        ? this.renderFilterTransmissionType(
-                              this.props.selectedTransmissionType
-                          )
-                        : ''}
+                    {this.props.selectedFuelType ? (
+                        this.renderFilterFuelType(this.props.selectedFuelType)
+                    ) : (
+                        ''
+                    )}
+                    {this.props.selectedTransmissionType ? (
+                        this.renderFilterTransmissionType(
+                            this.props.selectedTransmissionType
+                        )
+                    ) : (
+                        ''
+                    )}
                     {this.props.selectedFeatures.map(this.renderFilterFeatures)}
                 </div>
 

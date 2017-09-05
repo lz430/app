@@ -8,9 +8,14 @@
     "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "npm run production",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "prettier": "prettier --single-quote --tab-width=4 --trailing-comma=es5 --write 'resources/assets/js/**/*.js*'",
+    "prettier": "prettier --write 'resources/assets/js/**/*.js*'",
     "test": "jest",
     "watch-test": "jest --watch"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "tabWidth": 4,
+    "trailingComma": "es5"
   },
   "devDependencies": {
     "axios": "^0.16.1",

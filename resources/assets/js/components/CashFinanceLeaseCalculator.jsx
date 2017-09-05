@@ -30,7 +30,9 @@ class CashFinanceLeaseCalculator extends React.PureComponent {
     }
 
     tabClassName(tabName) {
-        return `tabs__tab ${tabName === this.props.selectedTab ? 'tabs__tab--selected' : ''}`;
+        return `tabs__tab ${tabName === this.props.selectedTab
+            ? 'tabs__tab--selected'
+            : ''}`;
     }
 
     renderLeaseForm() {
@@ -109,9 +111,7 @@ class CashFinanceLeaseCalculator extends React.PureComponent {
                         Lease
                     </div>
                 </div>
-                <div className="tabs__content">
-                    {this.renderSelectedTab()}
-                </div>
+                <div className="tabs__content">{this.renderSelectedTab()}</div>
             </div>
         );
     }

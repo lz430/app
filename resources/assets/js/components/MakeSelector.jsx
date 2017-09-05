@@ -28,7 +28,9 @@ class MakeSelector extends React.PureComponent {
         const selected =
             this.props.selectedMakes &&
             R.contains(make.id, this.props.selectedMakes);
-        const className = `make-selector__make ${selected ? 'make-selector__make--selected' : ''}`;
+        const className = `make-selector__make ${selected
+            ? 'make-selector__make--selected'
+            : ''}`;
 
         return (
             <div
@@ -48,9 +50,11 @@ class MakeSelector extends React.PureComponent {
         return (
             <div className="make-selector">
                 <div className="make-selector__makes">
-                    {this.props.makes
-                        ? this.props.makes.map(this.renderMake)
-                        : 'loading'}
+                    {this.props.makes ? (
+                        this.props.makes.map(this.renderMake)
+                    ) : (
+                        'loading'
+                    )}
                 </div>
             </div>
         );

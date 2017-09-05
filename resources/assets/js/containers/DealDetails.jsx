@@ -11,6 +11,7 @@ import * as Actions from 'actions/index';
 import Modal from 'components/Modal';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import strings from 'src/strings';
+import CompareBar from 'components/CompareBar';
 
 class DealDetails extends React.PureComponent {
     constructor(props) {
@@ -114,9 +115,8 @@ class DealDetails extends React.PureComponent {
     }
 
     renderDot(photo, index) {
-        const color = this.state.featuredImage.url === photo.url
-            ? 'gray'
-            : 'none';
+        const color =
+            this.state.featuredImage.url === photo.url ? 'gray' : 'none';
         return (
             <svg
                 key={index}
@@ -159,11 +159,7 @@ class DealDetails extends React.PureComponent {
                 <div>
                     <ul>
                         {this.props.deal.features.map((feature, index) => {
-                            return (
-                                <li key={index}>
-                                    {feature.feature}
-                                </li>
-                            );
+                            return <li key={index}>{feature.feature}</li>;
                         })}
                     </ul>
                 </div>
@@ -181,11 +177,7 @@ class DealDetails extends React.PureComponent {
                 <div>
                     <ul>
                         {deal.versions[0].equipment.map((equipment, index) => {
-                            return (
-                                <li key={index}>
-                                    {equipment.name}
-                                </li>
-                            );
+                            return <li key={index}>{equipment.name}</li>;
                         })}
                     </ul>
                 </div>
@@ -202,56 +194,45 @@ class DealDetails extends React.PureComponent {
                     <div className="deal-details__deal-content-subtitle">
                         Vehicle Standard Features
                     </div>
-
                     <ul>
                         {deal.versions[0].equipment
                             .slice(0, 5)
                             .map((equipment, index) => {
-                                return (
-                                    <li key={index}>
-                                        {equipment.name}
-                                    </li>
-                                );
+                                return <li key={index}>{equipment.name}</li>;
                             })}
                     </ul>
-
                     <a href="#" onClick={() => this.showFeatures()}>
                         SEE ALL STANDARD FEATURES
                     </a>
                     <br />
-
                     <div className="deal-details__deal-content-subtitle">
                         Additional Options On This Vehicle
                     </div>
                     <ul>
                         {deal.features.slice(0, 5).map((feature, index) => {
-                            return (
-                                <li key={index}>
-                                    {feature.feature}
-                                </li>
-                            );
+                            return <li key={index}>{feature.feature}</li>;
                         })}
                     </ul>
-
                     <a href="#" onClick={() => this.showEquipment()}>
                         SEE ALL ADDITIONAL OPTIONS
                     </a>
                     <br />
-
                     <div className="deal-details__buttons">
                         <button
                             onClick={() =>
                                 this.props.toggleCompare(this.props.deal)}
                             className={
                                 'deal-details__button deal-details__button--small ' +
-                                    (inCompareList
-                                        ? 'deal-details__button--blue'
-                                        : '')
+                                (inCompareList
+                                    ? 'deal-details__button--blue'
+                                    : '')
                             }
                         >
-                            {inCompareList
-                                ? 'Remove from Compare'
-                                : 'Add to Compare'}
+                            {inCompareList ? (
+                                'Remove from Compare'
+                            ) : (
+                                'Add to Compare'
+                            )}
                         </button>
 
                         <button
@@ -271,7 +252,6 @@ class DealDetails extends React.PureComponent {
                                 )}
                         >
                             Buy Now
-
                         </button>
                     </div>
                 </div>
@@ -308,10 +288,14 @@ class DealDetails extends React.PureComponent {
                     </div>
                 </div>
 
+                <CompareBar class="compare-bar compare-bar--static" />
+
                 {this.state.showFeatures ? this.renderFeaturesModal(deal) : ''}
-                {this.state.showEquipment
-                    ? this.renderEquipmentModal(deal)
-                    : ''}
+                {this.state.showEquipment ? (
+                    this.renderEquipmentModal(deal)
+                ) : (
+                    ''
+                )}
                 {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}
             </div>
         );

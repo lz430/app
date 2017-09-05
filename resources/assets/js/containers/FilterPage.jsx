@@ -5,13 +5,12 @@ import MakeSelector from 'components/MakeSelector';
 import Deals from 'components/Deals';
 import Sortbar from 'components/Sortbar';
 import Filterbar from 'components/Filterbar';
-import Comparebar from 'components/Comparebar';
+import CompareBar from 'components/CompareBar';
 import FilterPanel from 'components/FilterPanel';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import util from 'src/util';
-import CashFinanceLeaseCalculator
-    from '../components/CashFinanceLeaseCalculator';
+import CashFinanceLeaseCalculator from '../components/CashFinanceLeaseCalculator';
 
 class FilterPage extends React.PureComponent {
     renderMakeSelectionModal() {
@@ -44,9 +43,9 @@ class FilterPage extends React.PureComponent {
             (util.windowIsLargerThanSmall(this.props.window.width)
                 ? ''
                 : 'filter-page__filter-panel--small ' +
-                      (this.props.smallFiltersShown
-                          ? 'filter-page__filter-panel--small-filters-shown'
-                          : 'filter-page__filter-panel--small-filters-hidden'));
+                  (this.props.smallFiltersShown
+                      ? 'filter-page__filter-panel--small-filters-shown'
+                      : 'filter-page__filter-panel--small-filters-hidden'));
 
         return (
             <div className={className}>
@@ -61,18 +60,20 @@ class FilterPage extends React.PureComponent {
             (util.windowIsLargerThanSmall(this.props.window.width)
                 ? ''
                 : 'filter-page__deals--small ' +
-                      (this.props.smallFiltersShown
-                          ? 'filter-page__deals--small-filters-shown'
-                          : 'filter-page__deals--small-filters-hidden'));
+                  (this.props.smallFiltersShown
+                      ? 'filter-page__deals--small-filters-shown'
+                      : 'filter-page__deals--small-filters-hidden'));
 
         return (
             <div className={className}>
                 <Sortbar />
                 <Filterbar />
-                {this.props.deals.length
-                    ? <Deals />
-                    : <div className="filter-page__no-results">No Results</div>}
-                <Comparebar />
+                {this.props.deals.length ? (
+                    <Deals />
+                ) : (
+                    <div className="filter-page__no-results">No Results</div>
+                )}
+                <CompareBar />
             </div>
         );
     }
@@ -89,9 +90,11 @@ class FilterPage extends React.PureComponent {
     render() {
         return (
             <div>
-                {this.props.showMakeSelectorModal
-                    ? this.renderMakeSelectionModal()
-                    : ''}
+                {this.props.showMakeSelectorModal ? (
+                    this.renderMakeSelectionModal()
+                ) : (
+                    ''
+                )}
 
                 {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}
 

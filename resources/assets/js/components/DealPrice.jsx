@@ -58,29 +58,32 @@ class DealPrice extends React.PureComponent {
                     Estimated Monthly Finance Payment
                 </div>
                 <div className="deal-price__finance-lease-price">
-                    {this.props.dealRebates.hasOwnProperty(this.props.deal.id)
-                        ? util.moneyFormat(
-                              Math.round(
-                                  formulas.calculateFinancedMonthlyPayments(
-                                      this.props.deal.price -
-                                          R.sum(
-                                              R.map(
-                                                  R.prop('value'),
-                                                  rebates.getSelectedRebatesForDealAndType(
-                                                      this.props.dealRebates,
-                                                      this.props
-                                                          .selectedRebates,
-                                                      this.props.selectedTab,
-                                                      this.props.deal
-                                                  )
-                                              )
-                                          ),
-                                      this.props.downPayment,
-                                      this.props.termDuration
-                                  )
-                              )
-                          )
-                        : 'Loading...'}
+                    {this.props.dealRebates.hasOwnProperty(
+                        this.props.deal.id
+                    ) ? (
+                        util.moneyFormat(
+                            Math.round(
+                                formulas.calculateFinancedMonthlyPayments(
+                                    this.props.deal.price -
+                                        R.sum(
+                                            R.map(
+                                                R.prop('value'),
+                                                rebates.getSelectedRebatesForDealAndType(
+                                                    this.props.dealRebates,
+                                                    this.props.selectedRebates,
+                                                    this.props.selectedTab,
+                                                    this.props.deal
+                                                )
+                                            )
+                                        ),
+                                    this.props.downPayment,
+                                    this.props.termDuration
+                                )
+                            )
+                        )
+                    ) : (
+                        'Loading...'
+                    )}
                 </div>
                 <div className="deal-price__hr" />
             </div>
@@ -163,26 +166,33 @@ class DealPrice extends React.PureComponent {
                 <div className="tabs">
                     <div
                         onClick={this.props.selectTab.bind(null, 'cash')}
-                        className={`tabs__tab ${this.props.selectedTab === 'cash' ? 'tabs__tab--selected' : ''}`}
+                        className={`tabs__tab ${this.props.selectedTab ===
+                        'cash'
+                            ? 'tabs__tab--selected'
+                            : ''}`}
                     >
                         Cash
                     </div>
                     <div
                         onClick={this.props.selectTab.bind(null, 'finance')}
-                        className={`tabs__tab ${this.props.selectedTab === 'finance' ? 'tabs__tab--selected' : ''}`}
+                        className={`tabs__tab ${this.props.selectedTab ===
+                        'finance'
+                            ? 'tabs__tab--selected'
+                            : ''}`}
                     >
                         Finance
                     </div>
                     <div
                         onClick={this.props.selectTab.bind(null, 'lease')}
-                        className={`tabs__tab ${this.props.selectedTab === 'lease' ? 'tabs__tab--selected' : ''}`}
+                        className={`tabs__tab ${this.props.selectedTab ===
+                        'lease'
+                            ? 'tabs__tab--selected'
+                            : ''}`}
                     >
                         Lease
                     </div>
                 </div>
-                <div className="tabs__content">
-                    {this.renderSelectedTab()}
-                </div>
+                <div className="tabs__content">{this.renderSelectedTab()}</div>
                 {this.renderAppliedRebatesLink()}
             </div>
         );
