@@ -28,6 +28,7 @@
     "react-dom": "^15.5.3"
   },
   "dependencies": {
+    "animate.css": "^3.5.2",
     "browser-sync": "^2.18.13",
     "browser-sync-webpack-plugin": "^1.2.0",
     "jsonp": "^0.2.1",

@@ -1,6 +1,8 @@
 import React from 'react';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
+import { connect } from 'react-redux';
+import * as Actions from 'actions';
 
 class Modal extends React.PureComponent {
     render() {
@@ -39,7 +41,7 @@ class Modal extends React.PureComponent {
                             ? <div className="modal__footer">
                                   <button
                                       onClick={this.props.onClose}
-                                      className="modal__close-button modal__close-button--blue modal__close-button--small"
+                                      className={`modal__close-button modal__close-button--blue modal__close-button--small` + (this.props.selectedMakes.length ? ' animated rubberBand' : '')}
                                   >
                                       {this.props.closeText}
                                   </button>
@@ -52,4 +54,10 @@ class Modal extends React.PureComponent {
     }
 }
 
-export default Modal;
+const mapStateToProps = (state) => {
+    return {
+        selectedMakes: state.selectedMakes,
+    }
+};
+
+export default connect(mapStateToProps, Actions)(Modal);
