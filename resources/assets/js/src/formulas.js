@@ -1,7 +1,7 @@
-import R from "ramda";
+import R from 'ramda';
 
 const formulas = {
-  /**
+    /**
      * Formula: EMI = ( P × r × (1+r)n ) / ((1+r)n − 1)
      * EMI = Equated Monthly Installment
      * P = Loan Amount - Down payment
@@ -12,30 +12,35 @@ const formulas = {
      * @param term
      * @return float|int
      */
-  calculateFinancedMonthlyPayments: (price, downPayment, term) => {
-    const interestRate = 4;
+    calculateFinancedMonthlyPayments: (price, downPayment, term) => {
+        const interestRate = 4;
 
-    return (
-      (price - downPayment) *
-      (interestRate /
-        1200 *
-        Math.pow(1 + interestRate / 1200, term) /
-        (Math.pow(1 + interestRate / 1200, term) - 1))
-    );
-  },
+        return (
+            (price - downPayment) *
+            (interestRate /
+                1200 *
+                Math.pow(1 + interestRate / 1200, term) /
+                (Math.pow(1 + interestRate / 1200, term) - 1))
+        );
+    },
 
-  calculateLeasedMonthlyPayments: (price, downPayment, deliveryCost, term) => {
-    const interestRate = 4;
-    const capitalizedCost = price + deliveryCost - downPayment;
-    const jatoResidualValue = 0.61;
-    const depreciation =
-      (capitalizedCost - capitalizedCost * jatoResidualValue) / term;
-    const interest =
-      (capitalizedCost + capitalizedCost * jatoResidualValue) *
-      (interestRate / 2400);
+    calculateLeasedMonthlyPayments: (
+        price,
+        downPayment,
+        deliveryCost,
+        term
+    ) => {
+        const interestRate = 4;
+        const capitalizedCost = price + deliveryCost - downPayment;
+        const jatoResidualValue = 0.61;
+        const depreciation =
+            (capitalizedCost - capitalizedCost * jatoResidualValue) / term;
+        const interest =
+            (capitalizedCost + capitalizedCost * jatoResidualValue) *
+            (interestRate / 2400);
 
-    return depreciation + interest;
-  }
+        return depreciation + interest;
+    },
 };
 
 export default formulas;

@@ -1,55 +1,57 @@
-import "bootstrap";
-import React from "react";
-import ReactDOM from "react-dom";
-import FilterPage from "containers/FilterPage";
-import Financing from "containers/Financing";
-import { Provider } from "react-redux";
-import store from "configureStore";
-import ComparePage from "containers/ComparePage";
-import DealDetails from "containers/DealDetails";
+import 'bootstrap';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import FilterPage from 'containers/FilterPage';
+import Financing from 'containers/Financing';
+import { Provider } from 'react-redux';
+import store from 'configureStore';
+import ComparePage from 'containers/ComparePage';
+import DealDetails from 'containers/DealDetails';
 
 /**
  * Filter
  */
-Array.from(document.getElementsByTagName("FilterPage")).map(element => {
-  ReactDOM.render(
-    <Provider store={store()}>
-      <FilterPage />
-    </Provider>,
-    element
-  );
+Array.from(document.getElementsByTagName('FilterPage')).map(element => {
+    ReactDOM.render(
+        <Provider store={store()}>
+            <FilterPage />
+        </Provider>,
+        element
+    );
 });
 
 /**
  * Financing
  */
-Array.from(document.getElementsByTagName("Financing")).map(element => {
-  ReactDOM.render(<Financing purchase={DeliverMyRide.purchase} />, element);
+Array.from(document.getElementsByTagName('Financing')).map(element => {
+    ReactDOM.render(<Financing purchase={DeliverMyRide.purchase} />, element);
 });
 
 /**
  * ComparePage
  */
-Array.from(document.getElementsByTagName("ComparePage")).map(element => {
-  ReactDOM.render(
-    <Provider store={store()}>
-      <ComparePage deals={JSON.parse(element.getAttribute("deals")).data} />
-    </Provider>,
-    element
-  );
+Array.from(document.getElementsByTagName('ComparePage')).map(element => {
+    ReactDOM.render(
+        <Provider store={store()}>
+            <ComparePage
+                deals={JSON.parse(element.getAttribute('deals')).data}
+            />
+        </Provider>,
+        element
+    );
 });
 
 /**
  * DealDetails
  */
-Array.from(document.getElementsByTagName("DealDetails")).map(element => {
-  ReactDOM.render(
-    <Provider store={store()}>
-      <DealDetails
-        deal={JSON.parse(element.getAttribute("deal")).data}
-        intendedRoute={window.location.pathname}
-      />
-    </Provider>,
-    element
-  );
+Array.from(document.getElementsByTagName('DealDetails')).map(element => {
+    ReactDOM.render(
+        <Provider store={store()}>
+            <DealDetails
+                deal={JSON.parse(element.getAttribute('deal')).data}
+                intendedRoute={window.location.pathname}
+            />
+        </Provider>,
+        element
+    );
 });
