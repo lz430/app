@@ -6,6 +6,20 @@ const api = {
     getBodyStyles: () => {
         return window.axios.get('/api/body-styles');
     },
+    getDimensions: jato_vehicle_id => {
+        return window.axios.get('/api/dimensions', {
+            params: {
+                jato_vehicle_id,
+            },
+        });
+    },
+    getWarranties: jato_vehicle_id => {
+        return window.axios.get('/api/warranties', {
+            params: {
+                jato_vehicle_id,
+            },
+        });
+    },
     getMakes: () => {
         return window.axios.get('/api/makes');
     },

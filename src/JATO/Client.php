@@ -36,6 +36,14 @@ class Client
         ])->getBody(), true);
     }
 
+    public function featuresByVehicleIdAndCategoryId($vehicleId, $categoryId)
+    {
+        return json_decode(
+            (string) $this->guzzleClient->request('GET', "features/$vehicleId/$categoryId")->getBody(),
+            true
+        );
+    }
+
     public function bestCashIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
     {
         return json_decode((string) $this->guzzleClient->request('GET', "incentives/bestOffer/$vehicleId/cash", [

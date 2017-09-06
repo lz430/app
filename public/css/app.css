@@ -625,7 +625,7 @@ body {
   height: 100vh;
   left: 0;
   opacity: .5;
-  position: absolute;
+  position: fixed;
   top: 0;
   width: 100vw;
   z-index: 1;
@@ -639,7 +639,7 @@ body {
       -ms-flex-pack: center;
           justify-content: center;
   max-height: calc(100vh - 150px);
-  position: absolute;
+  position: fixed;
   top: 60px;
   width: 100vw;
   z-index: 1;
