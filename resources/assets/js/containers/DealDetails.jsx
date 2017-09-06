@@ -38,21 +38,25 @@ class DealDetails extends React.PureComponent {
     componentDidMount() {
         this._isMounted = true;
 
-        api.getDimensions(this.props.deal.versions[0].jato_vehicle_id).then((response) => {
-            if (! this._isMounted) return;
+        api
+            .getDimensions(this.props.deal.versions[0].jato_vehicle_id)
+            .then(response => {
+                if (!this._isMounted) return;
 
-            this.setState({
-                dimensions: response.data,
+                this.setState({
+                    dimensions: response.data,
+                });
             });
-        });
 
-        api.getWarranties(this.props.deal.versions[0].jato_vehicle_id).then((response) => {
-            if (! this._isMounted) return;
+        api
+            .getWarranties(this.props.deal.versions[0].jato_vehicle_id)
+            .then(response => {
+                if (!this._isMounted) return;
 
-            this.setState({
-                warranties: response.data,
+                this.setState({
+                    warranties: response.data,
+                });
             });
-        })
     }
 
     showFeatures() {
@@ -183,9 +187,7 @@ class DealDetails extends React.PureComponent {
             <Modal>
                 <div className="modal__content">
                     <div className="modal__sticker-container">
-                        <div className="modal__sticker">
-                            Standard Features
-                        </div>
+                        <div className="modal__sticker">Standard Features</div>
                     </div>
                     <div className="modal__header">
                         <div className="modal__titles modal__titles--center">
@@ -209,24 +211,40 @@ class DealDetails extends React.PureComponent {
                 </div>
                 <div className="deal-details__modal-body">
                     <h3>Specifications</h3>
-                    <hr/>
+                    <hr />
 
                     <h4>Dimensions</h4>
                     <ul>
-                        {this.state.dimensions ? this.state.dimensions.map((dimension, index) => {
-                            return <li key={index}>{dimension.feature}: {dimension.content}</li>
-                        }) : 'Loading...'}
+                        {this.state.dimensions ? (
+                            this.state.dimensions.map((dimension, index) => {
+                                return (
+                                    <li key={index}>
+                                        {dimension.feature}: {dimension.content}
+                                    </li>
+                                );
+                            })
+                        ) : (
+                            'Loading...'
+                        )}
                     </ul>
 
                     <h4>Warranties</h4>
                     <ul>
-                        {this.state.warranties ? this.state.warranties.map((dimension, index) => {
-                            return <li key={index}>{dimension.feature}: {dimension.content}</li>
-                        }) : 'Loading...'}
+                        {this.state.warranties ? (
+                            this.state.warranties.map((dimension, index) => {
+                                return (
+                                    <li key={index}>
+                                        {dimension.feature}: {dimension.content}
+                                    </li>
+                                );
+                            })
+                        ) : (
+                            'Loading...'
+                        )}
                     </ul>
 
                     <h3>Features</h3>
-                    <hr/>
+                    <hr />
 
                     <ul>
                         {this.props.deal.features.map((feature, index) => {
@@ -243,9 +261,7 @@ class DealDetails extends React.PureComponent {
             <Modal>
                 <div className="modal__content">
                     <div className="modal__sticker-container">
-                        <div className="modal__sticker">
-                            Additional Options
-                        </div>
+                        <div className="modal__sticker">Additional Options</div>
                     </div>
                     <div className="modal__header">
                         <div className="modal__titles modal__titles--center">
