@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use DeliverMyRide\HubSpot\Client;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -26,10 +27,10 @@ class ApplyOrPurchaseController extends Controller
     /**
      * Create "Purchase" from deal and rebates
      */
-    public function applyOrPurchase()
+    public function applyOrPurchase(Request $request)
     {
         try {
-            $this->validate(request(), [
+            $this->validate($request, [
                 'type' => 'required|in:cash,finance,lease',
                 'deal_id' => 'required|exists:deals,id',
                 'dmr_price' => 'required|numeric',
@@ -69,13 +70,20 @@ class ApplyOrPurchaseController extends Controller
             ]);
 
             $purchase->save();
-    
-            $purchase->load('deal.versions');
 
             /**
-             * Get the users email
+             * If email saved to session, put in request and send to receiveEmail.
              */
-            return redirect('request-email');
+            if (session()->has('email')) {
+                $request->merge(['email' => session()->get('email')]);
+
+                return $this->receiveEmail($request);
+            } else {
+                /**
+                 * Get the users email manually.
+                 */
+                return redirect('request-email');
+            }
         } catch (ValidationException $e) {
             Log::notice('Invalid applyOrPurchase submission: ' . json_encode(request()->all()));
 
@@ -91,16 +99,20 @@ class ApplyOrPurchaseController extends Controller
             ->with('purchase', $purchase);
     }
 
-    public function receiveEmail()
+    public function receiveEmail(Request $request)
     {
-        $this->validate(request(), [
+        $this->validate($request, [
             'email' => 'required|email',
         ], [
             'email' => 'Email is required',
         ]);
-        
-        $user = DB::transaction(function () {
-            if ($user = User::where('email', request('email'))->first()) {
+
+        $user = DB::transaction(function () use ($request) {
+            /**
+             * If we already have a user with this email, let's use that account
+             * instead of the newly created one.
+             */
+            if ($user = User::where('email', $request->email)->first()) {
                 auth()->user()->purchases()->each(function ($purchase) use ($user) {
                     $purchase->user_id = $user->id;
                     $purchase->save();
@@ -111,8 +123,8 @@ class ApplyOrPurchaseController extends Controller
             } else {
                 $user = auth()->user();
             }
-    
-            $user->email = request('email');
+
+            $user->email = $request->email;
             $user->save();
             return $user;
         });
@@ -162,7 +174,7 @@ class ApplyOrPurchaseController extends Controller
          * Disallow changing completed_at
          */
         if ($purchase->completed_at) {
-            return redirect()->route('thank-you', ['method' => request('method')]);
+            return redirect()->route('thank-you', ['method' => $purchase->type]);
         }
 
         /**
@@ -182,7 +194,7 @@ class ApplyOrPurchaseController extends Controller
             Bugsnag::notifyException($exception);
         }
 
-        return redirect()->route('thank-you', ['method' => request('method')]);
+        return redirect()->route('thank-you', ['method' => $purchase->type]);
     }
 
     public function apply()
