@@ -12,6 +12,8 @@ import Modal from 'components/Modal';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import strings from 'src/strings';
 import CompareBar from 'components/CompareBar';
+import SVGInline from 'react-svg-inline';
+import zondicons from 'zondicons';
 
 class DealDetails extends React.PureComponent {
     constructor(props) {
@@ -151,12 +153,34 @@ class DealDetails extends React.PureComponent {
 
     renderFeaturesModal() {
         return (
-            <Modal
-                onClose={() => this.hideModals()}
-                title="Select brand preference"
-                subtitle="Please select one or more brands that you are considering"
-            >
-                <div>
+            <Modal>
+                <div className="modal__content">
+                    <div className="modal__sticker-container">
+                        <div className="modal__sticker">
+                            Standard Features
+                        </div>
+                    </div>
+                    <div className="modal__header">
+                        <div className="modal__titles modal__titles--center">
+                            <div className="modal__subtitle modal__subtitle--center">
+                                {strings.dealYearMake(this.props.deal)}
+                            </div>
+                            <div className="modal__title modal_title--center">
+                                {strings.dealModelTrim(this.props.deal)}
+                            </div>
+                        </div>
+                        <div className="modal__close">
+                            <SVGInline
+                                onClick={() => this.hideModals()}
+                                height="20px"
+                                width="20px"
+                                className="modal__close-x"
+                                svg={zondicons['close']}
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div className="deal-details__modal-body">
                     <ul>
                         {this.props.deal.features.map((feature, index) => {
                             return <li key={index}>{feature.feature}</li>;
@@ -169,12 +193,34 @@ class DealDetails extends React.PureComponent {
 
     renderEquipmentModal(deal) {
         return (
-            <Modal
-                onClose={() => this.hideModals()}
-                title="Select brand preference"
-                subtitle="Please select one or more brands that you are considering"
-            >
-                <div>
+            <Modal>
+                <div className="modal__content">
+                    <div className="modal__sticker-container">
+                        <div className="modal__sticker">
+                            Additional Options
+                        </div>
+                    </div>
+                    <div className="modal__header">
+                        <div className="modal__titles modal__titles--center">
+                            <div className="modal__subtitle modal__subtitle--center">
+                                {strings.dealYearMake(this.props.deal)}
+                            </div>
+                            <div className="modal__title modal_title--center">
+                                {strings.dealModelTrim(this.props.deal)}
+                            </div>
+                        </div>
+                        <div className="modal__close">
+                            <SVGInline
+                                onClick={() => this.hideModals()}
+                                height="20px"
+                                width="20px"
+                                className="modal__close-x"
+                                svg={zondicons['close']}
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div className="deal-details__modal-body">
                     <ul>
                         {deal.versions[0].equipment.map((equipment, index) => {
                             return <li key={index}>{equipment.name}</li>;
