@@ -32,24 +32,10 @@
     flex: 1;
   }
 
-  &__form-input {
-    margin-right: 5px;
-    width: 50%;
-  }
-
   &__input {
     @include input;
-    width: 58px;
-
-    &::-webkit-inner-spin-button,
-    &::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    &--invalid {
-      border: 1px solid $color-error;
-    }
+    margin-right: 5px;
+    width: 50%;
   }
 
   &__zipcode {

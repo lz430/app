@@ -58,11 +58,11 @@ class ZipcodeFinder extends React.PureComponent {
                         <form onSubmit={this.saveZip}>
                             <input
                                 type="text"
-                                className="zipcode-finder__form-input"
+                                className="zipcode-finder__input"
                                 placeholder="00000"
                                 onChange={this.handleChange}
                             />
-                            <button>GO</button>
+                            <button className="zipcode-finder__button zipcode-finder__button--dark-bg">GO</button>
                         </form>
                     </div>
                 </div>

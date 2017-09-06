@@ -1444,34 +1444,20 @@ body {
           flex: 1;
 }
 
-.zipcode-finder__form-input {
-  margin-right: 5px;
-  width: 50%;
-}
-
 .zipcode-finder__input {
   border: 1px solid #ccc;
   border-radius: 3px;
   margin-top: 2px;
   padding: 8px;
   width: 100%;
-  width: 58px;
+  margin-right: 5px;
+  width: 50%;
 }
 
 .zipcode-finder__input[type=number]::-webkit-inner-spin-button,
 .zipcode-finder__input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-
-.zipcode-finder__input::-webkit-inner-spin-button,
-.zipcode-finder__input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.zipcode-finder__input--invalid {
-  border: 1px solid #ac0000;
 }
 
 .zipcode-finder__zipcode {
