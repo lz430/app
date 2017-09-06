@@ -21,6 +21,8 @@ Route::get('deals', 'DealsController@getDeals')->name('deals.index');
 Route::get('features', 'FeaturesController@index')->name('features.index');
 Route::get('rebates', 'RebatesController@getRebates')->name('rebates.getRebates');
 Route::get('rebates/best', 'RebatesController@getBestRebateIds')->name('rebates.getBestRebateIds');
+Route::get('warranties', 'WarrantiesController@getWarranties')->name('warranties.getWarranties');
+Route::get('dimensions', 'DimensionsController@getDimensions')->name('dimensions.getDimensions');
 Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');
 
 Route::group(['prefix' => 'webhook'], function () {

@@ -13271,6 +13271,20 @@ var api = {
     getBodyStyles: function getBodyStyles() {
         return window.axios.get('/api/body-styles');
     },
+    getDimensions: function getDimensions(jato_vehicle_id) {
+        return window.axios.get('/api/dimensions', {
+            params: {
+                jato_vehicle_id: jato_vehicle_id
+            }
+        });
+    },
+    getWarranties: function getWarranties(jato_vehicle_id) {
+        return window.axios.get('/api/warranties', {
+            params: {
+                jato_vehicle_id: jato_vehicle_id
+            }
+        });
+    },
     getMakes: function getMakes() {
         return window.axios.get('/api/makes');
     },
@@ -54820,6 +54834,10 @@ var _rebates = __webpack_require__(84);
 
 var _rebates2 = _interopRequireDefault(_rebates);
 
+var _api = __webpack_require__(218);
+
+var _api2 = _interopRequireDefault(_api);
+
 var _reactRedux = __webpack_require__(20);
 
 var _index = __webpack_require__(21);
@@ -54874,6 +54892,8 @@ var DealDetails = function (_React$PureComponent) {
             featuredImage: props.deal.photos[0],
             fuelExternalImages: [],
             fuelInternalImages: [],
+            warranties: null,
+            dimensions: null,
             showFeatures: false,
             showEquipment: false
         };
@@ -54881,6 +54901,34 @@ var DealDetails = function (_React$PureComponent) {
     }
 
     _createClass(DealDetails, [{
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            this._isMounted = false;
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            this._isMounted = true;
+
+            _api2.default.getDimensions(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
+                if (!_this2._isMounted) return;
+
+                _this2.setState({
+                    dimensions: response.data
+                });
+            });
+
+            _api2.default.getWarranties(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
+                if (!_this2._isMounted) return;
+
+                _this2.setState({
+                    warranties: response.data
+                });
+            });
+        }
+    }, {
         key: 'showFeatures',
         value: function showFeatures() {
             this.setState({
@@ -55055,7 +55103,7 @@ var DealDetails = function (_React$PureComponent) {
     }, {
         key: 'renderFeaturesModal',
         value: function renderFeaturesModal() {
-            var _this2 = this;
+            var _this3 = this;
 
             return _react2.default.createElement(
                 _Modal2.default,
@@ -55094,7 +55142,7 @@ var DealDetails = function (_React$PureComponent) {
                             { className: 'modal__close' },
                             _react2.default.createElement(_reactSvgInline2.default, {
                                 onClick: function onClick() {
-                                    return _this2.hideModals();
+                                    return _this3.hideModals();
                                 },
                                 height: '20px',
                                 width: '20px',
@@ -55107,6 +55155,54 @@ var DealDetails = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-details__modal-body' },
+                    _react2.default.createElement(
+                        'h3',
+                        null,
+                        'Specifications'
+                    ),
+                    _react2.default.createElement('hr', null),
+                    _react2.default.createElement(
+                        'h4',
+                        null,
+                        'Dimensions'
+                    ),
+                    _react2.default.createElement(
+                        'ul',
+                        null,
+                        this.state.dimensions ? this.state.dimensions.map(function (dimension, index) {
+                            return _react2.default.createElement(
+                                'li',
+                                { key: index },
+                                dimension.feature,
+                                ': ',
+                                dimension.content
+                            );
+                        }) : 'Loading...'
+                    ),
+                    _react2.default.createElement(
+                        'h4',
+                        null,
+                        'Warranties'
+                    ),
+                    _react2.default.createElement(
+                        'ul',
+                        null,
+                        this.state.warranties ? this.state.warranties.map(function (dimension, index) {
+                            return _react2.default.createElement(
+                                'li',
+                                { key: index },
+                                dimension.feature,
+                                ': ',
+                                dimension.content
+                            );
+                        }) : 'Loading...'
+                    ),
+                    _react2.default.createElement(
+                        'h3',
+                        null,
+                        'Features'
+                    ),
+                    _react2.default.createElement('hr', null),
                     _react2.default.createElement(
                         'ul',
                         null,
@@ -55124,7 +55220,7 @@ var DealDetails = function (_React$PureComponent) {
     }, {
         key: 'renderEquipmentModal',
         value: function renderEquipmentModal(deal) {
-            var _this3 = this;
+            var _this4 = this;
 
             return _react2.default.createElement(
                 _Modal2.default,
@@ -55163,7 +55259,7 @@ var DealDetails = function (_React$PureComponent) {
                             { className: 'modal__close' },
                             _react2.default.createElement(_reactSvgInline2.default, {
                                 onClick: function onClick() {
-                                    return _this3.hideModals();
+                                    return _this4.hideModals();
                                 },
                                 height: '20px',
                                 width: '20px',
@@ -55193,7 +55289,7 @@ var DealDetails = function (_React$PureComponent) {
     }, {
         key: 'renderDeal',
         value: function renderDeal(deal, index) {
-            var _this4 = this;
+            var _this5 = this;
 
             var inCompareList = _ramda2.default.contains(deal, this.props.compareList);
             return _react2.default.createElement(
@@ -55224,7 +55320,7 @@ var DealDetails = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'a',
                         { href: '#', onClick: function onClick() {
-                                return _this4.showFeatures();
+                                return _this5.showFeatures();
                             } },
                         'SEE ALL STANDARD FEATURES'
                     ),
@@ -55248,7 +55344,7 @@ var DealDetails = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'a',
                         { href: '#', onClick: function onClick() {
-                                return _this4.showEquipment();
+                                return _this5.showEquipment();
                             } },
                         'SEE ALL ADDITIONAL OPTIONS'
                     ),
@@ -55260,7 +55356,7 @@ var DealDetails = function (_React$PureComponent) {
                             'button',
                             {
                                 onClick: function onClick() {
-                                    return _this4.props.toggleCompare(_this4.props.deal);
+                                    return _this5.props.toggleCompare(_this5.props.deal);
                                 },
                                 className: 'deal-details__button deal-details__button--small ' + (inCompareList ? 'deal-details__button--blue' : '')
                             },
@@ -55271,7 +55367,7 @@ var DealDetails = function (_React$PureComponent) {
                             {
                                 className: 'deal-details__button deal-details__button--small deal-details__button--blue',
                                 onClick: function onClick() {
-                                    return _purchase2.default.start(deal, _this4.props.selectedTab, _this4.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this4.props.dealRebates, _this4.props.selectedRebates, _this4.props.selectedTab, deal), _this4.props.termDuration);
+                                    return _purchase2.default.start(deal, _this5.props.selectedTab, _this5.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this5.props.dealRebates, _this5.props.selectedRebates, _this5.props.selectedTab, deal), _this5.props.termDuration);
                                 }
                             },
                             'Buy Now'
@@ -55283,7 +55379,7 @@ var DealDetails = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
-            var _this5 = this;
+            var _this6 = this;
 
             var deal = this.props.deal;
 
@@ -55318,7 +55414,7 @@ var DealDetails = function (_React$PureComponent) {
                                 'div',
                                 { className: 'deal-details__dots' },
                                 this.allImages().map(function (image, index) {
-                                    return _this5.renderDot(image, index);
+                                    return _this6.renderDot(image, index);
                                 })
                             )
                         )

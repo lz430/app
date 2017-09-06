@@ -6,6 +6,7 @@ import fuelcolor from 'src/fuel-color-map';
 import Deal from 'components/Deal';
 import purchase from 'src/purchase';
 import rebates from 'src/rebates';
+import api from 'src/api';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import Modal from 'components/Modal';
@@ -23,9 +24,35 @@ class DealDetails extends React.PureComponent {
             featuredImage: props.deal.photos[0],
             fuelExternalImages: [],
             fuelInternalImages: [],
+            warranties: null,
+            dimensions: null,
             showFeatures: false,
             showEquipment: false,
         };
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    componentDidMount() {
+        this._isMounted = true;
+
+        api.getDimensions(this.props.deal.versions[0].jato_vehicle_id).then((response) => {
+            if (! this._isMounted) return;
+
+            this.setState({
+                dimensions: response.data,
+            });
+        });
+
+        api.getWarranties(this.props.deal.versions[0].jato_vehicle_id).then((response) => {
+            if (! this._isMounted) return;
+
+            this.setState({
+                warranties: response.data,
+            });
+        })
     }
 
     showFeatures() {
@@ -181,6 +208,26 @@ class DealDetails extends React.PureComponent {
                     </div>
                 </div>
                 <div className="deal-details__modal-body">
+                    <h3>Specifications</h3>
+                    <hr/>
+
+                    <h4>Dimensions</h4>
+                    <ul>
+                        {this.state.dimensions ? this.state.dimensions.map((dimension, index) => {
+                            return <li key={index}>{dimension.feature}: {dimension.content}</li>
+                        }) : 'Loading...'}
+                    </ul>
+
+                    <h4>Warranties</h4>
+                    <ul>
+                        {this.state.warranties ? this.state.warranties.map((dimension, index) => {
+                            return <li key={index}>{dimension.feature}: {dimension.content}</li>
+                        }) : 'Loading...'}
+                    </ul>
+
+                    <h3>Features</h3>
+                    <hr/>
+
                     <ul>
                         {this.props.deal.features.map((feature, index) => {
                             return <li key={index}>{feature.feature}</li>;
