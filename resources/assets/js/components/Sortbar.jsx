@@ -112,12 +112,6 @@ class Sortbar extends React.PureComponent {
         return (
             <div className="sortbar">
                 {this.renderFilterToggle()}
-                <div className="sortbar__count">
-                    <span className="sortbar__count-number">
-                        {this.props.results_count}
-                    </span>{' '}
-                    results
-                </div>
                 {util.windowIsLargerThanSmall(this.props.window.width) ? (
                     this.renderSortbarButtons()
                 ) : (

@@ -51897,17 +51897,6 @@ var Sortbar = function (_React$PureComponent) {
                 'div',
                 { className: 'sortbar' },
                 this.renderFilterToggle(),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'sortbar__count' },
-                    _react2.default.createElement(
-                        'span',
-                        { className: 'sortbar__count-number' },
-                        this.props.results_count
-                    ),
-                    ' ',
-                    'results'
-                ),
                 _util2.default.windowIsLargerThanSmall(this.props.window.width) ? this.renderSortbarButtons() : this.renderSortbarDropdown()
             );
         }
@@ -52540,14 +52529,6 @@ var _index = __webpack_require__(21);
 
 var Actions = _interopRequireWildcard(_index);
 
-var _reactSvgInline = __webpack_require__(35);
-
-var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
-
-var _zondicons = __webpack_require__(44);
-
-var _zondicons2 = _interopRequireDefault(_zondicons);
-
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -52573,7 +52554,6 @@ var ZipcodeFinder = function (_React$PureComponent) {
 
         _this.saveZip = _this.saveZip.bind(_this);
         _this.isValid = _this.isValid.bind(_this);
-        _this.toggleEditing = _this.toggleEditing.bind(_this);
         _this.handleChange = _this.handleChange.bind(_this);
         return _this;
     }
@@ -52594,13 +52574,6 @@ var ZipcodeFinder = function (_React$PureComponent) {
             }
         }
     }, {
-        key: 'toggleEditing',
-        value: function toggleEditing() {
-            this.setState({
-                editing: !this.state.editing
-            });
-        }
-    }, {
         key: 'handleChange',
         value: function handleChange(event) {
             this.setState({
@@ -52610,8 +52583,6 @@ var ZipcodeFinder = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
-            var valid = this.isValid();
-
             return _react2.default.createElement(
                 'div',
                 { className: 'zipcode-finder' },
@@ -52620,21 +52591,15 @@ var ZipcodeFinder = function (_React$PureComponent) {
                     { className: 'zipcode-finder__info' },
                     _react2.default.createElement(
                         'div',
+                        { className: 'zipcode-finder___count' },
+                        this.props.results_count + ' results for:'
+                    ),
+                    _react2.default.createElement(
+                        'div',
                         null,
                         this.props.city ? '' : 'Zip Code'
                     ),
-                    this.state.editing ? _react2.default.createElement(
-                        'form',
-                        { onSubmit: this.saveZip },
-                        _react2.default.createElement('input', {
-                            className: 'zipcode-finder__input ' + (valid ? '' : 'zipcode-finder__input--invalid'),
-                            type: 'number',
-                            pattern: '\\d*',
-                            autoFocus: true,
-                            value: this.state.zipcode ? this.state.zipcode : '',
-                            onChange: this.handleChange
-                        })
-                    ) : _react2.default.createElement(
+                    _react2.default.createElement(
                         'div',
                         { className: 'zipcode-finder__zipcode' },
                         this.props.city || this.props.zipcode || '_____'
@@ -52642,45 +52607,30 @@ var ZipcodeFinder = function (_React$PureComponent) {
                 ),
                 _react2.default.createElement(
                     'div',
-                    { className: 'zipcode-finder__buttons' },
-                    this.state.editing ? _react2.default.createElement(
+                    { className: 'zipcode-finder__form' },
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        'Change Zip:'
+                    ),
+                    _react2.default.createElement(
                         'div',
                         null,
                         _react2.default.createElement(
-                            'button',
-                            {
-                                onClick: this.toggleEditing,
-                                className: 'zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg'
-                            },
-                            _react2.default.createElement(_reactSvgInline2.default, {
-                                width: '12px',
-                                height: '12px',
-                                className: 'zipcode-finder__button-icon',
-                                svg: _zondicons2.default['close']
+                            'form',
+                            { onSubmit: this.saveZip },
+                            _react2.default.createElement('input', {
+                                type: 'text',
+                                className: 'zipcode-finder__input',
+                                placeholder: '00000',
+                                onChange: this.handleChange
                             }),
-                            'Cancel'
-                        ),
-                        _react2.default.createElement(
-                            'button',
-                            {
-                                onClick: this.saveZip,
-                                className: 'zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg ' + (valid ? '' : 'zipcode-finder__button--inactive')
-                            },
-                            _react2.default.createElement(_reactSvgInline2.default, {
-                                width: '12px',
-                                height: '12px',
-                                className: 'zipcode-finder__button-icon',
-                                svg: _zondicons2.default['checkmark']
-                            }),
-                            'Save'
+                            _react2.default.createElement(
+                                'button',
+                                { className: 'zipcode-finder__button zipcode-finder__button--dark-bg' },
+                                'GO'
+                            )
                         )
-                    ) : _react2.default.createElement(
-                        'button',
-                        {
-                            onClick: this.toggleEditing,
-                            className: 'zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg'
-                        },
-                        'Change Zip'
                     )
                 )
             );
@@ -52697,8 +52647,9 @@ ZipcodeFinder.propTypes = {
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
-        zipcode: state.zipcode,
-        city: state.city
+        city: state.city,
+        results_count: state.deals.length,
+        zipcode: state.zipcode
     };
 };
 

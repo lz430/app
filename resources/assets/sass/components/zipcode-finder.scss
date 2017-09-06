@@ -9,27 +9,33 @@
   height: auto;
   padding: 5px 10px;
 
+  &__count {
+    width: 100%;
+  }
+
+  &__count-number {
+    font-weight: bold;
+    margin-right: 5px;
+  }
+
   &__info {
     align-content: center;
     display: flex;
-    flex: 3;
+    flex: 1;
     flex-flow: column nowrap;
     justify-content: space-between;
+    padding-right: 8px;
+  }
+
+  &__form {
+    align-self: center;
+    flex: 1;
   }
 
   &__input {
     @include input;
-    width: 58px;
-
-    &::-webkit-inner-spin-button,
-    &::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    &--invalid {
-      border: 1px solid $color-error;
-    }
+    margin-right: 5px;
+    width: 50%;
   }
 
   &__zipcode {

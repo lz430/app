@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
 
 class ZipcodeFinder extends React.PureComponent {
     constructor(props) {
@@ -16,7 +14,6 @@ class ZipcodeFinder extends React.PureComponent {
 
         this.saveZip = this.saveZip.bind(this);
         this.isValid = this.isValid.bind(this);
-        this.toggleEditing = this.toggleEditing.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
 
@@ -37,12 +34,6 @@ class ZipcodeFinder extends React.PureComponent {
         }
     }
 
-    toggleEditing() {
-        this.setState({
-            editing: !this.state.editing,
-        });
-    }
-
     handleChange(event) {
         this.setState({
             zipcode: event.target.value,
@@ -50,71 +41,30 @@ class ZipcodeFinder extends React.PureComponent {
     }
 
     render() {
-        const valid = this.isValid();
-
         return (
             <div className="zipcode-finder">
                 <div className="zipcode-finder__info">
+                    <div className="zipcode-finder___count">
+                        {`${this.props.results_count} results for:`}
+                    </div>
                     <div>{this.props.city ? '' : 'Zip Code'}</div>
-                    {this.state.editing ? (
+                    <div className="zipcode-finder__zipcode">
+                        {this.props.city || this.props.zipcode || '_____'}
+                    </div>
+                </div>
+                <div className="zipcode-finder__form">
+                    <div>Change Zip:</div>
+                    <div>
                         <form onSubmit={this.saveZip}>
                             <input
-                                className={`zipcode-finder__input ${valid
-                                    ? ''
-                                    : 'zipcode-finder__input--invalid'}`}
-                                type="number"
-                                pattern="\d*"
-                                autoFocus
-                                value={
-                                    this.state.zipcode ? this.state.zipcode : ''
-                                }
+                                type="text"
+                                className="zipcode-finder__input"
+                                placeholder="00000"
                                 onChange={this.handleChange}
                             />
+                            <button className="zipcode-finder__button zipcode-finder__button--dark-bg">GO</button>
                         </form>
-                    ) : (
-                        <div className="zipcode-finder__zipcode">
-                            {this.props.city || this.props.zipcode || '_____'}
-                        </div>
-                    )}
-                </div>
-                <div className="zipcode-finder__buttons">
-                    {this.state.editing ? (
-                        <div>
-                            <button
-                                onClick={this.toggleEditing}
-                                className="zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg"
-                            >
-                                <SVGInline
-                                    width="12px"
-                                    height="12px"
-                                    className="zipcode-finder__button-icon"
-                                    svg={zondicons['close']}
-                                />
-                                Cancel
-                            </button>
-                            <button
-                                onClick={this.saveZip}
-                                className={`zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg ${valid
-                                    ? ''
-                                    : 'zipcode-finder__button--inactive'}`}
-                            >
-                                <SVGInline
-                                    width="12px"
-                                    height="12px"
-                                    className="zipcode-finder__button-icon"
-                                    svg={zondicons['checkmark']}
-                                />
-                                Save
-                            </button>
-                        </div>
-                    ) : (
-                        <button
-                            onClick={this.toggleEditing}
-                            className="zipcode-finder__button zipcode-finder__button--small zipcode-finder__button--dark-bg"
-                        >
-                            Change Zip
-                        </button>
-                    )}
+                    </div>
                 </div>
             </div>
         );
@@ -128,8 +78,9 @@ ZipcodeFinder.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        zipcode: state.zipcode,
         city: state.city,
+        results_count: state.deals.length,
+        zipcode: state.zipcode,
     };
 };
 

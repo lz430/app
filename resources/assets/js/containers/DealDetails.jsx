@@ -156,9 +156,7 @@ class DealDetails extends React.PureComponent {
             <Modal>
                 <div className="modal__content">
                     <div className="modal__sticker-container">
-                        <div className="modal__sticker">
-                            Standard Features
-                        </div>
+                        <div className="modal__sticker">Standard Features</div>
                     </div>
                     <div className="modal__header">
                         <div className="modal__titles modal__titles--center">
@@ -196,9 +194,7 @@ class DealDetails extends React.PureComponent {
             <Modal>
                 <div className="modal__content">
                     <div className="modal__sticker-container">
-                        <div className="modal__sticker">
-                            Additional Options
-                        </div>
+                        <div className="modal__sticker">Additional Options</div>
                     </div>
                     <div className="modal__header">
                         <div className="modal__titles modal__titles--center">
