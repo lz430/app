@@ -7,12 +7,15 @@ use App\Mail\DealPurchasedUser;
 use App\Purchase;
 use App\User;
 use App\Deal;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class PurchaseEmailsTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function sends_emails_to_both_user_and_dmr()
     {

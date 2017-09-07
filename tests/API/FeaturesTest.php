@@ -3,10 +3,13 @@
 namespace Tests\API;
 
 use App\Feature;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class FeaturesTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_shows_all_features_that_a_user_can_filter_with()
     {
