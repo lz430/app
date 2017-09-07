@@ -4,10 +4,13 @@ namespace Tests\API;
 
 use App\Purchase;
 use App\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class RouteOneWebhookTest extends TestCase
 {
+    use DatabaseMigrations;
+    
     protected $sampleXML = <<< XML
 <payload xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 	<E:Envelope xmlns:E="http://schemas.xmlsoap.org/soap/envelope/">
@@ -244,10 +247,10 @@ XML;
         $this->assertNull($purchase->completed_at);
         
         $response = $this->call('POST', route('route-one-webhook'), [], [], [], ['CONTENT_TYPE' => 'text/xml'], $this->sampleXML);
-        
+    
         $response->assertStatus(200);
-        
         $purchase->refresh();
         $this->assertNotNull($purchase->completed_at);
+        $this->assertEquals($purchase->application_status, 'A');
     }
 }

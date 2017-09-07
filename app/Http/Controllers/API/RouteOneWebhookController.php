@@ -33,10 +33,20 @@ class RouteOneWebhookController extends BaseAPIController
                 ->IndividualApplicant
                 ->Contact
                 ->EMailAddress;
+            
+            $applicationStatus = $payload
+                ->ProcessCreditDecision
+                ->DataArea
+                ->CreditDecision
+                ->Header
+                ->ApplicationStatus ?? null;
 
             $user = User::where('email', '=', $email)->firstOrFail();
             $purchase = Purchase::where('user_id', $user->id)->orderBy('id', 'desc')->firstOrFail();
-            $purchase->update(['completed_at' => Carbon::now()]);
+            $purchase->update([
+                'completed_at' => Carbon::now(),
+                'application_status' => $applicationStatus,
+            ]);
         } catch (ValidationException | ModelNotFoundException $e) {
             Bugsnag::notifyException($e);
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
