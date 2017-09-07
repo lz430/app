@@ -30,7 +30,6 @@ class ZipcodeFinder extends React.PureComponent {
 
         if (this.isValid()) {
             this.props.setZipCode(this.state.zipcode);
-            this.toggleEditing();
         }
     }
 
