@@ -9,11 +9,14 @@ use App\JATO\VehicleModel;
 use App\JATO\Version;
 use App\Deal;
 use App\Zipcode;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Fluent;
 use Tests\TestCase;
 
 class DealsTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_returns_a_listing_of_deals_for_a_specific_make_and_body_style()
     {

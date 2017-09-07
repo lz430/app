@@ -5,10 +5,13 @@ namespace Tests\API;
 use App\JATO\Make;
 use App\JATO\VehicleModel;
 use App\JATO\Version;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class VersionsTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_returns_a_listing_of_versions_for_a_specific_make_and_body_style()
     {

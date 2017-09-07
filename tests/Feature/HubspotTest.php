@@ -11,11 +11,14 @@ use App\Listeners\CreateHubspotContact;
 use App\Listeners\UpdateHubspotContact;
 use App\Purchase;
 use App\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class HubspotTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_fires_the_events_to_create_and_update_hubspot_contacts()
     {
