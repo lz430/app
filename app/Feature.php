@@ -12,14 +12,16 @@ class Feature extends Model
         self::GROUP_TECHNOLOGY,
         self::GROUP_TRUCK,
         self::COMFORT_AND_CONVENIENCE,
+        self::POWERTRAIN,
     ];
     public const GROUP_SAFETY = 'safety';
     public const GROUP_SEATING = 'seating';
     public const GROUP_TECHNOLOGY = 'technology';
     public const GROUP_TRUCK = 'truck';
     public const COMFORT_AND_CONVENIENCE = 'comfort and convenience';
+    public const POWERTRAIN = 'powertrain';
 
-    protected $fillable = ['feature', 'group'];
+    protected $fillable = ['feature', 'content', 'group'];
 
     public function deals()
     {

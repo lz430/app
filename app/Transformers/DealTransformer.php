@@ -48,6 +48,7 @@ class DealTransformer extends TransformerAbstract
             'photos' => $deal->photos,
             'versions' => $deal->versions,
             'features' => $deal->features,
+            'vauto_features' => explode('|', $deal->vauto_features),
         ];
     }
     
