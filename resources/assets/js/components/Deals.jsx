@@ -6,6 +6,15 @@ import { connect } from 'react-redux';
 import * as Actions from 'actions';
 
 class Deals extends React.PureComponent {
+    compareButtonClass(deal) {
+        return (
+            'deal__button deal__button--small ' +
+            (R.contains(deal, R.map(R.prop('deal'), this.props.compareList))
+                ? 'deal__button--blue'
+                : '')
+        );
+    }
+
     render() {
         return (
             <div className="deals">
@@ -16,15 +25,7 @@ class Deals extends React.PureComponent {
                         <Deal deal={deal} key={index}>
                             <div className="deal__buttons">
                                 <button
-                                    className={
-                                        'deal__button deal__button--small ' +
-                                        (R.contains(
-                                            deal,
-                                            this.props.compareList
-                                        )
-                                            ? 'deal__button--blue'
-                                            : '')
-                                    }
+                                    className={this.compareButtonClass(deal)}
                                     onClick={this.props.toggleCompare.bind(
                                         null,
                                         deal

@@ -6,8 +6,8 @@
   border: 1px solid $color-grey;
   border-radius: 6px;
   margin: 5px;
-  max-width: 300px;
-  min-width: 300px;
+  max-width: $deal-card-width;
+  min-width: $deal-card-width;
 
   &__image {
     border-top-left-radius: 6px;

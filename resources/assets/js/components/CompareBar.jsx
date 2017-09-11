@@ -47,7 +47,10 @@ class CompareBar extends React.PureComponent {
             window.location.href =
                 '/compare?' +
                 this.props.compareList
-                    .map(deal => `deals[]=${deal.id}`)
+                    .map(
+                        dealAndSelectedFilters =>
+                            `deals[]=${dealAndSelectedFilters.deal.id}`
+                    )
                     .join('&') +
                 `&zipcode=${this.props.zipcode}`;
         }
@@ -69,34 +72,42 @@ class CompareBar extends React.PureComponent {
                 className={this.props.class ? this.props.class : 'compare-bar'}
             >
                 <div className="compare-bar__deals">
-                    {this.props.compareList.map((deal, index) => {
-                        return (
-                            <div key={index} className="compare-bar__deal">
-                                <div className="compare-bar__deal__info">
-                                    <div className="compare-bar__deal__title">
-                                        {deal.year} {deal.make} {deal.model}
+                    {this.props.compareList.map(
+                        (dealAndSelectedFilters, index) => {
+                            return (
+                                <div key={index} className="compare-bar__deal">
+                                    <div className="compare-bar__deal__info">
+                                        <div className="compare-bar__deal__title">
+                                            {dealAndSelectedFilters.deal.year}{' '}
+                                            {dealAndSelectedFilters.deal.make}{' '}
+                                            {dealAndSelectedFilters.deal.model}
+                                        </div>
+                                        <div>
+                                            {dealAndSelectedFilters.deal
+                                                .price ? (
+                                                util.moneyFormat(
+                                                    dealAndSelectedFilters.deal
+                                                        .price
+                                                )
+                                            ) : (
+                                                ''
+                                            )}
+                                        </div>
                                     </div>
-                                    <div>
-                                        {deal.price ? (
-                                            util.moneyFormat(deal.price)
-                                        ) : (
-                                            ''
+                                    <SVGInline
+                                        onClick={this.props.toggleCompare.bind(
+                                            null,
+                                            dealAndSelectedFilters.deal
                                         )}
-                                    </div>
+                                        width="15px"
+                                        height="15px"
+                                        className="compare-bar__deal__remove"
+                                        svg={zondicons['close-solid']}
+                                    />
                                 </div>
-                                <SVGInline
-                                    onClick={this.props.toggleCompare.bind(
-                                        null,
-                                        deal
-                                    )}
-                                    width="15px"
-                                    height="15px"
-                                    className="compare-bar__deal__remove"
-                                    svg={zondicons['close-solid']}
-                                />
-                            </div>
-                        );
-                    })}
+                            );
+                        }
+                    )}
                 </div>
                 <div
                     onClick={this.redirectToCompare}

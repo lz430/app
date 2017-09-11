@@ -1,5 +1,6 @@
 import api from 'src/api';
 import util from 'src/util';
+import R from 'ramda';
 import * as ActionTypes from 'actiontypes/index';
 import jsonp from 'jsonp';
 
@@ -303,11 +304,31 @@ export function clearAllFilters() {
 
 export function toggleCompare(deal) {
     return (dispatch, getState) => {
-        const compareList = util.toggleItem(getState().compareList, deal);
+        const deals = getState().compareList.map(R.prop('deal'));
+
+        const nextCompareList = util.toggleItem(deals, deal).map(d => {
+            return {
+                deal: d,
+                selectedFilters: R.propOr(
+                    {
+                        selectedStyles: getState().selectedStyles,
+                        selectedMakes: getState().selectedMakes,
+                        selectedFuelType: getState().selectedFuelType,
+                        selectedTransmissionType: getState()
+                            .selectedTransmissionType,
+                        selectedFeatures: getState().selectedFeatures,
+                    },
+                    'selectedFilters',
+                    R.find(dealAndSelectedFilters => {
+                        return dealAndSelectedFilters.deal.id === d.id;
+                    }, getState().compareList)
+                ),
+            };
+        });
 
         dispatch({
             type: ActionTypes.TOGGLE_COMPARE,
-            compareList: compareList,
+            compareList: nextCompareList,
         });
     };
 }

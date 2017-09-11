@@ -9,6 +9,10 @@ comparepage {
   overflow: hidden;
   padding: 0;
 
+  &__body {
+    overflow-x: scroll;
+  }
+
   @media (min-width: $break-small) {
     padding: $section-padding;
   }

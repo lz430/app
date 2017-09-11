@@ -24,8 +24,6 @@ class ComparePage extends React.PureComponent {
         };
         this.renderDeal = this.renderDeal.bind(this);
         this.intendedRoute = this.intendedRoute.bind(this);
-
-        console.log(this.props.compareList);
     }
 
     removeDeal(deal) {
@@ -75,7 +73,7 @@ class ComparePage extends React.PureComponent {
                         onClick={() => (window.location = `/deals/${deal.id}`)}
                         className="deal__button deal__button--small deal__button--blue deal__button"
                     >
-                        Suggest Comparison
+                        View Details
                     </button>
                 </div>
             </Deal>
@@ -93,6 +91,69 @@ class ComparePage extends React.PureComponent {
         );
     }
 
+    renderTable(compareList) {
+        const maxNumberCells = R.reduce(
+            (carry, dealAndSelectedFilters) => {
+                return R.max(
+                    R.propOr(
+                        [],
+                        'selectedFeatures',
+                        dealAndSelectedFilters.selectedFilters
+                    ).length,
+                    carry
+                );
+            },
+            0,
+            compareList
+        );
+
+        return (
+            <div className="compare-page-table">
+                {compareList.map(({ deal, selectedFilters }, index) => {
+                    return (
+                        <div key={index} className="compare-page-table__column">
+                            <div className="compare-page-table__cell">
+                                {deal.id}&nbsp;
+                            </div>
+                            <div className="compare-page-table__cell">
+                                {selectedFilters.selectedFuelType}&nbsp;
+                            </div>
+                            <div className="compare-page-table__cell">
+                                {selectedFilters.selectedTransmissionType}&nbsp;
+                            </div>
+                            {selectedFilters.selectedFeatures.map(
+                                (feature, index) => {
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="compare-page-table__cell"
+                                        >
+                                            {feature}&nbsp;
+                                        </div>
+                                    );
+                                }
+                            )}
+                            {R.range(
+                                0,
+                                maxNumberCells -
+                                    selectedFilters.selectedFeatures.length
+                            ).map((_, index) => {
+                                return (
+                                    <div
+                                        key={index}
+                                        className="compare-page-table__cell"
+                                    >
+                                        &nbsp;
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    }
+
     render() {
         return (
             <div className="compare-page">
@@ -103,8 +164,14 @@ class ComparePage extends React.PureComponent {
                 <div className="compare-page-title-bar__title">
                     Vehicle Comparison
                 </div>
-                <div className="compare-page-deals">
-                    {this.state.deals.map(this.renderDeal)}
+                <div className="compare-page__body">
+                    <div className="compare-page-deals">
+                        {this.state.deals.map(this.renderDeal)}
+                    </div>
+                    <div className="compare-page-table__header">
+                        Your Selections
+                    </div>
+                    {this.renderTable(this.props.compareList)}
                 </div>
 
                 {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}

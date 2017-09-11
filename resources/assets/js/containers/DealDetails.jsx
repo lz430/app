@@ -247,9 +247,11 @@ class DealDetails extends React.PureComponent {
                     <hr />
 
                     <ul>
-                        {this.props.deal.vauto_features.map((feature, index) => {
-                            return <li key={index}>{feature}</li>;
-                        })}
+                        {this.props.deal.vauto_features.map(
+                            (feature, index) => {
+                                return <li key={index}>{feature}</li>;
+                            }
+                        )}
                     </ul>
                 </div>
             </Modal>
@@ -304,11 +306,9 @@ class DealDetails extends React.PureComponent {
                         Vehicle Standard Features
                     </div>
                     <ul>
-                        {deal.features
-                            .slice(0, 5)
-                            .map((feature, index) => {
-                                return <li key={index}>{feature.feature}</li>;
-                            })}
+                        {deal.features.slice(0, 5).map((feature, index) => {
+                            return <li key={index}>{feature.feature}</li>;
+                        })}
                     </ul>
                     <a href="#" onClick={() => this.showStandardFeatures()}>
                         SEE ALL STANDARD FEATURES
@@ -318,9 +318,11 @@ class DealDetails extends React.PureComponent {
                         Additional Options On This Vehicle
                     </div>
                     <ul>
-                        {deal.vauto_features.slice(0, 5).map((feature, index) => {
-                            return <li key={index}>{feature}</li>;
-                        })}
+                        {deal.vauto_features
+                            .slice(0, 5)
+                            .map((feature, index) => {
+                                return <li key={index}>{feature}</li>;
+                            })}
                     </ul>
                     <a href="#" onClick={() => this.showFeatures()}>
                         SEE ALL ADDITIONAL OPTIONS
@@ -399,12 +401,12 @@ class DealDetails extends React.PureComponent {
 
                 <CompareBar class="compare-bar compare-bar--static" />
 
-                {this.state.showStandardFeatures ? this.renderStandardFeaturesModal(deal) : ''}
-                {this.state.showFeatures ? (
-                    this.renderFeaturesModal(deal)
+                {this.state.showStandardFeatures ? (
+                    this.renderStandardFeaturesModal(deal)
                 ) : (
                     ''
                 )}
+                {this.state.showFeatures ? this.renderFeaturesModal(deal) : ''}
                 {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}
             </div>
         );

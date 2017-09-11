@@ -6,9 +6,9 @@
   border-radius: 6px;
   box-shadow: 0 0 3px 0 rgba(185, 185, 185, .9);
   height: fit-content;
-  margin: 5px;
-  max-width: 300px;
-  min-width: 300px;
+  margin: $deal-card-margin;
+  max-width: $deal-card-width;
+  min-width: $deal-card-width;
 
   &__basic-info {
     margin: 15px 0;

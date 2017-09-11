@@ -2451,27 +2451,32 @@ body {
   display: -ms-flexbox;
   display: flex;
   margin-top: 12px;
-  overflow-x: scroll;
-  -webkit-transition: .5s;
-  transition: .5s;
 }
 
-.compare-page-deals__deal {
-  margin-right: 10px;
-  min-width: 100vw;
-  -webkit-transition: 1s;
-  transition: 1s;
-  width: 300px;
+.compare-page-table {
+  border: 1px solid #000;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 
-@media (min-width: 576px) {
-  .compare-page-deals__deal {
-    min-width: 300px;
-  }
+.compare-page-table__column {
+  border-left: 1px solid #000;
+  max-width: 310px;
+  min-width: 310px;
 }
 
-.compare-page-deals__deal--opaque {
-  opacity: .5;
+.compare-page-table__column:first-child {
+  border-left: 0;
+}
+
+.compare-page-table__cell {
+  border-top: 1px solid #000;
+  padding: 5px;
+}
+
+.compare-page-table__cell:first-child {
+  border-top: 0;
 }
 
 .tabs {
@@ -2744,6 +2749,10 @@ comparepage {
   margin: 0 auto;
   overflow: hidden;
   padding: 0;
+}
+
+.compare-page__body {
+  overflow-x: scroll;
 }
 
 @media (min-width: 576px) {
