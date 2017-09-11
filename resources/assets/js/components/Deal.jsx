@@ -16,7 +16,13 @@ class Deal extends React.PureComponent {
         };
     }
 
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
     componentDidMount() {
+        this._isMounted = true;
+
         if (this.props.deal.photos.length === 0) {
             this.requestFuelImages();
         }
@@ -63,6 +69,7 @@ class Deal extends React.PureComponent {
                 )
             );
 
+            if (!this._isMounted) return;
             this.setState({ fuelFeaturedImage: externalImages[0] });
         } catch (e) {
             try {
@@ -70,6 +77,7 @@ class Deal extends React.PureComponent {
                     await fuelapi.getExternalImages(vehicleId, 'white')
                 );
 
+                if (!this._isMounted) return;
                 this.setState({ fuelFeaturedImage: externalImages[0] });
             } catch (e) {
                 // No Fuel Images Available.

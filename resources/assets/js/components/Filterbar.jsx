@@ -140,7 +140,7 @@ Filterbar.propTypes = {
                 name: PropTypes.string.isRequired,
             }),
         })
-    ).isRequired,
+    ),
     selectedMakes: PropTypes.arrayOf(PropTypes.string).isRequired,
     selectedTransmissionType: PropTypes.string,
     selectedFuelType: PropTypes.string,

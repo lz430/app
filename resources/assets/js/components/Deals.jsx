@@ -15,47 +15,66 @@ class Deals extends React.PureComponent {
         );
     }
 
+    renderShowMoreButton() {
+        if (this.props.deals && this.props.requestingMoreDeals) {
+            // Deals are already loaded and we have already requested more deals
+            return <div>Loading...</div>;
+        }
+
+        if (
+            this.props.deals &&
+            this.props.dealPage !== this.props.dealPageTotal
+        ) {
+            // Deals are already loaded, and there are more pages.
+            return (
+                <div className="deals__show-more">
+                    <button
+                        onClick={this.props.requestMoreDeals}
+                        className="deals__button deals__button--blue"
+                    >
+                        Show More
+                    </button>
+                </div>
+            );
+        }
+    }
+
     render() {
         return (
             <div className="deals">
                 <div className="deals__title">Dealer Inventory</div>
 
-                {this.props.deals.map((deal, index) => {
-                    return (
-                        <Deal deal={deal} key={index}>
-                            <div className="deal__buttons">
-                                <button
-                                    className={this.compareButtonClass(deal)}
-                                    onClick={this.props.toggleCompare.bind(
-                                        null,
-                                        deal
-                                    )}
-                                >
-                                    Compare
-                                </button>
-                                <button
-                                    onClick={() =>
-                                        (window.location = `/deals/${deal.id}`)}
-                                    className="deal__button deal__button--small deal__button--blue deal__button"
-                                >
-                                    View Details
-                                </button>
-                            </div>
-                        </Deal>
-                    );
-                })}
-                {this.props.dealPage === this.props.dealPageTotal ? (
-                    ''
+                {this.props.deals ? (
+                    this.props.deals.map((deal, index) => {
+                        return (
+                            <Deal deal={deal} key={index}>
+                                <div className="deal__buttons">
+                                    <button
+                                        className={this.compareButtonClass(
+                                            deal
+                                        )}
+                                        onClick={this.props.toggleCompare.bind(
+                                            null,
+                                            deal
+                                        )}
+                                    >
+                                        Compare
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            (window.location = `/deals/${deal.id}`)}
+                                        className="deal__button deal__button--small deal__button--blue deal__button"
+                                    >
+                                        View Details
+                                    </button>
+                                </div>
+                            </Deal>
+                        );
+                    })
                 ) : (
-                    <div className="deals__show-more">
-                        <button
-                            onClick={this.props.requestMoreDeals}
-                            className="deals__button deals__button--blue"
-                        >
-                            Show More
-                        </button>
-                    </div>
+                    'Loading...'
                 )}
+                {this.renderShowMoreButton()}
             </div>
         );
     }
@@ -72,8 +91,8 @@ Deals.propTypes = {
             id: PropTypes.number.isRequired,
         })
     ),
-    dealPage: PropTypes.number.isRequired,
-    dealPageTotal: PropTypes.number.isRequired,
+    dealPage: PropTypes.number,
+    dealPageTotal: PropTypes.number,
 };
 
 function mapStateToProps(state) {
@@ -82,6 +101,7 @@ function mapStateToProps(state) {
         dealPage: state.dealPage,
         dealPageTotal: state.dealPageTotal,
         compareList: state.compareList,
+        requestingMoreDeals: state.requestingMoreDeals,
     };
 }
 

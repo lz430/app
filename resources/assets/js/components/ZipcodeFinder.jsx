@@ -44,7 +44,11 @@ class ZipcodeFinder extends React.PureComponent {
             <div className="zipcode-finder">
                 <div className="zipcode-finder__info">
                     <div className="zipcode-finder___count">
-                        {`${this.props.results_count} results for:`}
+                        {this.props.deals ? (
+                            `${this.props.deals.length} results for:`
+                        ) : (
+                            ''
+                        )}
                     </div>
                     <div>{this.props.city ? '' : 'Zip Code'}</div>
                     <div className="zipcode-finder__zipcode">
@@ -58,7 +62,7 @@ class ZipcodeFinder extends React.PureComponent {
                             <input
                                 type="text"
                                 className="zipcode-finder__input"
-                                placeholder="00000"
+                                placeholder={this.props.zipcode}
                                 onChange={this.handleChange}
                             />
                             <button className="zipcode-finder__button zipcode-finder__button--dark-bg">
@@ -80,7 +84,7 @@ ZipcodeFinder.propTypes = {
 const mapStateToProps = state => {
     return {
         city: state.city,
-        results_count: state.deals.length,
+        deals: state.deals,
         zipcode: state.zipcode,
     };
 };

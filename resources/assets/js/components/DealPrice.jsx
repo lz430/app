@@ -16,6 +16,10 @@ class DealPrice extends React.PureComponent {
         };
     }
 
+    componentDidMount() {
+        this.componentWillReceiveProps(this.props);
+    }
+
     componentWillReceiveProps(props) {
         if (!props.dealRebates.hasOwnProperty(props.deal.id)) return;
 

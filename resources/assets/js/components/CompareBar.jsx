@@ -15,6 +15,7 @@ class CompareBar extends React.PureComponent {
         };
 
         window.setTimeout(() => {
+            if (!this._isMounted) return;
             this.setState({
                 shaking: false,
             });
@@ -27,14 +28,24 @@ class CompareBar extends React.PureComponent {
         this.renderCompareBubble = this.renderCompareBubble.bind(this);
     }
 
+    componentDidMount() {
+        this._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
     componentDidUpdate() {
         if (this.state.count !== this.props.compareList.length) {
+            if (!this._isMounted) return;
             this.setState({
                 count: this.props.compareList.length,
                 shaking: true,
             });
 
             window.setTimeout(() => {
+                if (!this._isMounted) return;
                 this.setState({
                     shaking: false,
                 });

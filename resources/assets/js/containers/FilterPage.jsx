@@ -68,11 +68,7 @@ class FilterPage extends React.PureComponent {
             <div className={className}>
                 <Sortbar />
                 <Filterbar />
-                {this.props.deals.length ? (
-                    <Deals />
-                ) : (
-                    <div className="filter-page__no-results">No Results</div>
-                )}
+                <Deals />
                 <CompareBar />
             </div>
         );
@@ -98,7 +94,7 @@ class FilterPage extends React.PureComponent {
 
                 {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}
 
-                {this.props.deals ? this.renderFilterPanelAndDeals() : ''}
+                {this.renderFilterPanelAndDeals()}
             </div>
         );
     }
