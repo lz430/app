@@ -1174,6 +1174,10 @@ var _util = __webpack_require__(36);
 
 var _util2 = _interopRequireDefault(_util);
 
+var _ramda = __webpack_require__(13);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
 var _index = __webpack_require__(362);
 
 var ActionTypes = _interopRequireWildcard(_index);
@@ -1439,11 +1443,26 @@ function clearAllFilters() {
 
 function toggleCompare(deal) {
     return function (dispatch, getState) {
-        var compareList = _util2.default.toggleItem(getState().compareList, deal);
+        var deals = getState().compareList.map(_ramda2.default.prop('deal'));
+
+        var nextCompareList = _util2.default.toggleItem(deals, deal).map(function (d) {
+            return {
+                deal: d,
+                selectedFilters: _ramda2.default.propOr({
+                    selectedStyles: getState().selectedStyles,
+                    selectedMakes: getState().selectedMakes,
+                    selectedFuelType: getState().selectedFuelType,
+                    selectedTransmissionType: getState().selectedTransmissionType,
+                    selectedFeatures: getState().selectedFeatures
+                }, 'selectedFilters', _ramda2.default.find(function (dealAndSelectedFilters) {
+                    return dealAndSelectedFilters.deal.id === d.id;
+                }, getState().compareList))
+            };
+        });
 
         dispatch({
             type: ActionTypes.TOGGLE_COMPARE,
-            compareList: compareList
+            compareList: nextCompareList
         });
     };
 }
@@ -22223,8 +22242,8 @@ var CompareBar = function (_React$PureComponent) {
         key: 'redirectToCompare',
         value: function redirectToCompare() {
             if (this.compareReady()) {
-                window.location.href = '/compare?' + this.props.compareList.map(function (deal) {
-                    return 'deals[]=' + deal.id;
+                window.location.href = '/compare?' + this.props.compareList.map(function (dealAndSelectedFilters) {
+                    return 'deals[]=' + dealAndSelectedFilters.deal.id;
                 }).join('&') + ('&zipcode=' + this.props.zipcode);
             }
         }
@@ -22251,7 +22270,7 @@ var CompareBar = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'compare-bar__deals' },
-                    this.props.compareList.map(function (deal, index) {
+                    this.props.compareList.map(function (dealAndSelectedFilters, index) {
                         return _react2.default.createElement(
                             'div',
                             { key: index, className: 'compare-bar__deal' },
@@ -22261,20 +22280,20 @@ var CompareBar = function (_React$PureComponent) {
                                 _react2.default.createElement(
                                     'div',
                                     { className: 'compare-bar__deal__title' },
-                                    deal.year,
+                                    dealAndSelectedFilters.deal.year,
                                     ' ',
-                                    deal.make,
+                                    dealAndSelectedFilters.deal.make,
                                     ' ',
-                                    deal.model
+                                    dealAndSelectedFilters.deal.model
                                 ),
                                 _react2.default.createElement(
                                     'div',
                                     null,
-                                    deal.price ? _util2.default.moneyFormat(deal.price) : ''
+                                    dealAndSelectedFilters.deal.price ? _util2.default.moneyFormat(dealAndSelectedFilters.deal.price) : ''
                                 )
                             ),
                             _react2.default.createElement(_reactSvgInline2.default, {
-                                onClick: _this3.props.toggleCompare.bind(null, deal),
+                                onClick: _this3.props.toggleCompare.bind(null, dealAndSelectedFilters.deal),
                                 width: '15px',
                                 height: '15px',
                                 className: 'compare-bar__deal__remove',
@@ -51403,6 +51422,11 @@ var Deals = function (_React$PureComponent) {
     }
 
     _createClass(Deals, [{
+        key: 'compareButtonClass',
+        value: function compareButtonClass(deal) {
+            return 'deal__button deal__button--small ' + (_ramda2.default.contains(deal, _ramda2.default.map(_ramda2.default.prop('deal'), this.props.compareList)) ? 'deal__button--blue' : '');
+        }
+    }, {
         key: 'render',
         value: function render() {
             var _this2 = this;
@@ -51425,7 +51449,7 @@ var Deals = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'button',
                                 {
-                                    className: 'deal__button deal__button--small ' + (_ramda2.default.contains(deal, _this2.props.compareList) ? 'deal__button--blue' : ''),
+                                    className: _this2.compareButtonClass(deal),
                                     onClick: _this2.props.toggleCompare.bind(null, deal)
                                 },
                                 'Compare'
@@ -54004,7 +54028,7 @@ var urlStyle = _util2.default.getInitialBodyStyleFromUrl();
 
 var initialState = {
     /** Version **/
-    0: '<- increment the number to purge LocalStorage',
+    1: '<- increment the number to purge LocalStorage',
     /** End Version **/
     window: { width: window.innerWidth },
     smallFiltersShown: false,
@@ -54631,8 +54655,6 @@ var ComparePage = function (_React$PureComponent) {
         };
         _this.renderDeal = _this.renderDeal.bind(_this);
         _this.intendedRoute = _this.intendedRoute.bind(_this);
-
-        console.log(_this.props.compareList);
         return _this;
     }
 
@@ -54679,7 +54701,7 @@ var ComparePage = function (_React$PureComponent) {
                             },
                             className: 'deal__button deal__button--small deal__button--blue deal__button'
                         },
-                        'Suggest Comparison'
+                        'View Details'
                     )
                 )
             );
@@ -54694,6 +54716,60 @@ var ComparePage = function (_React$PureComponent) {
                     closeText: 'Back to results'
                 },
                 _react2.default.createElement(_CashFinanceLeaseCalculator2.default, null)
+            );
+        }
+    }, {
+        key: 'renderTable',
+        value: function renderTable(compareList) {
+            var maxNumberCells = _ramda2.default.reduce(function (carry, dealAndSelectedFilters) {
+                return _ramda2.default.max(_ramda2.default.propOr([], 'selectedFeatures', dealAndSelectedFilters.selectedFilters).length, carry);
+            }, 0, compareList);
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'compare-page-table' },
+                compareList.map(function (_ref, index) {
+                    var deal = _ref.deal,
+                        selectedFilters = _ref.selectedFilters;
+
+                    return _react2.default.createElement(
+                        'div',
+                        { key: index, className: 'compare-page-table__column' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'compare-page-table__cell' },
+                            deal.id,
+                            '\xA0'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'compare-page-table__cell' },
+                            selectedFilters.selectedFuelType,
+                            '\xA0'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'compare-page-table__cell' },
+                            selectedFilters.selectedTransmissionType,
+                            '\xA0'
+                        ),
+                        selectedFilters.selectedFeatures.map(function (feature, index) {
+                            return _react2.default.createElement(
+                                'div',
+                                { key: index, className: 'compare-page-table__cell' },
+                                feature,
+                                '\xA0'
+                            );
+                        }),
+                        _ramda2.default.range(0, maxNumberCells - selectedFilters.selectedFeatures.length).map(function (_, index) {
+                            return _react2.default.createElement(
+                                'div',
+                                { key: index, className: 'compare-page-table__cell' },
+                                '\xA0'
+                            );
+                        })
+                    );
+                })
             );
         }
     }, {
@@ -54715,8 +54791,18 @@ var ComparePage = function (_React$PureComponent) {
                 ),
                 _react2.default.createElement(
                     'div',
-                    { className: 'compare-page-deals' },
-                    this.state.deals.map(this.renderDeal)
+                    { className: 'compare-page__body' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'compare-page-deals' },
+                        this.state.deals.map(this.renderDeal)
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'compare-page-table__header' },
+                        'Your Selections'
+                    ),
+                    this.renderTable(this.props.compareList)
                 ),
                 this.props.selectedDeal ? this.renderDealRebatesModal() : ''
             );

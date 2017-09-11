@@ -15,7 +15,7 @@ const urlStyle = util.getInitialBodyStyleFromUrl();
 
 const initialState = {
     /** Version **/
-    0: '<- increment the number to purge LocalStorage',
+    1: '<- increment the number to purge LocalStorage',
     /** End Version **/
     window: { width: window.innerWidth },
     smallFiltersShown: false,

@@ -1,0 +1,26 @@
+@import '../variables';
+
+.compare-page-table {
+  border: 1px solid $color-black;
+  display: inline-flex;
+
+  &__column {
+    border-left: 1px solid $color-black;
+    max-width: $deal-card-width + ($deal-card-margin * 2);
+    min-width: $deal-card-width + ($deal-card-margin * 2);
+
+    &:first-child {
+      border-left: 0;
+    }
+  }
+
+  &__cell {
+    border-top: 1px solid $color-black;
+    padding: $deal-card-margin;
+
+    &:first-child {
+      border-top: 0;
+    }
+  }
+}
+
