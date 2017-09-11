@@ -5,11 +5,12 @@ namespace Tests\API;
 use App\Purchase;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class RouteOneWebhookTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
     
     protected $sampleXML = <<< XML
 <payload xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">

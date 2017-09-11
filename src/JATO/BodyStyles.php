@@ -41,7 +41,6 @@ class BodyStyles
             'style' => 'Hatchback',
             'subStyles' => [
                 'Mini Mpv',
-                'Crossover',
             ],
             'icon' => 'hatchback',
         ],

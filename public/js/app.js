@@ -54844,8 +54844,8 @@ var DealDetails = function (_React$PureComponent) {
             fuelInternalImages: [],
             warranties: null,
             dimensions: null,
-            showFeatures: false,
-            showEquipment: false
+            showStandardFeatures: false,
+            showFeatures: false
         };
         return _this;
     }
@@ -54879,17 +54879,17 @@ var DealDetails = function (_React$PureComponent) {
             });
         }
     }, {
+        key: 'showStandardFeatures',
+        value: function showStandardFeatures() {
+            this.setState({
+                showStandardFeatures: true
+            });
+        }
+    }, {
         key: 'showFeatures',
         value: function showFeatures() {
             this.setState({
                 showFeatures: true
-            });
-        }
-    }, {
-        key: 'showEquipment',
-        value: function showEquipment() {
-            this.setState({
-                showEquipment: true
             });
         }
     }, {
@@ -55046,8 +55046,8 @@ var DealDetails = function (_React$PureComponent) {
         key: 'hideModals',
         value: function hideModals() {
             this.setState({
-                showFeatures: false,
-                showEquipment: false
+                showStandardFeatures: false,
+                showFeatures: false
             });
         }
     }, {
@@ -55156,11 +55156,11 @@ var DealDetails = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'ul',
                         null,
-                        this.props.deal.features.map(function (feature, index) {
+                        this.props.deal.vauto_features.map(function (feature, index) {
                             return _react2.default.createElement(
                                 'li',
                                 { key: index },
-                                feature.feature
+                                feature
                             );
                         })
                     )
@@ -55168,8 +55168,8 @@ var DealDetails = function (_React$PureComponent) {
             );
         }
     }, {
-        key: 'renderEquipmentModal',
-        value: function renderEquipmentModal(deal) {
+        key: 'renderStandardFeaturesModal',
+        value: function renderStandardFeaturesModal(deal) {
             var _this4 = this;
 
             return _react2.default.createElement(
@@ -55225,11 +55225,11 @@ var DealDetails = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'ul',
                         null,
-                        deal.versions[0].equipment.map(function (equipment, index) {
+                        deal.features.map(function (feature, index) {
                             return _react2.default.createElement(
                                 'li',
                                 { key: index },
-                                equipment.name
+                                feature.feature
                             );
                         })
                     )
@@ -55259,18 +55259,18 @@ var DealDetails = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'ul',
                         null,
-                        deal.versions[0].equipment.slice(0, 5).map(function (equipment, index) {
+                        deal.features.slice(0, 5).map(function (feature, index) {
                             return _react2.default.createElement(
                                 'li',
                                 { key: index },
-                                equipment.name
+                                feature.feature
                             );
                         })
                     ),
                     _react2.default.createElement(
                         'a',
                         { href: '#', onClick: function onClick() {
-                                return _this5.showFeatures();
+                                return _this5.showStandardFeatures();
                             } },
                         'SEE ALL STANDARD FEATURES'
                     ),
@@ -55283,18 +55283,18 @@ var DealDetails = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'ul',
                         null,
-                        deal.features.slice(0, 5).map(function (feature, index) {
+                        deal.vauto_features.slice(0, 5).map(function (feature, index) {
                             return _react2.default.createElement(
                                 'li',
                                 { key: index },
-                                feature.feature
+                                feature
                             );
                         })
                     ),
                     _react2.default.createElement(
                         'a',
                         { href: '#', onClick: function onClick() {
-                                return _this5.showEquipment();
+                                return _this5.showFeatures();
                             } },
                         'SEE ALL ADDITIONAL OPTIONS'
                     ),
@@ -55376,8 +55376,8 @@ var DealDetails = function (_React$PureComponent) {
                     )
                 ),
                 _react2.default.createElement(_CompareBar2.default, { 'class': 'compare-bar compare-bar--static' }),
+                this.state.showStandardFeatures ? this.renderStandardFeaturesModal(deal) : '',
                 this.state.showFeatures ? this.renderFeaturesModal(deal) : '',
-                this.state.showEquipment ? this.renderEquipmentModal(deal) : '',
                 this.props.selectedDeal ? this.renderDealRebatesModal() : ''
             );
         }

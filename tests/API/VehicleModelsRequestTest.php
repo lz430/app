@@ -3,10 +3,13 @@
 namespace Tests\API;
 
 use App\JATO\VehicleModel;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class VehicleModelsRequestTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_shows_the_vehicle_models_data()
     {

@@ -15,6 +15,8 @@ use Carbon\Carbon;
 use DeliverMyRide\JATO\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
+use function GuzzleHttp\Promise\unwrap;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\QueryException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
@@ -109,10 +111,17 @@ class Importer
             $row += 1;
 
             /**
-             * Skip if file hash + vin is already in db or it is not new.
+             * Skip if it is not new.
              */
-            if (Deal::where('file_hash', $fileHash)->where('vin', $keyedData['VIN'])->first()
-                || $keyedData['New/Used'] !== 'N') {
+            if ($keyedData['New/Used'] !== 'N') {
+                continue;
+            }
+
+            /**
+             * Skip if vin is already in db and has a matching version
+             */
+            $savedDeal = Deal::where('vin', $keyedData['VIN'])->first();
+            if ($savedDeal && $savedDeal->versions()->count() === 1) {
                 continue;
             }
 
@@ -148,18 +157,14 @@ class Importer
                 }
 
                 /**
-                 * Get the fully hydrated JATO matched version.
+                 * Get the fully hydrated JATO matched version, either from our database or their API.
                  */
-                $jatoVersion = $this->client->modelsVersionsByVehicleId($matchedVersion['vehicle_ID']);
-
-                DB::transaction(function () use ($jatoVersion, $versionDeal, $decoded, $keyedData, $fileHash) {
+                DB::transaction(function () use ($matchedVersion, $versionDeal, $decoded, $keyedData, $fileHash) {
                     /**
                      * If we don't already have the jato info saved to a jato_vehicle_id then we need to save
                      * all of that (checking for manufacturer -> make -> model as well).
                      */
-                    if (! $version = Version::where('jato_vehicle_id', $jatoVersion['vehicleId'])->first()) {
-                        $this->saveEquipmentByVehicleId($jatoVersion['vehicleId']);
-                        
+                    if (! $version = Version::where('jato_vehicle_id', $matchedVersion['vehicle_ID'])->first()) {
                         if (! $manufacturer = Manufacturer::where('name', $decoded['manufacturer'])->first()) {
                             // Save/Update manufacturer, make, model, then versions
                             $manufacturer = $this->saveManufacturer(
@@ -183,14 +188,16 @@ class Importer
                             );
                         }
 
-                        $version = $this->saveModelVersion($model, $jatoVersion);
+                        $version = $this->saveModelVersion(
+                            $model,
+                            $this->client->modelsVersionsByVehicleId($matchedVersion['vehicle_ID'])
+                        );
                     }
 
                     $versionDeal->versions()->attach($version->id);
 
                     $this->saveVersionFeatures(
-                        $versionDeal,
-                        $keyedData['Features']
+                        $versionDeal
                     );
 
                     $this->saveVersionDealPhotos(
@@ -207,37 +214,57 @@ class Importer
 
         Deal::where('file_hash', '!=', $fileHash)->whereDoesntHave('purchases')->delete();
     }
-    
-    private function saveEquipmentByVehicleId(string $vehicleId)
+
+    private function saveVersionFeaturesByGroup(Deal $deal, array $features, string $group)
     {
-        $equipment = $this->client->equipmentByVehicleId($vehicleId);
-        foreach ($equipment['results'] as $result) {
-            try {
-                Equipment::create(['jato_vehicle_id' => $vehicleId, 'name' => $result['name']]);
-            } catch (QueryException $exception) {
-                // duplicate
-            }
-        }
-    }
+        collect($features)->each(function ($jatoFeature) use ($deal, $group) {
+            /**
+             * Only add features that have _content_ that starts with "Standard", "Optional", "Yes"
+             * and does not have parenthesis in the _feature_
+             */
+            if ((! str_contains($jatoFeature['feature'], ['(', '/'])) && (
+                    starts_with($jatoFeature['content'], 'Standard')
+                    || starts_with($jatoFeature['content'], 'Yes')
+                )) {
+                try {
+                    $feature = Feature::updateOrCreate([
+                        'feature' => $jatoFeature['feature'],
+                        'content' => $jatoFeature['content'],
+                    ], [
+                        'feature' => $jatoFeature['feature'],
+                        'content' => $jatoFeature['content'],
+                        'group' => $group,
+                    ]);
 
-    private function saveVersionFeatures(Deal $deal, string $features)
-    {
-        $features = collect(explode('|', $features));
-
-        $features->map(function ($featureName) use ($deal) {
-            $feature = Feature::updateOrCreate([
-                'feature' => $featureName,
-            ], [
-                'feature' => $featureName,
-                'group' => Feature::getGroupForFeature($featureName),
-            ]);
-
-            try {
-                $feature->deals()->save($deal);
-            } catch (QueryException $e) {
-                // Already saved.
+                    $feature->deals()->save($deal);
+                } catch (QueryException $e) {
+                    // Already saved.
+                }
             }
         });
+    }
+
+    private function saveVersionFeatures(Deal $deal)
+    {
+        $jatoVehicleId = $deal->versions->first()->jato_vehicle_id;
+
+        $promises = [
+            Feature::GROUP_SAFETY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 11),
+            Feature::GROUP_SEATING => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 9),
+            Feature::COMFORT_AND_CONVENIENCE => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 1),
+            Feature::GROUP_TECHNOLOGY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 8),
+        ];
+
+        $results = unwrap($promises);
+
+        foreach ($results as $group => $response) {
+            /** @var Response $response */
+            $this->saveVersionFeaturesByGroup(
+                $deal,
+                json_decode((string) $response->getBody(), true)['results'],
+                $group
+            );
+        }
     }
 
     private function saveVersionDealPhotos(Deal $versionDeal, string $photos)
@@ -276,6 +303,7 @@ class Importer
             'interior_color' => $keyedData['Interior Color'],
             'price' => $keyedData['Price'] !== '' ? $keyedData['Price'] : null,
             'msrp' => $keyedData['MSRP'] !== '' ? $keyedData['MSRP'] : null,
+            'vauto_features' => $keyedData['Features'] !== '' ? $keyedData['Features'] : null,
             'inventory_date' => Carbon::createFromFormat('m/d/Y', $keyedData['Inventory Date']),
             'certified' => $keyedData['Certified'] === 'Yes',
             'description' => $keyedData['Description'],
@@ -376,127 +404,5 @@ class Importer
             'url_name' => $model['urlModelName'],
             'is_current' => $model['isCurrent'],
         ]);
-    }
-
-    /**
-     * Unused but saving just in case
-     */
-    private function saveVersionTaxesAndDiscounts(Version $version, array $taxesAndDiscounts)
-    {
-        $this->info("Saving Version Taxes and Discounts: $version->name");
-
-        foreach ($taxesAndDiscounts as $taxOrDiscount) {
-            $version->taxesAndDiscounts()->updateOrCreate([
-                'name' => $taxOrDiscount['item1'],
-                'version_id' => $version->id,
-            ], [
-                'name' => $taxOrDiscount['item1'],
-                'version_id' => $version->id,
-                'amount' => $taxOrDiscount['item2'],
-            ]);
-        }
-    }
-
-    /**
-     * Unused but saving just in case
-     */
-    private function saveVersionOptions(Version $version, $options)
-    {
-        $this->info("Saving Version Options: $version->name");
-
-        foreach ($options as $option) {
-            Option::updateOrCreate([
-                'jato_option_id' => $option['optionId'],
-                'jato_vehicle_id' => $version->id,
-            ], [
-                'name' => $option['optionName'],
-                'code' => $option['optionCode'],
-                'type' => $option['optionType'],
-                'msrp' => $option['msrp'],
-                'invoice' => $option['invoicePrice'],
-                'discount' => $option['discount'],
-                'state' => $option['optionState'],
-                'state_translation' => $option['optionStateTranslation'],
-                'description' => $option['optionDescription'],
-            ]);
-        }
-    }
-
-    /**
-     * Unused but saving just in case
-     */
-    private function saveVersionEquipment(Version $version, $equipments)
-    {
-        $this->info("Saving Version Equipment: $version->name");
-
-        foreach ($equipments as $equipment) {
-            Equipment::updateOrCreate([
-                'jato_option_id' => $equipment['optionId'],
-                'jato_vehicle_id' => $version->jato_vehicle_id,
-            ], [
-                'jato_option_id' => $equipment['optionId'],
-                'jato_vehicle_id' => $version->jato_vehicle_id,
-                'jato_schema_id' => $equipment['schemaId'],
-                'jato_category_id' => $equipment['categoryId'],
-                'category' => $equipment['category'],
-                'name' => $equipment['name'],
-                'location' => $equipment['location'],
-                'availability' => $equipment['availability'],
-                'value' => $equipment['value'],
-            ]);
-        }
-    }
-
-    /**
-     * Unused but saving just in case
-     */
-    private function saveIncentives($vehicleId)
-    {
-        $incentives = $this->client->incentivesByVehicleId($vehicleId);
-
-        foreach ($incentives as $incentive) {
-            try {
-                $validFrom = new Carbon($incentive['validFrom']);
-                $validTo = new Carbon($incentive['validTo']);
-                $revisionDate = new Carbon($incentive['revisionDate']);
-            } catch (\Exception $e) {
-                // invalid dates
-            }
-
-            $this->info('Saving incentive: ' . $incentive['title']);
-
-            try {
-                $incentive = Incentive::create([
-                    'makeName' => $incentive['makeName'],
-                    'subProgramID' => $incentive['subProgramID'],
-                    'title' => $incentive['title'],
-                    'description' => $incentive['description'],
-                    'categoryID' => $incentive['categoryID'],
-                    'typeID' => $incentive['typeID'],
-                    'targetID' => $incentive['targetID'],
-                    'validFrom' => $validFrom ?? null,
-                    'validTo' => $validTo ?? null,
-                    'revisionNumber' => $incentive['revisionNumber'],
-                    'revisionDescription' => $incentive['revisionDescription'],
-                    'revisionDate' => $revisionDate ?? null,
-                    'restrictions' => $incentive['restrictions'],
-                    'comments' => $incentive['comments'],
-                    'statusName' => $incentive['statusName'],
-                    'statusID' => $incentive['statusID'],
-                    'cash' => $incentive['cash'],
-                    'cashRequirements' => $incentive['cashRequirements'],
-                    'categoryName' => $incentive['categoryName'],
-                    'targetName' => $incentive['targetName'],
-                    'typeName' => $incentive['typeName'],
-                    'states' => $incentive['states'],
-                ]);
-
-                $incentive->versions()->attach(
-                    Version::where('jato_vehicle_id', $vehicleId)->pluck('id')
-                );
-            } catch (QueryException $e) {
-                // duplicate
-            }
-        }
     }
 }

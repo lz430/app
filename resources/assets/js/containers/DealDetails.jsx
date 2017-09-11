@@ -26,8 +26,8 @@ class DealDetails extends React.PureComponent {
             fuelInternalImages: [],
             warranties: null,
             dimensions: null,
+            showStandardFeatures: false,
             showFeatures: false,
-            showEquipment: false,
         };
     }
 
@@ -59,15 +59,15 @@ class DealDetails extends React.PureComponent {
             });
     }
 
-    showFeatures() {
+    showStandardFeatures() {
         this.setState({
-            showFeatures: true,
+            showStandardFeatures: true,
         });
     }
 
-    showEquipment() {
+    showFeatures() {
         this.setState({
-            showEquipment: true,
+            showFeatures: true,
         });
     }
 
@@ -177,8 +177,8 @@ class DealDetails extends React.PureComponent {
 
     hideModals() {
         this.setState({
+            showStandardFeatures: false,
             showFeatures: false,
-            showEquipment: false,
         });
     }
 
@@ -247,8 +247,8 @@ class DealDetails extends React.PureComponent {
                     <hr />
 
                     <ul>
-                        {this.props.deal.features.map((feature, index) => {
-                            return <li key={index}>{feature.feature}</li>;
+                        {this.props.deal.vauto_features.map((feature, index) => {
+                            return <li key={index}>{feature}</li>;
                         })}
                     </ul>
                 </div>
@@ -256,7 +256,7 @@ class DealDetails extends React.PureComponent {
         );
     }
 
-    renderEquipmentModal(deal) {
+    renderStandardFeaturesModal(deal) {
         return (
             <Modal>
                 <div className="modal__content">
@@ -285,8 +285,8 @@ class DealDetails extends React.PureComponent {
                 </div>
                 <div className="deal-details__modal-body">
                     <ul>
-                        {deal.versions[0].equipment.map((equipment, index) => {
-                            return <li key={index}>{equipment.name}</li>;
+                        {deal.features.map((feature, index) => {
+                            return <li key={index}>{feature.feature}</li>;
                         })}
                     </ul>
                 </div>
@@ -304,13 +304,13 @@ class DealDetails extends React.PureComponent {
                         Vehicle Standard Features
                     </div>
                     <ul>
-                        {deal.versions[0].equipment
+                        {deal.features
                             .slice(0, 5)
-                            .map((equipment, index) => {
-                                return <li key={index}>{equipment.name}</li>;
+                            .map((feature, index) => {
+                                return <li key={index}>{feature.feature}</li>;
                             })}
                     </ul>
-                    <a href="#" onClick={() => this.showFeatures()}>
+                    <a href="#" onClick={() => this.showStandardFeatures()}>
                         SEE ALL STANDARD FEATURES
                     </a>
                     <br />
@@ -318,11 +318,11 @@ class DealDetails extends React.PureComponent {
                         Additional Options On This Vehicle
                     </div>
                     <ul>
-                        {deal.features.slice(0, 5).map((feature, index) => {
-                            return <li key={index}>{feature.feature}</li>;
+                        {deal.vauto_features.slice(0, 5).map((feature, index) => {
+                            return <li key={index}>{feature}</li>;
                         })}
                     </ul>
-                    <a href="#" onClick={() => this.showEquipment()}>
+                    <a href="#" onClick={() => this.showFeatures()}>
                         SEE ALL ADDITIONAL OPTIONS
                     </a>
                     <br />
@@ -399,9 +399,9 @@ class DealDetails extends React.PureComponent {
 
                 <CompareBar class="compare-bar compare-bar--static" />
 
-                {this.state.showFeatures ? this.renderFeaturesModal(deal) : ''}
-                {this.state.showEquipment ? (
-                    this.renderEquipmentModal(deal)
+                {this.state.showStandardFeatures ? this.renderStandardFeaturesModal(deal) : ''}
+                {this.state.showFeatures ? (
+                    this.renderFeaturesModal(deal)
                 ) : (
                     ''
                 )}
