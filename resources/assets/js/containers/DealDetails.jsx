@@ -297,7 +297,7 @@ class DealDetails extends React.PureComponent {
     }
 
     renderDeal(deal, index) {
-        const inCompareList = R.contains(deal, this.props.compareList);
+        const inCompareList = R.contains(deal, R.map(R.prop('deal'), this.props.compareList));
         return (
             <Deal deal={deal} key={index} hideImageAndTitle={true}>
                 <div className="deal-details__deal-content">

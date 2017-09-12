@@ -55437,7 +55437,7 @@ var DealDetails = function (_React$PureComponent) {
         value: function renderDeal(deal, index) {
             var _this5 = this;
 
-            var inCompareList = _ramda2.default.contains(deal, this.props.compareList);
+            var inCompareList = _ramda2.default.contains(deal, _ramda2.default.map(_ramda2.default.prop('deal'), this.props.compareList));
             return _react2.default.createElement(
                 _Deal2.default,
                 { deal: deal, key: index, hideImageAndTitle: true },
