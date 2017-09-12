@@ -35,6 +35,7 @@ const initialState = {
     selectedRebates: [],
     dealRebates: {},
     features: null,
+    requestingMoreDeals: false,
     makes: null,
     dealPage: 1,
     dealPageTotal: 1,

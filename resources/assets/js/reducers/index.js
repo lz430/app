@@ -46,6 +46,16 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 makes: action.data.data.data,
             });
+        case ActionTypes.REQUEST_MORE_DEALS:
+            return Object.assign({}, state, {
+                requestingMoreDeals: true,
+            });
+        case ActionTypes.REQUEST_DEALS:
+            return Object.assign({}, state, {
+                deals: null,
+                dealPageTotal: null,
+                dealPage: null,
+            });
         case ActionTypes.RECEIVE_DEALS:
             return Object.assign({}, state, {
                 deals: action.data.data.data,
@@ -74,11 +84,12 @@ const reducer = (state, action) => {
             });
         case ActionTypes.RECEIVE_MORE_DEALS:
             return Object.assign({}, state, {
-                deals: R.concat(state.deals, action.data.data.data),
+                deals: R.concat(state.deals || [], action.data.data.data),
                 dealPage: R.min(
                     action.data.data.meta.pagination.current_page,
                     action.data.data.meta.pagination.total_pages
                 ),
+                requestingMoreDeals: false,
             });
         case ActionTypes.TOGGLE_MAKE:
             return Object.assign({}, state, {

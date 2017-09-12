@@ -20,7 +20,7 @@ class FilterPanel extends React.PureComponent {
     getFeaturesByGroup(group) {
         return R.filter(feature => {
             return R.path(['attributes', 'group'], feature) === group;
-        }, this.props.features);
+        }, this.props.features || []);
     }
 
     getCountOfSelectedFeatureByGroup(group) {

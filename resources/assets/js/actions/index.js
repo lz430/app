@@ -77,6 +77,10 @@ export function receiveFeatures(data) {
 
 export function toggleFeature(feature) {
     return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
         const selectedFeatures = util.toggleItem(
             getState().selectedFeatures,
             feature
@@ -101,6 +105,10 @@ export function toggleFeature(feature) {
 
 export function toggleMake(make_id) {
     return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
         const selectedMakes = util.toggleItem(
             getState().selectedMakes,
             make_id
@@ -143,18 +151,22 @@ export function receiveDealRebates(data) {
 
 export function requestDeals() {
     return (dispatch, getState) => {
-        api.getDeals(withStateDefaults(getState())).then(data => {
-            dispatch(receiveDeals(data));
-        });
-
         dispatch({
             type: ActionTypes.REQUEST_DEALS,
+        });
+
+        api.getDeals(withStateDefaults(getState())).then(data => {
+            dispatch(receiveDeals(data));
         });
     };
 }
 
 export function requestMoreDeals() {
     return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_MORE_DEALS,
+        });
+
         api
             .getDeals(
                 withStateDefaults(getState(), {
@@ -164,10 +176,6 @@ export function requestMoreDeals() {
             .then(data => {
                 dispatch(receiveMoreDeals(data));
             });
-
-        dispatch({
-            type: ActionTypes.REQUEST_MORE_DEALS,
-        });
     };
 }
 
@@ -210,6 +218,10 @@ export function requestBodyStyles() {
 
 export function toggleStyle(style) {
     return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
         const selectedStyles = util.toggleItem(
             getState().selectedStyles,
             style
@@ -236,6 +248,10 @@ export function toggleStyle(style) {
 
 export function chooseFuelType(fuelType) {
     return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
         const selectedFuelType =
             getState().selectedFuelType === fuelType ? null : fuelType;
 
@@ -258,6 +274,10 @@ export function chooseFuelType(fuelType) {
 
 export function chooseTransmissionType(transmissionType) {
     return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
         const selectedTransmissionType =
             getState().selectedTransmissionType === transmissionType
                 ? null
@@ -282,6 +302,10 @@ export function chooseTransmissionType(transmissionType) {
 
 export function clearAllFilters() {
     return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
         api
             .getDeals(
                 withStateDefaults(getState(), {
@@ -335,6 +359,10 @@ export function toggleCompare(deal) {
 
 export function setZipCode(zipcode) {
     return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
         api
             .getDeals(
                 withStateDefaults(getState(), {
@@ -380,6 +408,10 @@ export function requestLocationInfo() {
 
 export function receiveLocationInfo(data) {
     return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
         const zipcode = data.zip_code;
         const city = data.city;
 

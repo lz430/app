@@ -123,7 +123,16 @@ class Sortbar extends React.PureComponent {
 }
 
 Sortbar.propTypes = {
-    results_count: PropTypes.number.isRequired,
+    deals: PropTypes.arrayOf(
+        PropTypes.shape({
+            year: PropTypes.string.isRequired,
+            msrp: PropTypes.number.isRequired,
+            price: PropTypes.number.isRequired,
+            make: PropTypes.string.isRequired,
+            model: PropTypes.string.isRequired,
+            id: PropTypes.number.isRequired,
+        })
+    ),
     sortColumn: PropTypes.oneOf(['price', 'make', 'year']).isRequired,
     sortAscending: PropTypes.bool.isRequired,
     window: PropTypes.shape({
@@ -133,7 +142,7 @@ Sortbar.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        results_count: state.deals.length,
+        deals: state.deals,
         sortColumn: state.sortColumn,
         sortAscending: state.sortAscending,
         compareList: state.compareList,
