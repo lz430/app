@@ -41,7 +41,7 @@ class RebatesController extends Controller
             })->map(function ($incentive) {
                 return [
                     'id' => $incentive['subProgramId'],
-                    'rebate' => $incentive['title'],
+                    'rebate' => $incentive['restrictions'],
                     'value' => $incentive['cash'],
                     'statusName' => $incentive['statusName'],
                     'types' => [
