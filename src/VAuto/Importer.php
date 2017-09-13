@@ -19,6 +19,7 @@ use function GuzzleHttp\Promise\unwrap;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\QueryException;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -217,22 +218,20 @@ class Importer
 
     private function saveVersionFeaturesByGroup(Deal $deal, array $features, string $group)
     {
-        collect($features)->each(function ($jatoFeature) use ($deal, $group) {
+        collect($features)->reduce(function (Collection $carry, $jatoFeature) {
+            return $carry->merge(self::splitJATOFeaturesAndContent($jatoFeature['feature'], $jatoFeature['content']));
+        }, collect())->each(function ($featureAndContent) use ($deal, $group) {
             /**
-             * Only add features that have _content_ that starts with "Standard", "Optional", "Yes"
-             * and does not have parenthesis in the _feature_
+             * Only add features that have _content_ that starts with "Standard", "Optional", "Yes".
              */
-            if ((! str_contains($jatoFeature['feature'], ['(', '/'])) && (
-                    starts_with($jatoFeature['content'], 'Standard')
-                    || starts_with($jatoFeature['content'], 'Yes')
-                )) {
+            if (starts_with($featureAndContent['content'], ['Standard', 'Yes'])) {
                 try {
                     $feature = Feature::updateOrCreate([
-                        'feature' => $jatoFeature['feature'],
-                        'content' => $jatoFeature['content'],
+                        'feature' => $featureAndContent['feature'],
+                        'content' => $featureAndContent['content'],
                     ], [
-                        'feature' => $jatoFeature['feature'],
-                        'content' => $jatoFeature['content'],
+                        'feature' => $featureAndContent['feature'],
+                        'content' => $featureAndContent['content'],
                         'group' => $group,
                     ]);
 
@@ -404,5 +403,62 @@ class Importer
             'url_name' => $model['urlModelName'],
             'is_current' => $model['isCurrent'],
         ]);
+    }
+
+    public static function splitJATOFeaturesAndContent($feature, $content)
+    {
+        $all = [];
+
+        if (str_contains($feature, '(')) {
+            [$prefix, $suffix] = array_map('trim', explode('(', $feature));
+
+            if (str_contains($suffix, ' / ')) {
+                $features = array_map(function ($str) {
+                    return trim($str, '() ');
+                }, explode(' / ', $suffix));
+
+                $contents = array_map('trim', explode(' / ', $content));
+
+                foreach ($features as $index => $feature) {
+                    $all[] = [
+                        'feature' => "$prefix $feature",
+                        'content' => $contents[$index],
+                    ];
+                }
+            } else {
+                $features = [$prefix, $prefix . ' ' . trim($suffix, '() ')];
+                $contents = array_map(function ($str) {
+                    return trim($str, ') ') ;
+                }, explode('(', $content));
+
+                foreach ($features as $index => $feature) {
+                    $all[] = [
+                        'feature' => $feature,
+                        'content' => $contents[$index],
+                    ];
+                }
+            }
+
+            return $all;
+        } elseif (str_contains($feature, ' / ')) {
+            $features = array_map('trim', explode(' / ', $feature));
+            $contents = array_map('trim', explode(' / ', $content));
+
+            foreach ($features as $index => $feature) {
+                $all[] = [
+                    'feature' => $feature,
+                    'content' => $contents[$index],
+                ];
+            }
+        } else {
+            $all = [
+                [
+                    'feature' => trim($feature),
+                    'content' => trim($content),
+                ],
+            ];
+        }
+
+        return $all;
     }
 }
