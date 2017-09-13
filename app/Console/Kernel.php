@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('vauto:load')->daily();
+        $schedule->command('vauto:load')->daily()->thenPing('http://beats.envoyer.io/heartbeat/CtF23QZqY2cZ8zw');
     }
 
     /**
