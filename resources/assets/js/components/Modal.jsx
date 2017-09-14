@@ -47,12 +47,7 @@ class Modal extends React.PureComponent {
                             <div className="modal__footer">
                                 <button
                                     onClick={this.props.onClose}
-                                    className={
-                                        `modal__close-button modal__close-button--blue modal__close-button--small` +
-                                        (this.props.selectedMakes.length
-                                            ? ' animated rubberBand'
-                                            : '')
-                                    }
+                                    className="modal__close-button modal__close-button--blue modal__close-button--small"
                                 >
                                     {this.props.closeText}
                                 </button>

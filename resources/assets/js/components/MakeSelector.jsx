@@ -24,6 +24,18 @@ class MakeSelector extends React.PureComponent {
         ).bind(this)(make.attributes);
     }
 
+    animateButton() {
+        const modalCloseButton = document.getElementsByClassName(
+            'modal__close-button'
+        )[0];
+        modalCloseButton.classList.remove('animated');
+        modalCloseButton.classList.remove('rubberBand');
+        setTimeout(() => {
+            modalCloseButton.classList += ' rubberBand';
+            modalCloseButton.classList += ' animated';
+        }, 100);
+    }
+
     renderMake(make) {
         const selected =
             this.props.selectedMakes &&
@@ -35,7 +47,10 @@ class MakeSelector extends React.PureComponent {
         return (
             <div
                 className={className}
-                onClick={() => this.props.toggleMake(make.id)}
+                onClick={() => {
+                    this.props.toggleMake(make.id);
+                    this.animateButton();
+                }}
                 key={make.id}
             >
                 <img src={this.getLogoFor(make)} />
