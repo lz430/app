@@ -59,17 +59,17 @@ export default () => {
         autoRehydrate()
     );
 
-    persistStore(store);
+    persistStore(store, {}, () => {
+        window.setTimeout(() => {
+            store.dispatch(requestLocationInfo());
+        });
+        store.dispatch(requestMakes());
+        store.dispatch(requestBodyStyles());
+        store.dispatch(requestFeatures());
 
-    window.setTimeout(() => {
-        store.dispatch(requestLocationInfo());
-    });
-    store.dispatch(requestMakes());
-    store.dispatch(requestBodyStyles());
-    store.dispatch(requestFeatures());
-
-    window.addEventListener('resize', () => {
-        store.dispatch(windowResize(window.innerWidth));
+        window.addEventListener('resize', () => {
+            store.dispatch(windowResize(window.innerWidth));
+        });
     });
 
     return store;

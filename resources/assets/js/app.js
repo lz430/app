@@ -33,9 +33,7 @@ Array.from(document.getElementsByTagName('Financing')).map(element => {
 Array.from(document.getElementsByTagName('ComparePage')).map(element => {
     ReactDOM.render(
         <Provider store={store()}>
-            <ComparePage
-                deals={JSON.parse(element.getAttribute('deals')).data}
-            />
+            <ComparePage />
         </Provider>,
         element
     );
