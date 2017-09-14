@@ -4,6 +4,13 @@
   border: 1px solid $color-black;
   display: inline-flex;
 
+  &__header {
+    background-color: $color-darkgrey;
+    color: $color-text-white;
+    font-weight: bold;
+    padding: 5px 0 5px 10px;
+  }
+
   &__column {
     border-left: 1px solid $color-black;
     max-width: $deal-card-width + ($deal-card-margin * 2);

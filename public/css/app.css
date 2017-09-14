@@ -2455,6 +2455,13 @@ body {
   display: inline-flex;
 }
 
+.compare-page-table__header {
+  background-color: #535d63;
+  color: #fff;
+  font-weight: bold;
+  padding: 5px 0 5px 10px;
+}
+
 .compare-page-table__column {
   border-left: 1px solid #000;
   max-width: 310px;
