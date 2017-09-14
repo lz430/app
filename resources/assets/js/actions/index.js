@@ -23,20 +23,6 @@ const withStateDefaults = (state, changed) => {
     );
 };
 
-const loadRebatesForDeal = (dispatch, getState, deal) => {
-    // If we have already received the rebates for the deal, don't request them again.
-    if (getState().dealRebates.hasOwnProperty(deal.id)) return;
-
-    api.getRebates(getState().zipcode, deal.vin).then(data => {
-        dispatch(
-            receiveDealRebates({
-                data: data,
-                dealId: deal.id,
-            })
-        );
-    });
-};
-
 export function requestMakes() {
     return dispatch => {
         api.getMakes().then(data => {
@@ -131,10 +117,28 @@ export function toggleMake(make_id) {
     };
 }
 
-export function receiveDeals(data) {
+export function requestRebates(deal) {
     return (dispatch, getState) => {
-        data.data.data.map(loadRebatesForDeal.bind(null, dispatch, getState));
+        // If we have already received the rebates for the deal, don't request them again.
+        if (getState().dealRebates.hasOwnProperty(deal.id)) return;
 
+        api.getRebates(getState().zipcode, deal.vin).then(data => {
+            dispatch(
+                receiveDealRebates({
+                    data: data,
+                    dealId: deal.id,
+                })
+            );
+        });
+
+        dispatch({
+            type: ActionTypes.REQUEST_REBATES,
+        });
+    };
+}
+
+export function receiveDeals(data) {
+    return dispatch => {
         dispatch({
             type: ActionTypes.RECEIVE_DEALS,
             data: data,
@@ -194,9 +198,7 @@ export function receiveBodyStyles(deals) {
 }
 
 export function receiveMoreDeals(data) {
-    return (dispatch, getState) => {
-        data.data.data.map(loadRebatesForDeal.bind(null, dispatch, getState));
-
+    return dispatch => {
         dispatch({
             type: ActionTypes.RECEIVE_MORE_DEALS,
             data: data,

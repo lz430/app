@@ -16,7 +16,6 @@ class ComparePage extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            deals: props.deals,
             dealIndex: 0,
             zipcode: R.prop(
                 'zipcode',
@@ -27,26 +26,9 @@ class ComparePage extends React.PureComponent {
         this.intendedRoute = this.intendedRoute.bind(this);
     }
 
-    componentWillReceiveProps(props) {
-        props.compareList.forEach(dealsAndSelectedFilters => {
-            if (
-                !props.dealRebates.hasOwnProperty(
-                    dealsAndSelectedFilters.deal.id
-                )
-            )
-                console.log('no rebates available'); //@todo pull rebates for the deal
-        });
-    }
-
-    removeDeal(deal) {
-        this.setState({
-            deals: R.without([deal], this.state.deals),
-        });
-    }
-
     intendedRoute() {
         return encodeURIComponent(
-            `compare?${this.state.deals
+            `compare?${this.props.deals
                 .map(deal => {
                     return `deals[]=${deal.id}`;
                 })
@@ -245,7 +227,7 @@ class ComparePage extends React.PureComponent {
                 </div>
                 <div className="compare-page__body">
                     <div className="compare-page-deals">
-                        {this.state.deals.map(this.renderDeal)}
+                        {this.props.deals.map(this.renderDeal)}
                     </div>
                     <div className="compare-page-table__header">
                         Your Selections
@@ -258,12 +240,15 @@ class ComparePage extends React.PureComponent {
                     <div className="compare-page-table__header">
                         Rebates and Incentives
                     </div>
-                    {this.props.compareList.length ? (
+                    {R.all(
+                        deal => this.props.dealRebates.hasOwnProperty(deal.id),
+                        this.props.deals
+                    ) ? (
                         this.renderRebatesAndIncentivesTable(
                             this.props.compareList
                         )
                     ) : (
-                        ''
+                        'Loading...'
                     )}
                 </div>
 
@@ -275,6 +260,7 @@ class ComparePage extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
+        deals: R.map(R.prop('deal'), state.compareList),
         compareList: state.compareList,
         selectedDeal: state.selectedDeal,
         selectedTab: state.selectedTab,
