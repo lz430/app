@@ -3,12 +3,22 @@
 .compare-page-table {
   border: 1px solid $color-black;
   display: inline-flex;
+  flex-direction: column;
 
   &__header {
     background-color: $color-darkgrey;
     color: $color-text-white;
     font-weight: bold;
     padding: 5px 0 5px 10px;
+  }
+
+  &__columns {
+    display: inline-flex;
+    overflow-y: hidden;
+
+    &--closed {
+      height: 0;
+    }
   }
 
   &__column {
