@@ -14,7 +14,18 @@ class FilterPanel extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.getFeaturesByGroup = this.getFeaturesByGroup.bind(this);
+        this.state = {
+            openFilter: 'Vehicle Style',
+        };
+    }
+
+    toggleOpenFilter(openFilter) {
+        this.setState({
+            openFilter:
+                this.state.openFilter && this.state.openFilter === openFilter
+                    ? null
+                    : openFilter,
+        });
     }
 
     getFeaturesByGroup(group) {
@@ -43,127 +54,125 @@ class FilterPanel extends React.PureComponent {
                         Filter Results
                     </div>
                     <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Vehicle Style')}
+                        open={this.state.openFilter === 'Vehicle Style'}
                         title="Vehicle Style"
                         count={this.props.selectedStyles.length}
                     >
-                        {() => (
-                            <FilterStyleSelector
-                                styles={this.props.bodyStyles}
-                                selectedStyles={this.props.selectedStyles}
-                                onSelectStyle={this.props.toggleStyle}
-                            />
-                        )}
+                        <FilterStyleSelector
+                            styles={this.props.bodyStyles}
+                            selectedStyles={this.props.selectedStyles}
+                            onSelectStyle={this.props.toggleStyle}
+                        />
                     </SidebarFilter>
                     <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Brand')}
+                        open={this.state.openFilter === 'Brand'}
                         title="Brand"
                         count={this.props.selectedMakes.length}
                     >
-                        {() => (
-                            <FilterMakeSelector
-                                makes={this.props.makes}
-                                selectedMakes={this.props.selectedMakes}
-                                onSelectMake={this.props.toggleMake}
-                            />
-                        )}
+                        <FilterMakeSelector
+                            makes={this.props.makes}
+                            selectedMakes={this.props.selectedMakes}
+                            onSelectMake={this.props.toggleMake}
+                        />
                     </SidebarFilter>
                     <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Fuel')}
+                        open={this.state.openFilter === 'Fuel'}
                         title="Fuel"
                         count={this.props.selectedFuelType ? 1 : 0}
                     >
-                        {() => (
-                            <FilterFuelTypeSelector
-                                fuelTypes={this.props.fuelTypes}
-                                selectedFuelType={this.props.selectedFuelType}
-                                onChooseFuelType={this.props.chooseFuelType}
-                            />
-                        )}
+                        <FilterFuelTypeSelector
+                            fuelTypes={this.props.fuelTypes}
+                            selectedFuelType={this.props.selectedFuelType}
+                            onChooseFuelType={this.props.chooseFuelType}
+                        />
                     </SidebarFilter>
                     <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Transmission')}
+                        open={this.state.openFilter === 'Transmission'}
                         title="Transmission"
                         count={this.props.selectedTransmissionType ? 1 : 0}
                     >
-                        {() => (
-                            <FilterTransmissionTypeSelector
-                                transmissionTypes={this.props.transmissionTypes}
-                                selectedTransmissionType={
-                                    this.props.selectedTransmissionType
-                                }
-                                onSelectTransmissionType={
-                                    this.props.chooseTransmissionType
-                                }
-                            />
-                        )}
+                        <FilterTransmissionTypeSelector
+                            transmissionTypes={this.props.transmissionTypes}
+                            selectedTransmissionType={
+                                this.props.selectedTransmissionType
+                            }
+                            onSelectTransmissionType={
+                                this.props.chooseTransmissionType
+                            }
+                        />
                     </SidebarFilter>
                     <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Seating')}
+                        open={this.state.openFilter === 'Seating'}
                         title="Seating"
                         count={this.getCountOfSelectedFeatureByGroup('seating')}
                     >
-                        {() => (
-                            <FilterFeatureSelector
-                                selectedFeatures={this.props.selectedFeatures}
-                                features={this.getFeaturesByGroup('seating')}
-                                onSelectFeature={this.props.toggleFeature}
-                            />
-                        )}
+                        <FilterFeatureSelector
+                            selectedFeatures={this.props.selectedFeatures}
+                            features={this.getFeaturesByGroup('seating')}
+                            onSelectFeature={this.props.toggleFeature}
+                        />
                     </SidebarFilter>
                     <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Safety')}
+                        open={this.state.openFilter === 'Safety'}
                         title="Safety"
                         count={this.getCountOfSelectedFeatureByGroup('safety')}
                     >
-                        {() => (
-                            <FilterFeatureSelector
-                                selectedFeatures={this.props.selectedFeatures}
-                                features={this.getFeaturesByGroup('safety')}
-                                onSelectFeature={this.props.toggleFeature}
-                            />
-                        )}
+                        <FilterFeatureSelector
+                            selectedFeatures={this.props.selectedFeatures}
+                            features={this.getFeaturesByGroup('safety')}
+                            onSelectFeature={this.props.toggleFeature}
+                        />
                     </SidebarFilter>
                     <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Technology')}
+                        open={this.state.openFilter === 'Technology'}
                         title="Technology"
                         count={this.getCountOfSelectedFeatureByGroup(
                             'technology'
                         )}
                     >
-                        {() => (
-                            <FilterFeatureSelector
-                                selectedFeatures={this.props.selectedFeatures}
-                                features={this.getFeaturesByGroup('technology')}
-                                onSelectFeature={this.props.toggleFeature}
-                            />
-                        )}
+                        <FilterFeatureSelector
+                            selectedFeatures={this.props.selectedFeatures}
+                            features={this.getFeaturesByGroup('technology')}
+                            onSelectFeature={this.props.toggleFeature}
+                        />
                     </SidebarFilter>
                     <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Convenience')}
+                        open={this.state.openFilter === 'Convenience'}
                         title="Convenience"
                         count={this.getCountOfSelectedFeatureByGroup(
                             'comfort and convenience'
                         )}
                     >
-                        {() => (
-                            <FilterFeatureSelector
-                                selectedFeatures={this.props.selectedFeatures}
-                                features={this.getFeaturesByGroup(
-                                    'comfort and convenience'
-                                )}
-                                onSelectFeature={this.props.toggleFeature}
-                            />
-                        )}
+                        <FilterFeatureSelector
+                            selectedFeatures={this.props.selectedFeatures}
+                            features={this.getFeaturesByGroup(
+                                'comfort and convenience'
+                            )}
+                            onSelectFeature={this.props.toggleFeature}
+                        />
                     </SidebarFilter>
                     {R.contains('Pickup', this.props.selectedStyles) ? (
                         <SidebarFilter
+                            toggle={() => this.toggleOpenFilter('Truck')}
+                            open={this.state.openFilter === 'Truck'}
                             title="Truck"
                             count={this.getCountOfSelectedFeatureByGroup(
                                 'truck'
                             )}
                         >
-                            {() => (
-                                <FilterFeatureSelector
-                                    selectedFeatures={
-                                        this.props.selectedFeatures
-                                    }
-                                    features={this.getFeaturesByGroup('truck')}
-                                    onSelectFeature={this.props.toggleFeature}
-                                />
-                            )}
+                            <FilterFeatureSelector
+                                selectedFeatures={this.props.selectedFeatures}
+                                features={this.getFeaturesByGroup('truck')}
+                                onSelectFeature={this.props.toggleFeature}
+                            />
                         </SidebarFilter>
                     ) : (
                         ''

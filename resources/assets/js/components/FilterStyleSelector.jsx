@@ -42,7 +42,11 @@ class FilterStyleSelector extends React.PureComponent {
         return (
             <div className="filter-style-selector">
                 <div className="filter-style-selector__styles">
-                    {this.props.styles.map(this.renderStyle)}
+                    {this.props.styles ? (
+                        this.props.styles.map(this.renderStyle)
+                    ) : (
+                        'Loading...'
+                    )}
                 </div>
             </div>
         );
@@ -55,7 +59,7 @@ FilterStyleSelector.propTypes = {
             style: PropTypes.string,
             icon: PropTypes.string,
         })
-    ).isRequired,
+    ),
     selectedStyles: PropTypes.arrayOf(PropTypes.string).isRequired,
     onSelectStyle: PropTypes.func.isRequired,
 };
