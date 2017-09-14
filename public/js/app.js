@@ -55054,7 +55054,8 @@ var ComparePage = function (_React$PureComponent) {
 
         _this.state = {
             dealIndex: 0,
-            zipcode: _ramda2.default.prop('zipcode', _qs2.default.parse(window.location.search.slice(1)))
+            zipcode: _ramda2.default.prop('zipcode', _qs2.default.parse(window.location.search.slice(1))),
+            openAccordion: 'Your Selections'
         };
         _this.renderDeal = _this.renderDeal.bind(_this);
         _this.intendedRoute = _this.intendedRoute.bind(_this);
@@ -55062,6 +55063,13 @@ var ComparePage = function (_React$PureComponent) {
     }
 
     _createClass(ComparePage, [{
+        key: 'toggleAccordion',
+        value: function toggleAccordion(openAccordion) {
+            this.setState({
+                openAccordion: this.state.openAccordion && this.state.openAccordion === openAccordion ? null : openAccordion
+            });
+        }
+    }, {
         key: 'intendedRoute',
         value: function intendedRoute() {
             return encodeURIComponent('compare?' + this.props.deals.map(function (deal) {
@@ -55117,6 +55125,8 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderSelectionsTable',
         value: function renderSelectionsTable(compareList) {
+            var _this3 = this;
+
             var maxNumberCells = _ramda2.default.reduce(function (carry, dealAndSelectedFilters) {
                 return _ramda2.default.max(_ramda2.default.propOr([], 'selectedFeatures', dealAndSelectedFilters.selectedFilters).length, carry);
             }, 0, compareList);
@@ -55124,101 +55134,139 @@ var ComparePage = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 { className: 'compare-page-table' },
-                compareList.map(function (_ref, index) {
-                    var deal = _ref.deal,
-                        selectedFilters = _ref.selectedFilters;
+                _react2.default.createElement(
+                    'div',
+                    {
+                        onClick: function onClick() {
+                            return _this3.toggleAccordion('Your Selections');
+                        },
+                        className: 'compare-page-table__header'
+                    },
+                    'Your Selections'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    {
+                        className: 'compare-page-table__columns ' + (this.state.openAccordion !== 'Your Selections' ? 'compare-page-table__columns--closed' : '')
+                    },
+                    compareList.map(function (_ref, index) {
+                        var deal = _ref.deal,
+                            selectedFilters = _ref.selectedFilters;
 
-                    return _react2.default.createElement(
-                        'div',
-                        { key: index, className: 'compare-page-table__column' },
-                        _react2.default.createElement(
+                        return _react2.default.createElement(
                             'div',
-                            { className: 'compare-page-table__cell' },
-                            deal.id,
-                            '\xA0'
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'compare-page-table__cell' },
-                            selectedFilters.selectedFuelType,
-                            '\xA0'
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'compare-page-table__cell' },
-                            selectedFilters.selectedTransmissionType ? _strings2.default.toTitleCase(selectedFilters.selectedTransmissionType) : '',
-                            '\xA0'
-                        ),
-                        selectedFilters.selectedFeatures.map(function (feature, index) {
-                            return _react2.default.createElement(
+                            {
+                                key: index,
+                                className: 'compare-page-table__column'
+                            },
+                            _react2.default.createElement(
                                 'div',
-                                {
-                                    key: index,
-                                    className: 'compare-page-table__cell'
-                                },
-                                feature,
+                                { className: 'compare-page-table__cell' },
+                                deal.id,
                                 '\xA0'
-                            );
-                        }),
-                        _ramda2.default.range(0, maxNumberCells - selectedFilters.selectedFeatures.length).map(function (_, index) {
-                            return _react2.default.createElement(
+                            ),
+                            _react2.default.createElement(
                                 'div',
-                                {
-                                    key: index,
-                                    className: 'compare-page-table__cell'
-                                },
+                                { className: 'compare-page-table__cell' },
+                                selectedFilters.selectedFuelType,
                                 '\xA0'
-                            );
-                        })
-                    );
-                })
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'compare-page-table__cell' },
+                                selectedFilters.selectedTransmissionType ? _strings2.default.toTitleCase(selectedFilters.selectedTransmissionType) : '',
+                                '\xA0'
+                            ),
+                            selectedFilters.selectedFeatures.map(function (feature, index) {
+                                return _react2.default.createElement(
+                                    'div',
+                                    {
+                                        key: index,
+                                        className: 'compare-page-table__cell'
+                                    },
+                                    feature,
+                                    '\xA0'
+                                );
+                            }),
+                            _ramda2.default.range(0, maxNumberCells - selectedFilters.selectedFeatures.length).map(function (_, index) {
+                                return _react2.default.createElement(
+                                    'div',
+                                    {
+                                        key: index,
+                                        className: 'compare-page-table__cell'
+                                    },
+                                    '\xA0'
+                                );
+                            })
+                        );
+                    })
+                )
             );
         }
     }, {
         key: 'renderRebatesAndIncentivesTable',
         value: function renderRebatesAndIncentivesTable(compareList) {
-            var _this3 = this;
+            var _this4 = this;
 
             var maxNumberCells = _ramda2.default.reduce(function (carry, dealAndSelectedFilters) {
-                return _ramda2.default.max(_ramda2.default.propOr([], dealAndSelectedFilters.deal.id, _this3.props.dealRebates).length, carry);
+                return _ramda2.default.max(_ramda2.default.propOr([], dealAndSelectedFilters.deal.id, _this4.props.dealRebates).length, carry);
             }, 0, compareList);
 
             return _react2.default.createElement(
                 'div',
                 { className: 'compare-page-table' },
-                compareList.map(function (dealAndSelectedFilters, index) {
-                    return _react2.default.createElement(
-                        'div',
-                        { key: index, className: 'compare-page-table__column' },
-                        _this3.props.dealRebates[dealAndSelectedFilters.deal.id].map(function (rebate, index) {
-                            return _ramda2.default.contains(_this3.props.selectedTab, rebate.types) ? _react2.default.createElement(
-                                'div',
-                                {
-                                    key: index,
-                                    className: 'compare-page-table__cell'
-                                },
-                                rebate.rebate,
-                                '\xA0'
-                            ) : '';
-                        }),
-                        _ramda2.default.range(0, maxNumberCells - _this3.props.dealRebates[dealAndSelectedFilters.deal.id].length).map(function (_, index) {
-                            return _react2.default.createElement(
-                                'div',
-                                {
-                                    key: index,
-                                    className: 'compare-page-table__cell'
-                                },
-                                '\xA0'
-                            );
-                        })
-                    );
-                })
+                _react2.default.createElement(
+                    'div',
+                    {
+                        onClick: function onClick() {
+                            return _this4.toggleAccordion('Rebates and Incentives');
+                        },
+                        className: 'compare-page-table__header'
+                    },
+                    'Rebates and Incentives'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    {
+                        className: 'compare-page-table__columns ' + (this.state.openAccordion !== 'Rebates and Incentives' ? 'compare-page-table__columns--closed' : '')
+                    },
+                    compareList.map(function (dealAndSelectedFilters, index) {
+                        return _react2.default.createElement(
+                            'div',
+                            {
+                                key: index,
+                                className: 'compare-page-table__column'
+                            },
+                            _this4.props.dealRebates[dealAndSelectedFilters.deal.id].map(function (rebate, index) {
+                                return _ramda2.default.contains(_this4.props.selectedTab, rebate.types) ? _react2.default.createElement(
+                                    'div',
+                                    {
+                                        key: index,
+                                        className: 'compare-page-table__cell'
+                                    },
+                                    rebate.rebate,
+                                    '\xA0'
+                                ) : '';
+                            }),
+                            _ramda2.default.range(0, maxNumberCells - _this4.props.dealRebates[dealAndSelectedFilters.deal.id].length).map(function (_, index) {
+                                return _react2.default.createElement(
+                                    'div',
+                                    {
+                                        key: index,
+                                        className: 'compare-page-table__cell'
+                                    },
+                                    '\xA0'
+                                );
+                            })
+                        );
+                    })
+                )
             );
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this4 = this;
+            var _this5 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -55242,19 +55290,9 @@ var ComparePage = function (_React$PureComponent) {
                         { className: 'compare-page-deals' },
                         this.props.deals.map(this.renderDeal)
                     ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'compare-page-table__header' },
-                        'Your Selections'
-                    ),
                     this.props.compareList.length ? this.renderSelectionsTable(this.props.compareList) : '',
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'compare-page-table__header' },
-                        'Rebates and Incentives'
-                    ),
                     _ramda2.default.all(function (deal) {
-                        return _this4.props.dealRebates.hasOwnProperty(deal.id);
+                        return _this5.props.dealRebates.hasOwnProperty(deal.id);
                     }, this.props.deals) ? this.renderRebatesAndIncentivesTable(this.props.compareList) : 'Loading...'
                 ),
                 this.props.selectedDeal ? this.renderDealRebatesModal() : ''
