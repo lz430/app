@@ -10,6 +10,10 @@
   position: absolute;
   width: 100%;
 
+  &--static {
+    position: static;
+  }
+
   &__deals-counter-bubble {
     position: absolute;
     width: $compare-button-width;

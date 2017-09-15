@@ -1,22 +1,19 @@
 @import '../variables';
 
 .tabs {
-  border-bottom: 1px solid $color-section-bottom-border;
+  display: flex;
+  justify-content: center;
   padding-left: 10px;
 
   &--no-bottom-border {
     border-bottom: 0;
   }
 
-  @media (min-width: $break-small) {
-    padding-left: 0;
-  }
-
   &__tab {
     cursor: pointer;
     display: inline-block;
     margin: 5px 20px -1px 0;
-    padding-bottom: 6px;
+    padding: 6px;
 
     &--selected {
       border-bottom: 2px solid $color-blue;
@@ -25,29 +22,9 @@
   }
 
   &__content {
-    color: $text-color-dark;
     display: flex;
-    flex-direction: column;
-    margin: 10px 0;
-    padding-left: 10px;
-
-    @media (min-width: $break-small) {
-      flex-direction: row;
-      padding-left: 0;
-    }
-
-    &__item {
-      display: flex;
-      flex: 1;
-      flex-direction: column;
-      max-width: none;
-      padding-bottom: 0;
-      padding-right: 50px;
-
-      @media (min-width: $break-small) {
-        max-width: 300px;
-        padding-bottom: 30px;
-      }
-    }
+    flex-wrap: wrap;
+    padding: 10px 0;
+    width: 100%;
   }
 }

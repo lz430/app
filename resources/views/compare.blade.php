@@ -3,7 +3,5 @@
 @section('title', 'Deliver My Ride')
 
 @section('content')
-    <ComparePage
-        deals="{{$deals}}"
-    ></ComparePage>
+    <ComparePage></ComparePage>
 @endsection

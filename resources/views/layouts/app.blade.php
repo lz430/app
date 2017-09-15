@@ -8,7 +8,7 @@
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>@section('title', config('app.name'))</title>
+        <title>@yield('title')</title>
 
         <!-- Styles -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -18,11 +18,28 @@
             window.Laravel = {!! json_encode([
                 'csrfToken' => csrf_token(),
                 'apiToken' => auth()->user()->api_token ?? null,
-                'fuelApiKey' => config('services.fuel.api_key')
+                'fuelApiKey' => config('services.fuel.api_key'),
             ]) !!};
-
-            window.user = {!! auth()->user() ? json_encode(auth()->user()) : 'null' !!};
         </script>
+
+        @if (App::environment(['staging', 'production']))
+            <!-- Facebook Pixel Code -->
+            <script>
+                !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+                    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+                    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+                    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+                fbq('init', '1524314924299567'); // Insert your pixel ID here.
+                fbq('track', 'PageView');
+            </script>
+            <noscript><img height="1" width="1" style="display:none"
+                           src="https://www.facebook.com/tr?id=1524314924299567&ev=PageView&noscript=1"
+                /></noscript>
+            <!-- DO NOT MODIFY -->
+            <!-- End Facebook Pixel Code -->
+        @endif
+
     </head>
     <body class="{{ $bodyClass ?? '' }}">
         @section('nav')
@@ -31,22 +48,6 @@
                 <a class="nav__logo" href="{{ url('/') }}">
                     <img src="/images/dmr-logo.svg">
                 </a>
-
-                <div class="nav__links">
-                    <!-- Authentication Links -->
-                    @if (! request()->is('login') && auth()->check())
-                        <form name="logout" action="/logout" method="post">
-                            {{ csrf_field() }}
-                            <button class="nav__button nav__button--blue nav__button--small nav__button--no-border">Logout</button>
-                        </form>
-                    @endif
-
-                    @if (! auth()->check())
-                        <a href="{{ route('login') }}">
-                            <button class="nav__button nav__button--blue nav__button--small nav__button--no-border">Login</button>
-                        </a>
-                    @endif
-                </div>
             </div>
         </nav>
         @show
@@ -72,7 +73,9 @@
         @show
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}"></script>
-        @if ( App::environment('staging') )
+        @stack('scripts')
+        @if (App::environment(['staging', 'production']))
+
             <!-- Start of HubSpot Embed Code -->
             <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/3388780.js"></script>
             <!-- End of HubSpot Embed Code -->

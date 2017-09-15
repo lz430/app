@@ -4,7 +4,7 @@ import R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
-class FilterFeatureSelector extends React.Component {
+class FilterFeatureSelector extends React.PureComponent {
     render() {
         return (
             <div className="filter-selector">
@@ -21,14 +21,16 @@ class FilterFeatureSelector extends React.Component {
                             {R.contains(
                                 feature.attributes.feature,
                                 this.props.selectedFeatures
-                            )
-                                ? <SVGInline
-                                      width="15px"
-                                      height="15px"
-                                      className="filter-selector__checkbox filter-selector__checkbox--selected"
-                                      svg={zondicons['checkmark']}
-                                  />
-                                : <div className="filter-selector__checkbox" />}
+                            ) ? (
+                                <SVGInline
+                                    width="15px"
+                                    height="15px"
+                                    className="filter-selector__checkbox filter-selector__checkbox--selected"
+                                    svg={zondicons['checkmark']}
+                                />
+                            ) : (
+                                <div className="filter-selector__checkbox" />
+                            )}
                             {feature.attributes.feature}
                         </div>
                     );

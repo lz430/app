@@ -1,0 +1,43 @@
+@import '../variables';
+
+.compare-page-table {
+  border: 1px solid $color-black;
+  display: inline-flex;
+  flex-direction: column;
+
+  &__header {
+    background-color: $color-darkgrey;
+    color: $color-text-white;
+    font-weight: bold;
+    padding: 5px 0 5px 10px;
+  }
+
+  &__columns {
+    display: inline-flex;
+    overflow-y: hidden;
+
+    &--closed {
+      height: 0;
+    }
+  }
+
+  &__column {
+    border-left: 1px solid $color-black;
+    max-width: $deal-card-width + ($deal-card-margin * 2);
+    min-width: $deal-card-width + ($deal-card-margin * 2);
+
+    &:first-child {
+      border-left: 0;
+    }
+  }
+
+  &__cell {
+    border-top: 1px solid $color-black;
+    padding: $deal-card-margin;
+
+    &:first-child {
+      border-top: 0;
+    }
+  }
+}
+

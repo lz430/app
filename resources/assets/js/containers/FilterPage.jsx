@@ -3,16 +3,16 @@ import R from 'ramda';
 import Modal from 'components/Modal';
 import MakeSelector from 'components/MakeSelector';
 import Deals from 'components/Deals';
-import { connected as DealDetails } from 'components/DealDetails';
 import Sortbar from 'components/Sortbar';
 import Filterbar from 'components/Filterbar';
-import Comparebar from 'components/Comparebar';
+import CompareBar from 'components/CompareBar';
 import FilterPanel from 'components/FilterPanel';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import util from 'src/util';
+import CashFinanceLeaseCalculator from '../components/CashFinanceLeaseCalculator';
 
-class FilterPage extends React.Component {
+class FilterPage extends React.PureComponent {
     renderMakeSelectionModal() {
         return (
             <Modal
@@ -21,23 +21,18 @@ class FilterPage extends React.Component {
                 subtitle="Please select one or more brands that you are considering"
                 closeText="Show available vehicles"
             >
-                {() => <MakeSelector />}
+                <MakeSelector />
             </Modal>
         );
     }
 
-    renderSelectedDealModal() {
+    renderDealRebatesModal() {
         return (
             <Modal
                 onClose={this.props.clearSelectedDeal}
-                title={this.props.selectedDeal.model}
-                subtitle={
-                    this.props.selectedDeal.year +
-                        ' ' +
-                        this.props.selectedDeal.make
-                }
+                closeText="Back to results"
             >
-                {() => <DealDetails intendedRoute="filter" />}
+                <CashFinanceLeaseCalculator />
             </Modal>
         );
     }
@@ -48,9 +43,9 @@ class FilterPage extends React.Component {
             (util.windowIsLargerThanSmall(this.props.window.width)
                 ? ''
                 : 'filter-page__filter-panel--small ' +
-                      (this.props.smallFiltersShown
-                          ? 'filter-page__filter-panel--small-filters-shown'
-                          : 'filter-page__filter-panel--small-filters-hidden'));
+                  (this.props.smallFiltersShown
+                      ? 'filter-page__filter-panel--small-filters-shown'
+                      : 'filter-page__filter-panel--small-filters-hidden'));
 
         return (
             <div className={className}>
@@ -65,16 +60,16 @@ class FilterPage extends React.Component {
             (util.windowIsLargerThanSmall(this.props.window.width)
                 ? ''
                 : 'filter-page__deals--small ' +
-                      (this.props.smallFiltersShown
-                          ? 'filter-page__deals--small-filters-shown'
-                          : 'filter-page__deals--small-filters-hidden'));
+                  (this.props.smallFiltersShown
+                      ? 'filter-page__deals--small-filters-shown'
+                      : 'filter-page__deals--small-filters-hidden'));
 
         return (
             <div className={className}>
                 <Sortbar />
                 <Filterbar />
-                {this.props.deals.length ? <Deals /> : <p>No Results</p>}
-                <Comparebar />
+                <Deals />
+                <CompareBar />
             </div>
         );
     }
@@ -91,13 +86,15 @@ class FilterPage extends React.Component {
     render() {
         return (
             <div>
-                {this.props.showMakeSelectorModal
-                    ? this.renderMakeSelectionModal()
-                    : ''}
+                {this.props.showMakeSelectorModal ? (
+                    this.renderMakeSelectionModal()
+                ) : (
+                    ''
+                )}
 
-                {this.props.deals ? this.renderFilterPanelAndDeals() : ''}
+                {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}
 
-                {this.props.selectedDeal ? this.renderSelectedDealModal() : ''}
+                {this.renderFilterPanelAndDeals()}
             </div>
         );
     }

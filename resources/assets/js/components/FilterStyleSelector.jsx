@@ -4,7 +4,7 @@ import R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import bodyStyleIcons from 'body-styles';
 
-class FilterStyleSelector extends React.Component {
+class FilterStyleSelector extends React.PureComponent {
     constructor() {
         super();
 
@@ -13,7 +13,9 @@ class FilterStyleSelector extends React.Component {
 
     renderStyle(style) {
         let selected = R.contains(style.style, this.props.selectedStyles);
-        let className = `filter-style-selector__style ${selected ? 'filter-style-selector__style--selected' : ''}`;
+        let className = `filter-style-selector__style ${selected
+            ? 'filter-style-selector__style--selected'
+            : ''}`;
 
         return (
             <div
@@ -21,13 +23,15 @@ class FilterStyleSelector extends React.Component {
                 onClick={this.props.onSelectStyle.bind(null, style.style)}
                 key={style.style}
             >
-                {bodyStyleIcons[style.icon]
-                    ? <SVGInline
-                          width="50px"
-                          className="filter-style-selector__icon"
-                          svg={bodyStyleIcons[style.icon]}
-                      />
-                    : ''}
+                {bodyStyleIcons[style.icon] ? (
+                    <SVGInline
+                        width="50px"
+                        className="filter-style-selector__icon"
+                        svg={bodyStyleIcons[style.icon]}
+                    />
+                ) : (
+                    ''
+                )}
 
                 <div className="filter-style-selector__name">{style.label}</div>
             </div>
@@ -38,7 +42,11 @@ class FilterStyleSelector extends React.Component {
         return (
             <div className="filter-style-selector">
                 <div className="filter-style-selector__styles">
-                    {this.props.styles.map(this.renderStyle)}
+                    {this.props.styles ? (
+                        this.props.styles.map(this.renderStyle)
+                    ) : (
+                        'Loading...'
+                    )}
                 </div>
             </div>
         );
@@ -51,7 +59,7 @@ FilterStyleSelector.propTypes = {
             style: PropTypes.string,
             icon: PropTypes.string,
         })
-    ).isRequired,
+    ),
     selectedStyles: PropTypes.arrayOf(PropTypes.string).isRequired,
     onSelectStyle: PropTypes.func.isRequired,
 };

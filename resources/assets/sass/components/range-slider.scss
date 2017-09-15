@@ -2,10 +2,10 @@
 
 .range-slider {
   display: flex;
+  width: 100%;
 
-  input {
-    margin-right: auto;
-    width: 60%;
+  &__slider {
+    flex: 1;
   }
 
   &__badge {
@@ -14,8 +14,8 @@
     color: $text-color-dark;
     font-size: smaller;
     height: 20px;
-    padding: 2px 10px;
+    margin-left: 5px;
+    padding: 0 10px 0 25px;
     text-align: right;
-    width: 80px;
   }
 }

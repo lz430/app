@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import * as Actions from 'actions';
 import util from 'src/util';
 
-class Sortbar extends React.Component {
+class Sortbar extends React.PureComponent {
     constructor() {
         super();
 
@@ -20,32 +20,35 @@ class Sortbar extends React.Component {
     renderIcon(column) {
         const icon = this.props.sortAscending ? 'cheveron-up' : 'cheveron-down';
 
-        return this.props.sortColumn === column
-            ? <SVGInline
-                  height="18px"
-                  width="18px"
-                  className="sortbar__sort-icon"
-                  svg={zondicons[icon]}
-              />
-            : '';
+        return this.props.sortColumn === column ? (
+            <SVGInline
+                height="18px"
+                width="18px"
+                className="sortbar__sort-icon"
+                svg={zondicons[icon]}
+            />
+        ) : (
+            ''
+        );
     }
 
     renderFilterToggle() {
-        return util.windowIsLargerThanSmall(this.props.window.width)
-            ? ''
-            : <div
-                  onClick={this.props.toggleSmallFiltersShown}
-                  className="sortbar__filter-toggle"
-              >
-                  <SVGInline
-                      height="20px"
-                      width="20px"
-                      className="sortbar__filter-toggle-icon"
-                      svg={zondicons['tuning']}
-                  />
-                  {' '}
-                  <span className="sortbar__filter-toggle-text">Filter</span>
-              </div>;
+        return util.windowIsLargerThanSmall(this.props.window.width) ? (
+            ''
+        ) : (
+            <div
+                onClick={this.props.toggleSmallFiltersShown}
+                className="sortbar__filter-toggle"
+            >
+                <SVGInline
+                    height="20px"
+                    width="20px"
+                    className="sortbar__filter-toggle-icon"
+                    svg={zondicons['tuning']}
+                />{' '}
+                <span className="sortbar__filter-toggle-text">Filter</span>
+            </div>
+        );
     }
 
     renderSortbarButtons() {
@@ -68,15 +71,6 @@ class Sortbar extends React.Component {
                     }}
                 >
                     {this.renderIcon('year')} Year
-                </button>
-                <button
-                    className="sortbar__button sortbar__button"
-                    onClick={() => {
-                        this.props.sortDeals('make');
-                        this.props.requestDeals();
-                    }}
-                >
-                    {this.renderIcon('make')} A-Z
                 </button>
             </div>
         );
@@ -105,12 +99,11 @@ class Sortbar extends React.Component {
                         svg={zondicons[icon]}
                     />
                 </button>
-                {this.state.dropdownShown
-                    ? <div className="sortbar__dropdown">
-                          Sort Stuff
-                      </div>
-                    : ''}
-
+                {this.state.dropdownShown ? (
+                    <div className="sortbar__dropdown">Sort Stuff</div>
+                ) : (
+                    ''
+                )}
             </div>
         );
     }
@@ -119,23 +112,27 @@ class Sortbar extends React.Component {
         return (
             <div className="sortbar">
                 {this.renderFilterToggle()}
-                <div className="sortbar__count">
-                    <span className="sortbar__count-number">
-                        {this.props.results_count}
-                    </span>
-                    {' '}
-                    results
-                </div>
-                {util.windowIsLargerThanSmall(this.props.window.width)
-                    ? this.renderSortbarButtons()
-                    : this.renderSortbarDropdown()}
+                {util.windowIsLargerThanSmall(this.props.window.width) ? (
+                    this.renderSortbarButtons()
+                ) : (
+                    this.renderSortbarDropdown()
+                )}
             </div>
         );
     }
 }
 
 Sortbar.propTypes = {
-    results_count: PropTypes.number.isRequired,
+    deals: PropTypes.arrayOf(
+        PropTypes.shape({
+            year: PropTypes.string.isRequired,
+            msrp: PropTypes.number.isRequired,
+            price: PropTypes.number.isRequired,
+            make: PropTypes.string.isRequired,
+            model: PropTypes.string.isRequired,
+            id: PropTypes.number.isRequired,
+        })
+    ),
     sortColumn: PropTypes.oneOf(['price', 'make', 'year']).isRequired,
     sortAscending: PropTypes.bool.isRequired,
     window: PropTypes.shape({
@@ -145,7 +142,7 @@ Sortbar.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        results_count: state.deals.length,
+        deals: state.deals,
         sortColumn: state.sortColumn,
         sortAscending: state.sortAscending,
         compareList: state.compareList,

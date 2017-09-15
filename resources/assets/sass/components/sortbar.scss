@@ -8,19 +8,6 @@
   max-height: $sortbar-height;
   padding: 5px 10px 5px 0;
 
-  &__count {
-    align-items: center;
-    display: flex;
-    flex: 1;
-    padding-left: 10px;
-  }
-
-  &__count-number {
-    color: darken($text-color, 20%);
-    font-weight: bold;
-    margin-right: 5px;
-  }
-
   &__buttons {
     align-items: center;
     display: flex;

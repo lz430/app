@@ -4,15 +4,15 @@ import R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
-class FilterTransmissionTypeSelector extends React.Component {
+class FilterTransmissionTypeSelector extends React.PureComponent {
     render() {
         return (
             <div className="filter-selector">
                 {this.props.transmissionTypes.map((transmissionType, index) => {
-                    const className = this.props.selectedTransmissionType ===
-                        transmissionType
-                        ? 'filter-selector__radio filter-selector__radio--selected'
-                        : 'filter-selector__radio';
+                    const className =
+                        this.props.selectedTransmissionType === transmissionType
+                            ? 'filter-selector__radio filter-selector__radio--selected'
+                            : 'filter-selector__radio';
 
                     return (
                         <div

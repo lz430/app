@@ -1,140 +1,45 @@
 import React from 'react';
-import CashFinanceLease from 'components/CashFinanceLease';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
-import util from 'src/util';
+import purchase from 'src/purchase';
 import R from 'ramda';
+import qs from 'qs';
+import { connect } from 'react-redux';
+import * as Actions from 'actions/index';
+import Deal from 'components/Deal';
 import Modal from 'components/Modal';
-import { raw as DealDetails } from 'components/DealDetails';
+import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
+import rebates from 'src/rebates';
+import string from 'src/strings';
 
-class ComparePage extends React.Component {
+class ComparePage extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            deals: props.deals,
             dealIndex: 0,
-            selectedDeal: null,
+            zipcode: R.prop(
+                'zipcode',
+                qs.parse(window.location.search.slice(1))
+            ),
+            openAccordion: 'Your Selections',
         };
-        this.renderIncentive = this.renderIncentive.bind(this);
         this.renderDeal = this.renderDeal.bind(this);
-        this.getMarginLeft = this.getMarginLeft.bind(this);
-        this.slideLeft = this.slideLeft.bind(this);
-        this.slideRight = this.slideRight.bind(this);
-        this.dealClass = this.dealClass.bind(this);
-        this.closeModal = this.closeModal.bind(this);
         this.intendedRoute = this.intendedRoute.bind(this);
     }
 
-    componentDidMount() {
-        document.addEventListener('keyup', event => {
-            const keyPressed = parseInt(event.keyCode, 10);
-
-            switch (keyPressed) {
-                case 37: // left arrow
-                    this.slideLeft();
-                    break;
-                case 39: // right arrow
-                    this.slideRight();
-                    break;
-                default:
-                    break;
-            }
-        });
-
-        // ********************************************************
-        // ********************************************************
-        // Detect swipe left and swipe right
-        // Modified from https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
-        document.addEventListener(
-            'touchstart',
-            touchStartEvent => {
-                let xDown = touchStartEvent.touches[0].clientX;
-                let yDown = touchStartEvent.touches[0].clientY;
-
-                document.addEventListener(
-                    'touchmove',
-                    toucheEndEvent => {
-                        let deltaX = xDown - toucheEndEvent.touches[0].clientX;
-                        let deltaY = yDown - toucheEndEvent.touches[0].clientY;
-
-                        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                            /*most significant*/
-                            if (deltaX > 0) {
-                                this.slideLeft();
-                            } else {
-                                this.slideRight();
-                            }
-                        } else {
-                            if (deltaY > 0) {
-                                /* up swipe */
-                            } else {
-                                /* down swipe */
-                            }
-                        }
-
-                        xDown = null;
-                        yDown = null;
-                    },
-                    false
-                );
-            },
-            false
-        );
-        // ********************************************************
-        // ********************************************************
-    }
-
-    slideLeft() {
+    toggleAccordion(openAccordion) {
         this.setState({
-            dealIndex: Math.min(
-                this.state.dealIndex + 1,
-                this.props.deals.length - 1
-            ),
+            openAccordion:
+                this.state.openAccordion &&
+                this.state.openAccordion === openAccordion
+                    ? null
+                    : openAccordion,
         });
-    }
-
-    slideRight() {
-        this.setState({
-            dealIndex: Math.max(this.state.dealIndex - 1, 0),
-        });
-    }
-
-    removeDeal(deal) {
-        this.setState({
-            deals: R.without([deal], this.state.deals),
-        });
-    }
-
-    renderIncentive(incentive, index) {
-        return (
-            <div key={index} className="compare-deal__incentive">
-                {incentive.title}
-                ${incentive.cash}
-            </div>
-        );
-    }
-
-    dealClass(index) {
-        let className = 'compare-page-deals__deal';
-
-        if (index < this.state.dealIndex || index > this.state.dealIndex + 2) {
-            className += ' compare-page-deals__deal--opaque';
-        }
-
-        return className;
-    }
-
-    selectDeal(deal) {
-        this.setState({ selectedDeal: deal });
-    }
-
-    closeModal() {
-        this.setState({ selectedDeal: null });
     }
 
     intendedRoute() {
         return encodeURIComponent(
-            `compare?${this.state.deals
+            `compare?${this.props.deals
                 .map(deal => {
                     return `deals[]=${deal.id}`;
                 })
@@ -142,193 +47,265 @@ class ComparePage extends React.Component {
         );
     }
 
-    renderSelectedDealModal() {
+    renderDeal(deal, index) {
+        return (
+            <Deal deal={deal} key={index}>
+                <div className="deal__buttons">
+                    <button
+                        className={
+                            'deal__button deal__button--small ' +
+                            (R.contains(deal, this.props.compareList)
+                                ? 'deal__button--blue'
+                                : '')
+                        }
+                        onClick={() =>
+                            purchase.start(
+                                deal,
+                                this.props.selectedTab,
+                                this.props.downPayment,
+                                rebates.getSelectedRebatesForDealAndType(
+                                    this.props.dealRebates,
+                                    this.props.selectedRebates,
+                                    this.props.selectedTab,
+                                    deal
+                                ),
+                                this.props.termDuration
+                            )}
+                    >
+                        Buy Now
+                    </button>
+                    <button
+                        onClick={() => (window.location = `/deals/${deal.id}`)}
+                        className="deal__button deal__button--small deal__button--blue deal__button"
+                    >
+                        View Details
+                    </button>
+                </div>
+            </Deal>
+        );
+    }
+
+    renderDealRebatesModal() {
         return (
             <Modal
-                onClose={this.closeModal}
-                title={this.state.selectedDeal.model}
-                subtitle={
-                    this.state.selectedDeal.year +
-                        ' ' +
-                        this.state.selectedDeal.make
-                }
+                onClose={this.props.clearSelectedDeal}
+                closeText="Back to results"
             >
-                {() => (
-                    <DealDetails
-                        deal={this.state.selectedDeal}
-                        compareList={this.state.deals}
-                        intendedRoute={this.intendedRoute()}
-                        toggleCompare={() => {
-                            this.removeDeal(this.state.selectedDeal);
-                            this.closeModal();
-                        }}
-                    />
-                )}
+                <CashFinanceLeaseCalculator />
             </Modal>
         );
     }
 
-    renderDeal(deal, index) {
+    renderSelectionsTable(compareList) {
+        const maxNumberCells = R.reduce(
+            (carry, dealAndSelectedFilters) => {
+                return R.max(
+                    R.propOr(
+                        [],
+                        'selectedFeatures',
+                        dealAndSelectedFilters.selectedFilters
+                    ).length,
+                    carry
+                );
+            },
+            0,
+            compareList
+        );
+
         return (
-            <div key={index} className={this.dealClass(index)}>
-                <img className="compare-deal__image" src={deal.photos[0].url} />
-
-                <div className="compare-deal__buttons">
-                    <button
-                        onClick={this.selectDeal.bind(this, deal)}
-                        className="compare-deal__button compare-deal__button--small"
-                    >
-                        View Details
-                    </button>
-                    <a
-                        onClick={this.removeDeal.bind(this, deal)}
-                        className="compare-deal__button compare-deal__button--small"
-                    >
-                        Remove
-                    </a>
+            <div className="compare-page-table">
+                <div
+                    onClick={() => this.toggleAccordion('Your Selections')}
+                    className="compare-page-table__header"
+                >
+                    Your Selections
                 </div>
-                <div className="compare-deal__basic-info">
-                    <div className="compare-deal__basic-info__title">
-                        {deal.year} {deal.make} {deal.model}
-                    </div>
-
-                    <div className="compare-deal__basic-info__content">
-                        <div className="compare-deal__basic-info__subtitle">
-                            DMR Price
-                        </div>
-
-                        <div className="compare-deal__basic-info__price">
-                            {util.moneyFormat(deal.price)}
-                        </div>
-                    </div>
-                </div>
-                <div className="compare-deal__incentives">
-                    <div className="compare-deal__incentive">
-                        <input
-                            className="compare-deal__incentive__checkbox"
-                            type="checkbox"
-                        />
-                        <span className="compare-deal__incentive__name">
-                            Armed forces or family of armed forces
-                        </span>
-                        <span className="compare-deal__incentive__value">
-                            -$1,000
-                        </span>
-                    </div>
-                    <div className="compare-deal__incentive">
-                        <input
-                            className="compare-deal__incentive__checkbox"
-                            type="checkbox"
-                        />
-                        <span className="compare-deal__incentive__name">
-                            Other Incentive #1
-                        </span>
-                        <span className="compare-deal__incentive__value">
-                            -$500
-                        </span>
-                    </div>
-                    <div className="compare-deal__incentive">
-                        <input
-                            className="compare-deal__incentive__checkbox"
-                            type="checkbox"
-                        />
-                        <span className="compare-deal__incentive__name">
-                            Other Incentive #2
-                        </span>
-                        <span className="compare-deal__incentive__value">
-                            -$2,000
-                        </span>
-                    </div>
-                    <div className="compare-deal__incentive">
-                        <input
-                            className="compare-deal__incentive__checkbox"
-                            type="checkbox"
-                        />
-                        <span className="compare-deal__incentive__name">
-                            Other Incentive #3
-                        </span>
-                        <span className="compare-deal__incentive__value">
-                            -$1,500
-                        </span>
-                    </div>
-                    <div className="compare-deal__incentive">
-                        <input
-                            className="compare-deal__incentive__checkbox"
-                            type="checkbox"
-                        />
-                        <span className="compare-deal__incentive__name">
-                            Other Incentive #4
-                        </span>
-                        <span className="compare-deal__incentive__value">
-                            -$200
-                        </span>
-                    </div>
-                    {/*{deal.versions[0].incentives.map(this.renderIncentive)}*/}
-                </div>
-                <div className="compare-deal__cta">
-                    <div className="compare-deal__cta__info">
-                        <div className="compare-deal__cta__title">
-                            Your DMR Price
-                        </div>
-                        <div className="compare-deal__cta__price">
-                            {util.moneyFormat(deal.price)}
-                        </div>
-                    </div>
-                    <button className="compare-deal__cta__button compare-deal__cta__button--small compare-deal__cta__button--blue">
-                        Buy Now
-                    </button>
+                <div
+                    className={`compare-page-table__columns ${this.state
+                        .openAccordion !== 'Your Selections'
+                        ? 'compare-page-table__columns--closed'
+                        : ''}`}
+                >
+                    {compareList.map(({ deal, selectedFilters }, index) => {
+                        return (
+                            <div
+                                key={index}
+                                className="compare-page-table__column"
+                            >
+                                <div className="compare-page-table__cell">
+                                    {deal.id}&nbsp;
+                                </div>
+                                <div className="compare-page-table__cell">
+                                    {selectedFilters.selectedFuelType}&nbsp;
+                                </div>
+                                <div className="compare-page-table__cell">
+                                    {selectedFilters.selectedTransmissionType ? (
+                                        string.toTitleCase(
+                                            selectedFilters.selectedTransmissionType
+                                        )
+                                    ) : (
+                                        ''
+                                    )}&nbsp;
+                                </div>
+                                {selectedFilters.selectedFeatures.map(
+                                    (feature, index) => {
+                                        return (
+                                            <div
+                                                key={index}
+                                                className="compare-page-table__cell"
+                                            >
+                                                {feature}&nbsp;
+                                            </div>
+                                        );
+                                    }
+                                )}
+                                {R.range(
+                                    0,
+                                    maxNumberCells -
+                                        selectedFilters.selectedFeatures.length
+                                ).map((_, index) => {
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="compare-page-table__cell"
+                                        >
+                                            &nbsp;
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         );
     }
 
-    getMarginLeft() {
-        const dealPadding = 10;
-
-        const clientWidth = Math.max(
-            document.documentElement.clientWidth,
-            window.innerWidth || 0
+    renderRebatesAndIncentivesTable(compareList) {
+        const maxNumberCells = R.reduce(
+            (carry, dealAndSelectedFilters) => {
+                return R.max(
+                    R.propOr(
+                        [],
+                        dealAndSelectedFilters.deal.id,
+                        this.props.dealRebates
+                    ).length,
+                    carry
+                );
+            },
+            0,
+            compareList
         );
 
-        const subtractWidth = clientWidth < 576 ? clientWidth : 300;
-
-        return this.state.dealIndex * (-subtractWidth - dealPadding);
+        return (
+            <div className="compare-page-table">
+                <div
+                    onClick={() =>
+                        this.toggleAccordion('Rebates and Incentives')}
+                    className="compare-page-table__header"
+                >
+                    Rebates and Incentives
+                </div>
+                <div
+                    className={`compare-page-table__columns ${this.state
+                        .openAccordion !== 'Rebates and Incentives'
+                        ? 'compare-page-table__columns--closed'
+                        : ''}`}
+                >
+                    {compareList.map((dealAndSelectedFilters, index) => {
+                        return (
+                            <div
+                                key={index}
+                                className="compare-page-table__column"
+                            >
+                                {this.props.dealRebates[
+                                    dealAndSelectedFilters.deal.id
+                                ].map((rebate, index) => {
+                                    return R.contains(
+                                        this.props.selectedTab,
+                                        rebate.types
+                                    ) ? (
+                                        <div
+                                            key={index}
+                                            className="compare-page-table__cell"
+                                        >
+                                            {rebate.rebate}&nbsp;
+                                        </div>
+                                    ) : (
+                                        ''
+                                    );
+                                })}
+                                {R.range(
+                                    0,
+                                    maxNumberCells -
+                                        this.props.dealRebates[
+                                            dealAndSelectedFilters.deal.id
+                                        ].length
+                                ).map((_, index) => {
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="compare-page-table__cell"
+                                        >
+                                            &nbsp;
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        );
     }
 
     render() {
         return (
             <div className="compare-page">
-                {this.state.selectedDeal ? this.renderSelectedDealModal() : ''}
+                <a href="/filter">
+                    <SVGInline width="10px" svg={zondicons['cheveron-left']} />
+                    Back to Results
+                </a>
                 <div className="compare-page-title-bar__title">
-                    Vehicle Comparison
+                    Selected Vehicles to Compare…
                 </div>
-                <div className="compare-page__arrow-buttons">
-                    <SVGInline
-                        onClick={this.slideLeft}
-                        width="40px"
-                        className="compare-page__arrow-button"
-                        svg={zondicons['cheveron-left']}
-                    />
-                    <SVGInline
-                        onClick={this.slideRight}
-                        width="40px"
-                        className="compare-page__arrow-button"
-                        svg={zondicons['cheveron-right']}
-                    />
+                <div className="compare-page__body">
+                    <div className="compare-page-deals">
+                        {this.props.deals.map(this.renderDeal)}
+                    </div>
+                    {this.props.compareList.length ? (
+                        this.renderSelectionsTable(this.props.compareList)
+                    ) : (
+                        ''
+                    )}
+                    {R.all(
+                        deal => this.props.dealRebates.hasOwnProperty(deal.id),
+                        this.props.deals
+                    ) ? (
+                        this.renderRebatesAndIncentivesTable(
+                            this.props.compareList
+                        )
+                    ) : (
+                        'Loading...'
+                    )}
                 </div>
-                <CashFinanceLease />
-                <div className="compare-page__swipe-notification">
-                    <em>Swipe to left to compare other vehicles.</em>
-                </div>
-                <div
-                    style={{ marginLeft: this.getMarginLeft() }}
-                    className="compare-page-deals"
-                >
-                    {this.state.deals.map(this.renderDeal)}
-                </div>
+
+                {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}
             </div>
         );
     }
 }
 
-export default ComparePage;
+const mapStateToProps = state => {
+    return {
+        deals: R.map(R.prop('deal'), state.compareList),
+        compareList: state.compareList,
+        selectedDeal: state.selectedDeal,
+        selectedTab: state.selectedTab,
+        dealRebates: state.dealRebates,
+        selectedRebates: state.selectedRebates,
+        termDuration: state.termDuration,
+    };
+};
+
+export default connect(mapStateToProps, Actions)(ComparePage);

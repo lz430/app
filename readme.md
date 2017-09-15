@@ -51,9 +51,14 @@ php artisan vauto:load
 php artisan db:seed --class=DummySavedVehicleSeeder
 ```
 
-## JATO API Tests
+## Javascript Tests
 ```
-phpunit tests/JATO
+yarn run test
+```
+
+## Javascript Tests Watch
+```
+yarn run watch-test
 ```
 
 ## Notes

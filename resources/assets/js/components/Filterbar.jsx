@@ -6,7 +6,7 @@ import R from 'ramda';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
 
-class Filterbar extends React.Component {
+class Filterbar extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -106,14 +106,18 @@ class Filterbar extends React.Component {
                 <div className="filterbar__filters">
                     {this.props.selectedStyles.map(this.renderFilterStyles)}
                     {this.props.selectedMakes.map(this.renderFilterMakes)}
-                    {this.props.selectedFuelType
-                        ? this.renderFilterFuelType(this.props.selectedFuelType)
-                        : ''}
-                    {this.props.selectedTransmissionType
-                        ? this.renderFilterTransmissionType(
-                              this.props.selectedTransmissionType
-                          )
-                        : ''}
+                    {this.props.selectedFuelType ? (
+                        this.renderFilterFuelType(this.props.selectedFuelType)
+                    ) : (
+                        ''
+                    )}
+                    {this.props.selectedTransmissionType ? (
+                        this.renderFilterTransmissionType(
+                            this.props.selectedTransmissionType
+                        )
+                    ) : (
+                        ''
+                    )}
                     {this.props.selectedFeatures.map(this.renderFilterFeatures)}
                 </div>
 
@@ -136,7 +140,7 @@ Filterbar.propTypes = {
                 name: PropTypes.string.isRequired,
             }),
         })
-    ).isRequired,
+    ),
     selectedMakes: PropTypes.arrayOf(PropTypes.string).isRequired,
     selectedTransmissionType: PropTypes.string,
     selectedFuelType: PropTypes.string,

@@ -1,0 +1,15 @@
+@import '../variables';
+@import '../mixins/input';
+
+.lease {
+  display: flex;
+  flex-wrap: wrap;
+
+  &__label {
+    //
+  }
+
+  &__down-payment {
+    @include input;
+  }
+}

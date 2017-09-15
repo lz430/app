@@ -104,7 +104,9 @@ $factory->define(App\JATO\Option::class, function (Faker\Generator $faker) {
 $factory->define(App\Deal::class, function (Faker\Generator $faker) {
     return [
         'file_hash' => $faker->md5,
-        'dealer_id' => 'MP4164',
+        'dealer_id' => function () {
+            return factory(App\Dealer::class)->create()->dealer_id;
+        },
         'stock_number' => 'AH2844A',
         'vin' => '3C4NJDBB4HT628358',
         'new' => true,
@@ -153,8 +155,10 @@ $factory->define(App\Dealer::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Purchase::class, function (Faker\Generator $faker) {
     return [
-        'deal_id' => factory(App\Deal::class)->create()->id,
-        'user_id' => factory(App\User::class)->create()->id,
+        'type' => 'cash',
+        'deal_id' => factory(App\Deal::class),
+        'user_id' => factory(App\User::class),
         'dmr_price' => 30000,
+        'msrp' => 28000,
     ];
 });

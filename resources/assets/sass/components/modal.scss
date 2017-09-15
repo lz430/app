@@ -7,12 +7,24 @@ $modal-header-height: 100px;
 $modal-footer-height: 60px;
 
 .modal {
+  &__sticker-container {
+    background-color: $color-text-white;
+  }
+
+  &__sticker {
+    background-color: $color-darkergrey;
+    color: $color-text-white;
+    margin: 0 auto;
+    text-align: center;
+    width: 150px;
+  }
+
   &__overlay {
     background: $color-black;
     height: 100vh;
     left: 0;
     opacity: .5;
-    position: absolute;
+    position: fixed;
     top: 0;
     width: 100vw;
     z-index: 1;
@@ -22,7 +34,7 @@ $modal-footer-height: 60px;
     display: flex;
     justify-content: center;
     max-height: calc(100vh - #{$offset-top});
-    position: absolute;
+    position: fixed;
     top: $modal-footer-height;
     width: 100vw;
     z-index: 1;
@@ -33,7 +45,6 @@ $modal-footer-height: 60px;
     max-height: 100%;
     max-width: calc(100vw - #{$offset-horizontal * 2});
     opacity: 1;
-    overflow: scroll;
   }
 
   &__header {
@@ -47,6 +58,28 @@ $modal-footer-height: 60px;
   &__body {
     max-height: calc(100vh - #{$offset-top + $modal-header-height + $modal-footer-height});
     overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+      -webkit-appearance: none;
+      margin-right: 10px;
+      width: 9px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-clip: padding-box;
+      background-color: rgba(0,0,0,.5);
+      border: 1px solid rgba(0, 0, 0, 0);
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+
+    &::-webkit-scrollbar-corner {
+      background-color: transparent;
+    }
+
+    &--no-header {
+      max-height: calc(100vh - #{$offset-top + $modal-footer-height});
+    }
 
     &--no-footer {
       max-height: calc(100vh - #{$offset-top + $modal-header-height});
@@ -63,15 +96,24 @@ $modal-footer-height: 60px;
   }
 
   &__titles {
-    //
+
+    &--center {
+      margin: 0 auto;
+    }
   }
 
   &__title {
     font-size: 1.4rem;
+
+    &--center {
+      text-align: center;
+    }
   }
 
   &__subtitle {
-    //
+    &--center {
+      text-align: center;
+    }
   }
 
   &__close {

@@ -14,6 +14,7 @@ class DealTransformer extends TransformerAbstract
     
     public function transform(Deal $deal)
     {
+        $deal->photos->shift();
         return [
             'id' => $deal->id,
             'file_hash' => $deal->file_hash,
@@ -45,6 +46,9 @@ class DealTransformer extends TransformerAbstract
             'dealer_name' => $deal->dealer_name,
             'days_old' => $deal->days_old,
             'photos' => $deal->photos,
+            'versions' => $deal->versions,
+            'features' => $deal->features,
+            'vauto_features' => explode('|', $deal->vauto_features),
         ];
     }
     

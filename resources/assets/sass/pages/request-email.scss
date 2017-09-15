@@ -1,0 +1,6 @@
+@import '../mixins/vertical-form';
+@import '../mixins/link';
+
+.request-email {
+  @include vertical-form;
+}

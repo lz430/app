@@ -1,5 +1,6 @@
 import api from 'src/api';
 import util from 'src/util';
+import R from 'ramda';
 import * as ActionTypes from 'actiontypes/index';
 import jsonp from 'jsonp';
 
@@ -62,6 +63,10 @@ export function receiveFeatures(data) {
 
 export function toggleFeature(feature) {
     return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
         const selectedFeatures = util.toggleItem(
             getState().selectedFeatures,
             feature
@@ -86,6 +91,10 @@ export function toggleFeature(feature) {
 
 export function toggleMake(make_id) {
     return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
         const selectedMakes = util.toggleItem(
             getState().selectedMakes,
             make_id
@@ -108,27 +117,60 @@ export function toggleMake(make_id) {
     };
 }
 
+export function requestRebates(deal) {
+    return (dispatch, getState) => {
+        // If we have already received the rebates for the deal, don't request them again.
+        if (getState().dealRebates.hasOwnProperty(deal.id)) return;
+
+        api.getRebates(getState().zipcode, deal.vin).then(data => {
+            dispatch(
+                receiveDealRebates({
+                    data: data,
+                    dealId: deal.id,
+                })
+            );
+        });
+
+        dispatch({
+            type: ActionTypes.REQUEST_REBATES,
+        });
+    };
+}
+
 export function receiveDeals(data) {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.RECEIVE_DEALS,
+            data: data,
+        });
+    };
+}
+
+export function receiveDealRebates(data) {
     return {
-        type: ActionTypes.RECEIVE_DEALS,
+        type: ActionTypes.RECEIVE_DEAL_REBATES,
         data: data,
     };
 }
 
 export function requestDeals() {
     return (dispatch, getState) => {
-        api.getDeals(withStateDefaults(getState())).then(data => {
-            dispatch(receiveDeals(data));
-        });
-
         dispatch({
             type: ActionTypes.REQUEST_DEALS,
+        });
+
+        api.getDeals(withStateDefaults(getState())).then(data => {
+            dispatch(receiveDeals(data));
         });
     };
 }
 
 export function requestMoreDeals() {
     return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_MORE_DEALS,
+        });
+
         api
             .getDeals(
                 withStateDefaults(getState(), {
@@ -138,10 +180,6 @@ export function requestMoreDeals() {
             .then(data => {
                 dispatch(receiveMoreDeals(data));
             });
-
-        dispatch({
-            type: ActionTypes.REQUEST_MORE_DEALS,
-        });
     };
 }
 
@@ -159,10 +197,12 @@ export function receiveBodyStyles(deals) {
     };
 }
 
-export function receiveMoreDeals(deals) {
-    return {
-        type: ActionTypes.RECEIVE_MORE_DEALS,
-        data: deals,
+export function receiveMoreDeals(data) {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.RECEIVE_MORE_DEALS,
+            data: data,
+        });
     };
 }
 
@@ -180,6 +220,10 @@ export function requestBodyStyles() {
 
 export function toggleStyle(style) {
     return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
         const selectedStyles = util.toggleItem(
             getState().selectedStyles,
             style
@@ -195,6 +239,8 @@ export function toggleStyle(style) {
                 dispatch(receiveDeals(data));
             });
 
+        window.axios.post('/hubspot', { bodystyle1: selectedStyles.join() });
+
         dispatch({
             type: ActionTypes.TOGGLE_STYLE,
             selectedStyles: selectedStyles,
@@ -204,9 +250,12 @@ export function toggleStyle(style) {
 
 export function chooseFuelType(fuelType) {
     return (dispatch, getState) => {
-        const selectedFuelType = getState().selectedFuelType === fuelType
-            ? null
-            : fuelType;
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
+        const selectedFuelType =
+            getState().selectedFuelType === fuelType ? null : fuelType;
 
         api
             .getDeals(
@@ -227,10 +276,14 @@ export function chooseFuelType(fuelType) {
 
 export function chooseTransmissionType(transmissionType) {
     return (dispatch, getState) => {
-        const selectedTransmissionType = getState().selectedTransmissionType ===
-            transmissionType
-            ? null
-            : transmissionType;
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
+        const selectedTransmissionType =
+            getState().selectedTransmissionType === transmissionType
+                ? null
+                : transmissionType;
 
         api
             .getDeals(
@@ -249,21 +302,12 @@ export function chooseTransmissionType(transmissionType) {
     };
 }
 
-export function selectDeal(deal) {
-    return {
-        type: ActionTypes.SELECT_DEAL,
-        selectedDeal: deal,
-    };
-}
-
-export function clearSelectedDeal() {
-    return {
-        type: ActionTypes.CLEAR_SELECTED_DEAL,
-    };
-}
-
 export function clearAllFilters() {
     return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
         api
             .getDeals(
                 withStateDefaults(getState(), {
@@ -286,17 +330,41 @@ export function clearAllFilters() {
 
 export function toggleCompare(deal) {
     return (dispatch, getState) => {
-        const compareList = util.toggleItem(getState().compareList, deal);
+        const deals = getState().compareList.map(R.prop('deal'));
+
+        const nextCompareList = util.toggleItem(deals, deal).map(d => {
+            return {
+                deal: d,
+                selectedFilters: R.propOr(
+                    {
+                        selectedStyles: getState().selectedStyles,
+                        selectedMakes: getState().selectedMakes,
+                        selectedFuelType: getState().selectedFuelType,
+                        selectedTransmissionType: getState()
+                            .selectedTransmissionType,
+                        selectedFeatures: getState().selectedFeatures,
+                    },
+                    'selectedFilters',
+                    R.find(dealAndSelectedFilters => {
+                        return dealAndSelectedFilters.deal.id === d.id;
+                    }, getState().compareList)
+                ),
+            };
+        });
 
         dispatch({
             type: ActionTypes.TOGGLE_COMPARE,
-            compareList: compareList,
+            compareList: nextCompareList,
         });
     };
 }
 
 export function setZipCode(zipcode) {
     return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
         api
             .getDeals(
                 withStateDefaults(getState(), {
@@ -307,9 +375,11 @@ export function setZipCode(zipcode) {
                 dispatch(receiveDeals(data));
             });
 
+        window.axios.post('/hubspot', { zip: zipcode });
+
         dispatch({
             type: ActionTypes.SET_ZIP_CODE,
-            zipcode: zipcode,
+            zipcode,
         });
     };
 }
@@ -320,10 +390,11 @@ export function requestLocationInfo() {
          * If we don't already have a loaded zipcode, try to get one from freegeoip.net
          */
         if (!getState().zipcode) {
-            jsonp('//freegeoip.net/json/', null, function (err, data) {
+            jsonp('//freegeoip.net/json/', null, function(err, data) {
                 if (err) {
                     dispatch(requestDeals());
                 } else {
+                    window.axios.post('/hubspot', { zip: data.zip_code });
                     dispatch(receiveLocationInfo(data));
                 }
             });
@@ -339,7 +410,12 @@ export function requestLocationInfo() {
 
 export function receiveLocationInfo(data) {
     return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
         const zipcode = data.zip_code;
+        const city = data.city;
 
         api
             .getDeals(
@@ -354,6 +430,7 @@ export function receiveLocationInfo(data) {
         dispatch({
             type: ActionTypes.RECEIVE_LOCATION_INFO,
             zipcode,
+            city,
         });
     };
 }
@@ -376,5 +453,46 @@ export function windowResize(width) {
 export function toggleSmallFiltersShown() {
     return {
         type: ActionTypes.TOGGLE_SMALL_FILTERS_SHOWN,
+    };
+}
+
+export function selectTab(tab) {
+    return {
+        type: ActionTypes.SELECT_TAB,
+        data: tab,
+    };
+}
+
+export function selectDeal(deal) {
+    return {
+        type: ActionTypes.SELECT_DEAL,
+        selectedDeal: deal,
+    };
+}
+
+export function clearSelectedDeal() {
+    return {
+        type: ActionTypes.CLEAR_SELECTED_DEAL,
+    };
+}
+
+export function toggleRebate(rebate) {
+    return {
+        type: ActionTypes.TOGGLE_REBATE,
+        rebate,
+    };
+}
+
+export function updateDownPayment(downPayment) {
+    return {
+        type: ActionTypes.UPDATE_DOWN_PAYMENT,
+        downPayment,
+    };
+}
+
+export function updateTermDuration(termDuration) {
+    return {
+        type: ActionTypes.UPDATE_TERM_DURATION,
+        termDuration,
     };
 }

@@ -6,8 +6,17 @@
   background-color: $color-sidebar-background-secondary;
   color: $color-text-white;
   display: flex;
-  height: $sortbar-height;
+  height: auto;
   padding: 5px 10px;
+
+  &__count {
+    width: 100%;
+  }
+
+  &__count-number {
+    font-weight: bold;
+    margin-right: 5px;
+  }
 
   &__info {
     align-content: center;
@@ -15,21 +24,18 @@
     flex: 1;
     flex-flow: column nowrap;
     justify-content: space-between;
+    padding-right: 8px;
+  }
+
+  &__form {
+    align-self: center;
+    flex: 1;
   }
 
   &__input {
     @include input;
-    width: 58px;
-
-    &::-webkit-inner-spin-button,
-    &::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    &--invalid {
-      border: 1px solid $color-error;
-    }
+    margin-right: 5px;
+    width: 50%;
   }
 
   &__zipcode {
@@ -39,12 +45,14 @@
   &__buttons {
     align-items: center;
     display: flex;
+    flex: 2;
     justify-content: flex-end;
-    width: 70%;
   }
 
   &__button {
     @include button;
+    font-size: .5rem;
+
     &:first-child {
       margin-right: 5px;
     }

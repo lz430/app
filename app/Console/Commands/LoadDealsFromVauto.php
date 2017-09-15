@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use DeliverMyRide\Vauto\Importer;
+use DeliverMyRide\VAuto\Importer;
 use Illuminate\Console\Command;
 
 class LoadDealsFromVauto extends Command

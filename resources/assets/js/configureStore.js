@@ -14,19 +14,28 @@ import util from 'src/util';
 const urlStyle = util.getInitialBodyStyleFromUrl();
 
 const initialState = {
+    /** Version **/
+    1: '<- increment the number to purge LocalStorage',
+    /** End Version **/
     window: { width: window.innerWidth },
     smallFiltersShown: false,
     showMakeSelectorModal: true,
+    selectedTab: 'cash',
+    downPayment: 0,
+    termDuration: 60,
+    selectedDeal: null,
     selectedStyles: urlStyle ? [urlStyle] : [],
     bodyStyles: null,
-    fuelTypes: ['Gasoline', 'Flex Fuel', 'Diesel'],
+    fuelTypes: ['Gasoline', 'Flex Fuel', 'Diesel', 'Hybrid'],
     transmissionTypes: ['automatic', 'manual'],
     selectedTransmissionType: null,
     selectedFuelType: null,
     selectedMakes: [],
-    selectedDeal: null,
     selectedFeatures: [],
+    selectedRebates: [],
+    dealRebates: {},
     features: null,
+    requestingMoreDeals: false,
     makes: null,
     dealPage: 1,
     dealPageTotal: 1,
@@ -36,6 +45,7 @@ const initialState = {
     sortAscending: true,
     compareList: [],
     zipcode: null,
+    city: null,
 };
 
 export default () => {
@@ -49,17 +59,17 @@ export default () => {
         autoRehydrate()
     );
 
-    persistStore(store);
+    persistStore(store, {}, () => {
+        window.setTimeout(() => {
+            store.dispatch(requestLocationInfo());
+        });
+        store.dispatch(requestMakes());
+        store.dispatch(requestBodyStyles());
+        store.dispatch(requestFeatures());
 
-    window.setTimeout(() => {
-        store.dispatch(requestLocationInfo());
-    });
-    store.dispatch(requestMakes());
-    store.dispatch(requestBodyStyles());
-    store.dispatch(requestFeatures());
-
-    window.addEventListener('resize', () => {
-        store.dispatch(windowResize(window.innerWidth));
+        window.addEventListener('resize', () => {
+            store.dispatch(windowResize(window.innerWidth));
+        });
     });
 
     return store;

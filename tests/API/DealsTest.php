@@ -9,11 +9,14 @@ use App\JATO\VehicleModel;
 use App\JATO\Version;
 use App\Deal;
 use App\Zipcode;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Fluent;
 use Tests\TestCase;
 
 class DealsTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_returns_a_listing_of_deals_for_a_specific_make_and_body_style()
     {
@@ -201,7 +204,7 @@ class DealsTest extends TestCase
 
         $versionDeals = $version->deals()->saveMany(factory(Deal::class, 3)->make());
 
-        $versionDeals->first()->features()->attach(factory(Feature::class)->make(['feature' => 'ABS']));
+        $versionDeals->first()->features()->attach(factory(Feature::class)->create(['feature' => 'ABS']));
 
         $response = $this->getJson(route('deals.index', [
             'make_ids' => [$make->id, 2, 3],

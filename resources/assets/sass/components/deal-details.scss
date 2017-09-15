@@ -1,110 +1,46 @@
 @import '../variables';
 @import '../mixins/button';
+@import '../mixins/selector-icon';
 
 .deal-details {
   display: flex;
   flex-direction: column;
-  max-width: 100%;
+  margin: 0 auto;
+  max-width: $break-large;
 
-  @media (min-width: $break-medium) {
+  @media (min-width: $break-large) {
     flex-direction: row;
   }
 
-  &__images-and-information {
-    @media (min-width: $break-medium) {
-      width: $break-medium * .6;
-    }
-  }
-
-  &__images {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    margin: 0 15px;
-    overflow: hidden;
-  }
-
-  &__information {
+  &__deal-content {
     padding: 15px;
   }
 
+  &__deal-content-subtitle {
+    text-decoration: underline;
+  }
+
   &__title {
-    border-bottom: 2px solid $color-section-bottom-border;
     color: $text-color-dark;
-    font-size: 1.1rem;
-    padding-bottom: 10px;
+    margin-top: 10px;
+  }
+
+  &__title-year-make {
+    font-size: 1.2rem;
+  }
+
+  &__title-model-trim {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-top: -10px;
   }
 
   &__pricing {
     display: flex;
     flex-direction: column;
 
-    @media (min-width: $break-medium) {
-      width: $break-medium * .4;
-    }
-  }
-
-  &__pricing-title-and-tabs {
-    background: lighten($color-sidebar-background-secondary, 46%);
-    padding: 15px 15px 0;
-  }
-
-  &__pricing-title {
-    border-bottom: 1.5px solid transparentize($color-section-bottom-border, .5);
-    color: $text-color-dark;
-    font-size: 1.2rem;
-    padding-bottom: 5px;
-  }
-
-  &__pricing-body {
-    background: darken($color-background-primary, 4);
-    height: 100%;
-  }
-
-  &__msrp {
-    color: $text-color-dark;
-    font-size: 1.1rem;
-    padding: 10px 15px;
-  }
-
-  &__msrp-amount {
-    float: right;
-  }
-
-  &__dmr-price {
-    background: lighten($color-sidebar-background-secondary, 46%);
-    display: flex;
-    font-size: .9rem;
-    padding: 5px 15px;
-  }
-
-  &__dmr-price-label {
-    align-self: flex-end;
-    color: $text-color-dark;
-    flex: 1;
-    font-size: .9rem;
-  }
-
-  &__dmr-price-amount {
-    align-self: flex-start;
-    color: $text-color-dark;
-    float: right;
-    font-size: 1.6rem;
-    justify-self: flex-end;
-    line-height: 2rem;
-  }
-
-  &__dmr-buttons {
-    display: flex;
-  }
-
-  &__dmr-button {
-    @include button;
-    flex: 1;
-    margin: 15px;
-
-    &:first-child {
-      margin-right: 0;
+    @media (min-width: $break-large) {
+      width: $break-large * .4;
     }
   }
 
@@ -114,80 +50,24 @@
     width: 100%;
   }
 
-  &__thumbnail-images {
+  &__dots {
     display: flex;
-    margin-bottom: 10px;
-    overflow-x: scroll;
-    width: 100%;
+    justify-content: center;
+    margin-bottom: 20px;
   }
 
-  &__thumbnail-image {
-    height: 50px;
-    margin: 5px;
-    width: 66px;
-
-    &:first-child {
-      margin-left: 0;
-    }
-
-    &:last-child {
-      margin-right: 0;
-    }
-
-    &--from-fuel {
-      border: 2px solid $color-sidebar-background-secondary-dark;
-    }
-
-    &--selected {
-      border: 2px solid $color-blue;
-    }
-  }
-
-  &__vin {
-    color: $text-color;
-    float: right;
-    font-size: .8rem;
-  }
-
-  &__items {
+  &__buttons {
     display: flex;
-    flex-direction: column;
-  }
-
-  &__item {
-    border-bottom: 1px solid transparentize($color-section-bottom-border, .5);
-    color: $text-color-dark;
-    display: flex;
-    font-size: .8rem;
-    justify-content: flex-start;
-    padding: 8px;
-
-    :nth-child(1) {
-      margin-right: auto;
-    }
-  }
-
-  // Login Or Register
-  &__login-register {
-    background: $color-text-white;
-    border-radius: 4px;
-    margin: 0 15px 15px;
-    padding: 15px;
-  }
-
-  &__login-register-text {
-    margin-bottom: 15px;
-    text-align: center;
-  }
-
-  &__login-register-buttons {
-    display: flex;
-    width: 100%;
+    flex-wrap: nowrap;
   }
 
   &__button {
     @include button;
     flex: 1;
     margin: 5px;
+  }
+
+  &__modal-body {
+    padding: 20px;
   }
 }

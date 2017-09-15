@@ -1,10 +1,9 @@
 <?php
 
-namespace DeliverMyRide\Vauto;
+namespace DeliverMyRide\VAuto;
 
 use Exception;
 
 class MismatchedHeadersException extends Exception
 {
-
 }

@@ -46,6 +46,16 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 makes: action.data.data.data,
             });
+        case ActionTypes.REQUEST_MORE_DEALS:
+            return Object.assign({}, state, {
+                requestingMoreDeals: true,
+            });
+        case ActionTypes.REQUEST_DEALS:
+            return Object.assign({}, state, {
+                deals: null,
+                dealPageTotal: null,
+                dealPage: null,
+            });
         case ActionTypes.RECEIVE_DEALS:
             return Object.assign({}, state, {
                 deals: action.data.data.data,
@@ -55,18 +65,31 @@ const reducer = (state, action) => {
                     action.data.data.meta.pagination.total_pages
                 ),
             });
+        case ActionTypes.RECEIVE_DEAL_REBATES:
+            let nextDealRebates = Object.assign({}, state.dealRebates);
+
+            nextDealRebates[action.data.dealId] = action.data.data.data.rebates;
+
+            return Object.assign({}, state, {
+                dealRebates: nextDealRebates,
+            });
         case ActionTypes.SORT_DEALS:
             return Object.assign({}, state, {
                 sortColumn: action.sort,
                 sortAscending: !state.sortAscending,
             });
+        case ActionTypes.SELECT_TAB:
+            return Object.assign({}, state, {
+                selectedTab: action.data,
+            });
         case ActionTypes.RECEIVE_MORE_DEALS:
             return Object.assign({}, state, {
-                deals: R.concat(state.deals, action.data.data.data),
+                deals: R.concat(state.deals || [], action.data.data.data),
                 dealPage: R.min(
                     action.data.data.meta.pagination.current_page,
                     action.data.data.meta.pagination.total_pages
                 ),
+                requestingMoreDeals: false,
             });
         case ActionTypes.TOGGLE_MAKE:
             return Object.assign({}, state, {
@@ -88,9 +111,24 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 selectedStyles: action.selectedStyles,
             });
+        case ActionTypes.TOGGLE_REBATE:
+            return Object.assign({}, state, {
+                selectedRebates: util.toggleItem(
+                    state.selectedRebates,
+                    action.rebate
+                ),
+            });
         case ActionTypes.CHOOSE_FUEL_TYPE:
             return Object.assign({}, state, {
                 selectedFuelType: action.selectedFuelType,
+            });
+        case ActionTypes.UPDATE_DOWN_PAYMENT:
+            return Object.assign({}, state, {
+                downPayment: action.downPayment,
+            });
+        case ActionTypes.UPDATE_TERM_DURATION:
+            return Object.assign({}, state, {
+                termDuration: action.termDuration,
             });
         case ActionTypes.CHOOSE_TRANSMISSION_TYPE:
             return Object.assign({}, state, {
@@ -119,10 +157,12 @@ const reducer = (state, action) => {
         case ActionTypes.SET_ZIP_CODE:
             return Object.assign({}, state, {
                 zipcode: action.zipcode,
+                city: null,
             });
         case ActionTypes.RECEIVE_LOCATION_INFO:
             return Object.assign({}, state, {
                 zipcode: action.zipcode,
+                city: action.city,
             });
     }
 

@@ -6,6 +6,20 @@ const api = {
     getBodyStyles: () => {
         return window.axios.get('/api/body-styles');
     },
+    getDimensions: jato_vehicle_id => {
+        return window.axios.get('/api/dimensions', {
+            params: {
+                jato_vehicle_id,
+            },
+        });
+    },
+    getWarranties: jato_vehicle_id => {
+        return window.axios.get('/api/warranties', {
+            params: {
+                jato_vehicle_id,
+            },
+        });
+    },
     getMakes: () => {
         return window.axios.get('/api/makes');
     },
@@ -42,6 +56,22 @@ const api = {
                 latitude,
                 longitude,
                 zipcode,
+            },
+        });
+    },
+    getRebates: (zipcode, vin, selected_rebate_ids = []) => {
+        return window.axios.get('/api/rebates', {
+            params: {
+                zipcode,
+                vin,
+                selected_rebate_ids,
+            },
+        });
+    },
+    getApplicationStatus: purchaseId => {
+        return window.axios.get('/api/application-status', {
+            params: {
+                purchaseId,
             },
         });
     },

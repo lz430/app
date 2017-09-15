@@ -3,19 +3,25 @@
 namespace App;
 
 use App\JATO\Version;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\JoinClause;
-use Illuminate\Support\Facades\DB;
 
 class Deal extends Model
 {
+    const HOLD_HOURS = 48;
+    
     protected $guarded = [];
     protected $dates = ['inventory_date'];
 
     public function versions()
     {
         return $this->belongsToMany(Version::class);
+    }
+
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class);
     }
 
     public function options()
@@ -31,6 +37,13 @@ class Deal extends Model
     public function features()
     {
         return $this->belongsToMany(Feature::class)->hasGroup();
+    }
+    
+    public function featuredPhoto()
+    {
+        return ($this->photos && $this->photos->first())
+            ? $this->photos->first()
+            : null;
     }
 
     public static function allFuelTypes()
@@ -100,5 +113,12 @@ class Deal extends Model
             'not like',
             '%cvt%'
         );
+    }
+    
+    public function scopeForSale(Builder $query) : Builder
+    {
+        return $query->whereDoesntHave('purchases', function (Builder $q) {
+            $q->where('completed_at', '>=', Carbon::now()->subHours(self::HOLD_HOURS));
+        });
     }
 }

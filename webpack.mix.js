@@ -19,12 +19,12 @@ if (mix.config.inProduction) {
     mix.version();
 } else {
     mix.browserSync({
-        proxy: 'localhost',
+        proxy: 'delivermyride.dev',
         notify: {
             styles: {
                 top: 'auto',
-                bottom: '0'
-            }
-        }
+                bottom: '0',
+            },
+        },
     });
 }
