@@ -1163,6 +1163,7 @@ exports.toggleSmallFiltersShown = toggleSmallFiltersShown;
 exports.selectTab = selectTab;
 exports.selectDeal = selectDeal;
 exports.clearSelectedDeal = clearSelectedDeal;
+exports.selectRebate = selectRebate;
 exports.toggleRebate = toggleRebate;
 exports.updateDownPayment = updateDownPayment;
 exports.updateTermDuration = updateTermDuration;
@@ -1314,9 +1315,17 @@ function receiveDeals(data) {
 }
 
 function receiveDealRebates(data) {
-    return {
-        type: ActionTypes.RECEIVE_DEAL_REBATES,
-        data: data
+    return function (dispatch) {
+        data.data.data.rebates.map(function (rebate) {
+            if (rebate.openOffer) {
+                dispatch(selectRebate(rebate));
+            }
+        });
+
+        dispatch({
+            type: ActionTypes.RECEIVE_DEAL_REBATES,
+            data: data
+        });
     };
 }
 
@@ -1600,6 +1609,13 @@ function selectDeal(deal) {
 function clearSelectedDeal() {
     return {
         type: ActionTypes.CLEAR_SELECTED_DEAL
+    };
+}
+
+function selectRebate(rebate) {
+    return {
+        type: ActionTypes.SELECT_REBATE,
+        rebate: rebate
     };
 }
 
@@ -22171,6 +22187,7 @@ var SELECT_TAB = exports.SELECT_TAB = 'SELECT_TAB';
 var SELECT_DEAL = exports.SELECT_DEAL = 'SELECT_DEAL';
 var CLEAR_SELECTED_DEAL = exports.CLEAR_SELECTED_DEAL = 'CLEAR_SELECTED_DEAL';
 var TOGGLE_REBATE = exports.TOGGLE_REBATE = 'TOGGLE_REBATE';
+var SELECT_REBATE = exports.SELECT_REBATE = 'SELECT_REBATE';
 var UPDATE_DOWN_PAYMENT = exports.UPDATE_DOWN_PAYMENT = 'UPDATE_DOWN_PAYMENT';
 var UPDATE_TERM_DURATION = exports.UPDATE_TERM_DURATION = 'UPDATE_TERM_DURATION';
 var REQUEST_REBATES = exports.REQUEST_REBATES = 'REQUEST_REBATES';
@@ -54711,6 +54728,14 @@ var reducer = function reducer(state, action) {
             return Object.assign({}, state, {
                 selectedRebates: _util2.default.toggleItem(state.selectedRebates, action.rebate)
             });
+        case ActionTypes.SELECT_REBATE:
+            if (!_ramda2.default.contains(action.rebate, state.selectedRebates)) {
+                return Object.assign({}, state, {
+                    selectedRebates: _util2.default.toggleItem(state.selectedRebates, action.rebate)
+                });
+            }
+
+            return state;
         case ActionTypes.CHOOSE_FUEL_TYPE:
             return Object.assign({}, state, {
                 selectedFuelType: action.selectedFuelType

@@ -118,6 +118,17 @@ const reducer = (state, action) => {
                     action.rebate
                 ),
             });
+        case ActionTypes.SELECT_REBATE:
+            if (!R.contains(action.rebate, state.selectedRebates)) {
+                return Object.assign({}, state, {
+                    selectedRebates: util.toggleItem(
+                        state.selectedRebates,
+                        action.rebate
+                    ),
+                });
+            }
+
+            return state;
         case ActionTypes.CHOOSE_FUEL_TYPE:
             return Object.assign({}, state, {
                 selectedFuelType: action.selectedFuelType,

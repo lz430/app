@@ -52,6 +52,7 @@ class RebatesController extends Controller
                         'rebate' => $incentive['restrictions'],
                         'value' => $incentive['cash'],
                         'statusName' => $incentive['statusName'],
+                        'openOffer' => $incentive['targetName'] === 'Open Offer',
                         'types' => [
                                 'Auto Show Cash' => ['cash', 'finance'],
                                 'Bonus Cash' => ['cash', 'finance'],

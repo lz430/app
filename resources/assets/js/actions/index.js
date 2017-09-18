@@ -147,9 +147,17 @@ export function receiveDeals(data) {
 }
 
 export function receiveDealRebates(data) {
-    return {
-        type: ActionTypes.RECEIVE_DEAL_REBATES,
-        data: data,
+    return dispatch => {
+        data.data.data.rebates.map(rebate => {
+            if (rebate.openOffer) {
+                dispatch(selectRebate(rebate));
+            }
+        });
+
+        dispatch({
+            type: ActionTypes.RECEIVE_DEAL_REBATES,
+            data: data,
+        });
     };
 }
 
@@ -473,6 +481,13 @@ export function selectDeal(deal) {
 export function clearSelectedDeal() {
     return {
         type: ActionTypes.CLEAR_SELECTED_DEAL,
+    };
+}
+
+export function selectRebate(rebate) {
+    return {
+        type: ActionTypes.SELECT_REBATE,
+        rebate,
     };
 }
 
