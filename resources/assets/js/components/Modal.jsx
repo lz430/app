@@ -11,23 +11,17 @@ class Modal extends React.Component {
         this.state = {
             animating: false,
         };
-
-        this.animate = this.animate.bind(this);
-        this.stopAnimate = this.stopAnimate.bind(this);
     }
 
     animate() {
-        this.setState({
-            animating: true,
-        });
-
-        setTimeout(this.stopAnimate, 800);
-    }
-
-    stopAnimate() {
-        this.setState({
-            animating: false,
-        });
+        this.setState(
+            {
+                animating: true,
+            },
+            () => {
+                setTimeout(() => this.setState({ animating: false }), 800);
+            }
+        );
     }
 
     buttonClass() {
@@ -42,7 +36,7 @@ class Modal extends React.Component {
             this.props.children,
             child =>
                 React.cloneElement(child, {
-                    animate: this.animate,
+                    animate: () => this.animate(),
                 })
         );
 

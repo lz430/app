@@ -13296,26 +13296,20 @@ var Modal = function (_React$Component) {
         _this.state = {
             animating: false
         };
-
-        _this.animate = _this.animate.bind(_this);
-        _this.stopAnimate = _this.stopAnimate.bind(_this);
         return _this;
     }
 
     _createClass(Modal, [{
         key: 'animate',
         value: function animate() {
+            var _this2 = this;
+
             this.setState({
                 animating: true
-            });
-
-            setTimeout(this.stopAnimate, 800);
-        }
-    }, {
-        key: 'stopAnimate',
-        value: function stopAnimate() {
-            this.setState({
-                animating: false
+            }, function () {
+                setTimeout(function () {
+                    return _this2.setState({ animating: false });
+                }, 800);
             });
         }
     }, {
@@ -13326,11 +13320,13 @@ var Modal = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
             var childrenWithProps = _react2.default.Children.map(this.props.children, function (child) {
                 return _react2.default.cloneElement(child, {
-                    animate: _this2.animate
+                    animate: function animate() {
+                        return _this3.animate();
+                    }
                 });
             });
 
