@@ -7,7 +7,9 @@ import * as Actions from 'actions/index';
 class MakeSelector extends React.PureComponent {
     constructor() {
         super();
-
+        this.state = {
+            animating: 'false',
+        };
         this.renderMake = this.renderMake.bind(this);
         this.getLogoFor = this.getLogoFor.bind(this);
     }
@@ -24,18 +26,6 @@ class MakeSelector extends React.PureComponent {
         ).bind(this)(make.attributes);
     }
 
-    animateButton() {
-        const modalCloseButton = document.getElementsByClassName(
-            'modal__close-button'
-        )[0];
-        modalCloseButton.classList.remove('animated');
-        modalCloseButton.classList.remove('rubberBand');
-        setTimeout(() => {
-            modalCloseButton.classList += ' rubberBand';
-            modalCloseButton.classList += ' animated';
-        }, 100);
-    }
-
     renderMake(make) {
         const selected =
             this.props.selectedMakes &&
@@ -47,10 +37,7 @@ class MakeSelector extends React.PureComponent {
         return (
             <div
                 className={className}
-                onClick={() => {
-                    this.props.toggleMake(make.id);
-                    this.animateButton();
-                }}
+                onClick={() => this.props.toggleMake(make.id)}
                 key={make.id}
             >
                 <img src={this.getLogoFor(make)} />
@@ -63,7 +50,7 @@ class MakeSelector extends React.PureComponent {
 
     render() {
         return (
-            <div className="make-selector">
+            <div className="make-selector" onClick={this.props.animate}>
                 <div className="make-selector__makes">
                     {this.props.makes ? (
                         this.props.makes.map(this.renderMake)

@@ -13285,18 +13285,55 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Modal = function (_React$PureComponent) {
-    _inherits(Modal, _React$PureComponent);
+var Modal = function (_React$Component) {
+    _inherits(Modal, _React$Component);
 
-    function Modal() {
+    function Modal(props) {
         _classCallCheck(this, Modal);
 
-        return _possibleConstructorReturn(this, (Modal.__proto__ || Object.getPrototypeOf(Modal)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (Modal.__proto__ || Object.getPrototypeOf(Modal)).call(this, props));
+
+        _this.state = {
+            animating: false
+        };
+
+        _this.animate = _this.animate.bind(_this);
+        _this.stopAnimate = _this.stopAnimate.bind(_this);
+        return _this;
     }
 
     _createClass(Modal, [{
+        key: 'animate',
+        value: function animate() {
+            this.setState({
+                animating: true
+            });
+
+            setTimeout(this.stopAnimate, 800);
+        }
+    }, {
+        key: 'stopAnimate',
+        value: function stopAnimate() {
+            this.setState({
+                animating: false
+            });
+        }
+    }, {
+        key: 'buttonClass',
+        value: function buttonClass() {
+            return 'modal__close-button modal__close-button--blue modal__close-button--small ' + (this.state.animating ? 'animated rubberBand' : '');
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
+            var childrenWithProps = _react2.default.Children.map(this.props.children, function (child) {
+                return _react2.default.cloneElement(child, {
+                    animate: _this2.animate
+                });
+            });
+
             return _react2.default.createElement(
                 'div',
                 { className: 'modal' },
@@ -13341,7 +13378,7 @@ var Modal = function (_React$PureComponent) {
                             {
                                 className: 'modal__body ' + (this.props.closeText ? this.props.title ? '' : 'modal__body--no-header' : 'modal__body--no-footer')
                             },
-                            this.props.children
+                            childrenWithProps
                         ),
                         this.props.closeText ? _react2.default.createElement(
                             'div',
@@ -13350,7 +13387,8 @@ var Modal = function (_React$PureComponent) {
                                 'button',
                                 {
                                     onClick: this.props.onClose,
-                                    className: 'modal__close-button modal__close-button--blue modal__close-button--small' },
+                                    className: this.buttonClass()
+                                },
                                 this.props.closeText
                             )
                         ) : ''
@@ -13361,7 +13399,7 @@ var Modal = function (_React$PureComponent) {
     }]);
 
     return Modal;
-}(_react2.default.PureComponent);
+}(_react2.default.Component);
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
@@ -51378,6 +51416,9 @@ var MakeSelector = function (_React$PureComponent) {
 
         var _this = _possibleConstructorReturn(this, (MakeSelector.__proto__ || Object.getPrototypeOf(MakeSelector)).call(this));
 
+        _this.state = {
+            animating: 'false'
+        };
         _this.renderMake = _this.renderMake.bind(_this);
         _this.getLogoFor = _this.getLogoFor.bind(_this);
         return _this;
@@ -51398,20 +51439,6 @@ var MakeSelector = function (_React$PureComponent) {
             }, _ramda2.default.prop('logo')).bind(this)(make.attributes);
         }
     }, {
-        key: 'animateButton',
-        value: function animateButton() {
-            console.log(this.props.selectedMakes);
-            // if(!this.props.selectedMakes.length) return;
-            console.log('continued');
-            var modalCloseButton = document.getElementsByClassName('modal__close-button')[0];
-            modalCloseButton.classList.remove('animated');
-            modalCloseButton.classList.remove('rubberBand');
-            setTimeout(function () {
-                modalCloseButton.classList += ' rubberBand';
-                modalCloseButton.classList += ' animated';
-            }, 100);
-        }
-    }, {
         key: 'renderMake',
         value: function renderMake(make) {
             var _this3 = this;
@@ -51424,8 +51451,7 @@ var MakeSelector = function (_React$PureComponent) {
                 {
                     className: className,
                     onClick: function onClick() {
-                        _this3.props.toggleMake(make.id);
-                        _this3.animateButton();
+                        return _this3.props.toggleMake(make.id);
                     },
                     key: make.id
                 },
@@ -51442,7 +51468,7 @@ var MakeSelector = function (_React$PureComponent) {
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                { className: 'make-selector' },
+                { className: 'make-selector', onClick: this.props.animate },
                 _react2.default.createElement(
                     'div',
                     { className: 'make-selector__makes' },
