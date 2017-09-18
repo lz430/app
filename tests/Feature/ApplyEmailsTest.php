@@ -73,4 +73,30 @@ class ApplyEmailsTest extends TestCase
 
         $response->assertRedirect(route('thank-you', ['method' => 'cash']));
     }
+
+    /** @test */
+    public function requests_email_from_user_if_not_in_session()
+    {
+        $purchase = factory(Purchase::class)->create();
+        $purchase->deal->versions()->save(factory(Version::class)->make());
+
+        $response = $this->post(
+            route('applyOrPurchase'),
+            [
+                'type' => $purchase->type,
+                'deal_id' => $purchase->deal_id,
+                'dmr_price' => $purchase->dmr_price,
+                'msrp' => $purchase->msrp,
+                // Rebates.
+                'rebates' => [
+                    [
+                        'rebate' => 'test rebate',
+                        'value' => 1200,
+                    ],
+                ],
+            ]
+        );
+
+        $response->assertRedirect(route('request-email'));
+    }
 }
