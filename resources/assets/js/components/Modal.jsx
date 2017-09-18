@@ -4,8 +4,42 @@ import zondicons from 'zondicons';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
 
-class Modal extends React.PureComponent {
+class Modal extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            animating: false,
+        };
+    }
+
+    animate() {
+        this.setState(
+            {
+                animating: true,
+            },
+            () => {
+                setTimeout(() => this.setState({ animating: false }), 800);
+            }
+        );
+    }
+
+    buttonClass() {
+        return `modal__close-button modal__close-button--blue modal__close-button--small ${this
+            .state.animating
+            ? 'animated rubberBand'
+            : ''}`;
+    }
+
     render() {
+        const childrenWithProps = React.Children.map(
+            this.props.children,
+            child =>
+                React.cloneElement(child, {
+                    animate: () => this.animate(),
+                })
+        );
+
         return (
             <div className="modal">
                 <div className="modal__overlay" />
@@ -41,18 +75,13 @@ class Modal extends React.PureComponent {
                                   : 'modal__body--no-header'
                                 : 'modal__body--no-footer'}`}
                         >
-                            {this.props.children}
+                            {childrenWithProps}
                         </div>
                         {this.props.closeText ? (
                             <div className="modal__footer">
                                 <button
                                     onClick={this.props.onClose}
-                                    className={
-                                        `modal__close-button modal__close-button--blue modal__close-button--small` +
-                                        (this.props.selectedMakes.length
-                                            ? ' animated rubberBand'
-                                            : '')
-                                    }
+                                    className={this.buttonClass()}
                                 >
                                     {this.props.closeText}
                                 </button>
