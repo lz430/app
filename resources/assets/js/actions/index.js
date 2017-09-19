@@ -12,6 +12,7 @@ const withStateDefaults = (state, changed) => {
             bodyStyles: state.selectedStyles,
             fuelType: state.selectedFuelType,
             transmissionType: state.selectedTransmissionType,
+            segment: state.selectedSegment,
             features: state.selectedFeatures,
             includes: ['photos'],
             sortColumn: state.sortColumn,
@@ -305,7 +306,33 @@ export function chooseTransmissionType(transmissionType) {
 
         dispatch({
             type: ActionTypes.CHOOSE_TRANSMISSION_TYPE,
-            selectedTransmissionType: selectedTransmissionType,
+            selectedTransmissionType,
+        });
+    };
+}
+
+export function chooseSegment(segment) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
+        const selectedSegment =
+            getState().selectedSegment === segment ? null : segment;
+
+        api
+            .getDeals(
+                withStateDefaults(getState(), {
+                    segment: selectedSegment,
+                })
+            )
+            .then(data => {
+                dispatch(receiveDeals(data));
+            });
+
+        dispatch({
+            type: ActionTypes.CHOOSE_SEGMENT,
+            selectedSegment,
         });
     };
 }

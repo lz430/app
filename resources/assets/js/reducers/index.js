@@ -133,6 +133,10 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 selectedFuelType: action.selectedFuelType,
             });
+        case ActionTypes.CHOOSE_SEGMENT:
+            return Object.assign({}, state, {
+                selectedSegment: action.selectedSegment,
+            });
         case ActionTypes.UPDATE_DOWN_PAYMENT:
             return Object.assign({}, state, {
                 downPayment: action.downPayment,

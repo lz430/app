@@ -201,6 +201,10 @@ class Importer
                         $versionDeal
                     );
 
+                    $this->saveVersionSegment(
+                        $versionDeal
+                    );
+
                     $this->saveVersionDealPhotos(
                         $versionDeal,
                         $keyedData['Photos']
@@ -263,6 +267,38 @@ class Importer
                 json_decode((string) $response->getBody(), true)['results'],
                 $group
             );
+        }
+    }
+
+    private function saveVersionSegment(Deal $deal)
+    {
+        $jatoVersion = $deal->versions->first();
+
+        /** Save version "segment" */
+        $curbWeight = collect(
+            $this->client->featuresByVehicleIdAndCategoryId($deal->versions->first()->jato_vehicle_id, 2)['results']
+        )->first(function ($feature) {
+            return $feature['feature'] === 'Curb weight (lbs)';
+        });
+
+        if ($curbWeight && (int) $curbWeight !== 0) {
+            $jatoVersion->segment = $this->getSegmentByWeightInLbs((int) $curbWeight['content']);
+            $jatoVersion->save();
+        }
+    }
+
+    private function getSegmentByWeightInLbs($lbs)
+    {
+        if ($lbs < 1999) {
+            return 'mini';
+        } elseif ($lbs < 2499) {
+            return 'light';
+        } elseif ($lbs < 2999) {
+            return 'compact';
+        } elseif ($lbs < 3499) {
+            return 'medium';
+        } else {
+            return 'heavy';
         }
     }
 

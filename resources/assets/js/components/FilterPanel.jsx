@@ -6,6 +6,7 @@ import FilterMakeSelector from 'components/FilterMakeSelector';
 import FilterFuelTypeSelector from 'components/FilterFuelTypeSelector';
 import FilterFeatureSelector from 'components/FilterFeatureSelector';
 import FilterTransmissionTypeSelector from 'components/FilterTransmissionTypeSelector';
+import FilterSegmentSelector from 'components/FilterSegmentSelector';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import R from 'ramda';
@@ -63,6 +64,17 @@ class FilterPanel extends React.PureComponent {
                             styles={this.props.bodyStyles}
                             selectedStyles={this.props.selectedStyles}
                             onSelectStyle={this.props.toggleStyle}
+                        />
+                    </SidebarFilter>
+                    <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Vehicle Segment')}
+                        open={this.state.openFilter === 'Vehicle Segment'}
+                        title="Vehicle Segment"
+                    >
+                        <FilterSegmentSelector
+                            segments={this.props.segments}
+                            selectedSegment={this.props.selectedSegment}
+                            onSelectSegment={this.props.chooseSegment}
                         />
                     </SidebarFilter>
                     <SidebarFilter
@@ -191,6 +203,8 @@ const mapStateToProps = state => {
         transmissionTypes: state.transmissionTypes,
         selectedTransmissionType: state.selectedTransmissionType,
         bodyStyles: state.bodyStyles,
+        segments: state.segments,
+        selectedSegment: state.selectedSegment,
         selectedStyles: state.selectedStyles,
         selectedMakes: state.selectedMakes,
         fallbackLogoImage: state.fallbackLogoImage,

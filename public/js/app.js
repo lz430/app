@@ -1152,6 +1152,7 @@ exports.requestBodyStyles = requestBodyStyles;
 exports.toggleStyle = toggleStyle;
 exports.chooseFuelType = chooseFuelType;
 exports.chooseTransmissionType = chooseTransmissionType;
+exports.chooseSegment = chooseSegment;
 exports.clearAllFilters = clearAllFilters;
 exports.toggleCompare = toggleCompare;
 exports.setZipCode = setZipCode;
@@ -1198,6 +1199,7 @@ var withStateDefaults = function withStateDefaults(state, changed) {
         bodyStyles: state.selectedStyles,
         fuelType: state.selectedFuelType,
         transmissionType: state.selectedTransmissionType,
+        segment: state.selectedSegment,
         features: state.selectedFeatures,
         includes: ['photos'],
         sortColumn: state.sortColumn,
@@ -1451,6 +1453,27 @@ function chooseTransmissionType(transmissionType) {
         dispatch({
             type: ActionTypes.CHOOSE_TRANSMISSION_TYPE,
             selectedTransmissionType: selectedTransmissionType
+        });
+    };
+}
+
+function chooseSegment(segment) {
+    return function (dispatch, getState) {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS
+        });
+
+        var selectedSegment = getState().selectedSegment === segment ? null : segment;
+
+        _api2.default.getDeals(withStateDefaults(getState(), {
+            segment: selectedSegment
+        })).then(function (data) {
+            dispatch(receiveDeals(data));
+        });
+
+        dispatch({
+            type: ActionTypes.CHOOSE_SEGMENT,
+            selectedSegment: selectedSegment
         });
     };
 }
@@ -9938,6 +9961,7 @@ var api = {
             bodyStyles = _ref.bodyStyles,
             fuelType = _ref.fuelType,
             transmissionType = _ref.transmissionType,
+            segment = _ref.segment,
             features = _ref.features,
             includes = _ref.includes,
             sortColumn = _ref.sortColumn,
@@ -9953,6 +9977,7 @@ var api = {
                 body_styles: bodyStyles,
                 fuel_type: fuelType,
                 transmission_type: transmissionType,
+                segment: segment,
                 features: features,
                 includes: includes,
                 sort: sort(sortColumn, sortAscending),
@@ -22454,6 +22479,7 @@ var SELECT_DEAL = exports.SELECT_DEAL = 'SELECT_DEAL';
 var CLEAR_SELECTED_DEAL = exports.CLEAR_SELECTED_DEAL = 'CLEAR_SELECTED_DEAL';
 var TOGGLE_REBATE = exports.TOGGLE_REBATE = 'TOGGLE_REBATE';
 var SELECT_REBATE = exports.SELECT_REBATE = 'SELECT_REBATE';
+var CHOOSE_SEGMENT = exports.CHOOSE_SEGMENT = 'CHOOSE_SEGMENT';
 var UPDATE_DOWN_PAYMENT = exports.UPDATE_DOWN_PAYMENT = 'UPDATE_DOWN_PAYMENT';
 var UPDATE_TERM_DURATION = exports.UPDATE_TERM_DURATION = 'UPDATE_TERM_DURATION';
 var REQUEST_REBATES = exports.REQUEST_REBATES = 'REQUEST_REBATES';
@@ -52640,6 +52666,10 @@ var _FilterTransmissionTypeSelector = __webpack_require__(940);
 
 var _FilterTransmissionTypeSelector2 = _interopRequireDefault(_FilterTransmissionTypeSelector);
 
+var _FilterSegmentSelector = __webpack_require__(963);
+
+var _FilterSegmentSelector2 = _interopRequireDefault(_FilterSegmentSelector);
+
 var _reactRedux = __webpack_require__(20);
 
 var _index = __webpack_require__(21);
@@ -52724,6 +52754,21 @@ var FilterPanel = function (_React$PureComponent) {
                             styles: this.props.bodyStyles,
                             selectedStyles: this.props.selectedStyles,
                             onSelectStyle: this.props.toggleStyle
+                        })
+                    ),
+                    _react2.default.createElement(
+                        _SidebarFilter2.default,
+                        {
+                            toggle: function toggle() {
+                                return _this2.toggleOpenFilter('Vehicle Segment');
+                            },
+                            open: this.state.openFilter === 'Vehicle Segment',
+                            title: 'Vehicle Segment'
+                        },
+                        _react2.default.createElement(_FilterSegmentSelector2.default, {
+                            segments: this.props.segments,
+                            selectedSegment: this.props.selectedSegment,
+                            onSelectSegment: this.props.chooseSegment
                         })
                     ),
                     _react2.default.createElement(
@@ -52870,6 +52915,8 @@ var mapStateToProps = function mapStateToProps(state) {
         transmissionTypes: state.transmissionTypes,
         selectedTransmissionType: state.selectedTransmissionType,
         bodyStyles: state.bodyStyles,
+        segments: state.segments,
+        selectedSegment: state.selectedSegment,
         selectedStyles: state.selectedStyles,
         selectedMakes: state.selectedMakes,
         fallbackLogoImage: state.fallbackLogoImage,
@@ -54469,7 +54516,7 @@ var urlStyle = _util2.default.getInitialBodyStyleFromUrl();
 
 var initialState = {
     /** Version **/
-    1: '<- increment the number to purge LocalStorage',
+    0: '<- increment the number to purge LocalStorage',
     /** End Version **/
     window: { width: window.innerWidth },
     smallFiltersShown: false,
@@ -54483,6 +54530,8 @@ var initialState = {
     fuelTypes: ['Gasoline', 'Flex Fuel', 'Diesel', 'Hybrid'],
     transmissionTypes: ['automatic', 'manual'],
     selectedTransmissionType: null,
+    selectedSegment: null,
+    segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
     selectedFuelType: null,
     selectedMakes: [],
     selectedFeatures: [],
@@ -54982,6 +55031,10 @@ var reducer = function reducer(state, action) {
         case ActionTypes.CHOOSE_FUEL_TYPE:
             return Object.assign({}, state, {
                 selectedFuelType: action.selectedFuelType
+            });
+        case ActionTypes.CHOOSE_SEGMENT:
+            return Object.assign({}, state, {
+                selectedSegment: action.selectedSegment
             });
         case ActionTypes.UPDATE_DOWN_PAYMENT:
             return Object.assign({}, state, {
@@ -56140,6 +56193,92 @@ exports.default = strings;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 959 */,
+/* 960 */,
+/* 961 */,
+/* 962 */,
+/* 963 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(11);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(27);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _ramda = __webpack_require__(13);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _reactSvgInline = __webpack_require__(35);
+
+var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
+
+var _zondicons = __webpack_require__(44);
+
+var _zondicons2 = _interopRequireDefault(_zondicons);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FilterSegmentSelector = function (_React$PureComponent) {
+    _inherits(FilterSegmentSelector, _React$PureComponent);
+
+    function FilterSegmentSelector() {
+        _classCallCheck(this, FilterSegmentSelector);
+
+        return _possibleConstructorReturn(this, (FilterSegmentSelector.__proto__ || Object.getPrototypeOf(FilterSegmentSelector)).apply(this, arguments));
+    }
+
+    _createClass(FilterSegmentSelector, [{
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'filter-selector' },
+                this.props.segments.map(function (segment, index) {
+                    var className = _this2.props.selectedSegment === segment ? 'filter-selector__radio filter-selector__radio--selected' : 'filter-selector__radio';
+
+                    return _react2.default.createElement(
+                        'div',
+                        {
+                            key: index,
+                            className: 'filter-selector__selector',
+                            onClick: _this2.props.onSelectSegment.bind(null, segment)
+                        },
+                        _react2.default.createElement('div', { className: className }),
+                        ' ',
+                        segment
+                    );
+                })
+            );
+        }
+    }]);
+
+    return FilterSegmentSelector;
+}(_react2.default.PureComponent);
+
+exports.default = FilterSegmentSelector;
 
 /***/ })
 /******/ ]);
