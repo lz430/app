@@ -96,6 +96,31 @@ class ComparePage extends React.PureComponent {
         );
     }
 
+    renderAccordionTabHeader(accordionTab) {
+        return (
+            <div
+                onClick={() => this.toggleAccordion(accordionTab)}
+                className="compare-page-table__header"
+            >
+                <SVGInline
+                    className="compare-page-table__header-chevron"
+                    svg={
+                        this.state.openAccordion === accordionTab ? (
+                            zondicons['cheveron-down']
+                        ) : (
+                            zondicons['cheveron-up']
+                        )
+                    }
+                />
+                {accordionTab}
+            </div>
+        );
+    }
+
+    columnClass(accordionTab) {
+        return `compare-page-table__columns ${this.state.openAccordion !== accordionTab ? 'compare-page-table__columns--closed' : ''}`
+    }
+
     renderSelectionsTable(compareList) {
         const maxNumberCells = R.reduce(
             (carry, dealAndSelectedFilters) => {
@@ -114,18 +139,8 @@ class ComparePage extends React.PureComponent {
 
         return (
             <div className="compare-page-table">
-                <div
-                    onClick={() => this.toggleAccordion('Your Selections')}
-                    className="compare-page-table__header"
-                >
-                    Your Selections
-                </div>
-                <div
-                    className={`compare-page-table__columns ${this.state
-                        .openAccordion !== 'Your Selections'
-                        ? 'compare-page-table__columns--closed'
-                        : ''}`}
-                >
+                {this.renderAccordionTabHeader('Your Selections')}
+                <div className={this.columnClass('Your Selections')}>
                     {compareList.map(({ deal, selectedFilters }, index) => {
                         return (
                             <div
@@ -199,19 +214,8 @@ class ComparePage extends React.PureComponent {
 
         return (
             <div className="compare-page-table">
-                <div
-                    onClick={() =>
-                        this.toggleAccordion('Rebates and Incentives')}
-                    className="compare-page-table__header"
-                >
-                    Rebates and Incentives
-                </div>
-                <div
-                    className={`compare-page-table__columns ${this.state
-                        .openAccordion !== 'Rebates and Incentives'
-                        ? 'compare-page-table__columns--closed'
-                        : ''}`}
-                >
+                {this.renderAccordionTabHeader('Rebates and Incentives')}
+                <div className={this.columnClass('Rebates and Incentives')}>
                     {compareList.map((dealAndSelectedFilters, index) => {
                         return (
                             <div
