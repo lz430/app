@@ -26,7 +26,7 @@ class FeaturesTest extends TestCase
         
         // It is successful
         $response->assertStatus(200);
-        
+
         // And only 5 features are returned
         $this->assertCount(5, $response->decodeResponseJson()['data']);
     }

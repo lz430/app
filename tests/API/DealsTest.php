@@ -71,34 +71,6 @@ class DealsTest extends TestCase
     }
 
     /** @test */
-    public function it_includes_meta_information_for_fuel_types()
-    {
-        $make = factory(Make::class)->create([
-            'name' => 'some-make',
-        ]);
-        $vehicleModel = $make->models()->save(factory(VehicleModel::class)->make());
-        /** @var Version $version */
-        $version = $vehicleModel->versions()->save(factory(Version::class)->make([
-            'body_style' => 'Cargo Van',
-        ]));
-        $version->deals()->saveMany([
-            factory(Deal::class)->make([
-                'fuel' => 'fuel type A',
-            ]),
-            factory(Deal::class)->make([
-                'fuel' => 'fuel type B',
-            ]),
-        ]);
-
-        $response = $this->getJson(route('deals.index', [
-            'make_ids' => [$make->id, 2, 3],
-            'sort' => 'price',
-        ]));
-
-        $this->assertEquals($response->decodeResponseJson()['meta']['fuelTypes'], ['fuel type A', 'fuel type B']);
-    }
-
-    /** @test */
     public function it_filters_by_fuel_type()
     {
         $make = factory(Make::class)->create([

@@ -37,7 +37,6 @@ class DealsController extends BaseAPIController
         $dealsQuery = $this->filterQueryByFuelType($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByTransmissionType($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByFeatures($dealsQuery, $request);
-        $dealsQueryCopy = clone $dealsQuery;
         $dealsQuery = Sort::sortQuery($dealsQuery, $request->get('sort', 'price'));
 
         $deals = $dealsQuery->paginate(15);
@@ -48,18 +47,6 @@ class DealsController extends BaseAPIController
             ->transformWith(self::TRANSFORMER)
             ->serializeWith(new DataArraySerializer)
             ->paginateWith(new IlluminatePaginatorAdapter($deals))
-            ->parseIncludes($request->get('includes', []))
-            ->addMeta([
-                'fuelTypes' => $dealsQueryCopy->select('fuel')->distinct()->pluck('fuel'),
-                'features' => Feature::hasGroup()->whereIn(
-                    'id',
-                    DB::table('deal_feature')
-                        ->select('feature_id')
-                        ->distinct()
-                        ->whereIn('deal_id', $dealsQueryCopy->select('id')->distinct()->pluck('id'))
-                        ->pluck('feature_id')
-                )->select('feature')->distinct()->pluck('feature'),
-            ])
             ->respond();
     }
 

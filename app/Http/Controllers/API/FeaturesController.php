@@ -13,7 +13,7 @@ class FeaturesController extends BaseAPIController
     public function index()
     {
         return fractal()
-            ->collection(Feature::hasGroup()->get())
+            ->collection(Feature::hasGroup()->whereIn('feature', Feature::WHITELIST)->get())
             ->withResourceName(self::RESOURCE_NAME)
             ->transformWith(self::TRANSFORMER)
             ->respond();
