@@ -26,12 +26,13 @@ class DealsController extends BaseAPIController
             'make_ids' => 'sometimes|required|array',
             'body_styles' => 'sometimes|required|array',
             'fuel_type' => 'sometimes|required|string',
+            'segment' => 'sometimes|required|string|in:Subcompact,Compact,Mid-size,Full-size',
             'transmission_type' => 'sometimes|required|string|in:automatic,manual',
             'sort' => 'sometimes|required|string',
             'zipcode' => 'sometimes|required|string',
         ]);
 
-        $dealsQuery = $this->getQueryByMakesAndBodyStyles($request);
+        $dealsQuery = $this->makeDealsQuery($request);
         $dealsQuery = $this->filterQueryByLocationDistance($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByFuelType($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByTransmissionType($dealsQuery, $request);
@@ -83,11 +84,15 @@ class DealsController extends BaseAPIController
         return $query;
     }
 
-    private function getQueryByMakesAndBodyStyles(Request $request) : Builder
+    private function makeDealsQuery(Request $request) : Builder
     {
         return Deal::whereHas('versions', function (Builder $query) use ($request) {
             if ($request->has('body_styles')) {
                 $query->filterByBodyStyle($request->get('body_styles'));
+            }
+
+            if ($request->has('segment')) {
+                $query->filterBySegment($request->get('segment'));
             }
 
             $query->whereHas('model', function (Builder $query) use ($request) {

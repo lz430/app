@@ -15,7 +15,7 @@ const urlStyle = util.getInitialBodyStyleFromUrl();
 
 const initialState = {
     /** Version **/
-    1: '<- increment the number to purge LocalStorage',
+    0: '<- increment the number to purge LocalStorage',
     /** End Version **/
     window: { width: window.innerWidth },
     smallFiltersShown: false,
@@ -29,6 +29,8 @@ const initialState = {
     fuelTypes: ['Gasoline', 'Flex Fuel', 'Diesel', 'Hybrid'],
     transmissionTypes: ['automatic', 'manual'],
     selectedTransmissionType: null,
+    selectedSegment: null,
+    segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
     selectedFuelType: null,
     selectedMakes: [],
     selectedFeatures: [],
