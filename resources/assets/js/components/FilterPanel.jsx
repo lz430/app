@@ -70,6 +70,7 @@ class FilterPanel extends React.PureComponent {
                         toggle={() => this.toggleOpenFilter('Vehicle Segment')}
                         open={this.state.openFilter === 'Vehicle Segment'}
                         title="Vehicle Segment"
+                        count={this.props.selectedSegment ? 1 : 0}
                     >
                         <FilterSegmentSelector
                             segments={this.props.segments}

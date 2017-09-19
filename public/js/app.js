@@ -52467,6 +52467,7 @@ var Filterbar = function (_React$PureComponent) {
         _this.renderFilterStyles = _this.renderFilterStyles.bind(_this);
         _this.renderFilterMakes = _this.renderFilterMakes.bind(_this);
         _this.renderFilterTransmissionType = _this.renderFilterTransmissionType.bind(_this);
+        _this.renderFilterSegment = _this.renderFilterSegment.bind(_this);
         _this.renderFilterFeatures = _this.renderFilterFeatures.bind(_this);
         _this.renderX = _this.renderX.bind(_this);
         return _this;
@@ -52506,6 +52507,20 @@ var Filterbar = function (_React$PureComponent) {
                     onClick: this.props.chooseFuelType.bind(null, fuelType)
                 },
                 fuelType,
+                ' ',
+                this.renderX()
+            );
+        }
+    }, {
+        key: 'renderFilterSegment',
+        value: function renderFilterSegment(segment) {
+            return _react2.default.createElement(
+                'div',
+                {
+                    className: 'filterbar__filter',
+                    onClick: this.props.chooseSegment.bind(null, segment)
+                },
+                segment,
                 ' ',
                 this.renderX()
             );
@@ -52573,6 +52588,7 @@ var Filterbar = function (_React$PureComponent) {
                     'div',
                     { className: 'filterbar__filters' },
                     this.props.selectedStyles.map(this.renderFilterStyles),
+                    this.props.selectedSegment ? this.renderFilterSegment(this.props.selectedSegment) : '',
                     this.props.selectedMakes.map(this.renderFilterMakes),
                     this.props.selectedFuelType ? this.renderFilterFuelType(this.props.selectedFuelType) : '',
                     this.props.selectedTransmissionType ? this.renderFilterTransmissionType(this.props.selectedTransmissionType) : '',
@@ -52605,6 +52621,7 @@ Filterbar.propTypes = {
     selectedMakes: _propTypes2.default.arrayOf(_propTypes2.default.string).isRequired,
     selectedTransmissionType: _propTypes2.default.string,
     selectedFuelType: _propTypes2.default.string,
+    selectedSegment: _propTypes2.default.string,
     selectedFeatures: _propTypes2.default.arrayOf(_propTypes2.default.string).isRequired
 };
 
@@ -52615,6 +52632,7 @@ function mapStateToProps(state) {
         selectedMakes: state.selectedMakes,
         selectedTransmissionType: state.selectedTransmissionType,
         selectedFuelType: state.selectedFuelType,
+        selectedSegment: state.selectedSegment,
         selectedFeatures: state.selectedFeatures
     };
 }
@@ -52763,7 +52781,8 @@ var FilterPanel = function (_React$PureComponent) {
                                 return _this2.toggleOpenFilter('Vehicle Segment');
                             },
                             open: this.state.openFilter === 'Vehicle Segment',
-                            title: 'Vehicle Segment'
+                            title: 'Vehicle Segment',
+                            count: this.props.selectedSegment ? 1 : 0
                         },
                         _react2.default.createElement(_FilterSegmentSelector2.default, {
                             segments: this.props.segments,
