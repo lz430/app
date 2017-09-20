@@ -118,7 +118,10 @@ class ComparePage extends React.PureComponent {
     }
 
     columnClass(accordionTab) {
-        return `compare-page-table__columns ${this.state.openAccordion !== accordionTab ? 'compare-page-table__columns--closed' : ''}`
+        return `compare-page-table__columns ${this.state.openAccordion !==
+        accordionTab
+            ? 'compare-page-table__columns--closed'
+            : ''}`;
     }
 
     renderSelectionsTable(compareList) {

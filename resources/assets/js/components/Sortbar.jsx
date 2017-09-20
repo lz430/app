@@ -13,23 +13,6 @@ class Sortbar extends React.PureComponent {
         this.state = {
             dropdownShown: false,
         };
-
-        this.toggleDropdownShown = this.toggleDropdownShown.bind(this);
-    }
-
-    renderIcon(column) {
-        const icon = this.props.sortAscending ? 'cheveron-up' : 'cheveron-down';
-
-        return this.props.sortColumn === column ? (
-            <SVGInline
-                height="18px"
-                width="18px"
-                className="sortbar__sort-icon"
-                svg={zondicons[icon]}
-            />
-        ) : (
-            ''
-        );
     }
 
     renderFilterToggle() {
@@ -51,35 +34,25 @@ class Sortbar extends React.PureComponent {
         );
     }
 
-    renderSortbarButtons() {
-        return (
-            <div className="sortbar__buttons">
-                <button
-                    className="sortbar__button sortbar__button"
-                    onClick={() => {
-                        this.props.sortDeals('price');
-                        this.props.requestDeals();
-                    }}
-                >
-                    {this.renderIcon('price')} Price
-                </button>
-                <button
-                    className="sortbar__button sortbar__button"
-                    onClick={() => {
-                        this.props.sortDeals('year');
-                        this.props.requestDeals();
-                    }}
-                >
-                    {this.renderIcon('year')} Year
-                </button>
-            </div>
-        );
-    }
-
     toggleDropdownShown() {
         this.setState({
             dropdownShown: !this.state.dropdownShown,
         });
+    }
+
+    renderIcon(column) {
+        const icon = this.props.sortAscending ? 'cheveron-up' : 'cheveron-down';
+
+        return this.props.sortColumn === column ? (
+            <SVGInline
+                height="18px"
+                width="18px"
+                className="sortbar__sort-icon"
+                svg={zondicons[icon]}
+            />
+        ) : (
+            ''
+        );
     }
 
     renderSortbarDropdown() {
@@ -89,7 +62,7 @@ class Sortbar extends React.PureComponent {
             <div className="sortbar__buttons">
                 <button
                     className="sortbar__button sortbar__button"
-                    onClick={this.toggleDropdownShown}
+                    onClick={() => this.toggleDropdownShown()}
                 >
                     Sort
                     <SVGInline
@@ -100,7 +73,17 @@ class Sortbar extends React.PureComponent {
                     />
                 </button>
                 {this.state.dropdownShown ? (
-                    <div className="sortbar__dropdown">Sort Stuff</div>
+                    <div className="sortbar__dropdown">
+                        <div onClick={() => this.props.sortDeals('price')}>
+                            Price {this.renderIcon('price')}
+                        </div>
+                        <div onClick={() => this.props.sortDeals('make')}>
+                            Make {this.renderIcon('make')}
+                        </div>
+                        <div onClick={() => this.props.sortDeals('year')}>
+                            Year {this.renderIcon('year')}
+                        </div>
+                    </div>
                 ) : (
                     ''
                 )}
@@ -112,11 +95,7 @@ class Sortbar extends React.PureComponent {
         return (
             <div className="sortbar">
                 {this.renderFilterToggle()}
-                {util.windowIsLargerThanSmall(this.props.window.width) ? (
-                    this.renderSortbarButtons()
-                ) : (
-                    this.renderSortbarDropdown()
-                )}
+                {this.renderSortbarDropdown()}
             </div>
         );
     }
