@@ -14309,6 +14309,10 @@ var _zondicons = __webpack_require__(44);
 
 var _zondicons2 = _interopRequireDefault(_zondicons);
 
+var _strings = __webpack_require__(957);
+
+var _strings2 = _interopRequireDefault(_strings);
+
 var _reactRedux = __webpack_require__(20);
 
 var _actions = __webpack_require__(21);
@@ -14408,7 +14412,7 @@ var Rebates = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'rebates__title' },
-                    rebate.rebate
+                    _strings2.default.toTitleCase(rebate.rebate)
                 ),
                 _react2.default.createElement(
                     'div',
