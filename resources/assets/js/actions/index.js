@@ -193,9 +193,13 @@ export function requestMoreDeals() {
 }
 
 export function sortDeals(sort) {
-    return {
-        type: ActionTypes.SORT_DEALS,
-        sort,
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.SORT_DEALS,
+            sort,
+        });
+
+        dispatch(requestDeals());
     };
 }
 

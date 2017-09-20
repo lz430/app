@@ -1358,9 +1358,13 @@ function requestMoreDeals() {
 }
 
 function sortDeals(sort) {
-    return {
-        type: ActionTypes.SORT_DEALS,
-        sort: sort
+    return function (dispatch) {
+        dispatch({
+            type: ActionTypes.SORT_DEALS,
+            sort: sort
+        });
+
+        dispatch(requestDeals());
     };
 }
 
@@ -52254,24 +52258,10 @@ var Sortbar = function (_React$PureComponent) {
         _this.state = {
             dropdownShown: false
         };
-
-        _this.toggleDropdownShown = _this.toggleDropdownShown.bind(_this);
         return _this;
     }
 
     _createClass(Sortbar, [{
-        key: 'renderIcon',
-        value: function renderIcon(column) {
-            var icon = this.props.sortAscending ? 'cheveron-up' : 'cheveron-down';
-
-            return this.props.sortColumn === column ? _react2.default.createElement(_reactSvgInline2.default, {
-                height: '18px',
-                width: '18px',
-                className: 'sortbar__sort-icon',
-                svg: _zondicons2.default[icon]
-            }) : '';
-        }
-    }, {
         key: 'renderFilterToggle',
         value: function renderFilterToggle() {
             return _util2.default.windowIsLargerThanSmall(this.props.window.width) ? '' : _react2.default.createElement(
@@ -52295,40 +52285,6 @@ var Sortbar = function (_React$PureComponent) {
             );
         }
     }, {
-        key: 'renderSortbarButtons',
-        value: function renderSortbarButtons() {
-            var _this2 = this;
-
-            return _react2.default.createElement(
-                'div',
-                { className: 'sortbar__buttons' },
-                _react2.default.createElement(
-                    'button',
-                    {
-                        className: 'sortbar__button sortbar__button',
-                        onClick: function onClick() {
-                            _this2.props.sortDeals('price');
-                            _this2.props.requestDeals();
-                        }
-                    },
-                    this.renderIcon('price'),
-                    ' Price'
-                ),
-                _react2.default.createElement(
-                    'button',
-                    {
-                        className: 'sortbar__button sortbar__button',
-                        onClick: function onClick() {
-                            _this2.props.sortDeals('year');
-                            _this2.props.requestDeals();
-                        }
-                    },
-                    this.renderIcon('year'),
-                    ' Year'
-                )
-            );
-        }
-    }, {
         key: 'toggleDropdownShown',
         value: function toggleDropdownShown() {
             this.setState({
@@ -52336,8 +52292,22 @@ var Sortbar = function (_React$PureComponent) {
             });
         }
     }, {
+        key: 'renderIcon',
+        value: function renderIcon(column) {
+            var icon = this.props.sortAscending ? 'cheveron-up' : 'cheveron-down';
+
+            return this.props.sortColumn === column ? _react2.default.createElement(_reactSvgInline2.default, {
+                height: '18px',
+                width: '18px',
+                className: 'sortbar__sort-icon',
+                svg: _zondicons2.default[icon]
+            }) : '';
+        }
+    }, {
         key: 'renderSortbarDropdown',
         value: function renderSortbarDropdown() {
+            var _this2 = this;
+
             var icon = this.state.dropdownShown ? 'cheveron-down' : 'cheveron-up';
 
             return _react2.default.createElement(
@@ -52347,7 +52317,9 @@ var Sortbar = function (_React$PureComponent) {
                     'button',
                     {
                         className: 'sortbar__button sortbar__button',
-                        onClick: this.toggleDropdownShown
+                        onClick: function onClick() {
+                            return _this2.toggleDropdownShown();
+                        }
                     },
                     'Sort',
                     _react2.default.createElement(_reactSvgInline2.default, {
@@ -52360,7 +52332,30 @@ var Sortbar = function (_React$PureComponent) {
                 this.state.dropdownShown ? _react2.default.createElement(
                     'div',
                     { className: 'sortbar__dropdown' },
-                    'Sort Stuff'
+                    _react2.default.createElement(
+                        'div',
+                        { onClick: function onClick() {
+                                return _this2.props.sortDeals('price');
+                            } },
+                        'Price ',
+                        this.renderIcon('price')
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { onClick: function onClick() {
+                                return _this2.props.sortDeals('make');
+                            } },
+                        'Make ',
+                        this.renderIcon('make')
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { onClick: function onClick() {
+                                return _this2.props.sortDeals('year');
+                            } },
+                        'Year ',
+                        this.renderIcon('year')
+                    )
                 ) : ''
             );
         }
@@ -52371,7 +52366,7 @@ var Sortbar = function (_React$PureComponent) {
                 'div',
                 { className: 'sortbar' },
                 this.renderFilterToggle(),
-                _util2.default.windowIsLargerThanSmall(this.props.window.width) ? this.renderSortbarButtons() : this.renderSortbarDropdown()
+                this.renderSortbarDropdown()
             );
         }
     }]);
@@ -55256,10 +55251,33 @@ var ComparePage = function (_React$PureComponent) {
             );
         }
     }, {
-        key: 'renderSelectionsTable',
-        value: function renderSelectionsTable(compareList) {
+        key: 'renderAccordionTabHeader',
+        value: function renderAccordionTabHeader(accordionTab) {
             var _this3 = this;
 
+            return _react2.default.createElement(
+                'div',
+                {
+                    onClick: function onClick() {
+                        return _this3.toggleAccordion(accordionTab);
+                    },
+                    className: 'compare-page-table__header'
+                },
+                _react2.default.createElement(_reactSvgInline2.default, {
+                    className: 'compare-page-table__header-chevron',
+                    svg: this.state.openAccordion === accordionTab ? _zondicons2.default['cheveron-down'] : _zondicons2.default['cheveron-up']
+                }),
+                accordionTab
+            );
+        }
+    }, {
+        key: 'columnClass',
+        value: function columnClass(accordionTab) {
+            return 'compare-page-table__columns ' + (this.state.openAccordion !== accordionTab ? 'compare-page-table__columns--closed' : '');
+        }
+    }, {
+        key: 'renderSelectionsTable',
+        value: function renderSelectionsTable(compareList) {
             var maxNumberCells = _ramda2.default.reduce(function (carry, dealAndSelectedFilters) {
                 return _ramda2.default.max(_ramda2.default.propOr([], 'selectedFeatures', dealAndSelectedFilters.selectedFilters).length, carry);
             }, 0, compareList);
@@ -55267,21 +55285,10 @@ var ComparePage = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 { className: 'compare-page-table' },
+                this.renderAccordionTabHeader('Your Selections'),
                 _react2.default.createElement(
                     'div',
-                    {
-                        onClick: function onClick() {
-                            return _this3.toggleAccordion('Your Selections');
-                        },
-                        className: 'compare-page-table__header'
-                    },
-                    'Your Selections'
-                ),
-                _react2.default.createElement(
-                    'div',
-                    {
-                        className: 'compare-page-table__columns ' + (this.state.openAccordion !== 'Your Selections' ? 'compare-page-table__columns--closed' : '')
-                    },
+                    { className: this.columnClass('Your Selections') },
                     compareList.map(function (_ref, index) {
                         var deal = _ref.deal,
                             selectedFilters = _ref.selectedFilters;
@@ -55348,21 +55355,10 @@ var ComparePage = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 { className: 'compare-page-table' },
+                this.renderAccordionTabHeader('Rebates and Incentives'),
                 _react2.default.createElement(
                     'div',
-                    {
-                        onClick: function onClick() {
-                            return _this4.toggleAccordion('Rebates and Incentives');
-                        },
-                        className: 'compare-page-table__header'
-                    },
-                    'Rebates and Incentives'
-                ),
-                _react2.default.createElement(
-                    'div',
-                    {
-                        className: 'compare-page-table__columns ' + (this.state.openAccordion !== 'Rebates and Incentives' ? 'compare-page-table__columns--closed' : '')
-                    },
+                    { className: this.columnClass('Rebates and Incentives') },
                     compareList.map(function (dealAndSelectedFilters, index) {
                         return _react2.default.createElement(
                             'div',
