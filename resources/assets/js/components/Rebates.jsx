@@ -102,7 +102,9 @@ class Rebates extends React.PureComponent {
                 ) : (
                     <div className="rebates__checkbox" />
                 )}
-                <div className="rebates__title">{strings.toTitleCase(rebate.rebate)}</div>
+                <div className="rebates__title">
+                    {strings.toTitleCase(rebate.rebate)}
+                </div>
                 <div className="rebates__value">
                     -{util.moneyFormat(rebate.value)}
                 </div>
