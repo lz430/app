@@ -12,6 +12,8 @@
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
+
+use App\Feature;
 use Carbon\Carbon;
 
 $factory->define(App\User::class, function (Faker\Generator $faker) {
@@ -138,8 +140,8 @@ $factory->define(App\Deal::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Feature::class, function (Faker\Generator $faker) {
     return [
-        'feature' => $faker->sentence(3),
-        'group' => $faker->word,
+        'feature' => $faker->randomElement(Feature::WHITELIST),
+        'group' => $faker->randomElement(Feature::GROUPS),
     ];
 });
 

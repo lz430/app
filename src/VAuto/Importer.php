@@ -220,6 +220,12 @@ class Importer
         Deal::where('file_hash', '!=', $fileHash)->whereDoesntHave('purchases')->delete();
     }
 
+    private function getGroupWithOverrides(string $feature, string $group)
+    {
+        /** If group contains "seat" then it should be in "seating" category */
+        return str_contains($feature, 'seat') ? Feature::GROUP_SEATING : $group;
+    }
+
     private function saveVersionFeaturesByGroup(Deal $deal, array $features, string $group)
     {
         collect($features)->reduce(function (Collection $carry, $jatoFeature) {
@@ -236,7 +242,7 @@ class Importer
                     ], [
                         'feature' => $featureAndContent['feature'],
                         'content' => $featureAndContent['content'],
-                        'group' => $group,
+                        'group' => $this->getGroupWithOverrides($featureAndContent['feature'], $group),
                     ]);
 
                     $feature->deals()->save($deal);
@@ -249,7 +255,7 @@ class Importer
 
     private function saveVersionFeatures(Deal $deal)
     {
-        $jatoVehicleId = $deal->versions->first()->jato_vehicle_id;
+        $jatoVehicleId =  $deal->versions->first()->jato_vehicle_id;
 
         $promises = [
             Feature::GROUP_SAFETY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 11),
@@ -267,6 +273,40 @@ class Importer
                 json_decode((string) $response->getBody(), true)['results'],
                 $group
             );
+        }
+
+        $this->saveCustomHackyFeatures($deal);
+    }
+
+    private function saveCustomHackyFeatures(Deal $deal)
+    {
+        $jatoVersion = $deal->versions->first();
+
+        if ($jatoVersion->body_style === 'Pickup') {
+            try {
+                $doorCount = Feature::updateOrCreate([
+                    'feature' => "$deal->door_count Door",
+                    'content' => $deal->door_count,
+                ], [
+                    'feature' => "$deal->door_count Door",
+                    'content' => $deal->door_count,
+                    'group' => Feature::GROUP_TRUCK,
+                ]);
+
+                $cabType = Feature::updateOrCreate([
+                    'feature' => "$jatoVersion->cab Cab",
+                    'content' => $jatoVersion->cab,
+                ], [
+                    'feature' => "$jatoVersion->cab Cab",
+                    'content' => $jatoVersion->cab,
+                    'group' => Feature::GROUP_TRUCK,
+                ]);
+
+                $doorCount->deals()->save($deal);
+                $cabType->deals()->save($deal);
+            } catch (QueryException $e) {
+                // Already Saved.
+            }
         }
     }
 
@@ -385,6 +425,7 @@ class Importer
             'msrp' => $version['msrp'] !== '' ? $version['msrp'] : null,
             'invoice' => $version['invoice'] !== '' ? $version['invoice'] : null,
             'body_style' => $version['bodyStyleName'],
+            'cab' => $version['cabType'] !== '' ? $version['cabType'] : null,
             'photo_path' => $version['photoPath'],
             'fuel_econ_city' => $version['fuelEconCity'] !== ''
                 ? $version['fuelEconCity']
