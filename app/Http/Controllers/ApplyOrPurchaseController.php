@@ -118,12 +118,12 @@ class ApplyOrPurchaseController extends Controller
                     $purchase->user_id = $user->id;
                     $purchase->save();
                 });
-        
+
+                auth()->user()->delete();
                 auth()->login($user);
             } else {
                 $user = auth()->user();
             }
-
             $user->email = $request->email;
             $user->save();
             return $user;
@@ -155,8 +155,8 @@ class ApplyOrPurchaseController extends Controller
                 'purchase_id' => 'required|exists:purchases,id',
                 'method' => 'string',
             ]);
-            $purchase = Purchase::findOrFail(request('purchase_id'));
 
+            $purchase = Purchase::findOrFail(request('purchase_id'));
 
             return $this->handlePurchase($purchase);
         } catch (ValidationException | ModelNotFoundException $e) {
@@ -195,7 +195,12 @@ class ApplyOrPurchaseController extends Controller
 
     public function viewApply()
     {
-        JavaScriptFacade::put(['purchase' => session('purchase')]);
+        $purchase = session('purchase');
+        JavaScriptFacade::put([
+            'featuredPhoto' => $purchase->deal->featuredPhoto(),
+            'purchase' => $purchase,
+            'user' => $purchase->buyer
+        ]);
 
         return view('view-apply');
     }
