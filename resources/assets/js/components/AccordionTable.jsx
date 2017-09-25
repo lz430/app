@@ -8,7 +8,11 @@ class AccordionTable extends React.PureComponent {
     }
 
     render() {
-        return this.props.children();
+        return(
+            <div className="compare-page-table__accordion">
+                {this.props.children()}
+            </div>
+        );
     }
 }
 
