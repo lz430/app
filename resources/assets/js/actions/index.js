@@ -542,3 +542,17 @@ export function updateTermDuration(termDuration) {
         termDuration,
     };
 }
+
+export function updateAnnualMileage(annualMileage) {
+    return {
+        type: ActionTypes.UPDATE_ANNUAL_MILEAGE,
+        annualMileage,
+    };
+}
+
+export function updateResidualPercent(residualPercent) {
+    return {
+        type: ActionTypes.UPDATE_RESIDUAL_PERCENT,
+        residualPercent,
+    };
+}

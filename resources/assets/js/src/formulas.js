@@ -28,11 +28,12 @@ const formulas = {
         price,
         downPayment,
         deliveryCost,
-        term
+        term,
+        residualPercent
     ) => {
         const interestRate = 4;
         const capitalizedCost = price + deliveryCost - downPayment;
-        const jatoResidualValue = 0.61;
+        const jatoResidualValue = residualPercent * 0.01;
         const depreciation =
             (capitalizedCost - capitalizedCost * jatoResidualValue) / term;
         const interest =

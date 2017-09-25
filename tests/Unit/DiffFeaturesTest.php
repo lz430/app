@@ -29,7 +29,7 @@ class DiffFeaturesTest extends TestCase
 
         $deal->features()->save($feature);
 
-        $dealTransformer = new DealTransformer();
+        $dealTransformer = new DealTransformer;
 
         $this->assertEquals(
             /** This is the pipe delimited string without "ABS brakes" */

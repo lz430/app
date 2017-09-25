@@ -141,6 +141,14 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 downPayment: action.downPayment,
             });
+        case ActionTypes.UPDATE_ANNUAL_MILEAGE:
+            return Object.assign({}, state, {
+                annualMileage: action.annualMileage,
+            });
+        case ActionTypes.UPDATE_RESIDUAL_PERCENT:
+            return Object.assign({}, state, {
+                residualPercent: action.residualPercent,
+            });
         case ActionTypes.UPDATE_TERM_DURATION:
             return Object.assign({}, state, {
                 termDuration: action.termDuration,

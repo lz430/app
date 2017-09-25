@@ -15,7 +15,6 @@ use Carbon\Carbon;
 use DeliverMyRide\HubSpot\Client;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -43,7 +42,7 @@ class ApplyOrPurchaseController extends Controller
                 // Finance and lease values.
                 'term' => 'required_if:type,finance,lease|integer',
                 'down_payment' => 'required_if:type,finance,lease|integer',
-                'amount_financed' => 'required_if:type,finance,lease|numeric'
+                'amount_financed' => 'required_if:type,finance,lease|numeric',
             ]);
 
             /**
@@ -199,7 +198,7 @@ class ApplyOrPurchaseController extends Controller
         JavaScriptFacade::put([
             'featuredPhoto' => $purchase->deal->featuredPhoto(),
             'purchase' => $purchase,
-            'user' => $purchase->buyer
+            'user' => $purchase->buyer,
         ]);
 
         return view('view-apply');

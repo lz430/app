@@ -15,7 +15,7 @@ class FeaturesTest extends TestCase
     {
         // Given 5 features
         factory(Feature::class, 5)->create();
-    
+
         // And another feature that does not have a group set
         factory(Feature::class)->create([
             'group' => null,
