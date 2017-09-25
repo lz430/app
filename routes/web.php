@@ -22,6 +22,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('purchase', 'ApplyOrPurchaseController@purchase')->name('purchase');
     Route::get('thank-you', 'ApplyOrPurchaseController@thankYou')->name('thank-you');
 
-    Route::get('apply', 'ApplyOrPurchaseController@viewApply')->name('viewApply');
+    Route::get('apply', 'ApplyOrPurchaseController@viewApply')->name('view-apply');
     Route::post('apply', 'ApplyOrPurchaseController@apply')->name('apply');
 });

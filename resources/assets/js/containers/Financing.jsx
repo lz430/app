@@ -6,19 +6,23 @@ class Financing extends Component {
         super(props);
 
         this.state = {
-            url:
-                'https://itl.routeone.net/XRD/turnKeyOcaStart.do?rteOneDmsId=F00PRZ&dealerId=AX0PG' +
-                `&buyOrLease=1` +
+            url: 'https://itl.routeone.net/XRD/turnKeyOcaStart.do?rteOneDmsId=F00DMR' +
+                `&dealerId=${props.purchase.deal.dealer.route_one_id}` +
+                `&buyOrLease=${props.purchase.type === 'finance' ? 1 : 2}` +
+                `&email=${props.user.email}` +
                 `&vehicleYear=${props.purchase.deal.year}` +
                 `&vehicleMake=${props.purchase.deal.make}` +
                 `&vehicleModel=${props.purchase.deal.model}` +
                 `&contractTerms_vehiclestyle=${props.purchase.deal.body}` +
                 `&vehicle_vin=${props.purchase.deal.vin}` +
                 `&contractTerms_msrp=${props.purchase.deal.msrp}` +
-                `&vehicle_image_url=${props.purchase.deal.photos
-                    ? props.purchase.deal.photos[0].url
+                `&contractTerms_cash_down=${props.purchase.down_payment}` +
+                `&contractTerms_financed_amount=${props.purchase.amount_financed}` +
+                `&contractTerms_term=${props.purchase.term}` +
+                `&vehicle_image_url=${props.featuredPhoto
+                    ? props.featuredPhoto.url
                     : ''}` +
-                `&dealership_name=${props.purchase.deal.dealer_name}`,
+                `&dealership_name=${props.purchase.deal.dealer.name}`,
         };
     }
 

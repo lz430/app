@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use DeliverMyRide\HubSpot\Client;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -117,13 +118,12 @@ class ApplyOrPurchaseController extends Controller
                     $purchase->user_id = $user->id;
                     $purchase->save();
                 });
-        
+
                 auth()->user()->delete();
                 auth()->login($user);
             } else {
                 $user = auth()->user();
             }
-
             $user->email = $request->email;
             $user->save();
             return $user;
@@ -137,14 +137,10 @@ class ApplyOrPurchaseController extends Controller
         return (function () use ($purchase) {
             switch ($purchase->type) {
                 case Purchase::CASH:
-                case Purchase::LEASE:
                     return $this->handlePurchase($purchase);
+                case Purchase::LEASE:
                 case Purchase::FINANCE:
-                    JavaScriptFacade::put([
-                        'purchase' => $purchase,
-                    ]);
-
-                    return view('view-apply')
+                    return redirect()->route('view-apply')
                         ->with('purchase', $purchase);
                 default:
                     return abort('500');
@@ -195,6 +191,18 @@ class ApplyOrPurchaseController extends Controller
         }
 
         return redirect()->route('thank-you', ['method' => $purchase->type]);
+    }
+
+    public function viewApply()
+    {
+        $purchase = session('purchase');
+        JavaScriptFacade::put([
+            'featuredPhoto' => $purchase->deal->featuredPhoto(),
+            'purchase' => $purchase,
+            'user' => $purchase->buyer
+        ]);
+
+        return view('view-apply');
     }
 
     public function apply()
