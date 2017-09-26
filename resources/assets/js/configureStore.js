@@ -23,6 +23,8 @@ const initialState = {
     selectedTab: 'cash',
     downPayment: 0,
     termDuration: 60,
+    annualMileage: null,
+    residualPercent: null,
     selectedDeal: null,
     selectedStyles: urlStyle ? [urlStyle] : [],
     bodyStyles: null,

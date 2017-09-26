@@ -22,6 +22,7 @@ Route::get('features', 'FeaturesController@index')->name('features.index');
 Route::get('rebates', 'RebatesController@getRebates')->name('rebates.getRebates');
 Route::get('rebates/best', 'RebatesController@getBestRebateIds')->name('rebates.getBestRebateIds');
 Route::get('warranties', 'WarrantiesController@getWarranties')->name('warranties.getWarranties');
+Route::get('lease-rates', 'LeaseRatesController@getLeaseRates')->name('lease-rates.getLeaseRates');
 Route::get('dimensions', 'DimensionsController@getDimensions')->name('dimensions.getDimensions');
 Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');
 

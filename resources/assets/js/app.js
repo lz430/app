@@ -24,7 +24,13 @@ Array.from(document.getElementsByTagName('FilterPage')).map(element => {
  * Financing
  */
 Array.from(document.getElementsByTagName('Financing')).map(element => {
-    ReactDOM.render(<Financing purchase={DeliverMyRide.purchase} user={DeliverMyRide.user} />, element);
+    ReactDOM.render(
+        <Financing
+            purchase={DeliverMyRide.purchase}
+            user={DeliverMyRide.user}
+        />,
+        element
+    );
 });
 
 /**

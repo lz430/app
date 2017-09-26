@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddDealerInfoColumnsToDealersTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('dealers', function (Blueprint $table) {
@@ -25,11 +20,6 @@ class AddDealerInfoColumnsToDealersTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('dealers', function (Blueprint $table) {
