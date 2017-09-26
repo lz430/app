@@ -5,6 +5,7 @@ import rebates from 'src/rebates';
 import api from 'src/api';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
+import strings from 'src/strings';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
 
@@ -101,7 +102,9 @@ class Rebates extends React.PureComponent {
                 ) : (
                     <div className="rebates__checkbox" />
                 )}
-                <div className="rebates__title">{rebate.rebate}</div>
+                <div className="rebates__title">
+                    {strings.toTitleCase(rebate.rebate)}
+                </div>
                 <div className="rebates__value">
                     -{util.moneyFormat(rebate.value)}
                 </div>

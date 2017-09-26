@@ -11,6 +11,9 @@ import Modal from 'components/Modal';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import rebates from 'src/rebates';
 import string from 'src/strings';
+import AccordionTable from 'components/AccordionTable';
+import util from 'src/util';
+import api from 'src/api';
 
 class ComparePage extends React.PureComponent {
     constructor(props) {
@@ -22,9 +25,39 @@ class ComparePage extends React.PureComponent {
                 qs.parse(window.location.search.slice(1))
             ),
             openAccordion: 'Your Selections',
+            dealWarranties: {},
         };
         this.renderDeal = this.renderDeal.bind(this);
         this.intendedRoute = this.intendedRoute.bind(this);
+    }
+
+    componentDidMount() {
+        this.componentWillReceiveProps(this.props);
+    }
+
+    componentWillReceiveProps(props) {
+        props.compareList.map(dealAndSelectedFilters => {
+            if (
+                this.state.dealWarranties.hasOwnProperty(
+                    dealAndSelectedFilters.deal.id
+                )
+            )
+                return;
+
+            api
+                .getWarranties(
+                    dealAndSelectedFilters.deal.versions[0].jato_vehicle_id
+                )
+                .then(data => {
+                    let dealWarranties = this.state.dealWarranties;
+
+                    dealWarranties[dealAndSelectedFilters.deal.id] = data.data;
+
+                    this.setState({
+                        dealWarranties,
+                    });
+                });
+        });
     }
 
     toggleAccordion(openAccordion) {
@@ -96,6 +129,34 @@ class ComparePage extends React.PureComponent {
         );
     }
 
+    renderAccordionTabHeader(accordionTab) {
+        return (
+            <div
+                onClick={() => this.toggleAccordion(accordionTab)}
+                className="compare-page-table__header"
+            >
+                <SVGInline
+                    className="compare-page-table__header-cheveron"
+                    svg={
+                        this.state.openAccordion === accordionTab ? (
+                            zondicons['cheveron-down']
+                        ) : (
+                            zondicons['cheveron-up']
+                        )
+                    }
+                />
+                {accordionTab}
+            </div>
+        );
+    }
+
+    columnClass(accordionTab) {
+        return `compare-page-table__columns ${this.state.openAccordion !==
+        accordionTab
+            ? 'compare-page-table__columns--closed'
+            : ''}`;
+    }
+
     renderSelectionsTable(compareList) {
         const maxNumberCells = R.reduce(
             (carry, dealAndSelectedFilters) => {
@@ -114,18 +175,8 @@ class ComparePage extends React.PureComponent {
 
         return (
             <div className="compare-page-table">
-                <div
-                    onClick={() => this.toggleAccordion('Your Selections')}
-                    className="compare-page-table__header"
-                >
-                    Your Selections
-                </div>
-                <div
-                    className={`compare-page-table__columns ${this.state
-                        .openAccordion !== 'Your Selections'
-                        ? 'compare-page-table__columns--closed'
-                        : ''}`}
-                >
+                {this.renderAccordionTabHeader('Your Selections')}
+                <div className={this.columnClass('Your Selections')}>
                     {compareList.map(({ deal, selectedFilters }, index) => {
                         return (
                             <div
@@ -199,19 +250,8 @@ class ComparePage extends React.PureComponent {
 
         return (
             <div className="compare-page-table">
-                <div
-                    onClick={() =>
-                        this.toggleAccordion('Rebates and Incentives')}
-                    className="compare-page-table__header"
-                >
-                    Rebates and Incentives
-                </div>
-                <div
-                    className={`compare-page-table__columns ${this.state
-                        .openAccordion !== 'Rebates and Incentives'
-                        ? 'compare-page-table__columns--closed'
-                        : ''}`}
-                >
+                {this.renderAccordionTabHeader('Rebates and Incentives')}
+                <div className={this.columnClass('Rebates and Incentives')}>
                     {compareList.map((dealAndSelectedFilters, index) => {
                         return (
                             <div
@@ -259,6 +299,79 @@ class ComparePage extends React.PureComponent {
         );
     }
 
+    renderPricingTable(compareList) {
+        return (
+            <div className="compare-page-table">
+                {this.renderAccordionTabHeader('Pricing')}
+                <div className={this.columnClass('Pricing')}>
+                    {compareList.map((dealAndSelectedFilters, index) => {
+                        const deal = dealAndSelectedFilters.deal;
+                        return (
+                            <div
+                                key={index}
+                                className="compare-page-table__column"
+                            >
+                                <div className="compare-page-table__cell">
+                                    MSRP: {util.moneyFormat(deal.msrp)}
+                                </div>
+                                <div className="compare-page-table__cell">
+                                    Invoice:{' '}
+                                    {util.moneyFormat(deal.versions[0].invoice)}
+                                </div>
+                                <div className="compare-page-table__cell">
+                                    Delivery: Always Free!
+                                </div>
+                                <div className="compare-page-table__cell">
+                                    Deliver My Ride Price:{' '}
+                                    {util.moneyFormat(deal.price)}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        );
+    }
+
+    renderWarrantyTable(compareList) {
+        return (
+            <div className="compare-page-table">
+                {this.renderAccordionTabHeader('Warranty')}
+                <div className={this.columnClass('Warranty')}>
+                    {compareList.map((dealAndSelectedFilters, index) => {
+                        const deal = dealAndSelectedFilters.deal;
+                        return (
+                            <div
+                                key={index}
+                                className="compare-page-table__column"
+                            >
+                                {this.state.dealWarranties.hasOwnProperty(
+                                    deal.id
+                                ) ? (
+                                    this.state.dealWarranties[
+                                        deal.id
+                                    ].map((warranty, index) => {
+                                        return (
+                                            <div
+                                                key={index}
+                                                className="compare-page-table__cell"
+                                            >
+                                                {warranty.feature}:{' '}
+                                                {warranty.content}
+                                            </div>
+                                        );
+                                    })
+                                ) : (
+                                    'loading'
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        );
+    }
+
     render() {
         return (
             <div className="compare-page">
@@ -274,7 +387,13 @@ class ComparePage extends React.PureComponent {
                         {this.props.deals.map(this.renderDeal)}
                     </div>
                     {this.props.compareList.length ? (
-                        this.renderSelectionsTable(this.props.compareList)
+                        <AccordionTable>
+                            {() => {
+                                return this.renderSelectionsTable(
+                                    this.props.compareList
+                                );
+                            }}
+                        </AccordionTable>
                     ) : (
                         ''
                     )}
@@ -282,12 +401,31 @@ class ComparePage extends React.PureComponent {
                         deal => this.props.dealRebates.hasOwnProperty(deal.id),
                         this.props.deals
                     ) ? (
-                        this.renderRebatesAndIncentivesTable(
-                            this.props.compareList
-                        )
+                        <AccordionTable>
+                            {() => {
+                                return this.renderRebatesAndIncentivesTable(
+                                    this.props.compareList
+                                );
+                            }}
+                        </AccordionTable>
                     ) : (
                         'Loading...'
                     )}
+
+                    <AccordionTable>
+                        {() => {
+                            return this.renderPricingTable(
+                                this.props.compareList
+                            );
+                        }}
+                    </AccordionTable>
+                    <AccordionTable>
+                        {() => {
+                            return this.renderWarrantyTable(
+                                this.props.compareList
+                            );
+                        }}
+                    </AccordionTable>
                 </div>
 
                 {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}

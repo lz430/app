@@ -1,15 +1,28 @@
 @import '../variables';
 
+$icon-margin: 10px;
+$icon-size: 20px;
+
 .compare-page-table {
   border: 1px solid $color-black;
   display: inline-flex;
   flex-direction: column;
 
   &__header {
+    align-items: center;
     background-color: $color-darkgrey;
     color: $color-text-white;
+    display: flex;
     font-weight: bold;
     padding: 5px 0 5px 10px;
+  }
+
+  &__header-cheveron {
+    fill: $color-text-white;
+    height: $icon-size;
+    margin-left: $icon-margin;
+    margin-right: $icon-margin;
+    width: $icon-size;
   }
 
   &__columns {

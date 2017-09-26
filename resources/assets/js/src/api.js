@@ -13,6 +13,14 @@ const api = {
             },
         });
     },
+    getLeaseRates: (jato_vehicle_id, zipcode) => {
+        return window.axios.get('/api/lease-rates', {
+            params: {
+                jato_vehicle_id,
+                zipcode,
+            },
+        });
+    },
     getWarranties: jato_vehicle_id => {
         return window.axios.get('/api/warranties', {
             params: {
@@ -34,6 +42,7 @@ const api = {
         bodyStyles,
         fuelType,
         transmissionType,
+        segment,
         features,
         includes,
         sortColumn,
@@ -49,6 +58,7 @@ const api = {
                 body_styles: bodyStyles,
                 fuel_type: fuelType,
                 transmission_type: transmissionType,
+                segment: segment,
                 features,
                 includes,
                 sort: sort(sortColumn, sortAscending),

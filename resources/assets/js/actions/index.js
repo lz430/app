@@ -12,6 +12,7 @@ const withStateDefaults = (state, changed) => {
             bodyStyles: state.selectedStyles,
             fuelType: state.selectedFuelType,
             transmissionType: state.selectedTransmissionType,
+            segment: state.selectedSegment,
             features: state.selectedFeatures,
             includes: ['photos'],
             sortColumn: state.sortColumn,
@@ -147,9 +148,17 @@ export function receiveDeals(data) {
 }
 
 export function receiveDealRebates(data) {
-    return {
-        type: ActionTypes.RECEIVE_DEAL_REBATES,
-        data: data,
+    return dispatch => {
+        data.data.data.rebates.map(rebate => {
+            if (rebate.openOffer) {
+                dispatch(selectRebate(rebate));
+            }
+        });
+
+        dispatch({
+            type: ActionTypes.RECEIVE_DEAL_REBATES,
+            data: data,
+        });
     };
 }
 
@@ -184,9 +193,13 @@ export function requestMoreDeals() {
 }
 
 export function sortDeals(sort) {
-    return {
-        type: ActionTypes.SORT_DEALS,
-        sort,
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.SORT_DEALS,
+            sort,
+        });
+
+        dispatch(requestDeals());
     };
 }
 
@@ -297,7 +310,33 @@ export function chooseTransmissionType(transmissionType) {
 
         dispatch({
             type: ActionTypes.CHOOSE_TRANSMISSION_TYPE,
-            selectedTransmissionType: selectedTransmissionType,
+            selectedTransmissionType,
+        });
+    };
+}
+
+export function chooseSegment(segment) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
+        const selectedSegment =
+            getState().selectedSegment === segment ? null : segment;
+
+        api
+            .getDeals(
+                withStateDefaults(getState(), {
+                    segment: selectedSegment,
+                })
+            )
+            .then(data => {
+                dispatch(receiveDeals(data));
+            });
+
+        dispatch({
+            type: ActionTypes.CHOOSE_SEGMENT,
+            selectedSegment,
         });
     };
 }
@@ -476,6 +515,13 @@ export function clearSelectedDeal() {
     };
 }
 
+export function selectRebate(rebate) {
+    return {
+        type: ActionTypes.SELECT_REBATE,
+        rebate,
+    };
+}
+
 export function toggleRebate(rebate) {
     return {
         type: ActionTypes.TOGGLE_REBATE,
@@ -494,5 +540,19 @@ export function updateTermDuration(termDuration) {
     return {
         type: ActionTypes.UPDATE_TERM_DURATION,
         termDuration,
+    };
+}
+
+export function updateAnnualMileage(annualMileage) {
+    return {
+        type: ActionTypes.UPDATE_ANNUAL_MILEAGE,
+        annualMileage,
+    };
+}
+
+export function updateResidualPercent(residualPercent) {
+    return {
+        type: ActionTypes.UPDATE_RESIDUAL_PERCENT,
+        residualPercent,
     };
 }

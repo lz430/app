@@ -12,6 +12,8 @@
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
+
+use App\Feature;
 use Carbon\Carbon;
 
 $factory->define(App\User::class, function (Faker\Generator $faker) {
@@ -104,9 +106,7 @@ $factory->define(App\JATO\Option::class, function (Faker\Generator $faker) {
 $factory->define(App\Deal::class, function (Faker\Generator $faker) {
     return [
         'file_hash' => $faker->md5,
-        'dealer_id' => function () {
-            return factory(App\Dealer::class)->create()->dealer_id;
-        },
+        'dealer_id' => factory(App\Dealer::class)->create()->dealer_id,
         'stock_number' => 'AH2844A',
         'vin' => '3C4NJDBB4HT628358',
         'new' => true,
@@ -138,14 +138,14 @@ $factory->define(App\Deal::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Feature::class, function (Faker\Generator $faker) {
     return [
-        'feature' => $faker->sentence(3),
-        'group' => $faker->word,
+        'feature' => $faker->unique()->randomElement(Feature::WHITELIST),
+        'group' => $faker->randomElement(Feature::GROUPS),
     ];
 });
 
 $factory->define(App\Dealer::class, function (Faker\Generator $faker) {
     return [
-        'dealer_id' => $faker->randomNumber(),
+        'dealer_id' => $faker->unique()->randomNumber(),
         'latitude' => $faker->latitude,
         'longitude' => $faker->longitude,
         'name' => $faker->company,

@@ -44,6 +44,19 @@ class Client
         );
     }
 
+    public function programsByVehicleIdAndCategoryIdAndZipCode($vehicleId, $categoryId, $zipcode)
+    {
+        return json_decode(
+            (string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId", [
+                'query' => [
+                    'category' => 8,
+                    'zipCode' => $zipcode,
+                ],
+            ])->getBody(),
+            true
+        );
+    }
+
     public function featuresByVehicleIdAndCategoryIdAsync($vehicleId, $categoryId)
     {
         return $this->guzzleClient->requestAsync('GET', "features/$vehicleId/$categoryId?pageSize=100");

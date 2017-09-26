@@ -118,13 +118,36 @@ const reducer = (state, action) => {
                     action.rebate
                 ),
             });
+        case ActionTypes.SELECT_REBATE:
+            if (!R.contains(action.rebate, state.selectedRebates)) {
+                return Object.assign({}, state, {
+                    selectedRebates: util.toggleItem(
+                        state.selectedRebates,
+                        action.rebate
+                    ),
+                });
+            }
+
+            return state;
         case ActionTypes.CHOOSE_FUEL_TYPE:
             return Object.assign({}, state, {
                 selectedFuelType: action.selectedFuelType,
             });
+        case ActionTypes.CHOOSE_SEGMENT:
+            return Object.assign({}, state, {
+                selectedSegment: action.selectedSegment,
+            });
         case ActionTypes.UPDATE_DOWN_PAYMENT:
             return Object.assign({}, state, {
                 downPayment: action.downPayment,
+            });
+        case ActionTypes.UPDATE_ANNUAL_MILEAGE:
+            return Object.assign({}, state, {
+                annualMileage: action.annualMileage,
+            });
+        case ActionTypes.UPDATE_RESIDUAL_PERCENT:
+            return Object.assign({}, state, {
+                residualPercent: action.residualPercent,
             });
         case ActionTypes.UPDATE_TERM_DURATION:
             return Object.assign({}, state, {

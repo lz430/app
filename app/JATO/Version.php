@@ -11,6 +11,16 @@ use Illuminate\Support\Facades\DB;
 
 class Version extends Model
 {
+    public const SEGMENT_MAP = [
+        'Subcompact' => [
+            'mini',
+            'light',
+        ],
+        'Compact' => ['compact'],
+        'Mid-size' => ['medium'],
+        'Full-size' => ['heavy'],
+    ];
+
     protected $guarded = ['id'];
 
     protected $casts = [
@@ -50,6 +60,11 @@ class Version extends Model
     public function deals()
     {
         return $this->belongsToMany(Deal::class);
+    }
+
+    public function scopeFilterBySegment(Builder $query, string $segment) : Builder
+    {
+        return $query->whereIn('segment', self::SEGMENT_MAP[$segment]);
     }
     
     public function scopeFilterByBodyStyle(Builder $query, $bodyStyles) : Builder

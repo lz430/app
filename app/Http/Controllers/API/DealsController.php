@@ -26,17 +26,17 @@ class DealsController extends BaseAPIController
             'make_ids' => 'sometimes|required|array',
             'body_styles' => 'sometimes|required|array',
             'fuel_type' => 'sometimes|required|string',
+            'segment' => 'sometimes|required|string|in:Subcompact,Compact,Mid-size,Full-size',
             'transmission_type' => 'sometimes|required|string|in:automatic,manual',
             'sort' => 'sometimes|required|string',
             'zipcode' => 'sometimes|required|string',
         ]);
 
-        $dealsQuery = $this->getQueryByMakesAndBodyStyles($request);
+        $dealsQuery = $this->makeDealsQuery($request);
         $dealsQuery = $this->filterQueryByLocationDistance($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByFuelType($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByTransmissionType($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByFeatures($dealsQuery, $request);
-        $dealsQueryCopy = clone $dealsQuery;
         $dealsQuery = Sort::sortQuery($dealsQuery, $request->get('sort', 'price'));
 
         $deals = $dealsQuery->paginate(15);
@@ -47,18 +47,6 @@ class DealsController extends BaseAPIController
             ->transformWith(self::TRANSFORMER)
             ->serializeWith(new DataArraySerializer)
             ->paginateWith(new IlluminatePaginatorAdapter($deals))
-            ->parseIncludes($request->get('includes', []))
-            ->addMeta([
-                'fuelTypes' => $dealsQueryCopy->select('fuel')->distinct()->pluck('fuel'),
-                'features' => Feature::hasGroup()->whereIn(
-                    'id',
-                    DB::table('deal_feature')
-                        ->select('feature_id')
-                        ->distinct()
-                        ->whereIn('deal_id', $dealsQueryCopy->select('id')->distinct()->pluck('id'))
-                        ->pluck('feature_id')
-                )->select('feature')->distinct()->pluck('feature'),
-            ])
             ->respond();
     }
 
@@ -83,11 +71,15 @@ class DealsController extends BaseAPIController
         return $query;
     }
 
-    private function getQueryByMakesAndBodyStyles(Request $request) : Builder
+    private function makeDealsQuery(Request $request) : Builder
     {
         return Deal::whereHas('versions', function (Builder $query) use ($request) {
             if ($request->has('body_styles')) {
                 $query->filterByBodyStyle($request->get('body_styles'));
+            }
+
+            if ($request->has('segment')) {
+                $query->filterBySegment($request->get('segment'));
             }
 
             $query->whereHas('model', function (Builder $query) use ($request) {

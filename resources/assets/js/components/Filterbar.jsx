@@ -15,6 +15,7 @@ class Filterbar extends React.PureComponent {
         this.renderFilterTransmissionType = this.renderFilterTransmissionType.bind(
             this
         );
+        this.renderFilterSegment = this.renderFilterSegment.bind(this);
         this.renderFilterFeatures = this.renderFilterFeatures.bind(this);
         this.renderX = this.renderX.bind(this);
     }
@@ -51,6 +52,17 @@ class Filterbar extends React.PureComponent {
                 onClick={this.props.chooseFuelType.bind(null, fuelType)}
             >
                 {fuelType} {this.renderX()}
+            </div>
+        );
+    }
+
+    renderFilterSegment(segment) {
+        return (
+            <div
+                className="filterbar__filter"
+                onClick={this.props.chooseSegment.bind(null, segment)}
+            >
+                {segment} {this.renderX()}
             </div>
         );
     }
@@ -105,6 +117,11 @@ class Filterbar extends React.PureComponent {
 
                 <div className="filterbar__filters">
                     {this.props.selectedStyles.map(this.renderFilterStyles)}
+                    {this.props.selectedSegment ? (
+                        this.renderFilterSegment(this.props.selectedSegment)
+                    ) : (
+                        ''
+                    )}
                     {this.props.selectedMakes.map(this.renderFilterMakes)}
                     {this.props.selectedFuelType ? (
                         this.renderFilterFuelType(this.props.selectedFuelType)
@@ -144,6 +161,7 @@ Filterbar.propTypes = {
     selectedMakes: PropTypes.arrayOf(PropTypes.string).isRequired,
     selectedTransmissionType: PropTypes.string,
     selectedFuelType: PropTypes.string,
+    selectedSegment: PropTypes.string,
     selectedFeatures: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
@@ -154,6 +172,7 @@ function mapStateToProps(state) {
         selectedMakes: state.selectedMakes,
         selectedTransmissionType: state.selectedTransmissionType,
         selectedFuelType: state.selectedFuelType,
+        selectedSegment: state.selectedSegment,
         selectedFeatures: state.selectedFeatures,
     };
 }

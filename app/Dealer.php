@@ -21,7 +21,7 @@ class Dealer extends Model
         'zip',
         'phone',
         'contact_name',
-        'contact_title'
+        'contact_title',
     ];
 
     public function deals()

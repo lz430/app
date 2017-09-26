@@ -122,7 +122,8 @@ class DealPrice extends React.PureComponent {
                                     ),
                                 0,
                                 0,
-                                this.props.termDuration
+                                this.props.termDuration,
+                                R.or(this.props.residualPercent, 31)
                             )
                         )
                     )}
@@ -211,6 +212,7 @@ const mapStateToProps = state => {
     return {
         downPayment: state.downPayment,
         termDuration: state.termDuration,
+        residualPercent: state.residualPercent,
         selectedTab: state.selectedTab,
         dealRebates: state.dealRebates,
         selectedRebates: state.selectedRebates,
