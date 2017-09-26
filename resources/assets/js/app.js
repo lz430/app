@@ -26,11 +26,11 @@ Array.from(document.getElementsByTagName('FilterPage')).map(element => {
 Array.from(document.getElementsByTagName('Financing')).map(element => {
     ReactDOM.render(
         <Financing
+            featuredPhoto={DeliverMyRide.featuredPhoto}
             purchase={DeliverMyRide.purchase}
-            user={DeliverMyRide.user}
+            user={DeliverMyRide.user} 
         />,
-        element
-    );
+        element);
 });
 
 /**
