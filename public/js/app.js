@@ -23175,7 +23175,8 @@ Array.from(document.getElementsByTagName('Financing')).map(function (element) {
     _reactDom2.default.render(_react2.default.createElement(_Financing2.default, {
         featuredPhoto: DeliverMyRide.featuredPhoto,
         purchase: DeliverMyRide.purchase,
-        user: DeliverMyRide.user }), element);
+        user: DeliverMyRide.user
+    }), element);
 });
 
 /**
