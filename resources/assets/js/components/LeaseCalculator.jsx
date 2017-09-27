@@ -213,12 +213,71 @@ class LeaseCalculator extends React.PureComponent {
         );
     }
 
+    renderDueAtSigning() {
+        const totalRebates = R.sum(
+            R.map(R.prop('value'), this.props.selectedRebates)
+        );
+
+        return (
+            <div>
+                <span>Taxes due at signing</span>
+                <span style={{ float: 'right' }}>
+                    {this.props.availableRebates ? (
+                        util.moneyFormat(
+                            formulas.calculateLeaseTaxesDueAtSigning(
+                                totalRebates,
+                                this.props.downPayment,
+                                this.props.deal.doc_fee
+                            )
+                        )
+                    ) : (
+                        'Loading...'
+                    )}
+                </span>
+            </div>
+        );
+    }
+
+    renderSalesTax() {
+        return (
+            <div>
+                <span>Sales tax</span>
+                <span style={{ float: 'right' }}>6%</span>
+            </div>
+        );
+    }
+
+    renderYourRebatesAndIncentives() {
+        return (
+            <div>
+                <span>Your Rebates and Incentives</span>
+                <span style={{ float: 'right' }}>
+                    {this.props.availableRebates ? (
+                        util.moneyFormat(
+                            R.sum(
+                                R.map(
+                                    R.prop('value'),
+                                    this.props.selectedRebates
+                                )
+                            )
+                        )
+                    ) : (
+                        'Loading...'
+                    )}
+                </span>
+            </div>
+        );
+    }
+
     render() {
         return (
             <div>
                 Lease Price {util.moneyFormat(this.props.deal.price)}
-                <hr />
-                Available Rebates and Incentives on Lease
+                {this.state.selectedRebates ? (
+                    <hr /> + 'Available Rebates and Incentives on Lease'
+                ) : (
+                    ''
+                )}
                 <Rebates />
                 <hr />
                 Summary
@@ -235,31 +294,20 @@ class LeaseCalculator extends React.PureComponent {
                             {util.moneyFormat(this.props.deal.price)}
                         </span>
                     </div>
-                    <div>
-                        <span>Your Rebates and Incentives</span>
-                        <span style={{ float: 'right' }}>
-                            {this.props.availableRebates ? (
-                                util.moneyFormat(
-                                    R.sum(
-                                        R.map(
-                                            R.prop('value'),
-                                            this.props.selectedRebates
-                                        )
-                                    )
-                                )
-                            ) : (
-                                'Loading...'
-                            )}
-                        </span>
-                    </div>
+                    {this.renderYourRebatesAndIncentives()}
                 </div>
                 <hr />
                 <div>
                     Lease Summary
+                    {this.renderDueAtSigning()}
                     {this.renderTermDurationSelect()}
                     {this.renderAnnualMileageSelect()}
                 </div>
-                {this.renderMonthlyLeasePayment()}
+                <div>
+                    Monthly Payment
+                    {this.renderSalesTax()}
+                    {this.renderMonthlyLeasePayment()}
+                </div>
             </div>
         );
     }

@@ -28,9 +28,10 @@ Array.from(document.getElementsByTagName('Financing')).map(element => {
         <Financing
             featuredPhoto={DeliverMyRide.featuredPhoto}
             purchase={DeliverMyRide.purchase}
-            user={DeliverMyRide.user} 
+            user={DeliverMyRide.user}
         />,
-        element);
+        element
+    );
 });
 
 /**
