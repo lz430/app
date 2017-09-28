@@ -8,6 +8,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    margin-right: 2px;
   }
 
   &__style {
@@ -24,7 +25,7 @@
     width: 50%;
 
     &--selected {
-      outline: 1px solid red;
+      outline: 1px solid $color-blue;
     }
   }
 

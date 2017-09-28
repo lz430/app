@@ -66,6 +66,11 @@ class Version extends Model
     {
         return $query->whereIn('segment', self::SEGMENT_MAP[$segment]);
     }
+
+    public function scopeFilterByModel(Builder $query, array $modelIds) : Builder
+    {
+        return $query->whereIn('model_id', $modelIds);
+    }
     
     public function scopeFilterByBodyStyle(Builder $query, $bodyStyles) : Builder
     {

@@ -31,6 +31,9 @@ const api = {
     getMakes: () => {
         return window.axios.get('/api/makes');
     },
+    getModels: () => {
+        return window.axios.get('/api/models');
+    },
     getFeatures: () => {
         return window.axios.get('/api/features');
     },
@@ -39,6 +42,7 @@ const api = {
     },
     getDeals: ({
         makeIds,
+        modelIds,
         bodyStyles,
         fuelType,
         transmissionType,
@@ -55,6 +59,7 @@ const api = {
         return window.axios.get('/api/deals', {
             params: {
                 make_ids: makeIds,
+                model_ids: modelIds,
                 body_styles: bodyStyles,
                 fuel_type: fuelType,
                 transmission_type: transmissionType,
