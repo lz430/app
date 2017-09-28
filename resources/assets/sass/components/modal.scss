@@ -35,6 +35,7 @@ $modal-footer-height: 60px;
     justify-content: center;
     max-height: calc(100vh - #{$offset-top});
     position: fixed;
+    right: 0;
     top: $modal-footer-height;
     width: 100vw;
     z-index: 1;

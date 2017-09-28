@@ -1,0 +1,60 @@
+@import '../variables';
+@import '../mixins/button';
+
+.thank-you {
+  display: flex;
+
+  &__button {
+    @include button;
+  }
+
+  &__left-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    padding: 20px;
+  }
+
+  &__left-panel-title {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  &__left-panel-subtitle {
+    font-size: 1.5rem;
+  }
+  &__left-panel-image {
+    align-self: center;
+  }
+
+  &__left-panel-buttons {
+    @include button;
+    display: flex;
+    justify-content: space-between;
+
+  }
+
+  &__left-panel-button {
+    @include button;
+    width: 30%;
+  }
+
+ &__right-panel {
+   background-color: $color-text-white;
+   display: flex;
+   flex: 1;
+   flex-direction: column;
+   margin: 20px;
+   align-items: center;
+ }
+
+  &__modal {
+    padding: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  &__modal-close {
+    float: right;
+  }
+}

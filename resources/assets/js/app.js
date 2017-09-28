@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import store from 'configureStore';
 import ComparePage from 'containers/ComparePage';
 import DealDetails from 'containers/DealDetails';
+import ThankYouPage from 'containers/ThankYouPage';
 
 /**
  * Filter
@@ -55,6 +56,18 @@ Array.from(document.getElementsByTagName('DealDetails')).map(element => {
                 deal={JSON.parse(element.getAttribute('deal')).data}
                 intendedRoute={window.location.pathname}
             />
+        </Provider>,
+        element
+    );
+});
+
+/**
+ * Thank You
+ */
+Array.from(document.getElementsByTagName('ThankYouPage')).map(element => {
+    ReactDOM.render(
+        <Provider store={store()}>
+            <ThankYouPage />
         </Provider>,
         element
     );
