@@ -48,7 +48,7 @@ $make-img-size: 120px;
     }
 
     &--selected {
-      border: red solid 1px;
+      border: $color-blue solid 1px;
     }
 
     img {

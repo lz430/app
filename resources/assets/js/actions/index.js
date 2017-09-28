@@ -9,6 +9,7 @@ const withStateDefaults = (state, changed) => {
         {},
         {
             makeIds: state.selectedMakes,
+            modelIds: R.map(R.prop('id'), state.selectedModels),
             bodyStyles: state.selectedStyles,
             fuelType: state.selectedFuelType,
             transmissionType: state.selectedTransmissionType,
@@ -36,9 +37,28 @@ export function requestMakes() {
     };
 }
 
+export function requestModels() {
+    return dispatch => {
+        api.getModels().then(data => {
+            dispatch(receiveModels(data));
+        });
+
+        dispatch({
+            type: ActionTypes.REQUEST_MODELS,
+        });
+    };
+}
+
 export function receiveMakes(data) {
     return {
         type: ActionTypes.RECEIVE_MAKES,
+        data: data,
+    };
+}
+
+export function receiveModels(data) {
+    return {
+        type: ActionTypes.RECEIVE_MODELS,
         data: data,
     };
 }
@@ -114,6 +134,34 @@ export function toggleMake(make_id) {
         dispatch({
             type: ActionTypes.TOGGLE_MAKE,
             selectedMakes,
+        });
+    };
+}
+
+export function toggleModel(model) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
+        const selectedModels = util.toggleItem(
+            getState().selectedModels,
+            model
+        );
+
+        api
+            .getDeals(
+                withStateDefaults(getState(), {
+                    modelIds: R.map(R.prop('id'), selectedModels),
+                })
+            )
+            .then(data => {
+                dispatch(receiveDeals(data));
+            });
+
+        dispatch({
+            type: ActionTypes.TOGGLE_MODEL,
+            selectedModels,
         });
     };
 }

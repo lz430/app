@@ -4,6 +4,7 @@ import { persistStore, autoRehydrate } from 'redux-persist';
 import reducer from 'reducers/index';
 import {
     requestMakes,
+    requestModels,
     requestBodyStyles,
     requestFeatures,
     requestLocationInfo,
@@ -27,6 +28,8 @@ const initialState = {
     residualPercent: null,
     selectedDeal: null,
     selectedStyles: urlStyle ? [urlStyle] : [],
+    selectedModels: [],
+    models: null,
     bodyStyles: null,
     fuelTypes: ['Gasoline', 'Flex Fuel', 'Diesel', 'Hybrid'],
     transmissionTypes: ['automatic', 'manual'],
@@ -68,6 +71,7 @@ export default () => {
             store.dispatch(requestLocationInfo());
         });
         store.dispatch(requestMakes());
+        store.dispatch(requestModels());
         store.dispatch(requestBodyStyles());
         store.dispatch(requestFeatures());
 

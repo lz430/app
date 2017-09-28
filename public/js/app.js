@@ -1135,11 +1135,14 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.requestMakes = requestMakes;
+exports.requestModels = requestModels;
 exports.receiveMakes = receiveMakes;
+exports.receiveModels = receiveModels;
 exports.requestFeatures = requestFeatures;
 exports.receiveFeatures = receiveFeatures;
 exports.toggleFeature = toggleFeature;
 exports.toggleMake = toggleMake;
+exports.toggleModel = toggleModel;
 exports.requestRebates = requestRebates;
 exports.receiveDeals = receiveDeals;
 exports.receiveDealRebates = receiveDealRebates;
@@ -1198,6 +1201,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var withStateDefaults = function withStateDefaults(state, changed) {
     return Object.assign({}, {
         makeIds: state.selectedMakes,
+        modelIds: _ramda2.default.map(_ramda2.default.prop('id'), state.selectedModels),
         bodyStyles: state.selectedStyles,
         fuelType: state.selectedFuelType,
         transmissionType: state.selectedTransmissionType,
@@ -1223,9 +1227,28 @@ function requestMakes() {
     };
 }
 
+function requestModels() {
+    return function (dispatch) {
+        _api2.default.getModels().then(function (data) {
+            dispatch(receiveModels(data));
+        });
+
+        dispatch({
+            type: ActionTypes.REQUEST_MODELS
+        });
+    };
+}
+
 function receiveMakes(data) {
     return {
         type: ActionTypes.RECEIVE_MAKES,
+        data: data
+    };
+}
+
+function receiveModels(data) {
+    return {
+        type: ActionTypes.RECEIVE_MODELS,
         data: data
     };
 }
@@ -1287,6 +1310,27 @@ function toggleMake(make_id) {
         dispatch({
             type: ActionTypes.TOGGLE_MAKE,
             selectedMakes: selectedMakes
+        });
+    };
+}
+
+function toggleModel(model) {
+    return function (dispatch, getState) {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS
+        });
+
+        var selectedModels = _util2.default.toggleItem(getState().selectedModels, model);
+
+        _api2.default.getDeals(withStateDefaults(getState(), {
+            modelIds: _ramda2.default.map(_ramda2.default.prop('id'), selectedModels)
+        })).then(function (data) {
+            dispatch(receiveDeals(data));
+        });
+
+        dispatch({
+            type: ActionTypes.TOGGLE_MODEL,
+            selectedModels: selectedModels
         });
     };
 }
@@ -9978,6 +10022,9 @@ var api = {
     getMakes: function getMakes() {
         return window.axios.get('/api/makes');
     },
+    getModels: function getModels() {
+        return window.axios.get('/api/models');
+    },
     getFeatures: function getFeatures() {
         return window.axios.get('/api/features');
     },
@@ -9986,6 +10033,7 @@ var api = {
     },
     getDeals: function getDeals(_ref) {
         var makeIds = _ref.makeIds,
+            modelIds = _ref.modelIds,
             bodyStyles = _ref.bodyStyles,
             fuelType = _ref.fuelType,
             transmissionType = _ref.transmissionType,
@@ -10002,6 +10050,7 @@ var api = {
         return window.axios.get('/api/deals', {
             params: {
                 make_ids: makeIds,
+                model_ids: modelIds,
                 body_styles: bodyStyles,
                 fuel_type: fuelType,
                 transmission_type: transmissionType,
@@ -22518,8 +22567,11 @@ var SORT_DEALS = exports.SORT_DEALS = 'SORT_DEALS';
 var REQUEST_DEALS = exports.REQUEST_DEALS = 'REQUEST_DEALS';
 var REQUEST_MAKES = exports.REQUEST_MAKES = 'REQUEST_MAKES';
 var RECEIVE_MAKES = exports.RECEIVE_MAKES = 'RECEIVE_MAKES';
+var REQUEST_MODELS = exports.REQUEST_MODELS = 'REQUEST_MODELS';
+var RECEIVE_MODELS = exports.RECEIVE_MODELS = 'RECEIVE_MODELS';
 var RECEIVE_DEALS = exports.RECEIVE_DEALS = 'RECEIVE_DEALS';
 var TOGGLE_MAKE = exports.TOGGLE_MAKE = 'TOGGLE_MAKE';
+var TOGGLE_MODEL = exports.TOGGLE_MODEL = 'TOGGLE_MODEL';
 var REQUEST_MORE_DEALS = exports.REQUEST_MORE_DEALS = 'REQUEST_MORE_DEALS';
 var RECEIVE_MORE_DEALS = exports.RECEIVE_MORE_DEALS = 'RECEIVE_MORE_DEALS';
 var REQUEST_BODY_STYLES = exports.REQUEST_BODY_STYLES = 'REQUEST_BODY_STYLES';
@@ -52529,6 +52581,7 @@ var Filterbar = function (_React$PureComponent) {
 
         _this.renderFilterStyles = _this.renderFilterStyles.bind(_this);
         _this.renderFilterMakes = _this.renderFilterMakes.bind(_this);
+        _this.renderFilterModels = _this.renderFilterModels.bind(_this);
         _this.renderFilterTransmissionType = _this.renderFilterTransmissionType.bind(_this);
         _this.renderFilterSegment = _this.renderFilterSegment.bind(_this);
         _this.renderFilterFeatures = _this.renderFilterFeatures.bind(_this);
@@ -52621,6 +52674,21 @@ var Filterbar = function (_React$PureComponent) {
             );
         }
     }, {
+        key: 'renderFilterModels',
+        value: function renderFilterModels(model, index) {
+            return _react2.default.createElement(
+                'div',
+                {
+                    key: index,
+                    className: 'filterbar__filter',
+                    onClick: this.props.toggleModel.bind(null, model)
+                },
+                model.attributes.name,
+                ' ',
+                this.renderX()
+            );
+        }
+    }, {
         key: 'renderFilterFeatures',
         value: function renderFilterFeatures(feature, index) {
             return _react2.default.createElement(
@@ -52653,6 +52721,7 @@ var Filterbar = function (_React$PureComponent) {
                     this.props.selectedStyles.map(this.renderFilterStyles),
                     this.props.selectedSegment ? this.renderFilterSegment(this.props.selectedSegment) : '',
                     this.props.selectedMakes.map(this.renderFilterMakes),
+                    this.props.selectedModels.map(this.renderFilterModels),
                     this.props.selectedFuelType ? this.renderFilterFuelType(this.props.selectedFuelType) : '',
                     this.props.selectedTransmissionType ? this.renderFilterTransmissionType(this.props.selectedTransmissionType) : '',
                     this.props.selectedFeatures.map(this.renderFilterFeatures)
@@ -52692,7 +52761,9 @@ function mapStateToProps(state) {
     return {
         selectedStyles: state.selectedStyles,
         makes: state.makes,
+        models: state.selectedModels,
         selectedMakes: state.selectedMakes,
+        selectedModels: state.selectedModels,
         selectedTransmissionType: state.selectedTransmissionType,
         selectedFuelType: state.selectedFuelType,
         selectedSegment: state.selectedSegment,
@@ -52734,6 +52805,10 @@ var _FilterStyleSelector2 = _interopRequireDefault(_FilterStyleSelector);
 var _FilterMakeSelector = __webpack_require__(937);
 
 var _FilterMakeSelector2 = _interopRequireDefault(_FilterMakeSelector);
+
+var _FilterModelSelector = __webpack_require__(966);
+
+var _FilterModelSelector2 = _interopRequireDefault(_FilterModelSelector);
 
 var _FilterFuelTypeSelector = __webpack_require__(938);
 
@@ -52873,6 +52948,22 @@ var FilterPanel = function (_React$PureComponent) {
                         _SidebarFilter2.default,
                         {
                             toggle: function toggle() {
+                                return _this2.toggleOpenFilter('Model');
+                            },
+                            open: this.state.openFilter === 'Model',
+                            title: 'Model',
+                            count: this.props.selectedModels.length
+                        },
+                        _react2.default.createElement(_FilterModelSelector2.default, {
+                            models: this.props.models,
+                            selectedModels: this.props.selectedModels,
+                            onSelectModel: this.props.toggleModel
+                        })
+                    ),
+                    _react2.default.createElement(
+                        _SidebarFilter2.default,
+                        {
+                            toggle: function toggle() {
                                 return _this2.toggleOpenFilter('Fuel');
                             },
                             open: this.state.openFilter === 'Fuel',
@@ -52992,6 +53083,7 @@ var FilterPanel = function (_React$PureComponent) {
 var mapStateToProps = function mapStateToProps(state) {
     return {
         makes: state.makes,
+        models: state.models,
         fuelTypes: state.fuelTypes,
         selectedFuelType: state.selectedFuelType,
         transmissionTypes: state.transmissionTypes,
@@ -53001,6 +53093,7 @@ var mapStateToProps = function mapStateToProps(state) {
         selectedSegment: state.selectedSegment,
         selectedStyles: state.selectedStyles,
         selectedMakes: state.selectedMakes,
+        selectedModels: state.selectedModels,
         fallbackLogoImage: state.fallbackLogoImage,
         selectedFeatures: state.selectedFeatures,
         features: state.features
@@ -54813,6 +54906,8 @@ var initialState = {
     residualPercent: null,
     selectedDeal: null,
     selectedStyles: urlStyle ? [urlStyle] : [],
+    selectedModels: [],
+    models: null,
     bodyStyles: null,
     fuelTypes: ['Gasoline', 'Flex Fuel', 'Diesel', 'Hybrid'],
     transmissionTypes: ['automatic', 'manual'],
@@ -54848,6 +54943,7 @@ exports.default = function () {
             store.dispatch((0, _index3.requestLocationInfo)());
         });
         store.dispatch((0, _index3.requestMakes)());
+        store.dispatch((0, _index3.requestModels)());
         store.dispatch((0, _index3.requestBodyStyles)());
         store.dispatch((0, _index3.requestFeatures)());
 
@@ -55244,6 +55340,10 @@ var reducer = function reducer(state, action) {
             return Object.assign({}, state, {
                 makes: action.data.data.data
             });
+        case ActionTypes.RECEIVE_MODELS:
+            return Object.assign({}, state, {
+                models: action.data.data.data
+            });
         case ActionTypes.REQUEST_MORE_DEALS:
             return Object.assign({}, state, {
                 requestingMoreDeals: true
@@ -55286,6 +55386,10 @@ var reducer = function reducer(state, action) {
         case ActionTypes.TOGGLE_MAKE:
             return Object.assign({}, state, {
                 selectedMakes: action.selectedMakes
+            });
+        case ActionTypes.TOGGLE_MODEL:
+            return Object.assign({}, state, {
+                selectedModels: action.selectedModels
             });
         case ActionTypes.TOGGLE_FEATURE:
             return Object.assign({}, state, {
@@ -61580,6 +61684,100 @@ PI = new Decimal(pi);
 
 /* harmony default export */ __webpack_exports__["default"] = (Decimal);
 
+
+/***/ }),
+/* 966 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(11);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(27);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _ramda = __webpack_require__(13);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _reactSvgInline = __webpack_require__(35);
+
+var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
+
+var _zondicons = __webpack_require__(44);
+
+var _zondicons2 = _interopRequireDefault(_zondicons);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FilterModelSelector = function (_React$PureComponent) {
+    _inherits(FilterModelSelector, _React$PureComponent);
+
+    function FilterModelSelector() {
+        _classCallCheck(this, FilterModelSelector);
+
+        return _possibleConstructorReturn(this, (FilterModelSelector.__proto__ || Object.getPrototypeOf(FilterModelSelector)).apply(this, arguments));
+    }
+
+    _createClass(FilterModelSelector, [{
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'filter-selector' },
+                this.props.models ? this.props.models.map(function (model, index) {
+                    return _react2.default.createElement(
+                        'div',
+                        {
+                            key: index,
+                            className: 'filter-selector__selector',
+                            onClick: _this2.props.onSelectModel.bind(null, model)
+                        },
+                        _ramda2.default.contains(model, _this2.props.selectedModels) ? _react2.default.createElement(_reactSvgInline2.default, {
+                            width: '15px',
+                            height: '15px',
+                            className: 'filter-selector__checkbox filter-selector__checkbox--selected',
+                            svg: _zondicons2.default['checkmark']
+                        }) : _react2.default.createElement('div', { className: 'filter-selector__checkbox' }),
+                        model.attributes.name
+                    );
+                }) : 'Loading...'
+            );
+        }
+    }]);
+
+    return FilterModelSelector;
+}(_react2.default.PureComponent);
+
+FilterModelSelector.propTypes = {
+    models: _propTypes2.default.arrayOf(_propTypes2.default.shape({
+        name: _propTypes2.default.string
+    })),
+    selectedModels: _propTypes2.default.arrayOf(_propTypes2.default.shape({
+        name: _propTypes2.default.string
+    })),
+    onSelectModel: _propTypes2.default.func.isRequired
+};
+
+exports.default = FilterModelSelector;
 
 /***/ })
 /******/ ]);

@@ -24,6 +24,7 @@ class DealsController extends BaseAPIController
     {
         $this->validate($request, [
             'make_ids' => 'sometimes|required|array',
+            'model_ids' => 'sometimes|required|array',
             'body_styles' => 'sometimes|required|array',
             'fuel_type' => 'sometimes|required|string',
             'segment' => 'sometimes|required|string|in:Subcompact,Compact,Mid-size,Full-size',
@@ -80,6 +81,10 @@ class DealsController extends BaseAPIController
 
             if ($request->has('segment')) {
                 $query->filterBySegment($request->get('segment'));
+            }
+
+            if ($request->has('model_ids')) {
+                $query->filterByModel($request->get('model_ids'));
             }
 
             $query->whereHas('model', function (Builder $query) use ($request) {
