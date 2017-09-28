@@ -362,7 +362,8 @@ class DealDetails extends React.PureComponent {
                                         this.props.selectedTab,
                                         deal
                                     ),
-                                    this.props.termDuration
+                                    this.props.termDuration,
+                                    this.props.isEmployee
                                 )}
                         >
                             Buy Now
@@ -420,7 +421,8 @@ DealDetails.propTypes = {
     deal: PropTypes.shape({
         year: PropTypes.string.isRequired,
         msrp: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
+        employee_price: PropTypes.number.isRequired,
+        supplier_price: PropTypes.number.isRequired,
         make: PropTypes.string.isRequired,
         model: PropTypes.string.isRequired,
         id: PropTypes.number.isRequired,
@@ -438,6 +440,7 @@ const mapStateToProps = state => {
         termDuration: state.termDuration,
         fallbackDealImage: state.fallbackDealImage,
         selectedDeal: state.selectedDeal,
+        isEmployee: state.isEmployee,
     };
 };
 

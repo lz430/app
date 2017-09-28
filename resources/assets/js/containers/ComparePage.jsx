@@ -102,7 +102,8 @@ class ComparePage extends React.PureComponent {
                                     this.props.selectedTab,
                                     deal
                                 ),
-                                this.props.termDuration
+                                this.props.termDuration,
+                                this.props.isEmployee
                             )}
                     >
                         Buy Now
@@ -305,25 +306,35 @@ class ComparePage extends React.PureComponent {
                 {this.renderAccordionTabHeader('Pricing')}
                 <div className={this.columnClass('Pricing')}>
                     {compareList.map((dealAndSelectedFilters, index) => {
-                        const deal = dealAndSelectedFilters.deal;
                         return (
                             <div
                                 key={index}
                                 className="compare-page-table__column"
                             >
                                 <div className="compare-page-table__cell">
-                                    MSRP: {util.moneyFormat(deal.msrp)}
+                                    MSRP:{' '}
+                                    {util.moneyFormat(
+                                        dealAndSelectedFilters.deal.msrp
+                                    )}
                                 </div>
                                 <div className="compare-page-table__cell">
                                     Invoice:{' '}
-                                    {util.moneyFormat(deal.versions[0].invoice)}
+                                    {util.moneyFormat(
+                                        dealAndSelectedFilters.deal.versions[0]
+                                            .invoice
+                                    )}
                                 </div>
                                 <div className="compare-page-table__cell">
                                     Delivery: Always Free!
                                 </div>
                                 <div className="compare-page-table__cell">
                                     Deliver My Ride Price:{' '}
-                                    {util.moneyFormat(deal.price)}
+                                    {util.moneyFormat(
+                                        util.getEmployeeOrSupplierPrice(
+                                            dealAndSelectedFilters.deal,
+                                            this.props.isEmployee
+                                        )
+                                    )}
                                 </div>
                             </div>
                         );
@@ -443,6 +454,7 @@ const mapStateToProps = state => {
         dealRebates: state.dealRebates,
         selectedRebates: state.selectedRebates,
         termDuration: state.termDuration,
+        isEmployee: state.isEmployee,
     };
 };
 

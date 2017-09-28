@@ -28,8 +28,11 @@ const rebates = {
         const possibleRebatesForDeal = dealRebates[deal.id];
 
         return R.filter(possibleRebateForDeal => {
-            return R.map(R.prop('id'), selectedRebates).includes(
-                possibleRebateForDeal.id
+            return (
+                possibleRebateForDeal.types.includes(type) &&
+                R.map(R.prop('id'), selectedRebates).includes(
+                    possibleRebateForDeal.id
+                )
             );
         }, possibleRebatesForDeal);
     },

@@ -30,7 +30,8 @@ class Rebates extends React.PureComponent {
     componentWillReceiveProps(nextProps) {
         if (
             this.props.selectedRebates.length !==
-            nextProps.selectedRebates.length
+                nextProps.selectedRebates.length &&
+            nextProps.zipcode
         ) {
             this.updateCompatibleRebates(nextProps);
         }

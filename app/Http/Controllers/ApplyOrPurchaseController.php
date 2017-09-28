@@ -41,8 +41,8 @@ class ApplyOrPurchaseController extends Controller
                 'rebates.*.value' => 'required_with:rebates|numeric',
                 // Finance and lease values.
                 'term' => 'required_if:type,finance,lease|integer',
-                'down_payment' => 'required_if:type,finance,lease|integer',
-                'amount_financed' => 'required_if:type,finance,lease|numeric',
+                'down_payment' => 'required_if:type,finance|integer',
+                'amount_financed' => 'required_if:type,finance|numeric',
             ]);
 
             /**

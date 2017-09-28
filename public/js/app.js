@@ -1150,6 +1150,7 @@ exports.requestDeals = requestDeals;
 exports.requestMoreDeals = requestMoreDeals;
 exports.sortDeals = sortDeals;
 exports.receiveBodyStyles = receiveBodyStyles;
+exports.setIsEmployee = setIsEmployee;
 exports.receiveMoreDeals = receiveMoreDeals;
 exports.requestBodyStyles = requestBodyStyles;
 exports.toggleStyle = toggleStyle;
@@ -1338,7 +1339,8 @@ function toggleModel(model) {
 function requestRebates(deal) {
     return function (dispatch, getState) {
         // If we have already received the rebates for the deal, don't request them again.
-        if (getState().dealRebates.hasOwnProperty(deal.id)) return;
+        // Or if we don't yet have a zipcode
+        if (getState().dealRebates.hasOwnProperty(deal.id) || !getState().zipcode) return;
 
         _api2.default.getRebates(getState().zipcode, deal.vin).then(function (data) {
             dispatch(receiveDealRebates({
@@ -1418,6 +1420,13 @@ function receiveBodyStyles(deals) {
     return {
         type: ActionTypes.RECEIVE_BODY_STYLES,
         data: deals
+    };
+}
+
+function setIsEmployee(isEmployee) {
+    return {
+        type: ActionTypes.SET_IS_EMPLOYEE,
+        isEmployee: isEmployee
     };
 }
 
@@ -2641,10 +2650,13 @@ var util = {
             minimumFractionDigits: 0
         });
 
-        return formatter.format(num);
+        return formatter.format(Math.round(num));
     },
     toggleItem: function toggleItem(items, item) {
         return _ramda2.default.contains(item, items) ? _ramda2.default.reject(_ramda2.default.equals(item), items) : _ramda2.default.append(item, items);
+    },
+    getEmployeeOrSupplierPrice: function getEmployeeOrSupplierPrice(deal, isEmployee) {
+        return isEmployee ? deal.employee_price : deal.supplier_price;
     },
     getInitialBodyStyleFromUrl: function getInitialBodyStyleFromUrl() {
         return _ramda2.default.prop('style', _qs2.default.parse(window.location.search.slice(1)));
@@ -6064,7 +6076,7 @@ var rebates = {
         var possibleRebatesForDeal = dealRebates[deal.id];
 
         return _ramda2.default.filter(function (possibleRebateForDeal) {
-            return _ramda2.default.map(_ramda2.default.prop('id'), selectedRebates).includes(possibleRebateForDeal.id);
+            return possibleRebateForDeal.types.includes(type) && _ramda2.default.map(_ramda2.default.prop('id'), selectedRebates).includes(possibleRebateForDeal.id);
         }, possibleRebatesForDeal);
     }
 };
@@ -14089,11 +14101,11 @@ var _decimal2 = _interopRequireDefault(_decimal);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var formulas = {
-    calculateTotalCashFinance: function calculateTotalCashFinance(price, docFee, rebatesTotal) {
+    calculateTotalCashFinance: function calculateTotalCashFinance(price, docFee, downPayment, rebatesTotal) {
         var total = new _decimal2.default(price).plus(docFee);
         var totalWithSalesTax = total.plus(total.times(0.06));
 
-        return Number(totalWithSalesTax.minus(rebatesTotal));
+        return Number(totalWithSalesTax.minus(rebatesTotal).minus(downPayment));
     },
     calculateTotalLease: function calculateTotalLease(price, docFee, rebatesTotal) {
         var total = price + docFee;
@@ -14463,7 +14475,7 @@ var Rebates = function (_React$PureComponent) {
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(nextProps) {
-            if (this.props.selectedRebates.length !== nextProps.selectedRebates.length) {
+            if (this.props.selectedRebates.length !== nextProps.selectedRebates.length && nextProps.zipcode) {
                 this.updateCompatibleRebates(nextProps);
             }
         }
@@ -22598,6 +22610,7 @@ var TOGGLE_REBATE = exports.TOGGLE_REBATE = 'TOGGLE_REBATE';
 var SELECT_REBATE = exports.SELECT_REBATE = 'SELECT_REBATE';
 var CHOOSE_SEGMENT = exports.CHOOSE_SEGMENT = 'CHOOSE_SEGMENT';
 var UPDATE_DOWN_PAYMENT = exports.UPDATE_DOWN_PAYMENT = 'UPDATE_DOWN_PAYMENT';
+var SET_IS_EMPLOYEE = exports.SET_IS_EMPLOYEE = 'SET_IS_EMPLOYEE';
 var UPDATE_TERM_DURATION = exports.UPDATE_TERM_DURATION = 'UPDATE_TERM_DURATION';
 var UPDATE_ANNUAL_MILEAGE = exports.UPDATE_ANNUAL_MILEAGE = 'UPDATE_ANNUAL_MILEAGE';
 var UPDATE_RESIDUAL_PERCENT = exports.UPDATE_RESIDUAL_PERCENT = 'UPDATE_RESIDUAL_PERCENT';
@@ -22820,7 +22833,7 @@ var CompareBar = function (_React$PureComponent) {
                                 _react2.default.createElement(
                                     'div',
                                     null,
-                                    dealAndSelectedFilters.deal.price ? _util2.default.moneyFormat(dealAndSelectedFilters.deal.price) : ''
+                                    _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(dealAndSelectedFilters.deal, _this3.props.isEmployee))
                                 )
                             ),
                             _react2.default.createElement(_reactSvgInline2.default, {
@@ -22887,6 +22900,7 @@ var CompareBar = function (_React$PureComponent) {
 
 function mapStateToProps(state) {
     return {
+        isEmployee: state.isEmployee,
         window: state.window,
         compareList: state.compareList,
         zipcode: state.zipcode
@@ -23358,10 +23372,18 @@ var _ramda = __webpack_require__(13);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
+var _formulas = __webpack_require__(220);
+
+var _formulas2 = _interopRequireDefault(_formulas);
+
+var _util = __webpack_require__(36);
+
+var _util2 = _interopRequireDefault(_util);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var purchase = {
-    start: function start(deal, selectedTab, downPayment, selectedRebates, termDuration) {
+    start: function start(deal, selectedTab, downPayment, selectedRebates, termDuration, isEmployee) {
         var form = document.createElement('form');
         form.setAttribute('method', 'post');
         form.setAttribute('action', '/apply-or-purchase');
@@ -23376,10 +23398,10 @@ var purchase = {
         type.setAttribute('value', selectedTab);
         form.appendChild(type);
 
-        if (selectedTab !== 'cash') {
+        if (selectedTab === 'finance') {
             var amount_financed = document.createElement('input');
             amount_financed.setAttribute('name', 'amount_financed');
-            amount_financed.setAttribute('value', (deal.price - downPayment - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), selectedRebates))).toString());
+            amount_financed.setAttribute('value', _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(deal, isEmployee), deal.doc_fee, downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), selectedRebates))).toString());
             form.appendChild(amount_financed);
 
             var term = document.createElement('input');
@@ -23391,6 +23413,11 @@ var purchase = {
             down_payment.setAttribute('name', 'down_payment');
             down_payment.setAttribute('value', downPayment);
             form.appendChild(down_payment);
+        } else if (selectedTab === 'lease') {
+            var _term = document.createElement('input');
+            _term.setAttribute('name', 'term');
+            _term.setAttribute('value', termDuration);
+            form.appendChild(_term);
         }
 
         var deal_id = document.createElement('input');
@@ -23417,7 +23444,7 @@ var purchase = {
 
         var dmr_price = document.createElement('input');
         dmr_price.setAttribute('name', 'dmr_price');
-        dmr_price.setAttribute('value', (deal.price - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), selectedRebates))).toString());
+        dmr_price.setAttribute('value', (_util2.default.getEmployeeOrSupplierPrice(deal, isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), selectedRebates))).toString());
         form.appendChild(dmr_price);
 
         document.body.appendChild(form);
@@ -52039,7 +52066,8 @@ Deals.propTypes = {
     deals: _propTypes2.default.arrayOf(_propTypes2.default.shape({
         year: _propTypes2.default.string.isRequired,
         msrp: _propTypes2.default.number.isRequired,
-        price: _propTypes2.default.number.isRequired,
+        employee_price: _propTypes2.default.number.isRequired,
+        supplier_price: _propTypes2.default.number.isRequired,
         make: _propTypes2.default.string.isRequired,
         model: _propTypes2.default.string.isRequired,
         id: _propTypes2.default.number.isRequired
@@ -52127,7 +52155,7 @@ var DealPrice = function (_React$PureComponent) {
     _createClass(DealPrice, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            if (!this.props.dealRebates.hasOwnProperty(this.props.deal.id)) {
+            if (!this.props.dealRebates.hasOwnProperty(this.props.deal.id) && this.props.zipcode) {
                 this.props.requestRebates(this.props.deal);
             } else {
                 this.componentWillReceiveProps(this.props);
@@ -52157,7 +52185,7 @@ var DealPrice = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__cash-price' },
-                    _util2.default.moneyFormat(this.props.deal.price)
+                    _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee))
                 ),
                 _react2.default.createElement('div', { className: 'deal-price__hr' }),
                 _react2.default.createElement(
@@ -52187,7 +52215,7 @@ var DealPrice = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__finance-lease-price' },
-                    this.props.dealRebates.hasOwnProperty(this.props.deal.id) ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(this.props.deal.price - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), this.props.downPayment, this.props.termDuration))) : 'Loading...'
+                    this.props.dealRebates.hasOwnProperty(this.props.deal.id) ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), this.props.downPayment, this.props.termDuration))) : 'Loading...'
                 ),
                 _react2.default.createElement('div', { className: 'deal-price__hr' })
             );
@@ -52206,7 +52234,7 @@ var DealPrice = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__finance-lease-price' },
-                    _util2.default.moneyFormat(Math.round(_formulas2.default.calculateLeasedMonthlyPayments(this.props.deal.price - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31))))
+                    _util2.default.moneyFormat(Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31))))
                 ),
                 _react2.default.createElement('div', { className: 'deal-price__hr' })
             );
@@ -52307,6 +52335,7 @@ var DealPrice = function (_React$PureComponent) {
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
+        isEmployee: state.isEmployee,
         downPayment: state.downPayment,
         termDuration: state.termDuration,
         residualPercent: state.residualPercent,
@@ -52498,7 +52527,8 @@ Sortbar.propTypes = {
     deals: _propTypes2.default.arrayOf(_propTypes2.default.shape({
         year: _propTypes2.default.string.isRequired,
         msrp: _propTypes2.default.number.isRequired,
-        price: _propTypes2.default.number.isRequired,
+        employee_price: _propTypes2.default.number.isRequired,
+        supplier_price: _propTypes2.default.number.isRequired,
         make: _propTypes2.default.string.isRequired,
         model: _propTypes2.default.string.isRequired,
         id: _propTypes2.default.number.isRequired
@@ -53867,6 +53897,10 @@ var _Rebates = __webpack_require__(222);
 
 var _Rebates2 = _interopRequireDefault(_Rebates);
 
+var _CustomerTypeSelect = __webpack_require__(967);
+
+var _CustomerTypeSelect2 = _interopRequireDefault(_CustomerTypeSelect);
+
 var _rebates = __webpack_require__(84);
 
 var _rebates2 = _interopRequireDefault(_rebates);
@@ -53906,8 +53940,10 @@ var CashCalculator = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 null,
-                'Cash Price ',
-                _util2.default.moneyFormat(this.props.deal.price),
+                'Cash Price',
+                ' ',
+                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee)),
+                _react2.default.createElement(_CustomerTypeSelect2.default, null),
                 _react2.default.createElement('hr', null),
                 'Available Rebates and Incentives',
                 _react2.default.createElement(_Rebates2.default, null),
@@ -53941,7 +53977,7 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { style: { float: 'right' } },
-                            _util2.default.moneyFormat(this.props.deal.price)
+                            _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee))
                         )
                     ),
                     _react2.default.createElement(
@@ -53969,7 +54005,7 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { style: { float: 'right' } },
-                            _util2.default.moneyFormat(_formulas2.default.calculateSalesTaxCashFinance(this.props.deal.price, this.props.deal.doc_fee))
+                            _util2.default.moneyFormat(_formulas2.default.calculateSalesTaxCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee), this.props.deal.doc_fee))
                         )
                     ),
                     _react2.default.createElement(
@@ -53997,7 +54033,7 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { style: { float: 'right', color: 'green' } },
-                            _util2.default.moneyFormat(_formulas2.default.calculateTotalCashFinance(this.props.deal.price, this.props.deal.doc_fee, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))))
+                            _util2.default.moneyFormat(_formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee), this.props.deal.doc_fee, this.props.downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))))
                         )
                     )
                 )
@@ -54011,6 +54047,8 @@ var CashCalculator = function (_React$PureComponent) {
 function mapStateToProps(state) {
     return {
         deal: state.selectedDeal,
+        downPayment: state.downPayment,
+        isEmployee: state.isEmployee,
         selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal)
     };
 }
@@ -54045,6 +54083,10 @@ var _ramda2 = _interopRequireDefault(_ramda);
 var _Rebates = __webpack_require__(222);
 
 var _Rebates2 = _interopRequireDefault(_Rebates);
+
+var _CustomerTypeSelect = __webpack_require__(967);
+
+var _CustomerTypeSelect2 = _interopRequireDefault(_CustomerTypeSelect);
 
 var _rebates = __webpack_require__(84);
 
@@ -54092,7 +54134,7 @@ var FinanceCalculator = function (_React$PureComponent) {
     }, {
         key: 'getAmountToFinance',
         value: function getAmountToFinance() {
-            return this.props.availableRebates ? _formulas2.default.calculateTotalCashFinance(this.props.deal.price, this.props.deal.doc_fee, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))) : null;
+            return this.props.availableRebates ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee), this.props.deal.doc_fee, this.props.downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))) : null;
         }
     }, {
         key: 'renderTotalCostOfVehicle',
@@ -54110,7 +54152,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { style: { float: 'right', color: 'green' } },
-                    totalAmountToFinance ? _util2.default.moneyFormat(_formulas2.default.calculateTotalCashFinance(this.props.deal.price, this.props.deal.doc_fee, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)))) : 'Loading...'
+                    totalAmountToFinance ? _util2.default.moneyFormat(_formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee), this.props.deal.doc_fee, this.props.downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)))) : 'Loading...'
                 )
             );
         }
@@ -54180,8 +54222,10 @@ var FinanceCalculator = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 null,
-                'Finance Price ',
-                _util2.default.moneyFormat(this.props.deal.price),
+                'Finance Price',
+                ' ',
+                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee)),
+                _react2.default.createElement(_CustomerTypeSelect2.default, null),
                 _react2.default.createElement('hr', null),
                 'Available Rebates and Incentives on Finance',
                 _react2.default.createElement(_Rebates2.default, null),
@@ -54215,7 +54259,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { style: { float: 'right' } },
-                            _util2.default.moneyFormat(this.props.deal.price)
+                            _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee))
                         )
                     ),
                     _react2.default.createElement(
@@ -54243,7 +54287,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { style: { float: 'right' } },
-                            _util2.default.moneyFormat(_formulas2.default.calculateSalesTaxCashFinance(this.props.deal.price, this.props.deal.doc_fee))
+                            _util2.default.moneyFormat(_formulas2.default.calculateSalesTaxCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee), this.props.deal.doc_fee))
                         )
                     ),
                     this.renderYourRebatesAndIncentives(),
@@ -54350,6 +54394,7 @@ function mapStateToProps(state) {
         downPayment: state.downPayment,
         deal: state.selectedDeal,
         termDuration: state.termDuration,
+        isEmployee: state.isEmployee,
         availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal),
         selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal)
     };
@@ -54385,6 +54430,10 @@ var _ramda2 = _interopRequireDefault(_ramda);
 var _Rebates = __webpack_require__(222);
 
 var _Rebates2 = _interopRequireDefault(_Rebates);
+
+var _CustomerTypeSelect = __webpack_require__(967);
+
+var _CustomerTypeSelect2 = _interopRequireDefault(_CustomerTypeSelect);
 
 var _rebates = __webpack_require__(84);
 
@@ -54559,7 +54608,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { style: { float: 'right' } },
-                    this.props.availableRebates ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateLeasedMonthlyPayments(this.props.deal.price - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)), 0, 0, this.props.termDuration, this.props.residualPercent))) : 'Loading...'
+                    this.props.availableRebates ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)), 0, 0, this.props.termDuration, this.props.residualPercent))) : 'Loading...'
                 )
             );
         }
@@ -54642,6 +54691,7 @@ var LeaseCalculator = function (_React$PureComponent) {
     }, {
         key: 'renderYourRebatesAndIncentives',
         value: function renderYourRebatesAndIncentives() {
+            console.log(this.props.selectedRebates);
             return _react2.default.createElement(
                 'div',
                 null,
@@ -54663,8 +54713,10 @@ var LeaseCalculator = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 null,
-                'Lease Price ',
-                _util2.default.moneyFormat(this.props.deal.price),
+                'Lease Price',
+                ' ',
+                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee)),
+                _react2.default.createElement(_CustomerTypeSelect2.default, null),
                 this.state.selectedRebates ? _react2.default.createElement('hr', null) + 'Available Rebates and Incentives on Lease' : '',
                 _react2.default.createElement(_Rebates2.default, null),
                 _react2.default.createElement('hr', null),
@@ -54697,7 +54749,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { style: { float: 'right' } },
-                            _util2.default.moneyFormat(this.props.deal.price)
+                            _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee))
                         )
                     ),
                     this.renderYourRebatesAndIncentives()
@@ -54733,6 +54785,7 @@ function mapStateToProps(state) {
         termDuration: state.termDuration,
         annualMileage: state.annualMileage,
         residualPercent: state.residualPercent,
+        isEmployee: state.isEmployee,
         availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal),
         selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal)
     };
@@ -54916,6 +54969,7 @@ var initialState = {
     segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
     selectedFuelType: null,
     selectedMakes: [],
+    isEmployee: true,
     selectedFeatures: [],
     selectedRebates: [],
     dealRebates: {},
@@ -55391,6 +55445,10 @@ var reducer = function reducer(state, action) {
             return Object.assign({}, state, {
                 selectedModels: action.selectedModels
             });
+        case ActionTypes.SET_IS_EMPLOYEE:
+            return Object.assign({}, state, {
+                isEmployee: action.isEmployee
+            });
         case ActionTypes.TOGGLE_FEATURE:
             return Object.assign({}, state, {
                 selectedFeatures: action.selectedFeatures
@@ -55642,7 +55700,7 @@ var ComparePage = function (_React$PureComponent) {
                         {
                             className: 'deal__button deal__button--small ' + (_ramda2.default.contains(deal, this.props.compareList) ? 'deal__button--blue' : ''),
                             onClick: function onClick() {
-                                return _purchase2.default.start(deal, _this3.props.selectedTab, _this3.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this3.props.dealRebates, _this3.props.selectedRebates, _this3.props.selectedTab, deal), _this3.props.termDuration);
+                                return _purchase2.default.start(deal, _this3.props.selectedTab, _this3.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this3.props.dealRebates, _this3.props.selectedRebates, _this3.props.selectedTab, deal), _this3.props.termDuration, _this3.props.isEmployee);
                             }
                         },
                         'Buy Now'
@@ -55817,6 +55875,8 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderPricingTable',
         value: function renderPricingTable(compareList) {
+            var _this6 = this;
+
             return _react2.default.createElement(
                 'div',
                 { className: 'compare-page-table' },
@@ -55825,7 +55885,6 @@ var ComparePage = function (_React$PureComponent) {
                     'div',
                     { className: this.columnClass('Pricing') },
                     compareList.map(function (dealAndSelectedFilters, index) {
-                        var deal = dealAndSelectedFilters.deal;
                         return _react2.default.createElement(
                             'div',
                             {
@@ -55835,15 +55894,16 @@ var ComparePage = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'div',
                                 { className: 'compare-page-table__cell' },
-                                'MSRP: ',
-                                _util2.default.moneyFormat(deal.msrp)
+                                'MSRP:',
+                                ' ',
+                                _util2.default.moneyFormat(dealAndSelectedFilters.deal.msrp)
                             ),
                             _react2.default.createElement(
                                 'div',
                                 { className: 'compare-page-table__cell' },
                                 'Invoice:',
                                 ' ',
-                                _util2.default.moneyFormat(deal.versions[0].invoice)
+                                _util2.default.moneyFormat(dealAndSelectedFilters.deal.versions[0].invoice)
                             ),
                             _react2.default.createElement(
                                 'div',
@@ -55855,7 +55915,7 @@ var ComparePage = function (_React$PureComponent) {
                                 { className: 'compare-page-table__cell' },
                                 'Deliver My Ride Price:',
                                 ' ',
-                                _util2.default.moneyFormat(deal.price)
+                                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(dealAndSelectedFilters.deal, _this6.props.isEmployee))
                             )
                         );
                     })
@@ -55865,7 +55925,7 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderWarrantyTable',
         value: function renderWarrantyTable(compareList) {
-            var _this6 = this;
+            var _this7 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -55882,7 +55942,7 @@ var ComparePage = function (_React$PureComponent) {
                                 key: index,
                                 className: 'compare-page-table__column'
                             },
-                            _this6.state.dealWarranties.hasOwnProperty(deal.id) ? _this6.state.dealWarranties[deal.id].map(function (warranty, index) {
+                            _this7.state.dealWarranties.hasOwnProperty(deal.id) ? _this7.state.dealWarranties[deal.id].map(function (warranty, index) {
                                 return _react2.default.createElement(
                                     'div',
                                     {
@@ -55903,7 +55963,7 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
-            var _this7 = this;
+            var _this8 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -55931,30 +55991,30 @@ var ComparePage = function (_React$PureComponent) {
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this7.renderSelectionsTable(_this7.props.compareList);
+                            return _this8.renderSelectionsTable(_this8.props.compareList);
                         }
                     ) : '',
                     _ramda2.default.all(function (deal) {
-                        return _this7.props.dealRebates.hasOwnProperty(deal.id);
+                        return _this8.props.dealRebates.hasOwnProperty(deal.id);
                     }, this.props.deals) ? _react2.default.createElement(
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this7.renderRebatesAndIncentivesTable(_this7.props.compareList);
+                            return _this8.renderRebatesAndIncentivesTable(_this8.props.compareList);
                         }
                     ) : 'Loading...',
                     _react2.default.createElement(
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this7.renderPricingTable(_this7.props.compareList);
+                            return _this8.renderPricingTable(_this8.props.compareList);
                         }
                     ),
                     _react2.default.createElement(
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this7.renderWarrantyTable(_this7.props.compareList);
+                            return _this8.renderWarrantyTable(_this8.props.compareList);
                         }
                     )
                 ),
@@ -55974,7 +56034,8 @@ var mapStateToProps = function mapStateToProps(state) {
         selectedTab: state.selectedTab,
         dealRebates: state.dealRebates,
         selectedRebates: state.selectedRebates,
-        termDuration: state.termDuration
+        termDuration: state.termDuration,
+        isEmployee: state.isEmployee
     };
 };
 
@@ -56558,7 +56619,7 @@ var DealDetails = function (_React$PureComponent) {
                             {
                                 className: 'deal-details__button deal-details__button--small deal-details__button--blue',
                                 onClick: function onClick() {
-                                    return _purchase2.default.start(deal, _this5.props.selectedTab, _this5.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this5.props.dealRebates, _this5.props.selectedRebates, _this5.props.selectedTab, deal), _this5.props.termDuration);
+                                    return _purchase2.default.start(deal, _this5.props.selectedTab, _this5.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this5.props.dealRebates, _this5.props.selectedRebates, _this5.props.selectedTab, deal), _this5.props.termDuration, _this5.props.isEmployee);
                                 }
                             },
                             'Buy Now'
@@ -56631,7 +56692,8 @@ DealDetails.propTypes = {
     deal: _propTypes2.default.shape({
         year: _propTypes2.default.string.isRequired,
         msrp: _propTypes2.default.number.isRequired,
-        price: _propTypes2.default.number.isRequired,
+        employee_price: _propTypes2.default.number.isRequired,
+        supplier_price: _propTypes2.default.number.isRequired,
         make: _propTypes2.default.string.isRequired,
         model: _propTypes2.default.string.isRequired,
         id: _propTypes2.default.number.isRequired,
@@ -56648,7 +56710,8 @@ var mapStateToProps = function mapStateToProps(state) {
         selectedRebates: state.selectedRebates,
         termDuration: state.termDuration,
         fallbackDealImage: state.fallbackDealImage,
-        selectedDeal: state.selectedDeal
+        selectedDeal: state.selectedDeal,
+        isEmployee: state.isEmployee
     };
 };
 
@@ -61778,6 +61841,111 @@ FilterModelSelector.propTypes = {
 };
 
 exports.default = FilterModelSelector;
+
+/***/ }),
+/* 967 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(11);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _ramda = __webpack_require__(13);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _util = __webpack_require__(36);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _fuelapi = __webpack_require__(363);
+
+var _fuelapi2 = _interopRequireDefault(_fuelapi);
+
+var _DealPrice = __webpack_require__(929);
+
+var _DealPrice2 = _interopRequireDefault(_DealPrice);
+
+var _reactRedux = __webpack_require__(20);
+
+var _index = __webpack_require__(21);
+
+var Actions = _interopRequireWildcard(_index);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CustomerTypeSelect = function (_React$PureComponent) {
+    _inherits(CustomerTypeSelect, _React$PureComponent);
+
+    function CustomerTypeSelect() {
+        _classCallCheck(this, CustomerTypeSelect);
+
+        return _possibleConstructorReturn(this, (CustomerTypeSelect.__proto__ || Object.getPrototypeOf(CustomerTypeSelect)).apply(this, arguments));
+    }
+
+    _createClass(CustomerTypeSelect, [{
+        key: 'handleChange',
+        value: function handleChange(e) {
+            this.props.setIsEmployee(e.target.value === 'employee');
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'select',
+                    {
+                        value: this.props.isEmployee ? 'employee' : 'supplier',
+                        onChange: function onChange(e) {
+                            return _this2.handleChange(e);
+                        }
+                    },
+                    _react2.default.createElement(
+                        'option',
+                        { value: 'employee' },
+                        'Employee/Retiree'
+                    ),
+                    _react2.default.createElement(
+                        'option',
+                        { value: 'supplier' },
+                        'Supplier'
+                    )
+                )
+            );
+        }
+    }]);
+
+    return CustomerTypeSelect;
+}(_react2.default.PureComponent);
+
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        isEmployee: state.isEmployee
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(CustomerTypeSelect);
 
 /***/ })
 /******/ ]);
