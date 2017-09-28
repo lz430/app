@@ -25,19 +25,13 @@ const rebates = {
             return [];
         }
 
-        return R.filter(
-            selectedRebate =>
-                R.contains(
-                    selectedRebate.id,
-                    R.map(
-                        R.prop('id'),
-                        R.filter(rebate => {
-                            return R.contains(type, rebate.types);
-                        }, dealRebates[deal.id])
-                    )
-                ),
-            selectedRebates
-        );
+        const possibleRebatesForDeal = dealRebates[deal.id];
+
+        return R.filter(possibleRebateForDeal => {
+            return R.map(R.prop('id'), selectedRebates).includes(
+                possibleRebateForDeal.id
+            );
+        }, possibleRebatesForDeal);
     },
 };
 

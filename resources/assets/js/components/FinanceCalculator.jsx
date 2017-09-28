@@ -20,6 +20,108 @@ class FinanceCalculator extends React.PureComponent {
         this.props.updateTermDuration(Number(e.target.value));
     }
 
+    getAmountToFinance() {
+        return this.props.availableRebates
+            ? formulas.calculateTotalCashFinance(
+                  this.props.deal.price,
+                  this.props.deal.doc_fee,
+                  R.sum(R.map(R.prop('value'), this.props.selectedRebates))
+              )
+            : null;
+    }
+
+    renderTotalCostOfVehicle() {
+        const totalAmountToFinance = this.getAmountToFinance();
+
+        return (
+            <div>
+                <span>Total Cost of Vehicle</span>
+                <span style={{ float: 'right', color: 'green' }}>
+                    {totalAmountToFinance ? (
+                        util.moneyFormat(
+                            formulas.calculateTotalCashFinance(
+                                this.props.deal.price,
+                                this.props.deal.doc_fee,
+                                R.sum(
+                                    R.map(
+                                        R.prop('value'),
+                                        this.props.selectedRebates
+                                    )
+                                )
+                            )
+                        )
+                    ) : (
+                        'Loading...'
+                    )}
+                </span>
+            </div>
+        );
+    }
+
+    renderYourRebatesAndIncentives() {
+        return (
+            <div>
+                <span>Your Rebates and Incentives</span>
+                <span style={{ float: 'right' }}>
+                    {this.props.availableRebates ? (
+                        util.moneyFormat(
+                            R.sum(
+                                R.map(
+                                    R.prop('value'),
+                                    this.props.selectedRebates
+                                )
+                            )
+                        )
+                    ) : (
+                        'Loading...'
+                    )}
+                </span>
+            </div>
+        );
+    }
+
+    renderAmountFinanced() {
+        const totalAmountToFinance = this.getAmountToFinance();
+
+        return (
+            <div>
+                <span>Amount Financed</span>
+                <span style={{ float: 'right' }}>
+                    {totalAmountToFinance ? (
+                        util.moneyFormat(totalAmountToFinance)
+                    ) : (
+                        'Loading...'
+                    )}
+                </span>
+            </div>
+        );
+    }
+
+    renderYourMonthlyFinancePayment() {
+        const totalAmountToFinance = this.getAmountToFinance();
+
+        return (
+            <div>
+                <span>Your Monthly Finance Payment</span>
+                <span style={{ float: 'right' }}>
+                    {totalAmountToFinance ? (
+                        util.moneyFormat(
+                            Math.round(
+                                formulas.calculateFinancedMonthlyPayments(
+                                    totalAmountToFinance,
+                                    this.props.downPayment,
+                                    this.props.termDuration
+                                )
+                            )
+                        )
+                    ) : (
+                        'Loading...'
+                    )}
+                </span>
+            </div>
+        );
+    }
+
     render() {
         return (
             <div>
@@ -44,69 +146,28 @@ class FinanceCalculator extends React.PureComponent {
                     </div>
                     <div>
                         <span>Documentation Fee</span>
-                        <span style={{ float: 'right' }}>$0</span>
+                        <span style={{ float: 'right' }}>
+                            {util.moneyFormat(this.props.deal.doc_fee)}
+                        </span>
                     </div>
                     <div>
                         <span>Sales Tax</span>
-                        <span style={{ float: 'right' }}>$0</span>
-                    </div>
-                    <div>
-                        <span>Your Rebates and Incentives</span>
                         <span style={{ float: 'right' }}>
-                            {this.props.availableRebates ? (
-                                util.moneyFormat(
-                                    R.sum(
-                                        R.map(
-                                            R.prop('value'),
-                                            this.props.selectedRebates
-                                        )
-                                    )
-                                )
-                            ) : (
-                                'Loading...'
-                            )}
-                        </span>
-                    </div>
-                    <div>
-                        <span>Total Cost of Vehicle</span>
-                        <span style={{ float: 'right', color: 'green' }}>
                             {util.moneyFormat(
-                                this.props.deal.price -
-                                    R.sum(
-                                        R.map(
-                                            R.prop('value'),
-                                            this.props.selectedRebates
-                                        )
-                                    )
+                                formulas.calculateSalesTaxCashFinance(
+                                    this.props.deal.price,
+                                    this.props.deal.doc_fee
+                                )
                             )}
                         </span>
                     </div>
+                    {this.renderYourRebatesAndIncentives()}
+                    {this.renderTotalCostOfVehicle()}
                 </div>
                 <hr />
                 <div>
                     Calculate Your Payment
-                    <div>
-                        <span>Amount Financed</span>
-                        <span style={{ float: 'right' }}>
-                            {this.props.availableRebates ? (
-                                this.props.deal.price -
-                                this.props.downPayment -
-                                R.sum(
-                                    R.map(
-                                        R.prop('value'),
-                                        rebates.getSelectedRebatesForDealAndType(
-                                            this.props.dealRebates,
-                                            this.props.selectedRebates,
-                                            this.props.selectedTab,
-                                            this.props.deal
-                                        )
-                                    )
-                                )
-                            ) : (
-                                'Loading...'
-                            )}
-                        </span>
-                    </div>
+                    {this.renderAmountFinanced()}
                     <div>
                         <span>Down Payment (10%)</span>
                         <span style={{ float: 'right' }}>
@@ -136,33 +197,12 @@ class FinanceCalculator extends React.PureComponent {
                     </div>
                 </div>
                 <div>
-                    <span>Annual Percentage Rate</span>
+                    <span>
+                        Annual Percentage Rate (* 4% is an estimated APR)
+                    </span>
                     <span style={{ float: 'right' }}>4%</span>
                 </div>
-                <div>
-                    <span>Your Monthly Finance Payment</span>
-                    <span style={{ float: 'right' }}>
-                        {this.props.availableRebates ? (
-                            util.moneyFormat(
-                                Math.round(
-                                    formulas.calculateFinancedMonthlyPayments(
-                                        this.props.deal.price -
-                                            R.sum(
-                                                R.map(
-                                                    R.prop('value'),
-                                                    this.props.selectedRebates
-                                                )
-                                            ),
-                                        this.props.downPayment,
-                                        this.props.termDuration
-                                    )
-                                )
-                            )
-                        ) : (
-                            'Loading...'
-                        )}
-                    </span>
-                </div>
+                {this.renderYourMonthlyFinancePayment()}
             </div>
         );
     }

@@ -5,6 +5,7 @@ import Rebates from 'components/Rebates';
 import rebates from 'src/rebates';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
+import formulas from 'src/formulas';
 
 class CashCalculator extends React.PureComponent {
     render() {
@@ -31,11 +32,20 @@ class CashCalculator extends React.PureComponent {
                     </div>
                     <div>
                         <span>Documentation Fee</span>
-                        <span style={{ float: 'right' }}>$0</span>
+                        <span style={{ float: 'right' }}>
+                            {util.moneyFormat(this.props.deal.doc_fee)}
+                        </span>
                     </div>
                     <div>
                         <span>Sales Tax</span>
-                        <span style={{ float: 'right' }}>$0</span>
+                        <span style={{ float: 'right' }}>
+                            {util.moneyFormat(
+                                formulas.calculateSalesTaxCashFinance(
+                                    this.props.deal.price,
+                                    this.props.deal.doc_fee
+                                )
+                            )}
+                        </span>
                     </div>
                     <div>
                         <span>Your Rebates and Incentives</span>
@@ -54,13 +64,16 @@ class CashCalculator extends React.PureComponent {
                         <span>Total Cost of Vehicle</span>
                         <span style={{ float: 'right', color: 'green' }}>
                             {util.moneyFormat(
-                                this.props.deal.price -
+                                formulas.calculateTotalCashFinance(
+                                    this.props.deal.price,
+                                    this.props.deal.doc_fee,
                                     R.sum(
                                         R.map(
                                             R.prop('value'),
                                             this.props.selectedRebates
                                         )
                                     )
+                                )
                             )}
                         </span>
                     </div>
