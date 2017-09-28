@@ -1,7 +1,16 @@
 import R from 'ramda';
+import formulas from 'src/formulas';
+import util from 'src/util';
 
 const purchase = {
-    start: (deal, selectedTab, downPayment, selectedRebates, termDuration) => {
+    start: (
+        deal,
+        selectedTab,
+        downPayment,
+        selectedRebates,
+        termDuration,
+        isEmployee
+    ) => {
         let form = document.createElement('form');
         form.setAttribute('method', 'post');
         form.setAttribute('action', '/apply-or-purchase');
@@ -16,14 +25,19 @@ const purchase = {
         type.setAttribute('value', selectedTab);
         form.appendChild(type);
 
-        if (selectedTab !== 'cash') {
+        if (selectedTab === 'finance') {
             let amount_financed = document.createElement('input');
             amount_financed.setAttribute('name', 'amount_financed');
             amount_financed.setAttribute(
                 'value',
-                (deal.price -
-                    downPayment -
-                    R.sum(R.map(R.prop('value'), selectedRebates))).toString()
+                formulas
+                    .calculateTotalCashFinance(
+                        util.getEmployeeOrSupplierPrice(deal, isEmployee),
+                        deal.doc_fee,
+                        downPayment,
+                        R.sum(R.map(R.prop('value'), selectedRebates))
+                    )
+                    .toString()
             );
             form.appendChild(amount_financed);
 
@@ -36,6 +50,11 @@ const purchase = {
             down_payment.setAttribute('name', 'down_payment');
             down_payment.setAttribute('value', downPayment);
             form.appendChild(down_payment);
+        } else if (selectedTab === 'lease') {
+            let term = document.createElement('input');
+            term.setAttribute('name', 'term');
+            term.setAttribute('value', termDuration);
+            form.appendChild(term);
         }
 
         let deal_id = document.createElement('input');
@@ -64,7 +83,7 @@ const purchase = {
         dmr_price.setAttribute('name', 'dmr_price');
         dmr_price.setAttribute(
             'value',
-            (deal.price -
+            (util.getEmployeeOrSupplierPrice(deal, isEmployee) -
                 R.sum(R.map(R.prop('value'), selectedRebates))).toString()
         );
         form.appendChild(dmr_price);

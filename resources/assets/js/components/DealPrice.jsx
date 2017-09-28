@@ -17,7 +17,10 @@ class DealPrice extends React.PureComponent {
     }
 
     componentDidMount() {
-        if (!this.props.dealRebates.hasOwnProperty(this.props.deal.id)) {
+        if (
+            !this.props.dealRebates.hasOwnProperty(this.props.deal.id) &&
+            this.props.zipcode
+        ) {
             this.props.requestRebates(this.props.deal);
         } else {
             this.componentWillReceiveProps(this.props);
@@ -48,7 +51,12 @@ class DealPrice extends React.PureComponent {
             <div className="deal-price__price">
                 <div className="deal-price__cash-label">Your cash price</div>
                 <div className="deal-price__cash-price">
-                    {util.moneyFormat(this.props.deal.price)}
+                    {util.moneyFormat(
+                        util.getEmployeeOrSupplierPrice(
+                            this.props.deal,
+                            this.props.isEmployee
+                        )
+                    )}
                 </div>
                 <div className="deal-price__hr" />
                 <div className="deal-price__cash-msrp">
@@ -72,7 +80,10 @@ class DealPrice extends React.PureComponent {
                         util.moneyFormat(
                             Math.round(
                                 formulas.calculateFinancedMonthlyPayments(
-                                    this.props.deal.price -
+                                    util.getEmployeeOrSupplierPrice(
+                                        this.props.deal,
+                                        this.props.isEmployee
+                                    ) -
                                         R.sum(
                                             R.map(
                                                 R.prop('value'),
@@ -108,7 +119,10 @@ class DealPrice extends React.PureComponent {
                     {util.moneyFormat(
                         Math.round(
                             formulas.calculateLeasedMonthlyPayments(
-                                this.props.deal.price -
+                                util.getEmployeeOrSupplierPrice(
+                                    this.props.deal,
+                                    this.props.isEmployee
+                                ) -
                                     R.sum(
                                         R.map(
                                             R.prop('value'),
@@ -210,6 +224,7 @@ class DealPrice extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
+        isEmployee: state.isEmployee,
         downPayment: state.downPayment,
         termDuration: state.termDuration,
         residualPercent: state.residualPercent,

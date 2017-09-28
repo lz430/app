@@ -106,7 +106,8 @@ Sortbar.propTypes = {
         PropTypes.shape({
             year: PropTypes.string.isRequired,
             msrp: PropTypes.number.isRequired,
-            price: PropTypes.number.isRequired,
+            employee_price: PropTypes.number.isRequired,
+            supplier_price: PropTypes.number.isRequired,
             make: PropTypes.string.isRequired,
             model: PropTypes.string.isRequired,
             id: PropTypes.number.isRequired,

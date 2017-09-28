@@ -103,6 +103,10 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 selectedModels: action.selectedModels,
             });
+        case ActionTypes.SET_IS_EMPLOYEE:
+            return Object.assign({}, state, {
+                isEmployee: action.isEmployee,
+            });
         case ActionTypes.TOGGLE_FEATURE:
             return Object.assign({}, state, {
                 selectedFeatures: action.selectedFeatures,

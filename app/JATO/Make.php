@@ -7,6 +7,19 @@ use Illuminate\Support\Facades\DB;
 
 class Make extends Model
 {
+    public const DOMESTIC = [
+        'chrysler',
+        'dodge',
+        'jeep',
+        'ram',
+        'ford',
+        'lincoln',
+        'chevrolet',
+        'cadillac',
+        'buick',
+        'gmc',
+    ];
+
     public const MAKE_WHITELIST = [
         'acura',
         'alfa romeo',

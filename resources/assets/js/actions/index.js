@@ -169,7 +169,12 @@ export function toggleModel(model) {
 export function requestRebates(deal) {
     return (dispatch, getState) => {
         // If we have already received the rebates for the deal, don't request them again.
-        if (getState().dealRebates.hasOwnProperty(deal.id)) return;
+        // Or if we don't yet have a zipcode
+        if (
+            getState().dealRebates.hasOwnProperty(deal.id) ||
+            !getState().zipcode
+        )
+            return;
 
         api.getRebates(getState().zipcode, deal.vin).then(data => {
             dispatch(
@@ -255,6 +260,13 @@ export function receiveBodyStyles(deals) {
     return {
         type: ActionTypes.RECEIVE_BODY_STYLES,
         data: deals,
+    };
+}
+
+export function setIsEmployee(isEmployee) {
+    return {
+        type: ActionTypes.SET_IS_EMPLOYEE,
+        isEmployee: isEmployee,
     };
 }
 
