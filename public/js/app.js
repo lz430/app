@@ -54602,12 +54602,12 @@ var LeaseCalculator = function (_React$PureComponent) {
                 null,
                 _react2.default.createElement(
                     'span',
-                    null,
+                    { className: 'cash-finance-lease-calculator__left-item' },
                     'Your Monthly Lease Payment'
                 ),
                 _react2.default.createElement(
                     'span',
-                    { style: { float: 'right' } },
+                    { className: 'cash-finance-lease-calculator__right-item' },
                     this.props.availableRebates ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)), 0, 0, this.props.termDuration, this.props.residualPercent))) : 'Loading...'
                 )
             );
@@ -54622,12 +54622,12 @@ var LeaseCalculator = function (_React$PureComponent) {
                 null,
                 _react2.default.createElement(
                     'span',
-                    null,
+                    { className: 'cash-finance-lease-calculator__left-item' },
                     'Term Duration'
                 ),
                 _react2.default.createElement(
                     'span',
-                    { style: { float: 'right' } },
+                    { className: 'cash-finance-lease-calculator__right-item' },
                     _react2.default.createElement(
                         'select',
                         {
@@ -54660,12 +54660,12 @@ var LeaseCalculator = function (_React$PureComponent) {
                 null,
                 _react2.default.createElement(
                     'span',
-                    null,
+                    { className: 'cash-finance-lease-calculator__left-item' },
                     'Taxes due at signing'
                 ),
                 _react2.default.createElement(
                     'span',
-                    { style: { float: 'right' } },
+                    { className: 'cash-finance-lease-calculator__right-item' },
                     this.props.availableRebates ? _util2.default.moneyFormat(_formulas2.default.calculateLeaseTaxesDueAtSigning(totalRebates, this.props.downPayment, this.props.deal.doc_fee)) : 'Loading...'
                 )
             );
@@ -54678,12 +54678,12 @@ var LeaseCalculator = function (_React$PureComponent) {
                 null,
                 _react2.default.createElement(
                     'span',
-                    null,
+                    { className: 'cash-finance-lease-calculator__left-item' },
                     'Sales tax'
                 ),
                 _react2.default.createElement(
                     'span',
-                    { style: { float: 'right' } },
+                    { className: 'cash-finance-lease-calculator__right-item' },
                     '6%'
                 )
             );
@@ -54691,18 +54691,17 @@ var LeaseCalculator = function (_React$PureComponent) {
     }, {
         key: 'renderYourRebatesAndIncentives',
         value: function renderYourRebatesAndIncentives() {
-            console.log(this.props.selectedRebates);
             return _react2.default.createElement(
                 'div',
                 null,
                 _react2.default.createElement(
                     'span',
-                    null,
+                    { className: 'cash-finance-lease-calculator__left-item' },
                     'Your Rebates and Incentives'
                 ),
                 _react2.default.createElement(
                     'span',
-                    { style: { float: 'right' } },
+                    { className: 'cash-finance-lease-calculator__right-item' },
                     this.props.availableRebates ? _util2.default.moneyFormat(_ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))) : 'Loading...'
                 )
             );
@@ -54713,14 +54712,21 @@ var LeaseCalculator = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 null,
-                'Lease Price',
-                ' ',
+                _react2.default.createElement(
+                    'h4',
+                    null,
+                    'Lease Price'
+                ),
                 _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee)),
                 _react2.default.createElement(_CustomerTypeSelect2.default, null),
                 this.state.selectedRebates ? _react2.default.createElement('hr', null) + 'Available Rebates and Incentives on Lease' : '',
                 _react2.default.createElement(_Rebates2.default, null),
                 _react2.default.createElement('hr', null),
-                'Summary',
+                _react2.default.createElement(
+                    'h4',
+                    null,
+                    'Summary'
+                ),
                 _react2.default.createElement(
                     'div',
                     null,
@@ -54729,12 +54735,12 @@ var LeaseCalculator = function (_React$PureComponent) {
                         null,
                         _react2.default.createElement(
                             'span',
-                            null,
+                            { className: 'cash-finance-lease-calculator__left-item' },
                             'MSRP'
                         ),
                         _react2.default.createElement(
                             'span',
-                            { style: { float: 'right' } },
+                            { className: 'cash-finance-lease-calculator__right-item' },
                             _util2.default.moneyFormat(this.props.deal.msrp)
                         )
                     ),
@@ -54743,12 +54749,12 @@ var LeaseCalculator = function (_React$PureComponent) {
                         null,
                         _react2.default.createElement(
                             'span',
-                            null,
+                            { className: 'cash-finance-lease-calculator__left-item' },
                             'Your Price'
                         ),
                         _react2.default.createElement(
                             'span',
-                            { style: { float: 'right' } },
+                            { className: 'cash-finance-lease-calculator__right-item' },
                             _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee))
                         )
                     ),
@@ -54758,7 +54764,11 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     null,
-                    'Lease Summary',
+                    _react2.default.createElement(
+                        'h4',
+                        null,
+                        'Lease Summary'
+                    ),
                     this.renderDueAtSigning(),
                     this.renderTermDurationSelect(),
                     this.renderAnnualMileageSelect()
@@ -54766,7 +54776,20 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     null,
-                    'Monthly Payment',
+                    _react2.default.createElement(
+                        'h4',
+                        null,
+                        'Select Desired Lease Payment'
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        'h4',
+                        null,
+                        'Monthly Payment'
+                    ),
                     this.renderSalesTax(),
                     this.renderMonthlyLeasePayment()
                 )

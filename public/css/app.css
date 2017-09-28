@@ -1299,6 +1299,14 @@ body {
   padding: 15px;
 }
 
+.cash-finance-lease-calculator__left-item {
+  margin-right: 20px;
+}
+
+.cash-finance-lease-calculator__right-item {
+  float: right;
+}
+
 .application-form__input-group {
   display: -webkit-box;
   display: -ms-flexbox;

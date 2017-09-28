@@ -157,8 +157,8 @@ class LeaseCalculator extends React.PureComponent {
 
         return (
             <div>
-                <span>Your Monthly Lease Payment</span>
-                <span style={{ float: 'right' }}>
+                <span className="cash-finance-lease-calculator__left-item">Your Monthly Lease Payment</span>
+                <span className="cash-finance-lease-calculator__right-item">
                     {this.props.availableRebates ? (
                         util.moneyFormat(
                             Math.round(
@@ -191,8 +191,8 @@ class LeaseCalculator extends React.PureComponent {
     renderTermDurationSelect() {
         return (
             <div>
-                <span>Term Duration</span>
-                <span style={{ float: 'right' }}>
+                <span className="cash-finance-lease-calculator__left-item">Term Duration</span>
+                <span className="cash-finance-lease-calculator__right-item">
                     <select
                         value={this.props.termDuration}
                         onChange={e => this.updateTermDuration(e)}
@@ -224,8 +224,8 @@ class LeaseCalculator extends React.PureComponent {
 
         return (
             <div>
-                <span>Taxes due at signing</span>
-                <span style={{ float: 'right' }}>
+                <span className="cash-finance-lease-calculator__left-item">Taxes due at signing</span>
+                <span className="cash-finance-lease-calculator__right-item">
                     {this.props.availableRebates ? (
                         util.moneyFormat(
                             formulas.calculateLeaseTaxesDueAtSigning(
@@ -245,18 +245,17 @@ class LeaseCalculator extends React.PureComponent {
     renderSalesTax() {
         return (
             <div>
-                <span>Sales tax</span>
-                <span style={{ float: 'right' }}>6%</span>
+                <span className="cash-finance-lease-calculator__left-item">Sales tax</span>
+                <span className="cash-finance-lease-calculator__right-item">6%</span>
             </div>
         );
     }
 
     renderYourRebatesAndIncentives() {
-        console.log(this.props.selectedRebates);
         return (
             <div>
-                <span>Your Rebates and Incentives</span>
-                <span style={{ float: 'right' }}>
+                <span className="cash-finance-lease-calculator__left-item">Your Rebates and Incentives</span>
+                <span className="cash-finance-lease-calculator__right-item">
                     {this.props.availableRebates ? (
                         util.moneyFormat(
                             R.sum(
@@ -277,7 +276,7 @@ class LeaseCalculator extends React.PureComponent {
     render() {
         return (
             <div>
-                Lease Price{' '}
+                <h4>Lease Price</h4>
                 {util.moneyFormat(
                     util.getEmployeeOrSupplierPrice(
                         this.props.deal,
@@ -292,17 +291,17 @@ class LeaseCalculator extends React.PureComponent {
                 )}
                 <Rebates />
                 <hr />
-                Summary
+                <h4>Summary</h4>
                 <div>
                     <div>
-                        <span>MSRP</span>
-                        <span style={{ float: 'right' }}>
+                        <span className="cash-finance-lease-calculator__left-item">MSRP</span>
+                        <span  className="cash-finance-lease-calculator__right-item">
                             {util.moneyFormat(this.props.deal.msrp)}
                         </span>
                     </div>
                     <div>
-                        <span>Your Price</span>
-                        <span style={{ float: 'right' }}>
+                        <span className="cash-finance-lease-calculator__left-item">Your Price</span>
+                        <span className="cash-finance-lease-calculator__right-item">
                             {util.moneyFormat(
                                 util.getEmployeeOrSupplierPrice(
                                     this.props.deal,
@@ -315,13 +314,16 @@ class LeaseCalculator extends React.PureComponent {
                 </div>
                 <hr />
                 <div>
-                    Lease Summary
+                    <h4>Lease Summary</h4>
                     {this.renderDueAtSigning()}
                     {this.renderTermDurationSelect()}
                     {this.renderAnnualMileageSelect()}
                 </div>
                 <div>
-                    Monthly Payment
+                    <h4>Select Desired Lease Payment</h4>
+                </div>
+                <div>
+                    <h4>Monthly Payment</h4>
                     {this.renderSalesTax()}
                     {this.renderMonthlyLeasePayment()}
                 </div>
