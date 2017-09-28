@@ -9,7 +9,6 @@ use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
 use App\Mail\DealPurchasedUser;
 use App\Purchase;
-use App\Transformers\DealTransformer;
 use App\Transformers\PurchaseTransformer;
 use App\User;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
@@ -23,7 +22,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Laracasts\Utilities\JavaScript\JavaScriptFacade;
 

@@ -21,7 +21,7 @@ class ThankYouPage extends React.PureComponent {
             dimensions: null,
             showStandardFeatures: false,
             showFeatures: false,
-        }
+        };
     }
 
     componentWillUnmount() {
@@ -31,40 +31,42 @@ class ThankYouPage extends React.PureComponent {
     componentDidMount() {
         this._isMounted = true;
 
-        window.axios.get('/last-purchase').then(data => {
-            this.setState({
-                loading: false,
-                purchase: data.data.data.attributes,
-                deal: data.data.data.attributes.deal.data.attributes,
+        window.axios
+            .get('/last-purchase')
+            .then(data => {
+                this.setState({
+                    loading: false,
+                    purchase: data.data.data.attributes,
+                    deal: data.data.data.attributes.deal.data.attributes,
+                });
             })
-        }).then(() => {
-            api
-                .getDimensions(this.state.deal.versions[0].jato_vehicle_id)
-                .then(response => {
-                    if (!this._isMounted) return;
+            .then(() => {
+                api
+                    .getDimensions(this.state.deal.versions[0].jato_vehicle_id)
+                    .then(response => {
+                        if (!this._isMounted) return;
 
-                    this.setState({
-                        dimensions: response.data,
+                        this.setState({
+                            dimensions: response.data,
+                        });
                     });
-                });
 
-            api
-                .getWarranties(this.state.deal.versions[0].jato_vehicle_id)
-                .then(response => {
-                    if (!this._isMounted) return;
+                api
+                    .getWarranties(this.state.deal.versions[0].jato_vehicle_id)
+                    .then(response => {
+                        if (!this._isMounted) return;
 
-                    this.setState({
-                        warranties: response.data,
+                        this.setState({
+                            warranties: response.data,
+                        });
                     });
-                });
-        });
+            });
     }
-
 
     handleModalClose() {
         this.setState({
-            showModal: false
-        })
+            showModal: false,
+        });
     }
 
     showStandardFeatures() {
@@ -88,8 +90,7 @@ class ThankYouPage extends React.PureComponent {
                     </div>
                     <div className="modal__header">
                         <div className="modal__titles modal__titles--center">
-                            <div
-                                className="modal__subtitle modal__subtitle--center">
+                            <div className="modal__subtitle modal__subtitle--center">
                                 {strings.dealYearMake(deal)}
                             </div>
                             <div className="modal__title modal_title--center">
@@ -109,7 +110,7 @@ class ThankYouPage extends React.PureComponent {
                 </div>
                 <div className="deal-details__modal-body">
                     <h3>Specifications</h3>
-                    <hr/>
+                    <hr />
 
                     <h4>Dimensions</h4>
                     <ul>
@@ -142,27 +143,21 @@ class ThankYouPage extends React.PureComponent {
                     </ul>
 
                     <h3>Features</h3>
-                    <hr/>
+                    <hr />
 
                     <ul>
-                        {deal.vauto_features.map(
-                            (feature, index) => {
-                                return <li key={index}>{feature}</li>;
-                            }
-                        )}
+                        {deal.vauto_features.map((feature, index) => {
+                            return <li key={index}>{feature}</li>;
+                        })}
                     </ul>
                 </div>
             </Modal>
         );
     }
 
-
-        renderNewPurchaseModal() {
+    renderNewPurchaseModal() {
         return (
-            <Modal
-                closeText='Close'
-                onClose={() => this.handleModalClose()}
-            >
+            <Modal closeText="Close" onClose={() => this.handleModalClose()}>
                 <div className="thank-you__modal">
                     <div className="thank-you__modal-close">
                         <SVGInline
@@ -174,15 +169,20 @@ class ThankYouPage extends React.PureComponent {
                         />
                     </div>
                     <div className="thank-you__modal-image">
-                        {this.state.loading
-                            ?  'Loading...'
-                            : <img src={this.state.deal.photos[1].url} />
-                                }
-
+                        {this.state.loading ? (
+                            'Loading...'
+                        ) : (
+                            <img src={this.state.deal.photos[1].url} />
+                        )}
                     </div>
                     <div className="thank-you__modal-text">
                         <h1>Congratulations on your new purchase!</h1>
-                        <h2>Shortly, a certified Deliver My Ride representative will contact you to finalize your paperwork details and to schedule the place and time for your delivery.</h2>
+                        <h2>
+                            Shortly, a certified Deliver My Ride representative
+                            will contact you to finalize your paperwork details
+                            and to schedule the place and time for your
+                            delivery.
+                        </h2>
                     </div>
                 </div>
             </Modal>
@@ -190,18 +190,18 @@ class ThankYouPage extends React.PureComponent {
     }
 
     youChoseString(purchase) {
-        switch(purchase.type) {
+        switch (purchase.type) {
             case 'cash':
-                return "CASH PURCHASE";
+                return 'CASH PURCHASE';
                 break;
             case 'finance':
-                return "THIRD PARTY FINANCING";
+                return 'THIRD PARTY FINANCING';
                 break;
             case 'lease':
-                return "LEASE DEAL";
+                return 'LEASE DEAL';
                 break;
             default:
-                return "CASH PURCHASE"
+                return 'CASH PURCHASE';
         }
     }
 
@@ -209,7 +209,7 @@ class ThankYouPage extends React.PureComponent {
         this.setState({
             showStandardFeatures: false,
             showFeatures: false,
-        })
+        });
     }
 
     renderStandardFeaturesModal(deal) {
@@ -221,8 +221,7 @@ class ThankYouPage extends React.PureComponent {
                     </div>
                     <div className="modal__header">
                         <div className="modal__titles modal__titles--center">
-                            <div
-                                className="modal__subtitle modal__subtitle--center">
+                            <div className="modal__subtitle modal__subtitle--center">
                                 {strings.dealYearMake(deal)}
                             </div>
                             <div className="modal__title modal_title--center">
@@ -251,77 +250,121 @@ class ThankYouPage extends React.PureComponent {
         );
     }
 
-
-        render() {
+    render() {
         return (
             <div>
-                {this.state.loading ? 'Loading...' :
+                {this.state.loading ? (
+                    'Loading...'
+                ) : (
                     <div className="thank-you">
-                        {this.state.showModal ? this.renderNewPurchaseModal() : ''}
-                        {this.state.showStandardFeatures ? this.renderStandardFeaturesModal(this.state.deal) : ''}
-                        {this.state.showFeatures ? this.renderFeaturesModal(this.state.deal) : ''}
+                        {this.state.showModal ? (
+                            this.renderNewPurchaseModal()
+                        ) : (
+                            ''
+                        )}
+                        {this.state.showStandardFeatures ? (
+                            this.renderStandardFeaturesModal(this.state.deal)
+                        ) : (
+                            ''
+                        )}
+                        {this.state.showFeatures ? (
+                            this.renderFeaturesModal(this.state.deal)
+                        ) : (
+                            ''
+                        )}
                         <div className="thank-you__left-panel">
-                            <div className="thank-you__left-panel-title">Vehicle Purchase Summary</div>
-                            <div className="thank-you__left-panel-subtitle">{`${this.state.deal.year} ${this.state.deal.make} ${this.state.deal.model} ${this.state.deal.series} VIN#:${this.state.deal.vin}`}</div>
+                            <div className="thank-you__left-panel-title">
+                                Vehicle Purchase Summary
+                            </div>
+                            <div className="thank-you__left-panel-subtitle">{`${this
+                                .state.deal.year} ${this.state.deal.make} ${this
+                                .state.deal.model} ${this.state.deal
+                                .series} VIN#:${this.state.deal.vin}`}</div>
                             <div className="thank-you__left-panel-image">
-                                <img src={this.state.deal.photos[1].url}/>
+                                <img src={this.state.deal.photos[1].url} />
                             </div>
                             <div className="thank-you__left-panel-buttons">
-                                <button onClick={() => this.showStandardFeatures()} className="thank-you__button thank-you__button--blue">Review Standard Features</button>
-                                <button onClick={() => this.showFeatures()} className="thank-you__button thank-you__button--blue">Review Additional Options</button>
-                                <button className="thank-you__button thank-you__button--blue">Suggest Comparison</button>
+                                <button
+                                    onClick={() => this.showStandardFeatures()}
+                                    className="thank-you__button thank-you__button--blue"
+                                >
+                                    Review Standard Features
+                                </button>
+                                <button
+                                    onClick={() => this.showFeatures()}
+                                    className="thank-you__button thank-you__button--blue"
+                                >
+                                    Review Additional Options
+                                </button>
+                                <button className="thank-you__button thank-you__button--blue">
+                                    Suggest Comparison
+                                </button>
                             </div>
                         </div>
                         <div className="thank-you__right-panel">
-                            <DealPrice deal={this.state.deal}/>
+                            <DealPrice deal={this.state.deal} />
                             <div>
-                            YOU CHOSE: {this.youChoseString(this.state.purchase)}
+                                YOU CHOSE:{' '}
+                                {this.youChoseString(this.state.purchase)}
                             </div>
                             <div>
-                            YOUR OUT OF THE DOOR PRICE {this.state.purchase.dmr_price}
+                                YOUR OUT OF THE DOOR PRICE{' '}
+                                {this.state.purchase.dmr_price}
                             </div>
                             (plate fee not incleuded)
                             <hr />
-                            <div>
-                            {this.state.purchase.msrp} MSRP
-                            </div>
-                            <div>
-                                $8000 of $16000 in rebates!
-                            </div>
+                            <div>{this.state.purchase.msrp} MSRP</div>
+                            <div>$8000 of $16000 in rebates!</div>
                             <div>
                                 Selling Dealer
                                 <hr />
                                 {this.state.deal.dealer_name}
                             </div>
                             <div>
-
                                 <h4>Items needed to finalize your purchase:</h4>
-                                <hr/>
+                                <hr />
                                 <ul>
                                     <li>Driver’s License</li>
                                     <li>Certificate of Insurance</li>
-                                    <ul><li>Call your agent with vehicle details and VIN#</li></ul>
-                                    <li>Certified Check in the amount listed above.</li>
-                                    <ul><li>Dealer will calculate the license plate fee</li></ul>
+                                    <ul>
+                                        <li>
+                                            Call your agent with vehicle details
+                                            and VIN#
+                                        </li>
+                                    </ul>
+                                    <li>
+                                        Certified Check in the amount listed
+                                        above.
+                                    </li>
+                                    <ul>
+                                        <li>
+                                            Dealer will calculate the license
+                                            plate fee
+                                        </li>
+                                    </ul>
                                     <li>Registration</li>
-                                    <ul><li>Needed if transferring a valid license plate</li></ul>
-                                    <li>Proof of eligibility for selected rebates</li>
+                                    <ul>
+                                        <li>
+                                            Needed if transferring a valid
+                                            license plate
+                                        </li>
+                                    </ul>
+                                    <li>
+                                        Proof of eligibility for selected
+                                        rebates
+                                    </li>
                                 </ul>
                             </div>
-                            <div>
-                                Questions about your purchase?
-                            </div>
+                            <div>Questions about your purchase?</div>
                             <div>
                                 <button>1</button>
                                 <button>1</button>
                             </div>
-
-
                         </div>
                     </div>
-                }
+                )}
             </div>
-        )
+        );
     }
 }
 
