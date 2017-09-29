@@ -303,7 +303,8 @@ class ThankYouPage extends React.PureComponent {
                         </div>
                         <div className="thank-you__hr" />
                         <div className="thank-you__msrp">
-                            {util.moneyFormat(this.state.purchase.msrp)} MSRP
+                            {util.moneyFormat(this.state.purchase.msrp)}{' '}
+                            <span className="thank-you__msrp-label">MSRP</span>
                         </div>
                         {this.state.availableRebates ? (
                             <div className="thank-you__rebates-applied">

@@ -3354,6 +3354,10 @@ comparepage {
   font-size: large;
 }
 
+.thank-you__msrp-label {
+  font-size: x-small;
+}
+
 .thank-you__rebates-applied {
   font-size: small;
   margin-bottom: 10px;
