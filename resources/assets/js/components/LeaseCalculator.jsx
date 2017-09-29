@@ -17,6 +17,7 @@ class LeaseCalculator extends React.PureComponent {
 
         this.state = {
             leaseRates: null,
+            downPayment: 0,
         };
     }
 
@@ -31,13 +32,15 @@ class LeaseCalculator extends React.PureComponent {
             .then(data => {
                 if (!this._isMounted) return;
 
+                const leaseRates = data.data;
+
                 const closestTermMonths = util.getClosestNumberInRange(
-                    R.or(this.props.termDuration, 24),
-                    R.map(R.prop('termMonths'), data.data)
+                    this.props.termDuration,
+                    R.map(R.prop('termMonths'), leaseRates)
                 );
                 const closestLeaseRate = R.find(leaseRate => {
                     return leaseRate.termMonths === closestTermMonths;
-                }, data.data);
+                }, leaseRates);
                 const closestAnnualMileage = this.getClosestAnnualMileage(
                     closestLeaseRate
                 );
@@ -46,13 +49,18 @@ class LeaseCalculator extends React.PureComponent {
                     closestAnnualMileage
                 );
 
-                this.props.updateTermDuration(closestLeaseRate.termMonths);
-                this.props.updateAnnualMileage(closestAnnualMileage);
-                this.props.updateResidualPercent(residualPercent);
-
-                this.setState({
-                    leaseRates: data.data,
-                });
+                this.setState(
+                    {
+                        leaseRates,
+                    },
+                    () => {
+                        this.props.updateTermDuration(
+                            closestLeaseRate.termMonths
+                        );
+                        this.props.updateAnnualMileage(closestAnnualMileage);
+                        this.props.updateResidualPercent(residualPercent);
+                    }
+                );
             });
     }
 
@@ -83,12 +91,8 @@ class LeaseCalculator extends React.PureComponent {
         );
     }
 
-    updateDownPayment(e) {
-        this.props.updateDownPayment(Math.max(e.target.value, 0));
-    }
-
-    updateTermDuration(e) {
-        const newTermDuration = Number(e.target.value);
+    updateTermDuration(termDuration) {
+        const newTermDuration = Number(termDuration);
         const selectedLeaseRate = this.getSelectedLeaseRate(newTermDuration);
         const closestAnnualMileage = this.getClosestAnnualMileage(
             selectedLeaseRate
@@ -96,15 +100,18 @@ class LeaseCalculator extends React.PureComponent {
 
         this.props.updateTermDuration(newTermDuration);
         this.props.updateAnnualMileage(closestAnnualMileage);
+        this.props.updateResidualPercent(
+            this.getResidualPercent(selectedLeaseRate, closestAnnualMileage)
+        );
     }
 
-    updateAnnualMileage(e) {
-        const newAnnualMileage = Number(e.target.value);
+    updateAnnualMileage(annualMileage, termDuration) {
+        const newAnnualMileage = Number(annualMileage);
 
         this.props.updateAnnualMileage(newAnnualMileage);
         this.props.updateResidualPercent(
             this.getResidualPercent(
-                this.getSelectedLeaseRate(this.props.termDuration),
+                this.getSelectedLeaseRate(termDuration),
                 newAnnualMileage
             )
         );
@@ -130,7 +137,11 @@ class LeaseCalculator extends React.PureComponent {
                 <span style={{ float: 'right' }}>
                     <select
                         value={this.props.annualMileage}
-                        onChange={e => this.updateAnnualMileage(e)}
+                        onChange={e =>
+                            this.updateAnnualMileage(
+                                e.target.value,
+                                this.props.termDuration
+                            )}
                     >
                         {selectedLeaseRate ? (
                             selectedLeaseRate.residuals.map(
@@ -165,7 +176,7 @@ class LeaseCalculator extends React.PureComponent {
                 <span className="cash-finance-lease-calculator__right-item">
                     {this.props.availableRebates ? (
                         util.moneyFormat(
-                            Math.round(
+                            formulas.calculateTotalLeaseMonthlyPayment(
                                 formulas.calculateLeasedMonthlyPayments(
                                     util.getEmployeeOrSupplierPrice(
                                         this.props.deal,
@@ -177,7 +188,7 @@ class LeaseCalculator extends React.PureComponent {
                                                 this.props.selectedRebates
                                             )
                                         ),
-                                    0,
+                                    this.state.downPayment,
                                     0,
                                     this.props.termDuration,
                                     this.props.residualPercent
@@ -201,7 +212,7 @@ class LeaseCalculator extends React.PureComponent {
                 <span className="cash-finance-lease-calculator__right-item">
                     <select
                         value={this.props.termDuration}
-                        onChange={e => this.updateTermDuration(e)}
+                        onChange={e => this.updateTermDuration(e.target.value)}
                     >
                         {this.state.leaseRates ? (
                             this.state.leaseRates.map((leaseRate, index) => {
@@ -238,7 +249,7 @@ class LeaseCalculator extends React.PureComponent {
                         util.moneyFormat(
                             formulas.calculateLeaseTaxesDueAtSigning(
                                 totalRebates,
-                                this.props.downPayment,
+                                this.state.downPayment,
                                 this.props.deal.doc_fee
                             )
                         )
@@ -284,6 +295,66 @@ class LeaseCalculator extends React.PureComponent {
                     )}
                 </span>
             </div>
+        );
+    }
+
+    updateFromLeaseTable(termDuration, annualMileage, downPayment) {
+        this.setState(
+            {
+                downPayment,
+            },
+            () => {
+                this.updateTermDuration(termDuration);
+                this.updateAnnualMileage(annualMileage, termDuration);
+            }
+        );
+    }
+
+    renderMonthlyRateCell(downPayment, leaseRate, index) {
+        const residual = R.find(residual => {
+            return residual.annualMileage === this.props.annualMileage;
+        }, leaseRate.residuals);
+
+        const isSelected =
+            leaseRate.termMonths === this.props.termDuration &&
+            this.state.downPayment === downPayment;
+
+        const className = `cash-finance-lease-calculator__lease-table-cell--${isSelected
+            ? 'selected'
+            : 'selectable'}`;
+
+        return (
+            <td
+                onClick={() =>
+                    this.updateFromLeaseTable(
+                        leaseRate.termMonths,
+                        residual.annualMileage,
+                        downPayment
+                    )}
+                className={className}
+                key={index}
+            >
+                {util.moneyFormat(
+                    formulas.calculateTotalLeaseMonthlyPayment(
+                        formulas.calculateLeasedMonthlyPayments(
+                            util.getEmployeeOrSupplierPrice(
+                                this.props.deal,
+                                this.props.isEmployee
+                            ) -
+                                R.sum(
+                                    R.map(
+                                        R.prop('value'),
+                                        this.props.selectedRebates
+                                    )
+                                ),
+                            downPayment,
+                            0,
+                            leaseRate.termMonths,
+                            residual.residualPercent
+                        )
+                    )
+                )}
+            </td>
         );
     }
 
@@ -340,47 +411,98 @@ class LeaseCalculator extends React.PureComponent {
                     {this.renderTermDurationSelect()}
                     {this.renderAnnualMileageSelect()}
                 </div>
-                {/*<div>*/}
-                {/*<h4>Select Desired Lease Payment</h4>*/}
-                {/*<table>*/}
-                {/*<thead>*/}
-                {/*<tr>*/}
-                {/*<td>Cash Due</td>*/}
-                {/*{this.state.leaseRates ? (*/}
-                {/*this.state.leaseRates.map((leaseRate, index) => {*/}
-                {/*return (*/}
-                {/*<td*/}
-                {/*value={leaseRate.termMonths}*/}
-                {/*key={index}*/}
-                {/*>*/}
-                {/*{leaseRate.termMonths}*/}
-                {/*</td>*/}
-                {/*);*/}
-                {/*})*/}
-                {/*) : (*/}
-                {/*''*/}
-                {/*)}*/}
-                {/*</tr>*/}
-                {/*</thead>*/}
-                {/*<tbody>*/}
-                {/*{this.state.leaseRates ? (*/}
-                {/*this.state.leaseRates.map((leaseRate, index) => {*/}
-                {/*return <tr key={index}>*/}
-                {/*{leaseRate.residuals.map((residual, index) => {*/}
-                {/*return <td key={index}>{JSON.stringify(residual)}</td>*/}
-                {/*})}*/}
-                {/*</tr>;*/}
-                {/*})*/}
-                {/*) : (*/}
-                {/*''*/}
-                {/*)}*/}
-                {/*</tbody>*/}
-                {/*</table>*/}
-                {/*</div>*/}
                 <div>
-                    <h4>Monthly Payment</h4>
+                    <h4>Select Desired Lease Payment</h4>
+                    <table className="cash-finance-lease-calculator__lease-table">
+                        <thead>
+                            <tr>
+                                <td className="cash-finance-lease-calculator__lease-table-cell--darker">
+                                    Cash Due
+                                </td>
+                                {this.state.leaseRates ? (
+                                    this.state.leaseRates.map(
+                                        (leaseRate, index) => {
+                                            return (
+                                                <td
+                                                    className="cash-finance-lease-calculator__lease-table-cell--dark"
+                                                    value={leaseRate.termMonths}
+                                                    key={index}
+                                                >
+                                                    {leaseRate.termMonths}{' '}
+                                                    Months
+                                                </td>
+                                            );
+                                        }
+                                    )
+                                ) : (
+                                    <td />
+                                )}
+                            </tr>
+                        </thead>
+                        {this.state.leaseRates ? (
+                            <tbody>
+                                <tr>
+                                    <td className="cash-finance-lease-calculator__lease-table-cell--darker">
+                                        $0
+                                    </td>
+                                    {this.state.leaseRates.map(
+                                        this.renderMonthlyRateCell.bind(this, 0)
+                                    )}
+                                </tr>
+
+                                <tr>
+                                    <td className="cash-finance-lease-calculator__lease-table-cell--darker">
+                                        $1000
+                                    </td>
+                                    {this.state.leaseRates.map(
+                                        this.renderMonthlyRateCell.bind(
+                                            this,
+                                            1000
+                                        )
+                                    )}
+                                </tr>
+
+                                <tr>
+                                    <td className="cash-finance-lease-calculator__lease-table-cell--darker">
+                                        $2500
+                                    </td>
+                                    {this.state.leaseRates.map(
+                                        this.renderMonthlyRateCell.bind(
+                                            this,
+                                            2500
+                                        )
+                                    )}
+                                </tr>
+
+                                <tr>
+                                    <td className="cash-finance-lease-calculator__lease-table-cell--darker">
+                                        $5000
+                                    </td>
+                                    {this.state.leaseRates.map(
+                                        this.renderMonthlyRateCell.bind(
+                                            this,
+                                            5000
+                                        )
+                                    )}
+                                </tr>
+                            </tbody>
+                        ) : (
+                            <tbody />
+                        )}
+                    </table>
+                </div>
+                <div>
+                    <h4>Monthly Payment * </h4>
                     {this.renderSalesTax()}
                     {this.renderMonthlyLeasePayment()}
+                </div>
+                <div className="disclaimer">
+                    * $0 due statement *payments include first months' payment
+                    and all other inception fees except license plate cost.
+                    $1000 or $2500 due at signing statement *payments include
+                    first months' payment and all other inception fees except
+                    license plate cost. Actual payment may vary slightly more or
+                    less.
                 </div>
             </div>
         );
@@ -390,7 +512,6 @@ class LeaseCalculator extends React.PureComponent {
 function mapStateToProps(state) {
     return {
         zipcode: state.zipcode,
-        downPayment: state.downPayment,
         deal: state.selectedDeal,
         termDuration: state.termDuration,
         annualMileage: state.annualMileage,

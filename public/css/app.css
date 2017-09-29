@@ -1297,7 +1297,41 @@ body {
 
 .cash-finance-lease-calculator {
   background: #fff;
+  max-width: 500px;
   padding: 15px;
+}
+
+.cash-finance-lease-calculator__lease-table td {
+  padding: 5px;
+}
+
+.cash-finance-lease-calculator__lease-table-cell {
+  padding: 5px;
+}
+
+.cash-finance-lease-calculator__lease-table-cell--dark {
+  background: #ced4d9;
+}
+
+.cash-finance-lease-calculator__lease-table-cell--selectable {
+  background: #3786a1;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.cash-finance-lease-calculator__lease-table-cell--selected {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  color: #3786a1;
+  cursor: pointer;
+}
+
+.cash-finance-lease-calculator__lease-table-cell--darker {
+  background: #484d50;
+  color: #fff;
 }
 
 .cash-finance-lease-calculator__left-item {
@@ -2656,6 +2690,10 @@ body {
 .loading svg path,
 .loading svg rect {
   fill: #3786a1;
+}
+
+.disclaimer {
+  font-size: .8rem;
 }
 
 .welcome__top {
