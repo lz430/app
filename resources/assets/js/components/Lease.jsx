@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import util from 'src/util';
 import R from 'ramda';
+import miscicons from 'miscicons';
 
 class Lease extends React.PureComponent {
     constructor(props) {
@@ -76,7 +76,7 @@ class Lease extends React.PureComponent {
     renderLeaseTermsSlider() {
         switch (String(this.state.termLengths)) {
             case 'null':
-                return 'loading';
+                return <SVGInline svg={miscicons['loading']} />;
             case '':
                 return 'no terms available';
             default:

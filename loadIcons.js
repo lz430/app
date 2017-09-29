@@ -2,6 +2,7 @@ const fs = require('fs');
 
 const bodyStyles = fs.readdirSync(__dirname + '/resources/assets/svg/body-styles', 'utf8');
 const zondicons = fs.readdirSync(__dirname + '/resources/assets/svg/zondicons', 'utf8');
+const miscicons = fs.readdirSync(__dirname + '/resources/assets/svg/miscicons', 'utf8');
 
 const write = (things, pathSegment) => {
     let output = {};
@@ -19,3 +20,4 @@ const write = (things, pathSegment) => {
 
 write(bodyStyles, 'body-styles');
 write(zondicons, 'zondicons');
+write(miscicons, 'miscicons');

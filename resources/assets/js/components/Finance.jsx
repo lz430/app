@@ -1,7 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import util from 'src/util';
 import R from 'ramda';
+import SVGInline from 'react-svg-inline';
+import miscicons from 'miscicons';
 
 class Finance extends React.PureComponent {
     constructor(props) {
@@ -73,7 +74,7 @@ class Finance extends React.PureComponent {
     renderFinanceTermsSlider() {
         switch (String(this.state.termLengths)) {
             case 'null':
-                return 'loading';
+                return <SVGInline svg={miscicons['loading']} />;
             case '':
                 return 'no terms available';
             default:

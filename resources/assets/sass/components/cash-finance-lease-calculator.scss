@@ -3,4 +3,12 @@
 .cash-finance-lease-calculator {
   background: $color-text-white;
   padding: 15px;
+
+  &__left-item {
+    margin-right: 20px;
+  }
+
+  &__right-item {
+    float: right;
+  }
 }

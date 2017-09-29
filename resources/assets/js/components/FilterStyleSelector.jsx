@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import bodyStyleIcons from 'body-styles';
+import miscicons from 'miscicons';
 
 class FilterStyleSelector extends React.PureComponent {
     constructor() {
@@ -45,7 +46,7 @@ class FilterStyleSelector extends React.PureComponent {
                     {this.props.styles ? (
                         this.props.styles.map(this.renderStyle)
                     ) : (
-                        'Loading...'
+                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </div>
             </div>

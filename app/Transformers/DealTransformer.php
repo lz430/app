@@ -49,6 +49,7 @@ class DealTransformer extends TransformerAbstract
             'vauto_features' => array_values(array_diff(explode('|', $deal->vauto_features), $deal->features->map(function ($feature) {
                 return $feature->feature;
             })->toArray())),
+            'dealer' => $deal->dealer,
         ];
     }
 }

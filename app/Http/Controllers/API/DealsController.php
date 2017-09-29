@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Feature;
 use App\Transformers\DealTransformer;
 use App\Deal;
 use App\Zipcode;
 use DeliverMyRide\JATO\Client;
 use DeliverMyRide\JsonApi\Sort;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Serializer\DataArraySerializer;
 

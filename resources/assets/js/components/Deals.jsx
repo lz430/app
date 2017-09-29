@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import Deal from 'components/Deal';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
+import SVGInline from 'react-svg-inline';
+import miscicons from 'miscicons';
 
 class Deals extends React.PureComponent {
     compareButtonClass(deal) {
@@ -18,7 +20,7 @@ class Deals extends React.PureComponent {
     renderShowMoreButton() {
         if (this.props.deals && this.props.requestingMoreDeals) {
             // Deals are already loaded and we have already requested more deals
-            return <div>Loading...</div>;
+            return <SVGInline svg={miscicons['loading']} />;
         }
 
         if (
@@ -72,7 +74,7 @@ class Deals extends React.PureComponent {
                         );
                     })
                 ) : (
-                    'Loading...'
+                    <SVGInline svg={miscicons['loading']} />
                 )}
                 {this.renderShowMoreButton()}
             </div>

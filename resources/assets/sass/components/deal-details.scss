@@ -5,11 +5,13 @@
 .deal-details {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   margin: 0 auto;
-  max-width: $break-large;
+  max-width: 75%;
 
   @media (min-width: $break-large) {
     flex-direction: row;
+    max-width: $break-large;
   }
 
   &__deal-content {
@@ -37,9 +39,11 @@
 
   &__pricing {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: center;
 
     @media (min-width: $break-large) {
+      flex-direction: row;
       width: $break-large * .4;
     }
   }
