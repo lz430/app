@@ -2787,6 +2787,72 @@ financing {
   width: 100%;
 }
 
+.financing__button {
+  background: transparent;
+  border: 1px solid #ccc;
+  color: #586368;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 5px 10px;
+  border-radius: 4px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.financing__button--invert {
+  border: 2px solid #fff;
+}
+
+.financing__button--blue {
+  background-color: #3786a1;
+  color: #fff;
+}
+
+.financing__button--white {
+  background-color: #fff;
+  color: #3786a1;
+}
+
+.financing__button--small {
+  font-size: .9rem;
+  padding: 4px 15px;
+}
+
+.financing__button--no-border {
+  border: 2px solid transparent;
+}
+
+.financing__button--dark-bg {
+  color: #fff;
+}
+
+.financing__button--capitalize {
+  text-transform: capitalize;
+}
+
+.financing__button--facebook-blue {
+  background: #3b5998;
+  color: #fff;
+}
+
+.financing__button--twitter-blue {
+  background: #4099ff;
+  color: #fff;
+}
+
+.financing__button svg {
+  fill: #fff;
+  height: 12px;
+  margin-bottom: -1.5px;
+  margin-right: 5px;
+  width: 12px;
+}
+
+.financing__cash {
+  color: #0e9dce;
+  cursor: pointer;
+}
+
 .financing__header {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2800,11 +2866,6 @@ financing {
 .financing__title {
   color: #1e2123;
   font-size: 1.5rem;
-}
-
-.financing__cash {
-  color: #0e9dce;
-  cursor: pointer;
 }
 
 comparepage {
