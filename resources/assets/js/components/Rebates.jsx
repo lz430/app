@@ -4,6 +4,7 @@ import util from 'src/util';
 import rebates from 'src/rebates';
 import api from 'src/api';
 import SVGInline from 'react-svg-inline';
+import miscicons from 'miscicons';
 import zondicons from 'zondicons';
 import strings from 'src/strings';
 import { connect } from 'react-redux';
@@ -121,7 +122,7 @@ class Rebates extends React.PureComponent {
                         this.renderRebate(rebate, index)
                     )
                 ) : (
-                    'Loading...'
+                    <SVGInline svg={miscicons['loading']} />
                 )}
             </div>
         );

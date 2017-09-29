@@ -21,20 +21,24 @@ class CashCalculator extends React.PureComponent {
                 )}
                 <CustomerTypeSelect />
                 <hr />
-                Available Rebates and Incentives
+                <h4>Available Rebates and Incentives</h4>
                 <Rebates />
                 <hr />
-                Summary
+                <h4>Summary</h4>
                 <div>
                     <div>
-                        <span>MSRP</span>
-                        <span style={{ float: 'right' }}>
+                        <span className="cash-finance-lease-calculator__left-item">
+                            MSRP
+                        </span>
+                        <span className="cash-finance-lease-calculator__right-item">
                             {util.moneyFormat(this.props.deal.msrp)}
                         </span>
                     </div>
                     <div>
-                        <span>Your Price</span>
-                        <span style={{ float: 'right' }}>
+                        <span className="cash-finance-lease-calculator__left-item">
+                            Your Price
+                        </span>
+                        <span className="cash-finance-lease-calculator__right-item">
                             {util.moneyFormat(
                                 util.getEmployeeOrSupplierPrice(
                                     this.props.deal,
@@ -44,14 +48,18 @@ class CashCalculator extends React.PureComponent {
                         </span>
                     </div>
                     <div>
-                        <span>Documentation Fee</span>
-                        <span style={{ float: 'right' }}>
+                        <span className="cash-finance-lease-calculator__left-item">
+                            Documentation Fee
+                        </span>
+                        <span className="cash-finance-lease-calculator__right-item">
                             {util.moneyFormat(this.props.deal.doc_fee)}
                         </span>
                     </div>
                     <div>
-                        <span>Sales Tax</span>
-                        <span style={{ float: 'right' }}>
+                        <span className="cash-finance-lease-calculator__left-item">
+                            Sales Tax
+                        </span>
+                        <span className="cash-finance-lease-calculator__right-item">
                             {util.moneyFormat(
                                 formulas.calculateSalesTaxCashFinance(
                                     util.getEmployeeOrSupplierPrice(
@@ -64,8 +72,10 @@ class CashCalculator extends React.PureComponent {
                         </span>
                     </div>
                     <div>
-                        <span>Your Rebates and Incentives</span>
-                        <span style={{ float: 'right' }}>
+                        <span className="cash-finance-lease-calculator__left-item">
+                            Your Rebates and Incentives
+                        </span>
+                        <span className="cash-finance-lease-calculator__right-item">
                             {util.moneyFormat(
                                 R.sum(
                                     R.map(
@@ -77,8 +87,10 @@ class CashCalculator extends React.PureComponent {
                         </span>
                     </div>
                     <div>
-                        <span>Total Cost of Vehicle</span>
-                        <span style={{ float: 'right', color: 'green' }}>
+                        <span className="cash-finance-lease-calculator__left-item">
+                            Total Cost of Vehicle
+                        </span>
+                        <span className="cash-finance-lease-calculator__right-item">
                             {util.moneyFormat(
                                 formulas.calculateTotalCashFinance(
                                     util.getEmployeeOrSupplierPrice(

@@ -8,6 +8,8 @@ import formulas from 'src/formulas';
 import { connect } from 'react-redux';
 import api from 'src/api';
 import * as Actions from 'actions';
+import SVGInline from 'react-svg-inline';
+import miscicons from 'miscicons';
 
 class LeaseCalculator extends React.PureComponent {
     constructor(props) {
@@ -183,7 +185,7 @@ class LeaseCalculator extends React.PureComponent {
                             )
                         )
                     ) : (
-                        'Loading...'
+                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </span>
             </div>
@@ -241,7 +243,7 @@ class LeaseCalculator extends React.PureComponent {
                             )
                         )
                     ) : (
-                        'Loading...'
+                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </span>
             </div>
@@ -278,7 +280,7 @@ class LeaseCalculator extends React.PureComponent {
                             )
                         )
                     ) : (
-                        'Loading...'
+                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </span>
             </div>
@@ -288,7 +290,7 @@ class LeaseCalculator extends React.PureComponent {
     render() {
         return (
             <div>
-                <h4>Lease Price</h4>
+                Lease Price{' '}
                 {util.moneyFormat(
                     util.getEmployeeOrSupplierPrice(
                         this.props.deal,
@@ -297,7 +299,10 @@ class LeaseCalculator extends React.PureComponent {
                 )}
                 <CustomerTypeSelect />
                 {this.state.selectedRebates ? (
-                    <hr /> + 'Available Rebates and Incentives on Lease'
+                    <div>
+                        <hr />
+                        <h4>Available Rebates and Incentives</h4>
+                    </div>
                 ) : (
                     ''
                 )}

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import R from 'ramda';
 import * as Actions from 'actions/index';
+import SVGInline from 'react-svg-inline';
+import miscicons from 'miscicons';
 
 class MakeSelector extends React.PureComponent {
     constructor() {
@@ -55,7 +57,7 @@ class MakeSelector extends React.PureComponent {
                     {this.props.makes ? (
                         this.props.makes.map(this.renderMake)
                     ) : (
-                        'loading'
+                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </div>
             </div>
