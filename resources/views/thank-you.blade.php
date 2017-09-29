@@ -12,7 +12,7 @@
 @endpush
 
 @section('content')
-    <ThankYouPage></ThankYouPage>
+    <ThankYouPage purchase="{{$purchase}}"></ThankYouPage>
 
     @section('footer')
     @endsection

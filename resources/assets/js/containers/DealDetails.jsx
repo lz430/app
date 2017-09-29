@@ -182,7 +182,7 @@ class DealDetails extends React.PureComponent {
         });
     }
 
-    renderFeaturesModal() {
+    renderStandardFeaturesModal() {
         return (
             <Modal>
                 <div className="modal__content">
@@ -258,7 +258,7 @@ class DealDetails extends React.PureComponent {
         );
     }
 
-    renderStandardFeaturesModal(deal) {
+    renderFeaturesModal(deal) {
         return (
             <Modal>
                 <div className="modal__content">

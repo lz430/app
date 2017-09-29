@@ -248,15 +248,9 @@ class ApplyOrPurchaseController extends Controller
             return redirect(route('home'));
         }
         
-        return view('thank-you');
-    }
-    
-    public function getLastPurchase()
-    {
-        if (! auth()->user() || ! $lastPurchase = auth()->user()->purchases->last()) {
-            return JsonResponse::create([], Response::HTTP_NOT_FOUND);
-        }
-       
-        return fractal()->item($lastPurchase)->transformWith(PurchaseTransformer::class)->respond();
+        $lastPurchase->load('deal.photos');
+        $lastPurchase = fractal()->item($lastPurchase)->transformWith(PurchaseTransformer::class)->toJson();
+        
+        return view('thank-you')->with('purchase', $lastPurchase);
     }
 }

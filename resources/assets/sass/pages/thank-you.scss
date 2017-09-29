@@ -1,60 +1,145 @@
 @import '../variables';
 @import '../mixins/button';
+@import '../mixins/selector-icon';
 
 .thank-you {
   display: flex;
-
-  &__button {
-    @include button;
-  }
-
-  &__left-panel {
-    display: flex;
-    flex-direction: column;
-    flex: 2;
-    padding: 20px;
-  }
-
-  &__left-panel-title {
-    font-size: 2rem;
-    font-weight: bold;
-  }
-
-  &__left-panel-subtitle {
-    font-size: 1.5rem;
-  }
-  &__left-panel-image {
-    align-self: center;
-  }
-
-  &__left-panel-buttons {
-    @include button;
-    display: flex;
-    justify-content: space-between;
-
-  }
-
-  &__left-panel-button {
-    @include button;
-    width: 30%;
-  }
-
- &__right-panel {
-   background-color: $color-text-white;
-   display: flex;
-   flex: 1;
-   flex-direction: column;
-   margin: 20px;
-   align-items: center;
- }
+  flex-direction: column;
+  margin: 0 auto;
+  max-width: $break-large;
 
   &__modal {
-    padding: 20px;
     margin-bottom: 10px;
+    padding: 20px;
     text-align: center;
   }
 
   &__modal-close {
     float: right;
   }
+
+  @media (min-width: $break-large) {
+    flex-direction: row;
+  }
+
+  &__left-panel {
+    padding: 15px;
+  }
+
+  &__left-panel-buttons {
+    display: flex;
+  }
+
+  &__title {
+    color: $text-color-dark;
+    margin-top: 10px;
+  }
+
+  &__title-year-make {
+    font-size: 1.2rem;
+  }
+
+  &__pricing {
+    align-items: center;
+    background-color: $color-background-secondary;
+    border-radius: 6px;
+    box-shadow: 0 0 3px 0 rgba(185, 185, 185, 0.9);
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    margin: $deal-card-margin;
+    max-width: $deal-card-width;
+    min-width: $deal-card-width;
+
+    @media (min-width: $break-large) {
+      width: $break-large * .4;
+    }
+  }
+
+  &__modal-body {
+    padding: 20px;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
+  &__button {
+    @include button;
+    flex: 1;
+    margin: 5px;
+  }
+
+  &__primary-image {
+    border: 1px solid $color-section-bottom-border;
+    margin: 15px 0;
+    width: 100%;
+  }
+
+  &__choice {
+    border-bottom: 2px solid $color-blue;
+    font-size: .9rem;
+    margin-bottom: 10px;
+    padding-top: 6px;
+  }
+
+  &__your-price-label {
+    font-size: small;
+    text-transform: uppercase;
+  }
+
+  &__your-price {
+    font-size: xx-large;
+    margin-bottom: -.9rem;
+    margin-top: -10px;
+  }
+
+  &__plate-fee {
+    font-size: x-small;
+    margin-bottom: 5px;
+  }
+
+  &__sub-li {
+    font-size: small;
+  }
+
+  &__hr {
+    border-top: 1px solid $color-section-bottom-border;
+    display: inline-block;
+    height: 1px;
+    margin-bottom: 5px;
+    width: 7rem;
+
+    &--full {
+      width: 100%;
+    }
+  }
+
+  &__msrp {
+    color: lighten($text-color, 25%);
+    font-size: large;
+  }
+
+  &__rebates-applied {
+    font-size: small;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 100%;
+  }
+
+  &__dealer-info {
+    font-size: .9rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  &__dealer-title {
+    text-decoration: underline;
+  }
+
+  &__finalize-items {
+    padding-left: 10px;
+  }
 }
+

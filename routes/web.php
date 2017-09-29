@@ -15,7 +15,6 @@ Route::get('deals/{id}', 'DealsController@show')->name('deals.show');
 Route::post('set-email', 'OptinMonsterController@setEmailSession')->name('set-email');
 
 Route::get('thank-you', 'ApplyOrPurchaseController@thankYou')->name('thank-you');
-Route::get('last-purchase', 'ApplyOrPurchaseController@getLastPurchase')->name('getLastPurchase');
 Route::post('apply-or-purchase', 'ApplyOrPurchaseController@applyOrPurchase')->name('applyOrPurchase');
 Route::group(['middleware' => 'auth'], function () {
     /** Purchase Flow */

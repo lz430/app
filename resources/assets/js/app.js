@@ -68,7 +68,9 @@ Array.from(document.getElementsByTagName('DealDetails')).map(element => {
 Array.from(document.getElementsByTagName('ThankYouPage')).map(element => {
     ReactDOM.render(
         <Provider store={store()}>
-            <ThankYouPage />
+            <ThankYouPage
+                purchase={JSON.parse(element.getAttribute('purchase'))}
+            />
         </Provider>,
         element
     );
