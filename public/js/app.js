@@ -54779,15 +54779,6 @@ var LeaseCalculator = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'h4',
                         null,
-                        'Select Desired Lease Payment'
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    null,
-                    _react2.default.createElement(
-                        'h4',
-                        null,
                         'Monthly Payment'
                     ),
                     this.renderSalesTax(),
