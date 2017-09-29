@@ -13,7 +13,6 @@ class RouteOneWebhookTest extends TestCase
     use RefreshDatabase;
     
     protected $sampleXML = <<< XML
-<payload xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 	<E:Envelope xmlns:E="http://schemas.xmlsoap.org/soap/envelope/">
 		<SOAP:Header xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
 			<SOAP-SEC:Signature SOAP:mustUnderstand="1" xmlns:SOAP-SEC="http://schemas.xmlsoap.org/soap/security/2000-12">
@@ -237,7 +236,6 @@ class RouteOneWebhookTest extends TestCase
 			</A:RouteOne>
 		</E:Body>
 	</E:Envelope>
-</payload>
 XML;
 
     /** @test */
