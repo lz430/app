@@ -54,15 +54,13 @@ class ApplyOrPurchaseController extends Controller
             $user = User::create();
             auth()->login($user);
 
-            /**
-             * dmr_price is the customer's "desired" price. i.e. after rebates etc have been applied.
-             */
-            $purchase = $user->purchases()->firstOrNew([
+            $purchase = Purchase::firstOrNew([
                 'deal_id' => request('deal_id'),
                 'completed_at' => null,
             ]);
 
             $purchase->fill([
+                'user_id' => $user->id,
                 'type' => request('type'),
                 'rebates' => json_encode(request('rebates', []), JSON_NUMERIC_CHECK),
                 'dmr_price' => request('dmr_price'),
@@ -126,8 +124,10 @@ class ApplyOrPurchaseController extends Controller
             } else {
                 $user = auth()->user();
             }
+
             $user->email = $request->email;
             $user->save();
+
             return $user;
         });
 
@@ -241,16 +241,16 @@ class ApplyOrPurchaseController extends Controller
             return abort(404);
         }
     }
-    
+
     public function thankYou()
     {
         if (! auth()->user() || ! $lastPurchase = auth()->user()->purchases->last()) {
             return redirect(route('home'));
         }
-        
+
         $lastPurchase->load('deal.photos');
         $lastPurchase = fractal()->item($lastPurchase)->transformWith(PurchaseTransformer::class)->toJson();
-        
+
         return view('thank-you')->with('purchase', $lastPurchase);
     }
 }

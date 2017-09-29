@@ -71,7 +71,7 @@ class DealsController extends BaseAPIController
 
     private function makeDealsQuery(Request $request) : Builder
     {
-        return Deal::whereHas('versions', function (Builder $query) use ($request) {
+        return Deal::whereHas('dealer')->whereHas('versions', function (Builder $query) use ($request) {
             if ($request->has('body_styles')) {
                 $query->filterByBodyStyle($request->get('body_styles'));
             }
