@@ -2,6 +2,7 @@ import React from 'react';
 import util from 'src/util';
 import R from 'ramda';
 import Rebates from 'components/Rebates';
+import CustomerTypeSelect from 'components/CustomerTypeSelect';
 import rebates from 'src/rebates';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
@@ -11,7 +12,14 @@ class CashCalculator extends React.PureComponent {
     render() {
         return (
             <div>
-                Cash Price {util.moneyFormat(this.props.deal.price)}
+                Cash Price{' '}
+                {util.moneyFormat(
+                    util.getEmployeeOrSupplierPrice(
+                        this.props.deal,
+                        this.props.isEmployee
+                    )
+                )}
+                <CustomerTypeSelect />
                 <hr />
                 Available Rebates and Incentives
                 <Rebates />
@@ -27,7 +35,12 @@ class CashCalculator extends React.PureComponent {
                     <div>
                         <span>Your Price</span>
                         <span style={{ float: 'right' }}>
-                            {util.moneyFormat(this.props.deal.price)}
+                            {util.moneyFormat(
+                                util.getEmployeeOrSupplierPrice(
+                                    this.props.deal,
+                                    this.props.isEmployee
+                                )
+                            )}
                         </span>
                     </div>
                     <div>
@@ -41,7 +54,10 @@ class CashCalculator extends React.PureComponent {
                         <span style={{ float: 'right' }}>
                             {util.moneyFormat(
                                 formulas.calculateSalesTaxCashFinance(
-                                    this.props.deal.price,
+                                    util.getEmployeeOrSupplierPrice(
+                                        this.props.deal,
+                                        this.props.isEmployee
+                                    ),
                                     this.props.deal.doc_fee
                                 )
                             )}
@@ -65,8 +81,12 @@ class CashCalculator extends React.PureComponent {
                         <span style={{ float: 'right', color: 'green' }}>
                             {util.moneyFormat(
                                 formulas.calculateTotalCashFinance(
-                                    this.props.deal.price,
+                                    util.getEmployeeOrSupplierPrice(
+                                        this.props.deal,
+                                        this.props.isEmployee
+                                    ),
                                     this.props.deal.doc_fee,
+                                    this.props.downPayment,
                                     R.sum(
                                         R.map(
                                             R.prop('value'),
@@ -86,6 +106,8 @@ class CashCalculator extends React.PureComponent {
 function mapStateToProps(state) {
     return {
         deal: state.selectedDeal,
+        downPayment: state.downPayment,
+        isEmployee: state.isEmployee,
         selectedRebates: rebates.getSelectedRebatesForDealAndType(
             state.dealRebates,
             state.selectedRebates,

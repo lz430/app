@@ -40,9 +40,15 @@ test('calculates_total_cash_finance_price_via_formula', () => {
     const price = 40000;
     const docFee = 210;
     const totalRebates = 3500;
+    const downPayment = 0;
 
     expect(
-        formulas.calculateTotalCashFinance(price, docFee, totalRebates)
+        formulas.calculateTotalCashFinance(
+            price,
+            docFee,
+            downPayment,
+            totalRebates
+        )
     ).toEqual(39122.6);
 });
 

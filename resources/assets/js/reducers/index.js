@@ -46,6 +46,10 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 makes: action.data.data.data,
             });
+        case ActionTypes.RECEIVE_MODELS:
+            return Object.assign({}, state, {
+                models: action.data.data.data,
+            });
         case ActionTypes.REQUEST_MORE_DEALS:
             return Object.assign({}, state, {
                 requestingMoreDeals: true,
@@ -94,6 +98,14 @@ const reducer = (state, action) => {
         case ActionTypes.TOGGLE_MAKE:
             return Object.assign({}, state, {
                 selectedMakes: action.selectedMakes,
+            });
+        case ActionTypes.TOGGLE_MODEL:
+            return Object.assign({}, state, {
+                selectedModels: action.selectedModels,
+            });
+        case ActionTypes.SET_IS_EMPLOYEE:
+            return Object.assign({}, state, {
+                isEmployee: action.isEmployee,
             });
         case ActionTypes.TOGGLE_FEATURE:
             return Object.assign({}, state, {

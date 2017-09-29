@@ -1,11 +1,11 @@
 import Decimal from 'decimal.js';
 
 const formulas = {
-    calculateTotalCashFinance: (price, docFee, rebatesTotal) => {
+    calculateTotalCashFinance: (price, docFee, downPayment, rebatesTotal) => {
         const total = new Decimal(price).plus(docFee);
         const totalWithSalesTax = total.plus(total.times(0.06));
 
-        return Number(totalWithSalesTax.minus(rebatesTotal));
+        return Number(totalWithSalesTax.minus(rebatesTotal).minus(downPayment));
     },
     calculateTotalLease: (price, docFee, rebatesTotal) => {
         const total = price + docFee;

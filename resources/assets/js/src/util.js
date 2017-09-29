@@ -17,12 +17,15 @@ const util = {
             minimumFractionDigits: 0,
         });
 
-        return formatter.format(num);
+        return formatter.format(Math.round(num));
     },
     toggleItem: (items, item) => {
         return R.contains(item, items)
             ? R.reject(R.equals(item), items)
             : R.append(item, items);
+    },
+    getEmployeeOrSupplierPrice: (deal, isEmployee) => {
+        return isEmployee ? deal.employee_price : deal.supplier_price;
     },
     getInitialBodyStyleFromUrl: () => {
         return R.prop('style', qs.parse(window.location.search.slice(1)));

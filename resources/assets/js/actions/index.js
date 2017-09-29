@@ -9,6 +9,7 @@ const withStateDefaults = (state, changed) => {
         {},
         {
             makeIds: state.selectedMakes,
+            modelIds: R.map(R.prop('id'), state.selectedModels),
             bodyStyles: state.selectedStyles,
             fuelType: state.selectedFuelType,
             transmissionType: state.selectedTransmissionType,
@@ -36,9 +37,28 @@ export function requestMakes() {
     };
 }
 
+export function requestModels() {
+    return dispatch => {
+        api.getModels().then(data => {
+            dispatch(receiveModels(data));
+        });
+
+        dispatch({
+            type: ActionTypes.REQUEST_MODELS,
+        });
+    };
+}
+
 export function receiveMakes(data) {
     return {
         type: ActionTypes.RECEIVE_MAKES,
+        data: data,
+    };
+}
+
+export function receiveModels(data) {
+    return {
+        type: ActionTypes.RECEIVE_MODELS,
         data: data,
     };
 }
@@ -118,10 +138,43 @@ export function toggleMake(make_id) {
     };
 }
 
+export function toggleModel(model) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_DEALS,
+        });
+
+        const selectedModels = util.toggleItem(
+            getState().selectedModels,
+            model
+        );
+
+        api
+            .getDeals(
+                withStateDefaults(getState(), {
+                    modelIds: R.map(R.prop('id'), selectedModels),
+                })
+            )
+            .then(data => {
+                dispatch(receiveDeals(data));
+            });
+
+        dispatch({
+            type: ActionTypes.TOGGLE_MODEL,
+            selectedModels,
+        });
+    };
+}
+
 export function requestRebates(deal) {
     return (dispatch, getState) => {
         // If we have already received the rebates for the deal, don't request them again.
-        if (getState().dealRebates.hasOwnProperty(deal.id)) return;
+        // Or if we don't yet have a zipcode
+        if (
+            getState().dealRebates.hasOwnProperty(deal.id) ||
+            !getState().zipcode
+        )
+            return;
 
         api.getRebates(getState().zipcode, deal.vin).then(data => {
             dispatch(
@@ -207,6 +260,13 @@ export function receiveBodyStyles(deals) {
     return {
         type: ActionTypes.RECEIVE_BODY_STYLES,
         data: deals,
+    };
+}
+
+export function setIsEmployee(isEmployee) {
+    return {
+        type: ActionTypes.SET_IS_EMPLOYEE,
+        isEmployee: isEmployee,
     };
 }
 

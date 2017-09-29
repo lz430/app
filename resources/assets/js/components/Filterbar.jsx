@@ -12,6 +12,7 @@ class Filterbar extends React.PureComponent {
 
         this.renderFilterStyles = this.renderFilterStyles.bind(this);
         this.renderFilterMakes = this.renderFilterMakes.bind(this);
+        this.renderFilterModels = this.renderFilterModels.bind(this);
         this.renderFilterTransmissionType = this.renderFilterTransmissionType.bind(
             this
         );
@@ -93,6 +94,18 @@ class Filterbar extends React.PureComponent {
         );
     }
 
+    renderFilterModels(model, index) {
+        return (
+            <div
+                key={index}
+                className="filterbar__filter"
+                onClick={this.props.toggleModel.bind(null, model)}
+            >
+                {model.attributes.name} {this.renderX()}
+            </div>
+        );
+    }
+
     renderFilterFeatures(feature, index) {
         return (
             <div
@@ -123,6 +136,7 @@ class Filterbar extends React.PureComponent {
                         ''
                     )}
                     {this.props.selectedMakes.map(this.renderFilterMakes)}
+                    {this.props.selectedModels.map(this.renderFilterModels)}
                     {this.props.selectedFuelType ? (
                         this.renderFilterFuelType(this.props.selectedFuelType)
                     ) : (
@@ -169,7 +183,9 @@ function mapStateToProps(state) {
     return {
         selectedStyles: state.selectedStyles,
         makes: state.makes,
+        models: state.selectedModels,
         selectedMakes: state.selectedMakes,
+        selectedModels: state.selectedModels,
         selectedTransmissionType: state.selectedTransmissionType,
         selectedFuelType: state.selectedFuelType,
         selectedSegment: state.selectedSegment,

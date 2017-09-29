@@ -2,6 +2,7 @@ import React from 'react';
 import util from 'src/util';
 import R from 'ramda';
 import Rebates from 'components/Rebates';
+import CustomerTypeSelect from 'components/CustomerTypeSelect';
 import rebates from 'src/rebates';
 import formulas from 'src/formulas';
 import { connect } from 'react-redux';
@@ -162,7 +163,10 @@ class LeaseCalculator extends React.PureComponent {
                         util.moneyFormat(
                             Math.round(
                                 formulas.calculateLeasedMonthlyPayments(
-                                    this.props.deal.price -
+                                    util.getEmployeeOrSupplierPrice(
+                                        this.props.deal,
+                                        this.props.isEmployee
+                                    ) -
                                         R.sum(
                                             R.map(
                                                 R.prop('value'),
@@ -248,6 +252,7 @@ class LeaseCalculator extends React.PureComponent {
     }
 
     renderYourRebatesAndIncentives() {
+        console.log(this.props.selectedRebates);
         return (
             <div>
                 <span>Your Rebates and Incentives</span>
@@ -272,7 +277,14 @@ class LeaseCalculator extends React.PureComponent {
     render() {
         return (
             <div>
-                Lease Price {util.moneyFormat(this.props.deal.price)}
+                Lease Price{' '}
+                {util.moneyFormat(
+                    util.getEmployeeOrSupplierPrice(
+                        this.props.deal,
+                        this.props.isEmployee
+                    )
+                )}
+                <CustomerTypeSelect />
                 {this.state.selectedRebates ? (
                     <hr /> + 'Available Rebates and Incentives on Lease'
                 ) : (
@@ -291,7 +303,12 @@ class LeaseCalculator extends React.PureComponent {
                     <div>
                         <span>Your Price</span>
                         <span style={{ float: 'right' }}>
-                            {util.moneyFormat(this.props.deal.price)}
+                            {util.moneyFormat(
+                                util.getEmployeeOrSupplierPrice(
+                                    this.props.deal,
+                                    this.props.isEmployee
+                                )
+                            )}
                         </span>
                     </div>
                     {this.renderYourRebatesAndIncentives()}
@@ -321,6 +338,7 @@ function mapStateToProps(state) {
         termDuration: state.termDuration,
         annualMileage: state.annualMileage,
         residualPercent: state.residualPercent,
+        isEmployee: state.isEmployee,
         availableRebates: rebates.getAvailableRebatesForDealAndType(
             state.dealRebates,
             state.selectedRebates,

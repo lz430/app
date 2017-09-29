@@ -575,7 +575,7 @@ body {
 }
 
 .make-selector__make--selected {
-  border: red solid 1px;
+  border: #3786a1 solid 1px;
 }
 
 .make-selector__make img {
@@ -1575,6 +1575,7 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  line-height: 1rem;
   margin-left: auto;
   padding: 5px;
   width: 30px;
@@ -1635,6 +1636,7 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  margin-right: 2px;
 }
 
 .filter-style-selector__style {
@@ -1663,7 +1665,7 @@ body {
 }
 
 .filter-style-selector__style--selected {
-  outline: 1px solid red;
+  outline: 1px solid #3786a1;
 }
 
 .filter-style-selector__icon svg path {

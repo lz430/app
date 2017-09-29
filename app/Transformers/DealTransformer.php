@@ -3,6 +3,7 @@
 namespace App\Transformers;
 
 use App\Deal;
+use App\JATO\Make;
 use League\Fractal\TransformerAbstract;
 
 class DealTransformer extends TransformerAbstract
@@ -31,7 +32,8 @@ class DealTransformer extends TransformerAbstract
             'fuel' => $deal->fuel,
             'color' => $deal->color,
             'interior_color' => $deal->interior_color,
-            'price' => (float) $deal->price,
+            'employee_price' => (float) (in_array(strtolower($deal->make), Make::DOMESTIC) ? $deal->price : $deal->price - ($deal->price * 0.04)),
+            'supplier_price' =>  (float) (in_array(strtolower($deal->make), Make::DOMESTIC) ? $deal->price + ($deal->price * 0.04) : $deal->price),
             'msrp' => (float) $deal->msrp,
             'inventory_date' => $deal->inventory_date,
             'certified' => $deal->certified,

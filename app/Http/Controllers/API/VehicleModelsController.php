@@ -12,7 +12,7 @@ class VehicleModelsController extends BaseAPIController
     
     public function index()
     {
-        $models = VehicleModel::all();
+        $models = VehicleModel::orderBy('name')->get();
     
         return fractal()
             ->collection($models)

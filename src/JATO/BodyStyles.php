@@ -64,7 +64,7 @@ class BodyStyles
             'icon' => 'minivan',
         ],
         'sport utility vehicle' => [
-            'label' => 'Sport Utility Vehicle (SUV)',
+            'label' => 'Sport Utility Vehicle',
             'style' => 'Sport Utility Vehicle',
             'subStyles' => [
                 'Crossover',
