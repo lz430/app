@@ -183,7 +183,7 @@ class DealDetails extends React.PureComponent {
         });
     }
 
-    renderFeaturesModal() {
+    renderStandardFeaturesModal() {
         return (
             <Modal>
                 <div className="modal__content">
@@ -259,7 +259,7 @@ class DealDetails extends React.PureComponent {
         );
     }
 
-    renderStandardFeaturesModal(deal) {
+    renderFeaturesModal(deal) {
         return (
             <Modal>
                 <div className="modal__content">
@@ -269,10 +269,10 @@ class DealDetails extends React.PureComponent {
                     <div className="modal__header">
                         <div className="modal__titles modal__titles--center">
                             <div className="modal__subtitle modal__subtitle--center">
-                                {strings.dealYearMake(this.props.deal)}
+                                {strings.dealYearMake(deal)}
                             </div>
                             <div className="modal__title modal_title--center">
-                                {strings.dealModelTrim(this.props.deal)}
+                                {strings.dealModelTrim(deal)}
                             </div>
                         </div>
                         <div className="modal__close">

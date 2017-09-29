@@ -9,13 +9,16 @@ use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
 use App\Mail\DealPurchasedUser;
 use App\Purchase;
+use App\Transformers\PurchaseTransformer;
 use App\User;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Carbon\Carbon;
 use DeliverMyRide\HubSpot\Client;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -241,14 +244,13 @@ class ApplyOrPurchaseController extends Controller
     
     public function thankYou()
     {
-        if (! $lastPurchase = auth()->user()->purchases->last()) {
-            return redirect()->route('home');
+        if (! auth()->user() || ! $lastPurchase = auth()->user()->purchases->last()) {
+            return redirect(route('home'));
         }
-
-        $photo = $lastPurchase->deal->featuredPhoto();
-
-        auth()->logout();
         
-        return view('thank-you')->with(['purchase' => $lastPurchase, 'photo' => $photo]);
+        $lastPurchase->load('deal.photos');
+        $lastPurchase = fractal()->item($lastPurchase)->transformWith(PurchaseTransformer::class)->toJson();
+        
+        return view('thank-you')->with('purchase', $lastPurchase);
     }
 }

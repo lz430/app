@@ -31,7 +31,7 @@ class Deal extends Model
 
     public function photos()
     {
-        return $this->hasMany(DealPhoto::class);
+        return $this->hasMany(DealPhoto::class)->orderBy('id');
     }
     
     public function features()
