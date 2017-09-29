@@ -290,7 +290,7 @@ class LeaseCalculator extends React.PureComponent {
     render() {
         return (
             <div>
-                <h4>Lease Price</h4>
+                Lease Price{' '}
                 {util.moneyFormat(
                     util.getEmployeeOrSupplierPrice(
                         this.props.deal,
@@ -299,7 +299,10 @@ class LeaseCalculator extends React.PureComponent {
                 )}
                 <CustomerTypeSelect />
                 {this.state.selectedRebates ? (
-                    <hr /> + 'Available Rebates and Incentives on Lease'
+                    <div>
+                        <hr />
+                        <h4>Available Rebates and Incentives</h4>
+                    </div>
                 ) : (
                     ''
                 )}
