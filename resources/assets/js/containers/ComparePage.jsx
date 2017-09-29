@@ -14,6 +14,7 @@ import string from 'src/strings';
 import AccordionTable from 'components/AccordionTable';
 import util from 'src/util';
 import api from 'src/api';
+import miscicons from 'miscicons';
 
 class ComparePage extends React.PureComponent {
     constructor(props) {
@@ -420,7 +421,7 @@ class ComparePage extends React.PureComponent {
                             }}
                         </AccordionTable>
                     ) : (
-                        'Loading...'
+                        <SVGInline svg={miscicons['loading']} />
                     )}
 
                     <AccordionTable>

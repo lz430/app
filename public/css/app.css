@@ -2643,6 +2643,20 @@ body {
   width: 100%;
 }
 
+.loading {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.loading svg path,
+.loading svg rect {
+  fill: #3786a1;
+}
+
 .welcome__top {
   background: url("/images/welcome-top.png") center;
   background-size: cover;

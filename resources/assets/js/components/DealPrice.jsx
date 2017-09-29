@@ -5,6 +5,8 @@ import rebates from 'src/rebates';
 import formulas from 'src/formulas';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
+import SVGInline from 'react-svg-inline';
+import miscicons from 'miscicons';
 
 class DealPrice extends React.PureComponent {
     constructor(props) {
@@ -107,7 +109,7 @@ class DealPrice extends React.PureComponent {
                             )
                         )
                     ) : (
-                        'Loading...'
+                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </div>
                 <div className="deal-price__hr" />
@@ -166,7 +168,7 @@ class DealPrice extends React.PureComponent {
 
     renderAppliedRebatesLink() {
         if (!this.state.availableRebates) {
-            return <div>Loading...</div>;
+            return <SVGInline svg={miscicons['loading']} />;
         }
 
         const selectedAmount = R.sum(

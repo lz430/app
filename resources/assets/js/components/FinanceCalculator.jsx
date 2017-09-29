@@ -7,6 +7,8 @@ import rebates from 'src/rebates';
 import formulas from 'src/formulas';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
+import SVGInline from 'react-svg-inline';
+import miscicons from 'miscicons';
 
 class FinanceCalculator extends React.PureComponent {
     constructor(props) {
@@ -60,7 +62,7 @@ class FinanceCalculator extends React.PureComponent {
                             )
                         )
                     ) : (
-                        'Loading...'
+                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </span>
             </div>
@@ -82,7 +84,7 @@ class FinanceCalculator extends React.PureComponent {
                             )
                         )
                     ) : (
-                        'Loading...'
+                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </span>
             </div>
@@ -99,7 +101,7 @@ class FinanceCalculator extends React.PureComponent {
                     {totalAmountToFinance ? (
                         util.moneyFormat(totalAmountToFinance)
                     ) : (
-                        'Loading...'
+                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </span>
             </div>
@@ -124,7 +126,7 @@ class FinanceCalculator extends React.PureComponent {
                             )
                         )
                     ) : (
-                        'Loading...'
+                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </span>
             </div>

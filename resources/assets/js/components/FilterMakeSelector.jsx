@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
+import miscicons from 'miscicons';
 
 class FilterMakeSelector extends React.PureComponent {
     render() {
@@ -37,7 +38,7 @@ class FilterMakeSelector extends React.PureComponent {
                         );
                     })
                 ) : (
-                    'Loading...'
+                    <SVGInline svg={miscicons['loading']} />
                 )}
             </div>
         );

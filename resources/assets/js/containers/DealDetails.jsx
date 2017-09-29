@@ -15,6 +15,7 @@ import strings from 'src/strings';
 import CompareBar from 'components/CompareBar';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
+import miscicons from 'miscicons';
 
 class DealDetails extends React.PureComponent {
     constructor(props) {
@@ -224,7 +225,7 @@ class DealDetails extends React.PureComponent {
                                 );
                             })
                         ) : (
-                            'Loading...'
+                            <SVGInline svg={miscicons['loading']} />
                         )}
                     </ul>
 
@@ -239,7 +240,7 @@ class DealDetails extends React.PureComponent {
                                 );
                             })
                         ) : (
-                            'Loading...'
+                            <SVGInline svg={miscicons['loading']} />
                         )}
                     </ul>
 

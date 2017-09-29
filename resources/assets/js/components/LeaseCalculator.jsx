@@ -8,6 +8,8 @@ import formulas from 'src/formulas';
 import { connect } from 'react-redux';
 import api from 'src/api';
 import * as Actions from 'actions';
+import SVGInline from 'react-svg-inline';
+import miscicons from 'miscicons';
 
 class LeaseCalculator extends React.PureComponent {
     constructor(props) {
@@ -183,7 +185,7 @@ class LeaseCalculator extends React.PureComponent {
                             )
                         )
                     ) : (
-                        'Loading...'
+                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </span>
             </div>
@@ -241,7 +243,7 @@ class LeaseCalculator extends React.PureComponent {
                             )
                         )
                     ) : (
-                        'Loading...'
+                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </span>
             </div>
@@ -278,7 +280,7 @@ class LeaseCalculator extends React.PureComponent {
                             )
                         )
                     ) : (
-                        'Loading...'
+                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </span>
             </div>
