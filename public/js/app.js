@@ -52156,15 +52156,22 @@ var DealPrice = function (_React$PureComponent) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             if (!this.props.dealRebates.hasOwnProperty(this.props.deal.id) && this.props.zipcode) {
-                this.props.requestRebates(this.props.deal);
+                this.requestRebates();
             } else {
                 this.componentWillReceiveProps(this.props);
             }
         }
     }, {
+        key: 'requestRebates',
+        value: function requestRebates() {
+            this.props.requestRebates(this.props.deal);
+        }
+    }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(props) {
-            if (!props.dealRebates.hasOwnProperty(props.deal.id)) return;
+            if (!props.dealRebates.hasOwnProperty(props.deal.id)) {
+                return this.props.requestRebates(this.props.deal);
+            }
 
             this.setState({
                 availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(props.dealRebates, props.selectedRebates, props.selectedTab, props.deal),
