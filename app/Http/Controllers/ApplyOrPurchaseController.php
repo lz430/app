@@ -224,16 +224,16 @@ class ApplyOrPurchaseController extends Controller
             return abort(404);
         }
     }
-    
+
     public function thankYou()
     {
         if (! auth()->user() || ! $lastPurchase = auth()->user()->purchases->last()) {
             return redirect(route('home'));
         }
-        
+
         $lastPurchase->load('deal.photos');
         $lastPurchase = fractal()->item($lastPurchase)->transformWith(PurchaseTransformer::class)->toJson();
-        
+
         return view('thank-you')->with('purchase', $lastPurchase);
     }
 }

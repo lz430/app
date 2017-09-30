@@ -23,7 +23,7 @@ class RouteOneWebhookController extends BaseAPIController
 
         try {
             $xml = simplexml_load_string($request->getContent(), null, null, "http://schemas.xmlsoap.org/soap/envelope/");
-            $payload = json_decode(json_encode($xml->children('E', true)->Envelope->Body->children('B', true)), false);
+            $payload = json_decode(json_encode($xml->Body->children('B', true)), false);
 
             $email = $payload
                 ->ProcessCreditDecision

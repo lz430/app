@@ -8,12 +8,14 @@ use App\Mail\ApplicationSubmittedUser;
 use App\Purchase;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class ApplyEmailsTest extends TestCase
 {
+    use WithoutMiddleware;
     use RefreshDatabase;
 
     /** @test */
