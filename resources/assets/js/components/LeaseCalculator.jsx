@@ -315,6 +315,10 @@ class LeaseCalculator extends React.PureComponent {
             return residual.annualMileage === this.props.annualMileage;
         }, leaseRate.residuals);
 
+        if (!residual) {
+            return <td key={index}></td>;
+        }
+
         const isSelected =
             leaseRate.termMonths === this.props.termDuration &&
             this.state.downPayment === downPayment;

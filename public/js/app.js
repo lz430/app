@@ -59812,6 +59812,10 @@ var LeaseCalculator = function (_React$PureComponent) {
                 return residual.annualMileage === _this6.props.annualMileage;
             }, leaseRate.residuals);
 
+            if (!residual) {
+                return _react2.default.createElement('td', { key: index });
+            }
+
             var isSelected = leaseRate.termMonths === this.props.termDuration && this.state.downPayment === downPayment;
 
             var className = 'cash-finance-lease-calculator__lease-table-cell--' + (isSelected ? 'selected' : 'selectable');
