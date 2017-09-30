@@ -60,12 +60,12 @@ class Financing extends Component {
                                 value={DeliverMyRide.purchase.id}
                             />
                             <input type="hidden" name="method" value="cash" />
-                            <a
+                            <button
                                 onClick={() => document.purchase.submit()}
-                                className="financing__cash"
+                                className="financing__button financing__button--blue"
                             >
-                                No thanks, I'll pay cash
-                            </a>
+                                No thanks, I'll get my own financing.
+                            </button>
                         </form>
                     </div>
 

@@ -8,9 +8,12 @@ class SidebarFilter extends React.PureComponent {
         return (
             <div className="sidebar-filters__filter">
                 <div
-                    className="sidebar-filters__filter-title"
+                    className={`sidebar-filters__filter-title ${this.props.open
+                        ? 'sidebar-filters__filter-title--open'
+                        : ''}`}
                     onClick={this.props.toggle}
                 >
+                    {this.props.title}
                     <SVGInline
                         className="sidebar-filters__icon"
                         svg={
@@ -20,15 +23,7 @@ class SidebarFilter extends React.PureComponent {
                                 zondicons['cheveron-down']
                             )
                         }
-                    />{' '}
-                    {this.props.title}
-                    {this.props.count > 0 ? (
-                        <div className="sidebar-filters__count">
-                            {this.props.count}
-                        </div>
-                    ) : (
-                        ''
-                    )}
+                    />
                 </div>
 
                 {this.props.open ? (

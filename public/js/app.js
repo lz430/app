@@ -14175,13 +14175,16 @@ var Deal = function (_React$PureComponent) {
                                 },
                                 className: 'deal__basic-info-year-and-model'
                             },
-                            deal.year + ' ' + deal.make + ' ' + deal.model + ' ' + deal.series
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'deal__basic-info-msrp' },
-                            _util2.default.moneyFormat(deal.msrp),
-                            ' MSRP'
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'deal__basic-info-year-and-make' },
+                                deal.year + ' ' + deal.make
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'deal__basic-info-model-and-series' },
+                                deal.model + ' ' + deal.series
+                            )
                         )
                     ),
                     _react2.default.createElement('img', {
@@ -52475,11 +52478,6 @@ var Deals = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 { className: 'deals' },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'deals__title' },
-                    'Dealer Inventory'
-                ),
                 this.props.deals ? this.props.deals.map(function (deal, index) {
                     return _react2.default.createElement(
                         _Deal2.default,
@@ -52493,7 +52491,7 @@ var Deals = function (_React$PureComponent) {
                                     className: _this2.compareButtonClass(deal),
                                     onClick: _this2.props.toggleCompare.bind(null, deal)
                                 },
-                                'Compare'
+                                'Add to Compare'
                             ),
                             _react2.default.createElement(
                                 'button',
@@ -52501,7 +52499,7 @@ var Deals = function (_React$PureComponent) {
                                     onClick: function onClick() {
                                         return window.location = '/deals/' + deal.id;
                                     },
-                                    className: 'deal__button deal__button--small deal__button--blue deal__button'
+                                    className: 'deal__button deal__button--small deal__button--pink deal__button'
                                 },
                                 'View Details'
                             )
@@ -57450,6 +57448,12 @@ var Sortbar = function (_React$PureComponent) {
                 'div',
                 { className: 'sortbar__buttons' },
                 _react2.default.createElement(
+                    'div',
+                    { className: 'sortbar__label' },
+                    'Sort results by: ',
+                    _react2.default.createElement('br', null)
+                ),
+                _react2.default.createElement(
                     'button',
                     {
                         className: 'sortbar__button sortbar__button',
@@ -57457,7 +57461,6 @@ var Sortbar = function (_React$PureComponent) {
                             return _this2.toggleDropdownShown();
                         }
                     },
-                    'Sort',
                     _react2.default.createElement(_reactSvgInline2.default, {
                         height: '18px',
                         width: '18px',
@@ -57823,10 +57826,6 @@ var _FilterMakeSelector = __webpack_require__(941);
 
 var _FilterMakeSelector2 = _interopRequireDefault(_FilterMakeSelector);
 
-var _FilterModelSelector = __webpack_require__(942);
-
-var _FilterModelSelector2 = _interopRequireDefault(_FilterModelSelector);
-
 var _FilterFuelTypeSelector = __webpack_require__(943);
 
 var _FilterFuelTypeSelector2 = _interopRequireDefault(_FilterFuelTypeSelector);
@@ -57909,11 +57908,6 @@ var FilterPanel = function (_React$PureComponent) {
                     'div',
                     { className: 'sidebar-filters' },
                     _react2.default.createElement(
-                        'div',
-                        { className: 'sidebar-filters__header' },
-                        'Filter Results'
-                    ),
-                    _react2.default.createElement(
                         _SidebarFilter2.default,
                         {
                             toggle: function toggle() {
@@ -57949,9 +57943,9 @@ var FilterPanel = function (_React$PureComponent) {
                         _SidebarFilter2.default,
                         {
                             toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Brand');
+                                return _this2.toggleOpenFilter('Make');
                             },
-                            open: this.state.openFilter === 'Brand',
+                            open: this.state.openFilter === 'Make',
                             title: 'Brand',
                             count: this.props.selectedMakes.length
                         },
@@ -57959,22 +57953,6 @@ var FilterPanel = function (_React$PureComponent) {
                             makes: this.props.makes,
                             selectedMakes: this.props.selectedMakes,
                             onSelectMake: this.props.toggleMake
-                        })
-                    ),
-                    _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Model');
-                            },
-                            open: this.state.openFilter === 'Model',
-                            title: 'Model',
-                            count: this.props.selectedModels.length
-                        },
-                        _react2.default.createElement(_FilterModelSelector2.default, {
-                            models: this.props.models,
-                            selectedModels: this.props.selectedModels,
-                            onSelectModel: this.props.toggleModel
                         })
                     ),
                     _react2.default.createElement(
@@ -58174,20 +58152,14 @@ var SidebarFilter = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     {
-                        className: 'sidebar-filters__filter-title',
+                        className: 'sidebar-filters__filter-title ' + (this.props.open ? 'sidebar-filters__filter-title--open' : ''),
                         onClick: this.props.toggle
                     },
+                    this.props.title,
                     _react2.default.createElement(_reactSvgInline2.default, {
                         className: 'sidebar-filters__icon',
                         svg: this.props.open ? _zondicons2.default['cheveron-up'] : _zondicons2.default['cheveron-down']
-                    }),
-                    ' ',
-                    this.props.title,
-                    this.props.count > 0 ? _react2.default.createElement(
-                        'div',
-                        { className: 'sidebar-filters__count' },
-                        this.props.count
-                    ) : ''
+                    })
                 ),
                 this.props.open ? _react2.default.createElement(
                     'div',
@@ -58593,104 +58565,7 @@ FilterMakeSelector.propTypes = {
 exports.default = FilterMakeSelector;
 
 /***/ }),
-/* 942 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(7);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__(26);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _ramda = __webpack_require__(12);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-var _reactSvgInline = __webpack_require__(21);
-
-var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
-
-var _zondicons = __webpack_require__(30);
-
-var _zondicons2 = _interopRequireDefault(_zondicons);
-
-var _miscicons = __webpack_require__(50);
-
-var _miscicons2 = _interopRequireDefault(_miscicons);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var FilterModelSelector = function (_React$PureComponent) {
-    _inherits(FilterModelSelector, _React$PureComponent);
-
-    function FilterModelSelector() {
-        _classCallCheck(this, FilterModelSelector);
-
-        return _possibleConstructorReturn(this, (FilterModelSelector.__proto__ || Object.getPrototypeOf(FilterModelSelector)).apply(this, arguments));
-    }
-
-    _createClass(FilterModelSelector, [{
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            return _react2.default.createElement(
-                'div',
-                { className: 'filter-selector' },
-                this.props.models ? this.props.models.map(function (model, index) {
-                    return _react2.default.createElement(
-                        'div',
-                        {
-                            key: index,
-                            className: 'filter-selector__selector',
-                            onClick: _this2.props.onSelectModel.bind(null, model)
-                        },
-                        _ramda2.default.contains(model, _this2.props.selectedModels) ? _react2.default.createElement(_reactSvgInline2.default, {
-                            width: '15px',
-                            height: '15px',
-                            className: 'filter-selector__checkbox filter-selector__checkbox--selected',
-                            svg: _zondicons2.default['checkmark']
-                        }) : _react2.default.createElement('div', { className: 'filter-selector__checkbox' }),
-                        model.attributes.name
-                    );
-                }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
-            );
-        }
-    }]);
-
-    return FilterModelSelector;
-}(_react2.default.PureComponent);
-
-FilterModelSelector.propTypes = {
-    models: _propTypes2.default.arrayOf(_propTypes2.default.shape({
-        name: _propTypes2.default.string
-    })),
-    selectedModels: _propTypes2.default.arrayOf(_propTypes2.default.shape({
-        name: _propTypes2.default.string
-    })),
-    onSelectModel: _propTypes2.default.func.isRequired
-};
-
-exports.default = FilterModelSelector;
-
-/***/ }),
+/* 942 */,
 /* 943 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -60238,14 +60113,14 @@ var Financing = function (_Component) {
                             }),
                             _react2.default.createElement('input', { type: 'hidden', name: 'method', value: 'cash' }),
                             _react2.default.createElement(
-                                'a',
+                                'button',
                                 {
                                     onClick: function onClick() {
                                         return document.purchase.submit();
                                     },
-                                    className: 'financing__cash'
+                                    className: 'financing__button financing__button--blue'
                                 },
-                                'No thanks, I\'ll pay cash'
+                                'No thanks, I\'ll get my own financing.'
                             )
                         )
                     ),
@@ -61056,22 +60931,12 @@ var ComparePage = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'button',
                         {
-                            className: 'deal__button deal__button--small ' + (_ramda2.default.contains(deal, this.props.compareList) ? 'deal__button--blue' : ''),
+                            className: 'deal__button deal__button--small deal__button--pink',
                             onClick: function onClick() {
                                 return _purchase2.default.start(deal, _this3.props.selectedTab, _this3.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this3.props.dealRebates, _this3.props.selectedRebates, _this3.props.selectedTab, deal), _this3.props.termDuration, _this3.props.isEmployee);
                             }
                         },
                         'Buy Now'
-                    ),
-                    _react2.default.createElement(
-                        'button',
-                        {
-                            onClick: function onClick() {
-                                return window.location = '/deals/' + deal.id;
-                            },
-                            className: 'deal__button deal__button--small deal__button--blue deal__button'
-                        },
-                        'View Details'
                     )
                 )
             );
@@ -61099,7 +60964,7 @@ var ComparePage = function (_React$PureComponent) {
                     onClick: function onClick() {
                         return _this4.toggleAccordion(accordionTab);
                     },
-                    className: 'compare-page-table__header'
+                    className: 'compare-page-table__header ' + (this.state.openAccordion === accordionTab ? 'compare-page-table__header--open' : '')
                 },
                 _react2.default.createElement(_reactSvgInline2.default, {
                     className: 'compare-page-table__header-cheveron',
@@ -61976,9 +61841,13 @@ var DealDetails = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-details__deal-content' },
-                    'VEHICLE #',
-                    deal.vin.substr(deal.vin.length - 8),
-                    ' AT A GLANCE',
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'deal-details__deal-content-at-a-glance' },
+                        'VEHICLE #',
+                        deal.vin.substr(deal.vin.length - 8),
+                        ' AT A GLANCE'
+                    ),
                     _react2.default.createElement(
                         'div',
                         { className: 'deal-details__deal-content-subtitle' },
@@ -61986,7 +61855,7 @@ var DealDetails = function (_React$PureComponent) {
                     ),
                     _react2.default.createElement(
                         'ul',
-                        null,
+                        { className: 'deal-details__deal-content-features' },
                         deal.features.slice(0, 5).map(function (feature, index) {
                             return _react2.default.createElement(
                                 'li',
@@ -61997,9 +61866,13 @@ var DealDetails = function (_React$PureComponent) {
                     ),
                     _react2.default.createElement(
                         'a',
-                        { href: '#', onClick: function onClick() {
+                        {
+                            href: '#',
+                            className: 'deal-details__deal-content-see-all',
+                            onClick: function onClick() {
                                 return _this5.showStandardFeatures();
-                            } },
+                            }
+                        },
                         'SEE ALL STANDARD FEATURES'
                     ),
                     _react2.default.createElement('br', null),
@@ -62010,7 +61883,7 @@ var DealDetails = function (_React$PureComponent) {
                     ),
                     _react2.default.createElement(
                         'ul',
-                        null,
+                        { className: 'deal-details__deal-content-features' },
                         deal.vauto_features.slice(0, 5).map(function (feature, index) {
                             return _react2.default.createElement(
                                 'li',
@@ -62021,9 +61894,13 @@ var DealDetails = function (_React$PureComponent) {
                     ),
                     _react2.default.createElement(
                         'a',
-                        { href: '#', onClick: function onClick() {
+                        {
+                            href: '#',
+                            className: 'deal-details__deal-content-see-all',
+                            onClick: function onClick() {
                                 return _this5.showFeatures();
-                            } },
+                            }
+                        },
                         'SEE ALL ADDITIONAL OPTIONS'
                     ),
                     _react2.default.createElement('br', null),
@@ -62043,7 +61920,7 @@ var DealDetails = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'button',
                             {
-                                className: 'deal-details__button deal-details__button--small deal-details__button--blue',
+                                className: 'deal-details__button deal-details__button--small deal-details__button--pink',
                                 onClick: function onClick() {
                                     return _purchase2.default.start(deal, _this5.props.selectedTab, _this5.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this5.props.dealRebates, _this5.props.selectedRebates, _this5.props.selectedTab, deal), _this5.props.termDuration, _this5.props.isEmployee);
                                 }

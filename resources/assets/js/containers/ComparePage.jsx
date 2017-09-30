@@ -86,12 +86,7 @@ class ComparePage extends React.PureComponent {
             <Deal deal={deal} key={index}>
                 <div className="deal__buttons">
                     <button
-                        className={
-                            'deal__button deal__button--small ' +
-                            (R.contains(deal, this.props.compareList)
-                                ? 'deal__button--blue'
-                                : '')
-                        }
+                        className="deal__button deal__button--small deal__button--pink"
                         onClick={() =>
                             purchase.start(
                                 deal,
@@ -108,12 +103,6 @@ class ComparePage extends React.PureComponent {
                             )}
                     >
                         Buy Now
-                    </button>
-                    <button
-                        onClick={() => (window.location = `/deals/${deal.id}`)}
-                        className="deal__button deal__button--small deal__button--blue deal__button"
-                    >
-                        View Details
                     </button>
                 </div>
             </Deal>
@@ -135,7 +124,10 @@ class ComparePage extends React.PureComponent {
         return (
             <div
                 onClick={() => this.toggleAccordion(accordionTab)}
-                className="compare-page-table__header"
+                className={`compare-page-table__header ${this.state
+                    .openAccordion === accordionTab
+                    ? 'compare-page-table__header--open'
+                    : ''}`}
             >
                 <SVGInline
                     className="compare-page-table__header-cheveron"

@@ -3,7 +3,6 @@ import SidebarFilter from 'components/SidebarFilter';
 import ZipcodeFinder from 'components/ZipcodeFinder';
 import FilterStyleSelector from 'components/FilterStyleSelector';
 import FilterMakeSelector from 'components/FilterMakeSelector';
-import FilterModelSelector from 'components/FilterModelSelector';
 import FilterFuelTypeSelector from 'components/FilterFuelTypeSelector';
 import FilterFeatureSelector from 'components/FilterFeatureSelector';
 import FilterTransmissionTypeSelector from 'components/FilterTransmissionTypeSelector';
@@ -52,9 +51,6 @@ class FilterPanel extends React.PureComponent {
                 <ZipcodeFinder />
 
                 <div className="sidebar-filters">
-                    <div className="sidebar-filters__header">
-                        Filter Results
-                    </div>
                     <SidebarFilter
                         toggle={() => this.toggleOpenFilter('Vehicle Style')}
                         open={this.state.openFilter === 'Vehicle Style'}
@@ -80,8 +76,8 @@ class FilterPanel extends React.PureComponent {
                         />
                     </SidebarFilter>
                     <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Brand')}
-                        open={this.state.openFilter === 'Brand'}
+                        toggle={() => this.toggleOpenFilter('Make')}
+                        open={this.state.openFilter === 'Make'}
                         title="Brand"
                         count={this.props.selectedMakes.length}
                     >
@@ -89,18 +85,6 @@ class FilterPanel extends React.PureComponent {
                             makes={this.props.makes}
                             selectedMakes={this.props.selectedMakes}
                             onSelectMake={this.props.toggleMake}
-                        />
-                    </SidebarFilter>
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Model')}
-                        open={this.state.openFilter === 'Model'}
-                        title="Model"
-                        count={this.props.selectedModels.length}
-                    >
-                        <FilterModelSelector
-                            models={this.props.models}
-                            selectedModels={this.props.selectedModels}
-                            onSelectModel={this.props.toggleModel}
                         />
                     </SidebarFilter>
                     <SidebarFilter

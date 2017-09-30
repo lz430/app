@@ -44,8 +44,6 @@ class Deals extends React.PureComponent {
     render() {
         return (
             <div className="deals">
-                <div className="deals__title">Dealer Inventory</div>
-
                 {this.props.deals ? (
                     this.props.deals.map((deal, index) => {
                         return (
@@ -60,12 +58,12 @@ class Deals extends React.PureComponent {
                                             deal
                                         )}
                                     >
-                                        Compare
+                                        Add to Compare
                                     </button>
                                     <button
                                         onClick={() =>
                                             (window.location = `/deals/${deal.id}`)}
-                                        className="deal__button deal__button--small deal__button--blue deal__button"
+                                        className="deal__button deal__button--small deal__button--pink deal__button"
                                     >
                                         View Details
                                     </button>

@@ -2,10 +2,11 @@
 
 .compare-bar {
   $compare-button-width: 80px;
-  border-top: 3px solid $color-blue;
+  background-color: $color-compare-bar-background;
   bottom: 0;
   display: flex;
   height: $compare-bar-height;
+  justify-content: center;
   max-height: $compare-bar-height;
   position: absolute;
   width: 100%;
@@ -20,30 +21,32 @@
   }
 
   &__deals {
-    border-left: 2px solid transparent;
-    border-right: 5px solid transparent;
+    background-color: white;
+    border-top: 3px solid $color-blue;
     display: flex;
     flex-direction: row;
     font-size: small;
+    margin: 8px 0;
+    max-width: $compare-bar-width;
     overflow-x: auto;
-    width: calc(100% - #{$compare-button-width});
+    width: $compare-bar-width;
   }
 
   &__deal {
-    border: 1px solid $color-section-bottom-border;
-    border-radius: 4px;
+    border-bottom: 1px solid $color-blue;
     display: flex;
     margin: 2px;
     padding: 5px 10px;
 
     &__info {
+      color: $color-blue;
+      font-weight: bold;
       margin-right: auto;
       padding-right: 10px;
     }
 
     &__title {
-      color: $color-blue;
-      font-weight: bold;
+      color: $color-darkgrey;
       white-space: nowrap;
     }
 
@@ -60,6 +63,8 @@
     color: $color-text-white;
     cursor: pointer;
     font-size: small;
+    height: 54px;
+    margin: 8px 0;
     max-width: $compare-button-width;
     padding: 10px;
     text-align: center;

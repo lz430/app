@@ -6,7 +6,7 @@
     @if (App::environment(['staging', 'production']))
         <script>
             fbq('track', 'Purchase', {
-                value: {{ $purchase->dmr_price || 0 }},
+                value: {{ json_decode($purchase)->data->attributes->dmr_price || 0 }},
                 currency: 'USD'
             });
         </script>

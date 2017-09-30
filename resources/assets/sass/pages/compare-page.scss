@@ -3,17 +3,19 @@
 comparepage {
   width: 100%;
 }
+
 .compare-page {
   display: block;
   margin: 0 auto;
+  max-width: 992px;
   overflow: hidden;
   padding: 0;
 
-  &__body {
-    overflow-x: scroll;
+  a {
+    color: $color-blue;
   }
 
-  @media (min-width: $break-small) {
-    padding: $section-padding;
+  &__body {
+    overflow-x: scroll;
   }
 }

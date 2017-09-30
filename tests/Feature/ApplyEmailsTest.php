@@ -73,7 +73,7 @@ class ApplyEmailsTest extends TestCase
             ]
         );
 
-        $response->assertRedirect(route('thank-you', ['method' => 'cash']));
+        $response->assertRedirect(route('apply'));
     }
 
     /** @test */
