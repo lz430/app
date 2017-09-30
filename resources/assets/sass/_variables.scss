@@ -9,6 +9,8 @@ $color-sidebar-background-secondary: rgba(215, 215, 215, 1);
 $color-sidebar-background-secondary-dark: #343b3e;
 $color-sidebar-background-secondary-light: lighten($color-sidebar-background-secondary, 46%);
 
+$color-compare-bar-background: rgba(204, 204, 204, 1);
+
 $color-text-white: #fff;
 $color-text-blue: #0e9dce;
 $color-black: #000;
@@ -50,7 +52,8 @@ $break-extra-large: 1200px;
 $sidebar-filters-width: 250px;
 $sortbar-height: 60px;
 $filterbar-height: 45px;
-$compare-bar-height: 60px;
+$compare-bar-height: 70px;
+$compare-bar-width: 992px;
 $selector-icon-size: 23px;
 
 // Section

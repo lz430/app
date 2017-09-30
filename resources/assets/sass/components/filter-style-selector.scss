@@ -25,17 +25,26 @@
     width: 50%;
 
     &--selected {
-      outline: 1px solid $color-blue;
+      .filter-style-selector__icon {
+        svg path {
+          fill: $color-text-white;
+        }
+      }
+
+      .filter-style-selector__name {
+        color: $color-text-white;
+      }
     }
   }
 
   &__icon {
     svg path {
-      fill: $color-text-white;
+      fill: $color-grey;
     }
   }
 
   &__name {
+    color: $color-grey;
     font-size: .7rem;
     width: 100%;
   }

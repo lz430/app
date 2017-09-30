@@ -60,11 +60,14 @@ class Sortbar extends React.PureComponent {
 
         return (
             <div className="sortbar__buttons">
+                <div className="sortbar__label">
+                    Sort results by: <br />
+                </div>
                 <button
                     className="sortbar__button sortbar__button"
                     onClick={() => this.toggleDropdownShown()}
                 >
-                    Sort
+
                     <SVGInline
                         height="18px"
                         width="18px"

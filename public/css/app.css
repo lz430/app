@@ -33,10 +33,14 @@ body {
 }
 
 .content {
-  background: #f2f2f2;
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
+}
+
+.content--gray {
+  background: #f2f2f2;
+  padding-top: 20px;
 }
 
 .footer {
@@ -256,7 +260,6 @@ body {
 
 .nav {
   background-color: #fff;
-  border-bottom: 1px solid #ccc;
   border-top: 4px solid #2eb1ad;
   height: 76px;
   max-height: 76px;
@@ -720,6 +723,7 @@ body {
 }
 
 .modal__title {
+  color: #2eb1ad;
   font-size: 1.4rem;
 }
 
@@ -819,18 +823,21 @@ body {
 }
 
 .sortbar__buttons {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-flex: 3;
       -ms-flex: 3;
           flex: 3;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-left: auto;
+  max-width: 200px;
 }
 
 .sortbar__button {
@@ -843,6 +850,8 @@ body {
   border-radius: 4px;
   text-decoration: none;
   text-align: center;
+  background-color: #f6f6f7;
+  width: 200px;
 }
 
 .sortbar__button--invert {
@@ -903,13 +912,17 @@ body {
   margin-right: 10px;
 }
 
+.sortbar__label {
+  font-size: small;
+}
+
 .sortbar__sort-icon {
   margin-right: 3px;
 }
 
 .sortbar__sort-icon--right-side {
-  margin-left: 3px;
-  margin-right: 0;
+  float: right;
+  margin: -5px -5px 0 0;
 }
 
 .sortbar__sort-icon svg {
@@ -1040,7 +1053,7 @@ body {
 
 @media (min-width: 768px) {
   .deals {
-    height: calc(100vh - 241px);
+    height: calc(100vh - 251px);
   }
 }
 
@@ -1740,15 +1753,20 @@ body {
   width: 50%;
 }
 
-.filter-style-selector__style--selected {
-  outline: 1px solid #2eb1ad;
-}
-
-.filter-style-selector__icon svg path {
+.filter-style-selector__style--selected .filter-style-selector__icon svg path {
   fill: #fff;
 }
 
+.filter-style-selector__style--selected .filter-style-selector__name {
+  color: #fff;
+}
+
+.filter-style-selector__icon svg path {
+  fill: #ced4d9;
+}
+
 .filter-style-selector__name {
+  color: #ced4d9;
   font-size: .7rem;
   width: 100%;
 }
@@ -1837,6 +1855,7 @@ body {
           justify-content: center;
   margin: 0 auto;
   max-width: 75%;
+  padding-bottom: 80px;
 }
 
 @media (min-width: 992px) {
@@ -1850,10 +1869,31 @@ body {
 }
 
 .deal-details__deal-content {
+  border-top: 1px solid #ced4d9;
   padding: 15px;
 }
 
+.deal-details__deal-content-at-a-glance {
+  font-size: medium;
+  padding-bottom: 6px;
+}
+
+.deal-details__deal-content-features {
+  font-size: small;
+  margin: 0 0 10px 0;
+  padding: 0 15px;
+}
+
+.deal-details__deal-content-see-all {
+  color: #2eb1ad;
+  text-decoration: none;
+  font-size: small;
+  margin-bottom: 20px;
+}
+
 .deal-details__deal-content-subtitle {
+  font-size: small;
+  padding-top: 10px;
   text-decoration: underline;
 }
 
@@ -1987,6 +2027,11 @@ body {
   margin-bottom: -1.5px;
   margin-right: 5px;
   width: 12px;
+}
+
+.deal-details__button--small {
+  font-size: .8rem;
+  padding: 10px 5px;
 }
 
 .deal-details__modal-body {
@@ -2330,13 +2375,16 @@ body {
 }
 
 .compare-bar {
-  border-top: 3px solid #2eb1ad;
+  background-color: #cccccc;
   bottom: 0;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  height: 60px;
-  max-height: 60px;
+  height: 70px;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  max-height: 70px;
   position: absolute;
   width: 100%;
 }
@@ -2351,8 +2399,8 @@ body {
 }
 
 .compare-bar__deals {
-  border-left: 2px solid transparent;
-  border-right: 5px solid transparent;
+  background-color: white;
+  border-top: 3px solid #2eb1ad;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -2361,13 +2409,14 @@ body {
       -ms-flex-direction: row;
           flex-direction: row;
   font-size: small;
+  margin: 8px 0;
+  max-width: 992px;
   overflow-x: auto;
-  width: calc(100% - 80px);
+  width: 992px;
 }
 
 .compare-bar__deal {
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border-bottom: 1px solid #2eb1ad;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -2376,13 +2425,14 @@ body {
 }
 
 .compare-bar__deal__info {
+  color: #2eb1ad;
+  font-weight: bold;
   margin-right: auto;
   padding-right: 10px;
 }
 
 .compare-bar__deal__title {
-  color: #2eb1ad;
-  font-weight: bold;
+  color: #535d63;
   white-space: nowrap;
 }
 
@@ -2402,6 +2452,8 @@ body {
   color: #fff;
   cursor: pointer;
   font-size: small;
+  height: 54px;
+  margin: 8px 0;
   max-width: 80px;
   padding: 10px;
   text-align: center;
@@ -2491,9 +2543,11 @@ body {
 }
 
 .compare-page-title-bar__title {
-  color: #1e2123;
-  font-size: 1.5rem;
+  border-bottom: 1px solid #ced4d9;
+  color: #535d63;
+  font-size: x-large;
   margin: 10px 0 10px 10px;
+  padding-bottom: 8px;
 }
 
 @media (min-width: 576px) {
@@ -2554,7 +2608,7 @@ body {
 }
 
 .compare-page-table {
-  border: 1px solid #000;
+  border: 1px solid #ced4d9;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
@@ -2568,8 +2622,8 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background-color: #535d63;
-  color: #fff;
+  background-color: #fff;
+  color: #484d50;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -2577,8 +2631,17 @@ body {
   padding: 5px 0 5px 10px;
 }
 
-.compare-page-table__header-cheveron {
+.compare-page-table__header--open {
+  background-color: #666666;
+  color: #fff;
+}
+
+.compare-page-table__header--open .compare-page-table__header-cheveron {
   fill: #fff;
+}
+
+.compare-page-table__header-cheveron {
+  fill: #484d50;
   height: 20px;
   margin-left: 10px;
   margin-right: 10px;
@@ -2597,7 +2660,7 @@ body {
 }
 
 .compare-page-table__column {
-  border-left: 1px solid #000;
+  border-left: 1px solid #ced4d9;
   max-width: 310px;
   min-width: 310px;
 }
@@ -2607,7 +2670,7 @@ body {
 }
 
 .compare-page-table__cell {
-  border-top: 1px solid #000;
+  border-top: 1px solid #ced4d9;
   padding: 5px;
 }
 
@@ -2678,6 +2741,7 @@ body {
 }
 
 .deal-price__price {
+  margin-top: 3px;
   text-align: center;
   width: 100%;
 }
@@ -2968,18 +3032,17 @@ comparepage {
 .compare-page {
   display: block;
   margin: 0 auto;
+  max-width: 992px;
   overflow: hidden;
   padding: 0;
 }
 
-.compare-page__body {
-  overflow-x: scroll;
+.compare-page a {
+  color: #2eb1ad;
 }
 
-@media (min-width: 576px) {
-  .compare-page {
-    padding: 66px;
-  }
+.compare-page__body {
+  overflow-x: scroll;
 }
 
 .request-email {
@@ -2995,6 +3058,7 @@ comparepage {
           flex-direction: column;
   width: 100%;
   margin-top: 50px;
+  height: 100vh;
 }
 
 .request-email__form {

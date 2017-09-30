@@ -57180,6 +57180,12 @@ var Sortbar = function (_React$PureComponent) {
                 'div',
                 { className: 'sortbar__buttons' },
                 _react2.default.createElement(
+                    'div',
+                    { className: 'sortbar__label' },
+                    'Sort results by: ',
+                    _react2.default.createElement('br', null)
+                ),
+                _react2.default.createElement(
                     'button',
                     {
                         className: 'sortbar__button sortbar__button',
@@ -57187,7 +57193,6 @@ var Sortbar = function (_React$PureComponent) {
                             return _this2.toggleDropdownShown();
                         }
                     },
-                    'Sort',
                     _react2.default.createElement(_reactSvgInline2.default, {
                         height: '18px',
                         width: '18px',
@@ -60526,22 +60531,13 @@ var ComparePage = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'button',
                         {
-                            className: 'deal__button deal__button--small ' + (_ramda2.default.contains(deal, this.props.compareList) ? 'deal__button--blue' : ''),
+                            className: 'deal__button deal__button--small deal__button--pink',
+
                             onClick: function onClick() {
                                 return _purchase2.default.start(deal, _this3.props.selectedTab, _this3.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this3.props.dealRebates, _this3.props.selectedRebates, _this3.props.selectedTab, deal), _this3.props.termDuration, _this3.props.isEmployee);
                             }
                         },
                         'Buy Now'
-                    ),
-                    _react2.default.createElement(
-                        'button',
-                        {
-                            onClick: function onClick() {
-                                return window.location = '/deals/' + deal.id;
-                            },
-                            className: 'deal__button deal__button--small deal__button--blue deal__button'
-                        },
-                        'View Details'
                     )
                 )
             );
@@ -60569,7 +60565,7 @@ var ComparePage = function (_React$PureComponent) {
                     onClick: function onClick() {
                         return _this4.toggleAccordion(accordionTab);
                     },
-                    className: 'compare-page-table__header'
+                    className: 'compare-page-table__header ' + (this.state.openAccordion === accordionTab ? 'compare-page-table__header--open' : '')
                 },
                 _react2.default.createElement(_reactSvgInline2.default, {
                     className: 'compare-page-table__header-cheveron',
@@ -61446,9 +61442,13 @@ var DealDetails = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-details__deal-content' },
-                    'VEHICLE #',
-                    deal.vin.substr(deal.vin.length - 8),
-                    ' AT A GLANCE',
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'deal-details__deal-content-at-a-glance' },
+                        'VEHICLE #',
+                        deal.vin.substr(deal.vin.length - 8),
+                        ' AT A GLANCE'
+                    ),
                     _react2.default.createElement(
                         'div',
                         { className: 'deal-details__deal-content-subtitle' },
@@ -61456,7 +61456,7 @@ var DealDetails = function (_React$PureComponent) {
                     ),
                     _react2.default.createElement(
                         'ul',
-                        null,
+                        { className: 'deal-details__deal-content-features' },
                         deal.features.slice(0, 5).map(function (feature, index) {
                             return _react2.default.createElement(
                                 'li',
@@ -61467,7 +61467,7 @@ var DealDetails = function (_React$PureComponent) {
                     ),
                     _react2.default.createElement(
                         'a',
-                        { href: '#', onClick: function onClick() {
+                        { href: '#', className: 'deal-details__deal-content-see-all', onClick: function onClick() {
                                 return _this5.showStandardFeatures();
                             } },
                         'SEE ALL STANDARD FEATURES'
@@ -61480,7 +61480,7 @@ var DealDetails = function (_React$PureComponent) {
                     ),
                     _react2.default.createElement(
                         'ul',
-                        null,
+                        { className: 'deal-details__deal-content-features' },
                         deal.vauto_features.slice(0, 5).map(function (feature, index) {
                             return _react2.default.createElement(
                                 'li',
@@ -61491,7 +61491,7 @@ var DealDetails = function (_React$PureComponent) {
                     ),
                     _react2.default.createElement(
                         'a',
-                        { href: '#', onClick: function onClick() {
+                        { href: '#', className: 'deal-details__deal-content-see-all', onClick: function onClick() {
                                 return _this5.showFeatures();
                             } },
                         'SEE ALL ADDITIONAL OPTIONS'
@@ -61513,7 +61513,7 @@ var DealDetails = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'button',
                             {
-                                className: 'deal-details__button deal-details__button--small deal-details__button--blue',
+                                className: 'deal-details__button deal-details__button--small deal-details__button--pink',
                                 onClick: function onClick() {
                                     return _purchase2.default.start(deal, _this5.props.selectedTab, _this5.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this5.props.dealRebates, _this5.props.selectedRebates, _this5.props.selectedTab, deal), _this5.props.termDuration, _this5.props.isEmployee);
                                 }
