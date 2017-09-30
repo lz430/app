@@ -2,7 +2,6 @@
 @import '../mixins/button';
 
 .deals {
-  background-color: $color-background-primary;
   display: flex;
   flex-flow: row wrap;
   height: calc(100vh - #{$nav-height + $sortbar-height});

@@ -13907,13 +13907,16 @@ var Deal = function (_React$PureComponent) {
                                 },
                                 className: 'deal__basic-info-year-and-model'
                             },
-                            deal.year + ' ' + deal.make + ' ' + deal.model + ' ' + deal.series
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'deal__basic-info-msrp' },
-                            _util2.default.moneyFormat(deal.msrp),
-                            ' MSRP'
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'deal__basic-info-year-and-make' },
+                                deal.year + ' ' + deal.make
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'deal__basic-info-model-and-series' },
+                                deal.model + ' ' + deal.series
+                            )
                         )
                     ),
                     _react2.default.createElement('img', {
@@ -52207,11 +52210,6 @@ var Deals = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 { className: 'deals' },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'deals__title' },
-                    'Dealer Inventory'
-                ),
                 this.props.deals ? this.props.deals.map(function (deal, index) {
                     return _react2.default.createElement(
                         _Deal2.default,
@@ -52225,7 +52223,7 @@ var Deals = function (_React$PureComponent) {
                                     className: _this2.compareButtonClass(deal),
                                     onClick: _this2.props.toggleCompare.bind(null, deal)
                                 },
-                                'Compare'
+                                'Add to Compare'
                             ),
                             _react2.default.createElement(
                                 'button',
@@ -52233,7 +52231,7 @@ var Deals = function (_React$PureComponent) {
                                     onClick: function onClick() {
                                         return window.location = '/deals/' + deal.id;
                                     },
-                                    className: 'deal__button deal__button--small deal__button--blue deal__button'
+                                    className: 'deal__button deal__button--small deal__button--pink deal__button'
                                 },
                                 'View Details'
                             )
@@ -57555,10 +57553,6 @@ var _FilterMakeSelector = __webpack_require__(941);
 
 var _FilterMakeSelector2 = _interopRequireDefault(_FilterMakeSelector);
 
-var _FilterModelSelector = __webpack_require__(942);
-
-var _FilterModelSelector2 = _interopRequireDefault(_FilterModelSelector);
-
 var _FilterFuelTypeSelector = __webpack_require__(943);
 
 var _FilterFuelTypeSelector2 = _interopRequireDefault(_FilterFuelTypeSelector);
@@ -57641,11 +57635,6 @@ var FilterPanel = function (_React$PureComponent) {
                     'div',
                     { className: 'sidebar-filters' },
                     _react2.default.createElement(
-                        'div',
-                        { className: 'sidebar-filters__header' },
-                        'Filter Results'
-                    ),
-                    _react2.default.createElement(
                         _SidebarFilter2.default,
                         {
                             toggle: function toggle() {
@@ -57681,9 +57670,9 @@ var FilterPanel = function (_React$PureComponent) {
                         _SidebarFilter2.default,
                         {
                             toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Brand');
+                                return _this2.toggleOpenFilter('Make');
                             },
-                            open: this.state.openFilter === 'Brand',
+                            open: this.state.openFilter === 'Make',
                             title: 'Brand',
                             count: this.props.selectedMakes.length
                         },
@@ -57691,22 +57680,6 @@ var FilterPanel = function (_React$PureComponent) {
                             makes: this.props.makes,
                             selectedMakes: this.props.selectedMakes,
                             onSelectMake: this.props.toggleMake
-                        })
-                    ),
-                    _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Model');
-                            },
-                            open: this.state.openFilter === 'Model',
-                            title: 'Model',
-                            count: this.props.selectedModels.length
-                        },
-                        _react2.default.createElement(_FilterModelSelector2.default, {
-                            models: this.props.models,
-                            selectedModels: this.props.selectedModels,
-                            onSelectModel: this.props.toggleModel
                         })
                     ),
                     _react2.default.createElement(
@@ -57906,20 +57879,14 @@ var SidebarFilter = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     {
-                        className: 'sidebar-filters__filter-title',
+                        className: 'sidebar-filters__filter-title ' + (this.props.open ? 'sidebar-filters__filter-title--open' : ''),
                         onClick: this.props.toggle
                     },
+                    this.props.title,
                     _react2.default.createElement(_reactSvgInline2.default, {
                         className: 'sidebar-filters__icon',
                         svg: this.props.open ? _zondicons2.default['cheveron-up'] : _zondicons2.default['cheveron-down']
-                    }),
-                    ' ',
-                    this.props.title,
-                    this.props.count > 0 ? _react2.default.createElement(
-                        'div',
-                        { className: 'sidebar-filters__count' },
-                        this.props.count
-                    ) : ''
+                    })
                 ),
                 this.props.open ? _react2.default.createElement(
                     'div',
@@ -58316,104 +58283,7 @@ FilterMakeSelector.propTypes = {
 exports.default = FilterMakeSelector;
 
 /***/ }),
-/* 942 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(7);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__(26);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _ramda = __webpack_require__(12);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-var _reactSvgInline = __webpack_require__(21);
-
-var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
-
-var _zondicons = __webpack_require__(30);
-
-var _zondicons2 = _interopRequireDefault(_zondicons);
-
-var _miscicons = __webpack_require__(50);
-
-var _miscicons2 = _interopRequireDefault(_miscicons);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var FilterModelSelector = function (_React$PureComponent) {
-    _inherits(FilterModelSelector, _React$PureComponent);
-
-    function FilterModelSelector() {
-        _classCallCheck(this, FilterModelSelector);
-
-        return _possibleConstructorReturn(this, (FilterModelSelector.__proto__ || Object.getPrototypeOf(FilterModelSelector)).apply(this, arguments));
-    }
-
-    _createClass(FilterModelSelector, [{
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            return _react2.default.createElement(
-                'div',
-                { className: 'filter-selector' },
-                this.props.models ? this.props.models.map(function (model, index) {
-                    return _react2.default.createElement(
-                        'div',
-                        {
-                            key: index,
-                            className: 'filter-selector__selector',
-                            onClick: _this2.props.onSelectModel.bind(null, model)
-                        },
-                        _ramda2.default.contains(model, _this2.props.selectedModels) ? _react2.default.createElement(_reactSvgInline2.default, {
-                            width: '15px',
-                            height: '15px',
-                            className: 'filter-selector__checkbox filter-selector__checkbox--selected',
-                            svg: _zondicons2.default['checkmark']
-                        }) : _react2.default.createElement('div', { className: 'filter-selector__checkbox' }),
-                        model.attributes.name
-                    );
-                }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
-            );
-        }
-    }]);
-
-    return FilterModelSelector;
-}(_react2.default.PureComponent);
-
-FilterModelSelector.propTypes = {
-    models: _propTypes2.default.arrayOf(_propTypes2.default.shape({
-        name: _propTypes2.default.string
-    })),
-    selectedModels: _propTypes2.default.arrayOf(_propTypes2.default.shape({
-        name: _propTypes2.default.string
-    })),
-    onSelectModel: _propTypes2.default.func.isRequired
-};
-
-exports.default = FilterModelSelector;
-
-/***/ }),
+/* 942 */,
 /* 943 */
 /***/ (function(module, exports, __webpack_require__) {
 

@@ -115,6 +115,11 @@ body {
   color: #fff;
 }
 
+.section__button--pink {
+  background-color: #e70290;
+  color: #fff;
+}
+
 .section__button--white {
   background-color: #fff;
   color: #2eb1ad;
@@ -271,7 +276,6 @@ body {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  padding: 15px;
 }
 
 .nav__logo {
@@ -281,6 +285,10 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+}
+
+.nav__logo img {
+  height: 70px;
 }
 
 .triplets {
@@ -755,6 +763,11 @@ body {
   color: #fff;
 }
 
+.modal__close-button--pink {
+  background-color: #e70290;
+  color: #fff;
+}
+
 .modal__close-button--white {
   background-color: #fff;
   color: #2eb1ad;
@@ -838,6 +851,11 @@ body {
 
 .sortbar__button--blue {
   background-color: #2eb1ad;
+  color: #fff;
+}
+
+.sortbar__button--pink {
+  background-color: #e70290;
   color: #fff;
 }
 
@@ -963,7 +981,7 @@ body {
 }
 
 .filterbar__filter-icon {
-  fill: #494e51;
+  fill: #666666;
   height: 20px;
   margin-right: 5px;
   width: 20px;
@@ -998,14 +1016,13 @@ body {
 .filterbar__clear {
   color: #2eb1ad;
   cursor: pointer;
-  font-weight: bold;
+  font-size: small;
   margin-left: auto;
   text-align: right;
   white-space: nowrap;
 }
 
 .deals {
-  background-color: #f2f2f2;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1051,6 +1068,11 @@ body {
 
 .deals__button--blue {
   background-color: #2eb1ad;
+  color: #fff;
+}
+
+.deals__button--pink {
+  background-color: #e70290;
   color: #fff;
 }
 
@@ -1101,9 +1123,6 @@ body {
 
 .deal {
   background-color: #fff;
-  border-radius: 6px;
-  -webkit-box-shadow: 0 0 3px 0 rgba(185, 185, 185, 0.9);
-          box-shadow: 0 0 3px 0 rgba(185, 185, 185, 0.9);
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
@@ -1114,7 +1133,6 @@ body {
 
 .deal__basic-info {
   margin: 15px 0;
-  padding: 0 15px;
 }
 
 .deal__basic-info-year-and-model {
@@ -1124,6 +1142,17 @@ body {
   font-size: 1.1rem;
   line-height: 1.3rem;
   text-decoration: none;
+}
+
+.deal__basic-info-year-and-make {
+  color: #535d63;
+  font-size: small;
+  margin-bottom: 2px;
+}
+
+.deal__basic-info-model-and-series {
+  color: #484d50;
+  font-size: x-large;
 }
 
 .deal__basic-info-msrp {
@@ -1149,7 +1178,6 @@ body {
   -ms-flex-pack: distribute;
       justify-content: space-around;
   margin: 5px 0 25px;
-  padding: 0 10px;
 }
 
 .deal__button {
@@ -1177,6 +1205,11 @@ body {
 
 .deal__button--blue {
   background-color: #2eb1ad;
+  color: #fff;
+}
+
+.deal__button--pink {
+  background-color: #e70290;
   color: #fff;
 }
 
@@ -1220,6 +1253,11 @@ body {
   width: 12px;
 }
 
+.deal__button--small {
+  font-size: .8rem;
+  padding: 10px 15px;
+}
+
 .apply-or-purchase {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -1252,6 +1290,11 @@ body {
 
 .apply-or-purchase__button--blue {
   background-color: #2eb1ad;
+  color: #fff;
+}
+
+.apply-or-purchase__button--pink {
+  background-color: #e70290;
   color: #fff;
 }
 
@@ -1362,6 +1405,11 @@ body {
   color: #fff;
 }
 
+.application-form__button--pink {
+  background-color: #e70290;
+  color: #fff;
+}
+
 .application-form__button--white {
   background-color: #fff;
   color: #2eb1ad;
@@ -1403,13 +1451,13 @@ body {
 }
 
 .zipcode-finder {
-  background-color: #5f686e;
+  background-color: #666666;
   color: #fff;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   height: auto;
-  padding: 5px 10px;
+  padding: 20px 15px;
 }
 
 .zipcode-finder__count {
@@ -1443,6 +1491,8 @@ body {
 .zipcode-finder__form {
   -ms-flex-item-align: center;
       align-self: center;
+  color: #ced4d9;
+  font-size: small;
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
@@ -1505,6 +1555,11 @@ body {
   color: #fff;
 }
 
+.zipcode-finder__button--pink {
+  background-color: #e70290;
+  color: #fff;
+}
+
 .zipcode-finder__button--white {
   background-color: #fff;
   color: #2eb1ad;
@@ -1563,6 +1618,7 @@ body {
 }
 
 .sidebar-filters {
+  background-color: #d7d7d7;
   height: calc(100vh - 76px - 60px);
   overflow-x: hidden;
   overflow-y: auto;
@@ -1573,7 +1629,7 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background-color: #5f686e;
+  background-color: #d7d7d7;
   border-radius: 15px;
   color: #fff;
   display: -webkit-box;
@@ -1597,8 +1653,8 @@ body {
 }
 
 .sidebar-filters__filter {
-  border-bottom: 1px solid #5f686e;
-  color: #fff;
+  border-bottom: 2px solid #666666;
+  color: #484d50;
 }
 
 .sidebar-filters__filter-title {
@@ -1609,23 +1665,35 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  padding: 15px 15px 15px 0;
+  padding: 15px;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
 }
 
+.sidebar-filters__filter-title--open {
+  background-color: #666666;
+  color: #fff;
+}
+
+.sidebar-filters__filter-title--open .sidebar-filters__icon {
+  fill: #fff;
+}
+
 .sidebar-filters__filter-body {
-  border-top: 1px solid #5f686e;
-  margin-left: 40px;
+  background-color: #858585;
+  border-top: 1px solid #d7d7d7;
+  color: #fff;
 }
 
 .sidebar-filters__icon {
-  fill: #fff;
+  fill: #484d50;
   height: 20px;
   margin-left: 10px;
   margin-right: 10px;
+  position: absolute;
+  right: 0;
   width: 20px;
 }
 
@@ -1686,7 +1754,7 @@ body {
 }
 
 .filter-selector__selector {
-  border-bottom: 1px solid #5f686e;
+  border-bottom: 1px solid #d7d7d7;
   cursor: pointer;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1873,6 +1941,11 @@ body {
 
 .deal-details__button--blue {
   background-color: #2eb1ad;
+  color: #fff;
+}
+
+.deal-details__button--pink {
+  background-color: #e70290;
   color: #fff;
 }
 
@@ -2063,6 +2136,11 @@ body {
   color: #fff;
 }
 
+.compare-deal__button--pink {
+  background-color: #e70290;
+  color: #fff;
+}
+
 .compare-deal__button--white {
   background-color: #fff;
   color: #2eb1ad;
@@ -2203,6 +2281,11 @@ body {
 
 .compare-deal__cta__button--blue {
   background-color: #2eb1ad;
+  color: #fff;
+}
+
+.compare-deal__cta__button--pink {
+  background-color: #e70290;
   color: #fff;
 }
 
@@ -2547,14 +2630,16 @@ body {
 }
 
 .tabs__tab {
+  color: #ced4d9;
   cursor: pointer;
   display: inline-block;
-  margin: 5px 20px -1px 0;
-  padding: 6px;
+  font-size: small;
+  margin: 0px 20px -1px 0;
+  text-transform: uppercase;
 }
 
 .tabs__tab--selected {
-  border-bottom: 2px solid #2eb1ad;
+  border-bottom: 4px solid #e70290;
   color: #1e2123;
 }
 
@@ -2636,12 +2721,15 @@ body {
 }
 
 .deal-price__rebates-applied {
-  color: #65d1f6;
   font-size: small;
   margin-bottom: 10px;
   margin-top: -10px;
   text-align: center;
   width: 100%;
+}
+
+.deal-price__rebates-applied a {
+  color: #2eb1ad;
 }
 
 .loading {
@@ -2741,7 +2829,7 @@ body {
 }
 
 .filter-page__filter-panel {
-  background-color: #494e51;
+  background-color: #666666;
   height: 100%;
   position: absolute;
   width: 250px;
@@ -2805,6 +2893,11 @@ financing {
 
 .financing__button--blue {
   background-color: #2eb1ad;
+  color: #fff;
+}
+
+.financing__button--pink {
+  background-color: #e70290;
   color: #fff;
 }
 
@@ -3016,6 +3109,11 @@ comparepage {
   color: #fff;
 }
 
+.request-email__button--pink {
+  background-color: #e70290;
+  color: #fff;
+}
+
 .request-email__button--white {
   background-color: #fff;
   color: #2eb1ad;
@@ -3183,6 +3281,11 @@ comparepage {
   color: #fff;
 }
 
+.view-apply__button--pink {
+  background-color: #e70290;
+  color: #fff;
+}
+
 .view-apply__button--white {
   background-color: #fff;
   color: #2eb1ad;
@@ -3336,6 +3439,11 @@ comparepage {
 
 .thank-you__button--blue {
   background-color: #2eb1ad;
+  color: #fff;
+}
+
+.thank-you__button--pink {
+  background-color: #e70290;
   color: #fff;
 }
 

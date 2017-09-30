@@ -10,13 +10,15 @@
   }
 
   &__tab {
+    color: $color-grey;
     cursor: pointer;
     display: inline-block;
-    margin: 5px 20px -1px 0;
-    padding: 6px;
+    font-size: small;
+    margin: 0px 20px -1px 0;
+    text-transform: uppercase;
 
     &--selected {
-      border-bottom: 2px solid $color-blue;
+      border-bottom: 4px solid $color-pink;
       color: $text-color-dark;
     }
   }

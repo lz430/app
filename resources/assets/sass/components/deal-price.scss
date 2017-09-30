@@ -45,11 +45,14 @@
   }
 
   &__rebates-applied {
-    color: $color-light-blue;
     font-size: small;
     margin-bottom: 10px;
     margin-top: -10px;
     text-align: center;
     width: 100%;
+
+    a {
+      color: $color-blue;
+    }
   }
 }

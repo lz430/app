@@ -16,7 +16,12 @@
   }
 
   &--blue {
-    background-color: $color-blue;
+     background-color: $color-blue;
+     color: $color-text-white;
+   }
+
+  &--pink {
+    background-color: $color-pink;
     color: $color-text-white;
   }
 

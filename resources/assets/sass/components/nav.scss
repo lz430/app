@@ -13,11 +13,14 @@
     align-items: center;
     display: flex;
     justify-content: space-between;
-    padding: 15px;
   };
 
   &__logo {
     align-items: center;
     display: flex;
+
+    img {
+      height: 70px;
+    }
   }
 }
