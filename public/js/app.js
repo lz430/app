@@ -60176,7 +60176,7 @@ var urlStyle = _util2.default.getInitialBodyStyleFromUrl();
 
 var initialState = {
     /** Version **/
-    0: '<- increment the number to purge LocalStorage',
+    1: '<- increment the number to purge LocalStorage',
     /** End Version **/
     window: { width: window.innerWidth },
     smallFiltersShown: false,
@@ -60184,7 +60184,7 @@ var initialState = {
     selectedTab: 'cash',
     downPayment: 0,
     termDuration: 60,
-    annualMileage: null,
+    annualMileage: 10000,
     residualPercent: null,
     selectedDeal: null,
     selectedStyles: urlStyle ? [urlStyle] : [],
