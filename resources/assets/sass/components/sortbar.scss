@@ -9,26 +9,35 @@
   padding: 5px 10px 5px 0;
 
   &__buttons {
-    align-items: center;
     display: flex;
     flex: 3;
-    justify-content: flex-end;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: auto;
+    max-width: 200px;
   }
 
   &__button {
     @include button;
+
+    background-color: $color-lightgrey;
+    width: 200px;
 
     &:not(:last-of-type) {
       margin-right: 10px;
     }
   }
 
+  &__label {
+    font-size: small;
+  }
+
   &__sort-icon {
     margin-right: 3px;
 
     &--right-side {
-      margin-left: 3px;
-      margin-right: 0;
+      float: right;
+      margin: -5px -5px 0 0;
     }
 
     svg {

@@ -14,6 +14,10 @@ body {
 }
 
 .content {
-  background: $color-background-primary;
   flex: 1;
+}
+
+.content--gray {
+  background: $color-background-primary;
+  padding-top: 20px;
 }

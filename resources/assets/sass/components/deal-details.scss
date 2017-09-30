@@ -8,6 +8,7 @@
   justify-content: center;
   margin: 0 auto;
   max-width: 75%;
+  padding-bottom: 80px;
 
   @media (min-width: $break-large) {
     flex-direction: row;
@@ -15,10 +16,31 @@
   }
 
   &__deal-content {
+    border-top: 1px solid $color-grey;
     padding: 15px;
   }
 
+  &__deal-content-at-a-glance {
+    font-size: medium;
+    padding-bottom: 6px;
+  }
+
+  &__deal-content-features {
+    font-size: small;
+    margin: 0 0 10px 0;
+    padding: 0 15px;
+  }
+
+  &__deal-content-see-all {
+    color: $color-blue;
+    text-decoration: none;
+    font-size: small;
+    margin-bottom: 20px;
+  }
+
   &__deal-content-subtitle {
+    font-size: small;
+    padding-top: 10px;
     text-decoration: underline;
   }
 
@@ -69,6 +91,11 @@
     @include button;
     flex: 1;
     margin: 5px;
+
+    &--small {
+      font-size: .8rem;
+      padding: 10px 5px;
+    }
   }
 
   &__modal-body {

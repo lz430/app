@@ -3,8 +3,6 @@
 
 .deal {
   background-color: $color-background-secondary;
-  border-radius: 6px;
-  box-shadow: 0 0 3px 0 rgba(185, 185, 185, .9);
   height: fit-content;
   margin: $deal-card-margin;
   max-width: $deal-card-width;
@@ -12,7 +10,6 @@
 
   &__basic-info {
     margin: 15px 0;
-    padding: 0 15px;
   }
 
   &__basic-info-year-and-model {
@@ -22,6 +19,17 @@
     font-size: 1.1rem;
     line-height: 1.3rem;
     text-decoration: none;
+  }
+
+  &__basic-info-year-and-make {
+    color: $color-darkgrey;
+    font-size: small;
+    margin-bottom: 2px;
+  }
+
+  &__basic-info-model-and-series {
+    color: $color-darkergrey;
+    font-size: x-large;
   }
 
   &__basic-info-msrp {
@@ -44,7 +52,6 @@
     display: flex;
     justify-content: space-around;
     margin: 5px 0 25px;
-    padding: 0 10px;
   }
 
   &__button {
@@ -52,5 +59,10 @@
     flex: 1;
     justify-content: center;
     margin: 0 5px;
+
+    &--small {
+      font-size: .8rem;
+      padding: 10px 15px;
+    }
   }
 }

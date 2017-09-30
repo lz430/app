@@ -3,19 +3,23 @@ $color-background-primary: #f2f2f2;
 $color-background-secondary: #fff;
 $color-section-bottom-border: #ccc;
 
-$color-sidebar-background-primary: #494e51;
-$color-sidebar-background-secondary: #5f686e;
+$color-sidebar-background-primary: rgba(102, 102, 102, 1);
+$color-sidebar-background-primary-light: rgba(133, 133, 133, 1);
+$color-sidebar-background-secondary: rgba(215, 215, 215, 1);
 $color-sidebar-background-secondary-dark: #343b3e;
 $color-sidebar-background-secondary-light: lighten($color-sidebar-background-secondary, 46%);
+
+$color-compare-bar-background: rgba(204, 204, 204, 1);
 
 $color-text-white: #fff;
 $color-text-blue: #0e9dce;
 $color-black: #000;
 
-$color-blue: #3786a1;
+$color-blue: rgba(46, 177, 173, 1);
 $color-dark-blue: #436d82;
 $color-light-blue: #65d1f6;
 $color-lighter-blue: #b9e4f3;
+$color-pink: rgba(231, 2, 144, 1);
 $color-error: #ac0000;
 
 $color-lightgrey: #f6f6f7;
@@ -48,7 +52,8 @@ $break-extra-large: 1200px;
 $sidebar-filters-width: 250px;
 $sortbar-height: 60px;
 $filterbar-height: 45px;
-$compare-bar-height: 60px;
+$compare-bar-height: 70px;
+$compare-bar-width: 992px;
 $selector-icon-size: 23px;
 
 // Section

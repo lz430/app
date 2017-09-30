@@ -49,28 +49,22 @@ class ApplyOrPurchaseController extends Controller
             ]);
 
             /**
-             * Create a new user and log them in
+             * We don't want to save the purchase to the DB until we collect the user's email and query the user, so store
+             * in session for now
              */
-            $user = User::create();
-            auth()->login($user);
-
-            $purchase = Purchase::firstOrNew([
+            $purchase = new Purchase([
                 'deal_id' => request('deal_id'),
                 'completed_at' => null,
-            ]);
-
-            $purchase->fill([
-                'user_id' => $user->id,
                 'type' => request('type'),
                 'rebates' => json_encode(request('rebates', []), JSON_NUMERIC_CHECK),
                 'dmr_price' => request('dmr_price'),
                 'msrp' => request('msrp'),
-                'term' => request('term'),
-                'down_payment' => request('down_payment'),
-                'amount_financed' => request('amount_financed'),
+                'term' => request('term') ?: 60,
+                'down_payment' => request('down_payment') ?: 0,
+                'amount_financed' => request('amount_financed') ?: 0,
             ]);
 
-            $purchase->save();
+            session(['purchase' => $purchase]);
 
             /**
              * If email saved to session, put in request and send to receiveEmail.
@@ -94,10 +88,7 @@ class ApplyOrPurchaseController extends Controller
 
     public function requestEmail()
     {
-        $purchase = auth()->user()->purchases()->latest()->firstOrFail();
-
-        return view('request-email')
-            ->with('purchase', $purchase);
+        return view('request-email');
     }
 
     public function receiveEmail(Request $request)
@@ -113,41 +104,33 @@ class ApplyOrPurchaseController extends Controller
              * If we already have a user with this email, let's use that account
              * instead of the newly created one.
              */
-            if ($user = User::where('email', $request->email)->first()) {
-                auth()->user()->purchases()->each(function ($purchase) use ($user) {
-                    $purchase->user_id = $user->id;
-                    $purchase->save();
-                });
+            $user = User::where('email', $request->email)->first();
 
-                auth()->user()->delete();
-                auth()->login($user);
-            } else {
-                $user = auth()->user();
+            if (! $user) {
+                $user = User::create(['email' => $request->email]);
             }
 
-            $user->email = $request->email;
-            $user->save();
+            auth()->login($user);
 
             return $user;
         });
 
-        $purchase = $user->purchases()->with('deal')->latest()->firstOrFail();
+        $purchaseData = session('purchase');
+        $purchaseData->user_id = $user->id;
+        $purchase = Purchase::where('user_id', $user->id)
+            ->where('deal_id', $purchaseData->deal_id)
+            ->whereNull('completed_at')
+            ->first();
+
+        if (! $purchase) {
+            $purchase = Purchase::create($purchaseData->toArray());
+        }
 
         event(new UserDataChanged(['email' => $user->email]));
         event(new NewPurchaseInitiated($purchase));
 
-        return (function () use ($purchase) {
-            switch ($purchase->type) {
-                case Purchase::CASH:
-                    return $this->handlePurchase($purchase);
-                case Purchase::LEASE:
-                case Purchase::FINANCE:
-                    return redirect()->route('view-apply')
-                        ->with('purchase', $purchase);
-                default:
-                    return abort('500');
-            }
-        })();
+        return redirect()->route('view-apply')
+            ->with('purchase', $purchase);
     }
 
     public function purchase()

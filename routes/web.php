@@ -16,10 +16,11 @@ Route::post('set-email', 'OptinMonsterController@setEmailSession')->name('set-em
 
 Route::get('thank-you', 'ApplyOrPurchaseController@thankYou')->name('thank-you');
 Route::post('apply-or-purchase', 'ApplyOrPurchaseController@applyOrPurchase')->name('applyOrPurchase');
+
+Route::get('request-email', 'ApplyOrPurchaseController@requestEmail')->name('request-email');
+Route::post('receive-email', 'ApplyOrPurchaseController@receiveEmail')->name('receive-email');
 Route::group(['middleware' => 'auth'], function () {
     /** Purchase Flow */
-    Route::get('request-email', 'ApplyOrPurchaseController@requestEmail')->name('request-email');
-    Route::post('receive-email', 'ApplyOrPurchaseController@receiveEmail')->name('receive-email');
 
     Route::post('purchase', 'ApplyOrPurchaseController@purchase')->name('purchase');
 

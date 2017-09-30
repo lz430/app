@@ -3,7 +3,9 @@
 @section('title', $title)
 
 @section('content')
-    <DealDetails
-        deal="{{$deal}}"
-    ></DealDetails>
+    <div class="content--gray">
+        <DealDetails
+                deal="{{$deal}}"
+        ></DealDetails>
+    </div>
 @endsection

@@ -4,21 +4,31 @@ $icon-margin: 10px;
 $icon-size: 20px;
 
 .compare-page-table {
-  border: 1px solid $color-black;
+  border: 1px solid $color-grey;
   display: inline-flex;
   flex-direction: column;
 
   &__header {
     align-items: center;
-    background-color: $color-darkgrey;
-    color: $color-text-white;
+
+    background-color: $color-text-white;
+    color: $color-darkergrey;
     display: flex;
     font-weight: bold;
     padding: 5px 0 5px 10px;
+
+    &--open {
+      background-color: $color-sidebar-background-primary;
+      color: $color-text-white;
+
+      .compare-page-table__header-cheveron {
+        fill: $color-text-white;
+      }
+    }
   }
 
   &__header-cheveron {
-    fill: $color-text-white;
+    fill: $color-darkergrey;
     height: $icon-size;
     margin-left: $icon-margin;
     margin-right: $icon-margin;
@@ -35,7 +45,7 @@ $icon-size: 20px;
   }
 
   &__column {
-    border-left: 1px solid $color-black;
+    border-left: 1px solid $color-grey;
     max-width: $deal-card-width + ($deal-card-margin * 2);
     min-width: $deal-card-width + ($deal-card-margin * 2);
 
@@ -45,7 +55,7 @@ $icon-size: 20px;
   }
 
   &__cell {
-    border-top: 1px solid $color-black;
+    border-top: 1px solid $color-grey;
     padding: $deal-card-margin;
 
     &:first-child {

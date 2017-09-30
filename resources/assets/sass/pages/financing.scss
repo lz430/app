@@ -1,11 +1,22 @@
+@import '../mixins/button';
 @import '../mixins/constrained';
 
 financing {
   width: 100%;
 }
+
 .financing {
   @include constrained;
   text-align: center;
+
+  &__button {
+    @include button;
+  }
+
+  &__cash {
+    color: $color-text-blue;
+    cursor: pointer;
+  }
 
   &__header {
     display: flex;
@@ -16,10 +27,5 @@ financing {
   &__title {
     color: $text-color-dark;
     font-size: 1.5rem;
-  }
-
-  &__cash {
-    color: $color-text-blue;
-    cursor: pointer;
   }
 }

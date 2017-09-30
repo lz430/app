@@ -4,7 +4,6 @@
 
 .nav {
   background-color: $color-background-secondary;
-  border-bottom: 1px solid $color-section-bottom-border;
   border-top: 4px solid $color-blue;
   height: $nav-height;
   max-height: $nav-height;
@@ -13,11 +12,14 @@
     align-items: center;
     display: flex;
     justify-content: space-between;
-    padding: 15px;
   };
 
   &__logo {
     align-items: center;
     display: flex;
+
+    img {
+      height: 70px;
+    }
   }
 }

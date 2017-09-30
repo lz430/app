@@ -104,10 +104,13 @@ class Deal extends React.PureComponent {
                                     (window.location = `/deals/${deal.id}`)}
                                 className="deal__basic-info-year-and-model"
                             >
-                                {`${deal.year} ${deal.make} ${deal.model} ${deal.series}`}
-                            </div>
-                            <div className="deal__basic-info-msrp">
-                                {util.moneyFormat(deal.msrp)} MSRP
+                                <div className="deal__basic-info-year-and-make">
+                                    {`${deal.year} ${deal.make}`}
+                                </div>
+
+                                <div className="deal__basic-info-model-and-series">
+                                    {`${deal.model} ${deal.series}`}
+                                </div>
                             </div>
                         </div>
 

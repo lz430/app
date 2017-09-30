@@ -305,30 +305,32 @@ class DealDetails extends React.PureComponent {
         return (
             <Deal deal={deal} key={index} hideImageAndTitle={true}>
                 <div className="deal-details__deal-content">
-                    VEHICLE #{deal.vin.substr(deal.vin.length - 8)} AT A GLANCE
+                    <div className="deal-details__deal-content-at-a-glance">
+                        VEHICLE #{deal.vin.substr(deal.vin.length - 8)} AT A GLANCE
+                    </div>
                     <div className="deal-details__deal-content-subtitle">
                         Vehicle Standard Features
                     </div>
-                    <ul>
+                    <ul className="deal-details__deal-content-features">
                         {deal.features.slice(0, 5).map((feature, index) => {
                             return <li key={index}>{feature.feature}</li>;
                         })}
                     </ul>
-                    <a href="#" onClick={() => this.showStandardFeatures()}>
+                    <a href="#" className="deal-details__deal-content-see-all" onClick={() => this.showStandardFeatures()}>
                         SEE ALL STANDARD FEATURES
                     </a>
                     <br />
                     <div className="deal-details__deal-content-subtitle">
                         Additional Options On This Vehicle
                     </div>
-                    <ul>
+                    <ul className="deal-details__deal-content-features">
                         {deal.vauto_features
                             .slice(0, 5)
                             .map((feature, index) => {
                                 return <li key={index}>{feature}</li>;
                             })}
                     </ul>
-                    <a href="#" onClick={() => this.showFeatures()}>
+                    <a href="#" className="deal-details__deal-content-see-all" onClick={() => this.showFeatures()}>
                         SEE ALL ADDITIONAL OPTIONS
                     </a>
                     <br />
@@ -351,7 +353,7 @@ class DealDetails extends React.PureComponent {
                         </button>
 
                         <button
-                            className="deal-details__button deal-details__button--small deal-details__button--blue"
+                            className="deal-details__button deal-details__button--small deal-details__button--pink"
                             onClick={() =>
                                 purchase.start(
                                     deal,

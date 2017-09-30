@@ -4,6 +4,7 @@ $icon-margin: 10px;
 $icon-size: 20px;
 
 .sidebar-filters {
+  background-color: $color-sidebar-background-secondary;
   height: calc(100vh - #{$nav-height} - #{$sortbar-height});
   overflow-x: hidden;
   overflow-y: auto;
@@ -31,28 +32,40 @@ $icon-size: 20px;
   }
 
   &__filter {
-    border-bottom: 1px solid $color-sidebar-background-secondary;
-    color: $color-text-white;
+    border-bottom: 2px solid $color-sidebar-background-primary;
+    color: $color-darkergrey;
   }
 
   &__filter-title {
     align-items: center;
     cursor: pointer;
     display: flex;
-    padding: 15px 15px 15px 0;
+    padding: 15px;
     user-select: none;
+
+    &--open {
+      background-color: $color-sidebar-background-primary;
+      color: $color-text-white;
+
+      .sidebar-filters__icon {
+        fill: $color-text-white;
+      }
+    }
   }
 
   &__filter-body {
+    background-color: $color-sidebar-background-primary-light;
     border-top: 1px solid $color-sidebar-background-secondary;
-    margin-left: $icon-margin + $icon-size + $icon-margin;
+    color: $color-text-white;
   }
 
   &__icon {
-    fill: $color-text-white;
+    fill: $color-darkergrey;
     height: $icon-size;
     margin-left: $icon-margin;
     margin-right: $icon-margin;
+    position: absolute;
+    right: 0;
     width: $icon-size;
   }
 }
