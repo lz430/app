@@ -123,6 +123,7 @@ class ApplyOrPurchaseController extends Controller
             ->first();
 
         if (! $purchase) {
+            unset($purchaseData['deal']);
             $purchase = Purchase::create($purchaseData->toArray());
         }
 

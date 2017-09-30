@@ -8,7 +8,9 @@ class SidebarFilter extends React.PureComponent {
         return (
             <div className="sidebar-filters__filter">
                 <div
-                    className={`sidebar-filters__filter-title ${ this.props.open ? 'sidebar-filters__filter-title--open' : ''}`}
+                    className={`sidebar-filters__filter-title ${this.props.open
+                        ? 'sidebar-filters__filter-title--open'
+                        : ''}`}
                     onClick={this.props.toggle}
                 >
                     {this.props.title}

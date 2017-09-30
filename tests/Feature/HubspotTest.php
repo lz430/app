@@ -12,6 +12,7 @@ use App\Listeners\UpdateHubspotContact;
 use App\Purchase;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
@@ -33,8 +34,8 @@ class HubspotTest extends TestCase
         
         $purchase->deal->versions()->save(factory(Version::class)->make());
         
-        $this->post('receive-email', ['email' => 'test@example.com']);
-        
+        $this->withSession(['purchase' => $purchase])->post('receive-email', ['email' => 'test@example.com']);
+
         Event::assertDispatched(UserDataChanged::class);
         Event::assertDispatched(NewPurchaseInitiated::class);
     }

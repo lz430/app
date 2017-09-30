@@ -67,7 +67,6 @@ class Sortbar extends React.PureComponent {
                     className="sortbar__button sortbar__button"
                     onClick={() => this.toggleDropdownShown()}
                 >
-
                     <SVGInline
                         height="18px"
                         width="18px"

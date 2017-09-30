@@ -2,7 +2,43 @@
 
 .cash-finance-lease-calculator {
   background: $color-text-white;
+  max-width: 500px;
   padding: 15px;
+
+  &__lease-table {
+    td {
+      padding: 5px;
+    }
+  }
+
+  &__lease-table-cell {
+    padding: 5px;
+
+    &--dark {
+      background: $color-grey;
+    }
+
+    &--selectable {
+      background: $color-blue;
+      border: 1px solid $color-section-bottom-border;
+      border-radius: 3px;
+      color: $color-text-white;
+      cursor: pointer;
+    }
+
+    &--selected {
+      background: $color-text-white;
+      border: 1px solid $color-section-bottom-border;
+      border-radius: 3px;
+      color: $color-blue;
+      cursor: pointer;
+    }
+
+    &--darker {
+      background: $color-darkergrey;
+      color: $color-text-white;
+    }
+  }
 
   &__left-item {
     margin-right: 20px;

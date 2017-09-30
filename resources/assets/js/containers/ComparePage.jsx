@@ -87,7 +87,6 @@ class ComparePage extends React.PureComponent {
                 <div className="deal__buttons">
                     <button
                         className="deal__button deal__button--small deal__button--pink"
-
                         onClick={() =>
                             purchase.start(
                                 deal,
@@ -125,7 +124,10 @@ class ComparePage extends React.PureComponent {
         return (
             <div
                 onClick={() => this.toggleAccordion(accordionTab)}
-                className={`compare-page-table__header ${ this.state.openAccordion === accordionTab ? 'compare-page-table__header--open' : ''}`}
+                className={`compare-page-table__header ${this.state
+                    .openAccordion === accordionTab
+                    ? 'compare-page-table__header--open'
+                    : ''}`}
             >
                 <SVGInline
                     className="compare-page-table__header-cheveron"
