@@ -60180,14 +60180,14 @@ var urlStyle = _util2.default.getInitialBodyStyleFromUrl();
 
 var initialState = {
     /** Version **/
-    1: '<- increment the number to purge LocalStorage',
+    2: '<- increment the number to purge LocalStorage',
     /** End Version **/
     window: { width: window.innerWidth },
     smallFiltersShown: false,
     showMakeSelectorModal: true,
     selectedTab: 'cash',
     downPayment: 0,
-    termDuration: 60,
+    termDuration: 36,
     annualMileage: 10000,
     residualPercent: null,
     selectedDeal: null,
