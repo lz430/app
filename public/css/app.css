@@ -2848,6 +2848,55 @@ body {
   font-size: .8rem;
 }
 
+.customer-type {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.customer-type__select {
+  margin-right: 10px;
+}
+
+.customer-type__info {
+  display: inline;
+  position: relative;
+}
+
+@media (max-width: 576px) {
+  .customer-type__info {
+    display: none;
+  }
+}
+
+.customer-type__info:hover {
+  text-decoration: none;
+}
+
+.customer-type__info:hover::after {
+  background-color: #fff;
+  border: 1px solid #484d50;
+  bottom: 1.35em;
+  color: #1e2123;
+  content: attr(data-title);
+  display: block;
+  font-size: small;
+  left: 1em;
+  padding: .3em 1em;
+  position: absolute;
+  width: 240px;
+  z-index: 98;
+}
+
+.customer-type__info:hover::before {
+  bottom: 1em;
+  content: '';
+  display: block;
+  left: 2em;
+  position: absolute;
+  z-index: 99;
+}
+
 .welcome__top {
   background: url("/images/welcome-top.png") center;
   background-size: cover;

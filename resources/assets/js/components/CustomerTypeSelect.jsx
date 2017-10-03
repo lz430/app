@@ -1,10 +1,8 @@
 import React from 'react';
-import R from 'ramda';
-import util from 'src/util';
-import fuelapi from 'src/fuelapi';
-import DealPrice from 'components/DealPrice';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
+import SVGInline from 'react-svg-inline';
+import zondicons from 'zondicons';
 
 class CustomerTypeSelect extends React.PureComponent {
     handleChange(e) {
@@ -13,14 +11,20 @@ class CustomerTypeSelect extends React.PureComponent {
 
     render() {
         return (
-            <div>
+            <div className="customer-type">
                 <select
+                    className="customer-type__select"
                     value={this.props.isEmployee ? 'employee' : 'supplier'}
                     onChange={e => this.handleChange(e)}
                 >
                     <option value="employee">Employee/Retiree</option>
                     <option value="supplier">Supplier</option>
                 </select>
+                <a
+                    className="customer-type__info"
+                    data-title="If you are eligible for special pricing, please select. Proof of eligibility will be required by dealer.">
+                    <SVGInline width="15px" fill="grey" svg={zondicons['information-outline']} />
+                </a>
             </div>
         );
     }
