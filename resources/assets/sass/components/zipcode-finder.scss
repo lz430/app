@@ -6,7 +6,7 @@
   background-color: $color-sidebar-background-primary;
   color: $color-text-white;
   display: flex;
-  height: auto;
+  height: $sortbar-height + $filterbar-height;
   padding: 20px 15px;
 
   &__count {
