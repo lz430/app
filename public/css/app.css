@@ -1713,6 +1713,7 @@ body {
   display: -ms-flexbox;
   display: flex;
   padding: 15px;
+  position: relative;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;

@@ -41,6 +41,7 @@ $icon-size: 20px;
     cursor: pointer;
     display: flex;
     padding: 15px;
+    position: relative;
     user-select: none;
 
     &--open {
