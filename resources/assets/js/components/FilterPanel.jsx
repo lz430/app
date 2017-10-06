@@ -156,7 +156,7 @@ class FilterPanel extends React.PureComponent {
                     <SidebarFilter
                         toggle={() => this.toggleOpenFilter('Convenience')}
                         open={this.state.openFilter === 'Convenience'}
-                        title="Convenience"
+                        title="Comfort and Convenience"
                         count={this.getCountOfSelectedFeatureByGroup(
                             'comfort and convenience'
                         )}
