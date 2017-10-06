@@ -232,6 +232,13 @@ class Importer
             return $carry->merge(self::splitJATOFeaturesAndContent($jatoFeature['feature'], $jatoFeature['content']));
         }, collect())->each(function ($featureAndContent) use ($deal, $group) {
             /**
+             * Only interior features that contain "seat" should be added to seating
+             */
+            if ($group === Feature::GROUP_SEATING && !str_contains($featureAndContent['feature'], 'seat')) {
+                return;
+            }
+
+            /**
              * Only add features that have _content_ that starts with "Standard", "Optional", "Yes".
              */
             if (starts_with($featureAndContent['content'], ['Standard', 'Yes'])) {

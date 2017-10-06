@@ -79,41 +79,4 @@ class Feature extends Model
     {
         return $query->whereNotNull('group');
     }
-
-    public static function getGroupForFeature(string $featureString)
-    {
-        $feature = strtolower($featureString);
-
-        if (str_contains($feature, [
-            'airbag',
-            'brake',
-            'Blind Spot Sensor',
-            'Rear Parking Sensors',
-            'anti-roll',
-            'roll-over protection',
-            'camera',
-        ])) {
-            return self::GROUP_SAFETY;
-        } elseif (str_contains($feature, [
-            'seat',
-            'lumbar',
-        ])) {
-            return self::GROUP_SEATING;
-        } elseif (str_contains($feature, [
-            'technology',
-            'audio',
-        ])) {
-            return self::GROUP_TECHNOLOGY;
-        } elseif (str_contains($feature, [
-            'bed',
-        ])) {
-            return self::GROUP_TRUCK;
-        } elseif (str_contains($feature, [
-            'power',
-        ])) {
-            return self::COMFORT_AND_CONVENIENCE;
-        }
-
-        return null;
-    }
 }
