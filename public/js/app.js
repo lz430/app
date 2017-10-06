@@ -57774,7 +57774,7 @@ var FilterPanel = function (_React$PureComponent) {
                                 return _this2.toggleOpenFilter('Convenience');
                             },
                             open: this.state.openFilter === 'Convenience',
-                            title: 'Convenience',
+                            title: 'Comfort and Convenience',
                             count: this.getCountOfSelectedFeatureByGroup('comfort and convenience')
                         },
                         _react2.default.createElement(_FilterFeatureSelector2.default, {
