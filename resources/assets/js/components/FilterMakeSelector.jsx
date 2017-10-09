@@ -14,7 +14,10 @@ class FilterMakeSelector extends React.PureComponent {
                         return (
                             <div
                                 key={index}
-                                className="filter-selector__selector"
+                                className={R.contains(
+                                    make.id,
+                                    this.props.selectedMakes
+                                ) ? "filter-selector__selector filter-selector__selector--selected" : "filter-selector__selector"}
                                 onClick={this.props.onSelectMake.bind(
                                     null,
                                     make.id

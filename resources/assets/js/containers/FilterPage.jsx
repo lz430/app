@@ -18,8 +18,9 @@ class FilterPage extends React.PureComponent {
             <Modal
                 onClose={this.props.closeMakeSelectorModal}
                 title="Select brand preference"
-                subtitle="Please select one or more brands that you are considering"
+                subtitle="Select one or more brands to compare"
                 closeText="Show available vehicles"
+                buttonCloseDisabled={function () { /* @TODO THIS DOES NOT WORK */ return this.props.selectedMakes.length == 0 }}
             >
                 <MakeSelector />
             </Modal>

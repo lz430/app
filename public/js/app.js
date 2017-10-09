@@ -9925,7 +9925,7 @@ var Modal = function (_React$Component) {
     }, {
         key: 'buttonClass',
         value: function buttonClass() {
-            return 'modal__close-button modal__close-button--blue modal__close-button--small ' + (this.state.animating ? 'animated rubberBand' : '');
+            return 'modal__close-button modal__close-button--blue modal__close-button--small ' + (this.state.animating ? 'animated rubberBand' : '') + ' ' + (this.props.buttonCloseDisabled ? 'disabled' : '');
         }
     }, {
         key: 'render',
@@ -41821,8 +41821,11 @@ var FilterPage = function (_React$PureComponent) {
                 {
                     onClose: this.props.closeMakeSelectorModal,
                     title: 'Select brand preference',
-                    subtitle: 'Please select one or more brands that you are considering',
-                    closeText: 'Show available vehicles'
+                    subtitle: 'Select one or more brands to compare',
+                    closeText: 'Show available vehicles',
+                    buttonCloseDisabled: function buttonCloseDisabled() {
+                        /* @TODO THIS DOES NOT WORK */return this.props.selectedMakes.length == 0;
+                    }
                 },
                 _react2.default.createElement(_MakeSelector2.default, null)
             );
@@ -58257,7 +58260,7 @@ var FilterMakeSelector = function (_React$PureComponent) {
                         'div',
                         {
                             key: index,
-                            className: 'filter-selector__selector',
+                            className: _ramda2.default.contains(make.id, _this2.props.selectedMakes) ? "filter-selector__selector filter-selector__selector--selected" : "filter-selector__selector",
                             onClick: _this2.props.onSelectMake.bind(null, make.id)
                         },
                         _ramda2.default.contains(make.id, _this2.props.selectedMakes) ? _react2.default.createElement(_reactSvgInline2.default, {
