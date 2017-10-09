@@ -588,7 +588,7 @@ body {
 }
 
 .make-selector__make--selected {
-  border: #2eb1ad solid 1px;
+  border: #2eb1ad solid 3px;
 }
 
 .make-selector__make img {
