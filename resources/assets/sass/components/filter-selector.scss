@@ -11,6 +11,10 @@
     &:last-child {
       border-bottom: 0;
     }
+
+    &--selected {
+      background: $color-left-filter-selected;
+    }
   }
 
   &__checkbox {

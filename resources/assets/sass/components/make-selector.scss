@@ -31,6 +31,7 @@ $make-img-size: 120px;
     flex-direction: row;
     justify-content: flex-start;
     max-width: 100%;
+    padding-left: 10px;
     text-align: center;
     width: 100%;
 
@@ -44,6 +45,7 @@ $make-img-size: 120px;
       margin: 5px;
       max-height: $make-height;
       max-width: $make-width;
+      padding-left: 0;
       width: $make-width;
     }
 

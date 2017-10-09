@@ -58257,7 +58257,7 @@ var FilterMakeSelector = function (_React$PureComponent) {
                         'div',
                         {
                             key: index,
-                            className: 'filter-selector__selector',
+                            className: _ramda2.default.contains(make.id, _this2.props.selectedMakes) ? "filter-selector__selector filter-selector__selector--selected" : "filter-selector__selector",
                             onClick: _this2.props.onSelectMake.bind(null, make.id)
                         },
                         _ramda2.default.contains(make.id, _this2.props.selectedMakes) ? _react2.default.createElement(_reactSvgInline2.default, {

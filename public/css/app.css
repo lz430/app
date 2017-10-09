@@ -561,6 +561,7 @@ body {
       -ms-flex-pack: start;
           justify-content: flex-start;
   max-width: 100%;
+  padding-left: 10px;
   text-align: center;
   width: 100%;
 }
@@ -581,6 +582,7 @@ body {
     margin: 5px;
     max-height: calc(175px + 1rem);
     max-width: calc(175px + 1rem);
+    padding-left: 0;
     width: calc(175px + 1rem);
   }
 }
@@ -1767,6 +1769,7 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  border-radius: 0.5em;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1777,15 +1780,20 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  height: 75px;
+  height: 85px;
   -webkit-box-pack: end;
       -ms-flex-pack: end;
           justify-content: flex-end;
-  margin: 10px 0;
-  min-height: 75px;
-  min-width: 50%;
+  margin: 5px 5px;
+  min-height: 85px;
+  min-width: calc(50% - 10px);
+  padding: 5px;
   text-align: center;
-  width: 50%;
+  width: calc(50% - 10px);
+}
+
+.filter-style-selector__style--selected {
+  background: #279c99;
 }
 
 .filter-style-selector__style--selected .filter-style-selector__icon svg path {
@@ -1817,6 +1825,10 @@ body {
 
 .filter-selector__selector:last-child {
   border-bottom: 0;
+}
+
+.filter-selector__selector--selected {
+  background: #279c99;
 }
 
 .filter-selector__checkbox {
