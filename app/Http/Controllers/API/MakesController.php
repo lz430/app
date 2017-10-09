@@ -9,10 +9,10 @@ class MakesController extends BaseAPIController
 {
     private const TRANSFORMER = MakeTransformer::class;
     private const RESOURCE_NAME = 'makes';
-    
+
     public function index()
     {
-        $makes = Make::whiteListed()->get();
+        $makes = Make::whiteListed()->orderBy('name')->get();
 
         return fractal()
             ->collection($makes)
