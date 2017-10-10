@@ -9925,7 +9925,7 @@ var Modal = function (_React$Component) {
     }, {
         key: 'buttonClass',
         value: function buttonClass() {
-            return 'modal__close-button modal__close-button--blue modal__close-button--small ' + (this.state.animating ? 'animated rubberBand' : '') + ' ' + (this.props.buttonCloseDisabled() ? 'disabled' : '');
+            return 'modal__close-button modal__close-button--blue modal__close-button--small ' + (this.state.animating ? 'animated rubberBand' : '') + ' ' + (this.props.buttonCloseDisabled ? 'disabled' : '');
         }
     }, {
         key: 'render',
@@ -41760,6 +41760,10 @@ var _MakeSelector = __webpack_require__(930);
 
 var _MakeSelector2 = _interopRequireDefault(_MakeSelector);
 
+var _propTypes = __webpack_require__(26);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _Deals = __webpack_require__(931);
 
 var _Deals2 = _interopRequireDefault(_Deals);
@@ -41823,16 +41827,10 @@ var FilterPage = function (_React$PureComponent) {
                     title: 'Select brand preference',
                     subtitle: 'Select one or more brands to compare',
                     closeText: 'Show available vehicles',
-                    buttonCloseDisabled: this.selectedAnyBrands
+                    buttonCloseDisabled: this.props.selectedMakes.length == 0
                 },
                 _react2.default.createElement(_MakeSelector2.default, null)
             );
-        }
-    }, {
-        key: 'selectedAnyBrands',
-        value: function selectedAnyBrands() {
-            // return whether MakeSelector.selectedMakes.length > 0
-            return true;
         }
     }, {
         key: 'renderDealRebatesModal',
@@ -41897,7 +41895,23 @@ var FilterPage = function (_React$PureComponent) {
     return FilterPage;
 }(_react2.default.PureComponent);
 
-exports.default = (0, _reactRedux.connect)(_ramda2.default.identity, Actions)(FilterPage);
+FilterPage.propTypes = {
+    selectedMakes: _propTypes2.default.arrayOf(_propTypes2.default.string)
+};
+
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        selectedMakes: state.selectedMakes,
+        window: state.window,
+        closeMakeSelectorModal: state.closeMakeSelectorModal,
+        clearSelectedDeal: state.clearSelectedDeal,
+        smallFiltersShown: state.smallFiltersShown,
+        showMakeSelectorModal: state.showMakeSelectorModal,
+        selectedDeal: state.selectedDeal
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(FilterPage);
 
 /***/ }),
 /* 699 */

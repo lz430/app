@@ -28,7 +28,7 @@ class Modal extends React.Component {
         return `modal__close-button modal__close-button--blue modal__close-button--small ${this
             .state.animating
             ? 'animated rubberBand'
-            : ''} ${this.props.buttonCloseDisabled() ? 'disabled' : ''}`;
+            : ''} ${this.props.buttonCloseDisabled ? 'disabled' : ''}`;
     }
 
     render() {
