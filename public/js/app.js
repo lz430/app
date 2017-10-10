@@ -9925,7 +9925,7 @@ var Modal = function (_React$Component) {
     }, {
         key: 'buttonClass',
         value: function buttonClass() {
-            return 'modal__close-button modal__close-button--blue modal__close-button--small ' + (this.state.animating ? 'animated rubberBand' : '') + ' ' + (this.props.buttonCloseDisabled ? 'disabled' : '');
+            return 'modal__close-button modal__close-button--blue modal__close-button--small ' + (this.state.animating ? 'animated rubberBand' : '') + ' ' + (this.props.buttonCloseDisabled() ? 'disabled' : '');
         }
     }, {
         key: 'render',
@@ -41823,12 +41823,16 @@ var FilterPage = function (_React$PureComponent) {
                     title: 'Select brand preference',
                     subtitle: 'Select one or more brands to compare',
                     closeText: 'Show available vehicles',
-                    buttonCloseDisabled: function buttonCloseDisabled() {
-                        /* @TODO THIS DOES NOT WORK */return this.props.selectedMakes.length == 0;
-                    }
+                    buttonCloseDisabled: this.selectedAnyBrands
                 },
                 _react2.default.createElement(_MakeSelector2.default, null)
             );
+        }
+    }, {
+        key: 'selectedAnyBrands',
+        value: function selectedAnyBrands() {
+            // return whether MakeSelector.selectedMakes.length > 0
+            return true;
         }
     }, {
         key: 'renderDealRebatesModal',
