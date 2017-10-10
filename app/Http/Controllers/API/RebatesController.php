@@ -60,6 +60,8 @@ class RebatesController extends Controller
                                 'Credit Card Rebate' => ['cash', 'finance'],
                                 'Cash on MSRP ' => ['cash', 'finance'],
                                 'Cash on Term APR' => ['finance'],
+                                'Open Offer' => ['lease'],
+                                'Lease Customer' => ['lease'],
                             ][$incentive['typeName']] ?? [],
                     ];
                 })->filter(function ($incentive) {
