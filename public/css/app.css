@@ -164,6 +164,11 @@ body {
   width: 12px;
 }
 
+.section__button.disabled {
+  background: #aaa;
+  pointer-events: none;
+}
+
 .section__button:last-child {
   margin-right: 0;
 }
@@ -814,6 +819,11 @@ body {
   width: 12px;
 }
 
+.modal__close-button.disabled {
+  background: #aaa;
+  pointer-events: none;
+}
+
 .sortbar {
   border-bottom: 1px solid #ccc;
   display: -webkit-box;
@@ -908,6 +918,11 @@ body {
   margin-bottom: -1.5px;
   margin-right: 5px;
   width: 12px;
+}
+
+.sortbar__button.disabled {
+  background: #aaa;
+  pointer-events: none;
 }
 
 .sortbar__button:not(:last-of-type) {
@@ -1131,6 +1146,11 @@ body {
   width: 12px;
 }
 
+.deals__button.disabled {
+  background: #aaa;
+  pointer-events: none;
+}
+
 .deals__title {
   text-align: center;
   width: 100%;
@@ -1268,6 +1288,11 @@ body {
   width: 12px;
 }
 
+.deal__button.disabled {
+  background: #aaa;
+  pointer-events: none;
+}
+
 .deal__button--small {
   font-size: .8rem;
   padding: 10px 15px;
@@ -1351,6 +1376,11 @@ body {
   margin-bottom: -1.5px;
   margin-right: 5px;
   width: 12px;
+}
+
+.apply-or-purchase__button.disabled {
+  background: #aaa;
+  pointer-events: none;
 }
 
 .cash-finance-lease-calculator {
@@ -1497,6 +1527,11 @@ body {
   margin-bottom: -1.5px;
   margin-right: 5px;
   width: 12px;
+}
+
+.application-form__button.disabled {
+  background: #aaa;
+  pointer-events: none;
 }
 
 .zipcode-finder {
@@ -1647,6 +1682,11 @@ body {
   margin-bottom: -1.5px;
   margin-right: 5px;
   width: 12px;
+}
+
+.zipcode-finder__button.disabled {
+  background: #aaa;
+  pointer-events: none;
 }
 
 .zipcode-finder__button:first-child {
@@ -2076,6 +2116,11 @@ body {
   width: 12px;
 }
 
+.deal-details__button.disabled {
+  background: #aaa;
+  pointer-events: none;
+}
+
 .deal-details__button--small {
   font-size: .8rem;
   padding: 10px 5px;
@@ -2273,6 +2318,11 @@ body {
   width: 12px;
 }
 
+.compare-deal__button.disabled {
+  background: #aaa;
+  pointer-events: none;
+}
+
 .compare-deal__incentives {
   background-color: #535d63;
   border-top: 1px solid #ced4d9;
@@ -2419,6 +2469,11 @@ body {
   margin-bottom: -1.5px;
   margin-right: 5px;
   width: 12px;
+}
+
+.compare-deal__cta__button.disabled {
+  background: #aaa;
+  pointer-events: none;
 }
 
 .compare-bar {
@@ -3105,6 +3160,11 @@ financing {
   width: 12px;
 }
 
+.financing__button.disabled {
+  background: #aaa;
+  pointer-events: none;
+}
+
 .financing__cash {
   color: #0e9dce;
   cursor: pointer;
@@ -3318,6 +3378,11 @@ comparepage {
   width: 12px;
 }
 
+.request-email__button.disabled {
+  background: #aaa;
+  pointer-events: none;
+}
+
 .view-apply {
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -3490,6 +3555,11 @@ comparepage {
   width: 12px;
 }
 
+.view-apply__button.disabled {
+  background: #aaa;
+  pointer-events: none;
+}
+
 .thank-you {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -3649,6 +3719,11 @@ comparepage {
   margin-bottom: -1.5px;
   margin-right: 5px;
   width: 12px;
+}
+
+.thank-you__button.disabled {
+  background: #aaa;
+  pointer-events: none;
 }
 
 .thank-you__primary-image {

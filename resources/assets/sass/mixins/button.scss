@@ -64,4 +64,9 @@
     margin-right: 5px;
     width: 12px;
   }
+
+  &.disabled {
+    background: #aaa;
+    pointer-events: none;
+  }
 }

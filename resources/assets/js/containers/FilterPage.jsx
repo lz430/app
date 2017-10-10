@@ -2,6 +2,7 @@ import React from 'react';
 import R from 'ramda';
 import Modal from 'components/Modal';
 import MakeSelector from 'components/MakeSelector';
+import PropTypes from 'prop-types';
 import Deals from 'components/Deals';
 import Sortbar from 'components/Sortbar';
 import Filterbar from 'components/Filterbar';
@@ -20,7 +21,7 @@ class FilterPage extends React.PureComponent {
                 title="Select brand preference"
                 subtitle="Select one or more brands to compare"
                 closeText="Show available vehicles"
-                buttonCloseDisabled={function () { /* @TODO THIS DOES NOT WORK */ return this.props.selectedMakes.length == 0 }}
+                buttonCloseDisabled={this.props.selectedMakes.length == 0}
             >
                 <MakeSelector />
             </Modal>
@@ -101,4 +102,20 @@ class FilterPage extends React.PureComponent {
     }
 }
 
-export default connect(R.identity, Actions)(FilterPage);
+FilterPage.propTypes = {
+    selectedMakes: PropTypes.arrayOf(PropTypes.string),
+};
+
+const mapStateToProps = state => {
+    return {
+        selectedMakes: state.selectedMakes,
+        window: state.window,
+        closeMakeSelectorModal: state.closeMakeSelectorModal,
+        clearSelectedDeal: state.clearSelectedDeal,
+        smallFiltersShown: state.smallFiltersShown,
+        showMakeSelectorModal: state.showMakeSelectorModal,
+        selectedDeal: state.selectedDeal,
+    };
+};
+
+export default connect(mapStateToProps, Actions)(FilterPage);
