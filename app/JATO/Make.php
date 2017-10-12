@@ -80,7 +80,7 @@ class Make extends Model
         'land-rover' => self::BASE_PATH . 'land-rover.png',
         'lexus' => self::BASE_PATH . 'lexus.jpg',
         'lincoln' => self::BASE_PATH . 'lincoln.jpg',
-        'maserati' => self::BASE_PATH . 'maserati.jpg',
+        'maserati' => self::BASE_PATH . 'mitsubishi.jpg',
         'mercedes-benz' => self::BASE_PATH . 'mercedes-benz.jpg',
         'mini' => self::BASE_PATH . 'mini.jpg',
         'mitsubishi' => self::BASE_PATH . 'maserati.jpg',
