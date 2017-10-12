@@ -1,11 +1,11 @@
 @import '../variables';
 
-$make-height-half: calc(100px + 1rem);
-$make-width-half: calc(100px + 1rem);
-$make-height: calc(150px + 1rem);
-$make-width: calc(150px + 1rem);
-$make-img-size-half: 70px;
-$make-img-size: 110px;
+$make-height-half: calc(90px + 1rem);
+$make-width-half: calc(90px + 1rem);
+$make-height: calc(130px + 1rem);
+$make-width: calc(130px + 1rem);
+$make-img-size-half: 60px;
+$make-img-size: 90px;
 
 .make-selector {
   text-align: center;
@@ -43,9 +43,10 @@ $make-img-size: 110px;
       border-right: 1px solid $color-section-bottom-border;
       border-top: 1px solid $color-section-bottom-border;
       flex-direction: column;
+      font-size: 0.8em;
       height: $make-height-half;
       justify-content: center;
-      margin: 5px;
+      margin: 2px;
       max-height: $make-height-half;
       max-width: $make-width-half;
       padding-left: 0;
@@ -53,7 +54,9 @@ $make-img-size: 110px;
     }
 
     @media (min-width: $break-large) {
+      font-size: 1em;
       height: $make-height;
+      margin: 5px;
       max-height: $make-height;
       max-width: $make-width;
       width: $make-width;
