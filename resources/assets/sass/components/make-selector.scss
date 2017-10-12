@@ -1,8 +1,11 @@
 @import '../variables';
 
-$make-height: calc(175px + 1rem);
-$make-width: calc(175px + 1rem);
-$make-img-size: 120px;
+$make-height-half: calc(100px + 1rem);
+$make-width-half: calc(100px + 1rem);
+$make-height: calc(150px + 1rem);
+$make-width: calc(150px + 1rem);
+$make-img-size-half: 70px;
+$make-img-size: 110px;
 
 .make-selector {
   text-align: center;
@@ -40,12 +43,19 @@ $make-img-size: 120px;
       border-right: 1px solid $color-section-bottom-border;
       border-top: 1px solid $color-section-bottom-border;
       flex-direction: column;
-      height: $make-height;
+      height: $make-height-half;
       justify-content: center;
       margin: 5px;
+      max-height: $make-height-half;
+      max-width: $make-width-half;
+      padding-left: 0;
+      width: $make-width-half;
+    }
+
+    @media (min-width: $break-large) {
+      height: $make-height;
       max-height: $make-height;
       max-width: $make-width;
-      padding-left: 0;
       width: $make-width;
     }
 
@@ -60,6 +70,13 @@ $make-img-size: 120px;
       width: 50px;
 
       @media (min-width: $break-medium) {
+        height: $make-img-size-half;
+        max-height: $make-img-size-half;
+        max-width: $make-img-size-half;
+        width: $make-img-size-half;
+      }
+
+      @media (min-width: $break-large) {
         height: $make-img-size;
         max-height: $make-img-size;
         max-width: $make-img-size;
