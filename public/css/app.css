@@ -4,12 +4,19 @@ html {
 
 @font-face {
   font-family: 'Gotham Narrow Book';
+  font-weight: normal;
   src: url("/fonts/GothamNarrow-Book.woff") format("opentype");
+}
+
+@font-face {
+  font-family: 'Gotham Narrow Book';
+  font-weight: bold;
+  src: url("/fonts/GothamNarrow-Bold.otf") format("opentype");
 }
 
 body {
   color: #586368;
-  font-family: Gotham Narrow Book, serif;
+  font-family: "Gotham Narrow Book", serif;
   line-height: 1.6;
 }
 
@@ -3203,6 +3210,10 @@ comparepage {
 
 .compare-page__body {
   overflow-x: scroll;
+}
+
+.compare-page-table__header {
+  cursor: pointer;
 }
 
 .request-email {

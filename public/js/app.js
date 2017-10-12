@@ -60734,11 +60734,11 @@ var ComparePage = function (_React$PureComponent) {
 
             var anyHaveFuelType = _ramda2.default.any(function (selectedFilters) {
                 return selectedFilters.selectedFuelType;
-            });
+            }, compareList);
 
             var anyHaveTransmissionType = _ramda2.default.any(function (selectedFilters) {
                 return selectedFilters.selectedTransmissionType;
-            });
+            }, compareList);
 
             return _react2.default.createElement(
                 'div',
@@ -60762,13 +60762,13 @@ var ComparePage = function (_React$PureComponent) {
                                 { className: 'compare-page-table__cell' },
                                 selectedFilters.selectedFuelType,
                                 '\xA0'
-                            ) : _react2.default.createElement('span', null),
+                            ) : '',
                             anyHaveTransmissionType ? _react2.default.createElement(
                                 'div',
                                 { className: 'compare-page-table__cell' },
                                 selectedFilters.selectedTransmissionType ? _strings2.default.toTitleCase(selectedFilters.selectedTransmissionType) : '',
                                 '\xA0'
-                            ) : _react2.default.createElement('span', null),
+                            ) : '',
                             selectedFilters.selectedFeatures.map(function (feature, index) {
                                 return _react2.default.createElement(
                                     'div',
@@ -60866,26 +60866,43 @@ var ComparePage = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'div',
                                 { className: 'compare-page-table__cell' },
-                                'MSRP:',
+                                _react2.default.createElement(
+                                    'strong',
+                                    null,
+                                    'MSRP:'
+                                ),
                                 ' ',
                                 _util2.default.moneyFormat(dealAndSelectedFilters.deal.msrp)
                             ),
                             _react2.default.createElement(
                                 'div',
                                 { className: 'compare-page-table__cell' },
-                                'Invoice:',
+                                _react2.default.createElement(
+                                    'strong',
+                                    null,
+                                    'Invoice:'
+                                ),
                                 ' ',
                                 _util2.default.moneyFormat(dealAndSelectedFilters.deal.versions[0].invoice)
                             ),
                             _react2.default.createElement(
                                 'div',
                                 { className: 'compare-page-table__cell' },
-                                'Delivery: Always Free!'
+                                _react2.default.createElement(
+                                    'strong',
+                                    null,
+                                    'Delivery:'
+                                ),
+                                ' Always Free!'
                             ),
                             _react2.default.createElement(
                                 'div',
                                 { className: 'compare-page-table__cell' },
-                                'Deliver My Ride Price:',
+                                _react2.default.createElement(
+                                    'strong',
+                                    null,
+                                    'Deliver My Ride Price:'
+                                ),
                                 ' ',
                                 _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(dealAndSelectedFilters.deal, _this6.props.isEmployee))
                             )
@@ -60933,6 +60950,65 @@ var ComparePage = function (_React$PureComponent) {
             );
         }
     }, {
+        key: 'renderFeaturesTable',
+        value: function renderFeaturesTable(compareList) {
+            var maxNumberCells = _ramda2.default.reduce(function (carry, dealAndSelectedFilters) {
+                return _ramda2.default.max(dealAndSelectedFilters.deal.features.length, carry);
+            }, 0, compareList);
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'compare-page-table' },
+                this.renderAccordionTabHeader('Features'),
+                _react2.default.createElement(
+                    'div',
+                    { className: this.columnClass('Features') },
+                    compareList.map(function (_ref2, index) {
+                        var deal = _ref2.deal;
+
+                        return _react2.default.createElement(
+                            'div',
+                            {
+                                key: index,
+                                className: 'compare-page-table__column'
+                            },
+                            deal.features.map(function (feature, index) {
+                                return _react2.default.createElement(
+                                    'div',
+                                    { key: index, className: 'compare-page-table__cell' },
+                                    feature.feature,
+                                    '\xA0'
+                                );
+                            }),
+                            _ramda2.default.range(0, maxNumberCells - deal.features.length).map(function (_, index) {
+                                return _react2.default.createElement(
+                                    'div',
+                                    {
+                                        key: index,
+                                        className: 'compare-page-table__cell'
+                                    },
+                                    '\xA0'
+                                );
+                            })
+                        );
+                    })
+                )
+            );
+        }
+    }, {
+        key: 'hasSelections',
+        value: function hasSelections(compareList) {
+            var anyHaveFuelType = _ramda2.default.any(function (selectedFilters) {
+                return selectedFilters.selectedFuelType;
+            }, this.props.compareList);
+
+            var anyHaveTransmissionType = _ramda2.default.any(function (selectedFilters) {
+                return selectedFilters.selectedTransmissionType;
+            }, this.props.compareList);
+
+            return anyHaveFuelType || anyHaveTransmissionType;
+        }
+    }, {
         key: 'render',
         value: function render() {
             var _this8 = this;
@@ -60959,7 +61035,7 @@ var ComparePage = function (_React$PureComponent) {
                         { className: 'compare-page-deals' },
                         this.props.deals.map(this.renderDeal)
                     ),
-                    this.props.compareList.length ? _react2.default.createElement(
+                    this.props.compareList && this.hasSelections(this.props.compareList) ? _react2.default.createElement(
                         _AccordionTable2.default,
                         null,
                         function () {
@@ -60988,7 +61064,14 @@ var ComparePage = function (_React$PureComponent) {
                         function () {
                             return _this8.renderWarrantyTable(_this8.props.compareList);
                         }
-                    )
+                    ),
+                    this.props.compareList.length ? _react2.default.createElement(
+                        _AccordionTable2.default,
+                        null,
+                        function () {
+                            return _this8.renderFeaturesTable(_this8.props.compareList);
+                        }
+                    ) : ''
                 ),
                 this.props.selectedDeal ? this.renderDealRebatesModal() : ''
             );
