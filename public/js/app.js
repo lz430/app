@@ -61894,7 +61894,6 @@ var ThankYouPage = function (_React$PureComponent) {
         var _this = _possibleConstructorReturn(this, (ThankYouPage.__proto__ || Object.getPrototypeOf(ThankYouPage)).call(this, props));
 
         _this.state = {
-            showModal: true,
             purchase: props.purchase.data.attributes,
             deal: props.purchase.data.attributes.deal.data.attributes,
             warranties: null,
@@ -61930,13 +61929,6 @@ var ThankYouPage = function (_React$PureComponent) {
                 _this2.setState({
                     warranties: response.data
                 });
-            });
-        }
-    }, {
-        key: 'handleModalClose',
-        value: function handleModalClose() {
-            this.setState({
-                showModal: false
             });
         }
     }, {
@@ -62140,54 +62132,6 @@ var ThankYouPage = function (_React$PureComponent) {
             );
         }
     }, {
-        key: 'renderNewPurchaseModal',
-        value: function renderNewPurchaseModal() {
-            var _this5 = this;
-
-            return _react2.default.createElement(
-                _Modal2.default,
-                { closeText: 'Close', onClose: function onClose() {
-                        return _this5.handleModalClose();
-                    } },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'thank-you__modal' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'thank-you__modal-close' },
-                        _react2.default.createElement(_reactSvgInline2.default, {
-                            onClick: function onClick() {
-                                return _this5.handleModalClose();
-                            },
-                            height: '20px',
-                            width: '20px',
-                            className: 'modal__close-x',
-                            svg: _zondicons2.default['close']
-                        })
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'thank-you__modal-image' },
-                        _react2.default.createElement('img', { src: this.state.deal.photos[1].url })
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'thank-you__modal-text' },
-                        _react2.default.createElement(
-                            'h1',
-                            null,
-                            'Congratulations on your new purchase!'
-                        ),
-                        _react2.default.createElement(
-                            'h2',
-                            null,
-                            'Shortly, a certified Deliver My Ride representative will contact you to finalize your paperwork details and to schedule the place and time for your delivery.'
-                        )
-                    )
-                )
-            );
-        }
-    }, {
         key: 'youChoseString',
         value: function youChoseString(purchase) {
             switch (purchase.type) {
@@ -62215,7 +62159,7 @@ var ThankYouPage = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
-            var _this6 = this;
+            var _this5 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -62223,7 +62167,6 @@ var ThankYouPage = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'thank-you' },
-                    this.state.showModal ? this.renderNewPurchaseModal() : '',
                     this.state.showStandardFeatures ? this.renderStandardFeaturesModal(this.state.deal) : '',
                     this.state.showFeatures ? this.renderFeaturesModal(this.state.deal) : '',
                     _react2.default.createElement(
@@ -62251,7 +62194,7 @@ var ThankYouPage = function (_React$PureComponent) {
                                 'button',
                                 {
                                     onClick: function onClick() {
-                                        return _this6.showStandardFeatures();
+                                        return _this5.showStandardFeatures();
                                     },
                                     className: 'thank-you__button thank-you__button--blue'
                                 },
@@ -62261,7 +62204,7 @@ var ThankYouPage = function (_React$PureComponent) {
                                 'button',
                                 {
                                     onClick: function onClick() {
-                                        return _this6.showFeatures();
+                                        return _this5.showFeatures();
                                     },
                                     className: 'thank-you__button thank-you__button--blue'
                                 },

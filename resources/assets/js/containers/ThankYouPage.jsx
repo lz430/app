@@ -15,7 +15,6 @@ class ThankYouPage extends React.PureComponent {
         super(props);
 
         this.state = {
-            showModal: true,
             purchase: props.purchase.data.attributes,
             deal: props.purchase.data.attributes.deal.data.attributes,
             warranties: null,
@@ -60,12 +59,6 @@ class ThankYouPage extends React.PureComponent {
                     warranties: response.data,
                 });
             });
-    }
-
-    handleModalClose() {
-        this.setState({
-            showModal: false,
-        });
     }
 
     showStandardFeatures() {
@@ -192,36 +185,6 @@ class ThankYouPage extends React.PureComponent {
         );
     }
 
-    renderNewPurchaseModal() {
-        return (
-            <Modal closeText="Close" onClose={() => this.handleModalClose()}>
-                <div className="thank-you__modal">
-                    <div className="thank-you__modal-close">
-                        <SVGInline
-                            onClick={() => this.handleModalClose()}
-                            height="20px"
-                            width="20px"
-                            className="modal__close-x"
-                            svg={zondicons['close']}
-                        />
-                    </div>
-                    <div className="thank-you__modal-image">
-                        <img src={this.state.deal.photos[1].url} />
-                    </div>
-                    <div className="thank-you__modal-text">
-                        <h1>Congratulations on your new purchase!</h1>
-                        <h2>
-                            Shortly, a certified Deliver My Ride representative
-                            will contact you to finalize your paperwork details
-                            and to schedule the place and time for your
-                            delivery.
-                        </h2>
-                    </div>
-                </div>
-            </Modal>
-        );
-    }
-
     youChoseString(purchase) {
         switch (purchase.type) {
             case 'cash':
@@ -249,7 +212,6 @@ class ThankYouPage extends React.PureComponent {
         return (
             <div>
                 <div className="thank-you">
-                    {this.state.showModal ? this.renderNewPurchaseModal() : ''}
                     {this.state.showStandardFeatures ? (
                         this.renderStandardFeaturesModal(this.state.deal)
                     ) : (
