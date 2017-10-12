@@ -19,3 +19,9 @@ comparepage {
     overflow-x: scroll;
   }
 }
+
+.compare-page-table {
+  &__header {
+    cursor: pointer;
+  }
+}
