@@ -167,6 +167,14 @@ class ComparePage extends React.PureComponent {
             compareList
         );
 
+        const anyHaveFuelType = R.any(
+            (selectedFilters) => { return selectedFilters.selectedFuelType; }
+        );
+
+        const anyHaveTransmissionType = R.any(
+            (selectedFilters) => { return selectedFilters.selectedTransmissionType; }
+        );
+
         return (
             <div className="compare-page-table">
                 {this.renderAccordionTabHeader('Your Selections')}
@@ -177,12 +185,14 @@ class ComparePage extends React.PureComponent {
                                 key={index}
                                 className="compare-page-table__column"
                             >
-                                <div className="compare-page-table__cell">
-                                    {deal.id}&nbsp;
-                                </div>
+                            { anyHaveFuelType ?
                                 <div className="compare-page-table__cell">
                                     {selectedFilters.selectedFuelType}&nbsp;
                                 </div>
+                                :
+                                <span></span>
+                            }
+                            { anyHaveTransmissionType ?
                                 <div className="compare-page-table__cell">
                                     {selectedFilters.selectedTransmissionType ? (
                                         string.toTitleCase(
@@ -192,6 +202,9 @@ class ComparePage extends React.PureComponent {
                                         ''
                                     )}&nbsp;
                                 </div>
+                                :
+                                <span></span>
+                            }
                                 {selectedFilters.selectedFeatures.map(
                                     (feature, index) => {
                                         return (

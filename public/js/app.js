@@ -60732,6 +60732,14 @@ var ComparePage = function (_React$PureComponent) {
                 return _ramda2.default.max(_ramda2.default.propOr([], 'selectedFeatures', dealAndSelectedFilters.selectedFilters).length, carry);
             }, 0, compareList);
 
+            var anyHaveFuelType = _ramda2.default.any(function (selectedFilters) {
+                return selectedFilters.selectedFuelType;
+            });
+
+            var anyHaveTransmissionType = _ramda2.default.any(function (selectedFilters) {
+                return selectedFilters.selectedTransmissionType;
+            });
+
             return _react2.default.createElement(
                 'div',
                 { className: 'compare-page-table' },
@@ -60749,24 +60757,18 @@ var ComparePage = function (_React$PureComponent) {
                                 key: index,
                                 className: 'compare-page-table__column'
                             },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'compare-page-table__cell' },
-                                deal.id,
-                                '\xA0'
-                            ),
-                            _react2.default.createElement(
+                            anyHaveFuelType ? _react2.default.createElement(
                                 'div',
                                 { className: 'compare-page-table__cell' },
                                 selectedFilters.selectedFuelType,
                                 '\xA0'
-                            ),
-                            _react2.default.createElement(
+                            ) : _react2.default.createElement('span', null),
+                            anyHaveTransmissionType ? _react2.default.createElement(
                                 'div',
                                 { className: 'compare-page-table__cell' },
                                 selectedFilters.selectedTransmissionType ? _strings2.default.toTitleCase(selectedFilters.selectedTransmissionType) : '',
                                 '\xA0'
-                            ),
+                            ) : _react2.default.createElement('span', null),
                             selectedFilters.selectedFeatures.map(function (feature, index) {
                                 return _react2.default.createElement(
                                     'div',
