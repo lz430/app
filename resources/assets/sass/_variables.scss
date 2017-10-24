@@ -9,6 +9,8 @@ $color-sidebar-background-secondary: rgba(215, 215, 215, 1);
 $color-sidebar-background-secondary-dark: #343b3e;
 $color-sidebar-background-secondary-light: lighten($color-sidebar-background-secondary, 46%);
 
+$color-footer-background: #454d52;
+
 $color-compare-bar-background: rgba(204, 204, 204, 1);
 
 $color-text-white: #fff;
@@ -19,6 +21,7 @@ $color-blue: rgba(46, 177, 173, 1);
 $color-dark-blue: #436d82;
 $color-light-blue: #65d1f6;
 $color-lighter-blue: #b9e4f3;
+$color-teal: #41b1ac;
 $color-pink: rgba(231, 2, 144, 1);
 $color-error: #ac0000;
 
@@ -41,7 +44,7 @@ $text-color-dark: darken($text-color, 25);
 
 // Nav
 $nav-height: 76px;
-$footer-height: 190px;
+$footer-height: 300px;
 
 // Breakpoints
 $break-extra-small: 350px;

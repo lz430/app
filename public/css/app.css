@@ -50,32 +50,116 @@ body {
   padding-top: 20px;
 }
 
-.footer {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  background-color: #343b3e;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  height: 190px;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  max-height: 190px;
+.page-footer {
+  background-color: #454d52;
+  color: #fff;
+  height: 300px;
+  max-height: 300px;
+  padding-top: 2.5rem;
   text-align: center;
 }
 
-.footer__icon {
+.page-footer a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.page-footer a:hover {
+  text-decoration: underline;
+}
+
+.footer-icons,
+.footer-links,
+.footer-signup {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.footer-icons div,
+.footer-icons a,
+.footer-icons input,
+.footer-links div,
+.footer-links a,
+.footer-links input,
+.footer-signup div,
+.footer-signup a,
+.footer-signup input {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 0 1.5em;
+}
+
+.footer-icons {
+  margin-bottom: 1.5rem;
+}
+
+.footer-icons div {
   fill: #fff;
   height: 34px;
   margin: 0 30px;
+}
+
+.footer-links {
+  margin-bottom: 2.5rem;
+}
+
+.footer-signup {
+  margin-bottom: 2.5rem;
+}
+
+.footer-signup div,
+.footer-signup input {
+  height: 2.25rem;
+  margin: 0 1px;
+}
+
+.footer-signup__title {
+  border: 1px solid #fff;
+  border-radius: 0.3em 0 0 0.3em;
+  padding: 0 1em;
+}
+
+.footer-signup__email {
+  font-size: 1em;
+  min-width: 20em;
+  padding: 0 0.5em;
+}
+
+.footer-signup__email::-webkit-input-placeholder {
+  color: #ced4d9;
+}
+
+.footer-signup__email:-ms-input-placeholder {
+  color: #ced4d9;
+}
+
+.footer-signup__email::placeholder {
+  color: #ced4d9;
+}
+
+.footer-signup__submit {
+  background: #41b1ac;
+  border: 0;
+  border-radius: 0 0.3em 0.3em 0;
+  color: #fff;
+  font-size: 1em;
+  padding: 0 1em;
+}
+
+.footer-meta,
+.footer-meta a {
+  color: #ced4d9;
 }
 
 .section {
@@ -243,7 +327,7 @@ body {
 }
 
 .section--stretch {
-  min-height: calc(100vh - 76px - 190px);
+  min-height: calc(100vh - 76px - 300px);
 }
 
 .section--no-footer {

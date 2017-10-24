@@ -1,19 +1,84 @@
 @import '../variables';
 
-.footer {
-  align-items: center;
-  background-color: $color-sidebar-background-secondary-dark;
-  display: flex;
+.page-footer {
+  background-color: $color-footer-background;
+  color: #fff;
   height: $footer-height;
-  justify-content: center;
   max-height: $footer-height;
+  padding-top: 2.5rem;
   text-align: center;
 
-  &__icon {
+  a {
+    color: #fff;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.footer-icons, .footer-links, .footer-signup {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
+  div, a, input {
     align-items: center;
     display: flex;
+    margin: 0 1.5em;
+  }
+}
+
+.footer-icons {
+  margin-bottom: 1.5rem;
+
+  div {
     fill: $color-text-white;
     height: 34px;
     margin: 0 30px;
   }
+}
+
+.footer-links {
+  margin-bottom: 2.5rem;
+}
+
+.footer-signup {
+  margin-bottom: 2.5rem;
+
+  div, input {
+    height: 2.25rem;
+    margin: 0 1px;
+  }
+
+  &__title {
+    border: 1px solid #fff;
+    border-radius: 0.3em 0 0 0.3em;
+    padding: 0 1em;
+
+  }
+
+  &__email {
+    font-size: 1em;
+    min-width: 20em;
+    padding: 0 0.5em;
+
+    &::placeholder {
+      color: $color-grey;
+    }
+  }
+
+  &__submit {
+    background: $color-teal;
+    border: 0;
+    border-radius: 0 0.3em 0.3em 0;
+    color: #fff;
+    font-size: 1em;
+    padding: 0 1em;
+  }
+}
+
+.footer-meta, .footer-meta a {
+  color: $color-grey;
 }
