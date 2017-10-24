@@ -1274,16 +1274,19 @@ body {
 
 .deal {
   background-color: #fff;
+  border: 1px solid #ced4d9;
+  border-radius: 0.25rem;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   margin: 5px;
+  padding: 0.5rem;
   max-width: 300px;
   min-width: 300px;
 }
 
 .deal__basic-info {
-  margin: 15px 0;
+  margin-bottom: 0.5rem;
 }
 
 .deal__basic-info-year-and-model {
@@ -1313,6 +1316,7 @@ body {
 }
 
 .deal__image {
+  border: 1px solid #ced4d9;
   height: 225px;
   min-height: 225px;
   width: 100%;
@@ -1328,7 +1332,7 @@ body {
   display: flex;
   -ms-flex-pack: distribute;
       justify-content: space-around;
-  margin: 5px 0 25px;
+  margin: 5px 0 0.5rem;
 }
 
 .deal__button {

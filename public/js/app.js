@@ -13726,10 +13726,6 @@ var _ramda = __webpack_require__(12);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _util = __webpack_require__(27);
-
-var _util2 = _interopRequireDefault(_util);
-
 var _fuelapi = __webpack_require__(366);
 
 var _fuelapi2 = _interopRequireDefault(_fuelapi);
@@ -13940,6 +13936,11 @@ var Deal = function (_React$PureComponent) {
                         className: featureImageClass,
                         src: featuredImageUrl
                     })
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { style: { textAlign: 'center', 'border': '1px solid #eee' } },
+                    'Select Your Payment & Rebates'
                 ),
                 _react2.default.createElement(
                     'div',
