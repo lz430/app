@@ -9871,6 +9871,10 @@ var _react = __webpack_require__(8);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _ramda = __webpack_require__(12);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
 var _reactSvgInline = __webpack_require__(21);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
@@ -9929,9 +9933,12 @@ var Modal = function (_React$Component) {
         }
     }, {
         key: 'closeIfOverlayClick',
-        value: function closeIfOverlayClick() {
-            // @todo: Parse out of the click is or isn't within the modal__content
-            // and this.props.onClose if not
+        value: function closeIfOverlayClick(e, close) {
+            var targetClass = e.target.getAttribute('class');
+
+            if (_ramda2.default.contains(targetClass, 'modal__wrapper') || _ramda2.default.contains(targetClass, 'modal__overlay')) {
+                close();
+            }
         }
     }, {
         key: 'render',
@@ -9949,7 +9956,9 @@ var Modal = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 { className: 'modal',
-                    onClick: this.closeIfOverlayClick
+                    onClick: function onClick(e) {
+                        return _this3.closeIfOverlayClick(e, _this3.props.onClose);
+                    }
                 },
                 _react2.default.createElement('div', { className: 'modal__overlay' }),
                 _react2.default.createElement(

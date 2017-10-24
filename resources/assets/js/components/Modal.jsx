@@ -1,4 +1,5 @@
 import React from 'react';
+import R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import { connect } from 'react-redux';
@@ -31,9 +32,12 @@ class Modal extends React.Component {
             : ''} ${this.props.buttonCloseDisabled ? 'disabled' : ''}`;
     }
 
-    closeIfOverlayClick() {
-        // @todo: Parse out of the click is or isn't within the modal__content
-        // and this.props.onClose if not
+    closeIfOverlayClick(e, close) {
+        const targetClass = e.target.getAttribute('class');
+
+        if (R.contains(targetClass, 'modal__wrapper') || R.contains(targetClass, 'modal__overlay')) {
+            close();
+        }
     }
 
     render() {
@@ -47,7 +51,9 @@ class Modal extends React.Component {
 
         return (
             <div className="modal"
-                onClick={this.closeIfOverlayClick}
+                onClick={
+                    (e) => this.closeIfOverlayClick(e, this.props.onClose)
+                }
             >
                 <div className="modal__overlay" />
                 <div className="modal__wrapper">
