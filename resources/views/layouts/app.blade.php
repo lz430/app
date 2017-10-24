@@ -5,15 +5,12 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>@yield('title')</title>
 
-        <!-- Styles -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-        <!-- Scripts -->
         <script>
             window.Laravel = {!! json_encode([
                 'csrfToken' => csrf_token(),
@@ -43,13 +40,13 @@
     </head>
     <body class="{{ $bodyClass ?? '' }}">
         @section('nav')
-        <nav class="nav">
-            <div class="nav__constrained">
-                <a class="nav__logo" href="{{ url('/') }}">
-                    <img src="/images/dmr-logo.svg">
-                </a>
-            </div>
-        </nav>
+            <nav class="nav">
+                <div class="nav__constrained">
+                    <a class="nav__logo" href="{{ url('/') }}">
+                        <img src="/images/dmr-logo.svg">
+                    </a>
+                </div>
+            </nav>
         @show
 
         <div class="content {{ $contentClass ?? '' }}">
@@ -57,19 +54,9 @@
         </div>
 
         @section('footer')
-        <footer class="footer">
-            <div class="footer__icon">
-                {!! file_get_contents(resource_path("assets/svg/social/twitter.svg")) !!}
-            </div>
-            <div class="footer__icon">
-                {!! file_get_contents(resource_path("assets/svg/social/facebook.svg")) !!}
-            </div>
-            <div class="footer__icon">
-                {!! file_get_contents(resource_path("assets/svg/social/google-plus.svg")) !!}
-            </div>
-        </footer>
 
-        @include('footer')
+
+            @include('footer')
         @show
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}"></script>
