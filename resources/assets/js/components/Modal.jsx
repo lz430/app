@@ -82,19 +82,15 @@ class Modal extends React.Component {
                         ) : (
                             ''
                         )}
-                        {this.props.nowrapper ? (
-                            <div>{childrenWithProps}</div>
-                        ) : (
-                            <div
-                                className={`modal__body ${this.props.closeText
-                                    ? this.props.title
-                                      ? ''
-                                      : 'modal__body--no-header'
-                                    : 'modal__body--no-footer'}`}
-                            >
-                                {childrenWithProps}
-                            </div>
-                        )}
+                        <div
+                            className={`${this.props.nowrapper ? '' : 'modal__body'} ${this.props.closeText
+                                ? this.props.title
+                                  ? ''
+                                  : 'modal__body--no-header'
+                                : 'modal__body--no-footer'}`}
+                        >
+                            {childrenWithProps}
+                        </div>
                         {this.props.closeText ? (
                             <div className="modal__footer">
                                 <button

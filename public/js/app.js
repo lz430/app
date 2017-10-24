@@ -9996,14 +9996,10 @@ var Modal = function (_React$Component) {
                                 })
                             )
                         ) : '',
-                        this.props.nowrapper ? _react2.default.createElement(
-                            'div',
-                            null,
-                            childrenWithProps
-                        ) : _react2.default.createElement(
+                        _react2.default.createElement(
                             'div',
                             {
-                                className: 'modal__body ' + (this.props.closeText ? this.props.title ? '' : 'modal__body--no-header' : 'modal__body--no-footer')
+                                className: (this.props.nowrapper ? '' : 'modal__body') + ' ' + (this.props.closeText ? this.props.title ? '' : 'modal__body--no-header' : 'modal__body--no-footer')
                             },
                             childrenWithProps
                         ),
