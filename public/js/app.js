@@ -9928,6 +9928,12 @@ var Modal = function (_React$Component) {
             return 'modal__close-button modal__close-button--blue modal__close-button--small ' + (this.state.animating ? 'animated rubberBand' : '') + ' ' + (this.props.buttonCloseDisabled ? 'disabled' : '');
         }
     }, {
+        key: 'closeIfOverlayClick',
+        value: function closeIfOverlayClick() {
+            // @todo: Parse out of the click is or isn't within the modal__content
+            // and this.props.onClose if not
+        }
+    }, {
         key: 'render',
         value: function render() {
             var _this3 = this;
@@ -9942,7 +9948,9 @@ var Modal = function (_React$Component) {
 
             return _react2.default.createElement(
                 'div',
-                { className: 'modal' },
+                { className: 'modal',
+                    onClick: this.closeIfOverlayClick
+                },
                 _react2.default.createElement('div', { className: 'modal__overlay' }),
                 _react2.default.createElement(
                     'div',
@@ -9979,7 +9987,11 @@ var Modal = function (_React$Component) {
                                 })
                             )
                         ) : '',
-                        _react2.default.createElement(
+                        this.props.nowrapper ? _react2.default.createElement(
+                            'div',
+                            null,
+                            childrenWithProps
+                        ) : _react2.default.createElement(
                             'div',
                             {
                                 className: 'modal__body ' + (this.props.closeText ? this.props.title ? '' : 'modal__body--no-header' : 'modal__body--no-footer')
@@ -61482,7 +61494,12 @@ var DealDetails = function (_React$PureComponent) {
 
             return _react2.default.createElement(
                 _Modal2.default,
-                null,
+                {
+                    nowrapper: true,
+                    onClose: function onClose() {
+                        _this3.hideModals();
+                    }
+                },
                 _react2.default.createElement(
                     'div',
                     { className: 'modal__content' },
@@ -61525,69 +61542,69 @@ var DealDetails = function (_React$PureComponent) {
                                 svg: _zondicons2.default['close']
                             })
                         )
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'deal-details__modal-body' },
-                    _react2.default.createElement(
-                        'h3',
-                        null,
-                        'Specifications'
-                    ),
-                    _react2.default.createElement('hr', null),
-                    _react2.default.createElement(
-                        'h4',
-                        null,
-                        'Dimensions'
                     ),
                     _react2.default.createElement(
-                        'ul',
-                        null,
-                        this.state.dimensions ? this.state.dimensions.map(function (dimension, index) {
-                            return _react2.default.createElement(
-                                'li',
-                                { key: index },
-                                dimension.feature,
-                                ': ',
-                                dimension.content
-                            );
-                        }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
-                    ),
-                    _react2.default.createElement(
-                        'h4',
-                        null,
-                        'Warranties'
-                    ),
-                    _react2.default.createElement(
-                        'ul',
-                        null,
-                        this.state.warranties ? this.state.warranties.map(function (dimension, index) {
-                            return _react2.default.createElement(
-                                'li',
-                                { key: index },
-                                dimension.feature,
-                                ': ',
-                                dimension.content
-                            );
-                        }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
-                    ),
-                    _react2.default.createElement(
-                        'h3',
-                        null,
-                        'Features'
-                    ),
-                    _react2.default.createElement('hr', null),
-                    _react2.default.createElement(
-                        'ul',
-                        null,
-                        this.props.deal.vauto_features.map(function (feature, index) {
-                            return _react2.default.createElement(
-                                'li',
-                                { key: index },
-                                feature
-                            );
-                        })
+                        'div',
+                        { className: 'modal__body deal-details__modal-body' },
+                        _react2.default.createElement(
+                            'h3',
+                            null,
+                            'Specifications'
+                        ),
+                        _react2.default.createElement('hr', null),
+                        _react2.default.createElement(
+                            'h4',
+                            null,
+                            'Dimensions'
+                        ),
+                        _react2.default.createElement(
+                            'ul',
+                            null,
+                            this.state.dimensions ? this.state.dimensions.map(function (dimension, index) {
+                                return _react2.default.createElement(
+                                    'li',
+                                    { key: index },
+                                    dimension.feature,
+                                    ': ',
+                                    dimension.content
+                                );
+                            }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                        ),
+                        _react2.default.createElement(
+                            'h4',
+                            null,
+                            'Warranties'
+                        ),
+                        _react2.default.createElement(
+                            'ul',
+                            null,
+                            this.state.warranties ? this.state.warranties.map(function (dimension, index) {
+                                return _react2.default.createElement(
+                                    'li',
+                                    { key: index },
+                                    dimension.feature,
+                                    ': ',
+                                    dimension.content
+                                );
+                            }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                        ),
+                        _react2.default.createElement(
+                            'h3',
+                            null,
+                            'Features'
+                        ),
+                        _react2.default.createElement('hr', null),
+                        _react2.default.createElement(
+                            'ul',
+                            null,
+                            this.props.deal.vauto_features.map(function (feature, index) {
+                                return _react2.default.createElement(
+                                    'li',
+                                    { key: index },
+                                    feature
+                                );
+                            })
+                        )
                     )
                 )
             );
@@ -61599,7 +61616,12 @@ var DealDetails = function (_React$PureComponent) {
 
             return _react2.default.createElement(
                 _Modal2.default,
-                null,
+                {
+                    nowrapper: true,
+                    onClose: function onClose() {
+                        _this4.hideModals();
+                    }
+                },
                 _react2.default.createElement(
                     'div',
                     { className: 'modal__content' },
@@ -61646,7 +61668,7 @@ var DealDetails = function (_React$PureComponent) {
                 ),
                 _react2.default.createElement(
                     'div',
-                    { className: 'deal-details__modal-body' },
+                    { className: 'modal__body deal-details__modal-body' },
                     _react2.default.createElement(
                         'ul',
                         null,

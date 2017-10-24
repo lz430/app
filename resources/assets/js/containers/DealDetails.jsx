@@ -185,7 +185,10 @@ class DealDetails extends React.PureComponent {
 
     renderStandardFeaturesModal() {
         return (
-            <Modal>
+            <Modal
+                nowrapper={true}
+                onClose={() => { this.hideModals() }}
+            >
                 <div className="modal__content">
                     <div className="modal__sticker-container">
                         <div className="modal__sticker">Standard Features</div>
@@ -209,51 +212,51 @@ class DealDetails extends React.PureComponent {
                             />
                         </div>
                     </div>
-                </div>
-                <div className="deal-details__modal-body">
-                    <h3>Specifications</h3>
-                    <hr />
+                    <div className="modal__body deal-details__modal-body">
+                        <h3>Specifications</h3>
+                        <hr />
 
-                    <h4>Dimensions</h4>
-                    <ul>
-                        {this.state.dimensions ? (
-                            this.state.dimensions.map((dimension, index) => {
-                                return (
-                                    <li key={index}>
-                                        {dimension.feature}: {dimension.content}
-                                    </li>
-                                );
-                            })
-                        ) : (
-                            <SVGInline svg={miscicons['loading']} />
-                        )}
-                    </ul>
+                        <h4>Dimensions</h4>
+                        <ul>
+                            {this.state.dimensions ? (
+                                this.state.dimensions.map((dimension, index) => {
+                                    return (
+                                        <li key={index}>
+                                            {dimension.feature}: {dimension.content}
+                                        </li>
+                                    );
+                                })
+                            ) : (
+                                <SVGInline svg={miscicons['loading']} />
+                            )}
+                        </ul>
 
-                    <h4>Warranties</h4>
-                    <ul>
-                        {this.state.warranties ? (
-                            this.state.warranties.map((dimension, index) => {
-                                return (
-                                    <li key={index}>
-                                        {dimension.feature}: {dimension.content}
-                                    </li>
-                                );
-                            })
-                        ) : (
-                            <SVGInline svg={miscicons['loading']} />
-                        )}
-                    </ul>
+                        <h4>Warranties</h4>
+                        <ul>
+                            {this.state.warranties ? (
+                                this.state.warranties.map((dimension, index) => {
+                                    return (
+                                        <li key={index}>
+                                            {dimension.feature}: {dimension.content}
+                                        </li>
+                                    );
+                                })
+                            ) : (
+                                <SVGInline svg={miscicons['loading']} />
+                            )}
+                        </ul>
 
-                    <h3>Features</h3>
-                    <hr />
+                        <h3>Features</h3>
+                        <hr />
 
-                    <ul>
-                        {this.props.deal.vauto_features.map(
-                            (feature, index) => {
-                                return <li key={index}>{feature}</li>;
-                            }
-                        )}
-                    </ul>
+                        <ul>
+                            {this.props.deal.vauto_features.map(
+                                (feature, index) => {
+                                    return <li key={index}>{feature}</li>;
+                                }
+                            )}
+                        </ul>
+                    </div>
                 </div>
             </Modal>
         );
@@ -261,7 +264,10 @@ class DealDetails extends React.PureComponent {
 
     renderFeaturesModal(deal) {
         return (
-            <Modal>
+            <Modal
+                nowrapper={true}
+                onClose={() => { this.hideModals() }}
+            >
                 <div className="modal__content">
                     <div className="modal__sticker-container">
                         <div className="modal__sticker">Additional Options</div>
@@ -286,7 +292,7 @@ class DealDetails extends React.PureComponent {
                         </div>
                     </div>
                 </div>
-                <div className="deal-details__modal-body">
+                <div className="modal__body deal-details__modal-body">
                     <ul>
                         {deal.features.map((feature, index) => {
                             return <li key={index}>{feature.feature}</li>;
