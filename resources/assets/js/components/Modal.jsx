@@ -1,4 +1,5 @@
 import React from 'react';
+import R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import { connect } from 'react-redux';
@@ -31,6 +32,14 @@ class Modal extends React.Component {
             : ''} ${this.props.buttonCloseDisabled ? 'disabled' : ''}`;
     }
 
+    closeIfOverlayClick(e, close) {
+        const targetClass = e.target.getAttribute('class');
+
+        if (R.contains(targetClass, 'modal__wrapper') || R.contains(targetClass, 'modal__overlay')) {
+            close();
+        }
+    }
+
     render() {
         const childrenWithProps = React.Children.map(
             this.props.children,
@@ -41,10 +50,15 @@ class Modal extends React.Component {
         );
 
         return (
-            <div className="modal">
+            <div className="modal"
+                onClick={
+                    (e) => this.closeIfOverlayClick(e, this.props.onClose)
+                }
+            >
                 <div className="modal__overlay" />
                 <div className="modal__wrapper">
                     <div className="modal__content">
+
                         {this.props.title ? (
                             <div className="modal__header">
                                 <div className="modal__titles">
@@ -69,7 +83,7 @@ class Modal extends React.Component {
                             ''
                         )}
                         <div
-                            className={`modal__body ${this.props.closeText
+                            className={`${this.props.nowrapper ? '' : 'modal__body'} ${this.props.closeText
                                 ? this.props.title
                                   ? ''
                                   : 'modal__body--no-header'
