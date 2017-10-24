@@ -1184,6 +1184,10 @@ body {
   .deals {
     height: calc(100vh - 251px);
   }
+
+  .deals.no-compare {
+    height: calc(100vh - 181px);
+  }
 }
 
 .deals__show-more {
@@ -7254,5 +7258,9 @@ comparepage {
 .slideOutUp {
   -webkit-animation-name: slideOutUp;
   animation-name: slideOutUp;
+}
+
+.hidden {
+  display: none;
 }
 

@@ -43,7 +43,7 @@ class Deals extends React.PureComponent {
 
     render() {
         return (
-            <div className="deals">
+            <div className={`deals ${this.props.compareList.length > 0 ? '' : 'no-compare'}`}>
                 {this.props.deals ? (
                     this.props.deals.map((deal, index) => {
                         return (

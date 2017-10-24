@@ -80,7 +80,8 @@ class CompareBar extends React.PureComponent {
     renderCompareBar() {
         return (
             <div
-                className={this.props.class ? this.props.class : 'compare-bar'}
+                className={`${this.props.class ? this.props.class : 'compare-bar'}
+                    ${this.state.count == 0 ? 'hidden' : ''}`}
             >
                 <div className="compare-bar__deals">
                     {this.props.compareList.map(

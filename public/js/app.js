@@ -22716,7 +22716,7 @@ var CompareBar = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 {
-                    className: this.props.class ? this.props.class : 'compare-bar'
+                    className: (this.props.class ? this.props.class : 'compare-bar') + '\n                    ' + (this.state.count == 0 ? 'hidden' : '')
                 },
                 _react2.default.createElement(
                     'div',
@@ -51977,7 +51977,7 @@ var Deals = function (_React$PureComponent) {
 
             return _react2.default.createElement(
                 'div',
-                { className: 'deals' },
+                { className: 'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare') },
                 this.props.deals ? this.props.deals.map(function (deal, index) {
                     return _react2.default.createElement(
                         _Deal2.default,
