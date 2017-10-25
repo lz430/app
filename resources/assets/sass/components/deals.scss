@@ -11,6 +11,10 @@
 
   @media (min-width: $break-medium) {
     height: calc(100vh - #{$nav-height + $sortbar-height + $filterbar-height + $compare-bar-height});
+
+    &.no-compare {
+      height: calc(100vh - #{$nav-height + $sortbar-height + $filterbar-height});
+    }
   }
 
   &__show-more {

@@ -180,12 +180,14 @@ class DealPrice extends React.PureComponent {
 
         return (
             <div className="deal-price__rebates-applied">
+                {util.moneyFormat(selectedAmount)} rebates applied of{' '}
+                {util.moneyFormat(maxAmount)} available...<br />
+
                 <a
                     onClick={() => this.props.selectDeal(this.props.deal)}
                     href="#"
                 >
-                    {util.moneyFormat(selectedAmount)} rebates applied of{' '}
-                    {util.moneyFormat(maxAmount)} available...
+                    Recalculate Rebates and Financing
                 </a>
             </div>
         );

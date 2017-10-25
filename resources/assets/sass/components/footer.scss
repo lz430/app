@@ -11,7 +11,7 @@
   a {
     color: #fff;
     text-decoration: none;
-    
+
     &:hover {
       text-decoration: underline;
     }
@@ -70,7 +70,7 @@
   }
 
   &__submit {
-    background: $color-teal;
+    background: $color-blue;
     border: 0;
     border-radius: 0 0.3em 0.3em 0;
     color: #fff;

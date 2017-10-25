@@ -206,7 +206,7 @@ body {
 }
 
 .section__button--blue {
-  background-color: #2eb1ad;
+  background-color: #41b1ac;
   color: #fff;
 }
 
@@ -217,7 +217,7 @@ body {
 
 .section__button--white {
   background-color: #fff;
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .section__button--small {
@@ -265,7 +265,7 @@ body {
 }
 
 .section__title-icon {
-  fill: #2eb1ad;
+  fill: #41b1ac;
   height: 50px;
   margin: 0 auto 15px;
   width: 100%;
@@ -356,7 +356,7 @@ body {
 
 .nav {
   background-color: #fff;
-  border-top: 4px solid #2eb1ad;
+  border-top: 4px solid #41b1ac;
   height: 76px;
   max-height: 76px;
   width: 100%;
@@ -493,7 +493,7 @@ body {
 }
 
 .welcome-style-selector__style:hover {
-  background: #2eb1ad;
+  background: #41b1ac;
 }
 
 .welcome-style-selector__style:hover svg path {
@@ -584,7 +584,7 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background: #b9e4f3;
+  background: #d5efef;
   border: 2px solid #65d1f6;
   border-radius: 41px;
   color: #1e2123;
@@ -696,7 +696,7 @@ body {
 }
 
 .make-selector__make--selected {
-  border: #2eb1ad solid 3px;
+  border: #41b1ac solid 3px;
 }
 
 .make-selector__make img {
@@ -842,7 +842,7 @@ body {
 }
 
 .modal__title {
-  color: #2eb1ad;
+  color: #41b1ac;
   font-size: 1.4rem;
 }
 
@@ -882,7 +882,7 @@ body {
 }
 
 .modal__close-button--blue {
-  background-color: #2eb1ad;
+  background-color: #41b1ac;
   color: #fff;
 }
 
@@ -893,7 +893,7 @@ body {
 
 .modal__close-button--white {
   background-color: #fff;
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .modal__close-button--small {
@@ -983,7 +983,7 @@ body {
 }
 
 .sortbar__button--blue {
-  background-color: #2eb1ad;
+  background-color: #41b1ac;
   color: #fff;
 }
 
@@ -994,7 +994,7 @@ body {
 
 .sortbar__button--white {
   background-color: #fff;
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .sortbar__button--small {
@@ -1156,7 +1156,7 @@ body {
 }
 
 .filterbar__clear {
-  color: #2eb1ad;
+  color: #41b1ac;
   cursor: pointer;
   font-size: small;
   margin-left: auto;
@@ -1184,6 +1184,10 @@ body {
   .deals {
     height: calc(100vh - 251px);
   }
+
+  .deals.no-compare {
+    height: calc(100vh - 181px);
+  }
 }
 
 .deals__show-more {
@@ -1209,7 +1213,7 @@ body {
 }
 
 .deals__button--blue {
-  background-color: #2eb1ad;
+  background-color: #41b1ac;
   color: #fff;
 }
 
@@ -1220,7 +1224,7 @@ body {
 
 .deals__button--white {
   background-color: #fff;
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .deals__button--small {
@@ -1270,20 +1274,23 @@ body {
 
 .deal {
   background-color: #fff;
+  border: 1px solid #ced4d9;
+  border-radius: 0.25rem;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   margin: 5px;
+  padding: 0.5rem;
   max-width: 300px;
   min-width: 300px;
 }
 
 .deal__basic-info {
-  margin: 15px 0;
+  margin-bottom: 0.5rem;
 }
 
 .deal__basic-info-year-and-model {
-  color: #2eb1ad;
+  color: #41b1ac;
   cursor: pointer;
   display: inline-block;
   font-size: 1.1rem;
@@ -1309,6 +1316,9 @@ body {
 }
 
 .deal__image {
+  border: 1px solid #ced4d9;
+  border-bottom: 0;
+  display: block;
   height: 225px;
   min-height: 225px;
   width: 100%;
@@ -1324,7 +1334,7 @@ body {
   display: flex;
   -ms-flex-pack: distribute;
       justify-content: space-around;
-  margin: 5px 0 25px;
+  margin: 5px 0 0.5rem;
 }
 
 .deal__button {
@@ -1351,7 +1361,7 @@ body {
 }
 
 .deal__button--blue {
-  background-color: #2eb1ad;
+  background-color: #41b1ac;
   color: #fff;
 }
 
@@ -1362,7 +1372,7 @@ body {
 
 .deal__button--white {
   background-color: #fff;
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .deal__button--small {
@@ -1441,7 +1451,7 @@ body {
 }
 
 .apply-or-purchase__button--blue {
-  background-color: #2eb1ad;
+  background-color: #41b1ac;
   color: #fff;
 }
 
@@ -1452,7 +1462,7 @@ body {
 
 .apply-or-purchase__button--white {
   background-color: #fff;
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .apply-or-purchase__button--small {
@@ -1514,7 +1524,7 @@ body {
 }
 
 .cash-finance-lease-calculator__lease-table-cell--selectable {
-  background: #2eb1ad;
+  background: #41b1ac;
   border: 1px solid #ccc;
   border-radius: 3px;
   color: #fff;
@@ -1525,7 +1535,7 @@ body {
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 3px;
-  color: #2eb1ad;
+  color: #41b1ac;
   cursor: pointer;
 }
 
@@ -1592,7 +1602,7 @@ body {
 }
 
 .application-form__button--blue {
-  background-color: #2eb1ad;
+  background-color: #41b1ac;
   color: #fff;
 }
 
@@ -1603,7 +1613,7 @@ body {
 
 .application-form__button--white {
   background-color: #fff;
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .application-form__button--small {
@@ -1747,7 +1757,7 @@ body {
 }
 
 .zipcode-finder__button--blue {
-  background-color: #2eb1ad;
+  background-color: #41b1ac;
   color: #fff;
 }
 
@@ -1758,7 +1768,7 @@ body {
 
 .zipcode-finder__button--white {
   background-color: #fff;
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .zipcode-finder__button--small {
@@ -2001,11 +2011,11 @@ body {
 }
 
 .filter-selector__checkbox--selected {
-  border-color: #2eb1ad;
+  border-color: #41b1ac;
 }
 
 .filter-selector__checkbox--inverted {
-  fill: #2eb1ad;
+  fill: #41b1ac;
 }
 
 .filter-selector__radio {
@@ -2026,11 +2036,11 @@ body {
 }
 
 .filter-selector__radio--selected {
-  border-color: #2eb1ad;
+  border-color: #41b1ac;
 }
 
 .filter-selector__radio--inverted {
-  fill: #2eb1ad;
+  fill: #41b1ac;
 }
 
 .filter-selector__radio--selected::before {
@@ -2084,7 +2094,7 @@ body {
 }
 
 .deal-details__deal-content-see-all {
-  color: #2eb1ad;
+  color: #41b1ac;
   text-decoration: none;
   font-size: small;
   margin-bottom: 20px;
@@ -2179,7 +2189,7 @@ body {
 }
 
 .deal-details__button--blue {
-  background-color: #2eb1ad;
+  background-color: #41b1ac;
   color: #fff;
 }
 
@@ -2190,7 +2200,7 @@ body {
 
 .deal-details__button--white {
   background-color: #fff;
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .deal-details__button--small {
@@ -2278,11 +2288,11 @@ body {
 }
 
 .rebates__checkbox--selected {
-  border-color: #2eb1ad;
+  border-color: #41b1ac;
 }
 
 .rebates__checkbox--inverted {
-  fill: #2eb1ad;
+  fill: #41b1ac;
 }
 
 .rebates__title {
@@ -2327,7 +2337,7 @@ body {
 }
 
 .compare-deal__basic-info__title {
-  color: #2eb1ad;
+  color: #41b1ac;
   font-size: large;
   font-weight: bold;
   height: 50px;
@@ -2381,7 +2391,7 @@ body {
 }
 
 .compare-deal__button--blue {
-  background-color: #2eb1ad;
+  background-color: #41b1ac;
   color: #fff;
 }
 
@@ -2392,7 +2402,7 @@ body {
 
 .compare-deal__button--white {
   background-color: #fff;
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .compare-deal__button--small {
@@ -2534,7 +2544,7 @@ body {
 }
 
 .compare-deal__cta__button--blue {
-  background-color: #2eb1ad;
+  background-color: #41b1ac;
   color: #fff;
 }
 
@@ -2545,7 +2555,7 @@ body {
 
 .compare-deal__cta__button--white {
   background-color: #fff;
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .compare-deal__cta__button--small {
@@ -2614,7 +2624,7 @@ body {
 
 .compare-bar__deals {
   background-color: white;
-  border-top: 3px solid #2eb1ad;
+  border-top: 3px solid #41b1ac;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -2630,7 +2640,7 @@ body {
 }
 
 .compare-bar__deal {
-  border-bottom: 1px solid #2eb1ad;
+  border-bottom: 1px solid #41b1ac;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -2639,7 +2649,7 @@ body {
 }
 
 .compare-bar__deal__info {
-  color: #2eb1ad;
+  color: #41b1ac;
   font-weight: bold;
   margin-right: auto;
   padding-right: 10px;
@@ -2662,7 +2672,7 @@ body {
 }
 
 .compare-bar__compare-button {
-  background-color: #2eb1ad;
+  background-color: #41b1ac;
   color: #fff;
   cursor: pointer;
   font-size: small;
@@ -2686,7 +2696,7 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background: #2eb1ad;
+  background: #41b1ac;
   border-radius: 40px;
   bottom: 0;
   cursor: pointer;
@@ -2893,31 +2903,41 @@ body {
 }
 
 .tabs {
+  border-bottom: 4px solid #e70290;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  padding-left: 10px;
 }
 
 .tabs--no-bottom-border {
   border-bottom: 0;
 }
 
+.tabs__title {
+  border: 1px solid #ced4d9;
+  padding: 0.25em;
+  text-align: center;
+}
+
 .tabs__tab {
-  color: #ced4d9;
+  background: #d5efef;
+  color: #535d63;
   cursor: pointer;
-  display: inline-block;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
   font-size: small;
-  margin: 0px 20px -1px 0;
+  padding: 0.35em 0.25em 0.25em 0.25em;
+  text-align: center;
   text-transform: uppercase;
 }
 
 .tabs__tab--selected {
-  border-bottom: 4px solid #e70290;
-  color: #1e2123;
+  background: #e70290;
+  color: #fff;
 }
 
 .tabs__content {
@@ -2990,7 +3010,7 @@ body {
 }
 
 .deal-price__cash-msrp {
-  color: #98a3a8;
+  color: #b1b1b1;
   font-size: large;
 }
 
@@ -2999,6 +3019,7 @@ body {
 }
 
 .deal-price__rebates-applied {
+  color: #b1b1b1;
   font-size: small;
   margin-bottom: 10px;
   margin-top: -10px;
@@ -3007,7 +3028,7 @@ body {
 }
 
 .deal-price__rebates-applied a {
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .loading {
@@ -3021,7 +3042,7 @@ body {
 
 .loading svg path,
 .loading svg rect {
-  fill: #2eb1ad;
+  fill: #41b1ac;
 }
 
 .disclaimer {
@@ -3223,7 +3244,7 @@ financing {
 }
 
 .financing__button--blue {
-  background-color: #2eb1ad;
+  background-color: #41b1ac;
   color: #fff;
 }
 
@@ -3234,7 +3255,7 @@ financing {
 
 .financing__button--white {
   background-color: #fff;
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .financing__button--small {
@@ -3310,7 +3331,7 @@ comparepage {
 }
 
 .compare-page a {
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .compare-page__body {
@@ -3407,7 +3428,7 @@ comparepage {
 }
 
 .request-email__message {
-  color: #2eb1ad;
+  color: #41b1ac;
   font-size: .9rem;
   margin: 10px 0;
   max-width: 288px;
@@ -3445,7 +3466,7 @@ comparepage {
 }
 
 .request-email__button--blue {
-  background-color: #2eb1ad;
+  background-color: #41b1ac;
   color: #fff;
 }
 
@@ -3456,7 +3477,7 @@ comparepage {
 
 .request-email__button--white {
   background-color: #fff;
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .request-email__button--small {
@@ -3584,7 +3605,7 @@ comparepage {
 }
 
 .view-apply__message {
-  color: #2eb1ad;
+  color: #41b1ac;
   font-size: .9rem;
   margin: 10px 0;
   max-width: 288px;
@@ -3622,7 +3643,7 @@ comparepage {
 }
 
 .view-apply__button--blue {
-  background-color: #2eb1ad;
+  background-color: #41b1ac;
   color: #fff;
 }
 
@@ -3633,7 +3654,7 @@ comparepage {
 
 .view-apply__button--white {
   background-color: #fff;
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .view-apply__button--small {
@@ -3788,7 +3809,7 @@ comparepage {
 }
 
 .thank-you__button--blue {
-  background-color: #2eb1ad;
+  background-color: #41b1ac;
   color: #fff;
 }
 
@@ -3799,7 +3820,7 @@ comparepage {
 
 .thank-you__button--white {
   background-color: #fff;
-  color: #2eb1ad;
+  color: #41b1ac;
 }
 
 .thank-you__button--small {
@@ -3849,7 +3870,7 @@ comparepage {
 }
 
 .thank-you__choice {
-  border-bottom: 2px solid #2eb1ad;
+  border-bottom: 2px solid #41b1ac;
   font-size: .9rem;
   margin-bottom: 10px;
   padding-top: 6px;
@@ -7254,5 +7275,9 @@ comparepage {
 .slideOutUp {
   -webkit-animation-name: slideOutUp;
   animation-name: slideOutUp;
+}
+
+.hidden {
+  display: none;
 }
 

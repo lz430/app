@@ -3,13 +3,16 @@
 
 .deal {
   background-color: $color-background-secondary;
+  border: 1px solid $color-grey;
+  border-radius: 0.25rem;
   height: fit-content;
   margin: $deal-card-margin;
+  padding: 0.5rem;
   max-width: $deal-card-width;
   min-width: $deal-card-width;
 
   &__basic-info {
-    margin: 15px 0;
+    margin-bottom : 0.5rem;
   }
 
   &__basic-info-year-and-model {
@@ -22,13 +25,13 @@
   }
 
   &__basic-info-year-and-make {
-    color: $color-darkgrey;
+    color: $color-darkergrey;
     font-size: small;
     margin-bottom: 2px;
   }
 
   &__basic-info-model-and-series {
-    color: $color-darkergrey;
+    color: $color-darkestgrey;
     font-size: x-large;
   }
 
@@ -39,6 +42,9 @@
   }
 
   &__image {
+    border: 1px solid $color-grey;
+    border-bottom: 0;
+    display: block;
     height: 225px;
     min-height: 225px;
     width: 100%;
@@ -51,7 +57,7 @@
   &__buttons {
     display: flex;
     justify-content: space-around;
-    margin: 5px 0 25px;
+    margin: 5px 0 0.5rem;
   }
 
   &__button {

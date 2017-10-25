@@ -1,6 +1,5 @@
 import React from 'react';
 import R from 'ramda';
-import util from 'src/util';
 import fuelapi from 'src/fuelapi';
 import DealPrice from 'components/DealPrice';
 import { connect } from 'react-redux';
@@ -120,6 +119,8 @@ class Deal extends React.PureComponent {
                         />
                     </div>
                 )}
+
+                <div className="tabs__title">Select Your Payment &amp; Rebates</div>
 
                 <div className="deal__price">
                     <DealPrice deal={deal} />
