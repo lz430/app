@@ -150,7 +150,7 @@ class DealDetails extends React.PureComponent {
 
     renderDot(photo, index) {
         const color =
-            this.state.featuredImage.url === photo.url ? 'gray' : 'none';
+            this.state.featuredImage.url === photo.url ? 'gray' : 'white';
         return (
             <svg
                 key={index}
@@ -158,11 +158,11 @@ class DealDetails extends React.PureComponent {
                     cursor: 'pointer',
                     margin: '5px',
                 }}
-                height="10"
-                width="10"
+                height="20"
+                width="20"
                 onClick={this.selectFeaturedImage.bind(this, index)}
             >
-                <circle cx="5" cy="5" r="4" stroke="gray" fill={color} />
+                <circle cx="10" cy="10" r="8" stroke="#cccccc" fill={color} />
             </svg>
         );
     }
@@ -312,11 +312,10 @@ class DealDetails extends React.PureComponent {
             <Deal deal={deal} key={index} hideImageAndTitle={true}>
                 <div className="deal-details__deal-content">
                     <div className="deal-details__deal-content-at-a-glance">
-                        VEHICLE #{deal.vin.substr(deal.vin.length - 8)} AT A
-                        GLANCE
+                        This Vehicle At-A-Glance
                     </div>
                     <div className="deal-details__deal-content-subtitle">
-                        Vehicle Standard Features
+                        Vehicle #{deal.vin.substr(deal.vin.length - 8)} Standard Features
                     </div>
                     <ul className="deal-details__deal-content-features">
                         {deal.features.slice(0, 5).map((feature, index) => {
@@ -328,11 +327,10 @@ class DealDetails extends React.PureComponent {
                         className="deal-details__deal-content-see-all"
                         onClick={() => this.showStandardFeatures()}
                     >
-                        SEE ALL STANDARD FEATURES
+                        See all standard features &gt;
                     </a>
-                    <br />
                     <div className="deal-details__deal-content-subtitle">
-                        Additional Options On This Vehicle
+                        Vehicle #{deal.vin.substr(deal.vin.length - 8)} Additional Options
                     </div>
                     <ul className="deal-details__deal-content-features">
                         {deal.vauto_features
@@ -346,9 +344,8 @@ class DealDetails extends React.PureComponent {
                         className="deal-details__deal-content-see-all"
                         onClick={() => this.showFeatures()}
                     >
-                        SEE ALL ADDITIONAL OPTIONS
+                        See all additional options &gt;
                     </a>
-                    <br />
                     <div className="deal-details__buttons">
                         <button
                             onClick={() =>
@@ -397,6 +394,9 @@ class DealDetails extends React.PureComponent {
 
         return (
             <div>
+                <div className="back-bar">
+                    <a href="javascript:window.history.back();">&lt; Back to previous</a>
+                </div>
                 <div className="deal-details">
                     <div className="deal-details__images-and-title">
                         <div className="deal-details__title">

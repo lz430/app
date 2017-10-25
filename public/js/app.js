@@ -61463,7 +61463,7 @@ var DealDetails = function (_React$PureComponent) {
     }, {
         key: 'renderDot',
         value: function renderDot(photo, index) {
-            var color = this.state.featuredImage.url === photo.url ? 'gray' : 'none';
+            var color = this.state.featuredImage.url === photo.url ? 'gray' : 'white';
             return _react2.default.createElement(
                 'svg',
                 {
@@ -61472,11 +61472,11 @@ var DealDetails = function (_React$PureComponent) {
                         cursor: 'pointer',
                         margin: '5px'
                     },
-                    height: '10',
-                    width: '10',
+                    height: '20',
+                    width: '20',
                     onClick: this.selectFeaturedImage.bind(this, index)
                 },
-                _react2.default.createElement('circle', { cx: '5', cy: '5', r: '4', stroke: 'gray', fill: color })
+                _react2.default.createElement('circle', { cx: '10', cy: '10', r: '8', stroke: '#cccccc', fill: color })
             );
         }
     }, {
@@ -61706,14 +61706,14 @@ var DealDetails = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         { className: 'deal-details__deal-content-at-a-glance' },
-                        'VEHICLE #',
-                        deal.vin.substr(deal.vin.length - 8),
-                        ' AT A GLANCE'
+                        'This Vehicle At-A-Glance'
                     ),
                     _react2.default.createElement(
                         'div',
                         { className: 'deal-details__deal-content-subtitle' },
-                        'Vehicle Standard Features'
+                        'Vehicle #',
+                        deal.vin.substr(deal.vin.length - 8),
+                        ' Standard Features'
                     ),
                     _react2.default.createElement(
                         'ul',
@@ -61735,13 +61735,14 @@ var DealDetails = function (_React$PureComponent) {
                                 return _this5.showStandardFeatures();
                             }
                         },
-                        'SEE ALL STANDARD FEATURES'
+                        'See all standard features >'
                     ),
-                    _react2.default.createElement('br', null),
                     _react2.default.createElement(
                         'div',
                         { className: 'deal-details__deal-content-subtitle' },
-                        'Additional Options On This Vehicle'
+                        'Vehicle #',
+                        deal.vin.substr(deal.vin.length - 8),
+                        ' Additional Options'
                     ),
                     _react2.default.createElement(
                         'ul',
@@ -61763,9 +61764,8 @@ var DealDetails = function (_React$PureComponent) {
                                 return _this5.showFeatures();
                             }
                         },
-                        'SEE ALL ADDITIONAL OPTIONS'
+                        'See all additional options >'
                     ),
-                    _react2.default.createElement('br', null),
                     _react2.default.createElement(
                         'div',
                         { className: 'deal-details__buttons' },
@@ -61803,6 +61803,15 @@ var DealDetails = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 null,
+                _react2.default.createElement(
+                    'div',
+                    { className: 'back-bar' },
+                    _react2.default.createElement(
+                        'a',
+                        { href: 'javascript:window.history.back();' },
+                        '< Back to previous'
+                    )
+                ),
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-details' },

@@ -3,7 +3,7 @@
 @section('title', $title)
 
 @section('content')
-    <div class="content--gray">
+    <div class="content--grey">
         <DealDetails
                 deal="{{$deal}}"
         ></DealDetails>
