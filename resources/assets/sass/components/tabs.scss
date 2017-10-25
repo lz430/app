@@ -1,5 +1,9 @@
 @import '../variables';
 
+.deal-details .tabs__title {
+  border-width: 0 0 1px 0;
+}
+
 .tabs {
   border-bottom: 4px solid $color-pink;
   display: flex;
@@ -17,6 +21,8 @@
   }
 
   &__tab {
+    border: 1px solid #fff;
+    border-width: 0 1px;
     background: $color-lighter-blue;
     color: $color-darkergrey;
     cursor: pointer;
@@ -29,6 +35,14 @@
     &--selected {
       background: $color-pink;
       color: #fff;
+    }
+
+    &:first-child {
+      border-left-width: 0;
+    }
+
+    &:last-child {
+      border-right-width: 0;
     }
   }
 

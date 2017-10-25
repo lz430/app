@@ -1295,13 +1295,13 @@ body {
 }
 
 .deals .deal {
-  border: 1px solid #ced4d9;
+  border-radius: 0.25rem;
   padding: 0.5rem;
 }
 
 .deal {
   background-color: #fff;
-  border-radius: 0.25rem;
+  border: 1px solid #ced4d9;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
@@ -2936,6 +2936,10 @@ body {
   border-top: 0;
 }
 
+.deal-details .tabs__title {
+  border-width: 0 0 1px 0;
+}
+
 .tabs {
   border-bottom: 4px solid #e70290;
   display: -webkit-box;
@@ -2958,6 +2962,8 @@ body {
 }
 
 .tabs__tab {
+  border: 1px solid #fff;
+  border-width: 0 1px;
   background: #d5efef;
   color: #535d63;
   cursor: pointer;
@@ -2973,6 +2979,14 @@ body {
 .tabs__tab--selected {
   background: #e70290;
   color: #fff;
+}
+
+.tabs__tab:first-child {
+  border-left-width: 0;
+}
+
+.tabs__tab:last-child {
+  border-right-width: 0;
 }
 
 .tabs__content {
