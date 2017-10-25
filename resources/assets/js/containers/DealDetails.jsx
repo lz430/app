@@ -354,7 +354,7 @@ class DealDetails extends React.PureComponent {
                             onClick={() =>
                                 this.props.toggleCompare(this.props.deal)}
                             className={
-                                'deal-details__button deal-details__button--small ' +
+                                'deal-details__button deal-details__button--small deal-details__button--blue ' +
                                 (inCompareList
                                     ? 'deal-details__button--blue'
                                     : '')

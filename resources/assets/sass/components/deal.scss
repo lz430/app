@@ -43,6 +43,8 @@
 
   &__image {
     border: 1px solid $color-grey;
+    border-bottom: 0;
+    display: block;
     height: 225px;
     min-height: 225px;
     width: 100%;

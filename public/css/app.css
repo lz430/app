@@ -1317,6 +1317,8 @@ body {
 
 .deal__image {
   border: 1px solid #ced4d9;
+  border-bottom: 0;
+  display: block;
   height: 225px;
   min-height: 225px;
   width: 100%;
@@ -2901,31 +2903,41 @@ body {
 }
 
 .tabs {
+  border-bottom: 4px solid #e70290;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  padding-left: 10px;
 }
 
 .tabs--no-bottom-border {
   border-bottom: 0;
 }
 
+.tabs__title {
+  border: 1px solid #ced4d9;
+  padding: 0.25em;
+  text-align: center;
+}
+
 .tabs__tab {
-  color: #ced4d9;
+  background: #d5efef;
+  color: #535d63;
   cursor: pointer;
-  display: inline-block;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
   font-size: small;
-  margin: 0px 20px -1px 0;
+  padding: 0.35em 0.25em 0.25em 0.25em;
+  text-align: center;
   text-transform: uppercase;
 }
 
 .tabs__tab--selected {
-  border-bottom: 4px solid #e70290;
-  color: #1e2123;
+  background: #e70290;
+  color: #fff;
 }
 
 .tabs__content {

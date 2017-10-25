@@ -10,7 +10,7 @@ import miscicons from 'miscicons';
 class Deals extends React.PureComponent {
     compareButtonClass(deal) {
         return (
-            'deal__button deal__button--small ' +
+            'deal__button deal__button--small deal__button--blue' +
             (R.contains(deal, R.map(R.prop('deal'), this.props.compareList))
                 ? 'deal__button--blue'
                 : '')

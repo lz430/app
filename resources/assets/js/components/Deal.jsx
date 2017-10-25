@@ -120,7 +120,7 @@ class Deal extends React.PureComponent {
                     </div>
                 )}
 
-                <div style={{textAlign: 'center', 'border': '1px solid #eee'}}>Select Your Payment &amp; Rebates</div>
+                <div className="tabs__title">Select Your Payment &amp; Rebates</div>
 
                 <div className="deal__price">
                     <DealPrice deal={deal} />
