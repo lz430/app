@@ -37,7 +37,7 @@
   }
 
   &__cash-msrp {
-    color: lighten($text-color, 25%);
+    color: $color-darkgrey;
     font-size: large;
   }
 
@@ -46,6 +46,7 @@
   }
 
   &__rebates-applied {
+    color: $color-darkgrey;
     font-size: small;
     margin-bottom: 10px;
     margin-top: -10px;

@@ -33,7 +33,7 @@ $icon-size: 20px;
 
   &__filter {
     border-bottom: 2px solid $color-sidebar-background-primary;
-    color: $color-darkergrey;
+    color: $color-darkestgrey;
   }
 
   &__filter-title {
@@ -61,7 +61,7 @@ $icon-size: 20px;
   }
 
   &__icon {
-    fill: $color-darkergrey;
+    fill: $color-darkestgrey;
     height: $icon-size;
     margin-left: $icon-margin;
     margin-right: $icon-margin;

@@ -22,7 +22,7 @@
 
   &__info:hover::after {
     background-color: $color-text-white;
-    border: 1px solid $color-darkergrey;
+    border: 1px solid $color-darkestgrey;
     bottom: 1.35em;
     color: $text-color-dark;
     content: attr(data-title);
