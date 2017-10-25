@@ -27,7 +27,7 @@
                     n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
                     t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
                     document,'script','https://connect.facebook.net/en_US/fbevents.js');
-                fbq('init', '1524314924299567'); // Insert your pixel ID here.
+                fbq('init', '1524314924299567');
                 fbq('track', 'PageView');
             </script>
             <noscript><img height="1" width="1" style="display:none"
@@ -54,20 +54,13 @@
         </div>
 
         @section('footer')
-
-
             @include('footer')
         @show
-        <!-- Scripts -->
+
         <script src="{{ asset('js/app.js') }}"></script>
         @stack('scripts')
         @if (App::environment(['staging', 'production']))
-
-            <!-- Start of HubSpot Embed Code -->
             <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/3388780.js"></script>
-            <!-- End of HubSpot Embed Code -->
-
-            <!-- Google Analytics -->
             <script>
                 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -77,23 +70,21 @@
                 ga('create', 'UA-76262472-1', 'auto');
                 ga('send', 'pageview');
             </script>
-            <!-- End Google Analytics -->
-
         @endif
 
-        <!-- This site is converting visitors into subscribers and customers with OptinMonster - https://optinmonster.com -->
+        {{-- OptinMonster --}}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script>
             $(document).ready(function($){
                 $(document).on('OptinMonsterBeforeOptin', function(event, data, object){
                     const email = $('#om-' + data.optin).find('input[type="email"]').val();
-                    window.axios.post('/set-email', {email: email}, {headers: {'X-CSRF-TOKEN': "{{csrf_token()}}"}});
+                    window.axios.post('/set-email', {email: email}, {headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"}});
                 });
             });
         </script>
         <script>
             var om59caa4e21fc14,om59caa4e21fc14_poll=function(){var r=0;return function(n,l){clearInterval(r),r=setInterval(n,l)}}();!function(e,t,n){if(e.getElementById(n)){om59caa4e21fc14_poll(function(){if(window['om_loaded']){if(!om59caa4e21fc14){om59caa4e21fc14=new OptinMonsterApp();return om59caa4e21fc14.init({"s":"36449.59caa4e21fc14","staging":0,"dev":0,"beta":0});}}},25);return;}var d=false,o=e.createElement(t);o.id=n,o.src="https://a.optnmstr.com/app/js/api.min.js",o.async=true,o.onload=o.onreadystatechange=function(){if(!d){if(!this.readyState||this.readyState==="loaded"||this.readyState==="complete"){try{d=om_loaded=true;om59caa4e21fc14=new OptinMonsterApp();om59caa4e21fc14.init({"s":"36449.59caa4e21fc14","staging":0,"dev":0,"beta":0});o.onload=o.onreadystatechange=null;}catch(t){}}}};(document.getElementsByTagName("head")[0]||document.documentElement).appendChild(o)}(document,"script","omapi-script");
         </script>
-        <!-- / OptinMonster -->
+        {{-- End OptinMonster --}}
     </body>
 </html>

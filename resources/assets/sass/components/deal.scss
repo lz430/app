@@ -1,13 +1,16 @@
 @import '../variables';
 @import '../mixins/button';
 
+.deals .deal {
+  border: 1px solid $color-grey;
+  padding: 0.5rem;
+}
+
 .deal {
   background-color: $color-background-secondary;
-  border: 1px solid $color-grey;
   border-radius: 0.25rem;
   height: fit-content;
   margin: $deal-card-margin;
-  padding: 0.5rem;
   max-width: $deal-card-width;
   min-width: $deal-card-width;
 
