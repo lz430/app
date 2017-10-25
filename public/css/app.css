@@ -412,6 +412,22 @@ body {
   height: 70px;
 }
 
+.nav__links {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.nav__links a {
+  color: #535d63;
+  padding: 0 1em;
+  text-decoration: none;
+}
+
+.nav__links a:hover {
+  text-decoration: underline;
+}
+
 .triplets {
   display: -webkit-box;
   display: -ms-flexbox;

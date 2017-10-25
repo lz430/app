@@ -22,4 +22,18 @@
       height: 70px;
     }
   }
+
+  &__links {
+    display: flex;
+
+    a {
+      color: $color-darkergrey;
+      padding: 0 1em;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 }

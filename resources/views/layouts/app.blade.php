@@ -45,6 +45,13 @@
                     <a class="nav__logo" href="{{ url('/') }}">
                         <img src="/images/dmr-logo.svg">
                     </a>
+
+                    <div class="nav__links">
+                        <a href="#">About</a>
+                        <a href="#">Contact</a>
+                        <a href="#">Blog</a>
+                        <a href="#">Get Started</a>
+                    </div>
                 </div>
             </nav>
         @show
