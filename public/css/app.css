@@ -376,6 +376,80 @@ body {
   }
 }
 
+.steps-bar {
+  background-color: #666666;
+  color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 0.5em;
+  padding-left: 0.5em;
+}
+
+.steps-bar__page-title {
+  color: #41b1ac;
+  font-size: 1.75rem;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  padding-top: 0.5rem;
+}
+
+.steps {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 5px;
+}
+
+.step {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: #999;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  font-size: 0.8rem;
+  margin: 2px 0.75em;
+  text-align: center;
+}
+
+.step__icon {
+  border: 1px solid #999;
+  border-radius: 50%;
+  margin-bottom: 2px;
+  padding: 0.25em;
+  height: 2em;
+  width: 2em;
+}
+
+.step__icon svg {
+  fill: #999;
+  -webkit-transform: scale(0.8);
+          transform: scale(0.8);
+}
+
+.step__label {
+  font-size: 0.75rem;
+}
+
+.step--active .step__icon {
+  background: #fff;
+  color: #666666;
+}
+
+.step--active .step__label {
+  color: #fff;
+}
+
 .nav {
   background-color: #fff;
   border-top: 4px solid #41b1ac;
@@ -1203,6 +1277,7 @@ body {
 }
 
 .deals {
+  background: #f2f2f2;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

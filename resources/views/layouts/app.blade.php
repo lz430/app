@@ -50,13 +50,15 @@
                         <a href="#">About</a>
                         <a href="#">Contact</a>
                         <a href="#">Blog</a>
-                        <a href="#">Get Started</a>
+                        <a href="{{ route('filter') }}">Find a New Vehicle</a>
                     </div>
                 </div>
             </nav>
         @show
 
-        <div class="content {{ $contentClass ?? '' }}">
+        @yield('precontent')
+
+        <div class="contejnt {{ $contentClass ?? '' }}">
             @yield('content')
         </div>
 
