@@ -1,0 +1,85 @@
+@import '../variables';
+
+.back-bar {
+  background: #fff;
+  border-top: 1px solid #ddd;
+  box-shadow: inset 0px 4px 8px 0 rgba(0, 0, 0, 0.05);
+
+  a {
+    color: $color-blue;
+    display: block;
+    font-size: 0.75em;
+    max-width: 75%;
+    margin: 0 auto;
+    padding: 0.25em;
+    text-decoration: none;
+
+    @media (min-width: $break-large) {
+      max-width: $break-large;
+    }
+  }
+}
+
+.steps-bar {
+  background-color: $color-sidebar-background-primary;
+  color: #fff;
+  display: flex;
+  margin-bottom: 0.5em;
+  padding-left: 0.5em;
+
+  .inner {
+    display: flex;
+  }
+
+  &__page-title {
+    color: $color-blue;
+    font-size: 1.75rem;
+    flex: 1;
+    padding-top: 0.5rem;
+  }
+}
+
+.steps {
+  display: flex;
+  margin-top: 5px;
+}
+
+.step {
+  align-items: center;
+  color: $color-darkgrey;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  font-size: 0.8rem;
+  margin: 2px 0.75em;
+  text-align: center;
+
+  &__icon {
+    border: 1px solid $color-darkgrey;
+    border-radius: 50%;
+    margin-bottom: 2px;
+    padding: 0.25em;
+    height: 2em;
+    width: 2em;
+
+    svg {
+      fill: $color-darkgrey;
+      transform: scale(0.8);
+    }
+  }
+
+  &__label {
+    font-size: 0.75rem;
+  }
+
+  &--active {
+    .step__icon {
+      background: #fff;
+      color: $color-sidebar-background-primary;
+    }
+
+    .step__label {
+      color: #fff;
+    }
+  }
+}

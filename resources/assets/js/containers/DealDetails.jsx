@@ -394,9 +394,6 @@ class DealDetails extends React.PureComponent {
 
         return (
             <div>
-                <div className="back-bar">
-                    <a href="javascript:window.history.back();">&lt; Back to previous</a>
-                </div>
                 <div className="deal-details">
                     <div className="deal-details__images-and-title">
                         <div className="deal-details__title">

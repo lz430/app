@@ -36,7 +36,11 @@
   div {
     fill: $color-text-white;
     height: 34px;
-    margin: 0 30px;
+    margin: 0 3px 5px 0;
+
+    &:hover {
+      opacity: 0.75;
+    }
   }
 }
 
@@ -81,4 +85,5 @@
 
 .footer-meta, .footer-meta a {
   color: $color-grey;
+  font-size: 0.9em;
 }

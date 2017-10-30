@@ -3,6 +3,6 @@
 
     Purchase successfully completed!
 
-    Thanks,<br>
+    Thanks,
     {{ config('app.name') }}
 @endcomponent

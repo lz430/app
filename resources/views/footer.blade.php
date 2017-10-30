@@ -1,22 +1,30 @@
 <footer class="page-footer">
     <div class="footer-icons">
         <div class="footer__icon">
-            {!! file_get_contents(resource_path("assets/svg/social/twitter.svg")) !!}
+            <a target="_blank" href="https://www.facebook.com/DeliverMyRide/">
+                <img src="/images/social/facebook.svg" title="Facebook" alt="Facebook">
+            </a>
         </div>
         <div class="footer__icon">
-            {!! file_get_contents(resource_path("assets/svg/social/facebook.svg")) !!}
+            <a target="_blank" href="https://twitter.com/delivermyride1">
+                <img src="/images/social/twitter.svg" title="Twitter" alt="Twitter">
+            </a>
         </div>
         <div class="footer__icon">
-            {!! file_get_contents(resource_path("assets/svg/social/google-plus.svg")) !!}
+            <a target="_blank" href="https://www.instagram.com/delivermyride/">
+                <img src="/images/social/instagram.svg" title="Instagram" alt="Instagram">
+            </a>
+        </div>
+        <div class="footer__icon">
+            <a target="_blank" href="https://www.youtube.com/channel/UCOtyW2G9P_UixoVEfV5mVOA">
+                <img src="/images/social/youtube.svg" title="Youtube" alt="Youtube">
+            </a>
         </div>
     </div>
     <div class="footer-links">
-        <a href="">Create An Account</a>
-        <a href="">How It Works</a>
-        <a href="">About Us</a>
-        <a href="">FAQ</a>
-        <a href="">Join Dealer Network</a>
-        <a href="">Blog</a>
+        <a href="/about-us/">About Us</a>
+        <a href="/faq/">FAQ</a>
+        <a href="/blog/">Blog</a>
     </div>
     <form>
         <div class="footer-signup">
@@ -25,9 +33,13 @@
             <input class="footer-signup__submit" type="submit" value="Submit">
         </div>
     </form>
+
     <div class="footer-meta">
-        <a href="">Contact</a> |
-        <a href="">Privacy</a> |
-        &copy; {{ date('Y') }} Deliver My Ride. All Rights Reserved.
+        <a href="/contact-us/">Contact</a> |
+        <a href="/terms-of-service/">Terms</a> |
+        <a href="/privacy-policy/">Privacy</a> |
+        &copy; {{ date('Y') }} Deliver My Ride. All Rights Reserved. |
+        Headquarters: 135 W Huron Street, Suite 1000, Pontiac, MI 48342  |
+        Phone: 248.590.0360
     </div>
 </footer>
