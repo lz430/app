@@ -47,10 +47,10 @@
                     </a>
 
                     <div class="nav__links">
-                        <a href="#">About</a>
-                        <a href="#">Contact</a>
-                        <a href="#">Blog</a>
-                        <a href="{{ route('filter') }}">Find a New Vehicle</a>
+                        <a href="/about-us/">About</a>
+                        <a href="/contact-us/">Contact</a>
+                        <a href="/blog/">Blog</a>
+                        <a href="{{ route('filter') }}">Find New Vehicle</a>
                     </div>
                 </div>
             </nav>
