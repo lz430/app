@@ -440,7 +440,7 @@ class ComparePage extends React.PureComponent {
         );
     }
 
-    hasSelections(compareList) {
+    hasSelections() {
         const anyHaveFuelType = R.any(
             (selectedFilters) => { return selectedFilters.selectedFuelType; },
             this.props.compareList
@@ -457,13 +457,6 @@ class ComparePage extends React.PureComponent {
     render() {
         return (
             <div className="compare-page">
-                <a href="/filter">
-                    <SVGInline width="10px" svg={zondicons['cheveron-left']} />
-                    Back to Results
-                </a>
-                <div className="compare-page-title-bar__title">
-                    Selected Vehicles to Compare…
-                </div>
                 <div className="compare-page__body">
                     <div className="compare-page-deals">
                         {this.props.deals.map(this.renderDeal)}

@@ -61017,7 +61017,7 @@ var ComparePage = function (_React$PureComponent) {
         }
     }, {
         key: 'hasSelections',
-        value: function hasSelections(compareList) {
+        value: function hasSelections() {
             var anyHaveFuelType = _ramda2.default.any(function (selectedFilters) {
                 return selectedFilters.selectedFuelType;
             }, this.props.compareList);
@@ -61036,17 +61036,6 @@ var ComparePage = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 { className: 'compare-page' },
-                _react2.default.createElement(
-                    'a',
-                    { href: '/filter' },
-                    _react2.default.createElement(_reactSvgInline2.default, { width: '10px', svg: _zondicons2.default['cheveron-left'] }),
-                    'Back to Results'
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'compare-page-title-bar__title' },
-                    'Selected Vehicles to Compare\u2026'
-                ),
                 _react2.default.createElement(
                     'div',
                     { className: 'compare-page__body' },

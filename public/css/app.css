@@ -1410,6 +1410,10 @@ body {
   padding: 0.5rem;
 }
 
+.compare-page .deal {
+  border: none;
+}
+
 .deal {
   background-color: #fff;
   border: 1px solid #ced4d9;
