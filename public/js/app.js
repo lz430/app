@@ -52088,6 +52088,10 @@ var _miscicons = __webpack_require__(61);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
+var _InfoModal = __webpack_require__(969);
+
+var _InfoModal2 = _interopRequireDefault(_InfoModal);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -52140,6 +52144,11 @@ var DealPrice = function (_React$PureComponent) {
             });
         }
     }, {
+        key: 'renderPriceExplanationModal',
+        value: function renderPriceExplanationModal() {
+            return _react2.default.createElement(_InfoModal2.default, null);
+        }
+    }, {
         key: 'renderCashPrice',
         value: function renderCashPrice() {
             return _react2.default.createElement(
@@ -52153,7 +52162,8 @@ var DealPrice = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__cash-price' },
-                    _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee))
+                    _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee)),
+                    this.renderPriceExplanationModal()
                 ),
                 _react2.default.createElement('div', { className: 'deal-price__hr' }),
                 _react2.default.createElement(
@@ -62475,6 +62485,109 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(ThankYouPag
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 965 */,
+/* 966 */,
+/* 967 */,
+/* 968 */,
+/* 969 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(8);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _zondicons = __webpack_require__(29);
+
+var _zondicons2 = _interopRequireDefault(_zondicons);
+
+var _index = __webpack_require__(16);
+
+var Actions = _interopRequireWildcard(_index);
+
+var _reactRedux = __webpack_require__(15);
+
+var _reactSvgInline = __webpack_require__(21);
+
+var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var InfoModal = function (_React$PureComponent) {
+    _inherits(InfoModal, _React$PureComponent);
+
+    function InfoModal(props) {
+        _classCallCheck(this, InfoModal);
+
+        var _this = _possibleConstructorReturn(this, (InfoModal.__proto__ || Object.getPrototypeOf(InfoModal)).call(this, props));
+
+        _this.state = {
+            body: null,
+            toggled: false
+        };
+        return _this;
+    }
+
+    _createClass(InfoModal, [{
+        key: 'renderModal',
+        value: function renderModal() {
+            return "I am the modal content";
+        }
+    }, {
+        key: 'toggleModal',
+        value: function toggleModal() {
+            this.state.toggled = !this.state.toggled;
+            console.log(this.state);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'a',
+                    {
+                        onClick: function onClick() {
+                            _this2.toggleModal();
+                        },
+                        href: '#'
+                    },
+                    _react2.default.createElement(_reactSvgInline2.default, { width: '15px', fill: 'grey', svg: _zondicons2.default['information-outline'] })
+                ),
+                this.state.toggled ? this.renderModal() : ''
+            );
+        }
+    }]);
+
+    return InfoModal;
+}(_react2.default.PureComponent);
+
+var mapStateToProps = function mapStateToProps(state) {
+    return {};
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(InfoModal);
 
 /***/ })
 /******/ ]);
