@@ -5,8 +5,10 @@
         <a href="javascript:window.history.back();">&lt; Back to previous</a>
     </div>
     <div class="steps-bar">
-        <div class="steps-bar__page-title">Your Vehicle Search Results...</div>
-        @include('partials.steps', ['current' => 2])
+        <div class="inner">
+            <div class="steps-bar__page-title">Your Vehicle Search Results...</div>
+            @include('partials.steps', ['current' => 2])
+        </div>
     </div>
 @endsection
 

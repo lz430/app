@@ -61805,15 +61805,6 @@ var DealDetails = function (_React$PureComponent) {
                 null,
                 _react2.default.createElement(
                     'div',
-                    { className: 'back-bar' },
-                    _react2.default.createElement(
-                        'a',
-                        { href: 'javascript:window.history.back();' },
-                        '< Back to previous'
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
                     { className: 'deal-details' },
                     _react2.default.createElement(
                         'div',

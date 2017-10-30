@@ -52,8 +52,8 @@ body {
 .page-footer {
   background-color: #454d52;
   color: #fff;
-  height: 300px;
-  max-height: 300px;
+  height: 320px;
+  max-height: 320px;
   padding-top: 2.5rem;
   text-align: center;
 }
@@ -106,7 +106,11 @@ body {
 .footer-icons div {
   fill: #fff;
   height: 34px;
-  margin: 0 30px;
+  margin: 0 3px 5px 0;
+}
+
+.footer-icons div:hover {
+  opacity: 0.75;
 }
 
 .footer-links {
@@ -159,6 +163,7 @@ body {
 .footer-meta,
 .footer-meta a {
   color: #ced4d9;
+  font-size: 0.9em;
 }
 
 .section {
@@ -326,7 +331,7 @@ body {
 }
 
 .section--stretch {
-  min-height: calc(100vh - 76px - 300px);
+  min-height: calc(100vh - 76px - 320px);
 }
 
 .section--no-footer {
@@ -384,6 +389,12 @@ body {
   display: flex;
   margin-bottom: 0.5em;
   padding-left: 0.5em;
+}
+
+.steps-bar .inner {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .steps-bar__page-title {
@@ -1175,10 +1186,19 @@ body {
   border: 1px solid #ccc;
   border-radius: 4px;
   max-width: calc(100% - 20px);
-  padding: 15px;
+  padding: 5px;
   position: absolute;
   right: 10px;
   top: 57px;
+}
+
+.sortbar__dropdown div {
+  cursor: pointer;
+  padding: 2px 10px;
+}
+
+.sortbar__dropdown div:hover {
+  background: #f6f6f7;
 }
 
 .sortbar__filter-toggle {
@@ -7419,5 +7439,17 @@ comparepage {
 
 .hidden {
   display: none;
+}
+
+.inner {
+  max-width: 75%;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (min-width: 992px) {
+  .inner {
+    max-width: 992px;
+  }
 }
 

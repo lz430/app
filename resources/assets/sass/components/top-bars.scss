@@ -27,6 +27,10 @@
   margin-bottom: 0.5em;
   padding-left: 0.5em;
 
+  .inner {
+    display: flex;
+  }
+
   &__page-title {
     color: $color-blue;
     font-size: 1.75rem;
