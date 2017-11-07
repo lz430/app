@@ -59965,7 +59965,7 @@ var initialState = {
     segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
     selectedFuelType: null,
     selectedMakes: [],
-    isEmployee: true,
+    isEmployee: false,
     selectedFeatures: [],
     selectedRebates: [],
     dealRebates: {},
