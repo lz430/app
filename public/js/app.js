@@ -60752,12 +60752,12 @@ var ComparePage = function (_React$PureComponent) {
                 return _ramda2.default.max(_ramda2.default.propOr([], 'selectedFeatures', dealAndSelectedFilters.selectedFilters).length, carry);
             }, 0, compareList);
 
-            var anyHaveFuelType = _ramda2.default.any(function (selectedFilters) {
-                return selectedFilters.selectedFuelType;
+            var anyHaveFuelType = _ramda2.default.any(function (dealAndSelectedFilters) {
+                return dealAndSelectedFilters.selectedFilters.selectedFuelType;
             }, compareList);
 
-            var anyHaveTransmissionType = _ramda2.default.any(function (selectedFilters) {
-                return selectedFilters.selectedTransmissionType;
+            var anyHaveTransmissionType = _ramda2.default.any(function (dealAndSelectedFilters) {
+                return dealAndSelectedFilters.selectedFilters.selectedTransmissionType;
             }, compareList);
 
             return _react2.default.createElement(
@@ -61018,15 +61018,19 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'hasSelections',
         value: function hasSelections() {
-            var anyHaveFuelType = _ramda2.default.any(function (selectedFilters) {
-                return selectedFilters.selectedFuelType;
+            var anyHaveFuelType = _ramda2.default.any(function (dealAndSelectedFilters) {
+                return dealAndSelectedFilters.selectedFilters.selectedFuelType;
             }, this.props.compareList);
 
-            var anyHaveTransmissionType = _ramda2.default.any(function (selectedFilters) {
-                return selectedFilters.selectedTransmissionType;
+            var anyHaveTransmissionType = _ramda2.default.any(function (dealAndSelectedFilters) {
+                return dealAndSelectedFilters.selectedFilters.selectedTransmissionType;
             }, this.props.compareList);
 
-            return anyHaveFuelType || anyHaveTransmissionType;
+            var anyHaveFeatures = _ramda2.default.any(function (dealAndSelectedFilters) {
+                return dealAndSelectedFilters.selectedFilters.selectedFeatures && dealAndSelectedFilters.selectedFilters.selectedFeatures.length > 0;
+            }, this.props.compareList);
+
+            return anyHaveFuelType || anyHaveTransmissionType || anyHaveFeatures;
         }
     }, {
         key: 'render',
