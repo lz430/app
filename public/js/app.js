@@ -58073,7 +58073,7 @@ var ZipcodeFinder = function (_React$PureComponent) {
                             'form',
                             { onSubmit: this.saveZip },
                             _react2.default.createElement('input', {
-                                type: 'text',
+                                type: 'number',
                                 className: 'zipcode-finder__input',
                                 placeholder: this.props.zipcode,
                                 onChange: this.handleChange
