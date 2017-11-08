@@ -140,15 +140,15 @@ body {
 }
 
 .footer-signup__email::-webkit-input-placeholder {
-  color: #ced4d9;
+  color: #535d63;
 }
 
 .footer-signup__email:-ms-input-placeholder {
-  color: #ced4d9;
+  color: #535d63;
 }
 
 .footer-signup__email::placeholder {
-  color: #ced4d9;
+  color: #535d63;
 }
 
 .footer-signup__submit {
