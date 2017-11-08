@@ -60,7 +60,7 @@ class ZipcodeFinder extends React.PureComponent {
                     <div>
                         <form onSubmit={this.saveZip}>
                             <input
-                                type="text"
+                                type="number"
                                 className="zipcode-finder__input"
                                 placeholder={this.props.zipcode}
                                 onChange={this.handleChange}
