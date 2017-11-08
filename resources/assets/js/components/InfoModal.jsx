@@ -15,11 +15,24 @@ class InfoModal extends React.PureComponent {
     }
 
     renderModal() {
-        return "I am the modal content";
+        return (
+            <div className="modal">
+                <div className="modal__overlay" />
+                <div className="modal__wrapper">
+                    <div className="modal__content">
+                        <div className="modal__header">
+                            <div className="modal__titles">
+                                abc
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     toggleModal() {
-        this.state.toggled = !this.state.toggled;
+        this.setState({ toggled: !this.state.toggled});
         console.log(this.state)
     }
 
