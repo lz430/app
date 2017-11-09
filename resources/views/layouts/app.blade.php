@@ -58,7 +58,7 @@
 
         @yield('precontent')
 
-        <div class="contejnt {{ $contentClass ?? '' }}">
+        <div class="content {{ $contentClass ?? '' }}">
             @yield('content')
         </div>
 
