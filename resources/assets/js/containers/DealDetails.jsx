@@ -183,7 +183,7 @@ class DealDetails extends React.PureComponent {
         });
     }
 
-    renderStandardFeaturesModal() {
+    renderStandardFeaturesModal(deal) {
         return (
             <Modal
                 nowrapper={true}
@@ -192,6 +192,48 @@ class DealDetails extends React.PureComponent {
                 <div className="modal__content">
                     <div className="modal__sticker-container">
                         <div className="modal__sticker">Standard Features</div>
+                    </div>
+                    <div className="modal__header">
+                        <div className="modal__titles modal__titles--center">
+                            <div className="modal__subtitle modal__subtitle--center">
+                                {strings.dealYearMake(deal)}
+                            </div>
+                            <div className="modal__title modal_title--center">
+                                {strings.dealModelTrim(deal)}
+                            </div>
+                        </div>
+                        <div className="modal__close">
+                            <SVGInline
+                                onClick={() => this.hideModals()}
+                                height="20px"
+                                width="20px"
+                                className="modal__close-x"
+                                svg={zondicons['close']}
+                            />
+                        </div>
+                    </div>
+                    <div className="modal__body deal-details__modal-body">
+                        <ul>
+                            {deal.features.map((feature, index) => {
+                                return <li key={index}>{feature.feature}</li>;
+                            })}
+                        </ul>
+                    </div>
+                </div>
+            </Modal>
+        );
+    }
+
+    renderFeaturesModal() {
+        return (
+            <Modal
+                nowrapper={true}
+                onClose={() => { this.hideModals() }}
+            >
+
+                <div className="modal__content">
+                    <div className="modal__sticker-container">
+                        <div className="modal__sticker">Additional Options</div>
                     </div>
                     <div className="modal__header">
                         <div className="modal__titles modal__titles--center">
@@ -257,47 +299,6 @@ class DealDetails extends React.PureComponent {
                             )}
                         </ul>
                     </div>
-                </div>
-            </Modal>
-        );
-    }
-
-    renderFeaturesModal(deal) {
-        return (
-            <Modal
-                nowrapper={true}
-                onClose={() => { this.hideModals() }}
-            >
-                <div className="modal__content">
-                    <div className="modal__sticker-container">
-                        <div className="modal__sticker">Additional Options</div>
-                    </div>
-                    <div className="modal__header">
-                        <div className="modal__titles modal__titles--center">
-                            <div className="modal__subtitle modal__subtitle--center">
-                                {strings.dealYearMake(deal)}
-                            </div>
-                            <div className="modal__title modal_title--center">
-                                {strings.dealModelTrim(deal)}
-                            </div>
-                        </div>
-                        <div className="modal__close">
-                            <SVGInline
-                                onClick={() => this.hideModals()}
-                                height="20px"
-                                width="20px"
-                                className="modal__close-x"
-                                svg={zondicons['close']}
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div className="modal__body deal-details__modal-body">
-                    <ul>
-                        {deal.features.map((feature, index) => {
-                            return <li key={index}>{feature.feature}</li>;
-                        })}
-                    </ul>
                 </div>
             </Modal>
         );
