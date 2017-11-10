@@ -16,29 +16,73 @@
                     {{ csrf_field() }}
 
                     <div class="request-email__title">
-                        Where can we send your info?
+                        Please Provide Your Contact Information
                     </div>
 
-                    <div class="request-email__sexy-line"></div>
-
                     <div class="request-email__group {{ $errors->has('email') ? 'login__group-has-error' : '' }}">
-                        <label for="email" class="request-email__label">Email</label>
+                        <label for="email"class="request-email__label">Email</label>
 
                         <div class="request-email__input-and-error">
-                            <input id="email" type="email" class="request-email__input" name="email" value="{{ old('email') }}" required autofocus>
+                            <input id="email" type="email" placeholder="Enter Your Email" class="request-email__input" name="email" value="{{ old('email', $email) }}" required autofocus>
 
                             @if ($errors->has('email'))
                                 <span class="request-email__error">
-                                <strong>{{ $errors->first('email') }}</strong>
-                            </span>
+                                    <strong>{{ $errors->first('email') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="request-email__group {{ $errors->has('first_name') ? 'login__group-has-error' : '' }}">
+                        <label for="first_name" class="request-email__label">First Name</label>
+
+                        <div class="request-email__input-and-error">
+                            <input id="first_name" type="text" class="request-email__input" placeholder="Enter Your First Name" name="first_name" value="{{ old('first_name') }}" required>
+
+                            @if ($errors->has('first_name'))
+                                <span class="request-email__error">
+                                    <strong>{{ $errors->first('first_name') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="request-email__group {{ $errors->has('email') ? 'login__group-has-error' : '' }}">
+                        <label for="last_name" class="request-email__label">Last Name</label>
+
+                        <div class="request-email__input-and-error">
+                            <input id="last_name" type="text" class="request-email__input" name="last_name" placeholder="Enter Your Last Name"  value="{{ old('last_name') }}" required>
+
+                            @if ($errors->has('last_name'))
+                                <span class="request-email__error">
+                                    <strong>{{ $errors->first('last_name') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="request-email__group {{ $errors->has('phone_number') ? 'login__group-has-error' : '' }}">
+                        <label for="phone_number" class="request-email__label">Phone Number</label>
+
+                        <div class="request-email__input-and-error">
+                            <input id="phone_number" type="tel" class="request-email__input" name="phone_number" placeholder="Enter Your Phone Number" value="{{ old('phone_number') }}" required>
+
+                            @if ($errors->has('phone_number'))
+                                <span class="request-email__error">
+                                    <strong>{{ $errors->first('phone_number') }}</strong>
+                                </span>
                             @endif
                         </div>
                     </div>
 
                     <div class="request-email__buttons">
-                        <button class="request-email__button request-email__button--blue request-email__button--small">
-                            Continue
+                        <button class="request-email__button request-email__button--purple request-email__button--small">
+                            Submit Your Contact Information
                         </button>
+                    </div>
+
+                    <div class = "request-email__footer">
+                        <a href="/privacy-policy"> Privacy Policy</a> We will not share your information
                     </div>
                 </form>
             </div>

@@ -5,4 +5,22 @@
   @include vertical-form;
 
   height: 100vh;
+
+  &__button {
+    font-size: .8rem;
+    margin-bottom: 1.5rem;
+    margin-top: .5rem;
+    padding: .5rem 1rem;
+  }
+
+   &__footer {
+     font-size: .75em;
+     margin-bottom: 15px;
+   }
+
+  &__logo {
+    img  {
+      width: 90%;
+    }
+  }
 }
