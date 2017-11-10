@@ -2,7 +2,6 @@ import * as Actions from 'actions/index';
 import api from 'src/api';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import CompareBar from 'components/CompareBar';
-import ConfirmDetails from 'containers/ConfirmDetails';
 import { connect } from 'react-redux';
 import Deal from 'components/Deal';
 import fuelapi from 'src/fuelapi';
@@ -18,7 +17,7 @@ import strings from 'src/strings';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
-class DealDetails extends React.PureComponent {
+class ConfirmDetails extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -148,26 +147,6 @@ class DealDetails extends React.PureComponent {
             </Modal>
         );
     }
-
-    renderDot(photo, index) {
-        const color =
-            this.state.featuredImage.url === photo.url ? 'gray' : 'white';
-        return (
-            <svg
-                key={index}
-                style={{
-                    cursor: 'pointer',
-                    margin: '5px',
-                }}
-                height="20"
-                width="20"
-                onClick={this.selectFeaturedImage.bind(this, index)}
-            >
-                <circle cx="10" cy="10" r="8" stroke="#cccccc" fill={color} />
-            </svg>
-        );
-    }
-
     renderFeaturedImage() {
         return (
             <img
@@ -309,66 +288,28 @@ class DealDetails extends React.PureComponent {
             deal,
             R.map(R.prop('deal'), this.props.compareList)
         );
+
         return (
             <Deal deal={deal} key={index} hideImageAndTitle={true}>
                 <div className="deal-details__deal-content">
-                    <div className="deal-details__deal-content-at-a-glance">
-                        This Vehicle At-A-Glance
-                    </div>
-                    <div className="deal-details__deal-content-subtitle">
-                        Vehicle #{deal.vin.substr(deal.vin.length - 8)} Standard Features
-                    </div>
-                    <ul className="deal-details__deal-content-features">
-                        {deal.features.slice(0, 5).map((feature, index) => {
-                            return <li key={index}>{feature.feature}</li>;
-                        })}
-                    </ul>
-                    <a
-                        href="#"
-                        className="deal-details__deal-content-see-all"
-                        onClick={() => this.showStandardFeatures()}
-                    >
-                        See all standard features &gt;
-                    </a>
-                    <div className="deal-details__deal-content-subtitle">
-                        Vehicle #{deal.vin.substr(deal.vin.length - 8)} Additional Options
-                    </div>
-                    <ul className="deal-details__deal-content-features">
-                        {deal.vauto_features
-                            .slice(0, 5)
-                            .map((feature, index) => {
-                                return <li key={index}>{feature}</li>;
-                            })}
-                    </ul>
-                    <a
-                        href="#"
-                        className="deal-details__deal-content-see-all"
-                        onClick={() => this.showFeatures()}
-                    >
-                        See all additional options &gt;
-                    </a>
+                    <p>TODO: Update this payment block per confirm screen designs.</p>
                     <div className="deal-details__buttons">
                         <button
-                            onClick={() =>
-                                this.props.toggleCompare(this.props.deal)}
-                            className={
-                                'deal-details__button deal-details__button--small deal-details__button--blue ' +
-                                (inCompareList
-                                    ? 'deal-details__button--blue'
-                                    : '')
-                            }
-                        >
-                            {inCompareList ? (
-                                'Remove from Compare'
-                            ) : (
-                                'Add to Compare'
-                            )}
-                        </button>
-
-                        <button
                             className="deal-details__button deal-details__button--small deal-details__button--pink"
-                            onClick={() => window.location=`/confirm/${this.props.deal.id}`}
-
+                            onClick={() =>
+                                purchase.start(
+                                    deal,
+                                    this.props.selectedTab,
+                                    this.props.downPayment,
+                                    rebates.getSelectedRebatesForDealAndType(
+                                        this.props.dealRebates,
+                                        this.props.selectedRebates,
+                                        this.props.selectedTab,
+                                        deal
+                                    ),
+                                    this.props.termDuration,
+                                    this.props.isEmployee
+                                )}
                         >
                             Buy Now
                         </button>
@@ -395,33 +336,18 @@ class DealDetails extends React.PureComponent {
                         </div>
                         <div className="deal-details__images">
                             {this.renderFeaturedImage()}
-                            <div className="deal-details__dots">
-                                {this.allImages().map((image, index) =>
-                                    this.renderDot(image, index)
-                                )}
-                            </div>
                         </div>
                     </div>
                     <div className="deal-details__pricing">
                         {this.renderDeal(deal)}
                     </div>
                 </div>
-
-                <CompareBar class="compare-bar compare-bar--static" />
-
-                {this.state.showStandardFeatures ? (
-                    this.renderStandardFeaturesModal(deal)
-                ) : (
-                    ''
-                )}
-                {this.state.showFeatures ? this.renderFeaturesModal(deal) : ''}
-                {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}
             </div>
         );
     }
 }
 
-DealDetails.propTypes = {
+ConfirmDetails.propTypes = {
     deal: PropTypes.shape({
         year: PropTypes.string.isRequired,
         msrp: PropTypes.number.isRequired,
@@ -448,4 +374,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, Actions)(DealDetails);
+export default connect(mapStateToProps, Actions)(ConfirmDetails);
