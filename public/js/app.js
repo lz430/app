@@ -52193,7 +52193,8 @@ var DealPrice = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__finance-lease-price' },
-                    this.props.dealRebates.hasOwnProperty(this.props.deal.id) ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), this.props.downPayment, this.props.termDuration))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealRebates.hasOwnProperty(this.props.deal.id) ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), this.props.downPayment, this.props.termDuration))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }),
+                    this.renderPriceExplanationModal()
                 ),
                 _react2.default.createElement('div', { className: 'deal-price__hr' })
             );
@@ -52212,7 +52213,8 @@ var DealPrice = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__finance-lease-price' },
-                    _util2.default.moneyFormat(Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31))))
+                    _util2.default.moneyFormat(Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31)))),
+                    this.renderPriceExplanationModal()
                 ),
                 _react2.default.createElement('div', { className: 'deal-price__hr' })
             );

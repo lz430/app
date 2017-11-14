@@ -117,6 +117,7 @@ class DealPrice extends React.PureComponent {
                     ) : (
                         <SVGInline svg={miscicons['loading']} />
                     )}
+                    {this.renderPriceExplanationModal()}
                 </div>
                 <div className="deal-price__hr" />
             </div>
@@ -155,6 +156,7 @@ class DealPrice extends React.PureComponent {
                             )
                         )
                     )}
+                    {this.renderPriceExplanationModal()}
                 </div>
                 <div className="deal-price__hr" />
             </div>
