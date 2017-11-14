@@ -52088,7 +52088,7 @@ var _miscicons = __webpack_require__(61);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
-var _InfoModal = __webpack_require__(969);
+var _InfoModal = __webpack_require__(970);
 
 var _InfoModal2 = _interopRequireDefault(_InfoModal);
 
@@ -62491,7 +62491,8 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(ThankYouPag
 /* 966 */,
 /* 967 */,
 /* 968 */,
-/* 969 */
+/* 969 */,
+/* 970 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -62506,6 +62507,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__(8);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _ramda = __webpack_require__(12);
+
+var _ramda2 = _interopRequireDefault(_ramda);
 
 var _zondicons = __webpack_require__(29);
 
@@ -62549,29 +62554,65 @@ var InfoModal = function (_React$PureComponent) {
     _createClass(InfoModal, [{
         key: 'renderModal',
         value: function renderModal() {
-            return "I am the modal content";
-        }
-    }, {
-        key: 'toggleModal',
-        value: function toggleModal() {
-            this.state.toggled = !this.state.toggled;
-            console.log(this.state);
-        }
-    }, {
-        key: 'render',
-        value: function render() {
             var _this2 = this;
 
             return _react2.default.createElement(
                 'div',
-                null,
+                { className: 'modal',
+                    onClick: function onClick(e) {
+                        return _this2.closeIfOverlayClick(e);
+                    }
+                },
+                _react2.default.createElement('div', { className: 'modal__overlay' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'modal__wrapper' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'modal__content' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal__header' },
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal__titles' },
+                                'The data here will be the pricing information for this deal.'
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }, {
+        key: 'toggleModal',
+        value: function toggleModal() {
+            this.setState({ toggled: !this.state.toggled });
+        }
+    }, {
+        key: 'closeIfOverlayClick',
+        value: function closeIfOverlayClick(e) {
+            var targetClass = e.target.getAttribute('class');
+
+            if (_ramda2.default.contains(targetClass, 'modal__wrapper') || _ramda2.default.contains(targetClass, 'modal__overlay')) {
+                this.toggleModal();
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'infomodal__context' },
                 _react2.default.createElement(
                     'a',
                     {
                         onClick: function onClick() {
-                            _this2.toggleModal();
+                            _this3.toggleModal();
                         },
-                        href: '#'
+                        href: '#',
+                        className: 'infomodal__button'
                     },
                     _react2.default.createElement(_reactSvgInline2.default, { width: '15px', fill: 'grey', svg: _zondicons2.default['information-outline'] })
                 ),
