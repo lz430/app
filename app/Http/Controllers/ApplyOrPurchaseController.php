@@ -118,6 +118,10 @@ class ApplyOrPurchaseController extends Controller
             return $user;
         });
 
+        if (! session()->has('purchase') || ! is_object(session('purchase'))) {
+            return redirect()->back();
+        }
+
         $purchaseData = session('purchase');
         $purchaseData->user_id = $user->id;
         $purchase = Purchase::where('user_id', $user->id)
