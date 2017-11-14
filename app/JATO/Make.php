@@ -44,6 +44,7 @@ class Make extends Model
         'land rover',
         'lexus',
         'lincoln',
+        'mazda',
         'mercedes-benz',
         'mini',
         'mitsubishi',
@@ -52,7 +53,7 @@ class Make extends Model
         'ram',
         'subaru',
         'toyota',
-        'volkswagon',
+        'volkswagen',
         'volvo',
     ];
 
@@ -80,6 +81,7 @@ class Make extends Model
         'land-rover' => self::BASE_PATH . 'land-rover.png',
         'lexus' => self::BASE_PATH . 'lexus.jpg',
         'lincoln' => self::BASE_PATH . 'lincoln.jpg',
+        'mazda' => self::BASE_PATH . 'mazda.jpg',
         'maserati' => self::BASE_PATH . 'maserati.jpg',
         'mercedes-benz' => self::BASE_PATH . 'mercedes-benz.jpg',
         'mini' => self::BASE_PATH . 'mini.jpg',
@@ -90,7 +92,7 @@ class Make extends Model
         'scion' => self::BASE_PATH . 'scion.jpg',
         'subaru' => self::BASE_PATH . 'subaru.jpg',
         'toyota' => self::BASE_PATH . 'toyota.jpg',
-        'volkswagon' => self::BASE_PATH . 'volkswagon.jpg',
+        'volkswagen' => self::BASE_PATH . 'volkswagon.jpg',
         'volvo' => self::BASE_PATH . 'volvo.jpg',
     ];
 

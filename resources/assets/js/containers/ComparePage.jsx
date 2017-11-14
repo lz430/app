@@ -168,12 +168,12 @@ class ComparePage extends React.PureComponent {
         );
 
         const anyHaveFuelType = R.any(
-            (selectedFilters) => { return selectedFilters.selectedFuelType; },
+            (dealAndSelectedFilters) => { return dealAndSelectedFilters.selectedFilters.selectedFuelType; },
             compareList
         );
 
         const anyHaveTransmissionType = R.any(
-            (selectedFilters) => { return selectedFilters.selectedTransmissionType; },
+            (dealAndSelectedFilters) => { return dealAndSelectedFilters.selectedFilters.selectedTransmissionType; },
             compareList
         );
 
@@ -442,16 +442,21 @@ class ComparePage extends React.PureComponent {
 
     hasSelections() {
         const anyHaveFuelType = R.any(
-            (selectedFilters) => { return selectedFilters.selectedFuelType; },
+            (dealAndSelectedFilters) => { return dealAndSelectedFilters.selectedFilters.selectedFuelType; },
             this.props.compareList
         );
 
         const anyHaveTransmissionType = R.any(
-            (selectedFilters) => { return selectedFilters.selectedTransmissionType; },
+            (dealAndSelectedFilters) => { return dealAndSelectedFilters.selectedFilters.selectedTransmissionType; },
             this.props.compareList
         );
 
-        return anyHaveFuelType || anyHaveTransmissionType;
+        const anyHaveFeatures = R.any(
+            (dealAndSelectedFilters) => { return dealAndSelectedFilters.selectedFilters.selectedFeatures && dealAndSelectedFilters.selectedFilters.selectedFeatures.length > 0; },
+            this.props.compareList
+        );
+
+        return anyHaveFuelType || anyHaveTransmissionType || anyHaveFeatures;
     }
 
     render() {

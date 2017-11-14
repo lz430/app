@@ -140,15 +140,15 @@ body {
 }
 
 .footer-signup__email::-webkit-input-placeholder {
-  color: #ced4d9;
+  color: #535d63;
 }
 
 .footer-signup__email:-ms-input-placeholder {
-  color: #ced4d9;
+  color: #535d63;
 }
 
 .footer-signup__email::placeholder {
-  color: #ced4d9;
+  color: #535d63;
 }
 
 .footer-signup__submit {
@@ -215,6 +215,11 @@ body {
 }
 
 .section__button--pink {
+  background-color: #e70290;
+  color: #fff;
+}
+
+.section__button--purple {
   background-color: #e70290;
   color: #fff;
 }
@@ -1014,6 +1019,11 @@ body {
   color: #fff;
 }
 
+.modal__close-button--purple {
+  background-color: #e70290;
+  color: #fff;
+}
+
 .modal__close-button--white {
   background-color: #fff;
   color: #41b1ac;
@@ -1120,6 +1130,11 @@ body {
 }
 
 .sortbar__button--pink {
+  background-color: #e70290;
+  color: #fff;
+}
+
+.sortbar__button--purple {
   background-color: #e70290;
   color: #fff;
 }
@@ -1364,6 +1379,11 @@ body {
   color: #fff;
 }
 
+.deals__button--purple {
+  background-color: #e70290;
+  color: #fff;
+}
+
 .deals__button--white {
   background-color: #fff;
   color: #41b1ac;
@@ -1519,6 +1539,11 @@ body {
   color: #fff;
 }
 
+.deal__button--purple {
+  background-color: #e70290;
+  color: #fff;
+}
+
 .deal__button--white {
   background-color: #fff;
   color: #41b1ac;
@@ -1605,6 +1630,11 @@ body {
 }
 
 .apply-or-purchase__button--pink {
+  background-color: #e70290;
+  color: #fff;
+}
+
+.apply-or-purchase__button--purple {
   background-color: #e70290;
   color: #fff;
 }
@@ -1760,6 +1790,11 @@ body {
   color: #fff;
 }
 
+.application-form__button--purple {
+  background-color: #e70290;
+  color: #fff;
+}
+
 .application-form__button--white {
   background-color: #fff;
   color: #41b1ac;
@@ -1860,7 +1895,7 @@ body {
   padding: 8px;
   width: 100%;
   margin-right: 5px;
-  width: 50%;
+  width: 55%;
 }
 
 .zipcode-finder__input[type=number]::-webkit-inner-spin-button,
@@ -1911,6 +1946,11 @@ body {
 }
 
 .zipcode-finder__button--pink {
+  background-color: #e70290;
+  color: #fff;
+}
+
+.zipcode-finder__button--purple {
   background-color: #e70290;
   color: #fff;
 }
@@ -2356,6 +2396,11 @@ body {
   color: #fff;
 }
 
+.deal-details__button--purple {
+  background-color: #e70290;
+  color: #fff;
+}
+
 .deal-details__button--white {
   background-color: #fff;
   color: #41b1ac;
@@ -2558,6 +2603,11 @@ body {
   color: #fff;
 }
 
+.compare-deal__button--purple {
+  background-color: #e70290;
+  color: #fff;
+}
+
 .compare-deal__button--white {
   background-color: #fff;
   color: #41b1ac;
@@ -2707,6 +2757,11 @@ body {
 }
 
 .compare-deal__cta__button--pink {
+  background-color: #e70290;
+  color: #fff;
+}
+
+.compare-deal__cta__button--purple {
   background-color: #e70290;
   color: #fff;
 }
@@ -3426,6 +3481,11 @@ financing {
   color: #fff;
 }
 
+.financing__button--purple {
+  background-color: #e70290;
+  color: #fff;
+}
+
 .financing__button--white {
   background-color: #fff;
   color: #41b1ac;
@@ -3648,6 +3708,11 @@ comparepage {
   color: #fff;
 }
 
+.request-email__button--purple {
+  background-color: #e70290;
+  color: #fff;
+}
+
 .request-email__button--white {
   background-color: #fff;
   color: #41b1ac;
@@ -3691,6 +3756,22 @@ comparepage {
 .request-email__button.disabled {
   background: #aaa;
   pointer-events: none;
+}
+
+.request-email__button {
+  font-size: .8rem;
+  margin-bottom: 1.5rem;
+  margin-top: .5rem;
+  padding: .5rem 1rem;
+}
+
+.request-email__footer {
+  font-size: .75em;
+  margin-bottom: 15px;
+}
+
+.request-email__logo img {
+  width: 90%;
 }
 
 .view-apply {
@@ -3821,6 +3902,11 @@ comparepage {
 }
 
 .view-apply__button--pink {
+  background-color: #e70290;
+  color: #fff;
+}
+
+.view-apply__button--purple {
   background-color: #e70290;
   color: #fff;
 }
@@ -3987,6 +4073,11 @@ comparepage {
 }
 
 .thank-you__button--pink {
+  background-color: #e70290;
+  color: #fff;
+}
+
+.thank-you__button--purple {
   background-color: #e70290;
   color: #fff;
 }

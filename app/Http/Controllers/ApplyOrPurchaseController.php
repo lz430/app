@@ -71,14 +71,9 @@ class ApplyOrPurchaseController extends Controller
              */
             if (session()->has('email')) {
                 $request->merge(['email' => session()->get('email')]);
-
-                return $this->receiveEmail($request);
-            } else {
-                /**
-                 * Get the users email manually.
-                 */
-                return redirect('request-email');
             }
+
+            return redirect('request-email');
         } catch (ValidationException $e) {
             Log::notice('Invalid applyOrPurchase submission: ' . json_encode(request()->all()));
 
@@ -86,18 +81,22 @@ class ApplyOrPurchaseController extends Controller
         }
     }
 
-    public function requestEmail()
+    public function requestEmail(Request $request)
     {
-        return view('request-email');
+        return view('request-email')->with('email', $request->session()->get('email'));
     }
 
     public function receiveEmail(Request $request)
     {
-        $this->validate($request, [
-            'email' => 'required|email',
-        ], [
-            'email' => 'Email is required',
-        ]);
+        $this->validate(
+            $request,
+            [
+                'email' => 'required|email',
+                'first_name' => 'required|string',
+                'last_name' => 'required|string',
+                'phone_number' => 'required|digits:10',
+            ]
+        );
 
         $user = DB::transaction(function () use ($request) {
             /**
@@ -107,13 +106,21 @@ class ApplyOrPurchaseController extends Controller
             $user = User::where('email', $request->email)->first();
 
             if (! $user) {
-                $user = User::create(['email' => $request->email]);
+                $user = User::create([
+                    'email' => $request->email,
+                    'name' => $request->first_name . ' ' . $request->last_name,
+                    'phone_number' => $request->phone_number,
+                ]);
             }
 
             auth()->login($user);
 
             return $user;
         });
+
+        if (! session()->has('purchase') || ! is_object(session('purchase'))) {
+            return redirect()->back();
+        }
 
         $purchaseData = session('purchase');
         $purchaseData->user_id = $user->id;
