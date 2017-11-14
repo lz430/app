@@ -50,7 +50,7 @@
                         <a href="/about-us/">About</a>
                         <a href="/contact-us/">Contact</a>
                         <a href="/blog/">Blog</a>
-                        <a href="{{ route('filter') }}">Find New Vehicle</a>
+                        <a href="/#findNewCar">Find New Vehicle</a>
                     </div>
                 </div>
             </nav>

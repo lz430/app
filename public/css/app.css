@@ -1069,6 +1069,15 @@ body {
   pointer-events: none;
 }
 
+/* The info modal uses styles from modal; these are just add-ons */
+
+.infomodal__context {
+  display: inline-block;
+  font-size: 1rem;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
 .sortbar {
   border-bottom: 1px solid #ccc;
   display: -webkit-box;

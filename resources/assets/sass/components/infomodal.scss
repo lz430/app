@@ -1,0 +1,15 @@
+/* The info modal uses styles from modal; these are just add-ons */
+@import '../variables';
+
+.infomodal {
+    &__context {
+        display: inline-block;
+        font-size: 1rem;
+        margin-left: 5px;
+        vertical-align: middle;
+    }
+
+    &__button {
+
+    }
+}

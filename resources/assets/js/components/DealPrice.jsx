@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
+import InfoModal from 'components/InfoModal';
 
 class DealPrice extends React.PureComponent {
     constructor(props) {
@@ -54,6 +55,10 @@ class DealPrice extends React.PureComponent {
         });
     }
 
+    renderPriceExplanationModal() {
+        return <InfoModal></InfoModal>
+    }
+
     renderCashPrice() {
         return (
             <div className="deal-price__price">
@@ -65,6 +70,7 @@ class DealPrice extends React.PureComponent {
                             this.props.isEmployee
                         )
                     )}
+                    {this.renderPriceExplanationModal()}
                 </div>
                 <div className="deal-price__hr" />
                 <div className="deal-price__cash-msrp">
@@ -111,6 +117,7 @@ class DealPrice extends React.PureComponent {
                     ) : (
                         <SVGInline svg={miscicons['loading']} />
                     )}
+                    {this.renderPriceExplanationModal()}
                 </div>
                 <div className="deal-price__hr" />
             </div>
@@ -149,6 +156,7 @@ class DealPrice extends React.PureComponent {
                             )
                         )
                     )}
+                    {this.renderPriceExplanationModal()}
                 </div>
                 <div className="deal-price__hr" />
             </div>
