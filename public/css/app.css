@@ -3120,7 +3120,7 @@ body {
 }
 
 .tabs {
-  border-bottom: 4px solid #e70290;
+  border-bottom: 4px solid #41b1ac;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -3156,7 +3156,7 @@ body {
 }
 
 .tabs__tab--selected {
-  background: #e70290;
+  background: #41b1ac;
   color: #fff;
 }
 
