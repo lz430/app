@@ -54,14 +54,7 @@ class RebatesController extends Controller
                         'value' => $incentive['cash'],
                         'statusName' => $incentive['statusName'],
                         'openOffer' => $incentive['targetName'] === 'Open Offer',
-                        'types' => [
-                                'Auto Show Cash' => ['cash', 'finance'],
-                                'Bonus Cash' => ['cash', 'finance'],
-                                'Cash Back' => ['cash', 'finance'],
-                                'Credit Card Rebate' => ['cash', 'finance'],
-                                'Cash on MSRP ' => ['cash', 'finance'],
-                                'Cash on Term APR' => ['finance'],
-                            ][$incentive['typeName']] ?? [],
+                        'types' => $this->getTypes($incentive),
                     ];
                 })->filter(function ($incentive) {
                     return ! empty($incentive['types']);
@@ -71,5 +64,42 @@ class RebatesController extends Controller
                 'rebates' => $availableRebates,
             ]);
         });
+    }
+
+    protected function getTypes($incentive)
+    {
+        $types = [];
+
+        if ($this->matchesCash($incentive)) {
+            $types[] = 'cash';
+        }
+
+        if ($this->matchesFinance($incentive)) {
+            $types[] = 'incentive';
+        }
+
+        if ($this->matchesLease($incentive)) {
+            $types[] = 'lease';
+        }
+
+        return $types;
+    }
+
+    protected function matchesCash($incentive)
+    {
+        // @todo return whether it matches the right targets and type's per Beth's forthcoming document
+        return true;
+    }
+
+    protected function matchesFinance($incentive)
+    {
+        // @todo return whether it matches the right targets and type's per Beth's forthcoming document
+        return true;
+    }
+
+    protected function matchesLease($incentive)
+    {
+        // @todo return whether it matches the right targets and type's per Beth's forthcoming document
+        return true;
     }
 }
