@@ -2,8 +2,8 @@ import * as Actions from 'actions/index';
 import api from 'src/api';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import CompareBar from 'components/CompareBar';
+import ConfirmDeal from 'components/ConfirmDeal';
 import { connect } from 'react-redux';
-import Deal from 'components/Deal';
 import fuelapi from 'src/fuelapi';
 import fuelcolor from 'src/fuel-color-map';
 import Modal from 'components/Modal';
@@ -163,126 +163,6 @@ class ConfirmDetails extends React.PureComponent {
         });
     }
 
-    renderStandardFeaturesModal() {
-        return (
-            <Modal
-                nowrapper={true}
-                onClose={() => { this.hideModals() }}
-            >
-                <div className="modal__content">
-                    <div className="modal__sticker-container">
-                        <div className="modal__sticker">Standard Features</div>
-                    </div>
-                    <div className="modal__header">
-                        <div className="modal__titles modal__titles--center">
-                            <div className="modal__subtitle modal__subtitle--center">
-                                {strings.dealYearMake(this.props.deal)}
-                            </div>
-                            <div className="modal__title modal_title--center">
-                                {strings.dealModelTrim(this.props.deal)}
-                            </div>
-                        </div>
-                        <div className="modal__close">
-                            <SVGInline
-                                onClick={() => this.hideModals()}
-                                height="20px"
-                                width="20px"
-                                className="modal__close-x"
-                                svg={zondicons['close']}
-                            />
-                        </div>
-                    </div>
-                    <div className="modal__body deal-details__modal-body">
-                        <h3>Specifications</h3>
-                        <hr />
-
-                        <h4>Dimensions</h4>
-                        <ul>
-                            {this.state.dimensions ? (
-                                this.state.dimensions.map((dimension, index) => {
-                                    return (
-                                        <li key={index}>
-                                            {dimension.feature}: {dimension.content}
-                                        </li>
-                                    );
-                                })
-                            ) : (
-                                <SVGInline svg={miscicons['loading']} />
-                            )}
-                        </ul>
-
-                        <h4>Warranties</h4>
-                        <ul>
-                            {this.state.warranties ? (
-                                this.state.warranties.map((dimension, index) => {
-                                    return (
-                                        <li key={index}>
-                                            {dimension.feature}: {dimension.content}
-                                        </li>
-                                    );
-                                })
-                            ) : (
-                                <SVGInline svg={miscicons['loading']} />
-                            )}
-                        </ul>
-
-                        <h3>Features</h3>
-                        <hr />
-
-                        <ul>
-                            {this.props.deal.vauto_features.map(
-                                (feature, index) => {
-                                    return <li key={index}>{feature}</li>;
-                                }
-                            )}
-                        </ul>
-                    </div>
-                </div>
-            </Modal>
-        );
-    }
-
-    renderFeaturesModal(deal) {
-        return (
-            <Modal
-                nowrapper={true}
-                onClose={() => { this.hideModals() }}
-            >
-                <div className="modal__content">
-                    <div className="modal__sticker-container">
-                        <div className="modal__sticker">Additional Options</div>
-                    </div>
-                    <div className="modal__header">
-                        <div className="modal__titles modal__titles--center">
-                            <div className="modal__subtitle modal__subtitle--center">
-                                {strings.dealYearMake(deal)}
-                            </div>
-                            <div className="modal__title modal_title--center">
-                                {strings.dealModelTrim(deal)}
-                            </div>
-                        </div>
-                        <div className="modal__close">
-                            <SVGInline
-                                onClick={() => this.hideModals()}
-                                height="20px"
-                                width="20px"
-                                className="modal__close-x"
-                                svg={zondicons['close']}
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div className="modal__body deal-details__modal-body">
-                    <ul>
-                        {deal.features.map((feature, index) => {
-                            return <li key={index}>{feature.feature}</li>;
-                        })}
-                    </ul>
-                </div>
-            </Modal>
-        );
-    }
-
     renderDeal(deal, index) {
         const inCompareList = R.contains(
             deal,
@@ -290,9 +170,8 @@ class ConfirmDetails extends React.PureComponent {
         );
 
         return (
-            <Deal deal={deal} key={index} hideImageAndTitle={true}>
+            <ConfirmDeal deal={deal} key={index} hideImageAndTitle={true}>
                 <div className="deal-details__deal-content">
-                    <p>TODO: Update this payment block per confirm screen designs.</p>
                     <div className="deal-details__buttons">
                         <button
                             className="deal-details__button deal-details__button--small deal-details__button--pink"
@@ -315,7 +194,7 @@ class ConfirmDetails extends React.PureComponent {
                         </button>
                     </div>
                 </div>
-            </Deal>
+            </ConfirmDeal>
         );
     }
 
@@ -375,3 +254,9 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, Actions)(ConfirmDetails);
+
+// When selectedTab, downPayment, etc. are initially saved to redux store, also save to localStorage
+// on ComponentWillMount in ConfirmDetails, check localStorage for these values; if they exist, call the actions required to save them to redux
+// Once they are in Redux, they should be picked up by mapStateToProps and passed down to ConfirmDetail properly
+// Can also look into packages used to automatically re-hydrate Redux store
+// "Persisting Redux store to localStorage/SessionStorage"

@@ -63,7 +63,6 @@ class ApplyOrPurchaseController extends Controller
                 'down_payment' => request('down_payment') ?: 0,
                 'amount_financed' => request('amount_financed') ?: 0,
             ]);
-
             session(['purchase' => $purchase]);
 
             /**
