@@ -95,6 +95,7 @@ class ApplyOrPurchaseController extends Controller
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'phone_number' => 'required|digits:10',
+                'g-recaptcha-response' => 'required|recaptcha',
             ]
         );
 

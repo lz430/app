@@ -13,6 +13,11 @@
     padding: .5rem 1rem;
   }
 
+  &__captcha {
+    margin-top: .5rem;
+    transform: scale(.85);
+  }
+
    &__footer {
      font-size: .75em;
      margin-bottom: 15px;
