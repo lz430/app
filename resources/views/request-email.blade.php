@@ -77,6 +77,12 @@
 
                     <div class="request-email__captcha">
                         {!! Recaptcha::render() !!}
+
+                        @if ($errors->has('recaptcha'))
+                            <span class="request-email__error">
+                                <strong>{{ $errors->first('recaptcha') }}</strong>
+                            </span>
+                        @endif
                     </div>
 
                     <div class="request-email__buttons">
