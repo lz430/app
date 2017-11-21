@@ -3259,6 +3259,10 @@ body {
   color: #41b1ac;
 }
 
+.deal-price__tag-icon {
+  margin-right: 5px;
+}
+
 .loading {
   display: -webkit-box;
   display: -ms-flexbox;
