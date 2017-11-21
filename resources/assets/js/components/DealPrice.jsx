@@ -188,6 +188,12 @@ class DealPrice extends React.PureComponent {
 
         return (
             <div className="deal-price__rebates-applied">
+                <SVGInline
+                    height="10px"
+                    weight="10px"
+                    className="deal-price__tag-icon"
+                    svg={miscicons['tag']}
+                />
                 {util.moneyFormat(selectedAmount)} rebates applied of{' '}
                 {util.moneyFormat(maxAmount)} available...<br />
 
