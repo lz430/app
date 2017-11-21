@@ -8,6 +8,7 @@
         "php": ">=7.1",
         "bugsnag/bugsnag-laravel": "^2.0",
         "doctrine/dbal": "^2.5",
+        "greggilbert/recaptcha": "^2.2",
         "guzzlehttp/guzzle": "^6.2",
         "laracasts/utilities": "^2.1",
         "laravel/framework": "5.5.*",

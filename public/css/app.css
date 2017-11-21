@@ -3120,7 +3120,7 @@ body {
 }
 
 .tabs {
-  border-bottom: 4px solid #e70290;
+  border-bottom: 4px solid #41b1ac;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -3156,7 +3156,7 @@ body {
 }
 
 .tabs__tab--selected {
-  background: #e70290;
+  background: #41b1ac;
   color: #fff;
 }
 
@@ -3767,6 +3767,12 @@ comparepage {
   margin-bottom: 1.5rem;
   margin-top: .5rem;
   padding: .5rem 1rem;
+}
+
+.request-email__captcha {
+  margin-top: .5rem;
+  -webkit-transform: scale(0.85);
+          transform: scale(0.85);
 }
 
 .request-email__footer {
