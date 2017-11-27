@@ -61746,6 +61746,54 @@ var DealDetails = function (_React$PureComponent) {
                         'div',
                         { className: 'modal__body deal-details__modal-body' },
                         _react2.default.createElement(
+                            'h3',
+                            null,
+                            'Specifications'
+                        ),
+                        _react2.default.createElement('hr', null),
+                        _react2.default.createElement(
+                            'h4',
+                            null,
+                            'Dimensions'
+                        ),
+                        _react2.default.createElement(
+                            'ul',
+                            null,
+                            this.state.dimensions ? this.state.dimensions.map(function (dimension, index) {
+                                return _react2.default.createElement(
+                                    'li',
+                                    { key: index },
+                                    dimension.feature,
+                                    ': ',
+                                    dimension.content
+                                );
+                            }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                        ),
+                        _react2.default.createElement(
+                            'h4',
+                            null,
+                            'Warranties'
+                        ),
+                        _react2.default.createElement(
+                            'ul',
+                            null,
+                            this.state.warranties ? this.state.warranties.map(function (dimension, index) {
+                                return _react2.default.createElement(
+                                    'li',
+                                    { key: index },
+                                    dimension.feature,
+                                    ': ',
+                                    dimension.content
+                                );
+                            }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                        ),
+                        _react2.default.createElement(
+                            'h3',
+                            null,
+                            'Features'
+                        ),
+                        _react2.default.createElement('hr', null),
+                        _react2.default.createElement(
                             'ul',
                             null,
                             deal.features.map(function (feature, index) {
@@ -61819,54 +61867,6 @@ var DealDetails = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         { className: 'modal__body deal-details__modal-body' },
-                        _react2.default.createElement(
-                            'h3',
-                            null,
-                            'Specifications'
-                        ),
-                        _react2.default.createElement('hr', null),
-                        _react2.default.createElement(
-                            'h4',
-                            null,
-                            'Dimensions'
-                        ),
-                        _react2.default.createElement(
-                            'ul',
-                            null,
-                            this.state.dimensions ? this.state.dimensions.map(function (dimension, index) {
-                                return _react2.default.createElement(
-                                    'li',
-                                    { key: index },
-                                    dimension.feature,
-                                    ': ',
-                                    dimension.content
-                                );
-                            }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
-                        ),
-                        _react2.default.createElement(
-                            'h4',
-                            null,
-                            'Warranties'
-                        ),
-                        _react2.default.createElement(
-                            'ul',
-                            null,
-                            this.state.warranties ? this.state.warranties.map(function (dimension, index) {
-                                return _react2.default.createElement(
-                                    'li',
-                                    { key: index },
-                                    dimension.feature,
-                                    ': ',
-                                    dimension.content
-                                );
-                            }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
-                        ),
-                        _react2.default.createElement(
-                            'h3',
-                            null,
-                            'Features'
-                        ),
-                        _react2.default.createElement('hr', null),
                         _react2.default.createElement(
                             'ul',
                             null,

@@ -214,6 +214,40 @@ class DealDetails extends React.PureComponent {
                         </div>
                     </div>
                     <div className="modal__body deal-details__modal-body">
+                        <h3>Specifications</h3>
+                        <hr />
+
+                        <h4>Dimensions</h4>
+                        <ul>
+                            {this.state.dimensions ? (
+                                this.state.dimensions.map((dimension, index) => {
+                                    return (
+                                        <li key={index}>
+                                            {dimension.feature}: {dimension.content}
+                                        </li>
+                                    );
+                                })
+                            ) : (
+                                <SVGInline svg={miscicons['loading']} />
+                            )}
+                        </ul>
+
+                        <h4>Warranties</h4>
+                        <ul>
+                            {this.state.warranties ? (
+                                this.state.warranties.map((dimension, index) => {
+                                    return (
+                                        <li key={index}>
+                                            {dimension.feature}: {dimension.content}
+                                        </li>
+                                    );
+                                })
+                            ) : (
+                                <SVGInline svg={miscicons['loading']} />
+                            )}
+                        </ul>
+                        <h3>Features</h3>
+                        <hr />
                         <ul>
                             {deal.features.map((feature, index) => {
                                 return <li key={index}>{feature.feature}</li>;
@@ -256,42 +290,6 @@ class DealDetails extends React.PureComponent {
                         </div>
                     </div>
                     <div className="modal__body deal-details__modal-body">
-                        <h3>Specifications</h3>
-                        <hr />
-
-                        <h4>Dimensions</h4>
-                        <ul>
-                            {this.state.dimensions ? (
-                                this.state.dimensions.map((dimension, index) => {
-                                    return (
-                                        <li key={index}>
-                                            {dimension.feature}: {dimension.content}
-                                        </li>
-                                    );
-                                })
-                            ) : (
-                                <SVGInline svg={miscicons['loading']} />
-                            )}
-                        </ul>
-
-                        <h4>Warranties</h4>
-                        <ul>
-                            {this.state.warranties ? (
-                                this.state.warranties.map((dimension, index) => {
-                                    return (
-                                        <li key={index}>
-                                            {dimension.feature}: {dimension.content}
-                                        </li>
-                                    );
-                                })
-                            ) : (
-                                <SVGInline svg={miscicons['loading']} />
-                            )}
-                        </ul>
-
-                        <h3>Features</h3>
-                        <hr />
-
                         <ul>
                             {this.props.deal.vauto_features.map(
                                 (feature, index) => {
