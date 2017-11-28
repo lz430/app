@@ -52648,39 +52648,71 @@ var Deals = function (_React$PureComponent) {
         value: function render() {
             var _this2 = this;
 
-            return _react2.default.createElement(
-                'div',
-                { className: 'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare') },
-                this.props.deals ? this.props.deals.map(function (deal, index) {
-                    return _react2.default.createElement(
-                        _Deal2.default,
-                        { deal: deal, key: index },
+            if (this.props.deals && this.props.deals.length) {
+                return _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare') },
+                        this.props.deals ? this.props.deals.map(function (deal, index) {
+                            return _react2.default.createElement(
+                                _Deal2.default,
+                                { deal: deal, key: index },
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'deal__buttons' },
+                                    _react2.default.createElement(
+                                        'button',
+                                        {
+                                            className: _this2.compareButtonClass(deal),
+                                            onClick: _this2.props.toggleCompare.bind(null, deal)
+                                        },
+                                        'Add to Compare'
+                                    ),
+                                    _react2.default.createElement(
+                                        'button',
+                                        {
+                                            onClick: function onClick() {
+                                                return window.location = '/deals/' + deal.id;
+                                            },
+                                            className: 'deal__button deal__button--small deal__button--pink deal__button'
+                                        },
+                                        'View Details'
+                                    )
+                                )
+                            );
+                        }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }),
+                        this.renderShowMoreButton()
+                    )
+                );
+            } else {
+                return _react2.default.createElement(
+                    'div',
+                    { className: 'deals__no-matches' },
+                    _react2.default.createElement(
+                        'div',
+                        null,
                         _react2.default.createElement(
-                            'div',
-                            { className: 'deal__buttons' },
-                            _react2.default.createElement(
-                                'button',
-                                {
-                                    className: _this2.compareButtonClass(deal),
-                                    onClick: _this2.props.toggleCompare.bind(null, deal)
-                                },
-                                'Add to Compare'
-                            ),
-                            _react2.default.createElement(
-                                'button',
-                                {
-                                    onClick: function onClick() {
-                                        return window.location = '/deals/' + deal.id;
-                                    },
-                                    className: 'deal__button deal__button--small deal__button--pink deal__button'
-                                },
-                                'View Details'
-                            )
+                            'p',
+                            null,
+                            'Our service is not currently available in your area. Please provide your email so that we can notify you when we arrive. We apologize for the inconvenience.'
                         )
-                    );
-                }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }),
-                this.renderShowMoreButton()
-            );
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement('input', { className: 'deals__input', placeholder: 'Enter your email address' }),
+                        _react2.default.createElement(
+                            'button',
+                            { className: 'deals__button deals__button--blue'
+                                // onClick={() =>(do something)}
+                            },
+                            'Submit Email'
+                        )
+                    )
+                );
+            }
         }
     }]);
 
@@ -52707,7 +52739,8 @@ function mapStateToProps(state) {
         dealPage: state.dealPage,
         dealPageTotal: state.dealPageTotal,
         compareList: state.compareList,
-        requestingMoreDeals: state.requestingMoreDeals
+        requestingMoreDeals: state.requestingMoreDeals,
+        zipInRange: state.zipInRange
     };
 }
 
@@ -58832,6 +58865,7 @@ var ZipcodeFinder = function (_React$PureComponent) {
 
         _this.state = {
             editing: false,
+            zipError: false,
             zipcode: props.zipcode
         };
 
@@ -58844,7 +58878,10 @@ var ZipcodeFinder = function (_React$PureComponent) {
     _createClass(ZipcodeFinder, [{
         key: 'isValid',
         value: function isValid() {
-            return this.state.zipcode && this.state.zipcode.length === 5 && parseInt(this.state.zipcode).toString() === this.state.zipcode;
+            if (!(this.state.zipcode && this.state.zipcode.length === 5)) {
+                this.setState({ zipError: true });
+            }
+            return parseInt(this.state.zipcode).toString() === this.state.zipcode;
         }
     }, {
         key: 'saveZip',
@@ -58859,7 +58896,8 @@ var ZipcodeFinder = function (_React$PureComponent) {
         key: 'handleChange',
         value: function handleChange(event) {
             this.setState({
-                zipcode: event.target.value
+                zipcode: event.target.value,
+                zipError: false
             });
         }
     }, {
@@ -58867,54 +58905,67 @@ var ZipcodeFinder = function (_React$PureComponent) {
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                { className: 'zipcode-finder' },
+                null,
                 _react2.default.createElement(
                     'div',
-                    { className: 'zipcode-finder__info' },
+                    { className: 'zipcode-finder' },
                     _react2.default.createElement(
                         'div',
-                        { className: 'zipcode-finder___count' },
-                        this.props.deals ? this.props.deals.length + ' results for:' : ''
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        this.props.city ? '' : 'Zip Code'
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'zipcode-finder__zipcode' },
-                        this.props.city || this.props.zipcode || '_____'
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'zipcode-finder__form' },
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        'Change Zip:'
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        null,
+                        { className: 'zipcode-finder__info' },
                         _react2.default.createElement(
-                            'form',
-                            { onSubmit: this.saveZip },
-                            _react2.default.createElement('input', {
-                                type: 'number',
-                                className: 'zipcode-finder__input',
-                                placeholder: this.props.zipcode,
-                                onChange: this.handleChange
-                            }),
+                            'div',
+                            { className: 'zipcode-finder___count' },
+                            this.props.deals ? this.props.deals.length + ' results for:' : ''
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            this.props.city ? '' : 'Zip Code'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'zipcode-finder__zipcode' },
+                            this.props.city || this.props.zipcode || '_____'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'zipcode-finder__form' },
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            'Change Zip:'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            null,
                             _react2.default.createElement(
-                                'button',
-                                { className: 'zipcode-finder__button zipcode-finder__button--dark-bg' },
-                                'GO'
+                                'form',
+                                { onSubmit: this.saveZip },
+                                _react2.default.createElement('input', {
+                                    type: 'number',
+                                    className: 'zipcode-finder__input',
+                                    placeholder: this.props.zipcode,
+                                    onChange: this.handleChange
+                                }),
+                                _react2.default.createElement(
+                                    'button',
+                                    { className: 'zipcode-finder__button zipcode-finder__button--dark-bg' },
+                                    'GO'
+                                )
                             )
                         )
                     )
-                )
+                ),
+                this.state.zipError ? _react2.default.createElement(
+                    'div',
+                    { className: 'zipcode-finder__errors' },
+                    _react2.default.createElement(
+                        'span',
+                        null,
+                        'Please enter your 5-digit zip code.'
+                    )
+                ) : ''
             );
         }
     }]);

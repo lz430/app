@@ -9,48 +9,6 @@
   height: $sortbar-height + $filterbar-height;
   padding: 20px 15px;
 
-  &__count {
-    width: 100%;
-  }
-
-  &__count-number {
-    font-weight: bold;
-    margin-right: 5px;
-  }
-
-  &__info {
-    align-content: center;
-    display: flex;
-    flex: 1;
-    flex-flow: column nowrap;
-    justify-content: space-between;
-    padding-right: 8px;
-  }
-
-  &__form {
-    align-self: center;
-    color: $color-grey;
-    font-size: small;
-    flex: 1;
-  }
-
-  &__input {
-    @include input;
-    margin-right: 5px;
-    width: 55%;
-  }
-
-  &__zipcode {
-    font-size: 1.4rem;
-  }
-
-  &__buttons {
-    align-items: center;
-    display: flex;
-    flex: 2;
-    justify-content: flex-end;
-  }
-
   &__button {
     @include button;
     font-size: .5rem;
@@ -72,5 +30,58 @@
         fill: $inactive-color;
       }
     }
+  }
+
+  &__buttons {
+    align-items: center;
+    display: flex;
+    flex: 2;
+    justify-content: flex-end;
+  }
+
+  &__count {
+    width: 100%;
+  }
+
+  &__count-number {
+    font-weight: bold;
+    margin-right: 5px;
+  }
+
+  &__errors {
+    align-content: center;
+    background-color: white;
+    border: 1px solid;
+    border-color: $color-error;
+    color: $color-error;
+    font-size: .9rem;
+    justify-content: space-around;
+    margin: .5em;
+  }
+
+  &__form {
+    align-self: center;
+    color: $color-grey;
+    font-size: small;
+    flex: 1;
+  }
+
+  &__info {
+    align-content: center;
+    display: flex;
+    flex: 1;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    padding-right: 8px;
+  }
+
+  &__input {
+    @include input;
+    margin-right: 5px;
+    width: 60%;
+  }
+
+  &__zipcode {
+    font-size: 1.4rem;
   }
 }

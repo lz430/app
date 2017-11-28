@@ -20,7 +20,7 @@ class Deals extends React.PureComponent {
     renderShowMoreButton() {
         if (this.props.deals && this.props.requestingMoreDeals) {
             // Deals are already loaded and we have already requested more deals
-            return <SVGInline svg={miscicons['loading']} />;
+            return <SVGInline svg={miscicons['loading']}/>;
         }
 
         if (
@@ -42,41 +42,62 @@ class Deals extends React.PureComponent {
     }
 
     render() {
-        return (
-            <div className={`deals ${this.props.compareList.length > 0 ? '' : 'no-compare'}`}>
-                {this.props.deals ? (
-                    this.props.deals.map((deal, index) => {
-                        return (
-                            <Deal deal={deal} key={index}>
-                                <div className="deal__buttons">
-                                    <button
-                                        className={this.compareButtonClass(
-                                            deal
-                                        )}
-                                        onClick={this.props.toggleCompare.bind(
-                                            null,
-                                            deal
-                                        )}
-                                    >
-                                        Add to Compare
-                                    </button>
-                                    <button
-                                        onClick={() =>
-                                            (window.location = `/deals/${deal.id}`)}
-                                        className="deal__button deal__button--small deal__button--pink deal__button"
-                                    >
-                                        View Details
-                                    </button>
-                                </div>
-                            </Deal>
-                        );
-                    })
-                ) : (
-                    <SVGInline svg={miscicons['loading']} />
-                )}
-                {this.renderShowMoreButton()}
-            </div>
-        );
+        if (this.props.deals && this.props.deals.length) {
+            return (
+                <div>
+                    <div className={`deals ${this.props.compareList.length > 0 ? '' : 'no-compare'}`}>
+                        {this.props.deals ? (
+                            this.props.deals.map((deal, index) => {
+                                return (
+                                    <Deal deal={deal} key={index}>
+                                        <div className="deal__buttons">
+                                            <button
+                                                className={this.compareButtonClass(
+                                                    deal
+                                                )}
+                                                onClick={this.props.toggleCompare.bind(
+                                                    null,
+                                                    deal
+                                                )}
+                                            >
+                                                Add to Compare
+                                            </button>
+                                            <button
+                                                onClick={() =>
+                                                    (window.location = `/deals/${deal.id}`)}
+                                                className="deal__button deal__button--small deal__button--pink deal__button"
+                                            >
+                                                View Details
+                                            </button>
+                                        </div>
+                                    </Deal>
+                                );
+                            })
+                        ) : (
+                            <SVGInline svg={miscicons['loading']} />
+                        )}
+                        {this.renderShowMoreButton()}
+                    </div>
+                </div>
+            )
+        }
+
+        else {
+            return (
+                <div className="deals__no-matches">
+                    <div>
+                        <p>Our service is not currently available in your area. Please provide your email so that we can notify you when we arrive. We apologize for the inconvenience.</p>
+                    </div>
+                    <div>
+                        <input className="deals__input" placeholder="Enter your email address" />
+                        <button className="deals__button deals__button--blue"
+                            // onClick={() =>(do something)}
+                        >Submit Email</button>
+                    </div>
+                </div>
+            )
+
+        }
     }
 }
 
@@ -103,6 +124,7 @@ function mapStateToProps(state) {
         dealPageTotal: state.dealPageTotal,
         compareList: state.compareList,
         requestingMoreDeals: state.requestingMoreDeals,
+        zipInRange: state.zipInRange,
     };
 }
 

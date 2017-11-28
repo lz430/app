@@ -1347,6 +1347,23 @@ body {
   }
 }
 
+.deals__no-matches {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 1.5em;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+  margin: 1rem auto;
+  text-align: center;
+  width: 70%;
+}
+
 .deals__show-more {
   padding-top: 15px;
   text-align: center;
@@ -1427,6 +1444,23 @@ body {
 .deals__button.disabled {
   background: #aaa;
   pointer-events: none;
+}
+
+.deals__input {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-top: 2px;
+  padding: 8px;
+  width: 100%;
+  font-size: .6em;
+  margin-right: 1rem;
+  width: 70%;
+}
+
+.deals__input[type=number]::-webkit-inner-spin-button,
+.deals__input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .deals__title {
@@ -1850,79 +1884,6 @@ body {
   padding: 20px 15px;
 }
 
-.zipcode-finder__count {
-  width: 100%;
-}
-
-.zipcode-finder__count-number {
-  font-weight: bold;
-  margin-right: 5px;
-}
-
-.zipcode-finder__info {
-  -ms-flex-line-pack: center;
-      align-content: center;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-flow: column nowrap;
-          flex-flow: column nowrap;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  padding-right: 8px;
-}
-
-.zipcode-finder__form {
-  -ms-flex-item-align: center;
-      align-self: center;
-  color: #ced4d9;
-  font-size: small;
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-}
-
-.zipcode-finder__input {
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  margin-top: 2px;
-  padding: 8px;
-  width: 100%;
-  margin-right: 5px;
-  width: 55%;
-}
-
-.zipcode-finder__input[type=number]::-webkit-inner-spin-button,
-.zipcode-finder__input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.zipcode-finder__zipcode {
-  font-size: 1.4rem;
-}
-
-.zipcode-finder__buttons {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-flex: 2;
-      -ms-flex: 2;
-          flex: 2;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-}
-
 .zipcode-finder__button {
   background: transparent;
   border: 1px solid #ccc;
@@ -2015,6 +1976,92 @@ body {
 
 .zipcode-finder__button--inactive svg {
   fill: rgba(204, 204, 204, 0.5);
+}
+
+.zipcode-finder__buttons {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 2;
+      -ms-flex: 2;
+          flex: 2;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.zipcode-finder__count {
+  width: 100%;
+}
+
+.zipcode-finder__count-number {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.zipcode-finder__errors {
+  -ms-flex-line-pack: center;
+      align-content: center;
+  background-color: white;
+  border: 1px solid;
+  border-color: #ac0000;
+  color: #ac0000;
+  font-size: .9rem;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin: .5em;
+}
+
+.zipcode-finder__form {
+  -ms-flex-item-align: center;
+      align-self: center;
+  color: #ced4d9;
+  font-size: small;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.zipcode-finder__info {
+  -ms-flex-line-pack: center;
+      align-content: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-right: 8px;
+}
+
+.zipcode-finder__input {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-top: 2px;
+  padding: 8px;
+  width: 100%;
+  margin-right: 5px;
+  width: 60%;
+}
+
+.zipcode-finder__input[type=number]::-webkit-inner-spin-button,
+.zipcode-finder__input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.zipcode-finder__zipcode {
+  font-size: 1.4rem;
 }
 
 .sidebar-filters {
