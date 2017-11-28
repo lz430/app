@@ -503,10 +503,11 @@ class Importer
 
                 $contents = array_map('trim', explode(' / ', $content));
 
-                foreach ($features as $index => $feature) {
+                foreach ($features as $index => $thisfeature) {
                     $all[] = [
-                        'feature' => "$prefix $feature",
-                        'content' => $contents[$index],
+                        'feature' => "$prefix $thisfeature",
+                        // If there's only one content value for more than one features, grab the first on fail
+                        'content' => array_get($contents, $index, reset($contents)),
                     ];
                 }
             } else {
