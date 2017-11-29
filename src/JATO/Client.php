@@ -147,6 +147,7 @@ class Client
 
     public function modelsVersionsByModelName($modelName)
     {
+        $modelName = $this->makeModelNameUrlFriendly($modelName);
         return json_decode(
             (string) $this->guzzleClient->request('GET', "models/$modelName/versions")->getBody(),
             true
@@ -155,6 +156,7 @@ class Client
 
     public function modelsVersionsByModelNameAsync($modelName)
     {
+        $modelName = $this->makeModelNameUrlFriendly($modelName);
         return $this->guzzleClient->requestAsync('GET', "models/$modelName/versions");
     }
 
@@ -200,6 +202,11 @@ class Client
             )->getBody(),
             true
         );
+    }
+
+    private function makeModelNameUrlFriendly($modelName)
+    {
+        return strtolower(str_replace(' ', '-', $modelName));
     }
 
     private function authorize($username, $password)
