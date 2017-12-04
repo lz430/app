@@ -90,6 +90,9 @@ const api = {
             },
         });
     },
+    checkZipInRange: code => {
+        return window.axios.get(`/api/zip-codes/${code}`);
+    },
 };
 
 export default api;

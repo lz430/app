@@ -19,6 +19,7 @@ class ZipcodeFinder extends React.PureComponent {
     }
 
     isValid() {
+        // @todo check if is a number
         if (!(this.state.zipcode && this.state.zipcode.length === 5)){
             this.setState({ zipError: true });
         }
@@ -89,6 +90,7 @@ class ZipcodeFinder extends React.PureComponent {
 ZipcodeFinder.propTypes = {
     zipcode: PropTypes.string,
     city: PropTypes.string,
+    zipInRange: PropTypes.bool,
 };
 
 const mapStateToProps = state => {
@@ -96,6 +98,7 @@ const mapStateToProps = state => {
         city: state.city,
         deals: state.deals,
         zipcode: state.zipcode,
+        zipInRange: state.zipInRange,
     };
 };
 

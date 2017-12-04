@@ -53,7 +53,12 @@ return [
         'partner_id' => env('MARKET_SCAN_PARTNER_ID'),
         'account_number' => env('MARKET_SCAN_ACCOUNT_NUMBER'),
     ],
+
     'hubspot' => [
         'api_key' => env('HUBSPOT_API_KEY'),
+    ],
+
+    'google' => [
+        'api_key' => env('GOOGLE_API_KEY'),
     ],
 ];

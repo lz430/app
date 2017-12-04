@@ -199,6 +199,11 @@ const reducer = (state, action) => {
                 zipcode: action.zipcode,
                 city: action.city,
             });
+
+        case ActionTypes.SET_ZIP_IN_RANGE:
+            return Object.assign({}, state, {
+                zipInRange: action.supported,
+            });
     }
 
     return state;

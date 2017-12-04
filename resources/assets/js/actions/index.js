@@ -20,6 +20,7 @@ const withStateDefaults = (state, changed) => {
             sortAscending: state.sortAscending,
             page: 1,
             zipcode: state.zipcode,
+            zipInRange: state.zipInRange,
         },
         changed
     );
@@ -270,6 +271,25 @@ export function setIsEmployee(isEmployee) {
     };
 }
 
+
+export function checkZipInRange(code) {
+   return dispatch => {
+       api.checkZipInRange(code).then(data => {;
+           return dispatch(setZipInRange(data.data.supported));
+       })
+   }
+
+}
+
+export function setZipInRange(supported) {
+    return dispatch => {
+        return dispatch({
+            type: ActionTypes.SET_ZIP_IN_RANGE,
+            supported: supported,
+        })
+    }
+}
+
 export function receiveMoreDeals(data) {
     return dispatch => {
         dispatch({
@@ -480,6 +500,8 @@ export function setZipCode(zipcode) {
             type: ActionTypes.SET_ZIP_CODE,
             zipcode,
         });
+        
+        dispatch(checkZipInRange(zipcode))
     };
 }
 
