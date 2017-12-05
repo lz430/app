@@ -1,7 +1,7 @@
 import React from 'react';
 import R from 'ramda';
 import fuelapi from 'src/fuelapi';
-import DealPrice from 'components/DealPrice';
+import DealPrice from 'components/Deals/DealPrice';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 

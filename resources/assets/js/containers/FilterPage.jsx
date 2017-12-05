@@ -3,7 +3,7 @@ import R from 'ramda';
 import Modal from 'components/Modal';
 import MakeSelector from 'components/MakeSelector';
 import PropTypes from 'prop-types';
-import Deals from 'components/Deals';
+import Deals from 'components/Deals/Deals';
 import Sortbar from 'components/Sortbar';
 import Filterbar from 'components/Filterbar';
 import CompareBar from 'components/CompareBar';

@@ -51,10 +51,6 @@ php artisan vauto:load
 php artisan db:seed --class=DummySavedVehicleSeeder
 ```
 
-## Create a Google API Key
-
-Visit https://console.developers.google.com/apis/credentials?project=_ and register for a new API key
-
 ## Javascript Tests
 ```
 yarn run test

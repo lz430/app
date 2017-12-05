@@ -59,6 +59,7 @@ const reducer = (state, action) => {
                 deals: null,
                 dealPageTotal: null,
                 dealPage: null,
+                requestingMoreDeals: true,
             });
         case ActionTypes.RECEIVE_DEALS:
             return Object.assign({}, state, {
@@ -68,6 +69,7 @@ const reducer = (state, action) => {
                     action.data.data.meta.pagination.current_page,
                     action.data.data.meta.pagination.total_pages
                 ),
+                requestingMoreDeals: false,
             });
         case ActionTypes.RECEIVE_DEAL_REBATES:
             let nextDealRebates = Object.assign({}, state.dealRebates);

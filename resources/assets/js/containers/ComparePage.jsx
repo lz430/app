@@ -6,7 +6,7 @@ import R from 'ramda';
 import qs from 'qs';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
-import Deal from 'components/Deal';
+import Deal from 'components/Deals/Deal';
 import Modal from 'components/Modal';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import rebates from 'src/rebates';
