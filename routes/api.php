@@ -37,4 +37,3 @@ Route::post('hubspot/not-in-area', 'HubspotController@notInServiceArea')->name('
 Route::group(['prefix' => 'webhook'], function () {
     Route::post('route-one', 'RouteOneWebhookController@handleWebhook')->name('route-one-webhook');
 });
-

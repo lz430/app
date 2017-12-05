@@ -30,20 +30,26 @@ class NoMatchingDeals extends Component {
                 <div>
                     <p>{ this.state.formSubmitted ? formSubmittedMessage : formNotSubmittedMessage }</p>
                 </div>
-                <form onSubmit={ (e) => this.handleSubmit(e) }>
-                    <div>
-                        <input
-                            className="deals__input"
-                            placeholder="Enter your email address"
-                            onChange={(e) => { this.setState({email: e.target.value})}}
-                            value={ this.state.email}
-                            type="email"/>
-                        <button className="deals__button deals__button--blue" type="submit">
-                            Submit Email
-                        </button>
+                {!this.state.formSubmitted ? (
+                        <form onSubmit={(e) => this.handleSubmit(e)}>
+                            <div>
+                                <input
+                                    className="deals__input"
+                                    placeholder="Enter your email address"
+                                    onChange={(e) => {
+                                        this.setState({email: e.target.value})
+                                    }}
+                                    value={this.state.email}
+                                    type="email"/>
+                                <button className="deals__button deals__button--blue" type="submit">
+                                    Submit Email
+                                </button>
 
-                    </div>
-                </form>
+                            </div>
+                        </form>
+                    ) :
+                    ''
+                }
             </div>
         );
     }
