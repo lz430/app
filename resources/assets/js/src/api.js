@@ -6,6 +6,9 @@ const api = {
     getBodyStyles: () => {
         return window.axios.get('/api/body-styles');
     },
+    checkZipInRange: code => {
+        return window.axios.get(`/api/zip-codes/${code}`);
+    },
     getDimensions: jato_vehicle_id => {
         return window.axios.get('/api/dimensions', {
             params: {
@@ -41,21 +44,21 @@ const api = {
         return window.axios.get('/api/fuel-types');
     },
     getDeals: ({
-        makeIds,
-        modelIds,
-        bodyStyles,
-        fuelType,
-        transmissionType,
-        segment,
-        features,
-        includes,
-        sortColumn,
-        sortAscending,
-        page,
-        latitude,
-        longitude,
-        zipcode,
-    }) => {
+                   makeIds,
+                   modelIds,
+                   bodyStyles,
+                   fuelType,
+                   transmissionType,
+                   segment,
+                   features,
+                   includes,
+                   sortColumn,
+                   sortAscending,
+                   page,
+                   latitude,
+                   longitude,
+                   zipcode,
+               }) => {
         return window.axios.get('/api/deals', {
             params: {
                 make_ids: makeIds,
@@ -89,9 +92,6 @@ const api = {
                 purchaseId,
             },
         });
-    },
-    checkZipInRange: code => {
-        return window.axios.get(`/api/zip-codes/${code}`);
     },
 };
 

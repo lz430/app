@@ -5167,6 +5167,9 @@ var api = {
     getBodyStyles: function getBodyStyles() {
         return window.axios.get('/api/body-styles');
     },
+    checkZipInRange: function checkZipInRange(code) {
+        return window.axios.get('/api/zip-codes/' + code);
+    },
     getDimensions: function getDimensions(jato_vehicle_id) {
         return window.axios.get('/api/dimensions', {
             params: {
@@ -5252,9 +5255,6 @@ var api = {
                 purchaseId: purchaseId
             }
         });
-    },
-    checkZipInRange: function checkZipInRange(code) {
-        return window.axios.get('/api/zip-codes/' + code);
     }
 };
 
@@ -52638,7 +52638,12 @@ var Deals = function (_React$PureComponent) {
     function Deals() {
         _classCallCheck(this, Deals);
 
-        return _possibleConstructorReturn(this, (Deals.__proto__ || Object.getPrototypeOf(Deals)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (Deals.__proto__ || Object.getPrototypeOf(Deals)).call(this));
+
+        _this.state = {
+            email: ''
+        };
+        return _this;
     }
 
     _createClass(Deals, [{
@@ -52743,15 +52748,20 @@ var Deals = function (_React$PureComponent) {
                         )
                     ),
                     _react2.default.createElement(
-                        'div',
+                        'form',
                         null,
-                        _react2.default.createElement('input', { className: 'deals__input', placeholder: 'Enter your email address' }),
                         _react2.default.createElement(
-                            'button',
-                            { className: 'deals__button deals__button--blue'
-                                // onClick={() =>(do something)}
-                            },
-                            'Submit Email'
+                            'div',
+                            null,
+                            _react2.default.createElement('input', { className: 'deals__input', placeholder: 'Enter your email address', type: 'email' }),
+                            _react2.default.createElement(
+                                'button',
+                                { className: 'deals__button deals__button--blue', type: 'submit',
+                                    onSubmit: function onSubmit() {
+                                        return window.location = '/not-in-area';
+                                    } },
+                                'Submit Email'
+                            )
                         )
                     )
                 );

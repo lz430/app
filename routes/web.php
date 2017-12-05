@@ -25,3 +25,4 @@ Route::group(['middleware' => 'auth'], function () {
 /** External: Opt-in Monster and Hubspot */
 Route::post('hubspot', 'HubspotController@updateContact')->name('hubspot.contact.update');
 Route::post('set-email', 'OptinMonsterController@setEmailSession')->name('set-email');
+Route::post('not-in-area', 'HubspotController@notInServiceArea')->name('not-in-area');

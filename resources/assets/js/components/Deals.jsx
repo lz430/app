@@ -8,6 +8,14 @@ import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 
 class Deals extends React.PureComponent {
+    constructor() {
+        super();
+
+        this.state = {
+            email: ''
+        }
+    }
+
     compareButtonClass(deal) {
         return (
             'deal__button deal__button--small deal__button--blue' +
@@ -101,13 +109,17 @@ class Deals extends React.PureComponent {
                         <p>Our service is not currently available in your area. Please provide your email so that we
                             can notify you when we arrive. We apologize for the inconvenience.</p>
                     </div>
-                    <div>
-                        <input className="deals__input" placeholder="Enter your email address"/>
-                        <button className="deals__button deals__button--blue"
-                            // onClick={() =>(do something)}
-                        >Submit Email
-                        </button>
-                    </div>
+                    <form>
+                        <div>
+                            <input className="deals__input" placeholder="Enter your email address" type="email"/>
+                            <button className="deals__button deals__button--blue" type="submit"
+                                onSubmit={() =>
+                                    (window.location = '/not-in-area')}>
+                                Submit Email
+                            </button>
+
+                        </div>
+                    </form>
                 </div>
             )
         }
