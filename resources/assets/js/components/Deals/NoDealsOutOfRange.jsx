@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import api from 'src/api';
 
 const formNotSubmittedMessage = "Our service is not currently available in your area. Please provide your email so that we can notify you when we arrive. We apologize for the inconvenience."
-const formSubmittedMessage = "Thank you! We will notify you when we arrive in your area";
+const formSubmittedMessage = "Thank you! We will notify you when we arrive in your area.";
 
 class NoMatchingDeals extends Component {
     constructor() {

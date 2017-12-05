@@ -52746,7 +52746,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var formNotSubmittedMessage = "Our service is not currently available in your area. Please provide your email so that we can notify you when we arrive. We apologize for the inconvenience.";
-var formSubmittedMessage = "Thank you! We will notify you when we arrive in your area";
+var formSubmittedMessage = "Thank you! We will notify you when we arrive in your area.";
 
 var NoMatchingDeals = function (_Component) {
     _inherits(NoMatchingDeals, _Component);
