@@ -26,24 +26,4 @@ class HubspotController extends Controller
 
         return response('ok');
     }
-
-    public function notInServiceArea($email)
-    {
-        $this->client->request(
-            'POST',
-            'https://forms.hubspot.com/uploads/form/v2/3388780/1d44d5dc-d865-447e-9a56-3f11388c21f8',
-            [
-                'form-params' => [
-                    'body' => $email,
-                    'pageName' => 'Not In Service Area',
-                ],
-
-                'headers' => [
-                    'content-type' => 'application/x-www-form-urlencoded'
-                ]
-            ]
-        );
-
-        return back()->with('status', 'Email saved! Thank you!');
-    }
 }

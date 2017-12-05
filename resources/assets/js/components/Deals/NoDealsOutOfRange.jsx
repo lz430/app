@@ -1,27 +1,44 @@
 import React, { Component } from 'react';
+import api from 'src/api';
+
+const formNotSubmittedMessage = "Our service is not currently available in your area. Please provide your email so that we can notify you when we arrive. We apologize for the inconvenience."
+const formSubmittedMessage = "Thank you! We will notify you when we arrive in your area";
 
 class NoMatchingDeals extends Component {
     constructor() {
         super();
 
         this.state = {
-
+            email: '',
+            formSubmitted: false
         }
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+
+        api
+            .postNotifyWhenInRange(this.state.email)
+            .then(() => {
+                this.setState({formSubmitted: true});
+            });
     }
 
     render() {
         return (
             <div className="deals__no-matches">
                 <div>
-                    <p>Our service is not currently available in your area. Please provide your email so that we
-                        can notify you when we arrive. We apologize for the inconvenience.</p>
+                    <p>{ this.state.formSubmitted ? formSubmittedMessage : formNotSubmittedMessage }</p>
                 </div>
-                <form>
+                <form onSubmit={ (e) => this.handleSubmit(e) }>
                     <div>
-                        <input className="deals__input" placeholder="Enter your email address" type="email"/>
-                        <button className="deals__button deals__button--blue" type="submit"
-                                onSubmit={() =>
-                                    (window.location = '/not-in-area')}>
+                        <input
+                            className="deals__input"
+                            placeholder="Enter your email address"
+                            onChange={(e) => { this.setState({email: e.target.value})}}
+                            value={ this.state.email}
+                            type="email"/>
+                        <button className="deals__button deals__button--blue" type="submit">
                             Submit Email
                         </button>
 

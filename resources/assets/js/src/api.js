@@ -93,6 +93,9 @@ const api = {
             },
         });
     },
+    postNotifyWhenInRange: (email = null) => {
+        return window.axios.post('/api/hubspot/not-in-area', {email});
+    },
 };
 
 export default api;

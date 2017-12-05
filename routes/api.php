@@ -27,6 +27,14 @@ Route::get('dimensions', 'DimensionsController@getDimensions')->name('dimensions
 Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');
 Route::get('zip-codes/{code}', 'ZipCodesController@show')->name('zipCodes.show');
 
+
+/**
+ * Third-party
+ */
+
+Route::post('hubspot/not-in-area', 'HubspotController@notInServiceArea')->name('hubspot.notInArea');
+
 Route::group(['prefix' => 'webhook'], function () {
     Route::post('route-one', 'RouteOneWebhookController@handleWebhook')->name('route-one-webhook');
 });
+

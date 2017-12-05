@@ -68,6 +68,29 @@ class Client
             true
         );
     }
+
+    public function notifyUserWhenInRange($email)
+    {
+        $response = json_decode(
+            (string) $this->guzzleClient->request(
+                'POST',
+                'https://forms.hubspot.com/uploads/form/v2/3388780/1d44d5dc-d865-447e-9a56-3f11388c21f8',
+                [
+                    'form-params' => [
+                        'body' => $email,
+                        'pageName' => 'Not In Service Area',
+                    ],
+
+                    'headers' => [
+                        'content-type' => 'application/x-www-form-urlencoded'
+                    ]
+                ]
+            )->getBody(),
+            true
+        );
+
+        dd($response);
+    }
     
     private function generateHubspotPayloadFrom($payload)
     {
