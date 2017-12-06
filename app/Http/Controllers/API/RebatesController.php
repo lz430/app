@@ -8,6 +8,7 @@ use DeliverMyRide\JATO\Client;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Facades\App\JATO\RebateMatches;
 
 class RebatesController extends Controller
 {
@@ -70,15 +71,15 @@ class RebatesController extends Controller
     {
         $types = [];
 
-        if ($this->matchesCash($incentive)) {
+        if (RebateMatches::cash($incentive)) {
             $types[] = 'cash';
         }
 
-        if ($this->matchesFinance($incentive)) {
+        if (RebateMatches::finance($incentive)) {
             $types[] = 'incentive';
         }
 
-        if ($this->matchesLease($incentive)) {
+        if (RebateMatches::lease($incentive)) {
             $types[] = 'lease';
         }
 
