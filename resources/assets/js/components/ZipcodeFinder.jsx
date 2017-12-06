@@ -18,14 +18,20 @@ class ZipcodeFinder extends React.PureComponent {
         this.handleChange = this.handleChange.bind(this);
     }
 
+    isANumber() {
+        return !isNaN(parseFloat(this.state.zipcode)) && isFinite(this.state.zipcode)
+    }
+
     isValid() {
-        // @todo check if is a number
-        if (!(this.state.zipcode && this.state.zipcode.length === 5)){
-            this.setState({ zipError: true });
+        if (this.isANumber()) {
+            if (!(this.state.zipcode && this.state.zipcode.length === 5)) {
+                this.setState({zipError: true});
+            }
+            return (
+                parseInt(this.state.zipcode).toString() === this.state.zipcode
+            );
         }
-        return (
-            parseInt(this.state.zipcode).toString() === this.state.zipcode
-        );
+        return (this.setState({zipError: true}));
     }
 
     saveZip(event) {

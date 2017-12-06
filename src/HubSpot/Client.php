@@ -81,7 +81,6 @@ class Client
                     ],
 
                     'headers' => [
-                        'postman-token' => '3e774019-1ff6-29b8-8d16-6464032726e8',
                         'cache-control' => 'no-cache',
                         'content-type' => 'application/x-www-form-urlencoded'
                     ],
@@ -89,8 +88,6 @@ class Client
             )->getBody(),
             true
         );
-
-        dd($response);
     }
     
     private function generateHubspotPayloadFrom($payload)

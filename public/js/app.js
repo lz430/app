@@ -52806,7 +52806,8 @@ var NoMatchingDeals = function (_Component) {
                                 _this3.setState({ email: e.target.value });
                             },
                             value: this.state.email,
-                            type: 'email' }),
+                            type: 'email',
+                            required: true }),
                         _react2.default.createElement(
                             'button',
                             { className: 'deals__button deals__button--blue', type: 'submit' },
@@ -59118,13 +59119,20 @@ var ZipcodeFinder = function (_React$PureComponent) {
     }
 
     _createClass(ZipcodeFinder, [{
+        key: 'isANumber',
+        value: function isANumber() {
+            return !isNaN(parseFloat(this.state.zipcode)) && isFinite(this.state.zipcode);
+        }
+    }, {
         key: 'isValid',
         value: function isValid() {
-            // @todo check if is a number
-            if (!(this.state.zipcode && this.state.zipcode.length === 5)) {
-                this.setState({ zipError: true });
+            if (this.isANumber()) {
+                if (!(this.state.zipcode && this.state.zipcode.length === 5)) {
+                    this.setState({ zipError: true });
+                }
+                return parseInt(this.state.zipcode).toString() === this.state.zipcode;
             }
-            return parseInt(this.state.zipcode).toString() === this.state.zipcode;
+            return this.setState({ zipError: true });
         }
     }, {
         key: 'saveZip',

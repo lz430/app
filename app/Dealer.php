@@ -43,7 +43,7 @@ class Dealer extends Model
      * Google maps coordinate accuracy is to 7 decimal places
      * Need to use GeomFromText in order to set the SRID
      */
-    public function scopeFilterByLocationDistance(Builder $query, $latitude, $longitude) : Builder
+    public function scopeServesLocation(Builder $query, $latitude, $longitude) : Builder
     {
         return $query->whereRaw("
                ST_Distance_sphere(

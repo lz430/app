@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import api from 'src/api';
 
-const formNotSubmittedMessage = "Our service is not currently available in your area. Please provide your email so that we can notify you when we arrive. We apologize for the inconvenience."
+const formNotSubmittedMessage = "Our service is not currently available in your area. Please provide your email so that we can notify you when we arrive. We apologize for the inconvenience.";
 const formSubmittedMessage = "Thank you! We will notify you when we arrive in your area.";
 
 class NoMatchingDeals extends Component {
@@ -40,7 +40,8 @@ class NoMatchingDeals extends Component {
                                         this.setState({email: e.target.value})
                                     }}
                                     value={this.state.email}
-                                    type="email"/>
+                                    type="email"
+                                    required/>
                                 <button className="deals__button deals__button--blue" type="submit">
                                     Submit Email
                                 </button>

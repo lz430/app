@@ -230,7 +230,7 @@ body {
 }
 
 .section__button--small {
-  font-size: .9rem;
+  font-size: 0.9rem;
   padding: 4px 15px;
 }
 
@@ -882,7 +882,7 @@ body {
   background: #000;
   height: 100vh;
   left: 0;
-  opacity: .5;
+  opacity: 0.5;
   position: fixed;
   top: 0;
   width: 100vw;
@@ -1030,7 +1030,7 @@ body {
 }
 
 .modal__close-button--small {
-  font-size: .9rem;
+  font-size: 0.9rem;
   padding: 4px 15px;
 }
 
@@ -1145,7 +1145,7 @@ body {
 }
 
 .sortbar__button--small {
-  font-size: .9rem;
+  font-size: 0.9rem;
   padding: 4px 15px;
 }
 
@@ -1407,7 +1407,7 @@ body {
 }
 
 .deals__button--small {
-  font-size: .9rem;
+  font-size: 0.9rem;
   padding: 4px 15px;
 }
 
@@ -1452,7 +1452,7 @@ body {
   margin-top: 2px;
   padding: 8px;
   width: 100%;
-  font-size: .6em;
+  font-size: 0.6em;
   margin-right: 1rem;
   width: 70%;
 }
@@ -1584,7 +1584,7 @@ body {
 }
 
 .deal__button--small {
-  font-size: .9rem;
+  font-size: 0.9rem;
   padding: 4px 15px;
 }
 
@@ -1624,7 +1624,7 @@ body {
 }
 
 .deal__button--small {
-  font-size: .8rem;
+  font-size: 0.8rem;
   padding: 10px 15px;
 }
 
@@ -1679,7 +1679,7 @@ body {
 }
 
 .apply-or-purchase__button--small {
-  font-size: .9rem;
+  font-size: 0.9rem;
   padding: 4px 15px;
 }
 
@@ -1835,7 +1835,7 @@ body {
 }
 
 .application-form__button--small {
-  font-size: .9rem;
+  font-size: 0.9rem;
   padding: 4px 15px;
 }
 
@@ -1894,7 +1894,7 @@ body {
   border-radius: 4px;
   text-decoration: none;
   text-align: center;
-  font-size: .5rem;
+  font-size: 0.5rem;
 }
 
 .zipcode-finder__button--invert {
@@ -1922,7 +1922,7 @@ body {
 }
 
 .zipcode-finder__button--small {
-  font-size: .9rem;
+  font-size: 0.9rem;
   padding: 4px 15px;
 }
 
@@ -2009,10 +2009,11 @@ body {
   border: 1px solid;
   border-color: #ac0000;
   color: #ac0000;
-  font-size: .9rem;
+  font-size: 0.9rem;
   -ms-flex-pack: distribute;
       justify-content: space-around;
-  margin: .5em;
+  margin: 0.5em;
+  padding: 0.5em;
 }
 
 .zipcode-finder__form {
@@ -2208,7 +2209,7 @@ body {
 
 .filter-style-selector__name {
   color: #ced4d9;
-  font-size: .7rem;
+  font-size: 0.7rem;
   width: 100%;
 }
 
@@ -2454,7 +2455,7 @@ body {
 }
 
 .deal-details__button--small {
-  font-size: .9rem;
+  font-size: 0.9rem;
   padding: 4px 15px;
 }
 
@@ -2494,7 +2495,7 @@ body {
 }
 
 .deal-details__button--small {
-  font-size: .8rem;
+  font-size: 0.8rem;
   padding: 10px 5px;
 }
 
@@ -2661,7 +2662,7 @@ body {
 }
 
 .compare-deal__button--small {
-  font-size: .9rem;
+  font-size: 0.9rem;
   padding: 4px 15px;
 }
 
@@ -2762,7 +2763,7 @@ body {
 }
 
 .compare-deal__cta__title {
-  font-size: .9rem;
+  font-size: 0.9rem;
   margin-right: auto;
 }
 
@@ -2819,7 +2820,7 @@ body {
 }
 
 .compare-deal__cta__button--small {
-  font-size: .9rem;
+  font-size: 0.9rem;
   padding: 4px 15px;
 }
 
@@ -2945,7 +2946,7 @@ body {
 }
 
 .compare-bar__compare-button--not-ready {
-  opacity: .6;
+  opacity: 0.6;
 }
 
 .compare-bar__compare-button__arrow {
@@ -3325,7 +3326,7 @@ body {
 }
 
 .disclaimer {
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
 .customer-type {
@@ -3362,7 +3363,7 @@ body {
   display: block;
   font-size: small;
   left: 1em;
-  padding: .3em 1em;
+  padding: 0.3em 1em;
   position: absolute;
   width: 240px;
   z-index: 98;
@@ -3543,7 +3544,7 @@ financing {
 }
 
 .financing__button--small {
-  font-size: .9rem;
+  font-size: 0.9rem;
   padding: 4px 15px;
 }
 
@@ -3687,7 +3688,7 @@ comparepage {
 
 .request-email__label {
   color: #1e2123;
-  font-size: .9rem;
+  font-size: 0.9rem;
   font-weight: bold;
 }
 
@@ -3707,13 +3708,13 @@ comparepage {
 
 .request-email__error {
   color: #ac0000;
-  font-size: .8rem;
+  font-size: 0.8rem;
   max-width: 288px;
 }
 
 .request-email__message {
   color: #41b1ac;
-  font-size: .9rem;
+  font-size: 0.9rem;
   margin: 10px 0;
   max-width: 288px;
 }
@@ -3770,7 +3771,7 @@ comparepage {
 }
 
 .request-email__button--small {
-  font-size: .9rem;
+  font-size: 0.9rem;
   padding: 4px 15px;
 }
 
@@ -3891,7 +3892,7 @@ comparepage {
 
 .view-apply__label {
   color: #1e2123;
-  font-size: .9rem;
+  font-size: 0.9rem;
   font-weight: bold;
 }
 
@@ -3911,13 +3912,13 @@ comparepage {
 
 .view-apply__error {
   color: #ac0000;
-  font-size: .8rem;
+  font-size: 0.8rem;
   max-width: 288px;
 }
 
 .view-apply__message {
   color: #41b1ac;
-  font-size: .9rem;
+  font-size: 0.9rem;
   margin: 10px 0;
   max-width: 288px;
 }
@@ -3974,7 +3975,7 @@ comparepage {
 }
 
 .view-apply__button--small {
-  font-size: .9rem;
+  font-size: 0.9rem;
   padding: 4px 15px;
 }
 
@@ -4145,7 +4146,7 @@ comparepage {
 }
 
 .thank-you__button--small {
-  font-size: .9rem;
+  font-size: 0.9rem;
   padding: 4px 15px;
 }
 

@@ -44,21 +44,21 @@ const api = {
         return window.axios.get('/api/fuel-types');
     },
     getDeals: ({
-                   makeIds,
-                   modelIds,
-                   bodyStyles,
-                   fuelType,
-                   transmissionType,
-                   segment,
-                   features,
-                   includes,
-                   sortColumn,
-                   sortAscending,
-                   page,
-                   latitude,
-                   longitude,
-                   zipcode,
-               }) => {
+        makeIds,
+        modelIds,
+        bodyStyles,
+        fuelType,
+        transmissionType,
+        segment,
+        features,
+        includes,
+        sortColumn,
+        sortAscending,
+        page,
+        latitude,
+        longitude,
+        zipcode,
+       }) => {
         return window.axios.get('/api/deals', {
             params: {
                 make_ids: makeIds,
