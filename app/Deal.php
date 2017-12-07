@@ -60,7 +60,7 @@ class Deal extends Model
      * Google maps coordinate accuracy is to 7 decimal places
      * Need to use GeomFromText in order to set the SRID
      */
-    public function scopeServesLocation(Builder $query, $latitude, $longitude) : Builder
+    public function scopeFilterByLocationDistance(Builder $query, $latitude, $longitude) : Builder
     {
         return $query->whereHas('dealer', function (Builder $q) use ($latitude, $longitude) {
             $q->whereRaw("

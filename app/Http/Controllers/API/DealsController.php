@@ -51,7 +51,7 @@ class DealsController extends BaseAPIController
     private function filterQueryByLocationDistance(Builder $query, Request $request) : Builder
     {
         if ($request->has('zipcode') && $zipcode = Zipcode::where('zipcode', $request->get('zipcode'))->first()) {
-            $query->servesLocation(
+            $query->filterByLocationDistance(
                 $zipcode->latitude,
                 $zipcode->longitude
             );

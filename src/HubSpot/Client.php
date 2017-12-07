@@ -71,18 +71,13 @@ class Client
 
     public function notifyUserWhenInRange($email)
     {
-        $response = json_decode(
+        return json_decode(
             (string) $this->guzzleClient->request(
                 'POST',
                 'https://forms.hubspot.com/uploads/form/v2/3388780/1d44d5dc-d865-447e-9a56-3f11388c21f8',
                 [
                     'form_params' => [
                         'email' => $email,
-                    ],
-
-                    'headers' => [
-                        'cache-control' => 'no-cache',
-                        'content-type' => 'application/x-www-form-urlencoded'
                     ],
                 ]
             )->getBody(),
