@@ -57,8 +57,4 @@ return [
     'hubspot' => [
         'api_key' => env('HUBSPOT_API_KEY'),
     ],
-
-    'google' => [
-        'api_key' => env('GOOGLE_API_KEY'),
-    ],
 ];
