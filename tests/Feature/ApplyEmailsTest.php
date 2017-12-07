@@ -73,7 +73,7 @@ class ApplyEmailsTest extends TestCase
             ]
         );
 
-        $response->assertRedirect(route('apply'));
+        $response->assertRedirect(route('request-email'));
     }
 
     /** @test */

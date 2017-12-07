@@ -11,12 +11,13 @@ import {
     windowResize,
 } from 'actions/index';
 import util from 'src/util';
+import {checkZipInRange} from "./actions/index";
 
 const urlStyle = util.getInitialBodyStyleFromUrl();
 
 const initialState = {
     /** Version **/
-    3: '<- increment the number to purge LocalStorage',
+    4: '<- increment the number to purge LocalStorage',
     /** End Version **/
     window: { width: window.innerWidth },
     smallFiltersShown: false,
@@ -53,6 +54,7 @@ const initialState = {
     sortAscending: true,
     compareList: [],
     zipcode: null,
+    zipInRange: null,
     city: null,
 };
 
@@ -75,6 +77,10 @@ export default () => {
         store.dispatch(requestModels());
         store.dispatch(requestBodyStyles());
         store.dispatch(requestFeatures());
+
+        if (store.getState().zipcode) {
+            store.dispatch(checkZipInRange(store.getState().zipcode));
+        }
 
         window.addEventListener('resize', () => {
             store.dispatch(windowResize(window.innerWidth));

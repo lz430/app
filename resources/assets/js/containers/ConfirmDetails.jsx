@@ -1,9 +1,8 @@
 import * as Actions from 'actions/index';
 import api from 'src/api';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
-import CompareBar from 'components/CompareBar';
 import { connect } from 'react-redux';
-import Deal from 'components/Deal';
+import Deal from 'components/Deals/Deal';
 import fuelapi from 'src/fuelapi';
 import fuelcolor from 'src/fuel-color-map';
 import Modal from 'components/Modal';

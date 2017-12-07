@@ -1,5 +1,6 @@
 @import '../variables';
 @import '../mixins/button';
+@import '../mixins/input';
 
 .deals {
   background: $color-background-primary;
@@ -18,6 +19,16 @@
     }
   }
 
+  &__no-matches {
+    display: flex;
+    font-size: 1.5em;
+    justify-content: center;
+    flex-flow: column;
+    margin: 1rem auto;
+    text-align: center;
+    width: 70%;
+  }
+
   &__show-more {
     padding-top: 15px;
     text-align: center;
@@ -28,8 +39,16 @@
     @include button;
   }
 
+  &__input {
+    @include input;
+    font-size: 0.6em;
+    margin-right: 1rem;
+    width: 70%;
+  }
+
   &__title {
     text-align: center;
     width: 100%;
   }
+
 }

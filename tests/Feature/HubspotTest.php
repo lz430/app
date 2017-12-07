@@ -33,11 +33,10 @@ class HubspotTest extends TestCase
         ]);
         
         $purchase->deal->versions()->save(factory(Version::class)->make());
-        
-        $this->withSession(['purchase' => $purchase])->post('receive-email', ['email' => 'test@example.com']);
 
-        Event::assertDispatched(UserDataChanged::class);
-        Event::assertDispatched(NewPurchaseInitiated::class);
+        $this->post('hubspot', ['bodystyle1' => 'test']);
+
+        Event::assertDispatched(CreateHubspotContact::class);
     }
 
     /** @test */

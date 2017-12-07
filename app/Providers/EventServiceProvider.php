@@ -22,6 +22,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\NewPurchaseInitiated' => [
             'App\Listeners\UpdateHubspotContact',
         ],
+        'App\Events\UserWantsNotificationWhenInRange' => [
+            'App\Listeners\NotifyHubspotUserWhenInRange',
+        ],
     ];
 
     /**
