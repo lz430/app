@@ -31,7 +31,7 @@ class RebatesController extends Controller
             $vin = request('vin');
             $zipcode = request('zipcode');
 
-            $version = Deal::where('vin', $vin)->with('versions')->firstOrFail()->versions->first();
+            $version = Deal::where('vin', $vin)->with('versions')->firstOrFail()->versions()->firstOrFail();
             $vehicleId = $version->jato_vehicle_id;
 
             $incentives = request()->has('selected_rebate_ids')
