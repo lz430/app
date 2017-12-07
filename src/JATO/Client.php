@@ -4,6 +4,8 @@ namespace DeliverMyRide\JATO;
 
 use Carbon\Carbon;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\ClientException;
+use Illuminate\Contracts\Logging\Log;
 
 class Client
 {
@@ -27,32 +29,24 @@ class Client
         return json_decode((string) $this->guzzleClient->request('GET', 'makes')->getBody(), true);
     }
 
-    public function incentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
+    public function incentivesByVehicleIdAndZipcode($vehicleId, $zipcode, $additionalParams = [])
     {
-        return json_decode((string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId", [
-            'query' => [
-                'zipCode' => $zipcode,
-            ],
-        ])->getBody(), true);
+        try {
+            return json_decode((string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId", [
+                'query' => array_merge([
+                    'zipCode' => $zipcode,
+                ], $additionalParams),
+            ])->getBody(), true);
+        } catch (ClientException $e) {
+            Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode");
+            return [];
+        }
     }
 
     public function featuresByVehicleIdAndCategoryId($vehicleId, $categoryId)
     {
         return json_decode(
             (string) $this->guzzleClient->request('GET', "features/$vehicleId/$categoryId?pageSize=100")->getBody(),
-            true
-        );
-    }
-
-    public function programsByVehicleIdAndCategoryIdAndZipCode($vehicleId, $categoryId, $zipcode)
-    {
-        return json_decode(
-            (string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId", [
-                'query' => [
-                    'category' => 8,
-                    'zipCode' => $zipcode,
-                ],
-            ])->getBody(),
             true
         );
     }
