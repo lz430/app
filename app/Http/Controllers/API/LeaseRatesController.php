@@ -13,10 +13,10 @@ class LeaseRatesController extends BaseAPIController
             'zipcode' => 'required|string',
         ]);
 
-        return $client->programsByVehicleIdAndCategoryIdAndZipCode(
+        return $client->incentivesByVehicleIdAndZipcode(
             request('jato_vehicle_id'),
-            8,
-            request('zipcode')
+            request('zipcode'),
+            ['category' => 8]
         )[0]['leaseRates'] ?? [];
     }
 }
