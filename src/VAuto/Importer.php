@@ -195,6 +195,8 @@ class Importer
                         );
                     }
 
+                    $this->backfillNullMsrpsFromVersionMsrp($versionDeal, $version);
+
                     $versionDeal->versions()->attach($version->id);
 
                     $this->saveVersionFeatures(
@@ -448,6 +450,13 @@ class Importer
                 : null,
             'is_current' => $version['isCurrent'],
         ]);
+    }
+
+    private function backfillNullMsrpsFromVersionMsrp($deal, $version)
+    {
+        if (! $deal->msrp && $version['msrp']) {
+            $deal->update(['msrp' => $version['msrp']]);
+        }
     }
 
     private function saveManufacturer(array $manufacturer)

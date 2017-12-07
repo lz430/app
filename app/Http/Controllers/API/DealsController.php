@@ -16,7 +16,7 @@ class DealsController extends BaseAPIController
 {
     private const TRANSFORMER = DealTransformer::class;
     private const RESOURCE_NAME = 'deals';
-    
+
     public function getDeals(Request $request, Client $client)
     {
         $this->validate($request, [
@@ -104,7 +104,7 @@ class DealsController extends BaseAPIController
 
         return $query;
     }
-    
+
     private function filterQueryByFeatures(Builder $query, Request $request) : Builder
     {
         if ($request->has('features')) {
@@ -114,7 +114,7 @@ class DealsController extends BaseAPIController
                 });
             }
         }
-        
+
         return $query;
     }
 }
