@@ -106,7 +106,7 @@ class RebateMatches
 
         foreach ($categories as $category => $types) {
             if ($incentive['categoryName'] == $category) {
-                if (in_array($incentive['typeName'] , $types)) {
+                if (in_array($incentive['typeName'], $types)) {
                     return true;
                 }
             }
