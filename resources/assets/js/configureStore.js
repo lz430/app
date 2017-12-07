@@ -39,7 +39,7 @@ const initialState = {
     segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
     selectedFuelType: null,
     selectedMakes: [],
-    isEmployee: false,
+    employeeBrand: false,
     selectedFeatures: [],
     selectedRebates: [],
     dealRebates: {},

@@ -762,7 +762,7 @@ exports.requestDeals = requestDeals;
 exports.requestMoreDeals = requestMoreDeals;
 exports.sortDeals = sortDeals;
 exports.receiveBodyStyles = receiveBodyStyles;
-exports.setIsEmployee = setIsEmployee;
+exports.setEmployeeBrand = setEmployeeBrand;
 exports.checkZipInRange = checkZipInRange;
 exports.setZipInRange = setZipInRange;
 exports.receiveMoreDeals = receiveMoreDeals;
@@ -1038,10 +1038,10 @@ function receiveBodyStyles(deals) {
     };
 }
 
-function setIsEmployee(isEmployee) {
+function setEmployeeBrand(employeeBrand) {
     return {
         type: ActionTypes.SET_IS_EMPLOYEE,
-        isEmployee: isEmployee
+        employeeBrand: employeeBrand
     };
 }
 
@@ -2146,8 +2146,8 @@ var util = {
     toggleItem: function toggleItem(items, item) {
         return _ramda2.default.contains(item, items) ? _ramda2.default.reject(_ramda2.default.equals(item), items) : _ramda2.default.append(item, items);
     },
-    getEmployeeOrSupplierPrice: function getEmployeeOrSupplierPrice(deal, isEmployee) {
-        return isEmployee ? deal.employee_price : deal.supplier_price;
+    getEmployeeOrSupplierPrice: function getEmployeeOrSupplierPrice(deal, employeeBrand) {
+        return employeeBrand === deal.make ? deal.employee_price : deal.supplier_price;
     },
     getInitialBodyStyleFromUrl: function getInitialBodyStyleFromUrl() {
         return _ramda2.default.prop('style', _qs2.default.parse(window.location.search.slice(1)));
@@ -14509,6 +14509,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var domesticBrands = ['Chrysler', 'Dodge', 'Jeep', 'Ford', 'Lincoln', 'Chevrolet', 'Cadillac', 'Buick', 'GMC'];
+
 var CustomerTypeSelect = function (_React$PureComponent) {
     _inherits(CustomerTypeSelect, _React$PureComponent);
 
@@ -14521,21 +14523,21 @@ var CustomerTypeSelect = function (_React$PureComponent) {
     _createClass(CustomerTypeSelect, [{
         key: 'handleChange',
         value: function handleChange(e) {
-            this.props.setIsEmployee(e.target.value === 'employee');
+            this.props.setEmployeeBrand(e.target.value === 'employee' ? this.props.deal.make : false);
         }
     }, {
         key: 'render',
         value: function render() {
             var _this2 = this;
 
-            return _react2.default.createElement(
+            return domesticBrands.includes(this.props.deal.make) ? _react2.default.createElement(
                 'div',
                 { className: 'customer-type' },
                 _react2.default.createElement(
                     'select',
                     {
                         className: 'customer-type__select',
-                        value: this.props.isEmployee ? 'employee' : 'supplier',
+                        value: this.props.employeeBrand === this.props.deal.make ? 'employee' : 'supplier',
                         onChange: function onChange(e) {
                             return _this2.handleChange(e);
                         }
@@ -14558,7 +14560,7 @@ var CustomerTypeSelect = function (_React$PureComponent) {
                         'data-title': 'If you are eligible for special pricing, please select. Proof of eligibility will be required by dealer.' },
                     _react2.default.createElement(_reactSvgInline2.default, { width: '15px', fill: 'grey', svg: _zondicons2.default['information-outline'] })
                 )
-            );
+            ) : _react2.default.createElement('div', null);
         }
     }]);
 
@@ -14567,7 +14569,7 @@ var CustomerTypeSelect = function (_React$PureComponent) {
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
-        isEmployee: state.isEmployee
+        employeeBrand: state.employeeBrand
     };
 };
 
@@ -14599,7 +14601,7 @@ var _util2 = _interopRequireDefault(_util);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var purchase = {
-    start: function start(deal, selectedTab, downPayment, selectedRebates, termDuration, isEmployee) {
+    start: function start(deal, selectedTab, downPayment, selectedRebates, termDuration, employeeBrand) {
         var form = document.createElement('form');
         form.setAttribute('method', 'post');
         form.setAttribute('action', '/apply-or-purchase');
@@ -14617,7 +14619,7 @@ var purchase = {
         if (selectedTab === 'finance') {
             var amount_financed = document.createElement('input');
             amount_financed.setAttribute('name', 'amount_financed');
-            amount_financed.setAttribute('value', _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(deal, isEmployee), deal.doc_fee, downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), selectedRebates))).toString());
+            amount_financed.setAttribute('value', _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(deal, employeeBrand), deal.doc_fee, downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), selectedRebates))).toString());
             form.appendChild(amount_financed);
 
             var term = document.createElement('input');
@@ -14660,7 +14662,7 @@ var purchase = {
 
         var dmr_price = document.createElement('input');
         dmr_price.setAttribute('name', 'dmr_price');
-        dmr_price.setAttribute('value', (_util2.default.getEmployeeOrSupplierPrice(deal, isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), selectedRebates))).toString());
+        dmr_price.setAttribute('value', (_util2.default.getEmployeeOrSupplierPrice(deal, employeeBrand) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), selectedRebates))).toString());
         form.appendChild(dmr_price);
 
         document.body.appendChild(form);
@@ -22872,7 +22874,7 @@ var CompareBar = function (_React$PureComponent) {
                                 _react2.default.createElement(
                                     'div',
                                     null,
-                                    _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(dealAndSelectedFilters.deal, _this3.props.isEmployee))
+                                    _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(dealAndSelectedFilters.deal, _this3.props.employeeBrand))
                                 )
                             ),
                             _react2.default.createElement(_reactSvgInline2.default, {
@@ -22939,7 +22941,7 @@ var CompareBar = function (_React$PureComponent) {
 
 function mapStateToProps(state) {
     return {
-        isEmployee: state.isEmployee,
+        employeeBrand: state.employeeBrand,
         window: state.window,
         compareList: state.compareList,
         zipcode: state.zipcode
@@ -23910,7 +23912,7 @@ var ConfirmDetails = function (_React$PureComponent) {
                             {
                                 className: 'deal-details__button deal-details__button--small deal-details__button--pink',
                                 onClick: function onClick() {
-                                    return _purchase2.default.start(deal, _this5.props.selectedTab, _this5.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this5.props.dealRebates, _this5.props.selectedRebates, _this5.props.selectedTab, deal), _this5.props.termDuration, _this5.props.isEmployee);
+                                    return _purchase2.default.start(deal, _this5.props.selectedTab, _this5.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this5.props.dealRebates, _this5.props.selectedRebates, _this5.props.selectedTab, deal), _this5.props.termDuration, _this5.props.employeeBrand);
                                 }
                             },
                             'Buy Now'
@@ -23989,7 +23991,7 @@ var mapStateToProps = function mapStateToProps(state) {
         termDuration: state.termDuration,
         fallbackDealImage: state.fallbackDealImage,
         selectedDeal: state.selectedDeal,
-        isEmployee: state.isEmployee
+        employeeBrand: state.employeeBrand
     };
 };
 
@@ -53112,7 +53114,7 @@ var DealPrice = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__cash-price' },
-                    _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee)),
+                    _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
                     this.renderPriceExplanationModal()
                 ),
                 _react2.default.createElement('div', { className: 'deal-price__hr' }),
@@ -53143,7 +53145,7 @@ var DealPrice = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__finance-lease-price' },
-                    this.props.dealRebates.hasOwnProperty(this.props.deal.id) ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), this.props.downPayment, this.props.termDuration))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }),
+                    this.props.dealRebates.hasOwnProperty(this.props.deal.id) ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), this.props.downPayment, this.props.termDuration))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }),
                     this.renderPriceExplanationModal()
                 ),
                 _react2.default.createElement('div', { className: 'deal-price__hr' })
@@ -53163,7 +53165,7 @@ var DealPrice = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__finance-lease-price' },
-                    _util2.default.moneyFormat(Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31)))),
+                    _util2.default.moneyFormat(Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31)))),
                     this.renderPriceExplanationModal()
                 ),
                 _react2.default.createElement('div', { className: 'deal-price__hr' })
@@ -53269,7 +53271,7 @@ var DealPrice = function (_React$PureComponent) {
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
-        isEmployee: state.isEmployee,
+        employeeBrand: state.employeeBrand,
         downPayment: state.downPayment,
         termDuration: state.termDuration,
         residualPercent: state.residualPercent,
@@ -59890,8 +59892,8 @@ var CashCalculator = function (_React$PureComponent) {
                 null,
                 'Cash Price',
                 ' ',
-                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee)),
-                _react2.default.createElement(_CustomerTypeSelect2.default, null),
+                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
+                _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal }),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(
                     'h4',
@@ -59933,7 +59935,7 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee))
+                            _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand))
                         )
                     ),
                     _react2.default.createElement(
@@ -59961,7 +59963,7 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            _util2.default.moneyFormat(_formulas2.default.calculateSalesTaxCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee), this.props.deal.doc_fee))
+                            _util2.default.moneyFormat(_formulas2.default.calculateSalesTaxCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee))
                         )
                     ),
                     _react2.default.createElement(
@@ -59989,7 +59991,7 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            _util2.default.moneyFormat(_formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee), this.props.deal.doc_fee, this.props.downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))))
+                            _util2.default.moneyFormat(_formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))))
                         )
                     )
                 )
@@ -60004,7 +60006,7 @@ function mapStateToProps(state) {
     return {
         deal: state.selectedDeal,
         downPayment: state.downPayment,
-        isEmployee: state.isEmployee,
+        employeeBrand: state.employeeBrand,
         selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal)
     };
 }
@@ -60098,7 +60100,7 @@ var FinanceCalculator = function (_React$PureComponent) {
     }, {
         key: 'getAmountToFinance',
         value: function getAmountToFinance() {
-            return this.props.availableRebates ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee), this.props.deal.doc_fee, this.props.downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))) : null;
+            return this.props.availableRebates ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))) : null;
         }
     }, {
         key: 'renderTotalCostOfVehicle',
@@ -60116,7 +60118,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    totalAmountToFinance ? _util2.default.moneyFormat(_formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee), this.props.deal.doc_fee, this.props.downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    totalAmountToFinance ? _util2.default.moneyFormat(_formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                 )
             );
         }
@@ -60188,8 +60190,8 @@ var FinanceCalculator = function (_React$PureComponent) {
                 null,
                 'Finance Price',
                 ' ',
-                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee)),
-                _react2.default.createElement(_CustomerTypeSelect2.default, null),
+                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
+                _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal }),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(
                     'h4',
@@ -60231,7 +60233,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee))
+                            _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand))
                         )
                     ),
                     _react2.default.createElement(
@@ -60259,7 +60261,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            _util2.default.moneyFormat(_formulas2.default.calculateSalesTaxCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee), this.props.deal.doc_fee))
+                            _util2.default.moneyFormat(_formulas2.default.calculateSalesTaxCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee))
                         )
                     ),
                     this.renderYourRebatesAndIncentives(),
@@ -60370,7 +60372,7 @@ function mapStateToProps(state) {
         downPayment: state.downPayment,
         deal: state.selectedDeal,
         termDuration: state.termDuration,
-        isEmployee: state.isEmployee,
+        employeeBrand: state.employeeBrand,
         availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal),
         selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal)
     };
@@ -60591,7 +60593,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    this.props.availableRebates ? _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)), this.state.downPayment, 0, this.props.termDuration, this.props.residualPercent))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.availableRebates ? _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)), this.state.downPayment, 0, this.props.termDuration, this.props.residualPercent))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                 )
             );
         }
@@ -60727,7 +60729,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                     className: className,
                     key: index
                 },
-                _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)), downPayment, 0, leaseRate.termMonths, residual.residualPercent)))
+                _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)), downPayment, 0, leaseRate.termMonths, residual.residualPercent)))
             );
         }
     }, {
@@ -60738,8 +60740,8 @@ var LeaseCalculator = function (_React$PureComponent) {
                 null,
                 'Lease Price',
                 ' ',
-                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee)),
-                _react2.default.createElement(_CustomerTypeSelect2.default, null),
+                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
+                _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal }),
                 this.state.selectedRebates ? _react2.default.createElement(
                     'div',
                     null,
@@ -60785,7 +60787,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee))
+                            _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand))
                         )
                     ),
                     this.renderYourRebatesAndIncentives()
@@ -60916,7 +60918,7 @@ function mapStateToProps(state) {
         termDuration: state.termDuration,
         annualMileage: state.annualMileage,
         residualPercent: state.residualPercent,
-        isEmployee: state.isEmployee,
+        employeeBrand: state.employeeBrand,
         availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal),
         selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal)
     };
@@ -61102,7 +61104,7 @@ var initialState = {
     segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
     selectedFuelType: null,
     selectedMakes: [],
-    isEmployee: false,
+    employeeBrand: false,
     selectedFeatures: [],
     selectedRebates: [],
     dealRebates: {},
@@ -61587,7 +61589,7 @@ var reducer = function reducer(state, action) {
             });
         case ActionTypes.SET_IS_EMPLOYEE:
             return Object.assign({}, state, {
-                isEmployee: action.isEmployee
+                employeeBrand: action.employeeBrand
             });
         case ActionTypes.TOGGLE_FEATURE:
             return Object.assign({}, state, {
@@ -62388,7 +62390,7 @@ var mapStateToProps = function mapStateToProps(state) {
         termDuration: state.termDuration,
         fallbackDealImage: state.fallbackDealImage,
         selectedDeal: state.selectedDeal,
-        isEmployee: state.isEmployee
+        employeeBrand: state.employeeBrand
     };
 };
 
@@ -62556,7 +62558,7 @@ var ComparePage = function (_React$PureComponent) {
                         {
                             className: 'deal__button deal__button--small deal__button--pink',
                             onClick: function onClick() {
-                                return _purchase2.default.start(deal, _this3.props.selectedTab, _this3.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this3.props.dealRebates, _this3.props.selectedRebates, _this3.props.selectedTab, deal), _this3.props.termDuration, _this3.props.isEmployee);
+                                return _purchase2.default.start(deal, _this3.props.selectedTab, _this3.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this3.props.dealRebates, _this3.props.selectedRebates, _this3.props.selectedTab, deal), _this3.props.termDuration, _this3.props.employeeBrand);
                             }
                         },
                         'Buy Now'
@@ -62780,7 +62782,7 @@ var ComparePage = function (_React$PureComponent) {
                                     'Deliver My Ride Price:'
                                 ),
                                 ' ',
-                                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(dealAndSelectedFilters.deal, _this6.props.isEmployee))
+                                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(dealAndSelectedFilters.deal, _this6.props.employeeBrand))
                             )
                         );
                     })
@@ -62959,7 +62961,7 @@ var mapStateToProps = function mapStateToProps(state) {
         dealRebates: state.dealRebates,
         selectedRebates: state.selectedRebates,
         termDuration: state.termDuration,
-        isEmployee: state.isEmployee
+        employeeBrand: state.employeeBrand
     };
 };
 

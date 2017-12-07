@@ -98,7 +98,7 @@ class CompareBar extends React.PureComponent {
                                             {util.moneyFormat(
                                                 util.getEmployeeOrSupplierPrice(
                                                     dealAndSelectedFilters.deal,
-                                                    this.props.isEmployee
+                                                    this.props.employeeBrand
                                                 )
                                             )}
                                         </div>
@@ -166,7 +166,7 @@ class CompareBar extends React.PureComponent {
 
 function mapStateToProps(state) {
     return {
-        isEmployee: state.isEmployee,
+        employeeBrand: state.employeeBrand,
         window: state.window,
         compareList: state.compareList,
         zipcode: state.zipcode,

@@ -9,7 +9,7 @@ const purchase = {
         downPayment,
         selectedRebates,
         termDuration,
-        isEmployee
+        employeeBrand
     ) => {
         let form = document.createElement('form');
         form.setAttribute('method', 'post');
@@ -32,7 +32,7 @@ const purchase = {
                 'value',
                 formulas
                     .calculateTotalCashFinance(
-                        util.getEmployeeOrSupplierPrice(deal, isEmployee),
+                        util.getEmployeeOrSupplierPrice(deal, employeeBrand),
                         deal.doc_fee,
                         downPayment,
                         R.sum(R.map(R.prop('value'), selectedRebates))
@@ -83,7 +83,7 @@ const purchase = {
         dmr_price.setAttribute('name', 'dmr_price');
         dmr_price.setAttribute(
             'value',
-            (util.getEmployeeOrSupplierPrice(deal, isEmployee) -
+            (util.getEmployeeOrSupplierPrice(deal, employeeBrand) -
                 R.sum(R.map(R.prop('value'), selectedRebates))).toString()
         );
         form.appendChild(dmr_price);

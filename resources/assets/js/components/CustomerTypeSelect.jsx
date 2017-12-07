@@ -4,17 +4,20 @@ import * as Actions from 'actions/index';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
+const domesticBrands = ['Chrysler', 'Dodge', 'Jeep', 'Ford', 'Lincoln', 'Chevrolet', 'Cadillac', 'Buick', 'GMC'];
+
 class CustomerTypeSelect extends React.PureComponent {
     handleChange(e) {
-        this.props.setIsEmployee(e.target.value === 'employee');
+        this.props.setEmployeeBrand(e.target.value === 'employee' ? this.props.deal.make : false);
     }
 
     render() {
-        return (
+
+        return domesticBrands.includes(this.props.deal.make) ? (
             <div className="customer-type">
                 <select
                     className="customer-type__select"
-                    value={this.props.isEmployee ? 'employee' : 'supplier'}
+                    value={this.props.employeeBrand === this.props.deal.make ? 'employee' : 'supplier'}
                     onChange={e => this.handleChange(e)}
                 >
                     <option value="employee">Employee/Retiree</option>
@@ -26,13 +29,13 @@ class CustomerTypeSelect extends React.PureComponent {
                     <SVGInline width="15px" fill="grey" svg={zondicons['information-outline']} />
                 </a>
             </div>
-        );
+        ) : <div />;
     }
 }
 
 const mapStateToProps = state => {
     return {
-        isEmployee: state.isEmployee,
+        employeeBrand: state.employeeBrand,
     };
 };
 
