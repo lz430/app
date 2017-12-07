@@ -67,7 +67,7 @@ class DealPrice extends React.PureComponent {
                     {util.moneyFormat(
                         util.getEmployeeOrSupplierPrice(
                             this.props.deal,
-                            this.props.isEmployee
+                            this.props.employeeBrand
                         )
                     )}
                     {this.renderPriceExplanationModal()}
@@ -96,7 +96,7 @@ class DealPrice extends React.PureComponent {
                                 formulas.calculateFinancedMonthlyPayments(
                                     util.getEmployeeOrSupplierPrice(
                                         this.props.deal,
-                                        this.props.isEmployee
+                                        this.props.employeeBrand
                                     ) -
                                         R.sum(
                                             R.map(
@@ -136,7 +136,7 @@ class DealPrice extends React.PureComponent {
                             formulas.calculateLeasedMonthlyPayments(
                                 util.getEmployeeOrSupplierPrice(
                                     this.props.deal,
-                                    this.props.isEmployee
+                                    this.props.employeeBrand
                                 ) -
                                     R.sum(
                                         R.map(
@@ -248,7 +248,7 @@ class DealPrice extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
-        isEmployee: state.isEmployee,
+        employeeBrand: state.employeeBrand,
         downPayment: state.downPayment,
         termDuration: state.termDuration,
         residualPercent: state.residualPercent,

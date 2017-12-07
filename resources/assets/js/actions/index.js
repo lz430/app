@@ -264,10 +264,10 @@ export function receiveBodyStyles(deals) {
     };
 }
 
-export function setIsEmployee(isEmployee) {
+export function setEmployeeBrand(employeeBrand) {
     return {
         type: ActionTypes.SET_IS_EMPLOYEE,
-        isEmployee: isEmployee,
+        employeeBrand,
     };
 }
 

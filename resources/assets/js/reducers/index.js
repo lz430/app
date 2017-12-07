@@ -107,7 +107,7 @@ const reducer = (state, action) => {
             });
         case ActionTypes.SET_IS_EMPLOYEE:
             return Object.assign({}, state, {
-                isEmployee: action.isEmployee,
+                employeeBrand: action.employeeBrand,
             });
         case ActionTypes.TOGGLE_FEATURE:
             return Object.assign({}, state, {
