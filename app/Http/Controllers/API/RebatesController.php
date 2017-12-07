@@ -85,22 +85,4 @@ class RebatesController extends Controller
 
         return $types;
     }
-
-    protected function matchesCash($incentive)
-    {
-        // @todo return whether it matches the right targets and type's per Beth's forthcoming document
-        return true;
-    }
-
-    protected function matchesFinance($incentive)
-    {
-        // @todo return whether it matches the right targets and type's per Beth's forthcoming document
-        return true;
-    }
-
-    protected function matchesLease($incentive)
-    {
-        // @todo return whether it matches the right targets and type's per Beth's forthcoming document
-        return true;
-    }
 }
