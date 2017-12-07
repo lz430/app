@@ -8,6 +8,16 @@ use Tests\TestCase;
 class RebateMatchesTest extends TestCase
 {
     /** @test */
+    public function non_existent_category_doesnt_error()
+    {
+        $incentive = ['categoryName' => 'Alphabet', 'typeName' => 'Soup'];
+
+        $rebateMatches = new RebateMatches;
+
+        $this->assertFalse($rebateMatches->cash($incentive));
+    }
+
+    /** @test */
     public function auto_show_always_matches()
     {
         $autoShow = ['categoryName' => 'Retail Cash Programs', 'typeName' => 'Auto Show Cash', 'targetName' => 'Auto Show Cash Recipient'];
