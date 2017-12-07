@@ -100,9 +100,10 @@ class Client
         return json_decode((string) $this->guzzleClient->request('GET', "makes/$name")->getBody(), true);
     }
 
-    public function modelByName($name)
+    public function modelByName($modelName)
     {
-        return json_decode((string) $this->guzzleClient->request('GET', "models/$name")->getBody(), true);
+        $modelName = $this->makeModelNameUrlFriendly($modelName);
+        return json_decode((string) $this->guzzleClient->request('GET', "models/$modelName")->getBody(), true);
     }
 
     public function modelsByMakeName($makeName)
