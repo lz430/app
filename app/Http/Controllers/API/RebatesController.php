@@ -70,7 +70,7 @@ class RebatesController extends Controller
         }
 
         if (RebateMatches::finance($incentive)) {
-            $types[] = 'incentive';
+            $types[] = 'finance';
         }
 
         if (RebateMatches::lease($incentive)) {
