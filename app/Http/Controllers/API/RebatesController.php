@@ -42,13 +42,7 @@ class RebatesController extends Controller
                 ))
                 : collect($Client->incentivesByVehicleIdAndZipcode($vehicleId, $zipcode));
 
-            $availableRebates = $incentives
-                ->filter(function ($incentive) {
-                    return in_array($incentive['categoryName'], [
-                        "Retail Cash Programs",
-                        "Other Retail Programs",
-                    ]);
-                })->map(function ($incentive) {
+            $availableRebates = $incentives->map(function ($incentive) {
                     return [
                         'id' => $incentive['subProgramId'],
                         'rebate' => $incentive['restrictions'],
