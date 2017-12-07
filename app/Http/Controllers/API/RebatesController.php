@@ -8,6 +8,7 @@ use DeliverMyRide\JATO\Client;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Facades\App\JATO\RebateMatches;
 
 class RebatesController extends Controller
 {
@@ -41,26 +42,14 @@ class RebatesController extends Controller
                 ))
                 : collect($Client->incentivesByVehicleIdAndZipcode($vehicleId, $zipcode));
 
-            $availableRebates = $incentives
-                ->filter(function ($incentive) {
-                    return in_array($incentive['categoryName'], [
-                        "Retail Cash Programs",
-                    ]);
-                })->map(function ($incentive) {
+            $availableRebates = $incentives->map(function ($incentive) {
                     return [
                         'id' => $incentive['subProgramId'],
                         'rebate' => $incentive['restrictions'],
                         'value' => $incentive['cash'],
                         'statusName' => $incentive['statusName'],
                         'openOffer' => $incentive['targetName'] === 'Open Offer',
-                        'types' => [
-                                'Auto Show Cash' => ['cash', 'finance'],
-                                'Bonus Cash' => ['cash', 'finance'],
-                                'Cash Back' => ['cash', 'finance'],
-                                'Credit Card Rebate' => ['cash', 'finance'],
-                                'Cash on MSRP ' => ['cash', 'finance'],
-                                'Cash on Term APR' => ['finance'],
-                            ][$incentive['typeName']] ?? [],
+                        'types' => $this->getTypes($incentive),
                     ];
                 })->filter(function ($incentive) {
                     return ! empty($incentive['types']);
@@ -70,5 +59,24 @@ class RebatesController extends Controller
                 'rebates' => $availableRebates,
             ]);
         });
+    }
+
+    protected function getTypes($incentive)
+    {
+        $types = [];
+
+        if (RebateMatches::cash($incentive)) {
+            $types[] = 'cash';
+        }
+
+        if (RebateMatches::finance($incentive)) {
+            $types[] = 'finance';
+        }
+
+        if (RebateMatches::lease($incentive)) {
+            $types[] = 'lease';
+        }
+
+        return $types;
     }
 }
