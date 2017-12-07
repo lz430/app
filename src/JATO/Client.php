@@ -5,7 +5,7 @@ namespace DeliverMyRide\JATO;
 use Carbon\Carbon;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
-use Illuminate\Contracts\Logging\Log;
+use Illuminate\Support\Facades\Log;
 
 class Client
 {
