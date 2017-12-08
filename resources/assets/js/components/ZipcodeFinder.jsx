@@ -18,10 +18,6 @@ class ZipcodeFinder extends React.PureComponent {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    isANumber() {
-        return !isNaN(parseFloat(this.state.zipcode)) && isFinite(this.state.zipcode)
-    }
-
     isValid() {
         if (this.state.zipcode && this.state.zipcode.length === 5) {
             return parseInt(this.state.zipcode).toString() === this.state.zipcode;
