@@ -1,21 +1,18 @@
 import * as Actions from 'actions/index';
 import api from 'src/api';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
-import CompareBar from 'components/CompareBar';
 import ConfirmDeal from 'components/ConfirmDeal';
 import { connect } from 'react-redux';
 import fuelapi from 'src/fuelapi';
 import fuelcolor from 'src/fuel-color-map';
 import Modal from 'components/Modal';
-import miscicons from 'miscicons';
 import PropTypes from 'prop-types';
 import purchase from 'src/purchase';
 import R from 'ramda';
 import React from 'react';
 import rebates from 'src/rebates';
 import strings from 'src/strings';
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
+
 
 class ConfirmDetails extends React.PureComponent {
     constructor(props) {
@@ -72,69 +69,10 @@ class ConfirmDetails extends React.PureComponent {
         });
     }
 
-    extractFuelImages(data) {
-        return (
-            data.data.products.map(product =>
-                product.productFormats.map(format => {
-                    return {
-                        id: `fuel_external_${format.id}`,
-                        url: format.assets[0].url,
-                    };
-                })
-            )[0] || []
-        );
-    }
-
-    async requestFuelImages() {
-        const vehicleId =
-            (await fuelapi.getVehicleId(
-                this.props.deal.year,
-                this.props.deal.make,
-                this.props.deal.model
-            )).data[0].id || false;
-
-        if (!vehicleId) return;
-
-        try {
-            const externalImages = this.extractFuelImages(
-                await fuelapi.getExternalImages(
-                    vehicleId,
-                    fuelcolor.convert(this.props.deal.color)
-                )
-            );
-
-            this.setState({
-                fuelExternalImages: externalImages,
-            });
-        } catch (e) {
-            try {
-                const externalImages = this.extractFuelImages(
-                    await fuelapi.getExternalImages(vehicleId, 'white')
-                );
-
-                this.setState({
-                    fuelExternalImages: externalImages,
-                });
-            } catch (e) {
-                // No Fuel Images Available.
-            }
-        }
-    }
-
     selectFeaturedImage(index) {
         this.setState({
             featuredImage: this.allImages()[index],
         });
-    }
-
-    allImages() {
-        return R.concat(
-            this.props.deal.photos,
-            R.concat(
-                this.state.fuelExternalImages,
-                this.state.fuelInternalImages
-            )
-        );
     }
 
     renderDealRebatesModal() {
@@ -163,12 +101,18 @@ class ConfirmDetails extends React.PureComponent {
         });
     }
 
-    renderDeal(deal, index) {
-        const inCompareList = R.contains(
-            deal,
-            R.map(R.prop('deal'), this.props.compareList)
+    renderDealRebatesModal() {
+        return (
+            <Modal
+                onClose={this.props.clearSelectedDeal}
+                closeText="Back to results"
+            >
+                <CashFinanceLeaseCalculator />
+            </Modal>
         );
+    }
 
+    renderDeal(deal, index) {
         return (
             <ConfirmDeal deal={deal} key={index} hideImageAndTitle={true}>
                 <div className="deal-details__deal-content">
@@ -220,6 +164,7 @@ class ConfirmDetails extends React.PureComponent {
                     <div className="deal-details__pricing">
                         {this.renderDeal(deal)}
                     </div>
+                    {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}
                 </div>
             </div>
         );

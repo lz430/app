@@ -3477,6 +3477,16 @@ body {
   padding: 25px;
 }
 
+.confirm-deal__more-rebates {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 0.8em;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
 .confirm-deal__prices {
   font-size: .9em;
 }

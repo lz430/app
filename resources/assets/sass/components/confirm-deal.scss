@@ -79,6 +79,12 @@
     }
   }
 
+  &__more-rebates {
+    display: flex;
+    font-size: 0.8em;
+    justify-content: space-between;
+  }
+
   &__prices {
     font-size: .9em;
 
