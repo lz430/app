@@ -18,20 +18,12 @@ class ZipcodeFinder extends React.PureComponent {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    isANumber() {
-        return !isNaN(parseFloat(this.state.zipcode)) && isFinite(this.state.zipcode)
-    }
-
     isValid() {
-        if (this.isANumber()) {
-            if (!(this.state.zipcode && this.state.zipcode.length === 5)) {
-                this.setState({zipError: true});
-            }
-            return (
-                parseInt(this.state.zipcode).toString() === this.state.zipcode
-            );
+        if (this.state.zipcode && this.state.zipcode.length === 5) {
+            return parseInt(this.state.zipcode).toString() === this.state.zipcode;
         }
-        return (this.setState({zipError: true}));
+
+        this.setState({zipError: true});
     }
 
     saveZip(event) {
@@ -72,6 +64,7 @@ class ZipcodeFinder extends React.PureComponent {
                             <form onSubmit={this.saveZip}>
                                 <input
                                     type="number"
+                                    min="0"
                                     className="zipcode-finder__input"
                                     placeholder={this.props.zipcode}
                                     onChange={this.handleChange}
