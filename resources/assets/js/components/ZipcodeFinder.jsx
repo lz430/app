@@ -23,15 +23,11 @@ class ZipcodeFinder extends React.PureComponent {
     }
 
     isValid() {
-        if (this.isANumber()) {
-            if (!(this.state.zipcode && this.state.zipcode.length === 5)) {
-                this.setState({zipError: true});
-            }
-            return (
-                parseInt(this.state.zipcode).toString() === this.state.zipcode
-            );
+        if (this.state.zipcode && this.state.zipcode.length === 5) {
+            return parseInt(this.state.zipcode).toString() === this.state.zipcode;
         }
-        return (this.setState({zipError: true}));
+
+        this.setState({zipError: true});
     }
 
     saveZip(event) {

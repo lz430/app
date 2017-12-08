@@ -59130,13 +59130,11 @@ var ZipcodeFinder = function (_React$PureComponent) {
     }, {
         key: 'isValid',
         value: function isValid() {
-            if (this.isANumber()) {
-                if (!(this.state.zipcode && this.state.zipcode.length === 5)) {
-                    this.setState({ zipError: true });
-                }
+            if (this.state.zipcode && this.state.zipcode.length === 5) {
                 return parseInt(this.state.zipcode).toString() === this.state.zipcode;
             }
-            return this.setState({ zipError: true });
+
+            this.setState({ zipError: true });
         }
     }, {
         key: 'saveZip',
