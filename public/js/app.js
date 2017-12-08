@@ -59123,11 +59123,6 @@ var ZipcodeFinder = function (_React$PureComponent) {
     }
 
     _createClass(ZipcodeFinder, [{
-        key: 'isANumber',
-        value: function isANumber() {
-            return !isNaN(parseFloat(this.state.zipcode)) && isFinite(this.state.zipcode);
-        }
-    }, {
         key: 'isValid',
         value: function isValid() {
             if (this.state.zipcode && this.state.zipcode.length === 5) {
@@ -59197,6 +59192,7 @@ var ZipcodeFinder = function (_React$PureComponent) {
                                 { onSubmit: this.saveZip },
                                 _react2.default.createElement('input', {
                                     type: 'number',
+                                    min: '0',
                                     className: 'zipcode-finder__input',
                                     placeholder: this.props.zipcode,
                                     onChange: this.handleChange
