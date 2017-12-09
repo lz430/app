@@ -60092,6 +60092,11 @@ var FinanceCalculator = function (_React$PureComponent) {
             this.props.updateTermDuration(Number(e.target.value));
         }
     }, {
+        key: 'getTotalVehicleCost',
+        value: function getTotalVehicleCost() {
+            return this.props.availableRebates ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, 0, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))) : null;
+        }
+    }, {
         key: 'getAmountToFinance',
         value: function getAmountToFinance() {
             return this.props.availableRebates ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))) : null;
@@ -60099,7 +60104,7 @@ var FinanceCalculator = function (_React$PureComponent) {
     }, {
         key: 'renderTotalCostOfVehicle',
         value: function renderTotalCostOfVehicle() {
-            var totalAmountToFinance = this.getAmountToFinance();
+            var totalCostOfVehicle = this.getTotalVehicleCost();
 
             return _react2.default.createElement(
                 'div',
@@ -60112,7 +60117,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    totalAmountToFinance ? _util2.default.moneyFormat(_formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    totalCostOfVehicle ? _util2.default.moneyFormat(totalCostOfVehicle) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                 )
             );
         }
@@ -60157,7 +60162,7 @@ var FinanceCalculator = function (_React$PureComponent) {
     }, {
         key: 'renderYourMonthlyFinancePayment',
         value: function renderYourMonthlyFinancePayment() {
-            var totalAmountToFinance = this.getAmountToFinance();
+            var totalVehicleCost = this.getTotalVehicleCost();
 
             return _react2.default.createElement(
                 'div',
@@ -60170,7 +60175,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    totalAmountToFinance ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(totalAmountToFinance, this.props.downPayment, this.props.termDuration))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    totalVehicleCost ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(totalVehicleCost, this.props.downPayment, this.props.termDuration))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                 )
             );
         }
