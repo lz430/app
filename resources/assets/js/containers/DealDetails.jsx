@@ -443,7 +443,7 @@ const mapStateToProps = state => {
         termDuration: state.termDuration,
         fallbackDealImage: state.fallbackDealImage,
         selectedDeal: state.selectedDeal,
-        isEmployee: state.isEmployee,
+        employeeBrand: state.employeeBrand,
     };
 };
 

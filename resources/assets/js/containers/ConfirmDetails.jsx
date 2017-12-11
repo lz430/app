@@ -307,7 +307,7 @@ class ConfirmDetails extends React.PureComponent {
                                         deal
                                     ),
                                     this.props.termDuration,
-                                    this.props.isEmployee
+                                    this.props.employeeBrand
                                 )}
                         >
                             Buy Now
@@ -369,7 +369,7 @@ const mapStateToProps = state => {
         termDuration: state.termDuration,
         fallbackDealImage: state.fallbackDealImage,
         selectedDeal: state.selectedDeal,
-        isEmployee: state.isEmployee,
+        employeeBrand: state.employeeBrand,
     };
 };
 

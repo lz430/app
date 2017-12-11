@@ -24,8 +24,8 @@ const util = {
             ? R.reject(R.equals(item), items)
             : R.append(item, items);
     },
-    getEmployeeOrSupplierPrice: (deal, isEmployee) => {
-        return isEmployee ? deal.employee_price : deal.supplier_price;
+    getEmployeeOrSupplierPrice: (deal, employeeBrand) => {
+        return (employeeBrand === deal.make) ? deal.employee_price : deal.supplier_price;
     },
     getInitialBodyStyleFromUrl: () => {
         return R.prop('style', qs.parse(window.location.search.slice(1)));

@@ -16,10 +16,10 @@ class CashCalculator extends React.PureComponent {
                 {util.moneyFormat(
                     util.getEmployeeOrSupplierPrice(
                         this.props.deal,
-                        this.props.isEmployee
+                        this.props.employeeBrand
                     )
                 )}
-                <CustomerTypeSelect />
+                <CustomerTypeSelect deal={this.props.deal} />
                 <hr />
                 <h4>Available Rebates and Incentives</h4>
                 <Rebates />
@@ -42,7 +42,7 @@ class CashCalculator extends React.PureComponent {
                             {util.moneyFormat(
                                 util.getEmployeeOrSupplierPrice(
                                     this.props.deal,
-                                    this.props.isEmployee
+                                    this.props.employeeBrand
                                 )
                             )}
                         </span>
@@ -64,7 +64,7 @@ class CashCalculator extends React.PureComponent {
                                 formulas.calculateSalesTaxCashFinance(
                                     util.getEmployeeOrSupplierPrice(
                                         this.props.deal,
-                                        this.props.isEmployee
+                                        this.props.employeeBrand
                                     ),
                                     this.props.deal.doc_fee
                                 )
@@ -95,7 +95,7 @@ class CashCalculator extends React.PureComponent {
                                 formulas.calculateTotalCashFinance(
                                     util.getEmployeeOrSupplierPrice(
                                         this.props.deal,
-                                        this.props.isEmployee
+                                        this.props.employeeBrand
                                     ),
                                     this.props.deal.doc_fee,
                                     this.props.downPayment,
@@ -119,7 +119,7 @@ function mapStateToProps(state) {
     return {
         deal: state.selectedDeal,
         downPayment: state.downPayment,
-        isEmployee: state.isEmployee,
+        employeeBrand: state.employeeBrand,
         selectedRebates: rebates.getSelectedRebatesForDealAndType(
             state.dealRebates,
             state.selectedRebates,

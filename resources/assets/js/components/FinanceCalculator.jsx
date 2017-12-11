@@ -28,7 +28,7 @@ class FinanceCalculator extends React.PureComponent {
             ? formulas.calculateTotalCashFinance(
                   util.getEmployeeOrSupplierPrice(
                       this.props.deal,
-                      this.props.isEmployee
+                      this.props.employeeBrand
                   ),
                   this.props.deal.doc_fee,
                   this.props.downPayment,
@@ -51,7 +51,7 @@ class FinanceCalculator extends React.PureComponent {
                             formulas.calculateTotalCashFinance(
                                 util.getEmployeeOrSupplierPrice(
                                     this.props.deal,
-                                    this.props.isEmployee
+                                    this.props.employeeBrand
                                 ),
                                 this.props.deal.doc_fee,
                                 this.props.downPayment,
@@ -148,10 +148,10 @@ class FinanceCalculator extends React.PureComponent {
                 {util.moneyFormat(
                     util.getEmployeeOrSupplierPrice(
                         this.props.deal,
-                        this.props.isEmployee
+                        this.props.employeeBrand
                     )
                 )}
-                <CustomerTypeSelect />
+                <CustomerTypeSelect deal={this.props.deal} />
                 <hr />
                 <h4>Available Rebates and Incentives</h4>
                 <Rebates />
@@ -174,7 +174,7 @@ class FinanceCalculator extends React.PureComponent {
                             {util.moneyFormat(
                                 util.getEmployeeOrSupplierPrice(
                                     this.props.deal,
-                                    this.props.isEmployee
+                                    this.props.employeeBrand
                                 )
                             )}
                         </span>
@@ -196,7 +196,7 @@ class FinanceCalculator extends React.PureComponent {
                                 formulas.calculateSalesTaxCashFinance(
                                     util.getEmployeeOrSupplierPrice(
                                         this.props.deal,
-                                        this.props.isEmployee
+                                        this.props.employeeBrand
                                     ),
                                     this.props.deal.doc_fee
                                 )
@@ -262,7 +262,7 @@ function mapStateToProps(state) {
         downPayment: state.downPayment,
         deal: state.selectedDeal,
         termDuration: state.termDuration,
-        isEmployee: state.isEmployee,
+        employeeBrand: state.employeeBrand,
         availableRebates: rebates.getAvailableRebatesForDealAndType(
             state.dealRebates,
             state.selectedRebates,

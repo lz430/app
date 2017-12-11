@@ -15,7 +15,11 @@ class Zipcode extends Model
         return Cache::remember('zip-code:' . $code, 1440, function () use ($code) {
             $zipCode = self::where('zipcode', $code)->first();
 
-            return Dealer::servesLocation($zipCode->latitude, $zipCode->longitude)->count() > 0;
+            if ($zipCode) {
+                return Dealer::servesLocation($zipCode->latitude, $zipCode->longitude)->count() > 0;
+            }
+
+            return false;
         });
     }
 }
