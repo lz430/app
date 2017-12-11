@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\JATO;
 
 use DeliverMyRide\VAuto\Importer;
 use Tests\TestCase;
 
-class ImporterTest extends TestCase
+class VersionAndFeatureImporterTest extends TestCase
 {
     /** @test */
     public function it_can_return_features_that_do_not_need_splitting()
