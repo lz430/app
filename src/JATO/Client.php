@@ -2,7 +2,6 @@
 
 namespace DeliverMyRide\JATO;
 
-use Carbon\Carbon;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Log;
