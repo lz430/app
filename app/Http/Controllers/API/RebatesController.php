@@ -28,7 +28,7 @@ class RebatesController extends Controller
         $rebates = Cache::remember($cacheKey, 1440, function () use ($importer) {
             return $importer->availableRebates(
                 request('vin'),
-                request('zip'),
+                request('zipcode'),
                 request('selected_rebate_ids')
             );
         });

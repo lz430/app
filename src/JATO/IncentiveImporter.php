@@ -14,10 +14,10 @@ class IncentiveImporter
         $this->client = $client;
     }
 
-    public function getCacheKey($zip, $vin, $ids)
+    public function getCacheKey($zipcode, $vin, $ids)
     {
         return 'getRebates'
-            . ':' . $zip
+            . ':' . $zipcode
             . ':' . $vin
             . ':' . implode($ids);
     }
