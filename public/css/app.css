@@ -3359,6 +3359,10 @@ body {
   font-size: 1.15rem;
 }
 
+.confirm-deal__bold {
+  font-weight: bold;
+}
+
 .confirm-deal__button {
   background: transparent;
   border: 1px solid #ccc;
@@ -3441,6 +3445,27 @@ body {
 
 .confirm-deal__button--small {
   font-size: .8em;
+}
+
+.confirm-deal__button--spacing {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 2rem;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+.confirm-deal__costs {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-bottom: .3em;
+  margin-right: 2.5rem;
 }
 
 .confirm-deal__disclaimer {

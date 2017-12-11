@@ -350,17 +350,22 @@ class ConfirmDeal extends React.PureComponent {
         );
 
         return (
-            <div className="confirm-deal__rebate-info">
-                <p>{`Rebates Applied: ${util.moneyFormat(selectedAmount)}`} </p>
-                <div className="confirm-deal__more-rebates">
-                    <p>{`${util.moneyFormat(maxAmount)} in rebates available.  `}
+            <div>
+                <div className="confirm-deal__rebate-info confirm-deal__costs confirm-deal__bold">
+                    <div>{`Rebates Applied:`}</div>
+                    <div>{`${util.moneyFormat(selectedAmount)}`}</div>
+                </div>
+
+                <div className="confirm-deal__more-rebates confirm-deal__costs">
+                    <div>{`${util.moneyFormat(maxAmount)} in rebates available.  `}</div>
+                    <div>
                         <a
-                            onClick={() => this.props.selectDeal(this.props.deal)}
-                            href="#"
+                        onClick={() => this.props.selectDeal(this.props.deal)}
+                        href="#"
                         >
                             Get Rebates
                         </a>
-                    </p>
+                    </div>
                 </div>
             </div>
         );
@@ -415,7 +420,7 @@ class ConfirmDeal extends React.PureComponent {
                     <div className="confirm-deal__feature-buttons">
                         <button
                             onClick={() => this.showStandardFeatures(deal)}
-                            className="confirm-deal__button confirm-deal__button--white confirm-deal__button--small"
+                            className="confirm-deal__button confirm-deal__button--spacing confirm-deal__button--white confirm-deal__button--small"
                         >
                             <SVGInline svg={miscicons['binoculars']} />
                             Review Standard Features
@@ -423,7 +428,7 @@ class ConfirmDeal extends React.PureComponent {
 
                         <button
                             onClick={() => this.showFeatures(deal)}
-                            className="confirm-deal__button confirm-deal__button--white confirm-deal__button--small"
+                            className="confirm-deal__button confirm-deal__button--spacing confirm-deal__button--white confirm-deal__button--small"
                         >
                             <SVGInline svg={miscicons['binoculars']} />
                             Review Additional Options
@@ -435,15 +440,24 @@ class ConfirmDeal extends React.PureComponent {
                         <p>{ `${this.fixSelectedTabCaseFormatting()} Terms`}</p>
 
                         <div className="confirm-deal__prices">
-                            <p>Suggested Retail: {util.moneyFormat(this.props.deal.msrp)} <br />
-                                Your Price: {`${util.moneyFormat(this.props.deal.supplier_price)}*`}
-                            </p>
+                            <div className="confirm-deal__costs">
+                                <div className="confirm-deal__label">Suggested Retail: </div>
+                                <div className="confirm-deal__amount">{util.moneyFormat(this.props.deal.msrp)}</div>
+                            </div>
+                            <div className="confirm-deal__costs">
+                                <div className="confirm-deal__label">Your Price:</div>
+                                <div className="confirm-deal__amount">{`${util.moneyFormat(this.props.deal.supplier_price)}*`}</div>
+                            </div>
                             {this.renderAppliedRebatesLink()}
                         </div>
 
                         <hr />
-                        <p className="confirm-deal__final-price">{`Your ${this.fixSelectedTabCaseFormatting()} Price: ${util.moneyFormat(this.displayFinalPrice())}
-                        ${this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? `per month` : ``}`}</p>
+                        <div className="confirm-deal__final-price confirm-deal__costs confirm-deal__bold">
+                            <div>{`Your ${this.fixSelectedTabCaseFormatting()} Price:`}</div>
+                            <div>{`${util.moneyFormat(this.displayFinalPrice())}
+                                ${this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? `per month` : ``}`}
+                            </div>
+                        </div>
                         <p className="confirm-deal__disclaimer">*Includes sales tax and dealer fees. License plate fees not included.</p>
                     </div>
 

@@ -39,6 +39,11 @@
     display: block;
     font-size: 1.15rem;
   }
+
+  &__bold {
+       font-weight: bold;
+   }
+
   &__button {
     @include button;
     border-color: $color-blue;
@@ -50,6 +55,19 @@
     &--small{
       font-size: .8em;
     }
+
+    &--spacing{
+      display: flex;
+      height: 2rem;
+      justify-content: space-evenly;
+    }
+  }
+
+  &__costs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .3em;
+    margin-right: 2.5rem;
   }
 
   &__disclaimer {
