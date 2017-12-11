@@ -53200,7 +53200,7 @@ var DealPrice = function (_React$PureComponent) {
                 { className: 'deal-price__rebates-applied' },
                 _react2.default.createElement(_reactSvgInline2.default, {
                     height: '10px',
-                    weight: '10px',
+                    width: '10px',
                     className: 'deal-price__tag-icon',
                     svg: _miscicons2.default['tag']
                 }),
