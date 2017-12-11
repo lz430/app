@@ -11,23 +11,23 @@ class IncentiveImporterTest extends TestCase
     public function it_ignores_zero_dollar_incentives()
     {
         $importer = app(IncentiveImporter::class);
-        $this->assertFalse($importer->validIncentive(['cash' => 0, 'restrictions' => 'Great!']));
+        $this->assertFalse($importer->validIncentive(['value' => 0, 'rebate' => 'Great!']));
     }
 
     /** @test */
     public function it_ignores_truecar_incentives()
     {
         $importer = app(IncentiveImporter::class);
-        $this->assertFalse($importer->validIncentive(['cash' => 1, 'restrictions' => 'Something something Truecar Something']));
-        $this->assertFalse($importer->validIncentive(['cash' => 1, 'restrictions' => 'Truecar stuff']));
-        $this->assertFalse($importer->validIncentive(['cash' => 1, 'restrictions' => 'Stuff Truecar']));
-        $this->assertFalse($importer->validIncentive(['cash' => 1, 'restrictions' => 'Truecar']));
+        $this->assertFalse($importer->validIncentive(['value' => 1, 'rebate' => 'Something something Truecar Something']));
+        $this->assertFalse($importer->validIncentive(['value' => 1, 'rebate' => 'Truecar stuff']));
+        $this->assertFalse($importer->validIncentive(['value' => 1, 'rebate' => 'Stuff Truecar']));
+        $this->assertFalse($importer->validIncentive(['value' => 1, 'rebate' => 'Truecar']));
     }
 
     /** @test */
     public function it_passes_non_matching_incentives()
     {
         $importer = app(IncentiveImporter::class);
-        $this->assertTrue($importer->validIncentive(['cash' => 12345, 'restrictions' => 'Great!']));
+        $this->assertTrue($importer->validIncentive(['value' => 12345, 'rebate' => 'Great!']));
     }
 }

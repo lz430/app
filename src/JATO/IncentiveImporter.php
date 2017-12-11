@@ -72,11 +72,11 @@ class IncentiveImporter
 
     public function validIncentive($incentive)
     {
-        if ($incentive['cash'] == 0) {
+        if ($incentive['value'] == 0) {
             return false;
         }
 
-        if (str_contains($incentive['restrictions'], 'Truecar')) {
+        if (str_contains($incentive['rebate'], 'Truecar')) {
             return false;
         }
 

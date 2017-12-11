@@ -33,6 +33,8 @@ class RebatesController extends Controller
             );
         });
 
-        return response()->json($rebates);
+        return response()->json([
+            'rebates' => $rebates
+        ]);
     }
 }
