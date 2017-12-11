@@ -162,37 +162,11 @@ class Importer
                  */
                 DB::transaction(function () use ($matchedVersion, $versionDeal, $decoded, $keyedData, $fileHash) {
                     /**
-                     * If we don't already have the jato info saved to a jato_vehicle_id then we need to save
+                     * If we don't already have the jato info saved to a jato_uid then we need to save
                      * all of that (checking for manufacturer -> make -> model as well).
                      */
-                    if (! $version = Version::where('jato_vehicle_id', $matchedVersion['vehicle_ID'])->first()) {
-                        if (! $manufacturer = Manufacturer::where('name', $decoded['manufacturer'])->first()) {
-                            // Save/Update manufacturer, make, model, then versions
-                            $manufacturer = $this->saveManufacturer(
-                                $this->client->manufacturerByName($decoded['manufacturer'])
-                            );
-                        }
-
-                        if (! $make = Make::where('name', $decoded['make'])->first()) {
-                            // Save/Update and save new make
-                            $make = $this->saveManufacturerMake(
-                                $manufacturer,
-                                $this->client->makeByName($decoded['make'])
-                            );
-                        }
-
-                        if (! $model = VehicleModel::where('name', $decoded['model'])->first()) {
-                            // Save/Update and save new model
-                            $model = $this->saveMakeModel(
-                                $make,
-                                $this->client->modelByName($decoded['model'])
-                            );
-                        }
-
-                        $version = $this->saveModelVersion(
-                            $model,
-                            $this->client->modelsVersionsByVehicleId($matchedVersion['vehicle_ID'])
-                        );
+                    if (! $version = Version::where('jato_uid', $matchedVersion['uid'])->first()) {
+                        $version = $this->saveVersionAndRelations($decoded, $matchedVersion);
                     }
 
                     $this->backfillNullMsrpsFromVersionMsrp($versionDeal, $version);
@@ -220,6 +194,37 @@ class Importer
         }
 
         Deal::where('file_hash', '!=', $fileHash)->whereDoesntHave('purchases')->delete();
+    }
+
+    private function saveVersionAndRelations($decoded, $matchedVersion)
+    {
+        if (! $manufacturer = Manufacturer::where('name', $decoded['manufacturer'])->first()) {
+            // Save/Update manufacturer, make, model, then versions
+            $manufacturer = $this->saveManufacturer(
+                $this->client->manufacturerByName($decoded['manufacturer'])
+            );
+        }
+
+        if (! $make = Make::where('name', $decoded['make'])->first()) {
+            // Save/Update and save new make
+            $make = $this->saveManufacturerMake(
+                $manufacturer,
+                $this->client->makeByName($decoded['make'])
+            );
+        }
+
+        if (! $model = VehicleModel::where('name', $decoded['model'])->first()) {
+            // Save/Update and save new model
+            $model = $this->saveMakeModel(
+                $make,
+                $this->client->modelByName($decoded['model'])
+            );
+        }
+
+        return $this->saveModelVersion(
+            $model,
+            $this->client->modelsVersionsByVehicleId($matchedVersion['vehicle_ID'])
+        );
     }
 
     private function getGroupWithOverrides(string $feature, string $group)
