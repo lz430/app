@@ -13,7 +13,6 @@ class RebateMatches
             'Cash on term APR',
             'Cash on term Lease',
             'Cash on MSRP',
-            'Cash to Lessee',
             'Down Payment Allowance',
             'Inventory Bonus Cash',
         ],
