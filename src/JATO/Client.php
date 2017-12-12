@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\Log;
 class Client
 {
     private $guzzleClient;
-    private $categories = [
-        'cash' => 1,
-        'finance' => 7,
-        'lease' => 8,
-    ];
 
     public function __construct($username, $password)
     {
