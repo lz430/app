@@ -165,7 +165,7 @@ class Importer
                      * If we don't already have the jato info saved to a jato_uid then we need to save
                      * all of that (checking for manufacturer -> make -> model as well).
                      */
-                    if (! $version = Version::where('jato_uid', $matchedVersion['uid'])->first()) {
+                    if (! $version = Version::where('jato_uid', $matchedVersion['uid'])->where('year', $versionDeal->year)->first()) {
                         $version = $this->saveVersionAndRelations($decoded, $matchedVersion);
                     }
 
