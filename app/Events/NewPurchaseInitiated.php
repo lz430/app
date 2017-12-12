@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Purchase;
+use App\User;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -14,14 +15,21 @@ class NewPurchaseInitiated
 
     public $payload;
 
-    public function __construct(Purchase $purchase)
+    public function __construct(User $user, Purchase $purchase)
     {
         $this->payload = [
+            'firstname' => $user->first_name,
+            'lastname' => $user->last_name,
+            'email' => $user->email,
+            'phone' => $user->phone_number,
+            'zip' => $user->zip,
             'bodystyle1' => $purchase->deal->versions()->first()->body_style,
-            'brand1' => $purchase->deal->make,
+            'brand' => $purchase->deal->make,
             'model1' => $purchase->deal->model,
             'color1' => $purchase->deal->color,
             'dealername' => $purchase->deal->dealer->name,
+            'dealercontact' => $purchase->deal->dealer->contact_name,
+            'dealerphone' => $purchase->deal->dealer->phone,
             'payment' => title_case($purchase->type),
         ];
     }

@@ -1098,8 +1098,6 @@ function toggleStyle(style) {
             dispatch(receiveDeals(data));
         });
 
-        window.axios.post('/hubspot', { bodystyle1: selectedStyles.join() });
-
         dispatch({
             type: ActionTypes.TOGGLE_STYLE,
             selectedStyles: selectedStyles
@@ -1230,8 +1228,6 @@ function setZipCode(zipcode) {
             dispatch(receiveDeals(data));
         });
 
-        window.axios.post('/hubspot', { zip: zipcode });
-
         dispatch({
             type: ActionTypes.SET_ZIP_CODE,
             zipcode: zipcode
@@ -1251,7 +1247,6 @@ function requestLocationInfo() {
                 if (err) {
                     dispatch(requestDeals());
                 } else {
-                    window.axios.post('/hubspot', { zip: data.zip_code });
                     dispatch(receiveLocationInfo(data));
                 }
             });
@@ -4804,7 +4799,7 @@ var api = {
         return window.axios.get('/api/body-styles');
     },
     checkZipInRange: function checkZipInRange(code) {
-        return window.axios.get('/api/zip-codes/' + code);
+        return window.axios.get('/zip-codes/' + code);
     },
     getDimensions: function getDimensions(jato_vehicle_id) {
         return window.axios.get('/api/dimensions', {

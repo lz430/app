@@ -332,8 +332,6 @@ export function toggleStyle(style) {
                 dispatch(receiveDeals(data));
             });
 
-        window.axios.post('/hubspot', { bodystyle1: selectedStyles.join() });
-
         dispatch({
             type: ActionTypes.TOGGLE_STYLE,
             selectedStyles: selectedStyles,
@@ -494,8 +492,6 @@ export function setZipCode(zipcode) {
                 dispatch(receiveDeals(data));
             });
 
-        window.axios.post('/hubspot', { zip: zipcode });
-
         dispatch({
             type: ActionTypes.SET_ZIP_CODE,
             zipcode,
@@ -515,7 +511,6 @@ export function requestLocationInfo() {
                 if (err) {
                     dispatch(requestDeals());
                 } else {
-                    window.axios.post('/hubspot', { zip: data.zip_code });
                     dispatch(receiveLocationInfo(data));
                 }
             });
