@@ -23122,10 +23122,6 @@ var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
-var _api = __webpack_require__(65);
-
-var _api2 = _interopRequireDefault(_api);
-
 var _CashFinanceLeaseCalculator = __webpack_require__(158);
 
 var _CashFinanceLeaseCalculator2 = _interopRequireDefault(_CashFinanceLeaseCalculator);
@@ -23135,14 +23131,6 @@ var _ConfirmDeal = __webpack_require__(977);
 var _ConfirmDeal2 = _interopRequireDefault(_ConfirmDeal);
 
 var _reactRedux = __webpack_require__(14);
-
-var _fuelapi = __webpack_require__(224);
-
-var _fuelapi2 = _interopRequireDefault(_fuelapi);
-
-var _fuelColorMap = __webpack_require__(375);
-
-var _fuelColorMap2 = _interopRequireDefault(_fuelColorMap);
 
 var _Modal = __webpack_require__(114);
 
@@ -23191,13 +23179,7 @@ var ConfirmDetails = function (_React$PureComponent) {
         var _this = _possibleConstructorReturn(this, (ConfirmDetails.__proto__ || Object.getPrototypeOf(ConfirmDetails)).call(this, props));
 
         _this.state = {
-            featuredImage: props.deal.photos[0],
-            fuelExternalImages: [],
-            fuelInternalImages: [],
-            warranties: null,
-            dimensions: null,
-            showStandardFeatures: false,
-            showFeatures: false
+            featuredImage: props.deal.photos[0]
         };
         return _this;
     }
@@ -23210,58 +23192,7 @@ var ConfirmDetails = function (_React$PureComponent) {
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this2 = this;
-
             this._isMounted = true;
-
-            _api2.default.getDimensions(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
-                if (!_this2._isMounted) return;
-
-                _this2.setState({
-                    dimensions: response.data
-                });
-            });
-
-            _api2.default.getWarranties(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
-                if (!_this2._isMounted) return;
-
-                _this2.setState({
-                    warranties: response.data
-                });
-            });
-        }
-    }, {
-        key: 'showStandardFeatures',
-        value: function showStandardFeatures() {
-            this.setState({
-                showStandardFeatures: true
-            });
-        }
-    }, {
-        key: 'showFeatures',
-        value: function showFeatures() {
-            this.setState({
-                showFeatures: true
-            });
-        }
-    }, {
-        key: 'selectFeaturedImage',
-        value: function selectFeaturedImage(index) {
-            this.setState({
-                featuredImage: this.allImages()[index]
-            });
-        }
-    }, {
-        key: 'renderDealRebatesModal',
-        value: function renderDealRebatesModal() {
-            return _react2.default.createElement(
-                _Modal2.default,
-                {
-                    onClose: this.props.clearSelectedDeal,
-                    closeText: 'Back to results'
-                },
-                _react2.default.createElement(_CashFinanceLeaseCalculator2.default, null)
-            );
         }
     }, {
         key: 'renderFeaturedImage',
@@ -23269,14 +23200,6 @@ var ConfirmDetails = function (_React$PureComponent) {
             return _react2.default.createElement('img', {
                 className: 'deal-details__primary-image',
                 src: _ramda2.default.propOr(this.state.q, 'url', this.state.featuredImage)
-            });
-        }
-    }, {
-        key: 'hideModals',
-        value: function hideModals() {
-            this.setState({
-                showStandardFeatures: false,
-                showFeatures: false
             });
         }
     }, {
@@ -23294,7 +23217,7 @@ var ConfirmDetails = function (_React$PureComponent) {
     }, {
         key: 'renderDeal',
         value: function renderDeal(deal, index) {
-            var _this3 = this;
+            var _this2 = this;
 
             return _react2.default.createElement(
                 _ConfirmDeal2.default,
@@ -23310,7 +23233,7 @@ var ConfirmDetails = function (_React$PureComponent) {
                             {
                                 className: 'deal-details__button deal-details__button--small deal-details__button--pink',
                                 onClick: function onClick() {
-                                    return _purchase2.default.start(deal, _this3.props.selectedTab, _this3.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this3.props.dealRebates, _this3.props.selectedRebates, _this3.props.selectedTab, deal), _this3.props.termDuration, _this3.props.isEmployee);
+                                    return _purchase2.default.start(deal, _this2.props.selectedTab, _this2.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this2.props.dealRebates, _this2.props.selectedRebates, _this2.props.selectedTab, deal), _this2.props.termDuration, _this2.props.isEmployee);
                                 }
                             },
                             'Buy Now'
@@ -23382,7 +23305,6 @@ ConfirmDetails.propTypes = {
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
-        compareList: state.compareList,
         selectedTab: state.selectedTab,
         downPayment: state.downPayment,
         dealRebates: state.dealRebates,
@@ -23395,12 +23317,6 @@ var mapStateToProps = function mapStateToProps(state) {
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(ConfirmDetails);
-
-// When selectedTab, downPayment, etc. are initially saved to redux store, also save to localStorage
-// on ComponentWillMount in ConfirmDetails, check localStorage for these values; if they exist, call the actions required to save them to redux
-// Once they are in Redux, they should be picked up by mapStateToProps and passed down to ConfirmDetail properly
-// Can also look into packages used to automatically re-hydrate Redux store
-// "Persisting Redux store to localStorage/SessionStorage"
 
 /***/ }),
 /* 375 */
@@ -23510,13 +23426,9 @@ var _ThankYouPage2 = _interopRequireDefault(_ThankYouPage);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// const persistedState = loadState();
-
 /**
  * Filter
  */
-
-// import { loadState } from 'localStorage';
 Array.from(document.getElementsByTagName('FilterPage')).map(function (element) {
     _reactDom2.default.render(_react2.default.createElement(
         _reactRedux.Provider,
@@ -63426,7 +63338,7 @@ var ConfirmDeal = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'div',
                                 null,
-                                _util2.default.moneyFormat(this.displayFinalPrice()) + '\n                                ' + (this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? 'per month' : '')
+                                _util2.default.moneyFormat(this.displayFinalPrice()) + '\n                                ' + (this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? ' /month' : '')
                             )
                         ),
                         _react2.default.createElement(

@@ -3,15 +3,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import FilterPage from 'containers/FilterPage';
 import Financing from 'containers/Financing';
-// import { loadState } from 'localStorage';
 import { Provider } from 'react-redux';
 import store from 'configureStore';
 import DealDetails from 'containers/DealDetails';
 import ComparePage from 'containers/ComparePage';
 import ConfirmDetails from 'containers/ConfirmDetails';
 import ThankYouPage from 'containers/ThankYouPage';
-
-// const persistedState = loadState();
 
 /**
  * Filter

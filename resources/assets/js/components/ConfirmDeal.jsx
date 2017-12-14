@@ -13,7 +13,6 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import util from 'src/util';
 
-
 class ConfirmDeal extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -455,7 +454,7 @@ class ConfirmDeal extends React.PureComponent {
                         <div className="confirm-deal__final-price confirm-deal__costs confirm-deal__bold">
                             <div>{`Your ${this.fixSelectedTabCaseFormatting()} Price:`}</div>
                             <div>{`${util.moneyFormat(this.displayFinalPrice())}
-                                ${this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? `per month` : ``}`}
+                                ${this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? ` /month` : ``}`}
                             </div>
                         </div>
                         <p className="confirm-deal__disclaimer">*Includes sales tax and dealer fees. License plate fees not included.</p>
