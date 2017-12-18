@@ -12,6 +12,7 @@
   &__button {
     @include button;
     font-size: 0.5rem;
+    height: 2rem;
 
     &:first-child {
       margin-right: 5px;

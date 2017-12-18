@@ -31,6 +31,7 @@ $icon-size: 20px;
     text-transform: uppercase;
   }
 
+
   &__filter {
     border-bottom: 2px solid $color-sidebar-background-primary;
     color: $color-darkestgrey;
@@ -59,7 +60,6 @@ $icon-size: 20px;
     border-top: 1px solid $color-sidebar-background-secondary;
     color: $color-text-white;
   }
-
   &__icon {
     fill: $color-darkestgrey;
     height: $icon-size;
@@ -68,5 +68,11 @@ $icon-size: 20px;
     position: absolute;
     right: 0;
     width: $icon-size;
+  }
+
+  &__section-header {
+    background-color: $color-sidebar-background-primary;
+    color: $color-text-white;
+    height: 2.75em;
   }
 }

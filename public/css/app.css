@@ -292,7 +292,7 @@ body {
 
 .section__image img {
   border: 1px solid #ccc;
-  width: 350px;
+  width: 300px;
 }
 
 .section__title {
@@ -305,7 +305,7 @@ body {
 
 .section__title--constrict-extra-small {
   margin: 0 auto;
-  max-width: 350px;
+  max-width: 300px;
 }
 
 .section__title--constrict-small {
@@ -1895,6 +1895,7 @@ body {
   text-decoration: none;
   text-align: center;
   font-size: 0.5rem;
+  height: 2rem;
 }
 
 .zipcode-finder__button--invert {
@@ -2146,6 +2147,12 @@ body {
   width: 20px;
 }
 
+.sidebar-filters__section-header {
+  background-color: #666666;
+  color: #fff;
+  height: 2.75em;
+}
+
 .filter-style-selector {
   text-align: center;
 }
@@ -2185,10 +2192,10 @@ body {
           justify-content: flex-end;
   margin: 5px 5px;
   min-height: 85px;
-  min-width: calc(50% - 10px);
+  min-width: calc(33% - 10px);
   padding: 5px;
   text-align: center;
-  width: calc(50% - 10px);
+  width: calc(33% - 10px);
 }
 
 .filter-style-selector__style--selected {
@@ -2214,12 +2221,11 @@ body {
 }
 
 .filter-selector__selector {
-  border-bottom: 1px solid #d7d7d7;
   cursor: pointer;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  padding: 10px;
+  padding: 5px;
 }
 
 .filter-selector__selector:last-child {
@@ -2245,6 +2251,8 @@ body {
   min-width: 23px;
   padding: 3px;
   width: 23px;
+  background-color: #fff;
+  fill: black;
 }
 
 .filter-selector__checkbox--selected {
@@ -3441,7 +3449,7 @@ body {
 }
 
 .filter-page__deals--small-filters-shown {
-  left: 250px;
+  left: 300px;
 }
 
 .filter-page__deals--small-filters-hidden {
@@ -3455,8 +3463,8 @@ body {
 
 @media (min-width: 576px) {
   .filter-page__deals {
-    left: 250px;
-    width: calc(100vw - 250px);
+    left: 300px;
+    width: calc(100vw - 300px);
   }
 }
 
@@ -3464,7 +3472,7 @@ body {
   background-color: #666666;
   height: 100%;
   position: absolute;
-  width: 250px;
+  width: 300px;
 }
 
 @media (min-width: 576px) {
@@ -3478,7 +3486,7 @@ body {
 }
 
 .filter-page__filter-panel--small-filters-hidden {
-  left: -250px;
+  left: -300px;
 }
 
 .filter-page__filter-panel--small {

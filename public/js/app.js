@@ -58794,6 +58794,29 @@ var FilterPanel = function (_React$PureComponent) {
                         _SidebarFilter2.default,
                         {
                             toggle: function toggle() {
+                                return _this2.toggleOpenFilter('Make');
+                            },
+                            open: this.state.openFilter === 'Make',
+                            title: 'Vehicle Make',
+                            count: this.props.selectedMakes.length
+                        },
+                        _react2.default.createElement(_FilterMakeSelector2.default, {
+                            makes: this.props.makes,
+                            selectedMakes: this.props.selectedMakes,
+                            onSelectMake: this.props.toggleMake
+                        })
+                    ),
+                    _react2.default.createElement(_SidebarFilter2.default, {
+                        toggle: function toggle() {
+                            return _this2.toggleOpenFilter('Vehicle Model');
+                        },
+                        open: this.state.openFilter === 'Model',
+                        title: 'Vehicle Model'
+                    }),
+                    _react2.default.createElement(
+                        _SidebarFilter2.default,
+                        {
+                            toggle: function toggle() {
                                 return _this2.toggleOpenFilter('Vehicle Style');
                             },
                             open: this.state.openFilter === 'Vehicle Style',
@@ -58813,7 +58836,7 @@ var FilterPanel = function (_React$PureComponent) {
                                 return _this2.toggleOpenFilter('Vehicle Segment');
                             },
                             open: this.state.openFilter === 'Vehicle Segment',
-                            title: 'Vehicle Segment',
+                            title: 'Vehicle Class',
                             count: this.props.selectedSegment ? 1 : 0
                         },
                         _react2.default.createElement(_FilterSegmentSelector2.default, {
@@ -58823,20 +58846,13 @@ var FilterPanel = function (_React$PureComponent) {
                         })
                     ),
                     _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Make');
-                            },
-                            open: this.state.openFilter === 'Make',
-                            title: 'Brand',
-                            count: this.props.selectedMakes.length
-                        },
-                        _react2.default.createElement(_FilterMakeSelector2.default, {
-                            makes: this.props.makes,
-                            selectedMakes: this.props.selectedMakes,
-                            onSelectMake: this.props.toggleMake
-                        })
+                        'div',
+                        { className: 'sidebar-filters__section-header sidebar-filters__filter-title' },
+                        _react2.default.createElement(
+                            'p',
+                            null,
+                            'Features & Options'
+                        )
                     ),
                     _react2.default.createElement(
                         _SidebarFilter2.default,
@@ -58845,7 +58861,7 @@ var FilterPanel = function (_React$PureComponent) {
                                 return _this2.toggleOpenFilter('Fuel');
                             },
                             open: this.state.openFilter === 'Fuel',
-                            title: 'Fuel',
+                            title: 'Fuel Type',
                             count: this.props.selectedFuelType ? 1 : 0
                         },
                         _react2.default.createElement(_FilterFuelTypeSelector2.default, {
@@ -58870,6 +58886,29 @@ var FilterPanel = function (_React$PureComponent) {
                             onSelectTransmissionType: this.props.chooseTransmissionType
                         })
                     ),
+                    _react2.default.createElement(_SidebarFilter2.default, {
+                        toggle: function toggle() {
+                            return _this2.toggleOpenFilter('Drive Train');
+                        },
+                        open: this.state.openFilter === 'Drive Train',
+                        title: 'Drive Train'
+                    }),
+                    _react2.default.createElement(
+                        _SidebarFilter2.default,
+                        {
+                            toggle: function toggle() {
+                                return _this2.toggleOpenFilter('Convenience');
+                            },
+                            open: this.state.openFilter === 'Convenience',
+                            title: 'Comfort & Convenience',
+                            count: this.getCountOfSelectedFeatureByGroup('comfort and convenience')
+                        },
+                        _react2.default.createElement(_FilterFeatureSelector2.default, {
+                            selectedFeatures: this.props.selectedFeatures,
+                            features: this.getFeaturesByGroup('comfort and convenience'),
+                            onSelectFeature: this.props.toggleFeature
+                        })
+                    ),
                     _react2.default.createElement(
                         _SidebarFilter2.default,
                         {
@@ -58890,26 +58929,10 @@ var FilterPanel = function (_React$PureComponent) {
                         _SidebarFilter2.default,
                         {
                             toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Safety');
-                            },
-                            open: this.state.openFilter === 'Safety',
-                            title: 'Safety',
-                            count: this.getCountOfSelectedFeatureByGroup('safety')
-                        },
-                        _react2.default.createElement(_FilterFeatureSelector2.default, {
-                            selectedFeatures: this.props.selectedFeatures,
-                            features: this.getFeaturesByGroup('safety'),
-                            onSelectFeature: this.props.toggleFeature
-                        })
-                    ),
-                    _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
                                 return _this2.toggleOpenFilter('Technology');
                             },
                             open: this.state.openFilter === 'Technology',
-                            title: 'Technology',
+                            title: 'Infotainment',
                             count: this.getCountOfSelectedFeatureByGroup('technology')
                         },
                         _react2.default.createElement(_FilterFeatureSelector2.default, {
@@ -58922,15 +58945,27 @@ var FilterPanel = function (_React$PureComponent) {
                         _SidebarFilter2.default,
                         {
                             toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Convenience');
+                                return _this2.toggleOpenFilter('Interior');
                             },
-                            open: this.state.openFilter === 'Convenience',
-                            title: 'Comfort and Convenience',
-                            count: this.getCountOfSelectedFeatureByGroup('comfort and convenience')
+                            open: this.state.openFilter === 'Interior',
+                            title: 'Interior',
+                            count: this.getCountOfSelectedFeatureByGroup('interior')
+                        },
+                        '/>'
+                    ),
+                    _react2.default.createElement(
+                        _SidebarFilter2.default,
+                        {
+                            toggle: function toggle() {
+                                return _this2.toggleOpenFilter('Safety');
+                            },
+                            open: this.state.openFilter === 'Safety',
+                            title: 'Safety & Driver Assist',
+                            count: this.getCountOfSelectedFeatureByGroup('safety')
                         },
                         _react2.default.createElement(_FilterFeatureSelector2.default, {
                             selectedFeatures: this.props.selectedFeatures,
-                            features: this.getFeaturesByGroup('comfort and convenience'),
+                            features: this.getFeaturesByGroup('safety'),
                             onSelectFeature: this.props.toggleFeature
                         })
                     ),

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class Version extends Model
 {
     public const SEGMENT_MAP = [
-        'Subcompact' => [
+        'Sub-Compact' => [
             'mini',
             'light',
         ],
