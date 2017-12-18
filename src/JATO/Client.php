@@ -32,7 +32,7 @@ class Client
                 ], $additionalParams),
             ])->getBody(), true);
         } catch (ClientException $e) {
-            Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode");
+            \Facades\App\JATO\Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode");
             return [];
         }
     }

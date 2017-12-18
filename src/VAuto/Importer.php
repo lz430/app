@@ -149,7 +149,7 @@ class Importer
                 }
 
                 if (! $matchedVersion) {
-                    Log::error('Could not find exact match for VIN -> JATO Version', [
+                    \Facades\App\JATO\Log::error('Could not find exact match for VIN -> JATO Version', [
                         'VAuto Row' => $keyedData,
                         'JATO VIN Decode' => $decoded,
                     ]);
