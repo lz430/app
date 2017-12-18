@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Facades\App\JATO\Log;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -12,7 +13,7 @@ class Handler extends ExceptionHandler
      * A list of the exception types that should not be reported.
      *
      * @var array
-     */
+     *
     protected $dontReport = [
         \Illuminate\Auth\AuthenticationException::class,
         \Illuminate\Auth\Access\AuthorizationException::class,
@@ -33,7 +34,7 @@ class Handler extends ExceptionHandler
     public function report(Exception $exception)
     {
         if (str_contains($exception->getMessage(), 'jatoflex')) {
-            \Facades\App\JATO\Log::error($e->getMessage()); // @todo add other information!!
+            Log::error($e->getMessage());
         }
 
         parent::report($exception);

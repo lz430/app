@@ -2,9 +2,9 @@
 
 namespace DeliverMyRide\JATO;
 
+use Facades\App\JATO\Log;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
-use Illuminate\Support\Facades\Log;
 
 class Client
 {
@@ -32,7 +32,7 @@ class Client
                 ], $additionalParams),
             ])->getBody(), true);
         } catch (ClientException $e) {
-            \Facades\App\JATO\Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode");
+            Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode");
             return [];
         }
     }
