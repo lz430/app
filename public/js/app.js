@@ -1049,17 +1049,18 @@ function setEmployeeBrand(employeeBrand) {
 function checkZipInRange(code) {
     return function (dispatch) {
         _api2.default.checkZipInRange(code).then(function (data) {
-            ;
-            return dispatch(setZipInRange(data.data.supported));
+            return dispatch(setZipInRange(data.data));
         });
     };
 }
 
-function setZipInRange(supported) {
+function setZipInRange(data) {
     return function (dispatch) {
-        return dispatch({
-            type: ActionTypes.SET_ZIP_IN_RANGE,
-            supported: supported
+        _api2.default.setZip(data.code).then(function () {
+            return dispatch({
+                type: ActionTypes.SET_ZIP_IN_RANGE,
+                supported: data.supported
+            });
         });
     };
 }
@@ -1098,8 +1099,6 @@ function toggleStyle(style) {
         })).then(function (data) {
             dispatch(receiveDeals(data));
         });
-
-        window.axios.post('/hubspot', { bodystyle1: selectedStyles.join() });
 
         dispatch({
             type: ActionTypes.TOGGLE_STYLE,
@@ -1230,8 +1229,6 @@ function setZipCode(zipcode) {
         })).then(function (data) {
             dispatch(receiveDeals(data));
         });
-
-        window.axios.post('/hubspot', { zip: zipcode });
 
         dispatch({
             type: ActionTypes.SET_ZIP_CODE,
@@ -4809,6 +4806,9 @@ var api = {
     },
     checkZipInRange: function checkZipInRange(code) {
         return window.axios.get('/api/zip-codes/' + code);
+    },
+    setZip: function setZip(code) {
+        return window.axios.post('/zip-codes/', { code: code });
     },
     getDimensions: function getDimensions(jato_vehicle_id) {
         return window.axios.get('/api/dimensions', {

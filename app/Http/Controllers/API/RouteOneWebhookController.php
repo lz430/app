@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\UserDataChanged;
 use App\Purchase;
 use App\User;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
@@ -47,6 +48,8 @@ class RouteOneWebhookController extends BaseAPIController
                 'completed_at' => Carbon::now(),
                 'application_status' => $applicationStatus,
             ]);
+
+            event(UserDataChanged::class, ['email' => $email, 'creditapproval' => $applicationStatus]);
         } catch (ValidationException | ModelNotFoundException $e) {
             Bugsnag::notifyException($e);
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);

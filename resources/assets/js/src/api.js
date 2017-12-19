@@ -9,6 +9,9 @@ const api = {
     checkZipInRange: code => {
         return window.axios.get(`/api/zip-codes/${code}`);
     },
+    setZip: code => {
+        return window.axios.post('/zip-codes/', {code});
+    },
     getDimensions: jato_vehicle_id => {
         return window.axios.get('/api/dimensions', {
             params: {
