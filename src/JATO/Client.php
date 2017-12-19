@@ -2,9 +2,9 @@
 
 namespace DeliverMyRide\JATO;
 
+use Facades\App\JATO\Log;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
-use Illuminate\Support\Facades\Log;
 
 class Client
 {

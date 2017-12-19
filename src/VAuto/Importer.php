@@ -3,16 +3,14 @@
 namespace DeliverMyRide\VAuto;
 
 use App\Feature;
-use App\Incentive;
-use App\JATO\Equipment;
 use App\JATO\Make;
 use App\JATO\Manufacturer;
-use App\JATO\Option;
 use App\JATO\VehicleModel;
 use App\JATO\Version;
 use App\Deal;
 use Carbon\Carbon;
 use DeliverMyRide\JATO\Client;
+use Facades\App\JATO\Log;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use function GuzzleHttp\Promise\unwrap;
@@ -21,7 +19,6 @@ use Illuminate\Database\QueryException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class Importer
 {
@@ -122,7 +119,7 @@ class Importer
              * Skip if vin is already in db and has a matching version
              */
             $savedDeal = Deal::where('vin', $keyedData['VIN'])->first();
-            if ($savedDeal && $savedDeal->versions()->count() === 1) {
+            if ($savedDeal && $savedDeal->versions()->count() > 0) {
                 continue;
             }
 
@@ -187,8 +184,10 @@ class Importer
                     );
                 });
             } catch (ClientException | ServerException $e) {
+                Log::error('Importer error: ' . $e->getMessage());
                 $this->info('Error: ' . $e->getMessage());
             } catch (QueryException $e) {
+                Log::error('Importer error: ' . $e->getMessage());
                 $this->info('Error: ' . $e->getMessage());
             }
         }
