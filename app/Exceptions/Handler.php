@@ -34,7 +34,7 @@ class Handler extends ExceptionHandler
     public function report(Exception $exception)
     {
         if (str_contains($exception->getMessage(), 'jatoflex')) {
-            Log::error($e->getMessage());
+            Log::error($exception->getMessage());
         }
 
         parent::report($exception);
