@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Deal;
 use App\Dealer;
 use App\Zipcode;
 use Illuminate\Support\Facades\DB;
@@ -23,5 +24,9 @@ class ZipCodeTesterController extends Controller
 
             echo "&bull; " . $dealer->name . " ($distance miles)<br>";
         });
+
+        $count = Deal::filterByLocationDistance($zip->latitude, $zip->longitude)->count();
+
+        echo "<br><br>There are $count deals that should return for you.";
     }
 }

@@ -512,6 +512,8 @@ export function requestLocationInfo() {
                 if (err) {
                     dispatch(requestDeals());
                 } else {
+                    window.axios.post('/hubspot', { zip: data.zip_code });
+                    
                     dispatch(receiveLocationInfo(data));
                 }
             });
@@ -549,6 +551,8 @@ export function receiveLocationInfo(data) {
             zipcode,
             city,
         });
+
+        dispatch(checkZipInRange(zipcode));
     };
 }
 
