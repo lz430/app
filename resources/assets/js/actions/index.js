@@ -513,7 +513,7 @@ export function requestLocationInfo() {
                     dispatch(requestDeals());
                 } else {
                     window.axios.post('/hubspot', { zip: data.zip_code });
-                    
+
                     dispatch(receiveLocationInfo(data));
                 }
             });

@@ -108,14 +108,14 @@ class ApplyOrPurchaseController extends Controller
              * instead of the newly created one.
              */
             $user = User::updateOrCreate([
-                'email' => $request->email
-            ],
-            [
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'phone_number' => $request->phone_number,
-                'zip' => session()->get('zip'),
-            ]);
+                    'email' => $request->email
+                ],
+                [
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'phone_number' => $request->phone_number,
+                    'zip' => session()->get('zip'),
+                ]);
 
             auth()->login($user);
 
