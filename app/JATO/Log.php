@@ -14,6 +14,11 @@ class Log
         $this->filename = storage_path('logs/jato.log');
     }
 
+    public function debug($message, $details = [])
+    {
+        $this->log('debug', $message, $details);
+    }
+
     public function info($message, $details = [])
     {
         $this->log('info', $message, $details);
