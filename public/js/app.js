@@ -23379,39 +23379,19 @@ var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
-var _api = __webpack_require__(71);
-
-var _api2 = _interopRequireDefault(_api);
-
 var _CashFinanceLeaseCalculator = __webpack_require__(158);
 
 var _CashFinanceLeaseCalculator2 = _interopRequireDefault(_CashFinanceLeaseCalculator);
 
-var _CompareBar = __webpack_require__(225);
+var _ConfirmDeal = __webpack_require__(970);
 
-var _CompareBar2 = _interopRequireDefault(_CompareBar);
+var _ConfirmDeal2 = _interopRequireDefault(_ConfirmDeal);
 
 var _reactRedux = __webpack_require__(14);
-
-var _Deal = __webpack_require__(157);
-
-var _Deal2 = _interopRequireDefault(_Deal);
-
-var _fuelapi = __webpack_require__(224);
-
-var _fuelapi2 = _interopRequireDefault(_fuelapi);
-
-var _fuelColorMap = __webpack_require__(375);
-
-var _fuelColorMap2 = _interopRequireDefault(_fuelColorMap);
 
 var _Modal = __webpack_require__(114);
 
 var _Modal2 = _interopRequireDefault(_Modal);
-
-var _miscicons = __webpack_require__(50);
-
-var _miscicons2 = _interopRequireDefault(_miscicons);
 
 var _propTypes = __webpack_require__(25);
 
@@ -23437,19 +23417,9 @@ var _strings = __webpack_require__(116);
 
 var _strings2 = _interopRequireDefault(_strings);
 
-var _reactSvgInline = __webpack_require__(17);
-
-var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
-
-var _zondicons = __webpack_require__(27);
-
-var _zondicons2 = _interopRequireDefault(_zondicons);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -23466,13 +23436,7 @@ var ConfirmDetails = function (_React$PureComponent) {
         var _this = _possibleConstructorReturn(this, (ConfirmDetails.__proto__ || Object.getPrototypeOf(ConfirmDetails)).call(this, props));
 
         _this.state = {
-            featuredImage: props.deal.photos[0],
-            fuelExternalImages: [],
-            fuelInternalImages: [],
-            warranties: null,
-            dimensions: null,
-            showStandardFeatures: false,
-            showFeatures: false
+            featuredImage: props.deal.photos[0]
         };
         return _this;
     }
@@ -23485,150 +23449,15 @@ var ConfirmDetails = function (_React$PureComponent) {
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this2 = this;
-
             this._isMounted = true;
-
-            _api2.default.getDimensions(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
-                if (!_this2._isMounted) return;
-
-                _this2.setState({
-                    dimensions: response.data
-                });
-            });
-
-            _api2.default.getWarranties(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
-                if (!_this2._isMounted) return;
-
-                _this2.setState({
-                    warranties: response.data
-                });
-            });
         }
     }, {
-        key: 'showStandardFeatures',
-        value: function showStandardFeatures() {
-            this.setState({
-                showStandardFeatures: true
+        key: 'renderFeaturedImage',
+        value: function renderFeaturedImage() {
+            return _react2.default.createElement('img', {
+                className: 'deal-details__primary-image',
+                src: _ramda2.default.propOr(this.state.q, 'url', this.state.featuredImage)
             });
-        }
-    }, {
-        key: 'showFeatures',
-        value: function showFeatures() {
-            this.setState({
-                showFeatures: true
-            });
-        }
-    }, {
-        key: 'extractFuelImages',
-        value: function extractFuelImages(data) {
-            return data.data.products.map(function (product) {
-                return product.productFormats.map(function (format) {
-                    return {
-                        id: 'fuel_external_' + format.id,
-                        url: format.assets[0].url
-                    };
-                });
-            })[0] || [];
-        }
-    }, {
-        key: 'requestFuelImages',
-        value: function () {
-            var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-                var vehicleId, externalImages, _externalImages;
-
-                return regeneratorRuntime.wrap(function _callee$(_context) {
-                    while (1) {
-                        switch (_context.prev = _context.next) {
-                            case 0:
-                                _context.next = 2;
-                                return _fuelapi2.default.getVehicleId(this.props.deal.year, this.props.deal.make, this.props.deal.model);
-
-                            case 2:
-                                _context.t0 = _context.sent.data[0].id;
-
-                                if (_context.t0) {
-                                    _context.next = 5;
-                                    break;
-                                }
-
-                                _context.t0 = false;
-
-                            case 5:
-                                vehicleId = _context.t0;
-
-                                if (vehicleId) {
-                                    _context.next = 8;
-                                    break;
-                                }
-
-                                return _context.abrupt('return');
-
-                            case 8:
-                                _context.prev = 8;
-                                _context.t1 = this;
-                                _context.next = 12;
-                                return _fuelapi2.default.getExternalImages(vehicleId, _fuelColorMap2.default.convert(this.props.deal.color));
-
-                            case 12:
-                                _context.t2 = _context.sent;
-                                externalImages = _context.t1.extractFuelImages.call(_context.t1, _context.t2);
-
-
-                                this.setState({
-                                    fuelExternalImages: externalImages
-                                });
-                                _context.next = 30;
-                                break;
-
-                            case 17:
-                                _context.prev = 17;
-                                _context.t3 = _context['catch'](8);
-                                _context.prev = 19;
-                                _context.t4 = this;
-                                _context.next = 23;
-                                return _fuelapi2.default.getExternalImages(vehicleId, 'white');
-
-                            case 23:
-                                _context.t5 = _context.sent;
-                                _externalImages = _context.t4.extractFuelImages.call(_context.t4, _context.t5);
-
-
-                                this.setState({
-                                    fuelExternalImages: _externalImages
-                                });
-                                _context.next = 30;
-                                break;
-
-                            case 28:
-                                _context.prev = 28;
-                                _context.t6 = _context['catch'](19);
-
-                            case 30:
-                            case 'end':
-                                return _context.stop();
-                        }
-                    }
-                }, _callee, this, [[8, 17], [19, 28]]);
-            }));
-
-            function requestFuelImages() {
-                return _ref.apply(this, arguments);
-            }
-
-            return requestFuelImages;
-        }()
-    }, {
-        key: 'selectFeaturedImage',
-        value: function selectFeaturedImage(index) {
-            this.setState({
-                featuredImage: this.allImages()[index]
-            });
-        }
-    }, {
-        key: 'allImages',
-        value: function allImages() {
-            return _ramda2.default.concat(this.props.deal.photos, _ramda2.default.concat(this.state.fuelExternalImages, this.state.fuelInternalImages));
         }
     }, {
         key: 'renderDealRebatesModal',
@@ -23643,235 +23472,16 @@ var ConfirmDetails = function (_React$PureComponent) {
             );
         }
     }, {
-        key: 'renderFeaturedImage',
-        value: function renderFeaturedImage() {
-            return _react2.default.createElement('img', {
-                className: 'deal-details__primary-image',
-                src: _ramda2.default.propOr(this.state.q, 'url', this.state.featuredImage)
-            });
-        }
-    }, {
-        key: 'hideModals',
-        value: function hideModals() {
-            this.setState({
-                showStandardFeatures: false,
-                showFeatures: false
-            });
-        }
-    }, {
-        key: 'renderStandardFeaturesModal',
-        value: function renderStandardFeaturesModal() {
-            var _this3 = this;
-
-            return _react2.default.createElement(
-                _Modal2.default,
-                {
-                    nowrapper: true,
-                    onClose: function onClose() {
-                        _this3.hideModals();
-                    }
-                },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'modal__content' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'modal__sticker-container' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'modal__sticker' },
-                            'Standard Features'
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'modal__header' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'modal__titles modal__titles--center' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'modal__subtitle modal__subtitle--center' },
-                                _strings2.default.dealYearMake(this.props.deal)
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'modal__title modal_title--center' },
-                                _strings2.default.dealModelTrim(this.props.deal)
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'modal__close' },
-                            _react2.default.createElement(_reactSvgInline2.default, {
-                                onClick: function onClick() {
-                                    return _this3.hideModals();
-                                },
-                                height: '20px',
-                                width: '20px',
-                                className: 'modal__close-x',
-                                svg: _zondicons2.default['close']
-                            })
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'modal__body deal-details__modal-body' },
-                        _react2.default.createElement(
-                            'h3',
-                            null,
-                            'Specifications'
-                        ),
-                        _react2.default.createElement('hr', null),
-                        _react2.default.createElement(
-                            'h4',
-                            null,
-                            'Dimensions'
-                        ),
-                        _react2.default.createElement(
-                            'ul',
-                            null,
-                            this.state.dimensions ? this.state.dimensions.map(function (dimension, index) {
-                                return _react2.default.createElement(
-                                    'li',
-                                    { key: index },
-                                    dimension.feature,
-                                    ': ',
-                                    dimension.content
-                                );
-                            }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
-                        ),
-                        _react2.default.createElement(
-                            'h4',
-                            null,
-                            'Warranties'
-                        ),
-                        _react2.default.createElement(
-                            'ul',
-                            null,
-                            this.state.warranties ? this.state.warranties.map(function (dimension, index) {
-                                return _react2.default.createElement(
-                                    'li',
-                                    { key: index },
-                                    dimension.feature,
-                                    ': ',
-                                    dimension.content
-                                );
-                            }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
-                        ),
-                        _react2.default.createElement(
-                            'h3',
-                            null,
-                            'Features'
-                        ),
-                        _react2.default.createElement('hr', null),
-                        _react2.default.createElement(
-                            'ul',
-                            null,
-                            this.props.deal.vauto_features.map(function (feature, index) {
-                                return _react2.default.createElement(
-                                    'li',
-                                    { key: index },
-                                    feature
-                                );
-                            })
-                        )
-                    )
-                )
-            );
-        }
-    }, {
-        key: 'renderFeaturesModal',
-        value: function renderFeaturesModal(deal) {
-            var _this4 = this;
-
-            return _react2.default.createElement(
-                _Modal2.default,
-                {
-                    nowrapper: true,
-                    onClose: function onClose() {
-                        _this4.hideModals();
-                    }
-                },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'modal__content' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'modal__sticker-container' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'modal__sticker' },
-                            'Additional Options'
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'modal__header' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'modal__titles modal__titles--center' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'modal__subtitle modal__subtitle--center' },
-                                _strings2.default.dealYearMake(deal)
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'modal__title modal_title--center' },
-                                _strings2.default.dealModelTrim(deal)
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'modal__close' },
-                            _react2.default.createElement(_reactSvgInline2.default, {
-                                onClick: function onClick() {
-                                    return _this4.hideModals();
-                                },
-                                height: '20px',
-                                width: '20px',
-                                className: 'modal__close-x',
-                                svg: _zondicons2.default['close']
-                            })
-                        )
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'modal__body deal-details__modal-body' },
-                    _react2.default.createElement(
-                        'ul',
-                        null,
-                        deal.features.map(function (feature, index) {
-                            return _react2.default.createElement(
-                                'li',
-                                { key: index },
-                                feature.feature
-                            );
-                        })
-                    )
-                )
-            );
-        }
-    }, {
         key: 'renderDeal',
         value: function renderDeal(deal, index) {
-            var _this5 = this;
-
-            var inCompareList = _ramda2.default.contains(deal, _ramda2.default.map(_ramda2.default.prop('deal'), this.props.compareList));
+            var _this2 = this;
 
             return _react2.default.createElement(
-                _Deal2.default,
+                _ConfirmDeal2.default,
                 { deal: deal, key: index, hideImageAndTitle: true },
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-details__deal-content' },
-                    _react2.default.createElement(
-                        'p',
-                        null,
-                        'TODO: Update this payment block per confirm screen designs.'
-                    ),
                     _react2.default.createElement(
                         'div',
                         { className: 'deal-details__buttons' },
@@ -23880,7 +23490,7 @@ var ConfirmDetails = function (_React$PureComponent) {
                             {
                                 className: 'deal-details__button deal-details__button--small deal-details__button--pink',
                                 onClick: function onClick() {
-                                    return _purchase2.default.start(deal, _this5.props.selectedTab, _this5.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this5.props.dealRebates, _this5.props.selectedRebates, _this5.props.selectedTab, deal), _this5.props.termDuration, _this5.props.isEmployee);
+                                    return _purchase2.default.start(deal, _this2.props.selectedTab, _this2.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this2.props.dealRebates, _this2.props.selectedRebates, _this2.props.selectedTab, deal), _this2.props.termDuration, _this2.props.isEmployee);
                                 }
                             },
                             'Buy Now'
@@ -23927,7 +23537,8 @@ var ConfirmDetails = function (_React$PureComponent) {
                         'div',
                         { className: 'deal-details__pricing' },
                         this.renderDeal(deal)
-                    )
+                    ),
+                    this.props.selectedDeal ? this.renderDealRebatesModal() : ''
                 )
             );
         }
@@ -23951,7 +23562,6 @@ ConfirmDetails.propTypes = {
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
-        compareList: state.compareList,
         selectedTab: state.selectedTab,
         downPayment: state.downPayment,
         dealRebates: state.dealRebates,
@@ -61239,10 +60849,6 @@ var _CompareBar = __webpack_require__(225);
 
 var _CompareBar2 = _interopRequireDefault(_CompareBar);
 
-var _ConfirmDetails = __webpack_require__(374);
-
-var _ConfirmDetails2 = _interopRequireDefault(_ConfirmDetails);
-
 var _reactRedux = __webpack_require__(14);
 
 var _Deal = __webpack_require__(157);
@@ -61269,10 +60875,6 @@ var _propTypes = __webpack_require__(25);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _purchase = __webpack_require__(228);
-
-var _purchase2 = _interopRequireDefault(_purchase);
-
 var _ramda = __webpack_require__(12);
 
 var _ramda2 = _interopRequireDefault(_ramda);
@@ -61280,10 +60882,6 @@ var _ramda2 = _interopRequireDefault(_ramda);
 var _react = __webpack_require__(7);
 
 var _react2 = _interopRequireDefault(_react);
-
-var _rebates = __webpack_require__(65);
-
-var _rebates2 = _interopRequireDefault(_rebates);
 
 var _strings = __webpack_require__(116);
 
@@ -63105,6 +62703,683 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(ThankYouPag
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 966 */,
+/* 967 */,
+/* 968 */,
+/* 969 */,
+/* 970 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _index = __webpack_require__(15);
+
+var Actions = _interopRequireWildcard(_index);
+
+var _api = __webpack_require__(71);
+
+var _api2 = _interopRequireDefault(_api);
+
+var _reactRedux = __webpack_require__(14);
+
+var _formulas = __webpack_require__(115);
+
+var _formulas2 = _interopRequireDefault(_formulas);
+
+var _miscicons = __webpack_require__(50);
+
+var _miscicons2 = _interopRequireDefault(_miscicons);
+
+var _Modal = __webpack_require__(114);
+
+var _Modal2 = _interopRequireDefault(_Modal);
+
+var _propTypes = __webpack_require__(25);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _ramda = __webpack_require__(12);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _react = __webpack_require__(7);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _rebates = __webpack_require__(65);
+
+var _rebates2 = _interopRequireDefault(_rebates);
+
+var _strings = __webpack_require__(116);
+
+var _strings2 = _interopRequireDefault(_strings);
+
+var _reactSvgInline = __webpack_require__(17);
+
+var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
+
+var _zondicons = __webpack_require__(27);
+
+var _zondicons2 = _interopRequireDefault(_zondicons);
+
+var _util = __webpack_require__(30);
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ConfirmDeal = function (_React$PureComponent) {
+    _inherits(ConfirmDeal, _React$PureComponent);
+
+    function ConfirmDeal(props) {
+        _classCallCheck(this, ConfirmDeal);
+
+        var _this = _possibleConstructorReturn(this, (ConfirmDeal.__proto__ || Object.getPrototypeOf(ConfirmDeal)).call(this, props));
+
+        _this.state = {
+            showStandardFeatures: false,
+            showFeatures: false,
+            fallbackDealImage: '/images/dmr-logo.svg',
+            fuelFeaturedImage: null,
+            warranties: null,
+            dimensions: null
+        };
+        return _this;
+    }
+
+    _createClass(ConfirmDeal, [{
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            this._isMounted = false;
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            this._isMounted = true;
+
+            if (this.props.deal.photos.length === 0) {
+                this.requestFuelImages();
+            }
+
+            _api2.default.getDimensions(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
+                if (!_this2._isMounted) return;
+
+                _this2.setState({
+                    dimensions: response.data
+                });
+            });
+
+            _api2.default.getWarranties(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
+                if (!_this2._isMounted) return;
+
+                _this2.setState({
+                    warranties: response.data
+                });
+            });
+
+            if (!this.props.dealRebates.hasOwnProperty(this.props.deal.id) && this.props.zipcode) {
+                this.requestRebates();
+            } else {
+                this.componentWillReceiveProps(this.props);
+            }
+        }
+    }, {
+        key: 'requestRebates',
+        value: function requestRebates() {
+            this.props.requestRebates(this.props.deal);
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(props) {
+            if (!props.dealRebates.hasOwnProperty(props.deal.id)) {
+                return this.props.requestRebates(this.props.deal);
+            }
+
+            this.setState({
+                availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(props.dealRebates, props.selectedRebates, props.selectedTab, props.deal),
+                selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(props.dealRebates, props.selectedRebates, props.selectedTab, props.deal)
+            });
+        }
+    }, {
+        key: 'featuredImageUrl',
+        value: function featuredImageUrl() {
+            return _ramda2.default.propOr(_ramda2.default.propOr(this.state.fallbackDealImage, 'url', this.state.fuelFeaturedImage), 'url', this.props.deal.photos[0]);
+        }
+    }, {
+        key: 'renderDealRebatesModal',
+        value: function renderDealRebatesModal() {
+            return _react2.default.createElement(_Modal2.default, {
+                onClose: this.props.clearSelectedDeal,
+                closeText: 'Back to results'
+            });
+        }
+    }, {
+        key: 'fixSelectedTabCaseFormatting',
+        value: function fixSelectedTabCaseFormatting() {
+            switch (this.props.selectedTab) {
+                case 'cash':
+                    return 'Cash';
+                case 'finance':
+                    return 'Finance';
+                case 'lease':
+                    return 'Lease';
+            }
+        }
+    }, {
+        key: 'displayFinalPrice',
+        value: function displayFinalPrice() {
+            switch (this.props.selectedTab) {
+                case 'cash':
+                    return this.props.deal.supplier_price;
+                case 'finance':
+                    {
+                        return Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), this.props.downPayment, this.props.termDuration));
+                    }
+                case 'lease':
+                    {
+                        return Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31)));
+                    }
+            }
+        }
+    }, {
+        key: 'showAppliedRebates',
+        value: function showAppliedRebates() {
+            var selectedAmount = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates));
+            var maxAmount = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.dealRebates));
+
+            this.setState({
+                selectedRebateAmount: selectedAmount,
+                maxRebateAmount: maxAmount
+            });
+        }
+    }, {
+        key: 'hideModals',
+        value: function hideModals() {
+            this.setState({
+                showStandardFeatures: false,
+                showFeatures: false
+            });
+        }
+    }, {
+        key: 'renderStandardFeaturesModal',
+        value: function renderStandardFeaturesModal(deal) {
+            var _this3 = this;
+
+            return _react2.default.createElement(
+                _Modal2.default,
+                {
+                    nowrapper: true,
+                    onClose: function onClose() {
+                        _this3.hideModals();
+                    }
+                },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'modal__content' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'modal__sticker-container' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal__sticker' },
+                            'Standard Features'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'modal__header' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal__titles modal__titles--center' },
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal__subtitle modal__subtitle--center' },
+                                _strings2.default.dealYearMake(deal)
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal__title modal_title--center' },
+                                _strings2.default.dealModelTrim(deal)
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal__close' },
+                            _react2.default.createElement(_reactSvgInline2.default, {
+                                onClick: function onClick() {
+                                    return _this3.hideModals();
+                                },
+                                height: '20px',
+                                width: '20px',
+                                className: 'modal__close-x',
+                                svg: _zondicons2.default['close']
+                            })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'modal__body deal-details__modal-body' },
+                        _react2.default.createElement(
+                            'h3',
+                            null,
+                            'Specifications'
+                        ),
+                        _react2.default.createElement('hr', null),
+                        _react2.default.createElement(
+                            'h4',
+                            null,
+                            'Dimensions'
+                        ),
+                        _react2.default.createElement(
+                            'ul',
+                            null,
+                            this.state.dimensions ? this.state.dimensions.map(function (dimension, index) {
+                                return _react2.default.createElement(
+                                    'li',
+                                    { key: index },
+                                    dimension.feature,
+                                    ': ',
+                                    dimension.content
+                                );
+                            }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                        ),
+                        _react2.default.createElement(
+                            'h4',
+                            null,
+                            'Warranties'
+                        ),
+                        _react2.default.createElement(
+                            'ul',
+                            null,
+                            this.state.warranties ? this.state.warranties.map(function (dimension, index) {
+                                return _react2.default.createElement(
+                                    'li',
+                                    { key: index },
+                                    dimension.feature,
+                                    ': ',
+                                    dimension.content
+                                );
+                            }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                        ),
+                        _react2.default.createElement(
+                            'h3',
+                            null,
+                            'Features'
+                        ),
+                        _react2.default.createElement('hr', null),
+                        _react2.default.createElement(
+                            'ul',
+                            null,
+                            deal.features.map(function (feature, index) {
+                                return _react2.default.createElement(
+                                    'li',
+                                    { key: index },
+                                    feature.feature
+                                );
+                            })
+                        )
+                    )
+                )
+            );
+        }
+    }, {
+        key: 'renderFeaturesModal',
+        value: function renderFeaturesModal() {
+            var _this4 = this;
+
+            return _react2.default.createElement(
+                _Modal2.default,
+                {
+                    nowrapper: true,
+                    onClose: function onClose() {
+                        _this4.hideModals();
+                    }
+                },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'modal__content' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'modal__sticker-container' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal__sticker' },
+                            'Additional Options'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'modal__header' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal__titles modal__titles--center' },
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal__subtitle modal__subtitle--center' },
+                                _strings2.default.dealYearMake(this.props.deal)
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'modal__title modal_title--center' },
+                                _strings2.default.dealModelTrim(this.props.deal)
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'modal__close' },
+                            _react2.default.createElement(_reactSvgInline2.default, {
+                                onClick: function onClick() {
+                                    return _this4.hideModals();
+                                },
+                                height: '20px',
+                                width: '20px',
+                                className: 'modal__close-x',
+                                svg: _zondicons2.default['close']
+                            })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'modal__body deal-details__modal-body' },
+                        _react2.default.createElement(
+                            'ul',
+                            null,
+                            this.props.deal.vauto_features.map(function (feature, index) {
+                                return _react2.default.createElement(
+                                    'li',
+                                    { key: index },
+                                    feature
+                                );
+                            })
+                        )
+                    )
+                )
+            );
+        }
+    }, {
+        key: 'showStandardFeatures',
+        value: function showStandardFeatures() {
+            this.setState({
+                showStandardFeatures: true
+            });
+        }
+    }, {
+        key: 'showFeatures',
+        value: function showFeatures() {
+            this.setState({
+                showFeatures: true
+            });
+        }
+    }, {
+        key: 'renderAppliedRebatesLink',
+        value: function renderAppliedRebatesLink() {
+            var _this5 = this;
+
+            if (!this.state.availableRebates) {
+                return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
+            }
+
+            var selectedAmount = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.state.selectedRebates));
+            var maxAmount = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.state.availableRebates));
+
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'div',
+                    { className: 'confirm-deal__rebate-info confirm-deal__costs confirm-deal__bold' },
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        'Rebates Applied:'
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        '' + _util2.default.moneyFormat(selectedAmount)
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'confirm-deal__more-rebates confirm-deal__costs' },
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _util2.default.moneyFormat(maxAmount) + ' in rebates available.  '
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            {
+                                onClick: function onClick() {
+                                    return _this5.props.selectDeal(_this5.props.deal);
+                                },
+                                href: '#'
+                            },
+                            'Get Rebates'
+                        )
+                    )
+                )
+            );
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this6 = this;
+
+            var deal = this.props.deal;
+            var featuredImageUrl = this.featuredImageUrl();
+            var featureImageClass = featuredImageUrl !== this.state.fallbackDealImage ? 'deal__image' : 'deal__image deal__image--fallback';
+
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'div',
+                    { className: 'confirm-deal' },
+                    this.props.hideImageAndTitle ? '' : _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'confirm-deal__basic-info' },
+                            _react2.default.createElement(
+                                'div',
+                                {
+                                    className: 'confirm-deal__basic-info-year-and-model'
+                                },
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'confirm-deal__basic-info-year-and-make' },
+                                    deal.year + ' ' + deal.make
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'confirm-deal__basic-info-model-and-series' },
+                                    deal.model + ' ' + deal.series
+                                )
+                            )
+                        ),
+                        _react2.default.createElement('img', {
+                            className: featureImageClass,
+                            src: featuredImageUrl
+                        })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'tabs__title' },
+                        'You Selected...'
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'confirm-deal__vehicle-info' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'model-vin' },
+                            _react2.default.createElement(
+                                'p',
+                                null,
+                                deal.year + ' ' + deal.make + ' ' + deal.model + ' ' + deal.series,
+                                ' ',
+                                _react2.default.createElement('br', null),
+                                'Stock #' + deal.vin
+                            )
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'confirm-deal__feature-buttons' },
+                        _react2.default.createElement(
+                            'button',
+                            {
+                                onClick: function onClick() {
+                                    return _this6.showStandardFeatures(deal);
+                                },
+                                className: 'confirm-deal__button confirm-deal__button--spacing confirm-deal__button--white confirm-deal__button--small'
+                            },
+                            _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['binoculars'] }),
+                            'Review Standard Features'
+                        ),
+                        _react2.default.createElement(
+                            'button',
+                            {
+                                onClick: function onClick() {
+                                    return _this6.showFeatures(deal);
+                                },
+                                className: 'confirm-deal__button confirm-deal__button--spacing confirm-deal__button--white confirm-deal__button--small'
+                            },
+                            _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['binoculars'] }),
+                            'Review Additional Options'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'confirm-deal__price' },
+                        _react2.default.createElement(
+                            'p',
+                            { className: 'confirm-deal__pricing-details' },
+                            'Pricing Details'
+                        ),
+                        _react2.default.createElement(
+                            'p',
+                            null,
+                            this.fixSelectedTabCaseFormatting() + ' Terms'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'confirm-deal__prices' },
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'confirm-deal__costs' },
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'confirm-deal__label' },
+                                    'Suggested Retail: '
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'confirm-deal__amount' },
+                                    _util2.default.moneyFormat(this.props.deal.msrp)
+                                )
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'confirm-deal__costs' },
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'confirm-deal__label' },
+                                    'Your Price:'
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'confirm-deal__amount' },
+                                    _util2.default.moneyFormat(this.props.deal.supplier_price) + '*'
+                                )
+                            ),
+                            this.renderAppliedRebatesLink()
+                        ),
+                        _react2.default.createElement('hr', null),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'confirm-deal__final-price confirm-deal__costs confirm-deal__bold' },
+                            _react2.default.createElement(
+                                'div',
+                                null,
+                                'Your ' + this.fixSelectedTabCaseFormatting() + ' Price:'
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                null,
+                                _util2.default.moneyFormat(this.displayFinalPrice()) + '\n                                ' + (this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? ' /month' : '')
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'p',
+                            { className: 'confirm-deal__disclaimer' },
+                            '*Includes sales tax and dealer fees. License plate fees not included.'
+                        )
+                    ),
+                    this.props.children
+                ),
+                this.state.showStandardFeatures ? this.renderStandardFeaturesModal(deal) : '',
+                this.state.showFeatures ? this.renderFeaturesModal(deal) : ''
+            );
+        }
+    }]);
+
+    return ConfirmDeal;
+}(_react2.default.PureComponent);
+
+ConfirmDeal.propTypes = {
+    deal: _propTypes2.default.shape({
+        year: _propTypes2.default.string.isRequired,
+        msrp: _propTypes2.default.number.isRequired,
+        employee_price: _propTypes2.default.number.isRequired,
+        supplier_price: _propTypes2.default.number.isRequired,
+        make: _propTypes2.default.string.isRequired,
+        model: _propTypes2.default.string.isRequired,
+        id: _propTypes2.default.number.isRequired,
+        vin: _propTypes2.default.string.isRequired
+    })
+};
+
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        compareList: state.compareList,
+        selectedTab: state.selectedTab,
+        downPayment: state.downPayment,
+        dealRebates: state.dealRebates,
+        selectedRebates: state.selectedRebates,
+        termDuration: state.termDuration,
+        fallbackDealImage: state.fallbackDealImage,
+        selectedDeal: state.selectedDeal,
+        isEmployee: state.isEmployee,
+        residualPercent: state.residualPercent
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(ConfirmDeal);
 
 /***/ })
 /******/ ]);
