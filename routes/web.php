@@ -13,7 +13,7 @@ Route::post('apply-or-purchase', 'ApplyOrPurchaseController@applyOrPurchase')->n
 Route::get('request-email', 'ApplyOrPurchaseController@requestEmail')->name('request-email');
 Route::post('receive-email', 'ApplyOrPurchaseController@receiveEmail')->name('receive-email');
 
-Route::get('zip-codes/{code}', 'ZipCodesController@show')->name('zipCodes.show');
+Route::post('zip-codes', 'ZipCodesController@store')->name('zipCodes.store');
 
 Route::group(['middleware' => 'auth'], function () {
     /** Purchase Flow */

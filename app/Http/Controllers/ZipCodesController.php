@@ -2,18 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Zipcode;
-use App\Http\Controllers\Controller;
-
 class ZipCodesController extends Controller
 {
-    public function show($code)
+    public function store()
     {
-        session(['zip' => $code]);
+        session(['zip' => request('code')]);
 
-        return response()->json([
-            'code' => $code,
-            'supported' => ZipCode::isSupported($code),
-        ]);
+        return response(['status' => 'ok']);
     }
 }

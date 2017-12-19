@@ -25,6 +25,7 @@ Route::get('warranties', 'WarrantiesController@getWarranties')->name('warranties
 Route::get('lease-rates', 'LeaseRatesController@getLeaseRates')->name('lease-rates.getLeaseRates');
 Route::get('dimensions', 'DimensionsController@getDimensions')->name('dimensions.getDimensions');
 Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');
+Route::get('zip-codes/{code}', 'ZipCodesController@show')->name('zipCodes.show');
 
 /**
  * Third-party

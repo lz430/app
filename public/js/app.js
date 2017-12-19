@@ -1049,17 +1049,18 @@ function setEmployeeBrand(employeeBrand) {
 function checkZipInRange(code) {
     return function (dispatch) {
         _api2.default.checkZipInRange(code).then(function (data) {
-            ;
-            return dispatch(setZipInRange(data.data.supported));
+            return dispatch(setZipInRange(data.data));
         });
     };
 }
 
-function setZipInRange(supported) {
+function setZipInRange(data) {
     return function (dispatch) {
-        return dispatch({
-            type: ActionTypes.SET_ZIP_IN_RANGE,
-            supported: supported
+        _api2.default.setZip(data.code).then(function () {
+            return dispatch({
+                type: ActionTypes.SET_ZIP_IN_RANGE,
+                supported: data.supported
+            });
         });
     };
 }
@@ -4804,7 +4805,10 @@ var api = {
         return window.axios.get('/api/body-styles');
     },
     checkZipInRange: function checkZipInRange(code) {
-        return window.axios.get('/zip-codes/' + code);
+        return window.axios.get('/api/zip-codes/' + code);
+    },
+    setZip: function setZip(code) {
+        return window.axios.post('/zip-codes/', { code: code });
     },
     getDimensions: function getDimensions(jato_vehicle_id) {
         return window.axios.get('/api/dimensions', {
