@@ -25,3 +25,8 @@ Route::group(['middleware' => 'auth'], function () {
 /** External: Opt-in Monster and Hubspot */
 Route::post('hubspot', 'HubspotController@updateContact')->name('hubspot.contact.update');
 Route::post('set-email', 'OptinMonsterController@setEmailSession')->name('set-email');
+
+/** Temp */
+if (App::environment(['staging', 'local'])) {
+    Route::get('zip-tester/{zip}', 'ZipCodeTesterController');
+}
