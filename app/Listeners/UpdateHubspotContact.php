@@ -19,6 +19,7 @@ class UpdateHubspotContact
     {
         try {
             $this->client->createOrUpdateContact($event->payload);
+            $this->client->submitBuyNowContactInfoForm($event->payload);
             return;
         } catch (Exception $exception) {
             Bugsnag::notifyException($exception);

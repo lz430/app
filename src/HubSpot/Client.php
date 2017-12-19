@@ -55,6 +55,25 @@ class Client
         );
     }
 
+    public function submitBuyNowContactInfoForm($payload)
+    {
+        return json_decode(
+            (string) $this->guzzleClient->request(
+                'POST',
+                'https://forms.hubspot.com/uploads/form/v2/3388780/9cac9eed-3b2c-4d2f-9bc6-38b0c7b04c2f',
+                [
+                    'form_params' => [
+                        'email' => $payload['email'],
+                        'firstname' => $payload['firstname'],
+                        'lastname' => $payload['lastname'],
+                        'phone' => $payload['phone'],
+                    ],
+                ]
+            )->getBody(),
+            true
+        );
+    }
+
     private function generateHubspotPayloadFrom($payload)
     {
         /**
