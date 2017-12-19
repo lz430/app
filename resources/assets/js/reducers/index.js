@@ -59,6 +59,7 @@ const reducer = (state, action) => {
                 deals: null,
                 dealPageTotal: null,
                 dealPage: null,
+                requestingMoreDeals: true,
             });
         case ActionTypes.RECEIVE_DEALS:
             return Object.assign({}, state, {
@@ -68,6 +69,7 @@ const reducer = (state, action) => {
                     action.data.data.meta.pagination.current_page,
                     action.data.data.meta.pagination.total_pages
                 ),
+                requestingMoreDeals: false,
             });
         case ActionTypes.RECEIVE_DEAL_REBATES:
             let nextDealRebates = Object.assign({}, state.dealRebates);
@@ -105,7 +107,7 @@ const reducer = (state, action) => {
             });
         case ActionTypes.SET_IS_EMPLOYEE:
             return Object.assign({}, state, {
-                isEmployee: action.isEmployee,
+                employeeBrand: action.employeeBrand,
             });
         case ActionTypes.TOGGLE_FEATURE:
             return Object.assign({}, state, {
@@ -199,6 +201,11 @@ const reducer = (state, action) => {
                 zipcode: action.zipcode,
                 city: action.city,
             });
+
+        case ActionTypes.SET_ZIP_IN_RANGE:
+            return Object.assign({}, state, {
+                zipInRange: action.supported,
+        });
     }
 
     return state;

@@ -180,7 +180,7 @@ class LeaseCalculator extends React.PureComponent {
                                 formulas.calculateLeasedMonthlyPayments(
                                     util.getEmployeeOrSupplierPrice(
                                         this.props.deal,
-                                        this.props.isEmployee
+                                        this.props.employeeBrand
                                     ) -
                                         R.sum(
                                             R.map(
@@ -343,7 +343,7 @@ class LeaseCalculator extends React.PureComponent {
                         formulas.calculateLeasedMonthlyPayments(
                             util.getEmployeeOrSupplierPrice(
                                 this.props.deal,
-                                this.props.isEmployee
+                                this.props.employeeBrand
                             ) -
                                 R.sum(
                                     R.map(
@@ -369,10 +369,10 @@ class LeaseCalculator extends React.PureComponent {
                 {util.moneyFormat(
                     util.getEmployeeOrSupplierPrice(
                         this.props.deal,
-                        this.props.isEmployee
+                        this.props.employeeBrand
                     )
                 )}
-                <CustomerTypeSelect />
+                <CustomerTypeSelect deal={this.props.deal} />
                 {this.state.selectedRebates ? (
                     <div>
                         <hr />
@@ -401,7 +401,7 @@ class LeaseCalculator extends React.PureComponent {
                             {util.moneyFormat(
                                 util.getEmployeeOrSupplierPrice(
                                     this.props.deal,
-                                    this.props.isEmployee
+                                    this.props.employeeBrand
                                 )
                             )}
                         </span>
@@ -520,7 +520,7 @@ function mapStateToProps(state) {
         termDuration: state.termDuration,
         annualMileage: state.annualMileage,
         residualPercent: state.residualPercent,
-        isEmployee: state.isEmployee,
+        employeeBrand: state.employeeBrand,
         availableRebates: rebates.getAvailableRebatesForDealAndType(
             state.dealRebates,
             state.selectedRebates,

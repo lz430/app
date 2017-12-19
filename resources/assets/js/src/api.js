@@ -6,6 +6,12 @@ const api = {
     getBodyStyles: () => {
         return window.axios.get('/api/body-styles');
     },
+    checkZipInRange: code => {
+        return window.axios.get(`/api/zip-codes/${code}`);
+    },
+    setZip: code => {
+        return window.axios.post('/zip-codes/', {code});
+    },
     getDimensions: jato_vehicle_id => {
         return window.axios.get('/api/dimensions', {
             params: {
@@ -55,7 +61,7 @@ const api = {
         latitude,
         longitude,
         zipcode,
-    }) => {
+       }) => {
         return window.axios.get('/api/deals', {
             params: {
                 make_ids: makeIds,
@@ -89,6 +95,9 @@ const api = {
                 purchaseId,
             },
         });
+    },
+    postNotifyWhenInRange: (email = null) => {
+        return window.axios.post('/api/hubspot/not-in-area', {email});
     },
 };
 

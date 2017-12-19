@@ -75,6 +75,16 @@
                         </div>
                     </div>
 
+                    <div class="request-email__captcha">
+                        {!! Recaptcha::render() !!}
+
+                        @if ($errors->has('recaptcha'))
+                            <span class="request-email__error">
+                                <strong>{{ $errors->first('recaptcha') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+
                     <div class="request-email__buttons">
                         <button class="request-email__button request-email__button--purple request-email__button--small">
                             Submit Your Contact Information

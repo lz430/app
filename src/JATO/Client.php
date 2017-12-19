@@ -2,17 +2,13 @@
 
 namespace DeliverMyRide\JATO;
 
-use Carbon\Carbon;
+use Facades\App\JATO\Log;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\ClientException;
 
 class Client
 {
     private $guzzleClient;
-    private $categories = [
-        'cash' => 1,
-        'finance' => 7,
-        'lease' => 8,
-    ];
 
     public function __construct($username, $password)
     {
@@ -27,32 +23,24 @@ class Client
         return json_decode((string) $this->guzzleClient->request('GET', 'makes')->getBody(), true);
     }
 
-    public function incentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
+    public function incentivesByVehicleIdAndZipcode($vehicleId, $zipcode, $additionalParams = [])
     {
-        return json_decode((string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId", [
-            'query' => [
-                'zipCode' => $zipcode,
-            ],
-        ])->getBody(), true);
+        try {
+            return json_decode((string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId", [
+                'query' => array_merge([
+                    'zipCode' => $zipcode,
+                ], $additionalParams),
+            ])->getBody(), true);
+        } catch (ClientException $e) {
+            Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode");
+            return [];
+        }
     }
 
     public function featuresByVehicleIdAndCategoryId($vehicleId, $categoryId)
     {
         return json_decode(
             (string) $this->guzzleClient->request('GET', "features/$vehicleId/$categoryId?pageSize=100")->getBody(),
-            true
-        );
-    }
-
-    public function programsByVehicleIdAndCategoryIdAndZipCode($vehicleId, $categoryId, $zipcode)
-    {
-        return json_decode(
-            (string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId", [
-                'query' => [
-                    'category' => 8,
-                    'zipCode' => $zipcode,
-                ],
-            ])->getBody(),
             true
         );
     }
@@ -106,9 +94,10 @@ class Client
         return json_decode((string) $this->guzzleClient->request('GET', "makes/$name")->getBody(), true);
     }
 
-    public function modelByName($name)
+    public function modelByName($modelName)
     {
-        return json_decode((string) $this->guzzleClient->request('GET', "models/$name")->getBody(), true);
+        $modelName = $this->makeModelNameUrlFriendly($modelName);
+        return json_decode((string) $this->guzzleClient->request('GET', "models/$modelName")->getBody(), true);
     }
 
     public function modelsByMakeName($makeName)
@@ -147,6 +136,7 @@ class Client
 
     public function modelsVersionsByModelName($modelName)
     {
+        $modelName = $this->makeModelNameUrlFriendly($modelName);
         return json_decode(
             (string) $this->guzzleClient->request('GET', "models/$modelName/versions")->getBody(),
             true
@@ -155,6 +145,7 @@ class Client
 
     public function modelsVersionsByModelNameAsync($modelName)
     {
+        $modelName = $this->makeModelNameUrlFriendly($modelName);
         return $this->guzzleClient->requestAsync('GET', "models/$modelName/versions");
     }
 
@@ -200,6 +191,11 @@ class Client
             )->getBody(),
             true
         );
+    }
+
+    private function makeModelNameUrlFriendly($modelName)
+    {
+        return strtolower(str_replace(' ', '-', $modelName));
     }
 
     private function authorize($username, $password)

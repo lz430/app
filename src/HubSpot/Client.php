@@ -15,49 +15,19 @@ class Client
             'connect_timeout' => 5,
         ]);
     }
-    
-    public function createContact($payload)
+
+    public function createOrUpdateContact($payload)
     {
-        $hubspotPayload = $this->generateHubspotPayloadFrom($payload);
-        
         return json_decode(
             (string) $this->guzzleClient->request(
                 'POST',
-                'contacts/v1/contact?hapikey=' . config('services.hubspot.api_key'),
-                ['json' => ['properties' => $hubspotPayload]]
+                "/contacts/v1/contact/createOrUpdate/email/{$payload['email']}?hapikey=" . config('services.hubspot.api_key'),
+                ['json' => ['properties' => $this->generateHubspotPayloadFrom($payload)]]
             )->getBody(),
             true
         );
     }
-    
-    public function updateContactByEmail($email, $payload)
-    {
-        $hubspotPayload = $this->generateHubspotPayloadFrom($payload);
-    
-        return json_decode(
-            (string) $this->guzzleClient->request(
-                'POST',
-                "/contacts/v1/contact/createOrUpdate/email/{$email}?hapikey=" . config('services.hubspot.api_key'),
-                ['json' => ['properties' => $hubspotPayload]]
-            )->getBody(),
-            true
-        );
-    }
-    
-    public function updateContactByHubspotId($hubspot_id, $payload)
-    {
-        $hubspotPayload = $this->generateHubspotPayloadFrom($payload);
-    
-        return json_decode(
-            (string) $this->guzzleClient->request(
-                'POST',
-                "/contacts/v1/contact/vid/{$hubspot_id}/profile?hapikey=" . config('services.hubspot.api_key'),
-                ['json' => ['properties' => $hubspotPayload]]
-            )->getBody(),
-            true
-        );
-    }
-    
+
     public function getContacts()
     {
         return json_decode(
@@ -68,7 +38,42 @@ class Client
             true
         );
     }
-    
+
+    public function notifyUserWhenInRange($email)
+    {
+        return json_decode(
+            (string) $this->guzzleClient->request(
+                'POST',
+                'https://forms.hubspot.com/uploads/form/v2/3388780/1d44d5dc-d865-447e-9a56-3f11388c21f8',
+                [
+                    'form_params' => [
+                        'email' => $email,
+                    ],
+                ]
+            )->getBody(),
+            true
+        );
+    }
+
+    public function submitBuyNowContactInfoForm($payload)
+    {
+        return json_decode(
+            (string) $this->guzzleClient->request(
+                'POST',
+                'https://forms.hubspot.com/uploads/form/v2/3388780/9cac9eed-3b2c-4d2f-9bc6-38b0c7b04c2f',
+                [
+                    'form_params' => [
+                        'email' => $payload['email'],
+                        'firstname' => $payload['firstname'],
+                        'lastname' => $payload['lastname'],
+                        'phone' => $payload['phone'],
+                    ],
+                ]
+            )->getBody(),
+            true
+        );
+    }
+
     private function generateHubspotPayloadFrom($payload)
     {
         /**

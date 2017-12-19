@@ -9,6 +9,36 @@
   height: $sortbar-height + $filterbar-height;
   padding: 20px 15px;
 
+  &__button {
+    @include button;
+    font-size: 0.5rem;
+
+    &:first-child {
+      margin-right: 5px;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &--inactive {
+      $inactive-color: transparentize($color-section-bottom-border, 0.5);
+      border: 1px solid $inactive-color;
+      color: $inactive-color;
+
+      svg {
+        fill: $inactive-color;
+      }
+    }
+  }
+
+  &__buttons {
+    align-items: center;
+    display: flex;
+    flex: 2;
+    justify-content: flex-end;
+  }
+
   &__count {
     width: 100%;
   }
@@ -16,6 +46,25 @@
   &__count-number {
     font-weight: bold;
     margin-right: 5px;
+  }
+
+  &__errors {
+    align-content: center;
+    background-color: white;
+    border: 1px solid;
+    border-color: $color-error;
+    color: $color-error;
+    font-size: 0.9rem;
+    justify-content: space-around;
+    margin: 0.5em;
+    padding: 0.5em;
+  }
+
+  &__form {
+    align-self: center;
+    color: $color-grey;
+    font-size: small;
+    flex: 1;
   }
 
   &__info {
@@ -27,50 +76,13 @@
     padding-right: 8px;
   }
 
-  &__form {
-    align-self: center;
-    color: $color-grey;
-    font-size: small;
-    flex: 1;
-  }
-
   &__input {
     @include input;
     margin-right: 5px;
-    width: 55%;
+    width: 60%;
   }
 
   &__zipcode {
     font-size: 1.4rem;
-  }
-
-  &__buttons {
-    align-items: center;
-    display: flex;
-    flex: 2;
-    justify-content: flex-end;
-  }
-
-  &__button {
-    @include button;
-    font-size: .5rem;
-
-    &:first-child {
-      margin-right: 5px;
-    }
-
-    &:last-child {
-      margin-right: 0;
-    }
-
-    &--inactive {
-      $inactive-color: transparentize($color-section-bottom-border, .5);
-      border: 1px solid $inactive-color;
-      color: $inactive-color;
-
-      svg {
-        fill: $inactive-color;
-      }
-    }
   }
 }

@@ -3,16 +3,14 @@
 namespace DeliverMyRide\VAuto;
 
 use App\Feature;
-use App\Incentive;
-use App\JATO\Equipment;
 use App\JATO\Make;
 use App\JATO\Manufacturer;
-use App\JATO\Option;
 use App\JATO\VehicleModel;
 use App\JATO\Version;
 use App\Deal;
 use Carbon\Carbon;
 use DeliverMyRide\JATO\Client;
+use Facades\App\JATO\Log;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use function GuzzleHttp\Promise\unwrap;
@@ -21,7 +19,6 @@ use Illuminate\Database\QueryException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class Importer
 {
@@ -122,7 +119,7 @@ class Importer
              * Skip if vin is already in db and has a matching version
              */
             $savedDeal = Deal::where('vin', $keyedData['VIN'])->first();
-            if ($savedDeal && $savedDeal->versions()->count() === 1) {
+            if ($savedDeal && $savedDeal->versions()->count() > 0) {
                 continue;
             }
 
@@ -162,38 +159,14 @@ class Importer
                  */
                 DB::transaction(function () use ($matchedVersion, $versionDeal, $decoded, $keyedData, $fileHash) {
                     /**
-                     * If we don't already have the jato info saved to a jato_vehicle_id then we need to save
+                     * If we don't already have the jato info saved to a jato_uid then we need to save
                      * all of that (checking for manufacturer -> make -> model as well).
                      */
-                    if (! $version = Version::where('jato_vehicle_id', $matchedVersion['vehicle_ID'])->first()) {
-                        if (! $manufacturer = Manufacturer::where('name', $decoded['manufacturer'])->first()) {
-                            // Save/Update manufacturer, make, model, then versions
-                            $manufacturer = $this->saveManufacturer(
-                                $this->client->manufacturerByName($decoded['manufacturer'])
-                            );
-                        }
-
-                        if (! $make = Make::where('name', $decoded['make'])->first()) {
-                            // Save/Update and save new make
-                            $make = $this->saveManufacturerMake(
-                                $manufacturer,
-                                $this->client->makeByName($decoded['make'])
-                            );
-                        }
-
-                        if (! $model = VehicleModel::where('name', $decoded['model'])->first()) {
-                            // Save/Update and save new model
-                            $model = $this->saveMakeModel(
-                                $make,
-                                $this->client->modelByName($decoded['model'])
-                            );
-                        }
-
-                        $version = $this->saveModelVersion(
-                            $model,
-                            $this->client->modelsVersionsByVehicleId($matchedVersion['vehicle_ID'])
-                        );
+                    if (! $version = Version::where('jato_uid', $matchedVersion['uid'])->where('year', $versionDeal->year)->first()) {
+                        $version = $this->saveVersionAndRelations($decoded, $matchedVersion);
                     }
+
+                    $this->backfillNullMsrpsFromVersionMsrp($versionDeal, $version);
 
                     $versionDeal->versions()->attach($version->id);
 
@@ -211,13 +184,46 @@ class Importer
                     );
                 });
             } catch (ClientException | ServerException $e) {
+                Log::error('Importer error: ' . $e->getMessage());
                 $this->info('Error: ' . $e->getMessage());
             } catch (QueryException $e) {
+                Log::error('Importer error: ' . $e->getMessage());
                 $this->info('Error: ' . $e->getMessage());
             }
         }
 
         Deal::where('file_hash', '!=', $fileHash)->whereDoesntHave('purchases')->delete();
+    }
+
+    private function saveVersionAndRelations($decoded, $matchedVersion)
+    {
+        if (! $manufacturer = Manufacturer::where('name', $decoded['manufacturer'])->first()) {
+            // Save/Update manufacturer, make, model, then versions
+            $manufacturer = $this->saveManufacturer(
+                $this->client->manufacturerByName($decoded['manufacturer'])
+            );
+        }
+
+        if (! $make = Make::where('name', $decoded['make'])->first()) {
+            // Save/Update and save new make
+            $make = $this->saveManufacturerMake(
+                $manufacturer,
+                $this->client->makeByName($decoded['make'])
+            );
+        }
+
+        if (! $model = VehicleModel::where('name', $decoded['model'])->first()) {
+            // Save/Update and save new model
+            $model = $this->saveMakeModel(
+                $make,
+                $this->client->modelByName($decoded['model'])
+            );
+        }
+
+        return $this->saveModelVersion(
+            $model,
+            $this->client->modelsVersionsByVehicleId($matchedVersion['vehicle_ID'])
+        );
     }
 
     private function getGroupWithOverrides(string $feature, string $group)
@@ -420,7 +426,7 @@ class Importer
             'jato_vehicle_id' => $version['vehicleId'],
             'jato_uid' => $version['uid'],
             'jato_model_id' => $version['modelId'],
-            'year' => $version['modelYear'],
+            'year' => str_before($version['modelYear'], '.'), // trim off .5
             'name' => ! in_array($version['versionName'], ['-', ''])
                 ? $version['versionName']
                 : null,
@@ -448,6 +454,13 @@ class Importer
                 : null,
             'is_current' => $version['isCurrent'],
         ]);
+    }
+
+    private function backfillNullMsrpsFromVersionMsrp($deal, $version)
+    {
+        if (! $deal->msrp && $version['msrp']) {
+            $deal->update(['msrp' => $version['msrp']]);
+        }
     }
 
     private function saveManufacturer(array $manufacturer)
@@ -503,10 +516,11 @@ class Importer
 
                 $contents = array_map('trim', explode(' / ', $content));
 
-                foreach ($features as $index => $feature) {
+                foreach ($features as $index => $thisfeature) {
                     $all[] = [
-                        'feature' => "$prefix $feature",
-                        'content' => $contents[$index],
+                        'feature' => "$prefix $thisfeature",
+                        // If there's only one content value for more than one features, grab the first on fail
+                        'content' => array_get($contents, $index, reset($contents)),
                     ];
                 }
             } else {

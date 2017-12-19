@@ -13,14 +13,14 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\NewSessionCreated' => [
-            'App\Listeners\CreateHubspotContact',
-        ],
         'App\Events\UserDataChanged' => [
             'App\Listeners\UpdateHubspotContact',
         ],
         'App\Events\NewPurchaseInitiated' => [
             'App\Listeners\UpdateHubspotContact',
+        ],
+        'App\Events\UserWantsNotificationWhenInRange' => [
+            'App\Listeners\NotifyHubspotUserWhenInRange',
         ],
     ];
 

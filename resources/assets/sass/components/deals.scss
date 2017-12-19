@@ -1,5 +1,6 @@
 @import '../variables';
 @import '../mixins/button';
+@import '../mixins/input';
 
 .deals {
   background: $color-background-primary;
@@ -11,11 +12,21 @@
   padding: 10px 40px 20px;
 
   @media (min-width: $break-medium) {
-    height: calc(100vh - #{$nav-height + $sortbar-height + $filterbar-height + $compare-bar-height});
+    height: calc(100vh - #{$header-height + $sortbar-height + $filterbar-height + $compare-bar-height});
 
     &.no-compare {
-      height: calc(100vh - #{$nav-height + $sortbar-height + $filterbar-height});
+      height: calc(100vh - #{$header-height + $sortbar-height + $filterbar-height});
     }
+  }
+
+  &__no-matches {
+    display: flex;
+    font-size: 1.5em;
+    justify-content: center;
+    flex-flow: column;
+    margin: 1rem auto;
+    text-align: center;
+    width: 70%;
   }
 
   &__show-more {
@@ -28,8 +39,16 @@
     @include button;
   }
 
+  &__input {
+    @include input;
+    font-size: 0.6em;
+    margin-right: 1rem;
+    width: 70%;
+  }
+
   &__title {
     text-align: center;
     width: 100%;
   }
+
 }

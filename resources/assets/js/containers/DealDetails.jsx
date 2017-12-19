@@ -3,7 +3,7 @@ import api from 'src/api';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import CompareBar from 'components/CompareBar';
 import { connect } from 'react-redux';
-import Deal from 'components/Deal';
+import Deal from 'components/Deals/Deal';
 import fuelapi from 'src/fuelapi';
 import fuelcolor from 'src/fuel-color-map';
 import Modal from 'components/Modal';
@@ -211,6 +211,40 @@ class DealDetails extends React.PureComponent {
                         </div>
                     </div>
                     <div className="modal__body deal-details__modal-body">
+                        <h3>Specifications</h3>
+                        <hr />
+
+                        <h4>Dimensions</h4>
+                        <ul>
+                            {this.state.dimensions ? (
+                                this.state.dimensions.map((dimension, index) => {
+                                    return (
+                                        <li key={index}>
+                                            {dimension.feature}: {dimension.content}
+                                        </li>
+                                    );
+                                })
+                            ) : (
+                                <SVGInline svg={miscicons['loading']} />
+                            )}
+                        </ul>
+
+                        <h4>Warranties</h4>
+                        <ul>
+                            {this.state.warranties ? (
+                                this.state.warranties.map((dimension, index) => {
+                                    return (
+                                        <li key={index}>
+                                            {dimension.feature}: {dimension.content}
+                                        </li>
+                                    );
+                                })
+                            ) : (
+                                <SVGInline svg={miscicons['loading']} />
+                            )}
+                        </ul>
+                        <h3>Features</h3>
+                        <hr />
                         <ul>
                             {deal.features.map((feature, index) => {
                                 return <li key={index}>{feature.feature}</li>;
@@ -253,42 +287,6 @@ class DealDetails extends React.PureComponent {
                         </div>
                     </div>
                     <div className="modal__body deal-details__modal-body">
-                        <h3>Specifications</h3>
-                        <hr />
-
-                        <h4>Dimensions</h4>
-                        <ul>
-                            {this.state.dimensions ? (
-                                this.state.dimensions.map((dimension, index) => {
-                                    return (
-                                        <li key={index}>
-                                            {dimension.feature}: {dimension.content}
-                                        </li>
-                                    );
-                                })
-                            ) : (
-                                <SVGInline svg={miscicons['loading']} />
-                            )}
-                        </ul>
-
-                        <h4>Warranties</h4>
-                        <ul>
-                            {this.state.warranties ? (
-                                this.state.warranties.map((dimension, index) => {
-                                    return (
-                                        <li key={index}>
-                                            {dimension.feature}: {dimension.content}
-                                        </li>
-                                    );
-                                })
-                            ) : (
-                                <SVGInline svg={miscicons['loading']} />
-                            )}
-                        </ul>
-
-                        <h3>Features</h3>
-                        <hr />
-
                         <ul>
                             {this.props.deal.vauto_features.map(
                                 (feature, index) => {
@@ -442,7 +440,7 @@ const mapStateToProps = state => {
         termDuration: state.termDuration,
         fallbackDealImage: state.fallbackDealImage,
         selectedDeal: state.selectedDeal,
-        isEmployee: state.isEmployee,
+        employeeBrand: state.employeeBrand,
     };
 };
 

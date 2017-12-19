@@ -23,7 +23,7 @@ $modal-footer-height: 60px;
     background: $color-black;
     height: 100vh;
     left: 0;
-    opacity: .5;
+    opacity: 0.5;
     position: fixed;
     top: 0;
     width: 100vw;
@@ -68,7 +68,7 @@ $modal-footer-height: 60px;
 
     &::-webkit-scrollbar-thumb {
       background-clip: padding-box;
-      background-color: rgba(0,0,0,.5);
+      background-color: rgba(0,0,0,0.5);
       border: 1px solid rgba(0, 0, 0, 0);
       border-radius: 4px;
       margin-right: 10px;

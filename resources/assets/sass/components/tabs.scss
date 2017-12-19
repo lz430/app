@@ -5,7 +5,7 @@
 }
 
 .tabs {
-  border-bottom: 4px solid $color-pink;
+  border-bottom: 4px solid $color-blue;
   display: flex;
   justify-content: center;
 
@@ -33,7 +33,7 @@
     text-transform: uppercase;
 
     &--selected {
-      background: $color-pink;
+      background: $color-blue;
       color: #fff;
     }
 

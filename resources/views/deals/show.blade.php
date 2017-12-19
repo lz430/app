@@ -8,7 +8,7 @@
     </div>
     <div class="steps-bar">
         <div class="inner">
-            <div class="steps-bar__page-title">Details for Selected Vehicle..</div>
+            <div class="steps-bar__page-title">Details for Selected Vehicle...</div>
             @include('partials.steps', ['current' => 3])
         </div>
     </div>

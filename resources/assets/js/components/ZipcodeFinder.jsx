@@ -9,6 +9,7 @@ class ZipcodeFinder extends React.PureComponent {
 
         this.state = {
             editing: false,
+            zipError: false,
             zipcode: props.zipcode,
         };
 
@@ -18,11 +19,11 @@ class ZipcodeFinder extends React.PureComponent {
     }
 
     isValid() {
-        return (
-            this.state.zipcode &&
-            this.state.zipcode.length === 5 &&
-            parseInt(this.state.zipcode).toString() === this.state.zipcode
-        );
+        if (this.state.zipcode && this.state.zipcode.length === 5) {
+            return parseInt(this.state.zipcode).toString() === this.state.zipcode;
+        }
+
+        this.setState({zipError: true});
     }
 
     saveZip(event) {
@@ -36,41 +37,50 @@ class ZipcodeFinder extends React.PureComponent {
     handleChange(event) {
         this.setState({
             zipcode: event.target.value,
-        });
+            zipError: false,
+        })
     }
 
     render() {
         return (
-            <div className="zipcode-finder">
-                <div className="zipcode-finder__info">
-                    <div className="zipcode-finder___count">
-                        {this.props.deals ? (
-                            `${this.props.deals.length} results for:`
-                        ) : (
-                            ''
-                        )}
+            <div>
+                <div className="zipcode-finder">
+                    <div className="zipcode-finder__info">
+                        <div className="zipcode-finder___count">
+                            {this.props.deals ? (
+                                `${this.props.deals.length} results for:`
+                            ) : (
+                                ''
+                            )}
+                        </div>
+                        <div>{this.props.city ? '' : 'Zip Code'}</div>
+                        <div className="zipcode-finder__zipcode">
+                            {this.props.city || this.props.zipcode || '_____'}
+                        </div>
                     </div>
-                    <div>{this.props.city ? '' : 'Zip Code'}</div>
-                    <div className="zipcode-finder__zipcode">
-                        {this.props.city || this.props.zipcode || '_____'}
+                    <div className="zipcode-finder__form">
+                        <div>Change Zip:</div>
+                        <div>
+                            <form onSubmit={this.saveZip}>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    className="zipcode-finder__input"
+                                    placeholder={this.props.zipcode}
+                                    onChange={this.handleChange}
+                                />
+                                <button className="zipcode-finder__button zipcode-finder__button--dark-bg">
+                                    GO
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-                <div className="zipcode-finder__form">
-                    <div>Change Zip:</div>
-                    <div>
-                        <form onSubmit={this.saveZip}>
-                            <input
-                                type="number"
-                                className="zipcode-finder__input"
-                                placeholder={this.props.zipcode}
-                                onChange={this.handleChange}
-                            />
-                            <button className="zipcode-finder__button zipcode-finder__button--dark-bg">
-                                GO
-                            </button>
-                        </form>
-                    </div>
-                </div>
+                { this.state.zipError ?
+                    <div className="zipcode-finder__errors">
+                        <span>Please enter your 5-digit zip code.</span>
+                    </div> : ''
+                }
             </div>
         );
     }
@@ -79,6 +89,7 @@ class ZipcodeFinder extends React.PureComponent {
 ZipcodeFinder.propTypes = {
     zipcode: PropTypes.string,
     city: PropTypes.string,
+    zipInRange: PropTypes.bool,
 };
 
 const mapStateToProps = state => {
@@ -86,6 +97,7 @@ const mapStateToProps = state => {
         city: state.city,
         deals: state.deals,
         zipcode: state.zipcode,
+        zipInRange: state.zipInRange,
     };
 };
 

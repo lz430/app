@@ -94,6 +94,10 @@ class ApplyOrPurchaseController extends Controller
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'phone_number' => 'required|digits:10',
+                'g-recaptcha-response' => 'required|recaptcha',
+            ],
+            [
+                'g-recaptcha-response' => 'The recaptcha is required.',
             ]
         );
 
@@ -102,20 +106,24 @@ class ApplyOrPurchaseController extends Controller
              * If we already have a user with this email, let's use that account
              * instead of the newly created one.
              */
-            $user = User::where('email', $request->email)->first();
-
-            if (! $user) {
-                $user = User::create([
-                    'email' => $request->email,
-                    'name' => $request->first_name . ' ' . $request->last_name,
+            $user = User::updateOrCreate([
+                    'email' => $request->email
+                ],
+                [
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
                     'phone_number' => $request->phone_number,
+                    'zip' => session()->get('zip'),
                 ]);
-            }
 
             auth()->login($user);
 
             return $user;
         });
+
+        if (! session()->has('purchase') || ! is_object(session('purchase'))) {
+            return redirect()->back();
+        }
 
         $purchaseData = session('purchase');
         $purchaseData->user_id = $user->id;
@@ -129,8 +137,7 @@ class ApplyOrPurchaseController extends Controller
             $purchase = Purchase::create($purchaseData->toArray());
         }
 
-        event(new UserDataChanged(['email' => $user->email]));
-        event(new NewPurchaseInitiated($purchase));
+        event(new NewPurchaseInitiated($user, $purchase));
 
         return redirect()->route('view-apply')
             ->with('purchase', $purchase);
@@ -169,14 +176,6 @@ class ApplyOrPurchaseController extends Controller
 
         Mail::to(config('mail.dmr.address'))->send(new DealPurchasedDMR);
         Mail::to(auth()->user())->send(new DealPurchasedUser);
-
-        try {
-            (new Client)->updateContactByEmail(auth()->user()->email, [
-                'payment' => title_case($purchase->type),
-            ]);
-        } catch (Exception $exception) {
-            Bugsnag::notifyException($exception);
-        }
 
         return redirect()->route('thank-you', ['method' => $purchase->type]);
     }

@@ -20,6 +20,7 @@ const withStateDefaults = (state, changed) => {
             sortAscending: state.sortAscending,
             page: 1,
             zipcode: state.zipcode,
+            zipInRange: state.zipInRange,
         },
         changed
     );
@@ -203,8 +204,9 @@ export function receiveDeals(data) {
 export function receiveDealRebates(data) {
     return dispatch => {
         data.data.data.rebates.map(rebate => {
+            // Don't auto-select just based on this criteria. We'll eventually select on load based on the "Open Offer Best Offer"
             if (rebate.openOffer) {
-                dispatch(selectRebate(rebate));
+                // dispatch(selectRebate(rebate));
             }
         });
 
@@ -263,11 +265,32 @@ export function receiveBodyStyles(deals) {
     };
 }
 
-export function setIsEmployee(isEmployee) {
+export function setEmployeeBrand(employeeBrand) {
     return {
         type: ActionTypes.SET_IS_EMPLOYEE,
-        isEmployee: isEmployee,
+        employeeBrand,
     };
+}
+
+
+export function checkZipInRange(code) {
+   return dispatch => {
+       api.checkZipInRange(code).then(data => {
+           return dispatch(setZipInRange(data.data));
+       })
+   }
+
+}
+
+export function setZipInRange(data) {
+    return dispatch => {
+        api.setZip(data.code).then(() => {
+            return dispatch({
+                type: ActionTypes.SET_ZIP_IN_RANGE,
+                supported: data.supported,
+            })
+        });
+    }
 }
 
 export function receiveMoreDeals(data) {
@@ -311,8 +334,6 @@ export function toggleStyle(style) {
             .then(data => {
                 dispatch(receiveDeals(data));
             });
-
-        window.axios.post('/hubspot', { bodystyle1: selectedStyles.join() });
 
         dispatch({
             type: ActionTypes.TOGGLE_STYLE,
@@ -474,12 +495,12 @@ export function setZipCode(zipcode) {
                 dispatch(receiveDeals(data));
             });
 
-        window.axios.post('/hubspot', { zip: zipcode });
-
         dispatch({
             type: ActionTypes.SET_ZIP_CODE,
             zipcode,
         });
+        
+        dispatch(checkZipInRange(zipcode))
     };
 }
 
@@ -494,6 +515,7 @@ export function requestLocationInfo() {
                     dispatch(requestDeals());
                 } else {
                     window.axios.post('/hubspot', { zip: data.zip_code });
+
                     dispatch(receiveLocationInfo(data));
                 }
             });
@@ -531,6 +553,8 @@ export function receiveLocationInfo(data) {
             zipcode,
             city,
         });
+
+        dispatch(checkZipInRange(zipcode));
     };
 }
 

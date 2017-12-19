@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\JATO;
 
 use DeliverMyRide\VAuto\Importer;
 use Tests\TestCase;
 
-class ImporterTest extends TestCase
+class VersionAndFeatureImporterTest extends TestCase
 {
     /** @test */
     public function it_can_return_features_that_do_not_need_splitting()
@@ -86,8 +86,6 @@ class ImporterTest extends TestCase
     /** @test */
     public function it_can_split_double_jato_feature_and_content()
     {
-
-
         $this->assertEquals(
             [
                 [
@@ -106,6 +104,28 @@ class ImporterTest extends TestCase
         );
     }
 
+    /** @test */
+    public function if_content_count_and_feature_count_dont_match_it_defaults_to_first_content()
+    {
+        $this->assertEquals(
+            [
+                [
+                    'feature' => 'Front seat thigh support adjustment driver',
+                    'content' => 'Manual',
+                ],
+                [
+                    'feature' => 'Front seat thigh support adjustment passenger',
+                    'content' => 'Manual',
+                ],
+            ],
+            Importer::splitJATOFeaturesAndContent(
+                'Front seat thigh support adjustment (driver / passenger)',
+                'Manual'
+            )
+        );
+    }
+
+    /** @test */
     public function it_can_split_triple_jato_feature_and_content()
     {
         $this->assertEquals(

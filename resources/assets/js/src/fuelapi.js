@@ -62,6 +62,7 @@ const fuel = {
             params: {
                 productID: 2,
                 productFormatIDs: '6,8,12',
+                proto: 'https',
                 color,
             },
         });
@@ -71,6 +72,7 @@ const fuel = {
             params: {
                 productID: 1,
                 productFormatIDs: 17,
+                proto: 'https',
             },
         });
     },

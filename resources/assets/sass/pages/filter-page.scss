@@ -4,7 +4,7 @@
 .filter-page {
   background: $color-background-secondary;
   display: flex;
-  height: calc(100vh - #{$nav-height});
+  height: calc(100vh - #{$header-height});
   overflow: hidden;
   position: relative;
 
