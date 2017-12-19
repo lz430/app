@@ -1253,6 +1253,7 @@ function requestLocationInfo() {
                     dispatch(requestDeals());
                 } else {
                     window.axios.post('/hubspot', { zip: data.zip_code });
+
                     dispatch(receiveLocationInfo(data));
                 }
             });
@@ -1286,6 +1287,8 @@ function receiveLocationInfo(data) {
             zipcode: zipcode,
             city: city
         });
+
+        dispatch(checkZipInRange(zipcode));
     };
 }
 
@@ -52753,13 +52756,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var formNotSubmittedMessage = "Our service is not currently available in your area. Please provide your email so that we can notify you when we arrive. We apologize for the inconvenience.";
 var formSubmittedMessage = "Thank you! We will notify you when we arrive in your area.";
 
-var NoMatchingDeals = function (_Component) {
-    _inherits(NoMatchingDeals, _Component);
+var NoDealsOutOfRange = function (_Component) {
+    _inherits(NoDealsOutOfRange, _Component);
 
-    function NoMatchingDeals() {
-        _classCallCheck(this, NoMatchingDeals);
+    function NoDealsOutOfRange() {
+        _classCallCheck(this, NoDealsOutOfRange);
 
-        var _this = _possibleConstructorReturn(this, (NoMatchingDeals.__proto__ || Object.getPrototypeOf(NoMatchingDeals)).call(this));
+        var _this = _possibleConstructorReturn(this, (NoDealsOutOfRange.__proto__ || Object.getPrototypeOf(NoDealsOutOfRange)).call(this));
 
         _this.state = {
             email: '',
@@ -52768,7 +52771,7 @@ var NoMatchingDeals = function (_Component) {
         return _this;
     }
 
-    _createClass(NoMatchingDeals, [{
+    _createClass(NoDealsOutOfRange, [{
         key: 'handleSubmit',
         value: function handleSubmit(e) {
             var _this2 = this;
@@ -52824,10 +52827,10 @@ var NoMatchingDeals = function (_Component) {
         }
     }]);
 
-    return NoMatchingDeals;
+    return NoDealsOutOfRange;
 }(_react.Component);
 
-exports.default = NoMatchingDeals;
+exports.default = NoDealsOutOfRange;
 
 /***/ }),
 /* 936 */
