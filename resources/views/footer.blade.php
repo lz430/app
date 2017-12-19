@@ -22,9 +22,9 @@
         </div>
     </div>
     <div class="footer-links">
-        <a href="/about-us/">About Us</a>
-        <a href="/faq/">FAQ</a>
-        <a href="/blog/">Blog</a>
+        <a href="{{ marketing_url('about/') }}">About Us</a>
+        <a href="{{ marketing_url('faq/') }}">FAQ</a>
+        <a href="{{ marketing_url('blog/') }}">Blog</a>
     </div>
     <form>
         <div class="footer-signup">
@@ -35,9 +35,9 @@
     </form>
 
     <div class="footer-meta">
-        <a href="/contact-us/">Contact</a> |
-        <a href="/terms-of-service/">Terms</a> |
-        <a href="/privacy-policy/">Privacy</a> |
+        <a href="{{ marketing_url('contact/') }}">Contact</a> |
+        <a href="{{ marketing_url('terms-of-service/') }}">Terms</a> |
+        <a href="{{ marketing_url('privacy-policy/') }}">Privacy</a> |
         &copy; {{ date('Y') }} Deliver My Ride. All Rights Reserved. |
         Headquarters: 135 W Huron Street, Suite 1000, Pontiac, MI 48342  |
         Phone: 248.590.0360
