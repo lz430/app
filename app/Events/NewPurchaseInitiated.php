@@ -23,6 +23,7 @@ class NewPurchaseInitiated
             'email' => $user->email,
             'phone' => $user->phone_number,
             'zip' => $user->zip,
+            'vin' => $purchase->deal->vin,
             'bodystyle1' => $purchase->deal->versions()->first()->body_style,
             'brand' => $purchase->deal->make,
             'model1' => $purchase->deal->model,
