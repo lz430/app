@@ -426,7 +426,7 @@ class Importer
             'jato_vehicle_id' => $version['vehicleId'],
             'jato_uid' => $version['uid'],
             'jato_model_id' => $version['modelId'],
-            'year' => $version['modelYear'],
+            'year' => str_before($version['modelYear'], '.'), // trim off .5
             'name' => ! in_array($version['versionName'], ['-', ''])
                 ? $version['versionName']
                 : null,
