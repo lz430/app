@@ -2,19 +2,13 @@
 
 namespace DeliverMyRide\JATO;
 
-use Carbon\Carbon;
+use Facades\App\JATO\Log;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
-use Illuminate\Support\Facades\Log;
 
 class Client
 {
     private $guzzleClient;
-    private $categories = [
-        'cash' => 1,
-        'finance' => 7,
-        'lease' => 8,
-    ];
 
     public function __construct($username, $password)
     {

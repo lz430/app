@@ -1339,11 +1339,11 @@ body {
 
 @media (min-width: 768px) {
   .deals {
-    height: calc(100vh - 251px);
+    height: calc(100vh - 351px);
   }
 
   .deals.no-compare {
-    height: calc(100vh - 181px);
+    height: calc(100vh - 281px);
   }
 }
 
@@ -2067,7 +2067,7 @@ body {
 
 .sidebar-filters {
   background-color: #d7d7d7;
-  height: calc(100vh - 76px - 105px);
+  height: calc(100vh - 176px - 105px);
   overflow-x: hidden;
   overflow-y: auto;
   width: 100%;
@@ -3428,7 +3428,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  height: calc(100vh - 76px);
+  height: calc(100vh - 176px);
   overflow: hidden;
   position: relative;
 }

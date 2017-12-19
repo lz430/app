@@ -204,8 +204,9 @@ export function receiveDeals(data) {
 export function receiveDealRebates(data) {
     return dispatch => {
         data.data.data.rebates.map(rebate => {
+            // Don't auto-select just based on this criteria. We'll eventually select on load based on the "Open Offer Best Offer"
             if (rebate.openOffer) {
-                dispatch(selectRebate(rebate));
+                // dispatch(selectRebate(rebate));
             }
         });
 

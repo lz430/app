@@ -190,7 +190,7 @@ class DealPrice extends React.PureComponent {
             <div className="deal-price__rebates-applied">
                 <SVGInline
                     height="10px"
-                    weight="10px"
+                    width="10px"
                     className="deal-price__tag-icon"
                     svg={miscicons['tag']}
                 />

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\JATO;
 
 use App\JATO\RebateMatches;
 use Tests\TestCase;
