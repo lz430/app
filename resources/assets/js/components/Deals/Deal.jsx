@@ -1,6 +1,7 @@
 import React from 'react';
 import R from 'ramda';
 import fuelapi from 'src/fuelapi';
+import fuelcolor from 'src/fuel-color-map';
 import DealPrice from 'components/Deals/DealPrice';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';

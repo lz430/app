@@ -9,6 +9,9 @@ import R from 'ramda';
 import React from 'react';
 import rebates from 'src/rebates';
 import strings from 'src/strings';
+import fuelapi from 'src/fuelapi';
+import fuelcolor from 'src/fuel-color-map';
+import DealImage from 'components/Deals/DealImage';
 
 class ConfirmDetails extends React.PureComponent {
     constructor(props) {
@@ -16,6 +19,7 @@ class ConfirmDetails extends React.PureComponent {
 
         this.state = {
             featuredImage: props.deal.photos[0],
+            fallbackDealImage: '/images/dmr-logo.svg',
         };
     }
 
@@ -26,14 +30,30 @@ class ConfirmDetails extends React.PureComponent {
     componentDidMount() {
         this._isMounted = true;
 
+        if (this.props.deal.photos.length === 0) {
+            this.requestFuelImages();
+        }
+
     }
 
     renderFeaturedImage() {
         return (
-            <img
-                className="deal-details__primary-image"
-                src={R.propOr(this.state.q, 'url', this.state.featuredImage)}
+            <DealImage
+                featureImageClass="deal-details__primary-image"
+                featuredImageUrl={this.featuredImageUrl()}
             />
+        );
+    }
+
+    featuredImageUrl() {
+        return R.propOr(
+            R.propOr(
+                this.state.fallbackDealImage,
+                'url',
+                this.state.featuredImage
+            ),
+            'url',
+            this.props.deal.photos[0]
         );
     }
 
@@ -46,6 +66,51 @@ class ConfirmDetails extends React.PureComponent {
                 <CashFinanceLeaseCalculator />
             </Modal>
         );
+    }
+
+    extractFuelImages(data) {
+        return (
+            data.data.products.map(product =>
+                product.productFormats.map(format => {
+                    return {
+                        id: `fuel_external_${format.id}`,
+                        url: format.assets[0].url,
+                    };
+                })
+            )[0] || []
+        );
+    }
+
+    async requestFuelImages() {
+        const deal = this.props.deal;
+
+        const vehicleId =
+            (await fuelapi.getVehicleId(deal.year, deal.make, deal.model))
+                .data[0].id || false;
+        if (!vehicleId) return;
+
+        try {
+            const externalImages = this.extractFuelImages(
+                await fuelapi.getExternalImages(
+                    vehicleId,
+                    fuelcolor.convert(deal.color)
+                )
+            );
+
+            if (!this._isMounted) return;
+            this.setState({ featuredImage: externalImages[0] });
+        } catch (e) {
+            try {
+                const externalImages = this.extractFuelImages(
+                    await fuelapi.getExternalImages(vehicleId, 'white')
+                );
+
+                if (!this._isMounted) return;
+                this.setState({ featuredImage: externalImages[0] });
+            } catch (e) {
+                // No Fuel Images Available.
+            }
+        }
     }
 
     renderDeal(deal, index) {
