@@ -10,6 +10,8 @@ import rebates from 'src/rebates';
 import R from 'ramda';
 import util from 'src/util';
 
+
+// @TODO update this whole page for targets
 class ThankYouPage extends React.PureComponent {
     constructor(props) {
         super(props);

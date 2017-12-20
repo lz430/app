@@ -136,16 +136,6 @@ class ConfirmDetails extends React.PureComponent {
         );
     }
 
-    renderDealRebatesModal() {
-        return (
-            <Modal
-                onClose={this.props.clearSelectedDeal}
-                closeText="Back to results"
-            >
-                <CashFinanceLeaseCalculator />
-            </Modal>
-        );
-    }
     renderFeaturedImage() {
         return (
             <img
@@ -300,6 +290,9 @@ class ConfirmDetails extends React.PureComponent {
                                     deal,
                                     this.props.selectedTab,
                                     this.props.downPayment,
+
+                                    // @TODO Update this to handle.. what. targets? some other number
+                                    // that's influenced by the selected targets?
                                     rebates.getSelectedRebatesForDealAndType(
                                         this.props.dealRebates,
                                         this.props.selectedRebates,

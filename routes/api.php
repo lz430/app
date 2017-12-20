@@ -19,8 +19,7 @@ Route::get('body-styles', 'BodyStylesController@index')->name('bodyStyles.index'
 Route::get('versions', 'VersionsController@index')->name('versions.index');
 Route::get('deals', 'DealsController@getDeals')->name('deals.index');
 Route::get('features', 'FeaturesController@index')->name('features.index');
-Route::get('rebates', 'RebatesController@getRebates')->name('rebates.getRebates');
-Route::get('rebates/best', 'RebatesController@getBestRebateIds')->name('rebates.getBestRebateIds');
+Route::get('targets', 'TargetsController@getTargets')->name('targets.getTargets');
 Route::get('warranties', 'WarrantiesController@getWarranties')->name('warranties.getWarranties');
 Route::get('lease-rates', 'LeaseRatesController@getLeaseRates')->name('lease-rates.getLeaseRates');
 Route::get('dimensions', 'DimensionsController@getDimensions')->name('dimensions.getDimensions');

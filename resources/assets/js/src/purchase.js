@@ -7,6 +7,7 @@ const purchase = {
         deal,
         selectedTab,
         downPayment,
+        // @TODO update this for targets
         selectedRebates,
         termDuration,
         employeeBrand

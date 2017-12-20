@@ -80,12 +80,12 @@ const api = {
             },
         });
     },
-    getRebates: (zipcode, vin, selected_rebate_ids = []) => {
-        return window.axios.get('/api/rebates', {
+    getTargets: (zipcode, vin, selected_target_ids = []) => {
+        return window.axios.get('/api/targets', {
             params: {
                 zipcode,
                 vin,
-                selected_rebate_ids,
+                selected_target_ids,
             },
         });
     },

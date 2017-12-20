@@ -47,6 +47,7 @@ test('calculates_total_cash_finance_price_via_formula', () => {
             price,
             docFee,
             downPayment,
+            // @TODO handle all this too
             totalRebates
         )
     ).toEqual(39122.6);

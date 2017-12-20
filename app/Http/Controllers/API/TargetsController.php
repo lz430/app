@@ -3,38 +3,38 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use DeliverMyRide\JATO\IncentiveImporter;
+use DeliverMyRide\JATO\TargetImporter;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Cache;
 
-class RebatesController extends Controller
+class TargetsController extends Controller
 {
     use ValidatesRequests;
 
-    public function getRebates(IncentiveImporter $importer)
+    public function getTargets(TargetImporter $importer)
     {
         $this->validate(request(), [
             'zipcode' => 'required|string',
             'vin' => 'required|string',
-            'selected_rebate_ids' => 'array:int',
+            'selected_target_ids' => 'array:int',
         ]);
 
         $cacheKey = $importer->getCacheKey(
             request('zipcode'),
             request('vin'),
-            request('selected_rebate_ids', [])
+            request('selected_target_ids', [])
         );
 
-        $rebates = Cache::remember($cacheKey, 1440, function () use ($importer) {
-            return $importer->availableRebates(
+        $targets = Cache::remember($cacheKey, 1440, function () use ($importer) {
+            return $importer->availableTargets(
                 request('vin'),
                 request('zipcode'),
-                request('selected_rebate_ids')
+                request('selected_target_ids')
             );
         });
 
         return response()->json([
-            'rebates' => $rebates
+            'targets' => $targets
         ]);
     }
 }

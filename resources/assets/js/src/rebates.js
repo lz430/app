@@ -1,5 +1,6 @@
 import R from 'ramda';
 
+// @TODO omg handle all this i am overwhelmed
 const rebates = {
     getAvailableRebatesForDealAndType: (
         dealRebates,

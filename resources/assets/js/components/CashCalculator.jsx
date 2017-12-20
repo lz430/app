@@ -21,7 +21,7 @@ class CashCalculator extends React.PureComponent {
                 )}
                 <CustomerTypeSelect deal={this.props.deal} />
                 <hr />
-                <h4>Available Rebates and Incentives</h4>
+                <h4>Some text here about picking yoour target</h4>
                 <Rebates />
                 <hr />
                 <h4>Summary</h4>
@@ -73,7 +73,7 @@ class CashCalculator extends React.PureComponent {
                     </div>
                     <div>
                         <span className="cash-finance-lease-calculator__left-item">
-                            Your Rebates and Incentives
+                            Some text here about yoour targets
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
                             {util.moneyFormat(

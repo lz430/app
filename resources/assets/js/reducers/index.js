@@ -72,6 +72,7 @@ const reducer = (state, action) => {
                 requestingMoreDeals: false,
             });
         case ActionTypes.RECEIVE_DEAL_REBATES:
+            // @TODO handle this insanity
             let nextDealRebates = Object.assign({}, state.dealRebates);
 
             nextDealRebates[action.data.dealId] = action.data.data.data.rebates;

@@ -274,11 +274,11 @@ class LeaseCalculator extends React.PureComponent {
         );
     }
 
-    renderYourRebatesAndIncentives() {
+    renderYourTargets() {
         return (
             <div>
                 <span className="cash-finance-lease-calculator__left-item">
-                    Your Rebates and Incentives
+                    Some text here about your target
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
                     {this.props.availableRebates ? (
@@ -406,7 +406,7 @@ class LeaseCalculator extends React.PureComponent {
                             )}
                         </span>
                     </div>
-                    {this.renderYourRebatesAndIncentives()}
+                    {this.renderYourTargets()}
                 </div>
                 <hr />
                 <div>

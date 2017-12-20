@@ -138,7 +138,7 @@ class DealDetails extends React.PureComponent {
         );
     }
 
-    renderDealRebatesModal() {
+    renderCalculatorModal() {
         return (
             <Modal
                 onClose={this.props.clearSelectedDeal}
@@ -414,7 +414,7 @@ class DealDetails extends React.PureComponent {
                     ''
                 )}
                 {this.state.showFeatures ? this.renderFeaturesModal(deal) : ''}
-                {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}
+                {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
             </div>
         );
     }

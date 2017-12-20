@@ -132,6 +132,7 @@ class Client
         return $this->get("features/$vehicleId/$categoryId?pageSize=100", [], true);
     }
 
+    // @todo : KEEP THIS ONE! it's for lease rates
     public function incentivesByVehicleIdAndZipcode($vehicleId, $zipcode, $additionalParams = [])
     {
         try {
@@ -146,6 +147,7 @@ class Client
         }
     }
 
+    /*
     public function bestCashIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
     {
         return $this->get("incentives/bestOffer/$vehicleId/cash", [
@@ -181,6 +183,7 @@ class Client
             ]
         );
     }
+    */
 
     protected function makeModelNameUrlFriendly($modelName)
     {

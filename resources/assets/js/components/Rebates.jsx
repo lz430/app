@@ -30,8 +30,8 @@ class Rebates extends React.PureComponent {
 
     componentWillReceiveProps(nextProps) {
         if (
-            this.props.selectedRebates.length !==
-                nextProps.selectedRebates.length &&
+            this.props.selectedTargets.length !==
+                nextProps.selectedTargets.length &&
             nextProps.zipcode
         ) {
             this.updateCompatibleRebates(nextProps);
@@ -43,7 +43,7 @@ class Rebates extends React.PureComponent {
             .getRebates(
                 props.zipcode,
                 props.deal.vin,
-                R.map(R.prop('id'), props.selectedRebates)
+                R.map(R.prop('id'), props.selectedTargets)
             )
             .then(response => {
                 if (!this._isMounted) return;
@@ -75,7 +75,7 @@ class Rebates extends React.PureComponent {
     }
 
     renderRebate(rebate, index) {
-        const isSelected = R.contains(rebate, this.props.selectedRebates);
+        const isSelected = R.contains(rebate, this.props.selectedTargets);
         const isSelectable = R.contains(
             rebate.id,
             this.state.compatibleRebateIds
@@ -135,13 +135,13 @@ function mapStateToProps(state) {
         deal: state.selectedDeal,
         availableRebates: rebates.getAvailableRebatesForDealAndType(
             state.dealRebates,
-            state.selectedRebates,
+            state.selectedTargets,
             state.selectedTab,
             state.selectedDeal
         ),
-        selectedRebates: rebates.getSelectedRebatesForDealAndType(
+        selectedTargets: rebates.getSelectedRebatesForDealAndType(
             state.dealRebates,
-            state.selectedRebates,
+            state.selectedTargets,
             state.selectedTab,
             state.selectedDeal
         ),

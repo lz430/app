@@ -16,6 +16,8 @@ import util from 'src/util';
 import api from 'src/api';
 import miscicons from 'miscicons';
 
+// @TODO fix how this page handles rebates for new target-based stuff
+
 class ComparePage extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -241,7 +243,7 @@ class ComparePage extends React.PureComponent {
         );
     }
 
-    renderRebatesAndIncentivesTable(compareList) {
+    renderTargetsTable(compareList) {
         const maxNumberCells = R.reduce(
             (carry, dealAndSelectedFilters) => {
                 return R.max(
@@ -259,8 +261,8 @@ class ComparePage extends React.PureComponent {
 
         return (
             <div className="compare-page-table">
-                {this.renderAccordionTabHeader('Rebates and Incentives')}
-                <div className={this.columnClass('Rebates and Incentives')}>
+                {this.renderAccordionTabHeader('Something About Targets')}
+                <div className={this.columnClass('Something About Targets')}>
                     {compareList.map((dealAndSelectedFilters, index) => {
                         return (
                             <div
@@ -483,7 +485,7 @@ class ComparePage extends React.PureComponent {
                     ) ? (
                         <AccordionTable>
                             {() => {
-                                return this.renderRebatesAndIncentivesTable(
+                                return this.renderTargetsTable(
                                     this.props.compareList
                                 );
                             }}
