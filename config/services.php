@@ -38,20 +38,15 @@ return [
     'jato' => [
         'username' => env('JATO_USERNAME'),
         'password' => env('JATO_PASSWORD'),
+        'subscription_key' => 'e37102e58e4f42bf927743e6e92c41c3',
     ],
 
     'vauto' => [
         'uploads_path' => env('VAUTO_UPLOADS_PATH'),
     ],
-    
+
     'fuel' => [
         'api_key' => env('FUEL_API_KEY'),
-    ],
-
-    'marketscan' => [
-        'url' => env('MARKET_SCAN_URL'),
-        'partner_id' => env('MARKET_SCAN_PARTNER_ID'),
-        'account_number' => env('MARKET_SCAN_ACCOUNT_NUMBER'),
     ],
 
     'hubspot' => [
