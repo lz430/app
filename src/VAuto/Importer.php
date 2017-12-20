@@ -57,11 +57,13 @@ class Importer
         "Engine",
         "Fuel",
         "Age",
+        "Option Codes",
     ];
 
     private $filesystem;
     private $client;
     private $info;
+    private $error;
 
     public function __construct(Filesystem $filesystem, Client $client)
     {
@@ -78,6 +80,18 @@ class Importer
     {
         if ($this->info) {
             call_user_func($this->info, $info);
+        }
+    }
+
+    public function setErrorFunction(callable $errorFunction)
+    {
+        $this->error = $errorFunction;
+    }
+
+    private function error(string $error)
+    {
+        if ($this->error) {
+            call_user_func($this->error, $error);
         }
     }
 
@@ -185,10 +199,15 @@ class Importer
                 });
             } catch (ClientException | ServerException $e) {
                 Log::error('Importer error: ' . $e->getMessage());
-                $this->info('Error: ' . $e->getMessage());
+                $this->error('Error: ' . $e->getMessage());
+
+                if ($e->getCode() === 401) {
+                    $this->error('401 error connecting to JATO; cancelling the rest of the calls.');
+                    throw $e;
+                }
             } catch (QueryException $e) {
                 Log::error('Importer error: ' . $e->getMessage());
-                $this->info('Error: ' . $e->getMessage());
+                $this->error('Error: ' . $e->getMessage());
             }
         }
 

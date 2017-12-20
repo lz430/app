@@ -7,7 +7,6 @@ use App\Events\UserDataChanged;
 use App\Mail\ApplicationSubmittedDMR;
 use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
-use App\Mail\DealPurchasedUser;
 use App\Purchase;
 use App\Transformers\PurchaseTransformer;
 use App\User;
@@ -175,7 +174,6 @@ class ApplyOrPurchaseController extends Controller
         $purchase->save();
 
         Mail::to(config('mail.dmr.address'))->send(new DealPurchasedDMR);
-        Mail::to(auth()->user())->send(new DealPurchasedUser);
 
         return redirect()->route('thank-you', ['method' => $purchase->type]);
     }

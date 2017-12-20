@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Mail\DealPurchasedDMR;
-use App\Mail\DealPurchasedUser;
 use App\Purchase;
 use App\User;
 use App\Deal;
@@ -36,10 +35,6 @@ class PurchaseEmailsTest extends TestCase
 
         Mail::assertSent(DealPurchasedDMR::class, function (Mailable $mailable) {
             return $mailable->hasTo(config('mail.dmr.address'));
-        });
-
-        Mail::assertSent(DealPurchasedUser::class, function (Mailable $mailable) {
-            return $mailable->hasTo('test@example.com');
         });
 
         $response->assertSeeText('thank-you');
