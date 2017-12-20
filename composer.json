@@ -18,10 +18,11 @@
         "spatie/laravel-fractal": "^5.0"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.0",
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~6.0",
-        "barryvdh/laravel-debugbar": "^3.0"
+        "nunomaduro/collision": "^1.1",
+        "phpunit/phpunit": "~6.0"
     },
     "autoload": {
         "classmap": [
