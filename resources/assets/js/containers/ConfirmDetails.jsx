@@ -1,20 +1,14 @@
 import * as Actions from 'actions/index';
-import api from 'src/api';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
+import ConfirmDeal from 'components/ConfirmDeal';
 import { connect } from 'react-redux';
-import Deal from 'components/Deals/Deal';
-import fuelapi from 'src/fuelapi';
-import fuelcolor from 'src/fuel-color-map';
 import Modal from 'components/Modal';
-import miscicons from 'miscicons';
 import PropTypes from 'prop-types';
 import purchase from 'src/purchase';
 import R from 'ramda';
 import React from 'react';
 import rebates from 'src/rebates';
 import strings from 'src/strings';
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
 
 class ConfirmDetails extends React.PureComponent {
     constructor(props) {
@@ -22,12 +16,6 @@ class ConfirmDetails extends React.PureComponent {
 
         this.state = {
             featuredImage: props.deal.photos[0],
-            fuelExternalImages: [],
-            fuelInternalImages: [],
-            warranties: null,
-            dimensions: null,
-            showStandardFeatures: false,
-            showFeatures: false,
         };
     }
 
@@ -38,102 +26,6 @@ class ConfirmDetails extends React.PureComponent {
     componentDidMount() {
         this._isMounted = true;
 
-        api
-            .getDimensions(this.props.deal.versions[0].jato_vehicle_id)
-            .then(response => {
-                if (!this._isMounted) return;
-
-                this.setState({
-                    dimensions: response.data,
-                });
-            });
-
-        api
-            .getWarranties(this.props.deal.versions[0].jato_vehicle_id)
-            .then(response => {
-                if (!this._isMounted) return;
-
-                this.setState({
-                    warranties: response.data,
-                });
-            });
-    }
-
-    showStandardFeatures() {
-        this.setState({
-            showStandardFeatures: true,
-        });
-    }
-
-    showFeatures() {
-        this.setState({
-            showFeatures: true,
-        });
-    }
-
-    extractFuelImages(data) {
-        return (
-            data.data.products.map(product =>
-                product.productFormats.map(format => {
-                    return {
-                        id: `fuel_external_${format.id}`,
-                        url: format.assets[0].url,
-                    };
-                })
-            )[0] || []
-        );
-    }
-
-    async requestFuelImages() {
-        const vehicleId =
-            (await fuelapi.getVehicleId(
-                this.props.deal.year,
-                this.props.deal.make,
-                this.props.deal.model
-            )).data[0].id || false;
-
-        if (!vehicleId) return;
-
-        try {
-            const externalImages = this.extractFuelImages(
-                await fuelapi.getExternalImages(
-                    vehicleId,
-                    fuelcolor.convert(this.props.deal.color)
-                )
-            );
-
-            this.setState({
-                fuelExternalImages: externalImages,
-            });
-        } catch (e) {
-            try {
-                const externalImages = this.extractFuelImages(
-                    await fuelapi.getExternalImages(vehicleId, 'white')
-                );
-
-                this.setState({
-                    fuelExternalImages: externalImages,
-                });
-            } catch (e) {
-                // No Fuel Images Available.
-            }
-        }
-    }
-
-    selectFeaturedImage(index) {
-        this.setState({
-            featuredImage: this.allImages()[index],
-        });
-    }
-
-    allImages() {
-        return R.concat(
-            this.props.deal.photos,
-            R.concat(
-                this.state.fuelExternalImages,
-                this.state.fuelInternalImages
-            )
-        );
     }
 
     renderFeaturedImage() {
@@ -145,143 +37,21 @@ class ConfirmDetails extends React.PureComponent {
         );
     }
 
-    hideModals() {
-        this.setState({
-            showStandardFeatures: false,
-            showFeatures: false,
-        });
-    }
-
-    renderStandardFeaturesModal() {
+    renderDealRebatesModal() {
         return (
             <Modal
-                nowrapper={true}
-                onClose={() => { this.hideModals() }}
+                onClose={this.props.clearSelectedDeal}
+                closeText="Back to results"
             >
-                <div className="modal__content">
-                    <div className="modal__sticker-container">
-                        <div className="modal__sticker">Standard Features</div>
-                    </div>
-                    <div className="modal__header">
-                        <div className="modal__titles modal__titles--center">
-                            <div className="modal__subtitle modal__subtitle--center">
-                                {strings.dealYearMake(this.props.deal)}
-                            </div>
-                            <div className="modal__title modal_title--center">
-                                {strings.dealModelTrim(this.props.deal)}
-                            </div>
-                        </div>
-                        <div className="modal__close">
-                            <SVGInline
-                                onClick={() => this.hideModals()}
-                                height="20px"
-                                width="20px"
-                                className="modal__close-x"
-                                svg={zondicons['close']}
-                            />
-                        </div>
-                    </div>
-                    <div className="modal__body deal-details__modal-body">
-                        <h3>Specifications</h3>
-                        <hr />
-
-                        <h4>Dimensions</h4>
-                        <ul>
-                            {this.state.dimensions ? (
-                                this.state.dimensions.map((dimension, index) => {
-                                    return (
-                                        <li key={index}>
-                                            {dimension.feature}: {dimension.content}
-                                        </li>
-                                    );
-                                })
-                            ) : (
-                                <SVGInline svg={miscicons['loading']} />
-                            )}
-                        </ul>
-
-                        <h4>Warranties</h4>
-                        <ul>
-                            {this.state.warranties ? (
-                                this.state.warranties.map((dimension, index) => {
-                                    return (
-                                        <li key={index}>
-                                            {dimension.feature}: {dimension.content}
-                                        </li>
-                                    );
-                                })
-                            ) : (
-                                <SVGInline svg={miscicons['loading']} />
-                            )}
-                        </ul>
-
-                        <h3>Features</h3>
-                        <hr />
-
-                        <ul>
-                            {this.props.deal.vauto_features.map(
-                                (feature, index) => {
-                                    return <li key={index}>{feature}</li>;
-                                }
-                            )}
-                        </ul>
-                    </div>
-                </div>
-            </Modal>
-        );
-    }
-
-    renderFeaturesModal(deal) {
-        return (
-            <Modal
-                nowrapper={true}
-                onClose={() => { this.hideModals() }}
-            >
-                <div className="modal__content">
-                    <div className="modal__sticker-container">
-                        <div className="modal__sticker">Additional Options</div>
-                    </div>
-                    <div className="modal__header">
-                        <div className="modal__titles modal__titles--center">
-                            <div className="modal__subtitle modal__subtitle--center">
-                                {strings.dealYearMake(deal)}
-                            </div>
-                            <div className="modal__title modal_title--center">
-                                {strings.dealModelTrim(deal)}
-                            </div>
-                        </div>
-                        <div className="modal__close">
-                            <SVGInline
-                                onClick={() => this.hideModals()}
-                                height="20px"
-                                width="20px"
-                                className="modal__close-x"
-                                svg={zondicons['close']}
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div className="modal__body deal-details__modal-body">
-                    <ul>
-                        {deal.features.map((feature, index) => {
-                            return <li key={index}>{feature.feature}</li>;
-                        })}
-                    </ul>
-                </div>
+                <CashFinanceLeaseCalculator />
             </Modal>
         );
     }
 
     renderDeal(deal, index) {
-        const inCompareList = R.contains(
-            deal,
-            R.map(R.prop('deal'), this.props.compareList)
-        );
-
         return (
-            <Deal deal={deal} key={index} hideImageAndTitle={true}>
+            <ConfirmDeal deal={deal} key={index} hideImageAndTitle={true}>
                 <div className="deal-details__deal-content">
-                    <p>TODO: Update this payment block per confirm screen designs.</p>
                     <div className="deal-details__buttons">
                         <button
                             className="deal-details__button deal-details__button--small deal-details__button--pink"
@@ -307,7 +77,7 @@ class ConfirmDetails extends React.PureComponent {
                         </button>
                     </div>
                 </div>
-            </Deal>
+            </ConfirmDeal>
         );
     }
 
@@ -333,6 +103,7 @@ class ConfirmDetails extends React.PureComponent {
                     <div className="deal-details__pricing">
                         {this.renderDeal(deal)}
                     </div>
+                    {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}
                 </div>
             </div>
         );
@@ -354,7 +125,6 @@ ConfirmDetails.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        compareList: state.compareList,
         selectedTab: state.selectedTab,
         downPayment: state.downPayment,
         dealRebates: state.dealRebates,
