@@ -53195,10 +53195,6 @@ var DealPrice = function (_React$PureComponent) {
             if (!this.state.availableRebates) {
                 return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
             }
-
-            var selectedAmount = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.state.selectedRebates));
-            var maxAmount = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.state.availableRebates));
-
             return _react2.default.createElement(
                 'div',
                 { className: 'deal-price__rebates-applied' },
@@ -53208,12 +53204,6 @@ var DealPrice = function (_React$PureComponent) {
                     className: 'deal-price__tag-icon',
                     svg: _miscicons2.default['tag']
                 }),
-                _util2.default.moneyFormat(selectedAmount),
-                ' rebates applied of',
-                ' ',
-                _util2.default.moneyFormat(maxAmount),
-                ' available...',
-                _react2.default.createElement('br', null),
                 _react2.default.createElement(
                     'a',
                     {
@@ -53222,7 +53212,7 @@ var DealPrice = function (_React$PureComponent) {
                         },
                         href: '#'
                     },
-                    'Recalculate Rebates and Financing'
+                    'See Available Rebates'
                 )
             );
         }
