@@ -17,19 +17,28 @@ class Client
         $this->authorize($username, $password);
     }
 
+    protected function get($path, $options = [])
+    {
+        try {
+            return json_decode((string) $this->guzzleClient->request('GET', $path, $options)->getBody(), true);
+        } catch (ClientException $e) {
+            // @todo handle ONLY 401s.. otherwise throw up again
+        }
+    }
+
     public function makes()
     {
-        return json_decode((string) $this->guzzleClient->request('GET', 'makes')->getBody(), true);
+        return $this->get('makes');
     }
 
     public function incentivesByVehicleIdAndZipcode($vehicleId, $zipcode, $additionalParams = [])
     {
         try {
-            return json_decode((string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId", [
+            return $this->get("incentives/programs/$vehicleId", [
                 'query' => array_merge([
                     'zipCode' => $zipcode,
-                ], $additionalParams),
-            ])->getBody(), true);
+                    ], $additionalParams)
+            ]);
         } catch (ClientException $e) {
             Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode");
             return [];
@@ -38,158 +47,117 @@ class Client
 
     public function featuresByVehicleIdAndCategoryId($vehicleId, $categoryId)
     {
-        return json_decode(
-            (string) $this->guzzleClient->request('GET', "features/$vehicleId/$categoryId?pageSize=100")->getBody(),
-            true
-        );
+        return $this->get("features/$vehicleId/$categoryId?pageSize=100");
     }
 
     public function featuresByVehicleIdAndCategoryIdAsync($vehicleId, $categoryId)
     {
+        // @todo handle 401 here too I guess?
         return $this->guzzleClient->requestAsync('GET', "features/$vehicleId/$categoryId?pageSize=100");
     }
 
     public function bestCashIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
     {
-        return json_decode((string) $this->guzzleClient->request('GET', "incentives/bestOffer/$vehicleId/cash", [
-            'query' => [
-                'zipCode' => $zipcode,
-            ],
-        ])->getBody(), true)['programs'] ?? [];
+        return $this->get("incentives/bestOffer/$vehicleId/cash", [
+                'query' => ['zipCode' => $zipcode]
+            ])['programs'] ?? [];
     }
 
     public function bestFinanceIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
     {
-        return json_decode((string) $this->guzzleClient->request('GET', "incentives/bestOffer/$vehicleId/finance", [
-            'query' => [
-                'zipCode' => $zipcode,
-            ],
-        ])->getBody(), true)['programs'] ?? [];
+        return $this->get("incentives/bestOffer/$vehicleId/finance", [
+                'query' => ['zipCode' => $zipcode]
+            ])['programs'] ?? [];
     }
 
     public function bestLeaseIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
     {
-        return json_decode((string) $this->guzzleClient->request('GET', "incentives/bestOffer/$vehicleId/lease", [
-            'query' => [
-                'zipCode' => $zipcode,
-            ],
-        ])->getBody(), true)['programs'] ?? [];
+        return $this->get("incentives/bestOffer/$vehicleId/lease", [
+                'query' => ['zipCode' => $zipcode]
+            ])['programs'] ?? [];
     }
 
     public function incentivesByVehicleIdAndZipcodeWithSelected($vehicleId, $zipcode, $selected)
     {
         $first = array_first($selected);
 
-        return json_decode((string) $this->guzzleClient->request('GET', "incentives/programs/$vehicleId/add/$first", [
-            'query' => [
-                'zipCode' => $zipcode,
-                'addedPrograms' => implode(',', $selected),
-            ],
-        ])->getBody(), true);
+        return $this->get(
+            "incentives/programs/$vehicleId/add/$first",
+            [
+                'query' => [
+                    'zipCode' => $zipcode,
+                    'addedPrograms' => implode(',', $selected),
+                ]
+            ]
+        );
     }
 
     public function makeByName($name)
     {
-        return json_decode((string) $this->guzzleClient->request('GET', "makes/$name")->getBody(), true);
+        return $this->get("makes/$make");
     }
 
     public function modelByName($modelName)
     {
-        $modelName = $this->makeModelNameUrlFriendly($modelName);
-        return json_decode((string) $this->guzzleClient->request('GET', "models/$modelName")->getBody(), true);
+        return $this->get("models/" . $this->makeModelNameUrlFriendly($modelName));
     }
 
     public function modelsByMakeName($makeName)
     {
-        return json_decode(
-            (string) $this->guzzleClient->request('GET', "makes/$makeName/models")->getBody(),
-            true
-        )['results'];
+        return $this->get("makes/$makeName/models")['results'];
     }
 
     public function manufacturers()
     {
-        return json_decode((string) $this->guzzleClient->request('GET', 'manufacturers')->getBody(), true)['results'];
+        return $this->get("manufacturers")['results'];
     }
 
     public function manufacturerByName($name)
     {
-        return json_decode((string) $this->guzzleClient->request('GET', "manufacturers/$name")->getBody(), true);
+        return $this->get("manufacturers/$name");
     }
 
     public function makesByManufacturerUrlName($manufacturerName)
     {
-        return json_decode(
-            (string) $this->guzzleClient->request('GET', "manufacturers/$manufacturerName/makes")->getBody(),
-            true
-        )['results'];
+        return $this->get("manufacturers/$manufacturerName/makes")['results'];
     }
 
     public function modelsVersionsByVehicleId($vehicleId)
     {
-        return json_decode(
-            (string) $this->guzzleClient->request('GET', "versions/$vehicleId")->getBody(),
-            true
-        );
+        return $this->get("versions/$vehicleId");
     }
 
     public function modelsVersionsByModelName($modelName)
     {
         $modelName = $this->makeModelNameUrlFriendly($modelName);
-        return json_decode(
-            (string) $this->guzzleClient->request('GET', "models/$modelName/versions")->getBody(),
-            true
-        )['results'];
+        return $this->get("models/$modelName/versions")['results'];
     }
 
     public function modelsVersionsByModelNameAsync($modelName)
     {
+        // @todo handle 401 here i guess
         $modelName = $this->makeModelNameUrlFriendly($modelName);
         return $this->guzzleClient->requestAsync('GET', "models/$modelName/versions");
     }
 
     public function optionsByVehicleId($vehicleId)
     {
-        return json_decode(
-            (string) $this->guzzleClient->request(
-                'GET',
-                "options/$vehicleId"
-            )->getBody(),
-            true
-        );
+        return $this->get("options/$vehicleId");
     }
 
     public function vehicleById($vehicleId)
     {
-        return json_decode(
-            (string) $this->guzzleClient->request(
-                'GET',
-                "vehicle/$vehicleId"
-            )->getBody(),
-            true
-        );
+        return $this->get("vehicle/$vehicleId");
     }
 
     public function equipmentByVehicleId($vehicleId)
     {
-        return json_decode(
-            (string) $this->guzzleClient->request(
-                'GET',
-                "equipment/$vehicleId"
-            )->getBody(),
-            true
-        );
+        return $this->get("equipment/$vehicleId");
     }
 
     public function decodeVin($vin)
     {
-        return json_decode(
-            (string) $this->guzzleClient->request(
-                'GET',
-                "vin/decode/$vin"
-            )->getBody(),
-            true
-        );
+        return $this->get("vin/decode/$vin");
     }
 
     private function makeModelNameUrlFriendly($modelName)
@@ -206,7 +174,8 @@ class Client
         $this->guzzleClient = new GuzzleClient([
             'base_uri' => 'https://api.jatoflex.com/api/en-us/',
             'headers' => [
-                'Authorization' => Cache::get(self::tokenKey),
+                // 'Authorization' => Cache::get(self::tokenKey),
+                'Authorization' => 'abc',
                 'Subscription-Key' => config('services.jato.subscription_key'),
             ],
         ]);
