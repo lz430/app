@@ -83,6 +83,7 @@ class Deal extends React.PureComponent {
             }
         }
     }
+
     render() {
         const deal = this.props.deal;
         const featuredImageUrl = this.featuredImageUrl();
