@@ -2,10 +2,12 @@
 
 namespace Tests\API;
 
+use App\Events\UserDataChanged;
 use App\Purchase;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class RouteOneWebhookTest extends TestCase
@@ -241,6 +243,8 @@ XML;
     /** @test */
     public function it_receives_xml_and_updates_a_purchase()
     {
+        Event::fake();
+
         $user = factory(User::class)->create(['email' => 'msmith@example.com']);
         $purchase = factory(Purchase::class)->create(['user_id' => $user->id]);
         $this->assertNull($purchase->completed_at);
@@ -251,5 +255,7 @@ XML;
         $purchase->refresh();
         $this->assertNotNull($purchase->completed_at);
         $this->assertEquals($purchase->application_status, 'A');
+
+        Event::assertDispatched(UserDataChanged::class);
     }
 }

@@ -17,13 +17,12 @@ class UpdateHubspotContact
     
     public function handle($event)
     {
-        if ($hubspot_id = session()->get('hubspot_id')) {
-            try {
-                $this->client->updateContactByHubspotId($hubspot_id, $event->payload);
-                return;
-            } catch (Exception $exception) {
-                Bugsnag::notifyException($exception);
-            }
+        try {
+            $this->client->createOrUpdateContact($event->payload);
+            $this->client->submitBuyNowContactInfoForm($event->payload);
+            return;
+        } catch (Exception $exception) {
+            Bugsnag::notifyException($exception);
         }
     }
 }

@@ -13,6 +13,8 @@ Route::post('apply-or-purchase', 'ApplyOrPurchaseController@applyOrPurchase')->n
 Route::get('request-email', 'ApplyOrPurchaseController@requestEmail')->name('request-email');
 Route::post('receive-email', 'ApplyOrPurchaseController@receiveEmail')->name('receive-email');
 
+Route::post('zip-codes', 'ZipCodesController@store')->name('zipCodes.store');
+
 Route::group(['middleware' => 'auth'], function () {
     /** Purchase Flow */
     Route::post('purchase', 'ApplyOrPurchaseController@purchase')->name('purchase');
@@ -23,5 +25,9 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 /** External: Opt-in Monster and Hubspot */
-Route::post('hubspot', 'HubspotController@updateContact')->name('hubspot.contact.update');
 Route::post('set-email', 'OptinMonsterController@setEmailSession')->name('set-email');
+
+/** Temp */
+if (App::environment(['staging', 'local'])) {
+    Route::get('zip-tester/{zip}', 'ZipCodeTesterController');
+}

@@ -275,19 +275,21 @@ export function setEmployeeBrand(employeeBrand) {
 
 export function checkZipInRange(code) {
    return dispatch => {
-       api.checkZipInRange(code).then(data => {;
-           return dispatch(setZipInRange(data.data.supported));
+       api.checkZipInRange(code).then(data => {
+           return dispatch(setZipInRange(data.data));
        })
    }
 
 }
 
-export function setZipInRange(supported) {
+export function setZipInRange(data) {
     return dispatch => {
-        return dispatch({
-            type: ActionTypes.SET_ZIP_IN_RANGE,
-            supported: supported,
-        })
+        api.setZip(data.code).then(() => {
+            return dispatch({
+                type: ActionTypes.SET_ZIP_IN_RANGE,
+                supported: data.supported,
+            })
+        });
     }
 }
 
@@ -332,8 +334,6 @@ export function toggleStyle(style) {
             .then(data => {
                 dispatch(receiveDeals(data));
             });
-
-        window.axios.post('/hubspot', { bodystyle1: selectedStyles.join() });
 
         dispatch({
             type: ActionTypes.TOGGLE_STYLE,
@@ -495,8 +495,6 @@ export function setZipCode(zipcode) {
                 dispatch(receiveDeals(data));
             });
 
-        window.axios.post('/hubspot', { zip: zipcode });
-
         dispatch({
             type: ActionTypes.SET_ZIP_CODE,
             zipcode,
@@ -517,6 +515,7 @@ export function requestLocationInfo() {
                     dispatch(requestDeals());
                 } else {
                     window.axios.post('/hubspot', { zip: data.zip_code });
+
                     dispatch(receiveLocationInfo(data));
                 }
             });
@@ -554,6 +553,8 @@ export function receiveLocationInfo(data) {
             zipcode,
             city,
         });
+
+        dispatch(checkZipInRange(zipcode));
     };
 }
 

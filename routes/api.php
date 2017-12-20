@@ -27,7 +27,6 @@ Route::get('dimensions', 'DimensionsController@getDimensions')->name('dimensions
 Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');
 Route::get('zip-codes/{code}', 'ZipCodesController@show')->name('zipCodes.show');
 
-
 /**
  * Third-party
  */

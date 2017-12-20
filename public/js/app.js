@@ -1049,17 +1049,18 @@ function setEmployeeBrand(employeeBrand) {
 function checkZipInRange(code) {
     return function (dispatch) {
         _api2.default.checkZipInRange(code).then(function (data) {
-            ;
-            return dispatch(setZipInRange(data.data.supported));
+            return dispatch(setZipInRange(data.data));
         });
     };
 }
 
-function setZipInRange(supported) {
+function setZipInRange(data) {
     return function (dispatch) {
-        return dispatch({
-            type: ActionTypes.SET_ZIP_IN_RANGE,
-            supported: supported
+        _api2.default.setZip(data.code).then(function () {
+            return dispatch({
+                type: ActionTypes.SET_ZIP_IN_RANGE,
+                supported: data.supported
+            });
         });
     };
 }
@@ -1098,8 +1099,6 @@ function toggleStyle(style) {
         })).then(function (data) {
             dispatch(receiveDeals(data));
         });
-
-        window.axios.post('/hubspot', { bodystyle1: selectedStyles.join() });
 
         dispatch({
             type: ActionTypes.TOGGLE_STYLE,
@@ -1231,8 +1230,6 @@ function setZipCode(zipcode) {
             dispatch(receiveDeals(data));
         });
 
-        window.axios.post('/hubspot', { zip: zipcode });
-
         dispatch({
             type: ActionTypes.SET_ZIP_CODE,
             zipcode: zipcode
@@ -1253,6 +1250,7 @@ function requestLocationInfo() {
                     dispatch(requestDeals());
                 } else {
                     window.axios.post('/hubspot', { zip: data.zip_code });
+
                     dispatch(receiveLocationInfo(data));
                 }
             });
@@ -1286,6 +1284,8 @@ function receiveLocationInfo(data) {
             zipcode: zipcode,
             city: city
         });
+
+        dispatch(checkZipInRange(zipcode));
     };
 }
 
@@ -4806,6 +4806,9 @@ var api = {
     },
     checkZipInRange: function checkZipInRange(code) {
         return window.axios.get('/api/zip-codes/' + code);
+    },
+    setZip: function setZip(code) {
+        return window.axios.post('/zip-codes/', { code: code });
     },
     getDimensions: function getDimensions(jato_vehicle_id) {
         return window.axios.get('/api/dimensions', {
@@ -52753,13 +52756,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var formNotSubmittedMessage = "Our service is not currently available in your area. Please provide your email so that we can notify you when we arrive. We apologize for the inconvenience.";
 var formSubmittedMessage = "Thank you! We will notify you when we arrive in your area.";
 
-var NoMatchingDeals = function (_Component) {
-    _inherits(NoMatchingDeals, _Component);
+var NoDealsOutOfRange = function (_Component) {
+    _inherits(NoDealsOutOfRange, _Component);
 
-    function NoMatchingDeals() {
-        _classCallCheck(this, NoMatchingDeals);
+    function NoDealsOutOfRange() {
+        _classCallCheck(this, NoDealsOutOfRange);
 
-        var _this = _possibleConstructorReturn(this, (NoMatchingDeals.__proto__ || Object.getPrototypeOf(NoMatchingDeals)).call(this));
+        var _this = _possibleConstructorReturn(this, (NoDealsOutOfRange.__proto__ || Object.getPrototypeOf(NoDealsOutOfRange)).call(this));
 
         _this.state = {
             email: '',
@@ -52768,7 +52771,7 @@ var NoMatchingDeals = function (_Component) {
         return _this;
     }
 
-    _createClass(NoMatchingDeals, [{
+    _createClass(NoDealsOutOfRange, [{
         key: 'handleSubmit',
         value: function handleSubmit(e) {
             var _this2 = this;
@@ -52824,10 +52827,10 @@ var NoMatchingDeals = function (_Component) {
         }
     }]);
 
-    return NoMatchingDeals;
+    return NoDealsOutOfRange;
 }(_react.Component);
 
-exports.default = NoMatchingDeals;
+exports.default = NoDealsOutOfRange;
 
 /***/ }),
 /* 936 */

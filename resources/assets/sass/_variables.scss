@@ -46,6 +46,8 @@ $text-color-dark: darken($text-color, 25);
 // Nav
 $nav-height: 76px;
 $footer-height: 320px;
+$subnav-height: 100px;
+$header-height: $nav-height + $subnav-height;
 
 // Breakpoints
 $break-extra-small: 350px;
