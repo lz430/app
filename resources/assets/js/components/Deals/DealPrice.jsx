@@ -178,14 +178,6 @@ class DealPrice extends React.PureComponent {
         if (!this.state.availableRebates) {
             return <SVGInline svg={miscicons['loading']} />;
         }
-
-        const selectedAmount = R.sum(
-            R.map(R.prop('value'), this.state.selectedRebates)
-        );
-        const maxAmount = R.sum(
-            R.map(R.prop('value'), this.state.availableRebates)
-        );
-
         return (
             <div className="deal-price__rebates-applied">
                 <SVGInline
