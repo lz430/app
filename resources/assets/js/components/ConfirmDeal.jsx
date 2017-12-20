@@ -1,6 +1,5 @@
 import * as Actions from 'actions/index';
 import api from 'src/api';
-import fuelapi from 'src/fuelapi';
 import { connect } from 'react-redux';
 import formulas from 'src/formulas';
 import miscicons from 'miscicons';
@@ -21,8 +20,6 @@ class ConfirmDeal extends React.PureComponent {
         this.state = {
             showStandardFeatures: false,
             showFeatures: false,
-            fallbackDealImage: '/images/dmr-logo.svg',
-            fuelFeaturedImage: null,
             warranties: null,
             dimensions: null,
         };
@@ -34,10 +31,6 @@ class ConfirmDeal extends React.PureComponent {
 
     componentDidMount() {
         this._isMounted = true;
-
-        if (this.props.deal.photos.length === 0) {
-            this.requestFuelImages();
-        }
 
         api
             .getDimensions(this.props.deal.versions[0].jato_vehicle_id)
@@ -69,51 +62,6 @@ class ConfirmDeal extends React.PureComponent {
         }
     }
 
-    extractFuelImages(data) {
-        return (
-            data.data.products.map(product =>
-                product.productFormats.map(format => {
-                    return {
-                        id: `fuel_external_${format.id}`,
-                        url: format.assets[0].url,
-                    };
-                })
-            )[0] || []
-        );
-    }
-
-    async requestFuelImages() {
-        const deal = this.props.deal;
-
-        const vehicleId =
-            (await fuelapi.getVehicleId(deal.year, deal.make, deal.model))
-                .data[0].id || false;
-        if (!vehicleId) return;
-
-        try {
-            const externalImages = this.extractFuelImages(
-                await fuelapi.getExternalImages(
-                    vehicleId,
-                    fuelcolor.convert(deal.color)
-                )
-            );
-
-            if (!this._isMounted) return;
-            this.setState({ fuelFeaturedImage: externalImages[0] });
-        } catch (e) {
-            try {
-                const externalImages = this.extractFuelImages(
-                    await fuelapi.getExternalImages(vehicleId, 'white')
-                );
-
-                if (!this._isMounted) return;
-                this.setState({ fuelFeaturedImage: externalImages[0] });
-            } catch (e) {
-                // No Fuel Images Available.
-            }
-        }
-    }
-
     requestRebates() {
         this.props.requestRebates(this.props.deal);
     }
@@ -137,18 +85,6 @@ class ConfirmDeal extends React.PureComponent {
                 props.deal
             ),
         });
-    }
-
-    featuredImageUrl() {
-        return R.propOr(
-            R.propOr(
-                this.state.fallbackDealImage,
-                'url',
-                this.state.fuelFeaturedImage
-            ),
-            'url',
-            this.props.deal.photos[0]
-        );
     }
 
     renderDealRebatesModal() {
@@ -418,11 +354,6 @@ class ConfirmDeal extends React.PureComponent {
 
     render() {
         const deal = this.props.deal;
-        const featuredImageUrl = this.featuredImageUrl();
-        const featureImageClass =
-            featuredImageUrl !== this.state.fallbackDealImage
-                ? 'deal__image'
-                : 'deal__image deal__image--fallback';
 
         return (
             <div>
@@ -444,11 +375,6 @@ class ConfirmDeal extends React.PureComponent {
                                     </div>
                                 </div>
                             </div>
-
-                            <img
-                                className={featureImageClass}
-                                src={featuredImageUrl}
-                            />
                         </div>
                     )}
                     <div className="tabs__title">You Selected...</div>
@@ -540,7 +466,6 @@ const mapStateToProps = state => {
         dealRebates: state.dealRebates,
         selectedRebates: state.selectedRebates,
         termDuration: state.termDuration,
-        fallbackDealImage: state.fallbackDealImage,
         selectedDeal: state.selectedDeal,
         isEmployee: state.isEmployee,
         residualPercent: state.residualPercent,

@@ -5,36 +5,18 @@ import { connect } from 'react-redux';
 import Modal from 'components/Modal';
 import PropTypes from 'prop-types';
 import purchase from 'src/purchase';
-import R from 'ramda';
 import React from 'react';
 import rebates from 'src/rebates';
 import strings from 'src/strings';
+import DealImage from 'components/Deals/DealImage';
 
 class ConfirmDetails extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            featuredImage: props.deal.photos[0],
-        };
-    }
-
     componentWillUnmount() {
         this._isMounted = false;
     }
 
     componentDidMount() {
         this._isMounted = true;
-
-    }
-
-    renderFeaturedImage() {
-        return (
-            <img
-                className="deal-details__primary-image"
-                src={R.propOr(this.state.q, 'url', this.state.featuredImage)}
-            />
-        );
     }
 
     renderDealRebatesModal() {
@@ -94,7 +76,10 @@ class ConfirmDetails extends React.PureComponent {
                             </div>
                         </div>
                         <div className="deal-details__images">
-                            {this.renderFeaturedImage()}
+                            <DealImage
+                                featureImageClass="deal-details__primary-image"
+                                deal={this.props.deal}
+                            />
                         </div>
                     </div>
                     <div className="deal-details__pricing">
