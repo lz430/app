@@ -5,16 +5,15 @@ namespace DeliverMyRide\JATO;
 use Facades\App\JATO\Log;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
+use Illuminate\Support\Facades\Cache;
 
 class Client
 {
     private $guzzleClient;
+    const tokenKey = 'JATO_AUTH_HEADER';
 
     public function __construct($username, $password)
     {
-        $this->guzzleClient = new GuzzleClient([
-            'connect_timeout' => 5,
-        ]);
         $this->authorize($username, $password);
     }
 
@@ -200,7 +199,24 @@ class Client
 
     private function authorize($username, $password)
     {
-        $response = json_decode((string) $this->guzzleClient->request('POST', 'https://auth.jatoflex.com/oauth/token', [
+        if (! Cache::has(self::tokenKey)) {
+            $this->refreshAuthorizationToken($username, $password);
+        }
+
+        $this->guzzleClient = new GuzzleClient([
+            'base_uri' => 'https://api.jatoflex.com/api/en-us/',
+            'headers' => [
+                'Authorization' => Cache::get(self::tokenKey),
+                'Subscription-Key' => config('services.jato.subscription_key'),
+            ],
+        ]);
+    }
+
+    private function refreshAuthorizationToken($username, $password)
+    {
+        $guzzleClient = new GuzzleClient(['connect_timeout' => 5]);
+
+        $response = json_decode((string) $guzzleClient->request('POST', 'https://auth.jatoflex.com/oauth/token', [
             'form_params' => [
                 'username' => $username,
                 'password' => $password,
@@ -208,12 +224,10 @@ class Client
             ],
         ])->getBody(), true);
 
-        $this->guzzleClient = new GuzzleClient([
-            'base_uri' => 'https://api.jatoflex.com/api/en-us/',
-            'headers' => [
-                'Authorization' => $response['token_type'] . ' ' . $response['access_token'],
-                'Subscription-Key' => 'e37102e58e4f42bf927743e6e92c41c3',
-            ],
-        ]);
+        Cache::put(
+            self::tokenKey,
+            $response['token_type'] . ' ' . $response['access_token'],
+            ($response['expires_in'] / 60) - 1
+        );
     }
 }
