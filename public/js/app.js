@@ -63877,6 +63877,10 @@ var _api = __webpack_require__(65);
 
 var _api2 = _interopRequireDefault(_api);
 
+var _fuelapi = __webpack_require__(366);
+
+var _fuelapi2 = _interopRequireDefault(_fuelapi);
+
 var _reactRedux = __webpack_require__(13);
 
 var _formulas = __webpack_require__(99);
@@ -63926,6 +63930,8 @@ var _util2 = _interopRequireDefault(_util);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -63997,6 +64003,116 @@ var ConfirmDeal = function (_React$PureComponent) {
                 this.componentWillReceiveProps(this.props);
             }
         }
+    }, {
+        key: 'extractFuelImages',
+        value: function extractFuelImages(data) {
+            return data.data.products.map(function (product) {
+                return product.productFormats.map(function (format) {
+                    return {
+                        id: 'fuel_external_' + format.id,
+                        url: format.assets[0].url
+                    };
+                });
+            })[0] || [];
+        }
+    }, {
+        key: 'requestFuelImages',
+        value: function () {
+            var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+                var deal, vehicleId, externalImages, _externalImages;
+
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                deal = this.props.deal;
+                                _context.next = 3;
+                                return _fuelapi2.default.getVehicleId(deal.year, deal.make, deal.model);
+
+                            case 3:
+                                _context.t0 = _context.sent.data[0].id;
+
+                                if (_context.t0) {
+                                    _context.next = 6;
+                                    break;
+                                }
+
+                                _context.t0 = false;
+
+                            case 6:
+                                vehicleId = _context.t0;
+
+                                if (vehicleId) {
+                                    _context.next = 9;
+                                    break;
+                                }
+
+                                return _context.abrupt('return');
+
+                            case 9:
+                                _context.prev = 9;
+                                _context.t1 = this;
+                                _context.next = 13;
+                                return _fuelapi2.default.getExternalImages(vehicleId, fuelcolor.convert(deal.color));
+
+                            case 13:
+                                _context.t2 = _context.sent;
+                                externalImages = _context.t1.extractFuelImages.call(_context.t1, _context.t2);
+
+                                if (this._isMounted) {
+                                    _context.next = 17;
+                                    break;
+                                }
+
+                                return _context.abrupt('return');
+
+                            case 17:
+                                this.setState({ fuelFeaturedImage: externalImages[0] });
+                                _context.next = 35;
+                                break;
+
+                            case 20:
+                                _context.prev = 20;
+                                _context.t3 = _context['catch'](9);
+                                _context.prev = 22;
+                                _context.t4 = this;
+                                _context.next = 26;
+                                return _fuelapi2.default.getExternalImages(vehicleId, 'white');
+
+                            case 26:
+                                _context.t5 = _context.sent;
+                                _externalImages = _context.t4.extractFuelImages.call(_context.t4, _context.t5);
+
+                                if (this._isMounted) {
+                                    _context.next = 30;
+                                    break;
+                                }
+
+                                return _context.abrupt('return');
+
+                            case 30:
+                                this.setState({ fuelFeaturedImage: _externalImages[0] });
+                                _context.next = 35;
+                                break;
+
+                            case 33:
+                                _context.prev = 33;
+                                _context.t6 = _context['catch'](22);
+
+                            case 35:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this, [[9, 20], [22, 33]]);
+            }));
+
+            function requestFuelImages() {
+                return _ref.apply(this, arguments);
+            }
+
+            return requestFuelImages;
+        }()
     }, {
         key: 'requestRebates',
         value: function requestRebates() {
