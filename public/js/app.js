@@ -13979,18 +13979,6 @@ var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _ramda = __webpack_require__(11);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-var _fuelapi = __webpack_require__(224);
-
-var _fuelapi2 = _interopRequireDefault(_fuelapi);
-
-var _fuelColorMap = __webpack_require__(964);
-
-var _fuelColorMap2 = _interopRequireDefault(_fuelColorMap);
-
 var _DealPrice = __webpack_require__(935);
 
 var _DealPrice2 = _interopRequireDefault(_DealPrice);
@@ -14001,11 +13989,13 @@ var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
+var _DealImage = __webpack_require__(975);
+
+var _DealImage2 = _interopRequireDefault(_DealImage);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -14016,16 +14006,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Deal = function (_React$PureComponent) {
     _inherits(Deal, _React$PureComponent);
 
-    function Deal(props) {
+    function Deal() {
         _classCallCheck(this, Deal);
 
-        var _this = _possibleConstructorReturn(this, (Deal.__proto__ || Object.getPrototypeOf(Deal)).call(this, props));
-
-        _this.state = {
-            fallbackDealImage: '/images/dmr-logo.svg',
-            fuelFeaturedImage: null
-        };
-        return _this;
+        return _possibleConstructorReturn(this, (Deal.__proto__ || Object.getPrototypeOf(Deal)).apply(this, arguments));
     }
 
     _createClass(Deal, [{
@@ -14037,132 +14021,11 @@ var Deal = function (_React$PureComponent) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             this._isMounted = true;
-
-            if (this.props.deal.photos.length === 0) {
-                this.requestFuelImages();
-            }
         }
-    }, {
-        key: 'featuredImageUrl',
-        value: function featuredImageUrl() {
-            return _ramda2.default.propOr(_ramda2.default.propOr(this.state.fallbackDealImage, 'url', this.state.fuelFeaturedImage), 'url', this.props.deal.photos[0]);
-        }
-    }, {
-        key: 'extractFuelImages',
-        value: function extractFuelImages(data) {
-            return data.data.products.map(function (product) {
-                return product.productFormats.map(function (format) {
-                    return {
-                        id: 'fuel_external_' + format.id,
-                        url: format.assets[0].url
-                    };
-                });
-            })[0] || [];
-        }
-    }, {
-        key: 'requestFuelImages',
-        value: function () {
-            var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-                var deal, vehicleId, externalImages, _externalImages;
-
-                return regeneratorRuntime.wrap(function _callee$(_context) {
-                    while (1) {
-                        switch (_context.prev = _context.next) {
-                            case 0:
-                                deal = this.props.deal;
-                                _context.next = 3;
-                                return _fuelapi2.default.getVehicleId(deal.year, deal.make, deal.model);
-
-                            case 3:
-                                _context.t0 = _context.sent.data[0].id;
-
-                                if (_context.t0) {
-                                    _context.next = 6;
-                                    break;
-                                }
-
-                                _context.t0 = false;
-
-                            case 6:
-                                vehicleId = _context.t0;
-
-                                if (vehicleId) {
-                                    _context.next = 9;
-                                    break;
-                                }
-
-                                return _context.abrupt('return');
-
-                            case 9:
-                                _context.prev = 9;
-                                _context.t1 = this;
-                                _context.next = 13;
-                                return _fuelapi2.default.getExternalImages(vehicleId, _fuelColorMap2.default.convert(deal.color));
-
-                            case 13:
-                                _context.t2 = _context.sent;
-                                externalImages = _context.t1.extractFuelImages.call(_context.t1, _context.t2);
-
-                                if (this._isMounted) {
-                                    _context.next = 17;
-                                    break;
-                                }
-
-                                return _context.abrupt('return');
-
-                            case 17:
-                                this.setState({ fuelFeaturedImage: externalImages[0] });
-                                _context.next = 35;
-                                break;
-
-                            case 20:
-                                _context.prev = 20;
-                                _context.t3 = _context['catch'](9);
-                                _context.prev = 22;
-                                _context.t4 = this;
-                                _context.next = 26;
-                                return _fuelapi2.default.getExternalImages(vehicleId, 'white');
-
-                            case 26:
-                                _context.t5 = _context.sent;
-                                _externalImages = _context.t4.extractFuelImages.call(_context.t4, _context.t5);
-
-                                if (this._isMounted) {
-                                    _context.next = 30;
-                                    break;
-                                }
-
-                                return _context.abrupt('return');
-
-                            case 30:
-                                this.setState({ fuelFeaturedImage: _externalImages[0] });
-                                _context.next = 35;
-                                break;
-
-                            case 33:
-                                _context.prev = 33;
-                                _context.t6 = _context['catch'](22);
-
-                            case 35:
-                            case 'end':
-                                return _context.stop();
-                        }
-                    }
-                }, _callee, this, [[9, 20], [22, 33]]);
-            }));
-
-            function requestFuelImages() {
-                return _ref.apply(this, arguments);
-            }
-
-            return requestFuelImages;
-        }()
     }, {
         key: 'render',
         value: function render() {
             var deal = this.props.deal;
-            var featuredImageUrl = this.featuredImageUrl();
-            var featureImageClass = featuredImageUrl !== this.state.fallbackDealImage ? 'deal__image' : 'deal__image deal__image--fallback';
 
             return _react2.default.createElement(
                 'div',
@@ -14193,9 +14056,9 @@ var Deal = function (_React$PureComponent) {
                             )
                         )
                     ),
-                    _react2.default.createElement('img', {
-                        className: featureImageClass,
-                        src: featuredImageUrl
+                    _react2.default.createElement(_DealImage2.default, {
+                        featureImageClass: 'deal__image',
+                        deal: this.props.deal
                     })
                 ),
                 _react2.default.createElement(
@@ -61132,7 +60995,7 @@ var DealDetails = function (_React$PureComponent) {
         var _this = _possibleConstructorReturn(this, (DealDetails.__proto__ || Object.getPrototypeOf(DealDetails)).call(this, props));
 
         _this.state = {
-            featuredImage: props.deal.photos[0],
+            featuredImage: [],
             fuelExternalImages: [],
             fuelInternalImages: [],
             warranties: null,
@@ -61154,6 +61017,12 @@ var DealDetails = function (_React$PureComponent) {
             var _this2 = this;
 
             this._isMounted = true;
+
+            if (this.props.deal.photos.length === 0) {
+                this.requestFuelImages();
+            } else {
+                this.setState({ featuredImage: this.props.deal.photos[0] });
+            }
 
             _api2.default.getDimensions(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
                 if (!_this2._isMounted) return;
@@ -61242,7 +61111,8 @@ var DealDetails = function (_React$PureComponent) {
 
 
                                 this.setState({
-                                    fuelExternalImages: externalImages
+                                    fuelExternalImages: externalImages,
+                                    featuredImage: externalImages[0]
                                 });
                                 _context.next = 30;
                                 break;
@@ -61261,7 +61131,8 @@ var DealDetails = function (_React$PureComponent) {
 
 
                                 this.setState({
-                                    fuelExternalImages: _externalImages
+                                    fuelExternalImages: _externalImages,
+                                    featuredImage: _externalImages[0]
                                 });
                                 _context.next = 30;
                                 break;
@@ -62456,10 +62327,6 @@ var _purchase = __webpack_require__(373);
 
 var _purchase2 = _interopRequireDefault(_purchase);
 
-var _ramda = __webpack_require__(11);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
 var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
@@ -62472,14 +62339,6 @@ var _strings = __webpack_require__(100);
 
 var _strings2 = _interopRequireDefault(_strings);
 
-var _fuelapi = __webpack_require__(224);
-
-var _fuelapi2 = _interopRequireDefault(_fuelapi);
-
-var _fuelColorMap = __webpack_require__(964);
-
-var _fuelColorMap2 = _interopRequireDefault(_fuelColorMap);
-
 var _DealImage = __webpack_require__(975);
 
 var _DealImage2 = _interopRequireDefault(_DealImage);
@@ -62487,8 +62346,6 @@ var _DealImage2 = _interopRequireDefault(_DealImage);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -62499,16 +62356,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var ConfirmDetails = function (_React$PureComponent) {
     _inherits(ConfirmDetails, _React$PureComponent);
 
-    function ConfirmDetails(props) {
+    function ConfirmDetails() {
         _classCallCheck(this, ConfirmDetails);
 
-        var _this = _possibleConstructorReturn(this, (ConfirmDetails.__proto__ || Object.getPrototypeOf(ConfirmDetails)).call(this, props));
-
-        _this.state = {
-            featuredImage: props.deal.photos[0],
-            fallbackDealImage: '/images/dmr-logo.svg'
-        };
-        return _this;
+        return _possibleConstructorReturn(this, (ConfirmDetails.__proto__ || Object.getPrototypeOf(ConfirmDetails)).apply(this, arguments));
     }
 
     _createClass(ConfirmDetails, [{
@@ -62520,23 +62371,6 @@ var ConfirmDetails = function (_React$PureComponent) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             this._isMounted = true;
-
-            if (this.props.deal.photos.length === 0) {
-                this.requestFuelImages();
-            }
-        }
-    }, {
-        key: 'renderFeaturedImage',
-        value: function renderFeaturedImage() {
-            return _react2.default.createElement(_DealImage2.default, {
-                featureImageClass: 'deal-details__primary-image',
-                featuredImageUrl: this.featuredImageUrl()
-            });
-        }
-    }, {
-        key: 'featuredImageUrl',
-        value: function featuredImageUrl() {
-            return _ramda2.default.propOr(_ramda2.default.propOr(this.state.fallbackDealImage, 'url', this.state.featuredImage), 'url', this.props.deal.photos[0]);
         }
     }, {
         key: 'renderDealRebatesModal',
@@ -62550,116 +62384,6 @@ var ConfirmDetails = function (_React$PureComponent) {
                 _react2.default.createElement(_CashFinanceLeaseCalculator2.default, null)
             );
         }
-    }, {
-        key: 'extractFuelImages',
-        value: function extractFuelImages(data) {
-            return data.data.products.map(function (product) {
-                return product.productFormats.map(function (format) {
-                    return {
-                        id: 'fuel_external_' + format.id,
-                        url: format.assets[0].url
-                    };
-                });
-            })[0] || [];
-        }
-    }, {
-        key: 'requestFuelImages',
-        value: function () {
-            var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-                var deal, vehicleId, externalImages, _externalImages;
-
-                return regeneratorRuntime.wrap(function _callee$(_context) {
-                    while (1) {
-                        switch (_context.prev = _context.next) {
-                            case 0:
-                                deal = this.props.deal;
-                                _context.next = 3;
-                                return _fuelapi2.default.getVehicleId(deal.year, deal.make, deal.model);
-
-                            case 3:
-                                _context.t0 = _context.sent.data[0].id;
-
-                                if (_context.t0) {
-                                    _context.next = 6;
-                                    break;
-                                }
-
-                                _context.t0 = false;
-
-                            case 6:
-                                vehicleId = _context.t0;
-
-                                if (vehicleId) {
-                                    _context.next = 9;
-                                    break;
-                                }
-
-                                return _context.abrupt('return');
-
-                            case 9:
-                                _context.prev = 9;
-                                _context.t1 = this;
-                                _context.next = 13;
-                                return _fuelapi2.default.getExternalImages(vehicleId, _fuelColorMap2.default.convert(deal.color));
-
-                            case 13:
-                                _context.t2 = _context.sent;
-                                externalImages = _context.t1.extractFuelImages.call(_context.t1, _context.t2);
-
-                                if (this._isMounted) {
-                                    _context.next = 17;
-                                    break;
-                                }
-
-                                return _context.abrupt('return');
-
-                            case 17:
-                                this.setState({ featuredImage: externalImages[0] });
-                                _context.next = 35;
-                                break;
-
-                            case 20:
-                                _context.prev = 20;
-                                _context.t3 = _context['catch'](9);
-                                _context.prev = 22;
-                                _context.t4 = this;
-                                _context.next = 26;
-                                return _fuelapi2.default.getExternalImages(vehicleId, 'white');
-
-                            case 26:
-                                _context.t5 = _context.sent;
-                                _externalImages = _context.t4.extractFuelImages.call(_context.t4, _context.t5);
-
-                                if (this._isMounted) {
-                                    _context.next = 30;
-                                    break;
-                                }
-
-                                return _context.abrupt('return');
-
-                            case 30:
-                                this.setState({ featuredImage: _externalImages[0] });
-                                _context.next = 35;
-                                break;
-
-                            case 33:
-                                _context.prev = 33;
-                                _context.t6 = _context['catch'](22);
-
-                            case 35:
-                            case 'end':
-                                return _context.stop();
-                        }
-                    }
-                }, _callee, this, [[9, 20], [22, 33]]);
-            }));
-
-            function requestFuelImages() {
-                return _ref.apply(this, arguments);
-            }
-
-            return requestFuelImages;
-        }()
     }, {
         key: 'renderDeal',
         value: function renderDeal(deal, index) {
@@ -62719,7 +62443,10 @@ var ConfirmDetails = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'deal-details__images' },
-                            this.renderFeaturedImage()
+                            _react2.default.createElement(_DealImage2.default, {
+                                featureImageClass: 'deal-details__primary-image',
+                                deal: this.props.deal
+                            })
                         )
                     ),
                     _react2.default.createElement(
@@ -63994,7 +63721,21 @@ var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _ramda = __webpack_require__(11);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _fuelapi = __webpack_require__(224);
+
+var _fuelapi2 = _interopRequireDefault(_fuelapi);
+
+var _fuelColorMap = __webpack_require__(964);
+
+var _fuelColorMap2 = _interopRequireDefault(_fuelColorMap);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -64005,18 +63746,148 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var DealImage = function (_React$PureComponent) {
     _inherits(DealImage, _React$PureComponent);
 
-    function DealImage() {
+    function DealImage(props) {
         _classCallCheck(this, DealImage);
 
-        return _possibleConstructorReturn(this, (DealImage.__proto__ || Object.getPrototypeOf(DealImage)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (DealImage.__proto__ || Object.getPrototypeOf(DealImage)).call(this, props));
+
+        _this.state = {
+            featuredImage: props.deal.photos[0],
+            fallbackDealImage: '/images/dmr-logo.svg'
+        };
+        return _this;
     }
 
     _createClass(DealImage, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this._isMounted = true;
+
+            if (this.props.deal.photos.length === 0) {
+                this.requestFuelImages();
+            }
+        }
+    }, {
+        key: 'featuredImageUrl',
+        value: function featuredImageUrl() {
+            return _ramda2.default.propOr(_ramda2.default.propOr(this.state.fallbackDealImage, 'url', this.state.featuredImage), 'url', this.props.deal.photos[0]);
+        }
+    }, {
+        key: 'extractFuelImages',
+        value: function extractFuelImages(data) {
+            return data.data.products.map(function (product) {
+                return product.productFormats.map(function (format) {
+                    return {
+                        id: 'fuel_external_' + format.id,
+                        url: format.assets[0].url
+                    };
+                });
+            })[0] || [];
+        }
+    }, {
+        key: 'requestFuelImages',
+        value: function () {
+            var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+                var deal, vehicleId, externalImages, _externalImages;
+
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                deal = this.props.deal;
+                                _context.next = 3;
+                                return _fuelapi2.default.getVehicleId(deal.year, deal.make, deal.model);
+
+                            case 3:
+                                _context.t0 = _context.sent.data[0].id;
+
+                                if (_context.t0) {
+                                    _context.next = 6;
+                                    break;
+                                }
+
+                                _context.t0 = false;
+
+                            case 6:
+                                vehicleId = _context.t0;
+
+                                if (vehicleId) {
+                                    _context.next = 9;
+                                    break;
+                                }
+
+                                return _context.abrupt('return');
+
+                            case 9:
+                                _context.prev = 9;
+                                _context.t1 = this;
+                                _context.next = 13;
+                                return _fuelapi2.default.getExternalImages(vehicleId, _fuelColorMap2.default.convert(deal.color));
+
+                            case 13:
+                                _context.t2 = _context.sent;
+                                externalImages = _context.t1.extractFuelImages.call(_context.t1, _context.t2);
+
+                                if (this._isMounted) {
+                                    _context.next = 17;
+                                    break;
+                                }
+
+                                return _context.abrupt('return');
+
+                            case 17:
+                                this.setState({ featuredImage: externalImages[0] });
+                                _context.next = 35;
+                                break;
+
+                            case 20:
+                                _context.prev = 20;
+                                _context.t3 = _context['catch'](9);
+                                _context.prev = 22;
+                                _context.t4 = this;
+                                _context.next = 26;
+                                return _fuelapi2.default.getExternalImages(vehicleId, 'white');
+
+                            case 26:
+                                _context.t5 = _context.sent;
+                                _externalImages = _context.t4.extractFuelImages.call(_context.t4, _context.t5);
+
+                                if (this._isMounted) {
+                                    _context.next = 30;
+                                    break;
+                                }
+
+                                return _context.abrupt('return');
+
+                            case 30:
+                                this.setState({ featuredImage: _externalImages[0] });
+                                _context.next = 35;
+                                break;
+
+                            case 33:
+                                _context.prev = 33;
+                                _context.t6 = _context['catch'](22);
+
+                            case 35:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this, [[9, 20], [22, 33]]);
+            }));
+
+            function requestFuelImages() {
+                return _ref.apply(this, arguments);
+            }
+
+            return requestFuelImages;
+        }()
+    }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement('img', {
                 className: this.props.featureImageClass,
-                src: this.props.featuredImageUrl
+                src: this.featuredImageUrl()
             });
         }
     }]);

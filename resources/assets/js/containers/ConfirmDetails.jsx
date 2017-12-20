@@ -5,56 +5,18 @@ import { connect } from 'react-redux';
 import Modal from 'components/Modal';
 import PropTypes from 'prop-types';
 import purchase from 'src/purchase';
-import R from 'ramda';
 import React from 'react';
 import rebates from 'src/rebates';
 import strings from 'src/strings';
-import fuelapi from 'src/fuelapi';
-import fuelcolor from 'src/fuel-color-map';
 import DealImage from 'components/Deals/DealImage';
 
 class ConfirmDetails extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            featuredImage: props.deal.photos[0],
-            fallbackDealImage: '/images/dmr-logo.svg',
-        };
-    }
-
     componentWillUnmount() {
         this._isMounted = false;
     }
 
     componentDidMount() {
         this._isMounted = true;
-
-        if (this.props.deal.photos.length === 0) {
-            this.requestFuelImages();
-        }
-
-    }
-
-    renderFeaturedImage() {
-        return (
-            <DealImage
-                featureImageClass="deal-details__primary-image"
-                featuredImageUrl={this.featuredImageUrl()}
-            />
-        );
-    }
-
-    featuredImageUrl() {
-        return R.propOr(
-            R.propOr(
-                this.state.fallbackDealImage,
-                'url',
-                this.state.featuredImage
-            ),
-            'url',
-            this.props.deal.photos[0]
-        );
     }
 
     renderDealRebatesModal() {
@@ -66,51 +28,6 @@ class ConfirmDetails extends React.PureComponent {
                 <CashFinanceLeaseCalculator />
             </Modal>
         );
-    }
-
-    extractFuelImages(data) {
-        return (
-            data.data.products.map(product =>
-                product.productFormats.map(format => {
-                    return {
-                        id: `fuel_external_${format.id}`,
-                        url: format.assets[0].url,
-                    };
-                })
-            )[0] || []
-        );
-    }
-
-    async requestFuelImages() {
-        const deal = this.props.deal;
-
-        const vehicleId =
-            (await fuelapi.getVehicleId(deal.year, deal.make, deal.model))
-                .data[0].id || false;
-        if (!vehicleId) return;
-
-        try {
-            const externalImages = this.extractFuelImages(
-                await fuelapi.getExternalImages(
-                    vehicleId,
-                    fuelcolor.convert(deal.color)
-                )
-            );
-
-            if (!this._isMounted) return;
-            this.setState({ featuredImage: externalImages[0] });
-        } catch (e) {
-            try {
-                const externalImages = this.extractFuelImages(
-                    await fuelapi.getExternalImages(vehicleId, 'white')
-                );
-
-                if (!this._isMounted) return;
-                this.setState({ featuredImage: externalImages[0] });
-            } catch (e) {
-                // No Fuel Images Available.
-            }
-        }
     }
 
     renderDeal(deal, index) {
@@ -159,7 +76,10 @@ class ConfirmDetails extends React.PureComponent {
                             </div>
                         </div>
                         <div className="deal-details__images">
-                            {this.renderFeaturedImage()}
+                            <DealImage
+                                featureImageClass="deal-details__primary-image"
+                                deal={this.props.deal}
+                            />
                         </div>
                     </div>
                     <div className="deal-details__pricing">
