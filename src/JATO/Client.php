@@ -11,85 +11,48 @@ class Client
 {
     private $guzzleClient;
     const tokenKey = 'JATO_AUTH_HEADER';
+    private $retryCount = 0;
+
+    private $username;
+    private $password;
 
     public function __construct($username, $password)
     {
-        $this->authorize($username, $password);
+        $this->username = $username;
+        $this->password = $password;
+
+        $this->authorize();
     }
 
-    protected function get($path, $options = [])
+    protected function get($path, $options = [], $async = false)
     {
         try {
-            return json_decode((string) $this->guzzleClient->request('GET', $path, $options)->getBody(), true);
+            if ($async) {
+                return json_decode((string) $this->guzzleClient->requestAsync('GET', $path, $options)->getBody(), true);
+            } else {
+                return json_decode((string) $this->guzzleClient->request('GET', $path, $options)->getBody(), true);
+            }
         } catch (ClientException $e) {
-            // @todo handle ONLY 401s.. otherwise throw up again
+            if ($e->getCode() === 401) {
+                if ($this->retryCount > 2) {
+                    Log::error('Three failures authenticating in a row. Quitting out. Message: ' . $e->getMessage());
+
+                    throw $e;
+                }
+
+                $this->retryCount++;
+                $this->authorize();
+
+                return $this->get($path, $options, $async);
+            }
+
+            throw $e;
         }
     }
 
     public function makes()
     {
         return $this->get('makes');
-    }
-
-    public function incentivesByVehicleIdAndZipcode($vehicleId, $zipcode, $additionalParams = [])
-    {
-        try {
-            return $this->get("incentives/programs/$vehicleId", [
-                'query' => array_merge([
-                    'zipCode' => $zipcode,
-                    ], $additionalParams)
-            ]);
-        } catch (ClientException $e) {
-            Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode");
-            return [];
-        }
-    }
-
-    public function featuresByVehicleIdAndCategoryId($vehicleId, $categoryId)
-    {
-        return $this->get("features/$vehicleId/$categoryId?pageSize=100");
-    }
-
-    public function featuresByVehicleIdAndCategoryIdAsync($vehicleId, $categoryId)
-    {
-        // @todo handle 401 here too I guess?
-        return $this->guzzleClient->requestAsync('GET', "features/$vehicleId/$categoryId?pageSize=100");
-    }
-
-    public function bestCashIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
-    {
-        return $this->get("incentives/bestOffer/$vehicleId/cash", [
-                'query' => ['zipCode' => $zipcode]
-            ])['programs'] ?? [];
-    }
-
-    public function bestFinanceIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
-    {
-        return $this->get("incentives/bestOffer/$vehicleId/finance", [
-                'query' => ['zipCode' => $zipcode]
-            ])['programs'] ?? [];
-    }
-
-    public function bestLeaseIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
-    {
-        return $this->get("incentives/bestOffer/$vehicleId/lease", [
-                'query' => ['zipCode' => $zipcode]
-            ])['programs'] ?? [];
-    }
-
-    public function incentivesByVehicleIdAndZipcodeWithSelected($vehicleId, $zipcode, $selected)
-    {
-        $first = array_first($selected);
-
-        return $this->get(
-            "incentives/programs/$vehicleId/add/$first",
-            [
-                'query' => [
-                    'zipCode' => $zipcode,
-                    'addedPrograms' => implode(',', $selected),
-                ]
-            ]
-        );
     }
 
     public function makeByName($name)
@@ -135,9 +98,8 @@ class Client
 
     public function modelsVersionsByModelNameAsync($modelName)
     {
-        // @todo handle 401 here i guess
         $modelName = $this->makeModelNameUrlFriendly($modelName);
-        return $this->guzzleClient->requestAsync('GET', "models/$modelName/versions");
+        return $this->get("models/$modelName/versions", [], true);
     }
 
     public function optionsByVehicleId($vehicleId)
@@ -160,35 +122,94 @@ class Client
         return $this->get("vin/decode/$vin");
     }
 
-    private function makeModelNameUrlFriendly($modelName)
+    public function featuresByVehicleIdAndCategoryId($vehicleId, $categoryId)
+    {
+        return $this->get("features/$vehicleId/$categoryId?pageSize=100");
+    }
+
+    public function featuresByVehicleIdAndCategoryIdAsync($vehicleId, $categoryId)
+    {
+        return $this->get("features/$vehicleId/$categoryId?pageSize=100", [], true);
+    }
+
+    public function incentivesByVehicleIdAndZipcode($vehicleId, $zipcode, $additionalParams = [])
+    {
+        try {
+            return $this->get("incentives/programs/$vehicleId", [
+                'query' => array_merge([
+                    'zipCode' => $zipcode,
+                    ], $additionalParams)
+            ]);
+        } catch (ClientException $e) {
+            Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode");
+            return [];
+        }
+    }
+
+    public function bestCashIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
+    {
+        return $this->get("incentives/bestOffer/$vehicleId/cash", [
+                'query' => ['zipCode' => $zipcode]
+            ])['programs'] ?? [];
+    }
+
+    public function bestFinanceIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
+    {
+        return $this->get("incentives/bestOffer/$vehicleId/finance", [
+                'query' => ['zipCode' => $zipcode]
+            ])['programs'] ?? [];
+    }
+
+    public function bestLeaseIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
+    {
+        return $this->get("incentives/bestOffer/$vehicleId/lease", [
+                'query' => ['zipCode' => $zipcode]
+            ])['programs'] ?? [];
+    }
+
+    public function incentivesByVehicleIdAndZipcodeWithSelected($vehicleId, $zipcode, $selected)
+    {
+        $first = array_first($selected);
+
+        return $this->get(
+            "incentives/programs/$vehicleId/add/$first",
+            [
+                'query' => [
+                    'zipCode' => $zipcode,
+                    'addedPrograms' => implode(',', $selected),
+                ]
+            ]
+        );
+    }
+
+    protected function makeModelNameUrlFriendly($modelName)
     {
         return strtolower(str_replace(' ', '-', $modelName));
     }
 
-    private function authorize($username, $password)
+    protected function authorize()
     {
         if (! Cache::has(self::tokenKey)) {
-            $this->refreshAuthorizationToken($username, $password);
+            $this->refreshAuthorizationToken();
         }
 
         $this->guzzleClient = new GuzzleClient([
             'base_uri' => 'https://api.jatoflex.com/api/en-us/',
             'headers' => [
-                // 'Authorization' => Cache::get(self::tokenKey),
-                'Authorization' => 'abc',
+                'Authorization' => Cache::get(self::tokenKey),
                 'Subscription-Key' => config('services.jato.subscription_key'),
             ],
         ]);
     }
 
-    private function refreshAuthorizationToken($username, $password)
+    private function refreshAuthorizationToken()
     {
         $guzzleClient = new GuzzleClient(['connect_timeout' => 5]);
 
         $response = json_decode((string) $guzzleClient->request('POST', 'https://auth.jatoflex.com/oauth/token', [
             'form_params' => [
-                'username' => $username,
-                'password' => $password,
+                'username' => $this->username,
+                'password' => $this->password,
                 'grant_type' => 'password',
             ],
         ])->getBody(), true);

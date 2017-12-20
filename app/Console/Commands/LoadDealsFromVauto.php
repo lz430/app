@@ -19,6 +19,10 @@ class LoadDealsFromVauto extends Command
             $this->info($info);
         });
 
+        $importer->setErrorFunction(function (string $error) {
+            $this->error($error);
+        });
+
         $this->importer = $importer;
     }
 
