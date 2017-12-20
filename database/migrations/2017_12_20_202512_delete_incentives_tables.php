@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class DeleteIncentivesTable extends Migration
+class DeleteIncentivesTables extends Migration
 {
     /**
      * Run the migrations.
@@ -14,6 +14,7 @@ class DeleteIncentivesTable extends Migration
     public function up()
     {
         Schema::dropIfExists('incentives');
+        Schema::dropIfExists('incentive_version');
     }
 
     /**
