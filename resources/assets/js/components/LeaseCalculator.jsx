@@ -521,18 +521,25 @@ function mapStateToProps(state) {
         annualMileage: state.annualMileage,
         residualPercent: state.residualPercent,
         employeeBrand: state.employeeBrand,
-        availableRebates: rebates.getAvailableRebatesForDealAndType(
-            state.dealRebates,
-            state.selectedRebates,
+        // @TODO delete this rebates class?
+        // availableRebates: rebates.getAvailableRebatesForDealAndTypee
+        //     state.dealRebates,
+        //     state.selectedRebates,
+        //     state.selectedTab,
+        //     state.selectedDeal
+        // ),
+        availableTargets: rebates.getAvailableTargetsForDealAndType(
+            state.dealTargets,
             state.selectedTab,
             state.selectedDeal
         ),
-        selectedRebates: rebates.getSelectedRebatesForDealAndType(
-            state.dealRebates,
-            state.selectedRebates,
-            state.selectedTab,
-            state.selectedDeal
-        ),
+        // selectedRebates: rebates.getSelectedRebatesForDealAndType(
+        //     state.dealRebates,
+        //     state.selectedRebates,
+        //     state.selectedTab,
+        //     state.selectedDeal
+        // ),
+        selectedRebates: [],
     };
 }
 

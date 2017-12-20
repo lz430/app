@@ -435,8 +435,6 @@ const mapStateToProps = state => {
         compareList: state.compareList,
         selectedTab: state.selectedTab,
         downPayment: state.downPayment,
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates,
         termDuration: state.termDuration,
         fallbackDealImage: state.fallbackDealImage,
         selectedDeal: state.selectedDeal,

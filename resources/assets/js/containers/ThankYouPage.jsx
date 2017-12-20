@@ -23,22 +23,14 @@ class ThankYouPage extends React.PureComponent {
             dimensions: null,
             showStandardFeatures: false,
             showFeatures: false,
-            availableRebates: null,
-            selectedRebates: null,
+            availableTargets: null,
         };
     }
 
     componentWillReceiveProps(props) {
         this.setState({
-            availableRebates: rebates.getAvailableRebatesForDealAndType(
-                props.dealRebates,
-                props.selectedRebates,
-                props.purchase.data.attributes.type,
-                props.purchase.data.attributes.deal.data
-            ),
-            selectedRebates: rebates.getSelectedRebatesForDealAndType(
-                props.dealRebates,
-                props.selectedRebates,
+            availableTargets: rebates.getAvailableTargetsForDealAndType(
+                props.dealTargets,
                 props.purchase.data.attributes.type,
                 props.purchase.data.attributes.deal.data
             ),
@@ -270,26 +262,9 @@ class ThankYouPage extends React.PureComponent {
                             {util.moneyFormat(this.state.purchase.msrp)}{' '}
                             <span className="thank-you__msrp-label">MSRP</span>
                         </div>
-                        {this.state.availableRebates ? (
+                        {this.state.availableTargets ? (
                             <div className="thank-you__rebates-applied">
-                                {util.moneyFormat(
-                                    R.sum(
-                                        R.map(
-                                            R.prop('value'),
-                                            this.state.selectedRebates
-                                        )
-                                    )
-                                )}{' '}
-                                of{' '}
-                                {util.moneyFormat(
-                                    R.sum(
-                                        R.map(
-                                            R.prop('value'),
-                                            this.state.availableRebates
-                                        )
-                                    )
-                                )}{' '}
-                                in rebates!
+                                @todo some rebate money! yay!
                             </div>
                         ) : (
                             'Loading'
@@ -347,8 +322,7 @@ class ThankYouPage extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates,
+        dealTargets: state.dealTargets,
     };
 };
 

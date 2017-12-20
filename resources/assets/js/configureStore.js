@@ -42,7 +42,7 @@ const initialState = {
     employeeBrand: false,
     selectedFeatures: [],
     selectedRebates: [],
-    dealRebates: {},
+    dealTargets: {},
     features: null,
     requestingMoreDeals: false,
     makes: null,

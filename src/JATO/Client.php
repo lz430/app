@@ -147,6 +147,15 @@ class Client
         }
     }
 
+    public function targetsByVehicleIdAndZipcode($vehicleId, $zipcode)
+    {
+        return $this->get("incentives/bestOffer/$vehicleId/targets", [
+            'query' => [
+                'zipCode' => $zipcode,
+            ]
+        ]);
+    }
+
     /*
     public function bestCashIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
     {

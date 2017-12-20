@@ -80,12 +80,11 @@ const api = {
             },
         });
     },
-    getTargets: (zipcode, vin, selected_target_ids = []) => {
+    getTargets: (zipcode, vin) => {
         return window.axios.get('/api/targets', {
             params: {
                 zipcode,
                 vin,
-                selected_target_ids,
             },
         });
     },

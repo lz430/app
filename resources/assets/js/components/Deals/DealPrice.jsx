@@ -14,44 +14,36 @@ class DealPrice extends React.PureComponent {
         super(props);
 
         this.state = {
-            availableRebates: null,
-            selectedRebates: [],
+            availableTargets: null,
         };
     }
 
     componentDidMount() {
         if (
-            !this.props.dealRebates.hasOwnProperty(this.props.deal.id) &&
+            !this.props.dealTargets.hasOwnProperty(this.props.deal.id) &&
             this.props.zipcode
         ) {
-            this.requestRebates();
+            this.requestTargets();
         } else {
             this.componentWillReceiveProps(this.props);
         }
     }
 
-    requestRebates() {
-        this.props.requestRebates(this.props.deal);
+    requestTargets() {
+        this.props.requestTargets(this.props.deal);
     }
 
     componentWillReceiveProps(props) {
-        if (!props.dealRebates.hasOwnProperty(props.deal.id)) {
-            return this.props.requestRebates(this.props.deal);
+        if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
+            return this.props.requestTargets(this.props.deal);
         }
 
         this.setState({
-            availableRebates: rebates.getAvailableRebatesForDealAndType(
-                props.dealRebates,
-                props.selectedRebates,
+            availableTargets: rebates.getAvailableTargetsForDealAndType(
+                props.dealTargets,
                 props.selectedTab,
-                props.deal
-            ),
-            selectedRebates: rebates.getSelectedRebatesForDealAndType(
-                props.dealRebates,
-                props.selectedRebates,
-                props.selectedTab,
-                props.deal
-            ),
+                props.selectedDeal
+            )
         });
     }
 
@@ -88,7 +80,7 @@ class DealPrice extends React.PureComponent {
                     Estimated Monthly Finance Payment
                 </div>
                 <div className="deal-price__finance-lease-price">
-                    {this.props.dealRebates.hasOwnProperty(
+                    {this.props.dealTargets.hasOwnProperty(
                         this.props.deal.id
                     ) ? (
                         util.moneyFormat(
@@ -98,17 +90,19 @@ class DealPrice extends React.PureComponent {
                                         this.props.deal,
                                         this.props.employeeBrand
                                     ) -
+                                    /*
                                         R.sum(
                                             R.map(
                                                 R.prop('value'),
                                                 rebates.getSelectedRebatesForDealAndType(
-                                                    this.props.dealRebates,
+                                                    this.props.dealTargets,
                                                     this.props.selectedRebates,
                                                     this.props.selectedTab,
                                                     this.props.deal
                                                 )
                                             )
-                                        ),
+                                        ),*/
+                                    0, // @todo this would be the sum of our rebating
                                     this.props.downPayment,
                                     this.props.termDuration
                                 )
@@ -138,17 +132,20 @@ class DealPrice extends React.PureComponent {
                                     this.props.deal,
                                     this.props.employeeBrand
                                 ) -
+                                /*
                                     R.sum(
                                         R.map(
                                             R.prop('value'),
                                             rebates.getSelectedRebatesForDealAndType(
-                                                this.props.dealRebates,
+                                                this.props.dealTargets,
                                                 this.props.selectedRebates,
                                                 this.props.selectedTab,
                                                 this.props.deal
                                             )
                                         )
                                     ),
+                                    */
+                                0, // @TODO this would be the sum of our rebate price
                                 0,
                                 0,
                                 this.props.termDuration,
@@ -174,8 +171,8 @@ class DealPrice extends React.PureComponent {
         }
     }
 
-    renderAppliedRebatesLink() {
-        if (!this.state.availableRebates) {
+    renderAppliedTargetsLink() {
+        if (!this.state.availableTargets) {
             return <SVGInline svg={miscicons['loading']} />;
         }
         return (
@@ -190,7 +187,7 @@ class DealPrice extends React.PureComponent {
                     onClick={() => this.props.selectDeal(this.props.deal)}
                     href="#"
                 >
-                    See Available Rebates
+                    See Available Targets or something
                 </a>
             </div>
         );
@@ -229,7 +226,7 @@ class DealPrice extends React.PureComponent {
                     </div>
                 </div>
                 <div className="tabs__content">{this.renderSelectedTab()}</div>
-                {this.renderAppliedRebatesLink()}
+                {this.renderAppliedTargetsLink()}
             </div>
         );
     }
@@ -242,8 +239,7 @@ const mapStateToProps = state => {
         termDuration: state.termDuration,
         residualPercent: state.residualPercent,
         selectedTab: state.selectedTab,
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates,
+        dealTargets: state.dealTargets,
     };
 };
 

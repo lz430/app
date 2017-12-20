@@ -39,14 +39,17 @@ class Rebates extends React.PureComponent {
     }
 
     updateCompatibleRebates(props) {
+        // @todo this should probably instead make a new call to calculate stuff...
         api
-            .getRebates(
+            .getTargets(
                 props.zipcode,
                 props.deal.vin,
-                R.map(R.prop('id'), props.selectedTargets)
             )
             .then(response => {
                 if (!this._isMounted) return;
+
+                alert('got it');
+                console.log(response);
 
                 this.setState({
                     compatibleRebateIds: R.map(
@@ -133,18 +136,25 @@ function mapStateToProps(state) {
     return {
         zipcode: state.zipcode,
         deal: state.selectedDeal,
-        availableRebates: rebates.getAvailableRebatesForDealAndType(
-            state.dealRebates,
-            state.selectedTargets,
+        // @TODO delete this rebates class?
+        // availableRebates: rebates.getAvailableRebatesForDealAndTypee
+        //     state.dealRebates,
+        //     state.selectedRebates,
+        //     state.selectedTab,
+        //     state.selectedDeal
+        // ),
+        availableTargets: rebates.getAvailableTargetsForDealAndType(
+            state.dealTargets,
             state.selectedTab,
             state.selectedDeal
         ),
-        selectedTargets: rebates.getSelectedRebatesForDealAndType(
-            state.dealRebates,
-            state.selectedTargets,
-            state.selectedTab,
-            state.selectedDeal
-        ),
+        // selectedRebates: rebates.getSelectedRebatesForDealAndType(
+        //     state.dealRebates,
+        //     state.selectedRebates,
+        //     state.selectedTab,
+        //     state.selectedDeal
+        // ),
+        selectedRebates: [],
     };
 }
 

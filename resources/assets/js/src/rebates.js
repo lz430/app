@@ -1,42 +1,22 @@
 import R from 'ramda';
 
-// @TODO omg handle all this i am overwhelmed
 const rebates = {
-    getAvailableRebatesForDealAndType: (
-        dealRebates,
-        selectedRebates,
+    getAvailableTargetsForDealAndType: (
+        dealTargets,
         type,
         deal
     ) => {
-        if (!(deal && dealRebates && dealRebates.hasOwnProperty(deal.id))) {
-            return null;
-        }
+        // @todo later filter out finance only to finance, etc.
+        return dealTargets[deal.id];
 
-        return R.filter(rebate => {
-            return R.contains(type, rebate.types);
-        }, dealRebates[deal.id]);
-    },
-    getSelectedRebatesForDealAndType: (
-        dealRebates,
-        selectedRebates,
-        type,
-        deal
-    ) => {
-        if (!(deal && dealRebates && dealRebates.hasOwnProperty(deal.id))) {
-            return [];
-        }
+        // if (!(deal && dealTargets && dealTargets.hasOwnProperty(deal.id))) {
+        //     return null;
+        // }
 
-        const possibleRebatesForDeal = dealRebates[deal.id];
-
-        return R.filter(possibleRebateForDeal => {
-            return (
-                possibleRebateForDeal.types.includes(type) &&
-                R.map(R.prop('id'), selectedRebates).includes(
-                    possibleRebateForDeal.id
-                )
-            );
-        }, possibleRebatesForDeal);
-    },
+        // return R.filter(rebate => {
+        //     return R.contains(type, rebate.types);
+        // }, dealTargets[deal.id]);
+    }
 };
 
 export default rebates;

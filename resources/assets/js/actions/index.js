@@ -167,19 +167,19 @@ export function toggleModel(model) {
     };
 }
 
-export function requestRebates(deal) {
+export function requestTargets(deal) {
     return (dispatch, getState) => {
-        // If we have already received the rebates for the deal, don't request them again.
+        // If we have already received the targets for the deal, don't request them again.
         // Or if we don't yet have a zipcode
         if (
-            getState().dealRebates.hasOwnProperty(deal.id) ||
+            getState().dealTargets.hasOwnProperty(deal.id) ||
             !getState().zipcode
         )
             return;
 
-        api.getRebates(getState().zipcode, deal.vin).then(data => {
+        api.getTargets(getState().zipcode, deal.vin).then(data => {
             dispatch(
-                receiveDealRebates({
+                receiveDealTargets({
                     data: data,
                     dealId: deal.id,
                 })
@@ -187,7 +187,7 @@ export function requestRebates(deal) {
         });
 
         dispatch({
-            type: ActionTypes.REQUEST_REBATES,
+            type: ActionTypes.REQUEST_TARGETS,
         });
     };
 }
@@ -201,14 +201,10 @@ export function receiveDeals(data) {
     };
 }
 
-export function receiveDealRebates(data) {
+export function receiveDealTargets(data) {
     return dispatch => {
-        data.data.data.rebates.map(rebate => {
-            // Don't auto-select just based on this criteria. We'll eventually select on load based on the "Open Offer Best Offer"
-            if (rebate.openOffer) {
-                // dispatch(selectRebate(rebate));
-            }
-        });
+        console.log(data);
+        alert('received 1kgkgkgk');
 
         dispatch({
             type: ActionTypes.RECEIVE_DEAL_REBATES,
@@ -499,7 +495,7 @@ export function setZipCode(zipcode) {
             type: ActionTypes.SET_ZIP_CODE,
             zipcode,
         });
-        
+
         dispatch(checkZipInRange(zipcode))
     };
 }

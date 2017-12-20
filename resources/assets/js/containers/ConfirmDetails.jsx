@@ -37,7 +37,7 @@ class ConfirmDetails extends React.PureComponent {
         );
     }
 
-    renderDealRebatesModal() {
+    renderCalculatorModal() {
         return (
             <Modal
                 onClose={this.props.clearSelectedDeal}
@@ -63,12 +63,14 @@ class ConfirmDetails extends React.PureComponent {
 
                                     // @TODO Update this to handle.. what. targets? some other number
                                     // that's influenced by the selected targets?
-                                    rebates.getSelectedRebatesForDealAndType(
-                                        this.props.dealRebates,
+                                    /*rebates.getSelectedRebatesForDealAndType(
+                                        this.props.dealTargets,
                                         this.props.selectedRebates,
                                         this.props.selectedTab,
                                         deal
-                                    ),
+                                    ),*/
+                                    [], /* ?!?!?!?!?! @TODO */
+                                    [],
                                     this.props.termDuration,
                                     this.props.employeeBrand
                                 )}
@@ -103,7 +105,7 @@ class ConfirmDetails extends React.PureComponent {
                     <div className="deal-details__pricing">
                         {this.renderDeal(deal)}
                     </div>
-                    {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}
+                    {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
                 </div>
             </div>
         );
@@ -127,8 +129,7 @@ const mapStateToProps = state => {
     return {
         selectedTab: state.selectedTab,
         downPayment: state.downPayment,
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates,
+        dealTargets: state.dealTargets,
         termDuration: state.termDuration,
         fallbackDealImage: state.fallbackDealImage,
         selectedDeal: state.selectedDeal,
