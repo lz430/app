@@ -53208,12 +53208,6 @@ var DealPrice = function (_React$PureComponent) {
                     className: 'deal-price__tag-icon',
                     svg: _miscicons2.default['tag']
                 }),
-                _util2.default.moneyFormat(selectedAmount),
-                ' rebates applied of',
-                ' ',
-                _util2.default.moneyFormat(maxAmount),
-                ' available...',
-                _react2.default.createElement('br', null),
                 _react2.default.createElement(
                     'a',
                     {
@@ -53222,7 +53216,7 @@ var DealPrice = function (_React$PureComponent) {
                         },
                         href: '#'
                     },
-                    'Recalculate Rebates and Financing'
+                    'See Available Rebates'
                 )
             );
         }
