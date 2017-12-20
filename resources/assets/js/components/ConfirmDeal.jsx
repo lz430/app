@@ -1,5 +1,6 @@
 import * as Actions from 'actions/index';
 import api from 'src/api';
+import fuelapi from 'src/fuelapi';
 import { connect } from 'react-redux';
 import formulas from 'src/formulas';
 import miscicons from 'miscicons';
@@ -65,6 +66,51 @@ class ConfirmDeal extends React.PureComponent {
             this.requestRebates();
         } else {
             this.componentWillReceiveProps(this.props);
+        }
+    }
+
+    extractFuelImages(data) {
+        return (
+            data.data.products.map(product =>
+                product.productFormats.map(format => {
+                    return {
+                        id: `fuel_external_${format.id}`,
+                        url: format.assets[0].url,
+                    };
+                })
+            )[0] || []
+        );
+    }
+
+    async requestFuelImages() {
+        const deal = this.props.deal;
+
+        const vehicleId =
+            (await fuelapi.getVehicleId(deal.year, deal.make, deal.model))
+                .data[0].id || false;
+        if (!vehicleId) return;
+
+        try {
+            const externalImages = this.extractFuelImages(
+                await fuelapi.getExternalImages(
+                    vehicleId,
+                    fuelcolor.convert(deal.color)
+                )
+            );
+
+            if (!this._isMounted) return;
+            this.setState({ fuelFeaturedImage: externalImages[0] });
+        } catch (e) {
+            try {
+                const externalImages = this.extractFuelImages(
+                    await fuelapi.getExternalImages(vehicleId, 'white')
+                );
+
+                if (!this._isMounted) return;
+                this.setState({ fuelFeaturedImage: externalImages[0] });
+            } catch (e) {
+                // No Fuel Images Available.
+            }
         }
     }
 
