@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Cache;
 class Client
 {
     private $guzzleClient;
-    const tokenKey = 'JATO_AUTH_HEADER';
+    const TOKEN_KEY = 'JATO_AUTH_HEADER';
     private $retryCount = 0;
 
     private $username;
@@ -28,7 +28,7 @@ class Client
     {
         try {
             if ($async) {
-                return json_decode((string) $this->guzzleClient->requestAsync('GET', $path, $options)->getBody(), true);
+                return $this->guzzleClient->requestAsync('GET', $path, $options);
             } else {
                 return json_decode((string) $this->guzzleClient->request('GET', $path, $options)->getBody(), true);
             }
@@ -189,14 +189,14 @@ class Client
 
     protected function authorize()
     {
-        if (! Cache::has(self::tokenKey)) {
+        if (! Cache::has(self::TOKEN_KEY)) {
             $this->refreshAuthorizationToken();
         }
 
         $this->guzzleClient = new GuzzleClient([
             'base_uri' => 'https://api.jatoflex.com/api/en-us/',
             'headers' => [
-                'Authorization' => Cache::get(self::tokenKey),
+                'Authorization' => Cache::get(self::TOKEN_KEY),
                 'Subscription-Key' => config('services.jato.subscription_key'),
             ],
         ]);
@@ -215,7 +215,7 @@ class Client
         ])->getBody(), true);
 
         Cache::put(
-            self::tokenKey,
+            self::TOKEN_KEY,
             $response['token_type'] . ' ' . $response['access_token'],
             ($response['expires_in'] / 60) - 1
         );
