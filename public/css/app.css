@@ -2064,6 +2064,7 @@ body {
 
 .zipcode-finder__zipcode {
   font-size: 1.4rem;
+  margin-top: -0.5rem;
 }
 
 .sidebar-filters {
@@ -2193,7 +2194,7 @@ body {
   margin: 5px 5px;
   min-height: 85px;
   min-width: calc(33% - 10px);
-  padding: 5px;
+  padding: 5px 5px;
   text-align: center;
   width: calc(33% - 10px);
 }
@@ -2217,6 +2218,7 @@ body {
 .filter-style-selector__name {
   color: #ced4d9;
   font-size: 0.7rem;
+  margin-top: -1.5rem;
   width: 100%;
 }
 

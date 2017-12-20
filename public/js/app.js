@@ -59346,7 +59346,7 @@ var FilterStyleSelector = function (_React$PureComponent) {
                     key: style.style
                 },
                 _bodyStyles2.default[style.icon] ? _react2.default.createElement(_reactSvgInline2.default, {
-                    width: '50px',
+                    width: '70px',
                     className: 'filter-style-selector__icon',
                     svg: _bodyStyles2.default[style.icon]
                 }) : '',
