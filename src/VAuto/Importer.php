@@ -57,6 +57,7 @@ class Importer
         "Engine",
         "Fuel",
         "Age",
+        "Option Codes",
     ];
 
     private $filesystem;
