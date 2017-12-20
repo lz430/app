@@ -57,7 +57,7 @@ class Client
 
     public function makeByName($name)
     {
-        return $this->get("makes/$make");
+        return $this->get("makes/$name");
     }
 
     public function modelByName($modelName)
