@@ -44,8 +44,9 @@ class InfoModal extends React.PureComponent {
     }
 
     render() {
-        return <div className="infomodal__context">
-            <a
+        return (
+            <div className="infomodal__context">
+                <a
                     onClick={() => {this.toggleModal()}}
                     href="#"
                     className="infomodal__button"
@@ -54,6 +55,7 @@ class InfoModal extends React.PureComponent {
                 </a>
                 {this.state.toggled ? this.renderModal() : ''}
             </div>
+        );
     }
 }
 

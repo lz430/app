@@ -12,7 +12,7 @@ input {
   margin: $deal-card-margin;
   max-width: $deal-card-width;
   min-width: $deal-card-width;
-  padding: 1em;
+  padding: 1.5em;
 
   &__basic-info-msrp {
     color: $text-color-dark;
@@ -27,13 +27,15 @@ input {
   &__costs {
     display: flex;
     justify-content: space-between;
-    margin-bottom: .3em;
-    margin-right: 2.5rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0.3em;
+    width: 100%;
   }
 
   &__default-label {
     display: flex;
     justify-content: flex-start;
+    margin-bottom: -0.1rem;
     width: 100%;
   }
 
@@ -58,7 +60,7 @@ input {
   }
 
   &__prices {
-    font-size: .9em;
+    font-size: 0.9em;
 
     a {
       text-transform: uppercase;

@@ -1074,6 +1074,9 @@ body {
 .infomodal__context {
   display: inline-block;
   font-size: 1rem;
+  height: -webkit-min-content;
+  height: -moz-min-content;
+  height: min-content;
   margin-left: 5px;
   vertical-align: middle;
 }
@@ -1091,7 +1094,7 @@ input {
   margin: 5px;
   max-width: 300px;
   min-width: 300px;
-  padding: 1em;
+  padding: 1.5em;
 }
 
 .info-modal-data__basic-info-msrp {
@@ -1111,8 +1114,9 @@ input {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  margin-bottom: .3em;
-  margin-right: 2.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.3em;
+  width: 100%;
 }
 
 .info-modal-data__default-label {
@@ -1122,6 +1126,7 @@ input {
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
+  margin-bottom: -0.1rem;
   width: 100%;
 }
 
@@ -1150,7 +1155,7 @@ input {
 }
 
 .info-modal-data__prices {
-  font-size: .9em;
+  font-size: 0.9em;
 }
 
 .info-modal-data__prices a {
