@@ -2124,7 +2124,7 @@ body {
 }
 
 .sidebar-filters__filter-title--open {
-  background-color: #666666;
+  background-color: #717171;
   color: #fff;
 }
 
@@ -2230,6 +2230,10 @@ body {
   padding: 5px;
 }
 
+.filter-selector__selector:first-child {
+  margin-top: 0.5em;
+}
+
 .filter-selector__selector:last-child {
   border-bottom: 0;
 }
@@ -2254,6 +2258,7 @@ body {
   padding: 3px;
   width: 23px;
   background-color: #fff;
+  margin-left: 0.5em;
   fill: black;
 }
 
@@ -2280,6 +2285,7 @@ body {
   min-width: 23px;
   padding: 3px;
   width: 23px;
+  margin-left: 0.5em;
 }
 
 .filter-selector__radio--selected {

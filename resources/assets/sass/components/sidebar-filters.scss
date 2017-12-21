@@ -46,7 +46,7 @@ $icon-size: 20px;
     user-select: none;
 
     &--open {
-      background-color: $color-sidebar-background-primary;
+      background-color: $color-sidebar-background-primary-mid;
       color: $color-text-white;
 
       .sidebar-filters__icon {

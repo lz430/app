@@ -68,6 +68,9 @@ class FilterPanel extends React.PureComponent {
                         open={this.state.openFilter === 'Model'}
                         title="Vehicle Model"
                     >
+                        <div>
+                            <p>Placeholder Text</p>
+                        </div>
                     </SidebarFilter>
                     <SidebarFilter
                         toggle={() => this.toggleOpenFilter('Vehicle Style')}
@@ -129,6 +132,9 @@ class FilterPanel extends React.PureComponent {
                         open={this.state.openFilter === 'Drive Train'}
                         title="Drive Train"
                     >
+                        <div>
+                            <p>Placeholder Text</p>
+                        </div>
                     </SidebarFilter>
                     <SidebarFilter
                         toggle={() => this.toggleOpenFilter('Convenience')}
@@ -180,7 +186,9 @@ class FilterPanel extends React.PureComponent {
                             'interior'
                         )}
                     >
-                        />
+                        <div>
+                            <p>Placeholder Text</p>
+                        </div>
                     </SidebarFilter>
                     <SidebarFilter
                         toggle={() => this.toggleOpenFilter('Safety')}
