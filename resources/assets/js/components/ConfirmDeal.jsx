@@ -20,8 +20,6 @@ class ConfirmDeal extends React.PureComponent {
         this.state = {
             showStandardFeatures: false,
             showFeatures: false,
-            fallbackDealImage: '/images/dmr-logo.svg',
-            fuelFeaturedImage: null,
             warranties: null,
             dimensions: null,
         };
@@ -33,10 +31,6 @@ class ConfirmDeal extends React.PureComponent {
 
     componentDidMount() {
         this._isMounted = true;
-
-        if (this.props.deal.photos.length === 0) {
-            this.requestFuelImages();
-        }
 
         api
             .getDimensions(this.props.deal.versions[0].jato_vehicle_id)
@@ -92,18 +86,18 @@ class ConfirmDeal extends React.PureComponent {
             ),
         });
     }
-
-    featuredImageUrl() {
-        return R.propOr(
-            R.propOr(
-                this.state.fallbackDealImage,
-                'url',
-                this.state.fuelFeaturedImage
-            ),
-            'url',
-            this.props.deal.photos[0]
-        );
-    }
+    //
+    // featuredImageUrl() {
+    //     return R.propOr(
+    //         R.propOr(
+    //             this.state.fallbackDealImage,
+    //             'url',
+    //             this.state.fuelFeaturedImage
+    //         ),
+    //         'url',
+    //         this.props.deal.photos[0]
+    //     );
+    // }
 
     renderDealRebatesModal() {
         return (
@@ -372,12 +366,6 @@ class ConfirmDeal extends React.PureComponent {
 
     render() {
         const deal = this.props.deal;
-        const featuredImageUrl = this.featuredImageUrl();
-        const featureImageClass =
-            featuredImageUrl !== this.state.fallbackDealImage
-                ? 'deal__image'
-                : 'deal__image deal__image--fallback';
-
         return (
             <div>
                 <div className="confirm-deal">
@@ -398,11 +386,6 @@ class ConfirmDeal extends React.PureComponent {
                                     </div>
                                 </div>
                             </div>
-
-                            <img
-                                className={featureImageClass}
-                                src={featuredImageUrl}
-                            />
                         </div>
                     )}
                     <div className="tabs__title">You Selected...</div>
@@ -494,7 +477,6 @@ const mapStateToProps = state => {
         dealRebates: state.dealRebates,
         selectedRebates: state.selectedRebates,
         termDuration: state.termDuration,
-        fallbackDealImage: state.fallbackDealImage,
         selectedDeal: state.selectedDeal,
         isEmployee: state.isEmployee,
         residualPercent: state.residualPercent,

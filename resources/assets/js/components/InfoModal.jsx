@@ -1,8 +1,7 @@
+import InfoModalData from 'components/InfoModalData';
 import React from 'react';
 import R from 'ramda';
 import zondicons from "../zondicons";
-import * as Actions from 'actions/index';
-import { connect } from 'react-redux';
 import SVGInline from 'react-svg-inline';
 
 class InfoModal extends React.PureComponent {
@@ -25,11 +24,7 @@ class InfoModal extends React.PureComponent {
                 <div className="modal__overlay" />
                 <div className="modal__wrapper">
                     <div className="modal__content">
-                        <div className="modal__header">
-                            <div className="modal__titles">
-                                The data here will be the pricing information for this deal.
-                            </div>
-                        </div>
+                        <InfoModalData deal={this.props.deal} />
                     </div>
                 </div>
             </div>
@@ -62,9 +57,4 @@ class InfoModal extends React.PureComponent {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-    };
-};
-
-export default connect(mapStateToProps, Actions)(InfoModal);
+export default InfoModal;
