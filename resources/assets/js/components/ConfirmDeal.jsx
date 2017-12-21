@@ -1,11 +1,5 @@
-import * as Actions from 'actions/index';
 import api from 'src/api';
-import { connect } from 'react-redux';
-import formulas from 'src/formulas';
-import miscicons from 'miscicons';
-import Modal from 'components/Modal';
-import PropTypes from "prop-types";
-import R from 'ramda';
+import miscicons from 'miscicons';;
 import React from 'react';
 import rebates from 'src/rebates';
 import strings from 'src/strings';
@@ -86,18 +80,6 @@ class ConfirmDeal extends React.PureComponent {
             ),
         });
     }
-    //
-    // featuredImageUrl() {
-    //     return R.propOr(
-    //         R.propOr(
-    //             this.state.fallbackDealImage,
-    //             'url',
-    //             this.state.fuelFeaturedImage
-    //         ),
-    //         'url',
-    //         this.props.deal.photos[0]
-    //     );
-    // }
 
     renderDealRebatesModal() {
         return (
@@ -366,6 +348,7 @@ class ConfirmDeal extends React.PureComponent {
 
     render() {
         const deal = this.props.deal;
+
         return (
             <div>
                 <div className="confirm-deal">

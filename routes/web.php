@@ -19,7 +19,7 @@ Route::group(['middleware' => 'auth'], function () {
     /** Purchase Flow */
     Route::post('purchase', 'ApplyOrPurchaseController@purchase')->name('purchase');
 
-    Route::get('apply', 'ApplyOrPurchaseController@viewApply')->name('view-apply');
+    Route::get('apply/{purchaseId}', 'ApplyOrPurchaseController@viewApply')->name('view-apply');
     Route::post('apply', 'ApplyOrPurchaseController@apply')->name('apply');
     Route::get('thank-you', 'ApplyOrPurchaseController@thankYou')->name('thank-you');
 });
