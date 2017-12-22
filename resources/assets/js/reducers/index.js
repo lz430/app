@@ -72,10 +72,9 @@ const reducer = (state, action) => {
                 requestingMoreDeals: false,
             });
         case ActionTypes.RECEIVE_DEAL_TARGETS:
-            // @TODO handle this insanity
-            console.log('in the action type for deal target');
-
             let nextDealTargets = Object.assign({}, state.dealTargets);
+
+            console.log(action.data);
 
             nextDealTargets[action.data.dealId] = action.data.data.data.targets; // @TODO prob wrong i dunno
 

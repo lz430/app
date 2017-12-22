@@ -203,11 +203,8 @@ export function receiveDeals(data) {
 
 export function receiveDealTargets(data) {
     return dispatch => {
-        console.log(data);
-        alert('received 1kgkgkgk');
-
         dispatch({
-            type: ActionTypes.RECEIVE_DEAL_REBATES,
+            type: ActionTypes.RECEIVE_DEAL_TARGETS,
             data: data,
         });
     };

@@ -20,7 +20,7 @@ class DealDetails extends React.PureComponent {
         super(props);
 
         this.state = {
-            featuredImage: props.deal.photos[0],
+            featuredImage: [],
             fuelExternalImages: [],
             fuelInternalImages: [],
             warranties: null,
@@ -36,6 +36,12 @@ class DealDetails extends React.PureComponent {
 
     componentDidMount() {
         this._isMounted = true;
+
+        if (this.props.deal.photos.length === 0) {
+            this.requestFuelImages();
+        } else {
+            this.setState({featuredImage: this.props.deal.photos[0]});
+        }
 
         api
             .getDimensions(this.props.deal.versions[0].jato_vehicle_id)
@@ -103,6 +109,7 @@ class DealDetails extends React.PureComponent {
 
             this.setState({
                 fuelExternalImages: externalImages,
+                featuredImage: externalImages[0]
             });
         } catch (e) {
             try {
@@ -112,6 +119,7 @@ class DealDetails extends React.PureComponent {
 
                 this.setState({
                     fuelExternalImages: externalImages,
+                    featuredImage: externalImages[0]
                 });
             } catch (e) {
                 // No Fuel Images Available.

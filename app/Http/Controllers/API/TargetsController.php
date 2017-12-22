@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Deal;
 use App\Http\Controllers\Controller;
 use DeliverMyRide\JATO\Client;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -19,11 +20,9 @@ class TargetsController extends Controller
             'vin' => 'required|string',
         ]);
 
-        // @TODO is this a vin or a vehicle id? What is actually going on here?
-
         $targets = Cache::remember($this->getCacheKey(), self::CACHE_LENGTH, function () use ($client) {
             return $client->targetsByVehicleIdAndZipcode(
-                request('vin'),
+                $this->vehicleIdByVin(request('vin')),
                 request('zipcode')
             );
         });
@@ -36,5 +35,11 @@ class TargetsController extends Controller
     private function getCacheKey()
     {
         return 'JATO_TARGETS:' . request('vin') . ':' . request('zipcode');
+    }
+
+    private function vehicleIdByVin($vin)
+    {
+        $version = Deal::where('vin', $vin)->with('versions')->firstOrFail()->versions()->firstOrFail();
+        return $version->jato_vehicle_id;
     }
 }
