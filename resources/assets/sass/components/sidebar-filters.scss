@@ -31,6 +31,7 @@ $icon-size: 20px;
     text-transform: uppercase;
   }
 
+
   &__filter {
     border-bottom: 2px solid $color-sidebar-background-primary;
     color: $color-darkestgrey;
@@ -45,7 +46,7 @@ $icon-size: 20px;
     user-select: none;
 
     &--open {
-      background-color: $color-sidebar-background-primary;
+      background-color: $color-sidebar-background-primary-mid;
       color: $color-text-white;
 
       .sidebar-filters__icon {
@@ -63,10 +64,17 @@ $icon-size: 20px;
   &__icon {
     fill: $color-darkestgrey;
     height: $icon-size;
+    line-height: 0;
     margin-left: $icon-margin;
     margin-right: $icon-margin;
     position: absolute;
     right: 0;
     width: $icon-size;
+  }
+
+  &__section-header {
+    background-color: $color-sidebar-background-primary;
+    color: $color-text-white;
+    height: 2.75em;
   }
 }

@@ -12,6 +12,7 @@
   &__button {
     @include button;
     font-size: 0.5rem;
+    height: 2rem;
 
     &:first-child {
       margin-right: 5px;
@@ -84,5 +85,6 @@
 
   &__zipcode {
     font-size: 1.4rem;
+    margin-top: -0.5rem;
   }
 }

@@ -26,7 +26,7 @@ class FilterStyleSelector extends React.PureComponent {
             >
                 {bodyStyleIcons[style.icon] ? (
                     <SVGInline
-                        width="50px"
+                        width="70px"
                         className="filter-style-selector__icon"
                         svg={bodyStyleIcons[style.icon]}
                     />
