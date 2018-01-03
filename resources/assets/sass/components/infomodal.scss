@@ -5,11 +5,8 @@
     &__context {
         display: inline-block;
         font-size: 1rem;
+        height: min-content;
         margin-left: 5px;
         vertical-align: middle;
-    }
-
-    &__button {
-
     }
 }

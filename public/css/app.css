@@ -1074,8 +1074,98 @@ body {
 .infomodal__context {
   display: inline-block;
   font-size: 1rem;
+  height: -webkit-min-content;
+  height: -moz-min-content;
+  height: min-content;
   margin-left: 5px;
   vertical-align: middle;
+}
+
+input {
+  width: 100%;
+}
+
+.info-modal-data {
+  background-color: #fff;
+  border: 1px solid #ced4d9;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  margin: 5px;
+  max-width: 300px;
+  min-width: 300px;
+  padding: 1.5em;
+}
+
+.info-modal-data__basic-info-msrp {
+  color: #1e2123;
+  display: block;
+  font-size: 1.15rem;
+}
+
+.info-modal-data__bold {
+  font-weight: bold;
+}
+
+.info-modal-data__costs {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-top: 0.75rem;
+  margin-bottom: 0.3em;
+  width: 100%;
+}
+
+.info-modal-data__default-label {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  margin-bottom: -0.1rem;
+  width: 100%;
+}
+
+.info-modal-data__default-option {
+  margin-top: -1rem;
+  width: 100%;
+}
+
+.info-modal-data__disclaimer {
+  font-size: small;
+  text-align: left;
+}
+
+.info-modal-data__final-price {
+  color: #e70290;
+}
+
+.info-modal-data__more-rebates {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 0.8em;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.info-modal-data__prices {
+  font-size: 0.9em;
+}
+
+.info-modal-data__prices a {
+  text-transform: uppercase;
+  color: #41b1ac;
+}
+
+.info-modal-data__pricing-details {
+  font-size: 1.25em;
+  text-decoration: underline;
 }
 
 .sortbar {

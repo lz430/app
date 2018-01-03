@@ -1,17 +1,14 @@
-import * as Actions from 'actions/index';
 import api from 'src/api';
-import { connect } from 'react-redux';
-import formulas from 'src/formulas';
 import miscicons from 'miscicons';
-import Modal from 'components/Modal';
-import PropTypes from "prop-types";
-import R from 'ramda';
 import React from 'react';
 import rebates from 'src/rebates';
 import strings from 'src/strings';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import util from 'src/util';
+import PropTypes from 'prop-types';
+import * as Actions from 'actions/index';
+import { connect } from 'react-redux';
 
 class ConfirmDeal extends React.PureComponent {
     constructor(props) {

@@ -56,7 +56,7 @@ class DealPrice extends React.PureComponent {
     }
 
     renderPriceExplanationModal() {
-        return <InfoModal></InfoModal>
+        return <InfoModal deal={this.props.deal}/>
     }
 
     renderCashPrice() {
