@@ -2231,6 +2231,7 @@ input {
 .sidebar-filters__icon {
   fill: #484d50;
   height: 20px;
+  line-height: 0;
   margin-left: 10px;
   margin-right: 10px;
   position: absolute;

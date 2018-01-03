@@ -58697,13 +58697,25 @@ var FilterPanel = function (_React$PureComponent) {
                             onSelectMake: this.props.toggleMake
                         })
                     ),
-                    _react2.default.createElement(_SidebarFilter2.default, {
-                        toggle: function toggle() {
-                            return _this2.toggleOpenFilter('Vehicle Model');
+                    _react2.default.createElement(
+                        _SidebarFilter2.default,
+                        {
+                            toggle: function toggle() {
+                                return _this2.toggleOpenFilter('Model');
+                            },
+                            open: this.state.openFilter === 'Model',
+                            title: 'Vehicle Model'
                         },
-                        open: this.state.openFilter === 'Model',
-                        title: 'Vehicle Model'
-                    }),
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(
+                                'p',
+                                null,
+                                'Placeholder Text'
+                            )
+                        )
+                    ),
                     _react2.default.createElement(
                         _SidebarFilter2.default,
                         {
@@ -58777,13 +58789,25 @@ var FilterPanel = function (_React$PureComponent) {
                             onSelectTransmissionType: this.props.chooseTransmissionType
                         })
                     ),
-                    _react2.default.createElement(_SidebarFilter2.default, {
-                        toggle: function toggle() {
-                            return _this2.toggleOpenFilter('Drive Train');
+                    _react2.default.createElement(
+                        _SidebarFilter2.default,
+                        {
+                            toggle: function toggle() {
+                                return _this2.toggleOpenFilter('Drive Train');
+                            },
+                            open: this.state.openFilter === 'Drive Train',
+                            title: 'Drive Train'
                         },
-                        open: this.state.openFilter === 'Drive Train',
-                        title: 'Drive Train'
-                    }),
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(
+                                'p',
+                                null,
+                                'Placeholder Text'
+                            )
+                        )
+                    ),
                     _react2.default.createElement(
                         _SidebarFilter2.default,
                         {
@@ -58842,7 +58866,15 @@ var FilterPanel = function (_React$PureComponent) {
                             title: 'Interior',
                             count: this.getCountOfSelectedFeatureByGroup('interior')
                         },
-                        '/>'
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(
+                                'p',
+                                null,
+                                'Placeholder Text'
+                            )
+                        )
                     ),
                     _react2.default.createElement(
                         _SidebarFilter2.default,

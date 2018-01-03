@@ -64,7 +64,7 @@ class FilterPanel extends React.PureComponent {
                         />
                     </SidebarFilter>
                     <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Vehicle Model')}
+                        toggle={() => this.toggleOpenFilter('Model')}
                         open={this.state.openFilter === 'Model'}
                         title="Vehicle Model"
                     >
