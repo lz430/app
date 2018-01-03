@@ -39,6 +39,7 @@ body {
 @import 'components/make-selector';
 @import 'components/modal';
 @import 'components/infomodal';
+@import 'components/info-modal-data';
 @import 'components/sortbar';
 @import 'components/filterbar';
 @import 'components/deals';
@@ -66,6 +67,7 @@ body {
 @import 'components/loading';
 @import 'components/disclaimer';
 @import 'components/customer-type';
+@import 'components/confirm-deal.scss';
 
 // Pages
 @import 'pages/welcome';

@@ -62,7 +62,6 @@ class ApplyOrPurchaseController extends Controller
                 'down_payment' => request('down_payment') ?: 0,
                 'amount_financed' => request('amount_financed') ?: 0,
             ]);
-
             session(['purchase' => $purchase]);
 
             /**
@@ -139,7 +138,7 @@ class ApplyOrPurchaseController extends Controller
 
         event(new NewPurchaseInitiated($user, $purchase));
 
-        return redirect()->route('view-apply')
+        return redirect()->route('view-apply', ['purchaseId' => $purchase->id])
             ->with('purchase', $purchase);
     }
 
@@ -179,16 +178,21 @@ class ApplyOrPurchaseController extends Controller
         return redirect()->route('thank-you', ['method' => $purchase->type]);
     }
 
-    public function viewApply()
+    public function viewApply($purchaseId)
     {
-        $purchase = session('purchase');
-        JavaScriptFacade::put([
-            'featuredPhoto' => $purchase->deal->featuredPhoto(),
-            'purchase' => $purchase,
-            'user' => $purchase->buyer,
-        ]);
+        try {
+            $purchase = Purchase::with('deal', 'deal.dealer', 'buyer')->findOrFail($purchaseId);
+            
+            JavaScriptFacade::put([
+                'featuredPhoto' => $purchase->deal->featuredPhoto(),
+                'purchase' => $purchase,
+                'user' => $purchase->buyer,
+            ]);
 
-        return view('view-apply');
+            return view('view-apply');
+        } catch (ModelNotFoundException $e) {
+            return abort(500);
+        }
     }
 
     public function apply()

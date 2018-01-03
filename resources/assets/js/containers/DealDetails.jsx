@@ -2,7 +2,6 @@ import * as Actions from 'actions/index';
 import api from 'src/api';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import CompareBar from 'components/CompareBar';
-import ConfirmDetails from 'containers/ConfirmDetails';
 import { connect } from 'react-redux';
 import Deal from 'components/Deals/Deal';
 import fuelapi from 'src/fuelapi';
@@ -10,10 +9,8 @@ import fuelcolor from 'src/fuel-color-map';
 import Modal from 'components/Modal';
 import miscicons from 'miscicons';
 import PropTypes from 'prop-types';
-import purchase from 'src/purchase';
 import R from 'ramda';
 import React from 'react';
-import rebates from 'src/rebates';
 import strings from 'src/strings';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
@@ -23,7 +20,7 @@ class DealDetails extends React.PureComponent {
         super(props);
 
         this.state = {
-            featuredImage: props.deal.photos[0],
+            featuredImage: [],
             fuelExternalImages: [],
             fuelInternalImages: [],
             warranties: null,
@@ -39,6 +36,12 @@ class DealDetails extends React.PureComponent {
 
     componentDidMount() {
         this._isMounted = true;
+
+        if (this.props.deal.photos.length === 0) {
+            this.requestFuelImages();
+        } else {
+            this.setState({featuredImage: this.props.deal.photos[0]});
+        }
 
         api
             .getDimensions(this.props.deal.versions[0].jato_vehicle_id)
@@ -106,6 +109,7 @@ class DealDetails extends React.PureComponent {
 
             this.setState({
                 fuelExternalImages: externalImages,
+                featuredImage: externalImages[0]
             });
         } catch (e) {
             try {
@@ -115,6 +119,7 @@ class DealDetails extends React.PureComponent {
 
                 this.setState({
                     fuelExternalImages: externalImages,
+                    featuredImage: externalImages[0]
                 });
             } catch (e) {
                 // No Fuel Images Available.
