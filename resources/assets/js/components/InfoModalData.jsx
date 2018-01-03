@@ -70,9 +70,12 @@ class InfoModalData extends React.PureComponent {
     }
 
     displayFinalPrice() {
+        const selectedAmount = this.state.selectedRebates
+            ? R.sum(R.map(R.prop('value'), this.state.selectedRebates))
+            : 0;
         switch (this.props.selectedTab) {
             case 'cash':
-                return this.props.deal.supplier_price;
+                return this.props.deal.supplier_price - selectedAmount;
             case 'finance': {
                 return Math.round(
                     formulas.calculateFinancedMonthlyPayments(
