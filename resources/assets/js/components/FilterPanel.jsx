@@ -54,7 +54,7 @@ class FilterPanel extends React.PureComponent {
                     <SidebarFilter
                         toggle={() => this.toggleOpenFilter('Make')}
                         open={this.state.openFilter === 'Make'}
-                        title="Vehicle Make"
+                        title="Vehicle Brand"
                         count={this.props.selectedMakes.length}
                     >
                         <FilterMakeSelector

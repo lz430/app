@@ -58688,7 +58688,7 @@ var FilterPanel = function (_React$PureComponent) {
                                 return _this2.toggleOpenFilter('Make');
                             },
                             open: this.state.openFilter === 'Make',
-                            title: 'Vehicle Make',
+                            title: 'Vehicle Brand',
                             count: this.props.selectedMakes.length
                         },
                         _react2.default.createElement(_FilterMakeSelector2.default, {
