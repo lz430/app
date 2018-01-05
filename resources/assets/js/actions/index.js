@@ -599,10 +599,10 @@ export function selectRebate(rebate) {
     };
 }
 
-export function toggleRebate(rebate) {
+export function toggleTarget(target) {
     return {
-        type: ActionTypes.TOGGLE_REBATE,
-        rebate,
+        type: ActionTypes.TOGGLE_TARGET,
+        target,
     };
 }
 

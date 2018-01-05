@@ -21,6 +21,13 @@ class TargetsController extends Controller
         ]);
 
         $targets = Cache::remember($this->getCacheKey(), self::CACHE_LENGTH, function () use ($client) {
+            // @todo consider filtering out targets based on this list from rudy:
+            /*
+                Trade-in allowance
+                Early Bird allowance
+                First payment waiver
+                Dealer cash
+             */
             return $client->targetsByVehicleIdAndZipcode(
                 $this->vehicleIdByVin(request('vin')),
                 request('zipcode')

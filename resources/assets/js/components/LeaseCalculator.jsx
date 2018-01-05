@@ -1,7 +1,7 @@
 import React from 'react';
 import util from 'src/util';
 import R from 'ramda';
-import Rebates from 'components/Rebates';
+import Targets from 'components/Targets';
 import CustomerTypeSelect from 'components/CustomerTypeSelect';
 import rebates from 'src/rebates';
 import formulas from 'src/formulas';
@@ -387,7 +387,7 @@ class LeaseCalculator extends React.PureComponent {
                 ) : (
                     ''
                 )}
-                <Rebates />
+                <Targets />
                 <hr />
                 <h4>Summary</h4>
                 <div>

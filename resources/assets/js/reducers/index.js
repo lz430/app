@@ -127,11 +127,11 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 selectedStyles: action.selectedStyles,
             });
-        case ActionTypes.TOGGLE_REBATE:
+        case ActionTypes.TOGGLE_TARGET:
             return Object.assign({}, state, {
-                selectedRebates: util.toggleItem(
-                    state.selectedRebates,
-                    action.rebate
+                selectedTargets: util.toggleItem(
+                    state.selectedTargets,
+                    action.target
                 ),
             });
         case ActionTypes.SELECT_REBATE:

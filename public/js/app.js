@@ -766,7 +766,7 @@ exports.selectTab = selectTab;
 exports.selectDeal = selectDeal;
 exports.clearSelectedDeal = clearSelectedDeal;
 exports.selectRebate = selectRebate;
-exports.toggleRebate = toggleRebate;
+exports.toggleTarget = toggleTarget;
 exports.updateDownPayment = updateDownPayment;
 exports.updateTermDuration = updateTermDuration;
 exports.updateAnnualMileage = updateAnnualMileage;
@@ -1313,10 +1313,10 @@ function selectRebate(rebate) {
     };
 }
 
-function toggleRebate(rebate) {
+function toggleTarget(target) {
     return {
-        type: ActionTypes.TOGGLE_REBATE,
-        rebate: rebate
+        type: ActionTypes.TOGGLE_TARGET,
+        target: target
     };
 }
 
@@ -14081,191 +14081,7 @@ var mapStateToProps = function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(Deal);
 
 /***/ }),
-/* 224 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(5);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _ramda = __webpack_require__(12);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-var _util = __webpack_require__(28);
-
-var _util2 = _interopRequireDefault(_util);
-
-var _rebates = __webpack_require__(62);
-
-var _rebates2 = _interopRequireDefault(_rebates);
-
-var _api = __webpack_require__(66);
-
-var _api2 = _interopRequireDefault(_api);
-
-var _reactSvgInline = __webpack_require__(16);
-
-var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
-
-var _miscicons = __webpack_require__(38);
-
-var _miscicons2 = _interopRequireDefault(_miscicons);
-
-var _zondicons = __webpack_require__(27);
-
-var _zondicons2 = _interopRequireDefault(_zondicons);
-
-var _strings = __webpack_require__(87);
-
-var _strings2 = _interopRequireDefault(_strings);
-
-var _reactRedux = __webpack_require__(13);
-
-var _actions = __webpack_require__(14);
-
-var Actions = _interopRequireWildcard(_actions);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Rebates = function (_React$PureComponent) {
-    _inherits(Rebates, _React$PureComponent);
-
-    function Rebates(props) {
-        _classCallCheck(this, Rebates);
-
-        var _this = _possibleConstructorReturn(this, (Rebates.__proto__ || Object.getPrototypeOf(Rebates)).call(this, props));
-
-        _this.state = {
-            compatibleRebateIds: null
-        };
-        return _this;
-    }
-
-    _createClass(Rebates, [{
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            this._isMounted = false;
-        }
-    }, {
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this._isMounted = true;
-            this.updateCompatibleTargets(this.props);
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-            if (this.props.selectedTargets.length !== nextProps.selectedTargets.length && nextProps.zipcode) {
-                this.updateCompatibleTargets(nextProps);
-            }
-        }
-    }, {
-        key: 'updateCompatibleTargets',
-        value: function updateCompatibleTargets(props) {
-            var _this2 = this;
-
-            // @todo this should probably instead make a new call to calculate stuff...
-            _api2.default.getTargets(props.zipcode, props.deal.vin).then(function (response) {
-                if (!_this2._isMounted) return;
-
-                alert('got it');
-                console.log(response);
-
-                _this2.setState({
-                    compatibleRebateIds: _ramda2.default.map(_ramda2.default.prop('id'), _ramda2.default.filter(_ramda2.default.compose(_ramda2.default.not(), _ramda2.default.propEq('statusName', 'Excluded')), response.data.rebates))
-                });
-            });
-        }
-    }, {
-        key: 'toggleTarget',
-        value: function toggleTarget(target) {
-            var _this3 = this;
-
-            this.setState({
-                compatibleRebateIds: null
-            }, function () {
-                _this3.props.toggleTarget(target);
-            });
-        }
-    }, {
-        key: 'renderTarget',
-        value: function renderTarget(target, index) {
-            var _this4 = this;
-
-            var isSelected = _ramda2.default.contains(target, this.props.selectedTargets);
-            var isSelectable = _ramda2.default.contains(target.id, this.state.compatibleRebateIds);
-            var checkboxClass = 'rebates__checkbox rebates__checkbox--inverted ' + (isSelected ? 'rebates__checkbox--selected' : '');
-
-            return _react2.default.createElement(
-                'div',
-                {
-                    onClick: isSelectable ? function () {
-                        return _this4.toggleTarget(target);
-                    } : _ramda2.default.identity,
-                    className: 'rebates__rebate ' + (isSelectable ? '' : 'rebates__rebate--disabled'),
-                    key: index
-                },
-                isSelected ? _react2.default.createElement(_reactSvgInline2.default, {
-                    width: '15px',
-                    height: '15px',
-                    className: checkboxClass,
-                    svg: _zondicons2.default['checkmark']
-                }) : _react2.default.createElement('div', { className: 'rebates__checkbox' }),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'rebates__title' },
-                    _strings2.default.toTitleCase(target.targetName)
-                )
-            );
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this5 = this;
-
-            return _react2.default.createElement(
-                'div',
-                { className: 'rebates' },
-                this.state.compatibleRebateIds ? this.props.availableTargets.map(function (target, index) {
-                    return _this5.renderTarget(target, index);
-                }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
-            );
-        }
-    }]);
-
-    return Rebates;
-}(_react2.default.PureComponent);
-
-function mapStateToProps(state) {
-    return {
-        zipcode: state.zipcode,
-        deal: state.selectedDeal,
-        availableTargets: _rebates2.default.getAvailableTargetsForDeal(state.dealTargets, state.selectedDeal),
-        selectedTargets: _rebates2.default.getSelectedTargetsForDeal(state.dealTargets, state.selectedTargets, state.selectedDeal)
-    };
-}
-
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(Rebates);
-
-/***/ }),
+/* 224 */,
 /* 225 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -22409,7 +22225,7 @@ var RECEIVE_DEAL_TARGETS = exports.RECEIVE_DEAL_TARGETS = 'RECEIVE_DEAL_TARGETS'
 var SELECT_TAB = exports.SELECT_TAB = 'SELECT_TAB';
 var SELECT_DEAL = exports.SELECT_DEAL = 'SELECT_DEAL';
 var CLEAR_SELECTED_DEAL = exports.CLEAR_SELECTED_DEAL = 'CLEAR_SELECTED_DEAL';
-var TOGGLE_REBATE = exports.TOGGLE_REBATE = 'TOGGLE_REBATE';
+var TOGGLE_TARGET = exports.TOGGLE_TARGET = 'TOGGLE_TARGET';
 var SELECT_REBATE = exports.SELECT_REBATE = 'SELECT_REBATE';
 var CHOOSE_SEGMENT = exports.CHOOSE_SEGMENT = 'CHOOSE_SEGMENT';
 var UPDATE_DOWN_PAYMENT = exports.UPDATE_DOWN_PAYMENT = 'UPDATE_DOWN_PAYMENT';
@@ -59834,9 +59650,9 @@ var _ramda = __webpack_require__(12);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _Rebates = __webpack_require__(224);
+var _Targets = __webpack_require__(977);
 
-var _Rebates2 = _interopRequireDefault(_Rebates);
+var _Targets2 = _interopRequireDefault(_Targets);
 
 var _CustomerTypeSelect = __webpack_require__(225);
 
@@ -59891,7 +59707,7 @@ var CashCalculator = function (_React$PureComponent) {
                     null,
                     'Some text here about picking yoour target'
                 ),
-                _react2.default.createElement(_Rebates2.default, null),
+                _react2.default.createElement(_Targets2.default, null),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(
                     'h4',
@@ -60036,9 +59852,9 @@ var _ramda = __webpack_require__(12);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _Rebates = __webpack_require__(224);
+var _Targets = __webpack_require__(977);
 
-var _Rebates2 = _interopRequireDefault(_Rebates);
+var _Targets2 = _interopRequireDefault(_Targets);
 
 var _CustomerTypeSelect = __webpack_require__(225);
 
@@ -60212,7 +60028,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                     null,
                     'Available Rebates and Incentives'
                 ),
-                _react2.default.createElement(_Rebates2.default, null),
+                _react2.default.createElement(_Targets2.default, null),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(
                     'h4',
@@ -60419,9 +60235,9 @@ var _ramda = __webpack_require__(12);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _Rebates = __webpack_require__(224);
+var _Targets = __webpack_require__(977);
 
-var _Rebates2 = _interopRequireDefault(_Rebates);
+var _Targets2 = _interopRequireDefault(_Targets);
 
 var _CustomerTypeSelect = __webpack_require__(225);
 
@@ -60780,7 +60596,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                         'Available Rebates and Incentives'
                     )
                 ) : '',
-                _react2.default.createElement(_Rebates2.default, null),
+                _react2.default.createElement(_Targets2.default, null),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(
                     'h4',
@@ -61638,9 +61454,9 @@ var reducer = function reducer(state, action) {
             return Object.assign({}, state, {
                 selectedStyles: action.selectedStyles
             });
-        case ActionTypes.TOGGLE_REBATE:
+        case ActionTypes.TOGGLE_TARGET:
             return Object.assign({}, state, {
-                selectedRebates: _util2.default.toggleItem(state.selectedRebates, action.rebate)
+                selectedTargets: _util2.default.toggleItem(state.selectedTargets, action.target)
             });
         case ActionTypes.SELECT_REBATE:
             if (!_ramda2.default.contains(action.rebate, state.selectedRebates)) {
@@ -64483,6 +64299,154 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(ThankYouPag
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 973 */,
+/* 974 */,
+/* 975 */,
+/* 976 */,
+/* 977 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(5);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _ramda = __webpack_require__(12);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _util = __webpack_require__(28);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _rebates = __webpack_require__(62);
+
+var _rebates2 = _interopRequireDefault(_rebates);
+
+var _api = __webpack_require__(66);
+
+var _api2 = _interopRequireDefault(_api);
+
+var _reactSvgInline = __webpack_require__(16);
+
+var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
+
+var _miscicons = __webpack_require__(38);
+
+var _miscicons2 = _interopRequireDefault(_miscicons);
+
+var _zondicons = __webpack_require__(27);
+
+var _zondicons2 = _interopRequireDefault(_zondicons);
+
+var _strings = __webpack_require__(87);
+
+var _strings2 = _interopRequireDefault(_strings);
+
+var _reactRedux = __webpack_require__(13);
+
+var _actions = __webpack_require__(14);
+
+var Actions = _interopRequireWildcard(_actions);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Targets = function (_React$PureComponent) {
+    _inherits(Targets, _React$PureComponent);
+
+    function Targets(props) {
+        _classCallCheck(this, Targets);
+
+        return _possibleConstructorReturn(this, (Targets.__proto__ || Object.getPrototypeOf(Targets)).call(this, props));
+    }
+
+    _createClass(Targets, [{
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            this._mounted = false;
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this._mounted = true;
+        }
+    }, {
+        key: 'toggleTarget',
+        value: function toggleTarget(target) {
+            this.props.toggleTarget(target);
+        }
+    }, {
+        key: 'renderTarget',
+        value: function renderTarget(target, index) {
+            var isSelected = _ramda2.default.contains(target, this.props.selectedTargets);
+            var checkboxClass = 'rebates__checkbox rebates__checkbox--inverted ' + (isSelected ? 'rebates__checkbox--selected' : '');
+
+            return _react2.default.createElement(
+                'div',
+                {
+                    onClick: this.toggleTarget(target),
+                    className: 'rebates__rebate',
+                    key: index
+                },
+                isSelected ? _react2.default.createElement(_reactSvgInline2.default, {
+                    width: '15px',
+                    height: '15px',
+                    className: checkboxClass,
+                    svg: _zondicons2.default['checkmark']
+                }) : _react2.default.createElement('div', { className: 'rebates__checkbox' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'rebates__title' },
+                    _strings2.default.toTitleCase(target.targetName)
+                )
+            );
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'rebates' },
+                this.props ? this.props.availableTargets.map(function (target, index) {
+                    return _this2.renderTarget(target, index);
+                }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+            );
+        }
+    }]);
+
+    return Targets;
+}(_react2.default.PureComponent);
+
+function mapStateToProps(state) {
+    return {
+        zipcode: state.zipcode,
+        deal: state.selectedDeal,
+        availableTargets: _rebates2.default.getAvailableTargetsForDeal(state.dealTargets, state.selectedDeal),
+        selectedTargets: _rebates2.default.getSelectedTargetsForDeal(state.dealTargets, state.selectedTargets, state.selectedDeal)
+    };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(Targets);
 
 /***/ })
 /******/ ]);

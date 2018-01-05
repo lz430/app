@@ -10,79 +10,25 @@ import strings from 'src/strings';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
 
-class Rebates extends React.PureComponent {
+class Targets extends React.PureComponent {
     constructor(props) {
         super(props);
-
-        this.state = {
-            compatibleRebateIds: null,
-        };
     }
 
     componentWillUnmount() {
-        this._isMounted = false;
+        this._mounted = false;
     }
 
     componentDidMount() {
-        this._isMounted = true;
-        this.updateCompatibleTargets(this.props);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (
-            this.props.selectedTargets.length !==
-                nextProps.selectedTargets.length &&
-            nextProps.zipcode
-        ) {
-            this.updateCompatibleTargets(nextProps);
-        }
-    }
-
-    updateCompatibleTargets(props) {
-        // @todo this should probably instead make a new call to calculate stuff...
-        api
-            .getTargets(
-                props.zipcode,
-                props.deal.vin,
-            )
-            .then(response => {
-                if (!this._isMounted) return;
-
-                alert('got it');
-                console.log(response);
-
-                this.setState({
-                    compatibleRebateIds: R.map(
-                        R.prop('id'),
-                        R.filter(
-                            R.compose(
-                                R.not(),
-                                R.propEq('statusName', 'Excluded')
-                            ),
-                            response.data.rebates
-                        )
-                    ),
-                });
-            });
+        this._mounted = true;
     }
 
     toggleTarget(target) {
-        this.setState(
-            {
-                compatibleRebateIds: null,
-            },
-            () => {
-                this.props.toggleTarget(target);
-            }
-        );
+        this.props.toggleTarget(target);
     }
 
     renderTarget(target, index) {
         const isSelected = R.contains(target, this.props.selectedTargets);
-        const isSelectable = R.contains(
-            target.id,
-            this.state.compatibleRebateIds
-        );
         const checkboxClass = `rebates__checkbox rebates__checkbox--inverted ${isSelected
             ? 'rebates__checkbox--selected'
             : ''}`;
@@ -90,11 +36,9 @@ class Rebates extends React.PureComponent {
         return (
             <div
                 onClick={
-                    isSelectable ? () => this.toggleTarget(target) : R.identity
+                    this.toggleTarget(target)
                 }
-                className={`rebates__rebate ${isSelectable
-                    ? ''
-                    : 'rebates__rebate--disabled'}`}
+                className={`rebates__rebate`}
                 key={index}
             >
                 {isSelected ? (
@@ -117,7 +61,7 @@ class Rebates extends React.PureComponent {
     render() {
         return (
             <div className="rebates">
-                {this.state.compatibleRebateIds ? (
+                {this.props ? (
                     this.props.availableTargets.map((target, index) =>
                         this.renderTarget(target, index)
                     )
@@ -145,4 +89,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, Actions)(Rebates);
+export default connect(mapStateToProps, Actions)(Targets);
