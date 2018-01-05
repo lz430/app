@@ -42,7 +42,7 @@ class DealPrice extends React.PureComponent {
             availableTargets: rebates.getAvailableTargetsForDealAndType(
                 props.dealTargets,
                 props.selectedTab,
-                props.selectedDeal
+                props.deal
             )
         });
     }

@@ -79,7 +79,7 @@ const reducer = (state, action) => {
             nextDealTargets[action.data.dealId] = action.data.data.data.targets; // @TODO prob wrong i dunno
 
             return Object.assign({}, state, {
-                dealTargets: dealTargets,
+                dealTargets: nextDealTargets,
             });
         case ActionTypes.SORT_DEALS:
             return Object.assign({}, state, {

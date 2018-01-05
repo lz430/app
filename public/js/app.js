@@ -22485,8 +22485,6 @@ var DealImage = function (_React$PureComponent) {
     _createClass(DealImage, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            this._isMounted = true;
-
             if (this.props.deal.photos.length === 0) {
                 this.requestFuelImages();
             }
@@ -22552,7 +22550,7 @@ var DealImage = function (_React$PureComponent) {
                                 _context.t2 = _context.sent;
                                 externalImages = _context.t1.extractFuelImages.call(_context.t1, _context.t2);
 
-                                if (this._isMounted) {
+                                if (this._mounted) {
                                     _context.next = 17;
                                     break;
                                 }
@@ -22576,7 +22574,7 @@ var DealImage = function (_React$PureComponent) {
                                 _context.t5 = _context.sent;
                                 _externalImages = _context.t4.extractFuelImages.call(_context.t4, _context.t5);
 
-                                if (this._isMounted) {
+                                if (this._mounted) {
                                     _context.next = 30;
                                     break;
                                 }
@@ -52556,7 +52554,7 @@ var DealPrice = function (_React$PureComponent) {
             }
 
             this.setState({
-                availableTargets: _rebates2.default.getAvailableTargetsForDealAndType(props.dealTargets, props.selectedTab, props.selectedDeal)
+                availableTargets: _rebates2.default.getAvailableTargetsForDealAndType(props.dealTargets, props.selectedTab, props.deal)
             });
         }
     }, {
@@ -61071,7 +61069,7 @@ var reducer = function reducer(state, action) {
             nextDealTargets[action.data.dealId] = action.data.data.data.targets; // @TODO prob wrong i dunno
 
             return Object.assign({}, state, {
-                dealTargets: dealTargets
+                dealTargets: nextDealTargets
             });
         case ActionTypes.SORT_DEALS:
             return Object.assign({}, state, {
