@@ -48,7 +48,6 @@ class ConfirmDetails extends React.PureComponent {
                                     /*rebates.getSelectedTargetsForDeal(
                                         this.props.dealTargets,
                                         this.props.selectedTargets,
-                                        this.props.selectedTab,
                                         deal
                                     ),*/
                                     [], /* ?!?!?!?!?! @TODO */

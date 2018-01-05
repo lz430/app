@@ -8,7 +8,7 @@ const purchase = {
         selectedTab,
         downPayment,
         // @TODO update this for targets
-        selectedRebates,
+        selectedTargets,
         termDuration,
         employeeBrand
     ) => {
@@ -36,7 +36,7 @@ const purchase = {
                         util.getEmployeeOrSupplierPrice(deal, employeeBrand),
                         deal.doc_fee,
                         downPayment,
-                        R.sum(R.map(R.prop('value'), selectedRebates))
+                        R.sum(R.map(R.prop('value'), selectedTargets))
                     )
                     .toString()
             );
@@ -63,7 +63,7 @@ const purchase = {
         deal_id.setAttribute('value', deal.id);
         form.appendChild(deal_id);
 
-        selectedRebates.forEach((rebate, index) => {
+        selectedTargets.forEach((rebate, index) => {
             let rebateName = document.createElement('input');
             rebateName.setAttribute('name', `rebates[${index}][rebate]`);
             rebateName.setAttribute('value', rebate.rebate);
@@ -85,7 +85,7 @@ const purchase = {
         dmr_price.setAttribute(
             'value',
             (util.getEmployeeOrSupplierPrice(deal, employeeBrand) -
-                R.sum(R.map(R.prop('value'), selectedRebates))).toString()
+                R.sum(R.map(R.prop('value'), selectedTargets))).toString()
         );
         form.appendChild(dmr_price);
 

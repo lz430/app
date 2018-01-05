@@ -3993,6 +3993,22 @@ var rebates = {
         // return R.filter(rebate => {
         //     return R.contains(type, rebate.types);
         // }, dealTargets[deal.id]);
+    },
+    /** @todo: should this return non-visible targets like 'open offers'? */
+    /**
+     * Return the intersection of globally selected targets and the targets
+     * available on this deal
+     */
+    getSelectedTargetsForDeal: function getSelectedTargetsForDeal(dealTargets, selectedTargets, deal) {
+        if (!(deal && dealTargets && dealTargets.hasOwnProperty(deal.id))) {
+            return [];
+        }
+
+        var possibleTargetsForDeal = dealTargets[deal.id];
+
+        return _ramda2.default.filter(function (possibleTargetForDeal) {
+            return _ramda2.default.map(_ramda2.default.prop('id'), selectedTargets).includes(possibleTargetForDeal.id);
+        }, possibleTargetsForDeal);
     }
 };
 
@@ -14253,21 +14269,8 @@ function mapStateToProps(state) {
     return {
         zipcode: state.zipcode,
         deal: state.selectedDeal,
-        // @TODO delete this rebates class?
-        // availableRebates: rebates.getAvailableRebatesForDealAndTypee
-        //     state.dealRebates,
-        //     state.selectedTargets,
-        //     state.selectedTab,
-        //     state.selectedDeal
-        // ),
         availableTargets: _rebates2.default.getAvailableTargetsForDealAndType(state.dealTargets, state.selectedTab, state.selectedDeal),
-        // selectedTargets: rebates.getSelectedTargetsForDeal(
-        //     state.dealRebates,
-        //     state.selectedTargets,
-        //     state.selectedTab,
-        //     state.selectedDeal
-        // ),
-        selectedTargets: []
+        selectedTargets: _rebates2.default.getSelectedTargetsForDeal(state.dealTargets, state.selectedTargets, state.selectedDeal)
     };
 }
 
@@ -23448,7 +23451,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var purchase = {
     start: function start(deal, selectedTab, downPayment,
     // @TODO update this for targets
-    selectedRebates, termDuration, employeeBrand) {
+    selectedTargets, termDuration, employeeBrand) {
         var form = document.createElement('form');
         form.setAttribute('method', 'post');
         form.setAttribute('action', '/apply-or-purchase');
@@ -23466,7 +23469,7 @@ var purchase = {
         if (selectedTab === 'finance') {
             var amount_financed = document.createElement('input');
             amount_financed.setAttribute('name', 'amount_financed');
-            amount_financed.setAttribute('value', _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(deal, employeeBrand), deal.doc_fee, downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), selectedRebates))).toString());
+            amount_financed.setAttribute('value', _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(deal, employeeBrand), deal.doc_fee, downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), selectedTargets))).toString());
             form.appendChild(amount_financed);
 
             var term = document.createElement('input');
@@ -23490,7 +23493,7 @@ var purchase = {
         deal_id.setAttribute('value', deal.id);
         form.appendChild(deal_id);
 
-        selectedRebates.forEach(function (rebate, index) {
+        selectedTargets.forEach(function (rebate, index) {
             var rebateName = document.createElement('input');
             rebateName.setAttribute('name', 'rebates[' + index + '][rebate]');
             rebateName.setAttribute('value', rebate.rebate);
@@ -23509,7 +23512,7 @@ var purchase = {
 
         var dmr_price = document.createElement('input');
         dmr_price.setAttribute('name', 'dmr_price');
-        dmr_price.setAttribute('value', (_util2.default.getEmployeeOrSupplierPrice(deal, employeeBrand) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), selectedRebates))).toString());
+        dmr_price.setAttribute('value', (_util2.default.getEmployeeOrSupplierPrice(deal, employeeBrand) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), selectedTargets))).toString());
         form.appendChild(dmr_price);
 
         document.body.appendChild(form);
@@ -52622,7 +52625,6 @@ var DealPrice = function (_React$PureComponent) {
                                 rebates.getSelectedTargetsForDeal(
                                     this.props.dealTargets,
                                     this.props.selectedTargets,
-                                    this.props.selectedTab,
                                     this.props.deal
                                 )
                             )
@@ -52656,7 +52658,6 @@ var DealPrice = function (_React$PureComponent) {
                                 rebates.getSelectedTargetsForDeal(
                                     this.props.dealTargets,
                                     this.props.selectedTargets,
-                                    this.props.selectedTab,
                                     this.props.deal
                                 )
                             )
@@ -57776,7 +57777,7 @@ var InfoModalData = function (_React$PureComponent) {
         value: function componentDidMount() {
             this._isMounted = true;
 
-            if (!this.props.dealRebates.hasOwnProperty(this.props.deal.id) && this.props.zipcode) {
+            if (!this.props.dealTargets.hasOwnProperty(this.props.deal.id) && this.props.zipcode) {
                 this.requestRebates();
             } else {
                 this.componentWillReceiveProps(this.props);
@@ -57790,13 +57791,13 @@ var InfoModalData = function (_React$PureComponent) {
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(props) {
-            if (!props.dealRebates.hasOwnProperty(props.deal.id)) {
+            if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
                 return this.props.requestRebates(this.props.deal);
             }
 
             this.setState({
-                availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(props.dealRebates, props.selectedTargets, props.selectedTab, props.deal),
-                selectedTargets: _rebates2.default.getSelectedTargetsForDeal(props.dealRebates, props.selectedTargets, props.selectedTab, props.deal)
+                availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(props.dealTargets, props.selectedTargets, props.selectedTab, props.deal),
+                selectedTargets: _rebates2.default.getSelectedTargetsForDeal(props.dealTargets, props.selectedTargets, props.deal)
             });
         }
     }, {
@@ -57816,11 +57817,33 @@ var InfoModalData = function (_React$PureComponent) {
                     return this.props.deal.supplier_price - selectedAmount;
                 case 'finance':
                     {
-                        return Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedTargetsForDeal(this.props.dealRebates, this.props.selectedTargets, this.props.selectedTab, this.props.deal))), this.props.downPayment, this.props.termDuration));
+                        return Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum([0]
+                        /* @todo: update this to pull sum from api or whatever
+                        R.map(
+                            R.prop('value'),
+                            rebates.getSelectedTargetsForDeal(
+                                this.props.dealTargets,
+                                this.props.selectedTargets,
+                                this.props.deal
+                            )
+                        )
+                        */
+                        ), this.props.downPayment, this.props.termDuration));
                     }
                 case 'lease':
                     {
-                        return Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedTargetsForDeal(this.props.dealRebates, this.props.selectedTargets, this.props.selectedTab, this.props.deal))), 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31)));
+                        return Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum([0]
+                        /* @todo: sum from api or whatever
+                        R.map(
+                            R.prop('value'),
+                            rebates.getSelectedTargetsForDeal(
+                                this.props.dealTargets,
+                                this.props.selectedTargets,
+                                this.props.deal
+                            )
+                        )
+                        */
+                        ), 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31)));
                     }
             }
         }
@@ -57828,11 +57851,9 @@ var InfoModalData = function (_React$PureComponent) {
         key: 'showAppliedRebates',
         value: function showAppliedRebates() {
             var selectedAmount = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedTargets));
-            var maxAmount = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.dealRebates));
 
             this.setState({
-                selectedRebateAmount: selectedAmount,
-                maxRebateAmount: maxAmount
+                selectedRebateAmount: selectedAmount
             });
         }
     }, {
@@ -58122,7 +58143,7 @@ var mapStateToProps = function mapStateToProps(state) {
         compareList: state.compareList,
         selectedTab: state.selectedTab,
         downPayment: state.downPayment,
-        dealRebates: state.dealRebates,
+        dealTargets: state.dealTargets,
         selectedTargets: state.selectedTargets,
         termDuration: state.termDuration,
         selectedDeal: state.selectedDeal,
@@ -59994,7 +60015,7 @@ function mapStateToProps(state) {
         deal: state.selectedDeal,
         downPayment: state.downPayment,
         employeeBrand: state.employeeBrand,
-        selectedTargets: _rebates2.default.getSelectedTargetsForDeal(state.dealRebates, state.selectedTargets, state.selectedTab, state.selectedDeal)
+        selectedTargets: _rebates2.default.getSelectedTargetsForDeal(state.dealTargets, state.selectedTargets, state.selectedDeal)
     };
 }
 
@@ -60365,21 +60386,8 @@ function mapStateToProps(state) {
         deal: state.selectedDeal,
         termDuration: state.termDuration,
         employeeBrand: state.employeeBrand,
-        // @TODO delete this rebates class?
-        // availableRebates: rebates.getAvailableRebatesForDealAndTypee
-        //     state.dealRebates,
-        //     state.selectedTargets,
-        //     state.selectedTab,
-        //     state.selectedDeal
-        // ),
         availableTargets: _rebates2.default.getAvailableTargetsForDealAndType(state.dealTargets, state.selectedTab, state.selectedDeal),
-        // selectedTargets: rebates.getSelectedTargetsForDeal(
-        //     state.dealRebates,
-        //     state.selectedTargets,
-        //     state.selectedTab,
-        //     state.selectedDeal
-        // ),
-        selectedTargets: []
+        selectedTargets: _rebates2.default.getSelectedTargetsForDeal(state.dealTargets, state.selectedTargets, state.selectedDeal)
     };
 }
 
@@ -60931,21 +60939,8 @@ function mapStateToProps(state) {
         annualMileage: state.annualMileage,
         residualPercent: state.residualPercent,
         employeeBrand: state.employeeBrand,
-        // @TODO delete this rebates class?
-        // availableRebates: rebates.getAvailableRebatesForDealAndTypee
-        //     state.dealRebates,
-        //     state.selectedTargets,
-        //     state.selectedTab,
-        //     state.selectedDeal
-        // ),
         availableTargets: _rebates2.default.getAvailableTargetsForDealAndType(state.dealTargets, state.selectedTab, state.selectedDeal),
-        // selectedTargets: rebates.getSelectedTargetsForDeal(
-        //     state.dealRebates,
-        //     state.selectedTargets,
-        //     state.selectedTab,
-        //     state.selectedDeal
-        // ),
-        selectedTargets: []
+        selectedTargets: _rebates2.default.getSelectedTargetsForDeal(state.dealTargets, state.selectedTargets, state.selectedDeal)
     };
 }
 
@@ -62587,7 +62582,6 @@ var ComparePage = function (_React$PureComponent) {
                                 rebates.getSelectedTargetsForDeal(
                                     this.props.dealTargets,
                                     this.props.selectedTargets,
-                                    this.props.selectedTab,
                                     deal
                                 ),
                                 */
@@ -63187,7 +63181,6 @@ var ConfirmDetails = function (_React$PureComponent) {
                                     /*rebates.getSelectedTargetsForDeal(
                                         this.props.dealTargets,
                                         this.props.selectedTargets,
-                                        this.props.selectedTab,
                                         deal
                                     ),*/
                                     [], /* ?!?!?!?!?! @TODO */
@@ -63388,7 +63381,7 @@ var ConfirmDeal = function (_React$PureComponent) {
                 });
             });
 
-            if (!this.props.dealRebates.hasOwnProperty(this.props.deal.id) && this.props.zipcode) {
+            if (!this.props.dealTargets.hasOwnProperty(this.props.deal.id) && this.props.zipcode) {
                 this.requestRebates();
             } else {
                 this.componentWillReceiveProps(this.props);
@@ -63402,13 +63395,13 @@ var ConfirmDeal = function (_React$PureComponent) {
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(props) {
-            if (!props.dealRebates.hasOwnProperty(props.deal.id)) {
+            if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
                 return this.props.requestRebates(this.props.deal);
             }
 
             this.setState({
-                availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(props.dealRebates, props.selectedTargets, props.selectedTab, props.deal),
-                selectedTargets: _rebates2.default.getSelectedTargetsForDeal(props.dealRebates, props.selectedTargets, props.selectedTab, props.deal)
+                availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(props.dealTargets, props.selectedTargets, props.selectedTab, props.deal),
+                selectedTargets: _rebates2.default.getSelectedTargetsForDeal(props.dealTargets, props.selectedTargets, props.deal)
             });
         }
     }, {
@@ -63439,11 +63432,11 @@ var ConfirmDeal = function (_React$PureComponent) {
                     return this.props.deal.supplier_price;
                 case 'finance':
                     {
-                        return Math.round(formulas.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - R.sum(R.map(R.prop('value'), _rebates2.default.getSelectedTargetsForDeal(this.props.dealRebates, this.props.selectedTargets, this.props.selectedTab, this.props.deal))), this.props.downPayment, this.props.termDuration));
+                        return Math.round(formulas.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - R.sum(R.map(R.prop('value'), _rebates2.default.getSelectedTargetsForDeal(this.props.dealTargets, this.props.selectedTargets, this.props.deal))), this.props.downPayment, this.props.termDuration));
                     }
                 case 'lease':
                     {
-                        return Math.round(formulas.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - R.sum(R.map(R.prop('value'), _rebates2.default.getSelectedTargetsForDeal(this.props.dealRebates, this.props.selectedTargets, this.props.selectedTab, this.props.deal))), 0, 0, this.props.termDuration, R.or(this.props.residualPercent, 31)));
+                        return Math.round(formulas.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - R.sum(R.map(R.prop('value'), _rebates2.default.getSelectedTargetsForDeal(this.props.dealTargets, this.props.selectedTargets, this.props.deal))), 0, 0, this.props.termDuration, R.or(this.props.residualPercent, 31)));
                     }
             }
         }
@@ -63451,11 +63444,9 @@ var ConfirmDeal = function (_React$PureComponent) {
         key: 'showAppliedRebates',
         value: function showAppliedRebates() {
             var selectedAmount = R.sum(R.map(R.prop('value'), this.props.selectedTargets));
-            var maxAmount = R.sum(R.map(R.prop('value'), this.props.dealRebates));
 
             this.setState({
-                selectedRebateAmount: selectedAmount,
-                maxRebateAmount: maxAmount
+                selectedRebateAmount: selectedAmount
             });
         }
     }, {
@@ -63910,7 +63901,7 @@ var mapStateToProps = function mapStateToProps(state) {
         compareList: state.compareList,
         selectedTab: state.selectedTab,
         downPayment: state.downPayment,
-        dealRebates: state.dealRebates,
+        dealTargets: state.dealTargets,
         selectedTargets: state.selectedTargets,
         termDuration: state.termDuration,
         selectedDeal: state.selectedDeal,

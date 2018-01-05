@@ -124,9 +124,8 @@ function mapStateToProps(state) {
         downPayment: state.downPayment,
         employeeBrand: state.employeeBrand,
         selectedTargets: rebates.getSelectedTargetsForDeal(
-            state.dealRebates,
+            state.dealTargets,
             state.selectedTargets,
-            state.selectedTab,
             state.selectedDeal
         ),
     };

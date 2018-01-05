@@ -26,7 +26,7 @@ class InfoModalData extends React.PureComponent {
         this._isMounted = true;
 
         if (
-            !this.props.dealRebates.hasOwnProperty(this.props.deal.id) &&
+            !this.props.dealTargets.hasOwnProperty(this.props.deal.id) &&
             this.props.zipcode
         ) {
             this.requestRebates();
@@ -40,21 +40,20 @@ class InfoModalData extends React.PureComponent {
     }
 
     componentWillReceiveProps(props) {
-        if (!props.dealRebates.hasOwnProperty(props.deal.id)) {
+        if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
             return this.props.requestRebates(this.props.deal);
         }
 
         this.setState({
             availableRebates: rebates.getAvailableRebatesForDealAndType(
-                props.dealRebates,
+                props.dealTargets,
                 props.selectedTargets,
                 props.selectedTab,
                 props.deal
             ),
             selectedTargets: rebates.getSelectedTargetsForDeal(
-                props.dealRebates,
+                props.dealTargets,
                 props.selectedTargets,
-                props.selectedTab,
                 props.deal
             ),
         });
@@ -84,15 +83,17 @@ class InfoModalData extends React.PureComponent {
                             this.props.isEmployee
                         ) -
                             R.sum(
+                                [0]
+                                /* @todo: update this to pull sum from api or whatever
                                 R.map(
                                     R.prop('value'),
                                     rebates.getSelectedTargetsForDeal(
-                                        this.props.dealRebates,
+                                        this.props.dealTargets,
                                         this.props.selectedTargets,
-                                        this.props.selectedTab,
                                         this.props.deal
                                     )
                                 )
+                                */
                             ),
                         this.props.downPayment,
                         this.props.termDuration
@@ -107,15 +108,17 @@ class InfoModalData extends React.PureComponent {
                             this.props.isEmployee
                         ) -
                             R.sum(
+                                [0]
+                                /* @todo: sum from api or whatever
                                 R.map(
                                     R.prop('value'),
                                     rebates.getSelectedTargetsForDeal(
-                                        this.props.dealRebates,
+                                        this.props.dealTargets,
                                         this.props.selectedTargets,
-                                        this.props.selectedTab,
                                         this.props.deal
                                     )
                                 )
+                                */
                             ),
                         0,
                         0,
@@ -131,11 +134,9 @@ class InfoModalData extends React.PureComponent {
         const selectedAmount = R.sum(
             R.map(R.prop('value'), this.props.selectedTargets)
         );
-        const maxAmount = R.sum(R.map(R.prop('value'), this.props.dealRebates));
 
         this.setState({
             selectedRebateAmount: selectedAmount,
-            maxRebateAmount: maxAmount,
         });
     }
 
@@ -354,7 +355,7 @@ const mapStateToProps = state => {
         compareList: state.compareList,
         selectedTab: state.selectedTab,
         downPayment: state.downPayment,
-        dealRebates: state.dealRebates,
+        dealTargets: state.dealTargets,
         selectedTargets: state.selectedTargets,
         termDuration: state.termDuration,
         selectedDeal: state.selectedDeal,

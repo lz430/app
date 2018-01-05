@@ -262,25 +262,16 @@ function mapStateToProps(state) {
         deal: state.selectedDeal,
         termDuration: state.termDuration,
         employeeBrand: state.employeeBrand,
-        // @TODO delete this rebates class?
-        // availableRebates: rebates.getAvailableRebatesForDealAndTypee
-        //     state.dealRebates,
-        //     state.selectedTargets,
-        //     state.selectedTab,
-        //     state.selectedDeal
-        // ),
         availableTargets: rebates.getAvailableTargetsForDealAndType(
             state.dealTargets,
             state.selectedTab,
             state.selectedDeal
         ),
-        // selectedTargets: rebates.getSelectedTargetsForDeal(
-        //     state.dealRebates,
-        //     state.selectedTargets,
-        //     state.selectedTab,
-        //     state.selectedDeal
-        // ),
-        selectedTargets: [],
+        selectedTargets: rebates.getSelectedTargetsForDeal(
+            state.dealTargets,
+            state.selectedTargets,
+            state.selectedDeal
+        ),
     };
 }
 

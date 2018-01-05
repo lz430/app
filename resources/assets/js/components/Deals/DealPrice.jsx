@@ -97,7 +97,6 @@ class DealPrice extends React.PureComponent {
                                                 rebates.getSelectedTargetsForDeal(
                                                     this.props.dealTargets,
                                                     this.props.selectedTargets,
-                                                    this.props.selectedTab,
                                                     this.props.deal
                                                 )
                                             )
@@ -139,7 +138,6 @@ class DealPrice extends React.PureComponent {
                                             rebates.getSelectedTargetsForDeal(
                                                 this.props.dealTargets,
                                                 this.props.selectedTargets,
-                                                this.props.selectedTab,
                                                 this.props.deal
                                             )
                                         )
