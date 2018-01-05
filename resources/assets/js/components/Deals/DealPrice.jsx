@@ -94,9 +94,9 @@ class DealPrice extends React.PureComponent {
                                         R.sum(
                                             R.map(
                                                 R.prop('value'),
-                                                rebates.getSelectedRebatesForDealAndType(
+                                                rebates.getSelectedTargetsForDeal(
                                                     this.props.dealTargets,
-                                                    this.props.selectedRebates,
+                                                    this.props.selectedTargets,
                                                     this.props.selectedTab,
                                                     this.props.deal
                                                 )
@@ -136,9 +136,9 @@ class DealPrice extends React.PureComponent {
                                     R.sum(
                                         R.map(
                                             R.prop('value'),
-                                            rebates.getSelectedRebatesForDealAndType(
+                                            rebates.getSelectedTargetsForDeal(
                                                 this.props.dealTargets,
-                                                this.props.selectedRebates,
+                                                this.props.selectedTargets,
                                                 this.props.selectedTab,
                                                 this.props.deal
                                             )

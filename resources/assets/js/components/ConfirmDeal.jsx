@@ -71,13 +71,13 @@ class ConfirmDeal extends React.PureComponent {
         this.setState({
             availableRebates: rebates.getAvailableRebatesForDealAndType(
                 props.dealRebates,
-                props.selectedRebates,
+                props.selectedTargets,
                 props.selectedTab,
                 props.deal
             ),
-            selectedRebates: rebates.getSelectedRebatesForDealAndType(
+            selectedTargets: rebates.getSelectedTargetsForDeal(
                 props.dealRebates,
-                props.selectedRebates,
+                props.selectedTargets,
                 props.selectedTab,
                 props.deal
             ),
@@ -120,9 +120,9 @@ class ConfirmDeal extends React.PureComponent {
                                 R.sum(
                                     R.map(
                                         R.prop('value'),
-                                        rebates.getSelectedRebatesForDealAndType(
+                                        rebates.getSelectedTargetsForDeal(
                                             this.props.dealRebates,
-                                            this.props.selectedRebates,
+                                            this.props.selectedTargets,
                                             this.props.selectedTab,
                                             this.props.deal
                                         )
@@ -143,9 +143,9 @@ class ConfirmDeal extends React.PureComponent {
                         R.sum(
                             R.map(
                                 R.prop('value'),
-                                rebates.getSelectedRebatesForDealAndType(
+                                rebates.getSelectedTargetsForDeal(
                                     this.props.dealRebates,
-                                    this.props.selectedRebates,
+                                    this.props.selectedTargets,
                                     this.props.selectedTab,
                                     this.props.deal
                                 )
@@ -163,7 +163,7 @@ class ConfirmDeal extends React.PureComponent {
 
     showAppliedRebates() {
         const selectedAmount = R.sum(
-            R.map(R.prop('value'), this.props.selectedRebates)
+            R.map(R.prop('value'), this.props.selectedTargets)
         );
         const maxAmount = R.sum(
             R.map(R.prop('value'), this.props.dealRebates)
@@ -321,7 +321,7 @@ class ConfirmDeal extends React.PureComponent {
         }
 
         const selectedAmount = R.sum(
-            R.map(R.prop('value'), this.state.selectedRebates)
+            R.map(R.prop('value'), this.state.selectedTargets)
         );
         const maxAmount = R.sum(
             R.map(R.prop('value'), this.state.availableRebates)
@@ -461,7 +461,7 @@ const mapStateToProps = state => {
         selectedTab: state.selectedTab,
         downPayment: state.downPayment,
         dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates,
+        selectedTargets: state.selectedTargets,
         termDuration: state.termDuration,
         selectedDeal: state.selectedDeal,
         isEmployee: state.isEmployee,

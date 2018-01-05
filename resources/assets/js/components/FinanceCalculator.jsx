@@ -32,7 +32,7 @@ class FinanceCalculator extends React.PureComponent {
                   ),
                   this.props.deal.doc_fee,
                   0,
-                  R.sum(R.map(R.prop('value'), this.props.selectedRebates))
+                  R.sum(R.map(R.prop('value'), this.props.selectedTargets))
               )
             : null;
     }
@@ -46,7 +46,7 @@ class FinanceCalculator extends React.PureComponent {
                   ),
                   this.props.deal.doc_fee,
                   this.props.downPayment,
-                  R.sum(R.map(R.prop('value'), this.props.selectedRebates))
+                  R.sum(R.map(R.prop('value'), this.props.selectedTargets))
               )
             : null;
     }
@@ -82,7 +82,7 @@ class FinanceCalculator extends React.PureComponent {
                             R.sum(
                                 R.map(
                                     R.prop('value'),
-                                    this.props.selectedRebates
+                                    this.props.selectedTargets
                                 )
                             )
                         )
@@ -265,7 +265,7 @@ function mapStateToProps(state) {
         // @TODO delete this rebates class?
         // availableRebates: rebates.getAvailableRebatesForDealAndTypee
         //     state.dealRebates,
-        //     state.selectedRebates,
+        //     state.selectedTargets,
         //     state.selectedTab,
         //     state.selectedDeal
         // ),
@@ -274,13 +274,13 @@ function mapStateToProps(state) {
             state.selectedTab,
             state.selectedDeal
         ),
-        // selectedRebates: rebates.getSelectedRebatesForDealAndType(
+        // selectedTargets: rebates.getSelectedTargetsForDeal(
         //     state.dealRebates,
-        //     state.selectedRebates,
+        //     state.selectedTargets,
         //     state.selectedTab,
         //     state.selectedDeal
         // ),
-        selectedRebates: [],
+        selectedTargets: [],
     };
 }
 

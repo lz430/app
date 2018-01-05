@@ -95,9 +95,9 @@ class ComparePage extends React.PureComponent {
                                 this.props.selectedTab,
                                 this.props.downPayment,
                                 /*
-                                rebates.getSelectedRebatesForDealAndType(
+                                rebates.getSelectedTargetsForDeal(
                                     this.props.dealTargets,
-                                    this.props.selectedRebates,
+                                    this.props.selectedTargets,
                                     this.props.selectedTab,
                                     deal
                                 ),

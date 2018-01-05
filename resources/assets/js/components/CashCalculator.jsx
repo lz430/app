@@ -78,10 +78,13 @@ class CashCalculator extends React.PureComponent {
                         <span className="cash-finance-lease-calculator__right-item">
                             {util.moneyFormat(
                                 R.sum(
+                                    [0]
+                                    /* @todo fix to pull this info from the api or whatever
                                     R.map(
                                         R.prop('value'),
-                                        this.props.selectedRebates
+                                        this.props.selectedTargets
                                     )
+                                    */
                                 )
                             )}
                         </span>
@@ -102,7 +105,7 @@ class CashCalculator extends React.PureComponent {
                                     R.sum(
                                         R.map(
                                             R.prop('value'),
-                                            this.props.selectedRebates
+                                            this.props.selectedTargets
                                         )
                                     )
                                 )
@@ -120,9 +123,9 @@ function mapStateToProps(state) {
         deal: state.selectedDeal,
         downPayment: state.downPayment,
         employeeBrand: state.employeeBrand,
-        selectedRebates: rebates.getSelectedRebatesForDealAndType(
+        selectedTargets: rebates.getSelectedTargetsForDeal(
             state.dealRebates,
-            state.selectedRebates,
+            state.selectedTargets,
             state.selectedTab,
             state.selectedDeal
         ),

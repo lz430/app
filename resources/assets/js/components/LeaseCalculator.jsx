@@ -185,7 +185,7 @@ class LeaseCalculator extends React.PureComponent {
                                         R.sum(
                                             R.map(
                                                 R.prop('value'),
-                                                this.props.selectedRebates
+                                                this.props.selectedTargets
                                             )
                                         ),
                                     this.state.downPayment,
@@ -236,7 +236,7 @@ class LeaseCalculator extends React.PureComponent {
 
     renderDueAtSigning() {
         const totalRebates = R.sum(
-            R.map(R.prop('value'), this.props.selectedRebates)
+            R.map(R.prop('value'), this.props.selectedTargets)
         );
 
         return (
@@ -284,10 +284,13 @@ class LeaseCalculator extends React.PureComponent {
                     {this.props.availableRebates ? (
                         util.moneyFormat(
                             R.sum(
+                                [0]
+                                /** @todo : replace this to somehow get info back from API best offer call
                                 R.map(
                                     R.prop('value'),
-                                    this.props.selectedRebates
+                                    this.props.selectedTargets
                                 )
+                                */
                             )
                         )
                     ) : (
@@ -348,7 +351,7 @@ class LeaseCalculator extends React.PureComponent {
                                 R.sum(
                                     R.map(
                                         R.prop('value'),
-                                        this.props.selectedRebates
+                                        this.props.selectedTargets
                                     )
                                 ),
                             downPayment,
@@ -373,7 +376,7 @@ class LeaseCalculator extends React.PureComponent {
                     )
                 )}
                 <CustomerTypeSelect deal={this.props.deal} />
-                {this.state.selectedRebates ? (
+                {this.state.selectedTargets ? (
                     <div>
                         <hr />
                         <h4>Available Rebates and Incentives</h4>
@@ -524,7 +527,7 @@ function mapStateToProps(state) {
         // @TODO delete this rebates class?
         // availableRebates: rebates.getAvailableRebatesForDealAndTypee
         //     state.dealRebates,
-        //     state.selectedRebates,
+        //     state.selectedTargets,
         //     state.selectedTab,
         //     state.selectedDeal
         // ),
@@ -533,13 +536,13 @@ function mapStateToProps(state) {
             state.selectedTab,
             state.selectedDeal
         ),
-        // selectedRebates: rebates.getSelectedRebatesForDealAndType(
+        // selectedTargets: rebates.getSelectedTargetsForDeal(
         //     state.dealRebates,
-        //     state.selectedRebates,
+        //     state.selectedTargets,
         //     state.selectedTab,
         //     state.selectedDeal
         // ),
-        selectedRebates: [],
+        selectedTargets: [],
     };
 }
 

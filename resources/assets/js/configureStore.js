@@ -41,7 +41,8 @@ const initialState = {
     selectedMakes: [],
     employeeBrand: false,
     selectedFeatures: [],
-    selectedRebates: [],
+    selectedTargets: [],
+    // @todo: should this be instantiated as an array, not {} }
     dealTargets: {},
     features: null,
     requestingMoreDeals: false,

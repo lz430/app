@@ -45,9 +45,9 @@ class ConfirmDetails extends React.PureComponent {
 
                                     // @TODO Update this to handle.. what. targets? some other number
                                     // that's influenced by the selected targets?
-                                    /*rebates.getSelectedRebatesForDealAndType(
+                                    /*rebates.getSelectedTargetsForDeal(
                                         this.props.dealTargets,
-                                        this.props.selectedRebates,
+                                        this.props.selectedTargets,
                                         this.props.selectedTab,
                                         deal
                                     ),*/

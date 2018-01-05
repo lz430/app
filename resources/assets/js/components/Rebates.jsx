@@ -139,7 +139,7 @@ function mapStateToProps(state) {
         // @TODO delete this rebates class?
         // availableRebates: rebates.getAvailableRebatesForDealAndTypee
         //     state.dealRebates,
-        //     state.selectedRebates,
+        //     state.selectedTargets,
         //     state.selectedTab,
         //     state.selectedDeal
         // ),
@@ -148,13 +148,13 @@ function mapStateToProps(state) {
             state.selectedTab,
             state.selectedDeal
         ),
-        // selectedRebates: rebates.getSelectedRebatesForDealAndType(
+        // selectedTargets: rebates.getSelectedTargetsForDeal(
         //     state.dealRebates,
-        //     state.selectedRebates,
+        //     state.selectedTargets,
         //     state.selectedTab,
         //     state.selectedDeal
         // ),
-        selectedRebates: [],
+        selectedTargets: [],
     };
 }
 
