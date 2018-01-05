@@ -3982,17 +3982,12 @@ var _ramda2 = _interopRequireDefault(_ramda);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var rebates = {
-    getAvailableTargetsForDealAndType: function getAvailableTargetsForDealAndType(dealTargets, type, deal) {
-        // @todo later filter out finance only to finance, etc.
+    getAvailableTargetsForDeal: function getAvailableTargetsForDeal(dealTargets, deal) {
+        if (!(deal && dealTargets && dealTargets.hasOwnProperty(deal.id))) {
+            return null;
+        }
+
         return dealTargets[deal.id];
-
-        // if (!(deal && dealTargets && dealTargets.hasOwnProperty(deal.id))) {
-        //     return null;
-        // }
-
-        // return R.filter(rebate => {
-        //     return R.contains(type, rebate.types);
-        // }, dealTargets[deal.id]);
     },
     /** @todo: should this return non-visible targets like 'open offers'? */
     /**
@@ -4007,7 +4002,7 @@ var rebates = {
         var possibleTargetsForDeal = dealTargets[deal.id];
 
         return _ramda2.default.filter(function (possibleTargetForDeal) {
-            return _ramda2.default.map(_ramda2.default.prop('id'), selectedTargets).includes(possibleTargetForDeal.id);
+            return _ramda2.default.map(_ramda2.default.prop('targetId'), selectedTargets).includes(possibleTargetForDeal.targetId);
         }, possibleTargetsForDeal);
     }
 };
@@ -14249,8 +14244,8 @@ var Rebates = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 { className: 'rebates' },
-                this.state.compatibleRebateIds ? this.props.availableTargets.map(function (rebate, index) {
-                    return _this5.renderTarget(rebate, index);
+                this.state.compatibleRebateIds ? this.props.availableTargets.map(function (target, index) {
+                    return _this5.renderTarget(target, index);
                 }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
             );
         }
@@ -14263,7 +14258,7 @@ function mapStateToProps(state) {
     return {
         zipcode: state.zipcode,
         deal: state.selectedDeal,
-        availableTargets: _rebates2.default.getAvailableTargetsForDealAndType(state.dealTargets, state.selectedTab, state.selectedDeal),
+        availableTargets: _rebates2.default.getAvailableTargetsForDeal(state.dealTargets, state.selectedDeal),
         selectedTargets: _rebates2.default.getSelectedTargetsForDeal(state.dealTargets, state.selectedTargets, state.selectedDeal)
     };
 }
@@ -52558,7 +52553,7 @@ var DealPrice = function (_React$PureComponent) {
             }
 
             this.setState({
-                availableTargets: _rebates2.default.getAvailableTargetsForDealAndType(props.dealTargets, props.selectedTab, props.deal)
+                availableTargets: _rebates2.default.getAvailableTargetsForDeal(props.dealTargets, props.deal)
             });
         }
     }, {
@@ -60392,7 +60387,7 @@ function mapStateToProps(state) {
         deal: state.selectedDeal,
         termDuration: state.termDuration,
         employeeBrand: state.employeeBrand,
-        availableTargets: _rebates2.default.getAvailableTargetsForDealAndType(state.dealTargets, state.selectedTab, state.selectedDeal),
+        availableTargets: _rebates2.default.getAvailableTargetsForDeal(state.dealTargets, state.selectedDeal),
         selectedTargets: _rebates2.default.getSelectedTargetsForDeal(state.dealTargets, state.selectedTargets, state.selectedDeal)
     };
 }
@@ -60952,7 +60947,7 @@ function mapStateToProps(state) {
         annualMileage: state.annualMileage,
         residualPercent: state.residualPercent,
         employeeBrand: state.employeeBrand,
-        availableTargets: _rebates2.default.getAvailableTargetsForDealAndType(state.dealTargets, state.selectedTab, state.selectedDeal),
+        availableTargets: _rebates2.default.getAvailableTargetsForDeal(state.dealTargets, state.selectedDeal),
         selectedTargets: _rebates2.default.getSelectedTargetsForDeal(state.dealTargets, state.selectedTargets, state.selectedDeal)
     };
 }
@@ -64033,7 +64028,7 @@ var ThankYouPage = function (_React$PureComponent) {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(props) {
             this.setState({
-                availableTargets: _rebates2.default.getAvailableTargetsForDealAndType(props.dealTargets, props.purchase.data.attributes.type, props.purchase.data.attributes.deal.data)
+                availableTargets: _rebates2.default.getAvailableTargetsForDeal(props.dealTargets, props.purchase.data.attributes.deal.data)
             });
         }
     }, {

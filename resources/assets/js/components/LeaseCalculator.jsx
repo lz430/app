@@ -527,9 +527,8 @@ function mapStateToProps(state) {
         annualMileage: state.annualMileage,
         residualPercent: state.residualPercent,
         employeeBrand: state.employeeBrand,
-        availableTargets: rebates.getAvailableTargetsForDealAndType(
+        availableTargets: rebates.getAvailableTargetsForDeal(
             state.dealTargets,
-            state.selectedTab,
             state.selectedDeal
         ),
         selectedTargets: rebates.getSelectedTargetsForDeal(

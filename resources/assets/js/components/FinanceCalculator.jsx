@@ -267,9 +267,8 @@ function mapStateToProps(state) {
         deal: state.selectedDeal,
         termDuration: state.termDuration,
         employeeBrand: state.employeeBrand,
-        availableTargets: rebates.getAvailableTargetsForDealAndType(
+        availableTargets: rebates.getAvailableTargetsForDeal(
             state.dealTargets,
-            state.selectedTab,
             state.selectedDeal
         ),
         selectedTargets: rebates.getSelectedTargetsForDeal(

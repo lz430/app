@@ -39,9 +39,8 @@ class DealPrice extends React.PureComponent {
         }
 
         this.setState({
-            availableTargets: rebates.getAvailableTargetsForDealAndType(
+            availableTargets: rebates.getAvailableTargetsForDeal(
                 props.dealTargets,
-                props.selectedTab,
                 props.deal
             )
         });

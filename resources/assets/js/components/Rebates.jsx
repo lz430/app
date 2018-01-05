@@ -118,8 +118,8 @@ class Rebates extends React.PureComponent {
         return (
             <div className="rebates">
                 {this.state.compatibleRebateIds ? (
-                    this.props.availableTargets.map((rebate, index) =>
-                        this.renderTarget(rebate, index)
+                    this.props.availableTargets.map((target, index) =>
+                        this.renderTarget(target, index)
                     )
                 ) : (
                     <SVGInline svg={miscicons['loading']} />
@@ -133,9 +133,8 @@ function mapStateToProps(state) {
     return {
         zipcode: state.zipcode,
         deal: state.selectedDeal,
-        availableTargets: rebates.getAvailableTargetsForDealAndType(
+        availableTargets: rebates.getAvailableTargetsForDeal(
             state.dealTargets,
-            state.selectedTab,
             state.selectedDeal
         ),
         selectedTargets: rebates.getSelectedTargetsForDeal(

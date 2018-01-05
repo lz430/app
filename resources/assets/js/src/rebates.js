@@ -1,21 +1,15 @@
 import R from 'ramda';
 
 const rebates = {
-    getAvailableTargetsForDealAndType: (
+    getAvailableTargetsForDeal: (
         dealTargets,
-        type,
         deal
     ) => {
-        // @todo later filter out finance only to finance, etc.
+        if (!(deal && dealTargets && dealTargets.hasOwnProperty(deal.id))) {
+            return null;
+        }
+
         return dealTargets[deal.id];
-
-        // if (!(deal && dealTargets && dealTargets.hasOwnProperty(deal.id))) {
-        //     return null;
-        // }
-
-        // return R.filter(rebate => {
-        //     return R.contains(type, rebate.types);
-        // }, dealTargets[deal.id]);
     },
     /** @todo: should this return non-visible targets like 'open offers'? */
     /**
@@ -35,8 +29,8 @@ const rebates = {
 
         return R.filter(possibleTargetForDeal => {
             return (
-                R.map(R.prop('id'), selectedTargets).includes(
-                    possibleTargetForDeal.id
+                R.map(R.prop('targetId'), selectedTargets).includes(
+                    possibleTargetForDeal.targetId
                 )
             );
         }, possibleTargetsForDeal);

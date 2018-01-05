@@ -29,9 +29,8 @@ class ThankYouPage extends React.PureComponent {
 
     componentWillReceiveProps(props) {
         this.setState({
-            availableTargets: rebates.getAvailableTargetsForDealAndType(
+            availableTargets: rebates.getAvailableTargetsForDeal(
                 props.dealTargets,
-                props.purchase.data.attributes.type,
                 props.purchase.data.attributes.deal.data
             ),
         });
