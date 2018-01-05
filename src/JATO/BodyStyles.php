@@ -6,18 +6,13 @@ class BodyStyles
 {
     public const ALL = [
         'coupe' => [
-            'label' => 'Coupe (2 Door)',
+            'label' => 'Coupe',
             'style' => 'Coupe',
             'subStyles' => [
                 'Roadster',
                 'Micro Car',
             ],
             'icon' => 'coupe',
-        ],
-        'sedan' => [
-            'label' => 'Sedan (4 Door)',
-            'style' => 'Sedan',
-            'icon' => 'sedan',
         ],
         'convertible' => [
             'label' => 'Convertible',
@@ -27,15 +22,6 @@ class BodyStyles
             ],
             'icon' => 'convertible',
         ],
-        'wagon' => [
-            'label' => 'Crossover/Wagon',
-            'style' => 'Wagon',
-            'subStyles' => [
-                'Combi',
-                'Crossover',
-            ],
-            'icon' => 'wagon',
-        ],
         'hatchback' => [
             'label' => 'Hatchback',
             'style' => 'Hatchback',
@@ -44,13 +30,28 @@ class BodyStyles
             ],
             'icon' => 'hatchback',
         ],
-        'pickup' => [
-            'label' => 'Pickup',
-            'style' => 'Pickup',
+        'sedan' => [
+            'label' => 'Sedan',
+            'style' => 'Sedan',
+            'icon' => 'sedan',
+        ],
+
+        'wagon' => [
+            'label' => 'Wagon/Crossover',
+            'style' => 'Wagon',
             'subStyles' => [
-                'Chassis Cab',
+                'Combi',
+                'Crossover',
             ],
-            'icon' => 'pickup',
+            'icon' => 'wagon',
+        ],
+        'sport utility vehicle' => [
+            'label' => 'SUV',
+            'style' => 'Sport Utility Vehicle',
+            'subStyles' => [
+                'Crossover',
+            ],
+            'icon' => 'suv',
         ],
         'van' => [
             'label' => 'Van/Minivan',
@@ -63,13 +64,13 @@ class BodyStyles
             ],
             'icon' => 'minivan',
         ],
-        'sport utility vehicle' => [
-            'label' => 'Sport Utility Vehicle',
-            'style' => 'Sport Utility Vehicle',
+        'pickup' => [
+            'label' => 'Pickups',
+            'style' => 'Pickup',
             'subStyles' => [
-                'Crossover',
+                'Chassis Cab',
             ],
-            'icon' => 'suv',
+            'icon' => 'pickup',
         ],
     ];
 }

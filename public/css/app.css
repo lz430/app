@@ -1074,8 +1074,98 @@ body {
 .infomodal__context {
   display: inline-block;
   font-size: 1rem;
+  height: -webkit-min-content;
+  height: -moz-min-content;
+  height: min-content;
   margin-left: 5px;
   vertical-align: middle;
+}
+
+input {
+  width: 100%;
+}
+
+.info-modal-data {
+  background-color: #fff;
+  border: 1px solid #ced4d9;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  margin: 5px;
+  max-width: 300px;
+  min-width: 300px;
+  padding: 1.5em;
+}
+
+.info-modal-data__basic-info-msrp {
+  color: #1e2123;
+  display: block;
+  font-size: 1.15rem;
+}
+
+.info-modal-data__bold {
+  font-weight: bold;
+}
+
+.info-modal-data__costs {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-top: 0.75rem;
+  margin-bottom: 0.3em;
+  width: 100%;
+}
+
+.info-modal-data__default-label {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  margin-bottom: -0.1rem;
+  width: 100%;
+}
+
+.info-modal-data__default-option {
+  margin-top: -1rem;
+  width: 100%;
+}
+
+.info-modal-data__disclaimer {
+  font-size: small;
+  text-align: left;
+}
+
+.info-modal-data__final-price {
+  color: #e70290;
+}
+
+.info-modal-data__more-rebates {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 0.8em;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.info-modal-data__prices {
+  font-size: 0.9em;
+}
+
+.info-modal-data__prices a {
+  text-transform: uppercase;
+  color: #41b1ac;
+}
+
+.info-modal-data__pricing-details {
+  font-size: 1.25em;
+  text-decoration: underline;
 }
 
 .sortbar {
@@ -1895,6 +1985,7 @@ body {
   text-decoration: none;
   text-align: center;
   font-size: 0.5rem;
+  height: 2rem;
 }
 
 .zipcode-finder__button--invert {
@@ -2063,6 +2154,7 @@ body {
 
 .zipcode-finder__zipcode {
   font-size: 1.4rem;
+  margin-top: -0.5rem;
 }
 
 .sidebar-filters {
@@ -2122,7 +2214,7 @@ body {
 }
 
 .sidebar-filters__filter-title--open {
-  background-color: #666666;
+  background-color: #717171;
   color: #fff;
 }
 
@@ -2139,11 +2231,18 @@ body {
 .sidebar-filters__icon {
   fill: #484d50;
   height: 20px;
+  line-height: 0;
   margin-left: 10px;
   margin-right: 10px;
   position: absolute;
   right: 0;
   width: 20px;
+}
+
+.sidebar-filters__section-header {
+  background-color: #666666;
+  color: #fff;
+  height: 2.75em;
 }
 
 .filter-style-selector {
@@ -2185,10 +2284,10 @@ body {
           justify-content: flex-end;
   margin: 5px 5px;
   min-height: 85px;
-  min-width: calc(50% - 10px);
-  padding: 5px;
+  min-width: calc(33% - 10px);
+  padding: 5px 5px;
   text-align: center;
-  width: calc(50% - 10px);
+  width: calc(33% - 10px);
 }
 
 .filter-style-selector__style--selected {
@@ -2210,16 +2309,20 @@ body {
 .filter-style-selector__name {
   color: #ced4d9;
   font-size: 0.7rem;
+  margin-top: -1.5rem;
   width: 100%;
 }
 
 .filter-selector__selector {
-  border-bottom: 1px solid #d7d7d7;
   cursor: pointer;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  padding: 10px;
+  padding: 5px;
+}
+
+.filter-selector__selector:first-child {
+  margin-top: 0.5em;
 }
 
 .filter-selector__selector:last-child {
@@ -2245,6 +2348,9 @@ body {
   min-width: 23px;
   padding: 3px;
   width: 23px;
+  background-color: #fff;
+  margin-left: 0.5em;
+  fill: black;
 }
 
 .filter-selector__checkbox--selected {
@@ -2270,6 +2376,7 @@ body {
   min-width: 23px;
   padding: 3px;
   width: 23px;
+  margin-left: 0.5em;
 }
 
 .filter-selector__radio--selected {
@@ -3650,7 +3757,7 @@ body {
 }
 
 .filter-page__deals--small-filters-shown {
-  left: 250px;
+  left: 300px;
 }
 
 .filter-page__deals--small-filters-hidden {
@@ -3664,8 +3771,8 @@ body {
 
 @media (min-width: 576px) {
   .filter-page__deals {
-    left: 250px;
-    width: calc(100vw - 250px);
+    left: 300px;
+    width: calc(100vw - 300px);
   }
 }
 
@@ -3673,7 +3780,7 @@ body {
   background-color: #666666;
   height: 100%;
   position: absolute;
-  width: 250px;
+  width: 300px;
 }
 
 @media (min-width: 576px) {
@@ -3687,7 +3794,7 @@ body {
 }
 
 .filter-page__filter-panel--small-filters-hidden {
-  left: -250px;
+  left: -300px;
 }
 
 .filter-page__filter-panel--small {

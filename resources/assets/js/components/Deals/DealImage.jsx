@@ -14,9 +14,15 @@ class DealImage extends React.PureComponent {
     }
 
     componentDidMount() {
+        this._mounted = true;
+
         if (this.props.deal.photos.length === 0) {
             this.requestFuelImages();
         }
+    }
+
+    componentWillUnmount() {
+        this._mounted = false;
     }
 
     featuredImageUrl() {
