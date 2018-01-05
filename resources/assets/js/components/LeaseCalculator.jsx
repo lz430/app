@@ -174,7 +174,7 @@ class LeaseCalculator extends React.PureComponent {
                     Your Monthly Lease Payment
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.props.availableRebates ? (
+                    {this.props.availableTargets ? (
                         util.moneyFormat(
                             formulas.calculateTotalLeaseMonthlyPayment(
                                 formulas.calculateLeasedMonthlyPayments(
@@ -183,10 +183,13 @@ class LeaseCalculator extends React.PureComponent {
                                         this.props.employeeBrand
                                     ) -
                                         R.sum(
+                                            [0]
+                                            /* @todo update this to pull value from api or whatever
                                             R.map(
                                                 R.prop('value'),
                                                 this.props.selectedTargets
                                             )
+                                            */
                                         ),
                                     this.state.downPayment,
                                     0,
@@ -245,7 +248,7 @@ class LeaseCalculator extends React.PureComponent {
                     Taxes due at signing
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.props.availableRebates ? (
+                    {this.props.availableTargets ? (
                         util.moneyFormat(
                             formulas.calculateLeaseTaxesDueAtSigning(
                                 totalRebates,
@@ -281,7 +284,7 @@ class LeaseCalculator extends React.PureComponent {
                     Some text here about your target
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.props.availableRebates ? (
+                    {this.props.availableTargets ? (
                         util.moneyFormat(
                             R.sum(
                                 [0]

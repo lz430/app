@@ -45,7 +45,7 @@ class InfoModalData extends React.PureComponent {
         }
 
         this.setState({
-            availableRebates: rebates.getAvailableRebatesForDealAndType(
+            availableTargets: rebates.getAvailableRebatesForDealAndType(
                 props.dealTargets,
                 props.selectedTargets,
                 props.selectedTab,
@@ -70,7 +70,8 @@ class InfoModalData extends React.PureComponent {
 
     displayFinalPrice() {
         const selectedAmount = this.state.selectedTargets
-            ? R.sum(R.map(R.prop('value'), this.state.selectedTargets))
+            // ? R.sum(R.map(R.prop('value'), this.state.selectedTargets))
+            ? 9999 // @todo update to pull from api or whatever
             : 0;
         switch (this.props.selectedTab) {
             case 'cash':
@@ -131,9 +132,11 @@ class InfoModalData extends React.PureComponent {
     }
 
     showAppliedRebates() {
-        const selectedAmount = R.sum(
-            R.map(R.prop('value'), this.props.selectedTargets)
-        );
+        // const selectedAmount = R.sum(
+        //     R.map(R.prop('value'), this.props.selectedTargets)
+        // );
+
+        const selectedAmount = 9999; // @todo update to pull from api or whatever
 
         this.setState({
             selectedRebateAmount: selectedAmount,
@@ -141,15 +144,12 @@ class InfoModalData extends React.PureComponent {
     }
 
     renderAppliedRebatesLink() {
-        if (!this.state.availableRebates) {
+        if (!this.state.availableTargets) {
             return <SVGInline svg={miscicons['loading']} />;
         }
 
         const selectedAmount = R.sum(
             R.map(R.prop('value'), this.state.selectedTargets)
-        );
-        const maxAmount = R.sum(
-            R.map(R.prop('value'), this.state.availableRebates)
         );
 
         return (
@@ -160,9 +160,6 @@ class InfoModalData extends React.PureComponent {
                 </div>
 
                 <div className="info-modal-data__more-rebates info-modal-data__costs">
-                    <div>{`${util.moneyFormat(
-                        maxAmount
-                    )} in rebates available.  `}</div>
                     <div>
                         <a
                             onClick={() =>

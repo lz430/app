@@ -14173,18 +14173,18 @@ var Rebates = function (_React$PureComponent) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             this._isMounted = true;
-            this.updateCompatibleRebates(this.props);
+            this.updateCompatibleTargets(this.props);
         }
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(nextProps) {
             if (this.props.selectedTargets.length !== nextProps.selectedTargets.length && nextProps.zipcode) {
-                this.updateCompatibleRebates(nextProps);
+                this.updateCompatibleTargets(nextProps);
             }
         }
     }, {
-        key: 'updateCompatibleRebates',
-        value: function updateCompatibleRebates(props) {
+        key: 'updateCompatibleTargets',
+        value: function updateCompatibleTargets(props) {
             var _this2 = this;
 
             // @todo this should probably instead make a new call to calculate stuff...
@@ -14200,30 +14200,30 @@ var Rebates = function (_React$PureComponent) {
             });
         }
     }, {
-        key: 'toggleRebate',
-        value: function toggleRebate(rebate) {
+        key: 'toggleTarget',
+        value: function toggleTarget(target) {
             var _this3 = this;
 
             this.setState({
                 compatibleRebateIds: null
             }, function () {
-                _this3.props.toggleRebate(rebate);
+                _this3.props.toggleTarget(target);
             });
         }
     }, {
-        key: 'renderRebate',
-        value: function renderRebate(rebate, index) {
+        key: 'renderTarget',
+        value: function renderTarget(target, index) {
             var _this4 = this;
 
-            var isSelected = _ramda2.default.contains(rebate, this.props.selectedTargets);
-            var isSelectable = _ramda2.default.contains(rebate.id, this.state.compatibleRebateIds);
+            var isSelected = _ramda2.default.contains(target, this.props.selectedTargets);
+            var isSelectable = _ramda2.default.contains(target.id, this.state.compatibleRebateIds);
             var checkboxClass = 'rebates__checkbox rebates__checkbox--inverted ' + (isSelected ? 'rebates__checkbox--selected' : '');
 
             return _react2.default.createElement(
                 'div',
                 {
                     onClick: isSelectable ? function () {
-                        return _this4.toggleRebate(rebate);
+                        return _this4.toggleTarget(target);
                     } : _ramda2.default.identity,
                     className: 'rebates__rebate ' + (isSelectable ? '' : 'rebates__rebate--disabled'),
                     key: index
@@ -14237,13 +14237,7 @@ var Rebates = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'rebates__title' },
-                    _strings2.default.toTitleCase(rebate.rebate)
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'rebates__value' },
-                    '-',
-                    _util2.default.moneyFormat(rebate.value)
+                    _strings2.default.toTitleCase(target.targetName)
                 )
             );
         }
@@ -14255,8 +14249,8 @@ var Rebates = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 { className: 'rebates' },
-                this.state.compatibleRebateIds ? this.props.availableRebates.map(function (rebate, index) {
-                    return _this5.renderRebate(rebate, index);
+                this.state.compatibleRebateIds ? this.props.availableTargets.map(function (rebate, index) {
+                    return _this5.renderTarget(rebate, index);
                 }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
             );
         }
@@ -57796,7 +57790,7 @@ var InfoModalData = function (_React$PureComponent) {
             }
 
             this.setState({
-                availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(props.dealTargets, props.selectedTargets, props.selectedTab, props.deal),
+                availableTargets: _rebates2.default.getAvailableRebatesForDealAndType(props.dealTargets, props.selectedTargets, props.selectedTab, props.deal),
                 selectedTargets: _rebates2.default.getSelectedTargetsForDeal(props.dealTargets, props.selectedTargets, props.deal)
             });
         }
@@ -57811,7 +57805,10 @@ var InfoModalData = function (_React$PureComponent) {
     }, {
         key: 'displayFinalPrice',
         value: function displayFinalPrice() {
-            var selectedAmount = this.state.selectedTargets ? _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.state.selectedTargets)) : 0;
+            var selectedAmount = this.state.selectedTargets
+            // ? R.sum(R.map(R.prop('value'), this.state.selectedTargets))
+            ? 9999 // @todo update to pull from api or whatever
+            : 0;
             switch (this.props.selectedTab) {
                 case 'cash':
                     return this.props.deal.supplier_price - selectedAmount;
@@ -57850,7 +57847,11 @@ var InfoModalData = function (_React$PureComponent) {
     }, {
         key: 'showAppliedRebates',
         value: function showAppliedRebates() {
-            var selectedAmount = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedTargets));
+            // const selectedAmount = R.sum(
+            //     R.map(R.prop('value'), this.props.selectedTargets)
+            // );
+
+            var selectedAmount = 9999; // @todo update to pull from api or whatever
 
             this.setState({
                 selectedRebateAmount: selectedAmount
@@ -57861,12 +57862,11 @@ var InfoModalData = function (_React$PureComponent) {
         value: function renderAppliedRebatesLink() {
             var _this2 = this;
 
-            if (!this.state.availableRebates) {
+            if (!this.state.availableTargets) {
                 return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
             }
 
             var selectedAmount = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.state.selectedTargets));
-            var maxAmount = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.state.availableRebates));
 
             return _react2.default.createElement(
                 'div',
@@ -57888,11 +57888,6 @@ var InfoModalData = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'info-modal-data__more-rebates info-modal-data__costs' },
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _util2.default.moneyFormat(maxAmount) + ' in rebates available.  '
-                    ),
                     _react2.default.createElement(
                         'div',
                         null,
@@ -60108,12 +60103,16 @@ var FinanceCalculator = function (_React$PureComponent) {
     }, {
         key: 'getTotalVehicleCost',
         value: function getTotalVehicleCost() {
-            return this.props.availableRebates ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, 0, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedTargets))) : null;
+            return this.props.availableTargets ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, 0, 9999 // @todo update to pull from api or whatever
+            // R.sum(R.map(R.prop('value'), this.props.selectedTargets))
+            ) : null;
         }
     }, {
         key: 'getAmountToFinance',
         value: function getAmountToFinance() {
-            return this.props.availableRebates ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedTargets))) : null;
+            return this.props.availableTargets ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, 9999 // @todo update to pull from api or whatever
+            // R.sum(R.map(R.prop('value'), this.props.selectedTargets))
+            ) : null;
         }
     }, {
         key: 'renderTotalCostOfVehicle',
@@ -60149,7 +60148,14 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    this.props.availableRebates ? _util2.default.moneyFormat(_ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedTargets))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.availableTargets ? _util2.default.moneyFormat(_ramda2.default.sum([9999] // @todo update to pull from api or whatever
+                    /*
+                    R.map(
+                        R.prop('value'),
+                        this.props.selectedTargets
+                    )
+                    */
+                    )) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                 )
             );
         }
@@ -60606,7 +60612,14 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    this.props.availableRebates ? _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedTargets)), this.state.downPayment, 0, this.props.termDuration, this.props.residualPercent))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.availableTargets ? _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - _ramda2.default.sum([0]
+                    /* @todo update this to pull value from api or whatever
+                    R.map(
+                        R.prop('value'),
+                        this.props.selectedTargets
+                    )
+                    */
+                    ), this.state.downPayment, 0, this.props.termDuration, this.props.residualPercent))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                 )
             );
         }
@@ -60664,7 +60677,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    this.props.availableRebates ? _util2.default.moneyFormat(_formulas2.default.calculateLeaseTaxesDueAtSigning(totalRebates, this.state.downPayment, this.props.deal.doc_fee)) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.availableTargets ? _util2.default.moneyFormat(_formulas2.default.calculateLeaseTaxesDueAtSigning(totalRebates, this.state.downPayment, this.props.deal.doc_fee)) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                 )
             );
         }
@@ -60700,7 +60713,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    this.props.availableRebates ? _util2.default.moneyFormat(_ramda2.default.sum([0]
+                    this.props.availableTargets ? _util2.default.moneyFormat(_ramda2.default.sum([0]
                     /** @todo : replace this to somehow get info back from API best offer call
                     R.map(
                         R.prop('value'),
@@ -63400,7 +63413,7 @@ var ConfirmDeal = function (_React$PureComponent) {
             }
 
             this.setState({
-                availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(props.dealTargets, props.selectedTargets, props.selectedTab, props.deal),
+                availableTargets: _rebates2.default.getAvailableRebatesForDealAndType(props.dealTargets, props.selectedTargets, props.selectedTab, props.deal),
                 selectedTargets: _rebates2.default.getSelectedTargetsForDeal(props.dealTargets, props.selectedTargets, props.deal)
             });
         }
@@ -63432,11 +63445,33 @@ var ConfirmDeal = function (_React$PureComponent) {
                     return this.props.deal.supplier_price;
                 case 'finance':
                     {
-                        return Math.round(formulas.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - R.sum(R.map(R.prop('value'), _rebates2.default.getSelectedTargetsForDeal(this.props.dealTargets, this.props.selectedTargets, this.props.deal))), this.props.downPayment, this.props.termDuration));
+                        return Math.round(formulas.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - R.sum([9999]
+                        /* @todo: pull this from the api or whatever
+                        R.map(
+                            R.prop('value'),
+                            rebates.getSelectedTargetsForDeal(
+                                this.props.dealTargets,
+                                this.props.selectedTargets,
+                                this.props.deal
+                            )
+                        )
+                        */
+                        ), this.props.downPayment, this.props.termDuration));
                     }
                 case 'lease':
                     {
-                        return Math.round(formulas.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - R.sum(R.map(R.prop('value'), _rebates2.default.getSelectedTargetsForDeal(this.props.dealTargets, this.props.selectedTargets, this.props.deal))), 0, 0, this.props.termDuration, R.or(this.props.residualPercent, 31)));
+                        return Math.round(formulas.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - R.sum([9999] // @todo pull this from the api or whatever
+                        /*
+                        R.map(
+                            R.prop('value'),
+                            rebates.getSelectedTargetsForDeal(
+                                this.props.dealTargets,
+                                this.props.selectedTargets,
+                                this.props.deal
+                            )
+                        )
+                        */
+                        ), 0, 0, this.props.termDuration, R.or(this.props.residualPercent, 31)));
                     }
             }
         }
@@ -63672,12 +63707,13 @@ var ConfirmDeal = function (_React$PureComponent) {
         value: function renderAppliedRebatesLink() {
             var _this5 = this;
 
-            if (!this.state.availableRebates) {
+            if (!this.state.availableTargets) {
                 return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
             }
 
-            var selectedAmount = R.sum(R.map(R.prop('value'), this.state.selectedTargets));
-            var maxAmount = R.sum(R.map(R.prop('value'), this.state.availableRebates));
+            var selectedAmount = R.sum([9999] // @todo pull from api or whatever
+            // R.map(R.prop('value'), this.state.selectedTargets)
+            );
 
             return _react2.default.createElement(
                 'div',
@@ -63699,11 +63735,6 @@ var ConfirmDeal = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'confirm-deal__more-rebates confirm-deal__costs' },
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _util2.default.moneyFormat(maxAmount) + ' in rebates available.  '
-                    ),
                     _react2.default.createElement(
                         'div',
                         null,

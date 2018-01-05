@@ -24,7 +24,7 @@ class FinanceCalculator extends React.PureComponent {
     }
 
     getTotalVehicleCost() {
-        return this.props.availableRebates
+        return this.props.availableTargets
             ? formulas.calculateTotalCashFinance(
                   util.getEmployeeOrSupplierPrice(
                       this.props.deal,
@@ -32,13 +32,14 @@ class FinanceCalculator extends React.PureComponent {
                   ),
                   this.props.deal.doc_fee,
                   0,
-                  R.sum(R.map(R.prop('value'), this.props.selectedTargets))
+                  9999, // @todo update to pull from api or whatever
+                  // R.sum(R.map(R.prop('value'), this.props.selectedTargets))
               )
             : null;
     }
 
     getAmountToFinance() {
-        return this.props.availableRebates
+        return this.props.availableTargets
             ? formulas.calculateTotalCashFinance(
                   util.getEmployeeOrSupplierPrice(
                       this.props.deal,
@@ -46,7 +47,8 @@ class FinanceCalculator extends React.PureComponent {
                   ),
                   this.props.deal.doc_fee,
                   this.props.downPayment,
-                  R.sum(R.map(R.prop('value'), this.props.selectedTargets))
+                  9999 // @todo update to pull from api or whatever
+                  // R.sum(R.map(R.prop('value'), this.props.selectedTargets))
               )
             : null;
     }
@@ -77,13 +79,16 @@ class FinanceCalculator extends React.PureComponent {
                     Some text here about your target
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.props.availableRebates ? (
+                    {this.props.availableTargets ? (
                         util.moneyFormat(
                             R.sum(
+                                [9999] // @todo update to pull from api or whatever
+                                /*
                                 R.map(
                                     R.prop('value'),
                                     this.props.selectedTargets
                                 )
+                                */
                             )
                         )
                     ) : (

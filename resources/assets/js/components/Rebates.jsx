@@ -25,7 +25,7 @@ class Rebates extends React.PureComponent {
 
     componentDidMount() {
         this._isMounted = true;
-        this.updateCompatibleRebates(this.props);
+        this.updateCompatibleTargets(this.props);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -34,11 +34,11 @@ class Rebates extends React.PureComponent {
                 nextProps.selectedTargets.length &&
             nextProps.zipcode
         ) {
-            this.updateCompatibleRebates(nextProps);
+            this.updateCompatibleTargets(nextProps);
         }
     }
 
-    updateCompatibleRebates(props) {
+    updateCompatibleTargets(props) {
         // @todo this should probably instead make a new call to calculate stuff...
         api
             .getTargets(
@@ -66,21 +66,21 @@ class Rebates extends React.PureComponent {
             });
     }
 
-    toggleRebate(rebate) {
+    toggleTarget(target) {
         this.setState(
             {
                 compatibleRebateIds: null,
             },
             () => {
-                this.props.toggleRebate(rebate);
+                this.props.toggleTarget(target);
             }
         );
     }
 
-    renderRebate(rebate, index) {
-        const isSelected = R.contains(rebate, this.props.selectedTargets);
+    renderTarget(target, index) {
+        const isSelected = R.contains(target, this.props.selectedTargets);
         const isSelectable = R.contains(
-            rebate.id,
+            target.id,
             this.state.compatibleRebateIds
         );
         const checkboxClass = `rebates__checkbox rebates__checkbox--inverted ${isSelected
@@ -90,7 +90,7 @@ class Rebates extends React.PureComponent {
         return (
             <div
                 onClick={
-                    isSelectable ? () => this.toggleRebate(rebate) : R.identity
+                    isSelectable ? () => this.toggleTarget(target) : R.identity
                 }
                 className={`rebates__rebate ${isSelectable
                     ? ''
@@ -108,10 +108,7 @@ class Rebates extends React.PureComponent {
                     <div className="rebates__checkbox" />
                 )}
                 <div className="rebates__title">
-                    {strings.toTitleCase(rebate.rebate)}
-                </div>
-                <div className="rebates__value">
-                    -{util.moneyFormat(rebate.value)}
+                    {strings.toTitleCase(target.targetName)}
                 </div>
             </div>
         );
@@ -121,8 +118,8 @@ class Rebates extends React.PureComponent {
         return (
             <div className="rebates">
                 {this.state.compatibleRebateIds ? (
-                    this.props.availableRebates.map((rebate, index) =>
-                        this.renderRebate(rebate, index)
+                    this.props.availableTargets.map((rebate, index) =>
+                        this.renderTarget(rebate, index)
                     )
                 ) : (
                     <SVGInline svg={miscicons['loading']} />
