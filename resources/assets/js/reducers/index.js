@@ -207,7 +207,7 @@ const reducer = (state, action) => {
         case ActionTypes.SET_ZIP_IN_RANGE:
             return Object.assign({}, state, {
                 zipInRange: action.supported,
-        });
+            });
     }
 
     return state;
