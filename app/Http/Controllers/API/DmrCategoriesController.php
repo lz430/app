@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\DmrCategory;
-use Illuminate\Http\Request;
 use App\Transformers\DmrCategoryTransformer;
+use Illuminate\Http\Request;
 
 class DmrCategoriesController extends BaseAPIController
 {

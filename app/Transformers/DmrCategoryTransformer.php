@@ -3,8 +3,8 @@
 namespace App\Transformers;
 
 use App\DmrCategory;
-use League\Fractal\TransformerAbstract;
 use App\Transformers\DmrFeatureTransformer;
+use League\Fractal\TransformerAbstract;
 
 class DmrCategoryTransformer extends TransformerAbstract
 {
@@ -18,7 +18,6 @@ class DmrCategoryTransformer extends TransformerAbstract
             'id'                        => $category->id,
             'title'                     => $category->title,
             'slug'                      => $category->slug,
-            'select_one_dmr_feature'    => $category->select_one_dmr_feature,
             'display_order'             => $category->display_order,
         ];
     }

@@ -14,9 +14,9 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\Feature;
-use Carbon\Carbon;
 use App\DmrCategory;
 use App\DmrFeature;
+use Carbon\Carbon;
 
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     return [
@@ -168,7 +168,6 @@ $factory->define(DmrCategory::class, function (Faker\Generator $faker) {
     return [
         'title'                     => $faker->unique()->company,
         'slug'                      => $faker->unique()->slug,
-        'select_one_dmr_feature'    => $faker->boolean(),
         'display_order'             => rand(1, 200),
     ];
 });

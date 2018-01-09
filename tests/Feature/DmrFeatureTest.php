@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+
 use App\DmrCategory;
 use App\DmrFeature;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class DmrFeatureTest extends TestCase
 {
@@ -18,14 +19,12 @@ class DmrFeatureTest extends TestCase
         $firstCategory = factory(DmrCategory::class)->create([
             'title'                     => 'First Category',
             'slug'                      => 'first-category',
-            'select_one_dmr_feature'    => true,
             'display_order'             => 1,
         ]);
         
         $secondCategory = factory(DmrCategory::class)->create([
             'title'                     => 'Second Category',
             'slug'                      => 'second-category',
-            'select_one_dmr_feature'    => true,
             'display_order'             => 2,
         ]);
 
@@ -70,7 +69,6 @@ class DmrFeatureTest extends TestCase
                 'attributes'    => [
                     'title'                     => 'First Category',
                     'slug'                      => 'first-category',
-                    'select_one_dmr_feature'    => '1',
                     'display_order'             => 1,
                 ],
                 'relationships' => [

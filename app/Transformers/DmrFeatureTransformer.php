@@ -2,9 +2,8 @@
 
 namespace App\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use App\DmrFeature;
-use function GuzzleHttp\json_decode;
+use League\Fractal\TransformerAbstract;
 
 class DmrFeatureTransformer extends TransformerAbstract
 {
