@@ -15,6 +15,8 @@
 
 use App\Feature;
 use Carbon\Carbon;
+use App\DmrCategory;
+use App\DmrFeature;
 
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     return [
@@ -159,5 +161,24 @@ $factory->define(App\Purchase::class, function (Faker\Generator $faker) {
         'user_id' => factory(App\User::class),
         'dmr_price' => 30000,
         'msrp' => 28000,
+    ];
+});
+
+$factory->define(DmrCategory::class, function (Faker\Generator $faker) {
+    return [
+        'title'                     => $faker->unique()->company,
+        'slug'                      => $faker->unique()->slug,
+        'select_one_dmr_feature'    => $faker->boolean(),
+        'display_order'             => rand(1, 200),
+    ];
+});
+
+$factory->define(DmrFeature::class, function (Faker\Generator $faker) {
+    return [
+        'title'             => 'First Feature',
+        'slug'              => 'first-feature',
+        'dmr_category_id'   => factory(DmrCategory::class)->create(),
+        'display_order'     => 1,
+        'jato_schema_ids'   => collect([$faker->randomNumber(5), $faker->randomNumber(5)])->toJson(),
     ];
 });
