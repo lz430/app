@@ -204,9 +204,9 @@ class FilterPanel extends React.PureComponent {
                     </SidebarFilter>
                     {R.contains('Pickup', this.props.selectedStyles) ? (
                         <SidebarFilter
-                            toggle={() => this.toggleOpenFilter('Truck')}
-                            open={this.state.openFilter === 'Truck'}
-                            title="Truck"
+                            toggle={() => this.toggleOpenFilter('Pickup')}
+                            open={this.state.openFilter === 'Pickup'}
+                            title="Pickup"
                             count={this.getCountOfSelectedFeatureByGroup(
                                 'truck'
                             )}

@@ -58896,10 +58896,10 @@ var FilterPanel = function (_React$PureComponent) {
                         _SidebarFilter2.default,
                         {
                             toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Truck');
+                                return _this2.toggleOpenFilter('Pickup');
                             },
-                            open: this.state.openFilter === 'Truck',
-                            title: 'Truck',
+                            open: this.state.openFilter === 'Pickup',
+                            title: 'Pickup',
                             count: this.getCountOfSelectedFeatureByGroup('truck')
                         },
                         _react2.default.createElement(_FilterFeatureSelector2.default, {
