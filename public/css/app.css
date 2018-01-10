@@ -1083,10 +1083,6 @@ body {
   vertical-align: middle;
 }
 
-input {
-  width: 100%;
-}
-
 .info-modal-data {
   background-color: #fff;
   border: 1px solid #ced4d9;
@@ -1097,6 +1093,10 @@ input {
   max-width: 300px;
   min-width: 300px;
   padding: 1.5em;
+}
+
+.info-modal-data__input {
+  width: 100%;
 }
 
 .info-modal-data__basic-info-msrp {
