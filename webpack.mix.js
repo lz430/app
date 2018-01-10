@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const { mix } = require('laravel-mix');
 const path = require('path');
 
@@ -19,7 +21,7 @@ if (mix.config.inProduction) {
     mix.version();
 } else {
     mix.browserSync({
-        proxy: 'delivermyride.dev',
+        proxy: process.env.APP_URL,
         notify: {
             styles: {
                 top: 'auto',
