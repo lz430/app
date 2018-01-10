@@ -15,6 +15,21 @@ class FinanceCalculator extends React.PureComponent {
         super(props);
     }
 
+    componentWillReceiveProps(props) {
+        if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
+            return this.props.requestTargets(this.props.deal);
+        }
+
+        this.setState({
+            availableTargets: props.dealTargets[props.deal.id] || [],
+            selectedTargets: rebates.getSelectedTargetsForDeal(
+                props.dealTargets,
+                props.selectedTargets,
+                props.deal
+            ),
+        });
+    }
+
     updateDownPayment(e) {
         this.props.updateDownPayment(Math.max(e.target.value, 0));
     }
@@ -32,7 +47,7 @@ class FinanceCalculator extends React.PureComponent {
                   ),
                   this.props.deal.doc_fee,
                   0,
-                  9999, // @todo update to pull from api or whatever
+                  9999 // @todo update to pull from api or whatever
                   // R.sum(R.map(R.prop('value'), this.props.selectedTargets))
               )
             : null;
@@ -267,15 +282,8 @@ function mapStateToProps(state) {
         deal: state.selectedDeal,
         termDuration: state.termDuration,
         employeeBrand: state.employeeBrand,
-        availableTargets: rebates.getAvailableTargetsForDeal(
-            state.dealTargets,
-            state.selectedDeal
-        ),
-        selectedTargets: rebates.getSelectedTargetsForDeal(
-            state.dealTargets,
-            state.selectedTargets,
-            state.selectedDeal
-        ),
+        dealTargets: state.dealTargets,
+        selectedTargets: state.selectedTargets,
     };
 }
 

@@ -39,10 +39,7 @@ class DealPrice extends React.PureComponent {
         }
 
         this.setState({
-            availableTargets: rebates.getAvailableTargetsForDeal(
-                props.dealTargets,
-                props.deal
-            )
+            availableTargets: props.dealTargets[props.deal.id] || []
         });
     }
 

@@ -156,6 +156,21 @@ class Client
         ]);
     }
 
+    public function bestOffer($vehicleId, $paymentType, $zipcode, $targets)
+    {
+        try {
+            return $this->get("incentives/bestOffer/$vehicleId/$paymentType", [
+                'query' => array_merge([
+                    'zipCode' => $zipcode,
+                    'targets' => $targets
+                ])
+            ]);
+        } catch (ClientException $e) {
+            Log::debug("Vehicle ID $vehicleId returns no Best Offers. URL: incentives/bestOffer/$vehicleId/$paymentType?zipCode=$zipcode&targets=$targets");
+            return [];
+        }
+    }
+
     /*
     public function bestCashIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
     {

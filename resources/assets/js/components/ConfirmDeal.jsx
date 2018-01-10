@@ -68,19 +68,14 @@ class ConfirmDeal extends React.PureComponent {
             return this.props.requestRebates(this.props.deal);
         }
 
-        this.setState({
-            availableTargets: rebates.getAvailableRebatesForDealAndType(
-                props.dealTargets,
-                props.selectedTargets,
-                props.selectedTab,
-                props.deal
-            ),
-            selectedTargets: rebates.getSelectedTargetsForDeal(
-                props.dealTargets,
-                props.selectedTargets,
-                props.deal
-            ),
-        });
+            this.setState({
+                availableTargets: props.dealTargets[props.deal.id] || [],
+                selectedTargets: rebates.getSelectedTargetsForDeal(
+                    props.dealTargets,
+                    props.selectedTargets,
+                    props.deal
+                ),
+            });
     }
 
     renderDealRebatesModal() {
@@ -462,6 +457,7 @@ const mapStateToProps = state => {
         selectedDeal: state.selectedDeal,
         isEmployee: state.isEmployee,
         residualPercent: state.residualPercent,
+
     };
 };
 

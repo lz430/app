@@ -10,7 +10,7 @@ const api = {
         return window.axios.get(`/api/zip-codes/${code}`);
     },
     setZip: code => {
-        return window.axios.post('/zip-codes/', {code});
+        return window.axios.post('/zip-codes/', { code });
     },
     getDimensions: jato_vehicle_id => {
         return window.axios.get('/api/dimensions', {
@@ -61,7 +61,7 @@ const api = {
         latitude,
         longitude,
         zipcode,
-       }) => {
+    }) => {
         return window.axios.get('/api/deals', {
             params: {
                 make_ids: makeIds,
@@ -96,7 +96,16 @@ const api = {
         });
     },
     postNotifyWhenInRange: (email = null) => {
-        return window.axios.post('/api/hubspot/not-in-area', {email});
+        return window.axios.post('/api/hubspot/not-in-area', { email });
+    },
+    getBestOffer: (dealId, payment_type, zipcode, targets) => {
+        return window.axios.get(`/api/deals/${dealId}/best-offer`, {
+            params: {
+                payment_type,
+                zipcode,
+                targets,
+            }
+        });
     },
 };
 

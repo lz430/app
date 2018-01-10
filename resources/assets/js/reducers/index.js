@@ -51,9 +51,7 @@ const reducer = (state, action) => {
                 models: action.data.data.data,
             });
         case ActionTypes.REQUEST_MORE_DEALS:
-            return Object.assign({}, state, {
-                requestingMoreDeals: true,
-            });
+            return Object.assign({}, state, { requestingMoreDeals: true });
         case ActionTypes.REQUEST_DEALS:
             return Object.assign({}, state, {
                 deals: null,
@@ -74,8 +72,6 @@ const reducer = (state, action) => {
         case ActionTypes.RECEIVE_DEAL_TARGETS:
             let nextDealTargets = Object.assign({}, state.dealTargets);
 
-            console.log(action.data);
-
             nextDealTargets[action.data.dealId] = action.data.data.data.targets; // @TODO prob wrong i dunno
 
             return Object.assign({}, state, {
@@ -87,9 +83,7 @@ const reducer = (state, action) => {
                 sortAscending: !state.sortAscending,
             });
         case ActionTypes.SELECT_TAB:
-            return Object.assign({}, state, {
-                selectedTab: action.data,
-            });
+            return Object.assign({}, state, { selectedTab: action.data });
         case ActionTypes.RECEIVE_MORE_DEALS:
             return Object.assign({}, state, {
                 deals: R.concat(state.deals || [], action.data.data.data),
@@ -178,9 +172,7 @@ const reducer = (state, action) => {
                 selectedDeal: action.selectedDeal,
             });
         case ActionTypes.CLEAR_SELECTED_DEAL:
-            return Object.assign({}, state, {
-                selectedDeal: null,
-            });
+            return Object.assign({}, state, { selectedDeal: null });
         case ActionTypes.CLEAR_ALL_FILTERS:
             return Object.assign({}, state, {
                 selectedStyles: [],
@@ -207,6 +199,10 @@ const reducer = (state, action) => {
         case ActionTypes.SET_ZIP_IN_RANGE:
             return Object.assign({}, state, {
                 zipInRange: action.supported,
+            });
+        case ActionTypes.RECEIVE_BEST_OFFER:
+            return Object.assign({}, state, {
+                dealBestOffer: action,
             });
     }
 

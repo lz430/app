@@ -771,6 +771,8 @@ exports.updateDownPayment = updateDownPayment;
 exports.updateTermDuration = updateTermDuration;
 exports.updateAnnualMileage = updateAnnualMileage;
 exports.updateResidualPercent = updateResidualPercent;
+exports.requestBestOffer = requestBestOffer;
+exports.receiveBestOffer = receiveBestOffer;
 
 var _api = __webpack_require__(71);
 
@@ -1345,6 +1347,33 @@ function updateResidualPercent(residualPercent) {
     return {
         type: ActionTypes.UPDATE_RESIDUAL_PERCENT,
         residualPercent: residualPercent
+    };
+}
+
+function requestBestOffer(dealId) {
+    return function (dispatch, getState) {
+        var OPEN_OFFER = 25;
+        var payment_type = getState().selectedTab;
+        var zipcode = getState().zipcode;
+        var defaultTargetIds = [OPEN_OFFER];
+        var selectedTargetIds = _ramda2.default.map(_ramda2.default.prop('targetId'), getState().selectedTargets);
+        var targets = defaultTargetIds.concat(selectedTargetIds);
+
+        // FINISH THE ACTION AND WORK ON THE REDUCER (currently on the 'read state data before the api call')
+        _api2.default.getBestOffer(dealId, payment_type, zipcode, targets).then(function (data) {
+            dispatch(receiveBestOffer(data));
+        });
+
+        dispatch({ type: ActionTypes.REQUEST_BEST_OFFER });
+    };
+}
+
+function receiveBestOffer(data) {
+    return function (dispatch) {
+        dispatch({
+            type: ActionTypes.RECEIVE_BEST_OFFER,
+            data: data.data
+        });
     };
 }
 
@@ -5258,6 +5287,15 @@ var api = {
         var email = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
         return window.axios.post('/api/hubspot/not-in-area', { email: email });
+    },
+    getBestOffer: function getBestOffer(dealId, payment_type, zipcode, targets) {
+        return window.axios.get('/api/deals/' + dealId + '/best-offer', {
+            params: {
+                payment_type: payment_type,
+                zipcode: zipcode,
+                targets: targets
+            }
+        });
     }
 };
 
@@ -14151,6 +14189,9 @@ var Targets = function (_React$PureComponent) {
         return _possibleConstructorReturn(this, (Targets.__proto__ || Object.getPrototypeOf(Targets)).call(this, props));
     }
 
+    // All Targets that are available to be selected for a specific deal
+
+
     _createClass(Targets, [{
         key: 'availableTargets',
         value: function availableTargets() {
@@ -22371,6 +22412,8 @@ var UPDATE_TERM_DURATION = exports.UPDATE_TERM_DURATION = 'UPDATE_TERM_DURATION'
 var UPDATE_ANNUAL_MILEAGE = exports.UPDATE_ANNUAL_MILEAGE = 'UPDATE_ANNUAL_MILEAGE';
 var UPDATE_RESIDUAL_PERCENT = exports.UPDATE_RESIDUAL_PERCENT = 'UPDATE_RESIDUAL_PERCENT';
 var REQUEST_TARGETS = exports.REQUEST_TARGETS = 'REQUEST_TARGETS';
+var REQUEST_BEST_OFFER = exports.REQUEST_BEST_OFFER = 'REQUEST_BEST_OFFER';
+var RECEIVE_BEST_OFFER = exports.RECEIVE_BEST_OFFER = 'RECEIVE_BEST_OFFER';
 var SET_ZIP_IN_RANGE = exports.SET_ZIP_IN_RANGE = 'SET_ZIP_IN_RANGE';
 
 /***/ }),
@@ -52506,7 +52549,7 @@ var DealPrice = function (_React$PureComponent) {
             }
 
             this.setState({
-                availableTargets: _rebates2.default.getAvailableTargetsForDeal(props.dealTargets, props.deal)
+                availableTargets: props.dealTargets[props.deal.id] || []
             });
         }
     }, {
@@ -57691,6 +57734,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -57738,9 +57783,11 @@ var InfoModalData = function (_React$PureComponent) {
             }
 
             this.setState({
-                availableTargets: _rebates2.default.getAvailableRebatesForDealAndType(props.dealTargets, props.selectedTargets, props.selectedTab, props.deal),
+                availableTargets: props.dealTargets[props.deal.id] || [],
                 selectedTargets: _rebates2.default.getSelectedTargetsForDeal(props.dealTargets, props.selectedTargets, props.deal)
             });
+
+            this.props.requestBestOffer(props.deal.id);
         }
     }, {
         key: 'renderDealRebatesModal',
@@ -57814,7 +57861,9 @@ var InfoModalData = function (_React$PureComponent) {
                 return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
             }
 
-            var selectedAmount = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.state.selectedTargets));
+            var selectedAmount = _ramda2.default.sum([0]
+            // R.map(R.prop('value'), this.state.selectedTargets)
+            );
 
             return _react2.default.createElement(
                 'div',
@@ -58082,7 +58131,7 @@ InfoModalData.propTypes = {
 };
 
 var mapStateToProps = function mapStateToProps(state) {
-    return {
+    return _defineProperty({
         compareList: state.compareList,
         selectedTab: state.selectedTab,
         downPayment: state.downPayment,
@@ -58092,7 +58141,7 @@ var mapStateToProps = function mapStateToProps(state) {
         selectedDeal: state.selectedDeal,
         isEmployee: state.isEmployee,
         residualPercent: state.residualPercent
-    };
+    }, 'selectedTargets', state.selectedTargets);
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(InfoModalData);
@@ -60039,6 +60088,18 @@ var FinanceCalculator = function (_React$PureComponent) {
     }
 
     _createClass(FinanceCalculator, [{
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(props) {
+            if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
+                return this.props.requestTargets(this.props.deal);
+            }
+
+            this.setState({
+                availableTargets: props.dealTargets[props.deal.id] || [],
+                selectedTargets: _rebates2.default.getSelectedTargetsForDeal(props.dealTargets, props.selectedTargets, props.deal)
+            });
+        }
+    }, {
         key: 'updateDownPayment',
         value: function updateDownPayment(e) {
             this.props.updateDownPayment(Math.max(e.target.value, 0));
@@ -60340,8 +60401,8 @@ function mapStateToProps(state) {
         deal: state.selectedDeal,
         termDuration: state.termDuration,
         employeeBrand: state.employeeBrand,
-        availableTargets: _rebates2.default.getAvailableTargetsForDeal(state.dealTargets, state.selectedDeal),
-        selectedTargets: _rebates2.default.getSelectedTargetsForDeal(state.dealTargets, state.selectedTargets, state.selectedDeal)
+        dealTargets: state.dealTargets,
+        selectedTargets: state.selectedTargets
     };
 }
 
@@ -61102,7 +61163,8 @@ var initialState = {
     compareList: [],
     zipcode: null,
     zipInRange: null,
-    city: null
+    city: null,
+    dealBestOffer: null
 };
 
 exports.default = function () {
@@ -61521,9 +61583,7 @@ var reducer = function reducer(state, action) {
                 models: action.data.data.data
             });
         case ActionTypes.REQUEST_MORE_DEALS:
-            return Object.assign({}, state, {
-                requestingMoreDeals: true
-            });
+            return Object.assign({}, state, { requestingMoreDeals: true });
         case ActionTypes.REQUEST_DEALS:
             return Object.assign({}, state, {
                 deals: null,
@@ -61541,8 +61601,6 @@ var reducer = function reducer(state, action) {
         case ActionTypes.RECEIVE_DEAL_TARGETS:
             var nextDealTargets = Object.assign({}, state.dealTargets);
 
-            console.log(action.data);
-
             nextDealTargets[action.data.dealId] = action.data.data.data.targets; // @TODO prob wrong i dunno
 
             return Object.assign({}, state, {
@@ -61554,9 +61612,7 @@ var reducer = function reducer(state, action) {
                 sortAscending: !state.sortAscending
             });
         case ActionTypes.SELECT_TAB:
-            return Object.assign({}, state, {
-                selectedTab: action.data
-            });
+            return Object.assign({}, state, { selectedTab: action.data });
         case ActionTypes.RECEIVE_MORE_DEALS:
             return Object.assign({}, state, {
                 deals: _ramda2.default.concat(state.deals || [], action.data.data.data),
@@ -61636,9 +61692,7 @@ var reducer = function reducer(state, action) {
                 selectedDeal: action.selectedDeal
             });
         case ActionTypes.CLEAR_SELECTED_DEAL:
-            return Object.assign({}, state, {
-                selectedDeal: null
-            });
+            return Object.assign({}, state, { selectedDeal: null });
         case ActionTypes.CLEAR_ALL_FILTERS:
             return Object.assign({}, state, {
                 selectedStyles: [],
@@ -61665,6 +61719,10 @@ var reducer = function reducer(state, action) {
         case ActionTypes.SET_ZIP_IN_RANGE:
             return Object.assign({}, state, {
                 zipInRange: action.supported
+            });
+        case ActionTypes.RECEIVE_BEST_OFFER:
+            return Object.assign({}, state, {
+                dealBestOffer: action
             });
     }
 
@@ -63361,7 +63419,7 @@ var ConfirmDeal = function (_React$PureComponent) {
             }
 
             this.setState({
-                availableTargets: _rebates2.default.getAvailableRebatesForDealAndType(props.dealTargets, props.selectedTargets, props.selectedTab, props.deal),
+                availableTargets: props.dealTargets[props.deal.id] || [],
                 selectedTargets: _rebates2.default.getSelectedTargetsForDeal(props.dealTargets, props.selectedTargets, props.deal)
             });
         }
@@ -63886,6 +63944,7 @@ var mapStateToProps = function mapStateToProps(state) {
         selectedDeal: state.selectedDeal,
         isEmployee: state.isEmployee,
         residualPercent: state.residualPercent
+
     };
 };
 

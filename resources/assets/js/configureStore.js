@@ -57,6 +57,7 @@ const initialState = {
     zipcode: null,
     zipInRange: null,
     city: null,
+    dealBestOffer: null,
 };
 
 export default () => {

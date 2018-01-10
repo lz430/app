@@ -14,6 +14,7 @@ class Targets extends React.PureComponent {
         super(props);
     }
 
+    // All Targets that are available to be selected for a specific deal
     availableTargets() {
         return this.props.dealTargets[this.props.deal.id] || [];
     }
