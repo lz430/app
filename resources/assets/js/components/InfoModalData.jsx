@@ -200,6 +200,7 @@ class InfoModalData extends React.PureComponent {
                             Down Payment
                         </p>
                         <input
+                            className="info-modal-data__input"
                             disabled
                             placeholder={util.moneyFormat(
                                 this.props.deal.supplier_price *
@@ -237,7 +238,7 @@ class InfoModalData extends React.PureComponent {
                             Cash Due
                         </p>
                         <input
-                            className="info-modal-data__default-option"
+                            className="info-modal-data__default-option info-modal-data__input"
                             disabled
                             placeholder={util.moneyFormat(
                                 this.props.deal.supplier_price *

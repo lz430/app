@@ -57904,6 +57904,7 @@ var InfoModalData = function (_React$PureComponent) {
                             'Down Payment'
                         ),
                         _react2.default.createElement('input', {
+                            className: 'info-modal-data__input',
                             disabled: true,
                             placeholder: _util2.default.moneyFormat(this.props.deal.supplier_price * financeDownPaymentAmount)
                         })
@@ -57964,7 +57965,7 @@ var InfoModalData = function (_React$PureComponent) {
                             'Cash Due'
                         ),
                         _react2.default.createElement('input', {
-                            className: 'info-modal-data__default-option',
+                            className: 'info-modal-data__default-option info-modal-data__input',
                             disabled: true,
                             placeholder: _util2.default.moneyFormat(this.props.deal.supplier_price * leaseDownPaymentAmount)
                         })
