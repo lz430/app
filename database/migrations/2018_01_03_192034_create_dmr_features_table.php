@@ -99,6 +99,33 @@ class CreateDmrFeaturesTable extends Migration
                     'slug' => 'folding_rear_seat',
                     'jato_schema_ids' => [17912],
                 ],
+                [
+                    'title' => 'Booster seats (rear / third row)',
+                    'slug' => 'booster_seats_rear_third_row',
+                    'jato_schema_ids' => [57402],
+                ],
+            ],
+            'seat_materials' => [
+                [
+                    'title' => 'Cloth',
+                    'slug' => 'seat_main_upholstery_cloth',
+                    'jato_schema_ids' => [17402],
+                ],
+                [
+                    'title' => 'Leather',
+                    'slug' => 'seat_main_upholstery_leather',
+                    'jato_schema_ids' => [17402],
+                ],
+                [
+                    'title' => 'Suede',
+                    'slug' => 'seat_main_upholstery_suede',
+                    'jato_schema_ids' => [17402],
+                ],
+                [
+                    'title' => 'Vinyl',
+                    'slug' => 'seat_main_upholstery_vinyl',
+                    'jato_schema_ids' => [17402],
+                ],
             ],
             'fuel_type' => [
                 [
@@ -107,14 +134,14 @@ class CreateDmrFeaturesTable extends Migration
                     'jato_schema_ids' => [7403, 8702],
                 ],
                 [
-                    'title' => 'Hybrid',
-                    'slug' => 'fuel_type_hybrid',
-                    'jato_schema_ids' => [51801],
+                    'title' => 'Diesel',
+                    'slug' => 'fuel_type_diesel',
+                    'jato_schema_ids' => [7403, 8702],
                 ],
                 [
-                    'title' => 'Electric',
+                    'title' => 'Hybrid & Electric',
                     'slug' => 'fuel_type_electric',
-                    'jato_schema_ids' => [51901],
+                    'jato_schema_ids' => [51801, 51901],
                 ],
             ],
             'exterior' => [
@@ -181,6 +208,78 @@ class CreateDmrFeaturesTable extends Migration
                     'jato_schema_ids' => [59802],
                 ],
             ],
+            'interior' => [
+                [
+                    'title' => 'Overhead console storage',
+                    'slug' => 'overhead_console_storage',
+                    'jato_schema_ids' => [26604],
+                ],
+                [
+                    'title' => 'Sunroof',
+                    'slug' => 'sunroof',
+                    'jato_schema_ids' => [15602],
+                ],
+                [
+                    'title' => 'Cupholders (front / rear)',
+                    'slug' => 'cupholders_front_rear',
+                    'jato_schema_ids' => [19602],
+                ],
+                [
+                    'title' => 'Ashtray (front / rear)',
+                    'slug' => 'ashtray_front_rear',
+                    'jato_schema_ids' => [4802],
+                ],
+            ],
+            'safety_and_driver_assist' => [
+                [
+                    'title' => 'Trailer hitch',
+                    'slug' => 'trailer_hitch',
+                    'jato_schema_ids' => [1602, 53103, 53105],
+                ],
+                [
+                    'title' => 'Anti-lock Breaking System (ABS)',
+                    'slug' => 'antilock_breaking_system',
+                    'jato_schema_ids' => [3201],
+                ],
+                [
+                    'title' => 'Collision Warning System',
+                    'slug' => 'collision_warning_system',
+                    'jato_schema_ids' => [41401, 44101, 44107, 44102, 44103, 44109, 57301, 46201, 46202, 46203, 61401],
+                ],
+                [
+                    'title' => 'Park Assist Sensors',
+                    'slug' => 'park_assist_sensors',
+                    'jato_schema_ids' => [5601, 49401, 5601],
+                ],
+                [
+                    'title' => 'Backup Camera',
+                    'slug' => 'backup_camera',
+                    'jato_schema_ids' => [53001, 21504],
+                ],
+                [
+                    'title' => 'Trailer hitch',
+                    'slug' => 'trailer_hitch',
+                    'jato_schema_ids' => [53101, 53102],
+                ],
+                [
+                    'title' => 'Anti-theft protection',
+                    'slug' => 'anti_theft_protection',
+                    'jato_schema_ids' => [14901],
+                ],
+                [
+                    'title' => 'Side airbags',
+                    'slug' => 'side_airbags',
+                    'jato_schema_ids' => [16401, 13801],
+                ],
+                [
+                    'title' => 'Heads Up Odometer Display',
+                    'slug' => 'heads_up_odometer_display',
+                    'jato_schema_ids' => [9003],
+                ],
+            ],
+            'transmission' => [
+
+            ]
         ])->each(function ($features, $categorySlug){
             $categoryId = DmrCategory::where('slug', $categorySlug)->first()->id;
 
