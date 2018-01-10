@@ -1,6 +1,7 @@
 @import '../variables';
 @import '../mixins/button';
 @import '../mixins/selector-icon';
+@import "node_modules/react-image-gallery/styles/scss/image-gallery.scss";
 
 .deal-details {
   display: flex;
@@ -79,16 +80,17 @@
     }
   }
 
+  &__images-and-title {
+    @media (min-width: $break-large) {
+      flex-direction: row;
+      width: $break-large * .6;
+    }
+  }
+
   &__primary-image {
     border: 1px solid $color-section-bottom-border;
     margin: 15px 0;
     width: 100%;
-  }
-
-  &__dots {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
   }
 
   &__buttons {
