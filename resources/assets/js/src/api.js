@@ -43,6 +43,13 @@ const api = {
     getFeatures: () => {
         return window.axios.get('/api/features');
     },
+    getFeatureCategories: () => {
+        return window.axios.get('/api/categories', {
+            params: {
+                include: 'features'
+            }
+        });
+    },
     getFuelTypes: () => {
         return window.axios.get('/api/fuel-types');
     },
