@@ -278,7 +278,7 @@ class CreateDmrFeaturesTable extends Migration
                 ],
             ],
             'transmission' => [
-
+                // @todo
             ]
         ])->each(function ($features, $categorySlug){
             $categoryId = DmrCategory::where('slug', $categorySlug)->first()->id;
