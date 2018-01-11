@@ -3,10 +3,9 @@
 
 .infomodal {
     &__context {
-        display: inline-block;
+        align-self: center;
         font-size: 1rem;
         height: min-content;
         margin-left: 5px;
-        vertical-align: middle;
     }
 }
