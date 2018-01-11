@@ -1,10 +1,6 @@
 @import '../variables';
 @import '../mixins/button';
 
-input {
-  width: 100%;
-}
-
 .info-modal-data {
   background-color: $color-background-secondary;
   border: 1px solid $color-grey;
@@ -13,6 +9,10 @@ input {
   max-width: $deal-card-width;
   min-width: $deal-card-width;
   padding: 1.5em;
+
+  &__input {
+    width: 100%;
+  }
 
   &__basic-info-msrp {
     color: $text-color-dark;

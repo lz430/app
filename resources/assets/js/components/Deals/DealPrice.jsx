@@ -48,25 +48,28 @@ class DealPrice extends React.PureComponent {
     }
 
     renderCashPrice() {
-        return (
-            <div className="deal-price__price">
-                <div className="deal-price__cash-label">Your cash price</div>
+        return <div className="deal-price__price">
+                <div className="deal-price__cash-label">
+                    Your cash price
+                </div>
                 <div className="deal-price__cash-price">
-                    {util.moneyFormat(
-                        util.getEmployeeOrSupplierPrice(
-                            this.props.deal,
-                            this.props.employeeBrand
-                        )
-                    )}
+                    <div>
+                        {util.moneyFormat(
+                            util.getEmployeeOrSupplierPrice(
+                                this.props.deal,
+                                this.props.employeeBrand
+                            )
+                        )}
+                    </div>
                     {this.renderPriceExplanationModal()}
                 </div>
                 <div className="deal-price__hr" />
                 <div className="deal-price__cash-msrp">
-                    {util.moneyFormat(this.props.deal.msrp)}{' '}
-                    <span className="deal-price__cash-msrp-label">MSRP</span>
+                    {util.moneyFormat(this.props.deal.msrp)} <span className="deal-price__cash-msrp-label">
+                        MSRP
+                    </span>
                 </div>
-            </div>
-        );
+            </div>;
     }
 
     renderFinancePrice() {
@@ -79,7 +82,8 @@ class DealPrice extends React.PureComponent {
                     {this.props.dealTargets.hasOwnProperty(
                         this.props.deal.id
                     ) ? (
-                        util.moneyFormat(
+                        <div>
+                        {util.moneyFormat(
                             Math.round(
                                 formulas.calculateFinancedMonthlyPayments(
                                     util.getEmployeeOrSupplierPrice(
@@ -102,7 +106,8 @@ class DealPrice extends React.PureComponent {
                                     this.props.termDuration
                                 )
                             )
-                        )
+                        )}
+                        </div>
                     ) : (
                         <SVGInline svg={miscicons['loading']} />
                     )}
@@ -120,6 +125,7 @@ class DealPrice extends React.PureComponent {
                     Estimated Monthly Lease Payment
                 </div>
                 <div className="deal-price__finance-lease-price">
+                    <div>
                     {util.moneyFormat(
                         Math.round(
                             formulas.calculateLeasedMonthlyPayments(
@@ -147,6 +153,7 @@ class DealPrice extends React.PureComponent {
                             )
                         )
                     )}
+                    </div>
                     {this.renderPriceExplanationModal()}
                 </div>
                 <div className="deal-price__hr" />

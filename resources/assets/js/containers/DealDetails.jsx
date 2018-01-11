@@ -14,6 +14,7 @@ import React from 'react';
 import strings from 'src/strings';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
+import ImageGallery from 'react-image-gallery';
 
 class DealDetails extends React.PureComponent {
     constructor(props) {
@@ -143,6 +144,12 @@ class DealDetails extends React.PureComponent {
         );
     }
 
+    galleryImages() {
+        return this.allImages().map(image => {
+            return { original: image.url };
+        });
+    }
+
     renderCalculatorModal() {
         return (
             <Modal
@@ -151,34 +158,6 @@ class DealDetails extends React.PureComponent {
             >
                 <CashFinanceLeaseCalculator />
             </Modal>
-        );
-    }
-
-    renderDot(photo, index) {
-        const color =
-            this.state.featuredImage.url === photo.url ? 'gray' : 'white';
-        return (
-            <svg
-                key={index}
-                style={{
-                    cursor: 'pointer',
-                    margin: '5px',
-                }}
-                height="20"
-                width="20"
-                onClick={this.selectFeaturedImage.bind(this, index)}
-            >
-                <circle cx="10" cy="10" r="8" stroke="#cccccc" fill={color} />
-            </svg>
-        );
-    }
-
-    renderFeaturedImage() {
-        return (
-            <img
-                className="deal-details__primary-image"
-                src={R.propOr(this.state.q, 'url', this.state.featuredImage)}
-            />
         );
     }
 
@@ -398,12 +377,13 @@ class DealDetails extends React.PureComponent {
                             </div>
                         </div>
                         <div className="deal-details__images">
-                            {this.renderFeaturedImage()}
-                            <div className="deal-details__dots">
-                                {this.allImages().map((image, index) =>
-                                    this.renderDot(image, index)
-                                )}
-                            </div>
+                            <ImageGallery
+                                items={this.galleryImages()}
+                                showBullets={true}
+                                showIndex={true}
+                                showThumbnails={false}
+                                showPlayButton={false}
+                                showFullscreenButton={false}/>
                         </div>
                     </div>
                     <div className="deal-details__pricing">
@@ -413,15 +393,10 @@ class DealDetails extends React.PureComponent {
 
                 <CompareBar class="compare-bar compare-bar--static" />
 
-                {this.state.showStandardFeatures ? (
-                    this.renderStandardFeaturesModal(deal)
-                ) : (
-                    ''
-                )}
+                {this.state.showStandardFeatures ? this.renderStandardFeaturesModal(deal) : ''}
                 {this.state.showFeatures ? this.renderFeaturesModal(deal) : ''}
                 {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
-            </div>
-        );
+            </div>);
     }
 }
 

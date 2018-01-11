@@ -507,7 +507,7 @@ export function requestLocationInfo() {
                 if (err) {
                     dispatch(requestDeals());
                 } else {
-                    window.axios.post('/hubspot', { zip: data.zip_code });
+                    window.axios.post('/hubspot', { zip: data.zip_code }).catch(e => console.log('hubspot error', e));
 
                     dispatch(receiveLocationInfo(data));
                 }
@@ -645,7 +645,6 @@ export function requestBestOffer(deal) {
 
         api.getBestOffer(deal.id, payment_type, zipcode, targets)
         .then(data => {
-            console.log('best-offer', data);
             dispatch(receiveBestOffer(data));
         });
 

@@ -142,9 +142,11 @@ class InfoModalData extends React.PureComponent {
                 <div className="info-modal-data__more-rebates info-modal-data__costs">
                     <div>
                         <a
-                            onClick={() =>
-                                this.props.selectDeal(this.props.deal)
-                            }
+                            onClick={() => {
+                                this.props.selectDeal(this.props.deal);
+
+                                this.props.closeModal();
+                            }}
                             href="#"
                         >
                             Get Rebates
@@ -178,6 +180,7 @@ class InfoModalData extends React.PureComponent {
                             Down Payment
                         </p>
                         <input
+                            className="info-modal-data__input"
                             disabled
                             placeholder={util.moneyFormat(
                                 this.props.deal.supplier_price *
@@ -215,7 +218,7 @@ class InfoModalData extends React.PureComponent {
                             Cash Due
                         </p>
                         <input
-                            className="info-modal-data__default-option"
+                            className="info-modal-data__default-option info-modal-data__input"
                             disabled
                             placeholder={util.moneyFormat(
                                 this.props.deal.supplier_price *
@@ -325,6 +328,7 @@ InfoModalData.propTypes = {
         id: PropTypes.number.isRequired,
         vin: PropTypes.string.isRequired,
     }),
+    closeModal: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
