@@ -39,19 +39,18 @@ class DealPrice extends React.PureComponent {
         }
 
         this.setState({
-            availableTargets: props.dealTargets[props.deal.id] || []
+            availableTargets: props.dealTargets[props.deal.id] || [],
         });
     }
 
     renderPriceExplanationModal() {
-        return <InfoModal deal={this.props.deal}/>
+        return <InfoModal deal={this.props.deal} />;
     }
 
     renderCashPrice() {
-        return <div className="deal-price__price">
-                <div className="deal-price__cash-label">
-                    Your cash price
-                </div>
+        return (
+            <div className="deal-price__price">
+                <div className="deal-price__cash-label">Your cash price</div>
                 <div className="deal-price__cash-price">
                     <div>
                         {util.moneyFormat(
@@ -65,11 +64,11 @@ class DealPrice extends React.PureComponent {
                 </div>
                 <div className="deal-price__hr" />
                 <div className="deal-price__cash-msrp">
-                    {util.moneyFormat(this.props.deal.msrp)} <span className="deal-price__cash-msrp-label">
-                        MSRP
-                    </span>
+                    {util.moneyFormat(this.props.deal.msrp)}{' '}
+                    <span className="deal-price__cash-msrp-label">MSRP</span>
                 </div>
-            </div>;
+            </div>
+        );
     }
 
     renderFinancePrice() {
@@ -83,14 +82,14 @@ class DealPrice extends React.PureComponent {
                         this.props.deal.id
                     ) ? (
                         <div>
-                        {util.moneyFormat(
-                            Math.round(
-                                formulas.calculateFinancedMonthlyPayments(
-                                    util.getEmployeeOrSupplierPrice(
-                                        this.props.deal,
-                                        this.props.employeeBrand
-                                    ) -
-                                    /*
+                            {util.moneyFormat(
+                                Math.round(
+                                    formulas.calculateFinancedMonthlyPayments(
+                                        util.getEmployeeOrSupplierPrice(
+                                            this.props.deal,
+                                            this.props.employeeBrand
+                                        ) -
+                                            /*
                                         R.sum(
                                             R.map(
                                                 R.prop('value'),
@@ -101,12 +100,12 @@ class DealPrice extends React.PureComponent {
                                                 )
                                             )
                                         ),*/
-                                    0, // @todo this would be the sum of our rebating
-                                    this.props.downPayment,
-                                    this.props.termDuration
+                                            0, // @todo this would be the sum of our rebating
+                                        this.props.downPayment,
+                                        this.props.termDuration
+                                    )
                                 )
-                            )
-                        )}
+                            )}
                         </div>
                     ) : (
                         <SVGInline svg={miscicons['loading']} />
@@ -126,14 +125,14 @@ class DealPrice extends React.PureComponent {
                 </div>
                 <div className="deal-price__finance-lease-price">
                     <div>
-                    {util.moneyFormat(
-                        Math.round(
-                            formulas.calculateLeasedMonthlyPayments(
-                                util.getEmployeeOrSupplierPrice(
-                                    this.props.deal,
-                                    this.props.employeeBrand
-                                ) -
-                                /*
+                        {util.moneyFormat(
+                            Math.round(
+                                formulas.calculateLeasedMonthlyPayments(
+                                    util.getEmployeeOrSupplierPrice(
+                                        this.props.deal,
+                                        this.props.employeeBrand
+                                    ) -
+                                        /*
                                     R.sum(
                                         R.map(
                                             R.prop('value'),
@@ -145,14 +144,14 @@ class DealPrice extends React.PureComponent {
                                         )
                                     ),
                                     */
-                                0, // @TODO this would be the sum of our rebate price
-                                0,
-                                0,
-                                this.props.termDuration,
-                                R.or(this.props.residualPercent, 31)
+                                        0, // @TODO this would be the sum of our rebate price
+                                    0,
+                                    0,
+                                    this.props.termDuration,
+                                    R.or(this.props.residualPercent, 31)
+                                )
                             )
-                        )
-                    )}
+                        )}
                     </div>
                     {this.renderPriceExplanationModal()}
                 </div>
@@ -200,28 +199,31 @@ class DealPrice extends React.PureComponent {
                 <div className="tabs">
                     <div
                         onClick={this.props.selectTab.bind(null, 'cash')}
-                        className={`tabs__tab ${this.props.selectedTab ===
-                        'cash'
-                            ? 'tabs__tab--selected'
-                            : ''}`}
+                        className={`tabs__tab ${
+                            this.props.selectedTab === 'cash'
+                                ? 'tabs__tab--selected'
+                                : ''
+                        }`}
                     >
                         Cash
                     </div>
                     <div
                         onClick={this.props.selectTab.bind(null, 'finance')}
-                        className={`tabs__tab ${this.props.selectedTab ===
-                        'finance'
-                            ? 'tabs__tab--selected'
-                            : ''}`}
+                        className={`tabs__tab ${
+                            this.props.selectedTab === 'finance'
+                                ? 'tabs__tab--selected'
+                                : ''
+                        }`}
                     >
                         Finance
                     </div>
                     <div
                         onClick={this.props.selectTab.bind(null, 'lease')}
-                        className={`tabs__tab ${this.props.selectedTab ===
-                        'lease'
-                            ? 'tabs__tab--selected'
-                            : ''}`}
+                        className={`tabs__tab ${
+                            this.props.selectedTab === 'lease'
+                                ? 'tabs__tab--selected'
+                                : ''
+                        }`}
                     >
                         Lease
                     </div>
