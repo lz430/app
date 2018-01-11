@@ -17,13 +17,17 @@
   }
 
   &__cash-price {
+    display: flex;
     font-size: xx-large;
+    justify-content: center;
     margin-bottom: -1.5rem;
     margin-top: -10px;
   }
 
   &__finance-lease-price {
+    display: flex;
     font-size: xx-large;
+    justify-content: center;
     margin-bottom: -1.5rem;
     margin-top: -10px;
   }

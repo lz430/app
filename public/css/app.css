@@ -903,7 +903,7 @@ body {
   right: 0;
   top: 60px;
   width: 100vw;
-  z-index: 1;
+  z-index: 5;
 }
 
 .modal__content {
@@ -1074,13 +1074,13 @@ body {
 /* The info modal uses styles from modal; these are just add-ons */
 
 .infomodal__context {
-  display: inline-block;
+  -ms-flex-item-align: center;
+      align-self: center;
   font-size: 1rem;
   height: -webkit-min-content;
   height: -moz-min-content;
   height: min-content;
   margin-left: 5px;
-  vertical-align: middle;
 }
 
 .info-modal-data {
@@ -3866,13 +3866,25 @@ body {
 }
 
 .deal-price__cash-price {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
   font-size: xx-large;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   margin-bottom: -1.5rem;
   margin-top: -10px;
 }
 
 .deal-price__finance-lease-price {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
   font-size: xx-large;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   margin-bottom: -1.5rem;
   margin-top: -10px;
 }
