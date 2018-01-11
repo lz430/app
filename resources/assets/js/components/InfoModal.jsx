@@ -1,7 +1,7 @@
 import InfoModalData from 'components/InfoModalData';
 import React from 'react';
 import R from 'ramda';
-import zondicons from "../zondicons";
+import zondicons from '../zondicons';
 import SVGInline from 'react-svg-inline';
 
 class InfoModal extends React.PureComponent {
@@ -16,15 +16,14 @@ class InfoModal extends React.PureComponent {
 
     renderModal() {
         return (
-            <div className="modal"
-                onClick={
-                    (e) => this.closeIfOverlayClick(e)
-                }
-            >
+            <div className="modal" onClick={e => this.closeIfOverlayClick(e)}>
                 <div className="modal__overlay" />
                 <div className="modal__wrapper">
                     <div className="modal__content">
-                        <InfoModalData deal={this.props.deal} />
+                        <InfoModalData
+                            closeModal={() => this.toggleModal()}
+                            deal={this.props.deal}
+                        />
                     </div>
                 </div>
             </div>
@@ -32,13 +31,16 @@ class InfoModal extends React.PureComponent {
     }
 
     toggleModal() {
-        this.setState({ toggled: !this.state.toggled});
+        this.setState({ toggled: !this.state.toggled });
     }
 
     closeIfOverlayClick(e) {
         const targetClass = e.target.getAttribute('class');
 
-        if (R.contains(targetClass, 'modal__wrapper') || R.contains(targetClass, 'modal__overlay')) {
+        if (
+            R.contains(targetClass, 'modal__wrapper') ||
+            R.contains(targetClass, 'modal__overlay')
+        ) {
             this.toggleModal();
         }
     }
@@ -47,11 +49,15 @@ class InfoModal extends React.PureComponent {
         return (
             <div className="infomodal__context">
                 <a
-                    onClick={() => {this.toggleModal()}}
+                    onClick={() => this.toggleModal()}
                     href="#"
                     className="infomodal__button"
                 >
-                    <SVGInline width="15px" fill="grey" svg={zondicons['information-outline']} />
+                    <SVGInline
+                        width="15px"
+                        fill="grey"
+                        svg={zondicons['information-outline']}
+                    />
                 </a>
                 {this.state.toggled ? this.renderModal() : ''}
             </div>

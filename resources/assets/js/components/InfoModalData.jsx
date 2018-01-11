@@ -164,9 +164,11 @@ class InfoModalData extends React.PureComponent {
                     )} in rebates available.  `}</div>
                     <div>
                         <a
-                            onClick={() =>
-                                this.props.selectDeal(this.props.deal)
-                            }
+                            onClick={() => {
+                                this.props.selectDeal(this.props.deal);
+
+                                this.props.closeModal();
+                            }}
                             href="#"
                         >
                             Get Rebates
@@ -348,6 +350,7 @@ InfoModalData.propTypes = {
         id: PropTypes.number.isRequired,
         vin: PropTypes.string.isRequired,
     }),
+    closeModal: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {

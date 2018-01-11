@@ -57610,11 +57610,9 @@ var InfoModal = function (_React$PureComponent) {
 
             return _react2.default.createElement(
                 'div',
-                { className: 'modal',
-                    onClick: function onClick(e) {
+                { className: 'modal', onClick: function onClick(e) {
                         return _this2.closeIfOverlayClick(e);
-                    }
-                },
+                    } },
                 _react2.default.createElement('div', { className: 'modal__overlay' }),
                 _react2.default.createElement(
                     'div',
@@ -57622,7 +57620,12 @@ var InfoModal = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         { className: 'modal__content' },
-                        _react2.default.createElement(_InfoModalData2.default, { deal: this.props.deal })
+                        _react2.default.createElement(_InfoModalData2.default, {
+                            closeModal: function closeModal() {
+                                return _this2.toggleModal();
+                            },
+                            deal: this.props.deal
+                        })
                     )
                 )
             );
@@ -57653,12 +57656,16 @@ var InfoModal = function (_React$PureComponent) {
                     'a',
                     {
                         onClick: function onClick() {
-                            _this3.toggleModal();
+                            return _this3.toggleModal();
                         },
                         href: '#',
                         className: 'infomodal__button'
                     },
-                    _react2.default.createElement(_reactSvgInline2.default, { width: '15px', fill: 'grey', svg: _zondicons2.default['information-outline'] })
+                    _react2.default.createElement(_reactSvgInline2.default, {
+                        width: '15px',
+                        fill: 'grey',
+                        svg: _zondicons2.default['information-outline']
+                    })
                 ),
                 this.state.toggled ? this.renderModal() : ''
             );
@@ -57864,7 +57871,9 @@ var InfoModalData = function (_React$PureComponent) {
                             'a',
                             {
                                 onClick: function onClick() {
-                                    return _this2.props.selectDeal(_this2.props.deal);
+                                    _this2.props.selectDeal(_this2.props.deal);
+
+                                    _this2.props.closeModal();
                                 },
                                 href: '#'
                             },
@@ -58100,7 +58109,8 @@ InfoModalData.propTypes = {
         model: _propTypes2.default.string.isRequired,
         id: _propTypes2.default.number.isRequired,
         vin: _propTypes2.default.string.isRequired
-    })
+    }),
+    closeModal: _propTypes2.default.func.isRequired
 };
 
 var mapStateToProps = function mapStateToProps(state) {
