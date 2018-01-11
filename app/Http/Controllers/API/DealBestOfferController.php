@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Deal;
 use DeliverMyRide\JATO\Client;
+use Cache;
 
 class DealBestOfferController extends BaseAPIController
 {
@@ -24,6 +25,23 @@ class DealBestOfferController extends BaseAPIController
             'targets' => 'required|array',
         ]);
 
-        return $this->client->bestOffer($deal->versions->first()->jato_vehicle_id, request('payment_type'), request('zipcode'), implode(',', request('targets')));
+        $targets = request('targets');
+        sort($targets, SORT_NUMERIC);
+        $sortedTargets = implode(',', $targets);
+        $jatoVehicleId = $deal->versions->first()->jato_vehicle_id;
+        $paymentType = request('payment_type');
+        $zipCode = request('zipcode');
+
+        $cacheKey = "best-offer:$jatoVehicleId:$paymentType:$zipCode:$sortedTargets";
+
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        }
+
+        $response = $this->client->bestOffer($jatoVehicleId, $paymentType, $zipCode, implode(',', $targets));
+
+        Cache::tags(['best-offers'])->put($cacheKey, $response, 1440);
+
+        return $response;
     }
 }
