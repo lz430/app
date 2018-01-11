@@ -25,23 +25,29 @@ class InfoModalData extends React.PureComponent {
     componentDidMount() {
         this._isMounted = true;
 
-        if (
-            !this.props.dealTargets.hasOwnProperty(this.props.deal.id) &&
-            this.props.zipcode
-        ) {
-            this.requestRebates();
+        if (this.targetsAreNotLoaded()) {
+            this.requestTargets();
         } else {
             this.componentWillReceiveProps(this.props);
         }
+
+        this.props.requestBestOffer(this.props.deal);
     }
 
-    requestRebates() {
-        this.props.requestRebates(this.props.deal);
+    targetsAreNotLoaded() {
+        return (
+            !this.props.dealTargets.hasOwnProperty(this.props.deal.id) &&
+            this.props.zipcode
+        );
+    }
+
+    requestTargets() {
+        this.props.requestTargets(this.props.deal);
     }
 
     componentWillReceiveProps(props) {
         if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
-            return this.props.requestRebates(this.props.deal);
+            return this.requestTargets();
         }
 
         this.setState({
@@ -51,48 +57,22 @@ class InfoModalData extends React.PureComponent {
                 props.selectedTargets,
                 props.deal
             ),
+            dealBestOffer: props.dealBestOffer,
         });
-
-        this.props.requestBestOffer(props.deal.id);
-    }
-
-    renderDealRebatesModal() {
-        return (
-            <Modal
-                onClose={this.props.clearSelectedDeal}
-                closeText="Back to results"
-            />
-        );
     }
 
     displayFinalPrice() {
-        const selectedAmount = this.state.selectedTargets
-            // ? R.sum(R.map(R.prop('value'), this.state.selectedTargets))
-            ? 9999 // @todo update to pull from api or whatever
+        const selectedAmount = this.props.dealBestOffer
+            ? this.props.dealBestOffer.totalValue
             : 0;
+
         switch (this.props.selectedTab) {
             case 'cash':
                 return this.props.deal.supplier_price - selectedAmount;
             case 'finance': {
                 return Math.round(
                     formulas.calculateFinancedMonthlyPayments(
-                        util.getEmployeeOrSupplierPrice(
-                            this.props.deal,
-                            this.props.isEmployee
-                        ) -
-                            R.sum(
-                                [0]
-                                /* @todo: update this to pull sum from api or whatever
-                                R.map(
-                                    R.prop('value'),
-                                    rebates.getSelectedTargetsForDeal(
-                                        this.props.dealTargets,
-                                        this.props.selectedTargets,
-                                        this.props.deal
-                                    )
-                                )
-                                */
-                            ),
+                        util.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee),
                         this.props.downPayment,
                         this.props.termDuration
                     )
@@ -154,7 +134,9 @@ class InfoModalData extends React.PureComponent {
             <div>
                 <div className="info-modal-data__rebate-info info-modal-data__costs info-modal-data__bold">
                     <div>{`Rebates Applied:`}</div>
-                    <div>{`${util.moneyFormat(selectedAmount)}`}</div>
+                    <div>{`${util.moneyFormat(
+                        this.state.dealBestOffer.totalValue || this.state.dealBestOffer.cash.totalValue
+                    )}`}</div>
                 </div>
 
                 <div className="info-modal-data__more-rebates info-modal-data__costs">
@@ -357,6 +339,7 @@ const mapStateToProps = state => {
         isEmployee: state.isEmployee,
         residualPercent: state.residualPercent,
         selectedTargets: state.selectedTargets,
+        dealBestOffer: state.dealBestOffer,
     };
 };
 

@@ -1350,7 +1350,7 @@ function updateResidualPercent(residualPercent) {
     };
 }
 
-function requestBestOffer(dealId) {
+function requestBestOffer(deal) {
     return function (dispatch, getState) {
         var OPEN_OFFER = 25;
         var payment_type = getState().selectedTab;
@@ -1359,8 +1359,8 @@ function requestBestOffer(dealId) {
         var selectedTargetIds = _ramda2.default.map(_ramda2.default.prop('targetId'), getState().selectedTargets);
         var targets = defaultTargetIds.concat(selectedTargetIds);
 
-        // FINISH THE ACTION AND WORK ON THE REDUCER (currently on the 'read state data before the api call')
-        _api2.default.getBestOffer(dealId, payment_type, zipcode, targets).then(function (data) {
+        _api2.default.getBestOffer(deal.id, payment_type, zipcode, targets).then(function (data) {
+            console.log('best-offer', data);
             dispatch(receiveBestOffer(data));
         });
 
@@ -57764,63 +57764,48 @@ var InfoModalData = function (_React$PureComponent) {
         value: function componentDidMount() {
             this._isMounted = true;
 
-            if (!this.props.dealTargets.hasOwnProperty(this.props.deal.id) && this.props.zipcode) {
-                this.requestRebates();
+            if (this.targetsAreNotLoaded()) {
+                this.requestTargets();
             } else {
                 this.componentWillReceiveProps(this.props);
             }
+
+            this.props.requestBestOffer(this.props.deal);
         }
     }, {
-        key: 'requestRebates',
-        value: function requestRebates() {
-            this.props.requestRebates(this.props.deal);
+        key: 'targetsAreNotLoaded',
+        value: function targetsAreNotLoaded() {
+            return !this.props.dealTargets.hasOwnProperty(this.props.deal.id) && this.props.zipcode;
+        }
+    }, {
+        key: 'requestTargets',
+        value: function requestTargets() {
+            this.props.requestTargets(this.props.deal);
         }
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(props) {
             if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
-                return this.props.requestRebates(this.props.deal);
+                return this.requestTargets();
             }
 
             this.setState({
                 availableTargets: props.dealTargets[props.deal.id] || [],
-                selectedTargets: _rebates2.default.getSelectedTargetsForDeal(props.dealTargets, props.selectedTargets, props.deal)
-            });
-
-            this.props.requestBestOffer(props.deal.id);
-        }
-    }, {
-        key: 'renderDealRebatesModal',
-        value: function renderDealRebatesModal() {
-            return _react2.default.createElement(_Modal2.default, {
-                onClose: this.props.clearSelectedDeal,
-                closeText: 'Back to results'
+                selectedTargets: _rebates2.default.getSelectedTargetsForDeal(props.dealTargets, props.selectedTargets, props.deal),
+                dealBestOffer: props.dealBestOffer
             });
         }
     }, {
         key: 'displayFinalPrice',
         value: function displayFinalPrice() {
-            var selectedAmount = this.state.selectedTargets
-            // ? R.sum(R.map(R.prop('value'), this.state.selectedTargets))
-            ? 9999 // @todo update to pull from api or whatever
-            : 0;
+            var selectedAmount = this.props.dealBestOffer ? this.props.dealBestOffer.totalValue : 0;
+
             switch (this.props.selectedTab) {
                 case 'cash':
                     return this.props.deal.supplier_price - selectedAmount;
                 case 'finance':
                     {
-                        return Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum([0]
-                        /* @todo: update this to pull sum from api or whatever
-                        R.map(
-                            R.prop('value'),
-                            rebates.getSelectedTargetsForDeal(
-                                this.props.dealTargets,
-                                this.props.selectedTargets,
-                                this.props.deal
-                            )
-                        )
-                        */
-                        ), this.props.downPayment, this.props.termDuration));
+                        return Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee), this.props.downPayment, this.props.termDuration));
                     }
                 case 'lease':
                     {
@@ -57879,7 +57864,7 @@ var InfoModalData = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         null,
-                        '' + _util2.default.moneyFormat(selectedAmount)
+                        '' + _util2.default.moneyFormat(this.state.dealBestOffer.totalValue || this.state.dealBestOffer.cash.totalValue)
                     )
                 ),
                 _react2.default.createElement(
@@ -58131,7 +58116,9 @@ InfoModalData.propTypes = {
 };
 
 var mapStateToProps = function mapStateToProps(state) {
-    return _defineProperty({
+    var _ref;
+
+    return _ref = {
         compareList: state.compareList,
         selectedTab: state.selectedTab,
         downPayment: state.downPayment,
@@ -58141,7 +58128,7 @@ var mapStateToProps = function mapStateToProps(state) {
         selectedDeal: state.selectedDeal,
         isEmployee: state.isEmployee,
         residualPercent: state.residualPercent
-    }, 'selectedTargets', state.selectedTargets);
+    }, _defineProperty(_ref, 'selectedTargets', state.selectedTargets), _defineProperty(_ref, 'dealBestOffer', state.dealBestOffer), _ref;
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(InfoModalData);
@@ -61722,7 +61709,7 @@ var reducer = function reducer(state, action) {
             });
         case ActionTypes.RECEIVE_BEST_OFFER:
             return Object.assign({}, state, {
-                dealBestOffer: action
+                dealBestOffer: action.data
             });
     }
 

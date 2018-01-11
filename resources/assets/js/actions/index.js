@@ -634,7 +634,7 @@ export function updateResidualPercent(residualPercent) {
     };
 }
 
-export function requestBestOffer(dealId) {
+export function requestBestOffer(deal) {
     return (dispatch, getState) => {
         const OPEN_OFFER = 25;
         const payment_type = getState().selectedTab;
@@ -643,9 +643,9 @@ export function requestBestOffer(dealId) {
         const selectedTargetIds = R.map(R.prop('targetId'), getState().selectedTargets);
         const targets = defaultTargetIds.concat(selectedTargetIds);
 
-// FINISH THE ACTION AND WORK ON THE REDUCER (currently on the 'read state data before the api call')
-        api.getBestOffer(dealId, payment_type, zipcode, targets)
+        api.getBestOffer(deal.id, payment_type, zipcode, targets)
         .then(data => {
+            console.log('best-offer', data);
             dispatch(receiveBestOffer(data));
         });
 

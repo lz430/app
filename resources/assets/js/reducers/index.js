@@ -202,7 +202,7 @@ const reducer = (state, action) => {
             });
         case ActionTypes.RECEIVE_BEST_OFFER:
             return Object.assign({}, state, {
-                dealBestOffer: action,
+                dealBestOffer: action.data,
             });
     }
 
