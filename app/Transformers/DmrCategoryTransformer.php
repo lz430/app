@@ -15,20 +15,15 @@ class DmrCategoryTransformer extends TransformerAbstract
     public function transform(DmrCategory $category)
     {
         return [
-            'id'                        => $category->id,
-            'title'                     => $category->title,
-            'slug'                      => $category->slug,
-            'display_order'             => $category->display_order,
+            'id' => $category->id,
+            'title' => $category->title,
+            'slug' => $category->slug,
+            'display_order' => $category->display_order,
         ];
     }
 
     public function includeFeatures(DmrCategory $category)
     {
-        $features = $category->features;
-
-        return $this->collection(
-            $features,
-            new DmrFeatureTransformer
-        )->setResourceKey('feature');
+        return $this->collection($category->features, new DmrFeatureTransformer)->setResourceKey('feature');
     }
 }

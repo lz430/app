@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-
 use App\DmrCategory;
 use App\DmrFeature;
 use Illuminate\Foundation\Testing\WithFaker;

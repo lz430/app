@@ -287,7 +287,6 @@ class CreateDmrFeaturesTable extends Migration
 
             collect($features)->each(function ($feature) use ($categoryId, &$count) {
                 $feature['dmr_category_id'] = $categoryId;
-                $feature['jato_schema_ids'] = json_encode($feature['jato_schema_ids']);
                 $feature['display_order'] = $count;
 
                 DmrFeature::create($feature);
