@@ -15,10 +15,10 @@ class DmrCategoryTransformer extends TransformerAbstract
     public function transform(DmrCategory $category)
     {
         return [
-            'id'                        => $category->id,
-            'title'                     => $category->title,
-            'slug'                      => $category->slug,
-            'display_order'             => $category->display_order,
+            'id' => $category->id,
+            'title' => $category->title,
+            'slug' => $category->slug,
+            'display_order' => $category->display_order,
         ];
     }
 

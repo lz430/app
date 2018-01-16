@@ -8,6 +8,10 @@ class DmrFeature extends Model
 {
     protected $fillable = ['title', 'slug', 'dmr_category_id', 'display_order', 'jato_schema_ids'];
 
+    protected $casts = [
+        'jato_schema_ids' => 'array'
+    ];
+
     public function category()
     {
         return $this->belongsTo(DmrCategory::class, 'dmr_category_id');
@@ -16,10 +20,5 @@ class DmrFeature extends Model
     public function deals()
     {
          return $this->belongsToMany(Deal::class);
-    }
-
-    public function getJatoSchemaIdsAttribute($value)
-    {
-        return (array) json_decode($value, true);
     }
 }

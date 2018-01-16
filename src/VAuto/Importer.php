@@ -189,7 +189,7 @@ class Importer
                         $versionDeal
                     );
 
-                    $this->saveVersionDmrFeatures(
+                    $this->saveVersionDealDmrFeatures(
                         $versionDeal
                     );
 
@@ -315,16 +315,20 @@ class Importer
         $this->saveCustomHackyFeatures($deal);
     }
 
-    private function saveVersionDmrFeatures(Deal $deal)
+    private function saveVersionDealDmrFeatures(Deal $deal)
     {
         $features = DmrFeature::all();
 
         collect($this->client->equipmentByVehicleId($deal->versions->first()->jato_vehicle_id)['results'])->each(function ($equipment) use ($deal, $features) {
-            $features->each(function ($feature) use ($deal, $equipment) {
+            $schemaIds = $features->map(function ($feature) use ($deal, $equipment) {
                 if (in_array($equipment['schemaId'], $feature->jato_schema_ids)) {
-                    $deal->dmrFeatures()->syncWithoutDetaching([$feature->id]);
+                    return $feature->id;
                 }
-            });
+            })->reject(function ($schema) {
+                return empty($schema);
+            })->toArray();
+
+            $deal->dmrFeatures()->syncWithoutDetaching($schemaIds);
         });
     }
 
