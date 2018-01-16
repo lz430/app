@@ -24,11 +24,6 @@ class DmrCategoryTransformer extends TransformerAbstract
 
     public function includeFeatures(DmrCategory $category)
     {
-        $features = $category->features;
-
-        return $this->collection(
-            $features,
-            new DmrFeatureTransformer
-        )->setResourceKey('feature');
+        return $this->collection($category->features, new DmrFeatureTransformer)->setResourceKey('feature');
     }
 }
