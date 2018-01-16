@@ -14,7 +14,7 @@ class DmrFeatureTransformer extends TransformerAbstract
             'title'             => $feature->title,
             'slug'              => $feature->slug,
             'display_order'     => $feature->display_order,
-            'jato_schema_ids'   => json_decode($feature->jato_schema_ids, true),
+            'jato_schema_ids'   => $feature->jato_schema_ids,
         ];
     }
 }

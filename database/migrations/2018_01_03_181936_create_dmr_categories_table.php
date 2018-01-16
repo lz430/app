@@ -18,55 +18,73 @@ class CreateDmrCategoriesTable extends Migration
             $table->increments('id');
             $table->string('title')->nullable();
             $table->string('slug')->nullable();
-            $table->string('select_one_dmr_feature')->default(false);
+            $table->string('has_custom_jato_mapping')->default(false);
             $table->integer('display_order')->default(0);
             $table->timestamps();
         });
+
+        $count = 1;
 
         collect([
             [
                 'title' => 'Fuel Type',
                 'slug' => 'fuel_type',
-                'display_order' => 1,
-                'select_one_dmr_feature' => true,
+                'has_custom_jato_mapping' => true,
             ],
             [
                 'title' => 'Transmission',
                 'slug' => 'transmission',
-                'display_order' => 2,
+                'has_custom_jato_mapping' => true,
+            ],
+            [
+                'title' => 'Drive Train',
+                'slug' => 'drive_train',
+                'has_custom_jato_mapping' => true,
             ],
             [
                 'title' => 'Comfort & Convenience',
                 'slug' => 'comfort_and_convenience',
-                'display_order' => 3,
             ],
             [
                 'title' => 'Seating',
                 'slug' => 'seating',
-                'display_order' => 4,
+            ],
+            [
+                'title' => 'Seat Materials',
+                'slug' => 'seat_materials',
+                'has_custom_jato_mapping' => true,
+            ],
+            [
+                'title' => 'Seating Configuration',
+                'slug' => 'seating_configuration',
+                'has_custom_jato_mapping' => true,
             ],
             [
                 'title' => 'Infotainment',
                 'slug' => 'infotainment',
-                'display_order' => 5,
             ],
             [
                 'title' => 'Interior',
                 'slug' => 'interior',
-                'display_order' => 6,
-            ],
-            [
-                'title' => 'Exterior',
-                'slug' => 'exterior',
-                'display_order' => 7,
             ],
             [
                 'title' => 'Safety & Driver Assist',
                 'slug' => 'safety_and_driver_assist',
-                'display_order' => 8,
             ],
-        ])->each(function ($category) {
+            [
+                'title' => 'Exterior',
+                'slug' => 'exterior',
+            ],
+            [
+                'title' => 'Pickup',
+                'slug' => 'pickup',
+                'has_custom_jato_mapping' => true,
+            ],
+        ])->each(function ($category) use (&$count) {
+            $category['display_order'] = $count;
+
             DmrCategory::create($category);
+            $count++;
         });
     }
 

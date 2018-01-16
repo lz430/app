@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\DmrCategory;
 use Illuminate\Database\Eloquent\Model;
 
 class DmrFeature extends Model
@@ -12,5 +11,15 @@ class DmrFeature extends Model
     public function category()
     {
         return $this->belongsTo(DmrCategory::class, 'dmr_category_id');
+    }
+
+    public function deals()
+    {
+         return $this->belongsToMany(Deal::class);
+    }
+
+    public function getJatoSchemaIdsAttribute($value)
+    {
+        return (array) json_decode($value, true);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace DeliverMyRide\VAuto;
 
+use App\DmrFeature;
 use App\Feature;
 use App\JATO\Make;
 use App\JATO\Manufacturer;
@@ -188,6 +189,10 @@ class Importer
                         $versionDeal
                     );
 
+                    $this->saveVersionDmrFeatures(
+                        $versionDeal
+                    );
+
                     $this->saveVersionSegment(
                         $versionDeal
                     );
@@ -308,6 +313,19 @@ class Importer
         }
 
         $this->saveCustomHackyFeatures($deal);
+    }
+
+    private function saveVersionDmrFeatures(Deal $deal)
+    {
+        $features = DmrFeature::all();
+
+        collect($this->client->equipmentByVehicleId($deal->versions->first()->jato_vehicle_id)['results'])->each(function ($equipment) use ($deal, $features) {
+            $features->each(function ($feature) use ($deal, $equipment) {
+                if (in_array($equipment['schemaId'], $feature->jato_schema_ids)) {
+                    $deal->dmrFeatures()->syncWithoutDetaching([$feature->id]);
+                }
+            });
+        });
     }
 
     private function saveCustomHackyFeatures(Deal $deal)

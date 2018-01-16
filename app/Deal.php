@@ -38,6 +38,11 @@ class Deal extends Model
     {
         return $this->belongsToMany(Feature::class)->hasGroup();
     }
+
+    public function dmrFeatures()
+    {
+        return $this->belongsToMany(DmrFeature::class);
+    }
     
     public function featuredPhoto()
     {
