@@ -23,8 +23,6 @@ class CreateDmrCategoriesTable extends Migration
             $table->timestamps();
         });
 
-        $count = 1;
-
         collect([
             [
                 'title' => 'Fuel Type',
@@ -80,11 +78,10 @@ class CreateDmrCategoriesTable extends Migration
                 'slug' => 'pickup',
                 'has_custom_jato_mapping' => true,
             ],
-        ])->each(function ($category) use (&$count) {
-            $category['display_order'] = $count;
+        ])->each(function ($category, $key) {
+            $category['display_order'] = $key + 1;
 
             DmrCategory::create($category);
-            $count++;
         });
     }
 

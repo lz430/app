@@ -13,9 +13,9 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Feature;
 use App\DmrCategory;
 use App\DmrFeature;
+use App\Feature;
 use Carbon\Carbon;
 
 $factory->define(App\User::class, function (Faker\Generator $faker) {
