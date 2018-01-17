@@ -265,14 +265,12 @@ export function setEmployeeBrand(employeeBrand) {
     };
 }
 
-
 export function checkZipInRange(code) {
-   return dispatch => {
-       api.checkZipInRange(code).then(data => {
-           return dispatch(setZipInRange(data.data));
-       })
-   }
-
+    return dispatch => {
+        api.checkZipInRange(code).then(data => {
+            return dispatch(setZipInRange(data.data));
+        });
+    };
 }
 
 export function setZipInRange(data) {
@@ -281,9 +279,9 @@ export function setZipInRange(data) {
             return dispatch({
                 type: ActionTypes.SET_ZIP_IN_RANGE,
                 supported: data.supported,
-            })
+            });
         });
-    }
+    };
 }
 
 export function receiveMoreDeals(data) {
@@ -493,7 +491,7 @@ export function setZipCode(zipcode) {
             zipcode,
         });
 
-        dispatch(checkZipInRange(zipcode))
+        dispatch(checkZipInRange(zipcode));
     };
 }
 
@@ -507,7 +505,9 @@ export function requestLocationInfo() {
                 if (err) {
                     dispatch(requestDeals());
                 } else {
-                    window.axios.post('/hubspot', { zip: data.zip_code }).catch(e => console.log('hubspot error', e));
+                    window.axios
+                        .post('/hubspot', { zip: data.zip_code })
+                        .catch(e => console.log('hubspot error', e));
 
                     dispatch(receiveLocationInfo(data));
                 }
@@ -640,23 +640,36 @@ export function requestBestOffer(deal) {
         const payment_type = getState().selectedTab;
         const zipcode = getState().zipcode;
         const defaultTargetIds = [OPEN_OFFER];
-        const selectedTargetIds = R.map(R.prop('targetId'), getState().selectedTargets);
+        const selectedTargetIds = R.map(
+            R.prop('targetId'),
+            getState().selectedTargets
+        );
         const targets = defaultTargetIds.concat(selectedTargetIds);
 
-        api.getBestOffer(deal.id, payment_type, zipcode, targets)
-        .then(data => {
+        api.getBestOffer(deal.id, payment_type, zipcode, targets).then(data => {
             dispatch(receiveBestOffer(data));
         });
 
         dispatch({ type: ActionTypes.REQUEST_BEST_OFFER });
-    }
+    };
 }
 
 export function receiveBestOffer(data) {
+    // To normalize the difference between JATO best offer cash endpoint (data.data)
+    //  and finance/lease endpoints (data.data.cash)
+    const bestOffer = data.data.hasOwnProperty('totalValue')
+        ? data.data
+        : data.data.cash;
     return dispatch => {
         dispatch({
             type: ActionTypes.RECEIVE_BEST_OFFER,
-            data: data.data,
+            data: bestOffer,
         });
+    };
+}
+
+export function clearBestOffer() {
+    return {
+        type: ActionTypes.CLEAR_BEST_OFFER,
     };
 }

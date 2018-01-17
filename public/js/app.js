@@ -773,6 +773,7 @@ exports.updateAnnualMileage = updateAnnualMileage;
 exports.updateResidualPercent = updateResidualPercent;
 exports.requestBestOffer = requestBestOffer;
 exports.receiveBestOffer = receiveBestOffer;
+exports.clearBestOffer = clearBestOffer;
 
 var _api = __webpack_require__(71);
 
@@ -1370,11 +1371,20 @@ function requestBestOffer(deal) {
 }
 
 function receiveBestOffer(data) {
+    // To normalize the difference between JATO best offer cash endpoint (data.data)
+    //  and finance/lease endpoints (data.data.cash)
+    var bestOffer = data.data.hasOwnProperty('totalValue') ? data.data : data.data.cash;
     return function (dispatch) {
         dispatch({
             type: ActionTypes.RECEIVE_BEST_OFFER,
-            data: data.data
+            data: bestOffer
         });
+    };
+}
+
+function clearBestOffer() {
+    return {
+        type: ActionTypes.CLEAR_BEST_OFFER
     };
 }
 
@@ -22415,6 +22425,7 @@ var UPDATE_RESIDUAL_PERCENT = exports.UPDATE_RESIDUAL_PERCENT = 'UPDATE_RESIDUAL
 var REQUEST_TARGETS = exports.REQUEST_TARGETS = 'REQUEST_TARGETS';
 var REQUEST_BEST_OFFER = exports.REQUEST_BEST_OFFER = 'REQUEST_BEST_OFFER';
 var RECEIVE_BEST_OFFER = exports.RECEIVE_BEST_OFFER = 'RECEIVE_BEST_OFFER';
+var CLEAR_BEST_OFFER = exports.CLEAR_BEST_OFFER = 'CLEAR_BEST_OFFER';
 var SET_ZIP_IN_RANGE = exports.SET_ZIP_IN_RANGE = 'SET_ZIP_IN_RANGE';
 
 /***/ }),
@@ -57793,6 +57804,11 @@ var InfoModalData = function (_React$PureComponent) {
             this.props.requestBestOffer(this.props.deal);
         }
     }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            this.props.clearBestOffer();
+        }
+    }, {
         key: 'targetsAreNotLoaded',
         value: function targetsAreNotLoaded() {
             return !this.props.dealTargets.hasOwnProperty(this.props.deal.id) && this.props.zipcode;
@@ -57829,18 +57845,7 @@ var InfoModalData = function (_React$PureComponent) {
                     }
                 case 'lease':
                     {
-                        return Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum([0]
-                        /* @todo: sum from api or whatever
-                        R.map(
-                            R.prop('value'),
-                            rebates.getSelectedTargetsForDeal(
-                                this.props.dealTargets,
-                                this.props.selectedTargets,
-                                this.props.deal
-                            )
-                        )
-                        */
-                        ), 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31)));
+                        return Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - selectedAmount, 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31)));
                     }
             }
         }
@@ -57878,15 +57883,34 @@ var InfoModalData = function (_React$PureComponent) {
                     { className: 'info-modal-data__rebate-info info-modal-data__costs info-modal-data__bold' },
                     _react2.default.createElement(
                         'div',
-                        null,
+                        { className: 'info-modal-data__rebate-info__title' },
                         'Rebates Applied:'
                     ),
                     _react2.default.createElement(
                         'div',
                         null,
-                        '' + _util2.default.moneyFormat(this.state.dealBestOffer.totalValue || this.state.dealBestOffer.cash.totalValue)
+                        '' + _util2.default.moneyFormat(this.state.dealBestOffer.totalValue)
                     )
                 ),
+                this.state.dealBestOffer.programs.map(function (program, index) {
+                    return _react2.default.createElement(
+                        'div',
+                        {
+                            className: 'info-modal-data__rebate-info info-modal-data__costs',
+                            key: index
+                        },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'info-modal-data__rebate-info__title' },
+                            _strings2.default.toTitleCase(program.title)
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            '' + _util2.default.moneyFormat(program.value)
+                        )
+                    );
+                }),
                 _react2.default.createElement(
                     'div',
                     { className: 'info-modal-data__more-rebates info-modal-data__costs' },
@@ -57895,14 +57919,11 @@ var InfoModalData = function (_React$PureComponent) {
                         null,
                         _react2.default.createElement(
                             'a',
-                            {
-                                onClick: function onClick() {
+                            { onClick: function onClick() {
                                     _this2.props.selectDeal(_this2.props.deal);
 
                                     _this2.props.closeModal();
-                                },
-                                href: '#'
-                            },
+                                }, href: '#' },
                             'Get Rebates'
                         )
                     )
@@ -58092,7 +58113,7 @@ var InfoModalData = function (_React$PureComponent) {
                                 )
                             ),
                             this.props.selectedTab === 'cash' ? '' : this.renderPaymentDefaults(),
-                            this.renderAppliedRebatesLink()
+                            this.state.dealBestOffer ? this.renderAppliedRebatesLink() : 'Loading Applied Rebates...'
                         ),
                         _react2.default.createElement('hr', null),
                         _react2.default.createElement(
@@ -61732,9 +61753,9 @@ var reducer = function reducer(state, action) {
                 zipInRange: action.supported
             });
         case ActionTypes.RECEIVE_BEST_OFFER:
-            return Object.assign({}, state, {
-                dealBestOffer: action.data
-            });
+            return Object.assign({}, state, { dealBestOffer: action.data });
+        case ActionTypes.CLEAR_BEST_OFFER:
+            return Object.assign({}, state, { dealBestOffer: null });
     }
 
     return state;

@@ -34,6 +34,10 @@ class InfoModalData extends React.PureComponent {
         this.props.requestBestOffer(this.props.deal);
     }
 
+    componentWillUnmount() {
+        this.props.clearBestOffer();
+    }
+
     targetsAreNotLoaded() {
         return (
             !this.props.dealTargets.hasOwnProperty(this.props.deal.id) &&
@@ -72,7 +76,10 @@ class InfoModalData extends React.PureComponent {
             case 'finance': {
                 return Math.round(
                     formulas.calculateFinancedMonthlyPayments(
-                        util.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee),
+                        util.getEmployeeOrSupplierPrice(
+                            this.props.deal,
+                            this.props.isEmployee
+                        ),
                         this.props.downPayment,
                         this.props.termDuration
                     )
@@ -84,20 +91,7 @@ class InfoModalData extends React.PureComponent {
                         util.getEmployeeOrSupplierPrice(
                             this.props.deal,
                             this.props.isEmployee
-                        ) -
-                            R.sum(
-                                [0]
-                                /* @todo: sum from api or whatever
-                                R.map(
-                                    R.prop('value'),
-                                    rebates.getSelectedTargetsForDeal(
-                                        this.props.dealTargets,
-                                        this.props.selectedTargets,
-                                        this.props.deal
-                                    )
-                                )
-                                */
-                            ),
+                        ) - selectedAmount,
                         0,
                         0,
                         this.props.termDuration,
@@ -130,31 +124,41 @@ class InfoModalData extends React.PureComponent {
             // R.map(R.prop('value'), this.state.selectedTargets)
         );
 
-        return (
-            <div>
+        return <div>
                 <div className="info-modal-data__rebate-info info-modal-data__costs info-modal-data__bold">
-                    <div>{`Rebates Applied:`}</div>
-                    <div>{`${util.moneyFormat(
-                        this.state.dealBestOffer.totalValue || this.state.dealBestOffer.cash.totalValue
-                    )}`}</div>
+                    <div className="info-modal-data__rebate-info__title">{`Rebates Applied:`}</div>
+                    <div>{`${util.moneyFormat(this.state.dealBestOffer.totalValue)}`}</div>
                 </div>
+                {this.state.dealBestOffer.programs.map(
+                    (program, index) => {
+                        return (
+                            <div
+                                className="info-modal-data__rebate-info info-modal-data__costs"
+                                key={index}
+                            >
+                                <div className="info-modal-data__rebate-info__title">
+                                    {strings.toTitleCase(program.title)}
+                                </div>
+                                <div>{`${util.moneyFormat(
+                                    program.value
+                                )}`}</div>
+                            </div>
+                        );
+                    }
+                )}
 
                 <div className="info-modal-data__more-rebates info-modal-data__costs">
                     <div>
-                        <a
-                            onClick={() => {
+                        <a onClick={() => {
                                 this.props.selectDeal(this.props.deal);
 
                                 this.props.closeModal();
-                            }}
-                            href="#"
-                        >
+                            }} href="#">
                             Get Rebates
                         </a>
                     </div>
                 </div>
-            </div>
-        );
+            </div>;
     }
 
     renderPaymentDefaults() {
@@ -282,7 +286,9 @@ class InfoModalData extends React.PureComponent {
                                 ? ''
                                 : this.renderPaymentDefaults()}
 
-                            {this.renderAppliedRebatesLink()}
+                            {this.state.dealBestOffer
+                                ? this.renderAppliedRebatesLink()
+                                : 'Loading Applied Rebates...'}
                         </div>
 
                         <hr />

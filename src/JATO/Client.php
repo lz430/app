@@ -6,6 +6,7 @@ use Facades\App\JATO\Log;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\JsonResponse;
 
 class Client
 {
@@ -149,11 +150,16 @@ class Client
 
     public function targetsByVehicleIdAndZipcode($vehicleId, $zipcode)
     {
-        return $this->get("incentives/bestOffer/$vehicleId/targets", [
-            'query' => [
-                'zipCode' => $zipcode,
-            ]
-        ]);
+        try {
+            return $this->get("incentives/bestOffer/$vehicleId/targets", [
+                'query' => [
+                    'zipCode' => $zipcode,
+                ]
+            ]);
+        } catch (ClientException $e) {
+            Log::debug("Unable to get targets for Vehicle ID $vehicleId. URL: incentives/bestOffer/$vehicleId/targets");
+        }
+
     }
 
     public function bestOffer($vehicleId, $paymentType, $zipcode, $targets)
@@ -167,7 +173,7 @@ class Client
             ]);
         } catch (ClientException $e) {
             Log::debug("Vehicle ID $vehicleId returns no Best Offers. URL: incentives/bestOffer/$vehicleId/$paymentType?zipCode=$zipcode&targets=$targets");
-            return [];
+            return JsonResponse::create(['totalValue' => 0, 'programs' => []]);
         }
     }
 

@@ -1170,6 +1170,10 @@ body {
   text-decoration: underline;
 }
 
+.info-modal-data__rebate-info__title {
+  text-align: left;
+}
+
 .sortbar {
   border-bottom: 1px solid #ccc;
   display: -webkit-box;

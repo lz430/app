@@ -18,13 +18,25 @@ class DealBestOfferTest extends TestCase
     {
         $deal = factory(Deal::class)->create();
         $deal->versions()->save(factory(Version::class)->make());
-
+        // ['payment_type' => 'somethingelse', 'zipcode' => '48203', 'targets' => '25,26']
         // Must have proper payment type
-        $response = $this->getJson(route('deals.best-offer', $deal->id), ['payment_type' => 'somethingelse', 'zipcode' => '48203', 'targets' => '25,26']);
+        $response = $this->json('GET', route('deals.best-offer', $deal->id), ['payment_type' => 'somethingelse', 'zipcode' => '48203', 'targets' => [25, 26]]);
         $response->assertJsonValidationErrors(['payment_type']);
 
         // Must have a zip code
-        $response = $this->getJson(route('deals.best-offer', $deal->id), ['payment_type' => 'cash', 'targets' => '25,26']);
+        $response = $this->json('GET', route('deals.best-offer', $deal->id), ['payment_type' => 'cash', 'targets' => [25, 26]]);
         $response->assertJsonValidationErrors(['zipcode']);
+    }
+
+    /** @test */
+    public function it_returns_a_total_value_of_0_if_no_best_offers_found()
+    {
+        $deal = factory(Deal::class)->create();
+        $deal->versions()->save(factory(Version::class)->make());
+
+
+        $response = $this->json('GET', route('deals.best-offer', $deal->id), ['payment_type' => 'cash', 'targets' => [25,26], 'zipcode' => '99999']);
+
+        $response->assertJsonFragment(['totalValue' => 0]);
     }
 }
