@@ -12,36 +12,32 @@ import InfoModal from 'components/InfoModal';
 class DealPrice extends React.PureComponent {
     constructor(props) {
         super(props);
-
-        this.state = {
-            availableTargets: null,
-        };
     }
 
-    componentDidMount() {
-        if (
-            !this.props.dealTargets.hasOwnProperty(this.props.deal.id) &&
-            this.props.zipcode
-        ) {
-            this.requestTargets();
-        } else {
-            this.componentWillReceiveProps(this.props);
-        }
-    }
+    // componentDidMount() {
+    //     if (
+    //         !this.props.dealTargets.hasOwnProperty(this.props.deal.id) &&
+    //         this.props.zipcode
+    //     ) {
+    //         this.requestTargets();
+    //     } else {
+    //         this.componentWillReceiveProps(this.props);
+    //     }
+    // }
 
-    requestTargets() {
-        this.props.requestTargets(this.props.deal);
-    }
+    // requestTargets() {
+    //     this.props.requestTargets(this.props.deal);
+    // }
 
-    componentWillReceiveProps(props) {
-        if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
-            return this.props.requestTargets(this.props.deal);
-        }
+    // componentWillReceiveProps(props) {
+    //     if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
+    //         return this.props.requestTargets(this.props.deal);
+    //     }
 
-        this.setState({
-            availableTargets: props.dealTargets[props.deal.id] || [],
-        });
-    }
+    //     this.setState({
+    //         availableTargets: props.dealTargets[props.deal.id] || [],
+    //     });
+    // }
 
     renderPriceExplanationModal() {
         return <InfoModal deal={this.props.deal} />;
@@ -172,9 +168,6 @@ class DealPrice extends React.PureComponent {
     }
 
     renderAppliedTargetsLink() {
-        if (!this.state.availableTargets) {
-            return <SVGInline svg={miscicons['loading']} />;
-        }
         return (
             <div className="deal-price__rebates-applied">
                 <SVGInline

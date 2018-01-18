@@ -7,9 +7,22 @@ import rebates from 'src/rebates';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
 import formulas from 'src/formulas';
+import SVGInline from 'react-svg-inline';
+import miscicons from 'miscicons';
 
 class CashCalculator extends React.PureComponent {
+    componentWillMount() {
+        this.props.requestTargets(this.props.deal);
+        this.props.requestBestOffer(this.props.deal);
+    }
+    componentWillUnmount() {
+        this.props.clearBestOffer();
+    }
+
     render() {
+        const bestOfferTotalValue = this.props.dealBestOffer
+            ? this.props.dealBestOffer.totalValue
+            : 0;
         return (
             <div>
                 Cash Price{' '}
@@ -21,8 +34,13 @@ class CashCalculator extends React.PureComponent {
                 )}
                 <CustomerTypeSelect deal={this.props.deal} />
                 <hr />
-                <h4>Some text here about picking yoour target</h4>
-                <Targets />
+                <h4>Some text here about picking your target</h4>
+                <Targets
+                    targetsChanged={this.props.requestBestOffer.bind(
+                        this,
+                        this.props.deal
+                    )}
+                />
                 <hr />
                 <h4>Summary</h4>
                 <div>
@@ -73,19 +91,13 @@ class CashCalculator extends React.PureComponent {
                     </div>
                     <div>
                         <span className="cash-finance-lease-calculator__left-item">
-                            Some text here about yoour targets
+                            Some text here about your targets
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {util.moneyFormat(
-                                R.sum(
-                                    [0]
-                                    /* @todo fix to pull this info from the api or whatever
-                                    R.map(
-                                        R.prop('value'),
-                                        this.props.selectedTargets
-                                    )
-                                    */
-                                )
+                            {this.props.dealBestOffer ? (
+                                util.moneyFormat(bestOfferTotalValue)
+                            ) : (
+                                <SVGInline svg={miscicons['loading']} />
                             )}
                         </span>
                     </div>
@@ -102,12 +114,7 @@ class CashCalculator extends React.PureComponent {
                                     ),
                                     this.props.deal.doc_fee,
                                     this.props.downPayment,
-                                    R.sum(
-                                        R.map(
-                                            R.prop('value'),
-                                            this.props.selectedTargets
-                                        )
-                                    )
+                                    bestOfferTotalValue
                                 )
                             )}
                         </span>
@@ -123,11 +130,7 @@ function mapStateToProps(state) {
         deal: state.selectedDeal,
         downPayment: state.downPayment,
         employeeBrand: state.employeeBrand,
-        selectedTargets: rebates.getSelectedTargetsForDeal(
-            state.dealTargets,
-            state.selectedTargets,
-            state.selectedDeal
-        ),
+        dealBestOffer: state.dealBestOffer,
     };
 }
 

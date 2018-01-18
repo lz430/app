@@ -636,6 +636,7 @@ export function updateResidualPercent(residualPercent) {
 
 export function requestBestOffer(deal) {
     return (dispatch, getState) => {
+        dispatch(clearBestOffer());
         const OPEN_OFFER = 25;
         const payment_type = getState().selectedTab;
         const zipcode = getState().zipcode;

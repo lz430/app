@@ -11,23 +11,13 @@ import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 
 class FinanceCalculator extends React.PureComponent {
-    constructor(props) {
-        super(props);
+    componentWillMount() {
+        this.props.requestTargets(this.props.deal);
+        this.props.requestBestOffer(this.props.deal);
     }
 
-    componentWillReceiveProps(props) {
-        if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
-            return this.props.requestTargets(this.props.deal);
-        }
-
-        this.setState({
-            availableTargets: props.dealTargets[props.deal.id] || [],
-            selectedTargets: rebates.getSelectedTargetsForDeal(
-                props.dealTargets,
-                props.selectedTargets,
-                props.deal
-            ),
-        });
+    componentWillUnmount() {
+        this.props.clearBestOffer();
     }
 
     updateDownPayment(e) {
@@ -38,8 +28,14 @@ class FinanceCalculator extends React.PureComponent {
         this.props.updateTermDuration(Number(e.target.value));
     }
 
+    bestOfferTotalValue() {
+        return this.props.dealBestOffer.totalValue
+            ? this.props.dealBestOffer.totalValue
+            : 0;
+    }
+
     getTotalVehicleCost() {
-        return this.props.availableTargets
+        return this.props.dealBestOffer
             ? formulas.calculateTotalCashFinance(
                   util.getEmployeeOrSupplierPrice(
                       this.props.deal,
@@ -47,14 +43,13 @@ class FinanceCalculator extends React.PureComponent {
                   ),
                   this.props.deal.doc_fee,
                   0,
-                  9999 // @todo update to pull from api or whatever
-                  // R.sum(R.map(R.prop('value'), this.props.selectedTargets))
+                  this.bestOfferTotalValue()
               )
             : null;
     }
 
     getAmountToFinance() {
-        return this.props.availableTargets
+        return this.props.dealBestOffer
             ? formulas.calculateTotalCashFinance(
                   util.getEmployeeOrSupplierPrice(
                       this.props.deal,
@@ -62,8 +57,7 @@ class FinanceCalculator extends React.PureComponent {
                   ),
                   this.props.deal.doc_fee,
                   this.props.downPayment,
-                  9999 // @todo update to pull from api or whatever
-                  // R.sum(R.map(R.prop('value'), this.props.selectedTargets))
+                  this.bestOfferTotalValue()
               )
             : null;
     }
@@ -94,18 +88,8 @@ class FinanceCalculator extends React.PureComponent {
                     Some text here about your target
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.props.availableTargets ? (
-                        util.moneyFormat(
-                            R.sum(
-                                [9999] // @todo update to pull from api or whatever
-                                /*
-                                R.map(
-                                    R.prop('value'),
-                                    this.props.selectedTargets
-                                )
-                                */
-                            )
-                        )
+                    {this.props.dealBestOffer ? (
+                        util.moneyFormat(this.bestOfferTotalValue())
                     ) : (
                         <SVGInline svg={miscicons['loading']} />
                     )}
@@ -173,7 +157,12 @@ class FinanceCalculator extends React.PureComponent {
                 <CustomerTypeSelect deal={this.props.deal} />
                 <hr />
                 <h4>Available Rebates and Incentives</h4>
-                <Targets />
+                <Targets
+                    targetsChanged={this.props.requestBestOffer.bind(
+                        this,
+                        this.props.deal
+                    )}
+                />
                 <hr />
                 <h4>Summary</h4>
                 <div>
@@ -282,8 +271,7 @@ function mapStateToProps(state) {
         deal: state.selectedDeal,
         termDuration: state.termDuration,
         employeeBrand: state.employeeBrand,
-        dealTargets: state.dealTargets,
-        selectedTargets: state.selectedTargets,
+        dealBestOffer: state.dealBestOffer,
     };
 }
 
