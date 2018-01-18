@@ -124,7 +124,7 @@ class FilterPanel extends React.PureComponent {
                             onSelectSegment={this.props.chooseSegment}
                         />
                     </SidebarFilter>
-                    <div className="sidebar-filters__section-header sidebar-filters__filter-title">
+                    <div className="sidebar-filters__header sidebar-filters__filter-title">
                         <p>Features & Options</p>
                     </div>
                     { this.renderSidebarFilters() }
