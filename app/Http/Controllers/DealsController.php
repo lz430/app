@@ -10,10 +10,8 @@ class DealsController extends Controller
 {
     public function show(int $id)
     {
-        $deal = Deal::with('features')->with(['photos' => function ($query) {
-            $query->orderBy('id')->limit(7);
-        },])->with('versions.equipment')->findOrFail($id);
-        
+        $deal = Deal::with('features')->with('photos')->with('versions.equipment')->findOrFail($id);
+
         $title = "$deal->year $deal->make $deal->model $deal->series";
 
         $dealTransformed = fractal($deal)
