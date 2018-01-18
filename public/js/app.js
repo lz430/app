@@ -54437,6 +54437,82 @@ var FilterPanel = function (_React$PureComponent) {
                             onSelectStyle: this.props.toggleStyle
                         })
                     ),
+                    _react2.default.createElement(
+                        _SidebarFilter2.default,
+                        {
+                            toggle: function toggle() {
+                                return _this3.toggleOpenFilter('Make');
+                            },
+                            open: this.state.openFilter === 'Make',
+                            title: 'Vehicle Brand',
+                            count: this.props.selectedMakes.length
+                        },
+                        _react2.default.createElement(_FilterMakeSelector2.default, {
+                            makes: this.props.makes,
+                            selectedMakes: this.props.selectedMakes,
+                            onSelectMake: this.props.toggleMake
+                        })
+                    ),
+                    _react2.default.createElement(
+                        _SidebarFilter2.default,
+                        {
+                            toggle: function toggle() {
+                                return _this3.toggleOpenFilter('Model');
+                            },
+                            open: this.state.openFilter === 'Model',
+                            title: 'Vehicle Model'
+                        },
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(
+                                'p',
+                                null,
+                                'Placeholder Text'
+                            )
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _SidebarFilter2.default,
+                        {
+                            toggle: function toggle() {
+                                return _this3.toggleOpenFilter('Vehicle Style');
+                            },
+                            open: this.state.openFilter === 'Vehicle Style',
+                            title: 'Vehicle Style',
+                            count: this.props.selectedStyles.length
+                        },
+                        _react2.default.createElement(_FilterStyleSelector2.default, {
+                            styles: this.props.bodyStyles,
+                            selectedStyles: this.props.selectedStyles,
+                            onSelectStyle: this.props.toggleStyle
+                        })
+                    ),
+                    _react2.default.createElement(
+                        _SidebarFilter2.default,
+                        {
+                            toggle: function toggle() {
+                                return _this3.toggleOpenFilter('Vehicle Segment');
+                            },
+                            open: this.state.openFilter === 'Vehicle Segment',
+                            title: 'Vehicle Class',
+                            count: this.props.selectedSegment ? 1 : 0
+                        },
+                        _react2.default.createElement(_FilterSegmentSelector2.default, {
+                            segments: this.props.segments,
+                            selectedSegment: this.props.selectedSegment,
+                            onSelectSegment: this.props.chooseSegment
+                        })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'sidebar-filters__section-header sidebar-filters__filter-title' },
+                        _react2.default.createElement(
+                            'p',
+                            null,
+                            'Features & Options'
+                        )
+                    ),
                     this.renderSidebarFilters()
                 )
             );

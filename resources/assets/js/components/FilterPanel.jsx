@@ -80,6 +80,27 @@ class FilterPanel extends React.PureComponent {
 
                 <div className="sidebar-filters">
                     <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Make')}
+                        open={this.state.openFilter === 'Make'}
+                        title="Vehicle Brand"
+                        count={this.props.selectedMakes.length}
+                    >
+                        <FilterMakeSelector
+                            makes={this.props.makes}
+                            selectedMakes={this.props.selectedMakes}
+                            onSelectMake={this.props.toggleMake}
+                        />
+                    </SidebarFilter>
+                    <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Model')}
+                        open={this.state.openFilter === 'Model'}
+                        title="Vehicle Model"
+                    >
+                        <div>
+                            <p>Placeholder Text</p>
+                        </div>
+                    </SidebarFilter>
+                    <SidebarFilter
                         toggle={() => this.toggleOpenFilter('Vehicle Style')}
                         open={this.state.openFilter === 'Vehicle Style'}
                         title="Vehicle Style"
@@ -91,6 +112,21 @@ class FilterPanel extends React.PureComponent {
                             onSelectStyle={this.props.toggleStyle}
                         />
                     </SidebarFilter>
+                    <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Vehicle Segment')}
+                        open={this.state.openFilter === 'Vehicle Segment'}
+                        title="Vehicle Class"
+                        count={this.props.selectedSegment ? 1 : 0}
+                    >
+                        <FilterSegmentSelector
+                            segments={this.props.segments}
+                            selectedSegment={this.props.selectedSegment}
+                            onSelectSegment={this.props.chooseSegment}
+                        />
+                    </SidebarFilter>
+                    <div className="sidebar-filters__section-header sidebar-filters__filter-title">
+                        <p>Features & Options</p>
+                    </div>
                     { this.renderSidebarFilters() }
                 </div>
             </div>
