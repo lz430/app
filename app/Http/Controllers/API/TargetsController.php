@@ -11,7 +11,11 @@ use Illuminate\Support\Facades\Cache;
 class TargetsController extends Controller
 {
     use ValidatesRequests;
+
     const CACHE_LENGTH = 1440;
+    const TARGET_BLACKLIST = [
+        49 // Direct/Private Offer Recipient
+    ];
 
     public function getTargets(Client $client)
     {
@@ -21,17 +25,19 @@ class TargetsController extends Controller
         ]);
 
         $targets = Cache::remember($this->getCacheKey(), self::CACHE_LENGTH, function () use ($client) {
-            // @todo consider filtering out targets based on this list from rudy:
-            /*
-                Trade-in allowance
-                Early Bird allowance
-                First payment waiver
-                Dealer cash
-             */
-            return $client->targetsByVehicleIdAndZipcode(
+            $response = $client->targetsByVehicleIdAndZipcode(
                 $this->vehicleIdByVin(request('vin')),
                 request('zipcode')
             );
+
+            $filteredTargets = [];
+            foreach($response as $key => $target) {
+                if(!in_array($target['targetId'], self::TARGET_BLACKLIST)) {
+                    $filteredTargets[] = $target;
+                }
+            }
+
+            return $filteredTargets;
         });
 
         return response()->json([

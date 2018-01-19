@@ -14,9 +14,24 @@ class Targets extends React.PureComponent {
         super(props);
     }
 
+    componentWillMount() {
+        if (this.targetsNotLoaded()) {
+            this.props.requestTargets(this.props.deal);
+        }
+    }
+
+    targetsNotLoaded() {
+        return R.isEmpty(this.props.dealTargets[this.props.deal.id]);
+    }
+
     // All Targets that are available to be selected for a specific deal
     availableTargets() {
         return this.props.dealTargets[this.props.deal.id] || [];
+    }
+
+    toggle(target) {
+        this.props.toggleTarget(target);
+        this.props.targetsChanged();
     }
 
     renderTarget(target, index) {
@@ -35,7 +50,7 @@ class Targets extends React.PureComponent {
         return (
             <div
                 key={index}
-                onClick={this.props.toggleTarget.bind(this, target)}
+                onClick={this.toggle.bind(this, target)}
                 className={`rebates__rebate`}
             >
                 {isSelected ? (
@@ -57,14 +72,17 @@ class Targets extends React.PureComponent {
 
     render() {
         return (
-            <div className="rebates">
-                {this.props ? (
-                    this.availableTargets().map((target, index) =>
-                        this.renderTarget(target, index)
-                    )
-                ) : (
-                    <SVGInline svg={miscicons['loading']} />
-                )}
+            <div>
+                <h4>Select </h4>
+                <div className="rebates">
+                    {this.props ? (
+                        this.availableTargets().map((target, index) =>
+                            this.renderTarget(target, index)
+                        )
+                    ) : (
+                        <SVGInline svg={miscicons['loading']} />
+                    )}
+                </div>
             </div>
         );
     }
@@ -73,17 +91,14 @@ class Targets extends React.PureComponent {
 function mapStateToProps(state) {
     return {
         zipcode: state.zipcode,
-        deal: state.selectedDeal,
         dealTargets: state.dealTargets,
         selectedTargets: state.selectedTargets,
     };
 }
 
 Targets.propTypes = {
-    zipcode: PropTypes.string.isRequired,
     deal: PropTypes.object.isRequired,
-    dealTargets: PropTypes.object.isRequired,
-    selectedTargets: PropTypes.array.isRequired,
+    targetsChanged: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, Actions)(Targets);

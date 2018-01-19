@@ -505,10 +505,6 @@ export function requestLocationInfo() {
                 if (err) {
                     dispatch(requestDeals());
                 } else {
-                    window.axios
-                        .post('/hubspot', { zip: data.zip_code })
-                        .catch(e => console.log('hubspot error', e));
-
                     dispatch(receiveLocationInfo(data));
                 }
             });

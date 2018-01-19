@@ -34,8 +34,8 @@ class CashCalculator extends React.PureComponent {
                 )}
                 <CustomerTypeSelect deal={this.props.deal} />
                 <hr />
-                <h4>Some text here about picking your target</h4>
                 <Targets
+                    deal={this.props.deal}
                     targetsChanged={this.props.requestBestOffer.bind(
                         this,
                         this.props.deal

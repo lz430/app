@@ -394,6 +394,7 @@ class LeaseCalculator extends React.PureComponent {
                     ''
                 )} */}
                 <Targets
+                    deal={this.props.deal}
                     targetsChanged={this.props.requestBestOffer.bind(
                         this,
                         this.props.deal

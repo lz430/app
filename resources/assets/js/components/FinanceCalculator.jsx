@@ -158,6 +158,7 @@ class FinanceCalculator extends React.PureComponent {
                 <hr />
                 <h4>Available Rebates and Incentives</h4>
                 <Targets
+                    deal={this.props.deal}
                     targetsChanged={this.props.requestBestOffer.bind(
                         this,
                         this.props.deal

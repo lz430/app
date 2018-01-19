@@ -103,8 +103,8 @@ module.exports = function _curry2(fn) {
 
 var global = __webpack_require__(8);
 var core = __webpack_require__(51);
-var hide = __webpack_require__(33);
-var redefine = __webpack_require__(34);
+var hide = __webpack_require__(34);
+var redefine = __webpack_require__(35);
 var ctx = __webpack_require__(46);
 var PROTOTYPE = 'prototype';
 
@@ -565,7 +565,7 @@ module.exports = {
   liftN: __webpack_require__(309),
   lt: __webpack_require__(804),
   lte: __webpack_require__(805),
-  map: __webpack_require__(37),
+  map: __webpack_require__(38),
   mapAccum: __webpack_require__(806),
   mapAccumRight: __webpack_require__(807),
   mapObjIndexed: __webpack_require__(808),
@@ -702,6 +702,165 @@ module.exports = {
 
 /***/ }),
 /* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(17);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__(899);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// import styles from "./styles"
+
+var cleanups = {
+  // some useless stuff for us
+  // that svgo doesn't remove
+  title: /<title>.*<\/title>/gi,
+  desc: /<desc>.*<\/desc>/gi,
+  comment: /<!--.*-->/gi,
+  defs: /<defs>.*<\/defs>/gi,
+
+  // remove hardcoded dimensions
+  width: / +width="\d+(\.\d+)?(px)?"/gi,
+  height: / +height="\d+(\.\d+)?(px)?"/gi,
+
+  // remove fill
+  fill: / +fill=\"(none|#[0-9a-f]+)\"/gi,
+
+  // Sketch.app shit
+  sketchMSShapeGroup: / +sketch:type=\"MSShapeGroup\"/gi,
+  sketchMSPage: / +sketch:type=\"MSPage\"/gi,
+  sketchMSLayerGroup: / +sketch:type=\"MSLayerGroup\"/gi
+};
+
+// @styled(styles)
+
+var SVGInline = function (_Component) {
+  _inherits(SVGInline, _Component);
+
+  function SVGInline() {
+    _classCallCheck(this, SVGInline);
+
+    return _possibleConstructorReturn(this, (SVGInline.__proto__ || Object.getPrototypeOf(SVGInline)).apply(this, arguments));
+  }
+
+  _createClass(SVGInline, [{
+    key: "render",
+    value: function render() {
+      var _props = this.props,
+          className = _props.className,
+          component = _props.component,
+          svg = _props.svg,
+          fill = _props.fill,
+          width = _props.width,
+          classSuffix = _props.classSuffix,
+          cleanupExceptions = _props.cleanupExceptions,
+          componentProps = _objectWithoutProperties(_props, ["className", "component", "svg", "fill", "width", "classSuffix", "cleanupExceptions"]);
+
+      var _props2 = this.props,
+          cleanup = _props2.cleanup,
+          height = _props2.height;
+
+
+      if (
+      // simple way to enable entire cleanup
+      cleanup === true ||
+      // passing cleanupExceptions enable cleanup as well
+      cleanup.length === 0 && cleanupExceptions.length > 0) {
+        cleanup = Object.keys(cleanups);
+      }
+      cleanup = cleanup.filter(function (key) {
+        return !(cleanupExceptions.indexOf(key) > -1);
+      });
+
+      if (width && height === undefined) {
+        height = width;
+      }
+
+      // remove useless props for wrapper
+      delete componentProps.cleanup;
+      delete componentProps.height;
+
+      var classes = (0, _classnames2.default)(_defineProperty({
+        "SVGInline": true,
+        "SVGInline--cleaned": cleanup.length
+      }, className, className));
+      var svgClasses = classes.split(" ").join(classSuffix + " ") + classSuffix;
+
+      return _react2.default.createElement(component, _extends({}, componentProps, { // take most props
+        className: classes,
+        dangerouslySetInnerHTML: {
+          __html: SVGInline.cleanupSvg(svg, cleanup).replace(/<svg/, "<svg class=\"" + svgClasses + "\"" + (fill ? " fill=\"" + fill + "\"" : "") + (width || height ? " style=\"" + (width ? "width: " + width + ";" : "") + (height ? "height: " + height + ";" : "") + "\"" : ""))
+        }
+      }));
+    }
+  }]);
+
+  return SVGInline;
+}(_react.Component);
+
+SVGInline.propTypes = {
+  className: _propTypes2.default.string,
+  classSuffix: _propTypes2.default.string,
+  component: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
+  svg: _propTypes2.default.string.isRequired,
+  fill: _propTypes2.default.string,
+  cleanup: _propTypes2.default.oneOfType([_propTypes2.default.bool, _propTypes2.default.array]),
+  cleanupExceptions: _propTypes2.default.array,
+  width: _propTypes2.default.string,
+  height: _propTypes2.default.string
+};
+
+SVGInline.defaultProps = {
+  component: "span",
+  classSuffix: "-svg",
+  cleanup: [],
+  cleanupExceptions: []
+};
+
+SVGInline.cleanupSvg = function (svg) {
+  var cleanup = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
+  return Object.keys(cleanups).filter(function (key) {
+    return cleanup.indexOf(key) > -1;
+  }).reduce(function (acc, key) {
+    return acc.replace(cleanups[key], "");
+  }, svg).trim();
+};
+
+exports.default = SVGInline;
+
+/***/ }),
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -720,7 +879,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1228,10 +1387,6 @@ function requestLocationInfo() {
                 if (err) {
                     dispatch(requestDeals());
                 } else {
-                    window.axios.post('/hubspot', { zip: data.zip_code }).catch(function (e) {
-                        return console.log('hubspot error', e);
-                    });
-
                     dispatch(receiveLocationInfo(data));
                 }
             });
@@ -1355,6 +1510,7 @@ function updateResidualPercent(residualPercent) {
 
 function requestBestOffer(deal) {
     return function (dispatch, getState) {
+        dispatch(clearBestOffer());
         var OPEN_OFFER = 25;
         var payment_type = getState().selectedTab;
         var zipcode = getState().zipcode;
@@ -1389,7 +1545,7 @@ function clearBestOffer() {
 }
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var store = __webpack_require__(117)('wks');
@@ -1404,165 +1560,6 @@ var $exports = module.exports = function (name) {
 
 $exports.store = store;
 
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(4);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__(17);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _classnames = __webpack_require__(899);
-
-var _classnames2 = _interopRequireDefault(_classnames);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-// import styles from "./styles"
-
-var cleanups = {
-  // some useless stuff for us
-  // that svgo doesn't remove
-  title: /<title>.*<\/title>/gi,
-  desc: /<desc>.*<\/desc>/gi,
-  comment: /<!--.*-->/gi,
-  defs: /<defs>.*<\/defs>/gi,
-
-  // remove hardcoded dimensions
-  width: / +width="\d+(\.\d+)?(px)?"/gi,
-  height: / +height="\d+(\.\d+)?(px)?"/gi,
-
-  // remove fill
-  fill: / +fill=\"(none|#[0-9a-f]+)\"/gi,
-
-  // Sketch.app shit
-  sketchMSShapeGroup: / +sketch:type=\"MSShapeGroup\"/gi,
-  sketchMSPage: / +sketch:type=\"MSPage\"/gi,
-  sketchMSLayerGroup: / +sketch:type=\"MSLayerGroup\"/gi
-};
-
-// @styled(styles)
-
-var SVGInline = function (_Component) {
-  _inherits(SVGInline, _Component);
-
-  function SVGInline() {
-    _classCallCheck(this, SVGInline);
-
-    return _possibleConstructorReturn(this, (SVGInline.__proto__ || Object.getPrototypeOf(SVGInline)).apply(this, arguments));
-  }
-
-  _createClass(SVGInline, [{
-    key: "render",
-    value: function render() {
-      var _props = this.props,
-          className = _props.className,
-          component = _props.component,
-          svg = _props.svg,
-          fill = _props.fill,
-          width = _props.width,
-          classSuffix = _props.classSuffix,
-          cleanupExceptions = _props.cleanupExceptions,
-          componentProps = _objectWithoutProperties(_props, ["className", "component", "svg", "fill", "width", "classSuffix", "cleanupExceptions"]);
-
-      var _props2 = this.props,
-          cleanup = _props2.cleanup,
-          height = _props2.height;
-
-
-      if (
-      // simple way to enable entire cleanup
-      cleanup === true ||
-      // passing cleanupExceptions enable cleanup as well
-      cleanup.length === 0 && cleanupExceptions.length > 0) {
-        cleanup = Object.keys(cleanups);
-      }
-      cleanup = cleanup.filter(function (key) {
-        return !(cleanupExceptions.indexOf(key) > -1);
-      });
-
-      if (width && height === undefined) {
-        height = width;
-      }
-
-      // remove useless props for wrapper
-      delete componentProps.cleanup;
-      delete componentProps.height;
-
-      var classes = (0, _classnames2.default)(_defineProperty({
-        "SVGInline": true,
-        "SVGInline--cleaned": cleanup.length
-      }, className, className));
-      var svgClasses = classes.split(" ").join(classSuffix + " ") + classSuffix;
-
-      return _react2.default.createElement(component, _extends({}, componentProps, { // take most props
-        className: classes,
-        dangerouslySetInnerHTML: {
-          __html: SVGInline.cleanupSvg(svg, cleanup).replace(/<svg/, "<svg class=\"" + svgClasses + "\"" + (fill ? " fill=\"" + fill + "\"" : "") + (width || height ? " style=\"" + (width ? "width: " + width + ";" : "") + (height ? "height: " + height + ";" : "") + "\"" : ""))
-        }
-      }));
-    }
-  }]);
-
-  return SVGInline;
-}(_react.Component);
-
-SVGInline.propTypes = {
-  className: _propTypes2.default.string,
-  classSuffix: _propTypes2.default.string,
-  component: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.func]),
-  svg: _propTypes2.default.string.isRequired,
-  fill: _propTypes2.default.string,
-  cleanup: _propTypes2.default.oneOfType([_propTypes2.default.bool, _propTypes2.default.array]),
-  cleanupExceptions: _propTypes2.default.array,
-  width: _propTypes2.default.string,
-  height: _propTypes2.default.string
-};
-
-SVGInline.defaultProps = {
-  component: "span",
-  classSuffix: "-svg",
-  cleanup: [],
-  cleanupExceptions: []
-};
-
-SVGInline.cleanupSvg = function (svg) {
-  var cleanup = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-
-  return Object.keys(cleanups).filter(function (key) {
-    return cleanup.indexOf(key) > -1;
-  }).reduce(function (acc, key) {
-    return acc.replace(cleanups[key], "");
-  }, svg).trim();
-};
-
-exports.default = SVGInline;
 
 /***/ }),
 /* 17 */
@@ -2263,6 +2260,18 @@ module.exports = function _has(prop, obj) {
 
 /***/ }),
 /* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = { "binoculars": "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n\t\t viewBox=\"0 0 26.2 26\" style=\"enable-background:new 0 0 26.2 26;\" xml:space=\"preserve\">\n\t<style type=\"text/css\">\n\t\t.st0{fill:#D0CFD0;}\n\t</style>\n\t<g>\n\t\t<path class=\"st0\" d=\"M9,3.8H7.5c-0.9,0-1.6-0.7-1.6-1.6v-2h4.7v2C10.6,3.1,9.8,3.8,9,3.8z\"/>\n\t\t<path class=\"st0\" d=\"M18.7,3.8h-1.5c-0.9,0-1.6-0.7-1.6-1.6v-2h4.7v2C20.3,3.1,19.5,3.8,18.7,3.8z\"/>\n\t\t<path class=\"st0\" d=\"M13.4,15.1h-0.6c-0.7,0-1.2-0.5-1.2-1.2v-9h3.1l0,9C14.6,14.6,14,15.1,13.4,15.1z\"/>\n\t\t<path class=\"st0\" d=\"M9.8,16.5l-0.4,0.2l-0.1,8.1c0,0.6-0.5,1-1,1H1.2c-0.6,0-1.1-0.5-1.1-1.1l0-7.6L3.6,5.7\n\t\t\tc0.1-0.5,0.6-0.8,1.1-0.8h5.9v10.5C10.6,15.9,10.3,16.3,9.8,16.5z\"/>\n\t\t<path class=\"st0\" d=\"M16.3,16.5l0.4,0.2l0.1,8.1c0,0.6,0.5,1,1,1h7.2c0.6,0,1.1-0.5,1.1-1.1l0-7.6L22.6,5.7\n\t\t\tc-0.1-0.5-0.6-0.8-1.1-0.8h-5.9v10.5C15.6,15.9,15.8,16.3,16.3,16.5z\"/>\n\t</g>\n</svg>\n", "loading": "<div class=\"loading\" title=\"5\">\n    <svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n     width=\"24px\" height=\"30px\" viewBox=\"0 0 24 30\" style=\"enable-background:new 0 0 50 50;\" xml:space=\"preserve\">\n    <rect x=\"0\" y=\"13\" width=\"4\" height=\"5\" fill=\"#333\">\n      <animate attributeName=\"height\" attributeType=\"XML\"\n        values=\"5;21;5\"\n        begin=\"0s\" dur=\"0.6s\" repeatCount=\"indefinite\" />\n      <animate attributeName=\"y\" attributeType=\"XML\"\n        values=\"13; 5; 13\"\n        begin=\"0s\" dur=\"0.6s\" repeatCount=\"indefinite\" />\n    </rect>\n    <rect x=\"10\" y=\"13\" width=\"4\" height=\"5\" fill=\"#333\">\n      <animate attributeName=\"height\" attributeType=\"XML\"\n        values=\"5;21;5\"\n        begin=\"0.15s\" dur=\"0.6s\" repeatCount=\"indefinite\" />\n      <animate attributeName=\"y\" attributeType=\"XML\"\n        values=\"13; 5; 13\"\n        begin=\"0.15s\" dur=\"0.6s\" repeatCount=\"indefinite\" />\n    </rect>\n    <rect x=\"20\" y=\"13\" width=\"4\" height=\"5\" fill=\"#333\">\n      <animate attributeName=\"height\" attributeType=\"XML\"\n        values=\"5;21;5\"\n        begin=\"0.3s\" dur=\"0.6s\" repeatCount=\"indefinite\" />\n      <animate attributeName=\"y\" attributeType=\"XML\"\n        values=\"13; 5; 13\"\n        begin=\"0.3s\" dur=\"0.6s\" repeatCount=\"indefinite\" />\n    </rect>\n  </svg>\n</div>", "tag": "<svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 51.91 52.58\">\n  <defs>\n    <style>\n      .cls-1 {\n        fill: #999;\n      }\n    </style>\n  </defs>\n  <title>TagIcon</title>\n  <path class=\"cls-1\" d=\"M1.2,4.66a4.4,4.4,0,0,1,1-2.37,3.61,3.61,0,0,1,1.55-.88,2.78,2.78,0,0,1,.76-.09H20.27s2.68-.22,3.87,1L50.08,28.22a3.81,3.81,0,0,1,.4.5,4.21,4.21,0,0,1,.72,2.07,6.38,6.38,0,0,1-.74,3.1,3,3,0,0,1-.49.63L34.11,50.38a4.93,4.93,0,0,1-3.34.94,5.11,5.11,0,0,1-3.57-1.16L2.47,24.51a3,3,0,0,1-.72-1.21,10.64,10.64,0,0,1-.55-3.2ZM12,7.23a4.63,4.63,0,1,0,4.63,4.62A4.62,4.62,0,0,0,12,7.23Z\"/>\n</svg>\n" };
+
+/***/ }),
+/* 33 */
 /***/ (function(module, exports) {
 
 var hasOwnProperty = {}.hasOwnProperty;
@@ -2272,7 +2281,7 @@ module.exports = function (it, key) {
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var dP = __webpack_require__(20);
@@ -2286,12 +2295,12 @@ module.exports = __webpack_require__(19) ? function (object, key, value) {
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(8);
-var hide = __webpack_require__(33);
-var has = __webpack_require__(32);
+var hide = __webpack_require__(34);
+var has = __webpack_require__(33);
 var SRC = __webpack_require__(74)('src');
 var TO_STRING = 'toString';
 var $toString = Function[TO_STRING];
@@ -2323,7 +2332,7 @@ __webpack_require__(51).inspectSource = function (it) {
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(1);
@@ -2348,7 +2357,7 @@ module.exports = function (NAME, exec) {
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2732,7 +2741,7 @@ var ReactComponentTreeHook = {
 module.exports = ReactComponentTreeHook;
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
@@ -2797,18 +2806,6 @@ module.exports = _curry2(_dispatchable(['fantasy-land/map', 'map'], _xmap, funct
 
 
 /***/ }),
-/* 38 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = { "binoculars": "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n\t\t viewBox=\"0 0 26.2 26\" style=\"enable-background:new 0 0 26.2 26;\" xml:space=\"preserve\">\n\t<style type=\"text/css\">\n\t\t.st0{fill:#D0CFD0;}\n\t</style>\n\t<g>\n\t\t<path class=\"st0\" d=\"M9,3.8H7.5c-0.9,0-1.6-0.7-1.6-1.6v-2h4.7v2C10.6,3.1,9.8,3.8,9,3.8z\"/>\n\t\t<path class=\"st0\" d=\"M18.7,3.8h-1.5c-0.9,0-1.6-0.7-1.6-1.6v-2h4.7v2C20.3,3.1,19.5,3.8,18.7,3.8z\"/>\n\t\t<path class=\"st0\" d=\"M13.4,15.1h-0.6c-0.7,0-1.2-0.5-1.2-1.2v-9h3.1l0,9C14.6,14.6,14,15.1,13.4,15.1z\"/>\n\t\t<path class=\"st0\" d=\"M9.8,16.5l-0.4,0.2l-0.1,8.1c0,0.6-0.5,1-1,1H1.2c-0.6,0-1.1-0.5-1.1-1.1l0-7.6L3.6,5.7\n\t\t\tc0.1-0.5,0.6-0.8,1.1-0.8h5.9v10.5C10.6,15.9,10.3,16.3,9.8,16.5z\"/>\n\t\t<path class=\"st0\" d=\"M16.3,16.5l0.4,0.2l0.1,8.1c0,0.6,0.5,1,1,1h7.2c0.6,0,1.1-0.5,1.1-1.1l0-7.6L22.6,5.7\n\t\t\tc-0.1-0.5-0.6-0.8-1.1-0.8h-5.9v10.5C15.6,15.9,15.8,16.3,16.3,16.5z\"/>\n\t</g>\n</svg>\n", "loading": "<div class=\"loading\" title=\"5\">\n    <svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n     width=\"24px\" height=\"30px\" viewBox=\"0 0 24 30\" style=\"enable-background:new 0 0 50 50;\" xml:space=\"preserve\">\n    <rect x=\"0\" y=\"13\" width=\"4\" height=\"5\" fill=\"#333\">\n      <animate attributeName=\"height\" attributeType=\"XML\"\n        values=\"5;21;5\"\n        begin=\"0s\" dur=\"0.6s\" repeatCount=\"indefinite\" />\n      <animate attributeName=\"y\" attributeType=\"XML\"\n        values=\"13; 5; 13\"\n        begin=\"0s\" dur=\"0.6s\" repeatCount=\"indefinite\" />\n    </rect>\n    <rect x=\"10\" y=\"13\" width=\"4\" height=\"5\" fill=\"#333\">\n      <animate attributeName=\"height\" attributeType=\"XML\"\n        values=\"5;21;5\"\n        begin=\"0.15s\" dur=\"0.6s\" repeatCount=\"indefinite\" />\n      <animate attributeName=\"y\" attributeType=\"XML\"\n        values=\"13; 5; 13\"\n        begin=\"0.15s\" dur=\"0.6s\" repeatCount=\"indefinite\" />\n    </rect>\n    <rect x=\"20\" y=\"13\" width=\"4\" height=\"5\" fill=\"#333\">\n      <animate attributeName=\"height\" attributeType=\"XML\"\n        values=\"5;21;5\"\n        begin=\"0.3s\" dur=\"0.6s\" repeatCount=\"indefinite\" />\n      <animate attributeName=\"y\" attributeType=\"XML\"\n        values=\"13; 5; 13\"\n        begin=\"0.3s\" dur=\"0.6s\" repeatCount=\"indefinite\" />\n    </rect>\n  </svg>\n</div>", "tag": "<svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 51.91 52.58\">\n  <defs>\n    <style>\n      .cls-1 {\n        fill: #999;\n      }\n    </style>\n  </defs>\n  <title>TagIcon</title>\n  <path class=\"cls-1\" d=\"M1.2,4.66a4.4,4.4,0,0,1,1-2.37,3.61,3.61,0,0,1,1.55-.88,2.78,2.78,0,0,1,.76-.09H20.27s2.68-.22,3.87,1L50.08,28.22a3.81,3.81,0,0,1,.4.5,4.21,4.21,0,0,1,.72,2.07,6.38,6.38,0,0,1-.74,3.1,3,3,0,0,1-.49.63L34.11,50.38a4.93,4.93,0,0,1-3.34.94,5.11,5.11,0,0,1-3.57-1.16L2.47,24.51a3,3,0,0,1-.72-1.21,10.64,10.64,0,0,1-.55-3.2ZM12,7.23a4.63,4.63,0,1,0,4.63,4.62A4.62,4.62,0,0,0,12,7.23Z\"/>\n</svg>\n" };
-
-/***/ }),
 /* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2828,7 +2825,7 @@ var pIE = __webpack_require__(104);
 var createDesc = __webpack_require__(73);
 var toIObject = __webpack_require__(39);
 var toPrimitive = __webpack_require__(52);
-var has = __webpack_require__(32);
+var has = __webpack_require__(33);
 var IE8_DOM_DEFINE = __webpack_require__(226);
 var gOPD = Object.getOwnPropertyDescriptor;
 
@@ -2847,7 +2844,7 @@ exports.f = __webpack_require__(19) ? gOPD : function getOwnPropertyDescriptor(O
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-var has = __webpack_require__(32);
+var has = __webpack_require__(33);
 var toObject = __webpack_require__(24);
 var IE_PROTO = __webpack_require__(160)('IE_PROTO');
 var ObjectProto = Object.prototype;
@@ -4066,14 +4063,14 @@ if (__webpack_require__(19)) {
   var ctx = __webpack_require__(46);
   var anInstance = __webpack_require__(81);
   var propertyDesc = __webpack_require__(73);
-  var hide = __webpack_require__(33);
+  var hide = __webpack_require__(34);
   var redefineAll = __webpack_require__(83);
   var toInteger = __webpack_require__(54);
   var toLength = __webpack_require__(21);
   var toIndex = __webpack_require__(252);
   var toAbsoluteIndex = __webpack_require__(77);
   var toPrimitive = __webpack_require__(52);
-  var has = __webpack_require__(32);
+  var has = __webpack_require__(33);
   var classof = __webpack_require__(105);
   var isObject = __webpack_require__(11);
   var toObject = __webpack_require__(24);
@@ -4083,7 +4080,7 @@ if (__webpack_require__(19)) {
   var gOPN = __webpack_require__(79).f;
   var getIterFn = __webpack_require__(176);
   var uid = __webpack_require__(74);
-  var wks = __webpack_require__(15);
+  var wks = __webpack_require__(16);
   var createArrayMethod = __webpack_require__(56);
   var createArrayIncludes = __webpack_require__(118);
   var speciesConstructor = __webpack_require__(125);
@@ -4871,7 +4868,7 @@ function getPooledWarningPropertyDefinition(propName, getVal) {
 
 var META = __webpack_require__(74)('meta');
 var isObject = __webpack_require__(11);
-var has = __webpack_require__(32);
+var has = __webpack_require__(33);
 var setDesc = __webpack_require__(20).f;
 var id = 0;
 var isExtensible = Object.isExtensible || function () {
@@ -4929,9 +4926,9 @@ var meta = module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 // 22.1.3.31 Array.prototype[@@unscopables]
-var UNSCOPABLES = __webpack_require__(15)('unscopables');
+var UNSCOPABLES = __webpack_require__(16)('unscopables');
 var ArrayProto = Array.prototype;
-if (ArrayProto[UNSCOPABLES] == undefined) __webpack_require__(33)(ArrayProto, UNSCOPABLES, {});
+if (ArrayProto[UNSCOPABLES] == undefined) __webpack_require__(34)(ArrayProto, UNSCOPABLES, {});
 module.exports = function (key) {
   ArrayProto[UNSCOPABLES][key] = true;
 };
@@ -5466,7 +5463,7 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
 var global = __webpack_require__(8);
 var dP = __webpack_require__(20);
 var DESCRIPTORS = __webpack_require__(19);
-var SPECIES = __webpack_require__(15)('species');
+var SPECIES = __webpack_require__(16)('species');
 
 module.exports = function (KEY) {
   var C = global[KEY];
@@ -5523,7 +5520,7 @@ exports.RETURN = RETURN;
 /* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var redefine = __webpack_require__(34);
+var redefine = __webpack_require__(35);
 module.exports = function (target, src, safe) {
   for (var key in src) redefine(target, key, src[key], safe);
   return target;
@@ -6079,8 +6076,8 @@ exports.default = strings;
 /***/ (function(module, exports, __webpack_require__) {
 
 var def = __webpack_require__(20).f;
-var has = __webpack_require__(32);
-var TAG = __webpack_require__(15)('toStringTag');
+var has = __webpack_require__(33);
+var TAG = __webpack_require__(16)('toStringTag');
 
 module.exports = function (it, tag, stat) {
   if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
@@ -6887,7 +6884,7 @@ var _ramda = __webpack_require__(12);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -6895,9 +6892,9 @@ var _zondicons = __webpack_require__(27);
 
 var _zondicons2 = _interopRequireDefault(_zondicons);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _actions = __webpack_require__(14);
+var _actions = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_actions);
 
@@ -6926,6 +6923,16 @@ var Modal = function (_React$Component) {
     }
 
     _createClass(Modal, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this._mounted = true;
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            this._mounted = false;
+        }
+    }, {
         key: 'animate',
         value: function animate() {
             var _this2 = this;
@@ -6934,7 +6941,11 @@ var Modal = function (_React$Component) {
                 animating: true
             }, function () {
                 setTimeout(function () {
-                    return _this2.setState({ animating: false });
+                    if (_this2._mounted) {
+                        _this2.setState({
+                            animating: false
+                        });
+                    }
                 }, 800);
             });
         }
@@ -6967,7 +6978,8 @@ var Modal = function (_React$Component) {
 
             return _react2.default.createElement(
                 'div',
-                { className: 'modal',
+                {
+                    className: 'modal',
                     onClick: function onClick(e) {
                         return _this3.closeIfOverlayClick(e, _this3.props.onClose);
                     }
@@ -7161,7 +7173,7 @@ exports.f = {}.propertyIsEnumerable;
 
 // getting tag from 19.1.3.6 Object.prototype.toString()
 var cof = __webpack_require__(47);
-var TAG = __webpack_require__(15)('toStringTag');
+var TAG = __webpack_require__(16)('toStringTag');
 // ES3 wrong here
 var ARG = cof(function () { return arguments; }()) == 'Arguments';
 
@@ -7722,7 +7734,7 @@ module.exports = ReactInstanceMap;
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var map = __webpack_require__(37);
+var map = __webpack_require__(38);
 var prop = __webpack_require__(203);
 
 
@@ -8036,7 +8048,7 @@ module.exports = Array.isArray || function isArray(arg) {
 // 7.2.8 IsRegExp(argument)
 var isObject = __webpack_require__(11);
 var cof = __webpack_require__(47);
-var MATCH = __webpack_require__(15)('match');
+var MATCH = __webpack_require__(16)('match');
 module.exports = function (it) {
   var isRegExp;
   return isObject(it) && ((isRegExp = it[MATCH]) !== undefined ? !!isRegExp : cof(it) == 'RegExp');
@@ -8047,7 +8059,7 @@ module.exports = function (it) {
 /* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var ITERATOR = __webpack_require__(15)('iterator');
+var ITERATOR = __webpack_require__(16)('iterator');
 var SAFE_CLOSING = false;
 
 try {
@@ -8097,11 +8109,11 @@ module.exports = function () {
 
 "use strict";
 
-var hide = __webpack_require__(33);
-var redefine = __webpack_require__(34);
+var hide = __webpack_require__(34);
+var redefine = __webpack_require__(35);
 var fails = __webpack_require__(9);
 var defined = __webpack_require__(53);
-var wks = __webpack_require__(15);
+var wks = __webpack_require__(16);
 
 module.exports = function (KEY, length, exec) {
   var SYMBOL = wks(KEY);
@@ -8133,7 +8145,7 @@ module.exports = function (KEY, length, exec) {
 // 7.3.20 SpeciesConstructor(O, defaultConstructor)
 var anObject = __webpack_require__(7);
 var aFunction = __webpack_require__(29);
-var SPECIES = __webpack_require__(15)('species');
+var SPECIES = __webpack_require__(16)('species');
 module.exports = function (O, D) {
   var C = anObject(O).constructor;
   var S;
@@ -8149,7 +8161,7 @@ module.exports = function (O, D) {
 
 var global = __webpack_require__(8);
 var $export = __webpack_require__(1);
-var redefine = __webpack_require__(34);
+var redefine = __webpack_require__(35);
 var redefineAll = __webpack_require__(83);
 var meta = __webpack_require__(66);
 var forOf = __webpack_require__(82);
@@ -8238,7 +8250,7 @@ module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(8);
-var hide = __webpack_require__(33);
+var hide = __webpack_require__(34);
 var uid = __webpack_require__(74);
 var TYPED = uid('typed_array');
 var VIEW = uid('view');
@@ -10054,7 +10066,7 @@ module.exports = _curry1(function flip(fn) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var map = __webpack_require__(37);
+var map = __webpack_require__(38);
 
 
 /**
@@ -10247,9 +10259,9 @@ var _LeaseCalculator = __webpack_require__(955);
 
 var _LeaseCalculator2 = _interopRequireDefault(_LeaseCalculator);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _actions = __webpack_require__(14);
+var _actions = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_actions);
 
@@ -10624,14 +10636,14 @@ module.exports = function (TO_STRING) {
 
 var LIBRARY = __webpack_require__(75);
 var $export = __webpack_require__(1);
-var redefine = __webpack_require__(34);
-var hide = __webpack_require__(33);
-var has = __webpack_require__(32);
+var redefine = __webpack_require__(35);
+var hide = __webpack_require__(34);
+var has = __webpack_require__(33);
 var Iterators = __webpack_require__(91);
 var $iterCreate = __webpack_require__(171);
 var setToStringTag = __webpack_require__(89);
 var getPrototypeOf = __webpack_require__(41);
-var ITERATOR = __webpack_require__(15)('iterator');
+var ITERATOR = __webpack_require__(16)('iterator');
 var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
 var FF_ITERATOR = '@@iterator';
 var KEYS = 'keys';
@@ -10705,7 +10717,7 @@ var setToStringTag = __webpack_require__(89);
 var IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-__webpack_require__(33)(IteratorPrototype, __webpack_require__(15)('iterator'), function () { return this; });
+__webpack_require__(34)(IteratorPrototype, __webpack_require__(16)('iterator'), function () { return this; });
 
 module.exports = function (Constructor, NAME, next) {
   Constructor.prototype = create(IteratorPrototype, { next: descriptor(1, next) });
@@ -10731,7 +10743,7 @@ module.exports = function (that, searchString, NAME) {
 /* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var MATCH = __webpack_require__(15)('match');
+var MATCH = __webpack_require__(16)('match');
 module.exports = function (KEY) {
   var re = /./;
   try {
@@ -10751,7 +10763,7 @@ module.exports = function (KEY) {
 
 // check on default Array iterator
 var Iterators = __webpack_require__(91);
-var ITERATOR = __webpack_require__(15)('iterator');
+var ITERATOR = __webpack_require__(16)('iterator');
 var ArrayProto = Array.prototype;
 
 module.exports = function (it) {
@@ -10779,7 +10791,7 @@ module.exports = function (object, index, value) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var classof = __webpack_require__(105);
-var ITERATOR = __webpack_require__(15)('iterator');
+var ITERATOR = __webpack_require__(16)('iterator');
 var Iterators = __webpack_require__(91);
 module.exports = __webpack_require__(51).getIteratorMethod = function (it) {
   if (it != undefined) return it[ITERATOR]
@@ -11062,7 +11074,7 @@ var global = __webpack_require__(8);
 var DESCRIPTORS = __webpack_require__(19);
 var LIBRARY = __webpack_require__(75);
 var $typed = __webpack_require__(127);
-var hide = __webpack_require__(33);
+var hide = __webpack_require__(34);
 var redefineAll = __webpack_require__(83);
 var fails = __webpack_require__(9);
 var anInstance = __webpack_require__(81);
@@ -13353,7 +13365,7 @@ module.exports = _curry2(function prop(p, obj) { return obj[p]; });
 var _concat = __webpack_require__(50);
 var _curry2 = __webpack_require__(0);
 var _reduce = __webpack_require__(44);
-var map = __webpack_require__(37);
+var map = __webpack_require__(38);
 
 
 /**
@@ -13416,7 +13428,7 @@ var _curry2 = __webpack_require__(0);
 var _dispatchable = __webpack_require__(23);
 var _makeFlat = __webpack_require__(310);
 var _xchain = __webpack_require__(719);
-var map = __webpack_require__(37);
+var map = __webpack_require__(38);
 
 
 /**
@@ -14026,9 +14038,9 @@ var _DealPrice = __webpack_require__(937);
 
 var _DealPrice2 = _interopRequireDefault(_DealPrice);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _index = __webpack_require__(14);
+var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -14155,13 +14167,13 @@ var _ramda = __webpack_require__(12);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _actions = __webpack_require__(14);
+var _actions = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_actions);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -14173,7 +14185,7 @@ var _strings = __webpack_require__(88);
 
 var _strings2 = _interopRequireDefault(_strings);
 
-var _miscicons = __webpack_require__(38);
+var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
@@ -14200,13 +14212,31 @@ var Targets = function (_React$PureComponent) {
         return _possibleConstructorReturn(this, (Targets.__proto__ || Object.getPrototypeOf(Targets)).call(this, props));
     }
 
-    // All Targets that are available to be selected for a specific deal
-
-
     _createClass(Targets, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            if (this.targetsNotLoaded()) {
+                this.props.requestTargets(this.props.deal);
+            }
+        }
+    }, {
+        key: 'targetsNotLoaded',
+        value: function targetsNotLoaded() {
+            return _ramda2.default.isEmpty(this.props.dealTargets[this.props.deal.id]);
+        }
+
+        // All Targets that are available to be selected for a specific deal
+
+    }, {
         key: 'availableTargets',
         value: function availableTargets() {
             return this.props.dealTargets[this.props.deal.id] || [];
+        }
+    }, {
+        key: 'toggle',
+        value: function toggle(target) {
+            this.props.toggleTarget(target);
+            this.props.targetsChanged();
         }
     }, {
         key: 'renderTarget',
@@ -14218,7 +14248,7 @@ var Targets = function (_React$PureComponent) {
                 'div',
                 {
                     key: index,
-                    onClick: this.props.toggleTarget.bind(this, target),
+                    onClick: this.toggle.bind(this, target),
                     className: 'rebates__rebate'
                 },
                 isSelected ? _react2.default.createElement(_reactSvgInline2.default, {
@@ -14241,10 +14271,19 @@ var Targets = function (_React$PureComponent) {
 
             return _react2.default.createElement(
                 'div',
-                { className: 'rebates' },
-                this.props ? this.availableTargets().map(function (target, index) {
-                    return _this2.renderTarget(target, index);
-                }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                null,
+                _react2.default.createElement(
+                    'h4',
+                    null,
+                    'Select '
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'rebates' },
+                    this.props ? this.availableTargets().map(function (target, index) {
+                        return _this2.renderTarget(target, index);
+                    }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                )
             );
         }
     }]);
@@ -14255,17 +14294,14 @@ var Targets = function (_React$PureComponent) {
 function mapStateToProps(state) {
     return {
         zipcode: state.zipcode,
-        deal: state.selectedDeal,
         dealTargets: state.dealTargets,
         selectedTargets: state.selectedTargets
     };
 }
 
 Targets.propTypes = {
-    zipcode: _propTypes2.default.string.isRequired,
     deal: _propTypes2.default.object.isRequired,
-    dealTargets: _propTypes2.default.object.isRequired,
-    selectedTargets: _propTypes2.default.array.isRequired
+    targetsChanged: _propTypes2.default.func.isRequired
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(Targets);
@@ -14287,13 +14323,13 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _index = __webpack_require__(14);
+var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -14390,14 +14426,14 @@ module.exports = !__webpack_require__(19) && !__webpack_require__(9)(function ()
 /* 227 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports.f = __webpack_require__(15);
+exports.f = __webpack_require__(16);
 
 
 /***/ }),
 /* 228 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var has = __webpack_require__(32);
+var has = __webpack_require__(33);
 var toIObject = __webpack_require__(39);
 var arrayIndexOf = __webpack_require__(118)(false);
 var IE_PROTO = __webpack_require__(160)('IE_PROTO');
@@ -14987,7 +15023,7 @@ module.exports = __webpack_require__(126)(SET, function (get) {
 "use strict";
 
 var each = __webpack_require__(56)(0);
-var redefine = __webpack_require__(34);
+var redefine = __webpack_require__(35);
 var meta = __webpack_require__(66);
 var assign = __webpack_require__(231);
 var weak = __webpack_require__(251);
@@ -15059,7 +15095,7 @@ var isObject = __webpack_require__(11);
 var anInstance = __webpack_require__(81);
 var forOf = __webpack_require__(82);
 var createArrayMethod = __webpack_require__(56);
-var $has = __webpack_require__(32);
+var $has = __webpack_require__(33);
 var validate = __webpack_require__(92);
 var arrayFind = createArrayMethod(5);
 var arrayFindIndex = createArrayMethod(6);
@@ -15181,7 +15217,7 @@ var isArray = __webpack_require__(120);
 var isObject = __webpack_require__(11);
 var toLength = __webpack_require__(21);
 var ctx = __webpack_require__(46);
-var IS_CONCAT_SPREADABLE = __webpack_require__(15)('isConcatSpreadable');
+var IS_CONCAT_SPREADABLE = __webpack_require__(16)('isConcatSpreadable');
 
 function flattenIntoArray(target, original, source, sourceLen, start, depth, mapper, thisArg) {
   var targetIndex = start;
@@ -15924,7 +15960,7 @@ module.exports = getIteratorFn;
 
 
 var ReactCurrentOwner = __webpack_require__(57);
-var ReactComponentTreeHook = __webpack_require__(36);
+var ReactComponentTreeHook = __webpack_require__(37);
 var ReactElement = __webpack_require__(84);
 
 var checkReactTypeSpec = __webpack_require__(605);
@@ -19655,7 +19691,7 @@ var _curry2 = __webpack_require__(0);
 var _reduce = __webpack_require__(44);
 var ap = __webpack_require__(204);
 var curryN = __webpack_require__(30);
-var map = __webpack_require__(37);
+var map = __webpack_require__(38);
 
 
 /**
@@ -19860,7 +19896,7 @@ module.exports = function pipe() {
 
 var chain = __webpack_require__(206);
 var compose = __webpack_require__(208);
-var map = __webpack_require__(37);
+var map = __webpack_require__(38);
 
 
 /**
@@ -21243,7 +21279,7 @@ module.exports = _curry2(function times(fn, n) {
 
 var _curry2 = __webpack_require__(0);
 var ap = __webpack_require__(204);
-var map = __webpack_require__(37);
+var map = __webpack_require__(38);
 var prepend = __webpack_require__(347);
 var reduceRight = __webpack_require__(349);
 
@@ -22763,13 +22799,13 @@ var _util = __webpack_require__(28);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _actions = __webpack_require__(14);
+var _actions = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_actions);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -23552,7 +23588,7 @@ var _Financing = __webpack_require__(956);
 
 var _Financing2 = _interopRequireDefault(_Financing);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
 var _configureStore = __webpack_require__(957);
 
@@ -23916,16 +23952,16 @@ module.exports = __webpack_require__(51);
 
 // ECMAScript 6 symbols shim
 var global = __webpack_require__(8);
-var has = __webpack_require__(32);
+var has = __webpack_require__(33);
 var DESCRIPTORS = __webpack_require__(19);
 var $export = __webpack_require__(1);
-var redefine = __webpack_require__(34);
+var redefine = __webpack_require__(35);
 var META = __webpack_require__(66).KEY;
 var $fails = __webpack_require__(9);
 var shared = __webpack_require__(117);
 var setToStringTag = __webpack_require__(89);
 var uid = __webpack_require__(74);
-var wks = __webpack_require__(15);
+var wks = __webpack_require__(16);
 var wksExt = __webpack_require__(227);
 var wksDefine = __webpack_require__(159);
 var enumKeys = __webpack_require__(382);
@@ -24140,7 +24176,7 @@ $JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function () {
 });
 
 // 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
-$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(33)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(34)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
 // 19.4.3.5 Symbol.prototype[@@toStringTag]
 setToStringTag($Symbol, 'Symbol');
 // 20.2.1.9 Math[@@toStringTag]
@@ -24387,9 +24423,9 @@ $export($export.S, 'Object', { setPrototypeOf: __webpack_require__(163).set });
 // 19.1.3.6 Object.prototype.toString()
 var classof = __webpack_require__(105);
 var test = {};
-test[__webpack_require__(15)('toStringTag')] = 'z';
+test[__webpack_require__(16)('toStringTag')] = 'z';
 if (test + '' != '[object z]') {
-  __webpack_require__(34)(Object.prototype, 'toString', function toString() {
+  __webpack_require__(35)(Object.prototype, 'toString', function toString() {
     return '[object ' + classof(this) + ']';
   }, true);
 }
@@ -24435,7 +24471,7 @@ NAME in FProto || __webpack_require__(19) && dP(FProto, NAME, {
 
 var isObject = __webpack_require__(11);
 var getPrototypeOf = __webpack_require__(41);
-var HAS_INSTANCE = __webpack_require__(15)('hasInstance');
+var HAS_INSTANCE = __webpack_require__(16)('hasInstance');
 var FunctionProto = Function.prototype;
 // 19.2.3.6 Function.prototype[@@hasInstance](V)
 if (!(HAS_INSTANCE in FunctionProto)) __webpack_require__(20).f(FunctionProto, HAS_INSTANCE, { value: function (O) {
@@ -24474,7 +24510,7 @@ $export($export.G + $export.F * (parseFloat != $parseFloat), { parseFloat: $pars
 "use strict";
 
 var global = __webpack_require__(8);
-var has = __webpack_require__(32);
+var has = __webpack_require__(33);
 var cof = __webpack_require__(47);
 var inheritIfRequired = __webpack_require__(165);
 var toPrimitive = __webpack_require__(52);
@@ -24539,7 +24575,7 @@ if (!$Number(' 0o1') || !$Number('0b1') || $Number('+0x1')) {
   }
   $Number.prototype = proto;
   proto.constructor = $Number;
-  __webpack_require__(34)(global, NUMBER, $Number);
+  __webpack_require__(35)(global, NUMBER, $Number);
 }
 
 
@@ -25268,7 +25304,7 @@ $export($export.P + $export.F * __webpack_require__(173)(STARTS_WITH), 'String',
 "use strict";
 
 // B.2.3.2 String.prototype.anchor(name)
-__webpack_require__(35)('anchor', function (createHTML) {
+__webpack_require__(36)('anchor', function (createHTML) {
   return function anchor(name) {
     return createHTML(this, 'a', 'name', name);
   };
@@ -25282,7 +25318,7 @@ __webpack_require__(35)('anchor', function (createHTML) {
 "use strict";
 
 // B.2.3.3 String.prototype.big()
-__webpack_require__(35)('big', function (createHTML) {
+__webpack_require__(36)('big', function (createHTML) {
   return function big() {
     return createHTML(this, 'big', '', '');
   };
@@ -25296,7 +25332,7 @@ __webpack_require__(35)('big', function (createHTML) {
 "use strict";
 
 // B.2.3.4 String.prototype.blink()
-__webpack_require__(35)('blink', function (createHTML) {
+__webpack_require__(36)('blink', function (createHTML) {
   return function blink() {
     return createHTML(this, 'blink', '', '');
   };
@@ -25310,7 +25346,7 @@ __webpack_require__(35)('blink', function (createHTML) {
 "use strict";
 
 // B.2.3.5 String.prototype.bold()
-__webpack_require__(35)('bold', function (createHTML) {
+__webpack_require__(36)('bold', function (createHTML) {
   return function bold() {
     return createHTML(this, 'b', '', '');
   };
@@ -25324,7 +25360,7 @@ __webpack_require__(35)('bold', function (createHTML) {
 "use strict";
 
 // B.2.3.6 String.prototype.fixed()
-__webpack_require__(35)('fixed', function (createHTML) {
+__webpack_require__(36)('fixed', function (createHTML) {
   return function fixed() {
     return createHTML(this, 'tt', '', '');
   };
@@ -25338,7 +25374,7 @@ __webpack_require__(35)('fixed', function (createHTML) {
 "use strict";
 
 // B.2.3.7 String.prototype.fontcolor(color)
-__webpack_require__(35)('fontcolor', function (createHTML) {
+__webpack_require__(36)('fontcolor', function (createHTML) {
   return function fontcolor(color) {
     return createHTML(this, 'font', 'color', color);
   };
@@ -25352,7 +25388,7 @@ __webpack_require__(35)('fontcolor', function (createHTML) {
 "use strict";
 
 // B.2.3.8 String.prototype.fontsize(size)
-__webpack_require__(35)('fontsize', function (createHTML) {
+__webpack_require__(36)('fontsize', function (createHTML) {
   return function fontsize(size) {
     return createHTML(this, 'font', 'size', size);
   };
@@ -25366,7 +25402,7 @@ __webpack_require__(35)('fontsize', function (createHTML) {
 "use strict";
 
 // B.2.3.9 String.prototype.italics()
-__webpack_require__(35)('italics', function (createHTML) {
+__webpack_require__(36)('italics', function (createHTML) {
   return function italics() {
     return createHTML(this, 'i', '', '');
   };
@@ -25380,7 +25416,7 @@ __webpack_require__(35)('italics', function (createHTML) {
 "use strict";
 
 // B.2.3.10 String.prototype.link(url)
-__webpack_require__(35)('link', function (createHTML) {
+__webpack_require__(36)('link', function (createHTML) {
   return function link(url) {
     return createHTML(this, 'a', 'href', url);
   };
@@ -25394,7 +25430,7 @@ __webpack_require__(35)('link', function (createHTML) {
 "use strict";
 
 // B.2.3.11 String.prototype.small()
-__webpack_require__(35)('small', function (createHTML) {
+__webpack_require__(36)('small', function (createHTML) {
   return function small() {
     return createHTML(this, 'small', '', '');
   };
@@ -25408,7 +25444,7 @@ __webpack_require__(35)('small', function (createHTML) {
 "use strict";
 
 // B.2.3.12 String.prototype.strike()
-__webpack_require__(35)('strike', function (createHTML) {
+__webpack_require__(36)('strike', function (createHTML) {
   return function strike() {
     return createHTML(this, 'strike', '', '');
   };
@@ -25422,7 +25458,7 @@ __webpack_require__(35)('strike', function (createHTML) {
 "use strict";
 
 // B.2.3.13 String.prototype.sub()
-__webpack_require__(35)('sub', function (createHTML) {
+__webpack_require__(36)('sub', function (createHTML) {
   return function sub() {
     return createHTML(this, 'sub', '', '');
   };
@@ -25436,7 +25472,7 @@ __webpack_require__(35)('sub', function (createHTML) {
 "use strict";
 
 // B.2.3.14 String.prototype.sup()
-__webpack_require__(35)('sup', function (createHTML) {
+__webpack_require__(36)('sup', function (createHTML) {
   return function sup() {
     return createHTML(this, 'sup', '', '');
   };
@@ -25533,7 +25569,7 @@ var TO_STRING = 'toString';
 var $toString = DateProto[TO_STRING];
 var getTime = DateProto.getTime;
 if (new Date(NaN) + '' != INVALID_DATE) {
-  __webpack_require__(34)(DateProto, TO_STRING, function toString() {
+  __webpack_require__(35)(DateProto, TO_STRING, function toString() {
     var value = getTime.call(this);
     // eslint-disable-next-line no-self-compare
     return value === value ? $toString.call(this) : INVALID_DATE;
@@ -25545,10 +25581,10 @@ if (new Date(NaN) + '' != INVALID_DATE) {
 /* 462 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var TO_PRIMITIVE = __webpack_require__(15)('toPrimitive');
+var TO_PRIMITIVE = __webpack_require__(16)('toPrimitive');
 var proto = Date.prototype;
 
-if (!(TO_PRIMITIVE in proto)) __webpack_require__(33)(proto, TO_PRIMITIVE, __webpack_require__(463));
+if (!(TO_PRIMITIVE in proto)) __webpack_require__(34)(proto, TO_PRIMITIVE, __webpack_require__(463));
 
 
 /***/ }),
@@ -25755,7 +25791,7 @@ $export($export.P + $export.F * !STRICT, 'Array', {
 
 var isObject = __webpack_require__(11);
 var isArray = __webpack_require__(120);
-var SPECIES = __webpack_require__(15)('species');
+var SPECIES = __webpack_require__(16)('species');
 
 module.exports = function (original) {
   var C;
@@ -26016,7 +26052,7 @@ var re2 = /a/g;
 var CORRECT_NEW = new $RegExp(re1) !== re1;
 
 if (__webpack_require__(19) && (!CORRECT_NEW || __webpack_require__(9)(function () {
-  re2[__webpack_require__(15)('match')] = false;
+  re2[__webpack_require__(16)('match')] = false;
   // RegExp constructor can alter flags and IsRegExp works correct with @@match
   return $RegExp(re1) != re1 || $RegExp(re2) == re2 || $RegExp(re1, 'i') != '/a/i';
 }))) {
@@ -26040,7 +26076,7 @@ if (__webpack_require__(19) && (!CORRECT_NEW || __webpack_require__(9)(function 
   for (var keys = gOPN(Base), i = 0; keys.length > i;) proxy(keys[i++]);
   proto.constructor = $RegExp;
   $RegExp.prototype = proto;
-  __webpack_require__(34)(global, 'RegExp', $RegExp);
+  __webpack_require__(35)(global, 'RegExp', $RegExp);
 }
 
 __webpack_require__(80)('RegExp');
@@ -26060,7 +26096,7 @@ var TO_STRING = 'toString';
 var $toString = /./[TO_STRING];
 
 var define = function (fn) {
-  __webpack_require__(34)(RegExp.prototype, TO_STRING, fn, true);
+  __webpack_require__(35)(RegExp.prototype, TO_STRING, fn, true);
 };
 
 // 21.2.5.14 RegExp.prototype.toString()
@@ -26239,7 +26275,7 @@ var USE_NATIVE = !!function () {
   try {
     // correct subclassing with @@species support
     var promise = $Promise.resolve(1);
-    var FakePromise = (promise.constructor = {})[__webpack_require__(15)('species')] = function (exec) {
+    var FakePromise = (promise.constructor = {})[__webpack_require__(16)('species')] = function (exec) {
       exec(empty, empty);
     };
     // unhandled rejections tracking support, NodeJS Promise without it fails @@species test
@@ -26836,7 +26872,7 @@ $export($export.S, 'Reflect', {
 // 26.1.6 Reflect.get(target, propertyKey [, receiver])
 var gOPD = __webpack_require__(40);
 var getPrototypeOf = __webpack_require__(41);
-var has = __webpack_require__(32);
+var has = __webpack_require__(33);
 var $export = __webpack_require__(1);
 var isObject = __webpack_require__(11);
 var anObject = __webpack_require__(7);
@@ -26959,7 +26995,7 @@ $export($export.S, 'Reflect', {
 var dP = __webpack_require__(20);
 var gOPD = __webpack_require__(40);
 var getPrototypeOf = __webpack_require__(41);
-var has = __webpack_require__(32);
+var has = __webpack_require__(33);
 var $export = __webpack_require__(1);
 var createDesc = __webpack_require__(73);
 var anObject = __webpack_require__(7);
@@ -27906,12 +27942,12 @@ var $export = __webpack_require__(1);
 var global = __webpack_require__(8);
 var core = __webpack_require__(51);
 var microtask = __webpack_require__(181)();
-var OBSERVABLE = __webpack_require__(15)('observable');
+var OBSERVABLE = __webpack_require__(16)('observable');
 var aFunction = __webpack_require__(29);
 var anObject = __webpack_require__(7);
 var anInstance = __webpack_require__(81);
 var redefineAll = __webpack_require__(83);
-var hide = __webpack_require__(33);
+var hide = __webpack_require__(34);
 var forOf = __webpack_require__(82);
 var RETURN = forOf.RETURN;
 
@@ -28145,11 +28181,11 @@ $export($export.G + $export.B, {
 
 var $iterators = __webpack_require__(179);
 var getKeys = __webpack_require__(76);
-var redefine = __webpack_require__(34);
+var redefine = __webpack_require__(35);
 var global = __webpack_require__(8);
-var hide = __webpack_require__(33);
+var hide = __webpack_require__(34);
 var Iterators = __webpack_require__(91);
-var wks = __webpack_require__(15);
+var wks = __webpack_require__(16);
 var ITERATOR = wks('iterator');
 var TO_STRING_TAG = wks('toStringTag');
 var ArrayValues = Iterators.Array;
@@ -30618,7 +30654,7 @@ if (typeof process !== 'undefined' && Object({"NODE_ENV":"development"}) && "dev
   // https://github.com/facebook/react/issues/7240
   // Remove the inline requires when we don't need them anymore:
   // https://github.com/facebook/react/pull/7178
-  ReactComponentTreeHook = __webpack_require__(36);
+  ReactComponentTreeHook = __webpack_require__(37);
 }
 
 var loggedTypeFailures = {};
@@ -30660,7 +30696,7 @@ function checkReactTypeSpec(typeSpecs, values, location, componentName, element,
 
         if (true) {
           if (!ReactComponentTreeHook) {
-            ReactComponentTreeHook = __webpack_require__(36);
+            ReactComponentTreeHook = __webpack_require__(37);
           }
           if (debugID !== null) {
             componentStackInfo = ReactComponentTreeHook.getStackAddendumByID(debugID);
@@ -33188,7 +33224,7 @@ module.exports = ReactOwner;
 
 var ReactInvalidSetStateWarningHook = __webpack_require__(626);
 var ReactHostOperationHistoryHook = __webpack_require__(627);
-var ReactComponentTreeHook = __webpack_require__(36);
+var ReactComponentTreeHook = __webpack_require__(37);
 var ExecutionEnvironment = __webpack_require__(26);
 
 var performanceNow = __webpack_require__(628);
@@ -37289,7 +37325,7 @@ if (typeof process !== 'undefined' && Object({"NODE_ENV":"development"}) && "dev
   // https://github.com/facebook/react/issues/7240
   // Remove the inline requires when we don't need them anymore:
   // https://github.com/facebook/react/pull/7178
-  ReactComponentTreeHook = __webpack_require__(36);
+  ReactComponentTreeHook = __webpack_require__(37);
 }
 
 function instantiateChild(childInstances, child, name, selfDebugID) {
@@ -37297,7 +37333,7 @@ function instantiateChild(childInstances, child, name, selfDebugID) {
   var keyUnique = childInstances[name] === undefined;
   if (true) {
     if (!ReactComponentTreeHook) {
-      ReactComponentTreeHook = __webpack_require__(36);
+      ReactComponentTreeHook = __webpack_require__(37);
     }
     if (!keyUnique) {
        true ? warning(false, 'flattenChildren(...): Encountered two children with the same key, ' + '`%s`. Child keys must be unique; when two children share a key, only ' + 'the first child will be used.%s', KeyEscapeUtils.unescape(name), ReactComponentTreeHook.getStackAddendumByID(selfDebugID)) : void 0;
@@ -38353,7 +38389,7 @@ if (typeof process !== 'undefined' && Object({"NODE_ENV":"development"}) && "dev
   // https://github.com/facebook/react/issues/7240
   // Remove the inline requires when we don't need them anymore:
   // https://github.com/facebook/react/pull/7178
-  ReactComponentTreeHook = __webpack_require__(36);
+  ReactComponentTreeHook = __webpack_require__(37);
 }
 
 var loggedTypeFailures = {};
@@ -38395,7 +38431,7 @@ function checkReactTypeSpec(typeSpecs, values, location, componentName, element,
 
         if (true) {
           if (!ReactComponentTreeHook) {
-            ReactComponentTreeHook = __webpack_require__(36);
+            ReactComponentTreeHook = __webpack_require__(37);
           }
           if (debugID !== null) {
             componentStackInfo = ReactComponentTreeHook.getStackAddendumByID(debugID);
@@ -38570,7 +38606,7 @@ if (typeof process !== 'undefined' && Object({"NODE_ENV":"development"}) && "dev
   // https://github.com/facebook/react/issues/7240
   // Remove the inline requires when we don't need them anymore:
   // https://github.com/facebook/react/pull/7178
-  ReactComponentTreeHook = __webpack_require__(36);
+  ReactComponentTreeHook = __webpack_require__(37);
 }
 
 /**
@@ -38586,7 +38622,7 @@ function flattenSingleChildIntoContext(traverseContext, child, name, selfDebugID
     var keyUnique = result[name] === undefined;
     if (true) {
       if (!ReactComponentTreeHook) {
-        ReactComponentTreeHook = __webpack_require__(36);
+        ReactComponentTreeHook = __webpack_require__(37);
       }
       if (!keyUnique) {
          true ? warning(false, 'flattenChildren(...): Encountered two children with the same key, ' + '`%s`. Child keys must be unique; when two children share a key, only ' + 'the first child will be used.%s', KeyEscapeUtils.unescape(name), ReactComponentTreeHook.getStackAddendumByID(selfDebugID)) : void 0;
@@ -41680,7 +41716,7 @@ module.exports = ReactMount.renderSubtreeIntoContainer;
 
 var DOMProperty = __webpack_require__(68);
 var EventPluginRegistry = __webpack_require__(133);
-var ReactComponentTreeHook = __webpack_require__(36);
+var ReactComponentTreeHook = __webpack_require__(37);
 
 var warning = __webpack_require__(6);
 
@@ -41795,7 +41831,7 @@ module.exports = ReactDOMUnknownPropertyHook;
 
 
 
-var ReactComponentTreeHook = __webpack_require__(36);
+var ReactComponentTreeHook = __webpack_require__(37);
 
 var warning = __webpack_require__(6);
 
@@ -41844,7 +41880,7 @@ module.exports = ReactDOMNullInputValuePropHook;
 
 
 var DOMProperty = __webpack_require__(68);
-var ReactComponentTreeHook = __webpack_require__(36);
+var ReactComponentTreeHook = __webpack_require__(37);
 
 var warning = __webpack_require__(6);
 
@@ -41977,9 +42013,9 @@ var _FilterPanel = __webpack_require__(943);
 
 var _FilterPanel2 = _interopRequireDefault(_FilterPanel);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _index = __webpack_require__(14);
+var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -42575,7 +42611,7 @@ module.exports = _curry2(function append(el, list) {
 var _curry1 = __webpack_require__(2);
 var apply = __webpack_require__(305);
 var curryN = __webpack_require__(30);
-var map = __webpack_require__(37);
+var map = __webpack_require__(38);
 var max = __webpack_require__(99);
 var pluck = __webpack_require__(110);
 var reduce = __webpack_require__(61);
@@ -42792,7 +42828,7 @@ module.exports = curry(function call(fn) {
 
 var _curry2 = __webpack_require__(0);
 var _flatCat = __webpack_require__(720);
-var map = __webpack_require__(37);
+var map = __webpack_require__(38);
 
 
 module.exports = _curry2(function _xchain(f, xf) {
@@ -43337,7 +43373,7 @@ module.exports = (function() {
 
 var _arity = __webpack_require__(59);
 var _curry1 = __webpack_require__(2);
-var map = __webpack_require__(37);
+var map = __webpack_require__(38);
 var max = __webpack_require__(99);
 var reduce = __webpack_require__(61);
 
@@ -48706,7 +48742,7 @@ module.exports = _curry1(function transpose(outerlist) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry3 = __webpack_require__(3);
-var map = __webpack_require__(37);
+var map = __webpack_require__(38);
 var sequence = __webpack_require__(351);
 
 
@@ -49283,7 +49319,7 @@ module.exports = _curry3(function when(pred, whenTrueFn, x) {
 
 var _curry2 = __webpack_require__(0);
 var equals = __webpack_require__(45);
-var map = __webpack_require__(37);
+var map = __webpack_require__(38);
 var where = __webpack_require__(352);
 
 
@@ -51932,21 +51968,21 @@ var _propTypes = __webpack_require__(17);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
 var _ramda = __webpack_require__(12);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _index = __webpack_require__(14);
+var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
-var _miscicons = __webpack_require__(38);
+var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
@@ -52088,15 +52124,15 @@ var _ViewDeals = __webpack_require__(936);
 
 var _ViewDeals2 = _interopRequireDefault(_ViewDeals);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
-var _miscicons = __webpack_require__(38);
+var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52324,7 +52360,7 @@ var _ramda = __webpack_require__(12);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _actions = __webpack_require__(14);
+var _actions = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_actions);
 
@@ -52332,15 +52368,15 @@ var _Deal = __webpack_require__(223);
 
 var _Deal2 = _interopRequireDefault(_Deal);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
-var _miscicons = __webpack_require__(38);
+var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -52497,17 +52533,17 @@ var _formulas = __webpack_require__(101);
 
 var _formulas2 = _interopRequireDefault(_formulas);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _index = __webpack_require__(14);
+var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
-var _miscicons = __webpack_require__(38);
+var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
@@ -52531,40 +52567,35 @@ var DealPrice = function (_React$PureComponent) {
     function DealPrice(props) {
         _classCallCheck(this, DealPrice);
 
-        var _this = _possibleConstructorReturn(this, (DealPrice.__proto__ || Object.getPrototypeOf(DealPrice)).call(this, props));
-
-        _this.state = {
-            availableTargets: null
-        };
-        return _this;
+        return _possibleConstructorReturn(this, (DealPrice.__proto__ || Object.getPrototypeOf(DealPrice)).call(this, props));
     }
 
-    _createClass(DealPrice, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            if (!this.props.dealTargets.hasOwnProperty(this.props.deal.id) && this.props.zipcode) {
-                this.requestTargets();
-            } else {
-                this.componentWillReceiveProps(this.props);
-            }
-        }
-    }, {
-        key: 'requestTargets',
-        value: function requestTargets() {
-            this.props.requestTargets(this.props.deal);
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(props) {
-            if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
-                return this.props.requestTargets(this.props.deal);
-            }
+    // componentDidMount() {
+    //     if (
+    //         !this.props.dealTargets.hasOwnProperty(this.props.deal.id) &&
+    //         this.props.zipcode
+    //     ) {
+    //         this.requestTargets();
+    //     } else {
+    //         this.componentWillReceiveProps(this.props);
+    //     }
+    // }
 
-            this.setState({
-                availableTargets: props.dealTargets[props.deal.id] || []
-            });
-        }
-    }, {
+    // requestTargets() {
+    //     this.props.requestTargets(this.props.deal);
+    // }
+
+    // componentWillReceiveProps(props) {
+    //     if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
+    //         return this.props.requestTargets(this.props.deal);
+    //     }
+
+    //     this.setState({
+    //         availableTargets: props.dealTargets[props.deal.id] || [],
+    //     });
+    // }
+
+    _createClass(DealPrice, [{
         key: 'renderPriceExplanationModal',
         value: function renderPriceExplanationModal() {
             return _react2.default.createElement(_InfoModal2.default, { deal: this.props.deal });
@@ -52696,9 +52727,6 @@ var DealPrice = function (_React$PureComponent) {
         value: function renderAppliedTargetsLink() {
             var _this2 = this;
 
-            if (!this.state.availableTargets) {
-                return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
-            }
             return _react2.default.createElement(
                 'div',
                 { className: 'deal-price__rebates-applied' },
@@ -57601,7 +57629,7 @@ var _zondicons = __webpack_require__(27);
 
 var _zondicons2 = _interopRequireDefault(_zondicons);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -57715,17 +57743,17 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _index = __webpack_require__(14);
+var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
 var _formulas = __webpack_require__(101);
 
 var _formulas2 = _interopRequireDefault(_formulas);
 
-var _miscicons = __webpack_require__(38);
+var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
@@ -57749,7 +57777,7 @@ var _rebates = __webpack_require__(62);
 
 var _rebates2 = _interopRequireDefault(_rebates);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -58199,7 +58227,7 @@ var _propTypes = __webpack_require__(17);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -58207,9 +58235,9 @@ var _zondicons = __webpack_require__(27);
 
 var _zondicons2 = _interopRequireDefault(_zondicons);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _actions = __webpack_require__(14);
+var _actions = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_actions);
 
@@ -58409,7 +58437,7 @@ var _propTypes = __webpack_require__(17);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -58421,9 +58449,9 @@ var _ramda = __webpack_require__(12);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _actions = __webpack_require__(14);
+var _actions = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_actions);
 
@@ -58688,9 +58716,9 @@ var _FilterSegmentSelector = __webpack_require__(952);
 
 var _FilterSegmentSelector2 = _interopRequireDefault(_FilterSegmentSelector);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _index = __webpack_require__(14);
+var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -59027,7 +59055,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -59117,9 +59145,9 @@ var _propTypes = __webpack_require__(17);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _index = __webpack_require__(14);
+var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -59295,7 +59323,7 @@ var _ramda = __webpack_require__(12);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -59303,7 +59331,7 @@ var _bodyStyles = __webpack_require__(947);
 
 var _bodyStyles2 = _interopRequireDefault(_bodyStyles);
 
-var _miscicons = __webpack_require__(38);
+var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
@@ -59418,7 +59446,7 @@ var _ramda = __webpack_require__(12);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -59426,7 +59454,7 @@ var _zondicons = __webpack_require__(27);
 
 var _zondicons2 = _interopRequireDefault(_zondicons);
 
-var _miscicons = __webpack_require__(38);
+var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
@@ -59515,7 +59543,7 @@ var _ramda = __webpack_require__(12);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -59603,7 +59631,7 @@ var _ramda = __webpack_require__(12);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -59698,7 +59726,7 @@ var _ramda = __webpack_require__(12);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -59786,7 +59814,7 @@ var _ramda = __webpack_require__(12);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -59880,15 +59908,23 @@ var _rebates = __webpack_require__(62);
 
 var _rebates2 = _interopRequireDefault(_rebates);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _actions = __webpack_require__(14);
+var _actions = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_actions);
 
 var _formulas = __webpack_require__(101);
 
 var _formulas2 = _interopRequireDefault(_formulas);
+
+var _reactSvgInline = __webpack_require__(13);
+
+var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
+
+var _miscicons = __webpack_require__(32);
+
+var _miscicons2 = _interopRequireDefault(_miscicons);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -59910,8 +59946,20 @@ var CashCalculator = function (_React$PureComponent) {
     }
 
     _createClass(CashCalculator, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.props.requestTargets(this.props.deal);
+            this.props.requestBestOffer(this.props.deal);
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            this.props.clearBestOffer();
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var bestOfferTotalValue = this.props.dealBestOffer ? this.props.dealBestOffer.totalValue : 0;
             return _react2.default.createElement(
                 'div',
                 null,
@@ -59920,12 +59968,10 @@ var CashCalculator = function (_React$PureComponent) {
                 _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
                 _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal }),
                 _react2.default.createElement('hr', null),
-                _react2.default.createElement(
-                    'h4',
-                    null,
-                    'Some text here about picking yoour target'
-                ),
-                _react2.default.createElement(_Targets2.default, null),
+                _react2.default.createElement(_Targets2.default, {
+                    deal: this.props.deal,
+                    targetsChanged: this.props.requestBestOffer.bind(this, this.props.deal)
+                }),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(
                     'h4',
@@ -59997,19 +60043,12 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__left-item' },
-                            'Some text here about yoour targets'
+                            'Some text here about your targets'
                         ),
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            _util2.default.moneyFormat(_ramda2.default.sum([0]
-                            /* @todo fix to pull this info from the api or whatever
-                            R.map(
-                                R.prop('value'),
-                                this.props.selectedTargets
-                            )
-                            */
-                            ))
+                            this.props.dealBestOffer ? _util2.default.moneyFormat(bestOfferTotalValue) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                         )
                     ),
                     _react2.default.createElement(
@@ -60023,7 +60062,7 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            _util2.default.moneyFormat(_formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedTargets))))
+                            _util2.default.moneyFormat(_formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, bestOfferTotalValue))
                         )
                     )
                 )
@@ -60039,7 +60078,7 @@ function mapStateToProps(state) {
         deal: state.selectedDeal,
         downPayment: state.downPayment,
         employeeBrand: state.employeeBrand,
-        selectedTargets: _rebates2.default.getSelectedTargetsForDeal(state.dealTargets, state.selectedTargets, state.selectedDeal)
+        dealBestOffer: state.dealBestOffer
     };
 }
 
@@ -60086,17 +60125,17 @@ var _formulas = __webpack_require__(101);
 
 var _formulas2 = _interopRequireDefault(_formulas);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _actions = __webpack_require__(14);
+var _actions = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_actions);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
-var _miscicons = __webpack_require__(38);
+var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
@@ -60113,23 +60152,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var FinanceCalculator = function (_React$PureComponent) {
     _inherits(FinanceCalculator, _React$PureComponent);
 
-    function FinanceCalculator(props) {
+    function FinanceCalculator() {
         _classCallCheck(this, FinanceCalculator);
 
-        return _possibleConstructorReturn(this, (FinanceCalculator.__proto__ || Object.getPrototypeOf(FinanceCalculator)).call(this, props));
+        return _possibleConstructorReturn(this, (FinanceCalculator.__proto__ || Object.getPrototypeOf(FinanceCalculator)).apply(this, arguments));
     }
 
     _createClass(FinanceCalculator, [{
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(props) {
-            if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
-                return this.props.requestTargets(this.props.deal);
-            }
-
-            this.setState({
-                availableTargets: props.dealTargets[props.deal.id] || [],
-                selectedTargets: _rebates2.default.getSelectedTargetsForDeal(props.dealTargets, props.selectedTargets, props.deal)
-            });
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.props.requestTargets(this.props.deal);
+            this.props.requestBestOffer(this.props.deal);
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            this.props.clearBestOffer();
         }
     }, {
         key: 'updateDownPayment',
@@ -60142,18 +60180,19 @@ var FinanceCalculator = function (_React$PureComponent) {
             this.props.updateTermDuration(Number(e.target.value));
         }
     }, {
+        key: 'bestOfferTotalValue',
+        value: function bestOfferTotalValue() {
+            return this.props.dealBestOffer.totalValue ? this.props.dealBestOffer.totalValue : 0;
+        }
+    }, {
         key: 'getTotalVehicleCost',
         value: function getTotalVehicleCost() {
-            return this.props.availableTargets ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, 0, 9999 // @todo update to pull from api or whatever
-            // R.sum(R.map(R.prop('value'), this.props.selectedTargets))
-            ) : null;
+            return this.props.dealBestOffer ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, 0, this.bestOfferTotalValue()) : null;
         }
     }, {
         key: 'getAmountToFinance',
         value: function getAmountToFinance() {
-            return this.props.availableTargets ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, 9999 // @todo update to pull from api or whatever
-            // R.sum(R.map(R.prop('value'), this.props.selectedTargets))
-            ) : null;
+            return this.props.dealBestOffer ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, this.bestOfferTotalValue()) : null;
         }
     }, {
         key: 'renderTotalCostOfVehicle',
@@ -60189,14 +60228,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    this.props.availableTargets ? _util2.default.moneyFormat(_ramda2.default.sum([9999] // @todo update to pull from api or whatever
-                    /*
-                    R.map(
-                        R.prop('value'),
-                        this.props.selectedTargets
-                    )
-                    */
-                    )) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealBestOffer ? _util2.default.moneyFormat(this.bestOfferTotalValue()) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                 )
             );
         }
@@ -60258,7 +60290,10 @@ var FinanceCalculator = function (_React$PureComponent) {
                     null,
                     'Available Rebates and Incentives'
                 ),
-                _react2.default.createElement(_Targets2.default, null),
+                _react2.default.createElement(_Targets2.default, {
+                    deal: this.props.deal,
+                    targetsChanged: this.props.requestBestOffer.bind(this, this.props.deal)
+                }),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(
                     'h4',
@@ -60433,8 +60468,7 @@ function mapStateToProps(state) {
         deal: state.selectedDeal,
         termDuration: state.termDuration,
         employeeBrand: state.employeeBrand,
-        dealTargets: state.dealTargets,
-        selectedTargets: state.selectedTargets
+        dealBestOffer: state.dealBestOffer
     };
 }
 
@@ -60481,21 +60515,21 @@ var _formulas = __webpack_require__(101);
 
 var _formulas2 = _interopRequireDefault(_formulas);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
 var _api = __webpack_require__(71);
 
 var _api2 = _interopRequireDefault(_api);
 
-var _actions = __webpack_require__(14);
+var _actions = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_actions);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
-var _miscicons = __webpack_require__(38);
+var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
@@ -60525,6 +60559,12 @@ var LeaseCalculator = function (_React$PureComponent) {
     }
 
     _createClass(LeaseCalculator, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.props.requestTargets(this.props.deal);
+            this.props.requestBestOffer(this.props.deal);
+        }
+    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
             var _this2 = this;
@@ -60556,6 +60596,7 @@ var LeaseCalculator = function (_React$PureComponent) {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
             this._isMounted = false;
+            this.props.clearBestOffer();
         }
     }, {
         key: 'getClosestAnnualMileage',
@@ -60705,7 +60746,9 @@ var LeaseCalculator = function (_React$PureComponent) {
     }, {
         key: 'renderDueAtSigning',
         value: function renderDueAtSigning() {
-            var totalRebates = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedTargets));
+            var totalRebates = _ramda2.default.sum([0]
+            // R.map(R.prop('value'), this.props.selectedTargets)
+            );
 
             return _react2.default.createElement(
                 'div',
@@ -60803,7 +60846,12 @@ var LeaseCalculator = function (_React$PureComponent) {
                     className: className,
                     key: index
                 },
-                _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedTargets)), downPayment, 0, leaseRate.termMonths, residual.residualPercent)))
+                _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - _ramda2.default.sum([0]
+                // R.map(
+                //     R.prop('value'),
+                //     this.props.selectedTargets
+                // )
+                ), downPayment, 0, leaseRate.termMonths, residual.residualPercent)))
             );
         }
     }, {
@@ -60816,17 +60864,10 @@ var LeaseCalculator = function (_React$PureComponent) {
                 ' ',
                 _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
                 _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal }),
-                this.state.selectedTargets ? _react2.default.createElement(
-                    'div',
-                    null,
-                    _react2.default.createElement('hr', null),
-                    _react2.default.createElement(
-                        'h4',
-                        null,
-                        'Available Rebates and Incentives'
-                    )
-                ) : '',
-                _react2.default.createElement(_Targets2.default, null),
+                _react2.default.createElement(_Targets2.default, {
+                    deal: this.props.deal,
+                    targetsChanged: this.props.requestBestOffer.bind(this, this.props.deal)
+                }),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(
                     'h4',
@@ -60993,8 +61034,16 @@ function mapStateToProps(state) {
         annualMileage: state.annualMileage,
         residualPercent: state.residualPercent,
         employeeBrand: state.employeeBrand,
-        availableTargets: _rebates2.default.getAvailableTargetsForDeal(state.dealTargets, state.selectedDeal),
-        selectedTargets: _rebates2.default.getSelectedTargetsForDeal(state.dealTargets, state.selectedTargets, state.selectedDeal)
+        dealBestOffer: state.dealBestOffer
+        // availableTargets: rebates.getAvailableTargetsForDeal(
+        //     state.dealTargets,
+        //     state.selectedDeal
+        // ),
+        // selectedTargets: rebates.getSelectedTargetsForDeal(
+        //     state.dealTargets,
+        //     state.selectedTargets,
+        //     state.selectedDeal
+        // )
     };
 }
 
@@ -61142,13 +61191,13 @@ var _index = __webpack_require__(965);
 
 var _index2 = _interopRequireDefault(_index);
 
-var _index3 = __webpack_require__(14);
+var _index3 = __webpack_require__(15);
 
 var _util = __webpack_require__(28);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _index4 = __webpack_require__(14);
+var _index4 = __webpack_require__(15);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61158,45 +61207,44 @@ var initialState = {
     /** Version **/
     4: '<- increment the number to purge LocalStorage',
     /** End Version **/
-    window: { width: window.innerWidth },
-    smallFiltersShown: false,
-    showMakeSelectorModal: true,
-    selectedTab: 'cash',
-    downPayment: 0,
-    termDuration: 36,
     annualMileage: 10000,
-    residualPercent: null,
-    selectedDeal: null,
-    selectedStyles: urlStyle ? [urlStyle] : [],
-    selectedModels: [],
-    models: null,
     bodyStyles: null,
-    fuelTypes: ['Gasoline', 'Electric', 'Flex Fuel', 'Diesel', 'Hybrid'],
-    transmissionTypes: ['automatic', 'manual'],
-    selectedTransmissionType: null,
-    selectedSegment: null,
-    segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
-    selectedFuelType: null,
-    selectedMakes: [],
-    employeeBrand: false,
-    selectedFeatures: [],
-    selectedTargets: [],
-    // @todo: should this be instantiated as an array, not {} }
-    dealTargets: {},
-    features: null,
-    requestingMoreDeals: false,
-    makes: null,
+    city: null,
+    compareList: [],
+    dealBestOffer: null,
     dealPage: 1,
     dealPageTotal: 1,
     deals: null,
+    dealTargets: {},
+    downPayment: 0,
+    employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
-    sortColumn: 'price',
+    features: null,
+    fuelTypes: ['Gasoline', 'Electric', 'Flex Fuel', 'Diesel', 'Hybrid'],
+    makes: null,
+    models: null,
+    requestingMoreDeals: false,
+    residualPercent: null,
+    smallFiltersShown: false,
+    showMakeSelectorModal: true,
+    segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
+    selectedDeal: null,
+    selectedFeatures: [],
+    selectedFuelType: null,
+    selectedMakes: [],
+    selectedModels: [],
+    selectedSegment: null,
+    selectedStyles: urlStyle ? [urlStyle] : [],
+    selectedTab: 'cash',
+    selectedTargets: [],
+    selectedTransmissionType: null,
     sortAscending: true,
-    compareList: [],
+    sortColumn: 'price',
+    termDuration: 36,
+    transmissionTypes: ['automatic', 'manual'],
+    window: { width: window.innerWidth },
     zipcode: null,
-    zipInRange: null,
-    city: null,
-    dealBestOffer: null
+    zipInRange: null
 };
 
 exports.default = function () {
@@ -61633,7 +61681,7 @@ var reducer = function reducer(state, action) {
         case ActionTypes.RECEIVE_DEAL_TARGETS:
             var nextDealTargets = Object.assign({}, state.dealTargets);
 
-            nextDealTargets[action.data.dealId] = action.data.data.data.targets; // @TODO prob wrong i dunno
+            nextDealTargets[action.data.dealId] = action.data.data.data.targets;
 
             return Object.assign({}, state, {
                 dealTargets: nextDealTargets
@@ -61776,7 +61824,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _index = __webpack_require__(14);
+var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -61792,7 +61840,7 @@ var _CompareBar = __webpack_require__(369);
 
 var _CompareBar2 = _interopRequireDefault(_CompareBar);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
 var _Deal = __webpack_require__(223);
 
@@ -61810,7 +61858,7 @@ var _Modal = __webpack_require__(100);
 
 var _Modal2 = _interopRequireDefault(_Modal);
 
-var _miscicons = __webpack_require__(38);
+var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
@@ -61830,7 +61878,7 @@ var _strings = __webpack_require__(88);
 
 var _strings2 = _interopRequireDefault(_strings);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -64909,7 +64957,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -64929,9 +64977,9 @@ var _qs = __webpack_require__(362);
 
 var _qs2 = _interopRequireDefault(_qs);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _index = __webpack_require__(14);
+var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -64967,7 +65015,7 @@ var _api = __webpack_require__(71);
 
 var _api2 = _interopRequireDefault(_api);
 
-var _miscicons = __webpack_require__(38);
+var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
@@ -65491,9 +65539,9 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _index = __webpack_require__(14);
+var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -65551,7 +65599,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _index = __webpack_require__(14);
+var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -65563,7 +65611,7 @@ var _ConfirmDeal = __webpack_require__(975);
 
 var _ConfirmDeal2 = _interopRequireDefault(_ConfirmDeal);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
 var _Modal = __webpack_require__(100);
 
@@ -65767,7 +65815,7 @@ var _api = __webpack_require__(71);
 
 var _api2 = _interopRequireDefault(_api);
 
-var _miscicons = __webpack_require__(38);
+var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
@@ -65783,7 +65831,7 @@ var _strings = __webpack_require__(88);
 
 var _strings2 = _interopRequireDefault(_strings);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -65799,11 +65847,11 @@ var _propTypes = __webpack_require__(17);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _index = __webpack_require__(14);
+var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -66427,13 +66475,13 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(13);
+var _reactRedux = __webpack_require__(14);
 
-var _index = __webpack_require__(14);
+var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
-var _reactSvgInline = __webpack_require__(16);
+var _reactSvgInline = __webpack_require__(13);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
