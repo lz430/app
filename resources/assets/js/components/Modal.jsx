@@ -15,11 +15,11 @@ class Modal extends React.Component {
     }
 
     componentDidMount() {
-        this._mounted = true;
+        this._isMounted = true;
     }
 
     componentWillUnmount() {
-        this._mounted = false;
+        this._isMounted = false;
     }
 
     animate() {
@@ -29,7 +29,7 @@ class Modal extends React.Component {
             },
             () => {
                 setTimeout(() => {
-                    if (this._mounted) {
+                    if (this._isMounted) {
                         this.setState({
                             animating: false,
                         });
