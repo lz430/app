@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\DmrCategory;
-use App\DmrFeature;
+use App\Feature;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -27,7 +27,7 @@ class DmrFeatureTest extends TestCase
             'display_order'             => 2,
         ]);
 
-        $firstFeature = factory(DmrFeature::class)->create([
+        $firstFeature = factory(Feature::class)->create([
             'title'             => 'First Feature',
             'slug'              => 'first-feature',
             'dmr_category_id'   => $firstCategory->id,
@@ -35,7 +35,7 @@ class DmrFeatureTest extends TestCase
             'jato_schema_ids'   => collect([12345, 23456])->toJson(),
         ]);
         
-        $secondFeature = factory(DmrFeature::class)->create([
+        $secondFeature = factory(Feature::class)->create([
             'title'             => 'Second Feature',
             'slug'              => 'second-feature',
             'dmr_category_id'   => $firstCategory->id,
@@ -43,7 +43,7 @@ class DmrFeatureTest extends TestCase
             'jato_schema_ids'   => collect([78901, 89012])->toJson(),
         ]);
 
-        factory(DmrFeature::class)->create([
+        factory(Feature::class)->create([
             'title'             => 'Third Feature',
             'slug'              => 'third-feature',
             'dmr_category_id'   => $secondCategory->id,
@@ -51,7 +51,7 @@ class DmrFeatureTest extends TestCase
             'jato_schema_ids'   => collect([56789, 67890])->toJson(),
         ]);
 
-        factory(DmrFeature::class)->create([
+        factory(Feature::class)->create([
             'title'             => 'Fourth Feature',
             'slug'              => 'fourth-feature',
             'dmr_category_id'   => $secondCategory->id,

@@ -36,12 +36,12 @@ class Deal extends Model
     
     public function features()
     {
-        return $this->belongsToMany(Feature::class)->hasGroup();
+        return $this->belongsToMany(JatoFeature::class)->hasGroup();
     }
 
     public function dmrFeatures()
     {
-        return $this->belongsToMany(DmrFeature::class);
+        return $this->belongsToMany(Feature::class);
     }
     
     public function featuredPhoto()

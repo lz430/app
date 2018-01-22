@@ -1,7 +1,7 @@
 <?php
 
 use App\DmrCategory;
-use App\DmrFeature;
+use App\Feature;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -289,7 +289,7 @@ class CreateDmrFeaturesTable extends Migration
                 $feature['dmr_category_id'] = $categoryId;
                 $feature['display_order'] = $count;
 
-                DmrFeature::create($feature);
+                Feature::create($feature);
                 $count++;
             });
 

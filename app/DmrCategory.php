@@ -10,6 +10,6 @@ class DmrCategory extends Model
 
     public function features()
     {
-        return $this->hasMany(DmrFeature::class, 'dmr_category_id');
+        return $this->hasMany(Feature::class, 'dmr_category_id');
     }
 }

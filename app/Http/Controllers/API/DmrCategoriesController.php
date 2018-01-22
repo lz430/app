@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\DmrCategory;
-use App\DmrFeature;
+use App\Feature;
 use App\Transformers\DmrCategoryTransformer;
 use Illuminate\Http\Request;
 

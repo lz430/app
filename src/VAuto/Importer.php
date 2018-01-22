@@ -2,8 +2,8 @@
 
 namespace DeliverMyRide\VAuto;
 
-use App\DmrFeature;
 use App\Feature;
+use App\JatoFeature;
 use App\JATO\Make;
 use App\JATO\Manufacturer;
 use App\JATO\VehicleModel;
@@ -253,7 +253,7 @@ class Importer
     private function getGroupWithOverrides(string $feature, string $group)
     {
         /** If group contains "seat" then it should be in "seating" category */
-        return str_contains($feature, 'seat') ? Feature::GROUP_SEATING : $group;
+        return str_contains($feature, 'seat') ? JatoFeature::GROUP_SEATING : $group;
     }
 
     private function saveVersionFeaturesByGroup(Deal $deal, array $features, string $group)
@@ -264,7 +264,7 @@ class Importer
             /**
              * Only interior features that contain "seat" should be added to seating
              */
-            if ($group === Feature::GROUP_SEATING && !str_contains($featureAndContent['feature'], 'seat')) {
+            if ($group === JatoFeature::GROUP_SEATING && !str_contains($featureAndContent['feature'], 'seat')) {
                 return;
             }
 
@@ -273,7 +273,7 @@ class Importer
              */
             if (starts_with($featureAndContent['content'], ['Standard', 'Yes'])) {
                 try {
-                    $feature = Feature::updateOrCreate([
+                    $feature = JatoFeature::updateOrCreate([
                         'feature' => $featureAndContent['feature'],
                         'content' => $featureAndContent['content'],
                     ], [
@@ -295,10 +295,10 @@ class Importer
         $jatoVehicleId =  $deal->versions->first()->jato_vehicle_id;
 
         $promises = [
-            Feature::GROUP_SAFETY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 11),
-            Feature::GROUP_SEATING => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 9),
-            Feature::COMFORT_AND_CONVENIENCE => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 1),
-            Feature::GROUP_TECHNOLOGY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 8),
+            JatoFeature::GROUP_SAFETY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 11),
+            JatoFeature::GROUP_SEATING => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 9),
+            JatoFeature::COMFORT_AND_CONVENIENCE => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 1),
+            JatoFeature::GROUP_TECHNOLOGY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 8),
         ];
 
         $results = unwrap($promises);
@@ -317,7 +317,7 @@ class Importer
 
     private function saveVersionDealDmrFeatures(Deal $deal)
     {
-        $features = DmrFeature::all();
+        $features = Feature::all();
 
         collect($this->client->equipmentByVehicleId($deal->versions->first()->jato_vehicle_id)['results'])->each(function ($equipment) use ($deal, $features) {
             $schemaIds = $features->map(function ($feature) use ($deal, $equipment) {
@@ -338,22 +338,22 @@ class Importer
 
         if ($jatoVersion->body_style === 'Pickup') {
             try {
-                $doorCount = Feature::updateOrCreate([
+                $doorCount = JatoFeature::updateOrCreate([
                     'feature' => "$deal->door_count Door",
                     'content' => $deal->door_count,
                 ], [
                     'feature' => "$deal->door_count Door",
                     'content' => $deal->door_count,
-                    'group' => Feature::GROUP_TRUCK,
+                    'group' => JatoFeature::GROUP_TRUCK,
                 ]);
 
-                $cabType = Feature::updateOrCreate([
+                $cabType = JatoFeature::updateOrCreate([
                     'feature' => "$jatoVersion->cab Cab",
                     'content' => $jatoVersion->cab,
                 ], [
                     'feature' => "$jatoVersion->cab Cab",
                     'content' => $jatoVersion->cab,
-                    'group' => Feature::GROUP_TRUCK,
+                    'group' => JatoFeature::GROUP_TRUCK,
                 ]);
 
                 $doorCount->deals()->save($deal);

@@ -3,7 +3,7 @@
 namespace Tests\API;
 
 use App\Dealer;
-use App\Feature;
+use App\JatoFeature;
 use App\JATO\Make;
 use App\JATO\VehicleModel;
 use App\JATO\Version;
@@ -176,7 +176,7 @@ class DealsTest extends TestCase
 
         $versionDeals = $version->deals()->saveMany(factory(Deal::class, 3)->make());
 
-        $versionDeals->first()->features()->attach(factory(Feature::class)->create(['feature' => 'ABS']));
+        $versionDeals->first()->features()->attach(factory(JatoFeature::class)->create(['feature' => 'ABS']));
 
         $response = $this->getJson(route('deals.index', [
             'make_ids' => [$make->id, 2, 3],
@@ -201,7 +201,7 @@ class DealsTest extends TestCase
             $version->deals()->attach($deal->id);
         }
 
-        $deals->first()->features()->attach(factory(Feature::class)->create(['feature' => 'ABS']));
+        $deals->first()->features()->attach(factory(JatoFeature::class)->create(['feature' => 'ABS']));
 
         $response = $this->getJson(route('deals.index', [
             'make_ids' => [$make->id],
@@ -224,8 +224,8 @@ class DealsTest extends TestCase
             $version->deals()->attach($deal->id);
         }
 
-        $absFeature = factory(Feature::class)->create(['feature' => 'ABS']);
-        $heatedSeatsFeature = factory(Feature::class)->create(['feature' => 'Heated seats']);
+        $absFeature = factory(JatoFeature::class)->create(['feature' => 'ABS']);
+        $heatedSeatsFeature = factory(JatoFeature::class)->create(['feature' => 'Heated seats']);
 
         $deals->first()->features()->attach($absFeature);
 

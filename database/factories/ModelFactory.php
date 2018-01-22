@@ -14,8 +14,8 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\DmrCategory;
-use App\DmrFeature;
 use App\Feature;
+use App\JatoFeature;
 use Carbon\Carbon;
 
 $factory->define(App\User::class, function (Faker\Generator $faker) {
@@ -137,10 +137,10 @@ $factory->define(App\Deal::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Feature::class, function (Faker\Generator $faker) {
+$factory->define(App\JatoFeature::class, function (Faker\Generator $faker) {
     return [
-        'feature' => $faker->unique()->randomElement(Feature::WHITELIST),
-        'group' => $faker->randomElement(Feature::GROUPS),
+        'feature' => $faker->unique()->randomElement(JatoFeature::WHITELIST),
+        'group' => $faker->randomElement(JatoFeature::GROUPS),
     ];
 });
 
@@ -172,7 +172,7 @@ $factory->define(DmrCategory::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(DmrFeature::class, function (Faker\Generator $faker) {
+$factory->define(Feature::class, function (Faker\Generator $faker) {
     return [
         'title'             => 'First Feature',
         'slug'              => 'first-feature',
