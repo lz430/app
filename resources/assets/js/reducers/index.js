@@ -70,22 +70,15 @@ const reducer = (state, action) => {
                 requestingMoreDeals: false,
             });
         case ActionTypes.RECEIVE_TARGETS:
-            const targetKey = util.getTargetKeyForDealAndZip(
-                action.data.deal,
-                action.data.zipcode
-            );
+            const targetKey = util.getTargetKeyForDealAndZip(action.data.deal, action.data.zipcode);
 
             let nextTargets = Object.assign({}, state.targets);
 
             if (R.isNil(nextTargets[targetKey])) {
-                nextTargets[targetKey] = {
-                    available: action.data.data.data.targets,
-                    selected: [],
-                };
+                nextTargets[targetKey] = { available: action.data.data.data.targets, selected: [] };
             }
 
             return Object.assign({}, state, { targets: nextTargets });
-
         case ActionTypes.RECEIVE_DEAL_TARGETS:
             let nextDealTargets = Object.assign({}, state.dealTargets);
 
@@ -94,6 +87,21 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 dealTargets: nextDealTargets,
             });
+        case ActionTypes.TOGGLE_TARGET:
+            let nextSelectedTargets = Object.assign({}, state.targets);
+            console.log(action);
+            nextSelectedTargets[action.targetKey].selected = util.toggleItem(nextSelectedTargets[action.targetKey].selected, action.target);
+
+            return Object.assign({}, state, {
+                targets: nextSelectedTargets,
+            });
+
+        // return Object.assign({}, state, {
+        //     selectedTargets: util.toggleItem(
+        //         state.selectedTargets,
+        //         action.target
+        //     ),
+        // });
         case ActionTypes.SORT_DEALS:
             return Object.assign({}, state, {
                 sortColumn: action.sort,
@@ -137,13 +145,6 @@ const reducer = (state, action) => {
         case ActionTypes.TOGGLE_STYLE:
             return Object.assign({}, state, {
                 selectedStyles: action.selectedStyles,
-            });
-        case ActionTypes.TOGGLE_TARGET:
-            return Object.assign({}, state, {
-                selectedTargets: util.toggleItem(
-                    state.selectedTargets,
-                    action.target
-                ),
             });
         case ActionTypes.SELECT_REBATE:
             if (!R.contains(action.rebate, state.selectedRebates)) {

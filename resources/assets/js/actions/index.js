@@ -612,10 +612,11 @@ export function selectRebate(rebate) {
     };
 }
 
-export function toggleTarget(target) {
+export function toggleTarget(target, targetKey) {
     return {
         type: ActionTypes.TOGGLE_TARGET,
         target,
+        targetKey,
     };
 }
 

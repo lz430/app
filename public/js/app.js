@@ -1493,10 +1493,11 @@ function selectRebate(rebate) {
     };
 }
 
-function toggleTarget(target) {
+function toggleTarget(target, targetKey) {
     return {
         type: ActionTypes.TOGGLE_TARGET,
-        target: target
+        target: target,
+        targetKey: targetKey
     };
 }
 
@@ -14281,7 +14282,7 @@ var Targets = function (_React$PureComponent) {
     }, {
         key: 'toggle',
         value: function toggle(target) {
-            this.props.toggleTarget(target);
+            this.props.toggleTarget(target, this.state.targetKey);
             this.props.targetsChanged();
         }
     }, {
@@ -61700,14 +61701,10 @@ var reducer = function reducer(state, action) {
             var nextTargets = Object.assign({}, state.targets);
 
             if (_ramda2.default.isNil(nextTargets[targetKey])) {
-                nextTargets[targetKey] = {
-                    available: action.data.data.data.targets,
-                    selected: []
-                };
+                nextTargets[targetKey] = { available: action.data.data.data.targets, selected: [] };
             }
 
             return Object.assign({}, state, { targets: nextTargets });
-
         case ActionTypes.RECEIVE_DEAL_TARGETS:
             var nextDealTargets = Object.assign({}, state.dealTargets);
 
@@ -61716,6 +61713,21 @@ var reducer = function reducer(state, action) {
             return Object.assign({}, state, {
                 dealTargets: nextDealTargets
             });
+        case ActionTypes.TOGGLE_TARGET:
+            var nextSelectedTargets = Object.assign({}, state.targets);
+            console.log(action);
+            nextSelectedTargets[action.targetKey].selected = _util2.default.toggleItem(nextSelectedTargets[action.targetKey].selected, action.target);
+
+            return Object.assign({}, state, {
+                targets: nextSelectedTargets
+            });
+
+        // return Object.assign({}, state, {
+        //     selectedTargets: util.toggleItem(
+        //         state.selectedTargets,
+        //         action.target
+        //     ),
+        // });
         case ActionTypes.SORT_DEALS:
             return Object.assign({}, state, {
                 sortColumn: action.sort,
@@ -61756,10 +61768,6 @@ var reducer = function reducer(state, action) {
         case ActionTypes.TOGGLE_STYLE:
             return Object.assign({}, state, {
                 selectedStyles: action.selectedStyles
-            });
-        case ActionTypes.TOGGLE_TARGET:
-            return Object.assign({}, state, {
-                selectedTargets: _util2.default.toggleItem(state.selectedTargets, action.target)
             });
         case ActionTypes.SELECT_REBATE:
             if (!_ramda2.default.contains(action.rebate, state.selectedRebates)) {

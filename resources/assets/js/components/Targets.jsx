@@ -38,7 +38,7 @@ class Targets extends React.PureComponent {
     }
 
     toggle(target) {
-        this.props.toggleTarget(target);
+        this.props.toggleTarget(target, this.state.targetKey);
         this.props.targetsChanged();
     }
 
