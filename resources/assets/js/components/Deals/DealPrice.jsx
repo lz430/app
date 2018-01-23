@@ -14,31 +14,6 @@ class DealPrice extends React.PureComponent {
         super(props);
     }
 
-    // componentDidMount() {
-    //     if (
-    //         !this.props.dealTargets.hasOwnProperty(this.props.deal.id) &&
-    //         this.props.zipcode
-    //     ) {
-    //         this.requestTargets();
-    //     } else {
-    //         this.componentWillReceiveProps(this.props);
-    //     }
-    // }
-
-    // requestTargets() {
-    //     this.props.requestTargets(this.props.deal);
-    // }
-
-    // componentWillReceiveProps(props) {
-    //     if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
-    //         return this.props.requestTargets(this.props.deal);
-    //     }
-
-    //     this.setState({
-    //         availableTargets: props.dealTargets[props.deal.id] || [],
-    //     });
-    // }
-
     renderPriceExplanationModal() {
         return <InfoModal deal={this.props.deal} />;
     }

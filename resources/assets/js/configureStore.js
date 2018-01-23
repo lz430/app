@@ -52,6 +52,7 @@ const initialState = {
     selectedTransmissionType: null,
     sortAscending: true,
     sortColumn: 'price',
+    targets: [],
     termDuration: 36,
     transmissionTypes: ['automatic', 'manual'],
     window: { width: window.innerWidth },

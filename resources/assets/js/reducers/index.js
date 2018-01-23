@@ -69,6 +69,23 @@ const reducer = (state, action) => {
                 ),
                 requestingMoreDeals: false,
             });
+        case ActionTypes.RECEIVE_TARGETS:
+            const targetKey = util.getTargetKeyForDealAndZip(
+                action.data.deal,
+                action.data.zipcode
+            );
+
+            let nextTargets = Object.assign({}, state.targets);
+
+            if (R.isNil(nextTargets[targetKey])) {
+                nextTargets[targetKey] = {
+                    available: action.data.data.data.targets,
+                    selected: [],
+                };
+            }
+
+            return Object.assign({}, state, { targets: nextTargets });
+
         case ActionTypes.RECEIVE_DEAL_TARGETS:
             let nextDealTargets = Object.assign({}, state.dealTargets);
 

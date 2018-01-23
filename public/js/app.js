@@ -898,6 +898,7 @@ exports.toggleFeature = toggleFeature;
 exports.toggleMake = toggleMake;
 exports.toggleModel = toggleModel;
 exports.requestTargets = requestTargets;
+exports.receiveTargets = receiveTargets;
 exports.receiveDeals = receiveDeals;
 exports.receiveDealTargets = receiveDealTargets;
 exports.requestDeals = requestDeals;
@@ -1098,19 +1099,38 @@ function toggleModel(model) {
 
 function requestTargets(deal) {
     return function (dispatch, getState) {
-        // If we have already received the targets for the deal, don't request them again.
-        // Or if we don't yet have a zipcode
-        if (getState().dealTargets.hasOwnProperty(deal.id) || !getState().zipcode) return;
+        // If no zipcode has been set, do not request targets
+        var zipcode = getState().zipcode;
+        if (!zipcode) return;
 
-        _api2.default.getTargets(getState().zipcode, deal.vin).then(function (data) {
+        // If we already have the target data, do not re-request it
+        var targetKey = _util2.default.getTargetKeyForDealAndZip(deal, zipcode);
+        if (!_ramda2.default.isNil(getState().targets[targetKey])) return;
+
+        _api2.default.getTargets(zipcode, deal.vin).then(function (data) {
             dispatch(receiveDealTargets({
                 data: data,
                 dealId: deal.id
+            }));
+
+            dispatch(receiveTargets({
+                data: data,
+                deal: deal,
+                zipcode: zipcode
             }));
         });
 
         dispatch({
             type: ActionTypes.REQUEST_TARGETS
+        });
+    };
+}
+
+function receiveTargets(data) {
+    return function (dispatch) {
+        dispatch({
+            type: ActionTypes.RECEIVE_TARGETS,
+            data: data
         });
     };
 }
@@ -1520,6 +1540,17 @@ function requestBestOffer(deal) {
 
         _api2.default.getBestOffer(deal.id, payment_type, zipcode, targets).then(function (data) {
             dispatch(receiveBestOffer(data));
+        }).catch(function (e) {
+            dispatch(receiveBestOffer({
+                data: {
+                    data: {
+                        cash: {
+                            totalValue: 0,
+                            programs: []
+                        }
+                    }
+                }
+            }));
         });
 
         dispatch({ type: ActionTypes.REQUEST_BEST_OFFER });
@@ -2174,6 +2205,13 @@ var util = {
 
             return closest;
         }, value, zipped);
+    },
+    getTargetKeyForDealAndZip: function getTargetKeyForDealAndZip(deal, zipcode) {
+        var make = deal.make;
+        var model = deal.model;
+        var series = deal.series;
+        var targetKey = zipcode + '-' + make + '-' + model + '-' + series;
+        return targetKey;
     }
 };
 
@@ -6925,12 +6963,12 @@ var Modal = function (_React$Component) {
     _createClass(Modal, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            this._mounted = true;
+            this._isMounted = true;
         }
     }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
-            this._mounted = false;
+            this._isMounted = false;
         }
     }, {
         key: 'animate',
@@ -6941,7 +6979,7 @@ var Modal = function (_React$Component) {
                 animating: true
             }, function () {
                 setTimeout(function () {
-                    if (_this2._mounted) {
+                    if (_this2._isMounted) {
                         _this2.setState({
                             animating: false
                         });
@@ -14185,6 +14223,10 @@ var _strings = __webpack_require__(88);
 
 var _strings2 = _interopRequireDefault(_strings);
 
+var _util = __webpack_require__(28);
+
+var _util2 = _interopRequireDefault(_util);
+
 var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
@@ -14209,28 +14251,32 @@ var Targets = function (_React$PureComponent) {
     function Targets(props) {
         _classCallCheck(this, Targets);
 
-        return _possibleConstructorReturn(this, (Targets.__proto__ || Object.getPrototypeOf(Targets)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (Targets.__proto__ || Object.getPrototypeOf(Targets)).call(this, props));
+
+        _this.state = { targetKey: null };
+        return _this;
     }
 
     _createClass(Targets, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-            if (this.targetsNotLoaded()) {
+            this.setState({
+                targetKey: _util2.default.getTargetKeyForDealAndZip(this.props.deal, this.props.zipcode)
+            });
+
+            if (this.targetsNotLoadedFor(this.state.targetKey)) {
                 this.props.requestTargets(this.props.deal);
             }
         }
     }, {
-        key: 'targetsNotLoaded',
-        value: function targetsNotLoaded() {
-            return _ramda2.default.isEmpty(this.props.dealTargets[this.props.deal.id]);
+        key: 'targetsNotLoadedFor',
+        value: function targetsNotLoadedFor(targetKey) {
+            return _ramda2.default.isNil(this.props.targets[targetKey]);
         }
-
-        // All Targets that are available to be selected for a specific deal
-
     }, {
         key: 'availableTargets',
         value: function availableTargets() {
-            return this.props.dealTargets[this.props.deal.id] || [];
+            return this.props.targets[this.state.targetKey].available || [];
         }
     }, {
         key: 'toggle',
@@ -14241,7 +14287,8 @@ var Targets = function (_React$PureComponent) {
     }, {
         key: 'renderTarget',
         value: function renderTarget(target, index) {
-            var isSelected = _ramda2.default.contains(target, _rebates2.default.getSelectedTargetsForDeal(this.props.dealTargets, this.props.selectedTargets, this.props.deal));
+            var isSelected = _ramda2.default.contains(target, this.props.targets[this.state.targetKey].selected);
+
             var checkboxClass = 'rebates__checkbox rebates__checkbox--inverted ' + (isSelected ? 'rebates__checkbox--selected' : '');
 
             return _react2.default.createElement(
@@ -14294,8 +14341,7 @@ var Targets = function (_React$PureComponent) {
 function mapStateToProps(state) {
     return {
         zipcode: state.zipcode,
-        dealTargets: state.dealTargets,
-        selectedTargets: state.selectedTargets
+        targets: state.targets
     };
 }
 
@@ -22459,6 +22505,7 @@ var UPDATE_TERM_DURATION = exports.UPDATE_TERM_DURATION = 'UPDATE_TERM_DURATION'
 var UPDATE_ANNUAL_MILEAGE = exports.UPDATE_ANNUAL_MILEAGE = 'UPDATE_ANNUAL_MILEAGE';
 var UPDATE_RESIDUAL_PERCENT = exports.UPDATE_RESIDUAL_PERCENT = 'UPDATE_RESIDUAL_PERCENT';
 var REQUEST_TARGETS = exports.REQUEST_TARGETS = 'REQUEST_TARGETS';
+var RECEIVE_TARGETS = exports.RECEIVE_TARGETS = 'RECEIVE_TARGETS';
 var REQUEST_BEST_OFFER = exports.REQUEST_BEST_OFFER = 'REQUEST_BEST_OFFER';
 var RECEIVE_BEST_OFFER = exports.RECEIVE_BEST_OFFER = 'RECEIVE_BEST_OFFER';
 var CLEAR_BEST_OFFER = exports.CLEAR_BEST_OFFER = 'CLEAR_BEST_OFFER';
@@ -22521,7 +22568,7 @@ var DealImage = function (_React$PureComponent) {
     _createClass(DealImage, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            this._mounted = true;
+            this._isMounted = true;
 
             if (this.props.deal.photos.length === 0) {
                 this.requestFuelImages();
@@ -22530,7 +22577,7 @@ var DealImage = function (_React$PureComponent) {
     }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
-            this._mounted = false;
+            this._isMounted = false;
         }
     }, {
         key: 'featuredImageUrl',
@@ -22593,7 +22640,7 @@ var DealImage = function (_React$PureComponent) {
                                 _context.t2 = _context.sent;
                                 externalImages = _context.t1.extractFuelImages.call(_context.t1, _context.t2);
 
-                                if (this._mounted) {
+                                if (this._isMounted) {
                                     _context.next = 17;
                                     break;
                                 }
@@ -22617,7 +22664,7 @@ var DealImage = function (_React$PureComponent) {
                                 _context.t5 = _context.sent;
                                 _externalImages = _context.t4.extractFuelImages.call(_context.t4, _context.t5);
 
-                                if (this._mounted) {
+                                if (this._isMounted) {
                                     _context.next = 30;
                                     break;
                                 }
@@ -52570,31 +52617,6 @@ var DealPrice = function (_React$PureComponent) {
         return _possibleConstructorReturn(this, (DealPrice.__proto__ || Object.getPrototypeOf(DealPrice)).call(this, props));
     }
 
-    // componentDidMount() {
-    //     if (
-    //         !this.props.dealTargets.hasOwnProperty(this.props.deal.id) &&
-    //         this.props.zipcode
-    //     ) {
-    //         this.requestTargets();
-    //     } else {
-    //         this.componentWillReceiveProps(this.props);
-    //     }
-    // }
-
-    // requestTargets() {
-    //     this.props.requestTargets(this.props.deal);
-    // }
-
-    // componentWillReceiveProps(props) {
-    //     if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
-    //         return this.props.requestTargets(this.props.deal);
-    //     }
-
-    //     this.setState({
-    //         availableTargets: props.dealTargets[props.deal.id] || [],
-    //     });
-    // }
-
     _createClass(DealPrice, [{
         key: 'renderPriceExplanationModal',
         value: function renderPriceExplanationModal() {
@@ -60561,18 +60583,15 @@ var LeaseCalculator = function (_React$PureComponent) {
     _createClass(LeaseCalculator, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-            this.props.requestTargets(this.props.deal);
-            this.props.requestBestOffer(this.props.deal);
-        }
-    }, {
-        key: 'componentDidMount',
-        value: function componentDidMount() {
             var _this2 = this;
 
-            this._isMounted = true;
+            this.props.requestTargets(this.props.deal);
+            this.props.requestBestOffer(this.props.deal);
 
             _api2.default.getLeaseRates(this.props.deal.versions[0].jato_vehicle_id, this.props.zipcode).then(function (data) {
                 if (!_this2._isMounted) return;
+
+                console.log(data);
 
                 var leaseRates = data.data;
 
@@ -60591,6 +60610,11 @@ var LeaseCalculator = function (_React$PureComponent) {
                     _this2.props.updateResidualPercent(residualPercent);
                 });
             });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this._isMounted = true;
         }
     }, {
         key: 'componentWillUnmount',
@@ -61035,15 +61059,6 @@ function mapStateToProps(state) {
         residualPercent: state.residualPercent,
         employeeBrand: state.employeeBrand,
         dealBestOffer: state.dealBestOffer
-        // availableTargets: rebates.getAvailableTargetsForDeal(
-        //     state.dealTargets,
-        //     state.selectedDeal
-        // ),
-        // selectedTargets: rebates.getSelectedTargetsForDeal(
-        //     state.dealTargets,
-        //     state.selectedTargets,
-        //     state.selectedDeal
-        // )
     };
 }
 
@@ -61240,6 +61255,7 @@ var initialState = {
     selectedTransmissionType: null,
     sortAscending: true,
     sortColumn: 'price',
+    targets: [],
     termDuration: 36,
     transmissionTypes: ['automatic', 'manual'],
     window: { width: window.innerWidth },
@@ -61678,6 +61694,20 @@ var reducer = function reducer(state, action) {
                 dealPage: _ramda2.default.min(action.data.data.meta.pagination.current_page, action.data.data.meta.pagination.total_pages),
                 requestingMoreDeals: false
             });
+        case ActionTypes.RECEIVE_TARGETS:
+            var targetKey = _util2.default.getTargetKeyForDealAndZip(action.data.deal, action.data.zipcode);
+
+            var nextTargets = Object.assign({}, state.targets);
+
+            if (_ramda2.default.isNil(nextTargets[targetKey])) {
+                nextTargets[targetKey] = {
+                    available: action.data.data.data.targets,
+                    selected: []
+                };
+            }
+
+            return Object.assign({}, state, { targets: nextTargets });
+
         case ActionTypes.RECEIVE_DEAL_TARGETS:
             var nextDealTargets = Object.assign({}, state.dealTargets);
 

@@ -169,25 +169,42 @@ export function toggleModel(model) {
 
 export function requestTargets(deal) {
     return (dispatch, getState) => {
-        // If we have already received the targets for the deal, don't request them again.
-        // Or if we don't yet have a zipcode
-        if (
-            getState().dealTargets.hasOwnProperty(deal.id) ||
-            !getState().zipcode
-        )
-            return;
+        // If no zipcode has been set, do not request targets
+        const zipcode = getState().zipcode;
+        if(!zipcode) return;
 
-        api.getTargets(getState().zipcode, deal.vin).then(data => {
+        // If we already have the target data, do not re-request it
+        const targetKey = util.getTargetKeyForDealAndZip(deal, zipcode);
+        if (!R.isNil(getState().targets[targetKey])) return;
+
+        api.getTargets(zipcode, deal.vin).then(data => {
             dispatch(
                 receiveDealTargets({
                     data: data,
                     dealId: deal.id,
                 })
             );
+
+            dispatch(
+                receiveTargets({
+                    data,
+                    deal,
+                    zipcode,
+                })
+            );
         });
 
         dispatch({
             type: ActionTypes.REQUEST_TARGETS,
+        });
+    };
+}
+
+export function receiveTargets(data) {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.RECEIVE_TARGETS,
+            data: data,
         });
     };
 }
@@ -643,9 +660,25 @@ export function requestBestOffer(deal) {
         );
         const targets = defaultTargetIds.concat(selectedTargetIds);
 
-        api.getBestOffer(deal.id, payment_type, zipcode, targets).then(data => {
-            dispatch(receiveBestOffer(data));
-        });
+        api
+            .getBestOffer(deal.id, payment_type, zipcode, targets)
+            .then(data => {
+                dispatch(receiveBestOffer(data));
+            })
+            .catch(e => {
+                dispatch(
+                    receiveBestOffer({
+                        data: {
+                            data: {
+                                cash: {
+                                    totalValue: 0,
+                                    programs: [],
+                                },
+                            },
+                        },
+                    })
+                );
+            });
 
         dispatch({ type: ActionTypes.REQUEST_BEST_OFFER });
     };

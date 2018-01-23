@@ -6,27 +6,35 @@ import * as Actions from 'actions';
 import SVGInline from 'react-svg-inline';
 import rebates from 'src/rebates';
 import strings from 'src/strings';
+import util from 'src/util';
 import miscicons from 'miscicons';
 import zondicons from 'zondicons';
 
 class Targets extends React.PureComponent {
     constructor(props) {
         super(props);
+        this.state = { targetKey: null };
     }
 
     componentWillMount() {
-        if (this.targetsNotLoaded()) {
+        this.setState({
+            targetKey: util.getTargetKeyForDealAndZip(
+                this.props.deal,
+                this.props.zipcode
+            ),
+        });
+
+        if (this.targetsNotLoadedFor(this.state.targetKey)) {
             this.props.requestTargets(this.props.deal);
         }
     }
 
-    targetsNotLoaded() {
-        return R.isEmpty(this.props.dealTargets[this.props.deal.id]);
+    targetsNotLoadedFor(targetKey) {
+        return R.isNil(this.props.targets[targetKey]);
     }
 
-    // All Targets that are available to be selected for a specific deal
     availableTargets() {
-        return this.props.dealTargets[this.props.deal.id] || [];
+        return this.props.targets[this.state.targetKey].available || [];
     }
 
     toggle(target) {
@@ -37,12 +45,9 @@ class Targets extends React.PureComponent {
     renderTarget(target, index) {
         const isSelected = R.contains(
             target,
-            rebates.getSelectedTargetsForDeal(
-                this.props.dealTargets,
-                this.props.selectedTargets,
-                this.props.deal
-            )
+            this.props.targets[this.state.targetKey].selected
         );
+
         const checkboxClass = `rebates__checkbox rebates__checkbox--inverted ${
             isSelected ? 'rebates__checkbox--selected' : ''
         }`;
@@ -91,8 +96,7 @@ class Targets extends React.PureComponent {
 function mapStateToProps(state) {
     return {
         zipcode: state.zipcode,
-        dealTargets: state.dealTargets,
-        selectedTargets: state.selectedTargets,
+        targets: state.targets,
     };
 }
 

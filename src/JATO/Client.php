@@ -144,7 +144,7 @@ class Client
             ]);
         } catch (ClientException $e) {
             Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode");
-            return [];
+            return ['targets' => []];
         }
     }
 
@@ -176,44 +176,6 @@ class Client
             return JsonResponse::create(['totalValue' => 0, 'programs' => []]);
         }
     }
-
-    /*
-    public function bestCashIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
-    {
-        return $this->get("incentives/bestOffer/$vehicleId/cash", [
-                'query' => ['zipCode' => $zipcode]
-            ])['programs'] ?? [];
-    }
-
-    public function bestFinanceIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
-    {
-        return $this->get("incentives/bestOffer/$vehicleId/finance", [
-                'query' => ['zipCode' => $zipcode]
-            ])['programs'] ?? [];
-    }
-
-    public function bestLeaseIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
-    {
-        return $this->get("incentives/bestOffer/$vehicleId/lease", [
-                'query' => ['zipCode' => $zipcode]
-            ])['programs'] ?? [];
-    }
-
-    public function incentivesByVehicleIdAndZipcodeWithSelected($vehicleId, $zipcode, $selected)
-    {
-        $first = array_first($selected);
-
-        return $this->get(
-            "incentives/programs/$vehicleId/add/$first",
-            [
-                'query' => [
-                    'zipCode' => $zipcode,
-                    'addedPrograms' => implode(',', $selected),
-                ]
-            ]
-        );
-    }
-    */
 
     protected function makeModelNameUrlFriendly($modelName)
     {

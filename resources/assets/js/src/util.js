@@ -98,6 +98,13 @@ const util = {
             zipped
         );
     },
+    getTargetKeyForDealAndZip(deal, zipcode) {
+        const make = deal.make;
+        const model = deal.model;
+        const series = deal.series;
+        const targetKey = `${zipcode}-${make}-${model}-${series}`;
+        return targetKey;
+    }
 };
 
 export default util;

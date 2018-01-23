@@ -22,12 +22,9 @@ class LeaseCalculator extends React.PureComponent {
     }
 
     componentWillMount() {
+
         this.props.requestTargets(this.props.deal);
         this.props.requestBestOffer(this.props.deal);
-    }
-
-    componentDidMount() {
-        this._isMounted = true;
 
         api
             .getLeaseRates(
@@ -36,6 +33,8 @@ class LeaseCalculator extends React.PureComponent {
             )
             .then(data => {
                 if (!this._isMounted) return;
+
+                console.log(data);
 
                 const leaseRates = data.data;
 
@@ -62,11 +61,19 @@ class LeaseCalculator extends React.PureComponent {
                         this.props.updateTermDuration(
                             closestLeaseRate.termMonths
                         );
-                        this.props.updateAnnualMileage(closestAnnualMileage);
-                        this.props.updateResidualPercent(residualPercent);
+                        this.props.updateAnnualMileage(
+                            closestAnnualMileage
+                        );
+                        this.props.updateResidualPercent(
+                            residualPercent
+                        );
                     }
                 );
             });
+    }
+
+    componentDidMount() {
+        this._isMounted = true;
     }
 
     componentWillUnmount() {
@@ -540,15 +547,6 @@ function mapStateToProps(state) {
         residualPercent: state.residualPercent,
         employeeBrand: state.employeeBrand,
         dealBestOffer: state.dealBestOffer,
-        // availableTargets: rebates.getAvailableTargetsForDeal(
-        //     state.dealTargets,
-        //     state.selectedDeal
-        // ),
-        // selectedTargets: rebates.getSelectedTargetsForDeal(
-        //     state.dealTargets,
-        //     state.selectedTargets,
-        //     state.selectedDeal
-        // )
     };
 }
 
