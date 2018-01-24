@@ -34,7 +34,9 @@ class Targets extends React.PureComponent {
     }
 
     availableTargets() {
-        return this.props.targets[this.state.targetKey].available || [];
+        return this.props.targets[this.state.targetKey]
+            ? this.props.targets[this.state.targetKey].available
+            : [];
     }
 
     toggle(target) {

@@ -2208,10 +2208,11 @@ var util = {
         }, value, zipped);
     },
     getTargetKeyForDealAndZip: function getTargetKeyForDealAndZip(deal, zipcode) {
+        var year = deal.year;
         var make = deal.make;
         var model = deal.model;
         var series = deal.series;
-        var targetKey = zipcode + '-' + make + '-' + model + '-' + series;
+        var targetKey = zipcode + '-' + year + '-' + make + '-' + model + '-' + series;
         return targetKey;
     }
 };
@@ -14277,7 +14278,7 @@ var Targets = function (_React$PureComponent) {
     }, {
         key: 'availableTargets',
         value: function availableTargets() {
-            return this.props.targets[this.state.targetKey].available || [];
+            return this.props.targets[this.state.targetKey] ? this.props.targets[this.state.targetKey].available : [];
         }
     }, {
         key: 'toggle',
@@ -61715,19 +61716,12 @@ var reducer = function reducer(state, action) {
             });
         case ActionTypes.TOGGLE_TARGET:
             var nextSelectedTargets = Object.assign({}, state.targets);
-            console.log(action);
+
             nextSelectedTargets[action.targetKey].selected = _util2.default.toggleItem(nextSelectedTargets[action.targetKey].selected, action.target);
 
             return Object.assign({}, state, {
                 targets: nextSelectedTargets
             });
-
-        // return Object.assign({}, state, {
-        //     selectedTargets: util.toggleItem(
-        //         state.selectedTargets,
-        //         action.target
-        //     ),
-        // });
         case ActionTypes.SORT_DEALS:
             return Object.assign({}, state, {
                 sortColumn: action.sort,

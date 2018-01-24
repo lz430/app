@@ -89,19 +89,12 @@ const reducer = (state, action) => {
             });
         case ActionTypes.TOGGLE_TARGET:
             let nextSelectedTargets = Object.assign({}, state.targets);
-            console.log(action);
+
             nextSelectedTargets[action.targetKey].selected = util.toggleItem(nextSelectedTargets[action.targetKey].selected, action.target);
 
             return Object.assign({}, state, {
                 targets: nextSelectedTargets,
             });
-
-        // return Object.assign({}, state, {
-        //     selectedTargets: util.toggleItem(
-        //         state.selectedTargets,
-        //         action.target
-        //     ),
-        // });
         case ActionTypes.SORT_DEALS:
             return Object.assign({}, state, {
                 sortColumn: action.sort,
