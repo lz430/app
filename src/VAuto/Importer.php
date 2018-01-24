@@ -198,7 +198,7 @@ class Importer
                     );
                 });
             } catch (ClientException | ServerException $e) {
-                Log::error('Importer error: ' . $e->getMessage());
+                Log::error('Importer error for vin [' . $keyedData['VIN']. ']: ' . $e->getMessage());
                 $this->error('Error: ' . $e->getMessage());
 
                 if ($e->getCode() === 401) {
@@ -206,7 +206,7 @@ class Importer
                     throw $e;
                 }
             } catch (QueryException $e) {
-                Log::error('Importer error: ' . $e->getMessage());
+                Log::error('Importer error for vin [' . $keyedData['VIN']. ']: ' . $e->getMessage());
                 $this->error('Error: ' . $e->getMessage());
             }
         }
