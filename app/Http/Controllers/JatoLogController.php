@@ -6,6 +6,17 @@ class JatoLogController extends Controller
 {
     private $file;
 
+    private $groupSort = [
+        'Uncategorized Errors',
+        '500 server errors from JATO',
+        '400 errors looking up features',
+        '400 errors looking up a version',
+        '404 errors decoding a VIN',
+        '403 errors decoding a VIN',
+        'We could not match VIN->Version',
+        'Internal errors to DMR MySQL'
+    ];
+
     public function __construct()
     {
         $this->file = file(storage_path('logs/jato.log'));
@@ -25,6 +36,7 @@ class JatoLogController extends Controller
     public function showDay($date)
     {
         // Entries are multiple lines of a log file separated by lines with datetime stamps
+        $groupSort = $this->groupSort;
         $entries = [];
         $currentEntry = [];
 
@@ -58,6 +70,8 @@ class JatoLogController extends Controller
                 return str_replace(['ERROR: ', 'Importer error: ', 'Server error: ', 'Client error: '], ['', '', '', ''], $line);
             })->toArray();
             return [$this->getGroupName($entry) => $filteredEntry];
+        })->sortBy(function ($group, $groupName) use ($groupSort) {
+            return array_search($groupName, $groupSort);
         })->each(function ($group, $groupName) {
             // Only show unique lines in these 400 errors
             if ($groupName == '400 errors looking up a version' ||
