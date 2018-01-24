@@ -41,11 +41,14 @@ class JatoLogController extends Controller
             }
         }
 
+        echo '<style>.hide{display:none;}.show{display:block;}</style><script>function expand(target) { document.getElementById(target).className = "show";}</script>';
+
         collect($entries)->filter(function ($entry) use ($date) {
-            $firstLine = reset($entry);
-            // Double check that the date of the entry is the one we want to use
-            // Filter out lines with "DEBUG:" in them
-            return substr($firstLine, 0, 11) == "[{$date}" || ! str_contains($firstLine, '] DEBUG:');
+            // Only get the right date
+            return substr(reset($entry), 0, 11) == "[{$date}";
+        })->reject(function ($entry) {
+            // Drop debug lines
+            return str_contains(reset($entry), 'DEBUG: ');
         })->mapToGroups(function ($entry) {
             // Remove specific strings from log lines
             $filteredEntry = collect($entry)->map(function ($line) {
@@ -61,18 +64,28 @@ class JatoLogController extends Controller
                 $groupName == '400 errors looking up features') {
                 $group = $group->map(function ($item) {
                     return [reset($item)];
-                })->unique();
+                })->unique()->sort();
             }
 
             // Render each group
             echo "<h2>$groupName</h2>";
-            echo '<pre>';
-            collect($group)->each(function ($entry) {
-                // Render each line of the group
-                echo htmlentities(implode("\n", $entry)) . "\n";
+            collect($group)->each(function ($entry, $i) use ($groupName) {
+                $this->renderEntry($entry, md5($groupName) . '-' . $i);
             });
-            echo '</pre>';
         });
+    }
+
+    private function renderEntry($entry, $i)
+    {
+        $firstLine = array_shift($entry);
+        echo '<pre>' . htmlentities($firstLine) . '</pre>';
+
+        if (count($entry) > 0) {
+            echo '<a href="#" onClick="expand(\'expand-' . $i . '\'); return false;">[expand]</a>';
+            echo '<pre id="expand-' . $i . '" class="hide">';
+            echo htmlentities(implode("\n", $entry));
+            echo '</pre>';
+        }
     }
 
     private function getGroupName($entry)
