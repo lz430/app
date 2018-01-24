@@ -1,6 +1,6 @@
 <?php
 
-use App\DmrCategory;
+use App\Category;
 use App\Feature;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -281,7 +281,9 @@ class CreateDmrFeaturesTable extends Migration
                 // @todo
             ]
         ])->each(function ($features, $categorySlug){
-            $categoryId = DmrCategory::where('slug', $categorySlug)->first()->id;
+            $categoryQuery = Category::query();
+            $categoryQuery->getQuery()->from('dmr_categories');
+            $categoryId = $categoryQuery->where('slug', $categorySlug)->first()->id;
 
             $count = 1;
 
@@ -289,7 +291,7 @@ class CreateDmrFeaturesTable extends Migration
                 $feature['dmr_category_id'] = $categoryId;
                 $feature['display_order'] = $count;
 
-                Feature::create($feature);
+                Feature::make($feature)->setTable('dmr_features')->save();
                 $count++;
             });
 

@@ -70,11 +70,9 @@ class JatoFeature extends Model
 
     protected $fillable = ['feature', 'content', 'group'];
 
-    protected $table = 'features';
-
     public function deals()
     {
-        return $this->belongsToMany(Deal::class, 'deal_feature', 'feature_id', 'deal_id');
+        return $this->belongsToMany(Deal::class);
     }
     
     public function scopeHasGroup($query)

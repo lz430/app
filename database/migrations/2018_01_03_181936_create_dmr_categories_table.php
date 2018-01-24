@@ -1,6 +1,6 @@
 <?php
 
-use App\DmrCategory;
+use App\Category;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -81,7 +81,7 @@ class CreateDmrCategoriesTable extends Migration
         ])->each(function ($category, $key) {
             $category['display_order'] = $key + 1;
 
-            DmrCategory::create($category);
+            Category::make($category)->setTable('dmr_categories')->save();
         });
     }
 

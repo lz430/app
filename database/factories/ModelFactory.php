@@ -13,7 +13,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\DmrCategory;
+use App\Category;
 use App\Feature;
 use App\JatoFeature;
 use Carbon\Carbon;
@@ -164,7 +164,7 @@ $factory->define(App\Purchase::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(DmrCategory::class, function (Faker\Generator $faker) {
+$factory->define(Category::class, function (Faker\Generator $faker) {
     return [
         'title'                     => $faker->unique()->company,
         'slug'                      => $faker->unique()->slug,
@@ -176,7 +176,7 @@ $factory->define(Feature::class, function (Faker\Generator $faker) {
     return [
         'title'             => 'First Feature',
         'slug'              => 'first-feature',
-        'dmr_category_id'   => factory(DmrCategory::class)->create(),
+        'category_id'       => factory(Category::class)->create(),
         'display_order'     => 1,
         'jato_schema_ids'   => collect([$faker->randomNumber(5), $faker->randomNumber(5)])->toJson(),
     ];
