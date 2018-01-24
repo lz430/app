@@ -1531,16 +1531,20 @@ function updateResidualPercent(residualPercent) {
 
 function requestBestOffer(deal) {
     return function (dispatch, getState) {
-        dispatch(clearBestOffer());
-        var OPEN_OFFER = 25;
-        var payment_type = getState().selectedTab;
         var zipcode = getState().zipcode;
+        if (!zipcode) return;
+        var OPEN_OFFER = 25;
+        var paymentType = getState().selectedTab;
         var defaultTargetIds = [OPEN_OFFER];
-        var selectedTargetIds = _ramda2.default.map(_ramda2.default.prop('targetId'), getState().selectedTargets);
+
+        var targetKey = _util2.default.getTargetKeyForDealAndZip(deal, zipcode);
+        var selectedTargetIds = getState().targets[targetKey] ? _ramda2.default.map(_ramda2.default.prop('targetId'), getState().targets[targetKey].selected) : [];
         var targets = defaultTargetIds.concat(selectedTargetIds);
 
-        _api2.default.getBestOffer(deal.id, payment_type, zipcode, targets).then(function (data) {
-            dispatch(receiveBestOffer(data));
+        var bestOfferKey = _util2.default.getBestOfferKeyForDeal(deal, zipcode, targets);
+
+        _api2.default.getBestOffer(deal.id, paymentType, zipcode, targets).then(function (data) {
+            dispatch(receiveBestOffer(data, bestOfferKey, paymentType));
         }).catch(function (e) {
             dispatch(receiveBestOffer({
                 data: {
@@ -1558,14 +1562,14 @@ function requestBestOffer(deal) {
     };
 }
 
-function receiveBestOffer(data) {
-    // To normalize the difference between JATO best offer cash endpoint (data.data)
-    //  and finance/lease endpoints (data.data.cash)
-    var bestOffer = data.data.hasOwnProperty('totalValue') ? data.data : data.data.cash;
+function receiveBestOffer(data, bestOfferKey, paymentType) {
+    var bestOffer = paymentType === 'cash' ? data.data : data.data.cash;
     return function (dispatch) {
         dispatch({
             type: ActionTypes.RECEIVE_BEST_OFFER,
-            data: bestOffer
+            data: bestOffer,
+            bestOfferKey: bestOfferKey,
+            paymentType: paymentType
         });
     };
 }
@@ -2214,6 +2218,13 @@ var util = {
         var series = deal.series;
         var targetKey = zipcode + '-' + year + '-' + make + '-' + model + '-' + series;
         return targetKey;
+    },
+    getBestOfferKeyForDeal: function getBestOfferKeyForDeal(deal, zipcode, selectedTargets) {
+        var targetString = _ramda2.default.sort(function (a, b) {
+            return a - b;
+        }, selectedTargets).join('');
+
+        return deal.id + '-' + zipcode + '-' + targetString;
     }
 };
 
@@ -14028,19 +14039,27 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _DealPrice = __webpack_require__(936);
-
-var _DealPrice2 = _interopRequireDefault(_DealPrice);
-
 var _reactRedux = __webpack_require__(14);
 
 var _index = __webpack_require__(15);
 
 var Actions = _interopRequireWildcard(_index);
 
+var _propTypes = __webpack_require__(17);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _util = __webpack_require__(28);
+
+var _util2 = _interopRequireDefault(_util);
+
 var _DealImage = __webpack_require__(365);
 
 var _DealImage2 = _interopRequireDefault(_DealImage);
+
+var _DealPrice = __webpack_require__(936);
+
+var _DealPrice2 = _interopRequireDefault(_DealPrice);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -14055,21 +14074,36 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Deal = function (_React$PureComponent) {
     _inherits(Deal, _React$PureComponent);
 
-    function Deal() {
+    function Deal(props) {
         _classCallCheck(this, Deal);
 
-        return _possibleConstructorReturn(this, (Deal.__proto__ || Object.getPrototypeOf(Deal)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (Deal.__proto__ || Object.getPrototypeOf(Deal)).call(this, props));
+
+        _this.state = {
+            targetKey: null,
+            bestOfferKey: null
+        };
+        return _this;
     }
 
     _createClass(Deal, [{
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            this._isMounted = false;
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.setState({
+                targetKey: _util2.default.getTargetKeyForDealAndZip(this.props.deal, this.props.zipcode)
+            });
+
+            this.props.requestBestOffer(this.props.deal);
         }
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
             this._isMounted = true;
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            this._isMounted = false;
         }
     }, {
         key: 'render',
@@ -14118,7 +14152,7 @@ var Deal = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal__price' },
-                    _react2.default.createElement(_DealPrice2.default, { deal: deal })
+                    _react2.default.createElement(_DealPrice2.default, { deal: deal, targetKey: this.state.targetKey })
                 ),
                 this.props.children
             );
@@ -14130,8 +14164,13 @@ var Deal = function (_React$PureComponent) {
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
-        compareList: state.compareList
+        compareList: state.compareList,
+        zipcode: state.zipcode
     };
+};
+
+Deal.PropTypes = {
+    deal: _propTypes2.default.object.isRequired
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(Deal);
@@ -52572,7 +52611,14 @@ var DealPrice = function (_React$PureComponent) {
     _createClass(DealPrice, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
+            //get all targets selected for this deal
+            //to use for best offer call
             // if best offer is not loaded, call it
+            // $jatoVehicleId: $paymentType: $zipCode: $sortedTargets;
+
+            // util.getBestOfferKey(deal, zipcode, payment_type, )
+            // this.props.bestOffers
+
 
         }
     }, {
@@ -52782,12 +52828,14 @@ var mapStateToProps = function mapStateToProps(state) {
         termDuration: state.termDuration,
         residualPercent: state.residualPercent,
         selectedTab: state.selectedTab,
-        dealTargets: state.dealTargets
+        dealTargets: state.dealTargets,
+        bestOffers: state.bestOffers
     };
 };
 
 DealPrice.PropTypes = {
-    deal: _propTypes2.default.object.isRequired
+    deal: _propTypes2.default.object.isRequired,
+    targetKey: _propTypes2.default.string.isRequired
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(DealPrice);
@@ -61169,6 +61217,7 @@ var initialState = {
     4: '<- increment the number to purge LocalStorage',
     /** End Version **/
     annualMileage: 10000,
+    bestOffers: [],
     bodyStyles: null,
     city: null,
     compareList: [],
@@ -61777,7 +61826,19 @@ var reducer = function reducer(state, action) {
                 zipInRange: action.supported
             });
         case ActionTypes.RECEIVE_BEST_OFFER:
-            return Object.assign({}, state, { dealBestOffer: action.data });
+            var bestOfferKey = action.bestOfferKey;
+
+            var nextBestOffers = Object.assign({}, state.bestOffers);
+
+            var paymentType = action.paymentType;
+
+            if (_ramda2.default.isNil(nextBestOffers[bestOfferKey].paymentType)) {
+                nextBestOffers[bestOfferKey].paymentType = action.data;
+            }
+
+            return Object.assign({}, state, {
+                bestOffers: nextBestOffers
+            });
         case ActionTypes.CLEAR_BEST_OFFER:
             return Object.assign({}, state, { dealBestOffer: null });
     }

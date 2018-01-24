@@ -15,7 +15,14 @@ class DealPrice extends React.PureComponent {
     }
 
     componentWillMount() {
+        //get all targets selected for this deal
+        //to use for best offer call
         // if best offer is not loaded, call it
+        // $jatoVehicleId: $paymentType: $zipCode: $sortedTargets;
+
+        // util.getBestOfferKey(deal, zipcode, payment_type, )
+        // this.props.bestOffers
+
 
     }
 
@@ -216,12 +223,14 @@ const mapStateToProps = state => {
         residualPercent: state.residualPercent,
         selectedTab: state.selectedTab,
         dealTargets: state.dealTargets,
+        bestOffers: state.bestOffers,
     };
 };
 
 
 DealPrice.PropTypes = {
-    deal: PropTypes.object.isRequired
+    deal: PropTypes.object.isRequired,
+    targetKey: PropTypes.string.isRequired,
 }
 
 export default connect(mapStateToProps, Actions)(DealPrice);

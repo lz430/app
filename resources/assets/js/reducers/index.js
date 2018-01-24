@@ -212,7 +212,19 @@ const reducer = (state, action) => {
                 zipInRange: action.supported,
             });
         case ActionTypes.RECEIVE_BEST_OFFER:
-            return Object.assign({}, state, { dealBestOffer: action.data });
+            const bestOfferKey = action.bestOfferKey;
+
+            let nextBestOffers = Object.assign({}, state.bestOffers);
+
+            const paymentType = action.paymentType;
+
+            if (R.isNil(nextBestOffers[bestOfferKey].paymentType)) {
+                nextBestOffers[bestOfferKey].paymentType = action.data;
+            }
+
+            return Object.assign({}, state, {
+                bestOffers: nextBestOffers,
+            });
         case ActionTypes.CLEAR_BEST_OFFER:
             return Object.assign({}, state, { dealBestOffer: null });
     }

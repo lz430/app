@@ -650,21 +650,22 @@ export function updateResidualPercent(residualPercent) {
 
 export function requestBestOffer(deal) {
     return (dispatch, getState) => {
-        dispatch(clearBestOffer());
-        const OPEN_OFFER = 25;
-        const payment_type = getState().selectedTab;
         const zipcode = getState().zipcode;
+        if(!zipcode) return;
+        const OPEN_OFFER = 25;
+        const paymentType = getState().selectedTab;
         const defaultTargetIds = [OPEN_OFFER];
-        const selectedTargetIds = R.map(
-            R.prop('targetId'),
-            getState().selectedTargets
-        );
+
+        const targetKey = util.getTargetKeyForDealAndZip(deal, zipcode);
+        const selectedTargetIds = getState().targets[targetKey] ? R.map(R.prop('targetId'), getState().targets[targetKey].selected) : [];
         const targets = defaultTargetIds.concat(selectedTargetIds);
 
+        const bestOfferKey = util.getBestOfferKeyForDeal(deal, zipcode, targets);
+
         api
-            .getBestOffer(deal.id, payment_type, zipcode, targets)
+            .getBestOffer(deal.id, paymentType, zipcode, targets)
             .then(data => {
-                dispatch(receiveBestOffer(data));
+                dispatch(receiveBestOffer(data, bestOfferKey, paymentType));
             })
             .catch(e => {
                 dispatch(
@@ -685,16 +686,14 @@ export function requestBestOffer(deal) {
     };
 }
 
-export function receiveBestOffer(data) {
-    // To normalize the difference between JATO best offer cash endpoint (data.data)
-    //  and finance/lease endpoints (data.data.cash)
-    const bestOffer = data.data.hasOwnProperty('totalValue')
-        ? data.data
-        : data.data.cash;
+export function receiveBestOffer(data, bestOfferKey, paymentType) {
+    const bestOffer = paymentType === 'cash' ? data.data : data.data.cash;
     return dispatch => {
         dispatch({
             type: ActionTypes.RECEIVE_BEST_OFFER,
             data: bestOffer,
+            bestOfferKey,
+            paymentType
         });
     };
 }

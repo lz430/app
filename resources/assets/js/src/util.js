@@ -105,6 +105,11 @@ const util = {
         const series = deal.series;
         const targetKey = `${zipcode}-${year}-${make}-${model}-${series}`;
         return targetKey;
+    },
+    getBestOfferKeyForDeal(deal, zipcode, selectedTargets) {
+        const targetString = R.sort((a, b) => {return a-b;}, selectedTargets).join('');
+
+        return `${deal.id}-${zipcode}-${targetString}`;
     }
 };
 

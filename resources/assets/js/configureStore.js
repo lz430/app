@@ -20,6 +20,7 @@ const initialState = {
     4: '<- increment the number to purge LocalStorage',
     /** End Version **/
     annualMileage: 10000,
+    bestOffers: [],
     bodyStyles: null,
     city: null,
     compareList: [],

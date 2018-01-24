@@ -1,16 +1,37 @@
 import React from 'react';
-import DealPrice from 'components/Deals/DealPrice';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
+import PropTypes from 'prop-types';
+import util from 'src/util';
 import DealImage from 'components/Deals/DealImage';
+import DealPrice from 'components/Deals/DealPrice';
 
 class Deal extends React.PureComponent {
-    componentWillUnmount() {
-        this._isMounted = false;
+    constructor(props) {
+        super(props);
+        this.state = {
+            targetKey: null,
+            bestOfferKey: null,
+        };
+    }
+
+    componentWillMount() {
+        this.setState({
+            targetKey: util.getTargetKeyForDealAndZip(
+                this.props.deal,
+                this.props.zipcode
+            ),
+        });
+
+        this.props.requestBestOffer(this.props.deal)
     }
 
     componentDidMount() {
         this._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     render() {
@@ -25,7 +46,8 @@ class Deal extends React.PureComponent {
                         <div className="deal__basic-info">
                             <div
                                 onClick={() =>
-                                    (window.location = `/deals/${deal.id}`)}
+                                    (window.location = `/deals/${deal.id}`)
+                                }
                                 className="deal__basic-info-year-and-model"
                             >
                                 <div className="deal__basic-info-year-and-make">
@@ -45,10 +67,12 @@ class Deal extends React.PureComponent {
                     </div>
                 )}
 
-                <div className="tabs__title">Select Your Payment &amp; Rebates</div>
+                <div className="tabs__title">
+                    Select Your Payment &amp; Rebates
+                </div>
 
                 <div className="deal__price">
-                    <DealPrice deal={deal} />
+                    <DealPrice deal={deal} targetKey={this.state.targetKey} />
                 </div>
 
                 {this.props.children}
@@ -60,7 +84,12 @@ class Deal extends React.PureComponent {
 const mapStateToProps = state => {
     return {
         compareList: state.compareList,
+        zipcode: state.zipcode,
     };
+};
+
+Deal.PropTypes = {
+    deal: PropTypes.object.isRequired,
 };
 
 export default connect(mapStateToProps, Actions)(Deal);
