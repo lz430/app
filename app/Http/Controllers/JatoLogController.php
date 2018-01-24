@@ -81,34 +81,34 @@ class JatoLogController extends Controller
 
         if (str_contains($firstLine, '/features/') &&
             str_contains($firstLine, '400 Bad Request')) {
-           return '400 errors looking up features';
+            return '400 errors looking up features';
         }
 
         if (str_contains($firstLine, '/vin/decode') &&
             str_contains($firstLine, '404 Not Found')) {
-           return '404 errors decoding a VIN';
+            return '404 errors decoding a VIN';
         }
 
         if (str_contains($firstLine, '/vin/decode') &&
             str_contains($firstLine, '403 Forbidden')) {
-           return '403 errors decoding a VIN';
+            return '403 errors decoding a VIN';
         }
 
         if (str_contains($firstLine, 'Could not find exact match for VIN')) {
-           return 'We could not match VIN->Version';
+            return 'We could not match VIN->Version';
         }
 
         if (str_contains($firstLine, '/versions/') &&
             str_contains($firstLine, '400 Bad Request')) {
-           return '400 errors looking up a version';
+            return '400 errors looking up a version';
         }
 
         if (str_contains($firstLine, 'Integrity constraint')) {
-           return 'Internal errors to DMR MySQL';
+            return 'Internal errors to DMR MySQL';
         }
 
         if (str_contains($firstLine, '500 Internal Server Error')) {
-           return '500 server errors from JATO';
+            return '500 server errors from JATO';
         }
 
         return 'Uncategorized Errors';
