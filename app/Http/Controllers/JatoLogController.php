@@ -4,33 +4,31 @@ namespace App\Http\Controllers;
 
 class JatoLogController extends Controller
 {
+    private $file;
+
+    public function __construct()
+    {
+        $this->file = file(storage_path('logs/jato.log'));
+    }
     // this file is just throwaway for debug purposes during dev.
     public function index()
     {
-        $dates = [];
-
-        $file = file(storage_path('logs/jato.log'));
-
-        foreach ($file as $f) {
-            if (substr($f, 0, 5) == "[2018") {
-                $date = substr($f, 1, 10);
-                $dates[$date] = true;
-            }
-        }
-
-        foreach ($dates as $date => $true) {
+        $dates = collect($this->file)->filter(function ($line) {
+            return substr($line, 0, 5) == "[2018";
+        })->map(function ($line) {
+            return substr($line, 1, 10);
+        })->unique()->each(function ($date) {
             echo '<a href="/jato-logs/' . $date . '">' . $date . '</a><br>';
-        }
+        });
     }
 
     public function showDay($date)
     {
-        $file = file(storage_path('logs/jato.log'));
-
+        // Entries are multiple lines of a log file separated by lines with datetime stamps
         $entries = [];
         $currentEntry = [];
 
-        foreach ($file as $f) {
+        foreach ($this->file as $f) {
             // Find start of an entry
             if (substr($f, 0, 5) == "[2018") {
                 // Take old entry; add it to the list
@@ -43,126 +41,76 @@ class JatoLogController extends Controller
             }
         }
 
-        $fourHundredFeatures = [];
-        $fourHundredVersion = [];
-        $vinDecodeFourOhFour = [];
-        $vinDecodeFourOhThree = [];
-        $couldNotMatch = [];
-        $integrityConstraint = [];
-        $fiveHundreds = [];
-
-        echo '<h2>Un-categorized errors</h2>';
-        echo '<pre>';
-
-        foreach ($entries as $entry) {
+        collect($entries)->filter(function ($entry) use ($date) {
             $firstLine = reset($entry);
-
-            if (substr($firstLine, 0, 11) != "[{$date}") {
-                continue; // skip this one; wrong day
+            // Double check that the date of the entry is the one we want to use
+            // Filter out lines with "DEBUG:" in them
+            return substr($firstLine, 0, 11) == "[{$date}" || ! str_contains($firstLine, '] DEBUG:');
+        })->mapToGroups(function ($entry) {
+            // Remove specific strings from log lines
+            $filteredEntry = collect($entry)->map(function ($line) {
+                if (str_contains($line, "ERROR: ")) {
+                    $line = strstr($line, 'ERROR: ');
+                }
+                return str_replace(['ERROR: ', 'Importer error: ', 'Server error: ', 'Client error: '], ['', '', '', ''], $line);
+            })->toArray();
+            return [$this->getGroupName($entry) => $filteredEntry];
+        })->each(function ($group, $groupName) {
+            // Only show unique lines in these 400 errors
+            if ($groupName == '400 errors looking up a version' ||
+                $groupName == '400 errors looking up features') {
+                $group = $group->map(function ($item) {
+                    return [reset($item)];
+                })->unique();
             }
 
-            if (str_contains($firstLine, '] DEBUG:')) {
-                continue; // skip debug
-            }
-
-            if (str_contains($firstLine, '/features/') &&
-                str_contains($firstLine, '400 Bad Request')) {
-                $fourHundredFeatures[] = $entry;
-                continue;
-            }
-
-            if (str_contains($firstLine, '/vin/decode') &&
-                str_contains($firstLine, '404 Not Found')) {
-                $vinDecodeFourOhFour[] = $entry;
-                continue;
-            }
-
-            if (str_contains($firstLine, '/vin/decode') &&
-                str_contains($firstLine, '403 Forbidden')) {
-                $vinDecodeFourOhThree[] = $entry;
-                continue;
-            }
-
-            if (str_contains($firstLine, 'Could not find exact match for VIN')) {
-                $couldNotMatch[] = $entry;
-                continue;
-            }
-
-            if (str_contains($firstLine, '/versions/') &&
-                str_contains($firstLine, '400 Bad Request')) {
-                $fourHundredVersion[] = $entry;
-                continue;
-            }
-
-            if (str_contains($firstLine, 'Integrity constraint')) {
-                $integrityConstraint[] = $entry;
-                continue;
-            }
-
-            if (str_contains($firstLine, '500 Internal Server Error')) {
-                $fiveHundreds[] = $entry;
-                continue;
-            }
-
-            echo htmlentities(implode("\n", $entry)) . "\n";
-        }
-
-        echo '</pre>';
-
-        foreach ([
-            '500 server errors from JATO' => $fiveHundreds,
-            '400 errors looking up features' => $fourHundredFeatures,
-            '400 errors looking up a version' => $fourHundredVersion,
-            '404 errors decoding a VIN' => $vinDecodeFourOhFour,
-            '403 errors decoding a VIN' => $vinDecodeFourOhThree,
-            'We could not match VIN->Version' => $couldNotMatch,
-            'Internal errors to DMR MySQL' => $integrityConstraint,
-        ] as $name => $entries) {
-            echo '<h2>' . $name . '</h2>';
+            // Render each group
+            echo "<h2>$groupName</h2>";
             echo '<pre>';
-
-            foreach ($entries as &$entry) {
-                foreach ($entry as &$line) {
-                    if (str_contains($line, "ERROR: ")) {
-                        $line = strstr($line, 'ERROR: ');
-                    }
-
-                    $line = str_replace(['ERROR: ', 'Importer error: ', 'Server error: ', 'Client error: '], ['', '', '', ''], $line);
-                }
-            }
-
-            // ugh i want unique flat map
-            if ($name == '400 errors looking up a version' ||
-                $name == '400 errors looking up features') {
-                $entries = $this->uniqueEntries($entries);
-            }
-
-            foreach ($entries as $entry) {
-                foreach ($entry as $line) {
-                    echo htmlentities($line) . "\n";
-                }
-            }
+            collect($group)->each(function ($entry) {
+                // Render each line of the group
+                echo htmlentities(implode("\n", $entry)) . "\n";
+            });
             echo '</pre>';
-        }
+        });
     }
 
-    private function uniqueEntries($entries)
+    private function getGroupName($entry)
     {
-        $lines = [];
+        $firstLine = reset($entry);
 
-        foreach ($entries as $entry) {
-            $lines[] = reset($entry);
+        if (str_contains($firstLine, '/features/') &&
+            str_contains($firstLine, '400 Bad Request')) {
+            return '400 errors looking up features';
         }
 
-        $lines = array_unique($lines);
-        sort($lines);
-
-        $return = [];
-
-        foreach ($lines as $line) {
-            $return[] = [$line];
+        if (str_contains($firstLine, '/vin/decode') &&
+            str_contains($firstLine, '404 Not Found')) {
+            return '404 errors decoding a VIN';
         }
 
-        return $return;
+        if (str_contains($firstLine, '/vin/decode') &&
+            str_contains($firstLine, '403 Forbidden')) {
+            return '403 errors decoding a VIN';
+        }
+
+        if (str_contains($firstLine, 'Could not find exact match for VIN')) {
+            return 'We could not match VIN->Version';
+        }
+
+        if (str_contains($firstLine, '/versions/') &&
+            str_contains($firstLine, '400 Bad Request')) {
+            return '400 errors looking up a version';
+        }
+
+        if (str_contains($firstLine, 'Integrity constraint')) {
+            return 'Internal errors to DMR MySQL';
+        }
+
+        if (str_contains($firstLine, '500 Internal Server Error')) {
+            return '500 server errors from JATO';
+        }
+
+        return 'Uncategorized Errors';
     }
 }
