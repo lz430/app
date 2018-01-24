@@ -6,7 +6,6 @@ import zondicons from 'zondicons';
 import Modal from 'components/Modal';
 import strings from 'src/strings';
 import api from 'src/api';
-import rebates from 'src/rebates';
 import R from 'ramda';
 import util from 'src/util';
 
@@ -28,12 +27,12 @@ class ThankYouPage extends React.PureComponent {
     }
 
     componentWillReceiveProps(props) {
-        this.setState({
-            availableTargets: rebates.getAvailableTargetsForDeal(
-                props.dealTargets,
-                props.purchase.data.attributes.deal.data
-            ),
-        });
+        // this.setState({
+        //     availableTargets: rebates.getAvailableTargetsForDeal(
+        //         props.dealTargets,
+        //         props.purchase.data.attributes.deal.data
+        //     ),
+        // });
     }
 
     componentDidMount() {

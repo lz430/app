@@ -1,7 +1,7 @@
 import React from 'react';
 import R from 'ramda';
+import PropTypes from 'prop-types';
 import util from 'src/util';
-import rebates from 'src/rebates';
 import formulas from 'src/formulas';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
@@ -12,6 +12,11 @@ import InfoModal from 'components/InfoModal';
 class DealPrice extends React.PureComponent {
     constructor(props) {
         super(props);
+    }
+
+    componentWillMount() {
+        // if best offer is not loaded, call it
+
     }
 
     renderPriceExplanationModal() {
@@ -213,5 +218,10 @@ const mapStateToProps = state => {
         dealTargets: state.dealTargets,
     };
 };
+
+
+DealPrice.PropTypes = {
+    deal: PropTypes.object.isRequired
+}
 
 export default connect(mapStateToProps, Actions)(DealPrice);

@@ -3,7 +3,6 @@ import util from 'src/util';
 import R from 'ramda';
 import Targets from 'components/Targets';
 import CustomerTypeSelect from 'components/CustomerTypeSelect';
-import rebates from 'src/rebates';
 import formulas from 'src/formulas';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
@@ -84,7 +83,7 @@ class FinanceCalculator extends React.PureComponent {
     renderYourTargets() {
         return <div>
                 <span className="cash-finance-lease-calculator__left-item">
-                    Best Rebates Offer
+                    Rebates Applied
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
                     {this.props.dealBestOffer ? (

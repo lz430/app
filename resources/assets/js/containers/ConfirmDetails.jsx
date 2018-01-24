@@ -6,7 +6,6 @@ import Modal from 'components/Modal';
 import PropTypes from 'prop-types';
 import purchase from 'src/purchase';
 import React from 'react';
-import rebates from 'src/rebates';
 import strings from 'src/strings';
 import DealImage from 'components/Deals/DealImage';
 

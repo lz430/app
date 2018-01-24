@@ -3,7 +3,6 @@ import util from 'src/util';
 import R from 'ramda';
 import Targets from 'components/Targets';
 import CustomerTypeSelect from 'components/CustomerTypeSelect';
-import rebates from 'src/rebates';
 import formulas from 'src/formulas';
 import { connect } from 'react-redux';
 import api from 'src/api';
@@ -284,30 +283,23 @@ class LeaseCalculator extends React.PureComponent {
     }
 
     renderYourTargets() {
-        return (
-            <div>
+        return <div>
                 <span className="cash-finance-lease-calculator__left-item">
-                    Best Rebates Offer
+                    Rebates Applied
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.props.availableTargets ? (
-                        util.moneyFormat(R.sum([0]))
-                    ) : (
-                        <SVGInline
-                            svg={
-                                miscicons['loading']
+                    {this.props.availableTargets ? util.moneyFormat(R.sum(
+                                [0]
+                            )) : <SVGInline svg={miscicons['loading']
                                 /** @todo : replace this to somehow get info back from API best offer call
                                 R.map(
                                     R.prop('value'),
                                     this.props.selectedTargets
                                 )
                                 */
-                            }
-                        />
-                    )}
+                            } />}
                 </span>
-            </div>
-        );
+            </div>;
     }
 
     updateFromLeaseTable(termDuration, annualMileage, downPayment) {

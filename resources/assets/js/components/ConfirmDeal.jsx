@@ -1,7 +1,6 @@
 import api from 'src/api';
 import miscicons from 'miscicons';
 import React from 'react';
-import rebates from 'src/rebates';
 import strings from 'src/strings';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
@@ -64,18 +63,18 @@ class ConfirmDeal extends React.PureComponent {
     }
 
     componentWillReceiveProps(props) {
-        if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
-            return this.props.requestRebates(this.props.deal);
-        }
+        // if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
+        //     return this.props.requestRebates(this.props.deal);
+        // }
 
-            this.setState({
-                availableTargets: props.dealTargets[props.deal.id] || [],
-                selectedTargets: rebates.getSelectedTargetsForDeal(
-                    props.dealTargets,
-                    props.selectedTargets,
-                    props.deal
-                ),
-            });
+        //     this.setState({
+        //         availableTargets: props.dealTargets[props.deal.id] || [],
+        //         selectedTargets: rebates.getSelectedTargetsForDeal(
+        //             props.dealTargets,
+        //             props.selectedTargets,
+        //             props.deal
+        //         ),
+        //     });
     }
 
     renderDealRebatesModal() {

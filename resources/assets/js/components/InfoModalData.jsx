@@ -6,7 +6,6 @@ import Modal from 'components/Modal';
 import PropTypes from 'prop-types';
 import R from 'ramda';
 import React from 'react';
-import rebates from 'src/rebates';
 import SVGInline from 'react-svg-inline';
 import util from 'src/util';
 import strings from 'src/strings';
@@ -50,19 +49,19 @@ class InfoModalData extends React.PureComponent {
     }
 
     componentWillReceiveProps(props) {
-        if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
-            return this.requestTargets();
-        }
+        // if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
+        //     return this.requestTargets();
+        // }
 
-        this.setState({
-            availableTargets: props.dealTargets[props.deal.id] || [],
-            selectedTargets: rebates.getSelectedTargetsForDeal(
-                props.dealTargets,
-                props.selectedTargets,
-                props.deal
-            ),
-            dealBestOffer: props.dealBestOffer,
-        });
+        // this.setState({
+        //     availableTargets: props.dealTargets[props.deal.id] || [],
+        //     selectedTargets: rebates.getSelectedTargetsForDeal(
+        //         props.dealTargets,
+        //         props.selectedTargets,
+        //         props.deal
+        //     ),
+        //     dealBestOffer: props.dealBestOffer,
+        // });
     }
 
     displayFinalPrice() {

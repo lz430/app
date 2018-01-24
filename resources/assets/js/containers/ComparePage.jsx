@@ -9,7 +9,6 @@ import * as Actions from 'actions/index';
 import Deal from 'components/Deals/Deal';
 import Modal from 'components/Modal';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
-import rebates from 'src/rebates';
 import string from 'src/strings';
 import AccordionTable from 'components/AccordionTable';
 import util from 'src/util';

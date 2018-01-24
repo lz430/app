@@ -4,7 +4,6 @@ import R from 'ramda';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
 import SVGInline from 'react-svg-inline';
-import rebates from 'src/rebates';
 import strings from 'src/strings';
 import util from 'src/util';
 import miscicons from 'miscicons';
@@ -80,7 +79,7 @@ class Targets extends React.PureComponent {
     render() {
         return (
             <div>
-                <h4>Select </h4>
+                <h4>Select Your Target - COPY?</h4>
                 <div className="rebates">
                     {this.props ? (
                         this.availableTargets().map((target, index) =>

@@ -3,7 +3,6 @@ import util from 'src/util';
 import R from 'ramda';
 import Targets from 'components/Targets';
 import CustomerTypeSelect from 'components/CustomerTypeSelect';
-import rebates from 'src/rebates';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
 import formulas from 'src/formulas';
@@ -23,24 +22,11 @@ class CashCalculator extends React.PureComponent {
         const bestOfferTotalValue = this.props.dealBestOffer
             ? this.props.dealBestOffer.totalValue
             : 0;
-        return (
-            <div>
-                Cash Price{' '}
-                {util.moneyFormat(
-                    util.getEmployeeOrSupplierPrice(
-                        this.props.deal,
-                        this.props.employeeBrand
-                    )
-                )}
+        return <div>
+                Cash Price {util.moneyFormat(util.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand))}
                 <CustomerTypeSelect deal={this.props.deal} />
                 <hr />
-                <Targets
-                    deal={this.props.deal}
-                    targetsChanged={this.props.requestBestOffer.bind(
-                        this,
-                        this.props.deal
-                    )}
-                />
+                <Targets deal={this.props.deal} targetsChanged={this.props.requestBestOffer.bind(this, this.props.deal)} />
                 <hr />
                 <h4>Summary</h4>
                 <div>
@@ -91,7 +77,7 @@ class CashCalculator extends React.PureComponent {
                     </div>
                     <div>
                         <span className="cash-finance-lease-calculator__left-item">
-                            Best Rebates Offer
+                            Rebates Applied
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
                             {this.props.dealBestOffer ? (
@@ -120,8 +106,7 @@ class CashCalculator extends React.PureComponent {
                         </span>
                     </div>
                 </div>
-            </div>
-        );
+            </div>;
     }
 }
 
