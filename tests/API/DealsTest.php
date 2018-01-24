@@ -12,6 +12,7 @@ use App\Zipcode;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Fluent;
 use Tests\TestCase;
+use App\Feature;
 
 class DealsTest extends TestCase
 {
@@ -176,7 +177,7 @@ class DealsTest extends TestCase
 
         $versionDeals = $version->deals()->saveMany(factory(Deal::class, 3)->make());
 
-        $versionDeals->first()->features()->attach(factory(JatoFeature::class)->create(['feature' => 'ABS']));
+        $versionDeals->first()->jatoFeatures()->attach(factory(JatoFeature::class)->create(['feature' => 'ABS']));
 
         $response = $this->getJson(route('deals.index', [
             'make_ids' => [$make->id, 2, 3],
@@ -201,7 +202,9 @@ class DealsTest extends TestCase
             $version->deals()->attach($deal->id);
         }
 
-        $deals->first()->features()->attach(factory(JatoFeature::class)->create(['feature' => 'ABS']));
+        $feature = factory(Feature::class)->create(['title' => 'ABS']);
+        
+        $deals->first()->features()->attach($feature->id);
 
         $response = $this->getJson(route('deals.index', [
             'make_ids' => [$make->id],
@@ -224,8 +227,8 @@ class DealsTest extends TestCase
             $version->deals()->attach($deal->id);
         }
 
-        $absFeature = factory(JatoFeature::class)->create(['feature' => 'ABS']);
-        $heatedSeatsFeature = factory(JatoFeature::class)->create(['feature' => 'Heated seats']);
+        $absFeature = factory(Feature::class)->create(['title' => 'ABS']);
+        $heatedSeatsFeature = factory(Feature::class)->create(['title' => 'Heated seats']);
 
         $deals->first()->features()->attach($absFeature);
 

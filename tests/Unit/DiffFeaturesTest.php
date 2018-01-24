@@ -27,7 +27,7 @@ class DiffFeaturesTest extends TestCase
             'group' => 'safety',
         ]);
 
-        $deal->features()->save($feature);
+        $deal->jatoFeatures()->save($feature);
 
         $dealTransformer = new DealTransformer;
 

@@ -34,14 +34,14 @@ class Deal extends Model
         return $this->hasMany(DealPhoto::class)->orderBy('id');
     }
     
-    public function features()
+    public function jatoFeatures()
     {
-        return $this->belongsToMany(JatoFeature::class)->hasGroup();
+        return $this->belongsToMany(JatoFeature::class, 'deal_feature', 'deal_id', 'feature_id')->hasGroup();
     }
 
-    public function dmrFeatures()
+    public function features()
     {
-        return $this->belongsToMany(Feature::class);
+        return $this->belongsToMany(Feature::class, 'deal_dmr_feature', 'deal_id', 'dmr_feature_id');
     }
     
     public function featuredPhoto()

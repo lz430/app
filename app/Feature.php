@@ -12,6 +12,8 @@ class Feature extends Model
         'jato_schema_ids' => 'array'
     ];
 
+    protected $table = 'dmr_features';
+
     public function category()
     {
         return $this->belongsTo(DmrCategory::class, 'dmr_category_id');
@@ -19,6 +21,6 @@ class Feature extends Model
 
     public function deals()
     {
-         return $this->belongsToMany(Deal::class);
+         return $this->belongsToMany(Deal::class, 'deal_dmr_feature', 'dmr_feature_id', 'deal_id');
     }
 }
