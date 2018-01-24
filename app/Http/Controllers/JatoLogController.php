@@ -53,7 +53,7 @@ class JatoLogController extends Controller
             }
         }
 
-        echo '<style>.hide{display:none;}.show{display:block;}</style><script>function expand(target) { document.getElementById(target).className = "show";}</script>';
+        echo '<style>.hide{display:none;}.show{display:block;}</style><script>function expand(target) { document.getElementById("expand-" + target).className = "show"; document.getElementById("expand-button-" + target).className = "hide"; }</script>';
 
         collect($entries)->filter(function ($entry) use ($date) {
             // Only get the right date
@@ -95,7 +95,7 @@ class JatoLogController extends Controller
         echo '<pre>' . htmlentities($firstLine) . '</pre>';
 
         if (count($entry) > 0) {
-            echo '<a href="#" onClick="expand(\'expand-' . $i . '\'); return false;">[expand]</a>';
+            echo '<a id="expand-button-' . $i . '" href="#" onClick="expand(\'' . $i . '\'); return false;">[expand]</a>';
             echo '<pre id="expand-' . $i . '" class="hide">';
             echo htmlentities(implode("\n", $entry));
             echo '</pre>';
