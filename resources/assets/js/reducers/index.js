@@ -216,17 +216,13 @@ const reducer = (state, action) => {
 
             let nextBestOffers = Object.assign({}, state.bestOffers);
 
-            const paymentType = action.paymentType;
-
-            if (R.isNil(nextBestOffers[bestOfferKey].paymentType)) {
-                nextBestOffers[bestOfferKey].paymentType = action.data;
+            if (R.isNil(nextBestOffers[bestOfferKey])) {
+                nextBestOffers[bestOfferKey] = action.data;
             }
 
             return Object.assign({}, state, {
                 bestOffers: nextBestOffers,
             });
-        case ActionTypes.CLEAR_BEST_OFFER:
-            return Object.assign({}, state, { dealBestOffer: null });
     }
 
     return state;

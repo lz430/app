@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import PropTypes from 'prop-types';
+import R from 'ramda';
 import util from 'src/util';
 import DealImage from 'components/Deals/DealImage';
 import DealPrice from 'components/Deals/DealPrice';
@@ -16,18 +17,45 @@ class Deal extends React.PureComponent {
     }
 
     componentWillMount() {
-        this.setState({
-            targetKey: util.getTargetKeyForDealAndZip(
-                this.props.deal,
-                this.props.zipcode
-            ),
-        });
-
-        this.props.requestBestOffer(this.props.deal)
+        // const targetKey = util.getTargetKeyForDealAndZip(
+        //     this.props.deal,
+        //     this.props.zipcode
+        // );
+        // let selectedTargetIds = this.props.targets[targetKey]
+        //     ? R.map(R.prop('targetId'), this.props.targets[targetKey].selected)
+        //     : [];
+        // selectedTargetIds = selectedTargetIds.concat(this.props.targetDefaults);
+        // this.setState({
+        //     targetKey: targetKey,
+        //     bestOfferKey: util.getBestOfferKeyForDeal(
+        //         this.props.deal,
+        //         this.props.zipcode,
+        //         this.props.selectedTab,
+        //         selectedTargetIds
+        //     ),
+        // });
     }
 
     componentDidMount() {
         this._isMounted = true;
+
+        //if no best offer is available, call for it
+        if (!R.prop(this.state.bestOfferKey, this.props.bestOffers)) {
+            this.props.requestBestOffer(this.props.deal);
+        }
+
+        const targetKey = util.getTargetKeyForDealAndZip(this.props.deal, this.props.zipcode);
+        let selectedTargetIds = this.props.targets[targetKey] ? R.map(R.prop('targetId'), this.props.targets[targetKey].selected) : [];
+        selectedTargetIds = R.uniq(selectedTargetIds.concat(this.props.targetDefaults));
+        this.setState({
+            targetKey: targetKey,
+            bestOfferKey: util.getBestOfferKeyForDeal(
+                this.props.deal,
+                this.props.zipcode,
+                this.props.selectedTab,
+                selectedTargetIds
+            ),
+        });
     }
 
     componentWillUnmount() {
@@ -72,7 +100,7 @@ class Deal extends React.PureComponent {
                 </div>
 
                 <div className="deal__price">
-                    <DealPrice deal={deal} targetKey={this.state.targetKey} />
+                    <DealPrice deal={deal} targetKey={this.state.targetKey} bestOfferKey={this.state.bestOfferKey}/>
                 </div>
 
                 {this.props.children}
@@ -85,6 +113,10 @@ const mapStateToProps = state => {
     return {
         compareList: state.compareList,
         zipcode: state.zipcode,
+        bestOffers: state.bestOffers,
+        selectedTab: state.selectedTab,
+        targets: state.targets,
+        targetDefaults: state.targetDefaults,
     };
 };
 

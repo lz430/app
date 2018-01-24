@@ -25,7 +25,9 @@ const util = {
             : R.append(item, items);
     },
     getEmployeeOrSupplierPrice: (deal, employeeBrand) => {
-        return (employeeBrand === deal.make) ? deal.employee_price : deal.supplier_price;
+        return employeeBrand === deal.make
+            ? deal.employee_price
+            : deal.supplier_price;
     },
     getInitialBodyStyleFromUrl: () => {
         return R.prop('style', qs.parse(window.location.search.slice(1)));
@@ -106,11 +108,13 @@ const util = {
         const targetKey = `${zipcode}-${year}-${make}-${model}-${series}`;
         return targetKey;
     },
-    getBestOfferKeyForDeal(deal, zipcode, selectedTargets) {
-        const targetString = R.sort((a, b) => {return a-b;}, selectedTargets).join('');
+    getBestOfferKeyForDeal(deal, zipcode, paymentType, selectedTargets) {
+        const targetString = R.sort((a, b) => {
+            return a - b;
+        }, selectedTargets).join('-');
 
-        return `${deal.id}-${zipcode}-${targetString}`;
-    }
+        return `${deal.id}-${zipcode}-${paymentType}-${targetString}`;
+    },
 };
 
 export default util;

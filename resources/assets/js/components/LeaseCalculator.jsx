@@ -72,7 +72,7 @@ class LeaseCalculator extends React.PureComponent {
 
     componentWillUnmount() {
         this._isMounted = false;
-        this.props.clearBestOffer();
+        // this.props.clearBestOffer();
     }
 
     getClosestAnnualMileage(leaseRate) {

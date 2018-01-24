@@ -15,7 +15,7 @@ class CashCalculator extends React.PureComponent {
         this.props.requestBestOffer(this.props.deal);
     }
     componentWillUnmount() {
-        this.props.clearBestOffer();
+        // this.props.clearBestOffer();
     }
 
     render() {

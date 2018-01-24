@@ -652,15 +652,15 @@ export function requestBestOffer(deal) {
     return (dispatch, getState) => {
         const zipcode = getState().zipcode;
         if(!zipcode) return;
-        const OPEN_OFFER = 25;
+
         const paymentType = getState().selectedTab;
-        const defaultTargetIds = [OPEN_OFFER];
+
 
         const targetKey = util.getTargetKeyForDealAndZip(deal, zipcode);
         const selectedTargetIds = getState().targets[targetKey] ? R.map(R.prop('targetId'), getState().targets[targetKey].selected) : [];
-        const targets = defaultTargetIds.concat(selectedTargetIds);
+        const targets = R.uniq(getState().targetDefaults.concat(selectedTargetIds));
 
-        const bestOfferKey = util.getBestOfferKeyForDeal(deal, zipcode, targets);
+        const bestOfferKey = util.getBestOfferKeyForDeal(deal, zipcode, paymentType, targets);
 
         api
             .getBestOffer(deal.id, paymentType, zipcode, targets)
@@ -693,13 +693,6 @@ export function receiveBestOffer(data, bestOfferKey, paymentType) {
             type: ActionTypes.RECEIVE_BEST_OFFER,
             data: bestOffer,
             bestOfferKey,
-            paymentType
         });
-    };
-}
-
-export function clearBestOffer() {
-    return {
-        type: ActionTypes.CLEAR_BEST_OFFER,
     };
 }

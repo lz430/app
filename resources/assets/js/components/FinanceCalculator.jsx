@@ -16,7 +16,7 @@ class FinanceCalculator extends React.PureComponent {
     }
 
     componentWillUnmount() {
-        this.props.clearBestOffer();
+        // this.props.clearBestOffer();
     }
 
     updateDownPayment(e) {

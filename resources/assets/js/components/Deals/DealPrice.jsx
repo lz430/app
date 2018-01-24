@@ -12,18 +12,26 @@ import InfoModal from 'components/InfoModal';
 class DealPrice extends React.PureComponent {
     constructor(props) {
         super(props);
+        this.state = {
+            bestOffer: null,
+        };
     }
 
     componentWillMount() {
-        //get all targets selected for this deal
-        //to use for best offer call
-        // if best offer is not loaded, call it
-        // $jatoVehicleId: $paymentType: $zipCode: $sortedTargets;
+        this.setState({
+            bestOffer: R.prop(this.props.bestOfferKey, this.props.bestOffers),
+        });
+    }
 
-        // util.getBestOfferKey(deal, zipcode, payment_type, )
-        // this.props.bestOffers
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps);
+        this.setState({
+            bestOffer: R.prop(nextProps.bestOfferKey, nextProps.bestOffers),
+        });
+    }
 
-
+    bestOfferTotalValue() {
+        return this.state.bestOffer ? this.state.bestOffer.totalValue : 0;
     }
 
     renderPriceExplanationModal() {
@@ -31,27 +39,28 @@ class DealPrice extends React.PureComponent {
     }
 
     renderCashPrice() {
-        return (
-            <div className="deal-price__price">
-                <div className="deal-price__cash-label">Your cash price</div>
+        return <div className="deal-price__price">
+                <div className="deal-price__cash-label">
+                    Your cash price
+                </div>
                 <div className="deal-price__cash-price">
                     <div>
                         {util.moneyFormat(
                             util.getEmployeeOrSupplierPrice(
                                 this.props.deal,
                                 this.props.employeeBrand
-                            )
+                            ) - this.bestOfferTotalValue()
                         )}
                     </div>
                     {this.renderPriceExplanationModal()}
                 </div>
                 <div className="deal-price__hr" />
                 <div className="deal-price__cash-msrp">
-                    {util.moneyFormat(this.props.deal.msrp)}{' '}
-                    <span className="deal-price__cash-msrp-label">MSRP</span>
+                    {util.moneyFormat(this.props.deal.msrp)} <span className="deal-price__cash-msrp-label">
+                        MSRP
+                    </span>
                 </div>
-            </div>
-        );
+            </div>;
     }
 
     renderFinancePrice() {
@@ -227,10 +236,10 @@ const mapStateToProps = state => {
     };
 };
 
-
 DealPrice.PropTypes = {
     deal: PropTypes.object.isRequired,
     targetKey: PropTypes.string.isRequired,
-}
+    bestOfferKey: PropTypes.string.isRequired,
+};
 
 export default connect(mapStateToProps, Actions)(DealPrice);

@@ -79,7 +79,7 @@ class Targets extends React.PureComponent {
     render() {
         return (
             <div>
-                <h4>Select Your Target - COPY?</h4>
+                <h4>Select Your Target</h4>
                 <div className="rebates">
                     {this.props ? (
                         this.availableTargets().map((target, index) =>

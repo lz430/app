@@ -54,6 +54,10 @@ const initialState = {
     sortAscending: true,
     sortColumn: 'price',
     targets: [],
+    targetDefaults: [
+        25, /// OPEN OFFER
+        52,
+    ],
     termDuration: 36,
     transmissionTypes: ['automatic', 'manual'],
     window: { width: window.innerWidth },
