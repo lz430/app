@@ -22,7 +22,6 @@ class LeaseCalculator extends React.PureComponent {
     }
 
     componentWillMount() {
-
         this.props.requestTargets(this.props.deal);
         this.props.requestBestOffer(this.props.deal);
 
@@ -61,12 +60,8 @@ class LeaseCalculator extends React.PureComponent {
                         this.props.updateTermDuration(
                             closestLeaseRate.termMonths
                         );
-                        this.props.updateAnnualMileage(
-                            closestAnnualMileage
-                        );
-                        this.props.updateResidualPercent(
-                            residualPercent
-                        );
+                        this.props.updateAnnualMileage(closestAnnualMileage);
+                        this.props.updateResidualPercent(residualPercent);
                     }
                 );
             });
@@ -292,23 +287,23 @@ class LeaseCalculator extends React.PureComponent {
         return (
             <div>
                 <span className="cash-finance-lease-calculator__left-item">
-                    Some text here about your target
+                    Best Rebates Offer
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
                     {this.props.availableTargets ? (
-                        util.moneyFormat(
-                            R.sum(
-                                [0]
+                        util.moneyFormat(R.sum([0]))
+                    ) : (
+                        <SVGInline
+                            svg={
+                                miscicons['loading']
                                 /** @todo : replace this to somehow get info back from API best offer call
                                 R.map(
                                     R.prop('value'),
                                     this.props.selectedTargets
                                 )
                                 */
-                            )
-                        )
-                    ) : (
-                        <SVGInline svg={miscicons['loading']} />
+                            }
+                        />
                     )}
                 </span>
             </div>

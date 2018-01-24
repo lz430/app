@@ -82,10 +82,9 @@ class FinanceCalculator extends React.PureComponent {
     }
 
     renderYourTargets() {
-        return (
-            <div>
+        return <div>
                 <span className="cash-finance-lease-calculator__left-item">
-                    Some text here about your target
+                    Best Rebates Offer
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
                     {this.props.dealBestOffer ? (
@@ -94,8 +93,7 @@ class FinanceCalculator extends React.PureComponent {
                         <SVGInline svg={miscicons['loading']} />
                     )}
                 </span>
-            </div>
-        );
+            </div>;
     }
 
     renderAmountFinanced() {

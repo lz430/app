@@ -60067,7 +60067,7 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__left-item' },
-                            'Some text here about your targets'
+                            'Best Rebates Offer'
                         ),
                         _react2.default.createElement(
                             'span',
@@ -60247,7 +60247,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__left-item' },
-                    'Some text here about your target'
+                    'Best Rebates Offer'
                 ),
                 _react2.default.createElement(
                     'span',
@@ -60818,19 +60818,21 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__left-item' },
-                    'Some text here about your target'
+                    'Best Rebates Offer'
                 ),
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    this.props.availableTargets ? _util2.default.moneyFormat(_ramda2.default.sum([0]
-                    /** @todo : replace this to somehow get info back from API best offer call
-                    R.map(
-                        R.prop('value'),
-                        this.props.selectedTargets
-                    )
-                    */
-                    )) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.availableTargets ? _util2.default.moneyFormat(_ramda2.default.sum([0])) : _react2.default.createElement(_reactSvgInline2.default, {
+                        svg: _miscicons2.default['loading']
+                        /** @todo : replace this to somehow get info back from API best offer call
+                        R.map(
+                            R.prop('value'),
+                            this.props.selectedTargets
+                        )
+                        */
+
+                    })
                 )
             );
         }

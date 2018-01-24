@@ -91,7 +91,7 @@ class CashCalculator extends React.PureComponent {
                     </div>
                     <div>
                         <span className="cash-finance-lease-calculator__left-item">
-                            Some text here about your targets
+                            Best Rebates Offer
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
                             {this.props.dealBestOffer ? (
