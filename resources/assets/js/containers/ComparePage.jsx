@@ -392,16 +392,13 @@ class ComparePage extends React.PureComponent {
     }
 
     renderFeaturesTable(compareList) {
-        const maxNumberCells = R.reduce(
-            (carry, dealAndSelectedFilters) => {
-                return R.max(
-                    dealAndSelectedFilters.deal.features.length,
-                    carry
-                );
-            },
-            0,
-            compareList
-        );
+        let featureSets = compareList.map(({ deal }, index) => {
+            return deal.features;
+        });
+
+        let totalFeatureSet = Object.values(R.mergeAll(featureSets));
+
+        console.log(totalFeatureSet);
 
         return (
             <div className="compare-page-table">
@@ -413,24 +410,16 @@ class ComparePage extends React.PureComponent {
                                 key={index}
                                 className="compare-page-table__column"
                             >
-                                {deal.features.map((feature, index) => {
-                                    return <div key={index} className="compare-page-table__cell">
-                                        {feature.feature}&nbsp;
-                                    </div>
-                                })}
-                                {R.range(
-                                    0,
-                                    maxNumberCells -
-                                    deal.features.length
-                                ).map((_, index) => {
-                                    return (
-                                        <div
-                                            key={index}
-                                            className="compare-page-table__cell"
-                                        >
-                                            &nbsp;
+                                {totalFeatureSet.map((feature, index) => {
+                                    if ( deal.features.find(dealFeature => { return dealFeature.id == feature.id; })) {
+                                        return <div key={index} className="compare-page-table__cell">
+                                            {feature.feature}&nbsp;
                                         </div>
-                                    );
+                                    } else {
+                                        return <div key={index} className="compare-page-table__cell">
+                                            &mdash;
+                                        </div>
+                                    }
                                 })}
                             </div>
                         );
