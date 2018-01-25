@@ -2131,8 +2131,6 @@ var util = {
         return formatter.format(num);
     },
     sameStateSchema: function sameStateSchema(a, b) {
-        console.log(Object.keys(a).sort(), Object.keys(b).sort());
-
         return JSON.stringify(Object.keys(a).sort()) === JSON.stringify(Object.keys(b).sort());
     },
     getClosestNumberInRange: function getClosestNumberInRange(value, values) {
@@ -58731,7 +58729,7 @@ var FilterPanel = function (_React$PureComponent) {
             var _this2 = this;
 
             return this.props.featureCategories.map(function (category, index) {
-                var features = _this2.props.dmrFeatures.filter(function (feature) {
+                var features = _this2.props.searchFeatures.filter(function (feature) {
                     var categoryFeatures = category.relationships.features.data.map(function (categoryFeature) {
                         return categoryFeature.id;
                     });
@@ -58873,7 +58871,7 @@ var mapStateToProps = function mapStateToProps(state) {
         selectedFeatures: state.selectedFeatures,
         features: state.features,
         featureCategories: state.featureCategories,
-        dmrFeatures: state.dmrFeatures
+        searchFeatures: state.searchFeatures
     };
 };
 
@@ -61013,7 +61011,7 @@ var initialState = {
     dealPage: 1,
     dealPageTotal: 1,
     deals: null,
-    dmrFeatures: [],
+    searchFeatures: [],
     fallbackLogoImage: '/images/dmr-logo-small.svg',
     sortColumn: 'price',
     sortAscending: true,
@@ -61400,14 +61398,12 @@ var reducer = function reducer(state, action) {
     console.log(action.type);
     switch (action.type) {
         case _constants.REHYDRATE:
-            console.log('rehydrated');
-            console.log(action);
             /**
              * If the state is a different "shape"/schema we need to let them restart
              */
             if (!_util2.default.sameStateSchema(state, action.payload)) {
                 localStorage.clear();
-                console.log('samestate');
+
                 return state;
             }
 
@@ -61416,10 +61412,10 @@ var reducer = function reducer(state, action) {
              */
             if (_util2.default.wasReferredFromHomePage()) {
                 localStorage.clear();
-                console.log('refer');
+
                 return state;
             }
-            console.log(action.payload);
+
             return Object.assign({}, state, action.payload);
         case ActionTypes.WINDOW_RESIZE:
             return Object.assign({}, state, {
@@ -61510,7 +61506,7 @@ var reducer = function reducer(state, action) {
         case ActionTypes.RECEIVE_FEATURE_CATEGORIES:
             return Object.assign({}, state, {
                 featureCategories: action.data.data.data,
-                dmrFeatures: action.data.data.included
+                searchFeatures: action.data.data.included
             });
         case ActionTypes.TOGGLE_STYLE:
             return Object.assign({}, state, {

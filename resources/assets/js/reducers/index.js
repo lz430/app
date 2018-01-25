@@ -125,7 +125,7 @@ const reducer = (state, action) => {
         case ActionTypes.RECEIVE_FEATURE_CATEGORIES:
             return Object.assign({}, state, {
                 featureCategories: action.data.data.data,
-                dmrFeatures: action.data.data.included
+                searchFeatures: action.data.data.included
             });
         case ActionTypes.TOGGLE_STYLE:
             return Object.assign({}, state, {
