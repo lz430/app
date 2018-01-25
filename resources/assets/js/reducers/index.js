@@ -43,9 +43,7 @@ const reducer = (state, action) => {
                 showMakeSelectorModal: false,
             });
         case ActionTypes.RECEIVE_MAKES:
-            return Object.assign({}, state, {
-                makes: action.data.data.data,
-            });
+            return { ...state, makes: action.data.data.data };
         case ActionTypes.RECEIVE_MODELS:
             return Object.assign({}, state, {
                 models: action.data.data.data,
@@ -70,12 +68,18 @@ const reducer = (state, action) => {
                 requestingMoreDeals: false,
             });
         case ActionTypes.RECEIVE_TARGETS:
-            const targetKey = util.getTargetKeyForDealAndZip(action.data.deal, action.data.zipcode);
+            const targetKey = util.getTargetKeyForDealAndZip(
+                action.data.deal,
+                action.data.zipcode
+            );
 
             let nextTargets = Object.assign({}, state.targets);
 
             if (R.isNil(nextTargets[targetKey])) {
-                nextTargets[targetKey] = { available: action.data.data.data.targets, selected: [] };
+                nextTargets[targetKey] = {
+                    available: action.data.data.data.targets,
+                    selected: [],
+                };
             }
 
             return Object.assign({}, state, { targets: nextTargets });
@@ -90,7 +94,10 @@ const reducer = (state, action) => {
         case ActionTypes.TOGGLE_TARGET:
             let nextSelectedTargets = Object.assign({}, state.targets);
 
-            nextSelectedTargets[action.targetKey].selected = util.toggleItem(nextSelectedTargets[action.targetKey].selected, action.target);
+            nextSelectedTargets[action.targetKey].selected = util.toggleItem(
+                nextSelectedTargets[action.targetKey].selected,
+                action.target
+            );
 
             return Object.assign({}, state, {
                 targets: nextSelectedTargets,
@@ -193,14 +200,9 @@ const reducer = (state, action) => {
                 selectedFeatures: [],
             });
         case ActionTypes.TOGGLE_COMPARE:
-            return Object.assign({}, state, {
-                compareList: action.compareList,
-            });
+            return { ...state, compareList: action.compareList };
         case ActionTypes.SET_ZIP_CODE:
-            return Object.assign({}, state, {
-                zipcode: action.zipcode,
-                city: null,
-            });
+            return { ...state, zipcode: action.zipcode, city: null };
         case ActionTypes.RECEIVE_LOCATION_INFO:
             return Object.assign({}, state, {
                 zipcode: action.zipcode,

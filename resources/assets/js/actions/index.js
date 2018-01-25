@@ -175,16 +175,9 @@ export function requestTargets(deal) {
 
         // If we already have the target data, do not re-request it
         const targetKey = util.getTargetKeyForDealAndZip(deal, zipcode);
-        if (!R.isNil(getState().targets[targetKey])) return;
+        if (!R.isNil(getState().targetsAvailable[targetKey])) return;
 
         api.getTargets(zipcode, deal.vin).then(data => {
-            dispatch(
-                receiveDealTargets({
-                    data: data,
-                    dealId: deal.id,
-                })
-            );
-
             dispatch(
                 receiveTargets({
                     data,
@@ -213,15 +206,6 @@ export function receiveDeals(data) {
     return dispatch => {
         dispatch({
             type: ActionTypes.RECEIVE_DEALS,
-            data: data,
-        });
-    };
-}
-
-export function receiveDealTargets(data) {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.RECEIVE_DEAL_TARGETS,
             data: data,
         });
     };
@@ -654,10 +638,8 @@ export function requestBestOffer(deal) {
         if(!zipcode) return;
 
         const paymentType = getState().selectedTab;
-
-
         const targetKey = util.getTargetKeyForDealAndZip(deal, zipcode);
-        const selectedTargetIds = getState().targets[targetKey] ? R.map(R.prop('targetId'), getState().targets[targetKey].selected) : [];
+        const selectedTargetIds = getState().targetsSelected[targetKey] ? R.map(R.prop('targetId'), getState().targetsSelected[targetKey]) : [];
         const targets = R.uniq(getState().targetDefaults.concat(selectedTargetIds));
 
         const bestOfferKey = util.getBestOfferKeyForDeal(deal, zipcode, paymentType, targets);

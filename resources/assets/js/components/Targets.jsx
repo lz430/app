@@ -29,13 +29,11 @@ class Targets extends React.PureComponent {
     }
 
     targetsNotLoadedFor(targetKey) {
-        return R.isNil(this.props.targets[targetKey]);
+        return R.isNil(this.props.targetsAvailable[targetKey]);
     }
 
     availableTargets() {
-        return this.props.targets[this.state.targetKey]
-            ? this.props.targets[this.state.targetKey].available
-            : [];
+        return this.props.targetsAvailable[this.state.targetKey] || [];
     }
 
     toggle(target) {
@@ -44,10 +42,10 @@ class Targets extends React.PureComponent {
     }
 
     renderTarget(target, index) {
-        const isSelected = R.contains(
+        const isSelected = this.props.targetsSelected[this.state.targetKey] ? R.contains(
             target,
-            this.props.targets[this.state.targetKey].selected
-        );
+            this.props.targetsSelected[this.state.targetKey]
+        ) : false;
 
         const checkboxClass = `rebates__checkbox rebates__checkbox--inverted ${
             isSelected ? 'rebates__checkbox--selected' : ''
@@ -97,7 +95,8 @@ class Targets extends React.PureComponent {
 function mapStateToProps(state) {
     return {
         zipcode: state.zipcode,
-        targets: state.targets,
+        targetsAvailable: state.targetsAvailable,
+        targetsSelected: state.targetsSelected,
     };
 }
 

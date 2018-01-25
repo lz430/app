@@ -936,7 +936,6 @@ exports.toggleModel = toggleModel;
 exports.requestTargets = requestTargets;
 exports.receiveTargets = receiveTargets;
 exports.receiveDeals = receiveDeals;
-exports.receiveDealTargets = receiveDealTargets;
 exports.requestDeals = requestDeals;
 exports.requestMoreDeals = requestMoreDeals;
 exports.sortDeals = sortDeals;
@@ -1140,14 +1139,9 @@ function requestTargets(deal) {
 
         // If we already have the target data, do not re-request it
         var targetKey = _util2.default.getTargetKeyForDealAndZip(deal, zipcode);
-        if (!_ramda2.default.isNil(getState().targets[targetKey])) return;
+        if (!_ramda2.default.isNil(getState().targetsAvailable[targetKey])) return;
 
         _api2.default.getTargets(zipcode, deal.vin).then(function (data) {
-            dispatch(receiveDealTargets({
-                data: data,
-                dealId: deal.id
-            }));
-
             dispatch(receiveTargets({
                 data: data,
                 deal: deal,
@@ -1174,15 +1168,6 @@ function receiveDeals(data) {
     return function (dispatch) {
         dispatch({
             type: ActionTypes.RECEIVE_DEALS,
-            data: data
-        });
-    };
-}
-
-function receiveDealTargets(data) {
-    return function (dispatch) {
-        dispatch({
-            type: ActionTypes.RECEIVE_DEAL_TARGETS,
             data: data
         });
     };
@@ -1570,9 +1555,8 @@ function requestBestOffer(deal) {
         if (!zipcode) return;
 
         var paymentType = getState().selectedTab;
-
         var targetKey = _util2.default.getTargetKeyForDealAndZip(deal, zipcode);
-        var selectedTargetIds = getState().targets[targetKey] ? _ramda2.default.map(_ramda2.default.prop('targetId'), getState().targets[targetKey].selected) : [];
+        var selectedTargetIds = getState().targetsSelected[targetKey] ? _ramda2.default.map(_ramda2.default.prop('targetId'), getState().targetsSelected[targetKey]) : [];
         var targets = _ramda2.default.uniq(getState().targetDefaults.concat(selectedTargetIds));
 
         var bestOfferKey = _util2.default.getBestOfferKeyForDeal(deal, zipcode, paymentType, targets);
@@ -14286,12 +14270,12 @@ var Targets = function (_React$PureComponent) {
     }, {
         key: 'targetsNotLoadedFor',
         value: function targetsNotLoadedFor(targetKey) {
-            return _ramda2.default.isNil(this.props.targets[targetKey]);
+            return _ramda2.default.isNil(this.props.targetsAvailable[targetKey]);
         }
     }, {
         key: 'availableTargets',
         value: function availableTargets() {
-            return this.props.targets[this.state.targetKey] ? this.props.targets[this.state.targetKey].available : [];
+            return this.props.targetsAvailable[this.state.targetKey] || [];
         }
     }, {
         key: 'toggle',
@@ -14302,7 +14286,7 @@ var Targets = function (_React$PureComponent) {
     }, {
         key: 'renderTarget',
         value: function renderTarget(target, index) {
-            var isSelected = _ramda2.default.contains(target, this.props.targets[this.state.targetKey].selected);
+            var isSelected = this.props.targetsSelected[this.state.targetKey] ? _ramda2.default.contains(target, this.props.targetsSelected[this.state.targetKey]) : false;
 
             var checkboxClass = 'rebates__checkbox rebates__checkbox--inverted ' + (isSelected ? 'rebates__checkbox--selected' : '');
 
@@ -14356,7 +14340,8 @@ var Targets = function (_React$PureComponent) {
 function mapStateToProps(state) {
     return {
         zipcode: state.zipcode,
-        targets: state.targets
+        targetsAvailable: state.targetsAvailable,
+        targetsSelected: state.targetsSelected
     };
 }
 
@@ -22507,7 +22492,6 @@ var RECEIVE_LOCATION_INFO = exports.RECEIVE_LOCATION_INFO = 'RECEIVE_LOCATION_IN
 var CLOSE_MAKE_SELECTOR_MODAL = exports.CLOSE_MAKE_SELECTOR_MODAL = 'CLOSE_MAKE_SELECTOR_MODAL';
 var WINDOW_RESIZE = exports.WINDOW_RESIZE = 'WINDOW_RESIZE';
 var TOGGLE_SMALL_FILTERS_SHOWN = exports.TOGGLE_SMALL_FILTERS_SHOWN = 'TOGGLE_SMALL_FILTERS_SHOWN';
-var RECEIVE_DEAL_TARGETS = exports.RECEIVE_DEAL_TARGETS = 'RECEIVE_DEAL_TARGETS';
 var SELECT_TAB = exports.SELECT_TAB = 'SELECT_TAB';
 var SELECT_DEAL = exports.SELECT_DEAL = 'SELECT_DEAL';
 var CLEAR_SELECTED_DEAL = exports.CLEAR_SELECTED_DEAL = 'CLEAR_SELECTED_DEAL';
@@ -52626,36 +52610,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var DealPrice = function (_React$PureComponent) {
     _inherits(DealPrice, _React$PureComponent);
 
-    function DealPrice(props) {
+    function DealPrice() {
         _classCallCheck(this, DealPrice);
 
-        var _this = _possibleConstructorReturn(this, (DealPrice.__proto__ || Object.getPrototypeOf(DealPrice)).call(this, props));
-
-        _this.state = {
-            bestOffer: null
-        };
-        return _this;
+        return _possibleConstructorReturn(this, (DealPrice.__proto__ || Object.getPrototypeOf(DealPrice)).apply(this, arguments));
     }
 
     _createClass(DealPrice, [{
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            this.setState({
-                bestOffer: _ramda2.default.prop(this.props.bestOfferKey, this.props.bestOffers)
-            });
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-            console.log(nextProps);
-            this.setState({
-                bestOffer: _ramda2.default.prop(nextProps.bestOfferKey, nextProps.bestOffers)
-            });
-        }
-    }, {
         key: 'bestOfferTotalValue',
         value: function bestOfferTotalValue() {
-            return this.state.bestOffer ? this.state.bestOffer.totalValue : 0;
+            return this.props.bestOffer ? this.props.bestOffer.totalValue : 0;
         }
     }, {
         key: 'renderPriceExplanationModal',
@@ -52864,8 +52828,7 @@ var mapStateToProps = function mapStateToProps(state) {
         termDuration: state.termDuration,
         residualPercent: state.residualPercent,
         selectedTab: state.selectedTab,
-        dealTargets: state.dealTargets,
-        bestOffers: state.bestOffers
+        dealTargets: state.dealTargets
     };
 };
 
@@ -61262,7 +61225,6 @@ var initialState = {
     dealPage: 1,
     dealPageTotal: 1,
     deals: null,
-    dealTargets: {},
     downPayment: 0,
     employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
@@ -61288,7 +61250,9 @@ var initialState = {
     sortAscending: true,
     sortColumn: 'price',
     targets: [],
-    targetDefaults: [25, /// OPEN OFFER
+    targetsAvailable: {},
+    targetsSelected: {},
+    targetDefaults: [25, // OPEN OFFER
     52],
     termDuration: 36,
     transmissionTypes: ['automatic', 'manual'],
@@ -61651,6 +61615,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _index = __webpack_require__(364);
 
 var ActionTypes = _interopRequireWildcard(_index);
@@ -61705,9 +61671,7 @@ var reducer = function reducer(state, action) {
                 showMakeSelectorModal: false
             });
         case ActionTypes.RECEIVE_MAKES:
-            return Object.assign({}, state, {
-                makes: action.data.data.data
-            });
+            return _extends({}, state, { makes: action.data.data.data });
         case ActionTypes.RECEIVE_MODELS:
             return Object.assign({}, state, {
                 models: action.data.data.data
@@ -61734,7 +61698,10 @@ var reducer = function reducer(state, action) {
             var nextTargets = Object.assign({}, state.targets);
 
             if (_ramda2.default.isNil(nextTargets[targetKey])) {
-                nextTargets[targetKey] = { available: action.data.data.data.targets, selected: [] };
+                nextTargets[targetKey] = {
+                    available: action.data.data.data.targets,
+                    selected: []
+                };
             }
 
             return Object.assign({}, state, { targets: nextTargets });
@@ -61846,14 +61813,9 @@ var reducer = function reducer(state, action) {
                 selectedFeatures: []
             });
         case ActionTypes.TOGGLE_COMPARE:
-            return Object.assign({}, state, {
-                compareList: action.compareList
-            });
+            return _extends({}, state, { compareList: action.compareList });
         case ActionTypes.SET_ZIP_CODE:
-            return Object.assign({}, state, {
-                zipcode: action.zipcode,
-                city: null
-            });
+            return _extends({}, state, { zipcode: action.zipcode, city: null });
         case ActionTypes.RECEIVE_LOCATION_INFO:
             return Object.assign({}, state, {
                 zipcode: action.zipcode,

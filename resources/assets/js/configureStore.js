@@ -28,7 +28,6 @@ const initialState = {
     dealPage: 1,
     dealPageTotal: 1,
     deals: null,
-    dealTargets: {},
     downPayment: 0,
     employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
@@ -54,8 +53,10 @@ const initialState = {
     sortAscending: true,
     sortColumn: 'price',
     targets: [],
+    targetsAvailable: {},
+    targetsSelected: {},
     targetDefaults: [
-        25, /// OPEN OFFER
+        25, // OPEN OFFER
         52,
     ],
     termDuration: 36,
