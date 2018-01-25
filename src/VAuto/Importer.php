@@ -189,7 +189,7 @@ class Importer
                         $versionDeal
                     );
 
-                    $this->saveVersionDealDmrFeatures(
+                    $this->saveVersionDealFeatures(
                         $versionDeal
                     );
 
@@ -315,7 +315,7 @@ class Importer
         $this->saveCustomHackyFeatures($deal);
     }
 
-    private function saveVersionDealDmrFeatures(Deal $deal)
+    private function saveVersionDealFeatures(Deal $deal)
     {
         $features = Feature::all();
 
@@ -328,7 +328,7 @@ class Importer
                 return empty($schema);
             })->toArray();
 
-            $deal->dmrFeatures()->syncWithoutDetaching($schemaIds);
+            $deal->features()->syncWithoutDetaching($schemaIds);
         });
     }
 
