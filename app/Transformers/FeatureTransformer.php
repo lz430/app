@@ -2,7 +2,7 @@
 
 namespace App\Transformers;
 
-use App\Feature;
+use App\JatoFeature;
 use League\Fractal\TransformerAbstract;
 
 class FeatureTransformer extends TransformerAbstract
@@ -12,7 +12,7 @@ class FeatureTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform(Feature $feature)
+    public function transform(JatoFeature $feature)
     {
         return [
             'id' => $feature->id,
