@@ -171,7 +171,7 @@ export function requestTargets(deal) {
     return (dispatch, getState) => {
         // If no zipcode has been set, do not request targets
         const zipcode = getState().zipcode;
-        if(!zipcode) return;
+        if (!zipcode) return;
 
         // If we already have the target data, do not re-request it
         const targetKey = util.getTargetKeyForDealAndZip(deal, zipcode);
@@ -635,36 +635,55 @@ export function updateResidualPercent(residualPercent) {
 export function requestBestOffer(deal) {
     return (dispatch, getState) => {
         const zipcode = getState().zipcode;
-        if(!zipcode) return;
-
-        const paymentType = getState().selectedTab;
+        if (!zipcode) return;
         const targetKey = util.getTargetKeyForDealAndZip(deal, zipcode);
-        const selectedTargetIds = getState().targetsSelected[targetKey] ? R.map(R.prop('targetId'), getState().targetsSelected[targetKey]) : [];
-        const targets = R.uniq(getState().targetDefaults.concat(selectedTargetIds));
+        const selectedTargetIds = getState().targetsSelected[targetKey]
+            ? R.map(R.prop('targetId'), getState().targetsSelected[targetKey])
+            : [];
+        const targets = R.uniq(
+            getState().targetDefaults.concat(selectedTargetIds)
+        );
+        const paymentTypes = ['cash', 'finance', 'lease'];
+        paymentTypes.map(paymentType => {
+            const bestOfferKey = util.getBestOfferKeyForDeal(
+                deal,
+                zipcode,
+                paymentType,
+                targets
+            );
+            if (R.props(bestOfferKey, getState().bestOffers)) {
+                dispatch({ type: ActionTypes.SAME_BEST_OFFERS });
+            }
 
-        const bestOfferKey = util.getBestOfferKeyForDeal(deal, zipcode, paymentType, targets);
+            const CancelToken = window.axios.CancelToken;
+            const source = CancelToken.source();
 
-        api
-            .getBestOffer(deal.id, paymentType, zipcode, targets)
-            .then(data => {
-                dispatch(receiveBestOffer(data, bestOfferKey, paymentType));
-            })
-            .catch(e => {
-                dispatch(
-                    receiveBestOffer({
-                        data: {
+            dispatch(appendCancelToken(deal, source));
+            api
+                .getBestOffer(deal.id, paymentType, zipcode, targets, source)
+                .then(data => {
+                    dispatch(removeCancelToken(deal));
+                    dispatch(receiveBestOffer(data, bestOfferKey, paymentType));
+                })
+                .catch(e => {
+                    dispatch(removeCancelToken(deal));
+                    dispatch(
+                        receiveBestOffer({
                             data: {
-                                cash: {
-                                    totalValue: 0,
-                                    programs: [],
+                                data: {
+                                    cash: {
+                                        totalValue: 0,
+                                        programs: [],
+                                    },
                                 },
                             },
-                        },
-                    })
-                );
-            });
+                        })
+                    );
+                });
 
-        dispatch({ type: ActionTypes.REQUEST_BEST_OFFER });
+            dispatch({ type: ActionTypes.REQUEST_BEST_OFFER });
+        });
+        // dispatch(clearCancelTokens());
     };
 }
 
@@ -676,5 +695,47 @@ export function receiveBestOffer(data, bestOfferKey, paymentType) {
             data: bestOffer,
             bestOfferKey,
         });
+    };
+}
+
+export function appendCancelToken(deal, cancelToken) {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.APPEND_CANCEL_TOKEN,
+            deal,
+            cancelToken,
+        });
+    };
+}
+
+export function removeCancelToken(deal) {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.REMOVE_CANCEL_TOKEN,
+            deal,
+        });
+    };
+}
+
+export function clearCancelTokens() {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.CLEAR_CANCEL_TOKENS,
+        });
+    };
+}
+
+export function cancelAllBestOfferPromises() {
+    return (dispatch, getState) => {
+        getState().cancelTokens.map(cancelToken => {
+            console.log('canceling');
+            try {
+                cancelToken.source.cancel();
+            } catch (err) {
+                console.log('Cancel error: ', err);
+            }
+        });
+        dispatch({ type: ActionTypes.CANCEL_ALL_PROMISES });
+        dispatch(clearCancelTokens());
     };
 }

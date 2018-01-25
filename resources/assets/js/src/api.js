@@ -98,13 +98,14 @@ const api = {
     postNotifyWhenInRange: (email = null) => {
         return window.axios.post('/api/hubspot/not-in-area', { email });
     },
-    getBestOffer: (dealId, payment_type, zipcode, targets) => {
+    getBestOffer: (dealId, payment_type, zipcode, targets, cancelToken) => {
         return window.axios.get(`/api/deals/${dealId}/best-offer`, {
+            cancelToken: cancelToken.token,
             params: {
                 payment_type,
                 zipcode,
                 targets,
-            }
+            },
         });
     },
 };

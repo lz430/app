@@ -32,8 +32,6 @@ class LeaseCalculator extends React.PureComponent {
             .then(data => {
                 if (!this._isMounted) return;
 
-                console.log(data);
-
                 const leaseRates = data.data;
 
                 const closestTermMonths = util.getClosestNumberInRange(

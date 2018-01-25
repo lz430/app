@@ -10,28 +10,9 @@ import miscicons from 'miscicons';
 import InfoModal from 'components/InfoModal';
 
 class DealPrice extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            bestOffer: null,
-        };
-    }
-
-    componentWillMount() {
-        this.setState({
-            bestOffer: R.prop(this.props.bestOfferKey, this.props.bestOffers),
-        });
-    }
-
-    componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
-        this.setState({
-            bestOffer: R.prop(nextProps.bestOfferKey, nextProps.bestOffers),
-        });
-    }
-
     bestOfferTotalValue() {
-        return this.state.bestOffer ? this.state.bestOffer.totalValue : 0;
+        return 0;
+        // return this.state.bestOffer ? this.state.bestOffer.totalValue : 0;
     }
 
     renderPriceExplanationModal() {
@@ -238,8 +219,6 @@ const mapStateToProps = state => {
 
 DealPrice.PropTypes = {
     deal: PropTypes.object.isRequired,
-    targetKey: PropTypes.string.isRequired,
-    bestOfferKey: PropTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps, Actions)(DealPrice);
