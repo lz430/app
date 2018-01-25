@@ -4,6 +4,7 @@ import { REHYDRATE } from 'redux-persist/constants';
 import util from 'src/util';
 
 const reducer = (state, action) => {
+    console.log(action.type);
     switch (action.type) {
         case REHYDRATE:
             /**
