@@ -398,8 +398,6 @@ class ComparePage extends React.PureComponent {
 
         let totalFeatureSet = Object.values(R.mergeAll(featureSets));
 
-        console.log(totalFeatureSet);
-
         return (
             <div className="compare-page-table">
                 {this.renderAccordionTabHeader('Features')}
