@@ -52610,16 +52610,36 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var DealPrice = function (_React$PureComponent) {
     _inherits(DealPrice, _React$PureComponent);
 
-    function DealPrice() {
+    function DealPrice(props) {
         _classCallCheck(this, DealPrice);
 
-        return _possibleConstructorReturn(this, (DealPrice.__proto__ || Object.getPrototypeOf(DealPrice)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (DealPrice.__proto__ || Object.getPrototypeOf(DealPrice)).call(this, props));
+
+        _this.state = {
+            bestOffer: null
+        };
+        return _this;
     }
 
     _createClass(DealPrice, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.setState({
+                bestOffer: _ramda2.default.prop(this.props.bestOfferKey, this.props.bestOffers)
+            });
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            console.log(nextProps);
+            this.setState({
+                bestOffer: _ramda2.default.prop(nextProps.bestOfferKey, nextProps.bestOffers)
+            });
+        }
+    }, {
         key: 'bestOfferTotalValue',
         value: function bestOfferTotalValue() {
-            return this.props.bestOffer ? this.props.bestOffer.totalValue : 0;
+            return this.state.bestOffer ? this.state.bestOffer.totalValue : 0;
         }
     }, {
         key: 'renderPriceExplanationModal',
@@ -52828,7 +52848,8 @@ var mapStateToProps = function mapStateToProps(state) {
         termDuration: state.termDuration,
         residualPercent: state.residualPercent,
         selectedTab: state.selectedTab,
-        dealTargets: state.dealTargets
+        dealTargets: state.dealTargets,
+        bestOffers: state.bestOffers
     };
 };
 
