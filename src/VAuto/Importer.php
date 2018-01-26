@@ -71,6 +71,7 @@ class Importer
     {
         $this->filesystem = $filesystem;
         $this->client = $client;
+        $this->features = Feature::with('category')->get();
     }
 
     public function setInfoFunction(callable $infoFunction)
@@ -99,8 +100,6 @@ class Importer
 
     public function import()
     {
-        $this->features = Feature::with('category')->get();
-
         $csvFiles = array_filter(
             $this->filesystem->files(realpath(base_path(config('services.vauto.uploads_path')))),
             function ($file) {
