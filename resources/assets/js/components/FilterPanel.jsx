@@ -47,7 +47,7 @@ class FilterPanel extends React.PureComponent {
 
     renderSidebarFilters() {
         return this.props.featureCategories.map((category, index) => {
-            let features = this.props.dmrFeatures.filter(feature => {
+            let features = this.props.searchFeatures.filter(feature => {
                 let categoryFeatures = category.relationships.features.data.map(categoryFeature => {
                     return categoryFeature.id;
                 });
@@ -152,7 +152,7 @@ const mapStateToProps = state => {
         selectedFeatures: state.selectedFeatures,
         features: state.features,
         featureCategories: state.featureCategories,
-        dmrFeatures: state.dmrFeatures,
+        searchFeatures: state.searchFeatures,
     };
 };
 

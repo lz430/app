@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Feature;
+use App\JatoFeature;
 use App\Transformers\FeatureTransformer;
 
 class FeaturesController extends BaseAPIController
@@ -13,7 +13,7 @@ class FeaturesController extends BaseAPIController
     public function index()
     {
         return fractal()
-            ->collection(Feature::hasGroup()->whereIn('feature', Feature::WHITELIST)->get())
+            ->collection(JatoFeature::hasGroup()->whereIn('feature', JatoFeature::WHITELIST)->get())
             ->withResourceName(self::RESOURCE_NAME)
             ->transformWith(self::TRANSFORMER)
             ->respond();

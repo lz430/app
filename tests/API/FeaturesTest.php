@@ -2,7 +2,7 @@
 
 namespace Tests\API;
 
-use App\Feature;
+use App\JatoFeature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -14,10 +14,10 @@ class FeaturesTest extends TestCase
     public function it_shows_all_features_that_a_user_can_filter_with()
     {
         // Given 5 features
-        factory(Feature::class, 5)->create();
+        factory(JatoFeature::class, 5)->create();
 
         // And another feature that does not have a group set
-        factory(Feature::class)->create([
+        factory(JatoFeature::class)->create([
             'group' => null,
         ]);
         

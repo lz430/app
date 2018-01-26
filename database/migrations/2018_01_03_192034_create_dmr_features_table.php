@@ -1,7 +1,7 @@
 <?php
 
-use App\DmrCategory;
-use App\DmrFeature;
+use App\Category;
+use App\Feature;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -393,7 +393,9 @@ class CreateDmrFeaturesTable extends Migration
                 ],
             ]
         ])->each(function ($features, $categorySlug){
-            $categoryId = DmrCategory::where('slug', $categorySlug)->first()->id;
+            $categoryQuery = Category::query();
+            $categoryQuery->getQuery()->from('dmr_categories');
+            $categoryId = $categoryQuery->where('slug', $categorySlug)->first()->id;
 
             $count = 1;
 
@@ -401,7 +403,7 @@ class CreateDmrFeaturesTable extends Migration
                 $feature['dmr_category_id'] = $categoryId;
                 $feature['display_order'] = $count;
 
-                DmrFeature::create($feature);
+                Feature::make($feature)->setTable('dmr_features')->save();
                 $count++;
             });
 

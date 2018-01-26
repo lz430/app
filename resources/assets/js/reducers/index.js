@@ -4,6 +4,7 @@ import { REHYDRATE } from 'redux-persist/constants';
 import util from 'src/util';
 
 const reducer = (state, action) => {
+    console.log(action.type);
     switch (action.type) {
         case REHYDRATE:
             /**
@@ -124,7 +125,7 @@ const reducer = (state, action) => {
         case ActionTypes.RECEIVE_FEATURE_CATEGORIES:
             return Object.assign({}, state, {
                 featureCategories: action.data.data.data,
-                dmrFeatures: action.data.data.included
+                searchFeatures: action.data.data.included
             });
         case ActionTypes.TOGGLE_STYLE:
             return Object.assign({}, state, {

@@ -50,6 +50,7 @@ const initialState = {
     dealPage: 1,
     dealPageTotal: 1,
     deals: null,
+    searchFeatures: [],
     fallbackLogoImage: '/images/dmr-logo-small.svg',
     sortColumn: 'price',
     sortAscending: true,

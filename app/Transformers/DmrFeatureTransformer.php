@@ -2,12 +2,12 @@
 
 namespace App\Transformers;
 
-use App\DmrFeature;
+use App\Feature;
 use League\Fractal\TransformerAbstract;
 
 class DmrFeatureTransformer extends TransformerAbstract
 {
-    public function transform(DmrFeature $feature)
+    public function transform(Feature $feature)
     {
         return [
             'id'                => $feature->id,

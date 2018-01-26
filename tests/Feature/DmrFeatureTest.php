@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\DmrCategory;
-use App\DmrFeature;
+use App\Category;
+use App\Feature;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -15,46 +15,46 @@ class DmrFeatureTest extends TestCase
     /** @test */
     public function api_returns_features_grouped_by_category()
     {
-        $firstCategory = factory(DmrCategory::class)->create([
+        $firstCategory = factory(Category::class)->create([
             'title'                     => 'First Category',
             'slug'                      => 'first-category',
             'display_order'             => 1,
         ]);
         
-        $secondCategory = factory(DmrCategory::class)->create([
+        $secondCategory = factory(Category::class)->create([
             'title'                     => 'Second Category',
             'slug'                      => 'second-category',
             'display_order'             => 2,
         ]);
 
-        $firstFeature = factory(DmrFeature::class)->create([
+        $firstFeature = factory(Feature::class)->create([
             'title'             => 'First Feature',
             'slug'              => 'first-feature',
-            'dmr_category_id'   => $firstCategory->id,
+            'category_id'   => $firstCategory->id,
             'display_order'     => 1,
             'jato_schema_ids'   => collect([12345, 23456])->toJson(),
         ]);
         
-        $secondFeature = factory(DmrFeature::class)->create([
+        $secondFeature = factory(Feature::class)->create([
             'title'             => 'Second Feature',
             'slug'              => 'second-feature',
-            'dmr_category_id'   => $firstCategory->id,
+            'category_id'   => $firstCategory->id,
             'display_order'     => 2,
             'jato_schema_ids'   => collect([78901, 89012])->toJson(),
         ]);
 
-        factory(DmrFeature::class)->create([
+        factory(Feature::class)->create([
             'title'             => 'Third Feature',
             'slug'              => 'third-feature',
-            'dmr_category_id'   => $secondCategory->id,
+            'category_id'   => $secondCategory->id,
             'display_order'     => 1,
             'jato_schema_ids'   => collect([56789, 67890])->toJson(),
         ]);
 
-        factory(DmrFeature::class)->create([
+        factory(Feature::class)->create([
             'title'             => 'Fourth Feature',
             'slug'              => 'fourth-feature',
-            'dmr_category_id'   => $secondCategory->id,
+            'category_id'   => $secondCategory->id,
             'display_order'     => 2,
             'jato_schema_ids'   => collect([12345, 23456])->toJson(),
         ]);

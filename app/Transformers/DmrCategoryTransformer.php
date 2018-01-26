@@ -2,7 +2,7 @@
 
 namespace App\Transformers;
 
-use App\DmrCategory;
+use App\Category;
 use App\Transformers\DmrFeatureTransformer;
 use League\Fractal\TransformerAbstract;
 
@@ -12,7 +12,7 @@ class DmrCategoryTransformer extends TransformerAbstract
         'features',
     ];
 
-    public function transform(DmrCategory $category)
+    public function transform(Category $category)
     {
         return [
             'id' => $category->id,
@@ -22,7 +22,7 @@ class DmrCategoryTransformer extends TransformerAbstract
         ];
     }
 
-    public function includeFeatures(DmrCategory $category)
+    public function includeFeatures(Category $category)
     {
         return $this->collection($category->features, new DmrFeatureTransformer)->setResourceKey('feature');
     }
