@@ -85,12 +85,12 @@ class DealFeatureImporter
                 break;
         }
 
-        if (! $feature) {
+        if (! $feature || $feature->isEmpty()) {
             Log::error('Importer error for vin [' . $this->deal['VIN']. ']: could not find mapping for schemaId ' . $equipment['schemaId'] );
             return null;
         }
 
-        return $feature->first()->id;
+        return $feature->count() ? $feature->first()->id : $feature->id;
     }
 
     private function syncVehicleSegment($equipment)

@@ -58820,22 +58820,6 @@ var FilterPanel = function (_React$PureComponent) {
                         })
                     ),
                     _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
-                                return _this3.toggleOpenFilter('Vehicle Segment');
-                            },
-                            open: this.state.openFilter === 'Vehicle Segment',
-                            title: 'Vehicle Class',
-                            count: this.props.selectedSegment ? 1 : 0
-                        },
-                        _react2.default.createElement(_FilterSegmentSelector2.default, {
-                            segments: this.props.segments,
-                            selectedSegment: this.props.selectedSegment,
-                            onSelectSegment: this.props.chooseSegment
-                        })
-                    ),
-                    _react2.default.createElement(
                         'div',
                         { className: 'sidebar-filters__section-header sidebar-filters__filter-title' },
                         _react2.default.createElement(

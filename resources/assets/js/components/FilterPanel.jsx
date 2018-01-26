@@ -112,18 +112,6 @@ class FilterPanel extends React.PureComponent {
                             onSelectStyle={this.props.toggleStyle}
                         />
                     </SidebarFilter>
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Vehicle Segment')}
-                        open={this.state.openFilter === 'Vehicle Segment'}
-                        title="Vehicle Class"
-                        count={this.props.selectedSegment ? 1 : 0}
-                    >
-                        <FilterSegmentSelector
-                            segments={this.props.segments}
-                            selectedSegment={this.props.selectedSegment}
-                            onSelectSegment={this.props.chooseSegment}
-                        />
-                    </SidebarFilter>
                     <div className="sidebar-filters__section-header sidebar-filters__filter-title">
                         <p>Features & Options</p>
                     </div>
