@@ -15,6 +15,7 @@ const withStateDefaults = (state, changed) => {
             transmissionType: state.selectedTransmissionType,
             segment: state.selectedSegment,
             features: state.selectedFeatures,
+            featureCategories: state.featureCategories,
             includes: ['photos'],
             sortColumn: state.sortColumn,
             sortAscending: state.sortAscending,
@@ -76,9 +77,28 @@ export function requestFeatures() {
     };
 }
 
+export function requestFeatureCategories() {
+    return dispatch => {
+        api.getFeatureCategories().then(data => {
+            dispatch(receiveFeatureCategories(data));
+        });
+
+        dispatch({
+            type: ActionTypes.REQUEST_FEATURE_CATEGORIES,
+        });
+    };
+}
+
 export function receiveFeatures(data) {
     return {
         type: ActionTypes.RECEIVE_FEATURES,
+        data: data,
+    };
+}
+
+export function receiveFeatureCategories(data) {
+    return {
+        type: ActionTypes.RECEIVE_FEATURE_CATEGORIES,
         data: data,
     };
 }

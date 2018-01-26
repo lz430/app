@@ -13,7 +13,9 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\Category;
 use App\Feature;
+use App\JatoFeature;
 use Carbon\Carbon;
 
 $factory->define(App\User::class, function (Faker\Generator $faker) {
@@ -135,10 +137,10 @@ $factory->define(App\Deal::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Feature::class, function (Faker\Generator $faker) {
+$factory->define(App\JatoFeature::class, function (Faker\Generator $faker) {
     return [
-        'feature' => $faker->unique()->randomElement(Feature::WHITELIST),
-        'group' => $faker->randomElement(Feature::GROUPS),
+        'feature' => $faker->unique()->randomElement(JatoFeature::WHITELIST),
+        'group' => $faker->randomElement(JatoFeature::GROUPS),
     ];
 });
 
@@ -159,5 +161,23 @@ $factory->define(App\Purchase::class, function (Faker\Generator $faker) {
         'user_id' => factory(App\User::class),
         'dmr_price' => 30000,
         'msrp' => 28000,
+    ];
+});
+
+$factory->define(Category::class, function (Faker\Generator $faker) {
+    return [
+        'title'                     => $faker->unique()->company,
+        'slug'                      => $faker->unique()->slug,
+        'display_order'             => rand(1, 200),
+    ];
+});
+
+$factory->define(Feature::class, function (Faker\Generator $faker) {
+    return [
+        'title'             => 'First Feature',
+        'slug'              => 'first-feature',
+        'category_id'       => factory(Category::class)->create(),
+        'display_order'     => 1,
+        'jato_schema_ids'   => collect([$faker->randomNumber(5), $faker->randomNumber(5)])->toJson(),
     ];
 });

@@ -734,7 +734,9 @@ exports.requestModels = requestModels;
 exports.receiveMakes = receiveMakes;
 exports.receiveModels = receiveModels;
 exports.requestFeatures = requestFeatures;
+exports.requestFeatureCategories = requestFeatureCategories;
 exports.receiveFeatures = receiveFeatures;
+exports.receiveFeatureCategories = receiveFeatureCategories;
 exports.toggleFeature = toggleFeature;
 exports.toggleMake = toggleMake;
 exports.toggleModel = toggleModel;
@@ -805,6 +807,7 @@ var withStateDefaults = function withStateDefaults(state, changed) {
         transmissionType: state.selectedTransmissionType,
         segment: state.selectedSegment,
         features: state.selectedFeatures,
+        featureCategories: state.featureCategories,
         includes: ['photos'],
         sortColumn: state.sortColumn,
         sortAscending: state.sortAscending,
@@ -864,9 +867,28 @@ function requestFeatures() {
     };
 }
 
+function requestFeatureCategories() {
+    return function (dispatch) {
+        _api2.default.getFeatureCategories().then(function (data) {
+            dispatch(receiveFeatureCategories(data));
+        });
+
+        dispatch({
+            type: ActionTypes.REQUEST_FEATURE_CATEGORIES
+        });
+    };
+}
+
 function receiveFeatures(data) {
     return {
         type: ActionTypes.RECEIVE_FEATURES,
+        data: data
+    };
+}
+
+function receiveFeatureCategories(data) {
+    return {
+        type: ActionTypes.RECEIVE_FEATURE_CATEGORIES,
         data: data
     };
 }
@@ -4882,6 +4904,13 @@ var api = {
     },
     getFeatures: function getFeatures() {
         return window.axios.get('/api/features');
+    },
+    getFeatureCategories: function getFeatureCategories() {
+        return window.axios.get('/api/categories', {
+            params: {
+                include: 'features'
+            }
+        });
     },
     getFuelTypes: function getFuelTypes() {
         return window.axios.get('/api/fuel-types');
@@ -22402,6 +22431,8 @@ var REQUEST_BODY_STYLES = exports.REQUEST_BODY_STYLES = 'REQUEST_BODY_STYLES';
 var RECEIVE_BODY_STYLES = exports.RECEIVE_BODY_STYLES = 'RECEIVE_BODY_STYLES';
 var REQUEST_FEATURES = exports.REQUEST_FEATURES = 'REQUEST_FEATURES';
 var RECEIVE_FEATURES = exports.RECEIVE_FEATURES = 'RECEIVE_FEATURES';
+var REQUEST_FEATURE_CATEGORIES = exports.REQUEST_FEATURE_CATEGORIES = 'REQUEST_FEATURE_CATEGORIES';
+var RECEIVE_FEATURE_CATEGORIES = exports.RECEIVE_FEATURE_CATEGORIES = 'RECEIVE_FEATURE_CATEGORIES';
 var TOGGLE_FEATURE = exports.TOGGLE_FEATURE = 'TOGGLE_FEATURE';
 var TOGGLE_STYLE = exports.TOGGLE_STYLE = 'TOGGLE_STYLE';
 var CHOOSE_FUEL_TYPE = exports.CHOOSE_FUEL_TYPE = 'CHOOSE_FUEL_TYPE';
@@ -58693,9 +58724,42 @@ var FilterPanel = function (_React$PureComponent) {
             return _ramda2.default.intersection(_ramda2.default.map(_ramda2.default.path(['attributes', 'feature']), this.getFeaturesByGroup(group)), this.props.selectedFeatures).length;
         }
     }, {
+        key: 'renderSidebarFilters',
+        value: function renderSidebarFilters() {
+            var _this2 = this;
+
+            return this.props.featureCategories.map(function (category, index) {
+                var features = _this2.props.searchFeatures.filter(function (feature) {
+                    var categoryFeatures = category.relationships.features.data.map(function (categoryFeature) {
+                        return categoryFeature.id;
+                    });
+
+                    return categoryFeatures.includes(feature.id);
+                });
+
+                return _react2.default.createElement(
+                    _SidebarFilter2.default,
+                    {
+                        key: index,
+                        toggle: function toggle() {
+                            return _this2.toggleOpenFilter(category.attributes.title);
+                        },
+                        open: _this2.state.openFilter === category.attributes.title,
+                        title: category.attributes.title,
+                        count: _this2.props.selectedStyles.length
+                    },
+                    _react2.default.createElement(_FilterFeatureSelector2.default, {
+                        selectedFeatures: _this2.props.selectedFeatures,
+                        features: features,
+                        onSelectFeature: _this2.props.toggleFeature
+                    })
+                );
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -58708,7 +58772,7 @@ var FilterPanel = function (_React$PureComponent) {
                         _SidebarFilter2.default,
                         {
                             toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Make');
+                                return _this3.toggleOpenFilter('Make');
                             },
                             open: this.state.openFilter === 'Make',
                             title: 'Vehicle Brand',
@@ -58724,7 +58788,7 @@ var FilterPanel = function (_React$PureComponent) {
                         _SidebarFilter2.default,
                         {
                             toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Model');
+                                return _this3.toggleOpenFilter('Model');
                             },
                             open: this.state.openFilter === 'Model',
                             title: 'Vehicle Model'
@@ -58743,7 +58807,7 @@ var FilterPanel = function (_React$PureComponent) {
                         _SidebarFilter2.default,
                         {
                             toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Vehicle Style');
+                                return _this3.toggleOpenFilter('Vehicle Style');
                             },
                             open: this.state.openFilter === 'Vehicle Style',
                             title: 'Vehicle Style',
@@ -58759,7 +58823,7 @@ var FilterPanel = function (_React$PureComponent) {
                         _SidebarFilter2.default,
                         {
                             toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Vehicle Segment');
+                                return _this3.toggleOpenFilter('Vehicle Segment');
                             },
                             open: this.state.openFilter === 'Vehicle Segment',
                             title: 'Vehicle Class',
@@ -58780,157 +58844,7 @@ var FilterPanel = function (_React$PureComponent) {
                             'Features & Options'
                         )
                     ),
-                    _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Fuel');
-                            },
-                            open: this.state.openFilter === 'Fuel',
-                            title: 'Fuel Type',
-                            count: this.props.selectedFuelType ? 1 : 0
-                        },
-                        _react2.default.createElement(_FilterFuelTypeSelector2.default, {
-                            fuelTypes: this.props.fuelTypes,
-                            selectedFuelType: this.props.selectedFuelType,
-                            onChooseFuelType: this.props.chooseFuelType
-                        })
-                    ),
-                    _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Transmission');
-                            },
-                            open: this.state.openFilter === 'Transmission',
-                            title: 'Transmission',
-                            count: this.props.selectedTransmissionType ? 1 : 0
-                        },
-                        _react2.default.createElement(_FilterTransmissionTypeSelector2.default, {
-                            transmissionTypes: this.props.transmissionTypes,
-                            selectedTransmissionType: this.props.selectedTransmissionType,
-                            onSelectTransmissionType: this.props.chooseTransmissionType
-                        })
-                    ),
-                    _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Drive Train');
-                            },
-                            open: this.state.openFilter === 'Drive Train',
-                            title: 'Drive Train'
-                        },
-                        _react2.default.createElement(
-                            'div',
-                            null,
-                            _react2.default.createElement(
-                                'p',
-                                null,
-                                'Placeholder Text'
-                            )
-                        )
-                    ),
-                    _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Convenience');
-                            },
-                            open: this.state.openFilter === 'Convenience',
-                            title: 'Comfort & Convenience',
-                            count: this.getCountOfSelectedFeatureByGroup('comfort and convenience')
-                        },
-                        _react2.default.createElement(_FilterFeatureSelector2.default, {
-                            selectedFeatures: this.props.selectedFeatures,
-                            features: this.getFeaturesByGroup('comfort and convenience'),
-                            onSelectFeature: this.props.toggleFeature
-                        })
-                    ),
-                    _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Seating');
-                            },
-                            open: this.state.openFilter === 'Seating',
-                            title: 'Seating',
-                            count: this.getCountOfSelectedFeatureByGroup('seating')
-                        },
-                        _react2.default.createElement(_FilterFeatureSelector2.default, {
-                            selectedFeatures: this.props.selectedFeatures,
-                            features: this.getFeaturesByGroup('seating'),
-                            onSelectFeature: this.props.toggleFeature
-                        })
-                    ),
-                    _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Technology');
-                            },
-                            open: this.state.openFilter === 'Technology',
-                            title: 'Infotainment',
-                            count: this.getCountOfSelectedFeatureByGroup('technology')
-                        },
-                        _react2.default.createElement(_FilterFeatureSelector2.default, {
-                            selectedFeatures: this.props.selectedFeatures,
-                            features: this.getFeaturesByGroup('technology'),
-                            onSelectFeature: this.props.toggleFeature
-                        })
-                    ),
-                    _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Interior');
-                            },
-                            open: this.state.openFilter === 'Interior',
-                            title: 'Interior',
-                            count: this.getCountOfSelectedFeatureByGroup('interior')
-                        },
-                        _react2.default.createElement(
-                            'div',
-                            null,
-                            _react2.default.createElement(
-                                'p',
-                                null,
-                                'Placeholder Text'
-                            )
-                        )
-                    ),
-                    _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Safety');
-                            },
-                            open: this.state.openFilter === 'Safety',
-                            title: 'Safety & Driver Assist',
-                            count: this.getCountOfSelectedFeatureByGroup('safety')
-                        },
-                        _react2.default.createElement(_FilterFeatureSelector2.default, {
-                            selectedFeatures: this.props.selectedFeatures,
-                            features: this.getFeaturesByGroup('safety'),
-                            onSelectFeature: this.props.toggleFeature
-                        })
-                    ),
-                    _ramda2.default.contains('Pickup', this.props.selectedStyles) ? _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
-                                return _this2.toggleOpenFilter('Pickup');
-                            },
-                            open: this.state.openFilter === 'Pickup',
-                            title: 'Pickup',
-                            count: this.getCountOfSelectedFeatureByGroup('truck')
-                        },
-                        _react2.default.createElement(_FilterFeatureSelector2.default, {
-                            selectedFeatures: this.props.selectedFeatures,
-                            features: this.getFeaturesByGroup('truck'),
-                            onSelectFeature: this.props.toggleFeature
-                        })
-                    ) : ''
+                    this.renderSidebarFilters()
                 )
             );
         }
@@ -58955,7 +58869,9 @@ var mapStateToProps = function mapStateToProps(state) {
         selectedModels: state.selectedModels,
         fallbackLogoImage: state.fallbackLogoImage,
         selectedFeatures: state.selectedFeatures,
-        features: state.features
+        features: state.features,
+        featureCategories: state.featureCategories,
+        searchFeatures: state.searchFeatures
     };
 };
 
@@ -59593,15 +59509,15 @@ var FilterFeatureSelector = function (_React$PureComponent) {
                         {
                             key: index,
                             className: 'filter-selector__selector',
-                            onClick: _this2.props.onSelectFeature.bind(null, feature.attributes.feature)
+                            onClick: _this2.props.onSelectFeature.bind(null, feature.attributes.title)
                         },
-                        _ramda2.default.contains(feature.attributes.feature, _this2.props.selectedFeatures) ? _react2.default.createElement(_reactSvgInline2.default, {
+                        _ramda2.default.contains(feature.attributes.title, _this2.props.selectedFeatures) ? _react2.default.createElement(_reactSvgInline2.default, {
                             width: '15px',
                             height: '15px',
                             className: 'filter-selector__checkbox filter-selector__checkbox--selected',
                             svg: _zondicons2.default['checkmark']
                         }) : _react2.default.createElement('div', { className: 'filter-selector__checkbox' }),
-                        feature.attributes.feature
+                        feature.attributes.title
                     );
                 })
             );
@@ -59614,8 +59530,7 @@ var FilterFeatureSelector = function (_React$PureComponent) {
 FilterFeatureSelector.propTypes = {
     features: _propTypes2.default.arrayOf(_propTypes2.default.shape({
         attributes: _propTypes2.default.shape({
-            feature: _propTypes2.default.string.isRequired,
-            group: _propTypes2.default.string.isRequired
+            title: _propTypes2.default.string.isRequired
         })
     }).isRequired).isRequired,
     selectedFeatures: _propTypes2.default.arrayOf(_propTypes2.default.string).isRequired,
@@ -61090,11 +61005,13 @@ var initialState = {
     selectedRebates: [],
     dealRebates: {},
     features: null,
+    featureCategories: [],
     requestingMoreDeals: false,
     makes: null,
     dealPage: 1,
     dealPageTotal: 1,
     deals: null,
+    searchFeatures: [],
     fallbackLogoImage: '/images/dmr-logo-small.svg',
     sortColumn: 'price',
     sortAscending: true,
@@ -61117,6 +61034,7 @@ exports.default = function () {
         store.dispatch((0, _index3.requestModels)());
         store.dispatch((0, _index3.requestBodyStyles)());
         store.dispatch((0, _index3.requestFeatures)());
+        store.dispatch((0, _index4.requestFeatureCategories)());
 
         if (store.getState().zipcode) {
             store.dispatch((0, _index4.checkZipInRange)(store.getState().zipcode));
@@ -61477,6 +61395,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var reducer = function reducer(state, action) {
+    console.log(action.type);
     switch (action.type) {
         case _constants.REHYDRATE:
             /**
@@ -61583,6 +61502,11 @@ var reducer = function reducer(state, action) {
         case ActionTypes.RECEIVE_FEATURES:
             return Object.assign({}, state, {
                 features: action.data.data.data
+            });
+        case ActionTypes.RECEIVE_FEATURE_CATEGORIES:
+            return Object.assign({}, state, {
+                featureCategories: action.data.data.data,
+                searchFeatures: action.data.data.included
             });
         case ActionTypes.TOGGLE_STYLE:
             return Object.assign({}, state, {

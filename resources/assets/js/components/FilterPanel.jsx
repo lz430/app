@@ -45,6 +45,34 @@ class FilterPanel extends React.PureComponent {
         ).length;
     }
 
+    renderSidebarFilters() {
+        return this.props.featureCategories.map((category, index) => {
+            let features = this.props.searchFeatures.filter(feature => {
+                let categoryFeatures = category.relationships.features.data.map(categoryFeature => {
+                    return categoryFeature.id;
+                });
+
+                return categoryFeatures.includes(feature.id);
+            });
+
+            return (
+                <SidebarFilter
+                    key={index}
+                    toggle={() => this.toggleOpenFilter(category.attributes.title)}
+                    open={this.state.openFilter === category.attributes.title}
+                    title={category.attributes.title}
+                    count={this.props.selectedStyles.length}
+                >
+                    <FilterFeatureSelector
+                        selectedFeatures={this.props.selectedFeatures}
+                        features={features}
+                        onSelectFeature={this.props.toggleFeature}
+                    />
+                </SidebarFilter>
+            )
+        });
+    }
+
     render() {
         return (
             <div>
@@ -99,127 +127,7 @@ class FilterPanel extends React.PureComponent {
                     <div className="sidebar-filters__section-header sidebar-filters__filter-title">
                         <p>Features & Options</p>
                     </div>
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Fuel')}
-                        open={this.state.openFilter === 'Fuel'}
-                        title="Fuel Type"
-                        count={this.props.selectedFuelType ? 1 : 0}
-                    >
-                        <FilterFuelTypeSelector
-                            fuelTypes={this.props.fuelTypes}
-                            selectedFuelType={this.props.selectedFuelType}
-                            onChooseFuelType={this.props.chooseFuelType}
-                        />
-                    </SidebarFilter>
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Transmission')}
-                        open={this.state.openFilter === 'Transmission'}
-                        title="Transmission"
-                        count={this.props.selectedTransmissionType ? 1 : 0}
-                    >
-                        <FilterTransmissionTypeSelector
-                            transmissionTypes={this.props.transmissionTypes}
-                            selectedTransmissionType={
-                                this.props.selectedTransmissionType
-                            }
-                            onSelectTransmissionType={
-                                this.props.chooseTransmissionType
-                            }
-                        />
-                    </SidebarFilter>
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Drive Train')}
-                        open={this.state.openFilter === 'Drive Train'}
-                        title="Drive Train"
-                    >
-                        <div>
-                            <p>Placeholder Text</p>
-                        </div>
-                    </SidebarFilter>
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Convenience')}
-                        open={this.state.openFilter === 'Convenience'}
-                        title="Comfort & Convenience"
-                        count={this.getCountOfSelectedFeatureByGroup(
-                            'comfort and convenience'
-                        )}
-                    >
-                        <FilterFeatureSelector
-                            selectedFeatures={this.props.selectedFeatures}
-                            features={this.getFeaturesByGroup(
-                                'comfort and convenience'
-                            )}
-                            onSelectFeature={this.props.toggleFeature}
-                        />
-                    </SidebarFilter>
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Seating')}
-                        open={this.state.openFilter === 'Seating'}
-                        title="Seating"
-                        count={this.getCountOfSelectedFeatureByGroup('seating')}
-                    >
-                        <FilterFeatureSelector
-                            selectedFeatures={this.props.selectedFeatures}
-                            features={this.getFeaturesByGroup('seating')}
-                            onSelectFeature={this.props.toggleFeature}
-                        />
-                    </SidebarFilter>
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Technology')}
-                        open={this.state.openFilter === 'Technology'}
-                        title="Infotainment"
-                        count={this.getCountOfSelectedFeatureByGroup(
-                            'technology'
-                        )}
-                    >
-                        <FilterFeatureSelector
-                            selectedFeatures={this.props.selectedFeatures}
-                            features={this.getFeaturesByGroup('technology')}
-                            onSelectFeature={this.props.toggleFeature}
-                        />
-                    </SidebarFilter>
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Interior')}
-                        open={this.state.openFilter === 'Interior'}
-                        title="Interior"
-                        count={this.getCountOfSelectedFeatureByGroup(
-                            'interior'
-                        )}
-                    >
-                        <div>
-                            <p>Placeholder Text</p>
-                        </div>
-                    </SidebarFilter>
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Safety')}
-                        open={this.state.openFilter === 'Safety'}
-                        title="Safety & Driver Assist"
-                        count={this.getCountOfSelectedFeatureByGroup('safety')}
-                    >
-                        <FilterFeatureSelector
-                            selectedFeatures={this.props.selectedFeatures}
-                            features={this.getFeaturesByGroup('safety')}
-                            onSelectFeature={this.props.toggleFeature}
-                        />
-                    </SidebarFilter>
-                    {R.contains('Pickup', this.props.selectedStyles) ? (
-                        <SidebarFilter
-                            toggle={() => this.toggleOpenFilter('Pickup')}
-                            open={this.state.openFilter === 'Pickup'}
-                            title="Pickup"
-                            count={this.getCountOfSelectedFeatureByGroup(
-                                'truck'
-                            )}
-                        >
-                            <FilterFeatureSelector
-                                selectedFeatures={this.props.selectedFeatures}
-                                features={this.getFeaturesByGroup('truck')}
-                                onSelectFeature={this.props.toggleFeature}
-                            />
-                        </SidebarFilter>
-                    ) : (
-                        ''
-                    )}
+                    { this.renderSidebarFilters() }
                 </div>
             </div>
         );
@@ -243,6 +151,8 @@ const mapStateToProps = state => {
         fallbackLogoImage: state.fallbackLogoImage,
         selectedFeatures: state.selectedFeatures,
         features: state.features,
+        featureCategories: state.featureCategories,
+        searchFeatures: state.searchFeatures,
     };
 };
 
