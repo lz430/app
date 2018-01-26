@@ -26,6 +26,38 @@ class CreateDmrFeaturesTable extends Migration
         });
 
         collect([
+            'vehicle_segment' => [
+                [
+                    'title' => 'Subcompact',
+                    'slug' => 'subcompact',
+                    'jato_schema_ids' => [176],
+                ],
+                [
+                    'title' => 'Compact',
+                    'slug' => 'compact',
+                    'jato_schema_ids' => [176],
+                ],
+                [
+                    'title' => 'Mid-size',
+                    'slug' => 'mid-size',
+                    'jato_schema_ids' => [176],
+                ],
+                [
+                    'title' => 'Full-size',
+                    'slug' => 'full-size',
+                    'jato_schema_ids' => [176],
+                ],
+                [
+                    'title' => 'Mini Van',
+                    'slug' => 'minivan',
+                    'jato_schema_ids' => [176],
+                ],
+                [
+                    'title' => 'Sports',
+                    'slug' => 'sports',
+                    'jato_schema_ids' => [176],
+                ],
+            ],
             'comfort_and_convenience' => [
                 [
                     'title' => 'Automatic trunk/hatch closing',
@@ -127,6 +159,55 @@ class CreateDmrFeaturesTable extends Migration
                     'jato_schema_ids' => [17402],
                 ],
             ],
+            'seating_configuration' => [
+                [
+                    'title' => 'Second row bench',
+                    'slug' => 'second_row_bench',
+                    'jato_schema_ids' => [701],
+                ],
+                [
+                    'title' => 'Second row captains chairs',
+                    'slug' => 'second_row_captains_chairs',
+                    'jato_schema_ids' => [701],
+                ],
+                [
+                    'title' => '3rd row seating',
+                    'slug' => 'third_row_seating',
+                    'jato_schema_ids' => [701],
+                ],
+                [
+                    'title' => '4th row seating',
+                    'slug' => 'fourth_row_seating',
+                    'jato_schema_ids' => [701],
+                ],
+            ],
+            'pickup' => [
+                [
+                    'title' => 'regular cab',
+                    'slug' => 'regular_cab',
+                    'jato_schema_ids' => [701],
+                ],
+                [
+                    'title' => 'extended cab',
+                    'slug' => 'extended_cab',
+                    'jato_schema_ids' => [701],
+                ],
+                [
+                    'title' => 'crew cab',
+                    'slug' => 'crew_cab',
+                    'jato_schema_ids' => [701],
+                ],
+                [
+                    'title' => '2 Door',
+                    'slug' => 'pickup_doors_2',
+                    'jato_schema_ids' => [601],
+                ],
+                [
+                    'title' => '4 Door',
+                    'slug' => 'pickup_doors_4',
+                    'jato_schema_ids' => [601],
+                ],
+            ],
             'fuel_type' => [
                 [
                     'title' => 'Gas',
@@ -140,7 +221,7 @@ class CreateDmrFeaturesTable extends Migration
                 ],
                 [
                     'title' => 'Hybrid & Electric',
-                    'slug' => 'fuel_type_electric',
+                    'slug' => 'fuel_type_hybrid_electric',
                     'jato_schema_ids' => [51801, 51901],
                 ],
             ],
@@ -278,7 +359,38 @@ class CreateDmrFeaturesTable extends Migration
                 ],
             ],
             'transmission' => [
-                // @todo
+                [
+                    'title' => 'Automatic',
+                    'slug' => 'transmission_automatic',
+                    'jato_schema_ids' => [20602],
+                ],
+                [
+                    'title' => 'Manual',
+                    'slug' => 'transmission_manual',
+                    'jato_schema_ids' => [20602],
+                ],
+            ],
+            'drive_train' => [
+                [
+                    'title' => 'Front Wheel Drive',
+                    'slug' => 'drive_train_fwd',
+                    'jato_schema_ids' => [6502],
+                ],
+                [
+                    'title' => 'Rear Wheel Drive',
+                    'slug' => 'drive_train_rwd',
+                    'jato_schema_ids' => [6502],
+                ],
+                [
+                    'title' => '4x4 (Four Wheel Drive)',
+                    'slug' => 'drive_train_4wd',
+                    'jato_schema_ids' => [6502],
+                ],
+                [
+                    'title' => 'All Wheel Drive',
+                    'slug' => 'drive_train_awd',
+                    'jato_schema_ids' => [6502],
+                ],
             ]
         ])->each(function ($features, $categorySlug){
             $categoryQuery = Category::query();
