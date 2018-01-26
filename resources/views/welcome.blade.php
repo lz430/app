@@ -17,7 +17,7 @@
 
     <div class="welcome__select-a-vehicle-type section section--darkest section--no-padding">
         <div class="welcome__select-a-vehicle-type-title">
-            Select a vehicle type
+            Select a vehicle style
         </div>
 
         <div class="welcome-style-selector">

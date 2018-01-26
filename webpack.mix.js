@@ -19,7 +19,7 @@ if (mix.config.inProduction) {
     mix.version();
 } else {
     mix.browserSync({
-        proxy: 'delivermyride.dev',
+        proxy: 'delivermyride.test',
         notify: {
             styles: {
                 top: 'auto',

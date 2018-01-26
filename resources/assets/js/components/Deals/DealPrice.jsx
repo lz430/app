@@ -56,7 +56,7 @@ class DealPrice extends React.PureComponent {
     }
 
     renderPriceExplanationModal() {
-        return <InfoModal></InfoModal>
+        return <InfoModal deal={this.props.deal}/>
     }
 
     renderCashPrice() {
@@ -64,12 +64,14 @@ class DealPrice extends React.PureComponent {
             <div className="deal-price__price">
                 <div className="deal-price__cash-label">Your cash price</div>
                 <div className="deal-price__cash-price">
-                    {util.moneyFormat(
-                        util.getEmployeeOrSupplierPrice(
-                            this.props.deal,
-                            this.props.employeeBrand
-                        )
-                    )}
+                    <div>
+                        {util.moneyFormat(
+                            util.getEmployeeOrSupplierPrice(
+                                this.props.deal,
+                                this.props.employeeBrand
+                            )
+                        )}
+                    </div>
                     {this.renderPriceExplanationModal()}
                 </div>
                 <div className="deal-price__hr" />
@@ -82,18 +84,61 @@ class DealPrice extends React.PureComponent {
     }
 
     renderFinancePrice() {
-        return (
-            <div className="deal-price__price">
+        return <div className="deal-price__price">
                 <div className="deal-price__finance-lease-label">
                     Estimated Monthly Finance Payment
                 </div>
                 <div className="deal-price__finance-lease-price">
-                    {this.props.dealRebates.hasOwnProperty(
-                        this.props.deal.id
-                    ) ? (
-                        util.moneyFormat(
+                    <div>
+                        {this.props.dealRebates.hasOwnProperty(
+                            this.props.deal.id
+                        ) ? (
+                            util.moneyFormat(
+                                Math.round(
+                                    formulas.calculateFinancedMonthlyPayments(
+                                        util.getEmployeeOrSupplierPrice(
+                                            this.props.deal,
+                                            this.props.employeeBrand
+                                        ) -
+                                            R.sum(
+                                                R.map(
+                                                    R.prop('value'),
+                                                    rebates.getSelectedRebatesForDealAndType(
+                                                        this.props
+                                                            .dealRebates,
+                                                        this.props
+                                                            .selectedRebates,
+                                                        this.props
+                                                            .selectedTab,
+                                                        this.props.deal
+                                                    )
+                                                )
+                                            ),
+                                        this.props.downPayment,
+                                        this.props.termDuration
+                                    )
+                                )
+                            )
+                        ) : (
+                            <SVGInline svg={miscicons['loading']} />
+                        )}
+                    </div>
+                    {this.renderPriceExplanationModal()}
+                </div>
+                <div className="deal-price__hr" />
+            </div>;
+    }
+
+    renderLeasePrice() {
+        return <div className="deal-price__price">
+                <div className="deal-price__finance-lease-label">
+                    Estimated Monthly Lease Payment
+                </div>
+                <div className="deal-price__finance-lease-price">
+                    <div>
+                        {util.moneyFormat(
                             Math.round(
-                                formulas.calculateFinancedMonthlyPayments(
+                                formulas.calculateLeasedMonthlyPayments(
                                     util.getEmployeeOrSupplierPrice(
                                         this.props.deal,
                                         this.props.employeeBrand
@@ -102,65 +147,28 @@ class DealPrice extends React.PureComponent {
                                             R.map(
                                                 R.prop('value'),
                                                 rebates.getSelectedRebatesForDealAndType(
-                                                    this.props.dealRebates,
-                                                    this.props.selectedRebates,
-                                                    this.props.selectedTab,
+                                                    this.props
+                                                        .dealRebates,
+                                                    this.props
+                                                        .selectedRebates,
+                                                    this.props
+                                                        .selectedTab,
                                                     this.props.deal
                                                 )
                                             )
                                         ),
-                                    this.props.downPayment,
-                                    this.props.termDuration
+                                    0,
+                                    0,
+                                    this.props.termDuration,
+                                    R.or(this.props.residualPercent, 31)
                                 )
                             )
-                        )
-                    ) : (
-                        <SVGInline svg={miscicons['loading']} />
-                    )}
+                        )}
+                    </div>
                     {this.renderPriceExplanationModal()}
                 </div>
                 <div className="deal-price__hr" />
-            </div>
-        );
-    }
-
-    renderLeasePrice() {
-        return (
-            <div className="deal-price__price">
-                <div className="deal-price__finance-lease-label">
-                    Estimated Monthly Lease Payment
-                </div>
-                <div className="deal-price__finance-lease-price">
-                    {util.moneyFormat(
-                        Math.round(
-                            formulas.calculateLeasedMonthlyPayments(
-                                util.getEmployeeOrSupplierPrice(
-                                    this.props.deal,
-                                    this.props.employeeBrand
-                                ) -
-                                    R.sum(
-                                        R.map(
-                                            R.prop('value'),
-                                            rebates.getSelectedRebatesForDealAndType(
-                                                this.props.dealRebates,
-                                                this.props.selectedRebates,
-                                                this.props.selectedTab,
-                                                this.props.deal
-                                            )
-                                        )
-                                    ),
-                                0,
-                                0,
-                                this.props.termDuration,
-                                R.or(this.props.residualPercent, 31)
-                            )
-                        )
-                    )}
-                    {this.renderPriceExplanationModal()}
-                </div>
-                <div className="deal-price__hr" />
-            </div>
-        );
+            </div>;
     }
 
     renderSelectedTab() {

@@ -52,6 +52,27 @@ class FilterPanel extends React.PureComponent {
 
                 <div className="sidebar-filters">
                     <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Make')}
+                        open={this.state.openFilter === 'Make'}
+                        title="Vehicle Brand"
+                        count={this.props.selectedMakes.length}
+                    >
+                        <FilterMakeSelector
+                            makes={this.props.makes}
+                            selectedMakes={this.props.selectedMakes}
+                            onSelectMake={this.props.toggleMake}
+                        />
+                    </SidebarFilter>
+                    <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Model')}
+                        open={this.state.openFilter === 'Model'}
+                        title="Vehicle Model"
+                    >
+                        <div>
+                            <p>Placeholder Text</p>
+                        </div>
+                    </SidebarFilter>
+                    <SidebarFilter
                         toggle={() => this.toggleOpenFilter('Vehicle Style')}
                         open={this.state.openFilter === 'Vehicle Style'}
                         title="Vehicle Style"
@@ -66,7 +87,7 @@ class FilterPanel extends React.PureComponent {
                     <SidebarFilter
                         toggle={() => this.toggleOpenFilter('Vehicle Segment')}
                         open={this.state.openFilter === 'Vehicle Segment'}
-                        title="Vehicle Segment"
+                        title="Vehicle Class"
                         count={this.props.selectedSegment ? 1 : 0}
                     >
                         <FilterSegmentSelector
@@ -75,22 +96,13 @@ class FilterPanel extends React.PureComponent {
                             onSelectSegment={this.props.chooseSegment}
                         />
                     </SidebarFilter>
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Make')}
-                        open={this.state.openFilter === 'Make'}
-                        title="Brand"
-                        count={this.props.selectedMakes.length}
-                    >
-                        <FilterMakeSelector
-                            makes={this.props.makes}
-                            selectedMakes={this.props.selectedMakes}
-                            onSelectMake={this.props.toggleMake}
-                        />
-                    </SidebarFilter>
+                    <div className="sidebar-filters__section-header sidebar-filters__filter-title">
+                        <p>Features & Options</p>
+                    </div>
                     <SidebarFilter
                         toggle={() => this.toggleOpenFilter('Fuel')}
                         open={this.state.openFilter === 'Fuel'}
-                        title="Fuel"
+                        title="Fuel Type"
                         count={this.props.selectedFuelType ? 1 : 0}
                     >
                         <FilterFuelTypeSelector
@@ -116,47 +128,18 @@ class FilterPanel extends React.PureComponent {
                         />
                     </SidebarFilter>
                     <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Seating')}
-                        open={this.state.openFilter === 'Seating'}
-                        title="Seating"
-                        count={this.getCountOfSelectedFeatureByGroup('seating')}
+                        toggle={() => this.toggleOpenFilter('Drive Train')}
+                        open={this.state.openFilter === 'Drive Train'}
+                        title="Drive Train"
                     >
-                        <FilterFeatureSelector
-                            selectedFeatures={this.props.selectedFeatures}
-                            features={this.getFeaturesByGroup('seating')}
-                            onSelectFeature={this.props.toggleFeature}
-                        />
-                    </SidebarFilter>
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Safety')}
-                        open={this.state.openFilter === 'Safety'}
-                        title="Safety"
-                        count={this.getCountOfSelectedFeatureByGroup('safety')}
-                    >
-                        <FilterFeatureSelector
-                            selectedFeatures={this.props.selectedFeatures}
-                            features={this.getFeaturesByGroup('safety')}
-                            onSelectFeature={this.props.toggleFeature}
-                        />
-                    </SidebarFilter>
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Technology')}
-                        open={this.state.openFilter === 'Technology'}
-                        title="Technology"
-                        count={this.getCountOfSelectedFeatureByGroup(
-                            'technology'
-                        )}
-                    >
-                        <FilterFeatureSelector
-                            selectedFeatures={this.props.selectedFeatures}
-                            features={this.getFeaturesByGroup('technology')}
-                            onSelectFeature={this.props.toggleFeature}
-                        />
+                        <div>
+                            <p>Placeholder Text</p>
+                        </div>
                     </SidebarFilter>
                     <SidebarFilter
                         toggle={() => this.toggleOpenFilter('Convenience')}
                         open={this.state.openFilter === 'Convenience'}
-                        title="Comfort and Convenience"
+                        title="Comfort & Convenience"
                         count={this.getCountOfSelectedFeatureByGroup(
                             'comfort and convenience'
                         )}
@@ -169,11 +152,61 @@ class FilterPanel extends React.PureComponent {
                             onSelectFeature={this.props.toggleFeature}
                         />
                     </SidebarFilter>
+                    <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Seating')}
+                        open={this.state.openFilter === 'Seating'}
+                        title="Seating"
+                        count={this.getCountOfSelectedFeatureByGroup('seating')}
+                    >
+                        <FilterFeatureSelector
+                            selectedFeatures={this.props.selectedFeatures}
+                            features={this.getFeaturesByGroup('seating')}
+                            onSelectFeature={this.props.toggleFeature}
+                        />
+                    </SidebarFilter>
+                    <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Technology')}
+                        open={this.state.openFilter === 'Technology'}
+                        title="Infotainment"
+                        count={this.getCountOfSelectedFeatureByGroup(
+                            'technology'
+                        )}
+                    >
+                        <FilterFeatureSelector
+                            selectedFeatures={this.props.selectedFeatures}
+                            features={this.getFeaturesByGroup('technology')}
+                            onSelectFeature={this.props.toggleFeature}
+                        />
+                    </SidebarFilter>
+                    <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Interior')}
+                        open={this.state.openFilter === 'Interior'}
+                        title="Interior"
+                        count={this.getCountOfSelectedFeatureByGroup(
+                            'interior'
+                        )}
+                    >
+                        <div>
+                            <p>Placeholder Text</p>
+                        </div>
+                    </SidebarFilter>
+                    <SidebarFilter
+                        toggle={() => this.toggleOpenFilter('Safety')}
+                        open={this.state.openFilter === 'Safety'}
+                        title="Safety & Driver Assist"
+                        count={this.getCountOfSelectedFeatureByGroup('safety')}
+                    >
+                        <FilterFeatureSelector
+                            selectedFeatures={this.props.selectedFeatures}
+                            features={this.getFeaturesByGroup('safety')}
+                            onSelectFeature={this.props.toggleFeature}
+                        />
+                    </SidebarFilter>
                     {R.contains('Pickup', this.props.selectedStyles) ? (
                         <SidebarFilter
-                            toggle={() => this.toggleOpenFilter('Truck')}
-                            open={this.state.openFilter === 'Truck'}
-                            title="Truck"
+                            toggle={() => this.toggleOpenFilter('Pickup')}
+                            open={this.state.openFilter === 'Pickup'}
+                            title="Pickup"
                             count={this.getCountOfSelectedFeatureByGroup(
                                 'truck'
                             )}
