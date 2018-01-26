@@ -13,6 +13,9 @@ class Deal extends Model
     
     protected $guarded = [];
     protected $dates = ['inventory_date'];
+    protected $casts = [
+        'option_codes' => 'array'
+    ];
 
     public function versions()
     {

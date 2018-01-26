@@ -184,7 +184,7 @@ class Client
 
     protected function makeModelNameUrlFriendly($modelName)
     {
-        return strtolower(str_replace(' ', '-', $modelName));
+        return strtolower(str_replace([' ', '%20'], ['-', '-'], $modelName));
     }
 
     protected function authorize()

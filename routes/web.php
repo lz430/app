@@ -30,4 +30,6 @@ Route::post('set-email', 'OptinMonsterController@setEmailSession')->name('set-em
 /** Temp */
 if (App::environment(['staging', 'local'])) {
     Route::get('zip-tester/{zip}', 'ZipCodeTesterController');
+    Route::get('jato-logs/{date}', 'JatoLogController@showDay');
+    Route::get('jato-logs', 'JatoLogController@index');
 }
