@@ -61,15 +61,17 @@ class Importer
         "Option Codes",
     ];
 
-    private $filesystem;
     private $client;
-    private $info;
     private $error;
+    private $features;
+    private $filesystem;
+    private $info;
 
     public function __construct(Filesystem $filesystem, Client $client)
     {
         $this->filesystem = $filesystem;
         $this->client = $client;
+        $this->features = Feature::with('category')->get();
     }
 
     public function setInfoFunction(callable $infoFunction)
@@ -189,18 +191,13 @@ class Importer
                         $versionDeal
                     );
 
-                    $this->saveVersionDealFeatures(
-                        $versionDeal
-                    );
-
-                    $this->saveVersionSegment(
-                        $versionDeal
-                    );
-
                     $this->saveVersionDealPhotos(
                         $versionDeal,
                         $keyedData['Photos']
                     );
+
+                    $importer = new DealFeatureImporter($versionDeal, $this->features, $this->client);
+                    $importer->import();
                 });
             } catch (ClientException | ServerException $e) {
                 Log::error('Importer error for vin [' . $keyedData['VIN']. ']: ' . $e->getMessage());
@@ -315,23 +312,6 @@ class Importer
         $this->saveCustomHackyFeatures($deal);
     }
 
-    private function saveVersionDealFeatures(Deal $deal)
-    {
-        $features = Feature::all();
-
-        collect($this->client->equipmentByVehicleId($deal->versions->first()->jato_vehicle_id)['results'])->each(function ($equipment) use ($deal, $features) {
-            $schemaIds = $features->map(function ($feature) use ($deal, $equipment) {
-                if (in_array($equipment['schemaId'], $feature->jato_schema_ids)) {
-                    return $feature->id;
-                }
-            })->reject(function ($schema) {
-                return empty($schema);
-            })->toArray();
-
-            $deal->features()->syncWithoutDetaching($schemaIds);
-        });
-    }
-
     private function saveCustomHackyFeatures(Deal $deal)
     {
         $jatoVersion = $deal->versions->first();
@@ -361,38 +341,6 @@ class Importer
             } catch (QueryException $e) {
                 // Already Saved.
             }
-        }
-    }
-
-    private function saveVersionSegment(Deal $deal)
-    {
-        $jatoVersion = $deal->versions->first();
-
-        /** Save version "segment" */
-        $curbWeight = collect(
-            $this->client->featuresByVehicleIdAndCategoryId($deal->versions->first()->jato_vehicle_id, 2)['results']
-        )->first(function ($feature) {
-            return $feature['feature'] === 'Curb weight (lbs)';
-        });
-
-        if ($curbWeight && (int) $curbWeight !== 0) {
-            $jatoVersion->segment = $this->getSegmentByWeightInLbs((int) $curbWeight['content']);
-            $jatoVersion->save();
-        }
-    }
-
-    private function getSegmentByWeightInLbs($lbs)
-    {
-        if ($lbs < 1999) {
-            return 'mini';
-        } elseif ($lbs < 2499) {
-            return 'light';
-        } elseif ($lbs < 2999) {
-            return 'compact';
-        } elseif ($lbs < 3499) {
-            return 'medium';
-        } else {
-            return 'heavy';
         }
     }
 
@@ -436,6 +384,7 @@ class Importer
             'inventory_date' => Carbon::createFromFormat('m/d/Y', $keyedData['Inventory Date']),
             'certified' => $keyedData['Certified'] === 'Yes',
             'description' => $keyedData['Description'],
+            'option_codes' => array_filter(explode(',', $keyedData['Option Codes'])),
             'fuel_econ_city' => $keyedData['City MPG'] !== '' ? $keyedData['City MPG'] : null,
             'fuel_econ_hwy' => $keyedData['Highway MPG'] !== '' ? $keyedData['Highway MPG'] : null,
             'dealer_name' => $keyedData['Dealer Name'],

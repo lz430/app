@@ -7,7 +7,7 @@ use App\Feature;
 use App\Transformers\DmrCategoryTransformer;
 use Illuminate\Http\Request;
 
-class DmrCategoriesController extends BaseAPIController
+class CategoriesController extends BaseAPIController
 {
     private const TRANSFORMER = DmrCategoryTransformer::class;
     private const RESOURCE_NAME = 'category';
