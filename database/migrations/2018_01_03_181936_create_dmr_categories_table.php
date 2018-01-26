@@ -25,6 +25,11 @@ class CreateDmrCategoriesTable extends Migration
 
         collect([
             [
+                'title' => 'Vehicle Segment',
+                'slug' => 'vehicle_segment',
+                'has_custom_jato_mapping' => true,
+            ],
+            [
                 'title' => 'Fuel Type',
                 'slug' => 'fuel_type',
                 'has_custom_jato_mapping' => true,

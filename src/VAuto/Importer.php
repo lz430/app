@@ -61,10 +61,11 @@ class Importer
         "Option Codes",
     ];
 
-    private $filesystem;
     private $client;
-    private $info;
     private $error;
+    private $features;
+    private $filesystem;
+    private $info;
 
     public function __construct(Filesystem $filesystem, Client $client)
     {
@@ -98,6 +99,8 @@ class Importer
 
     public function import()
     {
+        $this->features = DmrFeature::with('category')->get();
+
         $csvFiles = array_filter(
             $this->filesystem->files(realpath(base_path(config('services.vauto.uploads_path')))),
             function ($file) {
@@ -189,18 +192,13 @@ class Importer
                         $versionDeal
                     );
 
-                    $this->saveVersionDealDmrFeatures(
-                        $versionDeal
-                    );
-
-                    $this->saveVersionSegment(
-                        $versionDeal
-                    );
-
                     $this->saveVersionDealPhotos(
                         $versionDeal,
                         $keyedData['Photos']
                     );
+
+                    $importer = new DealFeatureImporter($versionDeal, $this->features, $this->client);
+                    $importer->import();
                 });
             } catch (ClientException | ServerException $e) {
                 Log::error('Importer error: ' . $e->getMessage());
@@ -315,23 +313,6 @@ class Importer
         $this->saveCustomHackyFeatures($deal);
     }
 
-    private function saveVersionDealDmrFeatures(Deal $deal)
-    {
-        $features = DmrFeature::all();
-
-        collect($this->client->equipmentByVehicleId($deal->versions->first()->jato_vehicle_id)['results'])->each(function ($equipment) use ($deal, $features) {
-            $schemaIds = $features->map(function ($feature) use ($deal, $equipment) {
-                if (in_array($equipment['schemaId'], $feature->jato_schema_ids)) {
-                    return $feature->id;
-                }
-            })->reject(function ($schema) {
-                return empty($schema);
-            })->toArray();
-
-            $deal->dmrFeatures()->syncWithoutDetaching($schemaIds);
-        });
-    }
-
     private function saveCustomHackyFeatures(Deal $deal)
     {
         $jatoVersion = $deal->versions->first();
@@ -436,6 +417,7 @@ class Importer
             'inventory_date' => Carbon::createFromFormat('m/d/Y', $keyedData['Inventory Date']),
             'certified' => $keyedData['Certified'] === 'Yes',
             'description' => $keyedData['Description'],
+            'option_codes' => array_filter(explode(',', $keyedData['Option Codes'])),
             'fuel_econ_city' => $keyedData['City MPG'] !== '' ? $keyedData['City MPG'] : null,
             'fuel_econ_hwy' => $keyedData['Highway MPG'] !== '' ? $keyedData['Highway MPG'] : null,
             'dealer_name' => $keyedData['Dealer Name'],
