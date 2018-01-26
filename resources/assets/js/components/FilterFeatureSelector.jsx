@@ -15,11 +15,11 @@ class FilterFeatureSelector extends React.PureComponent {
                             className="filter-selector__selector"
                             onClick={this.props.onSelectFeature.bind(
                                 null,
-                                feature.attributes.feature
+                                feature.attributes.title
                             )}
                         >
                             {R.contains(
-                                feature.attributes.feature,
+                                feature.attributes.title,
                                 this.props.selectedFeatures
                             ) ? (
                                 <SVGInline
@@ -31,7 +31,7 @@ class FilterFeatureSelector extends React.PureComponent {
                             ) : (
                                 <div className="filter-selector__checkbox" />
                             )}
-                            {feature.attributes.feature}
+                            {feature.attributes.title}
                         </div>
                     );
                 })}
@@ -44,8 +44,7 @@ FilterFeatureSelector.propTypes = {
     features: PropTypes.arrayOf(
         PropTypes.shape({
             attributes: PropTypes.shape({
-                feature: PropTypes.string.isRequired,
-                group: PropTypes.string.isRequired,
+                title: PropTypes.string.isRequired,
             }),
         }).isRequired
     ).isRequired,

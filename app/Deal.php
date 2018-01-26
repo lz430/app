@@ -13,6 +13,9 @@ class Deal extends Model
     
     protected $guarded = [];
     protected $dates = ['inventory_date'];
+    protected $casts = [
+        'option_codes' => 'array'
+    ];
 
     public function versions()
     {
@@ -34,9 +37,14 @@ class Deal extends Model
         return $this->hasMany(DealPhoto::class)->orderBy('id');
     }
     
+    public function jatoFeatures()
+    {
+        return $this->belongsToMany(JatoFeature::class)->hasGroup();
+    }
+
     public function features()
     {
-        return $this->belongsToMany(Feature::class)->hasGroup();
+        return $this->belongsToMany(Feature::class);
     }
     
     public function featuredPhoto()

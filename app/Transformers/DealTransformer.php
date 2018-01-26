@@ -44,9 +44,9 @@ class DealTransformer extends TransformerAbstract
             'days_old' => $deal->days_old,
             'photos' => $deal->photos,
             'versions' => $deal->versions,
-            'features' => $deal->features,
+            'features' => $deal->jatoFeatures,
             'doc_fee' => (float) $deal->dealer->doc_fee,
-            'vauto_features' => array_values(array_diff(explode('|', $deal->vauto_features), $deal->features->map(function ($feature) {
+            'vauto_features' => array_values(array_diff(explode('|', $deal->vauto_features), $deal->jatoFeatures->map(function ($feature) {
                 return $feature->feature;
             })->toArray())),
             'dealer' => $deal->dealer,

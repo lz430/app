@@ -58,12 +58,12 @@ class Client
 
     public function makeByName($name)
     {
-        return $this->get("makes/$name");
+        return $this->get("makes/" . $this->makeFancyNameUrlFriendly($name));
     }
 
     public function modelByName($modelName)
     {
-        return $this->get("models/" . $this->makeModelNameUrlFriendly($modelName));
+        return $this->get("models/" . $this->makeFancyNameUrlFriendly($modelName));
     }
 
     public function modelsByMakeName($makeName)
@@ -78,11 +78,12 @@ class Client
 
     public function manufacturerByName($name)
     {
-        return $this->get("manufacturers/$name");
+        return $this->get("manufacturers/" . $this->makeFancyNameUrlFriendly($name));
     }
 
     public function makesByManufacturerUrlName($manufacturerName)
     {
+        $modelName = $this->makeFancyNameUrlFriendly($modelName);
         return $this->get("manufacturers/$manufacturerName/makes")['results'];
     }
 
@@ -93,13 +94,13 @@ class Client
 
     public function modelsVersionsByModelName($modelName)
     {
-        $modelName = $this->makeModelNameUrlFriendly($modelName);
+        $modelName = $this->makeFancyNameUrlFriendly($modelName);
         return $this->get("models/$modelName/versions")['results'];
     }
 
     public function modelsVersionsByModelNameAsync($modelName)
     {
-        $modelName = $this->makeModelNameUrlFriendly($modelName);
+        $modelName = $this->makeFancyNameUrlFriendly($modelName);
         return $this->get("models/$modelName/versions", [], true);
     }
 
@@ -177,9 +178,9 @@ class Client
         }
     }
 
-    protected function makeModelNameUrlFriendly($modelName)
+    protected function makeFancyNameUrlFriendly($modelName)
     {
-        return strtolower(str_replace(' ', '-', $modelName));
+        return strtolower(str_replace([' ', '%20'], ['-', '-'], $modelName));
     }
 
     protected function authorize()

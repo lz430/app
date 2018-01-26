@@ -3,6 +3,7 @@
 namespace DeliverMyRide\VAuto;
 
 use App\Feature;
+use App\JatoFeature;
 use App\JATO\Make;
 use App\JATO\Manufacturer;
 use App\JATO\VehicleModel;
@@ -60,15 +61,17 @@ class Importer
         "Option Codes",
     ];
 
-    private $filesystem;
     private $client;
-    private $info;
     private $error;
+    private $features;
+    private $filesystem;
+    private $info;
 
     public function __construct(Filesystem $filesystem, Client $client)
     {
         $this->filesystem = $filesystem;
         $this->client = $client;
+        $this->features = Feature::with('category')->get();
     }
 
     public function setInfoFunction(callable $infoFunction)
@@ -188,17 +191,16 @@ class Importer
                         $versionDeal
                     );
 
-                    $this->saveVersionSegment(
-                        $versionDeal
-                    );
-
                     $this->saveVersionDealPhotos(
                         $versionDeal,
                         $keyedData['Photos']
                     );
+
+                    $importer = new DealFeatureImporter($versionDeal, $this->features, $this->client);
+                    $importer->import();
                 });
             } catch (ClientException | ServerException $e) {
-                Log::error('Importer error: ' . $e->getMessage());
+                Log::error('Importer error for vin [' . $keyedData['VIN']. ']: ' . $e->getMessage());
                 $this->error('Error: ' . $e->getMessage());
 
                 if ($e->getCode() === 401) {
@@ -206,7 +208,7 @@ class Importer
                     throw $e;
                 }
             } catch (QueryException $e) {
-                Log::error('Importer error: ' . $e->getMessage());
+                Log::error('Importer error for vin [' . $keyedData['VIN']. ']: ' . $e->getMessage());
                 $this->error('Error: ' . $e->getMessage());
             }
         }
@@ -248,7 +250,7 @@ class Importer
     private function getGroupWithOverrides(string $feature, string $group)
     {
         /** If group contains "seat" then it should be in "seating" category */
-        return str_contains($feature, 'seat') ? Feature::GROUP_SEATING : $group;
+        return str_contains($feature, 'seat') ? JatoFeature::GROUP_SEATING : $group;
     }
 
     private function saveVersionFeaturesByGroup(Deal $deal, array $features, string $group)
@@ -259,7 +261,7 @@ class Importer
             /**
              * Only interior features that contain "seat" should be added to seating
              */
-            if ($group === Feature::GROUP_SEATING && !str_contains($featureAndContent['feature'], 'seat')) {
+            if ($group === JatoFeature::GROUP_SEATING && !str_contains($featureAndContent['feature'], 'seat')) {
                 return;
             }
 
@@ -268,7 +270,7 @@ class Importer
              */
             if (starts_with($featureAndContent['content'], ['Standard', 'Yes'])) {
                 try {
-                    $feature = Feature::updateOrCreate([
+                    $feature = JatoFeature::updateOrCreate([
                         'feature' => $featureAndContent['feature'],
                         'content' => $featureAndContent['content'],
                     ], [
@@ -290,10 +292,10 @@ class Importer
         $jatoVehicleId =  $deal->versions->first()->jato_vehicle_id;
 
         $promises = [
-            Feature::GROUP_SAFETY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 11),
-            Feature::GROUP_SEATING => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 9),
-            Feature::COMFORT_AND_CONVENIENCE => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 1),
-            Feature::GROUP_TECHNOLOGY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 8),
+            JatoFeature::GROUP_SAFETY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 11),
+            JatoFeature::GROUP_SEATING => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 9),
+            JatoFeature::COMFORT_AND_CONVENIENCE => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 1),
+            JatoFeature::GROUP_TECHNOLOGY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 8),
         ];
 
         $results = unwrap($promises);
@@ -316,22 +318,22 @@ class Importer
 
         if ($jatoVersion->body_style === 'Pickup') {
             try {
-                $doorCount = Feature::updateOrCreate([
+                $doorCount = JatoFeature::updateOrCreate([
                     'feature' => "$deal->door_count Door",
                     'content' => $deal->door_count,
                 ], [
                     'feature' => "$deal->door_count Door",
                     'content' => $deal->door_count,
-                    'group' => Feature::GROUP_TRUCK,
+                    'group' => JatoFeature::GROUP_TRUCK,
                 ]);
 
-                $cabType = Feature::updateOrCreate([
+                $cabType = JatoFeature::updateOrCreate([
                     'feature' => "$jatoVersion->cab Cab",
                     'content' => $jatoVersion->cab,
                 ], [
                     'feature' => "$jatoVersion->cab Cab",
                     'content' => $jatoVersion->cab,
-                    'group' => Feature::GROUP_TRUCK,
+                    'group' => JatoFeature::GROUP_TRUCK,
                 ]);
 
                 $doorCount->deals()->save($deal);
@@ -339,38 +341,6 @@ class Importer
             } catch (QueryException $e) {
                 // Already Saved.
             }
-        }
-    }
-
-    private function saveVersionSegment(Deal $deal)
-    {
-        $jatoVersion = $deal->versions->first();
-
-        /** Save version "segment" */
-        $curbWeight = collect(
-            $this->client->featuresByVehicleIdAndCategoryId($deal->versions->first()->jato_vehicle_id, 2)['results']
-        )->first(function ($feature) {
-            return $feature['feature'] === 'Curb weight (lbs)';
-        });
-
-        if ($curbWeight && (int) $curbWeight !== 0) {
-            $jatoVersion->segment = $this->getSegmentByWeightInLbs((int) $curbWeight['content']);
-            $jatoVersion->save();
-        }
-    }
-
-    private function getSegmentByWeightInLbs($lbs)
-    {
-        if ($lbs < 1999) {
-            return 'mini';
-        } elseif ($lbs < 2499) {
-            return 'light';
-        } elseif ($lbs < 2999) {
-            return 'compact';
-        } elseif ($lbs < 3499) {
-            return 'medium';
-        } else {
-            return 'heavy';
         }
     }
 
@@ -414,6 +384,7 @@ class Importer
             'inventory_date' => Carbon::createFromFormat('m/d/Y', $keyedData['Inventory Date']),
             'certified' => $keyedData['Certified'] === 'Yes',
             'description' => $keyedData['Description'],
+            'option_codes' => array_filter(explode(',', $keyedData['Option Codes'])),
             'fuel_econ_city' => $keyedData['City MPG'] !== '' ? $keyedData['City MPG'] : null,
             'fuel_econ_hwy' => $keyedData['Highway MPG'] !== '' ? $keyedData['Highway MPG'] : null,
             'dealer_name' => $keyedData['Dealer Name'],

@@ -11,7 +11,7 @@ import {
     windowResize,
 } from 'actions/index';
 import util from 'src/util';
-import {checkZipInRange} from "./actions/index";
+import {checkZipInRange, requestFeatureCategories} from "./actions/index";
 
 const urlStyle = util.getInitialBodyStyleFromUrl();
 
@@ -33,6 +33,7 @@ const initialState = {
     employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
     features: null,
+    featureCategories: [],
     fuelTypes: ['Gasoline', 'Electric', 'Flex Fuel', 'Diesel', 'Hybrid'],
     makes: null,
     models: null,
@@ -40,6 +41,7 @@ const initialState = {
     residualPercent: null,
     smallFiltersShown: false,
     showMakeSelectorModal: true,
+    searchFeatures: [],
     segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
     selectedDeal: null,
     selectedFeatures: [],
@@ -86,6 +88,7 @@ export default () => {
         store.dispatch(requestModels());
         store.dispatch(requestBodyStyles());
         store.dispatch(requestFeatures());
+        store.dispatch(requestFeatureCategories());
 
         if (store.getState().zipcode) {
             store.dispatch(checkZipInRange(store.getState().zipcode));
