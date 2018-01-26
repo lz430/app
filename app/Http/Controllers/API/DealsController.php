@@ -109,8 +109,8 @@ class DealsController extends BaseAPIController
     {
         if ($request->has('features')) {
             foreach ($request->get('features') as $feature) {
-                $query->whereHas('features', function ($subQuery) use ($feature) {
-                    $subQuery->where('feature', $feature);
+                $query->whereHas('dmrFeatures', function ($subQuery) use ($feature) {
+                    $subQuery->where('title', $feature);
                 });
             }
         }

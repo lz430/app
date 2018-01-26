@@ -11,7 +11,7 @@ import {
     windowResize,
 } from 'actions/index';
 import util from 'src/util';
-import {checkZipInRange} from "./actions/index";
+import {checkZipInRange, requestFeatureCategories} from "./actions/index";
 
 const urlStyle = util.getInitialBodyStyleFromUrl();
 
@@ -44,6 +44,7 @@ const initialState = {
     selectedRebates: [],
     dealRebates: {},
     features: null,
+    featureCategories: [],
     requestingMoreDeals: false,
     makes: null,
     dealPage: 1,
@@ -77,6 +78,7 @@ export default () => {
         store.dispatch(requestModels());
         store.dispatch(requestBodyStyles());
         store.dispatch(requestFeatures());
+        store.dispatch(requestFeatureCategories());
 
         if (store.getState().zipcode) {
             store.dispatch(checkZipInRange(store.getState().zipcode));
