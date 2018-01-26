@@ -13,7 +13,7 @@ class FeaturesController extends BaseAPIController
     public function index()
     {
         return fractal()
-            ->collection(JatoFeature::hasGroup()->whereIn('feature', JatoFeature::WHITELIST)->get())
+            ->collection(JatoFeature::hasGroup()->get())
             ->withResourceName(self::RESOURCE_NAME)
             ->transformWith(self::TRANSFORMER)
             ->respond();

@@ -149,6 +149,10 @@ body {
   color: #535d63;
 }
 
+.footer-signup__email::-ms-input-placeholder {
+  color: #535d63;
+}
+
 .footer-signup__email::placeholder {
   color: #535d63;
 }

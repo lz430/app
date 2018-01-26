@@ -15,6 +15,7 @@ import AccordionTable from 'components/AccordionTable';
 import util from 'src/util';
 import api from 'src/api';
 import miscicons from 'miscicons';
+import toTitleCase from 'titlecase';
 
 class ComparePage extends React.PureComponent {
     constructor(props) {
@@ -392,52 +393,49 @@ class ComparePage extends React.PureComponent {
     }
 
     renderFeaturesTable(compareList) {
-        const maxNumberCells = R.reduce(
-            (carry, dealAndSelectedFilters) => {
-                return R.max(
-                    dealAndSelectedFilters.deal.features.length,
-                    carry
-                );
-            },
-            0,
-            compareList
-        );
+        let featureSets = compareList.map(({ deal }, index) => {
+            return deal.features;
+        });
 
-        return (
-            <div className="compare-page-table">
-                {this.renderAccordionTabHeader('Features')}
-                <div className={this.columnClass('Features')}>
-                    {compareList.map(({ deal }, index) => {
+        let groupedFeatureSet = Object.values(R.groupBy(feature => {
+            return feature.group;
+        }, Object.values(R.mergeAll(featureSets))));
+
+        return groupedFeatureSet.map((featureSet, index) => {
+            return (
+                <AccordionTable key={ index }>
+                    {() => {
                         return (
-                            <div
-                                key={index}
-                                className="compare-page-table__column"
-                            >
-                                {deal.features.map((feature, index) => {
-                                    return <div key={index} className="compare-page-table__cell">
-                                        {feature.feature}&nbsp;
-                                    </div>
-                                })}
-                                {R.range(
-                                    0,
-                                    maxNumberCells -
-                                    deal.features.length
-                                ).map((_, index) => {
-                                    return (
-                                        <div
-                                            key={index}
-                                            className="compare-page-table__cell"
-                                        >
-                                            &nbsp;
-                                        </div>
-                                    );
-                                })}
+                            <div className="compare-page-table">
+                                {this.renderAccordionTabHeader(toTitleCase(featureSet[0].group) + ' Features')}
+                                <div className={this.columnClass(toTitleCase(featureSet[0].group) + ' Features')}>
+                                    {compareList.map(({ deal }, index) => {
+                                        return (
+                                            <div
+                                                key={index}
+                                                className="compare-page-table__column"
+                                            >
+                                                {featureSet.map((feature, index) => {
+                                                    if ( deal.features.find(dealFeature => { return dealFeature.id == feature.id; })) {
+                                                        return <div key={index} className="compare-page-table__cell">
+                                                            {feature.feature}&nbsp;
+                                                        </div>
+                                                    } else {
+                                                        return <div key={index} className="compare-page-table__cell">
+                                                            &mdash;
+                                                        </div>
+                                                    }
+                                                })}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         );
-                    })}
-                </div>
-            </div>
-        );
+                    }}
+                </AccordionTable>
+            );
+        });
     }
 
     hasSelections() {
@@ -507,13 +505,9 @@ class ComparePage extends React.PureComponent {
                         }}
                     </AccordionTable>
                     {this.props.compareList.length ? (
-                        <AccordionTable>
-                            {() => {
-                                return this.renderFeaturesTable(
-                                    this.props.compareList
-                                );
-                            }}
-                        </AccordionTable>
+                        this.renderFeaturesTable(
+                            this.props.compareList
+                        )
                     ) : (
                         ''
                     )}

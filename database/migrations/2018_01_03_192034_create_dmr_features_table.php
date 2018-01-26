@@ -392,7 +392,7 @@ class CreateDmrFeaturesTable extends Migration
                     'jato_schema_ids' => [6502],
                 ],
             ]
-        ])->each(function ($features, $categorySlug){
+        ])->each(function ($features, $categorySlug) {
             $categoryQuery = Category::query();
             $categoryQuery->getQuery()->from('dmr_categories');
             $categoryId = $categoryQuery->where('slug', $categorySlug)->first()->id;

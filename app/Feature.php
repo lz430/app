@@ -6,12 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Feature extends Model
 {
-    public static function withTable($table) {
-        $class = new static;
-        $class->setTable($table);
-        
-        return $class;
-    }
     protected $fillable = ['title', 'slug', 'dmr_category_id', 'display_order', 'jato_schema_ids'];
 
     protected $casts = [
