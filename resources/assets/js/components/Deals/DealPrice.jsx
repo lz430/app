@@ -11,8 +11,14 @@ import InfoModal from 'components/InfoModal';
 
 class DealPrice extends React.PureComponent {
     bestOfferTotalValue() {
-        return 0;
-        // return this.state.bestOffer ? this.state.bestOffer.totalValue : 0;
+        const targetKey = util.getTargetKeyForDealAndZip(this.props.deal, this.props.zipcode);
+        const selectedTargetIds = this.props.targetsSelected[targetKey]
+            ? R.map(R.prop('targetId'), this.props.targetsSelected[targetKey])
+            : [];
+        const targets = R.uniq(this.props.targetDefaults.concat(selectedTargetIds));
+        const bestOfferKey = util.getBestOfferKeyForDeal(this.props.deal, this.props.zipcode, this.props.selectedTab, targets);
+        const result = R.prop(bestOfferKey, this.props.bestOffers) ? R.prop('totalValue', R.prop(bestOfferKey, this.props.bestOffers)) : 0;
+        return result;
     }
 
     renderPriceExplanationModal() {
@@ -20,18 +26,27 @@ class DealPrice extends React.PureComponent {
     }
 
     renderCashPrice() {
+        let bestOfferTotalValue = this.bestOfferTotalValue();
         return <div className="deal-price__price">
                 <div className="deal-price__cash-label">
                     Your cash price
                 </div>
                 <div className="deal-price__cash-price">
                     <div>
-                        {util.moneyFormat(
-                            util.getEmployeeOrSupplierPrice(
-                                this.props.deal,
-                                this.props.employeeBrand
-                            ) - this.bestOfferTotalValue()
-                        )}
+                        {!R.isNil(bestOfferTotalValue) ? (
+                                util.moneyFormat(
+                                    formulas.calculateTotalCashFinance(
+                                        util.getEmployeeOrSupplierPrice(
+                                            this.props.deal,
+                                            this.props.employeeBrand
+                                        ),
+                                        this.props.deal.doc_fee,
+                                        this.props.downPayment,
+                                        bestOfferTotalValue
+                                    ))
+                            ) : (
+                                <SVGInline svg={miscicons['loading']} />
+                            )}
                     </div>
                     {this.renderPriceExplanationModal()}
                 </div>
@@ -45,15 +60,14 @@ class DealPrice extends React.PureComponent {
     }
 
     renderFinancePrice() {
+        let bestOfferTotalValue = this.bestOfferTotalValue();
         return (
             <div className="deal-price__price">
                 <div className="deal-price__finance-lease-label">
                     Estimated Monthly Finance Payment
                 </div>
                 <div className="deal-price__finance-lease-price">
-                    {this.props.dealTargets.hasOwnProperty(
-                        this.props.deal.id
-                    ) ? (
+                    {!R.isNil(bestOfferTotalValue) ? (
                         <div>
                             {util.moneyFormat(
                                 Math.round(
@@ -61,19 +75,7 @@ class DealPrice extends React.PureComponent {
                                         util.getEmployeeOrSupplierPrice(
                                             this.props.deal,
                                             this.props.employeeBrand
-                                        ) -
-                                            /*
-                                        R.sum(
-                                            R.map(
-                                                R.prop('value'),
-                                                rebates.getSelectedTargetsForDeal(
-                                                    this.props.dealTargets,
-                                                    this.props.selectedTargets,
-                                                    this.props.deal
-                                                )
-                                            )
-                                        ),*/
-                                            0, // @todo this would be the sum of our rebating
+                                        ) - bestOfferTotalValue,
                                         this.props.downPayment,
                                         this.props.termDuration
                                     )
@@ -91,6 +93,7 @@ class DealPrice extends React.PureComponent {
     }
 
     renderLeasePrice() {
+        let bestOfferTotalValue = this.bestOfferTotalValue();
         return (
             <div className="deal-price__price">
                 <div className="deal-price__finance-lease-label">
@@ -104,20 +107,7 @@ class DealPrice extends React.PureComponent {
                                     util.getEmployeeOrSupplierPrice(
                                         this.props.deal,
                                         this.props.employeeBrand
-                                    ) -
-                                        /*
-                                    R.sum(
-                                        R.map(
-                                            R.prop('value'),
-                                            rebates.getSelectedTargetsForDeal(
-                                                this.props.dealTargets,
-                                                this.props.selectedTargets,
-                                                this.props.deal
-                                            )
-                                        )
-                                    ),
-                                    */
-                                        0, // @TODO this would be the sum of our rebate price
+                                    ) - bestOfferTotalValue,
                                     0,
                                     0,
                                     this.props.termDuration,
@@ -214,6 +204,12 @@ const mapStateToProps = state => {
         selectedTab: state.selectedTab,
         dealTargets: state.dealTargets,
         bestOffers: state.bestOffers,
+        zipcode: state.zipcode,
+        targetsSelected: state.targetsSelected,
+        targetDefaults: state.targetDefaults,
+        bestOffers: state.bestOffers,
+        selectedTab: state.selectedTab,
+        downPayment: state.downPayment,
     };
 };
 

@@ -51,7 +51,13 @@ const reducer = (state, action) => {
         case ActionTypes.REQUEST_MORE_DEALS:
             return Object.assign({}, state, { requestingMoreDeals: true });
         case ActionTypes.REQUEST_DEALS:
-            return { ...state, deals: null, dealPageTotal: null, dealPage: null, requestingMoreDeals: true };
+            return {
+                ...state,
+                deals: null,
+                dealPageTotal: null,
+                dealPage: null,
+                requestingMoreDeals: true,
+            };
         case ActionTypes.RECEIVE_DEALS:
             return Object.assign({}, state, {
                 deals: action.data.data.data,
@@ -63,15 +69,18 @@ const reducer = (state, action) => {
                 requestingMoreDeals: false,
             });
         case ActionTypes.RECEIVE_TARGETS:
-            const targetKey = util.getTargetKeyForDealAndZip(action.data.deal, action.data.zipcode);
+            const targetKey = util.getTargetKeyForDealAndZip(
+                action.data.deal,
+                action.data.zipcode
+            );
 
-            let nextTargets = Object.assign({}, state.targets);
-
-            if (R.isNil(nextTargets[targetKey])) {
-                nextTargets[targetKey] = { available: action.data.data.data.targets, selected: [] };
-            }
-
-            return Object.assign({}, state, { targets: nextTargets });
+            return {
+                ...state,
+                targetsAvailable: {
+                    ...state.targetsAvailable,
+                    [targetKey]: action.data.data.data.targets,
+                },
+            };
         case ActionTypes.RECEIVE_DEAL_TARGETS:
             let nextDealTargets = Object.assign({}, state.dealTargets);
 
@@ -81,13 +90,16 @@ const reducer = (state, action) => {
                 dealTargets: nextDealTargets,
             });
         case ActionTypes.TOGGLE_TARGET:
-            let nextSelectedTargets = Object.assign({}, state.targets);
-
-            nextSelectedTargets[action.targetKey].selected = util.toggleItem(nextSelectedTargets[action.targetKey].selected, action.target);
-
-            return Object.assign({}, state, {
-                targets: nextSelectedTargets,
-            });
+            return {
+                ...state,
+                targetsSelected: {
+                    ...state.targetsSelected,
+                    [action.targetKey]: util.toggleItem(
+                        state.targetsSelected[action.targetKey] || [],
+                        action.target
+                    ),
+                },
+            };
         case ActionTypes.SORT_DEALS:
             return Object.assign({}, state, {
                 sortColumn: action.sort,
@@ -210,10 +222,22 @@ const reducer = (state, action) => {
 
             return Object.assign({}, state, { bestOffers: nextBestOffers });
         case ActionTypes.APPEND_CANCEL_TOKEN:
-            return { ...state, cancelTokens: [...state.cancelTokens, { dealId: action.deal.id, source: action.cancelToken }] };
+            return {
+                ...state,
+                cancelTokens: [
+                    ...state.cancelTokens,
+                    { dealId: action.deal.id, source: action.cancelToken },
+                ],
+            };
 
         case ActionTypes.REMOVE_CANCEL_TOKEN:
-            return { ...state, cancelTokens: R.reject(R.propEq('dealId', action.deal.id), state.cancelTokens) };
+            return {
+                ...state,
+                cancelTokens: R.reject(
+                    R.propEq('dealId', action.deal.id),
+                    state.cancelTokens
+                ),
+            };
 
         case ActionTypes.CLEAR_CANCEL_TOKENS:
             return { ...state, cancelTokens: [] };

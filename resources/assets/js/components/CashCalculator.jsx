@@ -14,19 +14,29 @@ class CashCalculator extends React.PureComponent {
         this.props.requestTargets(this.props.deal);
         this.props.requestBestOffer(this.props.deal);
     }
-    componentWillUnmount() {
-        // this.props.clearBestOffer();
+
+    bestOfferTotalValue() {
+        const targetKey = util.getTargetKeyForDealAndZip(this.props.deal, this.props.zipcode);
+        const selectedTargetIds = this.props.targetsSelected[targetKey]
+            ? R.map(R.prop('targetId'), this.props.targetsSelected[targetKey])
+            : [];
+        const targets = R.uniq(this.props.targetDefaults.concat(selectedTargetIds));
+        const bestOfferKey = util.getBestOfferKeyForDeal(this.props.deal, this.props.zipcode, this.props.selectedTab, targets);
+        const result = R.prop(bestOfferKey, this.props.bestOffers) ? R.prop('totalValue', R.prop(bestOfferKey, this.props.bestOffers)) : 0;
+        return result;
+    }
+
+    handleTargetsChange() {
+        this.props.requestBestOffer(this.props.deal);
     }
 
     render() {
-        const bestOfferTotalValue = this.props.dealBestOffer
-            ? this.props.dealBestOffer.totalValue
-            : 0;
+        const bestOfferTotalValue = this.bestOfferTotalValue();
         return <div>
                 Cash Price {util.moneyFormat(util.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand))}
                 <CustomerTypeSelect deal={this.props.deal} />
                 <hr />
-                <Targets deal={this.props.deal} targetsChanged={this.props.requestBestOffer.bind(this, this.props.deal)} />
+                <Targets deal={this.props.deal} targetsChanged={this.handleTargetsChange.bind(this)} />
                 <hr />
                 <h4>Summary</h4>
                 <div>
@@ -80,7 +90,7 @@ class CashCalculator extends React.PureComponent {
                             Rebates Applied
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {this.props.dealBestOffer ? (
+                            {!R.isNil(bestOfferTotalValue) ? (
                                 util.moneyFormat(bestOfferTotalValue)
                             ) : (
                                 <SVGInline svg={miscicons['loading']} />
@@ -92,16 +102,19 @@ class CashCalculator extends React.PureComponent {
                             Total Cost of Vehicle
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {util.moneyFormat(
-                                formulas.calculateTotalCashFinance(
-                                    util.getEmployeeOrSupplierPrice(
-                                        this.props.deal,
-                                        this.props.employeeBrand
-                                    ),
-                                    this.props.deal.doc_fee,
-                                    this.props.downPayment,
-                                    bestOfferTotalValue
-                                )
+                            {!R.isNil(bestOfferTotalValue) ? (
+                                util.moneyFormat(
+                                    formulas.calculateTotalCashFinance(
+                                        util.getEmployeeOrSupplierPrice(
+                                            this.props.deal,
+                                            this.props.employeeBrand
+                                        ),
+                                        this.props.deal.doc_fee,
+                                        this.props.downPayment,
+                                        bestOfferTotalValue
+                                    ))
+                            ) : (
+                                <SVGInline svg={miscicons['loading']} />
                             )}
                         </span>
                     </div>
@@ -112,10 +125,14 @@ class CashCalculator extends React.PureComponent {
 
 function mapStateToProps(state) {
     return {
+        bestOffers: state.bestOffers,
         deal: state.selectedDeal,
         downPayment: state.downPayment,
         employeeBrand: state.employeeBrand,
-        dealBestOffer: state.dealBestOffer,
+        selectedTab: state.selectedTab,
+        targetsSelected: state.targetsSelected,
+        targetDefaults: state.targetDefaults,
+        zipcode: state.zipcode,
     };
 }
 

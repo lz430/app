@@ -38,6 +38,11 @@ class DealBestOfferController extends BaseAPIController
             return Cache::get($cacheKey);
         }
 
+        // We want to show the cash best offer information even in the finance tabs
+        if($paymentType == 'finance') {
+            $paymentType = 'cash';
+        }
+
         $response = $this->client->bestOffer($jatoVehicleId, $paymentType, $zipCode, implode(',', $targets));
 
         Cache::tags(['best-offers'])->put($cacheKey, $response, 1440);

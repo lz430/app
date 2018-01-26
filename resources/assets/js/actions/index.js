@@ -643,7 +643,12 @@ export function requestBestOffer(deal) {
         const targets = R.uniq(
             getState().targetDefaults.concat(selectedTargetIds)
         );
-        const paymentTypes = ['cash', 'finance', 'lease'];
+
+        //temporarily limit to only selected payment type
+        let paymentTypes = [getState().selectedTab];
+        // We can ask for all payment types by uncommenting this:
+        // const paymentTypes = ['cash', 'finance', 'lease'];
+
         paymentTypes.map(paymentType => {
             const bestOfferKey = util.getBestOfferKeyForDeal(
                 deal,
@@ -651,6 +656,8 @@ export function requestBestOffer(deal) {
                 paymentType,
                 targets
             );
+
+            // if the best offer is already in store, do not call for it again
             if (R.props(bestOfferKey, getState().bestOffers)) {
                 dispatch({ type: ActionTypes.SAME_BEST_OFFERS });
             }
@@ -728,7 +735,6 @@ export function clearCancelTokens() {
 export function cancelAllBestOfferPromises() {
     return (dispatch, getState) => {
         getState().cancelTokens.map(cancelToken => {
-            console.log('canceling');
             try {
                 cancelToken.source.cancel();
             } catch (err) {
