@@ -2,7 +2,8 @@
 
 namespace DeliverMyRide\VAuto;
 
-use App\DmrFeature;
+use App\Feature;
+use Facades\App\JATO\Log;
 
 class DealFeatureImporter
 {
@@ -25,7 +26,7 @@ class DealFeatureImporter
             }
 
             if ($equipment['optionCode'] !== 'N/A' && in_array($equipment['optionCode'], $this->deal->option_codes)) {
-                $matchingFeatures = DmrFeature::where('jato_schema_ids', $equipment['schemaId'])->get();
+                $matchingFeatures = Feature::where('jato_schema_ids', $equipment['schemaId'])->get();
 
                 // Some of the custom mappings have more than one feature with the same schemaIds, so if multiple features are returned here,
                 // we'll have to loop through them below in parseCustomJatoMappingDmrCategories() to handle string comparison
@@ -52,7 +53,7 @@ class DealFeatureImporter
             });
         })->unique()->toArray();
         
-        $this->deal->dmrFeatures()->syncWithoutDetaching($schemaIds);
+        $this->deal->features()->syncWithoutDetaching($schemaIds);
     }
 
     private function parseCustomJatoMappingDmrCategories($category, $equipment)
@@ -85,7 +86,7 @@ class DealFeatureImporter
         }
 
         if (! $feature) {
-            // @todo log error "Could not find JATO match for schemaId
+            Log::error('Importer error for vin [' . $this->deal['VIN']. ']: could not find mapping for schemaId ' . $equipment['schemaId'] );
             return null;
         }
 
@@ -118,7 +119,7 @@ class DealFeatureImporter
                     break;
             }
 
-            return DmrFeature::where('slug', $segment)->get();
+            return Feature::where('slug', $segment)->get();
         }
     }
 
@@ -139,7 +140,7 @@ class DealFeatureImporter
                 }
 
             })->filter()->unique()->map(function ($slugKey) {
-                return DmrFeature::where('slug', $slugKey)->first();
+                return Feature::where('slug', $slugKey)->first();
             });
         }
     }
@@ -149,7 +150,7 @@ class DealFeatureImporter
             return collect($equipment['attributes'])->filter(function ($attribute) {
                 return $attribute['name'] == "Transmission type";
             })->pluck('value')->map(function ($slugKey) {
-                return DmrFeature::where('slug', 'transmission_' . $slugKey)->first();
+                return Feature::where('slug', 'transmission_' . $slugKey)->first();
             });
         }
     }
@@ -160,7 +161,7 @@ class DealFeatureImporter
             return collect($equipment['attributes'])->filter(function ($attribute) {
                 return $attribute['name'] == "Driven wheels";
             })->pluck('value')->map(function ($slugKey) {
-                return DmrFeature::where('slug', 'drive_train_' . strtolower($slugKey))->first();
+                return Feature::where('slug', 'drive_train_' . strtolower($slugKey))->first();
             });
         }
     }
@@ -184,7 +185,7 @@ class DealFeatureImporter
                     return 'seat_main_upholstery_leather';
                 }
             })->filter()->unique()->map(function ($slugKey) {
-                return DmrFeature::where('slug', $slugKey)->first();
+                return Feature::where('slug', $slugKey)->first();
             });
         }
     }
@@ -208,7 +209,7 @@ class DealFeatureImporter
                     return 'fourth_row_seating';
                 }
             })->filter()->unique()->map(function ($slugKey) {
-                return DmrFeature::where('slug', $slugKey)->first();
+                return Feature::where('slug', $slugKey)->first();
             });
         }
     }
@@ -226,7 +227,7 @@ class DealFeatureImporter
                     return strtolower($this->version->cab) . '_cab';
                 }
             })->filter()->unique()->map(function ($slugKey) {
-                return DmrFeature::where('slug', $slugKey)->first();
+                return Feature::where('slug', $slugKey)->first();
             });
         }
     }
@@ -237,7 +238,7 @@ class DealFeatureImporter
             return collect($equipment['attributes'])->filter(function ($attribute) {
                 return $attribute['name'] == "Number of doors";
             })->pluck('value')->map(function ($slugKey) {
-                return DmrFeature::where('slug', 'pickup_doors_' . strtolower($slugKey))->first();
+                return Feature::where('slug', 'pickup_doors_' . strtolower($slugKey))->first();
             });
         }
     }

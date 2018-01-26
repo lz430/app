@@ -99,7 +99,7 @@ class Importer
 
     public function import()
     {
-        $this->features = DmrFeature::with('category')->get();
+        $this->features = Feature::with('category')->get();
 
         $csvFiles = array_filter(
             $this->filesystem->files(realpath(base_path(config('services.vauto.uploads_path')))),
