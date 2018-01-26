@@ -9,7 +9,7 @@ class DealFeatureImporter
 {
     private $deal, $features, $client, $version;
 
-    function __construct($deal, $features, $client)
+    public function __construct($deal, $features, $client)
     {
         $this->deal = $deal;
         $this->features = $features;
@@ -131,11 +131,9 @@ class DealFeatureImporter
             })->pluck('value')->map(function ($value) {
                 if (str_contains(strtolower($value), ['diesel', 'biodiesel'])) {
                     return 'fuel_type_diesel';
-                }
-                elseif (str_contains(strtolower($value), ['hybrid', 'electric'])) {
+                } elseif (str_contains(strtolower($value), ['hybrid', 'electric'])) {
                     return 'fuel_type_hybrid_electric';
-                }
-                elseif (str_contains(strtolower($value), ['unleaded', 'unleaded premium', 'premium', 'e85'])) {
+                } elseif (str_contains(strtolower($value), ['unleaded', 'unleaded premium', 'premium', 'e85'])) {
                     return 'fuel_type_gas';
                 }
 
@@ -145,7 +143,8 @@ class DealFeatureImporter
         }
     }
 
-    private function syncTransmission($equipment) {
+    private function syncTransmission($equipment)
+    {
         if ($equipment['schemaId'] == 20601) {
             return collect($equipment['attributes'])->filter(function ($attribute) {
                 return $attribute['name'] == "Transmission type";
@@ -174,14 +173,11 @@ class DealFeatureImporter
             })->pluck('value')->map(function ($value) {
                 if (str_contains(strtolower($value), ['cloth', 'synthetic suede'])) {
                     return 'seat_main_upholstery_cloth';
-                }
-                elseif (str_contains(strtolower($value), ['synthetic leather', 'vinyl'])) {
+                } elseif (str_contains(strtolower($value), ['synthetic leather', 'vinyl'])) {
                     return 'seat_main_upholstery_vinyl';
-                }
-                elseif (str_contains(strtolower($value), ['suede'])) {
+                } elseif (str_contains(strtolower($value), ['suede'])) {
                     return 'seat_main_upholstery_suede';
-                }
-                elseif (str_contains(strtolower($value), ['leather'])) {
+                } elseif (str_contains(strtolower($value), ['leather'])) {
                     return 'seat_main_upholstery_leather';
                 }
             })->filter()->unique()->map(function ($slugKey) {
@@ -198,14 +194,11 @@ class DealFeatureImporter
             })->pluck('value')->map(function ($value) {
                 if (str_contains(strtolower($value), ['2+3'])) {
                     return 'second_row_bench';
-                }
-                elseif (str_contains(strtolower($value), ['2+2'])) {
+                } elseif (str_contains(strtolower($value), ['2+2'])) {
                     return 'second_row_captains_chairs';
-                }
-                elseif (str_contains(strtolower($value), ['2+3+2', '2+3+3', '2+2+2'])) {
+                } elseif (str_contains(strtolower($value), ['2+3+2', '2+3+3', '2+2+2'])) {
                     return 'third_row_seating';
-                }
-                elseif (str_contains(strtolower($value), ['2+3+3+4'])) {
+                } elseif (str_contains(strtolower($value), ['2+3+3+4'])) {
                     return 'fourth_row_seating';
                 }
             })->filter()->unique()->map(function ($slugKey) {
@@ -222,8 +215,7 @@ class DealFeatureImporter
             })->pluck('value')->map(function ($value) {
                 if (str_contains(strtolower($value), ['2+0', '3+0'])) {
                     return 'regular_cab';
-                }
-                elseif (str_contains(strtolower($value), ['2+2', '2+3', '3+3'])) {
+                } elseif (str_contains(strtolower($value), ['2+2', '2+3', '3+3'])) {
                     return strtolower($this->version->cab) . '_cab';
                 }
             })->filter()->unique()->map(function ($slugKey) {
