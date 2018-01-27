@@ -767,3 +767,13 @@ export function cancelAllBestOfferPromises() {
         dispatch(clearCancelTokens());
     };
 }
+
+export function getBestOffersForLoadedDeals() {
+    return (dispatch, getState) => {
+        dispatch(cancelAllBestOfferPromises());
+        getState().deals.map(deal => {
+            dispatch(requestBestOffer(deal));
+        });
+        dispatch({ type: ActionTypes.REQUEST_ALL_BEST_OFFERS });
+    };
+}

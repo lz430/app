@@ -366,6 +366,10 @@ class LeaseCalculator extends React.PureComponent {
         );
     }
 
+    handleTargetsChange() {
+        this.props.getBestOffersForLoadedDeals();
+    }
+
     render() {
         return (
             <div>
@@ -387,10 +391,7 @@ class LeaseCalculator extends React.PureComponent {
                 )} */}
                 <Targets
                     deal={this.props.deal}
-                    targetsChanged={this.props.requestBestOffer.bind(
-                        this,
-                        this.props.deal
-                    )}
+                    targetsChanged={handleTargetsChange}
                 />
                 <hr />
                 <h4>Summary</h4>

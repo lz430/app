@@ -143,7 +143,7 @@ class FinanceCalculator extends React.PureComponent {
     }
 
     handleTargetsChange() {
-        this.props.requestBestOffer(this.props.deal);
+        this.props.getBestOffersForLoadedDeals();
     }
 
     render() {
