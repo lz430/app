@@ -57986,6 +57986,25 @@ var InfoModalData = function (_React$PureComponent) {
                         _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                     )
                 ),
+                this.props.dealBestOffer.programs.map(function (program, index) {
+                    return _react2.default.createElement(
+                        'div',
+                        {
+                            className: 'info-modal-data__rebate-info info-modal-data__costs',
+                            key: index
+                        },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'info-modal-data__rebate-info__title' },
+                            _strings2.default.toTitleCase(program.title)
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            '' + _util2.default.moneyFormat(program.value)
+                        )
+                    );
+                }),
                 _react2.default.createElement(
                     'div',
                     { className: 'info-modal-data__more-rebates info-modal-data__costs' },
@@ -57994,7 +58013,10 @@ var InfoModalData = function (_React$PureComponent) {
                         null,
                         _react2.default.createElement(
                             'a',
-                            { onClick: this.handleGetRebatesLink.bind(this), href: '#' },
+                            {
+                                onClick: this.handleGetRebatesLink.bind(this),
+                                href: '#'
+                            },
                             'Get Rebates'
                         )
                     )
@@ -58234,6 +58256,7 @@ InfoModalData.propTypes = {
 
 var makeMapStateToProps = function makeMapStateToProps() {
     var getDealBestOfferTotalValue = (0, _index2.makeDealBestOfferTotalValue)();
+    var getDealBestOffer = (0, _index2.makeDealBestOffer)();
     var mapStateToProps = function mapStateToProps(state, props) {
         return {
             downPayment: state.downPayment,
@@ -58242,7 +58265,8 @@ var makeMapStateToProps = function makeMapStateToProps() {
             selectedTab: state.selectedTab,
             selectedDeal: state.selectedDeal,
             termDuration: state.termDuration,
-            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOffer: getDealBestOffer(state, props)
         };
     };
     return mapStateToProps;

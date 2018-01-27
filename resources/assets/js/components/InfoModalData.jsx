@@ -9,7 +9,10 @@ import React from 'react';
 import SVGInline from 'react-svg-inline';
 import util from 'src/util';
 import strings from 'src/strings';
-import {makeDealBestOfferTotalValue} from 'selectors/index';
+import {
+    makeDealBestOfferTotalValue,
+    makeDealBestOffer,
+} from 'selectors/index';
 
 class InfoModalData extends React.PureComponent {
     componentDidMount() {
@@ -21,13 +24,13 @@ class InfoModalData extends React.PureComponent {
         switch (this.props.selectedTab) {
             case 'cash':
                 return formulas.calculateTotalCash(
-                        util.getEmployeeOrSupplierPrice(
-                            this.props.deal,
-                            this.props.employeeBrand
-                        ),
-                        this.props.deal.doc_fee,
-                        this.props.dealBestOfferTotalValue
-                    );
+                    util.getEmployeeOrSupplierPrice(
+                        this.props.deal,
+                        this.props.employeeBrand
+                    ),
+                    this.props.deal.doc_fee,
+                    this.props.dealBestOfferTotalValue
+                );
             case 'finance': {
                 return Math.round(
                     formulas.calculateFinancedMonthlyPayments(
@@ -63,37 +66,42 @@ class InfoModalData extends React.PureComponent {
     }
 
     renderAppliedRebatesLink() {
-        return <div>
+        return (
+            <div>
                 <div className="info-modal-data__rebate-info info-modal-data__costs info-modal-data__bold">
-                    <div className="info-modal-data__rebate-info__title">Rebates Applied:</div>
-                    <div>{util.moneyFormat(this.props.dealBestOfferTotalValue)}</div>
+                    <div className="info-modal-data__rebate-info__title">
+                        Rebates Applied:
+                    </div>
+                    <div>
+                        {util.moneyFormat(this.props.dealBestOfferTotalValue)}
+                    </div>
                 </div>
-                {/* {this.state.dealBestOffer.programs.map(
-                    (program, index) => {
-                        return (
-                            <div
-                                className="info-modal-data__rebate-info info-modal-data__costs"
-                                key={index}
-                            >
-                                <div className="info-modal-data__rebate-info__title">
-                                    {strings.toTitleCase(program.title)}
-                                </div>
-                                <div>{`${util.moneyFormat(
-                                    program.value
-                                )}`}</div>
+                {this.props.dealBestOffer.programs.map((program, index) => {
+                    return (
+                        <div
+                            className="info-modal-data__rebate-info info-modal-data__costs"
+                            key={index}
+                        >
+                            <div className="info-modal-data__rebate-info__title">
+                                {strings.toTitleCase(program.title)}
                             </div>
-                        );
-                    }
-                )} */}
+                            <div>{`${util.moneyFormat(program.value)}`}</div>
+                        </div>
+                    );
+                })}
 
                 <div className="info-modal-data__more-rebates info-modal-data__costs">
                     <div>
-                        <a onClick={this.handleGetRebatesLink.bind(this)} href="#">
+                        <a
+                            onClick={this.handleGetRebatesLink.bind(this)}
+                            href="#"
+                        >
                             Get Rebates
                         </a>
                     </div>
                 </div>
-            </div>;
+            </div>
+        );
     }
 
     renderPaymentDefaults() {
@@ -273,6 +281,7 @@ InfoModalData.propTypes = {
 
 const makeMapStateToProps = () => {
     const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
+    const getDealBestOffer = makeDealBestOffer();
     const mapStateToProps = (state, props) => {
         return {
             downPayment: state.downPayment,
@@ -282,9 +291,10 @@ const makeMapStateToProps = () => {
             selectedDeal: state.selectedDeal,
             termDuration: state.termDuration,
             dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOffer: getDealBestOffer(state, props),
         };
-    }
+    };
     return mapStateToProps;
-}
+};
 
 export default connect(makeMapStateToProps, Actions)(InfoModalData);
