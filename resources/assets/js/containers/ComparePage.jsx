@@ -16,8 +16,6 @@ import api from 'src/api';
 import miscicons from 'miscicons';
 import toTitleCase from 'titlecase';
 
-// @TODO fix how this page handles rebates for new target-based stuff
-
 class ComparePage extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -479,20 +477,14 @@ class ComparePage extends React.PureComponent {
                     ) : (
                         ''
                     )}
-                    {R.all(
-                        deal => this.props.dealTargets.hasOwnProperty(deal.id),
-                        this.props.deals
-                    ) ? (
-                        <AccordionTable>
+
+                        {/* <AccordionTable>
                             {() => {
                                 return this.renderTargetsTable(
                                     this.props.compareList
                                 );
                             }}
-                        </AccordionTable>
-                    ) : (
-                        <SVGInline svg={miscicons['loading']} />
-                    )}
+                        </AccordionTable> */}
 
                     <AccordionTable>
                         {() => {
@@ -529,7 +521,6 @@ const mapStateToProps = state => {
         compareList: state.compareList,
         selectedDeal: state.selectedDeal,
         selectedTab: state.selectedTab,
-        dealTargets: state.dealTargets,
         termDuration: state.termDuration,
         employeeBrand: state.employeeBrand,
     };

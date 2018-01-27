@@ -762,7 +762,7 @@ exports.clearCancelTokens = clearCancelTokens;
 exports.cancelAllBestOfferPromises = cancelAllBestOfferPromises;
 exports.getBestOffersForLoadedDeals = getBestOffersForLoadedDeals;
 
-var _api = __webpack_require__(70);
+var _api = __webpack_require__(71);
 
 var _api2 = _interopRequireDefault(_api);
 
@@ -1865,7 +1865,7 @@ module.exports = function (it) {
 
 var _prodInvariant = __webpack_require__(10);
 
-var DOMProperty = __webpack_require__(67);
+var DOMProperty = __webpack_require__(68);
 var ReactDOMComponentFlags = __webpack_require__(273);
 
 var invariant = __webpack_require__(5);
@@ -2050,7 +2050,7 @@ module.exports = ReactDOMComponentTree;
 /* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _isArray = __webpack_require__(68);
+var _isArray = __webpack_require__(69);
 var _isTransformer = __webpack_require__(202);
 
 
@@ -4943,6 +4943,136 @@ function getPooledWarningPropertyDefinition(propName, getVal) {
 /* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getSelectedTargetsKeyForSelectedDeal = exports.makeDealBestOfferTotalValue = exports.makeDealBestOffer = exports.makeDealBestOfferKey = exports.makeDealTargetsSelected = exports.makeDealTargetsAvailable = exports.makeDealTargetKey = undefined;
+
+var _reselect = __webpack_require__(941);
+
+var _index = __webpack_require__(13);
+
+var _ramda = __webpack_require__(11);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var selectedDeal = function selectedDeal(state) {
+    return state.selectedDeal;
+};
+var zipcode = function zipcode(state) {
+    return state.zipcode;
+};
+var deal = function deal(state, props) {
+    return props.deal;
+};
+var targetsAvailable = function targetsAvailable(state) {
+    return state.targetsAvailable;
+};
+var targetsSelected = function targetsSelected(state) {
+    return state.targetsSelected;
+};
+var bestOffers = function bestOffers(state) {
+    return state.bestOffers;
+};
+var paymentType = function paymentType(state) {
+    return state.selectedTab;
+};
+var targetDefaults = function targetDefaults(state) {
+    return state.targetDefaults;
+};
+
+// Generate the target key for a specific deal
+var dealTargetKey = (0, _reselect.createSelector)([deal, zipcode], function (deal, zipcode) {
+    if (!deal) {
+        return null;
+    }
+    var year = deal.year;
+    var make = deal.make;
+    var model = deal.model;
+    var series = deal.series;
+    return zipcode + '-' + year + '-' + make + '-' + model + '-' + series;
+});
+
+var makeDealTargetKey = exports.makeDealTargetKey = function makeDealTargetKey() {
+    return dealTargetKey;
+};
+
+// Show me all available targets for a specific deal
+var dealTargetsAvailable = (0, _reselect.createSelector)([dealTargetKey, targetsAvailable], function (dealTargetKey, targetsAvailable) {
+    return _ramda2.default.prop(dealTargetKey, targetsAvailable) || [];
+});
+
+var makeDealTargetsAvailable = exports.makeDealTargetsAvailable = function makeDealTargetsAvailable() {
+    return dealTargetsAvailable;
+};
+
+// Show me all selected targets for a specific deal
+var dealTargetsSelected = (0, _reselect.createSelector)([dealTargetKey, targetsSelected], function (dealTargetKey, targetsSelected) {
+    return _ramda2.default.prop(dealTargetKey, targetsSelected) || [];
+});
+
+var makeDealTargetsSelected = exports.makeDealTargetsSelected = function makeDealTargetsSelected() {
+    return dealTargetsSelected;
+};
+
+// Generate a string of unique target ids joined by '-'
+// This will be used to cache best offers on the front-end
+var selectedTargetsString = (0, _reselect.createSelector)([dealTargetsSelected, targetDefaults], function (dealTargetsSelected, targetDefaults) {
+    var selectedTargetIds = _ramda2.default.map(_ramda2.default.prop('targetId'), dealTargetsSelected) || [];
+    var uniqueSelectedTargetIds = _ramda2.default.uniq(_ramda2.default.concat(targetDefaults, selectedTargetIds));
+    return _ramda2.default.sort(function (a, b) {
+        return a - b;
+    }, uniqueSelectedTargetIds).join('-');
+});
+
+// Generate the best offer key for a specific deal
+var dealBestOfferKey = (0, _reselect.createSelector)([deal, zipcode, paymentType, selectedTargetsString], function (deal, zipcode, paymentType, selectedTargetsString) {
+    return deal.id + '-' + zipcode + '-' + paymentType + '-' + selectedTargetsString;
+});
+
+var makeDealBestOfferKey = exports.makeDealBestOfferKey = function makeDealBestOfferKey() {
+    return dealBestOfferKey;
+};
+
+// Show me the best offer for a specific deal or default to no best offer
+var dealBestOffer = (0, _reselect.createSelector)([bestOffers, dealBestOfferKey], function (bestOffers, dealBestOfferKey) {
+    return _ramda2.default.prop(dealBestOfferKey, bestOffers) || { totalValue: 0, programs: [] };
+});
+
+var makeDealBestOffer = exports.makeDealBestOffer = function makeDealBestOffer() {
+    return dealBestOffer;
+};
+
+// Get the total value of the best offer for the deal
+var dealBestOfferTotalValue = (0, _reselect.createSelector)([dealBestOffer], function (dealBestOffer) {
+    return _ramda2.default.prop('totalValue', dealBestOffer);
+});
+
+var makeDealBestOfferTotalValue = exports.makeDealBestOfferTotalValue = function makeDealBestOfferTotalValue() {
+    return dealBestOfferTotalValue;
+};
+
+// Generate the target key for globally the selected deal
+var getSelectedTargetsKeyForSelectedDeal = exports.getSelectedTargetsKeyForSelectedDeal = (0, _reselect.createSelector)([selectedDeal, zipcode], function (selectedDeal, zipcode) {
+    if (!selectedDeal) {
+        return null;
+    }
+    var year = selectedDeal.year;
+    var make = selectedDeal.make;
+    var model = selectedDeal.model;
+    var series = selectedDeal.series;
+    return zipcode + '-' + year + '-' + make + '-' + model + '-' + series;
+});
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
 var META = __webpack_require__(74)('meta');
 var isObject = __webpack_require__(12);
 var has = __webpack_require__(33);
@@ -4999,7 +5129,7 @@ var meta = module.exports = {
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 22.1.3.31 Array.prototype[@@unscopables]
@@ -5012,7 +5142,7 @@ module.exports = function (key) {
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5226,7 +5356,7 @@ var DOMProperty = {
 module.exports = DOMProperty;
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports) {
 
 /**
@@ -5249,7 +5379,7 @@ module.exports = Array.isArray || function _isArray(val) {
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports) {
 
 module.exports = function _reduced(x) {
@@ -5262,7 +5392,7 @@ module.exports = function _reduced(x) {
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5393,136 +5523,6 @@ var api = {
 };
 
 exports.default = api;
-
-/***/ }),
-/* 71 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.getSelectedTargetsKeyForSelectedDeal = exports.makeDealBestOfferTotalValue = exports.makeDealBestOffer = exports.makeDealBestOfferKey = exports.makeDealTargetsSelected = exports.makeDealTargetsAvailable = exports.makeDealTargetKey = undefined;
-
-var _reselect = __webpack_require__(941);
-
-var _index = __webpack_require__(13);
-
-var _ramda = __webpack_require__(11);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var selectedDeal = function selectedDeal(state) {
-    return state.selectedDeal;
-};
-var zipcode = function zipcode(state) {
-    return state.zipcode;
-};
-var deal = function deal(state, props) {
-    return props.deal;
-};
-var targetsAvailable = function targetsAvailable(state) {
-    return state.targetsAvailable;
-};
-var targetsSelected = function targetsSelected(state) {
-    return state.targetsSelected;
-};
-var bestOffers = function bestOffers(state) {
-    return state.bestOffers;
-};
-var paymentType = function paymentType(state) {
-    return state.selectedTab;
-};
-var targetDefaults = function targetDefaults(state) {
-    return state.targetDefaults;
-};
-
-// Generate the target key for a specific deal
-var dealTargetKey = (0, _reselect.createSelector)([deal, zipcode], function (deal, zipcode) {
-    if (!deal) {
-        return null;
-    }
-    var year = deal.year;
-    var make = deal.make;
-    var model = deal.model;
-    var series = deal.series;
-    return zipcode + '-' + year + '-' + make + '-' + model + '-' + series;
-});
-
-var makeDealTargetKey = exports.makeDealTargetKey = function makeDealTargetKey() {
-    return dealTargetKey;
-};
-
-// Show me all available targets for a specific deal
-var dealTargetsAvailable = (0, _reselect.createSelector)([dealTargetKey, targetsAvailable], function (dealTargetKey, targetsAvailable) {
-    return _ramda2.default.prop(dealTargetKey, targetsAvailable) || [];
-});
-
-var makeDealTargetsAvailable = exports.makeDealTargetsAvailable = function makeDealTargetsAvailable() {
-    return dealTargetsAvailable;
-};
-
-// Show me all selected targets for a specific deal
-var dealTargetsSelected = (0, _reselect.createSelector)([dealTargetKey, targetsSelected], function (dealTargetKey, targetsSelected) {
-    return _ramda2.default.prop(dealTargetKey, targetsSelected) || [];
-});
-
-var makeDealTargetsSelected = exports.makeDealTargetsSelected = function makeDealTargetsSelected() {
-    return dealTargetsSelected;
-};
-
-// Generate a string of unique target ids joined by '-'
-// This will be used to cache best offers on the front-end
-var selectedTargetsString = (0, _reselect.createSelector)([dealTargetsSelected, targetDefaults], function (dealTargetsSelected, targetDefaults) {
-    var selectedTargetIds = _ramda2.default.map(_ramda2.default.prop('targetId'), dealTargetsSelected) || [];
-    var uniqueSelectedTargetIds = _ramda2.default.uniq(_ramda2.default.concat(targetDefaults, selectedTargetIds));
-    return _ramda2.default.sort(function (a, b) {
-        return a - b;
-    }, uniqueSelectedTargetIds).join('-');
-});
-
-// Generate the best offer key for a specific deal
-var dealBestOfferKey = (0, _reselect.createSelector)([deal, zipcode, paymentType, selectedTargetsString], function (deal, zipcode, paymentType, selectedTargetsString) {
-    return deal.id + '-' + zipcode + '-' + paymentType + '-' + selectedTargetsString;
-});
-
-var makeDealBestOfferKey = exports.makeDealBestOfferKey = function makeDealBestOfferKey() {
-    return dealBestOfferKey;
-};
-
-// Show me the best offer for a specific deal or default to no best offer
-var dealBestOffer = (0, _reselect.createSelector)([bestOffers, dealBestOfferKey], function (bestOffers, dealBestOfferKey) {
-    return _ramda2.default.prop(dealBestOfferKey, bestOffers) || { totalValue: 0, programs: [] };
-});
-
-var makeDealBestOffer = exports.makeDealBestOffer = function makeDealBestOffer() {
-    return dealBestOffer;
-};
-
-// Get the total value of the best offer for the deal
-var dealBestOfferTotalValue = (0, _reselect.createSelector)([dealBestOffer], function (dealBestOffer) {
-    return _ramda2.default.prop('totalValue', dealBestOffer);
-});
-
-var makeDealBestOfferTotalValue = exports.makeDealBestOfferTotalValue = function makeDealBestOfferTotalValue() {
-    return dealBestOfferTotalValue;
-};
-
-// Generate the target key for globally the selected deal
-var getSelectedTargetsKeyForSelectedDeal = exports.getSelectedTargetsKeyForSelectedDeal = (0, _reselect.createSelector)([selectedDeal, zipcode], function (selectedDeal, zipcode) {
-    if (!selectedDeal) {
-        return null;
-    }
-    var year = selectedDeal.year;
-    var make = selectedDeal.make;
-    var model = selectedDeal.model;
-    var series = selectedDeal.series;
-    return zipcode + '-' + year + '-' + make + '-' + model + '-' + series;
-});
 
 /***/ }),
 /* 72 */
@@ -8002,7 +8002,7 @@ module.exports = function _isString(x) {
 /* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _isArray = __webpack_require__(68);
+var _isArray = __webpack_require__(69);
 
 
 /**
@@ -8384,7 +8384,7 @@ var global = __webpack_require__(8);
 var $export = __webpack_require__(1);
 var redefine = __webpack_require__(35);
 var redefineAll = __webpack_require__(83);
-var meta = __webpack_require__(65);
+var meta = __webpack_require__(66);
 var forOf = __webpack_require__(82);
 var anInstance = __webpack_require__(81);
 var isObject = __webpack_require__(12);
@@ -9860,7 +9860,7 @@ module.exports = function _map(fn, functor) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
-var _isArray = __webpack_require__(68);
+var _isArray = __webpack_require__(69);
 var _isString = __webpack_require__(111);
 
 
@@ -11062,7 +11062,7 @@ module.exports = function fill(value /* , start = 0, end = @length */) {
 
 "use strict";
 
-var addToUnscopables = __webpack_require__(66);
+var addToUnscopables = __webpack_require__(67);
 var step = __webpack_require__(243);
 var Iterators = __webpack_require__(93);
 var toIObject = __webpack_require__(39);
@@ -13805,7 +13805,7 @@ module.exports = _curry1(_checkForMethod('tail', slice(1, Infinity)));
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var _isArray = __webpack_require__(68);
+var _isArray = __webpack_require__(69);
 var _isFunction = __webpack_require__(146);
 var _isString = __webpack_require__(111);
 var toString = __webpack_require__(113);
@@ -15114,7 +15114,7 @@ var $iterDefine = __webpack_require__(170);
 var step = __webpack_require__(243);
 var setSpecies = __webpack_require__(80);
 var DESCRIPTORS = __webpack_require__(19);
-var fastKey = __webpack_require__(65).fastKey;
+var fastKey = __webpack_require__(66).fastKey;
 var validate = __webpack_require__(94);
 var SIZE = DESCRIPTORS ? '_s' : 'size';
 
@@ -15278,7 +15278,7 @@ module.exports = __webpack_require__(126)(SET, function (get) {
 
 var each = __webpack_require__(56)(0);
 var redefine = __webpack_require__(35);
-var meta = __webpack_require__(65);
+var meta = __webpack_require__(66);
 var assign = __webpack_require__(231);
 var weak = __webpack_require__(251);
 var isObject = __webpack_require__(12);
@@ -15343,7 +15343,7 @@ if (fails(function () { return new $WeakMap().set((Object.freeze || Object)(tmp)
 "use strict";
 
 var redefineAll = __webpack_require__(83);
-var getWeak = __webpack_require__(65).getWeak;
+var getWeak = __webpack_require__(66).getWeak;
 var anObject = __webpack_require__(7);
 var isObject = __webpack_require__(12);
 var anInstance = __webpack_require__(81);
@@ -17807,7 +17807,7 @@ module.exports = CSSProperty;
 
 
 
-var DOMProperty = __webpack_require__(67);
+var DOMProperty = __webpack_require__(68);
 var ReactDOMComponentTree = __webpack_require__(22);
 var ReactInstrumentation = __webpack_require__(43);
 
@@ -18999,7 +18999,7 @@ module.exports = getActiveElement;
 var _prodInvariant = __webpack_require__(10);
 
 var DOMLazyTree = __webpack_require__(99);
-var DOMProperty = __webpack_require__(67);
+var DOMProperty = __webpack_require__(68);
 var React = __webpack_require__(96);
 var ReactBrowserEventEmitter = __webpack_require__(138);
 var ReactCurrentOwner = __webpack_require__(57);
@@ -19756,7 +19756,7 @@ module.exports = _curry2(_dispatchable(['any'], _xany, function any(fn, list) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var _reduced = __webpack_require__(69);
+var _reduced = __webpack_require__(70);
 var _xfBase = __webpack_require__(25);
 
 
@@ -19861,7 +19861,7 @@ module.exports = _curry1(function values(obj) {
 
 var _curry3 = __webpack_require__(3);
 var _has = __webpack_require__(31);
-var _isArray = __webpack_require__(68);
+var _isArray = __webpack_require__(69);
 var _isInteger = __webpack_require__(205);
 var assoc = __webpack_require__(144);
 var isNil = __webpack_require__(308);
@@ -20840,7 +20840,7 @@ module.exports = _curry2(function or(a, b) {
 
 var _curry1 = __webpack_require__(2);
 var _isArguments = __webpack_require__(301);
-var _isArray = __webpack_require__(68);
+var _isArray = __webpack_require__(69);
 var _isObject = __webpack_require__(213);
 var _isString = __webpack_require__(111);
 
@@ -24217,7 +24217,7 @@ var has = __webpack_require__(33);
 var DESCRIPTORS = __webpack_require__(19);
 var $export = __webpack_require__(1);
 var redefine = __webpack_require__(35);
-var META = __webpack_require__(65).KEY;
+var META = __webpack_require__(66).KEY;
 var $fails = __webpack_require__(9);
 var shared = __webpack_require__(117);
 var setToStringTag = __webpack_require__(91);
@@ -24555,7 +24555,7 @@ __webpack_require__(55)('getOwnPropertyNames', function () {
 
 // 19.1.2.5 Object.freeze(O)
 var isObject = __webpack_require__(12);
-var meta = __webpack_require__(65).onFreeze;
+var meta = __webpack_require__(66).onFreeze;
 
 __webpack_require__(55)('freeze', function ($freeze) {
   return function freeze(it) {
@@ -24570,7 +24570,7 @@ __webpack_require__(55)('freeze', function ($freeze) {
 
 // 19.1.2.17 Object.seal(O)
 var isObject = __webpack_require__(12);
-var meta = __webpack_require__(65).onFreeze;
+var meta = __webpack_require__(66).onFreeze;
 
 __webpack_require__(55)('seal', function ($seal) {
   return function seal(it) {
@@ -24585,7 +24585,7 @@ __webpack_require__(55)('seal', function ($seal) {
 
 // 19.1.2.15 Object.preventExtensions(O)
 var isObject = __webpack_require__(12);
-var meta = __webpack_require__(65).onFreeze;
+var meta = __webpack_require__(66).onFreeze;
 
 __webpack_require__(55)('preventExtensions', function ($preventExtensions) {
   return function preventExtensions(it) {
@@ -26230,7 +26230,7 @@ var $export = __webpack_require__(1);
 
 $export($export.P, 'Array', { copyWithin: __webpack_require__(242) });
 
-__webpack_require__(66)('copyWithin');
+__webpack_require__(67)('copyWithin');
 
 
 /***/ }),
@@ -26242,7 +26242,7 @@ var $export = __webpack_require__(1);
 
 $export($export.P, 'Array', { fill: __webpack_require__(178) });
 
-__webpack_require__(66)('fill');
+__webpack_require__(67)('fill');
 
 
 /***/ }),
@@ -26263,7 +26263,7 @@ $export($export.P + $export.F * forced, 'Array', {
     return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
   }
 });
-__webpack_require__(66)(KEY);
+__webpack_require__(67)(KEY);
 
 
 /***/ }),
@@ -26284,7 +26284,7 @@ $export($export.P + $export.F * forced, 'Array', {
     return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
   }
 });
-__webpack_require__(66)(KEY);
+__webpack_require__(67)(KEY);
 
 
 /***/ }),
@@ -27322,7 +27322,7 @@ $export($export.P, 'Array', {
   }
 });
 
-__webpack_require__(66)('includes');
+__webpack_require__(67)('includes');
 
 
 /***/ }),
@@ -27351,7 +27351,7 @@ $export($export.P, 'Array', {
   }
 });
 
-__webpack_require__(66)('flatMap');
+__webpack_require__(67)('flatMap');
 
 
 /***/ }),
@@ -27379,7 +27379,7 @@ $export($export.P, 'Array', {
   }
 });
 
-__webpack_require__(66)('flatten');
+__webpack_require__(67)('flatten');
 
 
 /***/ }),
@@ -34130,7 +34130,7 @@ module.exports = EnterLeaveEventPlugin;
 
 
 
-var DOMProperty = __webpack_require__(67);
+var DOMProperty = __webpack_require__(68);
 
 var MUST_USE_PROPERTY = DOMProperty.injection.MUST_USE_PROPERTY;
 var HAS_BOOLEAN_VALUE = DOMProperty.injection.HAS_BOOLEAN_VALUE;
@@ -34823,7 +34823,7 @@ var AutoFocusUtils = __webpack_require__(640);
 var CSSPropertyOperations = __webpack_require__(641);
 var DOMLazyTree = __webpack_require__(99);
 var DOMNamespaces = __webpack_require__(192);
-var DOMProperty = __webpack_require__(67);
+var DOMProperty = __webpack_require__(68);
 var DOMPropertyOperations = __webpack_require__(285);
 var EventPluginHub = __webpack_require__(107);
 var EventPluginRegistry = __webpack_require__(133);
@@ -39825,7 +39825,7 @@ module.exports = getUnboundedScrollPosition;
 
 
 
-var DOMProperty = __webpack_require__(67);
+var DOMProperty = __webpack_require__(68);
 var EventPluginHub = __webpack_require__(107);
 var EventPluginUtils = __webpack_require__(186);
 var ReactComponentEnvironment = __webpack_require__(195);
@@ -41975,7 +41975,7 @@ module.exports = ReactMount.renderSubtreeIntoContainer;
 
 
 
-var DOMProperty = __webpack_require__(67);
+var DOMProperty = __webpack_require__(68);
 var EventPluginRegistry = __webpack_require__(133);
 var ReactComponentTreeHook = __webpack_require__(37);
 
@@ -42140,7 +42140,7 @@ module.exports = ReactDOMNullInputValuePropHook;
 
 
 
-var DOMProperty = __webpack_require__(67);
+var DOMProperty = __webpack_require__(68);
 var ReactComponentTreeHook = __webpack_require__(37);
 
 var warning = __webpack_require__(6);
@@ -42585,7 +42585,7 @@ module.exports = _curry2(_dispatchable(['all'], _xall, function all(fn, list) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var _reduced = __webpack_require__(69);
+var _reduced = __webpack_require__(70);
 var _xfBase = __webpack_require__(25);
 
 
@@ -44058,7 +44058,7 @@ module.exports = function dropLast(n, xs) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var _reduced = __webpack_require__(69);
+var _reduced = __webpack_require__(70);
 var _xfBase = __webpack_require__(25);
 
 module.exports = (function() {
@@ -44553,7 +44553,7 @@ module.exports = _curry2(_dispatchable(['find'], _xfind, function find(fn, list)
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var _reduced = __webpack_require__(69);
+var _reduced = __webpack_require__(70);
 var _xfBase = __webpack_require__(25);
 
 
@@ -44631,7 +44631,7 @@ module.exports = _curry2(_dispatchable([], _xfindIndex, function findIndex(fn, l
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var _reduced = __webpack_require__(69);
+var _reduced = __webpack_require__(70);
 var _xfBase = __webpack_require__(25);
 
 
@@ -45343,7 +45343,7 @@ module.exports = reduceBy(function(acc, elem) { return elem; }, null);
 
 var _curry2 = __webpack_require__(0);
 var _indexOf = __webpack_require__(317);
-var _isArray = __webpack_require__(68);
+var _isArray = __webpack_require__(69);
 
 
 /**
@@ -46192,7 +46192,7 @@ module.exports = _curry1(function keysIn(obj) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var _isArray = __webpack_require__(68);
+var _isArray = __webpack_require__(69);
 var equals = __webpack_require__(45);
 
 
@@ -47954,7 +47954,7 @@ module.exports = _curry2(function range(from, to) {
 
 var _curryN = __webpack_require__(141);
 var _reduce = __webpack_require__(44);
-var _reduced = __webpack_require__(69);
+var _reduced = __webpack_require__(70);
 
 
 /**
@@ -47998,7 +47998,7 @@ module.exports = _curryN(4, [], function _reduceWhile(pred, fn, a, list) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry1 = __webpack_require__(2);
-var _reduced = __webpack_require__(69);
+var _reduced = __webpack_require__(70);
 
 /**
  * Returns a value wrapped to indicate that it is the final value of the reduce
@@ -48669,7 +48669,7 @@ module.exports = _curry2(_dispatchable(['takeWhile'], _xtakeWhile, function take
 /***/ (function(module, exports, __webpack_require__) {
 
 var _curry2 = __webpack_require__(0);
-var _reduced = __webpack_require__(69);
+var _reduced = __webpack_require__(70);
 var _xfBase = __webpack_require__(25);
 
 
@@ -52522,7 +52522,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _api = __webpack_require__(70);
+var _api = __webpack_require__(71);
 
 var _api2 = _interopRequireDefault(_api);
 
@@ -52829,7 +52829,7 @@ var _InfoModal = __webpack_require__(939);
 
 var _InfoModal2 = _interopRequireDefault(_InfoModal);
 
-var _index2 = __webpack_require__(71);
+var _index2 = __webpack_require__(65);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -58060,7 +58060,7 @@ var _strings = __webpack_require__(90);
 
 var _strings2 = _interopRequireDefault(_strings);
 
-var _index2 = __webpack_require__(71);
+var _index2 = __webpack_require__(65);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -60132,7 +60132,7 @@ var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
-var _index = __webpack_require__(71);
+var _index = __webpack_require__(65);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -60350,7 +60350,7 @@ var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
-var _index = __webpack_require__(71);
+var _index = __webpack_require__(65);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -60721,7 +60721,7 @@ var _formulas2 = _interopRequireDefault(_formulas);
 
 var _reactRedux = __webpack_require__(16);
 
-var _api = __webpack_require__(70);
+var _api = __webpack_require__(71);
 
 var _api2 = _interopRequireDefault(_api);
 
@@ -60737,7 +60737,7 @@ var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
-var _index = __webpack_require__(71);
+var _index = __webpack_require__(65);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -61247,7 +61247,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _api = __webpack_require__(70);
+var _api = __webpack_require__(71);
 
 var _api2 = _interopRequireDefault(_api);
 
@@ -62021,7 +62021,7 @@ var _index = __webpack_require__(13);
 
 var Actions = _interopRequireWildcard(_index);
 
-var _api = __webpack_require__(70);
+var _api = __webpack_require__(71);
 
 var _api2 = _interopRequireDefault(_api);
 
@@ -65200,7 +65200,7 @@ var _util = __webpack_require__(26);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _api = __webpack_require__(70);
+var _api = __webpack_require__(71);
 
 var _api2 = _interopRequireDefault(_api);
 
@@ -65221,8 +65221,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-// @TODO fix how this page handles rebates for new target-based stuff
 
 var ComparePage = function (_React$PureComponent) {
     _inherits(ComparePage, _React$PureComponent);
@@ -65678,15 +65676,6 @@ var ComparePage = function (_React$PureComponent) {
                             return _this9.renderSelectionsTable(_this9.props.compareList);
                         }
                     ) : '',
-                    _ramda2.default.all(function (deal) {
-                        return _this9.props.dealTargets.hasOwnProperty(deal.id);
-                    }, this.props.deals) ? _react2.default.createElement(
-                        _AccordionTable2.default,
-                        null,
-                        function () {
-                            return _this9.renderTargetsTable(_this9.props.compareList);
-                        }
-                    ) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }),
                     _react2.default.createElement(
                         _AccordionTable2.default,
                         null,
@@ -65717,7 +65706,6 @@ var mapStateToProps = function mapStateToProps(state) {
         compareList: state.compareList,
         selectedDeal: state.selectedDeal,
         selectedTab: state.selectedTab,
-        dealTargets: state.dealTargets,
         termDuration: state.termDuration,
         employeeBrand: state.employeeBrand
     };
@@ -65742,14 +65730,6 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(16);
-
-var _index = __webpack_require__(13);
-
-var Actions = _interopRequireWildcard(_index);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -65761,18 +65741,18 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var AccordionTable = function (_React$PureComponent) {
     _inherits(AccordionTable, _React$PureComponent);
 
-    function AccordionTable(props) {
+    function AccordionTable() {
         _classCallCheck(this, AccordionTable);
 
-        return _possibleConstructorReturn(this, (AccordionTable.__proto__ || Object.getPrototypeOf(AccordionTable)).call(this, props));
+        return _possibleConstructorReturn(this, (AccordionTable.__proto__ || Object.getPrototypeOf(AccordionTable)).apply(this, arguments));
     }
 
     _createClass(AccordionTable, [{
-        key: 'render',
+        key: "render",
         value: function render() {
             return _react2.default.createElement(
-                'div',
-                { className: 'compare-page-table__accordion' },
+                "div",
+                { className: "compare-page-table__accordion" },
                 this.props.children()
             );
         }
@@ -65781,13 +65761,7 @@ var AccordionTable = function (_React$PureComponent) {
     return AccordionTable;
 }(_react2.default.PureComponent);
 
-var mapStateToProps = function mapStateToProps(state) {
-    return {
-        compareList: state.compareList
-    };
-};
-
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(AccordionTable);
+exports.default = AccordionTable;
 
 /***/ }),
 /* 975 */
@@ -66035,7 +66009,7 @@ var _DealImage = __webpack_require__(366);
 
 var _DealImage2 = _interopRequireDefault(_DealImage);
 
-var _index2 = __webpack_require__(71);
+var _index2 = __webpack_require__(65);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -66204,7 +66178,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _api = __webpack_require__(70);
+var _api = __webpack_require__(71);
 
 var _api2 = _interopRequireDefault(_api);
 
@@ -66246,7 +66220,7 @@ var _Modal = __webpack_require__(88);
 
 var _Modal2 = _interopRequireDefault(_Modal);
 
-var _index2 = __webpack_require__(71);
+var _index2 = __webpack_require__(65);
 
 var _formulas = __webpack_require__(89);
 
@@ -66824,7 +66798,7 @@ var _strings = __webpack_require__(90);
 
 var _strings2 = _interopRequireDefault(_strings);
 
-var _api = __webpack_require__(70);
+var _api = __webpack_require__(71);
 
 var _api2 = _interopRequireDefault(_api);
 
@@ -66836,7 +66810,7 @@ var _util = __webpack_require__(26);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _index2 = __webpack_require__(71);
+var _index2 = __webpack_require__(65);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
