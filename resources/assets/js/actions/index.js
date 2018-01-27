@@ -673,7 +673,7 @@ export function requestBestOffer(deal) {
             const bestOfferKey = util.getBestOfferKeyForDeal(
                 deal,
                 zipcode,
-                paymentType,
+                getState().selectedTab,
                 targets
             );
 

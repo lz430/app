@@ -18,12 +18,13 @@ class Financing extends Component {
                 `&vehicle_vin=${props.purchase.deal.vin}` +
                 `&contractTerms_msrp=${props.purchase.deal.msrp}` +
                 `&contractTerms_cash_down=${props.purchase.down_payment}` +
-                `&contractTerms_financed_amount=${props.purchase
-                    .amount_financed}` +
+                `&contractTerms_financed_amount=${
+                    props.purchase.amount_financed
+                }` +
                 `&contractTerms_term=${props.purchase.term}` +
-                `&vehicle_image_url=${props.featuredPhoto
-                    ? props.featuredPhoto.url
-                    : ''}` +
+                `&vehicle_image_url=${
+                    props.featuredPhoto ? props.featuredPhoto.url : ''
+                }` +
                 `&dealership_name=${props.purchase.deal.dealer.name}`,
         };
     }
@@ -35,7 +36,7 @@ class Financing extends Component {
         window.setInterval(() => {
             api.getApplicationStatus(this.props.purchase.id).then(response => {
                 if (response.data) {
-                    window.location = '/thank-you';
+                    window.location = '/thank-you?method=financing';
                 }
             });
         }, 2000);
@@ -47,26 +48,14 @@ class Financing extends Component {
                 <div className="financing__constrained">
                     <div className="financing__header">
                         <div className="financing__title">Financing</div>
-
-                        <form name="purchase" method="post" action="purchase">
-                            <input
-                                type="hidden"
-                                name="_token"
-                                value={window.Laravel.csrfToken}
-                            />
-                            <input
-                                type="hidden"
-                                name="purchase_id"
-                                value={DeliverMyRide.purchase.id}
-                            />
-                            <input type="hidden" name="method" value="cash" />
-                            <button
-                                onClick={() => document.purchase.submit()}
-                                className="financing__button financing__button--blue"
-                            >
-                                No thanks, I'll get my own financing.
-                            </button>
-                        </form>
+                        <button
+                            onClick={() =>
+                                (window.location = '/thank-you?method=cash')
+                            }
+                            className="financing__button financing__button--blue"
+                        >
+                            No thanks, I'll get my own financing.
+                        </button>
                     </div>
 
                     <iframe

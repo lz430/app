@@ -9,6 +9,7 @@ use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
 use App\Purchase;
 use App\Transformers\PurchaseTransformer;
+use App\Transformers\DealTransformer;
 use App\User;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Carbon\Carbon;
@@ -38,9 +39,8 @@ class ApplyOrPurchaseController extends Controller
                 'dmr_price' => 'required|numeric',
                 'msrp' => 'required|numeric',
                 // Rebates.
-                // @TODO: Update this to instead take targets and that custom field
                 'rebates' => 'array',
-                'rebates.*.rebate' => 'required_with:rebates|string',
+                'rebates.*.title' => 'required_with:rebates|string',
                 'rebates.*.value' => 'required_with:rebates|numeric',
                 // Finance and lease values.
                 'term' => 'required_if:type,finance,lease|integer',
@@ -183,7 +183,7 @@ class ApplyOrPurchaseController extends Controller
     {
         try {
             $purchase = Purchase::with('deal', 'deal.dealer', 'buyer')->findOrFail($purchaseId);
-            
+
             JavaScriptFacade::put([
                 'featuredPhoto' => $purchase->deal->featuredPhoto(),
                 'purchase' => $purchase,
@@ -239,7 +239,7 @@ class ApplyOrPurchaseController extends Controller
 
         $lastPurchase->load('deal.photos');
         $lastPurchase = fractal()->item($lastPurchase)->transformWith(PurchaseTransformer::class)->toJson();
-
-        return view('thank-you')->with('purchase', $lastPurchase);
+        $deal = $deal = fractal()->item(auth()->user()->purchases->last()->deal)->transformWith(DealTransformer::class)->toJson();
+        return view('thank-you')->with('purchase', $lastPurchase)->with('deal', $deal);
     }
 }

@@ -8,7 +8,7 @@ import * as Actions from 'actions/index';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import InfoModal from 'components/InfoModal';
-import {makeDealBestOfferTotalValue} from 'selectors/index';
+import { makeDealBestOfferTotalValue } from 'selectors/index';
 
 class DealPrice extends React.PureComponent {
     renderPriceExplanationModal() {
@@ -16,35 +16,35 @@ class DealPrice extends React.PureComponent {
     }
 
     renderCashPrice() {
-        return <div className="deal-price__price">
-                <div className="deal-price__cash-label">
-                    Your cash price
-                </div>
+        return (
+            <div className="deal-price__price">
+                <div className="deal-price__cash-label">Your cash price</div>
                 <div className="deal-price__cash-price">
                     <div>
                         {!R.isNil(this.props.dealBestOfferTotalValue) ? (
-                                util.moneyFormat(
-                                    formulas.calculateTotalCash(
-                                        util.getEmployeeOrSupplierPrice(
-                                            this.props.deal,
-                                            this.props.employeeBrand
-                                        ),
-                                        this.props.deal.doc_fee,
-                                        this.props.dealBestOfferTotalValue
-                                    ))
-                            ) : (
-                                <SVGInline svg={miscicons['loading']} />
-                            )}
+                            util.moneyFormat(
+                                formulas.calculateTotalCash(
+                                    util.getEmployeeOrSupplierPrice(
+                                        this.props.deal,
+                                        this.props.employeeBrand
+                                    ),
+                                    this.props.deal.doc_fee,
+                                    this.props.dealBestOfferTotalValue
+                                )
+                            )
+                        ) : (
+                            <SVGInline svg={miscicons['loading']} />
+                        )}
                     </div>
                     {this.renderPriceExplanationModal()}
                 </div>
                 <div className="deal-price__hr" />
                 <div className="deal-price__cash-msrp">
-                    {util.moneyFormat(this.props.deal.msrp)} <span className="deal-price__cash-msrp-label">
-                        MSRP
-                    </span>
+                    {util.moneyFormat(this.props.deal.msrp)}{' '}
+                    <span className="deal-price__cash-msrp-label">MSRP</span>
                 </div>
-            </div>;
+            </div>
+        );
     }
 
     renderFinancePrice() {
@@ -88,7 +88,7 @@ class DealPrice extends React.PureComponent {
                 <div className="deal-price__finance-lease-price">
                     <div>
                         {util.moneyFormat(
-                            Math.round(
+                            formulas.calculateTotalLeaseMonthlyPayment(
                                 formulas.calculateLeasedMonthlyPayments(
                                     util.getEmployeeOrSupplierPrice(
                                         this.props.deal,
@@ -139,12 +139,19 @@ class DealPrice extends React.PureComponent {
         );
     }
 
+    handleTabChange(tabName) {
+        this.props.selectTab(tabName);
+        this.props.getBestOffersForLoadedDeals();
+    }
+
     render() {
         return (
             <div className="deal-price">
                 <div className="tabs">
                     <div
-                        onClick={this.props.selectTab.bind(null, 'cash')}
+                        onClick={() => {
+                            this.handleTabChange('cash');
+                        }}
                         className={`tabs__tab ${
                             this.props.selectedTab === 'cash'
                                 ? 'tabs__tab--selected'
@@ -154,7 +161,9 @@ class DealPrice extends React.PureComponent {
                         Cash
                     </div>
                     <div
-                        onClick={this.props.selectTab.bind(null, 'finance')}
+                        onClick={() => {
+                            this.handleTabChange('finance');
+                        }}
                         className={`tabs__tab ${
                             this.props.selectedTab === 'finance'
                                 ? 'tabs__tab--selected'
@@ -164,7 +173,9 @@ class DealPrice extends React.PureComponent {
                         Finance
                     </div>
                     <div
-                        onClick={this.props.selectTab.bind(null, 'lease')}
+                        onClick={() => {
+                            this.handleTabChange('lease');
+                        }}
                         className={`tabs__tab ${
                             this.props.selectedTab === 'lease'
                                 ? 'tabs__tab--selected'
@@ -199,7 +210,6 @@ const mapStateToProps = state => {
     };
 };
 
-
 const makeMapStateToProps = () => {
     const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
     const mapStateToProps = (state, props) => {
@@ -219,9 +229,9 @@ const makeMapStateToProps = () => {
             downPayment: state.downPayment,
             dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
         };
-    }
+    };
     return mapStateToProps;
-}
+};
 
 DealPrice.PropTypes = {
     deal: PropTypes.object.isRequired,

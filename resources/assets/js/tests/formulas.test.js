@@ -39,7 +39,7 @@ test('calculates_monthly_lease_payment_via_jato_formula', () => {
 test('calculates_total_cash_finance_price_via_formula', () => {
     const price = 40000;
     const docFee = 210;
-    const totalRebates = 3500;
+    const dealBestOfferTotalValuw = 3500;
     const downPayment = 0;
 
     expect(
@@ -47,8 +47,7 @@ test('calculates_total_cash_finance_price_via_formula', () => {
             price,
             docFee,
             downPayment,
-            // @TODO handle all this too
-            totalRebates
+            dealBestOfferTotalValuw
         )
     ).toEqual(39122.6);
 });

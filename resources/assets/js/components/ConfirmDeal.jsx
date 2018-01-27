@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import * as Actions from 'actions/index';
 import { connect } from 'react-redux';
 import Modal from 'components/Modal';
-import {makeDealBestOfferTotalValue} from 'selectors/index';
+import { makeDealBestOfferTotalValue } from 'selectors/index';
 import formulas from 'src/formulas';
 
 class ConfirmDeal extends React.PureComponent {
@@ -50,35 +50,34 @@ class ConfirmDeal extends React.PureComponent {
                 this.setState({
                     warranties: response.data,
                 });
-        });
+            });
     }
 
     displayFinalPrice() {
         switch (this.props.selectedTab) {
             case 'cash':
                 return formulas.calculateTotalCash(
+                    util.getEmployeeOrSupplierPrice(
+                        this.props.deal,
+                        this.props.employeeBrand
+                    ),
+                    this.props.deal.doc_fee,
+                    this.props.dealBestOfferTotalValue
+                );
+            case 'finance': {
+                return Math.round(
+                    formulas.calculateFinancedMonthlyPayments(
                         util.getEmployeeOrSupplierPrice(
                             this.props.deal,
                             this.props.employeeBrand
-                        ),
-                        this.props.deal.doc_fee,
-                        this.props.dealBestOfferTotalValue
-                    );
-            case 'finance': {
-                return (
-                        Math.round(
-                            formulas.calculateFinancedMonthlyPayments(
-                                util.getEmployeeOrSupplierPrice(
-                                    this.props.deal,
-                                    this.props.employeeBrand
-                                ) - this.props.dealBestOfferTotalValue,
-                            this.props.downPayment,
-                            this.props.termDuration)
-                        )
+                        ) - this.props.dealBestOfferTotalValue,
+                        this.props.downPayment,
+                        this.props.termDuration
+                    )
                 );
             }
             case 'lease': {
-                return Math.round(
+                return formulas.calculateTotalLeaseMonthlyPayment(
                     formulas.calculateLeasedMonthlyPayments(
                         util.getEmployeeOrSupplierPrice(
                             this.props.deal,
@@ -91,7 +90,7 @@ class ConfirmDeal extends React.PureComponent {
                     )
                 );
             }
-         }
+        }
     }
 
     hideModals() {
@@ -105,7 +104,9 @@ class ConfirmDeal extends React.PureComponent {
         return (
             <Modal
                 nowrapper={true}
-                onClose={() => { this.hideModals() }}
+                onClose={() => {
+                    this.hideModals();
+                }}
             >
                 <div className="modal__content">
                     <div className="modal__sticker-container">
@@ -137,13 +138,16 @@ class ConfirmDeal extends React.PureComponent {
                         <h4>Dimensions</h4>
                         <ul>
                             {this.state.dimensions ? (
-                                this.state.dimensions.map((dimension, index) => {
-                                    return (
-                                        <li key={index}>
-                                            {dimension.feature}: {dimension.content}
-                                        </li>
-                                    );
-                                })
+                                this.state.dimensions.map(
+                                    (dimension, index) => {
+                                        return (
+                                            <li key={index}>
+                                                {dimension.feature}:{' '}
+                                                {dimension.content}
+                                            </li>
+                                        );
+                                    }
+                                )
                             ) : (
                                 <SVGInline svg={miscicons['loading']} />
                             )}
@@ -152,13 +156,16 @@ class ConfirmDeal extends React.PureComponent {
                         <h4>Warranties</h4>
                         <ul>
                             {this.state.warranties ? (
-                                this.state.warranties.map((dimension, index) => {
-                                    return (
-                                        <li key={index}>
-                                            {dimension.feature}: {dimension.content}
-                                        </li>
-                                    );
-                                })
+                                this.state.warranties.map(
+                                    (dimension, index) => {
+                                        return (
+                                            <li key={index}>
+                                                {dimension.feature}:{' '}
+                                                {dimension.content}
+                                            </li>
+                                        );
+                                    }
+                                )
                             ) : (
                                 <SVGInline svg={miscicons['loading']} />
                             )}
@@ -182,9 +189,10 @@ class ConfirmDeal extends React.PureComponent {
         return (
             <Modal
                 nowrapper={true}
-                onClose={() => { this.hideModals() }}
+                onClose={() => {
+                    this.hideModals();
+                }}
             >
-
                 <div className="modal__content">
                     <div className="modal__sticker-container">
                         <div className="modal__sticker">Additional Options</div>
@@ -243,14 +251,18 @@ class ConfirmDeal extends React.PureComponent {
             <div>
                 <div className="confirm-deal__rebate-info confirm-deal__costs confirm-deal__bold">
                     <div>{`Rebates Applied:`}</div>
-                    <div>{`${util.moneyFormat(this.props.dealBestOfferTotalValue)}`}</div>
+                    <div>{`${util.moneyFormat(
+                        this.props.dealBestOfferTotalValue
+                    )}`}</div>
                 </div>
 
                 <div className="confirm-deal__more-rebates confirm-deal__costs">
                     <div>
                         <a
-                        onClick={() => this.props.selectDeal(this.props.deal)}
-                        href="#"
+                            onClick={() =>
+                                this.props.selectDeal(this.props.deal)
+                            }
+                            href="#"
                         >
                             Get Rebates
                         </a>
@@ -271,9 +283,7 @@ class ConfirmDeal extends React.PureComponent {
                     ) : (
                         <div>
                             <div className="confirm-deal__basic-info">
-                                <div
-                                    className="confirm-deal__basic-info-year-and-model"
-                                >
+                                <div className="confirm-deal__basic-info-year-and-model">
                                     <div className="confirm-deal__basic-info-year-and-make">
                                         {`${deal.year} ${deal.make}`}
                                     </div>
@@ -290,7 +300,10 @@ class ConfirmDeal extends React.PureComponent {
                     <div className="confirm-deal__vehicle-info">
                         <div className="model-vin">
                             <p>
-                                {`${deal.year} ${deal.make} ${deal.model} ${deal.series}`} <br />
+                                {`${deal.year} ${deal.make} ${deal.model} ${
+                                    deal.series
+                                }`}{' '}
+                                <br />
                                 {`Stock #${deal.vin}`}
                             </p>
                         </div>
@@ -315,38 +328,59 @@ class ConfirmDeal extends React.PureComponent {
                     </div>
 
                     <div className="confirm-deal__price">
-                        <p className="confirm-deal__pricing-details">Pricing Details</p>
-                        <p>{ `${strings.toTitleCase(this.props.selectedTab)} Terms`}</p>
+                        <p className="confirm-deal__pricing-details">
+                            Pricing Details
+                        </p>
+                        <p>{`${strings.toTitleCase(
+                            this.props.selectedTab
+                        )} Terms`}</p>
 
                         <div className="confirm-deal__prices">
                             <div className="confirm-deal__costs">
-                                <div className="confirm-deal__label">Suggested Retail: </div>
-                                <div className="confirm-deal__amount">{util.moneyFormat(this.props.deal.msrp)}</div>
+                                <div className="confirm-deal__label">
+                                    Suggested Retail:{' '}
+                                </div>
+                                <div className="confirm-deal__amount">
+                                    {util.moneyFormat(this.props.deal.msrp)}
+                                </div>
                             </div>
                             <div className="confirm-deal__costs">
-                                <div className="confirm-deal__label">Your Price:</div>
-                                <div className="confirm-deal__amount">{`${util.moneyFormat(this.props.deal.supplier_price)}*`}</div>
+                                <div className="confirm-deal__label">
+                                    Your Price:
+                                </div>
+                                <div className="confirm-deal__amount">{`${util.moneyFormat(
+                                    this.props.deal.supplier_price
+                                )}*`}</div>
                             </div>
                             {this.renderAppliedRebatesLink()}
                         </div>
 
                         <hr />
                         <div className="confirm-deal__final-price confirm-deal__costs confirm-deal__bold">
-                            <div>{`Your ${strings.toTitleCase(this.props.selectedTab)}  Price:`}</div>
-                            <div>{`${util.moneyFormat(this.displayFinalPrice())}
-                                ${this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? ` /month` : ``}`}
+                            <div>{`Your ${strings.toTitleCase(
+                                this.props.selectedTab
+                            )}  Price:`}</div>
+                            <div>
+                                {`${util.moneyFormat(this.displayFinalPrice())}
+                                ${
+                                    this.props.selectedTab === 'finance' ||
+                                    this.props.selectedTab === 'lease'
+                                        ? ` /month`
+                                        : ``
+                                }`}
                             </div>
                         </div>
-                        <p className="confirm-deal__disclaimer">*Includes sales tax and dealer fees. License plate fees not included.</p>
+                        <p className="confirm-deal__disclaimer">
+                            *Includes sales tax and dealer fees. License plate
+                            fees not included.
+                        </p>
                     </div>
 
                     {this.props.children}
                 </div>
-                {this.state.showStandardFeatures ? (
-                    this.renderStandardFeaturesModal(deal)
-                ) : (
-                    ''
-                )}
+                {this.state.showStandardFeatures
+                    ? this.renderStandardFeaturesModal(deal)
+                    : ''}
                 {this.state.showFeatures ? this.renderFeaturesModal(deal) : ''}
             </div>
         );
@@ -381,8 +415,8 @@ const makeMapStateToProps = () => {
             selectedTargets: state.selectedTargets,
             dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
         };
-    }
+    };
     return mapStateToProps;
-}
+};
 
 export default connect(makeMapStateToProps, Actions)(ConfirmDeal);

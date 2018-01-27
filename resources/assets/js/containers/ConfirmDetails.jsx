@@ -8,6 +8,7 @@ import purchase from 'src/purchase';
 import React from 'react';
 import strings from 'src/strings';
 import DealImage from 'components/Deals/DealImage';
+import { makeDealBestOfferTotalValue, makeDealBestOffer } from 'selectors/index';
 
 class ConfirmDetails extends React.PureComponent {
     componentWillUnmount() {
@@ -41,16 +42,8 @@ class ConfirmDetails extends React.PureComponent {
                                     deal,
                                     this.props.selectedTab,
                                     this.props.downPayment,
-
-                                    // @TODO Update this to handle.. what. targets? some other number
-                                    // that's influenced by the selected targets?
-                                    /*rebates.getSelectedTargetsForDeal(
-                                        this.props.dealTargets,
-                                        this.props.selectedTargets,
-                                        deal
-                                    ),*/
-                                    [], /* ?!?!?!?!?! @TODO */
-                                    [],
+                                    this.props.dealBestOfferTotalValue,
+                                    this.props.dealBestOffer,
                                     this.props.termDuration,
                                     this.props.employeeBrand
                                 )}
@@ -108,16 +101,24 @@ ConfirmDetails.propTypes = {
     }),
 };
 
-const mapStateToProps = state => {
-    return {
-        selectedTab: state.selectedTab,
-        downPayment: state.downPayment,
-        dealTargets: state.dealTargets,
-        termDuration: state.termDuration,
-        fallbackDealImage: state.fallbackDealImage,
-        selectedDeal: state.selectedDeal,
-        employeeBrand: state.employeeBrand,
+
+const makeMapStateToProps = () => {
+    const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
+    const getDealBestOffer = makeDealBestOffer();
+    const mapStateToProps = (state, props) => {
+        return {
+            selectedTab: state.selectedTab,
+            downPayment: state.downPayment,
+            dealTargets: state.dealTargets,
+            termDuration: state.termDuration,
+            fallbackDealImage: state.fallbackDealImage,
+            selectedDeal: state.selectedDeal,
+            employeeBrand: state.employeeBrand,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOffer: getDealBestOffer(state, props),
+        };
     };
+    return mapStateToProps;
 };
 
-export default connect(mapStateToProps, Actions)(ConfirmDetails);
+export default connect(makeMapStateToProps, Actions)(ConfirmDetails);

@@ -44,7 +44,7 @@ class InfoModalData extends React.PureComponent {
                 );
             }
             case 'lease': {
-                return Math.round(
+                return formulas.calculateTotalLeaseMonthlyPayment(
                     formulas.calculateLeasedMonthlyPayments(
                         util.getEmployeeOrSupplierPrice(
                             this.props.deal,
