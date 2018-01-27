@@ -8,6 +8,7 @@ import * as Actions from 'actions/index';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import InfoModal from 'components/InfoModal';
+import {makeDealBestOfferTotalValue} from 'selectors/index';
 
 class DealPrice extends React.PureComponent {
     bestOfferTotalValue() {
@@ -26,14 +27,13 @@ class DealPrice extends React.PureComponent {
     }
 
     renderCashPrice() {
-        let bestOfferTotalValue = this.bestOfferTotalValue();
         return <div className="deal-price__price">
                 <div className="deal-price__cash-label">
                     Your cash price
                 </div>
                 <div className="deal-price__cash-price">
                     <div>
-                        {!R.isNil(bestOfferTotalValue) ? (
+                        {!R.isNil(this.props.dealBestOfferTotalValue) ? (
                                 util.moneyFormat(
                                     formulas.calculateTotalCashFinance(
                                         util.getEmployeeOrSupplierPrice(
@@ -42,7 +42,7 @@ class DealPrice extends React.PureComponent {
                                         ),
                                         this.props.deal.doc_fee,
                                         this.props.downPayment,
-                                        bestOfferTotalValue
+                                        this.props.dealBestOfferTotalValue
                                     ))
                             ) : (
                                 <SVGInline svg={miscicons['loading']} />
@@ -60,14 +60,13 @@ class DealPrice extends React.PureComponent {
     }
 
     renderFinancePrice() {
-        let bestOfferTotalValue = this.bestOfferTotalValue();
         return (
             <div className="deal-price__price">
                 <div className="deal-price__finance-lease-label">
                     Estimated Monthly Finance Payment
                 </div>
                 <div className="deal-price__finance-lease-price">
-                    {!R.isNil(bestOfferTotalValue) ? (
+                    {!R.isNil(this.props.dealBestOfferTotalValue) ? (
                         <div>
                             {util.moneyFormat(
                                 Math.round(
@@ -75,7 +74,7 @@ class DealPrice extends React.PureComponent {
                                         util.getEmployeeOrSupplierPrice(
                                             this.props.deal,
                                             this.props.employeeBrand
-                                        ) - bestOfferTotalValue,
+                                        ) - this.props.dealBestOfferTotalValue,
                                         this.props.downPayment,
                                         this.props.termDuration
                                     )
@@ -93,7 +92,6 @@ class DealPrice extends React.PureComponent {
     }
 
     renderLeasePrice() {
-        let bestOfferTotalValue = this.bestOfferTotalValue();
         return (
             <div className="deal-price__price">
                 <div className="deal-price__finance-lease-label">
@@ -107,7 +105,7 @@ class DealPrice extends React.PureComponent {
                                     util.getEmployeeOrSupplierPrice(
                                         this.props.deal,
                                         this.props.employeeBrand
-                                    ) - bestOfferTotalValue,
+                                    ) - this.props.dealBestOfferTotalValue,
                                     0,
                                     0,
                                     this.props.termDuration,
@@ -213,8 +211,32 @@ const mapStateToProps = state => {
     };
 };
 
+
+const makeMapStateToProps = () => {
+    const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
+    const mapStateToProps = (state, props) => {
+        return {
+            employeeBrand: state.employeeBrand,
+            downPayment: state.downPayment,
+            termDuration: state.termDuration,
+            residualPercent: state.residualPercent,
+            selectedTab: state.selectedTab,
+            dealTargets: state.dealTargets,
+            bestOffers: state.bestOffers,
+            zipcode: state.zipcode,
+            targetsSelected: state.targetsSelected,
+            targetDefaults: state.targetDefaults,
+            bestOffers: state.bestOffers,
+            selectedTab: state.selectedTab,
+            downPayment: state.downPayment,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+        };
+    }
+    return mapStateToProps;
+}
+
 DealPrice.PropTypes = {
     deal: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps, Actions)(DealPrice);
+export default connect(makeMapStateToProps, Actions)(DealPrice);
