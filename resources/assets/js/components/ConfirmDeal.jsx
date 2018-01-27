@@ -8,6 +8,9 @@ import util from 'src/util';
 import PropTypes from 'prop-types';
 import * as Actions from 'actions/index';
 import { connect } from 'react-redux';
+import Modal from 'components/Modal';
+import {makeDealBestOfferTotalValue} from 'selectors/index';
+import formulas from 'src/formulas';
 
 class ConfirmDeal extends React.PureComponent {
     constructor(props) {
@@ -27,6 +30,7 @@ class ConfirmDeal extends React.PureComponent {
 
     componentDidMount() {
         this._isMounted = true;
+        this.props.requestBestOffer(this.props.deal);
 
         api
             .getDimensions(this.props.deal.versions[0].jato_vehicle_id)
@@ -47,82 +51,27 @@ class ConfirmDeal extends React.PureComponent {
                     warranties: response.data,
                 });
         });
-
-        if (
-            !this.props.dealTargets.hasOwnProperty(this.props.deal.id) &&
-            this.props.zipcode
-        ) {
-            this.requestRebates();
-        } else {
-            this.componentWillReceiveProps(this.props);
-        }
-    }
-
-    requestRebates() {
-        this.props.requestRebates(this.props.deal);
-    }
-
-    componentWillReceiveProps(props) {
-        // if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
-        //     return this.props.requestRebates(this.props.deal);
-        // }
-
-        //     this.setState({
-        //         availableTargets: props.dealTargets[props.deal.id] || [],
-        //         selectedTargets: rebates.getSelectedTargetsForDeal(
-        //             props.dealTargets,
-        //             props.selectedTargets,
-        //             props.deal
-        //         ),
-        //     });
-    }
-
-    renderDealRebatesModal() {
-        return (
-            <Modal
-                onClose={this.props.clearSelectedDeal}
-                closeText="Back to results"
-            >
-            </Modal>
-        );
-    }
-
-    fixSelectedTabCaseFormatting() {
-        switch (this.props.selectedTab) {
-            case 'cash':
-                return 'Cash';
-            case 'finance':
-                return 'Finance';
-            case 'lease':
-                return 'Lease';
-        }
     }
 
     displayFinalPrice() {
         switch (this.props.selectedTab) {
             case 'cash':
-                return this.props.deal.supplier_price;
+                return formulas.calculateTotalCash(
+                        util.getEmployeeOrSupplierPrice(
+                            this.props.deal,
+                            this.props.employeeBrand
+                        ),
+                        this.props.deal.doc_fee,
+                        this.props.dealBestOfferTotalValue
+                    );
             case 'finance': {
                 return (
                         Math.round(
                             formulas.calculateFinancedMonthlyPayments(
                                 util.getEmployeeOrSupplierPrice(
                                     this.props.deal,
-                                    this.props.isEmployee
-                                ) -
-                                R.sum(
-                                    [9999]
-                                    /* @todo: pull this from the api or whatever
-                                    R.map(
-                                        R.prop('value'),
-                                        rebates.getSelectedTargetsForDeal(
-                                            this.props.dealTargets,
-                                            this.props.selectedTargets,
-                                            this.props.deal
-                                        )
-                                    )
-                                    */
-                                ),
+                                    this.props.employeeBrand
+                                ) - this.props.dealBestOfferTotalValue,
                             this.props.downPayment,
                             this.props.termDuration)
                         )
@@ -133,21 +82,8 @@ class ConfirmDeal extends React.PureComponent {
                     formulas.calculateLeasedMonthlyPayments(
                         util.getEmployeeOrSupplierPrice(
                             this.props.deal,
-                            this.props.isEmployee
-                        ) -
-                        R.sum(
-                            [9999] // @todo pull this from the api or whatever
-                            /*
-                            R.map(
-                                R.prop('value'),
-                                rebates.getSelectedTargetsForDeal(
-                                    this.props.dealTargets,
-                                    this.props.selectedTargets,
-                                    this.props.deal
-                                )
-                            )
-                            */
-                        ),
+                            this.props.employeeBrand
+                        ) - this.props.dealBestOfferTotalValue,
                         0,
                         0,
                         this.props.termDuration,
@@ -156,16 +92,6 @@ class ConfirmDeal extends React.PureComponent {
                 );
             }
          }
-    }
-
-    showAppliedRebates() {
-        const selectedAmount = R.sum(
-            R.map(R.prop('value'), this.props.selectedTargets)
-        );
-
-        this.setState({
-            selectedRebateAmount: selectedAmount,
-        });
     }
 
     hideModals() {
@@ -309,20 +235,15 @@ class ConfirmDeal extends React.PureComponent {
     }
 
     renderAppliedRebatesLink() {
-        if (!this.state.availableTargets) {
+        if (!this.props.dealBestOfferTotalValue) {
             return <SVGInline svg={miscicons['loading']} />;
         }
-
-        const selectedAmount = R.sum(
-            [9999] // @todo pull from api or whatever
-            // R.map(R.prop('value'), this.state.selectedTargets)
-        );
 
         return (
             <div>
                 <div className="confirm-deal__rebate-info confirm-deal__costs confirm-deal__bold">
                     <div>{`Rebates Applied:`}</div>
-                    <div>{`${util.moneyFormat(selectedAmount)}`}</div>
+                    <div>{`${util.moneyFormat(this.props.dealBestOfferTotalValue)}`}</div>
                 </div>
 
                 <div className="confirm-deal__more-rebates confirm-deal__costs">
@@ -395,7 +316,7 @@ class ConfirmDeal extends React.PureComponent {
 
                     <div className="confirm-deal__price">
                         <p className="confirm-deal__pricing-details">Pricing Details</p>
-                        <p>{ `${this.fixSelectedTabCaseFormatting()} Terms`}</p>
+                        <p>{ `${strings.toTitleCase(this.props.selectedTab)} Terms`}</p>
 
                         <div className="confirm-deal__prices">
                             <div className="confirm-deal__costs">
@@ -411,7 +332,7 @@ class ConfirmDeal extends React.PureComponent {
 
                         <hr />
                         <div className="confirm-deal__final-price confirm-deal__costs confirm-deal__bold">
-                            <div>{`Your ${this.fixSelectedTabCaseFormatting()} Price:`}</div>
+                            <div>{`Your ${strings.toTitleCase(this.props.selectedTab)}  Price:`}</div>
                             <div>{`${util.moneyFormat(this.displayFinalPrice())}
                                 ${this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? ` /month` : ``}`}
                             </div>
@@ -445,19 +366,23 @@ ConfirmDeal.propTypes = {
     }),
 };
 
-const mapStateToProps = state => {
-    return {
-        compareList: state.compareList,
-        selectedTab: state.selectedTab,
-        downPayment: state.downPayment,
-        dealTargets: state.dealTargets,
-        selectedTargets: state.selectedTargets,
-        termDuration: state.termDuration,
-        selectedDeal: state.selectedDeal,
-        isEmployee: state.isEmployee,
-        residualPercent: state.residualPercent,
+const makeMapStateToProps = () => {
+    const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
+    const mapStateToProps = (state, props) => {
+        return {
+            compareList: state.compareList,
+            selectedTab: state.selectedTab,
+            downPayment: state.downPayment,
+            termDuration: state.termDuration,
+            selectedDeal: state.selectedDeal,
+            employeeBrand: state.employeeBrand,
+            residualPercent: state.residualPercent,
+            dealTargets: state.dealTargets,
+            selectedTargets: state.selectedTargets,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+        };
+    }
+    return mapStateToProps;
+}
 
-    };
-};
-
-export default connect(mapStateToProps, Actions)(ConfirmDeal);
+export default connect(makeMapStateToProps, Actions)(ConfirmDeal);

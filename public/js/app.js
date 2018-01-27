@@ -66245,6 +66245,16 @@ var Actions = _interopRequireWildcard(_index);
 
 var _reactRedux = __webpack_require__(16);
 
+var _Modal = __webpack_require__(99);
+
+var _Modal2 = _interopRequireDefault(_Modal);
+
+var _index2 = __webpack_require__(940);
+
+var _formulas = __webpack_require__(100);
+
+var _formulas2 = _interopRequireDefault(_formulas);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -66283,6 +66293,7 @@ var ConfirmDeal = function (_React$PureComponent) {
             var _this2 = this;
 
             this._isMounted = true;
+            this.props.requestBestOffer(this.props.deal);
 
             _api2.default.getDimensions(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
                 if (!_this2._isMounted) return;
@@ -66299,100 +66310,22 @@ var ConfirmDeal = function (_React$PureComponent) {
                     warranties: response.data
                 });
             });
-
-            if (!this.props.dealTargets.hasOwnProperty(this.props.deal.id) && this.props.zipcode) {
-                this.requestRebates();
-            } else {
-                this.componentWillReceiveProps(this.props);
-            }
-        }
-    }, {
-        key: 'requestRebates',
-        value: function requestRebates() {
-            this.props.requestRebates(this.props.deal);
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(props) {
-            // if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
-            //     return this.props.requestRebates(this.props.deal);
-            // }
-
-            //     this.setState({
-            //         availableTargets: props.dealTargets[props.deal.id] || [],
-            //         selectedTargets: rebates.getSelectedTargetsForDeal(
-            //             props.dealTargets,
-            //             props.selectedTargets,
-            //             props.deal
-            //         ),
-            //     });
-        }
-    }, {
-        key: 'renderDealRebatesModal',
-        value: function renderDealRebatesModal() {
-            return _react2.default.createElement(Modal, {
-                onClose: this.props.clearSelectedDeal,
-                closeText: 'Back to results'
-            });
-        }
-    }, {
-        key: 'fixSelectedTabCaseFormatting',
-        value: function fixSelectedTabCaseFormatting() {
-            switch (this.props.selectedTab) {
-                case 'cash':
-                    return 'Cash';
-                case 'finance':
-                    return 'Finance';
-                case 'lease':
-                    return 'Lease';
-            }
         }
     }, {
         key: 'displayFinalPrice',
         value: function displayFinalPrice() {
             switch (this.props.selectedTab) {
                 case 'cash':
-                    return this.props.deal.supplier_price;
+                    return _formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue);
                 case 'finance':
                     {
-                        return Math.round(formulas.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - R.sum([9999]
-                        /* @todo: pull this from the api or whatever
-                        R.map(
-                            R.prop('value'),
-                            rebates.getSelectedTargetsForDeal(
-                                this.props.dealTargets,
-                                this.props.selectedTargets,
-                                this.props.deal
-                            )
-                        )
-                        */
-                        ), this.props.downPayment, this.props.termDuration));
+                        return Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration));
                     }
                 case 'lease':
                     {
-                        return Math.round(formulas.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - R.sum([9999] // @todo pull this from the api or whatever
-                        /*
-                        R.map(
-                            R.prop('value'),
-                            rebates.getSelectedTargetsForDeal(
-                                this.props.dealTargets,
-                                this.props.selectedTargets,
-                                this.props.deal
-                            )
-                        )
-                        */
-                        ), 0, 0, this.props.termDuration, R.or(this.props.residualPercent, 31)));
+                        return Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, 0, 0, this.props.termDuration, R.or(this.props.residualPercent, 31)));
                     }
             }
-        }
-    }, {
-        key: 'showAppliedRebates',
-        value: function showAppliedRebates() {
-            var selectedAmount = R.sum(R.map(R.prop('value'), this.props.selectedTargets));
-
-            this.setState({
-                selectedRebateAmount: selectedAmount
-            });
         }
     }, {
         key: 'hideModals',
@@ -66408,7 +66341,7 @@ var ConfirmDeal = function (_React$PureComponent) {
             var _this3 = this;
 
             return _react2.default.createElement(
-                Modal,
+                _Modal2.default,
                 {
                     nowrapper: true,
                     onClose: function onClose() {
@@ -66530,7 +66463,7 @@ var ConfirmDeal = function (_React$PureComponent) {
             var _this4 = this;
 
             return _react2.default.createElement(
-                Modal,
+                _Modal2.default,
                 {
                     nowrapper: true,
                     onClose: function onClose() {
@@ -66617,13 +66550,9 @@ var ConfirmDeal = function (_React$PureComponent) {
         value: function renderAppliedRebatesLink() {
             var _this5 = this;
 
-            if (!this.state.availableTargets) {
+            if (!this.props.dealBestOfferTotalValue) {
                 return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
             }
-
-            var selectedAmount = R.sum([9999] // @todo pull from api or whatever
-            // R.map(R.prop('value'), this.state.selectedTargets)
-            );
 
             return _react2.default.createElement(
                 'div',
@@ -66639,7 +66568,7 @@ var ConfirmDeal = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         null,
-                        '' + _util2.default.moneyFormat(selectedAmount)
+                        '' + _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                     )
                 ),
                 _react2.default.createElement(
@@ -66757,7 +66686,7 @@ var ConfirmDeal = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'p',
                             null,
-                            this.fixSelectedTabCaseFormatting() + ' Terms'
+                            _strings2.default.toTitleCase(this.props.selectedTab) + ' Terms'
                         ),
                         _react2.default.createElement(
                             'div',
@@ -66799,7 +66728,7 @@ var ConfirmDeal = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'div',
                                 null,
-                                'Your ' + this.fixSelectedTabCaseFormatting() + ' Price:'
+                                'Your ' + _strings2.default.toTitleCase(this.props.selectedTab) + '  Price:'
                             ),
                             _react2.default.createElement(
                                 'div',
@@ -66837,22 +66766,26 @@ ConfirmDeal.propTypes = {
     })
 };
 
-var mapStateToProps = function mapStateToProps(state) {
-    return {
-        compareList: state.compareList,
-        selectedTab: state.selectedTab,
-        downPayment: state.downPayment,
-        dealTargets: state.dealTargets,
-        selectedTargets: state.selectedTargets,
-        termDuration: state.termDuration,
-        selectedDeal: state.selectedDeal,
-        isEmployee: state.isEmployee,
-        residualPercent: state.residualPercent
-
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealBestOfferTotalValue = (0, _index2.makeDealBestOfferTotalValue)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        return {
+            compareList: state.compareList,
+            selectedTab: state.selectedTab,
+            downPayment: state.downPayment,
+            termDuration: state.termDuration,
+            selectedDeal: state.selectedDeal,
+            employeeBrand: state.employeeBrand,
+            residualPercent: state.residualPercent,
+            dealTargets: state.dealTargets,
+            selectedTargets: state.selectedTargets,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+        };
     };
+    return mapStateToProps;
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(ConfirmDeal);
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(ConfirmDeal);
 
 /***/ }),
 /* 981 */
