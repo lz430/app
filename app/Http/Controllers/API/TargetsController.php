@@ -32,9 +32,9 @@ class TargetsController extends Controller
 
             $filteredTargets = [];
 
-            if($response) {
-                foreach($response as $key => $target) {
-                    if(!in_array($target['targetId'], self::TARGET_BLACKLIST)) {
+            if ($response) {
+                foreach ($response as $key => $target) {
+                    if (!in_array($target['targetId'], self::TARGET_BLACKLIST)) {
                         $filteredTargets[] = $target;
                     }
                 }

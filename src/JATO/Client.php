@@ -160,7 +160,6 @@ class Client
         } catch (ClientException $e) {
             Log::debug("Unable to get targets for Vehicle ID $vehicleId. URL: incentives/bestOffer/$vehicleId/targets");
         }
-
     }
 
     public function bestOffer($vehicleId, $paymentType, $zipcode, $targets)

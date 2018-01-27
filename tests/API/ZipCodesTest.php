@@ -33,4 +33,3 @@ class ZipCodesTest extends TestCase
         $response->assertStatus(200);
     }
 }
-

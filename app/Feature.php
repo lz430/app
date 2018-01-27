@@ -19,6 +19,6 @@ class Feature extends Model
 
     public function deals()
     {
-         return $this->belongsToMany(Deal::class);
+        return $this->belongsToMany(Deal::class);
     }
 }

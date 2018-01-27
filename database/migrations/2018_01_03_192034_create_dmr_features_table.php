@@ -406,7 +406,6 @@ class CreateDmrFeaturesTable extends Migration
                 Feature::make($feature)->setTable('dmr_features')->save();
                 $count++;
             });
-
         });
     }
 

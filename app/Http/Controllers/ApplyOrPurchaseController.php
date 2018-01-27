@@ -106,7 +106,8 @@ class ApplyOrPurchaseController extends Controller
              * If we already have a user with this email, let's use that account
              * instead of the newly created one.
              */
-            $user = User::updateOrCreate([
+            $user = User::updateOrCreate(
+                [
                     'email' => $request->email
                 ],
                 [
@@ -114,7 +115,8 @@ class ApplyOrPurchaseController extends Controller
                     'last_name' => $request->last_name,
                     'phone_number' => $request->phone_number,
                     'zip' => session()->get('zip'),
-                ]);
+                ]
+            );
 
             auth()->login($user);
 

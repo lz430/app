@@ -91,7 +91,7 @@ class DealFeatureImporter
         }
 
         if (! $feature || $feature->isEmpty()) {
-            Log::error('Importer error for vin [' . $this->deal['VIN']. ']: could not find mapping for schemaId ' . $equipment['schemaId'] );
+            Log::error('Importer error for vin [' . $this->deal['VIN']. ']: could not find mapping for schemaId ' . $equipment['schemaId']);
             return null;
         }
 
@@ -134,7 +134,6 @@ class DealFeatureImporter
             } elseif (str_contains(strtolower($value), ['unleaded', 'unleaded premium', 'premium', 'e85'])) {
                 return 'fuel_type_gas';
             }
-
         })->filter()->unique()->map(function ($slugKey) {
             return Feature::where('slug', $slugKey)->first();
         });

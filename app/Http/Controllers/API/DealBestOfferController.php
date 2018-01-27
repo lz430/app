@@ -39,7 +39,7 @@ class DealBestOfferController extends BaseAPIController
         }
 
         // We want to show the cash best offer information even in the finance tabs
-        if($paymentType == 'finance') {
+        if ($paymentType == 'finance') {
             $paymentType = 'cash';
         }
 
