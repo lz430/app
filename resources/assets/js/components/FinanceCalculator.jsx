@@ -23,7 +23,6 @@ class FinanceCalculator extends React.PureComponent {
         const targets = R.uniq(this.props.targetDefaults.concat(selectedTargetIds));
         const bestOfferKey = util.getBestOfferKeyForDeal(this.props.deal, this.props.zipcode, this.props.selectedTab, targets);
         const result = R.prop(bestOfferKey, this.props.bestOffers) ? R.prop('totalValue', R.prop(bestOfferKey, this.props.bestOffers)) : 0;
-        console.log('result: ', result);
         return result;
     }
 

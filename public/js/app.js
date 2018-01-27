@@ -1410,7 +1410,9 @@ function requestBestOffer(deal) {
 }
 
 function receiveBestOffer(data, bestOfferKey, paymentType) {
-    var bestOffer = paymentType === 'cash' ? data.data : data.data.cash;
+    // Although lease AND finance have the 'cash' wrapper, we are currently
+    // displaying cash best offers in the finance tabs.
+    var bestOffer = paymentType === 'lease' ? data.data.cash : data.data;
     return function (dispatch) {
         dispatch({
             type: ActionTypes.RECEIVE_BEST_OFFER,
@@ -60143,7 +60145,6 @@ var FinanceCalculator = function (_React$PureComponent) {
             var targets = _ramda2.default.uniq(this.props.targetDefaults.concat(selectedTargetIds));
             var bestOfferKey = _util2.default.getBestOfferKeyForDeal(this.props.deal, this.props.zipcode, this.props.selectedTab, targets);
             var result = _ramda2.default.prop(bestOfferKey, this.props.bestOffers) ? _ramda2.default.prop('totalValue', _ramda2.default.prop(bestOfferKey, this.props.bestOffers)) : 0;
-            console.log('result: ', result);
             return result;
         }
     }, {
@@ -61599,7 +61600,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var reducer = function reducer(state, action) {
-    console.log(action.type);
     switch (action.type) {
         case _constants.REHYDRATE:
             /**
@@ -61785,15 +61785,7 @@ var reducer = function reducer(state, action) {
                 zipInRange: action.supported
             });
         case ActionTypes.RECEIVE_BEST_OFFER:
-            var bestOfferKey = action.bestOfferKey;
-
-            var nextBestOffers = Object.assign({}, state.bestOffers);
-
-            if (_ramda2.default.isNil(nextBestOffers[bestOfferKey])) {
-                nextBestOffers[bestOfferKey] = action.data;
-            }
-
-            return Object.assign({}, state, { bestOffers: nextBestOffers });
+            return _extends({}, state, { bestOffers: _extends({}, state.bestOffers, _defineProperty({}, action.bestOfferKey, action.data)) });
         case ActionTypes.APPEND_CANCEL_TOKEN:
             return _extends({}, state, {
                 cancelTokens: [].concat(_toConsumableArray(state.cancelTokens), [{ dealId: action.deal.id, source: action.cancelToken }])

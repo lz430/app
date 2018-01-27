@@ -715,7 +715,9 @@ export function requestBestOffer(deal) {
 }
 
 export function receiveBestOffer(data, bestOfferKey, paymentType) {
-    const bestOffer = paymentType === 'cash' ? data.data : data.data.cash;
+    // Although lease AND finance have the 'cash' wrapper, we are currently
+    // displaying cash best offers in the finance tabs.
+    const bestOffer = paymentType === 'lease' ? data.data.cash : data.data;
     return dispatch => {
         dispatch({
             type: ActionTypes.RECEIVE_BEST_OFFER,

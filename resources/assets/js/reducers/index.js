@@ -4,7 +4,6 @@ import { REHYDRATE } from 'redux-persist/constants';
 import util from 'src/util';
 
 const reducer = (state, action) => {
-    console.log(action.type);
     switch (action.type) {
         case REHYDRATE:
             /**
@@ -218,15 +217,7 @@ const reducer = (state, action) => {
                 zipInRange: action.supported,
             });
         case ActionTypes.RECEIVE_BEST_OFFER:
-            const bestOfferKey = action.bestOfferKey;
-
-            let nextBestOffers = Object.assign({}, state.bestOffers);
-
-            if (R.isNil(nextBestOffers[bestOfferKey])) {
-                nextBestOffers[bestOfferKey] = action.data;
-            }
-
-            return Object.assign({}, state, { bestOffers: nextBestOffers });
+            return {...state, bestOffers: {...state.bestOffers, [action.bestOfferKey]: action.data} }
         case ActionTypes.APPEND_CANCEL_TOKEN:
             return {
                 ...state,
