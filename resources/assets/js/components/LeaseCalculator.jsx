@@ -9,6 +9,7 @@ import api from 'src/api';
 import * as Actions from 'actions';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
+import { makeDealBestOfferTotalValue } from 'selectors/index';
 
 class LeaseCalculator extends React.PureComponent {
     constructor(props) {
@@ -70,7 +71,6 @@ class LeaseCalculator extends React.PureComponent {
 
     componentWillUnmount() {
         this._isMounted = false;
-        // this.props.clearBestOffer();
     }
 
     getClosestAnnualMileage(leaseRate) {
@@ -178,23 +178,14 @@ class LeaseCalculator extends React.PureComponent {
                     Your Monthly Lease Payment
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.props.availableTargets ? (
+                    {!R.isNil(this.props.dealBestOfferTotalValue) ? (
                         util.moneyFormat(
                             formulas.calculateTotalLeaseMonthlyPayment(
                                 formulas.calculateLeasedMonthlyPayments(
                                     util.getEmployeeOrSupplierPrice(
                                         this.props.deal,
                                         this.props.employeeBrand
-                                    ) -
-                                        R.sum(
-                                            [0]
-                                            /* @todo update this to pull value from api or whatever
-                                            R.map(
-                                                R.prop('value'),
-                                                this.props.selectedTargets
-                                            )
-                                            */
-                                        ),
+                                    ) - this.props.dealBestOfferTotalValue,
                                     this.state.downPayment,
                                     0,
                                     this.props.termDuration,
@@ -240,21 +231,16 @@ class LeaseCalculator extends React.PureComponent {
     }
 
     renderDueAtSigning() {
-        const totalRebates = R.sum(
-            [0]
-            // R.map(R.prop('value'), this.props.selectedTargets)
-        );
-
         return (
             <div>
                 <span className="cash-finance-lease-calculator__left-item">
                     Taxes due at signing
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.props.availableTargets ? (
+                    {!R.isNil(this.props.dealBestOfferTotalValue) ? (
                         util.moneyFormat(
                             formulas.calculateLeaseTaxesDueAtSigning(
-                                totalRebates,
+                                this.props.dealBestOfferTotalValue,
                                 this.state.downPayment,
                                 this.props.deal.doc_fee
                             )
@@ -281,23 +267,20 @@ class LeaseCalculator extends React.PureComponent {
     }
 
     renderYourTargets() {
-        return <div>
+        return (
+            <div>
                 <span className="cash-finance-lease-calculator__left-item">
                     Rebates Applied
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.props.availableTargets ? util.moneyFormat(R.sum(
-                                [0]
-                            )) : <SVGInline svg={miscicons['loading']
-                                /** @todo : replace this to somehow get info back from API best offer call
-                                R.map(
-                                    R.prop('value'),
-                                    this.props.selectedTargets
-                                )
-                                */
-                            } />}
+                    {!R.isNil(this.props.dealBestOfferTotalValue) ? (
+                        util.moneyFormat(this.props.dealBestOfferTotalValue)
+                    ) : (
+                        <SVGInline svg={miscicons['loading']} />
+                    )}
                 </span>
-            </div>;
+            </div>
+        );
     }
 
     updateFromLeaseTable(termDuration, annualMileage, downPayment) {
@@ -347,14 +330,7 @@ class LeaseCalculator extends React.PureComponent {
                             util.getEmployeeOrSupplierPrice(
                                 this.props.deal,
                                 this.props.employeeBrand
-                            ) -
-                                R.sum(
-                                    [0]
-                                    // R.map(
-                                    //     R.prop('value'),
-                                    //     this.props.selectedTargets
-                                    // )
-                                ),
+                            ) - this.props.dealBestOfferTotalValue,
                             downPayment,
                             0,
                             leaseRate.termMonths,
@@ -381,17 +357,9 @@ class LeaseCalculator extends React.PureComponent {
                     )
                 )}
                 <CustomerTypeSelect deal={this.props.deal} />
-                {/* {this.state.selectedTargets ? (
-                    <div>
-                        <hr />
-                        <h4>Available Rebates and Incentives</h4>
-                    </div>
-                ) : (
-                    ''
-                )} */}
                 <Targets
                     deal={this.props.deal}
-                    targetsChanged={handleTargetsChange}
+                    targetsChanged={this.handleTargetsChange.bind(this)}
                 />
                 <hr />
                 <h4>Summary</h4>
@@ -524,16 +492,19 @@ class LeaseCalculator extends React.PureComponent {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        zipcode: state.zipcode,
-        deal: state.selectedDeal,
-        termDuration: state.termDuration,
-        annualMileage: state.annualMileage,
-        residualPercent: state.residualPercent,
-        employeeBrand: state.employeeBrand,
-        dealBestOffer: state.dealBestOffer,
+const makeMapStateToProps = () => {
+    const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
+    const mapStateToProps = (state, props) => {
+        return {
+            zipcode: state.zipcode,
+            termDuration: state.termDuration,
+            annualMileage: state.annualMileage,
+            residualPercent: state.residualPercent,
+            employeeBrand: state.employeeBrand,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+        };
     };
-}
+    return mapStateToProps;
+};
 
-export default connect(mapStateToProps, Actions)(LeaseCalculator);
+export default connect(makeMapStateToProps, Actions)(LeaseCalculator);

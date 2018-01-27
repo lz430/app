@@ -11,17 +11,6 @@ import InfoModal from 'components/InfoModal';
 import {makeDealBestOfferTotalValue} from 'selectors/index';
 
 class DealPrice extends React.PureComponent {
-    bestOfferTotalValue() {
-        const targetKey = util.getTargetKeyForDealAndZip(this.props.deal, this.props.zipcode);
-        const selectedTargetIds = this.props.targetsSelected[targetKey]
-            ? R.map(R.prop('targetId'), this.props.targetsSelected[targetKey])
-            : [];
-        const targets = R.uniq(this.props.targetDefaults.concat(selectedTargetIds));
-        const bestOfferKey = util.getBestOfferKeyForDeal(this.props.deal, this.props.zipcode, this.props.selectedTab, targets);
-        const result = R.prop(bestOfferKey, this.props.bestOffers) ? R.prop('totalValue', R.prop(bestOfferKey, this.props.bestOffers)) : 0;
-        return result;
-    }
-
     renderPriceExplanationModal() {
         return <InfoModal deal={this.props.deal} />;
     }
@@ -35,13 +24,12 @@ class DealPrice extends React.PureComponent {
                     <div>
                         {!R.isNil(this.props.dealBestOfferTotalValue) ? (
                                 util.moneyFormat(
-                                    formulas.calculateTotalCashFinance(
+                                    formulas.calculateTotalCash(
                                         util.getEmployeeOrSupplierPrice(
                                             this.props.deal,
                                             this.props.employeeBrand
                                         ),
                                         this.props.deal.doc_fee,
-                                        this.props.downPayment,
                                         this.props.dealBestOfferTotalValue
                                     ))
                             ) : (
@@ -229,7 +217,7 @@ const makeMapStateToProps = () => {
             bestOffers: state.bestOffers,
             selectedTab: state.selectedTab,
             downPayment: state.downPayment,
-            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
         };
     }
     return mapStateToProps;

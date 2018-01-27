@@ -760,6 +760,7 @@ exports.appendCancelToken = appendCancelToken;
 exports.removeCancelToken = removeCancelToken;
 exports.clearCancelTokens = clearCancelTokens;
 exports.cancelAllBestOfferPromises = cancelAllBestOfferPromises;
+exports.getBestOffersForLoadedDeals = getBestOffersForLoadedDeals;
 
 var _api = __webpack_require__(70);
 
@@ -1460,6 +1461,16 @@ function cancelAllBestOfferPromises() {
         });
         dispatch({ type: ActionTypes.CANCEL_ALL_PROMISES });
         dispatch(clearCancelTokens());
+    };
+}
+
+function getBestOffersForLoadedDeals() {
+    return function (dispatch, getState) {
+        dispatch(cancelAllBestOfferPromises());
+        getState().deals.map(function (deal) {
+            dispatch(requestBestOffer(deal));
+        });
+        dispatch({ type: ActionTypes.REQUEST_ALL_BEST_OFFERS });
     };
 }
 
@@ -7154,6 +7165,12 @@ var formulas = {
 
         return Number(totalWithSalesTax.minus(rebatesTotal).minus(downPayment));
     },
+    calculateTotalCash: function calculateTotalCash(price, docFee, rebatesTotal) {
+        var total = new _decimal2.default(price).plus(docFee);
+        var totalWithSalesTax = total.plus(total.times(0.06));
+
+        return Number(totalWithSalesTax.minus(rebatesTotal));
+    },
     calculateTotalLease: function calculateTotalLease(price, docFee, rebatesTotal) {
         var total = price + docFee;
         var downPayment = 0;
@@ -10321,15 +10338,15 @@ var _util = __webpack_require__(26);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _CashCalculator = __webpack_require__(952);
+var _CashCalculator = __webpack_require__(954);
 
 var _CashCalculator2 = _interopRequireDefault(_CashCalculator);
 
-var _FinanceCalculator = __webpack_require__(953);
+var _FinanceCalculator = __webpack_require__(955);
 
 var _FinanceCalculator2 = _interopRequireDefault(_FinanceCalculator);
 
-var _LeaseCalculator = __webpack_require__(954);
+var _LeaseCalculator = __webpack_require__(956);
 
 var _LeaseCalculator2 = _interopRequireDefault(_LeaseCalculator);
 
@@ -10371,11 +10388,11 @@ var CashFinanceLeaseCalculator = function (_React$PureComponent) {
         value: function renderSelectedTab() {
             switch (this.props.selectedTab) {
                 case 'cash':
-                    return _react2.default.createElement(_CashCalculator2.default, null);
+                    return _react2.default.createElement(_CashCalculator2.default, { deal: this.props.selectedDeal });
                 case 'finance':
-                    return _react2.default.createElement(_FinanceCalculator2.default, null);
+                    return _react2.default.createElement(_FinanceCalculator2.default, { deal: this.props.selectedDeal });
                 case 'lease':
-                    return _react2.default.createElement(_LeaseCalculator2.default, null);
+                    return _react2.default.createElement(_LeaseCalculator2.default, { deal: this.props.selectedDeal });
             }
         }
     }, {
@@ -10516,7 +10533,8 @@ var CashFinanceLeaseCalculator = function (_React$PureComponent) {
 function mapStateToProps(state) {
     return {
         zipcode: state.zipcode,
-        selectedTab: state.selectedTab
+        selectedTab: state.selectedTab,
+        selectedDeal: state.selectedDeal
     };
 }
 
@@ -22576,6 +22594,7 @@ var APPEND_CANCEL_TOKEN = exports.APPEND_CANCEL_TOKEN = 'APPEND_CANCEL_TOKEN';
 var REMOVE_CANCEL_TOKEN = exports.REMOVE_CANCEL_TOKEN = 'REMOVE_CANCEL_TOKEN';
 var CLEAR_CANCEL_TOKENS = exports.CLEAR_CANCEL_TOKENS = 'CLEAR_CANCEL_TOKENS';
 var CANCEL_ALL_PROMISES = exports.CANCEL_ALL_PROMISES = 'CANCEL_ALL_PROMISES';
+var REQUEST_ALL_BEST_OFFERS = exports.REQUEST_ALL_BEST_OFFERS = 'REQUEST_ALL_BEST_OFFERS';
 
 /***/ }),
 /* 365 */
@@ -23130,7 +23149,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(CompareBar)
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(101);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__defaults_asyncLocalStorage__ = __webpack_require__(370);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__purgeStoredState__ = __webpack_require__(372);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_json_stringify_safe__ = __webpack_require__(961);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_json_stringify_safe__ = __webpack_require__(963);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_json_stringify_safe___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_json_stringify_safe__);
 
 
@@ -23673,7 +23692,7 @@ exports.default = purchase;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(376);
-module.exports = __webpack_require__(980);
+module.exports = __webpack_require__(982);
 
 
 /***/ }),
@@ -23697,29 +23716,29 @@ var _FilterPage = __webpack_require__(699);
 
 var _FilterPage2 = _interopRequireDefault(_FilterPage);
 
-var _Financing = __webpack_require__(955);
+var _Financing = __webpack_require__(957);
 
 var _Financing2 = _interopRequireDefault(_Financing);
 
 var _reactRedux = __webpack_require__(16);
 
-var _configureStore = __webpack_require__(956);
+var _configureStore = __webpack_require__(958);
 
 var _configureStore2 = _interopRequireDefault(_configureStore);
 
-var _DealDetails = __webpack_require__(965);
+var _DealDetails = __webpack_require__(967);
 
 var _DealDetails2 = _interopRequireDefault(_DealDetails);
 
-var _ComparePage = __webpack_require__(971);
+var _ComparePage = __webpack_require__(973);
 
 var _ComparePage2 = _interopRequireDefault(_ComparePage);
 
-var _ConfirmDetails = __webpack_require__(977);
+var _ConfirmDetails = __webpack_require__(979);
 
 var _ConfirmDetails2 = _interopRequireDefault(_ConfirmDetails);
 
-var _ThankYouPage = __webpack_require__(979);
+var _ThankYouPage = __webpack_require__(981);
 
 var _ThankYouPage2 = _interopRequireDefault(_ThankYouPage);
 
@@ -42110,11 +42129,11 @@ var _Deals = __webpack_require__(932);
 
 var _Deals2 = _interopRequireDefault(_Deals);
 
-var _Sortbar = __webpack_require__(940);
+var _Sortbar = __webpack_require__(942);
 
 var _Sortbar2 = _interopRequireDefault(_Sortbar);
 
-var _Filterbar = __webpack_require__(941);
+var _Filterbar = __webpack_require__(943);
 
 var _Filterbar2 = _interopRequireDefault(_Filterbar);
 
@@ -42122,7 +42141,7 @@ var _CompareBar = __webpack_require__(368);
 
 var _CompareBar2 = _interopRequireDefault(_CompareBar);
 
-var _FilterPanel = __webpack_require__(942);
+var _FilterPanel = __webpack_require__(944);
 
 var _FilterPanel2 = _interopRequireDefault(_FilterPanel);
 
@@ -52681,6 +52700,8 @@ var _InfoModal = __webpack_require__(938);
 
 var _InfoModal2 = _interopRequireDefault(_InfoModal);
 
+var _index2 = __webpack_require__(940);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -52703,16 +52724,6 @@ var DealPrice = function (_React$PureComponent) {
     }
 
     _createClass(DealPrice, [{
-        key: 'bestOfferTotalValue',
-        value: function bestOfferTotalValue() {
-            var targetKey = _util2.default.getTargetKeyForDealAndZip(this.props.deal, this.props.zipcode);
-            var selectedTargetIds = this.props.targetsSelected[targetKey] ? _ramda2.default.map(_ramda2.default.prop('targetId'), this.props.targetsSelected[targetKey]) : [];
-            var targets = _ramda2.default.uniq(this.props.targetDefaults.concat(selectedTargetIds));
-            var bestOfferKey = _util2.default.getBestOfferKeyForDeal(this.props.deal, this.props.zipcode, this.props.selectedTab, targets);
-            var result = _ramda2.default.prop(bestOfferKey, this.props.bestOffers) ? _ramda2.default.prop('totalValue', _ramda2.default.prop(bestOfferKey, this.props.bestOffers)) : 0;
-            return result;
-        }
-    }, {
         key: 'renderPriceExplanationModal',
         value: function renderPriceExplanationModal() {
             return _react2.default.createElement(_InfoModal2.default, { deal: this.props.deal });
@@ -52720,7 +52731,6 @@ var DealPrice = function (_React$PureComponent) {
     }, {
         key: 'renderCashPrice',
         value: function renderCashPrice() {
-            var bestOfferTotalValue = this.bestOfferTotalValue();
             return _react2.default.createElement(
                 'div',
                 { className: 'deal-price__price' },
@@ -52735,7 +52745,7 @@ var DealPrice = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         null,
-                        !_ramda2.default.isNil(bestOfferTotalValue) ? _util2.default.moneyFormat(_formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, bestOfferTotalValue)) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                        !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue)) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                     ),
                     this.renderPriceExplanationModal()
                 ),
@@ -52756,7 +52766,6 @@ var DealPrice = function (_React$PureComponent) {
     }, {
         key: 'renderFinancePrice',
         value: function renderFinancePrice() {
-            var bestOfferTotalValue = this.bestOfferTotalValue();
             return _react2.default.createElement(
                 'div',
                 { className: 'deal-price__price' },
@@ -52768,10 +52777,10 @@ var DealPrice = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__finance-lease-price' },
-                    !_ramda2.default.isNil(bestOfferTotalValue) ? _react2.default.createElement(
+                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _react2.default.createElement(
                         'div',
                         null,
-                        _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - bestOfferTotalValue, this.props.downPayment, this.props.termDuration)))
+                        _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration)))
                     ) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }),
                     this.renderPriceExplanationModal()
                 ),
@@ -52781,7 +52790,6 @@ var DealPrice = function (_React$PureComponent) {
     }, {
         key: 'renderLeasePrice',
         value: function renderLeasePrice() {
-            var bestOfferTotalValue = this.bestOfferTotalValue();
             return _react2.default.createElement(
                 'div',
                 { className: 'deal-price__price' },
@@ -52796,7 +52804,7 @@ var DealPrice = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         null,
-                        _util2.default.moneyFormat(Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - bestOfferTotalValue, 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31))))
+                        _util2.default.moneyFormat(Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31))))
                     ),
                     this.renderPriceExplanationModal()
                 ),
@@ -52905,11 +52913,32 @@ var mapStateToProps = function mapStateToProps(state) {
     }, _defineProperty(_ref, 'bestOffers', state.bestOffers), _defineProperty(_ref, 'selectedTab', state.selectedTab), _defineProperty(_ref, 'downPayment', state.downPayment), _ref;
 };
 
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealBestOfferTotalValue = (0, _index2.makeDealBestOfferTotalValue)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        var _ref2;
+
+        return _ref2 = {
+            employeeBrand: state.employeeBrand,
+            downPayment: state.downPayment,
+            termDuration: state.termDuration,
+            residualPercent: state.residualPercent,
+            selectedTab: state.selectedTab,
+            dealTargets: state.dealTargets,
+            bestOffers: state.bestOffers,
+            zipcode: state.zipcode,
+            targetsSelected: state.targetsSelected,
+            targetDefaults: state.targetDefaults
+        }, _defineProperty(_ref2, 'bestOffers', state.bestOffers), _defineProperty(_ref2, 'selectedTab', state.selectedTab), _defineProperty(_ref2, 'downPayment', state.downPayment), _defineProperty(_ref2, 'dealBestOfferTotalValue', getDealBestOfferTotalValue(state, props)), _ref2;
+    };
+    return mapStateToProps;
+};
+
 DealPrice.PropTypes = {
     deal: _propTypes2.default.object.isRequired
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(DealPrice);
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(DealPrice);
 
 /***/ }),
 /* 937 */
@@ -57888,11 +57917,11 @@ var _strings = __webpack_require__(87);
 
 var _strings2 = _interopRequireDefault(_strings);
 
+var _index2 = __webpack_require__(940);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -57903,109 +57932,43 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var InfoModalData = function (_React$PureComponent) {
     _inherits(InfoModalData, _React$PureComponent);
 
-    function InfoModalData(props) {
+    function InfoModalData() {
         _classCallCheck(this, InfoModalData);
 
-        var _this = _possibleConstructorReturn(this, (InfoModalData.__proto__ || Object.getPrototypeOf(InfoModalData)).call(this, props));
-
-        _this.state = {};
-        return _this;
+        return _possibleConstructorReturn(this, (InfoModalData.__proto__ || Object.getPrototypeOf(InfoModalData)).apply(this, arguments));
     }
 
     _createClass(InfoModalData, [{
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            this._isMounted = false;
-        }
-    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            this._isMounted = true;
-
-            if (this.targetsAreNotLoaded()) {
-                this.requestTargets();
-            } else {
-                this.componentWillReceiveProps(this.props);
-            }
-
+            this.props.requestTargets(this.props.deal);
             this.props.requestBestOffer(this.props.deal);
         }
     }, {
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            // this.props.clearBestOffer();
-        }
-    }, {
-        key: 'targetsAreNotLoaded',
-        value: function targetsAreNotLoaded() {
-            return !this.props.dealTargets.hasOwnProperty(this.props.deal.id) && this.props.zipcode;
-        }
-    }, {
-        key: 'requestTargets',
-        value: function requestTargets() {
-            this.props.requestTargets(this.props.deal);
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(props) {
-            // if (!props.dealTargets.hasOwnProperty(props.deal.id)) {
-            //     return this.requestTargets();
-            // }
-
-            // this.setState({
-            //     availableTargets: props.dealTargets[props.deal.id] || [],
-            //     selectedTargets: rebates.getSelectedTargetsForDeal(
-            //         props.dealTargets,
-            //         props.selectedTargets,
-            //         props.deal
-            //     ),
-            //     dealBestOffer: props.dealBestOffer,
-            // });
-        }
-    }, {
-        key: 'displayFinalPrice',
-        value: function displayFinalPrice() {
-            var selectedAmount = this.props.dealBestOffer ? this.props.dealBestOffer.totalValue : 0;
-
+        key: 'finalPrice',
+        value: function finalPrice() {
             switch (this.props.selectedTab) {
                 case 'cash':
-                    return this.props.deal.supplier_price - selectedAmount;
+                    return _formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue);
                 case 'finance':
                     {
-                        return Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee), this.props.downPayment, this.props.termDuration));
+                        return Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration));
                     }
                 case 'lease':
                     {
-                        return Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - selectedAmount, 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31)));
+                        return Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31)));
                     }
             }
         }
     }, {
-        key: 'showAppliedRebates',
-        value: function showAppliedRebates() {
-            // const selectedAmount = R.sum(
-            //     R.map(R.prop('value'), this.props.selectedTargets)
-            // );
-
-            var selectedAmount = 9999; // @todo update to pull from api or whatever
-
-            this.setState({
-                selectedRebateAmount: selectedAmount
-            });
+        key: 'handleGetRebatesLink',
+        value: function handleGetRebatesLink() {
+            this.props.selectDeal(this.props.deal);
+            this.props.closeModal();
         }
     }, {
         key: 'renderAppliedRebatesLink',
         value: function renderAppliedRebatesLink() {
-            var _this2 = this;
-
-            if (!this.state.availableTargets) {
-                return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
-            }
-
-            var selectedAmount = _ramda2.default.sum([0]
-            // R.map(R.prop('value'), this.state.selectedTargets)
-            );
-
             return _react2.default.createElement(
                 'div',
                 null,
@@ -58020,28 +57983,9 @@ var InfoModalData = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         null,
-                        '' + _util2.default.moneyFormat(this.state.dealBestOffer.totalValue)
+                        _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                     )
                 ),
-                this.state.dealBestOffer.programs.map(function (program, index) {
-                    return _react2.default.createElement(
-                        'div',
-                        {
-                            className: 'info-modal-data__rebate-info info-modal-data__costs',
-                            key: index
-                        },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'info-modal-data__rebate-info__title' },
-                            _strings2.default.toTitleCase(program.title)
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            null,
-                            '' + _util2.default.moneyFormat(program.value)
-                        )
-                    );
-                }),
                 _react2.default.createElement(
                     'div',
                     { className: 'info-modal-data__more-rebates info-modal-data__costs' },
@@ -58050,11 +57994,7 @@ var InfoModalData = function (_React$PureComponent) {
                         null,
                         _react2.default.createElement(
                             'a',
-                            { onClick: function onClick() {
-                                    _this2.props.selectDeal(_this2.props.deal);
-
-                                    _this2.props.closeModal();
-                                }, href: '#' },
+                            { onClick: this.handleGetRebatesLink.bind(this), href: '#' },
                             'Get Rebates'
                         )
                     )
@@ -58090,7 +58030,8 @@ var InfoModalData = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'option',
                                 null,
-                                defaultTermLength
+                                this.props.termDuration,
+                                ' months'
                             )
                         )
                     ),
@@ -58105,7 +58046,7 @@ var InfoModalData = function (_React$PureComponent) {
                         _react2.default.createElement('input', {
                             className: 'info-modal-data__input',
                             disabled: true,
-                            placeholder: _util2.default.moneyFormat(this.props.deal.supplier_price * financeDownPaymentAmount)
+                            placeholder: _util2.default.moneyFormat(this.props.downPayment)
                         })
                     )
                 );
@@ -58244,7 +58185,7 @@ var InfoModalData = function (_React$PureComponent) {
                                 )
                             ),
                             this.props.selectedTab === 'cash' ? '' : this.renderPaymentDefaults(),
-                            this.state.dealBestOffer ? this.renderAppliedRebatesLink() : 'Loading Applied Rebates...'
+                            this.props.dealBestOfferTotalValue ? this.renderAppliedRebatesLink() : 'Loading Applied Rebates...'
                         ),
                         _react2.default.createElement('hr', null),
                         _react2.default.createElement(
@@ -58258,7 +58199,7 @@ var InfoModalData = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'div',
                                 null,
-                                _util2.default.moneyFormat(this.displayFinalPrice()) + '\n                                ' + (this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? ' /month' : '')
+                                _util2.default.moneyFormat(this.finalPrice()) + '\n                                ' + (this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? ' /month' : '')
                             )
                         ),
                         _react2.default.createElement(
@@ -58291,26 +58232,287 @@ InfoModalData.propTypes = {
     closeModal: _propTypes2.default.func.isRequired
 };
 
-var mapStateToProps = function mapStateToProps(state) {
-    var _ref;
-
-    return _ref = {
-        compareList: state.compareList,
-        selectedTab: state.selectedTab,
-        downPayment: state.downPayment,
-        dealTargets: state.dealTargets,
-        selectedTargets: state.selectedTargets,
-        termDuration: state.termDuration,
-        selectedDeal: state.selectedDeal,
-        isEmployee: state.isEmployee,
-        residualPercent: state.residualPercent
-    }, _defineProperty(_ref, 'selectedTargets', state.selectedTargets), _defineProperty(_ref, 'dealBestOffer', state.dealBestOffer), _ref;
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealBestOfferTotalValue = (0, _index2.makeDealBestOfferTotalValue)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        return {
+            downPayment: state.downPayment,
+            employeeBrand: state.employeeBrand,
+            residualPercent: state.residualPercent,
+            selectedTab: state.selectedTab,
+            selectedDeal: state.selectedDeal,
+            termDuration: state.termDuration,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+        };
+    };
+    return mapStateToProps;
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(InfoModalData);
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(InfoModalData);
 
 /***/ }),
 /* 940 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getSelectedTargetsKeyForSelectedDeal = exports.makeDealBestOfferTotalValue = exports.makeDealBestOffer = exports.makeDealBestOfferKey = exports.makeDealTargetsSelected = exports.makeDealTargetsAvailable = exports.makeDealTargetKey = undefined;
+
+var _reselect = __webpack_require__(941);
+
+var _index = __webpack_require__(13);
+
+var _ramda = __webpack_require__(12);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var selectedDeal = function selectedDeal(state) {
+    return state.selectedDeal;
+};
+var zipcode = function zipcode(state) {
+    return state.zipcode;
+};
+var deal = function deal(state, props) {
+    return props.deal;
+};
+var targetsAvailable = function targetsAvailable(state) {
+    return state.targetsAvailable;
+};
+var targetsSelected = function targetsSelected(state) {
+    return state.targetsSelected;
+};
+var bestOffers = function bestOffers(state) {
+    return state.bestOffers;
+};
+var paymentType = function paymentType(state) {
+    return state.selectedTab;
+};
+var targetDefaults = function targetDefaults(state) {
+    return state.targetDefaults;
+};
+
+// Generate the target key for a specific deal
+var dealTargetKey = (0, _reselect.createSelector)([deal, zipcode], function (deal, zipcode) {
+    if (!deal) {
+        return null;
+    }
+    var year = deal.year;
+    var make = deal.make;
+    var model = deal.model;
+    var series = deal.series;
+    return zipcode + '-' + year + '-' + make + '-' + model + '-' + series;
+});
+
+var makeDealTargetKey = exports.makeDealTargetKey = function makeDealTargetKey() {
+    return dealTargetKey;
+};
+
+// Show me all available targets for a specific deal
+var dealTargetsAvailable = (0, _reselect.createSelector)([dealTargetKey, targetsAvailable], function (dealTargetKey, targetsAvailable) {
+    return _ramda2.default.prop(dealTargetKey, targetsAvailable) || [];
+});
+
+var makeDealTargetsAvailable = exports.makeDealTargetsAvailable = function makeDealTargetsAvailable() {
+    return dealTargetsAvailable;
+};
+
+// Show me all selected targets for a specific deal
+var dealTargetsSelected = (0, _reselect.createSelector)([dealTargetKey, targetsSelected], function (dealTargetKey, targetsSelected) {
+    return _ramda2.default.prop(dealTargetKey, targetsSelected) || [];
+});
+
+var makeDealTargetsSelected = exports.makeDealTargetsSelected = function makeDealTargetsSelected() {
+    return dealTargetsSelected;
+};
+
+// Generate a string of unique target ids joined by '-'
+// This will be used to cache best offers on the front-end
+var selectedTargetsString = (0, _reselect.createSelector)([dealTargetsSelected, targetDefaults], function (dealTargetsSelected, targetDefaults) {
+    var selectedTargetIds = _ramda2.default.map(_ramda2.default.prop('targetId'), dealTargetsSelected) || [];
+    var uniqueSelectedTargetIds = _ramda2.default.uniq(_ramda2.default.concat(targetDefaults, selectedTargetIds));
+    return _ramda2.default.sort(function (a, b) {
+        return a - b;
+    }, uniqueSelectedTargetIds).join('-');
+});
+
+// Generate the best offer key for a specific deal
+var dealBestOfferKey = (0, _reselect.createSelector)([deal, zipcode, paymentType, selectedTargetsString], function (deal, zipcode, paymentType, selectedTargetsString) {
+    return deal.id + '-' + zipcode + '-' + paymentType + '-' + selectedTargetsString;
+});
+
+var makeDealBestOfferKey = exports.makeDealBestOfferKey = function makeDealBestOfferKey() {
+    return dealBestOfferKey;
+};
+
+// Show me the best offer for a specific deal or default to no best offer
+var dealBestOffer = (0, _reselect.createSelector)([bestOffers, dealBestOfferKey], function (bestOffers, dealBestOfferKey) {
+    return _ramda2.default.prop(dealBestOfferKey, bestOffers) || { totalValue: 0, programs: [] };
+});
+
+var makeDealBestOffer = exports.makeDealBestOffer = function makeDealBestOffer() {
+    return dealBestOffer;
+};
+
+// Get the total value of the best offer for the deal
+var dealBestOfferTotalValue = (0, _reselect.createSelector)([dealBestOffer], function (dealBestOffer) {
+    return _ramda2.default.prop('totalValue', dealBestOffer);
+});
+
+var makeDealBestOfferTotalValue = exports.makeDealBestOfferTotalValue = function makeDealBestOfferTotalValue() {
+    return dealBestOfferTotalValue;
+};
+
+// Generate the target key for globally the selected deal
+var getSelectedTargetsKeyForSelectedDeal = exports.getSelectedTargetsKeyForSelectedDeal = (0, _reselect.createSelector)([selectedDeal, zipcode], function (selectedDeal, zipcode) {
+    if (!selectedDeal) {
+        return null;
+    }
+    var year = selectedDeal.year;
+    var make = selectedDeal.make;
+    var model = selectedDeal.model;
+    var series = selectedDeal.series;
+    return zipcode + '-' + year + '-' + make + '-' + model + '-' + series;
+});
+
+/***/ }),
+/* 941 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.defaultMemoize = defaultMemoize;
+exports.createSelectorCreator = createSelectorCreator;
+exports.createStructuredSelector = createStructuredSelector;
+function defaultEqualityCheck(a, b) {
+  return a === b;
+}
+
+function areArgumentsShallowlyEqual(equalityCheck, prev, next) {
+  if (prev === null || next === null || prev.length !== next.length) {
+    return false;
+  }
+
+  // Do this in a for loop (and not a `forEach` or an `every`) so we can determine equality as fast as possible.
+  var length = prev.length;
+  for (var i = 0; i < length; i++) {
+    if (!equalityCheck(prev[i], next[i])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function defaultMemoize(func) {
+  var equalityCheck = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultEqualityCheck;
+
+  var lastArgs = null;
+  var lastResult = null;
+  // we reference arguments instead of spreading them for performance reasons
+  return function () {
+    if (!areArgumentsShallowlyEqual(equalityCheck, lastArgs, arguments)) {
+      // apply arguments instead of spreading for performance.
+      lastResult = func.apply(null, arguments);
+    }
+
+    lastArgs = arguments;
+    return lastResult;
+  };
+}
+
+function getDependencies(funcs) {
+  var dependencies = Array.isArray(funcs[0]) ? funcs[0] : funcs;
+
+  if (!dependencies.every(function (dep) {
+    return typeof dep === 'function';
+  })) {
+    var dependencyTypes = dependencies.map(function (dep) {
+      return typeof dep;
+    }).join(', ');
+    throw new Error('Selector creators expect all input-selectors to be functions, ' + ('instead received the following types: [' + dependencyTypes + ']'));
+  }
+
+  return dependencies;
+}
+
+function createSelectorCreator(memoize) {
+  for (var _len = arguments.length, memoizeOptions = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    memoizeOptions[_key - 1] = arguments[_key];
+  }
+
+  return function () {
+    for (var _len2 = arguments.length, funcs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      funcs[_key2] = arguments[_key2];
+    }
+
+    var recomputations = 0;
+    var resultFunc = funcs.pop();
+    var dependencies = getDependencies(funcs);
+
+    var memoizedResultFunc = memoize.apply(undefined, [function () {
+      recomputations++;
+      // apply arguments instead of spreading for performance.
+      return resultFunc.apply(null, arguments);
+    }].concat(memoizeOptions));
+
+    // If a selector is called with the exact same arguments we don't need to traverse our dependencies again.
+    var selector = defaultMemoize(function () {
+      var params = [];
+      var length = dependencies.length;
+
+      for (var i = 0; i < length; i++) {
+        // apply arguments instead of spreading and mutate a local list of params for performance.
+        params.push(dependencies[i].apply(null, arguments));
+      }
+
+      // apply arguments instead of spreading for performance.
+      return memoizedResultFunc.apply(null, params);
+    });
+
+    selector.resultFunc = resultFunc;
+    selector.recomputations = function () {
+      return recomputations;
+    };
+    selector.resetRecomputations = function () {
+      return recomputations = 0;
+    };
+    return selector;
+  };
+}
+
+var createSelector = exports.createSelector = createSelectorCreator(defaultMemoize);
+
+function createStructuredSelector(selectors) {
+  var selectorCreator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : createSelector;
+
+  if (typeof selectors !== 'object') {
+    throw new Error('createStructuredSelector expects first argument to be an object ' + ('where each property is a selector, instead received a ' + typeof selectors));
+  }
+  var objectKeys = Object.keys(selectors);
+  return selectorCreator(objectKeys.map(function (key) {
+    return selectors[key];
+  }), function () {
+    for (var _len3 = arguments.length, values = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      values[_key3] = arguments[_key3];
+    }
+
+    return values.reduce(function (composition, value, index) {
+      composition[objectKeys[index]] = value;
+      return composition;
+    }, {});
+  });
+}
+
+/***/ }),
+/* 942 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58520,7 +58722,7 @@ function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(Sortbar);
 
 /***/ }),
-/* 941 */
+/* 943 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58771,7 +58973,7 @@ function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(Filterbar);
 
 /***/ }),
-/* 942 */
+/* 944 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58787,35 +58989,35 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _SidebarFilter = __webpack_require__(943);
+var _SidebarFilter = __webpack_require__(945);
 
 var _SidebarFilter2 = _interopRequireDefault(_SidebarFilter);
 
-var _ZipcodeFinder = __webpack_require__(944);
+var _ZipcodeFinder = __webpack_require__(946);
 
 var _ZipcodeFinder2 = _interopRequireDefault(_ZipcodeFinder);
 
-var _FilterStyleSelector = __webpack_require__(945);
+var _FilterStyleSelector = __webpack_require__(947);
 
 var _FilterStyleSelector2 = _interopRequireDefault(_FilterStyleSelector);
 
-var _FilterMakeSelector = __webpack_require__(947);
+var _FilterMakeSelector = __webpack_require__(949);
 
 var _FilterMakeSelector2 = _interopRequireDefault(_FilterMakeSelector);
 
-var _FilterFuelTypeSelector = __webpack_require__(948);
+var _FilterFuelTypeSelector = __webpack_require__(950);
 
 var _FilterFuelTypeSelector2 = _interopRequireDefault(_FilterFuelTypeSelector);
 
-var _FilterFeatureSelector = __webpack_require__(949);
+var _FilterFeatureSelector = __webpack_require__(951);
 
 var _FilterFeatureSelector2 = _interopRequireDefault(_FilterFeatureSelector);
 
-var _FilterTransmissionTypeSelector = __webpack_require__(950);
+var _FilterTransmissionTypeSelector = __webpack_require__(952);
 
 var _FilterTransmissionTypeSelector2 = _interopRequireDefault(_FilterTransmissionTypeSelector);
 
-var _FilterSegmentSelector = __webpack_require__(951);
+var _FilterSegmentSelector = __webpack_require__(953);
 
 var _FilterSegmentSelector2 = _interopRequireDefault(_FilterSegmentSelector);
 
@@ -59011,7 +59213,7 @@ var mapStateToProps = function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(FilterPanel);
 
 /***/ }),
-/* 943 */
+/* 945 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -59097,7 +59299,7 @@ SidebarFilter.propTypes = {
 exports.default = SidebarFilter;
 
 /***/ }),
-/* 944 */
+/* 946 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -59271,7 +59473,7 @@ var mapStateToProps = function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(ZipcodeFinder);
 
 /***/ }),
-/* 945 */
+/* 947 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -59299,7 +59501,7 @@ var _reactSvgInline = __webpack_require__(14);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
-var _bodyStyles = __webpack_require__(946);
+var _bodyStyles = __webpack_require__(948);
 
 var _bodyStyles2 = _interopRequireDefault(_bodyStyles);
 
@@ -59382,7 +59584,7 @@ FilterStyleSelector.propTypes = {
 exports.default = FilterStyleSelector;
 
 /***/ }),
-/* 946 */
+/* 948 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -59394,7 +59596,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = { "convertible": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 136 50\"><path fill=\"#000000\" d=\"M134 24l1 2v4h-7l-4-4v-2h10zm-9 1v.59l3.41 3.41H134v-2.76l-.62-1.24H125zm5 8h6v4h-6v-4zm1 1v2h4v-2h-4zm-26.83-19.91a93.21 93.21 0 0 1 3.95.4c3.78.45 7.57 1.08 11.1 1.91C129.69 18.85 136 22.5 136 28v15h-14.09a12 12 0 0 1-21.82 0H40.9a12 12 0 0 1-21.82 0H6.59L0 36.41V27.6l3-3V12h4.9L28.05 10l.23.05L29 5h4l3.74 6.73L48 13.98 51 6h4v8h26l1-1 2 1h6L74 6h-4V0h6l28.17 14.09zM55 15.99V16h-7v-.02h-.2l-19.85-3.97L8 14H5v5h7v2l-4 4H5v.41l-3 3v7.18L7.41 41h10.97A12.02 12.02 0 0 1 30 26a12 12 0 0 1 11.62 15h57.76A12.02 12.02 0 0 1 111 26a12 12 0 0 1 11.62 15H134V28c0-4.13-5.68-7.41-15.23-9.65a100.85 100.85 0 0 0-14.48-2.25L103 16H87.99 88v3h-6l-3-3-24-.02zm3 4.51V22h-1v-1h-6v-1h7v.5zM49 36h39v1H48v-4h1v3zM30 48a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm0-5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm81 9a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm0-5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM5 24h2.59L11 20.59V20H5v4zm75.41-8l2 2H87v-1.38l-4.8-2.4L80.4 16zM53 14V8h-.61l-2.25 6H53zM31.82 7h-1.09l-.48 3.41 3.9.78L31.82 7zm43.7-5H72v2h2.47l18 9h5.06l-22-11z\"/></svg>", "coupe": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 131 47\"><path fill=\"#000000\" fill-rule=\"evenodd\" d=\"M5 15h7v2l-4 4H5v1.41l-3 3v7.18L7.41 38h7.97A12.02 12.02 0 0 1 27 23a12 12 0 0 1 11.62 15h58.76A12.02 12.02 0 0 1 109 23a12 12 0 0 1 11.62 15H129v-4h-5v-4h5v-3h-5l-4-4v-2h5.98c-2.26-1.9-5.74-3.36-10.2-4.4A71.47 71.47 0 0 0 102.3 15h-9.55l-26-13H35.24l-22 11H5v2zm11.09 25h-9.5L0 33.41V24.6l3-3V11h9.76l22-11h32.48l26 13H102a53.98 53.98 0 0 1 4.45.2c3.33.26 6.66.73 9.78 1.45C125.38 16.78 131 20.7 131 27v13h-11.09a12 12 0 0 1-21.82 0H37.9a12 12 0 0 1-21.82 0zm110.93-18H121v.59l3.41 3.41h4.52a7.37 7.37 0 0 0-1.91-4zM47 33h39v1H46v-4h1v3zm8-14.5V20h-1v-1h-6v-1h7v.5zM29 11l14-7h24l14 7-4 4H33l-4-4zm4.41 3H76.6l2.72-2.73L66.76 5H43.24l-12.55 6.27L33.4 14zM125 33h4v-2h-4v2zM27 45a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm82 0a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm-82-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm82 1a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm-82-5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm82 1a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM5 20h2.59L11 16.59V16H5v4zm78-8l6 3v3h-6l-3-3 3-3zm-1.59 3l2 2H88v-1.38l-4.8-2.4L81.4 15z\"/></svg>", "hatchback": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 122 48\"><path fill=\"#000000\" d=\"M17.41 7H22l-8 8H7.8L6 16.47V18h4v2l-4 4v.41l-4 4v6.18L6.41 39h1.97A12.02 12.02 0 0 1 20 24a12 12 0 0 1 11.62 15h53.76A12.02 12.02 0 0 1 97 24a12 12 0 0 1 11.62 15H120v-3h-7v-4h7v-3h-6l-4-4v-2h6.33c-1.99-1.43-4.73-2.65-8.12-3.67a62.92 62.92 0 0 0-11.25-2.23L96 17h-3.24l-30-15H26c-1 0-2.15.08-3.4.24A70.77 70.77 0 0 0 15 3.76v.83L17.41 7zM31 40.8a12 12 0 0 1-21.91.2h-3.5L0 35.41V27.6l4-4v-8.06l10.51-8.6L13 5.4V2.25l.73-.21a28.53 28.53 0 0 1 1.2-.32c.93-.24 1.94-.48 2.99-.7C19.45.7 20.94.44 22.34.26A29.4 29.4 0 0 1 26 0h37.24l30 15h2.84a51.64 51.64 0 0 1 3.98.5c2.97.45 5.94 1.08 8.73 1.92C116.99 19.88 122 23.59 122 29v12h-14v-.2a12 12 0 0 1-21.91.2H31v-.2zm18-20.3V22h-1v-1h-6v-1h7v.5zM38 34h27v1H37v-4h1v3zM20 46a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm0-5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm77 9a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm0-5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM77 12l6 3v3h-6l-3-3 3-3zm-1.59 3l2 2H82v-1.38l-4.8-2.4L75.4 15zM5 23h.59L9 19.59V19H5v4zm109 10v2h6v-2h-6zm-3-9v.59l3.41 3.41H120v-.76L118.38 24H111zm-92-9L30 4h31l14 7-4 4H19zm8-1h43.59l2.72-2.73L60.76 5H30.41l-9 9H27zM16.35 8l-7.5 6h4.74l6-6h-3.24z\"/></svg>", "minivan": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 130 54\"><path fill=\"#000000\" d=\"M32.4 48a12 12 0 0 1-20.8 0H6.6L0 41.41V29.6l3-3V16h2.32L9 6.8V4.36l.6-.26a34.3 34.3 0 0 1 1.5-.64 76.9 76.9 0 0 1 3.7-1.4c1.23-.42 2.42-.8 3.56-1.11C20.57.34 22.47 0 24 0h48.24l36 18 .7.03a41.9 41.9 0 0 1 9.86 1.64C125.73 21.82 130 25.78 130 32v16h-16.6a12 12 0 0 1-20.8 0H32.4zm.92-2h58.36a12 12 0 1 1 22.63 0H128v-4h-7v-4h7v-6c0-.34-.02-.67-.05-1H118l-4-4v-2h10.82a17.98 17.98 0 0 0-6.62-3.42 36.7 36.7 0 0 0-9.34-1.56l-1.1-.02-36-18H24c-1.31 0-3.06.3-5.1.87-1.1.3-2.25.66-3.45 1.07A74.92 74.92 0 0 0 11 5.66v1.53L6.68 18H5v2h7v4l-4 4H4.41L2 30.41V40.6L7.41 46h3.27a12 12 0 1 1 22.63 0zm60.68.36a10 10 0 1 0-.17-.36H94v.36zM31.17 46a10 10 0 1 0-.17.36V46h.17zM78 20H24l-10-4 7-12h49l32 16H86v2h-6l-2-2zm-1-1l3-3 6 3h11.76l-28-14H21.57l-6.12 10.5 8.74 3.5H31v-8h1v8h29v-8h1v8h15zM40 40h39v1H39v-4h1v3zm63 10a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm0-5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-81 7a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm0-5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm46-17h-1v-1h-6v-1h7v2zm-30-1h-1v-1h-6v-1h7v2zm40.41-6l2 2H85v-1.38l-4.8-2.4L78.4 19zm47.4 7H115v.59l3.41 3.41h9.4a8.69 8.69 0 0 0-2-4zM122 39v2h6v-2h-6zM5 27h2.59L11 23.59V21H5v6z\"/></svg>", "pickup": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 138 50\"><path fill=\"#000000\" d=\"M103 36v5H42v-5a14 14 0 1 0-28 0v5H9.75L.98 36.62v-9.03l3-3v-8l2.36-2.36h40.4l4-14L88.37.3c5.75 2.2 11.82 6.91 18.25 14.1 19.81.1 29.39 1.86 29.39 6.21v8.94h2v8.86L135.41 41H131v-5a14 14 0 0 0-28 0zM5.4 26l-2.42 2.41v6.97L10.22 39H12v-3a16 16 0 1 1 32 0v3h57v-3a16 16 0 1 1 32 0v3h1.59l1.41-1.41v-6.04h-2V20.61c0-2.43-9.5-4.15-27.84-4.22h-.45l-.3-.34C99.14 8.98 93.26 4.37 87.81 2.23H52.25l-4 14H7.17L5.98 17.4V18H13v4l-4 4H5.4zM83 19v2h-1v-1h-6v-1h7zm-23 0v2h-1v-1h-6v-1h7zM48 35h51v1H47v-4h1v3zm54-18v1h-6l-1-1H52l4-13h32c10 5 16 13 16 13h-2zm-8-1l-1-1 3-3 3.96 1.98a51.24 51.24 0 0 0-5.32-4.65A45.35 45.35 0 0 0 87.76 5H56.74l-3.39 11H94zM28 50a12 12 0 1 1 0-24 12 12 0 0 1 0 24zm0-2a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm0-5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm89 11a12 12 0 1 1 0-24 12 12 0 0 1 0 24zm0-2a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm0-5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM94.41 15l2 2H101v-1.38l-4.8-2.4L94.4 15zM6 25h2.59L12 21.59V19H6v6z\"/></svg>", "sedan": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 140 49\"><path fill=\"#000000\" fill-rule=\"evenodd\" d=\"M5 17h7v2l-4 4H5v1.41l-3 3v7.18L7.41 40h7.97A12.02 12.02 0 0 1 27 25a12 12 0 0 1 11.62 15h62.76A12.02 12.02 0 0 1 113 25a12 12 0 0 1 11.62 15H138v-4h-5v-4h5v-3h-7l-4-4v-2h7.33c-1.99-1.43-4.73-2.65-8.12-3.67a62.92 62.92 0 0 0-11.25-2.23L114 17h-9.24l-30-15H47c-2.13 0-4.36.19-6.7.55-6.05.93-12.54 3-19.15 5.87a116.37 116.37 0 0 0-12.62 6.43l-.25.15H5v2zm11.09 25h-9.5L0 35.41V26.6l3-3V13h4.72l.71-.42a118.36 118.36 0 0 1 11.92-6C27.1 3.66 33.75 1.54 40 .57 42.43.19 44.77 0 47 0h28.24l30 15 9.14.03a49.48 49.48 0 0 1 3.68.47c2.97.45 5.94 1.08 8.73 1.92 5.93 1.78 10.19 4.2 12.1 7.47l.11.11v.09a8 8 0 0 1 1 3.91v13h-16v-.2a12 12 0 0 1-22 0v.2H37.91a12 12 0 0 1-21.82 0zm119.47-18H128v.59l3.41 3.41h6.5a7.13 7.13 0 0 0-2.35-4zM47 35h39v1H46v-4h1v3zm-6-14.5V22h-1v-1h-6v-1h7v.5zm32 0V22h-1v-1h-6v-1h7v.5zM25 11l18-7h31l14 7-4 4H33l-8-4zm8.24 3h50.35l2.72-2.73L73.76 5H43.2l-15.73 6.11L33.24 14zM134 35h4v-2h-4v2zM27 47a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm86 0a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm-86-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm86 1a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm-86-5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm86 1a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM5 22h2.59L11 18.59V18H5v4zm85-10l6 3v3h-6l-3-3 3-3zm-1.59 3l2 2H95v-1.38l-4.8-2.4L88.4 15zM61 7h1v7h-1V7zM41 9h1v5h-1V9z\"/></svg>", "suv": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 114 49\"><path fill=\"#000000\" fill-rule=\"evenodd\" d=\"M14.68 41h-3.96L0 34.57v-7.5l3-3v-8.38l9-13V0h50.32l20 14H97c9.17 0 14 1.95 14 6.25V27h2.05v10.62l-6.3 3.38h-4.43a12 12 0 0 1-22.64 0H37.32a12 12 0 0 1-22.64 0zm-.51-2a12 12 0 1 1 23.67 0h41.33a12 12 0 1 1 23.67 0h3.4l4.8-2.58V29H104v-8h5v-.75c0-2.7-3.84-4.25-12-4.25H81.68l-20-14H14v1.31l-9 13V17h7v2l-4 4H5v1.9l-3 3v5.53L11.28 39h2.89zm58.5-25.67L74 14v3h-6l-1-1H12l6-12h44l12 8-1.33 1.33zM42 35h33v1H41v-4h1v3zm2-30v10h22l-1-1 3-3 3.72 1.86.71-.7L61.7 5H44zm-2 0H18.62l-5 10H42V5zm16 13v2h-1v-1h-6v-1h7zm8.41-4l2 2H73v-1.38l-4.8-2.4L66.4 14zM105 28h4v-6h-4v6zM5 22h2.59L11 18.59V18H5v4zm21 25a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm0-5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm65 9a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm0-5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z\"/></svg>", "wagon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 145 50\"><path fill=\"#000000\" d=\"M143 34v-3h-6l-4-4v-2h7.56c-2-1.87-5.2-3.42-9.35-4.67a62.92 62.92 0 0 0-11.25-2.23L119 18h-7.23l-33-16H28c-2.09 0-4.35.36-6.62.97-.8.2-1.53.44-2.2.66-.04.02-.1.63-.18 1.84L6.36 16H5v3h7v2l-4 4H5v.41l-3 3v7.18L7.41 41h15.97A12.02 12.02 0 0 1 35 26a12 12 0 0 1 11.62 15h60.76A12.02 12.02 0 0 1 119 26a12 12 0 0 1 11.62 15H143v-3h-6v-4h6zM48 21.5V23h-1v-1h-6v-1h7v.5zm30 0V23h-1v-1h-6v-1h7v.5zM36 15v-5h1v5h28V8h1v7h22.59l2.72-2.73L78.76 6H34.3l-12.42 8.28L29 15h7zM24.09 43H6.59L0 36.41V27.6l3-3V14h2.64L17 4.53v-2.2l.63-.26a27.51 27.51 0 0 1 3.24-1.04A28.05 28.05 0 0 1 28 0h51.23l33 16h6.85a51.64 51.64 0 0 1 3.98.5c2.97.45 5.94 1.08 8.73 1.92C139.99 20.88 145 24.59 145 30v13h-15.09a12 12 0 0 1-21.91-.2v.2H45.91a12 12 0 0 1-21.82 0zM141.5 26H134v.59l3.41 3.41H143c0-1.45-.52-2.78-1.5-4zM53 36h39v1H52v-4h1v3zM35 48a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm0-5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm84 9a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-1a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm0-5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM19 15L34 5h45l14 7-4 4H29l-10-1zm76-2l6 3v3h-6l-3-3 3-3zm-1.59 3l2 2H100v-1.38l-4.8-2.4L93.4 16zM5 24h2.59L11 20.59V20H5v4zm133 13h5v-2h-5v2z\"/></svg>" };
 
 /***/ }),
-/* 947 */
+/* 949 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -59491,7 +59693,7 @@ FilterMakeSelector.propTypes = {
 exports.default = FilterMakeSelector;
 
 /***/ }),
-/* 948 */
+/* 950 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -59579,7 +59781,7 @@ FilterFuelTypeSelector.propTypes = {
 exports.default = FilterFuelTypeSelector;
 
 /***/ }),
-/* 949 */
+/* 951 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -59673,7 +59875,7 @@ FilterFeatureSelector.propTypes = {
 exports.default = FilterFeatureSelector;
 
 /***/ }),
-/* 950 */
+/* 952 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -59761,7 +59963,7 @@ FilterTransmissionTypeSelector.propTypes = {
 exports.default = FilterTransmissionTypeSelector;
 
 /***/ }),
-/* 951 */
+/* 953 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -59843,7 +60045,7 @@ var FilterSegmentSelector = function (_React$PureComponent) {
 exports.default = FilterSegmentSelector;
 
 /***/ }),
-/* 952 */
+/* 954 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -59893,6 +60095,8 @@ var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
+var _index = __webpack_require__(940);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -59919,32 +60123,25 @@ var CashCalculator = function (_React$PureComponent) {
             this.props.requestBestOffer(this.props.deal);
         }
     }, {
-        key: 'bestOfferTotalValue',
-        value: function bestOfferTotalValue() {
-            var targetKey = _util2.default.getTargetKeyForDealAndZip(this.props.deal, this.props.zipcode);
-            var selectedTargetIds = this.props.targetsSelected[targetKey] ? _ramda2.default.map(_ramda2.default.prop('targetId'), this.props.targetsSelected[targetKey]) : [];
-            var targets = _ramda2.default.uniq(this.props.targetDefaults.concat(selectedTargetIds));
-            var bestOfferKey = _util2.default.getBestOfferKeyForDeal(this.props.deal, this.props.zipcode, this.props.selectedTab, targets);
-            var result = _ramda2.default.prop(bestOfferKey, this.props.bestOffers) ? _ramda2.default.prop('totalValue', _ramda2.default.prop(bestOfferKey, this.props.bestOffers)) : 0;
-            return result;
-        }
-    }, {
         key: 'handleTargetsChange',
         value: function handleTargetsChange() {
-            this.props.requestBestOffer(this.props.deal);
+            this.props.getBestOffersForLoadedDeals();
         }
     }, {
         key: 'render',
         value: function render() {
-            var bestOfferTotalValue = this.bestOfferTotalValue();
             return _react2.default.createElement(
                 'div',
                 null,
-                'Cash Price ',
+                'Cash Price',
+                ' ',
                 _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
                 _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal }),
                 _react2.default.createElement('hr', null),
-                _react2.default.createElement(_Targets2.default, { deal: this.props.deal, targetsChanged: this.handleTargetsChange.bind(this) }),
+                _react2.default.createElement(_Targets2.default, {
+                    deal: this.props.deal,
+                    targetsChanged: this.handleTargetsChange.bind(this)
+                }),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(
                     'h4',
@@ -60021,7 +60218,7 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            !_ramda2.default.isNil(bestOfferTotalValue) ? _util2.default.moneyFormat(bestOfferTotalValue) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                            !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(this.props.dealBestOfferTotalValue) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                         )
                     ),
                     _react2.default.createElement(
@@ -60035,7 +60232,7 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            !_ramda2.default.isNil(bestOfferTotalValue) ? _util2.default.moneyFormat(_formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, bestOfferTotalValue)) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                            !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue)) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                         )
                     )
                 )
@@ -60046,23 +60243,27 @@ var CashCalculator = function (_React$PureComponent) {
     return CashCalculator;
 }(_react2.default.PureComponent);
 
-function mapStateToProps(state) {
-    return {
-        bestOffers: state.bestOffers,
-        deal: state.selectedDeal,
-        downPayment: state.downPayment,
-        employeeBrand: state.employeeBrand,
-        selectedTab: state.selectedTab,
-        targetsSelected: state.targetsSelected,
-        targetDefaults: state.targetDefaults,
-        zipcode: state.zipcode
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealBestOfferTotalValue = (0, _index.makeDealBestOfferTotalValue)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        return {
+            bestOffers: state.bestOffers,
+            downPayment: state.downPayment,
+            employeeBrand: state.employeeBrand,
+            selectedTab: state.selectedTab,
+            targetsSelected: state.targetsSelected,
+            targetDefaults: state.targetDefaults,
+            zipcode: state.zipcode,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+        };
     };
-}
+    return mapStateToProps;
+};
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(CashCalculator);
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(CashCalculator);
 
 /***/ }),
-/* 953 */
+/* 955 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -60112,6 +60313,8 @@ var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
+var _index = __webpack_require__(940);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -60138,16 +60341,6 @@ var FinanceCalculator = function (_React$PureComponent) {
             this.props.requestBestOffer(this.props.deal);
         }
     }, {
-        key: 'bestOfferTotalValue',
-        value: function bestOfferTotalValue() {
-            var targetKey = _util2.default.getTargetKeyForDealAndZip(this.props.deal, this.props.zipcode);
-            var selectedTargetIds = this.props.targetsSelected[targetKey] ? _ramda2.default.map(_ramda2.default.prop('targetId'), this.props.targetsSelected[targetKey]) : [];
-            var targets = _ramda2.default.uniq(this.props.targetDefaults.concat(selectedTargetIds));
-            var bestOfferKey = _util2.default.getBestOfferKeyForDeal(this.props.deal, this.props.zipcode, this.props.selectedTab, targets);
-            var result = _ramda2.default.prop(bestOfferKey, this.props.bestOffers) ? _ramda2.default.prop('totalValue', _ramda2.default.prop(bestOfferKey, this.props.bestOffers)) : 0;
-            return result;
-        }
-    }, {
         key: 'updateDownPayment',
         value: function updateDownPayment(e) {
             this.props.updateDownPayment(Math.max(e.target.value, 0));
@@ -60160,12 +60353,12 @@ var FinanceCalculator = function (_React$PureComponent) {
     }, {
         key: 'getTotalVehicleCost',
         value: function getTotalVehicleCost() {
-            return !_ramda2.default.isNil(this.bestOfferTotalValue()) ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, 0, this.bestOfferTotalValue()) : null;
+            return _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, 0, this.props.dealBestOfferTotalValue);
         }
     }, {
         key: 'getAmountToFinance',
         value: function getAmountToFinance() {
-            return !_ramda2.default.isNil(this.bestOfferTotalValue()) ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, this.bestOfferTotalValue()) : null;
+            return !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, this.props.dealBestOfferTotalValue) : null;
         }
     }, {
         key: 'renderTotalCostOfVehicle',
@@ -60201,7 +60394,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    !_ramda2.default.isNil(this.bestOfferTotalValue()) ? _util2.default.moneyFormat(this.bestOfferTotalValue()) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(this.props.dealBestOfferTotalValue) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                 )
             );
         }
@@ -60228,8 +60421,6 @@ var FinanceCalculator = function (_React$PureComponent) {
     }, {
         key: 'renderYourMonthlyFinancePayment',
         value: function renderYourMonthlyFinancePayment() {
-            var totalVehicleCost = this.getTotalVehicleCost();
-
             return _react2.default.createElement(
                 'div',
                 null,
@@ -60241,14 +60432,14 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    totalVehicleCost ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(totalVehicleCost, this.props.downPayment, this.props.termDuration))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                 )
             );
         }
     }, {
         key: 'handleTargetsChange',
         value: function handleTargetsChange() {
-            this.props.requestBestOffer(this.props.deal);
+            this.props.getBestOffersForLoadedDeals();
         }
     }, {
         key: 'render',
@@ -60263,12 +60454,10 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
                 _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal }),
                 _react2.default.createElement('hr', null),
-                _react2.default.createElement(
-                    'h4',
-                    null,
-                    'Available Rebates and Incentives'
-                ),
-                _react2.default.createElement(_Targets2.default, { deal: this.props.deal, targetsChanged: this.handleTargetsChange.bind(this) }),
+                _react2.default.createElement(_Targets2.default, {
+                    deal: this.props.deal,
+                    targetsChanged: this.handleTargetsChange.bind(this)
+                }),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(
                     'h4',
@@ -60436,24 +60625,28 @@ var FinanceCalculator = function (_React$PureComponent) {
     return FinanceCalculator;
 }(_react2.default.PureComponent);
 
-function mapStateToProps(state) {
-    return {
-        bestOffers: state.bestOffers,
-        deal: state.selectedDeal,
-        downPayment: state.downPayment,
-        employeeBrand: state.employeeBrand,
-        selectedTab: state.selectedTab,
-        targetsSelected: state.targetsSelected,
-        targetDefaults: state.targetDefaults,
-        termDuration: state.termDuration,
-        zipcode: state.zipcode
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealBestOfferTotalValue = (0, _index.makeDealBestOfferTotalValue)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        return {
+            bestOffers: state.bestOffers,
+            downPayment: state.downPayment,
+            employeeBrand: state.employeeBrand,
+            selectedTab: state.selectedTab,
+            targetsSelected: state.targetsSelected,
+            targetDefaults: state.targetDefaults,
+            termDuration: state.termDuration,
+            zipcode: state.zipcode,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+        };
     };
-}
+    return mapStateToProps;
+};
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(FinanceCalculator);
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(FinanceCalculator);
 
 /***/ }),
-/* 954 */
+/* 956 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -60506,6 +60699,8 @@ var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
+
+var _index = __webpack_require__(940);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -60570,7 +60765,6 @@ var LeaseCalculator = function (_React$PureComponent) {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
             this._isMounted = false;
-            // this.props.clearBestOffer();
         }
     }, {
         key: 'getClosestAnnualMileage',
@@ -60668,14 +60862,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    this.props.availableTargets ? _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - _ramda2.default.sum([0]
-                    /* @todo update this to pull value from api or whatever
-                    R.map(
-                        R.prop('value'),
-                        this.props.selectedTargets
-                    )
-                    */
-                    ), this.state.downPayment, 0, this.props.termDuration, this.props.residualPercent))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.state.downPayment, 0, this.props.termDuration, this.props.residualPercent))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                 )
             );
         }
@@ -60720,10 +60907,6 @@ var LeaseCalculator = function (_React$PureComponent) {
     }, {
         key: 'renderDueAtSigning',
         value: function renderDueAtSigning() {
-            var totalRebates = _ramda2.default.sum([0]
-            // R.map(R.prop('value'), this.props.selectedTargets)
-            );
-
             return _react2.default.createElement(
                 'div',
                 null,
@@ -60735,7 +60918,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    this.props.availableTargets ? _util2.default.moneyFormat(_formulas2.default.calculateLeaseTaxesDueAtSigning(totalRebates, this.state.downPayment, this.props.deal.doc_fee)) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(_formulas2.default.calculateLeaseTaxesDueAtSigning(this.props.dealBestOfferTotalValue, this.state.downPayment, this.props.deal.doc_fee)) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                 )
             );
         }
@@ -60771,14 +60954,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    this.props.availableTargets ? _util2.default.moneyFormat(_ramda2.default.sum([0])) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading']
-                        /** @todo : replace this to somehow get info back from API best offer call
-                        R.map(
-                            R.prop('value'),
-                            this.props.selectedTargets
-                        )
-                        */
-                    })
+                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(this.props.dealBestOfferTotalValue) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                 )
             );
         }
@@ -60820,13 +60996,13 @@ var LeaseCalculator = function (_React$PureComponent) {
                     className: className,
                     key: index
                 },
-                _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - _ramda2.default.sum([0]
-                // R.map(
-                //     R.prop('value'),
-                //     this.props.selectedTargets
-                // )
-                ), downPayment, 0, leaseRate.termMonths, residual.residualPercent)))
+                _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, downPayment, 0, leaseRate.termMonths, residual.residualPercent)))
             );
+        }
+    }, {
+        key: 'handleTargetsChange',
+        value: function handleTargetsChange() {
+            this.props.getBestOffersForLoadedDeals();
         }
     }, {
         key: 'render',
@@ -60840,7 +61016,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal }),
                 _react2.default.createElement(_Targets2.default, {
                     deal: this.props.deal,
-                    targetsChanged: this.props.requestBestOffer.bind(this, this.props.deal)
+                    targetsChanged: this.handleTargetsChange.bind(this)
                 }),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(
@@ -61000,22 +61176,25 @@ var LeaseCalculator = function (_React$PureComponent) {
     return LeaseCalculator;
 }(_react2.default.PureComponent);
 
-function mapStateToProps(state) {
-    return {
-        zipcode: state.zipcode,
-        deal: state.selectedDeal,
-        termDuration: state.termDuration,
-        annualMileage: state.annualMileage,
-        residualPercent: state.residualPercent,
-        employeeBrand: state.employeeBrand,
-        dealBestOffer: state.dealBestOffer
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealBestOfferTotalValue = (0, _index.makeDealBestOfferTotalValue)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        return {
+            zipcode: state.zipcode,
+            termDuration: state.termDuration,
+            annualMileage: state.annualMileage,
+            residualPercent: state.residualPercent,
+            employeeBrand: state.employeeBrand,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+        };
     };
-}
+    return mapStateToProps;
+};
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(LeaseCalculator);
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(LeaseCalculator);
 
 /***/ }),
-/* 955 */
+/* 957 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61134,7 +61313,7 @@ var Financing = function (_Component) {
 exports.default = Financing;
 
 /***/ }),
-/* 956 */
+/* 958 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61146,13 +61325,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(354);
 
-var _reduxThunk = __webpack_require__(957);
+var _reduxThunk = __webpack_require__(959);
 
 var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-var _reduxPersist = __webpack_require__(958);
+var _reduxPersist = __webpack_require__(960);
 
-var _index = __webpack_require__(964);
+var _index = __webpack_require__(966);
 
 var _index2 = _interopRequireDefault(_index);
 
@@ -61248,7 +61427,7 @@ exports.default = function () {
 };
 
 /***/ }),
-/* 957 */
+/* 959 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61277,17 +61456,17 @@ thunk.withExtraArgument = createThunkMiddleware;
 exports['default'] = thunk;
 
 /***/ }),
-/* 958 */
+/* 960 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "storages", function() { return storages; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__autoRehydrate__ = __webpack_require__(959);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__autoRehydrate__ = __webpack_require__(961);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__createPersistor__ = __webpack_require__(369);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__createTransform__ = __webpack_require__(962);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__createTransform__ = __webpack_require__(964);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__getStoredState__ = __webpack_require__(373);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__persistStore__ = __webpack_require__(963);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__persistStore__ = __webpack_require__(965);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__purgeStoredState__ = __webpack_require__(372);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "autoRehydrate", function() { return __WEBPACK_IMPORTED_MODULE_0__autoRehydrate__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createPersistor", function() { return __WEBPACK_IMPORTED_MODULE_1__createPersistor__["a"]; });
@@ -61318,13 +61497,13 @@ var storages = {
 
 
 /***/ }),
-/* 959 */
+/* 961 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = autoRehydrate;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants__ = __webpack_require__(101);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_isStatePlainEnough__ = __webpack_require__(960);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_isStatePlainEnough__ = __webpack_require__(962);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -61405,7 +61584,7 @@ function defaultStateReconciler(state, inboundState, reducedState, log) {
 }
 
 /***/ }),
-/* 960 */
+/* 962 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -61425,7 +61604,7 @@ function isStatePlainEnough(a) {
 }
 
 /***/ }),
-/* 961 */
+/* 963 */
 /***/ (function(module, exports) {
 
 exports = module.exports = stringify
@@ -61458,7 +61637,7 @@ function serializer(replacer, cycleReplacer) {
 
 
 /***/ }),
-/* 962 */
+/* 964 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -61487,7 +61666,7 @@ function createTransform(inbound, outbound) {
 /* harmony default export */ __webpack_exports__["a"] = (createTransform);
 
 /***/ }),
-/* 963 */
+/* 965 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -61565,7 +61744,7 @@ function rehydrateAction(payload) {
 }
 
 /***/ }),
-/* 964 */
+/* 966 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61749,9 +61928,7 @@ var reducer = function reducer(state, action) {
                 residualPercent: action.residualPercent
             });
         case ActionTypes.UPDATE_TERM_DURATION:
-            return Object.assign({}, state, {
-                termDuration: action.termDuration
-            });
+            return _extends({}, state, { termDuration: action.termDuration });
         case ActionTypes.CHOOSE_TRANSMISSION_TYPE:
             return Object.assign({}, state, {
                 selectedTransmissionType: action.selectedTransmissionType
@@ -61806,7 +61983,7 @@ var reducer = function reducer(state, action) {
 exports.default = reducer;
 
 /***/ }),
-/* 965 */
+/* 967 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61880,7 +62057,7 @@ var _zondicons = __webpack_require__(28);
 
 var _zondicons2 = _interopRequireDefault(_zondicons);
 
-var _reactImageGallery = __webpack_require__(966);
+var _reactImageGallery = __webpack_require__(968);
 
 var _reactImageGallery2 = _interopRequireDefault(_reactImageGallery);
 
@@ -62488,7 +62665,7 @@ var mapStateToProps = function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(DealDetails);
 
 /***/ }),
-/* 966 */
+/* 968 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -62506,15 +62683,15 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactSwipeable = __webpack_require__(967);
+var _reactSwipeable = __webpack_require__(969);
 
 var _reactSwipeable2 = _interopRequireDefault(_reactSwipeable);
 
-var _lodash = __webpack_require__(969);
+var _lodash = __webpack_require__(971);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _lodash3 = __webpack_require__(970);
+var _lodash3 = __webpack_require__(972);
 
 var _lodash4 = _interopRequireDefault(_lodash3);
 
@@ -63736,7 +63913,7 @@ ImageGallery.defaultProps = {
 exports.default = ImageGallery;
 
 /***/ }),
-/* 967 */
+/* 969 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -63752,7 +63929,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var React = __webpack_require__(4);
 var PropTypes = __webpack_require__(15);
-var DetectPassiveEvents = __webpack_require__(968).default;
+var DetectPassiveEvents = __webpack_require__(970).default;
 
 function getInitialState() {
   return {
@@ -64070,7 +64247,7 @@ Swipeable.defaultProps = {
 module.exports = Swipeable;
 
 /***/ }),
-/* 968 */
+/* 970 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64105,7 +64282,7 @@ detectPassiveEvents.update();
 exports.default = detectPassiveEvents;
 
 /***/ }),
-/* 969 */
+/* 971 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -64551,7 +64728,7 @@ module.exports = throttle;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(71)))
 
 /***/ }),
-/* 970 */
+/* 972 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -64935,7 +65112,7 @@ module.exports = debounce;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(71)))
 
 /***/ }),
-/* 971 */
+/* 973 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64993,7 +65170,7 @@ var _strings = __webpack_require__(87);
 
 var _strings2 = _interopRequireDefault(_strings);
 
-var _AccordionTable = __webpack_require__(972);
+var _AccordionTable = __webpack_require__(974);
 
 var _AccordionTable2 = _interopRequireDefault(_AccordionTable);
 
@@ -65009,7 +65186,7 @@ var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
-var _titlecase = __webpack_require__(973);
+var _titlecase = __webpack_require__(975);
 
 var _titlecase2 = _interopRequireDefault(_titlecase);
 
@@ -65527,7 +65704,7 @@ var mapStateToProps = function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(ComparePage);
 
 /***/ }),
-/* 972 */
+/* 974 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -65591,7 +65768,7 @@ var mapStateToProps = function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(AccordionTable);
 
 /***/ }),
-/* 973 */
+/* 975 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -65615,7 +65792,7 @@ module.exports = function toTitleCase(str){
 module.exports.toTitleCase = module.exports
 
 
-var laxWords = __webpack_require__(974).concat(__webpack_require__(975)).concat(__webpack_require__(976))
+var laxWords = __webpack_require__(976).concat(__webpack_require__(977)).concat(__webpack_require__(978))
       .concat(smallWords.source.replace(/(^\^\(|\)\$$)/g, '').split('|'))
       .concat(['is']) // a personal preference
   , laxWordsRe = new RegExp('^(' + laxWords.join('|') + ')$', 'i')
@@ -65647,14 +65824,14 @@ function titleCase (str, smallWords) {
 
 
 /***/ }),
-/* 974 */
+/* 976 */
 /***/ (function(module, exports) {
 
 module.exports = [ 'the', 'a', 'an', 'some' ]
 
 
 /***/ }),
-/* 975 */
+/* 977 */
 /***/ (function(module, exports) {
 
 module.exports = [
@@ -65769,7 +65946,7 @@ module.exports = [
 
 
 /***/ }),
-/* 976 */
+/* 978 */
 /***/ (function(module, exports) {
 
 module.exports = [
@@ -65786,7 +65963,7 @@ module.exports = [
 
 
 /***/ }),
-/* 977 */
+/* 979 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -65806,7 +65983,7 @@ var _CashFinanceLeaseCalculator = __webpack_require__(156);
 
 var _CashFinanceLeaseCalculator2 = _interopRequireDefault(_CashFinanceLeaseCalculator);
 
-var _ConfirmDeal = __webpack_require__(978);
+var _ConfirmDeal = __webpack_require__(980);
 
 var _ConfirmDeal2 = _interopRequireDefault(_ConfirmDeal);
 
@@ -65994,7 +66171,7 @@ var mapStateToProps = function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(ConfirmDetails);
 
 /***/ }),
-/* 978 */
+/* 980 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -66654,7 +66831,7 @@ var mapStateToProps = function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(ConfirmDeal);
 
 /***/ }),
-/* 979 */
+/* 981 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67193,7 +67370,7 @@ var mapStateToProps = function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(ThankYouPage);
 
 /***/ }),
-/* 980 */
+/* 982 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

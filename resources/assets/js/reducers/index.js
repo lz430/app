@@ -181,9 +181,7 @@ const reducer = (state, action) => {
                 residualPercent: action.residualPercent,
             });
         case ActionTypes.UPDATE_TERM_DURATION:
-            return Object.assign({}, state, {
-                termDuration: action.termDuration,
-            });
+            return {...state, termDuration: action.termDuration}
         case ActionTypes.CHOOSE_TRANSMISSION_TYPE:
             return Object.assign({}, state, {
                 selectedTransmissionType: action.selectedTransmissionType,

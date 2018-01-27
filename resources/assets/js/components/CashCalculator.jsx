@@ -8,6 +8,7 @@ import * as Actions from 'actions';
 import formulas from 'src/formulas';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
+import { makeDealBestOfferTotalValue } from 'selectors/index';
 
 class CashCalculator extends React.PureComponent {
     componentWillMount() {
@@ -15,28 +16,26 @@ class CashCalculator extends React.PureComponent {
         this.props.requestBestOffer(this.props.deal);
     }
 
-    bestOfferTotalValue() {
-        const targetKey = util.getTargetKeyForDealAndZip(this.props.deal, this.props.zipcode);
-        const selectedTargetIds = this.props.targetsSelected[targetKey]
-            ? R.map(R.prop('targetId'), this.props.targetsSelected[targetKey])
-            : [];
-        const targets = R.uniq(this.props.targetDefaults.concat(selectedTargetIds));
-        const bestOfferKey = util.getBestOfferKeyForDeal(this.props.deal, this.props.zipcode, this.props.selectedTab, targets);
-        const result = R.prop(bestOfferKey, this.props.bestOffers) ? R.prop('totalValue', R.prop(bestOfferKey, this.props.bestOffers)) : 0;
-        return result;
-    }
-
     handleTargetsChange() {
         this.props.getBestOffersForLoadedDeals();
     }
 
     render() {
-        const bestOfferTotalValue = this.bestOfferTotalValue();
-        return <div>
-                Cash Price {util.moneyFormat(util.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand))}
+        return (
+            <div>
+                Cash Price{' '}
+                {util.moneyFormat(
+                    util.getEmployeeOrSupplierPrice(
+                        this.props.deal,
+                        this.props.employeeBrand
+                    )
+                )}
                 <CustomerTypeSelect deal={this.props.deal} />
                 <hr />
-                <Targets deal={this.props.deal} targetsChanged={this.handleTargetsChange.bind(this)} />
+                <Targets
+                    deal={this.props.deal}
+                    targetsChanged={this.handleTargetsChange.bind(this)}
+                />
                 <hr />
                 <h4>Summary</h4>
                 <div>
@@ -90,8 +89,10 @@ class CashCalculator extends React.PureComponent {
                             Rebates Applied
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {!R.isNil(bestOfferTotalValue) ? (
-                                util.moneyFormat(bestOfferTotalValue)
+                            {!R.isNil(this.props.dealBestOfferTotalValue) ? (
+                                util.moneyFormat(
+                                    this.props.dealBestOfferTotalValue
+                                )
                             ) : (
                                 <SVGInline svg={miscicons['loading']} />
                             )}
@@ -102,38 +103,43 @@ class CashCalculator extends React.PureComponent {
                             Total Cost of Vehicle
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {!R.isNil(bestOfferTotalValue) ? (
+                            {!R.isNil(this.props.dealBestOfferTotalValue) ? (
                                 util.moneyFormat(
-                                    formulas.calculateTotalCashFinance(
+                                    formulas.calculateTotalCash(
                                         util.getEmployeeOrSupplierPrice(
                                             this.props.deal,
                                             this.props.employeeBrand
                                         ),
                                         this.props.deal.doc_fee,
-                                        this.props.downPayment,
-                                        bestOfferTotalValue
-                                    ))
+                                        this.props.dealBestOfferTotalValue
+                                    )
+                                )
                             ) : (
                                 <SVGInline svg={miscicons['loading']} />
                             )}
                         </span>
                     </div>
                 </div>
-            </div>;
+            </div>
+        );
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        bestOffers: state.bestOffers,
-        deal: state.selectedDeal,
-        downPayment: state.downPayment,
-        employeeBrand: state.employeeBrand,
-        selectedTab: state.selectedTab,
-        targetsSelected: state.targetsSelected,
-        targetDefaults: state.targetDefaults,
-        zipcode: state.zipcode,
+const makeMapStateToProps = () => {
+    const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
+    const mapStateToProps = (state, props) => {
+        return {
+            bestOffers: state.bestOffers,
+            downPayment: state.downPayment,
+            employeeBrand: state.employeeBrand,
+            selectedTab: state.selectedTab,
+            targetsSelected: state.targetsSelected,
+            targetDefaults: state.targetDefaults,
+            zipcode: state.zipcode,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+        };
     };
-}
+    return mapStateToProps;
+};
 
-export default connect(mapStateToProps, Actions)(CashCalculator);
+export default connect(makeMapStateToProps, Actions)(CashCalculator);
