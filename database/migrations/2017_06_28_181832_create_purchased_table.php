@@ -15,6 +15,7 @@ class CreatePurchasedTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('deal_id')->references('id')->on('deals');
             $table->decimal('dmr_price'); // added later
+            $table->string('type'); // added later
             $table->timestamps();
         });
     }
