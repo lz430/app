@@ -52,7 +52,7 @@ class ConfirmDetails extends React.PureComponent {
                                     this.props.employeeBrand
                                 )}
                         >
-                            Buy Now
+                            Confirm Purchase
                         </button>
                     </div>
                 </div>
