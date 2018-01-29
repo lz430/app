@@ -111,7 +111,7 @@ class ComparePage extends React.PureComponent {
         );
     }
 
-    renderCalculatorMOdal() {
+    renderCalculatorModal() {
         return (
             <Modal
                 onClose={this.props.clearSelectedDeal}
@@ -261,8 +261,8 @@ class ComparePage extends React.PureComponent {
 
         return (
             <div className="compare-page-table">
-                {this.renderAccordionTabHeader('Something About Targets')}
-                <div className={this.columnClass('Something About Targets')}>
+                {this.renderAccordionTabHeader('Targets')}
+                <div className={this.columnClass('Targets')}>
                     {compareList.map((dealAndSelectedFilters, index) => {
                         return (
                             <div
@@ -478,13 +478,13 @@ class ComparePage extends React.PureComponent {
                         ''
                     )}
 
-                        {/* <AccordionTable>
+                        <AccordionTable>
                             {() => {
                                 return this.renderTargetsTable(
                                     this.props.compareList
                                 );
                             }}
-                        </AccordionTable> */}
+                        </AccordionTable>
 
                     <AccordionTable>
                         {() => {
@@ -509,7 +509,7 @@ class ComparePage extends React.PureComponent {
                     )}
                 </div>
 
-                {this.props.selectedDeal ? this.renderCalculatorMOdal() : ''}
+                {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
             </div>
         );
     }

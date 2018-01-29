@@ -30,17 +30,9 @@ class TargetsController extends Controller
                 request('zipcode')
             );
 
-            $filteredTargets = [];
-
-            if ($response) {
-                foreach ($response as $key => $target) {
-                    if (!in_array($target['targetId'], self::TARGET_BLACKLIST)) {
-                        $filteredTargets[] = $target;
-                    }
-                }
-            }
-
-            return $filteredTargets;
+            return collect($response)->reject(function ($target) {
+                return in_array($target['targetid'], self::TARGET_BLACKLIST);
+            })->toArray();
         });
 
         return response()->json([

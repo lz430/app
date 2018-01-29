@@ -133,7 +133,7 @@ class DealPrice extends React.PureComponent {
                     onClick={() => this.props.selectDeal(this.props.deal)}
                     href="#"
                 >
-                    See Available Targets or something
+                    See Available Targets
                 </a>
             </div>
         );

@@ -664,7 +664,7 @@ export function requestBestOffer(deal) {
             getState().targetDefaults.concat(selectedTargetIds)
         );
 
-        //temporarily limit to only selected payment type
+        // Temporarily limit to only selected payment type until we can address performance issues
         let paymentTypes = [getState().selectedTab];
         // We can ask for all payment types by uncommenting this:
         // const paymentTypes = ['cash', 'finance', 'lease'];

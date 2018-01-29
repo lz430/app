@@ -18,7 +18,7 @@ class DealBestOfferTest extends TestCase
     {
         $deal = factory(Deal::class)->create();
         $deal->versions()->save(factory(Version::class)->make());
-        // ['payment_type' => 'somethingelse', 'zipcode' => '48203', 'targets' => '25,26']
+
         // Must have proper payment type
         $response = $this->json('GET', route('deals.best-offer', $deal->id), ['payment_type' => 'somethingelse', 'zipcode' => '48203', 'targets' => [25, 26]]);
         $response->assertJsonValidationErrors(['payment_type']);
@@ -33,7 +33,6 @@ class DealBestOfferTest extends TestCase
     {
         $deal = factory(Deal::class)->create();
         $deal->versions()->save(factory(Version::class)->make());
-
 
         $response = $this->json('GET', route('deals.best-offer', $deal->id), ['payment_type' => 'cash', 'targets' => [25,26], 'zipcode' => '99999']);
 

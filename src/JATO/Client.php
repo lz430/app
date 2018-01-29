@@ -134,7 +134,7 @@ class Client
         return $this->get("features/$vehicleId/$categoryId?pageSize=100", [], true);
     }
 
-    // @todo : KEEP THIS ONE! it's for lease rates
+    // KEEP THIS ONE! it's for lease rates
     public function incentivesByVehicleIdAndZipcode($vehicleId, $zipcode, $additionalParams = [])
     {
         try {
@@ -145,7 +145,7 @@ class Client
             ]);
         } catch (ClientException $e) {
             Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode");
-            return ['targets' => []];
+            return [];
         }
     }
 
@@ -159,6 +159,7 @@ class Client
             ]);
         } catch (ClientException $e) {
             Log::debug("Unable to get targets for Vehicle ID $vehicleId. URL: incentives/bestOffer/$vehicleId/targets");
+            return [];
         }
     }
 

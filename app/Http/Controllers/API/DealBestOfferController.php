@@ -10,6 +10,8 @@ use Cache;
 
 class DealBestOfferController extends BaseAPIController
 {
+    const CACHE_LENGTH = 1440;
+
     public $client;
 
     public function __construct(Client $client)
@@ -25,28 +27,24 @@ class DealBestOfferController extends BaseAPIController
             'targets' => 'required|array',
         ]);
 
-        $targets = request('targets');
-        sort($targets, SORT_NUMERIC);
-        $sortedTargets = implode(',', $targets);
-        $jatoVehicleId = $deal->versions->first()->jato_vehicle_id;
+        // We want to show the cash best offer information even in the finance tabs
         $paymentType = request('payment_type');
-        $zipCode = request('zipcode');
+        if ($paymentType == 'finance') {
+            $paymentType = 'cash';
+        }
 
-        $cacheKey = "best-offer:$jatoVehicleId:$paymentType:$zipCode:$sortedTargets";
+        // Generate the best offer cache key
+        $sortedTargets = collect(request('targets'))->sort()->implode(',');
+        $jatoVehicleId = $deal->versions->first()->jato_vehicle_id;
+        $zipCode = request('zipcode');
+        $cacheKey = "best-offer:{$jatoVehicleId}:{$paymentType}:{$zipCode}:{$sortedTargets}";
 
         if (Cache::has($cacheKey)) {
             return Cache::get($cacheKey);
         }
 
-        // We want to show the cash best offer information even in the finance tabs
-        if ($paymentType == 'finance') {
-            $paymentType = 'cash';
-        }
-
-        $response = $this->client->bestOffer($jatoVehicleId, $paymentType, $zipCode, implode(',', $targets));
-
-        Cache::tags(['best-offers'])->put($cacheKey, $response, 1440);
-
-        return $response;
+        return Cache::tags(['best-offers'])->remember($cacheKey, self::CACHE_LENGTH, function () use ($jatoVehicleId, $paymentType, $zipCode, $sortedTargets) {
+            return $this->client->bestOffer($jatoVehicleId, $paymentType, $zipCode, $sortedTargets);
+        });
     }
 }

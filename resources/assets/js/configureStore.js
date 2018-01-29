@@ -22,7 +22,7 @@ const initialState = {
     annualMileage: 10000,
     bestOffers: [],
     bodyStyles: null,
-    cancelTokens: [], //a list of tokens to cancel axios calls for best offers
+    cancelTokens: [], // A list of tokens to cancel axios calls for best offers
     city: null,
     compareList: [],
     dealBestOffer: null,
