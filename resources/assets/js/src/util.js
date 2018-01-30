@@ -101,11 +101,8 @@ const util = {
         );
     },
     getTargetKeyForDealAndZip(deal, zipcode) {
-        const year = deal.year;
-        const make = deal.make;
-        const model = deal.model;
-        const series = deal.series;
-        const targetKey = `${zipcode}-${year}-${make}-${model}-${series}`;
+        const vehicleId = deal.versions[0].jato_vehicle_id;
+        const targetKey = `${vehicleId}-${zipcode}`;
         return targetKey;
     },
     getBestOfferKeyForDeal(deal, zipcode, paymentType, selectedTargets) {

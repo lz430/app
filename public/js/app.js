@@ -2232,11 +2232,8 @@ var util = {
         }, value, zipped);
     },
     getTargetKeyForDealAndZip: function getTargetKeyForDealAndZip(deal, zipcode) {
-        var year = deal.year;
-        var make = deal.make;
-        var model = deal.model;
-        var series = deal.series;
-        var targetKey = zipcode + '-' + year + '-' + make + '-' + model + '-' + series;
+        var vehicleId = deal.versions[0].jato_vehicle_id;
+        var targetKey = vehicleId + '-' + zipcode;
         return targetKey;
     },
     getBestOfferKeyForDeal: function getBestOfferKeyForDeal(deal, zipcode, paymentType, selectedTargets) {
@@ -5447,11 +5444,8 @@ var dealTargetKey = (0, _reselect.createSelector)([deal, zipcode], function (dea
     if (!deal) {
         return null;
     }
-    var year = deal.year;
-    var make = deal.make;
-    var model = deal.model;
-    var series = deal.series;
-    return zipcode + '-' + year + '-' + make + '-' + model + '-' + series;
+    var vehicleId = deal.versions[0].jato_vehicle_id;
+    return vehicleId + '-' + zipcode;
 });
 
 var makeDealTargetKey = exports.makeDealTargetKey = function makeDealTargetKey() {
