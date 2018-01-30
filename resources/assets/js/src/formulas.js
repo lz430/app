@@ -7,6 +7,12 @@ const formulas = {
 
         return Number(totalWithSalesTax.minus(rebatesTotal).minus(downPayment));
     },
+    calculateTotalCash: (price, docFee, rebatesTotal) => {
+        const total = new Decimal(price).plus(docFee);
+        const totalWithSalesTax = total.plus(total.times(0.06));
+
+        return Number(totalWithSalesTax.minus(rebatesTotal));
+    },
     calculateTotalLease: (price, docFee, rebatesTotal) => {
         const total = price + docFee;
         const downPayment = 0;

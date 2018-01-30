@@ -21,18 +21,18 @@ class CashFinanceLeaseCalculator extends React.PureComponent {
     renderSelectedTab() {
         switch (this.props.selectedTab) {
             case 'cash':
-                return <CashCalculator />;
+                return <CashCalculator deal={this.props.selectedDeal} />;
             case 'finance':
-                return <FinanceCalculator />;
+                return <FinanceCalculator deal={this.props.selectedDeal} />;
             case 'lease':
-                return <LeaseCalculator />;
+                return <LeaseCalculator deal={this.props.selectedDeal} />;
         }
     }
 
     tabClassName(tabName) {
-        return `tabs__tab ${tabName === this.props.selectedTab
-            ? 'tabs__tab--selected'
-            : ''}`;
+        return `tabs__tab ${
+            tabName === this.props.selectedTab ? 'tabs__tab--selected' : ''
+        }`;
     }
 
     renderLeaseForm() {
@@ -59,7 +59,8 @@ class CashFinanceLeaseCalculator extends React.PureComponent {
                             onChange={el =>
                                 this.setState({
                                     milesPerYear: el.target.value,
-                                })}
+                                })
+                            }
                         />
                         <div className="range-slider__badge">
                             {util.numbersWithCommas(this.state.milesPerYear)}
@@ -77,7 +78,8 @@ class CashFinanceLeaseCalculator extends React.PureComponent {
                             step="1"
                             defaultValue={this.state.leaseTerm}
                             onChange={el =>
-                                this.setState({ leaseTerm: el.target.value })}
+                                this.setState({ leaseTerm: el.target.value })
+                            }
                         />
                         <div className="range-slider__badge">
                             {this.state.leaseTerm}
@@ -121,6 +123,7 @@ function mapStateToProps(state) {
     return {
         zipcode: state.zipcode,
         selectedTab: state.selectedTab,
+        selectedDeal: state.selectedDeal,
     };
 }
 

@@ -6,15 +6,34 @@ import ViewDeals from './ViewDeals';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import { connect } from 'react-redux';
+import * as Actions from 'actions/index';
 
 class Deals extends React.PureComponent {
+    componentWillReceiveProps(nextProps) {
+        nextProps.cancelAllBestOfferPromises();
+
+        if (nextProps.deals) {
+            nextProps.deals.map(deal => {
+                nextProps.requestBestOffer(deal);
+            });
+        }
+    }
+
     render() {
-        if (!this.props.deals && this.props.requestingMoreDeals && this.props.zipInRange) {
-            return <SVGInline svg={miscicons['loading']}/>;
+        if (
+            !this.props.deals &&
+            this.props.requestingMoreDeals &&
+            this.props.zipInRange
+        ) {
+            return <SVGInline svg={miscicons['loading']} />;
         }
 
         if (this.props.zipInRange) {
-            return (this.props.deals && this.props.deals.length) ? <ViewDeals /> : <NoDealsInRange/>;
+            return this.props.deals && this.props.deals.length ? (
+                <ViewDeals />
+            ) : (
+                <NoDealsInRange />
+            );
         }
 
         return <NoDealsOutOfRange />;
@@ -33,7 +52,7 @@ Deals.propTypes = {
             id: PropTypes.number.isRequired,
         })
     ),
-    zipInRange: PropTypes.bool
+    zipInRange: PropTypes.bool,
 };
 
 function mapStateToProps(state) {
@@ -44,4 +63,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, null)(Deals);
+export default connect(mapStateToProps, Actions)(Deals);

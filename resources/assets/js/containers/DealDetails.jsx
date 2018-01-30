@@ -150,7 +150,7 @@ class DealDetails extends React.PureComponent {
         });
     }
 
-    renderDealRebatesModal() {
+    renderCalculatorModal() {
         return (
             <Modal
                 onClose={this.props.clearSelectedDeal}
@@ -364,7 +364,8 @@ class DealDetails extends React.PureComponent {
     render() {
         const deal = this.props.deal;
 
-        return <div>
+        return (
+            <div>
                 <div className="deal-details">
                     <div className="deal-details__images-and-title">
                         <div className="deal-details__title">
@@ -394,8 +395,8 @@ class DealDetails extends React.PureComponent {
 
                 {this.state.showStandardFeatures ? this.renderStandardFeaturesModal(deal) : ''}
                 {this.state.showFeatures ? this.renderFeaturesModal(deal) : ''}
-                {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}
-            </div>;
+                {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
+            </div>);
     }
 }
 
@@ -417,8 +418,6 @@ const mapStateToProps = state => {
         compareList: state.compareList,
         selectedTab: state.selectedTab,
         downPayment: state.downPayment,
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates,
         termDuration: state.termDuration,
         fallbackDealImage: state.fallbackDealImage,
         selectedDeal: state.selectedDeal,

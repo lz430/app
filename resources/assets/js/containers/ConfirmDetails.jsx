@@ -6,9 +6,9 @@ import Modal from 'components/Modal';
 import PropTypes from 'prop-types';
 import purchase from 'src/purchase';
 import React from 'react';
-import rebates from 'src/rebates';
 import strings from 'src/strings';
 import DealImage from 'components/Deals/DealImage';
+import { makeDealBestOfferTotalValue, makeDealBestOffer } from 'selectors/index';
 
 class ConfirmDetails extends React.PureComponent {
     componentWillUnmount() {
@@ -19,7 +19,7 @@ class ConfirmDetails extends React.PureComponent {
         this._isMounted = true;
     }
 
-    renderDealRebatesModal() {
+    renderCalculatorModal() {
         return (
             <Modal
                 onClose={this.props.clearSelectedDeal}
@@ -42,12 +42,8 @@ class ConfirmDetails extends React.PureComponent {
                                     deal,
                                     this.props.selectedTab,
                                     this.props.downPayment,
-                                    rebates.getSelectedRebatesForDealAndType(
-                                        this.props.dealRebates,
-                                        this.props.selectedRebates,
-                                        this.props.selectedTab,
-                                        deal
-                                    ),
+                                    this.props.dealBestOfferTotalValue,
+                                    this.props.dealBestOffer,
                                     this.props.termDuration,
                                     this.props.employeeBrand
                                 )}
@@ -85,7 +81,7 @@ class ConfirmDetails extends React.PureComponent {
                     <div className="deal-details__pricing">
                         {this.renderDeal(deal)}
                     </div>
-                    {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}
+                    {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
                 </div>
             </div>
         );
@@ -105,17 +101,24 @@ ConfirmDetails.propTypes = {
     }),
 };
 
-const mapStateToProps = state => {
-    return {
-        selectedTab: state.selectedTab,
-        downPayment: state.downPayment,
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates,
-        termDuration: state.termDuration,
-        fallbackDealImage: state.fallbackDealImage,
-        selectedDeal: state.selectedDeal,
-        employeeBrand: state.employeeBrand,
+
+const makeMapStateToProps = () => {
+    const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
+    const getDealBestOffer = makeDealBestOffer();
+    const mapStateToProps = (state, props) => {
+        return {
+            selectedTab: state.selectedTab,
+            downPayment: state.downPayment,
+            dealTargets: state.dealTargets,
+            termDuration: state.termDuration,
+            fallbackDealImage: state.fallbackDealImage,
+            selectedDeal: state.selectedDeal,
+            employeeBrand: state.employeeBrand,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOffer: getDealBestOffer(state, props),
+        };
     };
+    return mapStateToProps;
 };
 
-export default connect(mapStateToProps, Actions)(ConfirmDetails);
+export default connect(makeMapStateToProps, Actions)(ConfirmDetails);

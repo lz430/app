@@ -9,7 +9,6 @@ import * as Actions from 'actions/index';
 import Deal from 'components/Deals/Deal';
 import Modal from 'components/Modal';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
-import rebates from 'src/rebates';
 import string from 'src/strings';
 import AccordionTable from 'components/AccordionTable';
 import util from 'src/util';
@@ -93,12 +92,14 @@ class ComparePage extends React.PureComponent {
                                 deal,
                                 this.props.selectedTab,
                                 this.props.downPayment,
-                                rebates.getSelectedRebatesForDealAndType(
-                                    this.props.dealRebates,
-                                    this.props.selectedRebates,
-                                    this.props.selectedTab,
+                                /*
+                                rebates.getSelectedTargetsForDeal(
+                                    this.props.dealTargets,
+                                    this.props.selectedTargets,
                                     deal
                                 ),
+                                */
+                                [], // @TODO resolve somehow?
                                 this.props.termDuration,
                                 this.props.employeeBrand
                             )}
@@ -110,7 +111,7 @@ class ComparePage extends React.PureComponent {
         );
     }
 
-    renderDealRebatesModal() {
+    renderCalculatorModal() {
         return (
             <Modal
                 onClose={this.props.clearSelectedDeal}
@@ -242,14 +243,14 @@ class ComparePage extends React.PureComponent {
         );
     }
 
-    renderRebatesAndIncentivesTable(compareList) {
+    renderTargetsTable(compareList) {
         const maxNumberCells = R.reduce(
             (carry, dealAndSelectedFilters) => {
                 return R.max(
                     R.propOr(
                         [],
                         dealAndSelectedFilters.deal.id,
-                        this.props.dealRebates
+                        this.props.dealTargets
                     ).length,
                     carry
                 );
@@ -260,15 +261,16 @@ class ComparePage extends React.PureComponent {
 
         return (
             <div className="compare-page-table">
-                {this.renderAccordionTabHeader('Rebates and Incentives')}
-                <div className={this.columnClass('Rebates and Incentives')}>
+                {this.renderAccordionTabHeader('Targets')}
+                <div className={this.columnClass('Targets')}>
                     {compareList.map((dealAndSelectedFilters, index) => {
                         return (
                             <div
                                 key={index}
                                 className="compare-page-table__column"
                             >
-                                {this.props.dealRebates[
+                            @TODO update this thing to be filtering by type correctly
+                                {this.props.dealTargets[
                                     dealAndSelectedFilters.deal.id
                                 ].map((rebate, index) => {
                                     return R.contains(
@@ -288,7 +290,7 @@ class ComparePage extends React.PureComponent {
                                 {R.range(
                                     0,
                                     maxNumberCells -
-                                        this.props.dealRebates[
+                                        this.props.dealTargets[
                                             dealAndSelectedFilters.deal.id
                                         ].length
                                 ).map((_, index) => {
@@ -475,20 +477,14 @@ class ComparePage extends React.PureComponent {
                     ) : (
                         ''
                     )}
-                    {R.all(
-                        deal => this.props.dealRebates.hasOwnProperty(deal.id),
-                        this.props.deals
-                    ) ? (
-                        <AccordionTable>
+
+                        {/* <AccordionTable>
                             {() => {
-                                return this.renderRebatesAndIncentivesTable(
+                                return this.renderTargetsTable(
                                     this.props.compareList
                                 );
                             }}
-                        </AccordionTable>
-                    ) : (
-                        <SVGInline svg={miscicons['loading']} />
-                    )}
+                        </AccordionTable> */}
 
                     <AccordionTable>
                         {() => {
@@ -513,7 +509,7 @@ class ComparePage extends React.PureComponent {
                     )}
                 </div>
 
-                {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}
+                {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
             </div>
         );
     }
@@ -525,8 +521,6 @@ const mapStateToProps = state => {
         compareList: state.compareList,
         selectedDeal: state.selectedDeal,
         selectedTab: state.selectedTab,
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates,
         termDuration: state.termDuration,
         employeeBrand: state.employeeBrand,
     };

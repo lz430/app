@@ -3,7 +3,6 @@
 namespace App\JATO;
 
 use App\Deal;
-use App\Incentive;
 use DeliverMyRide\JATO\BodyStyles;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -35,13 +34,6 @@ class Version extends Model
         return $this->belongsTo(VehicleModel::class, 'model_id');
     }
 
-    public function incentives()
-    {
-        return $this->belongsToMany(
-            Incentive::class
-        );
-    }
-
     public function options()
     {
         return $this->hasMany(Option::class, 'jato_vehicle_id');
@@ -71,7 +63,7 @@ class Version extends Model
     {
         return $query->whereIn('model_id', $modelIds);
     }
-    
+
     public function scopeFilterByBodyStyle(Builder $query, $bodyStyles) : Builder
     {
         if (! is_array($bodyStyles)) {

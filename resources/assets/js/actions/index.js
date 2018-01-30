@@ -187,27 +187,37 @@ export function toggleModel(model) {
     };
 }
 
-export function requestRebates(deal) {
+export function requestTargets(deal) {
     return (dispatch, getState) => {
-        // If we have already received the rebates for the deal, don't request them again.
-        // Or if we don't yet have a zipcode
-        if (
-            getState().dealRebates.hasOwnProperty(deal.id) ||
-            !getState().zipcode
-        )
-            return;
+        // If no zipcode has been set, do not request targets
+        const zipcode = getState().zipcode;
+        if (!zipcode) return;
 
-        api.getRebates(getState().zipcode, deal.vin).then(data => {
+        // If we already have the target data, do not re-request it
+        const targetKey = util.getTargetKeyForDealAndZip(deal, zipcode);
+        if (!R.isNil(getState().targetsAvailable[targetKey])) return;
+
+        api.getTargets(zipcode, deal.vin).then(data => {
             dispatch(
-                receiveDealRebates({
-                    data: data,
-                    dealId: deal.id,
+                receiveTargets({
+                    data,
+                    deal,
+                    zipcode,
                 })
             );
         });
 
         dispatch({
-            type: ActionTypes.REQUEST_REBATES,
+            type: ActionTypes.REQUEST_TARGETS,
+        });
+    };
+}
+
+export function receiveTargets(data) {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.RECEIVE_TARGETS,
+            data: data,
         });
     };
 }
@@ -216,22 +226,6 @@ export function receiveDeals(data) {
     return dispatch => {
         dispatch({
             type: ActionTypes.RECEIVE_DEALS,
-            data: data,
-        });
-    };
-}
-
-export function receiveDealRebates(data) {
-    return dispatch => {
-        data.data.data.rebates.map(rebate => {
-            // Don't auto-select just based on this criteria. We'll eventually select on load based on the "Open Offer Best Offer"
-            if (rebate.openOffer) {
-                // dispatch(selectRebate(rebate));
-            }
-        });
-
-        dispatch({
-            type: ActionTypes.RECEIVE_DEAL_REBATES,
             data: data,
         });
     };
@@ -292,14 +286,12 @@ export function setEmployeeBrand(employeeBrand) {
     };
 }
 
-
 export function checkZipInRange(code) {
-   return dispatch => {
-       api.checkZipInRange(code).then(data => {
-           return dispatch(setZipInRange(data.data));
-       })
-   }
-
+    return dispatch => {
+        api.checkZipInRange(code).then(data => {
+            return dispatch(setZipInRange(data.data));
+        });
+    };
 }
 
 export function setZipInRange(data) {
@@ -308,9 +300,9 @@ export function setZipInRange(data) {
             return dispatch({
                 type: ActionTypes.SET_ZIP_IN_RANGE,
                 supported: data.supported,
-            })
+            });
         });
-    }
+    };
 }
 
 export function receiveMoreDeals(data) {
@@ -519,8 +511,8 @@ export function setZipCode(zipcode) {
             type: ActionTypes.SET_ZIP_CODE,
             zipcode,
         });
-        
-        dispatch(checkZipInRange(zipcode))
+
+        dispatch(checkZipInRange(zipcode));
     };
 }
 
@@ -534,8 +526,6 @@ export function requestLocationInfo() {
                 if (err) {
                     dispatch(requestDeals());
                 } else {
-                    window.axios.post('/hubspot', { zip: data.zip_code });
-
                     dispatch(receiveLocationInfo(data));
                 }
             });
@@ -626,10 +616,11 @@ export function selectRebate(rebate) {
     };
 }
 
-export function toggleRebate(rebate) {
+export function toggleTarget(target, targetKey) {
     return {
-        type: ActionTypes.TOGGLE_REBATE,
-        rebate,
+        type: ActionTypes.TOGGLE_TARGET,
+        target,
+        targetKey,
     };
 }
 
@@ -658,5 +649,132 @@ export function updateResidualPercent(residualPercent) {
     return {
         type: ActionTypes.UPDATE_RESIDUAL_PERCENT,
         residualPercent,
+    };
+}
+
+export function requestBestOffer(deal) {
+    return (dispatch, getState) => {
+        const zipcode = getState().zipcode;
+        if (!zipcode) return;
+        const targetKey = util.getTargetKeyForDealAndZip(deal, zipcode);
+        const selectedTargetIds = getState().targetsSelected[targetKey]
+            ? R.map(R.prop('targetId'), getState().targetsSelected[targetKey])
+            : [];
+        const targets = R.uniq(
+            getState().targetDefaults.concat(selectedTargetIds)
+        );
+
+        // Temporarily limit to only selected payment type until we can address performance issues
+        let paymentTypes = [getState().selectedTab];
+        // We can ask for all payment types by uncommenting this:
+        // const paymentTypes = ['cash', 'finance', 'lease'];
+
+        paymentTypes.map(paymentType => {
+            const bestOfferKey = util.getBestOfferKeyForDeal(
+                deal,
+                zipcode,
+                getState().selectedTab,
+                targets
+            );
+
+            // if the best offer is already in store, do not call for it again
+            if (R.props(bestOfferKey, getState().bestOffers)) {
+                dispatch({ type: ActionTypes.SAME_BEST_OFFERS });
+            }
+
+            const CancelToken = window.axios.CancelToken;
+            const source = CancelToken.source();
+
+            dispatch(appendCancelToken(deal, source));
+            api
+                .getBestOffer(deal.id, paymentType, zipcode, targets, source)
+                .then(data => {
+                    dispatch(removeCancelToken(deal));
+                    dispatch(receiveBestOffer(data, bestOfferKey, paymentType));
+                })
+                .catch(e => {
+                    dispatch(removeCancelToken(deal));
+                    dispatch(
+                        receiveBestOffer({
+                            data: {
+                                data: {
+                                    cash: {
+                                        totalValue: 0,
+                                        programs: [],
+                                    },
+                                },
+                            },
+                        })
+                    );
+                });
+
+            dispatch({ type: ActionTypes.REQUEST_BEST_OFFER });
+        });
+
+        dispatch(clearCancelTokens());
+    };
+}
+
+export function receiveBestOffer(data, bestOfferKey, paymentType) {
+    // Although lease AND finance have the 'cash' wrapper, we are currently
+    // displaying cash best offers in the finance tabs.
+    const bestOffer = paymentType === 'lease' ? data.data.cash : data.data;
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.RECEIVE_BEST_OFFER,
+            data: bestOffer,
+            bestOfferKey,
+        });
+    };
+}
+
+export function appendCancelToken(deal, cancelToken) {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.APPEND_CANCEL_TOKEN,
+            deal,
+            cancelToken,
+        });
+    };
+}
+
+export function removeCancelToken(deal) {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.REMOVE_CANCEL_TOKEN,
+            deal,
+        });
+    };
+}
+
+export function clearCancelTokens() {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.CLEAR_CANCEL_TOKENS,
+        });
+    };
+}
+
+export function cancelAllBestOfferPromises() {
+    return (dispatch, getState) => {
+        getState().cancelTokens.map(cancelToken => {
+            try {
+                cancelToken.source.cancel();
+            } catch (err) {
+                console.log('Cancel error: ', err);
+            }
+        });
+        dispatch({ type: ActionTypes.CANCEL_ALL_PROMISES });
+        dispatch(clearCancelTokens());
+    };
+}
+
+export function getBestOffersForLoadedDeals() {
+    return (dispatch, getState) => {
+        dispatch(cancelAllBestOfferPromises());
+        getState().deals.map(deal => {
+            dispatch(requestBestOffer(deal));
+        });
+        dispatch({ type: ActionTypes.REQUEST_ALL_BEST_OFFERS });
     };
 }

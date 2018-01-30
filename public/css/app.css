@@ -149,10 +149,6 @@ body {
   color: #535d63;
 }
 
-.footer-signup__email::-ms-input-placeholder {
-  color: #535d63;
-}
-
 .footer-signup__email::placeholder {
   color: #535d63;
 }
@@ -1172,6 +1168,10 @@ body {
 .info-modal-data__pricing-details {
   font-size: 1.25em;
   text-decoration: underline;
+}
+
+.info-modal-data__rebate-info__title {
+  text-align: left;
 }
 
 .sortbar {

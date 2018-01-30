@@ -8,6 +8,7 @@ class CreateIncentivesTables extends Migration
 {
     public function up()
     {
+        /*
         Schema::create('incentives', function (Blueprint $table) {
             $table->increments('id');
             $table->string('makeName');
@@ -35,11 +36,13 @@ class CreateIncentivesTables extends Migration
             $table->unique(['subProgramID', 'title']);
             $table->timestamps();
         });
+        */
 
         Schema::table('versions', function (Blueprint $table) {
             $table->unique(['jato_vehicle_id']);
         });
 
+        /*
         Schema::create('incentive_version', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('incentive_id');
@@ -48,6 +51,7 @@ class CreateIncentivesTables extends Migration
             $table->foreign('version_id')->references('id')->on('versions')->onDelete('cascade');
             $table->unique(['version_id', 'incentive_id']);
         });
+        */
     }
 
     public function down()

@@ -66,7 +66,7 @@ class ApplyEmailsTest extends TestCase
                 // Rebates.
                 'rebates' => [
                     [
-                        'rebate' => 'test rebate',
+                        'title' => 'Military',
                         'value' => 1200,
                     ],
                 ],
@@ -92,7 +92,7 @@ class ApplyEmailsTest extends TestCase
                 // Rebates.
                 'rebates' => [
                     [
-                        'rebate' => 'test rebate',
+                        'title' => 'Military',
                         'value' => 1200,
                     ],
                 ],

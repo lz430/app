@@ -4,7 +4,6 @@ import { REHYDRATE } from 'redux-persist/constants';
 import util from 'src/util';
 
 const reducer = (state, action) => {
-    console.log(action.type);
     switch (action.type) {
         case REHYDRATE:
             /**
@@ -44,24 +43,21 @@ const reducer = (state, action) => {
                 showMakeSelectorModal: false,
             });
         case ActionTypes.RECEIVE_MAKES:
-            return Object.assign({}, state, {
-                makes: action.data.data.data,
-            });
+            return { ...state, makes: action.data.data.data };
         case ActionTypes.RECEIVE_MODELS:
             return Object.assign({}, state, {
                 models: action.data.data.data,
             });
         case ActionTypes.REQUEST_MORE_DEALS:
-            return Object.assign({}, state, {
-                requestingMoreDeals: true,
-            });
+            return Object.assign({}, state, { requestingMoreDeals: true });
         case ActionTypes.REQUEST_DEALS:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 deals: null,
                 dealPageTotal: null,
                 dealPage: null,
                 requestingMoreDeals: true,
-            });
+            };
         case ActionTypes.RECEIVE_DEALS:
             return Object.assign({}, state, {
                 deals: action.data.data.data,
@@ -72,23 +68,45 @@ const reducer = (state, action) => {
                 ),
                 requestingMoreDeals: false,
             });
-        case ActionTypes.RECEIVE_DEAL_REBATES:
-            let nextDealRebates = Object.assign({}, state.dealRebates);
+        case ActionTypes.RECEIVE_TARGETS:
+            const targetKey = util.getTargetKeyForDealAndZip(
+                action.data.deal,
+                action.data.zipcode
+            );
 
-            nextDealRebates[action.data.dealId] = action.data.data.data.rebates;
+            return {
+                ...state,
+                targetsAvailable: {
+                    ...state.targetsAvailable,
+                    [targetKey]: action.data.data.data.targets,
+                },
+            };
+        case ActionTypes.RECEIVE_DEAL_TARGETS:
+            let nextDealTargets = Object.assign({}, state.dealTargets);
+
+            nextDealTargets[action.data.dealId] = action.data.data.data.targets;
 
             return Object.assign({}, state, {
-                dealRebates: nextDealRebates,
+                dealTargets: nextDealTargets,
             });
+        case ActionTypes.TOGGLE_TARGET:
+            return {
+                ...state,
+                targetsSelected: {
+                    ...state.targetsSelected,
+                    [action.targetKey]: util.toggleItem(
+                        state.targetsSelected[action.targetKey] || [],
+                        action.target
+                    ),
+                },
+            };
         case ActionTypes.SORT_DEALS:
             return Object.assign({}, state, {
                 sortColumn: action.sort,
                 sortAscending: !state.sortAscending,
             });
         case ActionTypes.SELECT_TAB:
-            return Object.assign({}, state, {
-                selectedTab: action.data,
-            });
+            return Object.assign({}, state, { selectedTab: action.data });
         case ActionTypes.RECEIVE_MORE_DEALS:
             return Object.assign({}, state, {
                 deals: R.concat(state.deals || [], action.data.data.data),
@@ -131,13 +149,6 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 selectedStyles: action.selectedStyles,
             });
-        case ActionTypes.TOGGLE_REBATE:
-            return Object.assign({}, state, {
-                selectedRebates: util.toggleItem(
-                    state.selectedRebates,
-                    action.rebate
-                ),
-            });
         case ActionTypes.SELECT_REBATE:
             if (!R.contains(action.rebate, state.selectedRebates)) {
                 return Object.assign({}, state, {
@@ -170,9 +181,7 @@ const reducer = (state, action) => {
                 residualPercent: action.residualPercent,
             });
         case ActionTypes.UPDATE_TERM_DURATION:
-            return Object.assign({}, state, {
-                termDuration: action.termDuration,
-            });
+            return {...state, termDuration: action.termDuration}
         case ActionTypes.CHOOSE_TRANSMISSION_TYPE:
             return Object.assign({}, state, {
                 selectedTransmissionType: action.selectedTransmissionType,
@@ -182,9 +191,7 @@ const reducer = (state, action) => {
                 selectedDeal: action.selectedDeal,
             });
         case ActionTypes.CLEAR_SELECTED_DEAL:
-            return Object.assign({}, state, {
-                selectedDeal: null,
-            });
+            return Object.assign({}, state, { selectedDeal: null });
         case ActionTypes.CLEAR_ALL_FILTERS:
             return Object.assign({}, state, {
                 selectedStyles: [],
@@ -194,14 +201,9 @@ const reducer = (state, action) => {
                 selectedFeatures: [],
             });
         case ActionTypes.TOGGLE_COMPARE:
-            return Object.assign({}, state, {
-                compareList: action.compareList,
-            });
+            return { ...state, compareList: action.compareList };
         case ActionTypes.SET_ZIP_CODE:
-            return Object.assign({}, state, {
-                zipcode: action.zipcode,
-                city: null,
-            });
+            return { ...state, zipcode: action.zipcode, city: null };
         case ActionTypes.RECEIVE_LOCATION_INFO:
             return Object.assign({}, state, {
                 zipcode: action.zipcode,
@@ -211,7 +213,29 @@ const reducer = (state, action) => {
         case ActionTypes.SET_ZIP_IN_RANGE:
             return Object.assign({}, state, {
                 zipInRange: action.supported,
-        });
+            });
+        case ActionTypes.RECEIVE_BEST_OFFER:
+            return {...state, bestOffers: {...state.bestOffers, [action.bestOfferKey]: action.data} }
+        case ActionTypes.APPEND_CANCEL_TOKEN:
+            return {
+                ...state,
+                cancelTokens: [
+                    ...state.cancelTokens,
+                    { dealId: action.deal.id, source: action.cancelToken },
+                ],
+            };
+
+        case ActionTypes.REMOVE_CANCEL_TOKEN:
+            return {
+                ...state,
+                cancelTokens: R.reject(
+                    R.propEq('dealId', action.deal.id),
+                    state.cancelTokens
+                ),
+            };
+
+        case ActionTypes.CLEAR_CANCEL_TOKENS:
+            return { ...state, cancelTokens: [] };
     }
 
     return state;

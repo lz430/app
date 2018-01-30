@@ -6,117 +6,50 @@ import Modal from 'components/Modal';
 import PropTypes from 'prop-types';
 import R from 'ramda';
 import React from 'react';
-import rebates from 'src/rebates';
 import SVGInline from 'react-svg-inline';
 import util from 'src/util';
 import strings from 'src/strings';
+import {
+    makeDealBestOfferTotalValue,
+    makeDealBestOffer,
+} from 'selectors/index';
 
 class InfoModalData extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {};
-    }
-
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
-
     componentDidMount() {
-        this._isMounted = true;
-
-        if (
-            !this.props.dealRebates.hasOwnProperty(this.props.deal.id) &&
-            this.props.zipcode
-        ) {
-            this.requestRebates();
-        } else {
-            this.componentWillReceiveProps(this.props);
-        }
+        this.props.requestTargets(this.props.deal);
+        this.props.requestBestOffer(this.props.deal);
     }
 
-    requestRebates() {
-        this.props.requestRebates(this.props.deal);
-    }
-
-    componentWillReceiveProps(props) {
-        if (!props.dealRebates.hasOwnProperty(props.deal.id)) {
-            return this.props.requestRebates(this.props.deal);
-        }
-
-        this.setState({
-            availableRebates: rebates.getAvailableRebatesForDealAndType(
-                props.dealRebates,
-                props.selectedRebates,
-                props.selectedTab,
-                props.deal
-            ),
-            selectedRebates: rebates.getSelectedRebatesForDealAndType(
-                props.dealRebates,
-                props.selectedRebates,
-                props.selectedTab,
-                props.deal
-            ),
-        });
-    }
-
-    renderDealRebatesModal() {
-        return (
-            <Modal
-                onClose={this.props.clearSelectedDeal}
-                closeText="Back to results"
-            />
-        );
-    }
-
-    displayFinalPrice() {
-        const selectedAmount = this.state.selectedRebates
-            ? R.sum(R.map(R.prop('value'), this.state.selectedRebates))
-            : 0;
+    finalPrice() {
         switch (this.props.selectedTab) {
             case 'cash':
-                return this.props.deal.supplier_price - selectedAmount;
+                return formulas.calculateTotalCash(
+                    util.getEmployeeOrSupplierPrice(
+                        this.props.deal,
+                        this.props.employeeBrand
+                    ),
+                    this.props.deal.doc_fee,
+                    this.props.dealBestOfferTotalValue
+                );
             case 'finance': {
                 return Math.round(
                     formulas.calculateFinancedMonthlyPayments(
                         util.getEmployeeOrSupplierPrice(
                             this.props.deal,
-                            this.props.isEmployee
-                        ) -
-                            R.sum(
-                                R.map(
-                                    R.prop('value'),
-                                    rebates.getSelectedRebatesForDealAndType(
-                                        this.props.dealRebates,
-                                        this.props.selectedRebates,
-                                        this.props.selectedTab,
-                                        this.props.deal
-                                    )
-                                )
-                            ),
+                            this.props.employeeBrand
+                        ) - this.props.dealBestOfferTotalValue,
                         this.props.downPayment,
                         this.props.termDuration
                     )
                 );
             }
             case 'lease': {
-                return Math.round(
+                return formulas.calculateTotalLeaseMonthlyPayment(
                     formulas.calculateLeasedMonthlyPayments(
                         util.getEmployeeOrSupplierPrice(
                             this.props.deal,
-                            this.props.isEmployee
-                        ) -
-                            R.sum(
-                                R.map(
-                                    R.prop('value'),
-                                    rebates.getSelectedRebatesForDealAndType(
-                                        this.props.dealRebates,
-                                        this.props.selectedRebates,
-                                        this.props.selectedTab,
-                                        this.props.deal
-                                    )
-                                )
-                            ),
+                            this.props.employeeBrand
+                        ) - this.props.dealBestOfferTotalValue,
                         0,
                         0,
                         this.props.termDuration,
@@ -127,48 +60,40 @@ class InfoModalData extends React.PureComponent {
         }
     }
 
-    showAppliedRebates() {
-        const selectedAmount = R.sum(
-            R.map(R.prop('value'), this.props.selectedRebates)
-        );
-        const maxAmount = R.sum(R.map(R.prop('value'), this.props.dealRebates));
-
-        this.setState({
-            selectedRebateAmount: selectedAmount,
-            maxRebateAmount: maxAmount,
-        });
+    handleGetRebatesLink() {
+        this.props.selectDeal(this.props.deal);
+        this.props.closeModal();
     }
 
     renderAppliedRebatesLink() {
-        if (!this.state.availableRebates) {
-            return <SVGInline svg={miscicons['loading']} />;
-        }
-
-        const selectedAmount = R.sum(
-            R.map(R.prop('value'), this.state.selectedRebates)
-        );
-        const maxAmount = R.sum(
-            R.map(R.prop('value'), this.state.availableRebates)
-        );
-
         return (
             <div>
                 <div className="info-modal-data__rebate-info info-modal-data__costs info-modal-data__bold">
-                    <div>{`Rebates Applied:`}</div>
-                    <div>{`${util.moneyFormat(selectedAmount)}`}</div>
+                    <div className="info-modal-data__rebate-info__title">
+                        Rebates Applied:
+                    </div>
+                    <div>
+                        {util.moneyFormat(this.props.dealBestOfferTotalValue)}
+                    </div>
                 </div>
+                {this.props.dealBestOffer.programs.map((program, index) => {
+                    return (
+                        <div
+                            className="info-modal-data__rebate-info info-modal-data__costs"
+                            key={index}
+                        >
+                            <div className="info-modal-data__rebate-info__title">
+                                {strings.toTitleCase(program.title)}
+                            </div>
+                            <div>{`${util.moneyFormat(program.value)}`}</div>
+                        </div>
+                    );
+                })}
 
                 <div className="info-modal-data__more-rebates info-modal-data__costs">
-                    <div>{`${util.moneyFormat(
-                        maxAmount
-                    )} in rebates available.  `}</div>
                     <div>
                         <a
-                            onClick={() => {
-                                this.props.selectDeal(this.props.deal);
-
-                                this.props.closeModal();
-                            }}
+                            onClick={this.handleGetRebatesLink.bind(this)}
                             href="#"
                         >
                             Get Rebates
@@ -194,7 +119,7 @@ class InfoModalData extends React.PureComponent {
                             className="info-modal-data__default-option"
                             disabled
                         >
-                            <option>{defaultTermLength}</option>
+                            <option>{this.props.termDuration} months</option>
                         </select>
                     </div>
                     <div>
@@ -205,8 +130,7 @@ class InfoModalData extends React.PureComponent {
                             className="info-modal-data__input"
                             disabled
                             placeholder={util.moneyFormat(
-                                this.props.deal.supplier_price *
-                                    financeDownPaymentAmount
+                                this.props.downPayment
                             )}
                         />
                     </div>
@@ -304,7 +228,9 @@ class InfoModalData extends React.PureComponent {
                                 ? ''
                                 : this.renderPaymentDefaults()}
 
-                            {this.renderAppliedRebatesLink()}
+                            {this.props.dealBestOfferTotalValue
+                                ? this.renderAppliedRebatesLink()
+                                : 'Loading Applied Rebates...'}
                         </div>
 
                         <hr />
@@ -313,7 +239,7 @@ class InfoModalData extends React.PureComponent {
                                 this.props.selectedTab
                             )} Price:`}</div>
                             <div>
-                                {`${util.moneyFormat(this.displayFinalPrice())}
+                                {`${util.moneyFormat(this.finalPrice())}
                                 ${
                                     this.props.selectedTab === 'finance' ||
                                     this.props.selectedTab === 'lease'
@@ -353,18 +279,22 @@ InfoModalData.propTypes = {
     closeModal: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => {
-    return {
-        compareList: state.compareList,
-        selectedTab: state.selectedTab,
-        downPayment: state.downPayment,
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates,
-        termDuration: state.termDuration,
-        selectedDeal: state.selectedDeal,
-        isEmployee: state.isEmployee,
-        residualPercent: state.residualPercent,
+const makeMapStateToProps = () => {
+    const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
+    const getDealBestOffer = makeDealBestOffer();
+    const mapStateToProps = (state, props) => {
+        return {
+            downPayment: state.downPayment,
+            employeeBrand: state.employeeBrand,
+            residualPercent: state.residualPercent,
+            selectedTab: state.selectedTab,
+            selectedDeal: state.selectedDeal,
+            termDuration: state.termDuration,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOffer: getDealBestOffer(state, props),
+        };
     };
+    return mapStateToProps;
 };
 
-export default connect(mapStateToProps, Actions)(InfoModalData);
+export default connect(makeMapStateToProps, Actions)(InfoModalData);

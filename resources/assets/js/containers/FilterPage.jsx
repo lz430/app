@@ -28,7 +28,7 @@ class FilterPage extends React.PureComponent {
         );
     }
 
-    renderDealRebatesModal() {
+    renderCalculatorModal() {
         return (
             <Modal
                 onClose={this.props.clearSelectedDeal}
@@ -94,7 +94,7 @@ class FilterPage extends React.PureComponent {
                     ''
                 )}
 
-                {this.props.selectedDeal ? this.renderDealRebatesModal() : ''}
+                {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
 
                 {this.renderFilterPanelAndDeals()}
             </div>
