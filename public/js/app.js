@@ -1442,7 +1442,8 @@ function requestBestOffer(deal) {
 
             dispatch({ type: ActionTypes.REQUEST_BEST_OFFER });
         });
-        // dispatch(clearCancelTokens());
+
+        dispatch(clearCancelTokens());
     };
 }
 
@@ -61449,6 +61450,7 @@ var initialState = {
     targets: [],
     targetsAvailable: {},
     targetsSelected: {},
+    /** Need to duplicate these in App\Http\Controllers\API\TargetsController::TARGET_OPEN_OFFERS **/
     targetDefaults: [25, // Open Offer
     36, // Finance & Lease Customer
     39, // Finance Customer

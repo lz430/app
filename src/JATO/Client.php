@@ -6,7 +6,6 @@ use Facades\App\JATO\Log;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Http\JsonResponse;
 
 class Client
 {
@@ -145,7 +144,7 @@ class Client
             ]);
         } catch (ClientException $e) {
             Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode");
-            return ['targets' => []];
+            return [];
         }
     }
 
@@ -174,7 +173,7 @@ class Client
             ]);
         } catch (ClientException $e) {
             Log::debug("Vehicle ID $vehicleId returns no Best Offers. URL: incentives/bestOffer/$vehicleId/$paymentType?zipCode=$zipcode&targets=$targets");
-            return JsonResponse::create(['totalValue' => 0, 'programs' => []]);
+            return ['totalValue' => 0, 'programs' => []];
         }
     }
 

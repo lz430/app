@@ -39,10 +39,6 @@ class DealBestOfferController extends BaseAPIController
         $zipCode = request('zipcode');
         $cacheKey = "best-offer:{$jatoVehicleId}:{$paymentType}:{$zipCode}:{$sortedTargets}";
 
-        if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
-        }
-
         return Cache::tags(['best-offers'])->remember($cacheKey, self::CACHE_LENGTH, function () use ($jatoVehicleId, $paymentType, $zipCode, $sortedTargets) {
             return $this->client->bestOffer($jatoVehicleId, $paymentType, $zipCode, $sortedTargets);
         });

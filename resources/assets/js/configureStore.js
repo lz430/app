@@ -11,7 +11,7 @@ import {
     windowResize,
 } from 'actions/index';
 import util from 'src/util';
-import {checkZipInRange, requestFeatureCategories} from "./actions/index";
+import { checkZipInRange, requestFeatureCategories } from './actions/index';
 
 const urlStyle = util.getInitialBodyStyleFromUrl();
 
@@ -58,6 +58,7 @@ const initialState = {
     targets: [],
     targetsAvailable: {},
     targetsSelected: {},
+    /** Need to duplicate these in App\Http\Controllers\API\TargetsController::TARGET_OPEN_OFFERS **/
     targetDefaults: [
         25, // Open Offer
         36, // Finance & Lease Customer

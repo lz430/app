@@ -710,7 +710,8 @@ export function requestBestOffer(deal) {
 
             dispatch({ type: ActionTypes.REQUEST_BEST_OFFER });
         });
-        // dispatch(clearCancelTokens());
+
+        dispatch(clearCancelTokens());
     };
 }
 

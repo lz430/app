@@ -20,6 +20,7 @@ class TargetsController extends Controller
     ];
 
     // Targets that are automatically applied to all customers
+    // Need to duplicate these in configureStore.js initialState
     const TARGET_OPEN_OFFERS = [
         25, // Open Offer
         36, // Finance & Lease Customer
@@ -43,7 +44,7 @@ class TargetsController extends Controller
             );
 
             return collect($response)->reject(function ($target) {
-                return in_array($target['targetId'], self::TARGET_BLACKLIST);
+                return in_array($target['targetId'], array_merge(self::TARGET_BLACKLIST, self::TARGET_OPEN_OFFERS));
             })->values()->all();
         });
 
