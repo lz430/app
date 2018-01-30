@@ -105,11 +105,11 @@ const api = {
     postNotifyWhenInRange: (email = null) => {
         return window.axios.post('/api/hubspot/not-in-area', { email });
     },
-    getBestOffer: (dealId, payment_type, zipcode, targets, cancelToken) => {
+    getBestOffer: (dealId, paymentType, zipcode, targets, cancelToken) => {
         return window.axios.get(`/api/deals/${dealId}/best-offer`, {
             cancelToken: cancelToken.token,
             params: {
-                payment_type,
+                payment_type: paymentType,
                 zipcode,
                 targets,
             },

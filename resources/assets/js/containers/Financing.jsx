@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import api from 'src/api';
 
 class Financing extends Component {
@@ -6,37 +7,48 @@ class Financing extends Component {
         super(props);
 
         this.state = {
+            method: 'cash',
+        }
+    }
+
+    componentWillMount() {
+        this.setState({
             url:
                 'https://itl.routeone.net/XRD/turnKeyOcaStart.do?rteOneDmsId=F00DMR' +
-                `&dealerId=${props.purchase.deal.dealer.route_one_id}` +
-                `&buyOrLease=${props.purchase.type === 'finance' ? 1 : 2}` +
-                `&email=${props.user.email}` +
-                `&vehicleYear=${props.purchase.deal.year}` +
-                `&vehicleMake=${props.purchase.deal.make}` +
-                `&vehicleModel=${props.purchase.deal.model}` +
-                `&contractTerms_vehiclestyle=${props.purchase.deal.body}` +
-                `&vehicle_vin=${props.purchase.deal.vin}` +
-                `&contractTerms_msrp=${props.purchase.deal.msrp}` +
-                `&contractTerms_cash_down=${props.purchase.down_payment}` +
+                `&dealerId=${this.props.purchase.deal.dealer.route_one_id}` +
+                `&buyOrLease=${this.props.purchase.type === 'finance' ? 1 : 2}` +
+                `&email=${this.props.user.email}` +
+                `&vehicleYear=${this.props.purchase.deal.year}` +
+                `&vehicleMake=${this.props.purchase.deal.make}` +
+                `&vehicleModel=${this.props.purchase.deal.model}` +
+                `&contractTerms_vehiclestyle=${this.props.purchase.deal.body}` +
+                `&vehicle_vin=${this.props.purchase.deal.vin}` +
+                `&contractTerms_msrp=${this.props.purchase.deal.msrp}` +
+                `&contractTerms_cash_down=${this.props.purchase.down_payment}` +
                 `&contractTerms_financed_amount=${
-                    props.purchase.amount_financed
+                    this.props.purchase.amount_financed
                 }` +
-                `&contractTerms_term=${props.purchase.term}` +
+                `&contractTerms_term=${this.props.purchase.term}` +
                 `&vehicle_image_url=${
-                    props.featuredPhoto ? props.featuredPhoto.url : ''
+                    this.props.featuredPhoto ? this.props.featuredPhoto.url : ''
                 }` +
-                `&dealership_name=${props.purchase.deal.dealer.name}`,
-        };
+                `&dealership_name=${this.props.purchase.deal.dealer.name}`,
+        })
     }
 
     componentDidMount() {
         document.getElementById('routeOne').XrdNavigationUtils = {
             beforeUnloadIsDisabled: true,
         };
+
         window.setInterval(() => {
             api.getApplicationStatus(this.props.purchase.id).then(response => {
                 if (response.data) {
-                    window.location = '/thank-you?method=financing';
+                    this.setState({
+                        method: 'finance'
+                    });
+
+                    document.purchase.submit();
                 }
             });
         }, 2000);
@@ -48,14 +60,25 @@ class Financing extends Component {
                 <div className="financing__constrained">
                     <div className="financing__header">
                         <div className="financing__title">Financing</div>
-                        <button
-                            onClick={() =>
-                                (window.location = '/thank-you?method=cash')
-                            }
-                            className="financing__button financing__button--blue"
-                        >
-                            No thanks, I'll get my own financing.
-                        </button>
+                        <form name="purchase" method="post" action="/purchase">
+                            <input
+                                type="hidden"
+                                name="_token"
+                                value={window.Laravel.csrfToken}
+                            />
+                            <input
+                                type="hidden"
+                                name="purchase_id"
+                                value={this.props.purchase.id}
+                            />
+                            <input type="hidden" name="method" value={this.state.method} />
+                            <button
+                                onClick={() => document.purchase.submit()}
+                                className="financing__button financing__button--blue"
+                            >
+                                No thanks, I'll get my own financing.
+                            </button>
+                        </form>
                     </div>
 
                     <iframe
@@ -69,6 +92,12 @@ class Financing extends Component {
             </div>
         );
     }
+}
+
+PropTypes.Financing = {
+    featuredPhoto: PropTypes.object.isRequired,
+    purchase: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
 }
 
 export default Financing;

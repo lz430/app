@@ -704,6 +704,42 @@ module.exports = function (it) {
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
+/**
+ * Copyright 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+if (true) {
+  var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
+    Symbol.for &&
+    Symbol.for('react.element')) ||
+    0xeac7;
+
+  var isValidElement = function(object) {
+    return typeof object === 'object' &&
+      object !== null &&
+      object.$$typeof === REACT_ELEMENT_TYPE;
+  };
+
+  // By explicitly using `prop-types` you are opting into new development behavior.
+  // http://fb.me/prop-types-in-prod
+  var throwOnDirectAccess = true;
+  module.exports = __webpack_require__(271)(isValidElement, throwOnDirectAccess);
+} else {
+  // By explicitly using `prop-types` you are opting into new production behavior.
+  // http://fb.me/prop-types-in-prod
+  module.exports = require('./factoryWithThrowingShims')();
+}
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
@@ -1475,7 +1511,7 @@ function getBestOffersForLoadedDeals() {
 }
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1493,7 +1529,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -1632,42 +1668,6 @@ SVGInline.cleanupSvg = function (svg) {
 };
 
 exports.default = SVGInline;
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- */
-
-if (true) {
-  var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
-    Symbol.for &&
-    Symbol.for('react.element')) ||
-    0xeac7;
-
-  var isValidElement = function(object) {
-    return typeof object === 'object' &&
-      object !== null &&
-      object.$$typeof === REACT_ELEMENT_TYPE;
-  };
-
-  // By explicitly using `prop-types` you are opting into new development behavior.
-  // http://fb.me/prop-types-in-prod
-  var throwOnDirectAccess = true;
-  module.exports = __webpack_require__(271)(isValidElement, throwOnDirectAccess);
-} else {
-  // By explicitly using `prop-types` you are opting into new production behavior.
-  // http://fb.me/prop-types-in-prod
-  module.exports = require('./factoryWithThrowingShims')();
-}
-
 
 /***/ }),
 /* 16 */
@@ -5380,11 +5380,11 @@ var api = {
 
         return window.axios.post('/api/hubspot/not-in-area', { email: email });
     },
-    getBestOffer: function getBestOffer(dealId, payment_type, zipcode, targets, cancelToken) {
+    getBestOffer: function getBestOffer(dealId, paymentType, zipcode, targets, cancelToken) {
         return window.axios.get('/api/deals/' + dealId + '/best-offer', {
             cancelToken: cancelToken.token,
             params: {
-                payment_type: payment_type,
+                payment_type: paymentType,
                 zipcode: zipcode,
                 targets: targets
             }
@@ -5408,7 +5408,7 @@ exports.getSelectedTargetsKeyForSelectedDeal = exports.makeDealBestOfferTotalVal
 
 var _reselect = __webpack_require__(941);
 
-var _index = __webpack_require__(13);
+var _index = __webpack_require__(14);
 
 var _ramda = __webpack_require__(11);
 
@@ -6275,7 +6275,7 @@ var _ramda = __webpack_require__(11);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -6285,7 +6285,7 @@ var _zondicons2 = _interopRequireDefault(_zondicons);
 
 var _reactRedux = __webpack_require__(17);
 
-var _actions = __webpack_require__(13);
+var _actions = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_actions);
 
@@ -10482,7 +10482,7 @@ var _LeaseCalculator2 = _interopRequireDefault(_LeaseCalculator);
 
 var _reactRedux = __webpack_require__(17);
 
-var _actions = __webpack_require__(13);
+var _actions = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_actions);
 
@@ -14258,11 +14258,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(17);
 
-var _index = __webpack_require__(13);
+var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -14393,7 +14393,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -14403,11 +14403,11 @@ var _ramda2 = _interopRequireDefault(_ramda);
 
 var _reactRedux = __webpack_require__(17);
 
-var _actions = __webpack_require__(13);
+var _actions = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_actions);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -14579,11 +14579,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(17);
 
-var _index = __webpack_require__(13);
+var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -21630,7 +21630,7 @@ module.exports = _curry2(function where(spec, testObj) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return subscriptionShape; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return storeShape; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_prop_types__);
 
 
@@ -23063,11 +23063,11 @@ var _util2 = _interopRequireDefault(_util);
 
 var _reactRedux = __webpack_require__(17);
 
-var _actions = __webpack_require__(13);
+var _actions = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_actions);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -42250,7 +42250,7 @@ var _MakeSelector = __webpack_require__(932);
 
 var _MakeSelector2 = _interopRequireDefault(_MakeSelector);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -42276,7 +42276,7 @@ var _FilterPanel2 = _interopRequireDefault(_FilterPanel);
 
 var _reactRedux = __webpack_require__(17);
 
-var _index = __webpack_require__(13);
+var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -49874,7 +49874,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 /* harmony export (immutable) */ __webpack_exports__["a"] = createProvider;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_PropTypes__ = __webpack_require__(353);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_warning__ = __webpack_require__(222);
@@ -52225,7 +52225,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -52235,11 +52235,11 @@ var _ramda = __webpack_require__(11);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _index = __webpack_require__(13);
+var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -52369,7 +52369,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -52385,7 +52385,7 @@ var _ViewDeals = __webpack_require__(936);
 
 var _ViewDeals2 = _interopRequireDefault(_ViewDeals);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -52395,7 +52395,7 @@ var _miscicons2 = _interopRequireDefault(_miscicons);
 
 var _reactRedux = __webpack_require__(17);
 
-var _index = __webpack_require__(13);
+var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -52630,7 +52630,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -52638,7 +52638,7 @@ var _ramda = __webpack_require__(11);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _actions = __webpack_require__(13);
+var _actions = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_actions);
 
@@ -52646,7 +52646,7 @@ var _Deal = __webpack_require__(223);
 
 var _Deal2 = _interopRequireDefault(_Deal);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -52799,7 +52799,7 @@ var _ramda = __webpack_require__(11);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -52813,11 +52813,11 @@ var _formulas2 = _interopRequireDefault(_formulas);
 
 var _reactRedux = __webpack_require__(17);
 
-var _index = __webpack_require__(13);
+var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -57904,7 +57904,7 @@ var _zondicons = __webpack_require__(28);
 
 var _zondicons2 = _interopRequireDefault(_zondicons);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -58018,7 +58018,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _index = __webpack_require__(13);
+var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -58036,7 +58036,7 @@ var _Modal = __webpack_require__(88);
 
 var _Modal2 = _interopRequireDefault(_Modal);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -58048,7 +58048,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -58565,11 +58565,11 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -58579,7 +58579,7 @@ var _zondicons2 = _interopRequireDefault(_zondicons);
 
 var _reactRedux = __webpack_require__(17);
 
-var _actions = __webpack_require__(13);
+var _actions = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_actions);
 
@@ -58775,11 +58775,11 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -58793,7 +58793,7 @@ var _ramda2 = _interopRequireDefault(_ramda);
 
 var _reactRedux = __webpack_require__(17);
 
-var _actions = __webpack_require__(13);
+var _actions = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_actions);
 
@@ -59060,7 +59060,7 @@ var _FilterSegmentSelector2 = _interopRequireDefault(_FilterSegmentSelector);
 
 var _reactRedux = __webpack_require__(17);
 
-var _index = __webpack_require__(13);
+var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -59266,7 +59266,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -59274,7 +59274,7 @@ var _zondicons = __webpack_require__(28);
 
 var _zondicons2 = _interopRequireDefault(_zondicons);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -59352,13 +59352,13 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactRedux = __webpack_require__(17);
 
-var _index = __webpack_require__(13);
+var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -59526,7 +59526,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -59534,7 +59534,7 @@ var _ramda = __webpack_require__(11);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -59649,7 +59649,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -59657,7 +59657,7 @@ var _ramda = __webpack_require__(11);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -59746,7 +59746,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -59754,7 +59754,7 @@ var _ramda = __webpack_require__(11);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -59834,7 +59834,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -59842,7 +59842,7 @@ var _ramda = __webpack_require__(11);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -59928,7 +59928,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -59936,7 +59936,7 @@ var _ramda = __webpack_require__(11);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -60016,7 +60016,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -60024,7 +60024,7 @@ var _ramda = __webpack_require__(11);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -60116,7 +60116,7 @@ var _CustomerTypeSelect2 = _interopRequireDefault(_CustomerTypeSelect);
 
 var _reactRedux = __webpack_require__(17);
 
-var _actions = __webpack_require__(13);
+var _actions = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_actions);
 
@@ -60124,7 +60124,7 @@ var _formulas = __webpack_require__(89);
 
 var _formulas2 = _interopRequireDefault(_formulas);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -60338,11 +60338,11 @@ var _formulas2 = _interopRequireDefault(_formulas);
 
 var _reactRedux = __webpack_require__(17);
 
-var _actions = __webpack_require__(13);
+var _actions = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_actions);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -60725,11 +60725,11 @@ var _api = __webpack_require__(70);
 
 var _api2 = _interopRequireDefault(_api);
 
-var _actions = __webpack_require__(13);
+var _actions = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_actions);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -61247,6 +61247,10 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = __webpack_require__(13);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _api = __webpack_require__(70);
 
 var _api2 = _interopRequireDefault(_api);
@@ -61268,12 +61272,19 @@ var Financing = function (_Component) {
         var _this = _possibleConstructorReturn(this, (Financing.__proto__ || Object.getPrototypeOf(Financing)).call(this, props));
 
         _this.state = {
-            url: 'https://itl.routeone.net/XRD/turnKeyOcaStart.do?rteOneDmsId=F00DMR' + ('&dealerId=' + props.purchase.deal.dealer.route_one_id) + ('&buyOrLease=' + (props.purchase.type === 'finance' ? 1 : 2)) + ('&email=' + props.user.email) + ('&vehicleYear=' + props.purchase.deal.year) + ('&vehicleMake=' + props.purchase.deal.make) + ('&vehicleModel=' + props.purchase.deal.model) + ('&contractTerms_vehiclestyle=' + props.purchase.deal.body) + ('&vehicle_vin=' + props.purchase.deal.vin) + ('&contractTerms_msrp=' + props.purchase.deal.msrp) + ('&contractTerms_cash_down=' + props.purchase.down_payment) + ('&contractTerms_financed_amount=' + props.purchase.amount_financed) + ('&contractTerms_term=' + props.purchase.term) + ('&vehicle_image_url=' + (props.featuredPhoto ? props.featuredPhoto.url : '')) + ('&dealership_name=' + props.purchase.deal.dealer.name)
+            method: 'cash'
         };
         return _this;
     }
 
     _createClass(Financing, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.setState({
+                url: 'https://itl.routeone.net/XRD/turnKeyOcaStart.do?rteOneDmsId=F00DMR' + ('&dealerId=' + this.props.purchase.deal.dealer.route_one_id) + ('&buyOrLease=' + (this.props.purchase.type === 'finance' ? 1 : 2)) + ('&email=' + this.props.user.email) + ('&vehicleYear=' + this.props.purchase.deal.year) + ('&vehicleMake=' + this.props.purchase.deal.make) + ('&vehicleModel=' + this.props.purchase.deal.model) + ('&contractTerms_vehiclestyle=' + this.props.purchase.deal.body) + ('&vehicle_vin=' + this.props.purchase.deal.vin) + ('&contractTerms_msrp=' + this.props.purchase.deal.msrp) + ('&contractTerms_cash_down=' + this.props.purchase.down_payment) + ('&contractTerms_financed_amount=' + this.props.purchase.amount_financed) + ('&contractTerms_term=' + this.props.purchase.term) + ('&vehicle_image_url=' + (this.props.featuredPhoto ? this.props.featuredPhoto.url : '')) + ('&dealership_name=' + this.props.purchase.deal.dealer.name)
+            });
+        }
+    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
             var _this2 = this;
@@ -61281,10 +61292,15 @@ var Financing = function (_Component) {
             document.getElementById('routeOne').XrdNavigationUtils = {
                 beforeUnloadIsDisabled: true
             };
+
             window.setInterval(function () {
                 _api2.default.getApplicationStatus(_this2.props.purchase.id).then(function (response) {
                     if (response.data) {
-                        window.location = '/thank-you?method=financing';
+                        _this2.setState({
+                            method: 'finance'
+                        });
+
+                        document.purchase.submit();
                     }
                 });
             }, 2000);
@@ -61307,14 +61323,29 @@ var Financing = function (_Component) {
                             'Financing'
                         ),
                         _react2.default.createElement(
-                            'button',
-                            {
-                                onClick: function onClick() {
-                                    return window.location = '/thank-you?method=cash';
+                            'form',
+                            { name: 'purchase', method: 'post', action: '/purchase' },
+                            _react2.default.createElement('input', {
+                                type: 'hidden',
+                                name: '_token',
+                                value: window.Laravel.csrfToken
+                            }),
+                            _react2.default.createElement('input', {
+                                type: 'hidden',
+                                name: 'purchase_id',
+                                value: this.props.purchase.id
+                            }),
+                            _react2.default.createElement('input', { type: 'hidden', name: 'method', value: this.state.method }),
+                            _react2.default.createElement(
+                                'button',
+                                {
+                                    onClick: function onClick() {
+                                        return document.purchase.submit();
+                                    },
+                                    className: 'financing__button financing__button--blue'
                                 },
-                                className: 'financing__button financing__button--blue'
-                            },
-                            'No thanks, I\'ll get my own financing.'
+                                'No thanks, I\'ll get my own financing.'
+                            )
                         )
                     ),
                     _react2.default.createElement('iframe', {
@@ -61331,6 +61362,12 @@ var Financing = function (_Component) {
 
     return Financing;
 }(_react.Component);
+
+_propTypes2.default.Financing = {
+    featuredPhoto: _propTypes2.default.object.isRequired,
+    purchase: _propTypes2.default.object.isRequired,
+    user: _propTypes2.default.object.isRequired
+};
 
 exports.default = Financing;
 
@@ -61357,13 +61394,13 @@ var _index = __webpack_require__(966);
 
 var _index2 = _interopRequireDefault(_index);
 
-var _index3 = __webpack_require__(13);
+var _index3 = __webpack_require__(14);
 
 var _util = __webpack_require__(26);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _index4 = __webpack_require__(13);
+var _index4 = __webpack_require__(14);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -62021,7 +62058,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _index = __webpack_require__(13);
+var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -62059,7 +62096,7 @@ var _miscicons = __webpack_require__(32);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -62075,7 +62112,7 @@ var _strings = __webpack_require__(90);
 
 var _strings2 = _interopRequireDefault(_strings);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -62721,7 +62758,7 @@ var _lodash3 = __webpack_require__(972);
 
 var _lodash4 = _interopRequireDefault(_lodash3);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -63954,7 +63991,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = __webpack_require__(4);
-var PropTypes = __webpack_require__(15);
+var PropTypes = __webpack_require__(13);
 var DetectPassiveEvents = __webpack_require__(970).default;
 
 function getInitialState() {
@@ -65154,7 +65191,7 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -65176,7 +65213,7 @@ var _qs2 = _interopRequireDefault(_qs);
 
 var _reactRedux = __webpack_require__(17);
 
-var _index = __webpack_require__(13);
+var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -65975,7 +66012,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _index = __webpack_require__(13);
+var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -65993,7 +66030,7 @@ var _Modal = __webpack_require__(88);
 
 var _Modal2 = _interopRequireDefault(_Modal);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -66198,7 +66235,7 @@ var _strings = __webpack_require__(90);
 
 var _strings2 = _interopRequireDefault(_strings);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 
@@ -66210,11 +66247,11 @@ var _util = __webpack_require__(26);
 
 var _util2 = _interopRequireDefault(_util);
 
-var _propTypes = __webpack_require__(15);
+var _propTypes = __webpack_require__(13);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _index = __webpack_require__(13);
+var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
@@ -66782,11 +66819,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(17);
 
-var _index = __webpack_require__(13);
+var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
-var _reactSvgInline = __webpack_require__(14);
+var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 

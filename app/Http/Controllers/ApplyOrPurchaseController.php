@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewPurchaseInitiated;
-use App\Events\UserDataChanged;
 use App\Mail\ApplicationSubmittedDMR;
 use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
@@ -13,10 +12,8 @@ use App\Transformers\DealTransformer;
 use App\User;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Carbon\Carbon;
-use DeliverMyRide\HubSpot\Client;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +27,7 @@ class ApplyOrPurchaseController extends Controller
     /**
      * Create "Purchase" from deal and rebates
      */
-    public function applyOrPurchase(Request $request)
+    public function applyOrInitiatePurchase(Request $request)
     {
         try {
             $this->validate($request, [
