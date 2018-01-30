@@ -218,6 +218,8 @@ class Importer
 
     private function saveVersionAndRelations($decoded, $matchedVersion)
     {
+        $this->info("Saving version and relations for UID " . $matchedVersion['uid']);
+
         if (! $manufacturer = Manufacturer::where('name', $decoded['manufacturer'])->first()) {
             // Save/Update manufacturer, make, model, then versions
             $manufacturer = $this->saveManufacturer(
