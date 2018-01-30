@@ -61412,7 +61412,11 @@ var initialState = {
     targets: [],
     targetsAvailable: {},
     targetsSelected: {},
-    targetDefaults: [25, // OPEN OFFER
+    targetDefaults: [25, // Open Offer
+    36, // Finance & Lease Customer
+    39, // Finance Customer
+    26, // Lease Customer
+    45, // Captive Finance Customer
     52],
     termDuration: 36,
     transmissionTypes: ['automatic', 'manual'],
@@ -65676,13 +65680,6 @@ var ComparePage = function (_React$PureComponent) {
                             return _this9.renderSelectionsTable(_this9.props.compareList);
                         }
                     ) : '',
-                    _react2.default.createElement(
-                        _AccordionTable2.default,
-                        null,
-                        function () {
-                            return _this9.renderTargetsTable(_this9.props.compareList);
-                        }
-                    ),
                     _react2.default.createElement(
                         _AccordionTable2.default,
                         null,

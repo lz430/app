@@ -13,8 +13,20 @@ class TargetsController extends Controller
     use ValidatesRequests;
 
     const CACHE_LENGTH = 1440;
+
+    // Targets that should not selected
     const TARGET_BLACKLIST = [
         49 // Direct/Private Offer Recipient
+    ];
+
+    // Targets that are automatically applied to all customers
+    const TARGET_OPEN_OFFERS = [
+        25, // Open Offer
+        36, // Finance & Lease Customer
+        39, // Finance Customer
+        26, // Lease Customer
+        45, // Captive Finance Customer
+        52 // Auto Show Cash Recipient
     ];
 
     public function getTargets(Client $client)
@@ -31,8 +43,8 @@ class TargetsController extends Controller
             );
 
             return collect($response)->reject(function ($target) {
-                return in_array($target['targetid'], self::TARGET_BLACKLIST);
-            })->toArray();
+                return in_array($target['targetId'], self::TARGET_BLACKLIST);
+            })->values()->all();
         });
 
         return response()->json([

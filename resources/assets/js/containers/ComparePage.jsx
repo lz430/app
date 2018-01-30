@@ -478,13 +478,13 @@ class ComparePage extends React.PureComponent {
                         ''
                     )}
 
-                        <AccordionTable>
+                        {/* <AccordionTable>
                             {() => {
                                 return this.renderTargetsTable(
                                     this.props.compareList
                                 );
                             }}
-                        </AccordionTable>
+                        </AccordionTable> */}
 
                     <AccordionTable>
                         {() => {

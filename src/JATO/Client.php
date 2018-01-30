@@ -145,7 +145,7 @@ class Client
             ]);
         } catch (ClientException $e) {
             Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode");
-            return [];
+            return ['targets' => []];
         }
     }
 
