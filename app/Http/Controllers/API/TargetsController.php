@@ -16,6 +16,7 @@ class TargetsController extends Controller
 
     // Targets that should not selected
     const TARGET_BLACKLIST = [
+        2, // Affinity Customer
         7, // Dealer
         14, // Other
         32, // Sales Manager
