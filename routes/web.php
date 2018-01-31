@@ -28,8 +28,9 @@ Route::group(['middleware' => 'auth'], function () {
 Route::post('set-email', 'OptinMonsterController@setEmailSession')->name('set-email');
 
 /** Temp */
-// if (App::environment(['staging', 'local'])) {
+if (App::environment(['staging', 'local'])) {
     Route::get('zip-tester/{zip}', 'ZipCodeTesterController');
     Route::get('jato-logs/{date}', 'JatoLogController@showDay');
     Route::get('jato-logs', 'JatoLogController@index');
-// }
+    Route::get('statistics/deals', 'StatisticsController@deals');
+}
