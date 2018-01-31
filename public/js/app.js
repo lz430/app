@@ -14362,9 +14362,7 @@ var Deal = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal__price' },
-                    _react2.default.createElement(_DealPrice2.default, {
-                        deal: deal
-                    })
+                    _react2.default.createElement(_DealPrice2.default, { deal: deal })
                 ),
                 this.props.children
             );
@@ -53045,30 +53043,13 @@ var DealPrice = function (_React$PureComponent) {
     return DealPrice;
 }(_react2.default.PureComponent);
 
-var mapStateToProps = function mapStateToProps(state) {
-    var _ref;
-
-    return _ref = {
-        employeeBrand: state.employeeBrand,
-        downPayment: state.downPayment,
-        termDuration: state.termDuration,
-        residualPercent: state.residualPercent,
-        selectedTab: state.selectedTab,
-        dealTargets: state.dealTargets,
-        bestOffers: state.bestOffers,
-        zipcode: state.zipcode,
-        targetsSelected: state.targetsSelected,
-        targetDefaults: state.targetDefaults
-    }, _defineProperty(_ref, 'bestOffers', state.bestOffers), _defineProperty(_ref, 'selectedTab', state.selectedTab), _defineProperty(_ref, 'downPayment', state.downPayment), _ref;
-};
-
 var makeMapStateToProps = function makeMapStateToProps() {
     var getDealBestOfferTotalValue = (0, _index2.makeDealBestOfferTotalValue)();
     var getDealBestOfferLoading = (0, _index2.makeDealBestOfferLoading)();
     var mapStateToProps = function mapStateToProps(state, props) {
-        var _ref2;
+        var _ref;
 
-        return _ref2 = {
+        return _ref = {
             employeeBrand: state.employeeBrand,
             downPayment: state.downPayment,
             termDuration: state.termDuration,
@@ -53079,7 +53060,7 @@ var makeMapStateToProps = function makeMapStateToProps() {
             zipcode: state.zipcode,
             targetsSelected: state.targetsSelected,
             targetDefaults: state.targetDefaults
-        }, _defineProperty(_ref2, 'bestOffers', state.bestOffers), _defineProperty(_ref2, 'selectedTab', state.selectedTab), _defineProperty(_ref2, 'downPayment', state.downPayment), _defineProperty(_ref2, 'dealBestOfferTotalValue', getDealBestOfferTotalValue(state, props)), _defineProperty(_ref2, 'dealBestOfferLoading', getDealBestOfferLoading(state, props)), _ref2;
+        }, _defineProperty(_ref, 'bestOffers', state.bestOffers), _defineProperty(_ref, 'selectedTab', state.selectedTab), _defineProperty(_ref, 'downPayment', state.downPayment), _defineProperty(_ref, 'dealBestOfferTotalValue', getDealBestOfferTotalValue(state, props)), _defineProperty(_ref, 'dealBestOfferLoading', getDealBestOfferLoading(state, props)), _ref;
     };
     return mapStateToProps;
 };
@@ -65267,6 +65248,10 @@ var _titlecase = __webpack_require__(975);
 
 var _titlecase2 = _interopRequireDefault(_titlecase);
 
+var _Pricing = __webpack_require__(987);
+
+var _Pricing2 = _interopRequireDefault(_Pricing);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -65516,8 +65501,6 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderPricingTable',
         value: function renderPricingTable(compareList) {
-            var _this5 = this;
-
             return _react2.default.createElement(
                 'div',
                 { className: 'compare-page-table' },
@@ -65573,7 +65556,9 @@ var ComparePage = function (_React$PureComponent) {
                                     'Deliver My Ride Price:'
                                 ),
                                 ' ',
-                                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(dealAndSelectedFilters.deal, _this5.props.employeeBrand))
+                                _react2.default.createElement(_Pricing2.default, {
+                                    deal: dealAndSelectedFilters.deal
+                                })
                             )
                         );
                     })
@@ -65583,7 +65568,7 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderWarrantyTable',
         value: function renderWarrantyTable(compareList) {
-            var _this6 = this;
+            var _this5 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -65600,7 +65585,7 @@ var ComparePage = function (_React$PureComponent) {
                                 key: index,
                                 className: 'compare-page-table__column'
                             },
-                            _this6.state.dealWarranties.hasOwnProperty(deal.id) ? _this6.state.dealWarranties[deal.id].map(function (warranty, index) {
+                            _this5.state.dealWarranties.hasOwnProperty(deal.id) ? _this5.state.dealWarranties[deal.id].map(function (warranty, index) {
                                 return _react2.default.createElement(
                                     'div',
                                     {
@@ -65621,7 +65606,7 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderFeaturesTable',
         value: function renderFeaturesTable(compareList) {
-            var _this7 = this;
+            var _this6 = this;
 
             var featureSets = compareList.map(function (_ref2, index) {
                 var deal = _ref2.deal;
@@ -65641,10 +65626,12 @@ var ComparePage = function (_React$PureComponent) {
                         return _react2.default.createElement(
                             'div',
                             { className: 'compare-page-table' },
-                            _this7.renderAccordionTabHeader((0, _titlecase2.default)(featureSet[0].group) + ' Features'),
+                            _this6.renderAccordionTabHeader((0, _titlecase2.default)(featureSet[0].group) + ' Features'),
                             _react2.default.createElement(
                                 'div',
-                                { className: _this7.columnClass((0, _titlecase2.default)(featureSet[0].group) + ' Features') },
+                                {
+                                    className: _this6.columnClass((0, _titlecase2.default)(featureSet[0].group) + ' Features')
+                                },
                                 compareList.map(function (_ref3, index) {
                                     var deal = _ref3.deal;
 
@@ -65660,14 +65647,20 @@ var ComparePage = function (_React$PureComponent) {
                                             })) {
                                                 return _react2.default.createElement(
                                                     'div',
-                                                    { key: index, className: 'compare-page-table__cell' },
+                                                    {
+                                                        key: index,
+                                                        className: 'compare-page-table__cell'
+                                                    },
                                                     feature.feature,
                                                     '\xA0'
                                                 );
                                             } else {
                                                 return _react2.default.createElement(
                                                     'div',
-                                                    { key: index, className: 'compare-page-table__cell' },
+                                                    {
+                                                        key: index,
+                                                        className: 'compare-page-table__cell'
+                                                    },
                                                     '\u2014'
                                                 );
                                             }
@@ -65700,7 +65693,7 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
-            var _this8 = this;
+            var _this7 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -65717,21 +65710,21 @@ var ComparePage = function (_React$PureComponent) {
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this8.renderSelectionsTable(_this8.props.compareList);
+                            return _this7.renderSelectionsTable(_this7.props.compareList);
                         }
                     ) : '',
                     _react2.default.createElement(
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this8.renderPricingTable(_this8.props.compareList);
+                            return _this7.renderPricingTable(_this7.props.compareList);
                         }
                     ),
                     _react2.default.createElement(
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this8.renderWarrantyTable(_this8.props.compareList);
+                            return _this7.renderWarrantyTable(_this7.props.compareList);
                         }
                     ),
                     this.props.compareList.length ? this.renderFeaturesTable(this.props.compareList) : ''
@@ -67351,6 +67344,106 @@ exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(ThankYo
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 983 */,
+/* 984 */,
+/* 985 */,
+/* 986 */,
+/* 987 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(17);
+
+var _index = __webpack_require__(14);
+
+var Actions = _interopRequireWildcard(_index);
+
+var _propTypes = __webpack_require__(13);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactSvgInline = __webpack_require__(16);
+
+var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
+
+var _util = __webpack_require__(27);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _formulas = __webpack_require__(89);
+
+var _formulas2 = _interopRequireDefault(_formulas);
+
+var _miscicons = __webpack_require__(32);
+
+var _miscicons2 = _interopRequireDefault(_miscicons);
+
+var _index2 = __webpack_require__(71);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Pricing = function (_React$PureComponent) {
+    _inherits(Pricing, _React$PureComponent);
+
+    function Pricing() {
+        _classCallCheck(this, Pricing);
+
+        return _possibleConstructorReturn(this, (Pricing.__proto__ || Object.getPrototypeOf(Pricing)).apply(this, arguments));
+    }
+
+    _createClass(Pricing, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'span',
+                null,
+                this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue))
+            );
+        }
+    }]);
+
+    return Pricing;
+}(_react2.default.PureComponent);
+
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealBestOfferTotalValue = (0, _index2.makeDealBestOfferTotalValue)();
+    var getDealBestOfferLoading = (0, _index2.makeDealBestOfferLoading)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        return {
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferLoading: getDealBestOfferLoading(state, props)
+        };
+    };
+    return mapStateToProps;
+};
+
+Pricing.PropTypes = {
+    deal: _propTypes2.default.object.isRequired
+};
+
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(Pricing);
 
 /***/ })
 /******/ ]);

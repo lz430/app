@@ -45,9 +45,7 @@ class Deal extends React.PureComponent {
                 </div>
 
                 <div className="deal__price">
-                    <DealPrice
-                        deal={deal}
-                    />
+                    <DealPrice deal={deal} />
                 </div>
 
                 {this.props.children}

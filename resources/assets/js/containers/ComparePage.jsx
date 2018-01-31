@@ -15,6 +15,7 @@ import util from 'src/util';
 import api from 'src/api';
 import miscicons from 'miscicons';
 import toTitleCase from 'titlecase';
+import Pricing from 'components/ComparePage/Pricing';
 
 class ComparePage extends React.PureComponent {
     constructor(props) {
@@ -87,7 +88,9 @@ class ComparePage extends React.PureComponent {
                 <div className="deal__buttons">
                     <button
                         className="deal__button deal__button--small deal__button--pink"
-                        onClick={() => window.location=`/confirm/${deal.id}`}
+                        onClick={() =>
+                            (window.location = `/confirm/${deal.id}`)
+                        }
                     >
                         Buy Now
                     </button>
@@ -111,19 +114,18 @@ class ComparePage extends React.PureComponent {
         return (
             <div
                 onClick={() => this.toggleAccordion(accordionTab)}
-                className={`compare-page-table__header ${this.state
-                    .openAccordion === accordionTab
-                    ? 'compare-page-table__header--open'
-                    : ''}`}
+                className={`compare-page-table__header ${
+                    this.state.openAccordion === accordionTab
+                        ? 'compare-page-table__header--open'
+                        : ''
+                }`}
             >
                 <SVGInline
                     className="compare-page-table__header-cheveron"
                     svg={
-                        this.state.openAccordion === accordionTab ? (
-                            zondicons['cheveron-down']
-                        ) : (
-                            zondicons['cheveron-up']
-                        )
+                        this.state.openAccordion === accordionTab
+                            ? zondicons['cheveron-down']
+                            : zondicons['cheveron-up']
                     }
                 />
                 {accordionTab}
@@ -132,10 +134,11 @@ class ComparePage extends React.PureComponent {
     }
 
     columnClass(accordionTab) {
-        return `compare-page-table__columns ${this.state.openAccordion !==
-        accordionTab
-            ? 'compare-page-table__columns--closed'
-            : ''}`;
+        return `compare-page-table__columns ${
+            this.state.openAccordion !== accordionTab
+                ? 'compare-page-table__columns--closed'
+                : ''
+        }`;
     }
 
     renderSelectionsTable(compareList) {
@@ -154,15 +157,14 @@ class ComparePage extends React.PureComponent {
             compareList
         );
 
-        const anyHaveFuelType = R.any(
-            (dealAndSelectedFilters) => { return dealAndSelectedFilters.selectedFilters.selectedFuelType; },
-            compareList
-        );
+        const anyHaveFuelType = R.any(dealAndSelectedFilters => {
+            return dealAndSelectedFilters.selectedFilters.selectedFuelType;
+        }, compareList);
 
-        const anyHaveTransmissionType = R.any(
-            (dealAndSelectedFilters) => { return dealAndSelectedFilters.selectedFilters.selectedTransmissionType; },
-            compareList
-        );
+        const anyHaveTransmissionType = R.any(dealAndSelectedFilters => {
+            return dealAndSelectedFilters.selectedFilters
+                .selectedTransmissionType;
+        }, compareList);
 
         return (
             <div className="compare-page-table">
@@ -174,26 +176,24 @@ class ComparePage extends React.PureComponent {
                                 key={index}
                                 className="compare-page-table__column"
                             >
-                            { anyHaveFuelType ?
-                                <div className="compare-page-table__cell">
-                                    {selectedFilters.selectedFuelType}&nbsp;
-                                </div>
-                                :
-                                ''
-                            }
-                            { anyHaveTransmissionType ?
-                                <div className="compare-page-table__cell">
-                                    {selectedFilters.selectedTransmissionType ? (
-                                        string.toTitleCase(
-                                            selectedFilters.selectedTransmissionType
-                                        )
-                                    ) : (
-                                        ''
-                                    )}&nbsp;
-                                </div>
-                                :
-                                ''
-                            }
+                                {anyHaveFuelType ? (
+                                    <div className="compare-page-table__cell">
+                                        {selectedFilters.selectedFuelType}&nbsp;
+                                    </div>
+                                ) : (
+                                    ''
+                                )}
+                                {anyHaveTransmissionType ? (
+                                    <div className="compare-page-table__cell">
+                                        {selectedFilters.selectedTransmissionType
+                                            ? string.toTitleCase(
+                                                  selectedFilters.selectedTransmissionType
+                                              )
+                                            : ''}&nbsp;
+                                    </div>
+                                ) : (
+                                    ''
+                                )}
                                 {selectedFilters.selectedFeatures.map(
                                     (feature, index) => {
                                         return (
@@ -254,7 +254,8 @@ class ComparePage extends React.PureComponent {
                                 key={index}
                                 className="compare-page-table__column"
                             >
-                            @TODO update this thing to be filtering by type correctly
+                                @TODO update this thing to be filtering by type
+                                correctly
                                 {this.props.dealTargets[
                                     dealAndSelectedFilters.deal.id
                                 ].map((rebate, index) => {
@@ -325,12 +326,9 @@ class ComparePage extends React.PureComponent {
                                 </div>
                                 <div className="compare-page-table__cell">
                                     <strong>Deliver My Ride Price:</strong>{' '}
-                                    {util.moneyFormat(
-                                        util.getEmployeeOrSupplierPrice(
-                                            dealAndSelectedFilters.deal,
-                                            this.props.employeeBrand
-                                        )
-                                    )}
+                                    <Pricing
+                                        deal={dealAndSelectedFilters.deal}
+                                    />
                                 </div>
                             </div>
                         );
@@ -354,23 +352,21 @@ class ComparePage extends React.PureComponent {
                             >
                                 {this.state.dealWarranties.hasOwnProperty(
                                     deal.id
-                                ) ? (
-                                    this.state.dealWarranties[
-                                        deal.id
-                                    ].map((warranty, index) => {
-                                        return (
-                                            <div
-                                                key={index}
-                                                className="compare-page-table__cell"
-                                            >
-                                                {warranty.feature}:{' '}
-                                                {warranty.content}
-                                            </div>
-                                        );
-                                    })
-                                ) : (
-                                    'loading'
-                                )}
+                                )
+                                    ? this.state.dealWarranties[deal.id].map(
+                                          (warranty, index) => {
+                                              return (
+                                                  <div
+                                                      key={index}
+                                                      className="compare-page-table__cell"
+                                                  >
+                                                      {warranty.feature}:{' '}
+                                                      {warranty.content}
+                                                  </div>
+                                              );
+                                          }
+                                      )
+                                    : 'loading'}
                             </div>
                         );
                     })}
@@ -384,35 +380,68 @@ class ComparePage extends React.PureComponent {
             return deal.features;
         });
 
-        let groupedFeatureSet = Object.values(R.groupBy(feature => {
-            return feature.group;
-        }, Object.values(R.mergeAll(featureSets))));
+        let groupedFeatureSet = Object.values(
+            R.groupBy(feature => {
+                return feature.group;
+            }, Object.values(R.mergeAll(featureSets)))
+        );
 
         return groupedFeatureSet.map((featureSet, index) => {
             return (
-                <AccordionTable key={ index }>
+                <AccordionTable key={index}>
                     {() => {
                         return (
                             <div className="compare-page-table">
-                                {this.renderAccordionTabHeader(toTitleCase(featureSet[0].group) + ' Features')}
-                                <div className={this.columnClass(toTitleCase(featureSet[0].group) + ' Features')}>
+                                {this.renderAccordionTabHeader(
+                                    toTitleCase(featureSet[0].group) +
+                                        ' Features'
+                                )}
+                                <div
+                                    className={this.columnClass(
+                                        toTitleCase(featureSet[0].group) +
+                                            ' Features'
+                                    )}
+                                >
                                     {compareList.map(({ deal }, index) => {
                                         return (
                                             <div
                                                 key={index}
                                                 className="compare-page-table__column"
                                             >
-                                                {featureSet.map((feature, index) => {
-                                                    if ( deal.features.find(dealFeature => { return dealFeature.id == feature.id; })) {
-                                                        return <div key={index} className="compare-page-table__cell">
-                                                            {feature.feature}&nbsp;
-                                                        </div>
-                                                    } else {
-                                                        return <div key={index} className="compare-page-table__cell">
-                                                            &mdash;
-                                                        </div>
+                                                {featureSet.map(
+                                                    (feature, index) => {
+                                                        if (
+                                                            deal.features.find(
+                                                                dealFeature => {
+                                                                    return (
+                                                                        dealFeature.id ==
+                                                                        feature.id
+                                                                    );
+                                                                }
+                                                            )
+                                                        ) {
+                                                            return (
+                                                                <div
+                                                                    key={index}
+                                                                    className="compare-page-table__cell"
+                                                                >
+                                                                    {
+                                                                        feature.feature
+                                                                    }&nbsp;
+                                                                </div>
+                                                            );
+                                                        } else {
+                                                            return (
+                                                                <div
+                                                                    key={index}
+                                                                    className="compare-page-table__cell"
+                                                                >
+                                                                    &mdash;
+                                                                </div>
+                                                            );
+                                                        }
                                                     }
-                                                })}
+                                                )}
                                             </div>
                                         );
                                     })}
@@ -426,20 +455,22 @@ class ComparePage extends React.PureComponent {
     }
 
     hasSelections() {
-        const anyHaveFuelType = R.any(
-            (dealAndSelectedFilters) => { return dealAndSelectedFilters.selectedFilters.selectedFuelType; },
-            this.props.compareList
-        );
+        const anyHaveFuelType = R.any(dealAndSelectedFilters => {
+            return dealAndSelectedFilters.selectedFilters.selectedFuelType;
+        }, this.props.compareList);
 
-        const anyHaveTransmissionType = R.any(
-            (dealAndSelectedFilters) => { return dealAndSelectedFilters.selectedFilters.selectedTransmissionType; },
-            this.props.compareList
-        );
+        const anyHaveTransmissionType = R.any(dealAndSelectedFilters => {
+            return dealAndSelectedFilters.selectedFilters
+                .selectedTransmissionType;
+        }, this.props.compareList);
 
-        const anyHaveFeatures = R.any(
-            (dealAndSelectedFilters) => { return dealAndSelectedFilters.selectedFilters.selectedFeatures && dealAndSelectedFilters.selectedFilters.selectedFeatures.length > 0; },
-            this.props.compareList
-        );
+        const anyHaveFeatures = R.any(dealAndSelectedFilters => {
+            return (
+                dealAndSelectedFilters.selectedFilters.selectedFeatures &&
+                dealAndSelectedFilters.selectedFilters.selectedFeatures.length >
+                    0
+            );
+        }, this.props.compareList);
 
         return anyHaveFuelType || anyHaveTransmissionType || anyHaveFeatures;
     }
@@ -451,7 +482,8 @@ class ComparePage extends React.PureComponent {
                     <div className="compare-page-deals">
                         {this.props.deals.map(this.renderDeal)}
                     </div>
-                    {this.props.compareList && this.hasSelections(this.props.compareList) ? (
+                    {this.props.compareList &&
+                    this.hasSelections(this.props.compareList) ? (
                         <AccordionTable>
                             {() => {
                                 return this.renderSelectionsTable(
@@ -463,7 +495,7 @@ class ComparePage extends React.PureComponent {
                         ''
                     )}
 
-                        {/* <AccordionTable>
+                    {/* <AccordionTable>
                             {() => {
                                 return this.renderTargetsTable(
                                     this.props.compareList
@@ -485,13 +517,9 @@ class ComparePage extends React.PureComponent {
                             );
                         }}
                     </AccordionTable>
-                    {this.props.compareList.length ? (
-                        this.renderFeaturesTable(
-                            this.props.compareList
-                        )
-                    ) : (
-                        ''
-                    )}
+                    {this.props.compareList.length
+                        ? this.renderFeaturesTable(this.props.compareList)
+                        : ''}
                 </div>
 
                 {this.props.selectedDeal ? this.renderCalculatorModal() : ''}

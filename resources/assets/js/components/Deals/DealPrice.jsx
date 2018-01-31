@@ -8,7 +8,10 @@ import * as Actions from 'actions/index';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import InfoModal from 'components/InfoModal';
-import { makeDealBestOfferTotalValue, makeDealBestOfferLoading } from 'selectors/index';
+import {
+    makeDealBestOfferTotalValue,
+    makeDealBestOfferLoading,
+} from 'selectors/index';
 
 class DealPrice extends React.PureComponent {
     renderPriceExplanationModal() {
@@ -191,24 +194,6 @@ class DealPrice extends React.PureComponent {
         );
     }
 }
-
-const mapStateToProps = state => {
-    return {
-        employeeBrand: state.employeeBrand,
-        downPayment: state.downPayment,
-        termDuration: state.termDuration,
-        residualPercent: state.residualPercent,
-        selectedTab: state.selectedTab,
-        dealTargets: state.dealTargets,
-        bestOffers: state.bestOffers,
-        zipcode: state.zipcode,
-        targetsSelected: state.targetsSelected,
-        targetDefaults: state.targetDefaults,
-        bestOffers: state.bestOffers,
-        selectedTab: state.selectedTab,
-        downPayment: state.downPayment,
-    };
-};
 
 const makeMapStateToProps = () => {
     const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
