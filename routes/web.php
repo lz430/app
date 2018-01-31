@@ -27,10 +27,16 @@ Route::group(['middleware' => 'auth'], function () {
 /** External: Opt-in Monster and Hubspot */
 Route::post('set-email', 'OptinMonsterController@setEmailSession')->name('set-email');
 
-/** Temp */
+/** Admin */
 if (App::environment(['staging', 'local'])) {
-    Route::get('zip-tester/{zip}', 'ZipCodeTesterController');
-    Route::get('jato-logs/{date}', 'JatoLogController@showDay');
-    Route::get('jato-logs', 'JatoLogController@index');
-    Route::get('statistics/deals', 'StatisticsController@deals');
+    Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
+        Route::view('/', 'admin');
+        Route::get('zip-tester/{zip}', 'ZipCodeTesterController');
+        Route::get('jato-logs/{date}', 'JatoLogController@showDay');
+        Route::get('jato-logs', 'JatoLogController@index');
+        Route::get('statistics/deals', 'StatisticsController@deals');
+        Route::get('deal-debugger/{deal}', 'DealDebuggerController@show');
+    });
+
+    Route::redirect('jato-logs', 'admin/jato-logs');
 }

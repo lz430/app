@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Deal extends Model
 {
     const HOLD_HOURS = 48;
-    
+
     protected $guarded = [];
     protected $dates = ['inventory_date'];
     protected $casts = [
@@ -20,6 +20,11 @@ class Deal extends Model
     public function versions()
     {
         return $this->belongsToMany(Version::class);
+    }
+
+    public function getVersionAttribute()
+    {
+        return $this->versions()->first();
     }
 
     public function purchases()
@@ -36,7 +41,7 @@ class Deal extends Model
     {
         return $this->hasMany(DealPhoto::class)->orderBy('id');
     }
-    
+
     public function jatoFeatures()
     {
         return $this->belongsToMany(JatoFeature::class)->hasGroup();
@@ -46,7 +51,7 @@ class Deal extends Model
     {
         return $this->belongsToMany(Feature::class);
     }
-    
+
     public function featuredPhoto()
     {
         return ($this->photos && $this->photos->first())
@@ -82,7 +87,7 @@ class Deal extends Model
             ]);
         });
     }
-    
+
     public function scopeFilterByFuelType(Builder $query, $fuelType) : Builder
     {
         return $query->where('fuel', $fuelType);
@@ -96,7 +101,7 @@ class Deal extends Model
             'dealer_id'
         );
     }
-    
+
     public function scopeFilterByAutomaticTransmission(Builder $query) : Builder
     {
         return $query->where(
@@ -122,7 +127,7 @@ class Deal extends Model
             '%cvt%'
         );
     }
-    
+
     public function scopeForSale(Builder $query) : Builder
     {
         return $query->whereDoesntHave('purchases', function (Builder $q) {
