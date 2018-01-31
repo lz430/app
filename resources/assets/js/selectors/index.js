@@ -80,7 +80,8 @@ const selectedTargetsString = createSelector(
 const dealBestOfferKey = createSelector(
     [deal, zipcode, paymentType, selectedTargetsString],
     (deal, zipcode, paymentType, selectedTargetsString) => {
-        return `${deal.id}-${zipcode}-${paymentType}-${selectedTargetsString}`;
+        const vehicleId = deal.versions[0].jato_vehicle_id;
+        return `${vehicleId}-${zipcode}-${paymentType}-${selectedTargetsString}`;
     }
 );
 
@@ -122,18 +123,3 @@ const dealBestOfferTotalValue = createSelector(
 export const makeDealBestOfferTotalValue = () => {
     return dealBestOfferTotalValue;
 }
-
-// Generate the target key for globally the selected deal
-export const getSelectedTargetsKeyForSelectedDeal = createSelector(
-    [selectedDeal, zipcode],
-    (selectedDeal, zipcode) => {
-        if(!selectedDeal) {
-            return null;
-        }
-        const year = selectedDeal.year;
-        const make = selectedDeal.make;
-        const model = selectedDeal.model;
-        const series = selectedDeal.series;
-        return `${zipcode}-${year}-${make}-${model}-${series}`;
-    }
-)
