@@ -1816,8 +1816,12 @@ body {
 
 .cash-finance-lease-calculator {
   background: #fff;
-  max-width: 500px;
+  width: 450px;
   padding: 15px;
+}
+
+.cash-finance-lease-calculator__calculator-content {
+  width: 100%;
 }
 
 .cash-finance-lease-calculator__lease-table td {

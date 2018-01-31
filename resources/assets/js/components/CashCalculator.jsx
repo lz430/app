@@ -22,7 +22,7 @@ class CashCalculator extends React.PureComponent {
 
     render() {
         return (
-            <div>
+            <div className="cash-finance-lease-calculator__calculator-content">
                 Cash Price{' '}
                 {util.moneyFormat(
                     util.getEmployeeOrSupplierPrice(

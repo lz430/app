@@ -60173,7 +60173,7 @@ var CashCalculator = function (_React$PureComponent) {
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                null,
+                { className: 'cash-finance-lease-calculator__calculator-content' },
                 'Cash Price',
                 ' ',
                 _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
@@ -60491,7 +60491,7 @@ var FinanceCalculator = function (_React$PureComponent) {
 
             return _react2.default.createElement(
                 'div',
-                null,
+                { className: 'cash-finance-lease-calculator__calculator-content' },
                 'Finance Price',
                 ' ',
                 _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
@@ -61054,7 +61054,7 @@ var LeaseCalculator = function (_React$PureComponent) {
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                null,
+                { className: 'cash-finance-lease-calculator__calculator-content' },
                 'Lease Price',
                 ' ',
                 _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),

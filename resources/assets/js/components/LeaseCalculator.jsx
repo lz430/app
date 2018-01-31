@@ -348,7 +348,7 @@ class LeaseCalculator extends React.PureComponent {
 
     render() {
         return (
-            <div>
+            <div className="cash-finance-lease-calculator__calculator-content">
                 Lease Price{' '}
                 {util.moneyFormat(
                     util.getEmployeeOrSupplierPrice(
