@@ -76,6 +76,17 @@ export const makeDealBestOfferKey = () => {
     return dealBestOfferKey;
 }
 
+const dealBestOfferLoading = createSelector(
+    [bestOffers, dealBestOfferKey],
+    (bestOffers, dealBestOfferKey) => {
+        return R.isNil(R.prop(dealBestOfferKey,  bestOffers));
+    }
+)
+
+export const makeDealBestOfferLoading = () => {
+    return dealBestOfferLoading;
+}
+
 // Show me the best offer for a specific deal or default to no best offer
 const dealBestOffer = createSelector(
     [bestOffers, dealBestOfferKey],

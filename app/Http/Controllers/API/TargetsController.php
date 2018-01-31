@@ -16,7 +16,15 @@ class TargetsController extends Controller
 
     // Targets that should not selected
     const TARGET_BLACKLIST = [
-        49 // Direct/Private Offer Recipient
+        2, // Affinity Customer
+        7, // Dealer
+        14, // Other
+        32, // Sales Manager
+        33, // Sales Person
+        43, // Certificate/Coupon Bearer ** Coupon **
+        47, // Disaster Victim
+        49, // Direct/Private Offer Recipient ** Coupon **
+        54 // Vin Specific Customer
     ];
 
     // Targets that are automatically applied to all customers

@@ -88,6 +88,7 @@ Array.from(document.getElementsByTagName('ThankYouPage')).map(element => {
             <ThankYouPage
                 purchase={JSON.parse(element.getAttribute('purchase'))}
                 deal={JSON.parse(element.getAttribute('deal'))}
+                features={JSON.parse(element.getAttribute('features'))}
             />
         </Provider>,
         element

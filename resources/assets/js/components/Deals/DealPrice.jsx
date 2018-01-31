@@ -8,7 +8,7 @@ import * as Actions from 'actions/index';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import InfoModal from 'components/InfoModal';
-import { makeDealBestOfferTotalValue } from 'selectors/index';
+import { makeDealBestOfferTotalValue, makeDealBestOfferLoading } from 'selectors/index';
 
 class DealPrice extends React.PureComponent {
     renderPriceExplanationModal() {
@@ -21,7 +21,9 @@ class DealPrice extends React.PureComponent {
                 <div className="deal-price__cash-label">Your cash price</div>
                 <div className="deal-price__cash-price">
                     <div>
-                        {!R.isNil(this.props.dealBestOfferTotalValue) ? (
+                        {this.props.dealBestOfferLoading ? (
+                            <SVGInline svg={miscicons['loading']} />
+                        ) : (
                             util.moneyFormat(
                                 formulas.calculateTotalCash(
                                     util.getEmployeeOrSupplierPrice(
@@ -32,8 +34,6 @@ class DealPrice extends React.PureComponent {
                                     this.props.dealBestOfferTotalValue
                                 )
                             )
-                        ) : (
-                            <SVGInline svg={miscicons['loading']} />
                         )}
                     </div>
                     {this.renderPriceExplanationModal()}
@@ -54,7 +54,9 @@ class DealPrice extends React.PureComponent {
                     Estimated Monthly Finance Payment
                 </div>
                 <div className="deal-price__finance-lease-price">
-                    {!R.isNil(this.props.dealBestOfferTotalValue) ? (
+                    {this.props.dealBestOfferLoading ? (
+                        <SVGInline svg={miscicons['loading']} />
+                    ) : (
                         <div>
                             {util.moneyFormat(
                                 Math.round(
@@ -69,8 +71,6 @@ class DealPrice extends React.PureComponent {
                                 )
                             )}
                         </div>
-                    ) : (
-                        <SVGInline svg={miscicons['loading']} />
                     )}
                     {this.renderPriceExplanationModal()}
                 </div>
@@ -212,6 +212,7 @@ const mapStateToProps = state => {
 
 const makeMapStateToProps = () => {
     const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
+    const getDealBestOfferLoading = makeDealBestOfferLoading();
     const mapStateToProps = (state, props) => {
         return {
             employeeBrand: state.employeeBrand,
@@ -228,6 +229,7 @@ const makeMapStateToProps = () => {
             selectedTab: state.selectedTab,
             downPayment: state.downPayment,
             dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferLoading: getDealBestOfferLoading(state, props),
         };
     };
     return mapStateToProps;

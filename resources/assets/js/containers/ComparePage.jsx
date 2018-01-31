@@ -87,22 +87,7 @@ class ComparePage extends React.PureComponent {
                 <div className="deal__buttons">
                     <button
                         className="deal__button deal__button--small deal__button--pink"
-                        onClick={() =>
-                            purchase.start(
-                                deal,
-                                this.props.selectedTab,
-                                this.props.downPayment,
-                                /*
-                                rebates.getSelectedTargetsForDeal(
-                                    this.props.dealTargets,
-                                    this.props.selectedTargets,
-                                    deal
-                                ),
-                                */
-                                [], // @TODO resolve somehow?
-                                this.props.termDuration,
-                                this.props.employeeBrand
-                            )}
+                        onClick={() => window.location=`/confirm/${deal.id}`}
                     >
                         Buy Now
                     </button>

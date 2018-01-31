@@ -5402,7 +5402,7 @@ exports.default = api;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.getSelectedTargetsKeyForSelectedDeal = exports.makeDealBestOfferTotalValue = exports.makeDealBestOffer = exports.makeDealBestOfferKey = exports.makeDealTargetsSelected = exports.makeDealTargetsAvailable = exports.makeDealTargetKey = undefined;
+exports.getSelectedTargetsKeyForSelectedDeal = exports.makeDealBestOfferTotalValue = exports.makeDealBestOffer = exports.makeDealBestOfferLoading = exports.makeDealBestOfferKey = exports.makeDealTargetsSelected = exports.makeDealTargetsAvailable = exports.makeDealTargetKey = undefined;
 
 var _reselect = __webpack_require__(941);
 
@@ -5487,6 +5487,14 @@ var dealBestOfferKey = (0, _reselect.createSelector)([deal, zipcode, paymentType
 
 var makeDealBestOfferKey = exports.makeDealBestOfferKey = function makeDealBestOfferKey() {
     return dealBestOfferKey;
+};
+
+var dealBestOfferLoading = (0, _reselect.createSelector)([bestOffers, dealBestOfferKey], function (bestOffers, dealBestOfferKey) {
+    return _ramda2.default.isNil(_ramda2.default.prop(dealBestOfferKey, bestOffers));
+});
+
+var makeDealBestOfferLoading = exports.makeDealBestOfferLoading = function makeDealBestOfferLoading() {
+    return dealBestOfferLoading;
 };
 
 // Show me the best offer for a specific deal or default to no best offer
@@ -6355,11 +6363,14 @@ var Modal = function (_React$Component) {
             var _this3 = this;
 
             var childrenWithProps = _react2.default.Children.map(this.props.children, function (child) {
-                return _react2.default.cloneElement(child, {
-                    animate: function animate() {
-                        return _this3.animate();
-                    }
-                });
+                if (typeof _this3.animate == 'function') {
+                    _react2.default.cloneElement(child, {
+                        animate: function animate() {
+                            return _this3.animate();
+                        }
+                    });
+                }
+                return child;
             });
 
             return _react2.default.createElement(
@@ -23937,7 +23948,8 @@ Array.from(document.getElementsByTagName('ThankYouPage')).map(function (element)
         { store: (0, _configureStore2.default)() },
         _react2.default.createElement(_ThankYouPage2.default, {
             purchase: JSON.parse(element.getAttribute('purchase')),
-            deal: JSON.parse(element.getAttribute('deal'))
+            deal: JSON.parse(element.getAttribute('deal')),
+            features: JSON.parse(element.getAttribute('features'))
         })
     ), element);
 });
@@ -52869,7 +52881,7 @@ var DealPrice = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         null,
-                        !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue)) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                        this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue))
                     ),
                     this.renderPriceExplanationModal()
                 ),
@@ -52901,11 +52913,11 @@ var DealPrice = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__finance-lease-price' },
-                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _react2.default.createElement(
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _react2.default.createElement(
                         'div',
                         null,
                         _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration)))
-                    ) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }),
+                    ),
                     this.renderPriceExplanationModal()
                 ),
                 _react2.default.createElement('div', { className: 'deal-price__hr' })
@@ -53053,6 +53065,7 @@ var mapStateToProps = function mapStateToProps(state) {
 
 var makeMapStateToProps = function makeMapStateToProps() {
     var getDealBestOfferTotalValue = (0, _index2.makeDealBestOfferTotalValue)();
+    var getDealBestOfferLoading = (0, _index2.makeDealBestOfferLoading)();
     var mapStateToProps = function mapStateToProps(state, props) {
         var _ref2;
 
@@ -53067,7 +53080,7 @@ var makeMapStateToProps = function makeMapStateToProps() {
             zipcode: state.zipcode,
             targetsSelected: state.targetsSelected,
             targetDefaults: state.targetDefaults
-        }, _defineProperty(_ref2, 'bestOffers', state.bestOffers), _defineProperty(_ref2, 'selectedTab', state.selectedTab), _defineProperty(_ref2, 'downPayment', state.downPayment), _defineProperty(_ref2, 'dealBestOfferTotalValue', getDealBestOfferTotalValue(state, props)), _ref2;
+        }, _defineProperty(_ref2, 'bestOffers', state.bestOffers), _defineProperty(_ref2, 'selectedTab', state.selectedTab), _defineProperty(_ref2, 'downPayment', state.downPayment), _defineProperty(_ref2, 'dealBestOfferTotalValue', getDealBestOfferTotalValue(state, props)), _defineProperty(_ref2, 'dealBestOfferLoading', getDealBestOfferLoading(state, props)), _ref2;
     };
     return mapStateToProps;
 };
@@ -60164,7 +60177,7 @@ var CashCalculator = function (_React$PureComponent) {
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                null,
+                { className: 'cash-finance-lease-calculator__calculator-content' },
                 'Cash Price',
                 ' ',
                 _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
@@ -60250,7 +60263,7 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(this.props.dealBestOfferTotalValue) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                            this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                         )
                     ),
                     _react2.default.createElement(
@@ -60264,7 +60277,7 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue)) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                            this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue))
                         )
                     )
                 )
@@ -60277,6 +60290,7 @@ var CashCalculator = function (_React$PureComponent) {
 
 var makeMapStateToProps = function makeMapStateToProps() {
     var getDealBestOfferTotalValue = (0, _index.makeDealBestOfferTotalValue)();
+    var getDealBestOfferLoading = (0, _index.makeDealBestOfferLoading)();
     var mapStateToProps = function mapStateToProps(state, props) {
         return {
             bestOffers: state.bestOffers,
@@ -60286,7 +60300,8 @@ var makeMapStateToProps = function makeMapStateToProps() {
             targetsSelected: state.targetsSelected,
             targetDefaults: state.targetDefaults,
             zipcode: state.zipcode,
-            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferLoading: getDealBestOfferLoading(state, props)
         };
     };
     return mapStateToProps;
@@ -60390,7 +60405,7 @@ var FinanceCalculator = function (_React$PureComponent) {
     }, {
         key: 'getAmountToFinance',
         value: function getAmountToFinance() {
-            return !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, this.props.dealBestOfferTotalValue) : null;
+            return _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, this.props.dealBestOfferTotalValue);
         }
     }, {
         key: 'renderTotalCostOfVehicle',
@@ -60426,7 +60441,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(this.props.dealBestOfferTotalValue) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                 )
             );
         }
@@ -60464,7 +60479,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration)))
                 )
             );
         }
@@ -60480,7 +60495,7 @@ var FinanceCalculator = function (_React$PureComponent) {
 
             return _react2.default.createElement(
                 'div',
-                null,
+                { className: 'cash-finance-lease-calculator__calculator-content' },
                 'Finance Price',
                 ' ',
                 _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
@@ -60659,6 +60674,7 @@ var FinanceCalculator = function (_React$PureComponent) {
 
 var makeMapStateToProps = function makeMapStateToProps() {
     var getDealBestOfferTotalValue = (0, _index.makeDealBestOfferTotalValue)();
+    var getDealBestOfferLoading = (0, _index.makeDealBestOfferLoading)();
     var mapStateToProps = function mapStateToProps(state, props) {
         return {
             bestOffers: state.bestOffers,
@@ -60669,7 +60685,8 @@ var makeMapStateToProps = function makeMapStateToProps() {
             targetDefaults: state.targetDefaults,
             termDuration: state.termDuration,
             zipcode: state.zipcode,
-            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferLoading: getDealBestOfferLoading(state, props)
         };
     };
     return mapStateToProps;
@@ -60894,7 +60911,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.state.downPayment, 0, this.props.termDuration, this.props.residualPercent))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.state.downPayment, 0, this.props.termDuration, this.props.residualPercent)))
                 )
             );
         }
@@ -60950,7 +60967,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(_formulas2.default.calculateLeaseTaxesDueAtSigning(this.props.dealBestOfferTotalValue, this.state.downPayment, this.props.deal.doc_fee)) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(_formulas2.default.calculateLeaseTaxesDueAtSigning(this.props.dealBestOfferTotalValue, this.state.downPayment, this.props.deal.doc_fee))
                 )
             );
         }
@@ -60986,7 +61003,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(this.props.dealBestOfferTotalValue) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                 )
             );
         }
@@ -61041,7 +61058,7 @@ var LeaseCalculator = function (_React$PureComponent) {
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                null,
+                { className: 'cash-finance-lease-calculator__calculator-content' },
                 'Lease Price',
                 ' ',
                 _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
@@ -61210,6 +61227,7 @@ var LeaseCalculator = function (_React$PureComponent) {
 
 var makeMapStateToProps = function makeMapStateToProps() {
     var getDealBestOfferTotalValue = (0, _index.makeDealBestOfferTotalValue)();
+    var getDealBestOfferLoading = (0, _index.makeDealBestOfferLoading)();
     var mapStateToProps = function mapStateToProps(state, props) {
         return {
             zipcode: state.zipcode,
@@ -61217,7 +61235,8 @@ var makeMapStateToProps = function makeMapStateToProps() {
             annualMileage: state.annualMileage,
             residualPercent: state.residualPercent,
             employeeBrand: state.employeeBrand,
-            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferLoading: getDealBestOfferLoading(state, props)
         };
     };
     return mapStateToProps;
@@ -65319,8 +65338,6 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderDeal',
         value: function renderDeal(deal, index) {
-            var _this3 = this;
-
             return _react2.default.createElement(
                 _Deal2.default,
                 { deal: deal, key: index },
@@ -65332,16 +65349,7 @@ var ComparePage = function (_React$PureComponent) {
                         {
                             className: 'deal__button deal__button--small deal__button--pink',
                             onClick: function onClick() {
-                                return _purchase2.default.start(deal, _this3.props.selectedTab, _this3.props.downPayment,
-                                /*
-                                rebates.getSelectedTargetsForDeal(
-                                    this.props.dealTargets,
-                                    this.props.selectedTargets,
-                                    deal
-                                ),
-                                */
-                                [], // @TODO resolve somehow?
-                                _this3.props.termDuration, _this3.props.employeeBrand);
+                                return window.location = '/confirm/' + deal.id;
                             }
                         },
                         'Buy Now'
@@ -65364,13 +65372,13 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderAccordionTabHeader',
         value: function renderAccordionTabHeader(accordionTab) {
-            var _this4 = this;
+            var _this3 = this;
 
             return _react2.default.createElement(
                 'div',
                 {
                     onClick: function onClick() {
-                        return _this4.toggleAccordion(accordionTab);
+                        return _this3.toggleAccordion(accordionTab);
                     },
                     className: 'compare-page-table__header ' + (this.state.openAccordion === accordionTab ? 'compare-page-table__header--open' : '')
                 },
@@ -65459,10 +65467,10 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderTargetsTable',
         value: function renderTargetsTable(compareList) {
-            var _this5 = this;
+            var _this4 = this;
 
             var maxNumberCells = _ramda2.default.reduce(function (carry, dealAndSelectedFilters) {
-                return _ramda2.default.max(_ramda2.default.propOr([], dealAndSelectedFilters.deal.id, _this5.props.dealTargets).length, carry);
+                return _ramda2.default.max(_ramda2.default.propOr([], dealAndSelectedFilters.deal.id, _this4.props.dealTargets).length, carry);
             }, 0, compareList);
 
             return _react2.default.createElement(
@@ -65480,8 +65488,8 @@ var ComparePage = function (_React$PureComponent) {
                                 className: 'compare-page-table__column'
                             },
                             '@TODO update this thing to be filtering by type correctly',
-                            _this5.props.dealTargets[dealAndSelectedFilters.deal.id].map(function (rebate, index) {
-                                return _ramda2.default.contains(_this5.props.selectedTab, rebate.types) ? _react2.default.createElement(
+                            _this4.props.dealTargets[dealAndSelectedFilters.deal.id].map(function (rebate, index) {
+                                return _ramda2.default.contains(_this4.props.selectedTab, rebate.types) ? _react2.default.createElement(
                                     'div',
                                     {
                                         key: index,
@@ -65491,7 +65499,7 @@ var ComparePage = function (_React$PureComponent) {
                                     '\xA0'
                                 ) : '';
                             }),
-                            _ramda2.default.range(0, maxNumberCells - _this5.props.dealTargets[dealAndSelectedFilters.deal.id].length).map(function (_, index) {
+                            _ramda2.default.range(0, maxNumberCells - _this4.props.dealTargets[dealAndSelectedFilters.deal.id].length).map(function (_, index) {
                                 return _react2.default.createElement(
                                     'div',
                                     {
@@ -65509,7 +65517,7 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderPricingTable',
         value: function renderPricingTable(compareList) {
-            var _this6 = this;
+            var _this5 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -65566,7 +65574,7 @@ var ComparePage = function (_React$PureComponent) {
                                     'Deliver My Ride Price:'
                                 ),
                                 ' ',
-                                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(dealAndSelectedFilters.deal, _this6.props.employeeBrand))
+                                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(dealAndSelectedFilters.deal, _this5.props.employeeBrand))
                             )
                         );
                     })
@@ -65576,7 +65584,7 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderWarrantyTable',
         value: function renderWarrantyTable(compareList) {
-            var _this7 = this;
+            var _this6 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -65593,7 +65601,7 @@ var ComparePage = function (_React$PureComponent) {
                                 key: index,
                                 className: 'compare-page-table__column'
                             },
-                            _this7.state.dealWarranties.hasOwnProperty(deal.id) ? _this7.state.dealWarranties[deal.id].map(function (warranty, index) {
+                            _this6.state.dealWarranties.hasOwnProperty(deal.id) ? _this6.state.dealWarranties[deal.id].map(function (warranty, index) {
                                 return _react2.default.createElement(
                                     'div',
                                     {
@@ -65614,7 +65622,7 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderFeaturesTable',
         value: function renderFeaturesTable(compareList) {
-            var _this8 = this;
+            var _this7 = this;
 
             var featureSets = compareList.map(function (_ref2, index) {
                 var deal = _ref2.deal;
@@ -65634,10 +65642,10 @@ var ComparePage = function (_React$PureComponent) {
                         return _react2.default.createElement(
                             'div',
                             { className: 'compare-page-table' },
-                            _this8.renderAccordionTabHeader((0, _titlecase2.default)(featureSet[0].group) + ' Features'),
+                            _this7.renderAccordionTabHeader((0, _titlecase2.default)(featureSet[0].group) + ' Features'),
                             _react2.default.createElement(
                                 'div',
-                                { className: _this8.columnClass((0, _titlecase2.default)(featureSet[0].group) + ' Features') },
+                                { className: _this7.columnClass((0, _titlecase2.default)(featureSet[0].group) + ' Features') },
                                 compareList.map(function (_ref3, index) {
                                     var deal = _ref3.deal;
 
@@ -65693,7 +65701,7 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
-            var _this9 = this;
+            var _this8 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -65710,21 +65718,21 @@ var ComparePage = function (_React$PureComponent) {
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this9.renderSelectionsTable(_this9.props.compareList);
+                            return _this8.renderSelectionsTable(_this8.props.compareList);
                         }
                     ) : '',
                     _react2.default.createElement(
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this9.renderPricingTable(_this9.props.compareList);
+                            return _this8.renderPricingTable(_this8.props.compareList);
                         }
                     ),
                     _react2.default.createElement(
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this9.renderWarrantyTable(_this9.props.compareList);
+                            return _this8.renderWarrantyTable(_this8.props.compareList);
                         }
                     ),
                     this.props.compareList.length ? this.renderFeaturesTable(this.props.compareList) : ''
@@ -66847,6 +66855,10 @@ var _util = __webpack_require__(26);
 
 var _util2 = _interopRequireDefault(_util);
 
+var _miscicons = __webpack_require__(32);
+
+var _miscicons2 = _interopRequireDefault(_miscicons);
+
 var _index2 = __webpack_require__(71);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
@@ -66881,13 +66893,13 @@ var ThankYouPage = function (_React$PureComponent) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            _api2.default.getDimensions(this.props.deal.data.attributes.versions[0].jato_vehicle_id).then(function (response) {
+            _api2.default.getDimensions(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
                 _this2.setState({
                     dimensions: response.data
                 });
             });
 
-            _api2.default.getWarranties(this.props.deal.data.attributes.versions[0].jato_vehicle_id).then(function (response) {
+            _api2.default.getWarranties(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
                 _this2.setState({
                     warranties: response.data
                 });
@@ -66914,7 +66926,9 @@ var ThankYouPage = function (_React$PureComponent) {
 
             return _react2.default.createElement(
                 _Modal2.default,
-                null,
+                { onClose: function onClose() {
+                        return _this3.hideModals();
+                    } },
                 _react2.default.createElement(
                     'div',
                     { className: 'modal__content' },
@@ -66936,12 +66950,12 @@ var ThankYouPage = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'div',
                                 { className: 'modal__subtitle modal__subtitle--center' },
-                                _strings2.default.dealYearMake(deal.data.attributes)
+                                _strings2.default.dealYearMake(deal)
                             ),
                             _react2.default.createElement(
                                 'div',
                                 { className: 'modal__title modal_title--center' },
-                                _strings2.default.dealModelTrim(deal.data.attributes)
+                                _strings2.default.dealModelTrim(deal)
                             )
                         ),
                         _react2.default.createElement(
@@ -66965,11 +66979,11 @@ var ThankYouPage = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'ul',
                         null,
-                        deal.data.attributes.features.map(function (feature, index) {
+                        this.props.features.map(function (feature, index) {
                             return _react2.default.createElement(
                                 'li',
                                 { key: index },
-                                feature.feature
+                                feature
                             );
                         })
                     )
@@ -66981,10 +66995,11 @@ var ThankYouPage = function (_React$PureComponent) {
         value: function renderStandardFeaturesModal(deal) {
             var _this4 = this;
 
-            console.log(this.state.dimensions);
             return _react2.default.createElement(
                 _Modal2.default,
-                null,
+                { onClose: function onClose() {
+                        return _this4.hideModals();
+                    } },
                 _react2.default.createElement(
                     'div',
                     { className: 'modal__content' },
@@ -67006,12 +67021,12 @@ var ThankYouPage = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'div',
                                 { className: 'modal__subtitle modal__subtitle--center' },
-                                _strings2.default.dealYearMake(deal.data.attributes)
+                                _strings2.default.dealYearMake(deal)
                             ),
                             _react2.default.createElement(
                                 'div',
                                 { className: 'modal__title modal_title--center' },
-                                _strings2.default.dealModelTrim(deal.data.attributes)
+                                _strings2.default.dealModelTrim(deal)
                             )
                         ),
                         _react2.default.createElement(
@@ -67051,7 +67066,8 @@ var ThankYouPage = function (_React$PureComponent) {
                                 'li',
                                 { key: index },
                                 dimension.feature,
-                                ': ',
+                                ':',
+                                ' ',
                                 dimension.content
                             );
                         }) : 'Loading...'
@@ -67069,7 +67085,8 @@ var ThankYouPage = function (_React$PureComponent) {
                                 'li',
                                 { key: index },
                                 dimension.feature,
-                                ': ',
+                                ':',
+                                ' ',
                                 dimension.content
                             );
                         }) : 'Loading...'
@@ -67083,7 +67100,7 @@ var ThankYouPage = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'ul',
                         null,
-                        deal.data.attributes.vauto_features.map(function (feature, index) {
+                        this.props.features.map(function (feature, index) {
                             return _react2.default.createElement(
                                 'li',
                                 { key: index },
@@ -67143,12 +67160,12 @@ var ThankYouPage = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'thank-you__title-year-make' },
-                            this.props.deal.data.attributes.year + ' ' + this.props.deal.data.attributes.make + ' ' + this.props.deal.data.attributes.model + ' ' + this.props.deal.data.attributes.series + ' VIN#:' + this.props.deal.data.attributes.vin
+                            this.props.deal.year + ' ' + this.props.deal.make + ' ' + this.props.deal.model + ' ' + this.props.deal.series + ' VIN#:' + this.props.deal.vin
                         ),
                         _react2.default.createElement(
                             'div',
                             { className: 'thank-you__primary-image' },
-                            _react2.default.createElement('img', { src: this.props.deal.data.attributes.photos[1].url })
+                            _react2.default.createElement('img', { src: this.props.deal.photos[1].url })
                         ),
                         _react2.default.createElement(
                             'div',
@@ -67215,9 +67232,10 @@ var ThankYouPage = function (_React$PureComponent) {
                         this.props.dealBestOfferTotalValue ? _react2.default.createElement(
                             'div',
                             { className: 'thank-you__rebates-applied' },
-                            'Rebates Applied: ',
+                            'Rebates Applied:',
+                            ' ',
                             _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
-                        ) : 'Loading',
+                        ) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }),
                         _react2.default.createElement('div', { className: 'thank-you__hr thank-you__hr--full' }),
                         _react2.default.createElement(
                             'div',
@@ -67230,28 +67248,28 @@ var ThankYouPage = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'div',
                                 null,
-                                this.props.deal.data.attributes.dealer_name
+                                this.props.deal.dealer_name
                             ),
                             _react2.default.createElement(
                                 'div',
                                 null,
-                                this.props.deal.data.attributes.dealer.city,
+                                this.props.deal.dealer.city,
                                 ',',
                                 ' ',
-                                this.props.deal.data.attributes.dealer.state
+                                this.props.deal.dealer.state
                             ),
                             _react2.default.createElement(
                                 'div',
                                 null,
-                                this.props.deal.data.attributes.dealer.contact_name,
+                                this.props.deal.dealer.contact_name,
                                 ',',
                                 ' ',
-                                this.props.deal.data.attributes.dealer.contact_title
+                                this.props.deal.dealer.contact_title
                             ),
                             _react2.default.createElement(
                                 'div',
                                 null,
-                                this.props.deal.data.attributes.dealer.phone
+                                this.props.deal.dealer.phone
                             )
                         ),
                         _react2.default.createElement(

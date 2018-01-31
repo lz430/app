@@ -8,6 +8,7 @@ import strings from 'src/strings';
 import api from 'src/api';
 import R from 'ramda';
 import util from 'src/util';
+import miscicons from 'miscicons';
 import { makeDealBestOfferTotalValue } from 'selectors/index';
 
 class ThankYouPage extends React.PureComponent {
@@ -24,7 +25,7 @@ class ThankYouPage extends React.PureComponent {
 
     componentDidMount() {
         api
-            .getDimensions(this.props.deal.data.attributes.versions[0].jato_vehicle_id)
+            .getDimensions(this.props.deal.versions[0].jato_vehicle_id)
             .then(response => {
                 this.setState({
                     dimensions: response.data,
@@ -32,7 +33,7 @@ class ThankYouPage extends React.PureComponent {
             });
 
         api
-            .getWarranties(this.props.deal.data.attributes.versions[0].jato_vehicle_id)
+            .getWarranties(this.props.deal.versions[0].jato_vehicle_id)
             .then(response => {
                 this.setState({
                     warranties: response.data,
@@ -54,7 +55,7 @@ class ThankYouPage extends React.PureComponent {
 
     renderFeaturesModal(deal) {
         return (
-            <Modal>
+            <Modal onClose={() => this.hideModals()}>
                 <div className="modal__content">
                     <div className="modal__sticker-container">
                         <div className="modal__sticker">Additional Options</div>
@@ -62,10 +63,10 @@ class ThankYouPage extends React.PureComponent {
                     <div className="modal__header">
                         <div className="modal__titles modal__titles--center">
                             <div className="modal__subtitle modal__subtitle--center">
-                                {strings.dealYearMake(deal.data.attributes)}
+                                {strings.dealYearMake(deal)}
                             </div>
                             <div className="modal__title modal_title--center">
-                                {strings.dealModelTrim(deal.data.attributes)}
+                                {strings.dealModelTrim(deal)}
                             </div>
                         </div>
                         <div className="modal__close">
@@ -81,8 +82,8 @@ class ThankYouPage extends React.PureComponent {
                 </div>
                 <div className="deal-details__modal-body">
                     <ul>
-                        {deal.data.attributes.features.map((feature, index) => {
-                            return <li key={index}>{feature.feature}</li>;
+                        {this.props.features.map((feature, index) => {
+                            return <li key={index}>{feature}</li>;
                         })}
                     </ul>
                 </div>
@@ -91,9 +92,8 @@ class ThankYouPage extends React.PureComponent {
     }
 
     renderStandardFeaturesModal(deal) {
-        console.log(this.state.dimensions);
         return (
-            <Modal>
+            <Modal onClose={() => this.hideModals()}>
                 <div className="modal__content">
                     <div className="modal__sticker-container">
                         <div className="modal__sticker">Standard Features</div>
@@ -101,10 +101,10 @@ class ThankYouPage extends React.PureComponent {
                     <div className="modal__header">
                         <div className="modal__titles modal__titles--center">
                             <div className="modal__subtitle modal__subtitle--center">
-                                {strings.dealYearMake(deal.data.attributes)}
+                                {strings.dealYearMake(deal)}
                             </div>
                             <div className="modal__title modal_title--center">
-                                {strings.dealModelTrim(deal.data.attributes)}
+                                {strings.dealModelTrim(deal)}
                             </div>
                         </div>
                         <div className="modal__close">
@@ -124,39 +124,37 @@ class ThankYouPage extends React.PureComponent {
 
                     <h4>Dimensions</h4>
                     <ul>
-                        {this.state.dimensions ? (
-                            this.state.dimensions.map((dimension, index) => {
-                                return (
-                                    <li key={index}>
-                                        {dimension.feature}: {dimension.content}
-                                    </li>
-                                );
-                            })
-                        ) : (
-                            'Loading...'
-                        )}
+                        {this.state.dimensions
+                            ? this.state.dimensions.map((dimension, index) => {
+                                  return (
+                                      <li key={index}>
+                                          {dimension.feature}:{' '}
+                                          {dimension.content}
+                                      </li>
+                                  );
+                              })
+                            : 'Loading...'}
                     </ul>
 
                     <h4>Warranties</h4>
                     <ul>
-                        {this.state.warranties ? (
-                            this.state.warranties.map((dimension, index) => {
-                                return (
-                                    <li key={index}>
-                                        {dimension.feature}: {dimension.content}
-                                    </li>
-                                );
-                            })
-                        ) : (
-                            'Loading...'
-                        )}
+                        {this.state.warranties
+                            ? this.state.warranties.map((dimension, index) => {
+                                  return (
+                                      <li key={index}>
+                                          {dimension.feature}:{' '}
+                                          {dimension.content}
+                                      </li>
+                                  );
+                              })
+                            : 'Loading...'}
                     </ul>
 
                     <h3>Features</h3>
                     <hr />
 
                     <ul>
-                        {deal.data.attributes.vauto_features.map((feature, index) => {
+                        {this.props.features.map((feature, index) => {
                             return <li key={index}>{feature}</li>;
                         })}
                     </ul>
@@ -192,25 +190,25 @@ class ThankYouPage extends React.PureComponent {
         return (
             <div>
                 <div className="thank-you">
-                    {this.state.showStandardFeatures ? (
-                        this.renderStandardFeaturesModal(this.props.deal)
-                    ) : (
-                        ''
-                    )}
-                    {this.state.showFeatures ? (
-                        this.renderFeaturesModal(this.props.deal)
-                    ) : (
-                        ''
-                    )}
+                    {this.state.showStandardFeatures
+                        ? this.renderStandardFeaturesModal(this.props.deal)
+                        : ''}
+                    {this.state.showFeatures
+                        ? this.renderFeaturesModal(this.props.deal)
+                        : ''}
                     <div className="thank-you__left-panel">
                         <div className="thank-you__title-model-trim">
                             Vehicle Purchase Summary
                         </div>
                         <div className="thank-you__title-year-make">
-                            {`${this.props.deal.data.attributes.year} ${this.props.deal.data.attributes.make} ${this.props.deal.data.attributes.model} ${this.props.deal.data.attributes.series} VIN#:${this.props.deal.data.attributes.vin}`}
+                            {`${this.props.deal.year} ${this.props.deal.make} ${
+                                this.props.deal.model
+                            } ${this.props.deal.series} VIN#:${
+                                this.props.deal.vin
+                            }`}
                         </div>
                         <div className="thank-you__primary-image">
-                            <img src={this.props.deal.data.attributes.photos[1].url} />
+                            <img src={this.props.deal.photos[1].url} />
                         </div>
                         <div className="thank-you__left-panel-buttons">
                             <button
@@ -236,38 +234,45 @@ class ThankYouPage extends React.PureComponent {
                             YOUR OUT THE DOOR PRICE
                         </div>
                         <div className="thank-you__your-price">
-                            {util.moneyFormat(this.props.purchase.data.attributes.dmr_price)}
+                            {util.moneyFormat(
+                                this.props.purchase.data.attributes.dmr_price
+                            )}
                         </div>
                         <div className="thank-you__plate-fee">
                             (plate fee not included)
                         </div>
                         <div className="thank-you__hr" />
                         <div className="thank-you__msrp">
-                            {util.moneyFormat(this.props.purchase.data.attributes.msrp)}{' '}
+                            {util.moneyFormat(
+                                this.props.purchase.data.attributes.msrp
+                            )}{' '}
                             <span className="thank-you__msrp-label">MSRP</span>
                         </div>
                         {this.props.dealBestOfferTotalValue ? (
                             <div className="thank-you__rebates-applied">
-                                Rebates Applied: {util.moneyFormat(this.props.dealBestOfferTotalValue)}
+                                Rebates Applied:{' '}
+                                {util.moneyFormat(
+                                    this.props.dealBestOfferTotalValue
+                                )}
                             </div>
                         ) : (
-                            'Loading'
+                            <SVGInline svg={miscicons['loading']} />
                         )}
                         <div className="thank-you__hr thank-you__hr--full" />
                         <div className="thank-you__dealer-info">
                             <div className="thank-you__dealer-title">
                                 Selling Dealer
                             </div>
-                            <div>{this.props.deal.data.attributes.dealer_name}</div>
+                            <div>{this.props.deal.dealer_name}</div>
                             <div>
-                                {this.props.deal.data.attributes.dealer.city},{' '}
-                                {this.props.deal.data.attributes.dealer.state}
+                                {this.props.deal.dealer.city},{' '}
+                                {this.props.deal.dealer.state}
                             </div>
                             <div>
-                                {this.props.deal.data.attributes.dealer.contact_name},{' '}
-                                {this.props.deal.data.attributes.dealer.contact_title}
+                                {this.props.deal.dealer.contact_name},{' '}
+                                {this.props.deal.dealer.contact_title}
                             </div>
-                            <div>{this.props.deal.data.attributes.dealer.phone}</div>
+                            <div>{this.props.deal.dealer.phone}</div>
                         </div>
                         <div>
                             <div className="thank-you__finalize-items">

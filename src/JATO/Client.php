@@ -9,10 +9,29 @@ use Illuminate\Support\Facades\Cache;
 
 class Client
 {
-    private $guzzleClient;
+    // Types that should be exlcluded for every best offer call
+    const TYPE_BLACKLIST = [
+        7, // Cash Certificate Coupon ** Coupon **
+        11, // Gift
+        14, // Payment/Fee Waiver
+        15, // Package Option Discount
+        16, // Trade-in Allowance
+        25, // Cash on % of Objective
+        26, // Enhanced Rate/APR
+        27, // Enhanced Rate with Cash or Fee Waiver
+        28, // Other Financing
+        29, // Enhanced Rate and Residual
+        30, // Enhanced Rate/Money Factor
+        37, // Dealer Spin
+        44, // Flat Pay
+        47, // Direct/Private Offer ** Coupon **
+        50, // Final Pay
+        52, // Aged Inventory Bonus Cash
+    ];
     const TOKEN_KEY = 'JATO_AUTH_HEADER';
-    private $retryCount = 0;
 
+    private $guzzleClient;
+    private $retryCount = 0;
     private $username;
     private $password;
 
@@ -168,7 +187,8 @@ class Client
             return $this->get("incentives/bestOffer/$vehicleId/$paymentType", [
                 'query' => array_merge([
                     'zipCode' => $zipcode,
-                    'targets' => $targets
+                    'targets' => $targets,
+                    'excludeTypes' => implode(',', self::TYPE_BLACKLIST),
                 ])
             ]);
         } catch (ClientException $e) {
