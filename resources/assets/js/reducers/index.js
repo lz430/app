@@ -215,7 +215,11 @@ const reducer = (state, action) => {
                 zipInRange: action.supported,
             });
         case ActionTypes.RECEIVE_BEST_OFFER:
-            return {...state, bestOffers: {...state.bestOffers, [action.bestOfferKey]: action.data} }
+            return {
+                ...state,
+                bestOffers: {
+                    ...state.bestOffers,
+                    [action.bestOfferKey]: action.data} }
         case ActionTypes.APPEND_CANCEL_TOKEN:
             return {
                 ...state,
