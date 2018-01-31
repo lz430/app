@@ -17,7 +17,7 @@ class CashCalculator extends React.PureComponent {
     }
 
     handleTargetsChange() {
-        this.props.getBestOffersForLoadedDeals();
+        this.props.requestBestOffer(this.props.deal);
     }
 
     render() {
