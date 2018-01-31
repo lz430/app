@@ -27,6 +27,18 @@ export const makeDealTargetKey = () => {
     return dealTargetKey;
 };
 
+// Check if we already have the targets for this target id.
+const dealTargetsAvailableLoading = createSelector(
+    [dealTargetKey, targetsAvailable],
+    (dealTargetKey, targetsAvailable) => {
+        return R.isNil(R.prop(dealTargetKey, targetsAvailable));
+    }
+);
+
+export const makeDealTargetsAvailableLoading = () => {
+    return dealTargetsAvailableLoading;
+}
+
 // Show me all available targets for a specific deal
 const dealTargetsAvailable = createSelector(
     [dealTargetKey, targetsAvailable],

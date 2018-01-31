@@ -8,44 +8,29 @@ import strings from 'src/strings';
 import util from 'src/util';
 import miscicons from 'miscicons';
 import zondicons from 'zondicons';
+import {
+    makeDealTargetsAvailable,
+    makeDealTargetsAvailableLoading,
+    makeDealTargetKey,
+} from 'selectors/index';
 
 class Targets extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = { targetKey: null };
-    }
-
     componentWillMount() {
-        this.setState({
-            targetKey: util.getTargetKeyForDealAndZip(
-                this.props.deal,
-                this.props.zipcode
-            ),
-        });
-
-        if (this.targetsNotLoadedFor(this.state.targetKey)) {
-            this.props.requestTargets(this.props.deal);
-        }
-    }
-
-    targetsNotLoadedFor(targetKey) {
-        return R.isNil(this.props.targetsAvailable[targetKey]);
-    }
-
-    availableTargets() {
-        return this.props.targetsAvailable[this.state.targetKey] || [];
+        this.props.requestTargets(this.props.deal);
     }
 
     toggle(target) {
-        this.props.toggleTarget(target, this.state.targetKey);
+        this.props.toggleTarget(target, this.props.dealTargetKey);
         this.props.targetsChanged();
     }
 
     renderTarget(target, index) {
-        const isSelected = this.props.targetsSelected[this.state.targetKey] ? R.contains(
-            target,
-            this.props.targetsSelected[this.state.targetKey]
-        ) : false;
+        const isSelected = this.props.targetsSelected[this.props.dealTargetKey]
+            ? R.contains(
+                  target,
+                  this.props.targetsSelected[this.props.dealTargetKey]
+              )
+            : false;
 
         const checkboxClass = `rebates__checkbox rebates__checkbox--inverted ${
             isSelected ? 'rebates__checkbox--selected' : ''
@@ -76,39 +61,57 @@ class Targets extends React.PureComponent {
 
     renderAvailableTargets() {
         return (
-            <div>
-                <h4>Select Your Targets</h4>
-                <div className="rebates">
-                    {this.availableTargets().map((target, index) =>
-                        this.renderTarget(target, index)
-                    )}
-                </div>
+            <div className="rebates">
+                {this.props.dealTargetsAvailable.length == 0 ? (
+                    <h4>No Selectable Targets Available</h4>
+                ) : (
+                    <div>
+                        <h4>Select Your Targets</h4>
+                        {this.props.dealTargetsAvailable.map((target, index) =>
+                            this.renderTarget(target, index)
+                        )}
+                    </div>
+                )}
             </div>
         );
     }
 
     render() {
-        const targets = this.availableTargets();
         return (
             <div>
-                {targets.length == 0 ? <h4>No Selectable Targets Available</h4> : this.renderAvailableTargets()}
-                {targets ? '' : <SVGInline svg={miscicons['loading']} />}
+                {this.props.dealTargetsAvailableLoading ? (
+                    <SVGInline svg={miscicons['loading']} />
+                ) : (
+                    this.renderAvailableTargets()
+                )}
             </div>
         );
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        zipcode: state.zipcode,
-        targetsAvailable: state.targetsAvailable,
-        targetsSelected: state.targetsSelected,
+const makeMapStateToProps = () => {
+    const getDealTargetKey = makeDealTargetKey();
+    const getDealTargetsAvailable = makeDealTargetsAvailable();
+    const getDealTargetsAvailableLoading = makeDealTargetsAvailableLoading();
+    const mapStateToProps = (state, props) => {
+        return {
+            zipcode: state.zipcode,
+            targetsAvailable: state.targetsAvailable,
+            targetsSelected: state.targetsSelected,
+            dealTargetKey: getDealTargetKey(state, props),
+            dealTargetsAvailable: getDealTargetsAvailable(state, props),
+            dealTargetsAvailableLoading: getDealTargetsAvailableLoading(
+                state,
+                props
+            ),
+        };
     };
-}
+    return mapStateToProps;
+};
 
 Targets.propTypes = {
     deal: PropTypes.object.isRequired,
     targetsChanged: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, Actions)(Targets);
+export default connect(makeMapStateToProps, Actions)(Targets);
