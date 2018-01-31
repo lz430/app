@@ -9,7 +9,7 @@ import api from 'src/api';
 import * as Actions from 'actions';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
-import { makeDealBestOfferTotalValue } from 'selectors/index';
+import { makeDealBestOfferTotalValue, makeDealBestOfferLoading } from 'selectors/index';
 
 class LeaseCalculator extends React.PureComponent {
     constructor(props) {
@@ -178,7 +178,9 @@ class LeaseCalculator extends React.PureComponent {
                     Your Monthly Lease Payment
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {!R.isNil(this.props.dealBestOfferTotalValue) ? (
+                    {this.props.dealBestOfferLoading ? (
+                        <SVGInline svg={miscicons['loading']} />
+                    ) : (
                         util.moneyFormat(
                             formulas.calculateTotalLeaseMonthlyPayment(
                                 formulas.calculateLeasedMonthlyPayments(
@@ -193,8 +195,6 @@ class LeaseCalculator extends React.PureComponent {
                                 )
                             )
                         )
-                    ) : (
-                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </span>
             </div>
@@ -237,7 +237,9 @@ class LeaseCalculator extends React.PureComponent {
                     Taxes due at signing
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {!R.isNil(this.props.dealBestOfferTotalValue) ? (
+                    {this.props.dealBestOfferLoading ? (
+                        <SVGInline svg={miscicons['loading']} />
+                    ) : (
                         util.moneyFormat(
                             formulas.calculateLeaseTaxesDueAtSigning(
                                 this.props.dealBestOfferTotalValue,
@@ -245,8 +247,6 @@ class LeaseCalculator extends React.PureComponent {
                                 this.props.deal.doc_fee
                             )
                         )
-                    ) : (
-                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </span>
             </div>
@@ -273,10 +273,10 @@ class LeaseCalculator extends React.PureComponent {
                     Rebates Applied
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {!R.isNil(this.props.dealBestOfferTotalValue) ? (
-                        util.moneyFormat(this.props.dealBestOfferTotalValue)
-                    ) : (
+                    {this.props.dealBestOfferLoading ? (
                         <SVGInline svg={miscicons['loading']} />
+                    ) : (
+                        util.moneyFormat(this.props.dealBestOfferTotalValue)
                     )}
                 </span>
             </div>
@@ -494,6 +494,7 @@ class LeaseCalculator extends React.PureComponent {
 
 const makeMapStateToProps = () => {
     const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
+    const getDealBestOfferLoading = makeDealBestOfferLoading();
     const mapStateToProps = (state, props) => {
         return {
             zipcode: state.zipcode,
@@ -502,6 +503,7 @@ const makeMapStateToProps = () => {
             residualPercent: state.residualPercent,
             employeeBrand: state.employeeBrand,
             dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferLoading: getDealBestOfferLoading(state, props),
         };
     };
     return mapStateToProps;

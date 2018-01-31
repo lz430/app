@@ -8,7 +8,7 @@ import * as Actions from 'actions';
 import formulas from 'src/formulas';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
-import { makeDealBestOfferTotalValue } from 'selectors/index';
+import { makeDealBestOfferTotalValue, makeDealBestOfferLoading } from 'selectors/index';
 
 class CashCalculator extends React.PureComponent {
     componentWillMount() {
@@ -89,12 +89,12 @@ class CashCalculator extends React.PureComponent {
                             Rebates Applied
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {!R.isNil(this.props.dealBestOfferTotalValue) ? (
+                            {this.props.dealBestOfferLoading ? (
+                                <SVGInline svg={miscicons['loading']} />
+                            ) : (
                                 util.moneyFormat(
                                     this.props.dealBestOfferTotalValue
                                 )
-                            ) : (
-                                <SVGInline svg={miscicons['loading']} />
                             )}
                         </span>
                     </div>
@@ -103,7 +103,9 @@ class CashCalculator extends React.PureComponent {
                             Total Cost of Vehicle
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {!R.isNil(this.props.dealBestOfferTotalValue) ? (
+                            {this.props.dealBestOfferLoading ? (
+                                <SVGInline svg={miscicons['loading']} />
+                            ) : (
                                 util.moneyFormat(
                                     formulas.calculateTotalCash(
                                         util.getEmployeeOrSupplierPrice(
@@ -114,8 +116,6 @@ class CashCalculator extends React.PureComponent {
                                         this.props.dealBestOfferTotalValue
                                     )
                                 )
-                            ) : (
-                                <SVGInline svg={miscicons['loading']} />
                             )}
                         </span>
                     </div>
@@ -127,6 +127,7 @@ class CashCalculator extends React.PureComponent {
 
 const makeMapStateToProps = () => {
     const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
+    const getDealBestOfferLoading = makeDealBestOfferLoading();
     const mapStateToProps = (state, props) => {
         return {
             bestOffers: state.bestOffers,
@@ -137,6 +138,7 @@ const makeMapStateToProps = () => {
             targetDefaults: state.targetDefaults,
             zipcode: state.zipcode,
             dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferLoading: getDealBestOfferLoading(state, props),
         };
     };
     return mapStateToProps;

@@ -5402,7 +5402,7 @@ exports.default = api;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.getSelectedTargetsKeyForSelectedDeal = exports.makeDealBestOfferTotalValue = exports.makeDealBestOffer = exports.makeDealBestOfferKey = exports.makeDealTargetsSelected = exports.makeDealTargetsAvailable = exports.makeDealTargetKey = undefined;
+exports.getSelectedTargetsKeyForSelectedDeal = exports.makeDealBestOfferTotalValue = exports.makeDealBestOffer = exports.makeDealBestOfferLoading = exports.makeDealBestOfferKey = exports.makeDealTargetsSelected = exports.makeDealTargetsAvailable = exports.makeDealTargetKey = undefined;
 
 var _reselect = __webpack_require__(941);
 
@@ -5487,6 +5487,14 @@ var dealBestOfferKey = (0, _reselect.createSelector)([deal, zipcode, paymentType
 
 var makeDealBestOfferKey = exports.makeDealBestOfferKey = function makeDealBestOfferKey() {
     return dealBestOfferKey;
+};
+
+var dealBestOfferLoading = (0, _reselect.createSelector)([bestOffers, dealBestOfferKey], function (bestOffers, dealBestOfferKey) {
+    return _ramda2.default.isNil(_ramda2.default.prop(dealBestOfferKey, bestOffers));
+});
+
+var makeDealBestOfferLoading = exports.makeDealBestOfferLoading = function makeDealBestOfferLoading() {
+    return dealBestOfferLoading;
 };
 
 // Show me the best offer for a specific deal or default to no best offer
@@ -52869,7 +52877,7 @@ var DealPrice = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         null,
-                        !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue)) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                        this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue))
                     ),
                     this.renderPriceExplanationModal()
                 ),
@@ -52901,11 +52909,11 @@ var DealPrice = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__finance-lease-price' },
-                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _react2.default.createElement(
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _react2.default.createElement(
                         'div',
                         null,
                         _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration)))
-                    ) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }),
+                    ),
                     this.renderPriceExplanationModal()
                 ),
                 _react2.default.createElement('div', { className: 'deal-price__hr' })
@@ -53053,6 +53061,7 @@ var mapStateToProps = function mapStateToProps(state) {
 
 var makeMapStateToProps = function makeMapStateToProps() {
     var getDealBestOfferTotalValue = (0, _index2.makeDealBestOfferTotalValue)();
+    var getDealBestOfferLoading = (0, _index2.makeDealBestOfferLoading)();
     var mapStateToProps = function mapStateToProps(state, props) {
         var _ref2;
 
@@ -53067,7 +53076,7 @@ var makeMapStateToProps = function makeMapStateToProps() {
             zipcode: state.zipcode,
             targetsSelected: state.targetsSelected,
             targetDefaults: state.targetDefaults
-        }, _defineProperty(_ref2, 'bestOffers', state.bestOffers), _defineProperty(_ref2, 'selectedTab', state.selectedTab), _defineProperty(_ref2, 'downPayment', state.downPayment), _defineProperty(_ref2, 'dealBestOfferTotalValue', getDealBestOfferTotalValue(state, props)), _ref2;
+        }, _defineProperty(_ref2, 'bestOffers', state.bestOffers), _defineProperty(_ref2, 'selectedTab', state.selectedTab), _defineProperty(_ref2, 'downPayment', state.downPayment), _defineProperty(_ref2, 'dealBestOfferTotalValue', getDealBestOfferTotalValue(state, props)), _defineProperty(_ref2, 'dealBestOfferLoading', getDealBestOfferLoading(state, props)), _ref2;
     };
     return mapStateToProps;
 };
@@ -60250,7 +60259,7 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(this.props.dealBestOfferTotalValue) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                            this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                         )
                     ),
                     _react2.default.createElement(
@@ -60264,7 +60273,7 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue)) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                            this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue))
                         )
                     )
                 )
@@ -60277,6 +60286,7 @@ var CashCalculator = function (_React$PureComponent) {
 
 var makeMapStateToProps = function makeMapStateToProps() {
     var getDealBestOfferTotalValue = (0, _index.makeDealBestOfferTotalValue)();
+    var getDealBestOfferLoading = (0, _index.makeDealBestOfferLoading)();
     var mapStateToProps = function mapStateToProps(state, props) {
         return {
             bestOffers: state.bestOffers,
@@ -60286,7 +60296,8 @@ var makeMapStateToProps = function makeMapStateToProps() {
             targetsSelected: state.targetsSelected,
             targetDefaults: state.targetDefaults,
             zipcode: state.zipcode,
-            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferLoading: getDealBestOfferLoading(state, props)
         };
     };
     return mapStateToProps;
@@ -60390,7 +60401,7 @@ var FinanceCalculator = function (_React$PureComponent) {
     }, {
         key: 'getAmountToFinance',
         value: function getAmountToFinance() {
-            return !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, this.props.dealBestOfferTotalValue) : null;
+            return _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, this.props.dealBestOfferTotalValue);
         }
     }, {
         key: 'renderTotalCostOfVehicle',
@@ -60426,7 +60437,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(this.props.dealBestOfferTotalValue) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                 )
             );
         }
@@ -60464,7 +60475,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration)))
                 )
             );
         }
@@ -60659,6 +60670,7 @@ var FinanceCalculator = function (_React$PureComponent) {
 
 var makeMapStateToProps = function makeMapStateToProps() {
     var getDealBestOfferTotalValue = (0, _index.makeDealBestOfferTotalValue)();
+    var getDealBestOfferLoading = (0, _index.makeDealBestOfferLoading)();
     var mapStateToProps = function mapStateToProps(state, props) {
         return {
             bestOffers: state.bestOffers,
@@ -60669,7 +60681,8 @@ var makeMapStateToProps = function makeMapStateToProps() {
             targetDefaults: state.targetDefaults,
             termDuration: state.termDuration,
             zipcode: state.zipcode,
-            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferLoading: getDealBestOfferLoading(state, props)
         };
     };
     return mapStateToProps;
@@ -60894,7 +60907,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.state.downPayment, 0, this.props.termDuration, this.props.residualPercent))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.state.downPayment, 0, this.props.termDuration, this.props.residualPercent)))
                 )
             );
         }
@@ -60950,7 +60963,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(_formulas2.default.calculateLeaseTaxesDueAtSigning(this.props.dealBestOfferTotalValue, this.state.downPayment, this.props.deal.doc_fee)) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(_formulas2.default.calculateLeaseTaxesDueAtSigning(this.props.dealBestOfferTotalValue, this.state.downPayment, this.props.deal.doc_fee))
                 )
             );
         }
@@ -60986,7 +60999,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    !_ramda2.default.isNil(this.props.dealBestOfferTotalValue) ? _util2.default.moneyFormat(this.props.dealBestOfferTotalValue) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                 )
             );
         }
@@ -61210,6 +61223,7 @@ var LeaseCalculator = function (_React$PureComponent) {
 
 var makeMapStateToProps = function makeMapStateToProps() {
     var getDealBestOfferTotalValue = (0, _index.makeDealBestOfferTotalValue)();
+    var getDealBestOfferLoading = (0, _index.makeDealBestOfferLoading)();
     var mapStateToProps = function mapStateToProps(state, props) {
         return {
             zipcode: state.zipcode,
@@ -61217,7 +61231,8 @@ var makeMapStateToProps = function makeMapStateToProps() {
             annualMileage: state.annualMileage,
             residualPercent: state.residualPercent,
             employeeBrand: state.employeeBrand,
-            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferLoading: getDealBestOfferLoading(state, props)
         };
     };
     return mapStateToProps;
