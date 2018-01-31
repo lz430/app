@@ -238,7 +238,18 @@ class ApplyOrPurchaseController extends Controller
 
         $lastPurchase->load('deal.photos');
         $lastPurchase = fractal()->item($lastPurchase)->transformWith(PurchaseTransformer::class)->toJson();
-        $deal = $deal = fractal()->item(auth()->user()->purchases->last()->deal)->transformWith(DealTransformer::class)->toJson();
-        return view('thank-you')->with('purchase', $lastPurchase)->with('deal', $deal);
+        $deal = auth()->user()->purchases->last()->deal;
+        $vautoFeatures = collect(
+            array_values(
+                array_diff(
+                    explode('|', $deal->vauto_features),
+                    $deal->jatoFeatures->map(function ($feature) {
+                        return $feature->feature;
+                    })->toArray()
+                )
+            )
+        );
+
+        return view('thank-you')->with('purchase', $lastPurchase)->with('deal', $deal)->with('features', $vautoFeatures);
     }
 }

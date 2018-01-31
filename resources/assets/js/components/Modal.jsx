@@ -59,10 +59,14 @@ class Modal extends React.Component {
     render() {
         const childrenWithProps = React.Children.map(
             this.props.children,
-            child =>
-                React.cloneElement(child, {
-                    animate: () => this.animate(),
-                })
+            child => {
+                if (typeof this.animate == 'function') {
+                    React.cloneElement(child, {
+                        animate: () => this.animate(),
+                    });
+                }
+                return child;
+            }
         );
 
         return (
