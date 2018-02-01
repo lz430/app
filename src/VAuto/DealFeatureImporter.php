@@ -45,8 +45,8 @@ class DealFeatureImporter
                     return $this->parseCustomJatoMappingDmrCategories($feature->category, $equipment);
                 }
 
-                if ($equipment['availability'] === 'standard' && in_array($equipment['schemaId'], $feature->jato_schema_ids)) {
-                    return [$feature->id];
+                if ($equipment['availability'] === 'standard') {
+                    return $this->schemaIdMatches($equipment, $feature);
                 }
             })->flatten()->reject(function ($schema) {
                 return empty($schema);
@@ -54,6 +54,27 @@ class DealFeatureImporter
         })->unique()->toArray();
 
         $this->deal->features()->syncWithoutDetaching($schemaIds);
+    }
+
+    private function equipmentMatchesFeature($schemaId, $feature) {
+        return in_array($schemaId, $feature->jato_schema_ids);
+    }
+
+    private function attributeValueIsTruthy($value) {
+        return !in_array($value, ['no', 'none', '-']);
+    }
+
+    private function schemaIdMatches($equipment, $feature)
+    {
+        if ($this->equipmentMatchesFeature($equipment['schemaId'], $feature)) {
+            return [$feature->id];
+        }
+
+        $matchedAttributes = collect($equipment['attributes'])->filter(function ($attribute) use ($feature) {
+            return $this->equipmentMatchesFeature($attribute['schemaId'], $feature) && $this->attributeValueIsTruthy($attribute['value']);
+        });
+
+        return $matchedAttributes->count() ? [$feature->id] : null;
     }
 
     private function jatoEquipment()
@@ -67,8 +88,8 @@ class DealFeatureImporter
         $feature = null;
 
         switch ($category->slug) {
-            case 'vehicle_segment':
-                $feature = $this->syncVehicleSegment($equipment);
+            case 'vehicle_size':
+                $feature = $this->syncVehicleSize($equipment);
                 break;
             case 'fuel_type':
                 $feature = $this->syncFuelType($equipment);
@@ -98,7 +119,7 @@ class DealFeatureImporter
         return $feature->count() ? $feature->first()->id : null;
     }
 
-    private function syncVehicleSegment($equipment)
+    private function syncVehicleSize($equipment)
     {
         if ($equipment['schemaId'] !== 176) {
             return;
@@ -113,9 +134,9 @@ class DealFeatureImporter
             'sports' => ['sports'],
         ])->filter(function ($value) use ($equipment) {
             return str_contains(strtolower($equipment['availability']), $value);
-        })->keys()->first();
+        })->keys();
 
-        return Feature::where('slug', $segment)->get();
+        return Feature::where('slug', $segment->first())->get();
     }
 
     private function syncFuelType($equipment)
@@ -232,14 +253,14 @@ class DealFeatureImporter
 
     private function syncPickup($equipment)
     {
-        if ($equipment['schemaId'] !== 701) {
+        if ($equipment['schemaId'] !== 14201) {
             return;
         }
 
         return collect($equipment['attributes'])->filter(function ($attribute) {
-            return $attribute['name'] == "Number of doors";
+            return $attribute['name'] == "box length";
         })->pluck('value')->map(function ($slugKey) {
-            return Feature::where('slug', 'pickup_doors_' . strtolower($slugKey))->first();
+            return Feature::where('slug', strtolower($slugKey) . '_bed')->first();
         });
     }
 }
