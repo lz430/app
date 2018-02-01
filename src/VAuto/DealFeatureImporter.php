@@ -134,9 +134,9 @@ class DealFeatureImporter
             'sports' => ['sports'],
         ])->filter(function ($value) use ($equipment) {
             return str_contains(strtolower($equipment['availability']), $value);
-        })->keys();
+        })->keys()->first();
 
-        return Feature::where('slug', $segment->first())->get();
+        return Feature::where('slug', $segment)->get();
     }
 
     private function syncFuelType($equipment)
