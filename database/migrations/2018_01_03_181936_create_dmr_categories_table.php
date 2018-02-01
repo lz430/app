@@ -25,8 +25,8 @@ class CreateDmrCategoriesTable extends Migration
 
         collect([
             [
-                'title' => 'Vehicle Segment',
-                'slug' => 'vehicle_segment',
+                'title' => 'Vehicle Size',
+                'slug' => 'vehicle_size',
                 'has_custom_jato_mapping' => true,
             ],
             [
@@ -73,10 +73,6 @@ class CreateDmrCategoriesTable extends Migration
             [
                 'title' => 'Safety & Driver Assist',
                 'slug' => 'safety_and_driver_assist',
-            ],
-            [
-                'title' => 'Exterior',
-                'slug' => 'exterior',
             ],
             [
                 'title' => 'Pickup',

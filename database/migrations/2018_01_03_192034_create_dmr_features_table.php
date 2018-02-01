@@ -26,7 +26,7 @@ class CreateDmrFeaturesTable extends Migration
         });
 
         collect([
-            'vehicle_segment' => [
+            'vehicle_size' => [
                 [
                     'title' => 'Subcompact',
                     'slug' => 'subcompact',
@@ -198,14 +198,19 @@ class CreateDmrFeaturesTable extends Migration
                     'jato_schema_ids' => [701],
                 ],
                 [
-                    'title' => '2 Door',
-                    'slug' => 'pickup_doors_2',
-                    'jato_schema_ids' => [601],
+                    'title' => 'Short Bed',
+                    'slug' => 'short_bed',
+                    'jato_schema_ids' => [14201],
                 ],
                 [
-                    'title' => '4 Door',
-                    'slug' => 'pickup_doors_4',
-                    'jato_schema_ids' => [601],
+                    'title' => 'Regular Bed',
+                    'slug' => 'regular_bed',
+                    'jato_schema_ids' => [14201],
+                ],
+                [
+                    'title' => 'Long Bed',
+                    'slug' => 'long_bed',
+                    'jato_schema_ids' => [14201],
                 ],
             ],
             'fuel_type' => [
@@ -225,13 +230,6 @@ class CreateDmrFeaturesTable extends Migration
                     'jato_schema_ids' => [51801, 51901],
                 ],
             ],
-            'exterior' => [
-                [
-                    'title' => 'Roof rails',
-                    'slug' => 'roof_rails',
-                    'jato_schema_ids' => [15701],
-                ],
-            ],
             'infotainment' => [
                 [
                     'title' => 'Navigation system',
@@ -246,12 +244,12 @@ class CreateDmrFeaturesTable extends Migration
                 [
                     'title' => 'Bluetooth',
                     'slug' => 'bluetooth',
-                    'jato_schema_ids' => [44803, 44804],
+                    'jato_schema_ids' => [44801, 44803, 44804],
                 ],
                 [
                     'title' => 'Rear entertainment display (middle / back of front seats)',
                     'slug' => 'rear_entertainment_display_middle_back_of_front_seats',
-                    'jato_schema_ids' => [327702],
+                    'jato_schema_ids' => [32701],
                 ],
                 [
                     'title' => 'Wifi network',
@@ -298,12 +296,12 @@ class CreateDmrFeaturesTable extends Migration
                 [
                     'title' => 'Sunroof',
                     'slug' => 'sunroof',
-                    'jato_schema_ids' => [15602],
+                    'jato_schema_ids' => [15601],
                 ],
                 [
                     'title' => 'Cupholders (front / rear)',
                     'slug' => 'cupholders_front_rear',
-                    'jato_schema_ids' => [19602],
+                    'jato_schema_ids' => [19601],
                 ],
                 [
                     'title' => 'Ashtray (front / rear)',
@@ -315,7 +313,7 @@ class CreateDmrFeaturesTable extends Migration
                 [
                     'title' => 'Trailer hitch',
                     'slug' => 'trailer_hitch',
-                    'jato_schema_ids' => [1602, 53103, 53105],
+                    'jato_schema_ids' => [1601, 53101, 53103, 53105],
                 ],
                 [
                     'title' => 'Anti-lock Breaking System (ABS)',
@@ -336,11 +334,6 @@ class CreateDmrFeaturesTable extends Migration
                     'title' => 'Backup Camera',
                     'slug' => 'backup_camera',
                     'jato_schema_ids' => [53001, 21504],
-                ],
-                [
-                    'title' => 'Trailer hitch',
-                    'slug' => 'trailer_hitch',
-                    'jato_schema_ids' => [53101, 53102],
                 ],
                 [
                     'title' => 'Anti-theft protection',
