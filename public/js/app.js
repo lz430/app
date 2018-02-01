@@ -59161,25 +59161,6 @@ var FilterPanel = function (_React$PureComponent) {
                         _SidebarFilter2.default,
                         {
                             toggle: function toggle() {
-                                return _this3.toggleOpenFilter('Model');
-                            },
-                            open: this.state.openFilter === 'Model',
-                            title: 'Vehicle Model'
-                        },
-                        _react2.default.createElement(
-                            'div',
-                            null,
-                            _react2.default.createElement(
-                                'p',
-                                null,
-                                'Placeholder Text'
-                            )
-                        )
-                    ),
-                    _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
                                 return _this3.toggleOpenFilter('Vehicle Style');
                             },
                             open: this.state.openFilter === 'Vehicle Style',
