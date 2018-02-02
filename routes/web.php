@@ -38,5 +38,5 @@ if (App::environment(['staging', 'local'])) {
         Route::get('deal-debugger/{deal}', 'DealDebuggerController@show');
     });
 
-    Route::redirect('jato-logs', 'admin/jato-logs');
+    Route::redirect('jato-logs', '/admin/jato-logs');
 }
