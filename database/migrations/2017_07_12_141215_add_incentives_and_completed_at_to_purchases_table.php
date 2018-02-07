@@ -10,7 +10,7 @@ class AddIncentivesAndCompletedAtToPurchasesTable extends Migration
     {
         Schema::table('purchases', function (Blueprint $table) {
             $table->json('incentives')->after('deal_id')->nullable();
-            $table->decimal('dmr_price')->after('incentives');
+            // $table->decimal('dmr_price')->after('incentives');
             $table->dateTime('completed_at')->after('dmr_price')->nullable();
         });
     }
@@ -19,7 +19,7 @@ class AddIncentivesAndCompletedAtToPurchasesTable extends Migration
     {
         Schema::table('purchases', function (Blueprint $table) {
             $table->dropColumn('incentives');
-            $table->dropColumn('dmr_price');
+            // $table->dropColumn('dmr_price');
             $table->dropColumn('completed_at');
         });
     }

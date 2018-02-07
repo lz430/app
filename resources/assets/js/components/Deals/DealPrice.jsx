@@ -1,62 +1,21 @@
 import React from 'react';
 import R from 'ramda';
+import PropTypes from 'prop-types';
 import util from 'src/util';
-import rebates from 'src/rebates';
 import formulas from 'src/formulas';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import InfoModal from 'components/InfoModal';
+import {
+    makeDealBestOfferTotalValue,
+    makeDealBestOfferLoading,
+} from 'selectors/index';
 
 class DealPrice extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            availableRebates: null,
-            selectedRebates: [],
-        };
-    }
-
-    componentDidMount() {
-        if (
-            !this.props.dealRebates.hasOwnProperty(this.props.deal.id) &&
-            this.props.zipcode
-        ) {
-            this.requestRebates();
-        } else {
-            this.componentWillReceiveProps(this.props);
-        }
-    }
-
-    requestRebates() {
-        this.props.requestRebates(this.props.deal);
-    }
-
-    componentWillReceiveProps(props) {
-        if (!props.dealRebates.hasOwnProperty(props.deal.id)) {
-            return this.props.requestRebates(this.props.deal);
-        }
-
-        this.setState({
-            availableRebates: rebates.getAvailableRebatesForDealAndType(
-                props.dealRebates,
-                props.selectedRebates,
-                props.selectedTab,
-                props.deal
-            ),
-            selectedRebates: rebates.getSelectedRebatesForDealAndType(
-                props.dealRebates,
-                props.selectedRebates,
-                props.selectedTab,
-                props.deal
-            ),
-        });
-    }
-
     renderPriceExplanationModal() {
-        return <InfoModal deal={this.props.deal}/>
+        return <InfoModal deal={this.props.deal} />;
     }
 
     renderCashPrice() {
@@ -65,10 +24,18 @@ class DealPrice extends React.PureComponent {
                 <div className="deal-price__cash-label">Your cash price</div>
                 <div className="deal-price__cash-price">
                     <div>
-                        {util.moneyFormat(
-                            util.getEmployeeOrSupplierPrice(
-                                this.props.deal,
-                                this.props.employeeBrand
+                        {this.props.dealBestOfferLoading ? (
+                            <SVGInline svg={miscicons['loading']} />
+                        ) : (
+                            util.moneyFormat(
+                                formulas.calculateTotalCash(
+                                    util.getEmployeeOrSupplierPrice(
+                                        this.props.deal,
+                                        this.props.employeeBrand
+                                    ),
+                                    this.props.deal.doc_fee,
+                                    this.props.dealBestOfferTotalValue
+                                )
                             )
                         )}
                     </div>
@@ -84,79 +51,52 @@ class DealPrice extends React.PureComponent {
     }
 
     renderFinancePrice() {
-        return <div className="deal-price__price">
+        return (
+            <div className="deal-price__price">
                 <div className="deal-price__finance-lease-label">
                     Estimated Monthly Finance Payment
                 </div>
                 <div className="deal-price__finance-lease-price">
-                    <div>
-                        {this.props.dealRebates.hasOwnProperty(
-                            this.props.deal.id
-                        ) ? (
-                            util.moneyFormat(
+                    {this.props.dealBestOfferLoading ? (
+                        <SVGInline svg={miscicons['loading']} />
+                    ) : (
+                        <div>
+                            {util.moneyFormat(
                                 Math.round(
                                     formulas.calculateFinancedMonthlyPayments(
                                         util.getEmployeeOrSupplierPrice(
                                             this.props.deal,
                                             this.props.employeeBrand
-                                        ) -
-                                            R.sum(
-                                                R.map(
-                                                    R.prop('value'),
-                                                    rebates.getSelectedRebatesForDealAndType(
-                                                        this.props
-                                                            .dealRebates,
-                                                        this.props
-                                                            .selectedRebates,
-                                                        this.props
-                                                            .selectedTab,
-                                                        this.props.deal
-                                                    )
-                                                )
-                                            ),
+                                        ) - this.props.dealBestOfferTotalValue,
                                         this.props.downPayment,
                                         this.props.termDuration
                                     )
                                 )
-                            )
-                        ) : (
-                            <SVGInline svg={miscicons['loading']} />
-                        )}
-                    </div>
+                            )}
+                        </div>
+                    )}
                     {this.renderPriceExplanationModal()}
                 </div>
                 <div className="deal-price__hr" />
-            </div>;
+            </div>
+        );
     }
 
     renderLeasePrice() {
-        return <div className="deal-price__price">
+        return (
+            <div className="deal-price__price">
                 <div className="deal-price__finance-lease-label">
                     Estimated Monthly Lease Payment
                 </div>
                 <div className="deal-price__finance-lease-price">
                     <div>
                         {util.moneyFormat(
-                            Math.round(
+                            formulas.calculateTotalLeaseMonthlyPayment(
                                 formulas.calculateLeasedMonthlyPayments(
                                     util.getEmployeeOrSupplierPrice(
                                         this.props.deal,
                                         this.props.employeeBrand
-                                    ) -
-                                        R.sum(
-                                            R.map(
-                                                R.prop('value'),
-                                                rebates.getSelectedRebatesForDealAndType(
-                                                    this.props
-                                                        .dealRebates,
-                                                    this.props
-                                                        .selectedRebates,
-                                                    this.props
-                                                        .selectedTab,
-                                                    this.props.deal
-                                                )
-                                            )
-                                        ),
+                                    ) - this.props.dealBestOfferTotalValue,
                                     0,
                                     0,
                                     this.props.termDuration,
@@ -168,7 +108,8 @@ class DealPrice extends React.PureComponent {
                     {this.renderPriceExplanationModal()}
                 </div>
                 <div className="deal-price__hr" />
-            </div>;
+            </div>
+        );
     }
 
     renderSelectedTab() {
@@ -182,10 +123,7 @@ class DealPrice extends React.PureComponent {
         }
     }
 
-    renderAppliedRebatesLink() {
-        if (!this.state.availableRebates) {
-            return <SVGInline svg={miscicons['loading']} />;
-        }
+    renderAppliedTargetsLink() {
         return (
             <div className="deal-price__rebates-applied">
                 <SVGInline
@@ -198,10 +136,15 @@ class DealPrice extends React.PureComponent {
                     onClick={() => this.props.selectDeal(this.props.deal)}
                     href="#"
                 >
-                    See Available Rebates
+                    See Available Targets
                 </a>
             </div>
         );
+    }
+
+    handleTabChange(tabName) {
+        this.props.selectTab(tabName);
+        this.props.getBestOffersForLoadedDeals();
     }
 
     render() {
@@ -209,50 +152,76 @@ class DealPrice extends React.PureComponent {
             <div className="deal-price">
                 <div className="tabs">
                     <div
-                        onClick={this.props.selectTab.bind(null, 'cash')}
-                        className={`tabs__tab ${this.props.selectedTab ===
-                        'cash'
-                            ? 'tabs__tab--selected'
-                            : ''}`}
+                        onClick={() => {
+                            this.handleTabChange('cash');
+                        }}
+                        className={`tabs__tab ${
+                            this.props.selectedTab === 'cash'
+                                ? 'tabs__tab--selected'
+                                : ''
+                        }`}
                     >
                         Cash
                     </div>
                     <div
-                        onClick={this.props.selectTab.bind(null, 'finance')}
-                        className={`tabs__tab ${this.props.selectedTab ===
-                        'finance'
-                            ? 'tabs__tab--selected'
-                            : ''}`}
+                        onClick={() => {
+                            this.handleTabChange('finance');
+                        }}
+                        className={`tabs__tab ${
+                            this.props.selectedTab === 'finance'
+                                ? 'tabs__tab--selected'
+                                : ''
+                        }`}
                     >
                         Finance
                     </div>
                     <div
-                        onClick={this.props.selectTab.bind(null, 'lease')}
-                        className={`tabs__tab ${this.props.selectedTab ===
-                        'lease'
-                            ? 'tabs__tab--selected'
-                            : ''}`}
+                        onClick={() => {
+                            this.handleTabChange('lease');
+                        }}
+                        className={`tabs__tab ${
+                            this.props.selectedTab === 'lease'
+                                ? 'tabs__tab--selected'
+                                : ''
+                        }`}
                     >
                         Lease
                     </div>
                 </div>
                 <div className="tabs__content">{this.renderSelectedTab()}</div>
-                {this.renderAppliedRebatesLink()}
+                {this.renderAppliedTargetsLink()}
             </div>
         );
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        employeeBrand: state.employeeBrand,
-        downPayment: state.downPayment,
-        termDuration: state.termDuration,
-        residualPercent: state.residualPercent,
-        selectedTab: state.selectedTab,
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates,
+const makeMapStateToProps = () => {
+    const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
+    const getDealBestOfferLoading = makeDealBestOfferLoading();
+    const mapStateToProps = (state, props) => {
+        return {
+            employeeBrand: state.employeeBrand,
+            downPayment: state.downPayment,
+            termDuration: state.termDuration,
+            residualPercent: state.residualPercent,
+            selectedTab: state.selectedTab,
+            dealTargets: state.dealTargets,
+            bestOffers: state.bestOffers,
+            zipcode: state.zipcode,
+            targetsSelected: state.targetsSelected,
+            targetDefaults: state.targetDefaults,
+            bestOffers: state.bestOffers,
+            selectedTab: state.selectedTab,
+            downPayment: state.downPayment,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferLoading: getDealBestOfferLoading(state, props),
+        };
     };
+    return mapStateToProps;
 };
 
-export default connect(mapStateToProps, Actions)(DealPrice);
+DealPrice.PropTypes = {
+    deal: PropTypes.object.isRequired,
+};
+
+export default connect(makeMapStateToProps, Actions)(DealPrice);

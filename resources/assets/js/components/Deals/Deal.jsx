@@ -1,21 +1,15 @@
 import React from 'react';
-import DealPrice from 'components/Deals/DealPrice';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
+import PropTypes from 'prop-types';
+import R from 'ramda';
+import util from 'src/util';
 import DealImage from 'components/Deals/DealImage';
+import DealPrice from 'components/Deals/DealPrice';
 
 class Deal extends React.PureComponent {
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
-
-    componentDidMount() {
-        this._isMounted = true;
-    }
-
     render() {
         const deal = this.props.deal;
-
         return (
             <div className="deal">
                 {this.props.hideImageAndTitle ? (
@@ -25,7 +19,8 @@ class Deal extends React.PureComponent {
                         <div className="deal__basic-info">
                             <div
                                 onClick={() =>
-                                    (window.location = `/deals/${deal.id}`)}
+                                    (window.location = `/deals/${deal.id}`)
+                                }
                                 className="deal__basic-info-year-and-model"
                             >
                                 <div className="deal__basic-info-year-and-make">
@@ -45,7 +40,9 @@ class Deal extends React.PureComponent {
                     </div>
                 )}
 
-                <div className="tabs__title">Select Your Payment &amp; Rebates</div>
+                <div className="tabs__title">
+                    Select Your Payment &amp; Rebates
+                </div>
 
                 <div className="deal__price">
                     <DealPrice deal={deal} />
@@ -60,7 +57,16 @@ class Deal extends React.PureComponent {
 const mapStateToProps = state => {
     return {
         compareList: state.compareList,
+        zipcode: state.zipcode,
+        bestOffers: state.bestOffers,
+        selectedTab: state.selectedTab,
+        targets: state.targets,
+        targetDefaults: state.targetDefaults,
     };
+};
+
+Deal.PropTypes = {
+    deal: PropTypes.object.isRequired,
 };
 
 export default connect(mapStateToProps, Actions)(Deal);

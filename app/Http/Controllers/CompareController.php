@@ -18,9 +18,9 @@ class CompareController extends Controller
             'photos'  => function ($query) {
                 $query->orderBy('id');
             },
-            'versions.incentives',
+            // 'versions.incentives',
         ])->get();
-    
+
         $dealsTransformed = fractal()
             ->collection($deals)
             ->transformWith(DealTransformer::class)

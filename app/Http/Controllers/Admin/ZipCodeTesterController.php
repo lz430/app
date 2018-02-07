@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Deal;
 use App\Dealer;
+use App\Http\Controllers\Controller;
 use App\Zipcode;
 use Illuminate\Support\Facades\DB;
 

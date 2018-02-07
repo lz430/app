@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 class JatoLogController extends Controller
 {
@@ -29,7 +31,7 @@ class JatoLogController extends Controller
         })->map(function ($line) {
             return substr($line, 1, 10);
         })->unique()->each(function ($date) {
-            echo '<a href="/jato-logs/' . $date . '">' . $date . '</a><br>';
+            echo '<a href="/admin/jato-logs/' . $date . '">' . $date . '</a><br>';
         });
     }
 

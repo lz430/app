@@ -14,28 +14,44 @@ class Modal extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
     animate() {
         this.setState(
             {
                 animating: true,
             },
             () => {
-                setTimeout(() => this.setState({ animating: false }), 800);
+                setTimeout(() => {
+                    if (this._isMounted) {
+                        this.setState({
+                            animating: false,
+                        });
+                    }
+                }, 800);
             }
         );
     }
 
     buttonClass() {
-        return `modal__close-button modal__close-button--blue modal__close-button--small ${this
-            .state.animating
-            ? 'animated rubberBand'
-            : ''} ${this.props.buttonCloseDisabled ? 'disabled' : ''}`;
+        return `modal__close-button modal__close-button--blue modal__close-button--small ${
+            this.state.animating ? 'animated rubberBand' : ''
+        } ${this.props.buttonCloseDisabled ? 'disabled' : ''}`;
     }
 
     closeIfOverlayClick(e, close) {
         const targetClass = e.target.getAttribute('class');
 
-        if (R.contains(targetClass, 'modal__wrapper') || R.contains(targetClass, 'modal__overlay')) {
+        if (
+            R.contains(targetClass, 'modal__wrapper') ||
+            R.contains(targetClass, 'modal__overlay')
+        ) {
             close();
         }
     }
@@ -43,22 +59,24 @@ class Modal extends React.Component {
     render() {
         const childrenWithProps = React.Children.map(
             this.props.children,
-            child =>
-                React.cloneElement(child, {
-                    animate: () => this.animate(),
-                })
+            child => {
+                if (typeof this.animate == 'function') {
+                    React.cloneElement(child, {
+                        animate: () => this.animate(),
+                    });
+                }
+                return child;
+            }
         );
 
         return (
-            <div className="modal"
-                onClick={
-                    (e) => this.closeIfOverlayClick(e, this.props.onClose)
-                }
+            <div
+                className="modal"
+                onClick={e => this.closeIfOverlayClick(e, this.props.onClose)}
             >
                 <div className="modal__overlay" />
                 <div className="modal__wrapper">
                     <div className="modal__content">
-
                         {this.props.title ? (
                             <div className="modal__header">
                                 <div className="modal__titles">
@@ -83,11 +101,15 @@ class Modal extends React.Component {
                             ''
                         )}
                         <div
-                            className={`${this.props.nowrapper ? '' : 'modal__body'} ${this.props.closeText
-                                ? this.props.title
-                                  ? ''
-                                  : 'modal__body--no-header'
-                                : 'modal__body--no-footer'}`}
+                            className={`${
+                                this.props.nowrapper ? '' : 'modal__body'
+                            } ${
+                                this.props.closeText
+                                    ? this.props.title
+                                      ? ''
+                                      : 'modal__body--no-header'
+                                    : 'modal__body--no-footer'
+                            }`}
                         >
                             {childrenWithProps}
                         </div>

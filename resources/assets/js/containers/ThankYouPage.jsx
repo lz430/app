@@ -6,46 +6,26 @@ import zondicons from 'zondicons';
 import Modal from 'components/Modal';
 import strings from 'src/strings';
 import api from 'src/api';
-import rebates from 'src/rebates';
 import R from 'ramda';
 import util from 'src/util';
+import miscicons from 'miscicons';
+import { makeDealBestOfferTotalValue } from 'selectors/index';
 
 class ThankYouPage extends React.PureComponent {
     constructor(props) {
         super(props);
 
         this.state = {
-            purchase: props.purchase.data.attributes,
-            deal: props.purchase.data.attributes.deal.data.attributes,
             warranties: null,
             dimensions: null,
             showStandardFeatures: false,
             showFeatures: false,
-            availableRebates: null,
-            selectedRebates: null,
         };
-    }
-
-    componentWillReceiveProps(props) {
-        this.setState({
-            availableRebates: rebates.getAvailableRebatesForDealAndType(
-                props.dealRebates,
-                props.selectedRebates,
-                props.purchase.data.attributes.type,
-                props.purchase.data.attributes.deal.data
-            ),
-            selectedRebates: rebates.getSelectedRebatesForDealAndType(
-                props.dealRebates,
-                props.selectedRebates,
-                props.purchase.data.attributes.type,
-                props.purchase.data.attributes.deal.data
-            ),
-        });
     }
 
     componentDidMount() {
         api
-            .getDimensions(this.state.deal.versions[0].jato_vehicle_id)
+            .getDimensions(this.props.deal.versions[0].jato_vehicle_id)
             .then(response => {
                 this.setState({
                     dimensions: response.data,
@@ -53,7 +33,7 @@ class ThankYouPage extends React.PureComponent {
             });
 
         api
-            .getWarranties(this.state.deal.versions[0].jato_vehicle_id)
+            .getWarranties(this.props.deal.versions[0].jato_vehicle_id)
             .then(response => {
                 this.setState({
                     warranties: response.data,
@@ -75,7 +55,7 @@ class ThankYouPage extends React.PureComponent {
 
     renderFeaturesModal(deal) {
         return (
-            <Modal>
+            <Modal onClose={() => this.hideModals()}>
                 <div className="modal__content">
                     <div className="modal__sticker-container">
                         <div className="modal__sticker">Additional Options</div>
@@ -102,8 +82,8 @@ class ThankYouPage extends React.PureComponent {
                 </div>
                 <div className="deal-details__modal-body">
                     <ul>
-                        {deal.features.map((feature, index) => {
-                            return <li key={index}>{feature.feature}</li>;
+                        {this.props.features.map((feature, index) => {
+                            return <li key={index}>{feature}</li>;
                         })}
                     </ul>
                 </div>
@@ -113,7 +93,7 @@ class ThankYouPage extends React.PureComponent {
 
     renderStandardFeaturesModal(deal) {
         return (
-            <Modal>
+            <Modal onClose={() => this.hideModals()}>
                 <div className="modal__content">
                     <div className="modal__sticker-container">
                         <div className="modal__sticker">Standard Features</div>
@@ -144,39 +124,37 @@ class ThankYouPage extends React.PureComponent {
 
                     <h4>Dimensions</h4>
                     <ul>
-                        {this.state.dimensions ? (
-                            this.state.dimensions.map((dimension, index) => {
-                                return (
-                                    <li key={index}>
-                                        {dimension.feature}: {dimension.content}
-                                    </li>
-                                );
-                            })
-                        ) : (
-                            'Loading...'
-                        )}
+                        {this.state.dimensions
+                            ? this.state.dimensions.map((dimension, index) => {
+                                  return (
+                                      <li key={index}>
+                                          {dimension.feature}:{' '}
+                                          {dimension.content}
+                                      </li>
+                                  );
+                              })
+                            : 'Loading...'}
                     </ul>
 
                     <h4>Warranties</h4>
                     <ul>
-                        {this.state.warranties ? (
-                            this.state.warranties.map((dimension, index) => {
-                                return (
-                                    <li key={index}>
-                                        {dimension.feature}: {dimension.content}
-                                    </li>
-                                );
-                            })
-                        ) : (
-                            'Loading...'
-                        )}
+                        {this.state.warranties
+                            ? this.state.warranties.map((dimension, index) => {
+                                  return (
+                                      <li key={index}>
+                                          {dimension.feature}:{' '}
+                                          {dimension.content}
+                                      </li>
+                                  );
+                              })
+                            : 'Loading...'}
                     </ul>
 
                     <h3>Features</h3>
                     <hr />
 
                     <ul>
-                        {deal.vauto_features.map((feature, index) => {
+                        {this.props.features.map((feature, index) => {
                             return <li key={index}>{feature}</li>;
                         })}
                     </ul>
@@ -186,7 +164,7 @@ class ThankYouPage extends React.PureComponent {
     }
 
     youChoseString(purchase) {
-        switch (purchase.type) {
+        switch (purchase.data.attributes.type) {
             case 'cash':
                 return 'CASH PURCHASE';
                 break;
@@ -212,27 +190,25 @@ class ThankYouPage extends React.PureComponent {
         return (
             <div>
                 <div className="thank-you">
-                    {this.state.showStandardFeatures ? (
-                        this.renderStandardFeaturesModal(this.state.deal)
-                    ) : (
-                        ''
-                    )}
-                    {this.state.showFeatures ? (
-                        this.renderFeaturesModal(this.state.deal)
-                    ) : (
-                        ''
-                    )}
+                    {this.state.showStandardFeatures
+                        ? this.renderStandardFeaturesModal(this.props.deal)
+                        : ''}
+                    {this.state.showFeatures
+                        ? this.renderFeaturesModal(this.props.deal)
+                        : ''}
                     <div className="thank-you__left-panel">
                         <div className="thank-you__title-model-trim">
                             Vehicle Purchase Summary
                         </div>
                         <div className="thank-you__title-year-make">
-                            {`${this.state.deal.year} ${this.state.deal
-                                .make} ${this.state.deal.model} ${this.state
-                                .deal.series} VIN#:${this.state.deal.vin}`}
+                            {`${this.props.deal.year} ${this.props.deal.make} ${
+                                this.props.deal.model
+                            } ${this.props.deal.series} VIN#:${
+                                this.props.deal.vin
+                            }`}
                         </div>
                         <div className="thank-you__primary-image">
-                            <img src={this.state.deal.photos[1].url} />
+                            <img src={this.props.deal.photos[1].url} />
                         </div>
                         <div className="thank-you__left-panel-buttons">
                             <button
@@ -252,45 +228,35 @@ class ThankYouPage extends React.PureComponent {
                     <div className="thank-you__pricing">
                         <div className="thank-you__choice">
                             YOU CHOSE:{' '}
-                            {this.youChoseString(this.state.purchase)}
+                            {this.youChoseString(this.props.purchase)}
                         </div>
                         <div className="thank-you__your-price-label">
                             YOUR OUT THE DOOR PRICE
                         </div>
                         <div className="thank-you__your-price">
-                            {util.moneyFormat(this.state.purchase.dmr_price)}
+                            {util.moneyFormat(
+                                this.props.purchase.data.attributes.dmr_price
+                            )}
                         </div>
                         <div className="thank-you__plate-fee">
                             (plate fee not included)
                         </div>
                         <div className="thank-you__hr" />
                         <div className="thank-you__msrp">
-                            {util.moneyFormat(this.state.purchase.msrp)}{' '}
+                            {util.moneyFormat(
+                                this.props.purchase.data.attributes.msrp
+                            )}{' '}
                             <span className="thank-you__msrp-label">MSRP</span>
                         </div>
-                        {this.state.availableRebates ? (
+                        {this.props.dealBestOfferTotalValue ? (
                             <div className="thank-you__rebates-applied">
+                                Rebates Applied:{' '}
                                 {util.moneyFormat(
-                                    R.sum(
-                                        R.map(
-                                            R.prop('value'),
-                                            this.state.selectedRebates
-                                        )
-                                    )
-                                )}{' '}
-                                of{' '}
-                                {util.moneyFormat(
-                                    R.sum(
-                                        R.map(
-                                            R.prop('value'),
-                                            this.state.availableRebates
-                                        )
-                                    )
-                                )}{' '}
-                                in rebates!
+                                    this.props.dealBestOfferTotalValue
+                                )}
                             </div>
                         ) : (
-                            'Loading'
+                            <SVGInline svg={miscicons['loading']} />
                         )}
                         <div className="thank-you__hr thank-you__hr--full" />
                         <div>
@@ -328,11 +294,14 @@ class ThankYouPage extends React.PureComponent {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates,
+const makeMapStateToProps = () => {
+    const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
+    const mapStateToProps = (state, props) => {
+        return {
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+        };
     };
+    return mapStateToProps;
 };
 
-export default connect(mapStateToProps, Actions)(ThankYouPage);
+export default connect(makeMapStateToProps, Actions)(ThankYouPage);

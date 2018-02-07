@@ -3,19 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewPurchaseInitiated;
-use App\Events\UserDataChanged;
 use App\Mail\ApplicationSubmittedDMR;
 use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
 use App\Purchase;
 use App\Transformers\PurchaseTransformer;
+use App\Transformers\DealTransformer;
 use App\User;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Carbon\Carbon;
-use DeliverMyRide\HubSpot\Client;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +28,7 @@ class ApplyOrPurchaseController extends Controller
     /**
      * Create "Purchase" from deal and rebates
      */
-    public function applyOrPurchase(Request $request)
+    public function applyOrInitiatePurchase(Request $request)
     {
         try {
             $this->validate($request, [
@@ -40,7 +38,7 @@ class ApplyOrPurchaseController extends Controller
                 'msrp' => 'required|numeric',
                 // Rebates.
                 'rebates' => 'array',
-                'rebates.*.rebate' => 'required_with:rebates|string',
+                'rebates.*.title' => 'required_with:rebates|string',
                 'rebates.*.value' => 'required_with:rebates|numeric',
                 // Finance and lease values.
                 'term' => 'required_if:type,finance,lease|integer',
@@ -109,7 +107,8 @@ class ApplyOrPurchaseController extends Controller
              * If we already have a user with this email, let's use that account
              * instead of the newly created one.
              */
-            $user = User::updateOrCreate([
+            $user = User::updateOrCreate(
+                [
                     'email' => $request->email
                 ],
                 [
@@ -119,7 +118,8 @@ class ApplyOrPurchaseController extends Controller
                     'last_name' => $request->last_name,
                     'phone_number' => $request->phone_number,
                     'zip' => session()->get('zip'),
-                ]);
+                ]
+            );
 
             auth()->login($user);
 
@@ -191,7 +191,7 @@ class ApplyOrPurchaseController extends Controller
     {
         try {
             $purchase = Purchase::with('deal', 'deal.dealer', 'buyer')->findOrFail($purchaseId);
-            
+
             JavaScriptFacade::put([
                 'featuredPhoto' => $purchase->deal->featuredPhoto(),
                 'purchase' => $purchase,
@@ -247,7 +247,18 @@ class ApplyOrPurchaseController extends Controller
 
         $lastPurchase->load('deal.photos');
         $lastPurchase = fractal()->item($lastPurchase)->transformWith(PurchaseTransformer::class)->toJson();
+        $deal = auth()->user()->purchases->last()->deal;
+        $vautoFeatures = collect(
+            array_values(
+                array_diff(
+                    explode('|', $deal->vauto_features),
+                    $deal->jatoFeatures->map(function ($feature) {
+                        return $feature->feature;
+                    })->toArray()
+                )
+            )
+        );
 
-        return view('thank-you')->with('purchase', $lastPurchase);
+        return view('thank-you')->with('purchase', $lastPurchase)->with('deal', $deal)->with('features', $vautoFeatures);
     }
 }

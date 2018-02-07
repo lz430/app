@@ -7,7 +7,8 @@ const purchase = {
         deal,
         selectedTab,
         downPayment,
-        selectedRebates,
+        dealBestOfferTotalValue,
+        dealBestOffer,
         termDuration,
         employeeBrand
     ) => {
@@ -35,7 +36,7 @@ const purchase = {
                         util.getEmployeeOrSupplierPrice(deal, employeeBrand),
                         deal.doc_fee,
                         downPayment,
-                        R.sum(R.map(R.prop('value'), selectedRebates))
+                        dealBestOfferTotalValue
                     )
                     .toString()
             );
@@ -62,15 +63,15 @@ const purchase = {
         deal_id.setAttribute('value', deal.id);
         form.appendChild(deal_id);
 
-        selectedRebates.forEach((rebate, index) => {
+        dealBestOffer.programs.forEach((program, index) => {
             let rebateName = document.createElement('input');
-            rebateName.setAttribute('name', `rebates[${index}][rebate]`);
-            rebateName.setAttribute('value', rebate.rebate);
+            rebateName.setAttribute('name', `rebates[${index}][title]`);
+            rebateName.setAttribute('value', program.title);
             form.appendChild(rebateName);
 
             let rebateValue = document.createElement('input');
             rebateValue.setAttribute('name', `rebates[${index}][value]`);
-            rebateValue.setAttribute('value', rebate.value);
+            rebateValue.setAttribute('value', program.value);
             form.appendChild(rebateValue);
         });
 
@@ -83,8 +84,7 @@ const purchase = {
         dmr_price.setAttribute('name', 'dmr_price');
         dmr_price.setAttribute(
             'value',
-            (util.getEmployeeOrSupplierPrice(deal, employeeBrand) -
-                R.sum(R.map(R.prop('value'), selectedRebates))).toString()
+            (util.getEmployeeOrSupplierPrice(deal, employeeBrand) - dealBestOfferTotalValue).toString()
         );
         form.appendChild(dmr_price);
 

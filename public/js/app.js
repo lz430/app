@@ -746,6 +746,9 @@ if (true) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 exports.requestMakes = requestMakes;
 exports.requestModels = requestModels;
 exports.receiveMakes = receiveMakes;
@@ -757,9 +760,9 @@ exports.receiveFeatureCategories = receiveFeatureCategories;
 exports.toggleFeature = toggleFeature;
 exports.toggleMake = toggleMake;
 exports.toggleModel = toggleModel;
-exports.requestRebates = requestRebates;
+exports.requestTargets = requestTargets;
+exports.receiveTargets = receiveTargets;
 exports.receiveDeals = receiveDeals;
-exports.receiveDealRebates = receiveDealRebates;
 exports.requestDeals = requestDeals;
 exports.requestMoreDeals = requestMoreDeals;
 exports.sortDeals = sortDeals;
@@ -785,11 +788,18 @@ exports.selectTab = selectTab;
 exports.selectDeal = selectDeal;
 exports.clearSelectedDeal = clearSelectedDeal;
 exports.selectRebate = selectRebate;
-exports.toggleRebate = toggleRebate;
+exports.toggleTarget = toggleTarget;
 exports.updateDownPayment = updateDownPayment;
 exports.updateTermDuration = updateTermDuration;
 exports.updateAnnualMileage = updateAnnualMileage;
 exports.updateResidualPercent = updateResidualPercent;
+exports.requestBestOffer = requestBestOffer;
+exports.receiveBestOffer = receiveBestOffer;
+exports.appendCancelToken = appendCancelToken;
+exports.removeCancelToken = removeCancelToken;
+exports.clearCancelTokens = clearCancelTokens;
+exports.cancelAllBestOfferPromises = cancelAllBestOfferPromises;
+exports.getBestOffersForLoadedDeals = getBestOffersForLoadedDeals;
 
 var _api = __webpack_require__(71);
 
@@ -973,21 +983,35 @@ function toggleModel(model) {
     };
 }
 
-function requestRebates(deal) {
+function requestTargets(deal) {
     return function (dispatch, getState) {
-        // If we have already received the rebates for the deal, don't request them again.
-        // Or if we don't yet have a zipcode
-        if (getState().dealRebates.hasOwnProperty(deal.id) || !getState().zipcode) return;
+        // If no zipcode has been set, do not request targets
+        var zipcode = getState().zipcode;
+        if (!zipcode) return;
 
-        _api2.default.getRebates(getState().zipcode, deal.vin).then(function (data) {
-            dispatch(receiveDealRebates({
+        // If we already have the target data, do not re-request it
+        var targetKey = _util2.default.getTargetKeyForDealAndZip(deal, zipcode);
+        if (!_ramda2.default.isNil(getState().targetsAvailable[targetKey])) return;
+
+        _api2.default.getTargets(zipcode, deal.vin).then(function (data) {
+            dispatch(receiveTargets({
                 data: data,
-                dealId: deal.id
+                deal: deal,
+                zipcode: zipcode
             }));
         });
 
         dispatch({
-            type: ActionTypes.REQUEST_REBATES
+            type: ActionTypes.REQUEST_TARGETS
+        });
+    };
+}
+
+function receiveTargets(data) {
+    return function (dispatch) {
+        dispatch({
+            type: ActionTypes.RECEIVE_TARGETS,
+            data: data
         });
     };
 }
@@ -996,22 +1020,6 @@ function receiveDeals(data) {
     return function (dispatch) {
         dispatch({
             type: ActionTypes.RECEIVE_DEALS,
-            data: data
-        });
-    };
-}
-
-function receiveDealRebates(data) {
-    return function (dispatch) {
-        data.data.data.rebates.map(function (rebate) {
-            // Don't auto-select just based on this criteria. We'll eventually select on load based on the "Open Offer Best Offer"
-            if (rebate.openOffer) {
-                // dispatch(selectRebate(rebate));
-            }
-        });
-
-        dispatch({
-            type: ActionTypes.RECEIVE_DEAL_REBATES,
             data: data
         });
     };
@@ -1271,8 +1279,6 @@ function requestLocationInfo() {
                 if (err) {
                     dispatch(requestDeals());
                 } else {
-                    window.axios.post('/hubspot', { zip: data.zip_code });
-
                     dispatch(receiveLocationInfo(data));
                 }
             });
@@ -1359,10 +1365,11 @@ function selectRebate(rebate) {
     };
 }
 
-function toggleRebate(rebate) {
+function toggleTarget(target, targetKey) {
     return {
-        type: ActionTypes.TOGGLE_REBATE,
-        rebate: rebate
+        type: ActionTypes.TOGGLE_TARGET,
+        target: target,
+        targetKey: targetKey
     };
 }
 
@@ -1391,6 +1398,123 @@ function updateResidualPercent(residualPercent) {
     return {
         type: ActionTypes.UPDATE_RESIDUAL_PERCENT,
         residualPercent: residualPercent
+    };
+}
+
+function requestBestOffer(deal) {
+    return function (dispatch, getState) {
+        var zipcode = getState().zipcode;
+        if (!zipcode) return;
+        var targetKey = _util2.default.getTargetKeyForDealAndZip(deal, zipcode);
+        var selectedTargetIds = getState().targetsSelected[targetKey] ? _ramda2.default.map(_ramda2.default.prop('targetId'), getState().targetsSelected[targetKey]) : [];
+        var targets = _ramda2.default.uniq(getState().targetDefaults.concat(selectedTargetIds));
+
+        // Temporarily limit to only selected payment type until we can address performance issues
+        var paymentTypes = [getState().selectedTab];
+        // We can ask for all payment types by uncommenting this:
+        // const paymentTypes = ['cash', 'finance', 'lease'];
+
+        paymentTypes.map(function (paymentType) {
+            var bestOfferKey = _util2.default.getBestOfferKeyForDeal(deal, zipcode, getState().selectedTab, targets);
+
+            // if the best offer is already in store, do not call for it again
+            if (_ramda2.default.props(bestOfferKey, getState().bestOffers)) {
+                dispatch({ type: ActionTypes.SAME_BEST_OFFERS });
+            }
+
+            var CancelToken = window.axios.CancelToken;
+            var source = CancelToken.source();
+
+            dispatch(appendCancelToken(deal, source));
+            _api2.default.getBestOffer(deal.id, paymentType, zipcode, targets, source).then(function (data) {
+                dispatch(removeCancelToken(deal));
+                dispatch(receiveBestOffer(data, bestOfferKey, paymentType));
+            }).catch(function (e) {
+                dispatch(removeCancelToken(deal));
+                dispatch(receiveBestOffer({
+                    data: {
+                        data: {
+                            cash: {
+                                totalValue: 0,
+                                programs: []
+                            }
+                        }
+                    }
+                }));
+            });
+
+            dispatch({ type: ActionTypes.REQUEST_BEST_OFFER });
+        });
+
+        dispatch(clearCancelTokens());
+    };
+}
+
+function receiveBestOffer(data, bestOfferKey, paymentType) {
+    // Although lease AND finance have the 'cash' wrapper, we are currently
+    // displaying cash best offers in the finance tabs.
+    var bestOfferPrograms = paymentType === 'lease' ? data.data.cash : data.data;
+    var rates = paymentType === 'lease' ? data.data.rates : [];
+    var bestOffer = _extends({}, bestOfferPrograms, {
+        rates: rates
+    });
+    return function (dispatch) {
+        dispatch({
+            type: ActionTypes.RECEIVE_BEST_OFFER,
+            data: bestOffer,
+            bestOfferKey: bestOfferKey
+        });
+    };
+}
+
+function appendCancelToken(deal, cancelToken) {
+    return function (dispatch) {
+        dispatch({
+            type: ActionTypes.APPEND_CANCEL_TOKEN,
+            deal: deal,
+            cancelToken: cancelToken
+        });
+    };
+}
+
+function removeCancelToken(deal) {
+    return function (dispatch) {
+        dispatch({
+            type: ActionTypes.REMOVE_CANCEL_TOKEN,
+            deal: deal
+        });
+    };
+}
+
+function clearCancelTokens() {
+    return function (dispatch) {
+        dispatch({
+            type: ActionTypes.CLEAR_CANCEL_TOKENS
+        });
+    };
+}
+
+function cancelAllBestOfferPromises() {
+    return function (dispatch, getState) {
+        getState().cancelTokens.map(function (cancelToken) {
+            try {
+                cancelToken.source.cancel();
+            } catch (err) {
+                console.log('Cancel error: ', err);
+            }
+        });
+        dispatch({ type: ActionTypes.CANCEL_ALL_PROMISES });
+        dispatch(clearCancelTokens());
+    };
+}
+
+function getBestOffersForLoadedDeals() {
+    return function (dispatch, getState) {
+        dispatch(cancelAllBestOfferPromises());
+        getState().deals.map(function (deal) {
+            dispatch(requestBestOffer(deal));
+        });
+        dispatch({ type: ActionTypes.REQUEST_ALL_BEST_OFFERS });
     };
 }
 
@@ -2088,6 +2212,19 @@ var util = {
 
             return closest;
         }, value, zipped);
+    },
+    getTargetKeyForDealAndZip: function getTargetKeyForDealAndZip(deal, zipcode) {
+        var vehicleId = deal.versions[0].jato_vehicle_id;
+        var targetKey = vehicleId + '-' + zipcode;
+        return targetKey;
+    },
+    getBestOfferKeyForDeal: function getBestOfferKeyForDeal(deal, zipcode, paymentType, selectedTargets) {
+        var vehicleId = deal.versions[0].jato_vehicle_id;
+        var targetString = _ramda2.default.sort(function (a, b) {
+            return a - b;
+        }, selectedTargets).join('-');
+
+        return vehicleId + '-' + zipcode + '-' + paymentType + '-' + targetString;
     }
 };
 
@@ -3994,7 +4131,139 @@ module.exports = _curry3(_reduce);
 
 
 /***/ }),
-/* 62 */,
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.makeDealBestOfferTotalValue = exports.makeDealBestOffer = exports.makeDealBestOfferLoading = exports.makeDealBestOfferKey = exports.makeDealTargetsSelected = exports.makeDealTargetsAvailable = exports.makeDealTargetsAvailableLoading = exports.makeDealTargetKey = undefined;
+
+var _reselect = __webpack_require__(941);
+
+var _index = __webpack_require__(14);
+
+var _ramda = __webpack_require__(11);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var selectedDeal = function selectedDeal(state) {
+    return state.selectedDeal;
+};
+var zipcode = function zipcode(state) {
+    return state.zipcode;
+};
+var deal = function deal(state, props) {
+    return props.deal;
+};
+var targetsAvailable = function targetsAvailable(state) {
+    return state.targetsAvailable;
+};
+var targetsSelected = function targetsSelected(state) {
+    return state.targetsSelected;
+};
+var bestOffers = function bestOffers(state) {
+    return state.bestOffers;
+};
+var paymentType = function paymentType(state) {
+    return state.selectedTab;
+};
+var targetDefaults = function targetDefaults(state) {
+    return state.targetDefaults;
+};
+
+// Generate the target key for a specific deal
+var dealTargetKey = (0, _reselect.createSelector)([deal, zipcode], function (deal, zipcode) {
+    if (!deal) {
+        return null;
+    }
+    var vehicleId = deal.versions[0].jato_vehicle_id;
+    return vehicleId + '-' + zipcode;
+});
+
+var makeDealTargetKey = exports.makeDealTargetKey = function makeDealTargetKey() {
+    return dealTargetKey;
+};
+
+// Check if we already have the targets for this target id.
+var dealTargetsAvailableLoading = (0, _reselect.createSelector)([dealTargetKey, targetsAvailable], function (dealTargetKey, targetsAvailable) {
+    return _ramda2.default.isNil(_ramda2.default.prop(dealTargetKey, targetsAvailable));
+});
+
+var makeDealTargetsAvailableLoading = exports.makeDealTargetsAvailableLoading = function makeDealTargetsAvailableLoading() {
+    return dealTargetsAvailableLoading;
+};
+
+// Show me all available targets for a specific deal
+var dealTargetsAvailable = (0, _reselect.createSelector)([dealTargetKey, targetsAvailable], function (dealTargetKey, targetsAvailable) {
+    return _ramda2.default.prop(dealTargetKey, targetsAvailable) || [];
+});
+
+var makeDealTargetsAvailable = exports.makeDealTargetsAvailable = function makeDealTargetsAvailable() {
+    return dealTargetsAvailable;
+};
+
+// Show me all selected targets for a specific deal
+var dealTargetsSelected = (0, _reselect.createSelector)([dealTargetKey, targetsSelected], function (dealTargetKey, targetsSelected) {
+    return _ramda2.default.prop(dealTargetKey, targetsSelected) || [];
+});
+
+var makeDealTargetsSelected = exports.makeDealTargetsSelected = function makeDealTargetsSelected() {
+    return dealTargetsSelected;
+};
+
+// Generate a string of unique target ids joined by '-'
+// This will be used to cache best offers on the front-end
+var selectedTargetsString = (0, _reselect.createSelector)([dealTargetsSelected, targetDefaults], function (dealTargetsSelected, targetDefaults) {
+    var selectedTargetIds = _ramda2.default.map(_ramda2.default.prop('targetId'), dealTargetsSelected) || [];
+    var uniqueSelectedTargetIds = _ramda2.default.uniq(_ramda2.default.concat(targetDefaults, selectedTargetIds));
+    return _ramda2.default.sort(function (a, b) {
+        return a - b;
+    }, uniqueSelectedTargetIds).join('-');
+});
+
+// Generate the best offer key for a specific deal
+var dealBestOfferKey = (0, _reselect.createSelector)([deal, zipcode, paymentType, selectedTargetsString], function (deal, zipcode, paymentType, selectedTargetsString) {
+    var vehicleId = deal.versions[0].jato_vehicle_id;
+    return vehicleId + '-' + zipcode + '-' + paymentType + '-' + selectedTargetsString;
+});
+
+var makeDealBestOfferKey = exports.makeDealBestOfferKey = function makeDealBestOfferKey() {
+    return dealBestOfferKey;
+};
+
+var dealBestOfferLoading = (0, _reselect.createSelector)([bestOffers, dealBestOfferKey], function (bestOffers, dealBestOfferKey) {
+    return _ramda2.default.isNil(_ramda2.default.prop(dealBestOfferKey, bestOffers));
+});
+
+var makeDealBestOfferLoading = exports.makeDealBestOfferLoading = function makeDealBestOfferLoading() {
+    return dealBestOfferLoading;
+};
+
+// Show me the best offer for a specific deal or default to no best offer
+var dealBestOffer = (0, _reselect.createSelector)([bestOffers, dealBestOfferKey], function (bestOffers, dealBestOfferKey) {
+    return _ramda2.default.prop(dealBestOfferKey, bestOffers) || { totalValue: 0, programs: [] };
+});
+
+var makeDealBestOffer = exports.makeDealBestOffer = function makeDealBestOffer() {
+    return dealBestOffer;
+};
+
+// Get the total value of the best offer for the deal
+var dealBestOfferTotalValue = (0, _reselect.createSelector)([dealBestOffer], function (dealBestOffer) {
+    return _ramda2.default.prop('totalValue', dealBestOffer);
+});
+
+var makeDealBestOfferTotalValue = exports.makeDealBestOfferTotalValue = function makeDealBestOfferTotalValue() {
+    return dealBestOfferTotalValue;
+};
+
+/***/ }),
 /* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5230,14 +5499,11 @@ var api = {
             }
         });
     },
-    getRebates: function getRebates(zipcode, vin) {
-        var selected_rebate_ids = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-
-        return window.axios.get('/api/rebates', {
+    getTargets: function getTargets(zipcode, vin) {
+        return window.axios.get('/api/targets', {
             params: {
                 zipcode: zipcode,
-                vin: vin,
-                selected_rebate_ids: selected_rebate_ids
+                vin: vin
             }
         });
     },
@@ -5252,6 +5518,16 @@ var api = {
         var email = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
         return window.axios.post('/api/hubspot/not-in-area', { email: email });
+    },
+    getBestOffer: function getBestOffer(dealId, paymentType, zipcode, targets, cancelToken) {
+        return window.axios.get('/api/deals/' + dealId + '/best-offer', {
+            cancelToken: cancelToken.token,
+            params: {
+                payment_type: paymentType,
+                zipcode: zipcode,
+                targets: targets
+            }
+        });
     }
 };
 
@@ -5280,6 +5556,12 @@ var formulas = {
         var totalWithSalesTax = total.plus(total.times(0.06));
 
         return Number(totalWithSalesTax.minus(rebatesTotal).minus(downPayment));
+    },
+    calculateTotalCash: function calculateTotalCash(price, docFee, rebatesTotal) {
+        var total = new _decimal2.default(price).plus(docFee);
+        var totalWithSalesTax = total.plus(total.times(0.06));
+
+        return Number(totalWithSalesTax.minus(rebatesTotal));
     },
     calculateTotalLease: function calculateTotalLease(price, docFee, rebatesTotal) {
         var total = price + docFee;
@@ -6128,6 +6410,16 @@ var Modal = function (_React$Component) {
     }
 
     _createClass(Modal, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this._isMounted = true;
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            this._isMounted = false;
+        }
+    }, {
         key: 'animate',
         value: function animate() {
             var _this2 = this;
@@ -6136,7 +6428,11 @@ var Modal = function (_React$Component) {
                 animating: true
             }, function () {
                 setTimeout(function () {
-                    return _this2.setState({ animating: false });
+                    if (_this2._isMounted) {
+                        _this2.setState({
+                            animating: false
+                        });
+                    }
                 }, 800);
             });
         }
@@ -6160,16 +6456,20 @@ var Modal = function (_React$Component) {
             var _this3 = this;
 
             var childrenWithProps = _react2.default.Children.map(this.props.children, function (child) {
-                return _react2.default.cloneElement(child, {
-                    animate: function animate() {
-                        return _this3.animate();
-                    }
-                });
+                if (typeof _this3.animate == 'function') {
+                    _react2.default.cloneElement(child, {
+                        animate: function animate() {
+                            return _this3.animate();
+                        }
+                    });
+                }
+                return child;
             });
 
             return _react2.default.createElement(
                 'div',
-                { className: 'modal',
+                {
+                    className: 'modal',
                     onClick: function onClick(e) {
                         return _this3.closeIfOverlayClick(e, _this3.props.onClose);
                     }
@@ -10230,11 +10530,11 @@ var CashFinanceLeaseCalculator = function (_React$PureComponent) {
         value: function renderSelectedTab() {
             switch (this.props.selectedTab) {
                 case 'cash':
-                    return _react2.default.createElement(_CashCalculator2.default, null);
+                    return _react2.default.createElement(_CashCalculator2.default, { deal: this.props.selectedDeal });
                 case 'finance':
-                    return _react2.default.createElement(_FinanceCalculator2.default, null);
+                    return _react2.default.createElement(_FinanceCalculator2.default, { deal: this.props.selectedDeal });
                 case 'lease':
-                    return _react2.default.createElement(_LeaseCalculator2.default, null);
+                    return _react2.default.createElement(_LeaseCalculator2.default, { deal: this.props.selectedDeal });
             }
         }
     }, {
@@ -10375,7 +10675,8 @@ var CashFinanceLeaseCalculator = function (_React$PureComponent) {
 function mapStateToProps(state) {
     return {
         zipcode: state.zipcode,
-        selectedTab: state.selectedTab
+        selectedTab: state.selectedTab,
+        selectedDeal: state.selectedDeal
     };
 }
 
@@ -13967,19 +14268,31 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _DealPrice = __webpack_require__(937);
-
-var _DealPrice2 = _interopRequireDefault(_DealPrice);
-
 var _reactRedux = __webpack_require__(16);
 
 var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
+var _propTypes = __webpack_require__(13);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _ramda = __webpack_require__(11);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _util = __webpack_require__(24);
+
+var _util2 = _interopRequireDefault(_util);
+
 var _DealImage = __webpack_require__(366);
 
 var _DealImage2 = _interopRequireDefault(_DealImage);
+
+var _DealPrice = __webpack_require__(937);
+
+var _DealPrice2 = _interopRequireDefault(_DealPrice);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -14001,20 +14314,9 @@ var Deal = function (_React$PureComponent) {
     }
 
     _createClass(Deal, [{
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            this._isMounted = false;
-        }
-    }, {
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this._isMounted = true;
-        }
-    }, {
         key: 'render',
         value: function render() {
             var deal = this.props.deal;
-
             return _react2.default.createElement(
                 'div',
                 { className: 'deal' },
@@ -14069,14 +14371,196 @@ var Deal = function (_React$PureComponent) {
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
-        compareList: state.compareList
+        compareList: state.compareList,
+        zipcode: state.zipcode,
+        bestOffers: state.bestOffers,
+        selectedTab: state.selectedTab,
+        targets: state.targets,
+        targetDefaults: state.targetDefaults
     };
+};
+
+Deal.PropTypes = {
+    deal: _propTypes2.default.object.isRequired
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(Deal);
 
 /***/ }),
-/* 224 */,
+/* 224 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(13);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _ramda = __webpack_require__(11);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _reactRedux = __webpack_require__(16);
+
+var _actions = __webpack_require__(14);
+
+var Actions = _interopRequireWildcard(_actions);
+
+var _reactSvgInline = __webpack_require__(15);
+
+var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
+
+var _strings = __webpack_require__(90);
+
+var _strings2 = _interopRequireDefault(_strings);
+
+var _util = __webpack_require__(24);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _miscicons = __webpack_require__(29);
+
+var _miscicons2 = _interopRequireDefault(_miscicons);
+
+var _zondicons = __webpack_require__(28);
+
+var _zondicons2 = _interopRequireDefault(_zondicons);
+
+var _index = __webpack_require__(62);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Targets = function (_React$PureComponent) {
+    _inherits(Targets, _React$PureComponent);
+
+    function Targets() {
+        _classCallCheck(this, Targets);
+
+        return _possibleConstructorReturn(this, (Targets.__proto__ || Object.getPrototypeOf(Targets)).apply(this, arguments));
+    }
+
+    _createClass(Targets, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.props.requestTargets(this.props.deal);
+        }
+    }, {
+        key: 'toggle',
+        value: function toggle(target) {
+            this.props.toggleTarget(target, this.props.dealTargetKey);
+            this.props.targetsChanged();
+        }
+    }, {
+        key: 'renderTarget',
+        value: function renderTarget(target, index) {
+            var isSelected = this.props.targetsSelected[this.props.dealTargetKey] ? _ramda2.default.contains(target, this.props.targetsSelected[this.props.dealTargetKey]) : false;
+
+            var checkboxClass = 'rebates__checkbox rebates__checkbox--inverted ' + (isSelected ? 'rebates__checkbox--selected' : '');
+
+            return _react2.default.createElement(
+                'div',
+                {
+                    key: index,
+                    onClick: this.toggle.bind(this, target),
+                    className: 'rebates__rebate'
+                },
+                isSelected ? _react2.default.createElement(_reactSvgInline2.default, {
+                    width: '15px',
+                    height: '15px',
+                    className: checkboxClass,
+                    svg: _zondicons2.default['checkmark']
+                }) : _react2.default.createElement('div', { className: 'rebates__checkbox' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'rebates__title' },
+                    _strings2.default.toTitleCase(target.targetName)
+                )
+            );
+        }
+    }, {
+        key: 'renderAvailableTargets',
+        value: function renderAvailableTargets() {
+            var _this2 = this;
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'rebates' },
+                this.props.dealTargetsAvailable.length == 0 ? _react2.default.createElement(
+                    'h4',
+                    null,
+                    'No Selectable Targets Available'
+                ) : _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        'h4',
+                        null,
+                        'Select Your Targets'
+                    ),
+                    this.props.dealTargetsAvailable.map(function (target, index) {
+                        return _this2.renderTarget(target, index);
+                    })
+                )
+            );
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                null,
+                this.props.dealTargetsAvailableLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : this.renderAvailableTargets()
+            );
+        }
+    }]);
+
+    return Targets;
+}(_react2.default.PureComponent);
+
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealTargetKey = (0, _index.makeDealTargetKey)();
+    var getDealTargetsAvailable = (0, _index.makeDealTargetsAvailable)();
+    var getDealTargetsAvailableLoading = (0, _index.makeDealTargetsAvailableLoading)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        return {
+            zipcode: state.zipcode,
+            targetsAvailable: state.targetsAvailable,
+            targetsSelected: state.targetsSelected,
+            dealTargetKey: getDealTargetKey(state, props),
+            dealTargetsAvailable: getDealTargetsAvailable(state, props),
+            dealTargetsAvailableLoading: getDealTargetsAvailableLoading(state, props)
+        };
+    };
+    return mapStateToProps;
+};
+
+Targets.propTypes = {
+    deal: _propTypes2.default.object.isRequired,
+    targetsChanged: _propTypes2.default.func.isRequired
+};
+
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(Targets);
+
+/***/ }),
 /* 225 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -22218,11 +22702,10 @@ var RECEIVE_LOCATION_INFO = exports.RECEIVE_LOCATION_INFO = 'RECEIVE_LOCATION_IN
 var CLOSE_MAKE_SELECTOR_MODAL = exports.CLOSE_MAKE_SELECTOR_MODAL = 'CLOSE_MAKE_SELECTOR_MODAL';
 var WINDOW_RESIZE = exports.WINDOW_RESIZE = 'WINDOW_RESIZE';
 var TOGGLE_SMALL_FILTERS_SHOWN = exports.TOGGLE_SMALL_FILTERS_SHOWN = 'TOGGLE_SMALL_FILTERS_SHOWN';
-var RECEIVE_DEAL_REBATES = exports.RECEIVE_DEAL_REBATES = 'RECEIVE_DEAL_REBATES';
 var SELECT_TAB = exports.SELECT_TAB = 'SELECT_TAB';
 var SELECT_DEAL = exports.SELECT_DEAL = 'SELECT_DEAL';
 var CLEAR_SELECTED_DEAL = exports.CLEAR_SELECTED_DEAL = 'CLEAR_SELECTED_DEAL';
-var TOGGLE_REBATE = exports.TOGGLE_REBATE = 'TOGGLE_REBATE';
+var TOGGLE_TARGET = exports.TOGGLE_TARGET = 'TOGGLE_TARGET';
 var SELECT_REBATE = exports.SELECT_REBATE = 'SELECT_REBATE';
 var CHOOSE_SEGMENT = exports.CHOOSE_SEGMENT = 'CHOOSE_SEGMENT';
 var UPDATE_DOWN_PAYMENT = exports.UPDATE_DOWN_PAYMENT = 'UPDATE_DOWN_PAYMENT';
@@ -22230,8 +22713,18 @@ var SET_IS_EMPLOYEE = exports.SET_IS_EMPLOYEE = 'SET_IS_EMPLOYEE';
 var UPDATE_TERM_DURATION = exports.UPDATE_TERM_DURATION = 'UPDATE_TERM_DURATION';
 var UPDATE_ANNUAL_MILEAGE = exports.UPDATE_ANNUAL_MILEAGE = 'UPDATE_ANNUAL_MILEAGE';
 var UPDATE_RESIDUAL_PERCENT = exports.UPDATE_RESIDUAL_PERCENT = 'UPDATE_RESIDUAL_PERCENT';
-var REQUEST_REBATES = exports.REQUEST_REBATES = 'REQUEST_REBATES';
+var REQUEST_TARGETS = exports.REQUEST_TARGETS = 'REQUEST_TARGETS';
+var RECEIVE_TARGETS = exports.RECEIVE_TARGETS = 'RECEIVE_TARGETS';
+var REQUEST_BEST_OFFER = exports.REQUEST_BEST_OFFER = 'REQUEST_BEST_OFFER';
+var RECEIVE_BEST_OFFER = exports.RECEIVE_BEST_OFFER = 'RECEIVE_BEST_OFFER';
+var CLEAR_BEST_OFFER = exports.CLEAR_BEST_OFFER = 'CLEAR_BEST_OFFER';
 var SET_ZIP_IN_RANGE = exports.SET_ZIP_IN_RANGE = 'SET_ZIP_IN_RANGE';
+var SAME_BEST_OFFERS = exports.SAME_BEST_OFFERS = 'SAME_BEST_OFFERS';
+var APPEND_CANCEL_TOKEN = exports.APPEND_CANCEL_TOKEN = 'APPEND_CANCEL_TOKEN';
+var REMOVE_CANCEL_TOKEN = exports.REMOVE_CANCEL_TOKEN = 'REMOVE_CANCEL_TOKEN';
+var CLEAR_CANCEL_TOKENS = exports.CLEAR_CANCEL_TOKENS = 'CLEAR_CANCEL_TOKENS';
+var CANCEL_ALL_PROMISES = exports.CANCEL_ALL_PROMISES = 'CANCEL_ALL_PROMISES';
+var REQUEST_ALL_BEST_OFFERS = exports.REQUEST_ALL_BEST_OFFERS = 'REQUEST_ALL_BEST_OFFERS';
 
 /***/ }),
 /* 366 */
@@ -22290,7 +22783,7 @@ var DealImage = function (_React$PureComponent) {
     _createClass(DealImage, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            this._mounted = true;
+            this._isMounted = true;
 
             if (this.props.deal.photos.length === 0) {
                 this.requestFuelImages();
@@ -22299,7 +22792,7 @@ var DealImage = function (_React$PureComponent) {
     }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
-            this._mounted = false;
+            this._isMounted = false;
         }
     }, {
         key: 'featuredImageUrl',
@@ -22362,7 +22855,7 @@ var DealImage = function (_React$PureComponent) {
                                 _context.t2 = _context.sent;
                                 externalImages = _context.t1.extractFuelImages.call(_context.t1, _context.t2);
 
-                                if (this._mounted) {
+                                if (this._isMounted) {
                                     _context.next = 17;
                                     break;
                                 }
@@ -22386,7 +22879,7 @@ var DealImage = function (_React$PureComponent) {
                                 _context.t5 = _context.sent;
                                 _externalImages = _context.t4.extractFuelImages.call(_context.t4, _context.t5);
 
-                                if (this._mounted) {
+                                if (this._isMounted) {
                                     _context.next = 30;
                                     break;
                                 }
@@ -23251,7 +23744,7 @@ var _util2 = _interopRequireDefault(_util);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var purchase = {
-    start: function start(deal, selectedTab, downPayment, selectedRebates, termDuration, employeeBrand) {
+    start: function start(deal, selectedTab, downPayment, dealBestOfferTotalValue, dealBestOffer, termDuration, employeeBrand) {
         var form = document.createElement('form');
         form.setAttribute('method', 'post');
         form.setAttribute('action', '/apply-or-purchase');
@@ -23269,7 +23762,7 @@ var purchase = {
         if (selectedTab === 'finance') {
             var amount_financed = document.createElement('input');
             amount_financed.setAttribute('name', 'amount_financed');
-            amount_financed.setAttribute('value', _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(deal, employeeBrand), deal.doc_fee, downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), selectedRebates))).toString());
+            amount_financed.setAttribute('value', _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(deal, employeeBrand), deal.doc_fee, downPayment, dealBestOfferTotalValue).toString());
             form.appendChild(amount_financed);
 
             var term = document.createElement('input');
@@ -23293,15 +23786,15 @@ var purchase = {
         deal_id.setAttribute('value', deal.id);
         form.appendChild(deal_id);
 
-        selectedRebates.forEach(function (rebate, index) {
+        dealBestOffer.programs.forEach(function (program, index) {
             var rebateName = document.createElement('input');
-            rebateName.setAttribute('name', 'rebates[' + index + '][rebate]');
-            rebateName.setAttribute('value', rebate.rebate);
+            rebateName.setAttribute('name', 'rebates[' + index + '][title]');
+            rebateName.setAttribute('value', program.title);
             form.appendChild(rebateName);
 
             var rebateValue = document.createElement('input');
             rebateValue.setAttribute('name', 'rebates[' + index + '][value]');
-            rebateValue.setAttribute('value', rebate.value);
+            rebateValue.setAttribute('value', program.value);
             form.appendChild(rebateValue);
         });
 
@@ -23312,7 +23805,7 @@ var purchase = {
 
         var dmr_price = document.createElement('input');
         dmr_price.setAttribute('name', 'dmr_price');
-        dmr_price.setAttribute('value', (_util2.default.getEmployeeOrSupplierPrice(deal, employeeBrand) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), selectedRebates))).toString());
+        dmr_price.setAttribute('value', (_util2.default.getEmployeeOrSupplierPrice(deal, employeeBrand) - dealBestOfferTotalValue).toString());
         form.appendChild(dmr_price);
 
         document.body.appendChild(form);
@@ -23448,7 +23941,9 @@ Array.from(document.getElementsByTagName('ThankYouPage')).map(function (element)
         _reactRedux.Provider,
         { store: (0, _configureStore2.default)() },
         _react2.default.createElement(_ThankYouPage2.default, {
-            purchase: JSON.parse(element.getAttribute('purchase'))
+            purchase: JSON.parse(element.getAttribute('purchase')),
+            deal: JSON.parse(element.getAttribute('deal')),
+            features: JSON.parse(element.getAttribute('features'))
         })
     ), element);
 });
@@ -41829,8 +42324,8 @@ var FilterPage = function (_React$PureComponent) {
             );
         }
     }, {
-        key: 'renderDealRebatesModal',
-        value: function renderDealRebatesModal() {
+        key: 'renderCalculatorModal',
+        value: function renderCalculatorModal() {
             return _react2.default.createElement(
                 _Modal2.default,
                 {
@@ -41882,7 +42377,7 @@ var FilterPage = function (_React$PureComponent) {
                 'div',
                 null,
                 this.props.showMakeSelectorModal ? this.renderMakeSelectionModal() : '',
-                this.props.selectedDeal ? this.renderDealRebatesModal() : '',
+                this.props.selectedDeal ? this.renderCalculatorModal() : '',
                 this.renderFilterPanelAndDeals()
             );
         }
@@ -51901,6 +52396,12 @@ var _miscicons2 = _interopRequireDefault(_miscicons);
 
 var _reactRedux = __webpack_require__(16);
 
+var _index = __webpack_require__(14);
+
+var Actions = _interopRequireWildcard(_index);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -51919,6 +52420,17 @@ var Deals = function (_React$PureComponent) {
     }
 
     _createClass(Deals, [{
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            nextProps.cancelAllBestOfferPromises();
+
+            if (nextProps.deals) {
+                nextProps.deals.map(function (deal) {
+                    nextProps.requestBestOffer(deal);
+                });
+            }
+        }
+    }, {
         key: 'render',
         value: function render() {
             if (!this.props.deals && this.props.requestingMoreDeals && this.props.zipInRange) {
@@ -51957,7 +52469,7 @@ function mapStateToProps(state) {
     };
 }
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, null)(Deals);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(Deals);
 
 /***/ }),
 /* 934 */
@@ -52288,13 +52800,13 @@ var _ramda = __webpack_require__(11);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
+var _propTypes = __webpack_require__(13);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _util = __webpack_require__(24);
 
 var _util2 = _interopRequireDefault(_util);
-
-var _rebates = __webpack_require__(988);
-
-var _rebates2 = _interopRequireDefault(_rebates);
 
 var _formulas = __webpack_require__(72);
 
@@ -52318,9 +52830,13 @@ var _InfoModal = __webpack_require__(939);
 
 var _InfoModal2 = _interopRequireDefault(_InfoModal);
 
+var _index2 = __webpack_require__(62);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -52331,45 +52847,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var DealPrice = function (_React$PureComponent) {
     _inherits(DealPrice, _React$PureComponent);
 
-    function DealPrice(props) {
+    function DealPrice() {
         _classCallCheck(this, DealPrice);
 
-        var _this = _possibleConstructorReturn(this, (DealPrice.__proto__ || Object.getPrototypeOf(DealPrice)).call(this, props));
-
-        _this.state = {
-            availableRebates: null,
-            selectedRebates: []
-        };
-        return _this;
+        return _possibleConstructorReturn(this, (DealPrice.__proto__ || Object.getPrototypeOf(DealPrice)).apply(this, arguments));
     }
 
     _createClass(DealPrice, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            if (!this.props.dealRebates.hasOwnProperty(this.props.deal.id) && this.props.zipcode) {
-                this.requestRebates();
-            } else {
-                this.componentWillReceiveProps(this.props);
-            }
-        }
-    }, {
-        key: 'requestRebates',
-        value: function requestRebates() {
-            this.props.requestRebates(this.props.deal);
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(props) {
-            if (!props.dealRebates.hasOwnProperty(props.deal.id)) {
-                return this.props.requestRebates(this.props.deal);
-            }
-
-            this.setState({
-                availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(props.dealRebates, props.selectedRebates, props.selectedTab, props.deal),
-                selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(props.dealRebates, props.selectedRebates, props.selectedTab, props.deal)
-            });
-        }
-    }, {
         key: 'renderPriceExplanationModal',
         value: function renderPriceExplanationModal() {
             return _react2.default.createElement(_InfoModal2.default, { deal: this.props.deal });
@@ -52391,7 +52875,7 @@ var DealPrice = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         null,
-                        _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand))
+                        this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue))
                     ),
                     this.renderPriceExplanationModal()
                 ),
@@ -52423,10 +52907,10 @@ var DealPrice = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-price__finance-lease-price' },
-                    _react2.default.createElement(
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _react2.default.createElement(
                         'div',
                         null,
-                        this.props.dealRebates.hasOwnProperty(this.props.deal.id) ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), this.props.downPayment, this.props.termDuration))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                        _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration)))
                     ),
                     this.renderPriceExplanationModal()
                 ),
@@ -52450,7 +52934,7 @@ var DealPrice = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         null,
-                        _util2.default.moneyFormat(Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31))))
+                        _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31))))
                     ),
                     this.renderPriceExplanationModal()
                 ),
@@ -52470,13 +52954,10 @@ var DealPrice = function (_React$PureComponent) {
             }
         }
     }, {
-        key: 'renderAppliedRebatesLink',
-        value: function renderAppliedRebatesLink() {
+        key: 'renderAppliedTargetsLink',
+        value: function renderAppliedTargetsLink() {
             var _this2 = this;
 
-            if (!this.state.availableRebates) {
-                return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
-            }
             return _react2.default.createElement(
                 'div',
                 { className: 'deal-price__rebates-applied' },
@@ -52494,13 +52975,21 @@ var DealPrice = function (_React$PureComponent) {
                         },
                         href: '#'
                     },
-                    'See Available Rebates'
+                    'See Available Targets'
                 )
             );
         }
     }, {
+        key: 'handleTabChange',
+        value: function handleTabChange(tabName) {
+            this.props.selectTab(tabName);
+            this.props.getBestOffersForLoadedDeals();
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var _this3 = this;
+
             return _react2.default.createElement(
                 'div',
                 { className: 'deal-price' },
@@ -52510,7 +52999,9 @@ var DealPrice = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         {
-                            onClick: this.props.selectTab.bind(null, 'cash'),
+                            onClick: function onClick() {
+                                _this3.handleTabChange('cash');
+                            },
                             className: 'tabs__tab ' + (this.props.selectedTab === 'cash' ? 'tabs__tab--selected' : '')
                         },
                         'Cash'
@@ -52518,7 +53009,9 @@ var DealPrice = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         {
-                            onClick: this.props.selectTab.bind(null, 'finance'),
+                            onClick: function onClick() {
+                                _this3.handleTabChange('finance');
+                            },
                             className: 'tabs__tab ' + (this.props.selectedTab === 'finance' ? 'tabs__tab--selected' : '')
                         },
                         'Finance'
@@ -52526,7 +53019,9 @@ var DealPrice = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         {
-                            onClick: this.props.selectTab.bind(null, 'lease'),
+                            onClick: function onClick() {
+                                _this3.handleTabChange('lease');
+                            },
                             className: 'tabs__tab ' + (this.props.selectedTab === 'lease' ? 'tabs__tab--selected' : '')
                         },
                         'Lease'
@@ -52537,7 +53032,7 @@ var DealPrice = function (_React$PureComponent) {
                     { className: 'tabs__content' },
                     this.renderSelectedTab()
                 ),
-                this.renderAppliedRebatesLink()
+                this.renderAppliedTargetsLink()
             );
         }
     }]);
@@ -52545,19 +53040,33 @@ var DealPrice = function (_React$PureComponent) {
     return DealPrice;
 }(_react2.default.PureComponent);
 
-var mapStateToProps = function mapStateToProps(state) {
-    return {
-        employeeBrand: state.employeeBrand,
-        downPayment: state.downPayment,
-        termDuration: state.termDuration,
-        residualPercent: state.residualPercent,
-        selectedTab: state.selectedTab,
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealBestOfferTotalValue = (0, _index2.makeDealBestOfferTotalValue)();
+    var getDealBestOfferLoading = (0, _index2.makeDealBestOfferLoading)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        var _ref;
+
+        return _ref = {
+            employeeBrand: state.employeeBrand,
+            downPayment: state.downPayment,
+            termDuration: state.termDuration,
+            residualPercent: state.residualPercent,
+            selectedTab: state.selectedTab,
+            dealTargets: state.dealTargets,
+            bestOffers: state.bestOffers,
+            zipcode: state.zipcode,
+            targetsSelected: state.targetsSelected,
+            targetDefaults: state.targetDefaults
+        }, _defineProperty(_ref, 'bestOffers', state.bestOffers), _defineProperty(_ref, 'selectedTab', state.selectedTab), _defineProperty(_ref, 'downPayment', state.downPayment), _defineProperty(_ref, 'dealBestOfferTotalValue', getDealBestOfferTotalValue(state, props)), _defineProperty(_ref, 'dealBestOfferLoading', getDealBestOfferLoading(state, props)), _ref;
     };
+    return mapStateToProps;
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(DealPrice);
+DealPrice.PropTypes = {
+    deal: _propTypes2.default.object.isRequired
+};
+
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(DealPrice);
 
 /***/ }),
 /* 938 */
@@ -57524,10 +58033,6 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _rebates = __webpack_require__(988);
-
-var _rebates2 = _interopRequireDefault(_rebates);
-
 var _reactSvgInline = __webpack_require__(15);
 
 var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
@@ -57539,6 +58044,8 @@ var _util2 = _interopRequireDefault(_util);
 var _strings = __webpack_require__(90);
 
 var _strings2 = _interopRequireDefault(_strings);
+
+var _index2 = __webpack_require__(62);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -57553,96 +58060,43 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var InfoModalData = function (_React$PureComponent) {
     _inherits(InfoModalData, _React$PureComponent);
 
-    function InfoModalData(props) {
+    function InfoModalData() {
         _classCallCheck(this, InfoModalData);
 
-        var _this = _possibleConstructorReturn(this, (InfoModalData.__proto__ || Object.getPrototypeOf(InfoModalData)).call(this, props));
-
-        _this.state = {};
-        return _this;
+        return _possibleConstructorReturn(this, (InfoModalData.__proto__ || Object.getPrototypeOf(InfoModalData)).apply(this, arguments));
     }
 
     _createClass(InfoModalData, [{
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            this._isMounted = false;
-        }
-    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            this._isMounted = true;
-
-            if (!this.props.dealRebates.hasOwnProperty(this.props.deal.id) && this.props.zipcode) {
-                this.requestRebates();
-            } else {
-                this.componentWillReceiveProps(this.props);
-            }
+            this.props.requestTargets(this.props.deal);
+            this.props.requestBestOffer(this.props.deal);
         }
     }, {
-        key: 'requestRebates',
-        value: function requestRebates() {
-            this.props.requestRebates(this.props.deal);
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(props) {
-            if (!props.dealRebates.hasOwnProperty(props.deal.id)) {
-                return this.props.requestRebates(this.props.deal);
-            }
-
-            this.setState({
-                availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(props.dealRebates, props.selectedRebates, props.selectedTab, props.deal),
-                selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(props.dealRebates, props.selectedRebates, props.selectedTab, props.deal)
-            });
-        }
-    }, {
-        key: 'renderDealRebatesModal',
-        value: function renderDealRebatesModal() {
-            return _react2.default.createElement(_Modal2.default, {
-                onClose: this.props.clearSelectedDeal,
-                closeText: 'Back to results'
-            });
-        }
-    }, {
-        key: 'displayFinalPrice',
-        value: function displayFinalPrice() {
-            var selectedAmount = this.state.selectedRebates ? _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.state.selectedRebates)) : 0;
+        key: 'finalPrice',
+        value: function finalPrice() {
             switch (this.props.selectedTab) {
                 case 'cash':
-                    return this.props.deal.supplier_price - selectedAmount;
+                    return _formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue);
                 case 'finance':
                     {
-                        return Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), this.props.downPayment, this.props.termDuration));
+                        return Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration));
                     }
                 case 'lease':
                     {
-                        return Math.round(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31)));
+                        return _formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, 0, 0, this.props.termDuration, _ramda2.default.or(this.props.residualPercent, 31)));
                     }
             }
         }
     }, {
-        key: 'showAppliedRebates',
-        value: function showAppliedRebates() {
-            var selectedAmount = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates));
-            var maxAmount = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.dealRebates));
-
-            this.setState({
-                selectedRebateAmount: selectedAmount,
-                maxRebateAmount: maxAmount
-            });
+        key: 'handleGetRebatesLink',
+        value: function handleGetRebatesLink() {
+            this.props.selectDeal(this.props.deal);
+            this.props.closeModal();
         }
     }, {
         key: 'renderAppliedRebatesLink',
         value: function renderAppliedRebatesLink() {
-            var _this2 = this;
-
-            if (!this.state.availableRebates) {
-                return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
-            }
-
-            var selectedAmount = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.state.selectedRebates));
-            var maxAmount = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.state.availableRebates));
-
             return _react2.default.createElement(
                 'div',
                 null,
@@ -57651,34 +58105,44 @@ var InfoModalData = function (_React$PureComponent) {
                     { className: 'info-modal-data__rebate-info info-modal-data__costs info-modal-data__bold' },
                     _react2.default.createElement(
                         'div',
-                        null,
+                        { className: 'info-modal-data__rebate-info__title' },
                         'Rebates Applied:'
                     ),
                     _react2.default.createElement(
                         'div',
                         null,
-                        '' + _util2.default.moneyFormat(selectedAmount)
+                        _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                     )
                 ),
+                this.props.dealBestOffer.programs.map(function (program, index) {
+                    return _react2.default.createElement(
+                        'div',
+                        {
+                            className: 'info-modal-data__rebate-info info-modal-data__costs',
+                            key: index
+                        },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'info-modal-data__rebate-info__title' },
+                            _strings2.default.toTitleCase(program.title)
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            '' + _util2.default.moneyFormat(program.value)
+                        )
+                    );
+                }),
                 _react2.default.createElement(
                     'div',
                     { className: 'info-modal-data__more-rebates info-modal-data__costs' },
                     _react2.default.createElement(
                         'div',
                         null,
-                        _util2.default.moneyFormat(maxAmount) + ' in rebates available.  '
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        null,
                         _react2.default.createElement(
                             'a',
                             {
-                                onClick: function onClick() {
-                                    _this2.props.selectDeal(_this2.props.deal);
-
-                                    _this2.props.closeModal();
-                                },
+                                onClick: this.handleGetRebatesLink.bind(this),
                                 href: '#'
                             },
                             'Get Rebates'
@@ -57716,7 +58180,8 @@ var InfoModalData = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'option',
                                 null,
-                                defaultTermLength
+                                this.props.termDuration,
+                                ' months'
                             )
                         )
                     ),
@@ -57731,7 +58196,7 @@ var InfoModalData = function (_React$PureComponent) {
                         _react2.default.createElement('input', {
                             className: 'info-modal-data__input',
                             disabled: true,
-                            placeholder: _util2.default.moneyFormat(this.props.deal.supplier_price * financeDownPaymentAmount)
+                            placeholder: _util2.default.moneyFormat(this.props.downPayment)
                         })
                     )
                 );
@@ -57870,7 +58335,7 @@ var InfoModalData = function (_React$PureComponent) {
                                 )
                             ),
                             this.props.selectedTab === 'cash' ? '' : this.renderPaymentDefaults(),
-                            this.renderAppliedRebatesLink()
+                            this.props.dealBestOfferTotalValue ? this.renderAppliedRebatesLink() : 'Loading Applied Rebates...'
                         ),
                         _react2.default.createElement('hr', null),
                         _react2.default.createElement(
@@ -57884,7 +58349,7 @@ var InfoModalData = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'div',
                                 null,
-                                _util2.default.moneyFormat(this.displayFinalPrice()) + '\n                                ' + (this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? ' /month' : '')
+                                _util2.default.moneyFormat(this.finalPrice()) + '\n                                ' + (this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? ' /month' : '')
                             )
                         ),
                         _react2.default.createElement(
@@ -57917,24 +58382,158 @@ InfoModalData.propTypes = {
     closeModal: _propTypes2.default.func.isRequired
 };
 
-var mapStateToProps = function mapStateToProps(state) {
-    return {
-        compareList: state.compareList,
-        selectedTab: state.selectedTab,
-        downPayment: state.downPayment,
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates,
-        termDuration: state.termDuration,
-        selectedDeal: state.selectedDeal,
-        isEmployee: state.isEmployee,
-        residualPercent: state.residualPercent
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealBestOfferTotalValue = (0, _index2.makeDealBestOfferTotalValue)();
+    var getDealBestOffer = (0, _index2.makeDealBestOffer)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        return {
+            downPayment: state.downPayment,
+            employeeBrand: state.employeeBrand,
+            residualPercent: state.residualPercent,
+            selectedTab: state.selectedTab,
+            selectedDeal: state.selectedDeal,
+            termDuration: state.termDuration,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOffer: getDealBestOffer(state, props)
+        };
     };
+    return mapStateToProps;
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(InfoModalData);
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(InfoModalData);
 
 /***/ }),
-/* 941 */,
+/* 941 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.defaultMemoize = defaultMemoize;
+exports.createSelectorCreator = createSelectorCreator;
+exports.createStructuredSelector = createStructuredSelector;
+function defaultEqualityCheck(a, b) {
+  return a === b;
+}
+
+function areArgumentsShallowlyEqual(equalityCheck, prev, next) {
+  if (prev === null || next === null || prev.length !== next.length) {
+    return false;
+  }
+
+  // Do this in a for loop (and not a `forEach` or an `every`) so we can determine equality as fast as possible.
+  var length = prev.length;
+  for (var i = 0; i < length; i++) {
+    if (!equalityCheck(prev[i], next[i])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function defaultMemoize(func) {
+  var equalityCheck = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultEqualityCheck;
+
+  var lastArgs = null;
+  var lastResult = null;
+  // we reference arguments instead of spreading them for performance reasons
+  return function () {
+    if (!areArgumentsShallowlyEqual(equalityCheck, lastArgs, arguments)) {
+      // apply arguments instead of spreading for performance.
+      lastResult = func.apply(null, arguments);
+    }
+
+    lastArgs = arguments;
+    return lastResult;
+  };
+}
+
+function getDependencies(funcs) {
+  var dependencies = Array.isArray(funcs[0]) ? funcs[0] : funcs;
+
+  if (!dependencies.every(function (dep) {
+    return typeof dep === 'function';
+  })) {
+    var dependencyTypes = dependencies.map(function (dep) {
+      return typeof dep;
+    }).join(', ');
+    throw new Error('Selector creators expect all input-selectors to be functions, ' + ('instead received the following types: [' + dependencyTypes + ']'));
+  }
+
+  return dependencies;
+}
+
+function createSelectorCreator(memoize) {
+  for (var _len = arguments.length, memoizeOptions = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    memoizeOptions[_key - 1] = arguments[_key];
+  }
+
+  return function () {
+    for (var _len2 = arguments.length, funcs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      funcs[_key2] = arguments[_key2];
+    }
+
+    var recomputations = 0;
+    var resultFunc = funcs.pop();
+    var dependencies = getDependencies(funcs);
+
+    var memoizedResultFunc = memoize.apply(undefined, [function () {
+      recomputations++;
+      // apply arguments instead of spreading for performance.
+      return resultFunc.apply(null, arguments);
+    }].concat(memoizeOptions));
+
+    // If a selector is called with the exact same arguments we don't need to traverse our dependencies again.
+    var selector = defaultMemoize(function () {
+      var params = [];
+      var length = dependencies.length;
+
+      for (var i = 0; i < length; i++) {
+        // apply arguments instead of spreading and mutate a local list of params for performance.
+        params.push(dependencies[i].apply(null, arguments));
+      }
+
+      // apply arguments instead of spreading for performance.
+      return memoizedResultFunc.apply(null, params);
+    });
+
+    selector.resultFunc = resultFunc;
+    selector.recomputations = function () {
+      return recomputations;
+    };
+    selector.resetRecomputations = function () {
+      return recomputations = 0;
+    };
+    return selector;
+  };
+}
+
+var createSelector = exports.createSelector = createSelectorCreator(defaultMemoize);
+
+function createStructuredSelector(selectors) {
+  var selectorCreator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : createSelector;
+
+  if (typeof selectors !== 'object') {
+    throw new Error('createStructuredSelector expects first argument to be an object ' + ('where each property is a selector, instead received a ' + typeof selectors));
+  }
+  var objectKeys = Object.keys(selectors);
+  return selectorCreator(objectKeys.map(function (key) {
+    return selectors[key];
+  }), function () {
+    for (var _len3 = arguments.length, values = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      values[_key3] = arguments[_key3];
+    }
+
+    return values.reduce(function (composition, value, index) {
+      composition[objectKeys[index]] = value;
+      return composition;
+    }, {});
+  });
+}
+
+/***/ }),
 /* 942 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -58557,25 +59156,6 @@ var FilterPanel = function (_React$PureComponent) {
                             selectedMakes: this.props.selectedMakes,
                             onSelectMake: this.props.toggleMake
                         })
-                    ),
-                    _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
-                                return _this3.toggleOpenFilter('Model');
-                            },
-                            open: this.state.openFilter === 'Model',
-                            title: 'Vehicle Model'
-                        },
-                        _react2.default.createElement(
-                            'div',
-                            null,
-                            _react2.default.createElement(
-                                'p',
-                                null,
-                                'Placeholder Text'
-                            )
-                        )
                     ),
                     _react2.default.createElement(
                         _SidebarFilter2.default,
@@ -59492,17 +60072,13 @@ var _ramda = __webpack_require__(11);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _Rebates = __webpack_require__(989);
+var _Targets = __webpack_require__(224);
 
-var _Rebates2 = _interopRequireDefault(_Rebates);
+var _Targets2 = _interopRequireDefault(_Targets);
 
 var _CustomerTypeSelect = __webpack_require__(225);
 
 var _CustomerTypeSelect2 = _interopRequireDefault(_CustomerTypeSelect);
-
-var _rebates = __webpack_require__(988);
-
-var _rebates2 = _interopRequireDefault(_rebates);
 
 var _reactRedux = __webpack_require__(16);
 
@@ -59513,6 +60089,16 @@ var Actions = _interopRequireWildcard(_actions);
 var _formulas = __webpack_require__(72);
 
 var _formulas2 = _interopRequireDefault(_formulas);
+
+var _reactSvgInline = __webpack_require__(15);
+
+var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
+
+var _miscicons = __webpack_require__(29);
+
+var _miscicons2 = _interopRequireDefault(_miscicons);
+
+var _index = __webpack_require__(62);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -59534,22 +60120,31 @@ var CashCalculator = function (_React$PureComponent) {
     }
 
     _createClass(CashCalculator, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.props.requestTargets(this.props.deal);
+            this.props.requestBestOffer(this.props.deal);
+        }
+    }, {
+        key: 'handleTargetsChange',
+        value: function handleTargetsChange() {
+            this.props.requestBestOffer(this.props.deal);
+        }
+    }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                null,
+                { className: 'cash-finance-lease-calculator__calculator-content' },
                 'Cash Price',
                 ' ',
                 _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
                 _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal }),
                 _react2.default.createElement('hr', null),
-                _react2.default.createElement(
-                    'h4',
-                    null,
-                    'Available Rebates and Incentives'
-                ),
-                _react2.default.createElement(_Rebates2.default, null),
+                _react2.default.createElement(_Targets2.default, {
+                    deal: this.props.deal,
+                    targetsChanged: this.handleTargetsChange.bind(this)
+                }),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(
                     'h4',
@@ -59621,12 +60216,12 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__left-item' },
-                            'Your Rebates and Incentives'
+                            'Rebates Applied'
                         ),
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            _util2.default.moneyFormat(_ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)))
+                            this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                         )
                     ),
                     _react2.default.createElement(
@@ -59640,7 +60235,7 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            _util2.default.moneyFormat(_formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))))
+                            this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue))
                         )
                     )
                 )
@@ -59651,16 +60246,26 @@ var CashCalculator = function (_React$PureComponent) {
     return CashCalculator;
 }(_react2.default.PureComponent);
 
-function mapStateToProps(state) {
-    return {
-        deal: state.selectedDeal,
-        downPayment: state.downPayment,
-        employeeBrand: state.employeeBrand,
-        selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal)
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealBestOfferTotalValue = (0, _index.makeDealBestOfferTotalValue)();
+    var getDealBestOfferLoading = (0, _index.makeDealBestOfferLoading)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        return {
+            bestOffers: state.bestOffers,
+            downPayment: state.downPayment,
+            employeeBrand: state.employeeBrand,
+            selectedTab: state.selectedTab,
+            targetsSelected: state.targetsSelected,
+            targetDefaults: state.targetDefaults,
+            zipcode: state.zipcode,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferLoading: getDealBestOfferLoading(state, props)
+        };
     };
-}
+    return mapStateToProps;
+};
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(CashCalculator);
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(CashCalculator);
 
 /***/ }),
 /* 955 */
@@ -59687,17 +60292,13 @@ var _ramda = __webpack_require__(11);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _Rebates = __webpack_require__(989);
+var _Targets = __webpack_require__(224);
 
-var _Rebates2 = _interopRequireDefault(_Rebates);
+var _Targets2 = _interopRequireDefault(_Targets);
 
 var _CustomerTypeSelect = __webpack_require__(225);
 
 var _CustomerTypeSelect2 = _interopRequireDefault(_CustomerTypeSelect);
-
-var _rebates = __webpack_require__(988);
-
-var _rebates2 = _interopRequireDefault(_rebates);
 
 var _formulas = __webpack_require__(72);
 
@@ -59717,6 +60318,8 @@ var _miscicons = __webpack_require__(29);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
 
+var _index = __webpack_require__(62);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -59730,13 +60333,19 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var FinanceCalculator = function (_React$PureComponent) {
     _inherits(FinanceCalculator, _React$PureComponent);
 
-    function FinanceCalculator(props) {
+    function FinanceCalculator() {
         _classCallCheck(this, FinanceCalculator);
 
-        return _possibleConstructorReturn(this, (FinanceCalculator.__proto__ || Object.getPrototypeOf(FinanceCalculator)).call(this, props));
+        return _possibleConstructorReturn(this, (FinanceCalculator.__proto__ || Object.getPrototypeOf(FinanceCalculator)).apply(this, arguments));
     }
 
     _createClass(FinanceCalculator, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.props.requestTargets(this.props.deal);
+            this.props.requestBestOffer(this.props.deal);
+        }
+    }, {
         key: 'updateDownPayment',
         value: function updateDownPayment(e) {
             this.props.updateDownPayment(Math.max(e.target.value, 0));
@@ -59749,12 +60358,12 @@ var FinanceCalculator = function (_React$PureComponent) {
     }, {
         key: 'getTotalVehicleCost',
         value: function getTotalVehicleCost() {
-            return this.props.availableRebates ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, 0, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))) : null;
+            return _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, 0, this.props.dealBestOfferTotalValue);
         }
     }, {
         key: 'getAmountToFinance',
         value: function getAmountToFinance() {
-            return this.props.availableRebates ? _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))) : null;
+            return _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, this.props.dealBestOfferTotalValue);
         }
     }, {
         key: 'renderTotalCostOfVehicle',
@@ -59777,20 +60386,20 @@ var FinanceCalculator = function (_React$PureComponent) {
             );
         }
     }, {
-        key: 'renderYourRebatesAndIncentives',
-        value: function renderYourRebatesAndIncentives() {
+        key: 'renderYourTargets',
+        value: function renderYourTargets() {
             return _react2.default.createElement(
                 'div',
                 null,
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__left-item' },
-                    'Your Rebates and Incentives'
+                    'Rebates Applied'
                 ),
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    this.props.availableRebates ? _util2.default.moneyFormat(_ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                 )
             );
         }
@@ -59817,8 +60426,6 @@ var FinanceCalculator = function (_React$PureComponent) {
     }, {
         key: 'renderYourMonthlyFinancePayment',
         value: function renderYourMonthlyFinancePayment() {
-            var totalVehicleCost = this.getTotalVehicleCost();
-
             return _react2.default.createElement(
                 'div',
                 null,
@@ -59830,9 +60437,14 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    totalVehicleCost ? _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(totalVehicleCost, this.props.downPayment, this.props.termDuration))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration)))
                 )
             );
+        }
+    }, {
+        key: 'handleTargetsChange',
+        value: function handleTargetsChange() {
+            this.props.requestBestOffer(this.props.deal);
         }
     }, {
         key: 'render',
@@ -59841,18 +60453,16 @@ var FinanceCalculator = function (_React$PureComponent) {
 
             return _react2.default.createElement(
                 'div',
-                null,
+                { className: 'cash-finance-lease-calculator__calculator-content' },
                 'Finance Price',
                 ' ',
                 _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
                 _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal }),
                 _react2.default.createElement('hr', null),
-                _react2.default.createElement(
-                    'h4',
-                    null,
-                    'Available Rebates and Incentives'
-                ),
-                _react2.default.createElement(_Rebates2.default, null),
+                _react2.default.createElement(_Targets2.default, {
+                    deal: this.props.deal,
+                    targetsChanged: this.handleTargetsChange.bind(this)
+                }),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(
                     'h4',
@@ -59918,7 +60528,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                             _util2.default.moneyFormat(_formulas2.default.calculateSalesTaxCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee))
                         )
                     ),
-                    this.renderYourRebatesAndIncentives(),
+                    this.renderYourTargets(),
                     this.renderTotalCostOfVehicle()
                 ),
                 _react2.default.createElement('hr', null),
@@ -60020,19 +60630,27 @@ var FinanceCalculator = function (_React$PureComponent) {
     return FinanceCalculator;
 }(_react2.default.PureComponent);
 
-function mapStateToProps(state) {
-    return {
-        zipcode: state.zipcode,
-        downPayment: state.downPayment,
-        deal: state.selectedDeal,
-        termDuration: state.termDuration,
-        employeeBrand: state.employeeBrand,
-        availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal),
-        selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal)
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealBestOfferTotalValue = (0, _index.makeDealBestOfferTotalValue)();
+    var getDealBestOfferLoading = (0, _index.makeDealBestOfferLoading)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        return {
+            bestOffers: state.bestOffers,
+            downPayment: state.downPayment,
+            employeeBrand: state.employeeBrand,
+            selectedTab: state.selectedTab,
+            targetsSelected: state.targetsSelected,
+            targetDefaults: state.targetDefaults,
+            termDuration: state.termDuration,
+            zipcode: state.zipcode,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferLoading: getDealBestOfferLoading(state, props)
+        };
     };
-}
+    return mapStateToProps;
+};
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(FinanceCalculator);
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(FinanceCalculator);
 
 /***/ }),
 /* 956 */
@@ -60059,17 +60677,13 @@ var _ramda = __webpack_require__(11);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _Rebates = __webpack_require__(989);
+var _Targets = __webpack_require__(224);
 
-var _Rebates2 = _interopRequireDefault(_Rebates);
+var _Targets2 = _interopRequireDefault(_Targets);
 
 var _CustomerTypeSelect = __webpack_require__(225);
 
 var _CustomerTypeSelect2 = _interopRequireDefault(_CustomerTypeSelect);
-
-var _rebates = __webpack_require__(988);
-
-var _rebates2 = _interopRequireDefault(_rebates);
 
 var _formulas = __webpack_require__(72);
 
@@ -60092,6 +60706,8 @@ var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
 var _miscicons = __webpack_require__(29);
 
 var _miscicons2 = _interopRequireDefault(_miscicons);
+
+var _index = __webpack_require__(62);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -60119,11 +60735,12 @@ var LeaseCalculator = function (_React$PureComponent) {
     }
 
     _createClass(LeaseCalculator, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
+        key: 'componentWillMount',
+        value: function componentWillMount() {
             var _this2 = this;
 
-            this._isMounted = true;
+            this.props.requestTargets(this.props.deal);
+            this.props.requestBestOffer(this.props.deal);
 
             _api2.default.getLeaseRates(this.props.deal.versions[0].jato_vehicle_id, this.props.zipcode).then(function (data) {
                 if (!_this2._isMounted) return;
@@ -60145,6 +60762,11 @@ var LeaseCalculator = function (_React$PureComponent) {
                     _this2.props.updateResidualPercent(residualPercent);
                 });
             });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this._isMounted = true;
         }
     }, {
         key: 'componentWillUnmount',
@@ -60247,7 +60869,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    this.props.availableRebates ? _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)), this.state.downPayment, 0, this.props.termDuration, this.props.residualPercent))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.state.downPayment, 0, this.props.termDuration, this.props.residualPercent)))
                 )
             );
         }
@@ -60292,8 +60914,6 @@ var LeaseCalculator = function (_React$PureComponent) {
     }, {
         key: 'renderDueAtSigning',
         value: function renderDueAtSigning() {
-            var totalRebates = _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates));
-
             return _react2.default.createElement(
                 'div',
                 null,
@@ -60305,7 +60925,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    this.props.availableRebates ? _util2.default.moneyFormat(_formulas2.default.calculateLeaseTaxesDueAtSigning(totalRebates, this.state.downPayment, this.props.deal.doc_fee)) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(_formulas2.default.calculateLeaseTaxesDueAtSigning(this.props.dealBestOfferTotalValue, this.state.downPayment, this.props.deal.doc_fee))
                 )
             );
         }
@@ -60328,20 +60948,20 @@ var LeaseCalculator = function (_React$PureComponent) {
             );
         }
     }, {
-        key: 'renderYourRebatesAndIncentives',
-        value: function renderYourRebatesAndIncentives() {
+        key: 'renderYourTargets',
+        value: function renderYourTargets() {
             return _react2.default.createElement(
                 'div',
                 null,
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__left-item' },
-                    'Your Rebates and Incentives'
+                    'Rebates Applied'
                 ),
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    this.props.availableRebates ? _util2.default.moneyFormat(_ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates))) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                 )
             );
         }
@@ -60383,30 +61003,28 @@ var LeaseCalculator = function (_React$PureComponent) {
                     className: className,
                     key: index
                 },
-                _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - _ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.props.selectedRebates)), downPayment, 0, leaseRate.termMonths, residual.residualPercent)))
+                _util2.default.moneyFormat(_formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, downPayment, 0, leaseRate.termMonths, residual.residualPercent)))
             );
+        }
+    }, {
+        key: 'handleTargetsChange',
+        value: function handleTargetsChange() {
+            this.props.requestBestOffer(this.props.deal);
         }
     }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                null,
+                { className: 'cash-finance-lease-calculator__calculator-content' },
                 'Lease Price',
                 ' ',
                 _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
                 _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal }),
-                this.state.selectedRebates ? _react2.default.createElement(
-                    'div',
-                    null,
-                    _react2.default.createElement('hr', null),
-                    _react2.default.createElement(
-                        'h4',
-                        null,
-                        'Available Rebates and Incentives'
-                    )
-                ) : '',
-                _react2.default.createElement(_Rebates2.default, null),
+                _react2.default.createElement(_Targets2.default, {
+                    deal: this.props.deal,
+                    targetsChanged: this.handleTargetsChange.bind(this)
+                }),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(
                     'h4',
@@ -60444,7 +61062,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                             _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand))
                         )
                     ),
-                    this.renderYourRebatesAndIncentives()
+                    this.renderYourTargets()
                 ),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(
@@ -60565,20 +61183,24 @@ var LeaseCalculator = function (_React$PureComponent) {
     return LeaseCalculator;
 }(_react2.default.PureComponent);
 
-function mapStateToProps(state) {
-    return {
-        zipcode: state.zipcode,
-        deal: state.selectedDeal,
-        termDuration: state.termDuration,
-        annualMileage: state.annualMileage,
-        residualPercent: state.residualPercent,
-        employeeBrand: state.employeeBrand,
-        availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal),
-        selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal)
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealBestOfferTotalValue = (0, _index.makeDealBestOfferTotalValue)();
+    var getDealBestOfferLoading = (0, _index.makeDealBestOfferLoading)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        return {
+            zipcode: state.zipcode,
+            termDuration: state.termDuration,
+            annualMileage: state.annualMileage,
+            residualPercent: state.residualPercent,
+            employeeBrand: state.employeeBrand,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferLoading: getDealBestOfferLoading(state, props)
+        };
     };
-}
+    return mapStateToProps;
+};
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(LeaseCalculator);
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(LeaseCalculator);
 
 /***/ }),
 /* 957 */
@@ -60596,6 +61218,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(13);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _api = __webpack_require__(71);
 
@@ -60618,12 +61244,19 @@ var Financing = function (_Component) {
         var _this = _possibleConstructorReturn(this, (Financing.__proto__ || Object.getPrototypeOf(Financing)).call(this, props));
 
         _this.state = {
-            url: 'https://itl.routeone.net/XRD/turnKeyOcaStart.do?rteOneDmsId=F00DMR' + ('&dealerId=' + props.purchase.deal.dealer.route_one_id) + ('&buyOrLease=' + (props.purchase.type === 'finance' ? 1 : 2)) + ('&email=' + props.user.email) + ('&vehicleYear=' + props.purchase.deal.year) + ('&vehicleMake=' + props.purchase.deal.make) + ('&vehicleModel=' + props.purchase.deal.model) + ('&contractTerms_vehiclestyle=' + props.purchase.deal.body) + ('&vehicle_vin=' + props.purchase.deal.vin) + ('&contractTerms_msrp=' + props.purchase.deal.msrp) + ('&contractTerms_cash_down=' + props.purchase.down_payment) + ('&contractTerms_financed_amount=' + props.purchase.amount_financed) + ('&contractTerms_term=' + props.purchase.term) + ('&vehicle_image_url=' + (props.featuredPhoto ? props.featuredPhoto.url : '')) + ('&dealership_name=' + props.purchase.deal.dealer.name)
+            method: 'cash'
         };
         return _this;
     }
 
     _createClass(Financing, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.setState({
+                url: 'https://itl.routeone.net/XRD/turnKeyOcaStart.do?rteOneDmsId=F00DMR' + ('&dealerId=' + this.props.purchase.deal.dealer.route_one_id) + ('&buyOrLease=' + (this.props.purchase.type === 'finance' ? 1 : 2)) + ('&email=' + this.props.user.email) + ('&vehicleYear=' + this.props.purchase.deal.year) + ('&vehicleMake=' + this.props.purchase.deal.make) + ('&vehicleModel=' + this.props.purchase.deal.model) + ('&contractTerms_vehiclestyle=' + this.props.purchase.deal.body) + ('&vehicle_vin=' + this.props.purchase.deal.vin) + ('&contractTerms_msrp=' + this.props.purchase.deal.msrp) + ('&contractTerms_cash_down=' + this.props.purchase.down_payment) + ('&contractTerms_financed_amount=' + this.props.purchase.amount_financed) + ('&contractTerms_term=' + this.props.purchase.term) + ('&vehicle_image_url=' + (this.props.featuredPhoto ? this.props.featuredPhoto.url : '')) + ('&dealership_name=' + this.props.purchase.deal.dealer.name)
+            });
+        }
+    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
             var _this2 = this;
@@ -60631,10 +61264,15 @@ var Financing = function (_Component) {
             document.getElementById('routeOne').XrdNavigationUtils = {
                 beforeUnloadIsDisabled: true
             };
+
             window.setInterval(function () {
                 _api2.default.getApplicationStatus(_this2.props.purchase.id).then(function (response) {
                     if (response.data) {
-                        window.location = '/thank-you';
+                        _this2.setState({
+                            method: 'finance'
+                        });
+
+                        document.purchase.submit();
                     }
                 });
             }, 2000);
@@ -60667,9 +61305,9 @@ var Financing = function (_Component) {
                             _react2.default.createElement('input', {
                                 type: 'hidden',
                                 name: 'purchase_id',
-                                value: DeliverMyRide.purchase.id
+                                value: this.props.purchase.id
                             }),
-                            _react2.default.createElement('input', { type: 'hidden', name: 'method', value: 'cash' }),
+                            _react2.default.createElement('input', { type: 'hidden', name: 'method', value: this.state.method }),
                             _react2.default.createElement(
                                 'button',
                                 {
@@ -60696,6 +61334,12 @@ var Financing = function (_Component) {
 
     return Financing;
 }(_react.Component);
+
+_propTypes2.default.Financing = {
+    featuredPhoto: _propTypes2.default.object.isRequired,
+    purchase: _propTypes2.default.object.isRequired,
+    user: _propTypes2.default.object.isRequired
+};
 
 exports.default = Financing;
 
@@ -60738,45 +61382,57 @@ var initialState = {
     /** Version **/
     4: '<- increment the number to purge LocalStorage',
     /** End Version **/
-    window: { width: window.innerWidth },
-    smallFiltersShown: false,
-    showMakeSelectorModal: true,
-    selectedTab: 'cash',
-    downPayment: 0,
-    termDuration: 36,
     annualMileage: 10000,
-    residualPercent: null,
-    selectedDeal: null,
-    selectedStyles: urlStyle ? [urlStyle] : [],
-    selectedModels: [],
-    models: null,
+    bestOffers: [],
     bodyStyles: null,
-    fuelTypes: ['Gasoline', 'Electric', 'Flex Fuel', 'Diesel', 'Hybrid'],
-    transmissionTypes: ['automatic', 'manual'],
-    selectedTransmissionType: null,
-    selectedSegment: null,
-    segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
-    selectedFuelType: null,
-    selectedMakes: [],
-    employeeBrand: false,
-    selectedFeatures: [],
-    selectedRebates: [],
-    dealRebates: {},
-    features: null,
-    featureCategories: [],
-    requestingMoreDeals: false,
-    makes: null,
+    cancelTokens: [], // A list of tokens to cancel axios calls for best offers
+    city: null,
+    compareList: [],
+    dealBestOffer: null,
     dealPage: 1,
     dealPageTotal: 1,
     deals: null,
-    searchFeatures: [],
+    downPayment: 0,
+    employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
-    sortColumn: 'price',
+    features: null,
+    featureCategories: [],
+    fuelTypes: ['Gasoline', 'Electric', 'Flex Fuel', 'Diesel', 'Hybrid'],
+    makes: null,
+    models: null,
+    requestingMoreDeals: false,
+    residualPercent: null,
+    smallFiltersShown: false,
+    showMakeSelectorModal: true,
+    searchFeatures: [],
+    segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
+    selectedDeal: null,
+    selectedFeatures: [],
+    selectedFuelType: null,
+    selectedMakes: [],
+    selectedModels: [],
+    selectedSegment: null,
+    selectedStyles: urlStyle ? [urlStyle] : [],
+    selectedTab: 'cash',
+    selectedTargets: [],
+    selectedTransmissionType: null,
     sortAscending: true,
-    compareList: [],
+    sortColumn: 'price',
+    targets: [],
+    targetsAvailable: {},
+    targetsSelected: {},
+    /** Need to duplicate these in App\Http\Controllers\API\TargetsController::TARGET_OPEN_OFFERS **/
+    targetDefaults: [25, // Open Offer
+    36, // Finance & Lease Customer
+    39, // Finance Customer
+    26, // Lease Customer
+    45, // Captive Finance Customer
+    52],
+    termDuration: 36,
+    transmissionTypes: ['automatic', 'manual'],
+    window: { width: window.innerWidth },
     zipcode: null,
-    zipInRange: null,
-    city: null
+    zipInRange: null
 };
 
 exports.default = function () {
@@ -61134,6 +61790,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _index = __webpack_require__(365);
 
 var ActionTypes = _interopRequireWildcard(_index);
@@ -61152,8 +61810,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var reducer = function reducer(state, action) {
-    console.log(action.type);
     switch (action.type) {
         case _constants.REHYDRATE:
             /**
@@ -61189,19 +61850,15 @@ var reducer = function reducer(state, action) {
                 showMakeSelectorModal: false
             });
         case ActionTypes.RECEIVE_MAKES:
-            return Object.assign({}, state, {
-                makes: action.data.data.data
-            });
+            return _extends({}, state, { makes: action.data.data.data });
         case ActionTypes.RECEIVE_MODELS:
             return Object.assign({}, state, {
                 models: action.data.data.data
             });
         case ActionTypes.REQUEST_MORE_DEALS:
-            return Object.assign({}, state, {
-                requestingMoreDeals: true
-            });
+            return Object.assign({}, state, { requestingMoreDeals: true });
         case ActionTypes.REQUEST_DEALS:
-            return Object.assign({}, state, {
+            return _extends({}, state, {
                 deals: null,
                 dealPageTotal: null,
                 dealPage: null,
@@ -61214,13 +61871,23 @@ var reducer = function reducer(state, action) {
                 dealPage: _ramda2.default.min(action.data.data.meta.pagination.current_page, action.data.data.meta.pagination.total_pages),
                 requestingMoreDeals: false
             });
-        case ActionTypes.RECEIVE_DEAL_REBATES:
-            var nextDealRebates = Object.assign({}, state.dealRebates);
+        case ActionTypes.RECEIVE_TARGETS:
+            var targetKey = _util2.default.getTargetKeyForDealAndZip(action.data.deal, action.data.zipcode);
 
-            nextDealRebates[action.data.dealId] = action.data.data.data.rebates;
+            return _extends({}, state, {
+                targetsAvailable: _extends({}, state.targetsAvailable, _defineProperty({}, targetKey, action.data.data.data.targets))
+            });
+        case ActionTypes.RECEIVE_DEAL_TARGETS:
+            var nextDealTargets = Object.assign({}, state.dealTargets);
+
+            nextDealTargets[action.data.dealId] = action.data.data.data.targets;
 
             return Object.assign({}, state, {
-                dealRebates: nextDealRebates
+                dealTargets: nextDealTargets
+            });
+        case ActionTypes.TOGGLE_TARGET:
+            return _extends({}, state, {
+                targetsSelected: _extends({}, state.targetsSelected, _defineProperty({}, action.targetKey, _util2.default.toggleItem(state.targetsSelected[action.targetKey] || [], action.target)))
             });
         case ActionTypes.SORT_DEALS:
             return Object.assign({}, state, {
@@ -61228,9 +61895,7 @@ var reducer = function reducer(state, action) {
                 sortAscending: !state.sortAscending
             });
         case ActionTypes.SELECT_TAB:
-            return Object.assign({}, state, {
-                selectedTab: action.data
-            });
+            return Object.assign({}, state, { selectedTab: action.data });
         case ActionTypes.RECEIVE_MORE_DEALS:
             return Object.assign({}, state, {
                 deals: _ramda2.default.concat(state.deals || [], action.data.data.data),
@@ -61270,10 +61935,6 @@ var reducer = function reducer(state, action) {
             return Object.assign({}, state, {
                 selectedStyles: action.selectedStyles
             });
-        case ActionTypes.TOGGLE_REBATE:
-            return Object.assign({}, state, {
-                selectedRebates: _util2.default.toggleItem(state.selectedRebates, action.rebate)
-            });
         case ActionTypes.SELECT_REBATE:
             if (!_ramda2.default.contains(action.rebate, state.selectedRebates)) {
                 return Object.assign({}, state, {
@@ -61303,9 +61964,7 @@ var reducer = function reducer(state, action) {
                 residualPercent: action.residualPercent
             });
         case ActionTypes.UPDATE_TERM_DURATION:
-            return Object.assign({}, state, {
-                termDuration: action.termDuration
-            });
+            return _extends({}, state, { termDuration: action.termDuration });
         case ActionTypes.CHOOSE_TRANSMISSION_TYPE:
             return Object.assign({}, state, {
                 selectedTransmissionType: action.selectedTransmissionType
@@ -61315,9 +61974,7 @@ var reducer = function reducer(state, action) {
                 selectedDeal: action.selectedDeal
             });
         case ActionTypes.CLEAR_SELECTED_DEAL:
-            return Object.assign({}, state, {
-                selectedDeal: null
-            });
+            return Object.assign({}, state, { selectedDeal: null });
         case ActionTypes.CLEAR_ALL_FILTERS:
             return Object.assign({}, state, {
                 selectedStyles: [],
@@ -61327,14 +61984,9 @@ var reducer = function reducer(state, action) {
                 selectedFeatures: []
             });
         case ActionTypes.TOGGLE_COMPARE:
-            return Object.assign({}, state, {
-                compareList: action.compareList
-            });
+            return _extends({}, state, { compareList: action.compareList });
         case ActionTypes.SET_ZIP_CODE:
-            return Object.assign({}, state, {
-                zipcode: action.zipcode,
-                city: null
-            });
+            return _extends({}, state, { zipcode: action.zipcode, city: null });
         case ActionTypes.RECEIVE_LOCATION_INFO:
             return Object.assign({}, state, {
                 zipcode: action.zipcode,
@@ -61345,6 +61997,21 @@ var reducer = function reducer(state, action) {
             return Object.assign({}, state, {
                 zipInRange: action.supported
             });
+        case ActionTypes.RECEIVE_BEST_OFFER:
+            return _extends({}, state, {
+                bestOffers: _extends({}, state.bestOffers, _defineProperty({}, action.bestOfferKey, action.data)) });
+        case ActionTypes.APPEND_CANCEL_TOKEN:
+            return _extends({}, state, {
+                cancelTokens: [].concat(_toConsumableArray(state.cancelTokens), [{ dealId: action.deal.id, source: action.cancelToken }])
+            });
+
+        case ActionTypes.REMOVE_CANCEL_TOKEN:
+            return _extends({}, state, {
+                cancelTokens: _ramda2.default.reject(_ramda2.default.propEq('dealId', action.deal.id), state.cancelTokens)
+            });
+
+        case ActionTypes.CLEAR_CANCEL_TOKENS:
+            return _extends({}, state, { cancelTokens: [] });
     }
 
     return state;
@@ -61632,8 +62299,8 @@ var DealDetails = function (_React$PureComponent) {
             });
         }
     }, {
-        key: 'renderDealRebatesModal',
-        value: function renderDealRebatesModal() {
+        key: 'renderCalculatorModal',
+        value: function renderCalculatorModal() {
             return _react2.default.createElement(
                 _Modal2.default,
                 {
@@ -61999,7 +62666,7 @@ var DealDetails = function (_React$PureComponent) {
                 _react2.default.createElement(_CompareBar2.default, { 'class': 'compare-bar compare-bar--static' }),
                 this.state.showStandardFeatures ? this.renderStandardFeaturesModal(deal) : '',
                 this.state.showFeatures ? this.renderFeaturesModal(deal) : '',
-                this.props.selectedDeal ? this.renderDealRebatesModal() : ''
+                this.props.selectedDeal ? this.renderCalculatorModal() : ''
             );
         }
     }]);
@@ -62025,8 +62692,6 @@ var mapStateToProps = function mapStateToProps(state) {
         compareList: state.compareList,
         selectedTab: state.selectedTab,
         downPayment: state.downPayment,
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates,
         termDuration: state.termDuration,
         fallbackDealImage: state.fallbackDealImage,
         selectedDeal: state.selectedDeal,
@@ -64538,10 +65203,6 @@ var _CashFinanceLeaseCalculator = __webpack_require__(157);
 
 var _CashFinanceLeaseCalculator2 = _interopRequireDefault(_CashFinanceLeaseCalculator);
 
-var _rebates = __webpack_require__(988);
-
-var _rebates2 = _interopRequireDefault(_rebates);
-
 var _strings = __webpack_require__(90);
 
 var _strings2 = _interopRequireDefault(_strings);
@@ -64565,6 +65226,10 @@ var _miscicons2 = _interopRequireDefault(_miscicons);
 var _titlecase = __webpack_require__(975);
 
 var _titlecase2 = _interopRequireDefault(_titlecase);
+
+var _Pricing = __webpack_require__(979);
+
+var _Pricing2 = _interopRequireDefault(_Pricing);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -64636,8 +65301,6 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderDeal',
         value: function renderDeal(deal, index) {
-            var _this3 = this;
-
             return _react2.default.createElement(
                 _Deal2.default,
                 { deal: deal, key: index },
@@ -64649,7 +65312,7 @@ var ComparePage = function (_React$PureComponent) {
                         {
                             className: 'deal__button deal__button--small deal__button--pink',
                             onClick: function onClick() {
-                                return _purchase2.default.start(deal, _this3.props.selectedTab, _this3.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this3.props.dealRebates, _this3.props.selectedRebates, _this3.props.selectedTab, deal), _this3.props.termDuration, _this3.props.employeeBrand);
+                                return window.location = '/confirm/' + deal.id;
                             }
                         },
                         'Buy Now'
@@ -64658,8 +65321,8 @@ var ComparePage = function (_React$PureComponent) {
             );
         }
     }, {
-        key: 'renderDealRebatesModal',
-        value: function renderDealRebatesModal() {
+        key: 'renderCalculatorModal',
+        value: function renderCalculatorModal() {
             return _react2.default.createElement(
                 _Modal2.default,
                 {
@@ -64672,13 +65335,13 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderAccordionTabHeader',
         value: function renderAccordionTabHeader(accordionTab) {
-            var _this4 = this;
+            var _this3 = this;
 
             return _react2.default.createElement(
                 'div',
                 {
                     onClick: function onClick() {
-                        return _this4.toggleAccordion(accordionTab);
+                        return _this3.toggleAccordion(accordionTab);
                     },
                     className: 'compare-page-table__header ' + (this.state.openAccordion === accordionTab ? 'compare-page-table__header--open' : '')
                 },
@@ -64765,21 +65428,21 @@ var ComparePage = function (_React$PureComponent) {
             );
         }
     }, {
-        key: 'renderRebatesAndIncentivesTable',
-        value: function renderRebatesAndIncentivesTable(compareList) {
-            var _this5 = this;
+        key: 'renderTargetsTable',
+        value: function renderTargetsTable(compareList) {
+            var _this4 = this;
 
             var maxNumberCells = _ramda2.default.reduce(function (carry, dealAndSelectedFilters) {
-                return _ramda2.default.max(_ramda2.default.propOr([], dealAndSelectedFilters.deal.id, _this5.props.dealRebates).length, carry);
+                return _ramda2.default.max(_ramda2.default.propOr([], dealAndSelectedFilters.deal.id, _this4.props.dealTargets).length, carry);
             }, 0, compareList);
 
             return _react2.default.createElement(
                 'div',
                 { className: 'compare-page-table' },
-                this.renderAccordionTabHeader('Rebates and Incentives'),
+                this.renderAccordionTabHeader('Targets'),
                 _react2.default.createElement(
                     'div',
-                    { className: this.columnClass('Rebates and Incentives') },
+                    { className: this.columnClass('Targets') },
                     compareList.map(function (dealAndSelectedFilters, index) {
                         return _react2.default.createElement(
                             'div',
@@ -64787,8 +65450,9 @@ var ComparePage = function (_React$PureComponent) {
                                 key: index,
                                 className: 'compare-page-table__column'
                             },
-                            _this5.props.dealRebates[dealAndSelectedFilters.deal.id].map(function (rebate, index) {
-                                return _ramda2.default.contains(_this5.props.selectedTab, rebate.types) ? _react2.default.createElement(
+                            '@TODO update this thing to be filtering by type correctly',
+                            _this4.props.dealTargets[dealAndSelectedFilters.deal.id].map(function (rebate, index) {
+                                return _ramda2.default.contains(_this4.props.selectedTab, rebate.types) ? _react2.default.createElement(
                                     'div',
                                     {
                                         key: index,
@@ -64798,7 +65462,7 @@ var ComparePage = function (_React$PureComponent) {
                                     '\xA0'
                                 ) : '';
                             }),
-                            _ramda2.default.range(0, maxNumberCells - _this5.props.dealRebates[dealAndSelectedFilters.deal.id].length).map(function (_, index) {
+                            _ramda2.default.range(0, maxNumberCells - _this4.props.dealTargets[dealAndSelectedFilters.deal.id].length).map(function (_, index) {
                                 return _react2.default.createElement(
                                     'div',
                                     {
@@ -64816,8 +65480,6 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderPricingTable',
         value: function renderPricingTable(compareList) {
-            var _this6 = this;
-
             return _react2.default.createElement(
                 'div',
                 { className: 'compare-page-table' },
@@ -64873,7 +65535,9 @@ var ComparePage = function (_React$PureComponent) {
                                     'Deliver My Ride Price:'
                                 ),
                                 ' ',
-                                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(dealAndSelectedFilters.deal, _this6.props.employeeBrand))
+                                _react2.default.createElement(_Pricing2.default, {
+                                    deal: dealAndSelectedFilters.deal
+                                })
                             )
                         );
                     })
@@ -64883,7 +65547,7 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderWarrantyTable',
         value: function renderWarrantyTable(compareList) {
-            var _this7 = this;
+            var _this5 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -64900,7 +65564,7 @@ var ComparePage = function (_React$PureComponent) {
                                 key: index,
                                 className: 'compare-page-table__column'
                             },
-                            _this7.state.dealWarranties.hasOwnProperty(deal.id) ? _this7.state.dealWarranties[deal.id].map(function (warranty, index) {
+                            _this5.state.dealWarranties.hasOwnProperty(deal.id) ? _this5.state.dealWarranties[deal.id].map(function (warranty, index) {
                                 return _react2.default.createElement(
                                     'div',
                                     {
@@ -64921,7 +65585,7 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderFeaturesTable',
         value: function renderFeaturesTable(compareList) {
-            var _this8 = this;
+            var _this6 = this;
 
             var featureSets = compareList.map(function (_ref2, index) {
                 var deal = _ref2.deal;
@@ -64941,10 +65605,12 @@ var ComparePage = function (_React$PureComponent) {
                         return _react2.default.createElement(
                             'div',
                             { className: 'compare-page-table' },
-                            _this8.renderAccordionTabHeader((0, _titlecase2.default)(featureSet[0].group) + ' Features'),
+                            _this6.renderAccordionTabHeader((0, _titlecase2.default)(featureSet[0].group) + ' Features'),
                             _react2.default.createElement(
                                 'div',
-                                { className: _this8.columnClass((0, _titlecase2.default)(featureSet[0].group) + ' Features') },
+                                {
+                                    className: _this6.columnClass((0, _titlecase2.default)(featureSet[0].group) + ' Features')
+                                },
                                 compareList.map(function (_ref3, index) {
                                     var deal = _ref3.deal;
 
@@ -64960,14 +65626,20 @@ var ComparePage = function (_React$PureComponent) {
                                             })) {
                                                 return _react2.default.createElement(
                                                     'div',
-                                                    { key: index, className: 'compare-page-table__cell' },
+                                                    {
+                                                        key: index,
+                                                        className: 'compare-page-table__cell'
+                                                    },
                                                     feature.feature,
                                                     '\xA0'
                                                 );
                                             } else {
                                                 return _react2.default.createElement(
                                                     'div',
-                                                    { key: index, className: 'compare-page-table__cell' },
+                                                    {
+                                                        key: index,
+                                                        className: 'compare-page-table__cell'
+                                                    },
                                                     '\u2014'
                                                 );
                                             }
@@ -65000,7 +65672,7 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
-            var _this9 = this;
+            var _this7 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -65017,35 +65689,26 @@ var ComparePage = function (_React$PureComponent) {
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this9.renderSelectionsTable(_this9.props.compareList);
+                            return _this7.renderSelectionsTable(_this7.props.compareList);
                         }
                     ) : '',
-                    _ramda2.default.all(function (deal) {
-                        return _this9.props.dealRebates.hasOwnProperty(deal.id);
-                    }, this.props.deals) ? _react2.default.createElement(
-                        _AccordionTable2.default,
-                        null,
-                        function () {
-                            return _this9.renderRebatesAndIncentivesTable(_this9.props.compareList);
-                        }
-                    ) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }),
                     _react2.default.createElement(
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this9.renderPricingTable(_this9.props.compareList);
+                            return _this7.renderPricingTable(_this7.props.compareList);
                         }
                     ),
                     _react2.default.createElement(
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this9.renderWarrantyTable(_this9.props.compareList);
+                            return _this7.renderWarrantyTable(_this7.props.compareList);
                         }
                     ),
                     this.props.compareList.length ? this.renderFeaturesTable(this.props.compareList) : ''
                 ),
-                this.props.selectedDeal ? this.renderDealRebatesModal() : ''
+                this.props.selectedDeal ? this.renderCalculatorModal() : ''
             );
         }
     }]);
@@ -65059,8 +65722,6 @@ var mapStateToProps = function mapStateToProps(state) {
         compareList: state.compareList,
         selectedDeal: state.selectedDeal,
         selectedTab: state.selectedTab,
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates,
         termDuration: state.termDuration,
         employeeBrand: state.employeeBrand
     };
@@ -65085,14 +65746,6 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(16);
-
-var _index = __webpack_require__(14);
-
-var Actions = _interopRequireWildcard(_index);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -65104,18 +65757,18 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var AccordionTable = function (_React$PureComponent) {
     _inherits(AccordionTable, _React$PureComponent);
 
-    function AccordionTable(props) {
+    function AccordionTable() {
         _classCallCheck(this, AccordionTable);
 
-        return _possibleConstructorReturn(this, (AccordionTable.__proto__ || Object.getPrototypeOf(AccordionTable)).call(this, props));
+        return _possibleConstructorReturn(this, (AccordionTable.__proto__ || Object.getPrototypeOf(AccordionTable)).apply(this, arguments));
     }
 
     _createClass(AccordionTable, [{
-        key: 'render',
+        key: "render",
         value: function render() {
             return _react2.default.createElement(
-                'div',
-                { className: 'compare-page-table__accordion' },
+                "div",
+                { className: "compare-page-table__accordion" },
                 this.props.children()
             );
         }
@@ -65124,13 +65777,7 @@ var AccordionTable = function (_React$PureComponent) {
     return AccordionTable;
 }(_react2.default.PureComponent);
 
-var mapStateToProps = function mapStateToProps(state) {
-    return {
-        compareList: state.compareList
-    };
-};
-
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(AccordionTable);
+exports.default = AccordionTable;
 
 /***/ }),
 /* 975 */
@@ -65328,7 +65975,102 @@ module.exports = [
 
 
 /***/ }),
-/* 979 */,
+/* 979 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(16);
+
+var _index = __webpack_require__(14);
+
+var Actions = _interopRequireWildcard(_index);
+
+var _propTypes = __webpack_require__(13);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactSvgInline = __webpack_require__(15);
+
+var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
+
+var _util = __webpack_require__(24);
+
+var _util2 = _interopRequireDefault(_util);
+
+var _formulas = __webpack_require__(72);
+
+var _formulas2 = _interopRequireDefault(_formulas);
+
+var _miscicons = __webpack_require__(29);
+
+var _miscicons2 = _interopRequireDefault(_miscicons);
+
+var _index2 = __webpack_require__(62);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Pricing = function (_React$PureComponent) {
+    _inherits(Pricing, _React$PureComponent);
+
+    function Pricing() {
+        _classCallCheck(this, Pricing);
+
+        return _possibleConstructorReturn(this, (Pricing.__proto__ || Object.getPrototypeOf(Pricing)).apply(this, arguments));
+    }
+
+    _createClass(Pricing, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'span',
+                null,
+                this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue))
+            );
+        }
+    }]);
+
+    return Pricing;
+}(_react2.default.PureComponent);
+
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealBestOfferTotalValue = (0, _index2.makeDealBestOfferTotalValue)();
+    var getDealBestOfferLoading = (0, _index2.makeDealBestOfferLoading)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        return {
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferLoading: getDealBestOfferLoading(state, props)
+        };
+    };
+    return mapStateToProps;
+};
+
+Pricing.PropTypes = {
+    deal: _propTypes2.default.object.isRequired
+};
+
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(Pricing);
+
+/***/ }),
 /* 980 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -65371,10 +66113,6 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _rebates = __webpack_require__(988);
-
-var _rebates2 = _interopRequireDefault(_rebates);
-
 var _strings = __webpack_require__(90);
 
 var _strings2 = _interopRequireDefault(_strings);
@@ -65382,6 +66120,8 @@ var _strings2 = _interopRequireDefault(_strings);
 var _DealImage = __webpack_require__(366);
 
 var _DealImage2 = _interopRequireDefault(_DealImage);
+
+var _index2 = __webpack_require__(62);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -65413,8 +66153,8 @@ var ConfirmDetails = function (_React$PureComponent) {
             this._isMounted = true;
         }
     }, {
-        key: 'renderDealRebatesModal',
-        value: function renderDealRebatesModal() {
+        key: 'renderCalculatorModal',
+        value: function renderCalculatorModal() {
             return _react2.default.createElement(
                 _Modal2.default,
                 {
@@ -65443,7 +66183,7 @@ var ConfirmDetails = function (_React$PureComponent) {
                             {
                                 className: 'deal-details__button deal-details__button--small deal-details__button--pink',
                                 onClick: function onClick() {
-                                    return _purchase2.default.start(deal, _this2.props.selectedTab, _this2.props.downPayment, _rebates2.default.getSelectedRebatesForDealAndType(_this2.props.dealRebates, _this2.props.selectedRebates, _this2.props.selectedTab, deal), _this2.props.termDuration, _this2.props.employeeBrand);
+                                    return _purchase2.default.start(deal, _this2.props.selectedTab, _this2.props.downPayment, _this2.props.dealBestOfferTotalValue, _this2.props.dealBestOffer, _this2.props.termDuration, _this2.props.employeeBrand);
                                 }
                             },
                             'Confirm Purchase'
@@ -65494,7 +66234,7 @@ var ConfirmDetails = function (_React$PureComponent) {
                         { className: 'deal-details__pricing' },
                         this.renderDeal(deal)
                     ),
-                    this.props.selectedDeal ? this.renderDealRebatesModal() : ''
+                    this.props.selectedDeal ? this.renderCalculatorModal() : ''
                 )
             );
         }
@@ -65516,20 +66256,26 @@ ConfirmDetails.propTypes = {
     })
 };
 
-var mapStateToProps = function mapStateToProps(state) {
-    return {
-        selectedTab: state.selectedTab,
-        downPayment: state.downPayment,
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates,
-        termDuration: state.termDuration,
-        fallbackDealImage: state.fallbackDealImage,
-        selectedDeal: state.selectedDeal,
-        employeeBrand: state.employeeBrand
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealBestOfferTotalValue = (0, _index2.makeDealBestOfferTotalValue)();
+    var getDealBestOffer = (0, _index2.makeDealBestOffer)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        return {
+            selectedTab: state.selectedTab,
+            downPayment: state.downPayment,
+            dealTargets: state.dealTargets,
+            termDuration: state.termDuration,
+            fallbackDealImage: state.fallbackDealImage,
+            selectedDeal: state.selectedDeal,
+            employeeBrand: state.employeeBrand,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOffer: getDealBestOffer(state, props)
+        };
     };
+    return mapStateToProps;
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(ConfirmDetails);
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(ConfirmDetails);
 
 /***/ }),
 /* 981 */
@@ -65556,10 +66302,6 @@ var _react = __webpack_require__(4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _rebates = __webpack_require__(988);
-
-var _rebates2 = _interopRequireDefault(_rebates);
-
 var _strings = __webpack_require__(90);
 
 var _strings2 = _interopRequireDefault(_strings);
@@ -65585,6 +66327,16 @@ var _index = __webpack_require__(14);
 var Actions = _interopRequireWildcard(_index);
 
 var _reactRedux = __webpack_require__(16);
+
+var _Modal = __webpack_require__(89);
+
+var _Modal2 = _interopRequireDefault(_Modal);
+
+var _index2 = __webpack_require__(62);
+
+var _formulas = __webpack_require__(72);
+
+var _formulas2 = _interopRequireDefault(_formulas);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -65624,6 +66376,7 @@ var ConfirmDeal = function (_React$PureComponent) {
             var _this2 = this;
 
             this._isMounted = true;
+            this.props.requestBestOffer(this.props.deal);
 
             _api2.default.getDimensions(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
                 if (!_this2._isMounted) return;
@@ -65640,76 +66393,22 @@ var ConfirmDeal = function (_React$PureComponent) {
                     warranties: response.data
                 });
             });
-
-            if (!this.props.dealRebates.hasOwnProperty(this.props.deal.id) && this.props.zipcode) {
-                this.requestRebates();
-            } else {
-                this.componentWillReceiveProps(this.props);
-            }
-        }
-    }, {
-        key: 'requestRebates',
-        value: function requestRebates() {
-            this.props.requestRebates(this.props.deal);
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(props) {
-            if (!props.dealRebates.hasOwnProperty(props.deal.id)) {
-                return this.props.requestRebates(this.props.deal);
-            }
-
-            this.setState({
-                availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(props.dealRebates, props.selectedRebates, props.selectedTab, props.deal),
-                selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(props.dealRebates, props.selectedRebates, props.selectedTab, props.deal)
-            });
-        }
-    }, {
-        key: 'renderDealRebatesModal',
-        value: function renderDealRebatesModal() {
-            return _react2.default.createElement(Modal, {
-                onClose: this.props.clearSelectedDeal,
-                closeText: 'Back to results'
-            });
-        }
-    }, {
-        key: 'fixSelectedTabCaseFormatting',
-        value: function fixSelectedTabCaseFormatting() {
-            switch (this.props.selectedTab) {
-                case 'cash':
-                    return 'Cash';
-                case 'finance':
-                    return 'Finance';
-                case 'lease':
-                    return 'Lease';
-            }
         }
     }, {
         key: 'displayFinalPrice',
         value: function displayFinalPrice() {
             switch (this.props.selectedTab) {
                 case 'cash':
-                    return this.props.deal.supplier_price;
+                    return _formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue);
                 case 'finance':
                     {
-                        return Math.round(formulas.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - R.sum(R.map(R.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), this.props.downPayment, this.props.termDuration));
+                        return Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration));
                     }
                 case 'lease':
                     {
-                        return Math.round(formulas.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.isEmployee) - R.sum(R.map(R.prop('value'), _rebates2.default.getSelectedRebatesForDealAndType(this.props.dealRebates, this.props.selectedRebates, this.props.selectedTab, this.props.deal))), 0, 0, this.props.termDuration, R.or(this.props.residualPercent, 31)));
+                        return _formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, 0, 0, this.props.termDuration, R.or(this.props.residualPercent, 31)));
                     }
             }
-        }
-    }, {
-        key: 'showAppliedRebates',
-        value: function showAppliedRebates() {
-            var selectedAmount = R.sum(R.map(R.prop('value'), this.props.selectedRebates));
-            var maxAmount = R.sum(R.map(R.prop('value'), this.props.dealRebates));
-
-            this.setState({
-                selectedRebateAmount: selectedAmount,
-                maxRebateAmount: maxAmount
-            });
         }
     }, {
         key: 'hideModals',
@@ -65725,7 +66424,7 @@ var ConfirmDeal = function (_React$PureComponent) {
             var _this3 = this;
 
             return _react2.default.createElement(
-                Modal,
+                _Modal2.default,
                 {
                     nowrapper: true,
                     onClose: function onClose() {
@@ -65797,7 +66496,8 @@ var ConfirmDeal = function (_React$PureComponent) {
                                     'li',
                                     { key: index },
                                     dimension.feature,
-                                    ': ',
+                                    ':',
+                                    ' ',
                                     dimension.content
                                 );
                             }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
@@ -65815,7 +66515,8 @@ var ConfirmDeal = function (_React$PureComponent) {
                                     'li',
                                     { key: index },
                                     dimension.feature,
-                                    ': ',
+                                    ':',
+                                    ' ',
                                     dimension.content
                                 );
                             }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
@@ -65847,7 +66548,7 @@ var ConfirmDeal = function (_React$PureComponent) {
             var _this4 = this;
 
             return _react2.default.createElement(
-                Modal,
+                _Modal2.default,
                 {
                     nowrapper: true,
                     onClose: function onClose() {
@@ -65934,12 +66635,9 @@ var ConfirmDeal = function (_React$PureComponent) {
         value: function renderAppliedRebatesLink() {
             var _this5 = this;
 
-            if (!this.state.availableRebates) {
+            if (!this.props.dealBestOfferTotalValue) {
                 return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
             }
-
-            var selectedAmount = R.sum(R.map(R.prop('value'), this.state.selectedRebates));
-            var maxAmount = R.sum(R.map(R.prop('value'), this.state.availableRebates));
 
             return _react2.default.createElement(
                 'div',
@@ -65955,17 +66653,12 @@ var ConfirmDeal = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         null,
-                        '' + _util2.default.moneyFormat(selectedAmount)
+                        '' + _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                     )
                 ),
                 _react2.default.createElement(
                     'div',
                     { className: 'confirm-deal__more-rebates confirm-deal__costs' },
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _util2.default.moneyFormat(maxAmount) + ' in rebates available.  '
-                    ),
                     _react2.default.createElement(
                         'div',
                         null,
@@ -66004,9 +66697,7 @@ var ConfirmDeal = function (_React$PureComponent) {
                             { className: 'confirm-deal__basic-info' },
                             _react2.default.createElement(
                                 'div',
-                                {
-                                    className: 'confirm-deal__basic-info-year-and-model'
-                                },
+                                { className: 'confirm-deal__basic-info-year-and-model' },
                                 _react2.default.createElement(
                                     'div',
                                     { className: 'confirm-deal__basic-info-year-and-make' },
@@ -66078,7 +66769,7 @@ var ConfirmDeal = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'p',
                             null,
-                            this.fixSelectedTabCaseFormatting() + ' Terms'
+                            _strings2.default.toTitleCase(this.props.selectedTab) + ' Terms'
                         ),
                         _react2.default.createElement(
                             'div',
@@ -66089,7 +66780,8 @@ var ConfirmDeal = function (_React$PureComponent) {
                                 _react2.default.createElement(
                                     'div',
                                     { className: 'confirm-deal__label' },
-                                    'Suggested Retail: '
+                                    'Suggested Retail:',
+                                    ' '
                                 ),
                                 _react2.default.createElement(
                                     'div',
@@ -66120,7 +66812,7 @@ var ConfirmDeal = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'div',
                                 null,
-                                'Your ' + this.fixSelectedTabCaseFormatting() + ' Price:'
+                                'Your ' + _strings2.default.toTitleCase(this.props.selectedTab) + '  Price:'
                             ),
                             _react2.default.createElement(
                                 'div',
@@ -66158,21 +66850,26 @@ ConfirmDeal.propTypes = {
     })
 };
 
-var mapStateToProps = function mapStateToProps(state) {
-    return {
-        compareList: state.compareList,
-        selectedTab: state.selectedTab,
-        downPayment: state.downPayment,
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates,
-        termDuration: state.termDuration,
-        selectedDeal: state.selectedDeal,
-        isEmployee: state.isEmployee,
-        residualPercent: state.residualPercent
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealBestOfferTotalValue = (0, _index2.makeDealBestOfferTotalValue)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        return {
+            compareList: state.compareList,
+            selectedTab: state.selectedTab,
+            downPayment: state.downPayment,
+            termDuration: state.termDuration,
+            selectedDeal: state.selectedDeal,
+            employeeBrand: state.employeeBrand,
+            residualPercent: state.residualPercent,
+            dealTargets: state.dealTargets,
+            selectedTargets: state.selectedTargets,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+        };
     };
+    return mapStateToProps;
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(ConfirmDeal);
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(ConfirmDeal);
 
 /***/ }),
 /* 982 */
@@ -66217,10 +66914,6 @@ var _api = __webpack_require__(71);
 
 var _api2 = _interopRequireDefault(_api);
 
-var _rebates = __webpack_require__(988);
-
-var _rebates2 = _interopRequireDefault(_rebates);
-
 var _ramda = __webpack_require__(11);
 
 var _ramda2 = _interopRequireDefault(_ramda);
@@ -66228,6 +66921,12 @@ var _ramda2 = _interopRequireDefault(_ramda);
 var _util = __webpack_require__(24);
 
 var _util2 = _interopRequireDefault(_util);
+
+var _miscicons = __webpack_require__(29);
+
+var _miscicons2 = _interopRequireDefault(_miscicons);
+
+var _index2 = __webpack_require__(62);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -66248,38 +66947,26 @@ var ThankYouPage = function (_React$PureComponent) {
         var _this = _possibleConstructorReturn(this, (ThankYouPage.__proto__ || Object.getPrototypeOf(ThankYouPage)).call(this, props));
 
         _this.state = {
-            purchase: props.purchase.data.attributes,
-            deal: props.purchase.data.attributes.deal.data.attributes,
             warranties: null,
             dimensions: null,
             showStandardFeatures: false,
-            showFeatures: false,
-            availableRebates: null,
-            selectedRebates: null
+            showFeatures: false
         };
         return _this;
     }
 
     _createClass(ThankYouPage, [{
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(props) {
-            this.setState({
-                availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(props.dealRebates, props.selectedRebates, props.purchase.data.attributes.type, props.purchase.data.attributes.deal.data),
-                selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(props.dealRebates, props.selectedRebates, props.purchase.data.attributes.type, props.purchase.data.attributes.deal.data)
-            });
-        }
-    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
             var _this2 = this;
 
-            _api2.default.getDimensions(this.state.deal.versions[0].jato_vehicle_id).then(function (response) {
+            _api2.default.getDimensions(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
                 _this2.setState({
                     dimensions: response.data
                 });
             });
 
-            _api2.default.getWarranties(this.state.deal.versions[0].jato_vehicle_id).then(function (response) {
+            _api2.default.getWarranties(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
                 _this2.setState({
                     warranties: response.data
                 });
@@ -66306,7 +66993,9 @@ var ThankYouPage = function (_React$PureComponent) {
 
             return _react2.default.createElement(
                 _Modal2.default,
-                null,
+                { onClose: function onClose() {
+                        return _this3.hideModals();
+                    } },
                 _react2.default.createElement(
                     'div',
                     { className: 'modal__content' },
@@ -66357,11 +67046,11 @@ var ThankYouPage = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'ul',
                         null,
-                        deal.features.map(function (feature, index) {
+                        this.props.features.map(function (feature, index) {
                             return _react2.default.createElement(
                                 'li',
                                 { key: index },
-                                feature.feature
+                                feature
                             );
                         })
                     )
@@ -66375,7 +67064,9 @@ var ThankYouPage = function (_React$PureComponent) {
 
             return _react2.default.createElement(
                 _Modal2.default,
-                null,
+                { onClose: function onClose() {
+                        return _this4.hideModals();
+                    } },
                 _react2.default.createElement(
                     'div',
                     { className: 'modal__content' },
@@ -66442,7 +67133,8 @@ var ThankYouPage = function (_React$PureComponent) {
                                 'li',
                                 { key: index },
                                 dimension.feature,
-                                ': ',
+                                ':',
+                                ' ',
                                 dimension.content
                             );
                         }) : 'Loading...'
@@ -66460,7 +67152,8 @@ var ThankYouPage = function (_React$PureComponent) {
                                 'li',
                                 { key: index },
                                 dimension.feature,
-                                ': ',
+                                ':',
+                                ' ',
                                 dimension.content
                             );
                         }) : 'Loading...'
@@ -66474,7 +67167,7 @@ var ThankYouPage = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'ul',
                         null,
-                        deal.vauto_features.map(function (feature, index) {
+                        this.props.features.map(function (feature, index) {
                             return _react2.default.createElement(
                                 'li',
                                 { key: index },
@@ -66488,7 +67181,7 @@ var ThankYouPage = function (_React$PureComponent) {
     }, {
         key: 'youChoseString',
         value: function youChoseString(purchase) {
-            switch (purchase.type) {
+            switch (purchase.data.attributes.type) {
                 case 'cash':
                     return 'CASH PURCHASE';
                     break;
@@ -66521,8 +67214,8 @@ var ThankYouPage = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'thank-you' },
-                    this.state.showStandardFeatures ? this.renderStandardFeaturesModal(this.state.deal) : '',
-                    this.state.showFeatures ? this.renderFeaturesModal(this.state.deal) : '',
+                    this.state.showStandardFeatures ? this.renderStandardFeaturesModal(this.props.deal) : '',
+                    this.state.showFeatures ? this.renderFeaturesModal(this.props.deal) : '',
                     _react2.default.createElement(
                         'div',
                         { className: 'thank-you__left-panel' },
@@ -66534,12 +67227,12 @@ var ThankYouPage = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'thank-you__title-year-make' },
-                            this.state.deal.year + ' ' + this.state.deal.make + ' ' + this.state.deal.model + ' ' + this.state.deal.series + ' VIN#:' + this.state.deal.vin
+                            this.props.deal.year + ' ' + this.props.deal.make + ' ' + this.props.deal.model + ' ' + this.props.deal.series + ' VIN#:' + this.props.deal.vin
                         ),
                         _react2.default.createElement(
                             'div',
                             { className: 'thank-you__primary-image' },
-                            _react2.default.createElement('img', { src: this.state.deal.photos[1].url })
+                            _react2.default.createElement('img', { src: this.props.deal.photos[1].url })
                         ),
                         _react2.default.createElement(
                             'div',
@@ -66574,7 +67267,7 @@ var ThankYouPage = function (_React$PureComponent) {
                             { className: 'thank-you__choice' },
                             'YOU CHOSE:',
                             ' ',
-                            this.youChoseString(this.state.purchase)
+                            this.youChoseString(this.props.purchase)
                         ),
                         _react2.default.createElement(
                             'div',
@@ -66584,7 +67277,7 @@ var ThankYouPage = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'thank-you__your-price' },
-                            _util2.default.moneyFormat(this.state.purchase.dmr_price)
+                            _util2.default.moneyFormat(this.props.purchase.data.attributes.dmr_price)
                         ),
                         _react2.default.createElement(
                             'div',
@@ -66595,7 +67288,7 @@ var ThankYouPage = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'thank-you__msrp' },
-                            _util2.default.moneyFormat(this.state.purchase.msrp),
+                            _util2.default.moneyFormat(this.props.purchase.data.attributes.msrp),
                             ' ',
                             _react2.default.createElement(
                                 'span',
@@ -66603,17 +67296,13 @@ var ThankYouPage = function (_React$PureComponent) {
                                 'MSRP'
                             )
                         ),
-                        this.state.availableRebates ? _react2.default.createElement(
+                        this.props.dealBestOfferTotalValue ? _react2.default.createElement(
                             'div',
                             { className: 'thank-you__rebates-applied' },
-                            _util2.default.moneyFormat(_ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.state.selectedRebates))),
+                            'Rebates Applied:',
                             ' ',
-                            'of',
-                            ' ',
-                            _util2.default.moneyFormat(_ramda2.default.sum(_ramda2.default.map(_ramda2.default.prop('value'), this.state.availableRebates))),
-                            ' ',
-                            'in rebates!'
-                        ) : 'Loading',
+                            _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
+                        ) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }),
                         _react2.default.createElement('div', { className: 'thank-you__hr thank-you__hr--full' }),
                         _react2.default.createElement(
                             'div',
@@ -66678,253 +67367,23 @@ var ThankYouPage = function (_React$PureComponent) {
     return ThankYouPage;
 }(_react2.default.PureComponent);
 
-var mapStateToProps = function mapStateToProps(state) {
-    return {
-        dealRebates: state.dealRebates,
-        selectedRebates: state.selectedRebates
+var makeMapStateToProps = function makeMapStateToProps() {
+    var getDealBestOfferTotalValue = (0, _index2.makeDealBestOfferTotalValue)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        return {
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+        };
     };
+    return mapStateToProps;
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(ThankYouPage);
+exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(ThankYouPage);
 
 /***/ }),
 /* 983 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 984 */,
-/* 985 */,
-/* 986 */,
-/* 987 */,
-/* 988 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _ramda = __webpack_require__(11);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var rebates = {
-    getAvailableRebatesForDealAndType: function getAvailableRebatesForDealAndType(dealRebates, selectedRebates, type, deal) {
-        if (!(deal && dealRebates && dealRebates.hasOwnProperty(deal.id))) {
-            return null;
-        }
-
-        return _ramda2.default.filter(function (rebate) {
-            return _ramda2.default.contains(type, rebate.types);
-        }, dealRebates[deal.id]);
-    },
-    getSelectedRebatesForDealAndType: function getSelectedRebatesForDealAndType(dealRebates, selectedRebates, type, deal) {
-        if (!(deal && dealRebates && dealRebates.hasOwnProperty(deal.id))) {
-            return [];
-        }
-
-        var possibleRebatesForDeal = dealRebates[deal.id];
-
-        return _ramda2.default.filter(function (possibleRebateForDeal) {
-            return possibleRebateForDeal.types.includes(type) && _ramda2.default.map(_ramda2.default.prop('id'), selectedRebates).includes(possibleRebateForDeal.id);
-        }, possibleRebatesForDeal);
-    }
-};
-
-exports.default = rebates;
-
-/***/ }),
-/* 989 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(4);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _ramda = __webpack_require__(11);
-
-var _ramda2 = _interopRequireDefault(_ramda);
-
-var _util = __webpack_require__(24);
-
-var _util2 = _interopRequireDefault(_util);
-
-var _rebates = __webpack_require__(988);
-
-var _rebates2 = _interopRequireDefault(_rebates);
-
-var _api = __webpack_require__(71);
-
-var _api2 = _interopRequireDefault(_api);
-
-var _reactSvgInline = __webpack_require__(15);
-
-var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
-
-var _miscicons = __webpack_require__(29);
-
-var _miscicons2 = _interopRequireDefault(_miscicons);
-
-var _zondicons = __webpack_require__(28);
-
-var _zondicons2 = _interopRequireDefault(_zondicons);
-
-var _strings = __webpack_require__(90);
-
-var _strings2 = _interopRequireDefault(_strings);
-
-var _reactRedux = __webpack_require__(16);
-
-var _actions = __webpack_require__(14);
-
-var Actions = _interopRequireWildcard(_actions);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Rebates = function (_React$PureComponent) {
-    _inherits(Rebates, _React$PureComponent);
-
-    function Rebates(props) {
-        _classCallCheck(this, Rebates);
-
-        var _this = _possibleConstructorReturn(this, (Rebates.__proto__ || Object.getPrototypeOf(Rebates)).call(this, props));
-
-        _this.state = {
-            compatibleRebateIds: null
-        };
-        return _this;
-    }
-
-    _createClass(Rebates, [{
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            this._isMounted = false;
-        }
-    }, {
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this._isMounted = true;
-            this.updateCompatibleRebates(this.props);
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-            if (this.props.selectedRebates.length !== nextProps.selectedRebates.length && nextProps.zipcode) {
-                this.updateCompatibleRebates(nextProps);
-            }
-        }
-    }, {
-        key: 'updateCompatibleRebates',
-        value: function updateCompatibleRebates(props) {
-            var _this2 = this;
-
-            _api2.default.getRebates(props.zipcode, props.deal.vin, _ramda2.default.map(_ramda2.default.prop('id'), props.selectedRebates)).then(function (response) {
-                if (!_this2._isMounted) return;
-
-                _this2.setState({
-                    compatibleRebateIds: _ramda2.default.map(_ramda2.default.prop('id'), _ramda2.default.filter(_ramda2.default.compose(_ramda2.default.not(), _ramda2.default.propEq('statusName', 'Excluded')), response.data.rebates))
-                });
-            });
-        }
-    }, {
-        key: 'toggleRebate',
-        value: function toggleRebate(rebate) {
-            var _this3 = this;
-
-            this.setState({
-                compatibleRebateIds: null
-            }, function () {
-                _this3.props.toggleRebate(rebate);
-            });
-        }
-    }, {
-        key: 'renderRebate',
-        value: function renderRebate(rebate, index) {
-            var _this4 = this;
-
-            var isSelected = _ramda2.default.contains(rebate, this.props.selectedRebates);
-            var isSelectable = _ramda2.default.contains(rebate.id, this.state.compatibleRebateIds);
-            var checkboxClass = 'rebates__checkbox rebates__checkbox--inverted ' + (isSelected ? 'rebates__checkbox--selected' : '');
-
-            return _react2.default.createElement(
-                'div',
-                {
-                    onClick: isSelectable ? function () {
-                        return _this4.toggleRebate(rebate);
-                    } : _ramda2.default.identity,
-                    className: 'rebates__rebate ' + (isSelectable ? '' : 'rebates__rebate--disabled'),
-                    key: index
-                },
-                isSelected ? _react2.default.createElement(_reactSvgInline2.default, {
-                    width: '15px',
-                    height: '15px',
-                    className: checkboxClass,
-                    svg: _zondicons2.default['checkmark']
-                }) : _react2.default.createElement('div', { className: 'rebates__checkbox' }),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'rebates__title' },
-                    _strings2.default.toTitleCase(rebate.rebate)
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'rebates__value' },
-                    '-',
-                    _util2.default.moneyFormat(rebate.value)
-                )
-            );
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this5 = this;
-
-            return _react2.default.createElement(
-                'div',
-                { className: 'rebates' },
-                this.state.compatibleRebateIds ? this.props.availableRebates.map(function (rebate, index) {
-                    return _this5.renderRebate(rebate, index);
-                }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
-            );
-        }
-    }]);
-
-    return Rebates;
-}(_react2.default.PureComponent);
-
-function mapStateToProps(state) {
-    return {
-        zipcode: state.zipcode,
-        deal: state.selectedDeal,
-        availableRebates: _rebates2.default.getAvailableRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal),
-        selectedRebates: _rebates2.default.getSelectedRebatesForDealAndType(state.dealRebates, state.selectedRebates, state.selectedTab, state.selectedDeal)
-    };
-}
-
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(Rebates);
 
 /***/ })
 /******/ ]);

@@ -17,7 +17,7 @@ class RouteOneWebhookController extends BaseAPIController
     public function handleWebhook(Request $request)
     {
         Log::info('Route-One-Webhook-Request', [$request]);
-        
+
         if ($request->getContentType() !== 'xml') {
             return response()->json(['status' => 'error', 'message' => 'Invalid format. Please use XML.']);
         }
@@ -34,7 +34,7 @@ class RouteOneWebhookController extends BaseAPIController
                 ->IndividualApplicant
                 ->Contact
                 ->EMailAddress;
-            
+
             $applicationStatus = $payload
                 ->ProcessCreditDecision
                 ->DataArea

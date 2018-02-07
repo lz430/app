@@ -9,10 +9,29 @@ use Illuminate\Support\Facades\Cache;
 
 class Client
 {
-    private $guzzleClient;
+    // Types that should be exlcluded for every best offer call
+    const TYPE_BLACKLIST = [
+        7, // Cash Certificate Coupon ** Coupon **
+        11, // Gift
+        14, // Payment/Fee Waiver
+        15, // Package Option Discount
+        16, // Trade-in Allowance
+        25, // Cash on % of Objective
+        26, // Enhanced Rate/APR
+        27, // Enhanced Rate with Cash or Fee Waiver
+        28, // Other Financing
+        29, // Enhanced Rate and Residual
+        30, // Enhanced Rate/Money Factor
+        37, // Dealer Spin
+        44, // Flat Pay
+        47, // Direct/Private Offer ** Coupon **
+        50, // Final Pay
+        52, // Aged Inventory Bonus Cash
+    ];
     const TOKEN_KEY = 'JATO_AUTH_HEADER';
-    private $retryCount = 0;
 
+    private $guzzleClient;
+    private $retryCount = 0;
     private $username;
     private $password;
 
@@ -133,6 +152,7 @@ class Client
         return $this->get("features/$vehicleId/$categoryId?pageSize=100", [], true);
     }
 
+    // KEEP THIS ONE! it's for lease rates
     public function incentivesByVehicleIdAndZipcode($vehicleId, $zipcode, $additionalParams = [])
     {
         try {
@@ -147,40 +167,34 @@ class Client
         }
     }
 
-    public function bestCashIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
+    public function targetsByVehicleIdAndZipcode($vehicleId, $zipcode)
     {
-        return $this->get("incentives/bestOffer/$vehicleId/cash", [
-                'query' => ['zipCode' => $zipcode]
-            ])['programs'] ?? [];
-    }
-
-    public function bestFinanceIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
-    {
-        return $this->get("incentives/bestOffer/$vehicleId/finance", [
-                'query' => ['zipCode' => $zipcode]
-            ])['programs'] ?? [];
-    }
-
-    public function bestLeaseIncentivesByVehicleIdAndZipcode($vehicleId, $zipcode)
-    {
-        return $this->get("incentives/bestOffer/$vehicleId/lease", [
-                'query' => ['zipCode' => $zipcode]
-            ])['programs'] ?? [];
-    }
-
-    public function incentivesByVehicleIdAndZipcodeWithSelected($vehicleId, $zipcode, $selected)
-    {
-        $first = array_first($selected);
-
-        return $this->get(
-            "incentives/programs/$vehicleId/add/$first",
-            [
+        try {
+            return $this->get("incentives/bestOffer/$vehicleId/targets", [
                 'query' => [
                     'zipCode' => $zipcode,
-                    'addedPrograms' => implode(',', $selected),
                 ]
-            ]
-        );
+            ]);
+        } catch (ClientException $e) {
+            Log::debug("Unable to get targets for Vehicle ID $vehicleId. URL: incentives/bestOffer/$vehicleId/targets");
+            return [];
+        }
+    }
+
+    public function bestOffer($vehicleId, $paymentType, $zipcode, $targets)
+    {
+        try {
+            return $this->get("incentives/bestOffer/$vehicleId/$paymentType", [
+                'query' => array_merge([
+                    'zipCode' => $zipcode,
+                    'targets' => $targets,
+                    'excludeTypes' => implode(',', self::TYPE_BLACKLIST),
+                ])
+            ]);
+        } catch (ClientException $e) {
+            Log::debug("Vehicle ID $vehicleId returns no Best Offers. URL: incentives/bestOffer/$vehicleId/$paymentType?zipCode=$zipcode&targets=$targets");
+            return ['totalValue' => 0, 'programs' => []];
+        }
     }
 
     protected function makeFancyNameUrlFriendly($modelName)

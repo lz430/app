@@ -14,7 +14,7 @@ class DealImage extends React.PureComponent {
     }
 
     componentDidMount() {
-        this._mounted = true;
+        this._isMounted = true;
 
         if (this.props.deal.photos.length === 0) {
             this.requestFuelImages();
@@ -22,7 +22,7 @@ class DealImage extends React.PureComponent {
     }
 
     componentWillUnmount() {
-        this._mounted = false;
+        this._isMounted = false;
     }
 
     featuredImageUrl() {
@@ -66,7 +66,7 @@ class DealImage extends React.PureComponent {
                 )
             );
 
-            if (!this._mounted) return;
+            if (!this._isMounted) return;
             this.setState({ featuredImage: externalImages[0] });
         } catch (e) {
             try {
@@ -74,7 +74,7 @@ class DealImage extends React.PureComponent {
                     await fuelapi.getExternalImages(vehicleId, 'white')
                 );
 
-                if (!this._mounted) return;
+                if (!this._isMounted) return;
                 this.setState({ featuredImage: externalImages[0] });
             } catch (e) {
                 // No Fuel Images Available.

@@ -25,7 +25,9 @@ const util = {
             : R.append(item, items);
     },
     getEmployeeOrSupplierPrice: (deal, employeeBrand) => {
-        return (employeeBrand === deal.make) ? deal.employee_price : deal.supplier_price;
+        return employeeBrand === deal.make
+            ? deal.employee_price
+            : deal.supplier_price;
     },
     getInitialBodyStyleFromUrl: () => {
         return R.prop('style', qs.parse(window.location.search.slice(1)));
@@ -97,6 +99,19 @@ const util = {
             value,
             zipped
         );
+    },
+    getTargetKeyForDealAndZip(deal, zipcode) {
+        const vehicleId = deal.versions[0].jato_vehicle_id;
+        const targetKey = `${vehicleId}-${zipcode}`;
+        return targetKey;
+    },
+    getBestOfferKeyForDeal(deal, zipcode, paymentType, selectedTargets) {
+        const vehicleId = deal.versions[0].jato_vehicle_id;
+        const targetString = R.sort((a, b) => {
+            return a - b;
+        }, selectedTargets).join('-');
+
+        return `${vehicleId}-${zipcode}-${paymentType}-${targetString}`;
     },
 };
 

@@ -11,7 +11,7 @@ import {
     windowResize,
 } from 'actions/index';
 import util from 'src/util';
-import {checkZipInRange, requestFeatureCategories} from "./actions/index";
+import { checkZipInRange, requestFeatureCategories } from './actions/index';
 
 const urlStyle = util.getInitialBodyStyleFromUrl();
 
@@ -19,45 +19,59 @@ const initialState = {
     /** Version **/
     4: '<- increment the number to purge LocalStorage',
     /** End Version **/
-    window: { width: window.innerWidth },
-    smallFiltersShown: false,
-    showMakeSelectorModal: true,
-    selectedTab: 'cash',
-    downPayment: 0,
-    termDuration: 36,
     annualMileage: 10000,
-    residualPercent: null,
-    selectedDeal: null,
-    selectedStyles: urlStyle ? [urlStyle] : [],
-    selectedModels: [],
-    models: null,
+    bestOffers: [],
     bodyStyles: null,
-    fuelTypes: ['Gasoline', 'Electric', 'Flex Fuel', 'Diesel', 'Hybrid'],
-    transmissionTypes: ['automatic', 'manual'],
-    selectedTransmissionType: null,
-    selectedSegment: null,
-    segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
-    selectedFuelType: null,
-    selectedMakes: [],
-    employeeBrand: false,
-    selectedFeatures: [],
-    selectedRebates: [],
-    dealRebates: {},
-    features: null,
-    featureCategories: [],
-    requestingMoreDeals: false,
-    makes: null,
+    cancelTokens: [], // A list of tokens to cancel axios calls for best offers
+    city: null,
+    compareList: [],
+    dealBestOffer: null,
     dealPage: 1,
     dealPageTotal: 1,
     deals: null,
-    searchFeatures: [],
+    downPayment: 0,
+    employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
-    sortColumn: 'price',
+    features: null,
+    featureCategories: [],
+    fuelTypes: ['Gasoline', 'Electric', 'Flex Fuel', 'Diesel', 'Hybrid'],
+    makes: null,
+    models: null,
+    requestingMoreDeals: false,
+    residualPercent: null,
+    smallFiltersShown: false,
+    showMakeSelectorModal: true,
+    searchFeatures: [],
+    segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
+    selectedDeal: null,
+    selectedFeatures: [],
+    selectedFuelType: null,
+    selectedMakes: [],
+    selectedModels: [],
+    selectedSegment: null,
+    selectedStyles: urlStyle ? [urlStyle] : [],
+    selectedTab: 'cash',
+    selectedTargets: [],
+    selectedTransmissionType: null,
     sortAscending: true,
-    compareList: [],
+    sortColumn: 'price',
+    targets: [],
+    targetsAvailable: {},
+    targetsSelected: {},
+    /** Need to duplicate these in App\Http\Controllers\API\TargetsController::TARGET_OPEN_OFFERS **/
+    targetDefaults: [
+        25, // Open Offer
+        36, // Finance & Lease Customer
+        39, // Finance Customer
+        26, // Lease Customer
+        45, // Captive Finance Customer
+        52, // Auto Show Cash Recipient
+    ],
+    termDuration: 36,
+    transmissionTypes: ['automatic', 'manual'],
+    window: { width: window.innerWidth },
     zipcode: null,
     zipInRange: null,
-    city: null,
 };
 
 export default () => {

@@ -71,7 +71,6 @@ class Importer
     {
         $this->filesystem = $filesystem;
         $this->client = $client;
-        $this->features = Feature::with('category')->get();
     }
 
     public function setInfoFunction(callable $infoFunction)
@@ -100,6 +99,8 @@ class Importer
 
     public function import()
     {
+        $this->features = Feature::with('category')->get();
+
         $csvFiles = array_filter(
             $this->filesystem->files(realpath(base_path(config('services.vauto.uploads_path')))),
             function ($file) {
@@ -218,6 +219,8 @@ class Importer
 
     private function saveVersionAndRelations($decoded, $matchedVersion)
     {
+        $this->info("Saving version and relations for UID " . $matchedVersion['uid']);
+
         if (! $manufacturer = Manufacturer::where('name', $decoded['manufacturer'])->first()) {
             // Save/Update manufacturer, make, model, then versions
             $manufacturer = $this->saveManufacturer(

@@ -1,15 +1,15 @@
 import React from 'react';
 import util from 'src/util';
 import R from 'ramda';
-import Rebates from 'components/Rebates';
+import Targets from 'components/Targets';
 import CustomerTypeSelect from 'components/CustomerTypeSelect';
-import rebates from 'src/rebates';
 import formulas from 'src/formulas';
 import { connect } from 'react-redux';
 import api from 'src/api';
 import * as Actions from 'actions';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
+import { makeDealBestOfferTotalValue, makeDealBestOfferLoading } from 'selectors/index';
 
 class LeaseCalculator extends React.PureComponent {
     constructor(props) {
@@ -21,8 +21,9 @@ class LeaseCalculator extends React.PureComponent {
         };
     }
 
-    componentDidMount() {
-        this._isMounted = true;
+    componentWillMount() {
+        this.props.requestTargets(this.props.deal);
+        this.props.requestBestOffer(this.props.deal);
 
         api
             .getLeaseRates(
@@ -62,6 +63,10 @@ class LeaseCalculator extends React.PureComponent {
                     }
                 );
             });
+    }
+
+    componentDidMount() {
+        this._isMounted = true;
     }
 
     componentWillUnmount() {
@@ -141,24 +146,23 @@ class LeaseCalculator extends React.PureComponent {
                             this.updateAnnualMileage(
                                 e.target.value,
                                 this.props.termDuration
-                            )}
-                    >
-                        {selectedLeaseRate ? (
-                            selectedLeaseRate.residuals.map(
-                                (residual, index) => {
-                                    return (
-                                        <option
-                                            value={residual.annualMileage}
-                                            key={index}
-                                        >
-                                            {residual.annualMileage}
-                                        </option>
-                                    );
-                                }
                             )
-                        ) : (
-                            ''
-                        )}
+                        }
+                    >
+                        {selectedLeaseRate
+                            ? selectedLeaseRate.residuals.map(
+                                  (residual, index) => {
+                                      return (
+                                          <option
+                                              value={residual.annualMileage}
+                                              key={index}
+                                          >
+                                              {residual.annualMileage}
+                                          </option>
+                                      );
+                                  }
+                              )
+                            : ''}
                     </select>
                 </span>
             </div>
@@ -174,20 +178,16 @@ class LeaseCalculator extends React.PureComponent {
                     Your Monthly Lease Payment
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.props.availableRebates ? (
+                    {this.props.dealBestOfferLoading ? (
+                        <SVGInline svg={miscicons['loading']} />
+                    ) : (
                         util.moneyFormat(
                             formulas.calculateTotalLeaseMonthlyPayment(
                                 formulas.calculateLeasedMonthlyPayments(
                                     util.getEmployeeOrSupplierPrice(
                                         this.props.deal,
                                         this.props.employeeBrand
-                                    ) -
-                                        R.sum(
-                                            R.map(
-                                                R.prop('value'),
-                                                this.props.selectedRebates
-                                            )
-                                        ),
+                                    ) - this.props.dealBestOfferTotalValue,
                                     this.state.downPayment,
                                     0,
                                     this.props.termDuration,
@@ -195,8 +195,6 @@ class LeaseCalculator extends React.PureComponent {
                                 )
                             )
                         )
-                    ) : (
-                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </span>
             </div>
@@ -214,20 +212,18 @@ class LeaseCalculator extends React.PureComponent {
                         value={this.props.termDuration}
                         onChange={e => this.updateTermDuration(e.target.value)}
                     >
-                        {this.state.leaseRates ? (
-                            this.state.leaseRates.map((leaseRate, index) => {
-                                return (
-                                    <option
-                                        value={leaseRate.termMonths}
-                                        key={index}
-                                    >
-                                        {leaseRate.termMonths}
-                                    </option>
-                                );
-                            })
-                        ) : (
-                            ''
-                        )}
+                        {this.state.leaseRates
+                            ? this.state.leaseRates.map((leaseRate, index) => {
+                                  return (
+                                      <option
+                                          value={leaseRate.termMonths}
+                                          key={index}
+                                      >
+                                          {leaseRate.termMonths}
+                                      </option>
+                                  );
+                              })
+                            : ''}
                     </select>
                 </span>
             </div>
@@ -235,26 +231,22 @@ class LeaseCalculator extends React.PureComponent {
     }
 
     renderDueAtSigning() {
-        const totalRebates = R.sum(
-            R.map(R.prop('value'), this.props.selectedRebates)
-        );
-
         return (
             <div>
                 <span className="cash-finance-lease-calculator__left-item">
                     Taxes due at signing
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.props.availableRebates ? (
+                    {this.props.dealBestOfferLoading ? (
+                        <SVGInline svg={miscicons['loading']} />
+                    ) : (
                         util.moneyFormat(
                             formulas.calculateLeaseTaxesDueAtSigning(
-                                totalRebates,
+                                this.props.dealBestOfferTotalValue,
                                 this.state.downPayment,
                                 this.props.deal.doc_fee
                             )
                         )
-                    ) : (
-                        <SVGInline svg={miscicons['loading']} />
                     )}
                 </span>
             </div>
@@ -274,24 +266,17 @@ class LeaseCalculator extends React.PureComponent {
         );
     }
 
-    renderYourRebatesAndIncentives() {
+    renderYourTargets() {
         return (
             <div>
                 <span className="cash-finance-lease-calculator__left-item">
-                    Your Rebates and Incentives
+                    Rebates Applied
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.props.availableRebates ? (
-                        util.moneyFormat(
-                            R.sum(
-                                R.map(
-                                    R.prop('value'),
-                                    this.props.selectedRebates
-                                )
-                            )
-                        )
-                    ) : (
+                    {this.props.dealBestOfferLoading ? (
                         <SVGInline svg={miscicons['loading']} />
+                    ) : (
+                        util.moneyFormat(this.props.dealBestOfferTotalValue)
                     )}
                 </span>
             </div>
@@ -316,16 +301,16 @@ class LeaseCalculator extends React.PureComponent {
         }, leaseRate.residuals);
 
         if (!residual) {
-            return <td key={index}></td>;
+            return <td key={index} />;
         }
 
         const isSelected =
             leaseRate.termMonths === this.props.termDuration &&
             this.state.downPayment === downPayment;
 
-        const className = `cash-finance-lease-calculator__lease-table-cell--${isSelected
-            ? 'selected'
-            : 'selectable'}`;
+        const className = `cash-finance-lease-calculator__lease-table-cell--${
+            isSelected ? 'selected' : 'selectable'
+        }`;
 
         return (
             <td
@@ -334,7 +319,8 @@ class LeaseCalculator extends React.PureComponent {
                         leaseRate.termMonths,
                         residual.annualMileage,
                         downPayment
-                    )}
+                    )
+                }
                 className={className}
                 key={index}
             >
@@ -344,13 +330,7 @@ class LeaseCalculator extends React.PureComponent {
                             util.getEmployeeOrSupplierPrice(
                                 this.props.deal,
                                 this.props.employeeBrand
-                            ) -
-                                R.sum(
-                                    R.map(
-                                        R.prop('value'),
-                                        this.props.selectedRebates
-                                    )
-                                ),
+                            ) - this.props.dealBestOfferTotalValue,
                             downPayment,
                             0,
                             leaseRate.termMonths,
@@ -362,9 +342,13 @@ class LeaseCalculator extends React.PureComponent {
         );
     }
 
+    handleTargetsChange() {
+        this.props.requestBestOffer(this.props.deal);
+    }
+
     render() {
         return (
-            <div>
+            <div className="cash-finance-lease-calculator__calculator-content">
                 Lease Price{' '}
                 {util.moneyFormat(
                     util.getEmployeeOrSupplierPrice(
@@ -373,15 +357,10 @@ class LeaseCalculator extends React.PureComponent {
                     )
                 )}
                 <CustomerTypeSelect deal={this.props.deal} />
-                {this.state.selectedRebates ? (
-                    <div>
-                        <hr />
-                        <h4>Available Rebates and Incentives</h4>
-                    </div>
-                ) : (
-                    ''
-                )}
-                <Rebates />
+                <Targets
+                    deal={this.props.deal}
+                    targetsChanged={this.handleTargetsChange.bind(this)}
+                />
                 <hr />
                 <h4>Summary</h4>
                 <div>
@@ -406,7 +385,7 @@ class LeaseCalculator extends React.PureComponent {
                             )}
                         </span>
                     </div>
-                    {this.renderYourRebatesAndIncentives()}
+                    {this.renderYourTargets()}
                 </div>
                 <hr />
                 <div>
@@ -513,27 +492,21 @@ class LeaseCalculator extends React.PureComponent {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        zipcode: state.zipcode,
-        deal: state.selectedDeal,
-        termDuration: state.termDuration,
-        annualMileage: state.annualMileage,
-        residualPercent: state.residualPercent,
-        employeeBrand: state.employeeBrand,
-        availableRebates: rebates.getAvailableRebatesForDealAndType(
-            state.dealRebates,
-            state.selectedRebates,
-            state.selectedTab,
-            state.selectedDeal
-        ),
-        selectedRebates: rebates.getSelectedRebatesForDealAndType(
-            state.dealRebates,
-            state.selectedRebates,
-            state.selectedTab,
-            state.selectedDeal
-        ),
+const makeMapStateToProps = () => {
+    const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
+    const getDealBestOfferLoading = makeDealBestOfferLoading();
+    const mapStateToProps = (state, props) => {
+        return {
+            zipcode: state.zipcode,
+            termDuration: state.termDuration,
+            annualMileage: state.annualMileage,
+            residualPercent: state.residualPercent,
+            employeeBrand: state.employeeBrand,
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferLoading: getDealBestOfferLoading(state, props),
+        };
     };
-}
+    return mapStateToProps;
+};
 
-export default connect(mapStateToProps, Actions)(LeaseCalculator);
+export default connect(makeMapStateToProps, Actions)(LeaseCalculator);
