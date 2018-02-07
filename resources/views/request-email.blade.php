@@ -75,6 +75,85 @@
                         </div>
                     </div>
 
+                    <div class="request-dl__group {{ $errors->has('drivers_license') ? 'login__group-has-error' : '' }}">
+                        <div class="request-dl__labels">
+                            <label for="drivers_license" class="request-dl__number-label">Driver's License Number</label>
+                            <label for="drivers_license_state" class="request-dl__state-label">State</label>
+                        </div>
+
+                        <div class="request-dl__inline-input-and-error">
+                            <input id="drivers_license" type="tel" class="request-dl__number" name="drivers_license_number" placeholder="Enter Driver's License Number" value="{{ old('drivers_license') }}" required>
+
+                            <select class="request-dl__state" id="drivers_license_state" name="drivers_license_state">
+                                <option value="AL">AL</option>
+                                <option value="AK">AK</option>
+                                <option value="AS">AS</option>
+                                <option value="AZ">AZ</option>
+                                <option value="AR">AR</option>
+                                <option value="CA">CA</option>
+                                <option value="CO">CO</option>
+                                <option value="CT">CT</option>
+                                <option value="DE">DE</option>
+                                <option value="DC">DC</option>
+                                <option value="FM">FM</option>
+                                <option value="FL">FL</option>
+                                <option value="GA">GA</option>
+                                <option value="GU">GU</option>
+                                <option value="HI">HI</option>
+                                <option value="ID">ID</option>
+                                <option value="IL">IL</option>
+                                <option value="IN">IN</option>
+                                <option value="IA">IA</option>
+                                <option value="KS">KS</option>
+                                <option value="KY">KY</option>
+                                <option value="LA">LA</option>
+                                <option value="ME">ME</option>
+                                <option value="MH">MH</option>
+                                <option value="MD">MD</option>
+                                <option value="MA">MA</option>
+                                <option value="MI">MI</option>
+                                <option value="MN">MN</option>
+                                <option value="MS">MS</option>
+                                <option value="MO">MO</option>
+                                <option value="MT">MT</option>
+                                <option value="NE">NE</option>
+                                <option value="NV">NV</option>
+                                <option value="NH">NH</option>
+                                <option value="NJ">NJ</option>
+                                <option value="NM">NM</option>
+                                <option value="NY">NY</option>
+                                <option value="NC">NC</option>
+                                <option value="ND">ND</option>
+                                <option value="MP">MP</option>
+                                <option value="OH">OH</option>
+                                <option value="OK">OK</option>
+                                <option value="OR">OR</option>
+                                <option value="PW">PW</option>
+                                <option value="PA">PA</option>
+                                <option value="PR">PR</option>
+                                <option value="RI">RI</option>
+                                <option value="SC">SC</option>
+                                <option value="SD">SD</option>
+                                <option value="TN">TN</option>
+                                <option value="TX">TX</option>
+                                <option value="UT">UT</option>
+                                <option value="VT">VT</option>
+                                <option value="VI">VI</option>
+                                <option value="VA">VA</option>
+                                <option value="WA">WA</option>
+                                <option value="WV">WV</option>
+                                <option value="WI">WI</option>
+                                <option value="WY">WY</option>
+                            </select>
+
+                            @if ($errors->has('drivers_license_number'))
+                                <span class="request-email__error">
+                                    <strong>{{ $errors->first('drivers_license_number') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
                     <div class="request-email__captcha">
                         {!! Recaptcha::render() !!}
 
