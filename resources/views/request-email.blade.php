@@ -164,6 +164,7 @@
                         @endif
                     </div>
 
+                    <input type="hidden" name="method" value="{{ request('payment') }}" />
                     <div class="request-email__buttons">
                         <button class="request-email__button request-email__button--purple request-email__button--small">
                             Submit Your Contact Information

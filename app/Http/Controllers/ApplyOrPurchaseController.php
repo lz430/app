@@ -72,7 +72,7 @@ class ApplyOrPurchaseController extends Controller
                 $request->merge(['email' => session()->get('email')]);
             }
 
-            return redirect('request-email');
+            return redirect('/request-email?payment=' . request('type'));
         } catch (ValidationException $e) {
             Log::notice('Invalid applyOrPurchase submission: ' . json_encode(request()->all()));
 
@@ -144,6 +144,9 @@ class ApplyOrPurchaseController extends Controller
 
         event(new NewPurchaseInitiated($user, $purchase));
 
+        if (request('method') == 'cash') {
+            return redirect()->route('thank-you', ['method' => 'cash']);
+        }
         return redirect()->route('view-apply', ['purchaseId' => $purchase->id])
             ->with('purchase', $purchase);
     }

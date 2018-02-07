@@ -293,21 +293,6 @@ class ThankYouPage extends React.PureComponent {
                             'Loading'
                         )}
                         <div className="thank-you__hr thank-you__hr--full" />
-                        <div className="thank-you__dealer-info">
-                            <div className="thank-you__dealer-title">
-                                Selling Dealer
-                            </div>
-                            <div>{this.state.deal.dealer_name}</div>
-                            <div>
-                                {this.state.deal.dealer.city},{' '}
-                                {this.state.deal.dealer.state}
-                            </div>
-                            <div>
-                                {this.state.deal.dealer.contact_name},{' '}
-                                {this.state.deal.dealer.contact_title}
-                            </div>
-                            <div>{this.state.deal.dealer.phone}</div>
-                        </div>
                         <div>
                             <div className="thank-you__finalize-items">
                                 Items needed to finalize your purchase:
