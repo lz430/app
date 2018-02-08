@@ -60728,6 +60728,7 @@ var LeaseCalculator = function (_React$PureComponent) {
         var _this = _possibleConstructorReturn(this, (LeaseCalculator.__proto__ || Object.getPrototypeOf(LeaseCalculator)).call(this, props));
 
         _this.state = {
+            leasesLoaded: false,
             leaseRates: null,
             downPayment: 0
         };
@@ -60746,6 +60747,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 if (!_this2._isMounted) return;
 
                 var leaseRates = data.data;
+                var leasesLoaded = true;
 
                 var closestTermMonths = _util2.default.getClosestNumberInRange(_this2.props.termDuration, _ramda2.default.map(_ramda2.default.prop('termMonths'), leaseRates));
                 var closestLeaseRate = _ramda2.default.find(function (leaseRate) {
@@ -60755,7 +60757,8 @@ var LeaseCalculator = function (_React$PureComponent) {
                 var residualPercent = _this2.getResidualPercent(closestLeaseRate, closestAnnualMileage);
 
                 _this2.setState({
-                    leaseRates: leaseRates
+                    leaseRates: leaseRates,
+                    leasesLoaded: leasesLoaded
                 }, function () {
                     _this2.props.updateTermDuration(closestLeaseRate.termMonths);
                     _this2.props.updateAnnualMileage(closestAnnualMileage);
@@ -61014,7 +61017,16 @@ var LeaseCalculator = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
-            return _react2.default.createElement(
+
+            return this.state.leaseRates && this.state.leaseRates.length == 0 ? _react2.default.createElement(
+                'div',
+                { className: 'cash-finance-lease-calculator__calculator-content' },
+                _react2.default.createElement(
+                    'h4',
+                    null,
+                    'Currently there are no competitive lease rates available on this vehicle.'
+                )
+            ) : _react2.default.createElement(
                 'div',
                 { className: 'cash-finance-lease-calculator__calculator-content' },
                 'Lease Price',

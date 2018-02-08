@@ -16,6 +16,7 @@ class LeaseCalculator extends React.PureComponent {
         super(props);
 
         this.state = {
+            leasesLoaded: false,
             leaseRates: null,
             downPayment: 0,
         };
@@ -34,6 +35,7 @@ class LeaseCalculator extends React.PureComponent {
                 if (!this._isMounted) return;
 
                 const leaseRates = data.data;
+                const leasesLoaded = true;
 
                 const closestTermMonths = util.getClosestNumberInRange(
                     this.props.termDuration,
@@ -53,6 +55,7 @@ class LeaseCalculator extends React.PureComponent {
                 this.setState(
                     {
                         leaseRates,
+                        leasesLoaded,
                     },
                     () => {
                         this.props.updateTermDuration(
@@ -347,7 +350,12 @@ class LeaseCalculator extends React.PureComponent {
     }
 
     render() {
-        return (
+
+        return this.state.leaseRates && this.state.leaseRates.length == 0 ? (
+            <div className="cash-finance-lease-calculator__calculator-content">
+                <h4>Currently there are no competitive lease rates available on this vehicle.</h4>
+            </div>
+        ) : (
             <div className="cash-finance-lease-calculator__calculator-content">
                 Lease Price{' '}
                 {util.moneyFormat(
