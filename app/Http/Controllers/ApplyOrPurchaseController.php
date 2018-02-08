@@ -147,6 +147,7 @@ class ApplyOrPurchaseController extends Controller
         if (request('method') == 'cash') {
             return redirect()->route('thank-you', ['method' => 'cash']);
         }
+        
         return redirect()->route('view-apply', ['purchaseId' => $purchase->id])
             ->with('purchase', $purchase);
     }
