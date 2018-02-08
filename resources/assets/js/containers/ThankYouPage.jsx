@@ -259,21 +259,6 @@ class ThankYouPage extends React.PureComponent {
                             <SVGInline svg={miscicons['loading']} />
                         )}
                         <div className="thank-you__hr thank-you__hr--full" />
-                        <div className="thank-you__dealer-info">
-                            <div className="thank-you__dealer-title">
-                                Selling Dealer
-                            </div>
-                            <div>{this.props.deal.dealer_name}</div>
-                            <div>
-                                {this.props.deal.dealer.city},{' '}
-                                {this.props.deal.dealer.state}
-                            </div>
-                            <div>
-                                {this.props.deal.dealer.contact_name},{' '}
-                                {this.props.deal.dealer.contact_title}
-                            </div>
-                            <div>{this.props.deal.dealer.phone}</div>
-                        </div>
                         <div>
                             <div className="thank-you__finalize-items">
                                 Items needed to finalize your purchase:

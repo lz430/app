@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Laracasts\Utilities\JavaScript\JavaScriptFacade;
+use USDLRegex\Validator as LicenseValidator;
 
 class ApplyOrPurchaseController extends Controller
 {
@@ -69,7 +70,7 @@ class ApplyOrPurchaseController extends Controller
                 $request->merge(['email' => session()->get('email')]);
             }
 
-            return redirect('request-email');
+            return redirect('/request-email?payment=' . request('type'));
         } catch (ValidationException $e) {
             Log::notice('Invalid applyOrPurchase submission: ' . json_encode(request()->all()));
 
@@ -88,12 +89,15 @@ class ApplyOrPurchaseController extends Controller
             $request,
             [
                 'email' => 'required|email',
+                'drivers_license_state' => 'required|string', // This is out of alphabetical order but is required to exist for the driversLicense validator
+                'drivers_license_number' => 'required|drivers_license_number',
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'phone_number' => 'required|digits:10',
                 'g-recaptcha-response' => 'required|recaptcha',
             ],
             [
+                'drivers_license_number' => 'Please provide a valid License Number.',
                 'g-recaptcha-response' => 'The recaptcha is required.',
             ]
         );
@@ -108,6 +112,8 @@ class ApplyOrPurchaseController extends Controller
                     'email' => $request->email
                 ],
                 [
+                    'drivers_license_number' => $request->drivers_license_number,
+                    'drivers_license_state' => $request->drivers_license_state,
                     'first_name' => $request->first_name,
                     'last_name' => $request->last_name,
                     'phone_number' => $request->phone_number,
@@ -138,6 +144,10 @@ class ApplyOrPurchaseController extends Controller
 
         event(new NewPurchaseInitiated($user, $purchase));
 
+        if (request('method') == 'cash') {
+            return redirect()->route('thank-you', ['method' => 'cash']);
+        }
+        
         return redirect()->route('view-apply', ['purchaseId' => $purchase->id])
             ->with('purchase', $purchase);
     }

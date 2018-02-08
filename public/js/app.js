@@ -66186,7 +66186,7 @@ var ConfirmDetails = function (_React$PureComponent) {
                                     return _purchase2.default.start(deal, _this2.props.selectedTab, _this2.props.downPayment, _this2.props.dealBestOfferTotalValue, _this2.props.dealBestOffer, _this2.props.termDuration, _this2.props.employeeBrand);
                                 }
                             },
-                            'Buy Now'
+                            'Confirm Purchase'
                         )
                     )
                 )
@@ -67304,41 +67304,6 @@ var ThankYouPage = function (_React$PureComponent) {
                             _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                         ) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }),
                         _react2.default.createElement('div', { className: 'thank-you__hr thank-you__hr--full' }),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'thank-you__dealer-info' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'thank-you__dealer-title' },
-                                'Selling Dealer'
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                null,
-                                this.props.deal.dealer_name
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                null,
-                                this.props.deal.dealer.city,
-                                ',',
-                                ' ',
-                                this.props.deal.dealer.state
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                null,
-                                this.props.deal.dealer.contact_name,
-                                ',',
-                                ' ',
-                                this.props.deal.dealer.contact_title
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                null,
-                                this.props.deal.dealer.phone
-                            )
-                        ),
                         _react2.default.createElement(
                             'div',
                             null,

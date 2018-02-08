@@ -73,7 +73,7 @@ class ApplyEmailsTest extends TestCase
             ]
         );
 
-        $response->assertRedirect(route('request-email'));
+        $response->assertRedirect(route('request-email', ['payment' => 'cash']));
     }
 
     /** @test */
@@ -99,6 +99,6 @@ class ApplyEmailsTest extends TestCase
             ]
         );
 
-        $response->assertRedirect(route('request-email'));
+        $response->assertRedirect(route('request-email', ['payment' => 'cash']));
     }
 }
