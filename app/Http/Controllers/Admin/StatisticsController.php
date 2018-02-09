@@ -8,16 +8,55 @@ use App\Http\Controllers\Controller;
 use App\JATO\Version;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use League\Csv\Reader;
+use League\Csv\Statement;
 
 class StatisticsController extends Controller
 {
     public function deals()
     {
+        $csv = $this->csv();
+        $headers = $csv->getHeader();
+        $records = collect((new Statement)->process($csv));
+
+        $vauto_dealers = $this->dealersFromCsv($records);
+
+        $new_vehicle_count = $records->filter(function ($row) {
+            return $row['New/Used'] == "N";
+        })->count();
+
         return view('statistics.deals')
             ->with('dealers', Dealer::withCount('deals')->get())
+            ->with('dealerIds', Dealer::select('dealer_id')->get()->pluck('dealer_id')->toArray())
+            ->with('vauto_dealers', $vauto_dealers)
+            ->with('new_vehicle_count', $new_vehicle_count)
             ->with('deals_count', Deal::count())
             ->with('jato_versions', Version::count())
-            ->with('vauto_lines', $this->countFileLines($this->vautoFilePath()));
+            ->with('vauto_lines', $records->count());
+    }
+
+    private function dealersFromCsv($records)
+    {
+        $dealers = [];
+
+        foreach ($records as $record) {
+            if (! array_key_exists($record['DealerId'], $dealers)) {
+                $dealers[$record['DealerId']] = [
+                    'id' => $record['DealerId'],
+                    'name' => $record['Dealer Name'],
+                    'count_new' => 0,
+                    'count_old' => 0,
+                ];
+            }
+
+            if ($record['New/Used'] == 'N') {
+                $dealers[$record['DealerId']]['count_new']++;
+            } else {
+                $dealers[$record['DealerId']]['count_old']++;
+            }
+        }
+
+        return $dealers;
     }
 
     private function vautoFilePath()
@@ -32,31 +71,11 @@ class StatisticsController extends Controller
         return reset($csvFiles);
     }
 
-    private function vautoDealsCollection()
+    private function csv()
     {
-        // @todo
-        $handle = fopen($this->vautoFilePath(), 'r');
+        $csv = Reader::createFromPath($this->vautoFilePath(), 'r');
+        $csv->setHeaderOffset(0);
 
-        $dealers = [];
-
-        while (($data = fgetcsv($handle)) !== false) {
-            dd($data);
-            // $dealers[]
-        }
-    }
-
-    // https://stackoverflow.com/a/20537130
-    private function countFileLines($fileName)
-    {
-        $f = fopen($fileName, 'rb');
-        $lines = 0;
-
-        while (!feof($f)) {
-            $lines += substr_count(fread($f, 8192), "\n");
-        }
-
-        fclose($f);
-
-        return $lines;
+        return $csv;
     }
 }
