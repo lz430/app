@@ -222,7 +222,7 @@ class DealFeatureImporter
                 return 'second_row_bench';
             } elseif (str_contains(strtolower($value), ['2+2'])) {
                 return 'second_row_captains_chairs';
-            } elseif (str_contains(strtolower($value), ['2+3+2', '2+3+3', '2+2+2'])) {
+            } elseif (str_contains(strtolower($value), ['2+3+2', '2+3+3', '2+2+2', '2+2+3', '2+3+3'])) {
                 return 'third_row_seating';
             } elseif (str_contains(strtolower($value), ['2+3+3+4'])) {
                 return 'fourth_row_seating';
