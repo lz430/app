@@ -15,11 +15,7 @@ class StatisticsController extends Controller
 {
     public function deals()
     {
-        $csv = $this->csv();
-        $headers = $csv->getHeader();
-        $records = collect((new Statement)->process($csv));
-
-        $vauto_dealers = $this->dealersFromCsv($records);
+        $records = $this->csvRecords();
 
         $new_vehicle_count = $records->filter(function ($row) {
             return $row['New/Used'] == "N";
@@ -27,8 +23,8 @@ class StatisticsController extends Controller
 
         return view('statistics.deals')
             ->with('dealers', Dealer::withCount('deals')->get())
-            ->with('dealerIds', Dealer::select('dealer_id')->get()->pluck('dealer_id')->toArray())
-            ->with('vauto_dealers', $vauto_dealers)
+            ->with('dealer_ids', Dealer::select('dealer_id')->get()->pluck('dealer_id')->toArray())
+            ->with('vauto_dealers', $this->dealersFromCsv($records))
             ->with('new_vehicle_count', $new_vehicle_count)
             ->with('deals_count', Deal::count())
             ->with('jato_versions', Version::count())
@@ -71,11 +67,12 @@ class StatisticsController extends Controller
         return reset($csvFiles);
     }
 
-    private function csv()
+    private function csvRecords()
     {
         $csv = Reader::createFromPath($this->vautoFilePath(), 'r');
         $csv->setHeaderOffset(0);
+        $records = collect((new Statement)->process($csv));
 
-        return $csv;
+        return $records;
     }
 }

@@ -22,7 +22,7 @@ th, td {
 
                             @foreach ($vauto_dealers as $dealer)
                                 <tr>
-                                    <td style="{{ in_array($dealer['id'], $dealerIds) ? 'font-weight: bold;' : '' }}">{{ $dealer['name'] }}</td>
+                                    <td style="{{ in_array($dealer['id'], $dealer_ids) ? 'font-weight: bold;' : '' }}">{{ $dealer['name'] }}</td>
                                     <td>{{ $dealer['count_new'] }}</td>
                                     <td>{{ $dealer['count_old'] }}</td>
                                 </tr>
