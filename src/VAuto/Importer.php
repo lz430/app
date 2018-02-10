@@ -159,7 +159,8 @@ class Importer
                 // if we couldn't match, try to use the Model Code
                 if (! $matchedVersion) {
                     $matchedVersion = array_first($decoded['versions'], function ($version) use ($keyedData) {
-                        return str_contains($version['modelCode'], $keyedData['Model Code']);
+                        return str_contains($version['modelCode'], $keyedData['Model Code']) ||
+                            str_contains($version['localModelCode'], $keyedData['Model Code']);
                     });
                 }
 
