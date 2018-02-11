@@ -3,26 +3,30 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 
 class JatoLogController extends Controller
 {
     private $file;
 
     private $groupSort = [
-        'Uncategorized Errors',
-        '500 server errors from JATO',
-        '400 errors looking up features',
-        '400 errors looking up a version',
-        '404 errors decoding a VIN',
-        '403 errors decoding a VIN',
-        'We could not match VIN->Version',
-        'Internal errors to DMR MySQL'
+        'Uncategorized Errors' => 'Miscellaneous unexpected errors.',
+        '500 server errors from JATO' => 'Something is broken for JATO',
+        '400 errors looking up features' => 'I am not sure what this means.',
+        '403 errors looking up features' => 'I am not sure what this means.',
+        '403 errors looking up equipment' => 'I am not sure what this means.',
+        '404 errors decoding a VIN' => 'I am not sure what this means.',
+        '403 errors decoding a VIN' => 'I am not sure what this means.',
+        'We could not match VIN->Version' => 'Our current logic for matching the VIN to one of multiple returned versions could not pick the best version here.',
+        'Internal errors to DMR MySQL' => 'Something we need to fix in our code.',
+        '400 errors looking up a version' => 'Probably just an old vehicle, not in DMR license.',
     ];
 
     public function __construct()
     {
         $this->file = file(storage_path('logs/jato.log'));
     }
+
     // this file is just throwaway for debug purposes during dev.
     public function index()
     {
@@ -38,7 +42,7 @@ class JatoLogController extends Controller
     public function showDay($date)
     {
         // Entries are multiple lines of a log file separated by lines with datetime stamps
-        $groupSort = $this->groupSort;
+        $groupSort = array_keys($this->groupSort);
         $entries = [];
         $currentEntry = [];
 
@@ -55,7 +59,7 @@ class JatoLogController extends Controller
             }
         }
 
-        echo '<style>.hide{display:none;}.show{display:block;}</style><script>function expand(target) { document.getElementById("expand-" + target).className = "show"; document.getElementById("expand-button-" + target).className = "hide"; }</script>';
+        echo '<style>.hide{display:none;}.show{display:block;}</style><script>function expand(target, hideLink = true) { document.getElementById("expand-" + target).className = "show"; if (hideLink) {document.getElementById("expand-button-" + target).className = "hide"; } }</script> (click header to expand)';
 
         collect($entries)->filter(function ($entry) use ($date) {
             // Only get the right date
@@ -76,7 +80,7 @@ class JatoLogController extends Controller
             return array_search($groupName, $groupSort);
         })->each(function ($group, $groupName) {
             // Only show unique lines in these 400 errors
-            if ($groupName == '400 errors looking up a version' ||
+            if (/*$groupName == '400 errors looking up a version' || */
                 $groupName == '400 errors looking up features') {
                 $group = $group->map(function ($item) {
                     return [reset($item)];
@@ -84,10 +88,14 @@ class JatoLogController extends Controller
             }
 
             // Render each group
-            echo "<h2>$groupName</h2>";
+            $groupKey = Str::slug($groupName);
+            echo '<h2 id="expand-button-' . $groupKey . '" onClick="expand(\'' . $groupKey . '\', false); return false;" style="cursor:pointer; margin-top: 2em; margin-bottom: 0;">' . $groupName . ' (' . count($group) . ' errors)</h2>';
+            echo '<p style="margin-bottom: 2em; margin-top: 0.25em">' . $this->groupSort[$groupName] . '</p>';
+            echo "<div id='expand-{$groupKey}' class='hide' style='margin-left: 1em;'>";
             collect($group)->each(function ($entry, $i) use ($groupName) {
                 $this->renderEntry($entry, md5($groupName) . '-' . $i);
             });
+            echo "</div>";
         });
     }
 
@@ -111,6 +119,16 @@ class JatoLogController extends Controller
         if (str_contains($firstLine, '/features/') &&
             str_contains($firstLine, '400 Bad Request')) {
             return '400 errors looking up features';
+        }
+
+        if (str_contains($firstLine, '/features/') &&
+            str_contains($firstLine, '403 Forbidden')) {
+            return '403 errors looking up features';
+        }
+
+        if (str_contains($firstLine, '/equipment/') &&
+            str_contains($firstLine, '403 Forbidden')) {
+            return '403 errors looking up equipment';
         }
 
         if (str_contains($firstLine, '/vin/decode') &&
