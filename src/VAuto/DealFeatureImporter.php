@@ -111,7 +111,7 @@ class DealFeatureImporter
                 break;
         }
 
-        if (! $feature || $feature->isEmpty()) {
+        if (! $feature || $feature->isEmpty() || ! $feature->first()) {
             // Log::error('Importer error for vin [' . $this->deal['VIN']. ']: could not find mapping for schemaId ' . $equipment['schemaId']);
             return null;
         }
