@@ -241,7 +241,7 @@ class Importer
             // Save/Update and save new model
             $model = $this->saveMakeModel(
                 $make,
-                $this->client->modelByName($decoded['model'])
+                $this->client->modelByName($matchedVersion['urlModelName'])
             );
         }
 
