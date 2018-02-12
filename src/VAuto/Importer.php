@@ -119,90 +119,62 @@ class Importer
 
     private function saveVersionDeals($handle, string $fileHash)
     {
-        $row = 2;
-        while (($data = fgetcsv($handle)) !== false) {
-            $keyedData = $this->keyedArray($data);
+        $rowNumber = 2;
 
-            $this->info("VAuto import row: #{$row}");
-            $row += 1;
+        while (($csvRow = fgetcsv($handle)) !== false) {
+            $this->info("VAuto import row: #{$rowNumber}");
+            $rowNumber++;
 
-            /**
-             * Skip if it is not new.
-             */
-            if ($keyedData['New/Used'] !== 'N') {
+            $vAutoRow = array_combine(self::HEADERS, $csvRow);
+
+            if ($vAutoRow['New/Used'] !== 'N') {
                 continue;
             }
 
-            /**
-             * Skip if vin is already in db and has a matching version
-             */
-            // $savedDeal = Deal::where('vin', $keyedData['VIN'])->first();
-            // if ($savedDeal && $savedDeal->versions()->count() > 0) {
-            //     continue;
-            // }
-
             try {
-                $versionDeal = $this->saveDeal($fileHash, $keyedData);
+                $deal = $this->saveOrUpdateDeal($fileHash, $vAutoRow);
+                $decodedVin = $this->client->decodeVin($vAutoRow['VIN']);
 
-                $decoded = $this->client->decodeVin($keyedData['VIN']);
-
-                // If there is just 1 version then use that
-                if (count($decoded['versions']) === 1) {
-                    $matchedVersion = $decoded['versions'][0];
-                } else {
-                    // Get versions that match the Vin (need 1 style match, can use Series from VAuto -> Trim from JATO)
-                    $matchedVersion = array_first($decoded['versions'], function ($version) use ($keyedData) {
-                        return trim($version['trimName']) === trim($keyedData['Series']);
-                    });
-                }
-
-                // if we couldn't match, try to use the Model Code
-                if (! $matchedVersion) {
-                    $matchedVersion = array_first($decoded['versions'], function ($version) use ($keyedData) {
-                        return str_contains($version['modelCode'], $keyedData['Model Code']) ||
-                            str_contains($version['localModelCode'], $keyedData['Model Code']);
-                    });
-                }
-
-                if (! $matchedVersion) {
+                if (! $jatoVersion = $this->matchVersion($decodedVin, $vAutoRow)) {
                     Log::error('Could not find exact match for VIN -> JATO Version', [
-                        'VAuto Row' => $keyedData,
-                        'JATO VIN Decode' => $decoded,
+                        'VAuto Row' => $vAutoRow,
+                        'JATO VIN Decode' => $decodedVin,
                     ]);
 
                     continue;
                 }
 
-                /**
-                 * Get the fully hydrated JATO matched version, either from our database or their API.
-                 */
-                DB::transaction(function () use ($matchedVersion, $versionDeal, $decoded, $keyedData, $fileHash) {
-                    /**
-                     * If we don't already have the jato info saved to a jato_uid then we need to save
-                     * all of that (checking for manufacturer -> make -> model as well).
-                     */
-                    if (! $version = Version::where('jato_uid', $matchedVersion['uid'])->where('year', $versionDeal->year)->first()) {
-                        $version = $this->saveVersionAndRelations($decoded, $matchedVersion);
+                DB::transaction(function () use ($jatoVersion, $deal, $decodedVin, $vAutoRow) {
+                    // If this version is new (based on UUID-year), fill its version relations
+                    if (! $version = Version::where('jato_uid', $jatoVersion['uid'])->where('year', $deal->year)->first()) {
+                        $version = $this->saveVersionAndRelations($decodedVin, $jatoVersion);
                     }
 
-                    $this->backfillNullMsrpsFromVersionMsrp($versionDeal, $version);
+                    $this->backfillNullMsrpsFromVersionMsrp($deal, $version);
 
-                    $versionDeal->versions()->attach($version->id);
+                    if ($deal->wasRecentlyCreated) {
+                        $deal->versions()->attach($version->id);
+                    }
 
-                    $this->saveVersionFeatures(
-                        $versionDeal
-                    );
+                    if ($version->wasRecentlyCreated) {
+                        $this->saveDealRelations($deal, $vAutoRow);
+                        return true;
+                    }
 
-                    $this->saveVersionDealPhotos(
-                        $versionDeal,
-                        $keyedData['Photos']
-                    );
+                    if ($version->jato_vehicle_id == $jatoVersion['vehicle_ID']) {
+                        return true;
+                    }
 
-                    $importer = new DealFeatureImporter($versionDeal, $this->features, $this->client);
-                    $importer->import();
+                    // Version is old and jato vehicle ID has changed;
+                    // Find all deals attached to this version; wipe and update features
+                    // @todo make sure version->deals includes the new deal from :156 above
+                    foreach ($version->deals as $attachedDeal) {
+                        $this->wipeDealFeatures($attachedDeal);
+                        $this->saveDealRelations($attachedDeal, $vAutoRow);
+                    }
                 });
             } catch (ClientException | ServerException $e) {
-                Log::error('Importer error for vin [' . $keyedData['VIN']. ']: ' . $e->getMessage());
+                Log::error('Importer error for vin [' . $vAutoRow['VIN']. ']: ' . $e->getMessage());
                 $this->error('Error: ' . $e->getMessage());
 
                 if ($e->getCode() === 401) {
@@ -210,7 +182,7 @@ class Importer
                     throw $e;
                 }
             } catch (QueryException $e) {
-                Log::error('Importer error for vin [' . $keyedData['VIN']. ']: ' . $e->getMessage());
+                Log::error('Importer error for vin [' . $vAutoRow['VIN']. ']: ' . $e->getMessage());
                 $this->error('Error: ' . $e->getMessage());
             }
         }
@@ -218,46 +190,150 @@ class Importer
         Deal::where('file_hash', '!=', $fileHash)->whereDoesntHave('purchases')->delete();
     }
 
-    private function saveVersionAndRelations($decoded, $matchedVersion)
+    private function saveOrUpdateDeal(string $fileHash, array $vAutoRow) : Deal
     {
-        $this->info("Saving version and relations for UID " . $matchedVersion['uid']);
+        $this->info("Saving deal for vin: {$vAutoRow['VIN']}");
 
-        if (! $manufacturer = Manufacturer::where('name', $decoded['manufacturer'])->first()) {
+        $deal = Deal::updateOrCreate([
+            'file_hash' => $fileHash,
+            'vin' => $vAutoRow['VIN'],
+        ], [
+            'file_hash' => $fileHash,
+            'dealer_id' => $vAutoRow['DealerId'],
+            'stock_number' => $vAutoRow['Stock #'],
+            'vin' => $vAutoRow['VIN'],
+            'new' => $vAutoRow['New/Used'] === 'N',
+            'year' => $vAutoRow['Year'],
+            'make' => $vAutoRow['Make'],
+            'model' => $vAutoRow['Model'],
+            'model_code' => $vAutoRow['Model Code'],
+            'body' => $vAutoRow['Body'],
+            'transmission' => $vAutoRow['Transmission'],
+            'series' => $vAutoRow['Series'],
+            'series_detail' => $vAutoRow['Series Detail'],
+            'door_count' => $vAutoRow['Door Count'],
+            'odometer' => $vAutoRow['Odometer'],
+            'engine' => $vAutoRow['Engine'],
+            'fuel' => $vAutoRow['Fuel'],
+            'color' => $vAutoRow['Colour'],
+            'interior_color' => $vAutoRow['Interior Color'],
+            'price' => $vAutoRow['Price'] !== '' ? $vAutoRow['Price'] : null,
+            'msrp' => $vAutoRow['MSRP'] !== '' ? $vAutoRow['MSRP'] : null,
+            'vauto_features' => $vAutoRow['Features'] !== '' ? $vAutoRow['Features'] : null,
+            'inventory_date' => Carbon::createFromFormat('m/d/Y', $vAutoRow['Inventory Date']),
+            'certified' => $vAutoRow['Certified'] === 'Yes',
+            'description' => $vAutoRow['Description'],
+            'option_codes' => array_filter(explode(',', $vAutoRow['Option Codes'])),
+            'fuel_econ_city' => $vAutoRow['City MPG'] !== '' ? $vAutoRow['City MPG'] : null,
+            'fuel_econ_hwy' => $vAutoRow['Highway MPG'] !== '' ? $vAutoRow['Highway MPG'] : null,
+            'dealer_name' => $vAutoRow['Dealer Name'],
+            'days_old' => $vAutoRow['Age'],
+        ]);
+
+        return $deal;
+    }
+
+    private function matchVersion($decodedVin, $vAutoRow)
+    {
+        // If there is just one version then use that
+        if (count($decodedVin['versions']) === 1) {
+            return $decodedVin['versions'][0];
+        }
+
+        // Get versions that match the Vin
+        $jatoVersion = array_first($decodedVin['versions'], function ($version) use ($vAutoRow) {
+            return trim($version['trimName']) === trim($vAutoRow['Series']);
+        });
+
+        if ($jatoVersion) {
+            return $jatoVersion;
+        }
+
+        // if we couldn't match, try to use the Model Code; return null if none match
+        return array_first($decodedVin['versions'], function ($version) use ($vAutoRow) {
+            return str_contains($version['modelCode'], $vAutoRow['Model Code']) ||
+                str_contains($version['localModelCode'], $vAutoRow['Model Code']);
+        });
+    }
+
+    /**
+     * Save the related data for a version--data that won't change if the JATO
+     * vehicle ID changes
+     */
+    private function saveVersionAndRelations($decodedVin, $jatoVersion)
+    {
+        $this->info("Saving version and relations for UID " . $jatoVersion['uid']);
+
+        if (! $manufacturer = Manufacturer::where('name', $decodedVin['manufacturer'])->first()) {
             // Save/Update manufacturer, make, model, then versions
             $manufacturer = $this->saveManufacturer(
-                $this->client->manufacturerByName($decoded['manufacturer'])
+                $this->client->manufacturerByName($decodedVin['manufacturer'])
             );
         }
 
-        if (! $make = Make::where('name', $decoded['make'])->first()) {
+        if (! $make = Make::where('name', $decodedVin['make'])->first()) {
             // Save/Update and save new make
             $make = $this->saveManufacturerMake(
                 $manufacturer,
-                $this->client->makeByName($decoded['make'])
+                $this->client->makeByName($decodedVin['make'])
             );
         }
 
-        if (! $model = VehicleModel::where('name', $decoded['model'])->first()) {
+        if (! $model = VehicleModel::where('name', $decodedVin['model'])->first()) {
             // Save/Update and save new model
             $model = $this->saveMakeModel(
                 $make,
-                $this->client->modelByName($matchedVersion['urlModelName'])
+                $this->client->modelByName($jatoVersion['urlModelName'])
             );
         }
 
         return $this->saveModelVersion(
             $model,
-            $this->client->modelsVersionsByVehicleId($matchedVersion['vehicle_ID'])
+            $this->client->modelsVersionsByVehicleId($jatoVersion['vehicle_ID'])
         );
     }
 
-    private function getGroupWithOverrides(string $feature, string $group)
+    private function wipeDealFeatures($deal)
     {
-        /** If group contains "seat" then it should be in "seating" category */
-        return str_contains($feature, 'seat') ? JatoFeature::GROUP_SEATING : $group;
+        $deal->features()->sync([]);
+        $deal->jatoFeatures()->sync([]);
     }
 
-    private function saveVersionFeaturesByGroup(Deal $deal, array $features, string $group)
+    private function saveDealRelations($deal, $vAutoRow)
+    {
+        $this->saveDealJatoFeatures($deal);
+        $this->saveDealPhotos($deal, $vAutoRow['Photos']);
+
+        $importer = new DealFeatureImporter($deal, $this->features, $this->client);
+        $importer->import();
+    }
+
+    private function saveDealJatoFeatures(Deal $deal)
+    {
+        $jatoVehicleId =  $deal->versions->first()->jato_vehicle_id;
+
+        $promises = [
+            JatoFeature::GROUP_SAFETY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 11),
+            JatoFeature::GROUP_SEATING => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 9),
+            JatoFeature::COMFORT_AND_CONVENIENCE => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 1),
+            JatoFeature::GROUP_TECHNOLOGY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 8),
+        ];
+
+        $results = unwrap($promises);
+
+        foreach ($results as $group => $response) {
+            /** @var Response $response */
+            $this->saveDealJatoFeaturesByGroup(
+                $deal,
+                json_decode((string) $response->getBody(), true)['results'],
+                $group
+            );
+        }
+
+        $this->saveCustomHackyJatoFeatures($deal);
+    }
+
+    private function saveDealJatoFeaturesByGroup(Deal $deal, array $features, string $group)
     {
         collect($features)->reduce(function (Collection $carry, $jatoFeature) {
             return $carry->merge(self::splitJATOFeaturesAndContent($jatoFeature['feature'], $jatoFeature['content']));
@@ -291,32 +367,13 @@ class Importer
         });
     }
 
-    private function saveVersionFeatures(Deal $deal)
+    private function getGroupWithOverrides(string $feature, string $group)
     {
-        $jatoVehicleId =  $deal->versions->first()->jato_vehicle_id;
-
-        $promises = [
-            JatoFeature::GROUP_SAFETY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 11),
-            JatoFeature::GROUP_SEATING => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 9),
-            JatoFeature::COMFORT_AND_CONVENIENCE => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 1),
-            JatoFeature::GROUP_TECHNOLOGY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 8),
-        ];
-
-        $results = unwrap($promises);
-
-        foreach ($results as $group => $response) {
-            /** @var Response $response */
-            $this->saveVersionFeaturesByGroup(
-                $deal,
-                json_decode((string) $response->getBody(), true)['results'],
-                $group
-            );
-        }
-
-        $this->saveCustomHackyFeatures($deal);
+        /** If group contains "seat" then it should be in "seating" category */
+        return str_contains($feature, 'seat') ? JatoFeature::GROUP_SEATING : $group;
     }
 
-    private function saveCustomHackyFeatures(Deal $deal)
+    private function saveCustomHackyJatoFeatures(Deal $deal)
     {
         $jatoVersion = $deal->versions->first();
 
@@ -348,59 +405,11 @@ class Importer
         }
     }
 
-    private function saveVersionDealPhotos(Deal $versionDeal, string $photos)
+    private function saveDealPhotos(Deal $deal, string $photos)
     {
-        collect(explode('|', $photos))->each(function ($photoUrl) use ($versionDeal) {
-            $versionDeal->photos()->firstOrCreate(['url' => str_replace('http', 'https', $photoUrl)]);
+        collect(explode('|', $photos))->each(function ($photoUrl) use ($deal) {
+            $deal->photos()->firstOrCreate(['url' => str_replace('http', 'https', $photoUrl)]);
         });
-    }
-
-    private function saveDeal(string $fileHash, array $keyedData) : Deal
-    {
-        $this->info("Saving deal for vin: {$keyedData['VIN']}");
-
-        $deal = Deal::updateOrCreate([
-            'file_hash' => $fileHash,
-            'vin' => $keyedData['VIN'],
-        ], [
-            'file_hash' => $fileHash,
-            'dealer_id' => $keyedData['DealerId'],
-            'stock_number' => $keyedData['Stock #'],
-            'vin' => $keyedData['VIN'],
-            'new' => $keyedData['New/Used'] === 'N',
-            'year' => $keyedData['Year'],
-            'make' => $keyedData['Make'],
-            'model' => $keyedData['Model'],
-            'model_code' => $keyedData['Model Code'],
-            'body' => $keyedData['Body'],
-            'transmission' => $keyedData['Transmission'],
-            'series' => $keyedData['Series'],
-            'series_detail' => $keyedData['Series Detail'],
-            'door_count' => $keyedData['Door Count'],
-            'odometer' => $keyedData['Odometer'],
-            'engine' => $keyedData['Engine'],
-            'fuel' => $keyedData['Fuel'],
-            'color' => $keyedData['Colour'],
-            'interior_color' => $keyedData['Interior Color'],
-            'price' => $keyedData['Price'] !== '' ? $keyedData['Price'] : null,
-            'msrp' => $keyedData['MSRP'] !== '' ? $keyedData['MSRP'] : null,
-            'vauto_features' => $keyedData['Features'] !== '' ? $keyedData['Features'] : null,
-            'inventory_date' => Carbon::createFromFormat('m/d/Y', $keyedData['Inventory Date']),
-            'certified' => $keyedData['Certified'] === 'Yes',
-            'description' => $keyedData['Description'],
-            'option_codes' => array_filter(explode(',', $keyedData['Option Codes'])),
-            'fuel_econ_city' => $keyedData['City MPG'] !== '' ? $keyedData['City MPG'] : null,
-            'fuel_econ_hwy' => $keyedData['Highway MPG'] !== '' ? $keyedData['Highway MPG'] : null,
-            'dealer_name' => $keyedData['Dealer Name'],
-            'days_old' => $keyedData['Age'],
-        ]);
-
-        return $deal;
-    }
-
-    private function keyedArray(array $data)
-    {
-        return array_combine(self::HEADERS, $data);
     }
 
     private function checkHeaders(array $headers)
