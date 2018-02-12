@@ -136,10 +136,10 @@ class Importer
             /**
              * Skip if vin is already in db and has a matching version
              */
-            $savedDeal = Deal::where('vin', $keyedData['VIN'])->first();
-            if ($savedDeal && $savedDeal->versions()->count() > 0) {
-                continue;
-            }
+            // $savedDeal = Deal::where('vin', $keyedData['VIN'])->first();
+            // if ($savedDeal && $savedDeal->versions()->count() > 0) {
+            //     continue;
+            // }
 
             try {
                 $versionDeal = $this->saveDeal($fileHash, $keyedData);
