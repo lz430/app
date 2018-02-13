@@ -174,7 +174,6 @@ class Importer
 
                     // Version is old and jato vehicle ID has changed;
                     // Find all deals attached to this version; wipe and update features
-                    // @todo make sure version->deals includes the new deal from :156 above
                     foreach ($version->fresh()->deals as $attachedDeal) {
                         $this->wipeDealFeatures($attachedDeal);
                         $this->saveDealRelations($attachedDeal, $vAutoRow);
