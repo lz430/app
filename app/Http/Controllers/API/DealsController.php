@@ -21,10 +21,8 @@ class DealsController extends BaseAPIController
     {
         $this->validate($request, [
             'make_ids' => 'sometimes|required|array',
-            'model_ids' => 'sometimes|required|array',
             'body_styles' => 'sometimes|required|array',
             'fuel_type' => 'sometimes|required|string',
-            'segment' => 'sometimes|required|string|in:Subcompact,Compact,Mid-size,Full-size',
             'transmission_type' => 'sometimes|required|string|in:automatic,manual',
             'sort' => 'sometimes|required|string',
             'zipcode' => 'sometimes|required|string',
@@ -74,14 +72,6 @@ class DealsController extends BaseAPIController
         return Deal::whereHas('dealer')->whereHas('versions', function (Builder $query) use ($request) {
             if ($request->has('body_styles')) {
                 $query->filterByBodyStyle($request->get('body_styles'));
-            }
-
-            if ($request->has('segment')) {
-                $query->filterBySegment($request->get('segment'));
-            }
-
-            if ($request->has('model_ids')) {
-                $query->filterByModel($request->get('model_ids'));
             }
 
             $query->whereHas('model', function (Builder $query) use ($request) {
