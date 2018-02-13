@@ -133,7 +133,8 @@ class DealFeatureImporter
             'minivan' => ['mini van'],
             'sports' => ['sports'],
         ])->filter(function ($value) use ($equipment) {
-            return str_contains(strtolower($equipment['availability']), $value);
+            // Pull from value instead of availability--per Derek at JATO 2018-02-12
+            return str_contains(strtolower($equipment['value']), $value);
         })->keys()->first();
 
         return Feature::where('slug', $segment)->get();
