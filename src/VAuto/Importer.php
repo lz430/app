@@ -153,27 +153,28 @@ class Importer
 
                     $this->backfillNullMsrpsFromVersionMsrp($deal, $version);
 
+                    // If the deal is new, then we need to attach it to its version and flesh out its relations from that version
                     if ($deal->wasRecentlyCreated) {
                         $this->info("   Saving new Deal");
                         $deal->versions()->attach($version->id);
+                        $this->saveDealRelations($deal, $vAutoRow);
                     }
 
+                    // If the version is new, we don't have to check for a possibly-updated JATO Vehicle ID
                     if ($version->wasRecentlyCreated) {
-                        $this->info("   Saving new Version");
-                        $this->saveDealRelations($deal, $vAutoRow);
                         return true;
                     }
 
+                    // Old version; but nothing has changed in this JATO Vehicle ID, so we can quit
                     if ($version->jato_vehicle_id == $jatoVersion['vehicle_ID']) {
                         $this->info("   Vehicle ID is unchanged.");
                         return true;
                     }
 
+                    // JATO Vehicle ID has changed for this version; so we need to wipe and update all features for all related deals
                     $this->info("   JATO Vehicle ID has changed. Wiping features.");
                     $version->update(['jato_vehicle_id' => $jatoVersion['vehicle_ID']]);
 
-                    // Version is old and jato vehicle ID has changed;
-                    // Find all deals attached to this version; wipe and update features
                     foreach ($version->fresh()->deals as $attachedDeal) {
                         $this->wipeDealFeatures($attachedDeal);
                         $this->saveDealRelations($attachedDeal, $vAutoRow);
