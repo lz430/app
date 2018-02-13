@@ -128,6 +128,7 @@ class Importer
             $vAutoRow = array_combine(self::HEADERS, $csvRow);
 
             if ($vAutoRow['New/Used'] !== 'N') {
+                $this->info("   Skipping Used Vehicle.");
                 continue;
             }
 
@@ -153,17 +154,23 @@ class Importer
                     $this->backfillNullMsrpsFromVersionMsrp($deal, $version);
 
                     if ($deal->wasRecentlyCreated) {
+                        $this->info("   Saving new Deal");
                         $deal->versions()->attach($version->id);
                     }
 
                     if ($version->wasRecentlyCreated) {
+                        $this->info("   Saving new Version");
                         $this->saveDealRelations($deal, $vAutoRow);
                         return true;
                     }
 
                     if ($version->jato_vehicle_id == $jatoVersion['vehicle_ID']) {
+                        $this->info("   Vehicle ID is unchanged.");
                         return true;
                     }
+
+                    $this->info("   JATO Vehicle ID has changed. Wiping features.");
+                    $version->update(['jato_vehicle_id' => $jatoVersion['vehicle_ID']]);
 
                     // Version is old and jato vehicle ID has changed;
                     // Find all deals attached to this version; wipe and update features
@@ -192,7 +199,7 @@ class Importer
 
     private function saveOrUpdateDeal(string $fileHash, array $vAutoRow) : Deal
     {
-        $this->info("Saving deal for vin: {$vAutoRow['VIN']}");
+        $this->info("   Saving deal for vin: {$vAutoRow['VIN']}");
 
         $deal = Deal::updateOrCreate([
             'file_hash' => $fileHash,
@@ -262,7 +269,7 @@ class Importer
      */
     private function saveVersionAndRelations($decodedVin, $jatoVersion)
     {
-        $this->info("Saving version and relations for UID " . $jatoVersion['uid']);
+        $this->info("   Saving version and relations for UID " . $jatoVersion['uid']);
 
         if (! $manufacturer = Manufacturer::where('name', $decodedVin['manufacturer'])->first()) {
             // Save/Update manufacturer, make, model, then versions
@@ -423,7 +430,7 @@ class Importer
 
     private function saveModelVersion(VehicleModel $vehicleModel, array $version)
     {
-        $this->info('Saving Model Version: ' . $version['vehicleId']);
+        $this->info('   Saving Model Version: ' . $version['vehicleId']);
 
         return $vehicleModel->versions()->create([
             'jato_vehicle_id' => $version['vehicleId'],
@@ -468,7 +475,7 @@ class Importer
 
     private function saveManufacturer(array $manufacturer)
     {
-        $this->info('Saving Manufacturer: ' . $manufacturer['manufacturerName']);
+        $this->info('   Saving Manufacturer: ' . $manufacturer['manufacturerName']);
 
         return Manufacturer::updateOrCreate([
             'url_name' => $manufacturer['urlManufacturerName'],
@@ -481,7 +488,7 @@ class Importer
 
     private function saveManufacturerMake(Manufacturer $manufacturer, array $make)
     {
-        $this->info('Saving Manufacturer Make: ' . $make['makeName']);
+        $this->info('   Saving Manufacturer Make: ' . $make['makeName']);
 
         return $manufacturer->makes()->updateOrCreate([
             'url_name' => $make['urlMakeName'],
@@ -494,7 +501,7 @@ class Importer
 
     private function saveMakeModel(Make $make, array $model)
     {
-        $this->info('Saving Make Model: ' . $model['modelName']);
+        $this->info('   Saving Make Model: ' . $model['modelName']);
 
         return $make->models()->updateOrCreate([
             'url_name' => $model['urlModelName'],
