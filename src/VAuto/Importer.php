@@ -61,6 +61,10 @@ class Importer
         "Option Codes",
     ];
 
+    private const MAKE_BLACKLIST = [
+        'smart',
+    ];
+
     private $client;
     private $error;
     private $features;
@@ -129,6 +133,11 @@ class Importer
 
             if ($vAutoRow['New/Used'] !== 'N') {
                 $this->info("   Skipping Used Vehicle.");
+                continue;
+            }
+
+            if (in_array($vAutoRow['Make'], self::MAKE_BLACKLIST)) {
+                $this->info("   Skipping banned make: " . $vAutoRow['Make']);
                 continue;
             }
 
