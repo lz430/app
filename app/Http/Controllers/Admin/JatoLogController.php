@@ -11,15 +11,15 @@ class JatoLogController extends Controller
 
     private $groupSort = [
         'Uncategorized Errors' => 'Miscellaneous unexpected errors.',
-        '500 server errors from JATO' => 'Something is broken for JATO',
-        '400 errors looking up features' => 'I am not sure what this means.',
-        '403 errors looking up features' => 'I am not sure what this means.',
-        '403 errors looking up equipment' => 'I am not sure what this means.',
-        '404 errors decoding a VIN' => 'I am not sure what this means.',
-        '403 errors decoding a VIN' => 'I am not sure what this means.',
+        '500 server errors from JATO' => 'Internal errors within JATO hosted servers.',
+        '400 errors looking up features' => 'Vehicle ID is not within DMR license. (But if so, why is our code even looking up the feature set?)',
+        '403 errors looking up features' => 'Authentication error has occured due to an incorrect or expired authorization token.',
+        '403 errors looking up equipment' => 'Authentication error has occured due to an incorrect or expired authorization token.',
+        '404 errors decoding a VIN' => 'VIN pattern is out of JATO research scope.',
+        '403 errors decoding a VIN' => 'Authentication error has occured due to an incorrect or expired authorization token.',
         'We could not match VIN->Version' => 'Our current logic for matching the VIN to one of multiple returned versions could not pick the best version here.',
         'Internal errors to DMR MySQL' => 'Something we need to fix in our code.',
-        '400 errors looking up a version' => 'Probably just an old vehicle, not in DMR license.',
+        '400 errors looking up a version' => 'Vehicle ID is not within DMR license.',
     ];
 
     public function __construct()

@@ -59,6 +59,8 @@ class Client
                     throw $e;
                 }
 
+                Log::info('Re-authorizing with JATO.');
+
                 $this->retryCount++;
                 $this->authorize();
 
