@@ -141,6 +141,11 @@ class Importer
                 continue;
             }
 
+            if (strlen($vAutoRow['Price']) > 6) {
+                $this->info("   Skipping high price: " . $vAutoRow['Price']);
+                continue;
+            }
+
             try {
                 $deal = $this->saveOrUpdateDeal($fileHash, $vAutoRow);
                 $decodedVin = $this->client->decodeVin($vAutoRow['VIN']);
