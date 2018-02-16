@@ -16,7 +16,11 @@
 
             <h2>Version:</h2>
             <pre>
+                @if ($deal->version)
 {{ json_encode($deal->version->toArray(), JSON_PRETTY_PRINT) }}
+                @else
+                    No deal associated. Probably an error importing.
+                @endif
             </pre>
 
             <h2>Photos:</h2>
