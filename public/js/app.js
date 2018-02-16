@@ -4256,7 +4256,7 @@ var makeDealBestOffer = exports.makeDealBestOffer = function makeDealBestOffer()
 
 // Get the total value of the best offer for the deal
 var dealBestOfferTotalValue = (0, _reselect.createSelector)([dealBestOffer], function (dealBestOffer) {
-    return _ramda2.default.prop('totalValue', dealBestOffer);
+    return _ramda2.default.prop('totalValue', dealBestOffer) || 0;
 });
 
 var makeDealBestOfferTotalValue = exports.makeDealBestOfferTotalValue = function makeDealBestOfferTotalValue() {

@@ -116,7 +116,7 @@ export const makeDealBestOffer = () => {
 const dealBestOfferTotalValue = createSelector(
     [dealBestOffer],
     (dealBestOffer) => {
-        return R.prop('totalValue', dealBestOffer);
+        return R.prop('totalValue', dealBestOffer) || 0;
     }
 )
 
