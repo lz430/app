@@ -36,15 +36,7 @@ if (App::environment(['staging', 'local'])) {
         Route::get('jato-logs', 'JatoLogController@index');
         Route::get('statistics/deals', 'StatisticsController@deals');
         Route::get('deal-debugger/{deal}', 'DealDebuggerController@show');
-        Route::post('deal-by-vin', function () {
-            $deal = \App\Deal::where('vin', request('vin'))->first();
-
-            if ($deal) {
-                return redirect('/admin/deal-debugger/' . $deal->id);
-            }
-
-            return 'Cannot find this VIN.';
-        });
+        Route::post('deal-by-vin', 'DealDebuggerController@vinLookup');
     });
 
     Route::redirect('jato-logs', '/admin/jato-logs');
