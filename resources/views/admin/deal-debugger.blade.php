@@ -4,7 +4,11 @@
     <div class="content">
         <div style="max-width: 996px; margin: 0 auto">
             <h2>Deal:</h2>
+            @if ($deal->version)
             <a href="/deals/{{ $deal->id }}">See in the app</a>
+            @else
+            (doesn't exist in the app, because it wasn't correctly synced with a JATO version)
+            @endif
             <pre>
 {{ json_encode($deal->toArray(), JSON_PRETTY_PRINT) }}
             </pre>
