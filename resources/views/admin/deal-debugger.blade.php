@@ -55,7 +55,23 @@ No deal associated. Probably an error importing.
 {{ json_encode($deal->jatoFeatures->toArray(), JSON_PRETTY_PRINT) }}
             </pre>
 
+            <h2>Lease information</h2>
+            @php
+            $client = app(\DeliverMyRide\JATO\Client::class);
+            $rates = $client->incentivesByVehicleIdAndZipcode(
+                $deal->version ? $deal->version->jato_vehicle_id : 0,
+                48103,
+                ['category' => 8]
+            )[0]['leaseRates'] ?? [];
+            @endphp
+
+            <a href="#" id="expand-button-lease-rates" onClick="expand('lease-rates'); return false;">expand</a>
+            <pre id="expand-lease-rates" class="hide">
+{{ json_encode($rates, JSON_PRETTY_PRINT) }}
+            </pre>
+
             <br><br><br><br>
+
         </div>
     </div>
 @endsection
