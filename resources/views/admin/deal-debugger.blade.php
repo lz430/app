@@ -4,6 +4,7 @@
     <div class="content">
         <div style="max-width: 996px; margin: 0 auto">
             <h2>Deal:</h2>
+            <a href="/deals/{{ $deal->id }}">See in the app</a>
             <pre>
 {{ json_encode($deal->toArray(), JSON_PRETTY_PRINT) }}
             </pre>
