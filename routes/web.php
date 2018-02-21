@@ -36,6 +36,7 @@ if (App::environment(['staging', 'local'])) {
         Route::get('jato-logs', 'JatoLogController@index');
         Route::get('statistics/deals', 'StatisticsController@deals');
         Route::get('deal-debugger/{deal}', 'DealDebuggerController@show');
+        Route::get('deal-feature-debugger/{deal}', 'DealFeatureDebuggerController@show');
         Route::post('deal-by-vin', 'DealDebuggerController@vinLookup');
     });
 
