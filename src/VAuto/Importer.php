@@ -174,14 +174,9 @@ class Importer
                         $this->saveDealRelations($deal, $vAutoRow);
                     }
 
-                    // If the version is new, we don't have to check for a possibly-updated JATO Vehicle ID
-                    if ($version->wasRecentlyCreated) {
-                        return true;
-                    }
-
-                    // Old version; but nothing has changed in this JATO Vehicle ID, so we can quit
+                    // New version or Old version; but nothing has changed in this JATO Vehicle ID, so we can quit
                     if ($version->jato_vehicle_id == $jatoVersion['vehicle_ID']) {
-                        $this->info("   Vehicle ID is unchanged.");
+                        $this->info("   Vehicle ID is new or unchanged.");
                         return true;
                     }
 
