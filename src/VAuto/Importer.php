@@ -146,6 +146,11 @@ class Importer
                 continue;
             }
 
+            if (is_null($vAutoRow['Price'])) {
+                $this->info("   Skipping no price");
+                continue;
+            }
+
             try {
                 $deal = $this->saveOrUpdateDeal($fileHash, $vAutoRow);
                 $decodedVin = $this->client->decodeVin($vAutoRow['VIN']);
