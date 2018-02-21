@@ -546,7 +546,7 @@ class Importer
                 }, explode('(', $content));
 
                 if (count($features) != count($contents)) {
-                    Log::info("Cannot parse feature: title[$feature] content[$content]");
+                    Log::debug("Cannot parse feature: title[$feature] content[$content]");
                     return $all;
                 }
 

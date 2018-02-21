@@ -59,7 +59,7 @@ class JatoFeature extends Model
         ['title' => self::GROUP_SEATING_KEY, 'id' => 9],
         ['title' => 'comfort and convenience', 'id' => 1],
         ['title' => 'technology', 'id' => 8],
-        // ['title' => 'engine', 'id' => 3],
+        ['title' => 'engine', 'id' => 3],
         ['title' => 'exterior', 'id' => 4],
         ['title' => 'fuel economy', 'id' => 5],
         ['title' => 'general', 'id' => 6],
