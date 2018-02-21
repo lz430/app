@@ -142,7 +142,7 @@ $factory->define(App\Deal::class, function (Faker\Generator $faker) {
 $factory->define(App\JatoFeature::class, function (Faker\Generator $faker) {
     return [
         'feature' => $faker->unique()->randomElement(JatoFeature::WHITELIST),
-        'group' => $faker->randomElement(JatoFeature::GROUPS),
+        'group' => $faker->randomElement(JatoFeature::SYNC_GROUPS)['title'],
     ];
 });
 
