@@ -331,14 +331,11 @@ class Importer
 
     private function saveDealJatoFeatures(Deal $deal)
     {
-        $jatoVehicleId =  $deal->versions->first()->jato_vehicle_id;
+        $jatoVehicleId = $deal->versions->first()->jato_vehicle_id;
 
-        $promises = [
-            JatoFeature::GROUP_SAFETY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 11),
-            JatoFeature::GROUP_SEATING => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 9),
-            JatoFeature::COMFORT_AND_CONVENIENCE => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 1),
-            JatoFeature::GROUP_TECHNOLOGY => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, 8),
-        ];
+        $promises = collect(JatoFeature::SYNC_GROUPS)->flatMap(function ($group) use ($jatoVehicleId) {
+            return [$group['title'] => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, $group['id'])];
+        });
 
         $results = unwrap($promises);
 
@@ -362,7 +359,7 @@ class Importer
             /**
              * Only interior features that contain "seat" should be added to seating
              */
-            if ($group === JatoFeature::GROUP_SEATING && !str_contains($featureAndContent['feature'], 'seat')) {
+            if ($group === JatoFeature::GROUP_SEATING_KEY && !str_contains($featureAndContent['feature'], 'seat')) {
                 return;
             }
 
@@ -391,7 +388,7 @@ class Importer
     private function getGroupWithOverrides(string $feature, string $group)
     {
         /** If group contains "seat" then it should be in "seating" category */
-        return str_contains($feature, 'seat') ? JatoFeature::GROUP_SEATING : $group;
+        return str_contains($feature, 'seat') ? JatoFeature::GROUP_SEATING_KEY : $group;
     }
 
     private function saveCustomHackyJatoFeatures(Deal $deal)
@@ -406,7 +403,7 @@ class Importer
                 ], [
                     'feature' => "$deal->door_count Door",
                     'content' => $deal->door_count,
-                    'group' => JatoFeature::GROUP_TRUCK,
+                    'group' => JatoFeature::GROUP_TRUCK_KEY,
                 ]);
 
                 $cabType = JatoFeature::updateOrCreate([
@@ -415,7 +412,7 @@ class Importer
                 ], [
                     'feature' => "$jatoVersion->cab Cab",
                     'content' => $jatoVersion->cab,
-                    'group' => JatoFeature::GROUP_TRUCK,
+                    'group' => JatoFeature::GROUP_TRUCK_KEY,
                 ]);
 
                 $doorCount->deals()->save($deal);
@@ -552,6 +549,11 @@ class Importer
                 $contents = array_map(function ($str) {
                     return trim($str, ') ') ;
                 }, explode('(', $content));
+
+                if (count($features) != count($contents)) {
+                    Log::debug("Cannot parse feature: title[$feature] content[$content]");
+                    return $all;
+                }
 
                 foreach ($features as $index => $feature) {
                     $all[] = [

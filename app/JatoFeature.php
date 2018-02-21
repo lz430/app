@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class JatoFeature extends Model
 {
+    // No longer in use except by seeder
     public const WHITELIST = [
         'Side airbags front',
         'Side airbags rear',
@@ -53,20 +54,22 @@ class JatoFeature extends Model
         'Crew Cab',
     ];
 
-    public const GROUPS = [
-        self::GROUP_SAFETY,
-        self::GROUP_SEATING,
-        self::GROUP_TECHNOLOGY,
-        self::GROUP_TRUCK,
-        self::COMFORT_AND_CONVENIENCE,
-        self::POWERTRAIN,
+    public const SYNC_GROUPS = [
+        ['title' => 'safety', 'id' => 11],
+        ['title' => self::GROUP_SEATING_KEY, 'id' => 9],
+        ['title' => 'comfort and convenience', 'id' => 1],
+        ['title' => 'technology', 'id' => 8],
+        ['title' => 'engine', 'id' => 3],
+        ['title' => 'exterior', 'id' => 4],
+        ['title' => 'fuel economy', 'id' => 5],
+        ['title' => 'general', 'id' => 6],
+        ['title' => 'interior', 'id' => 9],
+        ['title' => 'suspension', 'id' => 12],
+        ['title' => 'transmission', 'id' => 13],
     ];
-    public const GROUP_SAFETY = 'safety';
-    public const GROUP_SEATING = 'seating';
-    public const GROUP_TECHNOLOGY = 'technology';
-    public const GROUP_TRUCK = 'truck';
-    public const COMFORT_AND_CONVENIENCE = 'comfort and convenience';
-    public const POWERTRAIN = 'powertrain';
+
+    public const GROUP_TRUCK_KEY = 'truck';
+    public const GROUP_SEATING_KEY = 'seating';
 
     protected $fillable = ['feature', 'content', 'group'];
 
@@ -74,7 +77,7 @@ class JatoFeature extends Model
     {
         return $this->belongsToMany(Deal::class);
     }
-    
+
     public function scopeHasGroup($query)
     {
         return $query->whereNotNull('group');
