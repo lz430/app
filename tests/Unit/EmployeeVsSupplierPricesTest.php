@@ -44,7 +44,7 @@ class EmployeeVsSupplierPricesTest extends TestCase
         $transformedDeal = $dealTransformer->transform($deal);
 
         $this->assertEquals(
-            9600,
+            10000,
             $transformedDeal['employee_price']
         );
 
