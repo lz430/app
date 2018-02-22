@@ -22,7 +22,12 @@ class DealFeatureImporter
 
     public function import()
     {
-        $schemaIds = $this->jatoEquipment()->reject(function ($equipment) {
+        $this->deal->features()->syncWithoutDetaching($this->featureIds());
+    }
+
+    public function featureIds()
+    {
+        return $this->jatoEquipment()->reject(function ($equipment) {
             return $equipment['availability'] === 'not available';
         })->flatMap(function ($equipment) {
             if ($equipment['optionCode'] !== 'N/A' && in_array($equipment['optionCode'], $this->deal->option_codes)) {
@@ -52,8 +57,6 @@ class DealFeatureImporter
                 return empty($schema);
             });
         })->unique()->toArray();
-
-        $this->deal->features()->syncWithoutDetaching($schemaIds);
     }
 
     private function equipmentMatchesFeature($schemaId, $feature) {
