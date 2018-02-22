@@ -12,6 +12,7 @@
             @else
             (doesn't exist in the app, because it wasn't correctly synced with a JATO version)
             @endif
+            | <a href="/admin/deal-feature-debugger/{{ $deal->id }}">(deal feature debugger for this deal)</a>
 
             <h2>Deal:</h2>
             <a href="#" id="expand-button-deal" onClick="expand('deal'); return false;">expand</a>
