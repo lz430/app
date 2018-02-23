@@ -32,7 +32,7 @@
             (same data, but JSON:)
 
             <pre>
-{{ json_encode($equipment) }}
+{{ json_encode($equipment, JSON_PRETTY_PRINT) }}
             </pre>
         </div>
     </div>
