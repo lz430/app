@@ -28,6 +28,12 @@
             @php
             dump($equipment)
             @endphp
+
+            (same data, but JSON:)
+
+            <pre>
+{{ json_encode($equipment) }}
+            </pre>
         </div>
     </div>
 @endsection
