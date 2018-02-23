@@ -22,6 +22,12 @@
                 <li>{{ $feature->title }}</li>
             @endforeach
             </ul>
+
+            <br><br>
+            <h2>JATO Equipment raw</h2>
+            @php
+            dump($equipment)
+            @endphp
         </div>
     </div>
 @endsection
