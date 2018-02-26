@@ -2,6 +2,7 @@
 
 @section('content')
 <style>.hide{display:none;}.show{display:block;}</style>
+<style>pre {font-size: 0.85em; line-height: 1.3;}</style>
 
 <script>function expand(target, hideLink = true) { document.getElementById("expand-" + target).className = "show"; if (hideLink) {document.getElementById("expand-button-" + target).className = "hide"; } }</script>
 
@@ -32,7 +33,28 @@
 @if ($deal->version)
 {{ json_encode($deal->version->toArray(), JSON_PRETTY_PRINT) }}
 @else
-No deal associated. Probably an error importing.
+No version associated. Probably an error importing.
+@endif
+            </pre>
+
+            <h2>Model:</h2>
+            <a href="#" id="expand-button-model" onClick="expand('model'); return false;">expand</a>
+            <pre id="expand-model" class="hide">
+@if ($deal->version)
+{{ json_encode($deal->version->model->toArray(), JSON_PRETTY_PRINT) }}
+@else
+No version associated. Probably an error importing.
+@endif
+            </pre>
+
+
+            <h2>Make:</h2>
+            <a href="#" id="expand-button-make" onClick="expand('make'); return false;">expand</a>
+            <pre id="expand-make" class="hide">
+@if ($deal->version)
+{{ json_encode($deal->version->model->make->toArray(), JSON_PRETTY_PRINT) }}
+@else
+No version associated. Probably an error importing.
 @endif
             </pre>
 
