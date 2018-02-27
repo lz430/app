@@ -272,10 +272,10 @@ export function sortDeals(sort) {
     };
 }
 
-export function drillDownDealsToModel(modelMakeYear) {
+export function selectDealGrouping(modelMakeYear) {
     return dispatch => {
         dispatch({
-            type: ActionTypes.DRILL_DOWN_DEALS_TO_MODEL,
+            type: ActionTypes.SELECT_DEAL_GROUPING,
             modelMakeYear
         });
     };

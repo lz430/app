@@ -66,7 +66,7 @@ const reducer = (state, action) => {
                 dealsByMakeModelYear: util.groupDealsByMakeModelYear(action.data.data.data),
                 requestingMoreDeals: false,
             });
-        case ActionTypes.DRILL_DOWN_DEALS_TO_MODEL:
+        case ActionTypes.SELECT_DEAL_GROUPING:
             return Object.assign({}, state, {
                 selectedDealGrouping: action.modelMakeYear,
             });

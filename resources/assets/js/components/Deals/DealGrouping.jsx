@@ -51,7 +51,7 @@ class DealGrouping extends React.PureComponent {
                             </div>
 
                             <button className="deal__button deal__button--small deal__button--pink deal__button"
-                                onClick={ () => {this.props.drillDownDealsToModel(dealGrouping) }}>
+                                onClick={ () => {this.props.selectDealGrouping(dealGrouping) }}>
                                 View Details
                             </button>
                                 

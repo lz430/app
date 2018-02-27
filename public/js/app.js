@@ -766,7 +766,7 @@ exports.receiveDeals = receiveDeals;
 exports.requestDeals = requestDeals;
 exports.requestMoreDeals = requestMoreDeals;
 exports.sortDeals = sortDeals;
-exports.drillDownDealsToModel = drillDownDealsToModel;
+exports.selectDealGrouping = selectDealGrouping;
 exports.receiveBodyStyles = receiveBodyStyles;
 exports.setEmployeeBrand = setEmployeeBrand;
 exports.checkZipInRange = checkZipInRange;
@@ -1063,10 +1063,10 @@ function sortDeals(sort) {
     };
 }
 
-function drillDownDealsToModel(modelMakeYear) {
+function selectDealGrouping(modelMakeYear) {
     return function (dispatch) {
         dispatch({
-            type: ActionTypes.DRILL_DOWN_DEALS_TO_MODEL,
+            type: ActionTypes.SELECT_DEAL_GROUPING,
             modelMakeYear: modelMakeYear
         });
     };
@@ -22894,7 +22894,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var SORT_DEALS = exports.SORT_DEALS = 'SORT_DEALS';
-var DRILL_DOWN_DEALS_TO_MODEL = exports.DRILL_DOWN_DEALS_TO_MODEL = 'DRILL_DOWN_DEALS_TO_MODEL';
+var SELECT_DEAL_GROUPING = exports.SELECT_DEAL_GROUPING = 'SELECT_DEAL_GROUPING';
 var REQUEST_DEALS = exports.REQUEST_DEALS = 'REQUEST_DEALS';
 var REQUEST_MAKES = exports.REQUEST_MAKES = 'REQUEST_MAKES';
 var RECEIVE_MAKES = exports.RECEIVE_MAKES = 'RECEIVE_MAKES';
@@ -53049,7 +53049,7 @@ var ViewDeals = function (_React$PureComponent) {
                     'button',
                     { className: 'deal__button deal__button--small deal__button--pink deal__button',
                         onClick: function onClick() {
-                            _this2.props.drillDownDealsToModel(null);
+                            _this2.props.selectDealGrouping(null);
                         } },
                     'BACK'
                 ),
@@ -58720,7 +58720,7 @@ var DealGrouping = function (_React$PureComponent) {
                         'button',
                         { className: 'deal__button deal__button--small deal__button--pink deal__button',
                             onClick: function onClick() {
-                                _this2.props.drillDownDealsToModel(dealGrouping);
+                                _this2.props.selectDealGrouping(dealGrouping);
                             } },
                         'View Details'
                     )
@@ -62109,7 +62109,7 @@ var reducer = function reducer(state, action) {
                 dealsByMakeModelYear: _util2.default.groupDealsByMakeModelYear(action.data.data.data),
                 requestingMoreDeals: false
             });
-        case ActionTypes.DRILL_DOWN_DEALS_TO_MODEL:
+        case ActionTypes.SELECT_DEAL_GROUPING:
             return Object.assign({}, state, {
                 selectedDealGrouping: action.modelMakeYear
             });

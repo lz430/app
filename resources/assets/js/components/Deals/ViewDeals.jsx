@@ -62,7 +62,7 @@ class ViewDeals extends React.PureComponent {
         return (
             <div>
                 <button className="deal__button deal__button--small deal__button--pink deal__button"
-                    onClick={() => { this.props.drillDownDealsToModel(null) }}>
+                    onClick={() => { this.props.selectDealGrouping(null) }}>
                     BACK
                 </button>
                 <div className={'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
