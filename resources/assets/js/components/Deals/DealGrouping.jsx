@@ -35,7 +35,7 @@ class DealGrouping extends React.PureComponent {
 
                             <DealImage
                                 featureImageClass="deal__image"
-                                deal={this.props.dealGrouping.deals[0]}
+                                deal={dealGrouping.deals[0]}
                             />
 
                             <div className="dealGroup__count">{ dealGrouping.deals.length } in stock.</div>
@@ -51,7 +51,7 @@ class DealGrouping extends React.PureComponent {
                             </div>
 
                             <button className="deal__button deal__button--small deal__button--pink deal__button"
-                                onClick={ () => {this.props.onUpdateModelDeals(this.props.dealGrouping.deals) }}>
+                                onClick={ () => {this.props.drillDownDealsToModel(dealGrouping) }}>
                                 View Details
                             </button>
                                 

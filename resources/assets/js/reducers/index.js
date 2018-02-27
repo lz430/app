@@ -63,7 +63,12 @@ const reducer = (state, action) => {
                 deals: action.data.data.data,
                 dealPageTotal: 1,
                 dealPage: 1,
+                dealsByMakeModelYear: util.groupDealsByMakeModelYear(action.data.data.data),
                 requestingMoreDeals: false,
+            });
+        case ActionTypes.DRILL_DOWN_DEALS_TO_MODEL:
+            return Object.assign({}, state, {
+                selectedDealGrouping: action.modelMakeYear,
             });
         case ActionTypes.RECEIVE_TARGETS:
             const targetKey = util.getTargetKeyForDealAndZip(

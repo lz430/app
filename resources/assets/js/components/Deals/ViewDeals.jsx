@@ -41,35 +41,14 @@ class ViewDeals extends React.PureComponent {
             );
         }
     }
-
-    groupByModel(deals) {
-        return R.values(
-            R.mapObjIndexed(
-                (index, key, value) => {
-                    return {
-                        make: value[key][0].make,
-                        model: value[key][0].model,
-                        year: value[key][0].year,
-                        deals: value[key]
-                    };
-                },
-                R.groupBy(deal => {
-                    return `${deal.year} ${deal.make} ${deal.model}`;
-                }, deals)
-            )
-        );
-    }
-    
     renderModels() {
-        let modelsWithDeals = this.groupByModel(this.props.deals);
-
-        console.log(modelsWithDeals);
+        console.log(this.props.dealsByMakeModelYear);
         return (
             <div>
                 <div className={'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
-                    {modelsWithDeals ? (
-                        modelsWithDeals.map((model, index) => {
-                            return <DealGrouping dealGrouping={model} key={index} onUpdateModelDeals={ this.props.onUpdateModelDeals }/>
+                    {this.props.dealsByMakeModelYear ? (
+                        this.props.dealsByMakeModelYear.map((model, index) => {
+                            return <DealGrouping dealGrouping={model} key={index} />
                         })
                     ) : (
                         <SVGInline svg={miscicons['loading']} />
@@ -82,9 +61,13 @@ class ViewDeals extends React.PureComponent {
     renderDeals() {
         return (
             <div>
+                <button className="deal__button deal__button--small deal__button--pink deal__button"
+                    onClick={() => { this.props.drillDownDealsToModel(null) }}>
+                    BACK
+                </button>
                 <div className={'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
-                    {this.props.modelDeals ? (
-                        this.props.modelDeals.map((deal, index) => {
+                    {this.props.selectedDealGrouping.deals ? (
+                       this.props.selectedDealGrouping.deals.map((deal, index) => {
                             return (
                                 <Deal deal={deal} key={index}>
                                     <div className="deal__buttons">
@@ -120,8 +103,8 @@ class ViewDeals extends React.PureComponent {
         )
     }
 
-    render() {
-        return this.props.modelDeals ? this.renderDeals() : this.renderModels();
+    render() { 
+        return this.props.selectedDealGrouping ? this.renderDeals() : this.renderModels();
     }
 }
 
@@ -137,16 +120,20 @@ ViewDeals.propTypes = {
             id: PropTypes.number.isRequired,
         })
     ),
+    dealsByMakeModelYear: PropTypes.array,
     dealPage: PropTypes.number,
     dealPageTotal: PropTypes.number,
+    selectedDealGrouping: PropTypes.object,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
     return {
         deals: state.deals,
+        dealsByMakeModelYear: state.dealsByMakeModelYear,
         dealPage: state.dealPage,
         dealPageTotal: state.dealPageTotal,
         compareList: state.compareList,
+        selectedDealGrouping: state.selectedDealGrouping,
         requestingMoreDeals: state.requestingMoreDeals
     };
 }

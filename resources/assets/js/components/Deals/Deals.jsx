@@ -9,14 +9,6 @@ import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 
 class Deals extends React.PureComponent {
-    constructor() {
-        super();
-
-        this.state = {
-            modelDeals: null,
-        };
-    }
-
     componentWillReceiveProps(nextProps) {
         nextProps.cancelAllBestOfferPromises();
 
@@ -27,12 +19,6 @@ class Deals extends React.PureComponent {
         }
     }
 
-    handleUpdateModelDeals(modelDeals) {
-        console.log('handled');
-        this.setState({
-            modelDeals 
-        });
-    }
     render() {
         if (
             !this.props.deals &&
@@ -44,7 +30,7 @@ class Deals extends React.PureComponent {
 
         if (this.props.zipInRange) {
             return this.props.deals && this.props.deals.length ? (
-                <ViewDeals modelDeals={ this.state.modelDeals } onUpdateModelDeals={ (deals) => { this.handleUpdateModelDeals(deals) }} />
+                <ViewDeals />
             ) : (
                 <NoDealsInRange />
             );

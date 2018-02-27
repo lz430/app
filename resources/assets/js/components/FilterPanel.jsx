@@ -74,35 +74,38 @@ class FilterPanel extends React.PureComponent {
     }
 
     render() {
+        let status = this.props.dealsByMakeModelYear.length ? 'broad' : 'narrow';
         return (
             <div>
                 <ZipcodeFinder />
 
                 <div className="sidebar-filters">
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Make')}
-                        open={this.state.openFilter === 'Make'}
-                        title="Vehicle Brand"
-                        count={this.props.selectedMakes.length}
-                    >
-                        <FilterMakeSelector
-                            makes={this.props.makes}
-                            selectedMakes={this.props.selectedMakes}
-                            onSelectMake={this.props.toggleMake}
-                        />
-                    </SidebarFilter>
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Vehicle Style')}
-                        open={this.state.openFilter === 'Vehicle Style'}
-                        title="Vehicle Style"
-                        count={this.props.selectedStyles.length}
-                    >
-                        <FilterStyleSelector
-                            styles={this.props.bodyStyles}
-                            selectedStyles={this.props.selectedStyles}
-                            onSelectStyle={this.props.toggleStyle}
-                        />
-                    </SidebarFilter>
+                    <div className={`sidebar-filters__broad sidebar-filters__broad--${status}`}>
+                        <SidebarFilter
+                            toggle={() => this.toggleOpenFilter('Make')}
+                            open={this.state.openFilter === 'Make'}
+                            title="Vehicle Brand"
+                            count={this.props.selectedMakes.length}
+                        >
+                            <FilterMakeSelector
+                                makes={this.props.makes}
+                                selectedMakes={this.props.selectedMakes}
+                                onSelectMake={this.props.toggleMake}
+                            />
+                        </SidebarFilter>
+                        <SidebarFilter
+                            toggle={() => this.toggleOpenFilter('Vehicle Style')}
+                            open={this.state.openFilter === 'Vehicle Style'}
+                            title="Vehicle Style"
+                            count={this.props.selectedStyles.length}
+                        >
+                            <FilterStyleSelector
+                                styles={this.props.bodyStyles}
+                                selectedStyles={this.props.selectedStyles}
+                                onSelectStyle={this.props.toggleStyle}
+                            />
+                        </SidebarFilter>
+                    </div>
                     <div className="sidebar-filters__section-header sidebar-filters__filter-title">
                         <p>Features & Options</p>
                     </div>
@@ -113,8 +116,9 @@ class FilterPanel extends React.PureComponent {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
     return {
+        dealsByMakeModelYear: state.dealsByMakeModelYear,
         makes: state.makes,
         models: state.models,
         fuelTypes: state.fuelTypes,

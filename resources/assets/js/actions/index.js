@@ -272,6 +272,15 @@ export function sortDeals(sort) {
     };
 }
 
+export function drillDownDealsToModel(modelMakeYear) {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.DRILL_DOWN_DEALS_TO_MODEL,
+            modelMakeYear
+        });
+    };
+}
+
 export function receiveBodyStyles(deals) {
     return {
         type: ActionTypes.RECEIVE_BODY_STYLES,

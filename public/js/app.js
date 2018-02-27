@@ -766,6 +766,7 @@ exports.receiveDeals = receiveDeals;
 exports.requestDeals = requestDeals;
 exports.requestMoreDeals = requestMoreDeals;
 exports.sortDeals = sortDeals;
+exports.drillDownDealsToModel = drillDownDealsToModel;
 exports.receiveBodyStyles = receiveBodyStyles;
 exports.setEmployeeBrand = setEmployeeBrand;
 exports.checkZipInRange = checkZipInRange;
@@ -1059,6 +1060,15 @@ function sortDeals(sort) {
         });
 
         dispatch(requestDeals());
+    };
+}
+
+function drillDownDealsToModel(modelMakeYear) {
+    return function (dispatch) {
+        dispatch({
+            type: ActionTypes.DRILL_DOWN_DEALS_TO_MODEL,
+            modelMakeYear: modelMakeYear
+        });
     };
 }
 
@@ -2225,6 +2235,18 @@ var util = {
         }, selectedTargets).join('-');
 
         return vehicleId + '-' + zipcode + '-' + paymentType + '-' + targetString;
+    },
+    groupDealsByMakeModelYear: function groupDealsByMakeModelYear(deals) {
+        return _ramda2.default.values(_ramda2.default.mapObjIndexed(function (index, key, value) {
+            return {
+                make: value[key][0].make,
+                model: value[key][0].model,
+                year: value[key][0].year,
+                deals: value[key]
+            };
+        }, _ramda2.default.groupBy(function (deal) {
+            return deal.year + ' ' + deal.make + ' ' + deal.model;
+        }, deals)));
     }
 };
 
@@ -22872,6 +22894,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var SORT_DEALS = exports.SORT_DEALS = 'SORT_DEALS';
+var DRILL_DOWN_DEALS_TO_MODEL = exports.DRILL_DOWN_DEALS_TO_MODEL = 'DRILL_DOWN_DEALS_TO_MODEL';
 var REQUEST_DEALS = exports.REQUEST_DEALS = 'REQUEST_DEALS';
 var REQUEST_MAKES = exports.REQUEST_MAKES = 'REQUEST_MAKES';
 var RECEIVE_MAKES = exports.RECEIVE_MAKES = 'RECEIVE_MAKES';
@@ -52705,12 +52728,7 @@ var Deals = function (_React$PureComponent) {
     function Deals() {
         _classCallCheck(this, Deals);
 
-        var _this = _possibleConstructorReturn(this, (Deals.__proto__ || Object.getPrototypeOf(Deals)).call(this));
-
-        _this.state = {
-            modelDeals: null
-        };
-        return _this;
+        return _possibleConstructorReturn(this, (Deals.__proto__ || Object.getPrototypeOf(Deals)).apply(this, arguments));
     }
 
     _createClass(Deals, [{
@@ -52725,26 +52743,14 @@ var Deals = function (_React$PureComponent) {
             }
         }
     }, {
-        key: 'handleUpdateModelDeals',
-        value: function handleUpdateModelDeals(modelDeals) {
-            console.log('handled');
-            this.setState({
-                modelDeals: modelDeals
-            });
-        }
-    }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
-
             if (!this.props.deals && this.props.requestingMoreDeals && this.props.zipInRange) {
                 return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
             }
 
             if (this.props.zipInRange) {
-                return this.props.deals && this.props.deals.length ? _react2.default.createElement(_ViewDeals2.default, { modelDeals: this.state.modelDeals, onUpdateModelDeals: function onUpdateModelDeals(deals) {
-                        _this2.handleUpdateModelDeals(deals);
-                    } }) : _react2.default.createElement(_NoDealsInRange2.default, null);
+                return this.props.deals && this.props.deals.length ? _react2.default.createElement(_ViewDeals2.default, null) : _react2.default.createElement(_NoDealsInRange2.default, null);
             }
 
             return _react2.default.createElement(_NoDealsOutOfRange2.default, null);
@@ -53016,35 +53022,17 @@ var ViewDeals = function (_React$PureComponent) {
             }
         }
     }, {
-        key: 'groupByModel',
-        value: function groupByModel(deals) {
-            return _ramda2.default.values(_ramda2.default.mapObjIndexed(function (index, key, value) {
-                return {
-                    make: value[key][0].make,
-                    model: value[key][0].model,
-                    year: value[key][0].year,
-                    deals: value[key]
-                };
-            }, _ramda2.default.groupBy(function (deal) {
-                return deal.year + ' ' + deal.make + ' ' + deal.model;
-            }, deals)));
-        }
-    }, {
         key: 'renderModels',
         value: function renderModels() {
-            var _this2 = this;
-
-            var modelsWithDeals = this.groupByModel(this.props.deals);
-
-            console.log(modelsWithDeals);
+            console.log(this.props.dealsByMakeModelYear);
             return _react2.default.createElement(
                 'div',
                 null,
                 _react2.default.createElement(
                     'div',
                     { className: 'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare') },
-                    modelsWithDeals ? modelsWithDeals.map(function (model, index) {
-                        return _react2.default.createElement(_DealGrouping2.default, { dealGrouping: model, key: index, onUpdateModelDeals: _this2.props.onUpdateModelDeals });
+                    this.props.dealsByMakeModelYear ? this.props.dealsByMakeModelYear.map(function (model, index) {
+                        return _react2.default.createElement(_DealGrouping2.default, { dealGrouping: model, key: index });
                     }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                 )
             );
@@ -53052,15 +53040,23 @@ var ViewDeals = function (_React$PureComponent) {
     }, {
         key: 'renderDeals',
         value: function renderDeals() {
-            var _this3 = this;
+            var _this2 = this;
 
             return _react2.default.createElement(
                 'div',
                 null,
                 _react2.default.createElement(
+                    'button',
+                    { className: 'deal__button deal__button--small deal__button--pink deal__button',
+                        onClick: function onClick() {
+                            _this2.props.drillDownDealsToModel(null);
+                        } },
+                    'BACK'
+                ),
+                _react2.default.createElement(
                     'div',
                     { className: 'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare') },
-                    this.props.modelDeals ? this.props.modelDeals.map(function (deal, index) {
+                    this.props.selectedDealGrouping.deals ? this.props.selectedDealGrouping.deals.map(function (deal, index) {
                         return _react2.default.createElement(
                             _Deal2.default,
                             { deal: deal, key: index },
@@ -53070,8 +53066,8 @@ var ViewDeals = function (_React$PureComponent) {
                                 _react2.default.createElement(
                                     'button',
                                     {
-                                        className: _this3.compareButtonClass(deal),
-                                        onClick: _this3.props.toggleCompare.bind(null, deal)
+                                        className: _this2.compareButtonClass(deal),
+                                        onClick: _this2.props.toggleCompare.bind(null, deal)
                                     },
                                     'Add to Compare'
                                 ),
@@ -53095,7 +53091,7 @@ var ViewDeals = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
-            return this.props.modelDeals ? this.renderDeals() : this.renderModels();
+            return this.props.selectedDealGrouping ? this.renderDeals() : this.renderModels();
         }
     }]);
 
@@ -53112,16 +53108,20 @@ ViewDeals.propTypes = {
         model: _propTypes2.default.string.isRequired,
         id: _propTypes2.default.number.isRequired
     })),
+    dealsByMakeModelYear: _propTypes2.default.array,
     dealPage: _propTypes2.default.number,
-    dealPageTotal: _propTypes2.default.number
+    dealPageTotal: _propTypes2.default.number,
+    selectedDealGrouping: _propTypes2.default.object
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
     return {
         deals: state.deals,
+        dealsByMakeModelYear: state.dealsByMakeModelYear,
         dealPage: state.dealPage,
         dealPageTotal: state.dealPageTotal,
         compareList: state.compareList,
+        selectedDealGrouping: state.selectedDealGrouping,
         requestingMoreDeals: state.requestingMoreDeals
     };
 }
@@ -58696,7 +58696,7 @@ var DealGrouping = function (_React$PureComponent) {
                     ),
                     _react2.default.createElement(_DealImage2.default, {
                         featureImageClass: 'deal__image',
-                        deal: this.props.dealGrouping.deals[0]
+                        deal: dealGrouping.deals[0]
                     }),
                     _react2.default.createElement(
                         'div',
@@ -58720,7 +58720,7 @@ var DealGrouping = function (_React$PureComponent) {
                         'button',
                         { className: 'deal__button deal__button--small deal__button--pink deal__button',
                             onClick: function onClick() {
-                                _this2.props.onUpdateModelDeals(_this2.props.dealGrouping.deals);
+                                _this2.props.drillDownDealsToModel(dealGrouping);
                             } },
                         'View Details'
                     )
@@ -59351,6 +59351,7 @@ var FilterPanel = function (_React$PureComponent) {
         value: function render() {
             var _this3 = this;
 
+            var status = this.props.dealsByMakeModelYear.length ? 'broad' : 'narrow';
             return _react2.default.createElement(
                 'div',
                 null,
@@ -59359,36 +59360,40 @@ var FilterPanel = function (_React$PureComponent) {
                     'div',
                     { className: 'sidebar-filters' },
                     _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
-                                return _this3.toggleOpenFilter('Make');
+                        'div',
+                        { className: 'sidebar-filters__broad sidebar-filters__broad--' + status },
+                        _react2.default.createElement(
+                            _SidebarFilter2.default,
+                            {
+                                toggle: function toggle() {
+                                    return _this3.toggleOpenFilter('Make');
+                                },
+                                open: this.state.openFilter === 'Make',
+                                title: 'Vehicle Brand',
+                                count: this.props.selectedMakes.length
                             },
-                            open: this.state.openFilter === 'Make',
-                            title: 'Vehicle Brand',
-                            count: this.props.selectedMakes.length
-                        },
-                        _react2.default.createElement(_FilterMakeSelector2.default, {
-                            makes: this.props.makes,
-                            selectedMakes: this.props.selectedMakes,
-                            onSelectMake: this.props.toggleMake
-                        })
-                    ),
-                    _react2.default.createElement(
-                        _SidebarFilter2.default,
-                        {
-                            toggle: function toggle() {
-                                return _this3.toggleOpenFilter('Vehicle Style');
+                            _react2.default.createElement(_FilterMakeSelector2.default, {
+                                makes: this.props.makes,
+                                selectedMakes: this.props.selectedMakes,
+                                onSelectMake: this.props.toggleMake
+                            })
+                        ),
+                        _react2.default.createElement(
+                            _SidebarFilter2.default,
+                            {
+                                toggle: function toggle() {
+                                    return _this3.toggleOpenFilter('Vehicle Style');
+                                },
+                                open: this.state.openFilter === 'Vehicle Style',
+                                title: 'Vehicle Style',
+                                count: this.props.selectedStyles.length
                             },
-                            open: this.state.openFilter === 'Vehicle Style',
-                            title: 'Vehicle Style',
-                            count: this.props.selectedStyles.length
-                        },
-                        _react2.default.createElement(_FilterStyleSelector2.default, {
-                            styles: this.props.bodyStyles,
-                            selectedStyles: this.props.selectedStyles,
-                            onSelectStyle: this.props.toggleStyle
-                        })
+                            _react2.default.createElement(_FilterStyleSelector2.default, {
+                                styles: this.props.bodyStyles,
+                                selectedStyles: this.props.selectedStyles,
+                                onSelectStyle: this.props.toggleStyle
+                            })
+                        )
                     ),
                     _react2.default.createElement(
                         'div',
@@ -59408,8 +59413,9 @@ var FilterPanel = function (_React$PureComponent) {
     return FilterPanel;
 }(_react2.default.PureComponent);
 
-var mapStateToProps = function mapStateToProps(state) {
+var mapStateToProps = function mapStateToProps(state, ownProps) {
     return {
+        dealsByMakeModelYear: state.dealsByMakeModelYear,
         makes: state.makes,
         models: state.models,
         fuelTypes: state.fuelTypes,
@@ -61621,6 +61627,7 @@ var initialState = {
     dealPage: 1,
     dealPageTotal: 1,
     deals: null,
+    dealsByMakeModelYear: [],
     downPayment: 0,
     employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
@@ -61636,6 +61643,7 @@ var initialState = {
     searchFeatures: [],
     segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
     selectedDeal: null,
+    selectedDealGrouping: null,
     selectedFeatures: [],
     selectedFuelType: null,
     selectedMakes: [],
@@ -62098,7 +62106,12 @@ var reducer = function reducer(state, action) {
                 deals: action.data.data.data,
                 dealPageTotal: 1,
                 dealPage: 1,
+                dealsByMakeModelYear: _util2.default.groupDealsByMakeModelYear(action.data.data.data),
                 requestingMoreDeals: false
+            });
+        case ActionTypes.DRILL_DOWN_DEALS_TO_MODEL:
+            return Object.assign({}, state, {
+                selectedDealGrouping: action.modelMakeYear
             });
         case ActionTypes.RECEIVE_TARGETS:
             var targetKey = _util2.default.getTargetKeyForDealAndZip(action.data.deal, action.data.zipcode);
