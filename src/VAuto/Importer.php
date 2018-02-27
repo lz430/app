@@ -425,7 +425,9 @@ class Importer
 
     private function saveDealPhotos(Deal $deal, string $photos)
     {
-        collect(explode('|', $photos))->each(function ($photoUrl) use ($deal) {
+        collect(explode('|', $photos))->reject(function ($photoUrl) {
+            return $photoUrl == '';
+        })->each(function ($photoUrl) use ($deal) {
             $deal->photos()->firstOrCreate(['url' => str_replace('http', 'https', $photoUrl)]);
         });
     }
