@@ -46,7 +46,8 @@ $text-color-dark: darken($text-color, 25);
 
 // Nav
 $nav-height: 76px;
-$footer-height: 320px;
+$footer-height: 70px;
+$footer-height-mobile: 130px;
 $subnav-height: 100px;
 $header-height: $nav-height + $subnav-height;
 

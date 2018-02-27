@@ -3,9 +3,9 @@
 .page-footer {
   background-color: $color-footer-background;
   color: #fff;
-  height: $footer-height;
-  max-height: $footer-height;
-  padding-top: 2.5rem;
+  height: $footer-height-mobile;
+  max-height: $footer-height-mobile;
+  padding-top: 1.5rem;
   text-align: center;
 
   a {
@@ -15,6 +15,11 @@
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  @media (min-width: $break-large) {
+    height: $footer-height;
+    max-height: $footer-height;
   }
 }
 

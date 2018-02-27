@@ -1,4 +1,5 @@
 <footer class="page-footer">
+    {{--
     <div class="footer-icons">
         <div class="footer__icon">
             <a target="_blank" href="https://www.facebook.com/DeliverMyRide/">
@@ -33,7 +34,7 @@
             <input class="footer-signup__submit" type="submit" value="Submit">
         </div>
     </form>
-
+    --}}
     <div class="footer-meta">
         <a href="{{ marketing_url('contact/') }}">Contact</a> |
         <a href="{{ marketing_url('terms-of-service/') }}">Terms</a> |
