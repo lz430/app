@@ -61,11 +61,8 @@ const reducer = (state, action) => {
         case ActionTypes.RECEIVE_DEALS:
             return Object.assign({}, state, {
                 deals: action.data.data.data,
-                dealPageTotal: action.data.data.meta.pagination.total_pages,
-                dealPage: R.min(
-                    action.data.data.meta.pagination.current_page,
-                    action.data.data.meta.pagination.total_pages
-                ),
+                dealPageTotal: 1,
+                dealPage: 1,
                 requestingMoreDeals: false,
             });
         case ActionTypes.RECEIVE_TARGETS:

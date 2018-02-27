@@ -8,7 +8,7 @@ import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import { connect } from 'react-redux';
 
-class ViewDeals extends React.PureComponent {
+class ViewDealGroupings extends React.PureComponent {
     compareButtonClass(deal) {
         return (
             'deal__button deal__button--small deal__button--blue' +
@@ -69,7 +69,7 @@ class ViewDeals extends React.PureComponent {
                 <div className={'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
                     {modelsWithDeals ? (
                         modelsWithDeals.map((model, index) => {
-                            return <DealGrouping dealGrouping={model} key={index} onUpdateModelDeals={ this.props.onUpdateModelDeals }/>
+                            return <DealGrouping dealGrouping={model} key={index} />
                         })
                     ) : (
                         <SVGInline svg={miscicons['loading']} />
@@ -83,8 +83,8 @@ class ViewDeals extends React.PureComponent {
         return (
             <div>
                 <div className={'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
-                    {this.props.modelDeals ? (
-                        this.props.modelDeals.map((deal, index) => {
+                    {this.props.deals ? (
+                        this.props.deals.map((deal, index) => {
                             return (
                                 <Deal deal={deal} key={index}>
                                     <div className="deal__buttons">
@@ -121,11 +121,11 @@ class ViewDeals extends React.PureComponent {
     }
 
     render() {
-        return this.props.modelDeals ? this.renderDeals() : this.renderModels();
+        return this.renderModels();
     }
 }
 
-ViewDeals.propTypes = {
+ViewDealGroupings.propTypes = {
     deals: PropTypes.arrayOf(
         PropTypes.shape({
             year: PropTypes.string.isRequired,
@@ -141,7 +141,7 @@ ViewDeals.propTypes = {
     dealPageTotal: PropTypes.number,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
     return {
         deals: state.deals,
         dealPage: state.dealPage,
@@ -151,4 +151,4 @@ function mapStateToProps(state, ownProps) {
     };
 }
 
-export default connect(mapStateToProps, Actions)(ViewDeals);
+export default connect(mapStateToProps, Actions)(ViewDealGroupings);

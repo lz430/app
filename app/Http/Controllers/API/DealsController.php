@@ -42,7 +42,7 @@ class DealsController extends BaseAPIController
             ->withResourceName(self::RESOURCE_NAME)
             ->transformWith(self::TRANSFORMER)
             ->serializeWith(new DataArraySerializer)
-            ->paginateWith(new IlluminatePaginatorAdapter($deals))
+            //->paginateWith(new IlluminatePaginatorAdapter($deals))
             ->respond();
     }
 
