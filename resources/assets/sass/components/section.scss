@@ -90,7 +90,11 @@
   }
 
   &--stretch {
-    min-height: calc(100vh - #{$nav-height} - #{$footer-height});
+    min-height: calc(100vh - #{$nav-height} - #{$footer-height-mobile});
+
+    @media (min-width: $break-large) {
+      min-height: calc(100vh - #{$nav-height} - #{$footer-height});
+    }
   }
 
   &--no-footer {

@@ -54,9 +54,9 @@ body {
 .page-footer {
   background-color: #454d52;
   color: #fff;
-  height: 320px;
-  max-height: 320px;
-  padding-top: 2.5rem;
+  height: 130px;
+  max-height: 130px;
+  padding-top: 1.5rem;
   text-align: center;
 }
 
@@ -67,6 +67,13 @@ body {
 
 .page-footer a:hover {
   text-decoration: underline;
+}
+
+@media (min-width: 992px) {
+  .page-footer {
+    height: 70px;
+    max-height: 70px;
+  }
 }
 
 .footer-icons,
@@ -338,7 +345,13 @@ body {
 }
 
 .section--stretch {
-  min-height: calc(100vh - 76px - 320px);
+  min-height: calc(100vh - 76px - 130px);
+}
+
+@media (min-width: 992px) {
+  .section--stretch {
+    min-height: calc(100vh - 76px - 70px);
+  }
 }
 
 .section--no-footer {
