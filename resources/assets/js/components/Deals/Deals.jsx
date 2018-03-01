@@ -7,6 +7,7 @@ import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
+import ViewModels from './ViewModels';
 
 class Deals extends React.PureComponent {
     componentWillReceiveProps(nextProps) {
@@ -28,13 +29,14 @@ class Deals extends React.PureComponent {
             return <SVGInline svg={miscicons['loading']} />;
         }
 
-        if (this.props.zipInRange) {
+        if ( false && this.props.zipInRange) {
             return this.props.deals && this.props.deals.length ? (
                 <ViewDeals />
             ) : (
                 <NoDealsInRange />
             );
         }
+        return <ViewModels />;
 
         return <NoDealsOutOfRange />;
     }

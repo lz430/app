@@ -108,6 +108,10 @@ export function toggleFeature(feature) {
         dispatch({
             type: ActionTypes.REQUEST_DEALS,
         });
+        
+        dispatch({
+            type: ActionTypes.REQUEST_MODEL_YEARS,
+        });
 
         const selectedFeatures = util.toggleItem(
             getState().selectedFeatures,
@@ -137,6 +141,10 @@ export function toggleMake(make_id) {
             type: ActionTypes.REQUEST_DEALS,
         });
 
+        dispatch({
+            type: ActionTypes.REQUEST_MODEL_YEARS,
+        });
+
         const selectedMakes = util.toggleItem(
             getState().selectedMakes,
             make_id
@@ -163,6 +171,10 @@ export function toggleModel(model) {
     return (dispatch, getState) => {
         dispatch({
             type: ActionTypes.REQUEST_DEALS,
+        });
+
+        dispatch({
+            type: ActionTypes.REQUEST_MODEL_YEARS,
         });
 
         const selectedModels = util.toggleItem(
@@ -272,12 +284,43 @@ export function sortDeals(sort) {
     };
 }
 
-export function drillDownDealsToModel(modelMakeYear) {
+
+export function receiveModelYears(data) {
     return dispatch => {
         dispatch({
-            type: ActionTypes.DRILL_DOWN_DEALS_TO_MODEL,
-            modelMakeYear
+            type: ActionTypes.RECEIVE_MODEL_YEARS,
+            data: data,
         });
+    };
+}
+
+export function requestModelYears() {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_MODEL_YEARS,
+        });
+
+        api.getModelYears(withStateDefaults(getState())).then(data => {
+            dispatch(receiveModelYears(data));
+        });
+    };
+}
+
+export function requestMoreModelYears() {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_MORE_MODEL_YEARS,
+        });
+
+        api
+            .getDeals(
+                withStateDefaults(getState(), {
+                    page: getState().modelPage + 1,
+                })
+            )
+            .then(data => {
+                dispatch(receiveMoreModelYears(data));
+            });
     };
 }
 
@@ -339,6 +382,10 @@ export function toggleStyle(style) {
     return (dispatch, getState) => {
         dispatch({
             type: ActionTypes.REQUEST_DEALS,
+        });
+
+        dispatch({
+            type: ActionTypes.REQUEST_MODEL_YEARS,
         });
 
         const selectedStyles = util.toggleItem(

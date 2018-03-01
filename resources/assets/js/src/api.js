@@ -87,6 +87,40 @@ const api = {
             },
         });
     },
+    getModelYears: ({
+        makeIds,
+        modelIds,
+        bodyStyles,
+        fuelType,
+        transmissionType,
+        segment,
+        features,
+        includes,
+        sortColumn,
+        sortAscending,
+        page,
+        latitude,
+        longitude,
+        zipcode,
+    }) => {
+        return window.axios.get('/api/dealsByModel', {
+            params: {
+                make_ids: makeIds,
+                model_ids: modelIds,
+                body_styles: bodyStyles,
+                fuel_type: fuelType,
+                transmission_type: transmissionType,
+                segment: segment,
+                features,
+                includes,
+                sort: sort(sortColumn, sortAscending),
+                page,
+                latitude,
+                longitude,
+                zipcode,
+            },
+        });
+    },
     getTargets: (zipcode, vin) => {
         return window.axios.get('/api/targets', {
             params: {

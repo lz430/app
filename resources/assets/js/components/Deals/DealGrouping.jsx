@@ -17,12 +17,7 @@ class DealGrouping extends React.PureComponent {
                     this.props.hideImageAndTitle ? ('') : (
                         <div>
                             <div className="deal__basic-info">
-                                <div
-                                    onClick={() =>
-                                        (window.location = `/deals/${dealGrouping.year}-${dealGrouping.make}-${dealGrouping.model}`)
-                                    }
-                                    className="deal__basic-info-year-and-model"
-                                >
+                                <div className="deal__basic-info-year-and-model">
                                     <div className="deal__basic-info-year-and-make">
                                         {`${dealGrouping.year} ${dealGrouping.make}`}
                                     </div>
@@ -33,21 +28,12 @@ class DealGrouping extends React.PureComponent {
                                 </div>
                             </div>
 
-                            <DealImage
-                                featureImageClass="deal__image"
-                                deal={dealGrouping.deals[0]}
-                            />
+                            
 
-                            <div className="dealGroup__count">{ dealGrouping.deals.length } in stock.</div>
+                            <div className="dealGroup__count">{ dealGrouping.deals.count } in stock.</div>
 
                             <div className="dealGroup__price">
-                                <span className="dealGroup__price-label">MSRP Starting at</span>
-                                {
-                                    R.sort(
-                                        (a, b) => { return a - b },
-                                        R.pluck('msrp', dealGrouping.deals)
-                                    )[0]
-                                }
+                                <span className="dealGroup__price-label">MSRP Starting at</span> ${dealGrouping.lowest_msrp}
                             </div>
 
                             <button className="deal__button deal__button--small deal__button--pink deal__button"

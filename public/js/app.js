@@ -766,7 +766,9 @@ exports.receiveDeals = receiveDeals;
 exports.requestDeals = requestDeals;
 exports.requestMoreDeals = requestMoreDeals;
 exports.sortDeals = sortDeals;
-exports.drillDownDealsToModel = drillDownDealsToModel;
+exports.receiveModelYears = receiveModelYears;
+exports.requestModelYears = requestModelYears;
+exports.requestMoreModelYears = requestMoreModelYears;
 exports.receiveBodyStyles = receiveBodyStyles;
 exports.setEmployeeBrand = setEmployeeBrand;
 exports.checkZipInRange = checkZipInRange;
@@ -927,6 +929,10 @@ function toggleFeature(feature) {
             type: ActionTypes.REQUEST_DEALS
         });
 
+        dispatch({
+            type: ActionTypes.REQUEST_MODEL_YEARS
+        });
+
         var selectedFeatures = _util2.default.toggleItem(getState().selectedFeatures, feature);
 
         _api2.default.getDeals(withStateDefaults(getState(), {
@@ -948,6 +954,10 @@ function toggleMake(make_id) {
             type: ActionTypes.REQUEST_DEALS
         });
 
+        dispatch({
+            type: ActionTypes.REQUEST_MODEL_YEARS
+        });
+
         var selectedMakes = _util2.default.toggleItem(getState().selectedMakes, make_id);
 
         _api2.default.getDeals(withStateDefaults(getState(), {
@@ -967,6 +977,10 @@ function toggleModel(model) {
     return function (dispatch, getState) {
         dispatch({
             type: ActionTypes.REQUEST_DEALS
+        });
+
+        dispatch({
+            type: ActionTypes.REQUEST_MODEL_YEARS
         });
 
         var selectedModels = _util2.default.toggleItem(getState().selectedModels, model);
@@ -1063,11 +1077,37 @@ function sortDeals(sort) {
     };
 }
 
-function drillDownDealsToModel(modelMakeYear) {
+function receiveModelYears(data) {
     return function (dispatch) {
         dispatch({
-            type: ActionTypes.DRILL_DOWN_DEALS_TO_MODEL,
-            modelMakeYear: modelMakeYear
+            type: ActionTypes.RECEIVE_MODEL_YEARS,
+            data: data
+        });
+    };
+}
+
+function requestModelYears() {
+    return function (dispatch, getState) {
+        dispatch({
+            type: ActionTypes.REQUEST_MODEL_YEARS
+        });
+
+        _api2.default.getModelYears(withStateDefaults(getState())).then(function (data) {
+            dispatch(receiveModelYears(data));
+        });
+    };
+}
+
+function requestMoreModelYears() {
+    return function (dispatch, getState) {
+        dispatch({
+            type: ActionTypes.REQUEST_MORE_MODEL_YEARS
+        });
+
+        _api2.default.getDeals(withStateDefaults(getState(), {
+            page: getState().modelPage + 1
+        })).then(function (data) {
+            dispatch(receiveMoreModelYears(data));
         });
     };
 }
@@ -1130,6 +1170,10 @@ function toggleStyle(style) {
     return function (dispatch, getState) {
         dispatch({
             type: ActionTypes.REQUEST_DEALS
+        });
+
+        dispatch({
+            type: ActionTypes.REQUEST_MODEL_YEARS
         });
 
         var selectedStyles = _util2.default.toggleItem(getState().selectedStyles, style);
@@ -5504,6 +5548,40 @@ var api = {
             zipcode = _ref.zipcode;
 
         return window.axios.get('/api/deals', {
+            params: {
+                make_ids: makeIds,
+                model_ids: modelIds,
+                body_styles: bodyStyles,
+                fuel_type: fuelType,
+                transmission_type: transmissionType,
+                segment: segment,
+                features: features,
+                includes: includes,
+                sort: sort(sortColumn, sortAscending),
+                page: page,
+                latitude: latitude,
+                longitude: longitude,
+                zipcode: zipcode
+            }
+        });
+    },
+    getModelYears: function getModelYears(_ref2) {
+        var makeIds = _ref2.makeIds,
+            modelIds = _ref2.modelIds,
+            bodyStyles = _ref2.bodyStyles,
+            fuelType = _ref2.fuelType,
+            transmissionType = _ref2.transmissionType,
+            segment = _ref2.segment,
+            features = _ref2.features,
+            includes = _ref2.includes,
+            sortColumn = _ref2.sortColumn,
+            sortAscending = _ref2.sortAscending,
+            page = _ref2.page,
+            latitude = _ref2.latitude,
+            longitude = _ref2.longitude,
+            zipcode = _ref2.zipcode;
+
+        return window.axios.get('/api/dealsByModel', {
             params: {
                 make_ids: makeIds,
                 model_ids: modelIds,
@@ -22899,7 +22977,9 @@ var REQUEST_DEALS = exports.REQUEST_DEALS = 'REQUEST_DEALS';
 var REQUEST_MAKES = exports.REQUEST_MAKES = 'REQUEST_MAKES';
 var RECEIVE_MAKES = exports.RECEIVE_MAKES = 'RECEIVE_MAKES';
 var REQUEST_MODELS = exports.REQUEST_MODELS = 'REQUEST_MODELS';
+var REQUEST_MODEL_YEARS = exports.REQUEST_MODEL_YEARS = 'REQUEST_MODEL_YEARS';
 var RECEIVE_MODELS = exports.RECEIVE_MODELS = 'RECEIVE_MODELS';
+var RECEIVE_MODEL_YEARS = exports.RECEIVE_MODEL_YEARS = 'RECEIVE_MODEL_YEARS';
 var RECEIVE_DEALS = exports.RECEIVE_DEALS = 'RECEIVE_DEALS';
 var TOGGLE_MAKE = exports.TOGGLE_MAKE = 'TOGGLE_MAKE';
 var TOGGLE_MODEL = exports.TOGGLE_MODEL = 'TOGGLE_MODEL';
@@ -52712,6 +52792,10 @@ var _index = __webpack_require__(14);
 
 var Actions = _interopRequireWildcard(_index);
 
+var _ViewModels = __webpack_require__(989);
+
+var _ViewModels2 = _interopRequireDefault(_ViewModels);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -52749,9 +52833,10 @@ var Deals = function (_React$PureComponent) {
                 return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
             }
 
-            if (this.props.zipInRange) {
+            if (false) {
                 return this.props.deals && this.props.deals.length ? _react2.default.createElement(_ViewDeals2.default, null) : _react2.default.createElement(_NoDealsInRange2.default, null);
             }
+            return _react2.default.createElement(_ViewModels2.default, null);
 
             return _react2.default.createElement(_NoDealsOutOfRange2.default, null);
         }
@@ -58676,12 +58761,7 @@ var DealGrouping = function (_React$PureComponent) {
                         { className: 'deal__basic-info' },
                         _react2.default.createElement(
                             'div',
-                            {
-                                onClick: function onClick() {
-                                    return window.location = '/deals/' + dealGrouping.year + '-' + dealGrouping.make + '-' + dealGrouping.model;
-                                },
-                                className: 'deal__basic-info-year-and-model'
-                            },
+                            { className: 'deal__basic-info-year-and-model' },
                             _react2.default.createElement(
                                 'div',
                                 { className: 'deal__basic-info-year-and-make' },
@@ -58694,14 +58774,10 @@ var DealGrouping = function (_React$PureComponent) {
                             )
                         )
                     ),
-                    _react2.default.createElement(_DealImage2.default, {
-                        featureImageClass: 'deal__image',
-                        deal: dealGrouping.deals[0]
-                    }),
                     _react2.default.createElement(
                         'div',
                         { className: 'dealGroup__count' },
-                        dealGrouping.deals.length,
+                        dealGrouping.deals.count,
                         ' in stock.'
                     ),
                     _react2.default.createElement(
@@ -58712,9 +58788,8 @@ var DealGrouping = function (_React$PureComponent) {
                             { className: 'dealGroup__price-label' },
                             'MSRP Starting at'
                         ),
-                        _ramda2.default.sort(function (a, b) {
-                            return a - b;
-                        }, _ramda2.default.pluck('msrp', dealGrouping.deals))[0]
+                        ' $',
+                        dealGrouping.lowest_msrp
                     ),
                     _react2.default.createElement(
                         'button',
@@ -59351,7 +59426,7 @@ var FilterPanel = function (_React$PureComponent) {
         value: function render() {
             var _this3 = this;
 
-            var status = this.props.dealsByMakeModelYear.length ? 'broad' : 'narrow';
+            var status = 'broad';
             return _react2.default.createElement(
                 'div',
                 null,
@@ -61627,7 +61702,6 @@ var initialState = {
     dealPage: 1,
     dealPageTotal: 1,
     deals: null,
-    dealsByMakeModelYear: [],
     downPayment: 0,
     employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
@@ -61636,6 +61710,7 @@ var initialState = {
     fuelTypes: ['Gasoline', 'Electric', 'Flex Fuel', 'Diesel', 'Hybrid'],
     makes: null,
     models: null,
+    modelYears: null,
     requestingMoreDeals: false,
     residualPercent: null,
     smallFiltersShown: false,
@@ -61643,7 +61718,6 @@ var initialState = {
     searchFeatures: [],
     segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
     selectedDeal: null,
-    selectedDealGrouping: null,
     selectedFeatures: [],
     selectedFuelType: null,
     selectedMakes: [],
@@ -62109,9 +62183,9 @@ var reducer = function reducer(state, action) {
                 dealsByMakeModelYear: _util2.default.groupDealsByMakeModelYear(action.data.data.data),
                 requestingMoreDeals: false
             });
-        case ActionTypes.DRILL_DOWN_DEALS_TO_MODEL:
+        case ActionTypes.RECEIVE_MODEL_YEARS:
             return Object.assign({}, state, {
-                selectedDealGrouping: action.modelMakeYear
+                modelYears: action.data.data
             });
         case ActionTypes.RECEIVE_TARGETS:
             var targetKey = _util2.default.getTargetKeyForDealAndZip(action.data.deal, action.data.zipcode);
@@ -67626,6 +67700,126 @@ exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(ThankYo
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 985 */,
+/* 986 */,
+/* 987 */,
+/* 988 */,
+/* 989 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(13);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _ramda = __webpack_require__(10);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _actions = __webpack_require__(14);
+
+var Actions = _interopRequireWildcard(_actions);
+
+var _Deal = __webpack_require__(157);
+
+var _Deal2 = _interopRequireDefault(_Deal);
+
+var _DealGrouping = __webpack_require__(942);
+
+var _DealGrouping2 = _interopRequireDefault(_DealGrouping);
+
+var _reactSvgInline = __webpack_require__(15);
+
+var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
+
+var _miscicons = __webpack_require__(29);
+
+var _miscicons2 = _interopRequireDefault(_miscicons);
+
+var _reactRedux = __webpack_require__(16);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ViewModels = function (_React$PureComponent) {
+    _inherits(ViewModels, _React$PureComponent);
+
+    function ViewModels() {
+        _classCallCheck(this, ViewModels);
+
+        return _possibleConstructorReturn(this, (ViewModels.__proto__ || Object.getPrototypeOf(ViewModels)).apply(this, arguments));
+    }
+
+    _createClass(ViewModels, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.props.requestModelYears();
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare') },
+                    this.props.modelYears ? this.props.modelYears.map(function (model, index) {
+                        return _react2.default.createElement(_DealGrouping2.default, { dealGrouping: model, key: index });
+                    }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                )
+            );
+        }
+    }]);
+
+    return ViewModels;
+}(_react2.default.PureComponent);
+
+ViewModels.propTypes = {
+    deals: _propTypes2.default.arrayOf(_propTypes2.default.shape({
+        year: _propTypes2.default.string.isRequired,
+        msrp: _propTypes2.default.number.isRequired,
+        employee_price: _propTypes2.default.number.isRequired,
+        supplier_price: _propTypes2.default.number.isRequired,
+        make: _propTypes2.default.string.isRequired,
+        model: _propTypes2.default.string.isRequired,
+        id: _propTypes2.default.number.isRequired
+    })),
+    dealsByMakeModelYear: _propTypes2.default.array,
+    dealPage: _propTypes2.default.number,
+    dealPageTotal: _propTypes2.default.number,
+    selectedDealGrouping: _propTypes2.default.object
+};
+
+function mapStateToProps(state) {
+    return {
+        modelYears: state.modelYears,
+        compareList: state.compareList
+    };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(ViewModels);
 
 /***/ })
 /******/ ]);
