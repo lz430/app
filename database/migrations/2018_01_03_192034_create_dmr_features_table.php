@@ -294,11 +294,6 @@ class CreateDmrFeaturesTable extends Migration
                     'jato_schema_ids' => [26604],
                 ],
                 [
-                    'title' => 'Sunroof',
-                    'slug' => 'sunroof',
-                    'jato_schema_ids' => [15601],
-                ],
-                [
                     'title' => 'Cupholders (front / rear)',
                     'slug' => 'cupholders_front_rear',
                     'jato_schema_ids' => [19601],
