@@ -129,6 +129,10 @@ const fuelColor = {
             )[0] || 'white'
         );
     },
+    random: () => {
+        let colors = colorMap.keys();
+        return colors[Math.floor(Math.random() * colors.length)];
+    },
 };
 
 export default fuelColor;

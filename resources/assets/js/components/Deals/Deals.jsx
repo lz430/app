@@ -7,6 +7,7 @@ import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
+import ViewModels from './ViewModels';
 
 class Deals extends React.PureComponent {
     componentWillReceiveProps(nextProps) {
@@ -21,9 +22,15 @@ class Deals extends React.PureComponent {
 
     render() {
         if (
-            !this.props.deals &&
-            this.props.requestingMoreDeals &&
-            this.props.zipInRange
+            ( 
+                !this.props.deals &&
+                this.props.requestingMoreDeals &&
+                this.props.zipInRange
+            ) || (
+                !this.props.modelYears &&
+                this.props.requestingMoreModelYears &&
+                this.props.zipInRange
+            )
         ) {
             return <SVGInline svg={miscicons['loading']} />;
         }
@@ -32,7 +39,11 @@ class Deals extends React.PureComponent {
             return this.props.deals && this.props.deals.length ? (
                 <ViewDeals />
             ) : (
-                <NoDealsInRange />
+                this.props.modelYears && this.props.modelYears.length ? (
+                    <ViewModels />
+                ) : (
+                    <NoDealsInRange />
+                )
             );
         }
 
@@ -59,7 +70,10 @@ function mapStateToProps(state) {
     return {
         deals: state.deals,
         requestingMoreDeals: state.requestingMoreDeals,
+        requestingMoreModelYears: state.requestingMoreModelYears,
         zipInRange: state.zipInRange,
+        modelYears: state.modelYears,
+        filterPage: state.filterPage,
     };
 }
 

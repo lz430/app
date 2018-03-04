@@ -54,6 +54,7 @@ const api = {
         return window.axios.get('/api/fuel-types');
     },
     getDeals: ({
+        filterPage,
         makeIds,
         modelIds,
         bodyStyles,
@@ -67,6 +68,7 @@ const api = {
         page,
         latitude,
         longitude,
+        year,
         zipcode,
     }) => {
         return window.axios.get('/api/deals', {
@@ -83,9 +85,51 @@ const api = {
                 page,
                 latitude,
                 longitude,
+                year,
                 zipcode,
             },
         });
+    },
+    getModelYears: ({
+        filterPage,
+        makeIds,
+        modelIds,
+        bodyStyles,
+        fuelType,
+        transmissionType,
+        segment,
+        features,
+        includes,
+        sortColumn,
+        sortAscending,
+        page,
+        latitude,
+        longitude,
+        year,
+        zipcode,
+    }) => {
+        return window.axios.get('/api/dealsByModel', {
+            params: {
+                make_ids: makeIds,
+                model_ids: modelIds,
+                body_styles: bodyStyles,
+                fuel_type: fuelType,
+                transmission_type: transmissionType,
+                segment: segment,
+                features,
+                includes,
+                sort: sort(sortColumn, sortAscending),
+                page,
+                latitude,
+                longitude,
+                year,
+                zipcode,
+            },
+        });
+    },
+    getModelsOrDeals: (searchParams) => {
+        console.log(searchParams.filterPage);
+        return searchParams.filterPage === 'deals' ? api.getDeals(searchParams) : api.getModelYears(searchParams);
     },
     getTargets: (zipcode, vin) => {
         return window.axios.get('/api/targets', {

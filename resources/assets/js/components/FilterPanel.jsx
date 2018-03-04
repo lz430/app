@@ -74,7 +74,7 @@ class FilterPanel extends React.PureComponent {
     }
 
     render() {
-        let status = this.props.dealsByMakeModelYear.length ? 'broad' : 'narrow';
+        let status = 'broad';
         return (
             <div>
                 <ZipcodeFinder />

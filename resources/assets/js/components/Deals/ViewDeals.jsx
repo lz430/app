@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import R from 'ramda';
 import * as Actions from 'actions';
 import Deal from './Deal';
-import DealGrouping from './DealGrouping';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import { connect } from 'react-redux';
@@ -41,33 +40,17 @@ class ViewDeals extends React.PureComponent {
             );
         }
     }
-    renderModels() {
-        console.log(this.props.dealsByMakeModelYear);
-        return (
-            <div>
-                <div className={'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
-                    {this.props.dealsByMakeModelYear ? (
-                        this.props.dealsByMakeModelYear.map((model, index) => {
-                            return <DealGrouping dealGrouping={model} key={index} />
-                        })
-                    ) : (
-                        <SVGInline svg={miscicons['loading']} />
-                    )}
-                </div>
-            </div>
-        );
-    }
     
-    renderDeals() {
+    render() {
         return (
             <div>
                 <button className="deal__button deal__button--small deal__button--pink deal__button"
-                    onClick={() => { this.props.selectDealGrouping(null) }}>
+                    onClick={() => { this.props.clearModelYear() }}>
                     BACK
                 </button>
                 <div className={'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
-                    {this.props.selectedDealGrouping.deals ? (
-                       this.props.selectedDealGrouping.deals.map((deal, index) => {
+                    {this.props.deals && this.props.deals.length ? (
+                       this.props.deals.map((deal, index) => {
                             return (
                                 <Deal deal={deal} key={index}>
                                     <div className="deal__buttons">
@@ -101,10 +84,6 @@ class ViewDeals extends React.PureComponent {
                 </div>
             </div>
         )
-    }
-
-    render() { 
-        return this.props.selectedDealGrouping ? this.renderDeals() : this.renderModels();
     }
 }
 
