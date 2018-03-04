@@ -34,14 +34,14 @@ class DealsController extends BaseAPIController
         $dealsQuery = $this->buildSearchQuery($request);
         $dealsQuery = Sort::sortQuery($dealsQuery, $request->get('sort', 'price'));
 
-        $deals = $dealsQuery->paginate(150);
+        $deals = $dealsQuery->paginate(24);
 
         return fractal()
             ->collection($deals)
             ->withResourceName(self::RESOURCE_NAME)
             ->transformWith(self::TRANSFORMER)
             ->serializeWith(new DataArraySerializer)
-            //->paginateWith(new IlluminatePaginatorAdapter($deals))
+            ->paginateWith(new IlluminatePaginatorAdapter($deals))
             ->respond();
     }
 }

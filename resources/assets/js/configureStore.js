@@ -34,11 +34,11 @@ const initialState = {
     fallbackLogoImage: '/images/dmr-logo-small.svg',
     features: null,
     featureCategories: [],
+    filterPage: 'models',
     fuelTypes: ['Gasoline', 'Electric', 'Flex Fuel', 'Diesel', 'Hybrid'],
     makes: null,
     models: null,
     modelYears: null,
-    filterPage: 'models',
     requestingMoreDeals: false,
     requestingMoreModelYears: false,
     residualPercent: null,
@@ -95,7 +95,7 @@ export default () => {
             store.dispatch(requestLocationInfo());
         });
         store.dispatch(requestMakes());
-        store.dispatch(requestModels());
+        //store.dispatch(requestModels());
         store.dispatch(requestBodyStyles());
         store.dispatch(requestFeatures());
         store.dispatch(requestFeatureCategories());

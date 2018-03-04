@@ -127,9 +127,9 @@ const api = {
             },
         });
     },
-    getModelsOrDeals: (searchParams) => {
+    applySearchFilters: (type, searchParams) => {
         console.log(searchParams.filterPage);
-        return searchParams.filterPage === 'deals' ? api.getDeals(searchParams) : api.getModelYears(searchParams);
+        return type === 'deals' ? api.getDeals(searchParams) : api.getModelYears(searchParams);
     },
     getTargets: (zipcode, vin) => {
         return window.axios.get('/api/targets', {

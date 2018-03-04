@@ -61,9 +61,10 @@ const reducer = (state, action) => {
         case ActionTypes.RECEIVE_DEALS:
             return Object.assign({}, state, {
                 deals: action.data.data.data,
-                dealPageTotal: 1,
-                dealPage: 1,
+                dealPageTotal: action.data.data.meta.pagination.total_pages,
+                dealPage: action.data.data.meta.pagination.current_page,
                 requestingMoreDeals: false,
+                requestingMoreModelYears: false,
                 filterPage: 'deals',
             });
         case ActionTypes.REQUEST_MODEL_YEARS:
@@ -76,11 +77,16 @@ const reducer = (state, action) => {
         case ActionTypes.RECEIVE_MODEL_YEARS:
             return Object.assign({}, state, {
                 requestingMoreModelYears: false,
+                requestingMoreDeals: false,
                 modelYears: action.data.data,
             });
         case ActionTypes.CLEAR_MODEL_YEAR:
             return Object.assign({}, state, {
                 modelIds: null,
+            });
+        case ActionTypes.SELECT_MODEL_YEAR:
+            return Object.assign({}, state, {
+                filterPage: 'deals',
             });
         case ActionTypes.RECEIVE_TARGETS:
             const targetKey = util.getTargetKeyForDealAndZip(
@@ -129,6 +135,7 @@ const reducer = (state, action) => {
                     action.data.data.meta.pagination.total_pages
                 ),
                 requestingMoreDeals: false,
+                requestingMoreModelYears: false,
             });
         case ActionTypes.TOGGLE_MAKE:
             return Object.assign({}, state, {

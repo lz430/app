@@ -12,13 +12,14 @@ $icon-size: 20px;
 
   &__count {
     align-items: center;
-    background-color: $color-sidebar-background-secondary;
+    background-color: rgba(0,0,0,0.4);
     border-radius: 15px;
     color: $color-text-white;
     display: flex;
+    font-size: small;
     height: 22px;
     justify-content: center;
-    line-height: 1rem;
+    line-height: 1.2;
     margin-left: auto;
     padding: 5px;
     width: 30px;
@@ -27,10 +28,29 @@ $icon-size: 20px;
   &__header {
     background-color: $color-sidebar-background-secondary-dark;
     color: $text-color;
-    padding: 5px 15px;
+    padding: 8px 15px;
     text-transform: uppercase;
   }
 
+  &__instructive-heading {
+    background-color: $color-blue;
+    color: $color-text-white;
+    padding: 8px 15px;
+    position: relative;
+
+    &::after {
+      content: '';
+      width: 0; 
+      height: 0; 
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 8px solid $color-blue;
+      position: absolute;
+      bottom: -5px;
+      left: 15px;
+      z-index: 10;
+    }
+  }
 
   &__filter {
     border-bottom: 2px solid $color-sidebar-background-primary;
@@ -41,7 +61,7 @@ $icon-size: 20px;
     align-items: center;
     cursor: pointer;
     display: flex;
-    padding: 15px;
+    padding: 8px 15px;
     position: relative;
     user-select: none;
 
@@ -55,6 +75,17 @@ $icon-size: 20px;
     }
   }
 
+  &__broad {
+    .sidebar-filters__filter {
+      border-bottom: 2px solid $color-sidebar-background-primary-light;
+      
+      &-title {
+        background: $color-sidebar-background-primary;
+        color: $color-text-white;
+      }
+    }
+  }
+  
   &__filter-body {
     background-color: $color-sidebar-background-primary-light;
     border-top: 1px solid $color-sidebar-background-secondary;
@@ -65,15 +96,15 @@ $icon-size: 20px;
     fill: $color-darkestgrey;
     height: $icon-size;
     line-height: 0;
-    margin-left: $icon-margin;
+    margin-left: 0;
     margin-right: $icon-margin;
-    position: absolute;
-    right: 0;
     width: $icon-size;
+    order: -1;
   }
 
   &__section-header {
     background-color: $color-sidebar-background-primary;
+    border-top: 5px solid $color-text-white;
     color: $color-text-white;
     height: 2.75em;
   }

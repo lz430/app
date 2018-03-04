@@ -56,24 +56,24 @@ const withStateDefaults = (state, changed) => {
 
 export function requestMakes() {
     return dispatch => {
-        api.getMakes().then(data => {
-            dispatch(receiveMakes(data));
-        });
-
         dispatch({
             type: ActionTypes.REQUEST_MAKES,
+        });
+
+        api.getMakes().then(data => {
+            dispatch(receiveMakes(data));
         });
     };
 }
 
 export function requestModels() {
     return dispatch => {
-        api.getModels().then(data => {
-            dispatch(receiveModels(data));
-        });
-
         dispatch({
             type: ActionTypes.REQUEST_MODELS,
+        });
+
+        api.getModels().then(data => {
+            dispatch(receiveModels(data));
         });
     };
 }
@@ -94,24 +94,24 @@ export function receiveModels(data) {
 
 export function requestFeatures() {
     return dispatch => {
-        api.getFeatures().then(data => {
-            dispatch(receiveFeatures(data));
-        });
-
         dispatch({
             type: ActionTypes.REQUEST_FEATURES,
+        });
+
+        api.getFeatures().then(data => {
+            dispatch(receiveFeatures(data));
         });
     };
 }
 
 export function requestFeatureCategories() {
     return dispatch => {
-        api.getFeatureCategories().then(data => {
-            dispatch(receiveFeatureCategories(data));
-        });
-
         dispatch({
             type: ActionTypes.REQUEST_FEATURE_CATEGORIES,
+        });
+
+        api.getFeatureCategories().then(data => {
+            dispatch(receiveFeatureCategories(data));
         });
     };
 }
@@ -132,99 +132,55 @@ export function receiveFeatureCategories(data) {
 
 export function toggleFeature(feature) {
     return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-        
-        dispatch({
-            type: ActionTypes.REQUEST_MODEL_YEARS,
-        });
-
         const selectedFeatures = util.toggleItem(
             getState().selectedFeatures,
             feature
         );
 
-        api
-            .getModelsOrDeals(
-                getState().filterPage,
-                withStateDefaults(getState(), {
-                    features: selectedFeatures,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
-
         dispatch({
             type: ActionTypes.TOGGLE_FEATURE,
             selectedFeatures,
+        });
+        
+        requestDealsOrModelYears({
+            features: selectedFeatures,
         });
     };
 }
 
 export function toggleMake(make_id) {
     return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
-        dispatch({
-            type: ActionTypes.REQUEST_MODEL_YEARS,
-        });
-
         const selectedMakes = util.toggleItem(
             getState().selectedMakes,
             make_id
         );
 
-        api
-            .getModelsOrDeals(
-                getState().filterPage,
-                withStateDefaults(getState(), {
-                    makeIds: selectedMakes,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
-
         dispatch({
             type: ActionTypes.TOGGLE_MAKE,
             selectedMakes,
         });
+
+        requestDealsOrModelYears({
+            makeIds: selectedMakes,
+        });
+
     };
 }
 
 export function toggleModel(model) {
     return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
-        dispatch({
-            type: ActionTypes.REQUEST_MODEL_YEARS,
-        });
-
         const selectedModels = util.toggleItem(
             getState().selectedModels,
             model
         );
 
-        api
-            .getModelsOrDeals(
-                getState().filterPage,
-                withStateDefaults(getState(), {
-                    modelIds: R.map(R.prop('id'), selectedModels),
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
-
         dispatch({
             type: ActionTypes.TOGGLE_MODEL,
             selectedModels,
+        });
+
+        requestDealsOrModelYears({
+            modelIds: R.map(R.prop('id'), selectedModels),
         });
     };
 }
@@ -239,6 +195,10 @@ export function requestTargets(deal) {
         const targetKey = util.getTargetKeyForDealAndZip(deal, zipcode);
         if (!R.isNil(getState().targetsAvailable[targetKey])) return;
 
+        dispatch({
+            type: ActionTypes.REQUEST_TARGETS,
+        });
+
         api.getTargets(zipcode, deal.vin).then(data => {
             dispatch(
                 receiveTargets({
@@ -247,10 +207,6 @@ export function requestTargets(deal) {
                     zipcode,
                 })
             );
-        });
-
-        dispatch({
-            type: ActionTypes.REQUEST_TARGETS,
         });
     };
 }
@@ -279,8 +235,6 @@ export function requestDeals() {
             type: ActionTypes.REQUEST_DEALS,
         });
 
-        console.log('requestDeals');
-
         api.getDeals(withStateDefaults(getState())).then(data => {
             dispatch(receiveDeals(data));
         });
@@ -294,7 +248,7 @@ export function requestMoreDeals() {
         });
 
         api
-            .getModelsOrDeals(
+            .applySearchFilters(
                 getState().filterPage,
                 withStateDefaults(getState(), {
                     page: getState().dealPage + 1,
@@ -339,33 +293,6 @@ export function requestModelYears() {
     };
 }
 
-export function selectModelYear(vehicleModel) {
-    return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
-        console.log(vehicleModel.id, vehicleModel.year);
-        api
-            .getModelsOrDeals(
-                withStateDefaults(getState(), {
-                    filterPage: 'deals',
-                    modelIds: [vehicleModel.id],
-                    year: vehicleModel.year,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
-
-        dispatch({
-            type: ActionTypes.SELECT_MODEL_YEAR,
-            vehicleModel: vehicleModel.id,
-            vehicleYear: vehicleModel.year,
-        });
-    };
-}
-
 export function clearModelYear() {
     return dispatch => {
             dispatch({
@@ -374,6 +301,41 @@ export function clearModelYear() {
 
         dispatch(requestModelYears());
     }
+}
+
+export function requestDealsOrModelYears(params = {}) {
+    return (dispatch, getState) => {
+        console.log('Fetching:', getState().filterPage);
+        
+        dispatch({
+            type: getState().filterPage == 'deals' ? ActionTypes.REQUEST_DEALS : ActionTypes.REQUEST_MODEL_YEARS
+        });
+
+        api.applySearchFilters(
+            getState().filterPage, withStateDefaults(getState(), params)
+        ).then(data => {
+            if(getState().filterPage == 'deals') {
+                dispatch(receiveDeals(data));
+            } else {
+                dispatch(receiveModelYears(data));
+            }
+        });
+    };
+}
+
+export function selectModelYear(vehicleModel) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.SELECT_MODEL_YEAR,
+        });
+        console.log('test');
+        dispatch(
+            requestDealsOrModelYears({
+                modelIds: [vehicleModel.id],
+                year: vehicleModel.year,
+            })
+        );
+    };
 }
 
 export function receiveBodyStyles(deals) {
@@ -420,128 +382,81 @@ export function receiveMoreDeals(data) {
 
 export function requestBodyStyles() {
     return dispatch => {
-        api.getBodyStyles().then(data => {
-            dispatch(receiveBodyStyles(data));
-        });
-
         dispatch({
             type: ActionTypes.REQUEST_BODY_STYLES,
+        });
+
+        api.getBodyStyles().then(data => {
+            dispatch(receiveBodyStyles(data));
         });
     };
 }
 
 export function toggleStyle(style) {
     return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
-        dispatch({
-            type: ActionTypes.REQUEST_MODEL_YEARS,
-        });
-
         const selectedStyles = util.toggleItem(
             getState().selectedStyles,
             style
         );
 
-        api
-            .getModelsOrDeals(
-                withStateDefaults(getState(), {
-                    filterPage: getState().filterPage,
-                    bodyStyles: selectedStyles,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
-
         dispatch({
             type: ActionTypes.TOGGLE_STYLE,
             selectedStyles: selectedStyles,
+        });
+
+        requestDealsOrModelYears({
+            bodyStyles: selectedStyles,
         });
     };
 }
 
 export function chooseFuelType(fuelType) {
     return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
         const selectedFuelType =
             getState().selectedFuelType === fuelType ? null : fuelType;
-
-        api
-            .getModelsOrDeals(
-                getState().filterPage,
-                withStateDefaults(getState(), {
-                    fuelType: selectedFuelType,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
 
         dispatch({
             type: ActionTypes.CHOOSE_FUEL_TYPE,
             selectedFuelType: selectedFuelType,
         });
+
+        requestDealsOrModelYears({
+            fuelType: selectedFuelType,
+        });
+
     };
 }
 
 export function chooseTransmissionType(transmissionType) {
     return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
         const selectedTransmissionType =
             getState().selectedTransmissionType === transmissionType
                 ? null
                 : transmissionType;
 
-        api
-            .getModelsOrDeals(
-                getState().filterPage,
-                withStateDefaults(getState(), {
-                    transmissionType: selectedTransmissionType,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
-
         dispatch({
             type: ActionTypes.CHOOSE_TRANSMISSION_TYPE,
             selectedTransmissionType,
+        });
+
+        requestDealsOrModelYears({
+            transmissionType: selectedTransmissionType,
         });
     };
 }
 
 export function chooseSegment(segment) {
     return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
         const selectedSegment =
             getState().selectedSegment === segment ? null : segment;
-
-        api
-            .getModelsOrDeals(
-                getState().filterPage,
-                withStateDefaults(getState(), {
-                    segment: selectedSegment,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
 
         dispatch({
             type: ActionTypes.CHOOSE_SEGMENT,
             selectedSegment,
+        });
+
+        requestDealsOrModelYears({
+            segment: selectedSegment,
         });
     };
 }
@@ -549,27 +464,17 @@ export function chooseSegment(segment) {
 export function clearAllFilters() {
     return (dispatch, getState) => {
         dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
-        api
-            .getModelsOrDeals(
-                getState().filterPage,
-                withStateDefaults(getState(), {
-                    makeIds: [],
-                    bodyStyles: [],
-                    fuelType: null,
-                    transmissionType: null,
-                    features: [],
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
-
-        dispatch({
             type: ActionTypes.CLEAR_ALL_FILTERS,
         });
+
+        requestDealsOrModelYears({
+            makeIds: [],
+            bodyStyles: [],
+            fuelType: null,
+            transmissionType: null,
+            features: [],
+        });
+
     };
 }
 
@@ -607,23 +512,11 @@ export function toggleCompare(deal) {
 export function setZipCode(zipcode) {
     return (dispatch, getState) => {
         dispatch({
-            type: ActionTypes.REQUEST_DEALS,
+            type: ActionTypes.SET_ZIP_CODE,
+            zipcode,
         });
 
-        console.log('setZipcode');
-        api
-            .getModelsOrDeals(
-                getState().filterPage,
-                withStateDefaults(getState(), {
-                    zipcode,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
-
-        dispatch({
-            type: ActionTypes.SET_ZIP_CODE,
+        requestDealsOrModelYears({
             zipcode,
         });
 
@@ -639,13 +532,13 @@ export function requestLocationInfo() {
         if (!getState().zipcode) {
             jsonp('//freegeoip.net/json/', null, function(err, data) {
                 if (err) {
-                    dispatch(requestModelYears());
+                    dispatch(requestDealsOrModelYears());
                 } else {
                     dispatch(receiveLocationInfo(data));
                 }
             });
         } else {
-            dispatch(requestModelYears());
+            dispatch(requestDealsOrModelYears());
         }
 
         dispatch({
@@ -656,23 +549,12 @@ export function requestLocationInfo() {
 
 export function receiveLocationInfo(data) {
     return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
         const zipcode = data.zip_code;
         const city = data.city;
 
-        api
-            .getModelsOrDeals(
-                getState().filterPage,
-                withStateDefaults(getState(), {
-                    zipcode,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
+        requestDealsOrModelYears({
+            zipcode,
+        });
 
         dispatch({
             type: ActionTypes.RECEIVE_LOCATION_INFO,

@@ -8,12 +8,13 @@ class ModelYearImage extends React.PureComponent {
         super(props);
 
         this.state = {
-            featuredImage: null,
             fallbackDealImage: '/images/dmr-logo.svg',
+            externalImages: null,
         };
     }
 
     componentDidMount() {
+        this._isMounted = true;
         this.requestFuelImages();
     }
 
@@ -22,11 +23,9 @@ class ModelYearImage extends React.PureComponent {
     }
 
     featuredImageUrl() {
-        return R.propOr(
-            this.state.fallbackDealImage,
-            'url',
-            this.state.featuredImage
-        )
+        return this.state.externalImages ? (
+            this.state.externalImages[2] ? this.state.externalImages[2].url : this.state.externalImages[0].url
+        ) : this.state.fallbackDealImage;
     }
 
     extractFuelImages(data) {
@@ -49,23 +48,25 @@ class ModelYearImage extends React.PureComponent {
         if (!vehicleId) return;
 
         try {
-            const externalImages = this.extractFuelImages(
-                await fuelapi.getExternalImages(
-                    vehicleId,
-                    fuelcolor.random()
-                )
-            );
-
             if (!this._isMounted) return;
-            this.setState({ featuredImage: externalImages[0] });
+
+            this.setState({
+                externalImages: this.extractFuelImages(
+                    await fuelapi.getExternalImages(
+                        vehicleId,
+                        fuelcolor.random()
+                    )
+                )
+            });
         } catch (e) {
             try {
-                const externalImages = this.extractFuelImages(
-                    await fuelapi.getExternalImages(vehicleId, 'white')
-                );
-
                 if (!this._isMounted) return;
-                this.setState({ featuredImage: externalImages[0] });
+
+                this.setState({
+                    externalImages: this.extractFuelImages(
+                        await fuelapi.getExternalImages(vehicleId, 'white')
+                    )
+                });
             } catch (e) {
                 // No Fuel Images Available.
             }
@@ -75,7 +76,7 @@ class ModelYearImage extends React.PureComponent {
     render() {
         return (
             <img
-                className={this.props.featureImageClass}
+                className='modelyear__image'
                 src={this.featuredImageUrl()}
             />
         );

@@ -12,7 +12,7 @@ class ViewModels extends React.PureComponent {
     render() {
         return (
             <div>
-                <div className={'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
+                <div className={'modelyears ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
                     {this.props.modelYears ? (this.props.modelYears.map((model, index) => {
                             return <ModelYear modelYear={model} key={index} />
                         })
