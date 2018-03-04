@@ -34,6 +34,7 @@ class DealByModelController extends BaseAPIController
 
         $deals = $this->buildSearchQuery($request)->paginate(400);
 
+        /* @TODO – This is terrible and insanely memory intensive. Needs badly to be rewritten. Sorry ~DC */
         $dealsByModel = $deals->map(function ($deal) {
             $deal->model_id = $deal->version->model_id;
             return $deal;

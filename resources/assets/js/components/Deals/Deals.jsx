@@ -22,21 +22,30 @@ class Deals extends React.PureComponent {
 
     render() {
         if (
-            !this.props.deals &&
-            this.props.requestingMoreDeals &&
-            this.props.zipInRange
+            ( 
+                !this.props.deals &&
+                this.props.requestingMoreDeals &&
+                this.props.zipInRange
+            ) || (
+                !this.props.modelYears &&
+                this.props.requestingMoreModelYears &&
+                this.props.zipInRange
+            )
         ) {
             return <SVGInline svg={miscicons['loading']} />;
         }
 
-        if ( false && this.props.zipInRange) {
+        if (this.props.zipInRange) {
             return this.props.deals && this.props.deals.length ? (
                 <ViewDeals />
             ) : (
-                <NoDealsInRange />
+                this.props.modelYears && this.props.modelYears.length ? (
+                    <ViewModels />
+                ) : (
+                    <NoDealsInRange />
+                )
             );
         }
-        return <ViewModels />;
 
         return <NoDealsOutOfRange />;
     }
@@ -61,7 +70,10 @@ function mapStateToProps(state) {
     return {
         deals: state.deals,
         requestingMoreDeals: state.requestingMoreDeals,
+        requestingMoreModelYears: state.requestingMoreModelYears,
         zipInRange: state.zipInRange,
+        modelYears: state.modelYears,
+        filterPage: state.filterPage,
     };
 }
 

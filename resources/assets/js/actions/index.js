@@ -5,6 +5,31 @@ import * as ActionTypes from 'actiontypes/index';
 import jsonp from 'jsonp';
 
 const withStateDefaults = (state, changed) => {
+    console.log(
+        Object.assign(
+            {},
+            {
+                makeIds: state.selectedMakes,
+                modelIds: R.map(R.prop('id'), state.selectedModels),
+                bodyStyles: state.selectedStyles,
+                fuelType: state.selectedFuelType,
+                transmissionType: state.selectedTransmissionType,
+                segment: state.selectedSegment,
+                features: state.selectedFeatures,
+                featureCategories: state.featureCategories,
+                includes: ['photos'],
+                sortColumn: state.sortColumn,
+                sortAscending: state.sortAscending,
+                page: 1,
+                zipcode: state.zipcode,
+                zipInRange: state.zipInRange,
+                vehicleModel: state.vehicleModel,
+                vehicleYear: state.vehicleYear,
+            },
+            changed
+        )
+    );
+    
     return Object.assign(
         {},
         {
@@ -22,6 +47,8 @@ const withStateDefaults = (state, changed) => {
             page: 1,
             zipcode: state.zipcode,
             zipInRange: state.zipInRange,
+            vehicleModel: state.vehicleModel,
+            vehicleYear: state.vehicleYear,
         },
         changed
     );
@@ -119,7 +146,8 @@ export function toggleFeature(feature) {
         );
 
         api
-            .getDeals(
+            .getModelsOrDeals(
+                getState().filterPage,
                 withStateDefaults(getState(), {
                     features: selectedFeatures,
                 })
@@ -151,7 +179,8 @@ export function toggleMake(make_id) {
         );
 
         api
-            .getDeals(
+            .getModelsOrDeals(
+                getState().filterPage,
                 withStateDefaults(getState(), {
                     makeIds: selectedMakes,
                 })
@@ -183,7 +212,8 @@ export function toggleModel(model) {
         );
 
         api
-            .getDeals(
+            .getModelsOrDeals(
+                getState().filterPage,
                 withStateDefaults(getState(), {
                     modelIds: R.map(R.prop('id'), selectedModels),
                 })
@@ -249,6 +279,8 @@ export function requestDeals() {
             type: ActionTypes.REQUEST_DEALS,
         });
 
+        console.log('requestDeals');
+
         api.getDeals(withStateDefaults(getState())).then(data => {
             dispatch(receiveDeals(data));
         });
@@ -262,7 +294,8 @@ export function requestMoreDeals() {
         });
 
         api
-            .getDeals(
+            .getModelsOrDeals(
+                getState().filterPage,
                 withStateDefaults(getState(), {
                     page: getState().dealPage + 1,
                 })
@@ -306,22 +339,41 @@ export function requestModelYears() {
     };
 }
 
-export function requestMoreModelYears() {
+export function selectModelYear(vehicleModel) {
     return (dispatch, getState) => {
         dispatch({
-            type: ActionTypes.REQUEST_MORE_MODEL_YEARS,
+            type: ActionTypes.REQUEST_DEALS,
         });
 
+        console.log(vehicleModel.id, vehicleModel.year);
         api
-            .getDeals(
+            .getModelsOrDeals(
                 withStateDefaults(getState(), {
-                    page: getState().modelPage + 1,
+                    filterPage: 'deals',
+                    modelIds: [vehicleModel.id],
+                    year: vehicleModel.year,
                 })
             )
             .then(data => {
-                dispatch(receiveMoreModelYears(data));
+                dispatch(receiveDeals(data));
             });
+
+        dispatch({
+            type: ActionTypes.SELECT_MODEL_YEAR,
+            vehicleModel: vehicleModel.id,
+            vehicleYear: vehicleModel.year,
+        });
     };
+}
+
+export function clearModelYear() {
+    return dispatch => {
+            dispatch({
+            type: ActionTypes.CLEAR_MODEL_YEAR
+        });
+
+        dispatch(requestModelYears());
+    }
 }
 
 export function receiveBodyStyles(deals) {
@@ -394,8 +446,9 @@ export function toggleStyle(style) {
         );
 
         api
-            .getDeals(
+            .getModelsOrDeals(
                 withStateDefaults(getState(), {
+                    filterPage: getState().filterPage,
                     bodyStyles: selectedStyles,
                 })
             )
@@ -420,7 +473,8 @@ export function chooseFuelType(fuelType) {
             getState().selectedFuelType === fuelType ? null : fuelType;
 
         api
-            .getDeals(
+            .getModelsOrDeals(
+                getState().filterPage,
                 withStateDefaults(getState(), {
                     fuelType: selectedFuelType,
                 })
@@ -448,7 +502,8 @@ export function chooseTransmissionType(transmissionType) {
                 : transmissionType;
 
         api
-            .getDeals(
+            .getModelsOrDeals(
+                getState().filterPage,
                 withStateDefaults(getState(), {
                     transmissionType: selectedTransmissionType,
                 })
@@ -474,7 +529,8 @@ export function chooseSegment(segment) {
             getState().selectedSegment === segment ? null : segment;
 
         api
-            .getDeals(
+            .getModelsOrDeals(
+                getState().filterPage,
                 withStateDefaults(getState(), {
                     segment: selectedSegment,
                 })
@@ -497,7 +553,8 @@ export function clearAllFilters() {
         });
 
         api
-            .getDeals(
+            .getModelsOrDeals(
+                getState().filterPage,
                 withStateDefaults(getState(), {
                     makeIds: [],
                     bodyStyles: [],
@@ -553,8 +610,10 @@ export function setZipCode(zipcode) {
             type: ActionTypes.REQUEST_DEALS,
         });
 
+        console.log('setZipcode');
         api
-            .getDeals(
+            .getModelsOrDeals(
+                getState().filterPage,
                 withStateDefaults(getState(), {
                     zipcode,
                 })
@@ -580,13 +639,13 @@ export function requestLocationInfo() {
         if (!getState().zipcode) {
             jsonp('//freegeoip.net/json/', null, function(err, data) {
                 if (err) {
-                    dispatch(requestDeals());
+                    dispatch(requestModelYears());
                 } else {
                     dispatch(receiveLocationInfo(data));
                 }
             });
         } else {
-            dispatch(requestDeals());
+            dispatch(requestModelYears());
         }
 
         dispatch({
@@ -605,7 +664,8 @@ export function receiveLocationInfo(data) {
         const city = data.city;
 
         api
-            .getDeals(
+            .getModelsOrDeals(
+                getState().filterPage,
                 withStateDefaults(getState(), {
                     zipcode,
                 })

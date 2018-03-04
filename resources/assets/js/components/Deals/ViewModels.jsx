@@ -3,22 +3,18 @@ import PropTypes from 'prop-types';
 import R from 'ramda';
 import * as Actions from 'actions';
 import Deal from './Deal';
-import DealGrouping from './DealGrouping';
+import ModelYear from './ModelYear';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import { connect } from 'react-redux';
 
 class ViewModels extends React.PureComponent {
-    componentWillMount() {
-        this.props.requestModelYears();
-    };
-    
     render() {
         return (
             <div>
                 <div className={'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
                     {this.props.modelYears ? (this.props.modelYears.map((model, index) => {
-                            return <DealGrouping dealGrouping={model} key={index} />
+                            return <ModelYear modelYear={model} key={index} />
                         })
                     ) : (
                         <SVGInline svg={miscicons['loading']} />

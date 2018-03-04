@@ -55,9 +55,25 @@ trait SearchesDeals
                     $query->filterByMake($request->get('make_ids'));
                 }
             });
+
+            $query->whereHas('model', function (Builder $query) use ($request) {
+                if ($request->has('model_ids')) {
+                    $query->whereIn('model_id', $request->get('model_ids'));
+                }
+            });
+            
         })->whereNotNull('price')->whereNotNull('msrp')->with(['photos' => function ($query) {
             $query->orderBy('id');
         },])->with('features')->with('versions.equipment')->with('dealer')->forSale();
+    }
+
+    private function filterQueryByYear(Builder $query, Request $request) : Builder
+    {
+        if ($request->has('year')) {
+            $query->where('year', $year);
+        }
+
+        return $query;
     }
 
     private function filterQueryByTransmissionType(Builder $query, Request $request) : Builder
