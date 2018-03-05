@@ -1225,13 +1225,13 @@ function clearAllFilters() {
             type: ActionTypes.CLEAR_ALL_FILTERS
         });
 
-        requestDealsOrModelYears({
+        dispatch(requestDealsOrModelYears({
             makeIds: [],
             bodyStyles: [],
             fuelType: null,
             transmissionType: null,
             features: []
-        });
+        }));
     };
 }
 
