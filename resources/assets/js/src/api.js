@@ -128,7 +128,6 @@ const api = {
         });
     },
     applySearchFilters: (type, searchParams) => {
-        console.log(searchParams.filterPage);
         return type === 'deals' ? api.getDeals(searchParams) : api.getModelYears(searchParams);
     },
     getTargets: (zipcode, vin) => {

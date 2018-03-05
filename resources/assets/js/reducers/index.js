@@ -82,11 +82,14 @@ const reducer = (state, action) => {
             });
         case ActionTypes.CLEAR_MODEL_YEAR:
             return Object.assign({}, state, {
-                modelIds: null,
+                selectedModels: null,
+                filterPage: 'models',
             });
         case ActionTypes.SELECT_MODEL_YEAR:
             return Object.assign({}, state, {
                 filterPage: 'deals',
+                selectedModels: [action.data.id],
+                selectedYear: action.data.id,
             });
         case ActionTypes.RECEIVE_TARGETS:
             const targetKey = util.getTargetKeyForDealAndZip(

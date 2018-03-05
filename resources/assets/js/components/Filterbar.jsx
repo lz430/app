@@ -136,7 +136,6 @@ class Filterbar extends React.PureComponent {
                         ''
                     )}
                     {this.props.selectedMakes.map(this.renderFilterMakes)}
-                    {this.props.selectedModels.map(this.renderFilterModels)}
                     {this.props.selectedFuelType ? (
                         this.renderFilterFuelType(this.props.selectedFuelType)
                     ) : (

@@ -10,6 +10,8 @@ import FilterSegmentSelector from 'components/FilterSegmentSelector';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import R from 'ramda';
+import SVGInline from 'react-svg-inline';
+import zondicons from 'zondicons';
 
 class FilterPanel extends React.PureComponent {
     constructor(props) {
@@ -18,7 +20,7 @@ class FilterPanel extends React.PureComponent {
         this.state = {
             openFilter: 'Vehicle Style',
             sizeCategory: null,
-            sizeFeatures: null,
+            sizeFeatures: [],
         };
     }
 
@@ -82,13 +84,20 @@ class FilterPanel extends React.PureComponent {
                 return categoryFeatures.includes(feature.id);
             });
 
+            let localSelectedFeatures = features.filter(feature => {
+                return R.contains(
+                    feature.attributes.title,
+                    this.props.selectedFeatures
+                );
+            });
+
             return (
                 <SidebarFilter
                     key={index}
                     toggle={() => this.toggleOpenFilter(category.attributes.title)}
                     open={this.state.openFilter === category.attributes.title}
                     title={category.attributes.title}
-                    count={this.props.selectedStyles.length}
+                    count={localSelectedFeatures.length}
                 >
                     <FilterFeatureSelector
                         selectedFeatures={this.props.selectedFeatures}
@@ -101,16 +110,39 @@ class FilterPanel extends React.PureComponent {
     }
 
     render() {
+        let selectedSizeFeatures = this.state.sizeFeatures.filter(feature => {
+            return R.contains(
+                feature.attributes.title,
+                this.props.selectedFeatures
+            );
+        });
         return (
             <div>
                 <ZipcodeFinder />
 
                 <div className="sidebar-filters">
                     <div className={`sidebar-filters__broad sidebar-filters__broad--${this.props.filterPage === 'deals' ? 'narrow' : 'broad'}`}>
-                        <div className="sidebar-filters__instructive-heading">Refine this search</div>
+                        {
+                            this.props.filterPage === 'deals' ? (
+                                <div className="sidebar-filters__overlay">
+                                    <a onClick={ () => {this.props.clearModelYear()} }>
+                                        <SVGInline
+                                            height="20px"
+                                            width="20px"
+                                            className="sidebar-filters__clear-icon"
+                                            svg={zondicons['arrow-outline-left']}
+                                        />
+                                        Return to original search
+                                    </a>
+                                </div>
+                            ) : (
+                                <div className="sidebar-filters__instructive-heading">Refine this search</div>
+                            )
+                        }
+
                         <SidebarFilter
                             toggle={() => this.toggleOpenFilter('Vehicle Style')}
-                            open={this.state.openFilter === 'Vehicle Style'}
+                            open={this.state.openFilter === 'Vehicle Style' && this.props.filterPage !== 'deals' }
                             title="Vehicle Style"
                             count={this.props.selectedStyles.length}
                         >
@@ -124,9 +156,9 @@ class FilterPanel extends React.PureComponent {
                         {this.state.sizeCategory ? (
                                 <SidebarFilter
                                     toggle={() => this.toggleOpenFilter(this.state.sizeCategory.attributes.title)}
-                                    open={this.state.openFilter === this.state.sizeCategory.attributes.title}
+                                    open={this.state.openFilter === this.state.sizeCategory.attributes.title && this.props.filterPage !== 'deals' }
                                     title={this.state.sizeCategory.attributes.title}
-                                    count={this.props.selectedStyles.length}
+                                    count={selectedSizeFeatures.length}
                                 >
                                     <FilterFeatureSelector
                                         selectedFeatures={this.props.selectedFeatures}
@@ -138,7 +170,7 @@ class FilterPanel extends React.PureComponent {
                         
                         <SidebarFilter
                             toggle={() => this.toggleOpenFilter('Make')}
-                            open={this.state.openFilter === 'Make'}
+                            open={this.state.openFilter === 'Make' && this.props.filterPage !== 'deals' }
                             title="Vehicle Brand"
                             count={this.props.selectedMakes.length}
                         >
@@ -150,6 +182,12 @@ class FilterPanel extends React.PureComponent {
                         </SidebarFilter>
                     </div>
                     <div className={`sidebar-filters__narrow sidebar-filters__narrow--${status}`}>
+                        { this.props.filterPage === 'deals' ? (
+                            <div className="sidebar-filters__instructive-heading">Refine this search</div>
+                        ) : (
+                            ''
+                        ) }
+
                         <div className="sidebar-filters__section-header sidebar-filters__filter-title">
                             <p>Features & Options</p>
                         </div>

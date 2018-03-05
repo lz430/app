@@ -5,36 +5,11 @@ import * as ActionTypes from 'actiontypes/index';
 import jsonp from 'jsonp';
 
 const withStateDefaults = (state, changed) => {
-    console.log(
-        Object.assign(
-            {},
-            {
-                makeIds: state.selectedMakes,
-                modelIds: R.map(R.prop('id'), state.selectedModels),
-                bodyStyles: state.selectedStyles,
-                fuelType: state.selectedFuelType,
-                transmissionType: state.selectedTransmissionType,
-                segment: state.selectedSegment,
-                features: state.selectedFeatures,
-                featureCategories: state.featureCategories,
-                includes: ['photos'],
-                sortColumn: state.sortColumn,
-                sortAscending: state.sortAscending,
-                page: 1,
-                zipcode: state.zipcode,
-                zipInRange: state.zipInRange,
-                vehicleModel: state.vehicleModel,
-                vehicleYear: state.vehicleYear,
-            },
-            changed
-        )
-    );
-    
     return Object.assign(
         {},
         {
             makeIds: state.selectedMakes,
-            modelIds: R.map(R.prop('id'), state.selectedModels),
+            modelIds: state.selectedModels,
             bodyStyles: state.selectedStyles,
             fuelType: state.selectedFuelType,
             transmissionType: state.selectedTransmissionType,
@@ -45,10 +20,9 @@ const withStateDefaults = (state, changed) => {
             sortColumn: state.sortColumn,
             sortAscending: state.sortAscending,
             page: 1,
+            year: state.selectedYear,
             zipcode: state.zipcode,
             zipInRange: state.zipInRange,
-            vehicleModel: state.vehicleModel,
-            vehicleYear: state.vehicleYear,
         },
         changed
     );
@@ -141,10 +115,10 @@ export function toggleFeature(feature) {
             type: ActionTypes.TOGGLE_FEATURE,
             selectedFeatures,
         });
-        
-        requestDealsOrModelYears({
+
+        dispatch(requestDealsOrModelYears({
             features: selectedFeatures,
-        });
+        }));
     };
 }
 
@@ -160,9 +134,9 @@ export function toggleMake(make_id) {
             selectedMakes,
         });
 
-        requestDealsOrModelYears({
+        dispatch(requestDealsOrModelYears({
             makeIds: selectedMakes,
-        });
+        }));
 
     };
 }
@@ -179,9 +153,9 @@ export function toggleModel(model) {
             selectedModels,
         });
 
-        requestDealsOrModelYears({
+        dispatch(requestDealsOrModelYears({
             modelIds: R.map(R.prop('id'), selectedModels),
-        });
+        }));
     };
 }
 
@@ -327,14 +301,10 @@ export function selectModelYear(vehicleModel) {
     return (dispatch, getState) => {
         dispatch({
             type: ActionTypes.SELECT_MODEL_YEAR,
+            data: vehicleModel,
         });
-        console.log('test');
-        dispatch(
-            requestDealsOrModelYears({
-                modelIds: [vehicleModel.id],
-                year: vehicleModel.year,
-            })
-        );
+
+        dispatch(requestDealsOrModelYears());
     };
 }
 
@@ -368,6 +338,8 @@ export function setZipInRange(data) {
                 supported: data.supported,
             });
         });
+
+        dispatch(requestDealsOrModelYears());
     };
 }
 
@@ -404,9 +376,9 @@ export function toggleStyle(style) {
             selectedStyles: selectedStyles,
         });
 
-        requestDealsOrModelYears({
-            bodyStyles: selectedStyles,
-        });
+        dispatch(requestDealsOrModelYears({
+            bodyStyles: getState().selectedStyles,
+        }));
     };
 }
 
@@ -516,10 +488,6 @@ export function setZipCode(zipcode) {
             zipcode,
         });
 
-        requestDealsOrModelYears({
-            zipcode,
-        });
-
         dispatch(checkZipInRange(zipcode));
     };
 }
@@ -552,9 +520,9 @@ export function receiveLocationInfo(data) {
         const zipcode = data.zip_code;
         const city = data.city;
 
-        requestDealsOrModelYears({
+        dispatch(requestDealsOrModelYears({
             zipcode,
-        });
+        }));
 
         dispatch({
             type: ActionTypes.RECEIVE_LOCATION_INFO,

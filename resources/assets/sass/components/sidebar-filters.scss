@@ -76,6 +76,8 @@ $icon-size: 20px;
   }
 
   &__broad {
+    position: relative;
+    
     .sidebar-filters__filter {
       border-bottom: 2px solid $color-sidebar-background-primary-light;
       
@@ -85,7 +87,14 @@ $icon-size: 20px;
       }
     }
   }
-  
+
+  &__narrow {
+    border-top: 5px solid $color-text-white;
+    .sidebar-filters__count {
+      display: none;
+    }
+  }
+
   &__filter-body {
     background-color: $color-sidebar-background-primary-light;
     border-top: 1px solid $color-sidebar-background-secondary;
@@ -102,9 +111,38 @@ $icon-size: 20px;
     order: -1;
   }
 
+  &__overlay {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(180,180,180, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    a {
+      padding: 10px 15px;
+      background: rgba(0,0,0,0.4);
+      border: 3px solid;
+      border-radius: 4px;
+      color: rgba(200,200,200, 1);
+      cursor: pointer;
+    }
+
+    .sidebar-filters__clear-icon {
+      margin-right: 5px;
+
+      path {
+        fill: rgba(200,200,200, 1);
+      }
+    }
+  }
+
   &__section-header {
     background-color: $color-sidebar-background-primary;
-    border-top: 5px solid $color-text-white;
     color: $color-text-white;
     height: 2.75em;
   }

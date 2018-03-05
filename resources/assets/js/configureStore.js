@@ -39,6 +39,7 @@ const initialState = {
     makes: null,
     models: null,
     modelYears: null,
+    selectedYear: null,
     requestingMoreDeals: false,
     requestingMoreModelYears: false,
     residualPercent: null,

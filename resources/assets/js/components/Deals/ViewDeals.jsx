@@ -44,10 +44,6 @@ class ViewDeals extends React.PureComponent {
     render() {
         return (
             <div>
-                <button className="deal__button deal__button--small deal__button--pink deal__button"
-                    onClick={() => { this.props.clearModelYear() }}>
-                    BACK
-                </button>
                 <div className={'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
                     {this.props.deals && this.props.deals.length ? (
                        this.props.deals.map((deal, index) => {

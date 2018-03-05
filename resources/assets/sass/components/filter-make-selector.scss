@@ -1,0 +1,68 @@
+@import '../variables';
+
+.filter-make-selector {
+  text-align: center;
+
+  &__makes {
+    align-content: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-right: 2px;
+  }
+
+  &__make {
+    background: white;
+    align-items: center;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    height: 85px;
+    justify-content: flex-end;
+    margin: 5px 5px;
+    min-height: 85px;
+    max-width: calc(33% - 10px);
+    min-width: calc(33% - 10px);
+    padding: 5px 5px;
+    text-align: center;
+    width: calc(33% - 10px);
+    opacity: 0.5;
+    position: relative;
+
+    &--selected {
+      border: 5px solid $color-left-filter-selected;
+      opacity: 1;
+
+      .filter-make-selector__icon {
+        svg path {
+          fill: $color-text-white;
+        }
+      }
+    }
+  }
+
+  &__icon {
+    width: 100%;
+    height: 60px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: white;
+    position: absolute;
+    top: 5px;
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+  }
+
+  &__name {
+    position: absolute;
+    bottom: 0;
+    color: $color-darkestgrey;
+    font-size: 0.7rem;
+    margin-top: -1.5rem;
+    width: 100%;
+  }
+}

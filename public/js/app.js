@@ -822,28 +822,9 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var withStateDefaults = function withStateDefaults(state, changed) {
-    console.log(Object.assign({}, {
-        makeIds: state.selectedMakes,
-        modelIds: _ramda2.default.map(_ramda2.default.prop('id'), state.selectedModels),
-        bodyStyles: state.selectedStyles,
-        fuelType: state.selectedFuelType,
-        transmissionType: state.selectedTransmissionType,
-        segment: state.selectedSegment,
-        features: state.selectedFeatures,
-        featureCategories: state.featureCategories,
-        includes: ['photos'],
-        sortColumn: state.sortColumn,
-        sortAscending: state.sortAscending,
-        page: 1,
-        zipcode: state.zipcode,
-        zipInRange: state.zipInRange,
-        vehicleModel: state.vehicleModel,
-        vehicleYear: state.vehicleYear
-    }, changed));
-
     return Object.assign({}, {
         makeIds: state.selectedMakes,
-        modelIds: _ramda2.default.map(_ramda2.default.prop('id'), state.selectedModels),
+        modelIds: state.selectedModels,
         bodyStyles: state.selectedStyles,
         fuelType: state.selectedFuelType,
         transmissionType: state.selectedTransmissionType,
@@ -854,10 +835,9 @@ var withStateDefaults = function withStateDefaults(state, changed) {
         sortColumn: state.sortColumn,
         sortAscending: state.sortAscending,
         page: 1,
+        year: state.selectedYear,
         zipcode: state.zipcode,
-        zipInRange: state.zipInRange,
-        vehicleModel: state.vehicleModel,
-        vehicleYear: state.vehicleYear
+        zipInRange: state.zipInRange
     }, changed);
 };
 
@@ -946,9 +926,9 @@ function toggleFeature(feature) {
             selectedFeatures: selectedFeatures
         });
 
-        requestDealsOrModelYears({
+        dispatch(requestDealsOrModelYears({
             features: selectedFeatures
-        });
+        }));
     };
 }
 
@@ -961,9 +941,9 @@ function toggleMake(make_id) {
             selectedMakes: selectedMakes
         });
 
-        requestDealsOrModelYears({
+        dispatch(requestDealsOrModelYears({
             makeIds: selectedMakes
-        });
+        }));
     };
 }
 
@@ -976,9 +956,9 @@ function toggleModel(model) {
             selectedModels: selectedModels
         });
 
-        requestDealsOrModelYears({
+        dispatch(requestDealsOrModelYears({
             modelIds: _ramda2.default.map(_ramda2.default.prop('id'), selectedModels)
-        });
+        }));
     };
 }
 
@@ -1115,13 +1095,11 @@ function requestDealsOrModelYears() {
 function selectModelYear(vehicleModel) {
     return function (dispatch, getState) {
         dispatch({
-            type: ActionTypes.SELECT_MODEL_YEAR
+            type: ActionTypes.SELECT_MODEL_YEAR,
+            data: vehicleModel
         });
-        console.log('test');
-        dispatch(requestDealsOrModelYears({
-            modelIds: [vehicleModel.id],
-            year: vehicleModel.year
-        }));
+
+        dispatch(requestDealsOrModelYears());
     };
 }
 
@@ -1155,6 +1133,8 @@ function setZipInRange(data) {
                 supported: data.supported
             });
         });
+
+        dispatch(requestDealsOrModelYears());
     };
 }
 
@@ -1188,9 +1168,9 @@ function toggleStyle(style) {
             selectedStyles: selectedStyles
         });
 
-        requestDealsOrModelYears({
-            bodyStyles: selectedStyles
-        });
+        dispatch(requestDealsOrModelYears({
+            bodyStyles: getState().selectedStyles
+        }));
     };
 }
 
@@ -1288,10 +1268,6 @@ function setZipCode(zipcode) {
             zipcode: zipcode
         });
 
-        requestDealsOrModelYears({
-            zipcode: zipcode
-        });
-
         dispatch(checkZipInRange(zipcode));
     };
 }
@@ -1324,9 +1300,9 @@ function receiveLocationInfo(data) {
         var zipcode = data.zip_code;
         var city = data.city;
 
-        requestDealsOrModelYears({
+        dispatch(requestDealsOrModelYears({
             zipcode: zipcode
-        });
+        }));
 
         dispatch({
             type: ActionTypes.RECEIVE_LOCATION_INFO,
@@ -5582,7 +5558,6 @@ var api = {
         });
     },
     applySearchFilters: function applySearchFilters(type, searchParams) {
-        console.log(searchParams.filterPage);
         return type === 'deals' ? api.getDeals(searchParams) : api.getModelYears(searchParams);
     },
     getTargets: function getTargets(zipcode, vin) {
@@ -52816,14 +52791,6 @@ var ViewDeals = function (_React$PureComponent) {
                 'div',
                 null,
                 _react2.default.createElement(
-                    'button',
-                    { className: 'deal__button deal__button--small deal__button--pink deal__button',
-                        onClick: function onClick() {
-                            _this2.props.clearModelYear();
-                        } },
-                    'BACK'
-                ),
-                _react2.default.createElement(
                     'div',
                     { className: 'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare') },
                     this.props.deals && this.props.deals.length ? this.props.deals.map(function (deal, index) {
@@ -59289,7 +59256,7 @@ var Sortbar = function (_React$PureComponent) {
                 'div',
                 { className: 'sortbar' },
                 this.renderFilterToggle(),
-                this.renderSortbarDropdown()
+                this.props.filterPage === 'deals' ? this.renderSortbarDropdown() : ''
             );
         }
     }]);
@@ -59317,6 +59284,7 @@ Sortbar.propTypes = {
 function mapStateToProps(state) {
     return {
         deals: state.deals,
+        filterPage: state.filterPage,
         sortColumn: state.sortColumn,
         sortAscending: state.sortAscending,
         compareList: state.compareList,
@@ -59525,7 +59493,6 @@ var Filterbar = function (_React$PureComponent) {
                     this.props.selectedStyles.map(this.renderFilterStyles),
                     this.props.selectedSegment ? this.renderFilterSegment(this.props.selectedSegment) : '',
                     this.props.selectedMakes.map(this.renderFilterMakes),
-                    this.props.selectedModels.map(this.renderFilterModels),
                     this.props.selectedFuelType ? this.renderFilterFuelType(this.props.selectedFuelType) : '',
                     this.props.selectedTransmissionType ? this.renderFilterTransmissionType(this.props.selectedTransmissionType) : '',
                     this.props.selectedFeatures.map(this.renderFilterFeatures)
@@ -59636,6 +59603,14 @@ var _ramda = __webpack_require__(9);
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
+var _reactSvgInline = __webpack_require__(15);
+
+var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
+
+var _zondicons = __webpack_require__(28);
+
+var _zondicons2 = _interopRequireDefault(_zondicons);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -59657,7 +59632,7 @@ var FilterPanel = function (_React$PureComponent) {
         _this.state = {
             openFilter: 'Vehicle Style',
             sizeCategory: null,
-            sizeFeatures: null
+            sizeFeatures: []
         };
         return _this;
     }
@@ -59723,6 +59698,10 @@ var FilterPanel = function (_React$PureComponent) {
                     return categoryFeatures.includes(feature.id);
                 });
 
+                var localSelectedFeatures = features.filter(function (feature) {
+                    return _ramda2.default.contains(feature.attributes.title, _this3.props.selectedFeatures);
+                });
+
                 return _react2.default.createElement(
                     _SidebarFilter2.default,
                     {
@@ -59732,7 +59711,7 @@ var FilterPanel = function (_React$PureComponent) {
                         },
                         open: _this3.state.openFilter === category.attributes.title,
                         title: category.attributes.title,
-                        count: _this3.props.selectedStyles.length
+                        count: localSelectedFeatures.length
                     },
                     _react2.default.createElement(_FilterFeatureSelector2.default, {
                         selectedFeatures: _this3.props.selectedFeatures,
@@ -59747,6 +59726,9 @@ var FilterPanel = function (_React$PureComponent) {
         value: function render() {
             var _this4 = this;
 
+            var selectedSizeFeatures = this.state.sizeFeatures.filter(function (feature) {
+                return _ramda2.default.contains(feature.attributes.title, _this4.props.selectedFeatures);
+            });
             return _react2.default.createElement(
                 'div',
                 null,
@@ -59757,7 +59739,23 @@ var FilterPanel = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         { className: 'sidebar-filters__broad sidebar-filters__broad--' + (this.props.filterPage === 'deals' ? 'narrow' : 'broad') },
-                        _react2.default.createElement(
+                        this.props.filterPage === 'deals' ? _react2.default.createElement(
+                            'div',
+                            { className: 'sidebar-filters__overlay' },
+                            _react2.default.createElement(
+                                'a',
+                                { onClick: function onClick() {
+                                        _this4.props.clearModelYear();
+                                    } },
+                                _react2.default.createElement(_reactSvgInline2.default, {
+                                    height: '20px',
+                                    width: '20px',
+                                    className: 'sidebar-filters__clear-icon',
+                                    svg: _zondicons2.default['arrow-outline-left']
+                                }),
+                                'Return to original search'
+                            )
+                        ) : _react2.default.createElement(
                             'div',
                             { className: 'sidebar-filters__instructive-heading' },
                             'Refine this search'
@@ -59768,7 +59766,7 @@ var FilterPanel = function (_React$PureComponent) {
                                 toggle: function toggle() {
                                     return _this4.toggleOpenFilter('Vehicle Style');
                                 },
-                                open: this.state.openFilter === 'Vehicle Style',
+                                open: this.state.openFilter === 'Vehicle Style' && this.props.filterPage !== 'deals',
                                 title: 'Vehicle Style',
                                 count: this.props.selectedStyles.length
                             },
@@ -59784,9 +59782,9 @@ var FilterPanel = function (_React$PureComponent) {
                                 toggle: function toggle() {
                                     return _this4.toggleOpenFilter(_this4.state.sizeCategory.attributes.title);
                                 },
-                                open: this.state.openFilter === this.state.sizeCategory.attributes.title,
+                                open: this.state.openFilter === this.state.sizeCategory.attributes.title && this.props.filterPage !== 'deals',
                                 title: this.state.sizeCategory.attributes.title,
-                                count: this.props.selectedStyles.length
+                                count: selectedSizeFeatures.length
                             },
                             _react2.default.createElement(_FilterFeatureSelector2.default, {
                                 selectedFeatures: this.props.selectedFeatures,
@@ -59800,7 +59798,7 @@ var FilterPanel = function (_React$PureComponent) {
                                 toggle: function toggle() {
                                     return _this4.toggleOpenFilter('Make');
                                 },
-                                open: this.state.openFilter === 'Make',
+                                open: this.state.openFilter === 'Make' && this.props.filterPage !== 'deals',
                                 title: 'Vehicle Brand',
                                 count: this.props.selectedMakes.length
                             },
@@ -59814,6 +59812,11 @@ var FilterPanel = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         { className: 'sidebar-filters__narrow sidebar-filters__narrow--' + status },
+                        this.props.filterPage === 'deals' ? _react2.default.createElement(
+                            'div',
+                            { className: 'sidebar-filters__instructive-heading' },
+                            'Refine this search'
+                        ) : '',
                         _react2.default.createElement(
                             'div',
                             { className: 'sidebar-filters__section-header sidebar-filters__filter-title' },
@@ -60298,34 +60301,43 @@ var FilterMakeSelector = function (_React$PureComponent) {
     function FilterMakeSelector() {
         _classCallCheck(this, FilterMakeSelector);
 
-        return _possibleConstructorReturn(this, (FilterMakeSelector.__proto__ || Object.getPrototypeOf(FilterMakeSelector)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (FilterMakeSelector.__proto__ || Object.getPrototypeOf(FilterMakeSelector)).call(this));
+
+        _this.renderMake = _this.renderMake.bind(_this);
+        return _this;
     }
 
     _createClass(FilterMakeSelector, [{
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
+        key: 'renderMake',
+        value: function renderMake(make) {
+            var selected = _ramda2.default.contains(make.id, this.props.selectedMakes);
+
+            var className = _ramda2.default.contains(make.id, this.props.selectedMakes) ? "filter-make-selector__make filter-make-selector__make--selected" : "filter-make-selector__make";
 
             return _react2.default.createElement(
                 'div',
-                { className: 'filter-selector' },
-                this.props.makes ? this.props.makes.map(function (make, index) {
-                    return _react2.default.createElement(
-                        'div',
-                        {
-                            key: index,
-                            className: _ramda2.default.contains(make.id, _this2.props.selectedMakes) ? "filter-selector__selector filter-selector__selector--selected" : "filter-selector__selector",
-                            onClick: _this2.props.onSelectMake.bind(null, make.id)
-                        },
-                        _ramda2.default.contains(make.id, _this2.props.selectedMakes) ? _react2.default.createElement(_reactSvgInline2.default, {
-                            width: '15px',
-                            height: '15px',
-                            className: 'filter-selector__checkbox filter-selector__checkbox--selected',
-                            svg: _zondicons2.default['checkmark']
-                        }) : _react2.default.createElement('div', { className: 'filter-selector__checkbox' }),
-                        make.attributes.name
-                    );
-                }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                { className: className,
+                    key: make.id,
+                    onClick: this.props.onSelectMake.bind(null, make.id) },
+                _react2.default.createElement('div', { className: 'filter-make-selector__icon', style: { backgroundImage: 'url(\'' + make.attributes.logo + '\')' } }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'filter-make-selector__name' },
+                    make.attributes.name
+                )
+            );
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'filter-make-selector' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'filter-make-selector__makes' },
+                    this.props.makes ? this.props.makes.map(this.renderMake) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                )
             );
         }
     }]);
@@ -62063,6 +62075,7 @@ var initialState = {
     makes: null,
     models: null,
     modelYears: null,
+    selectedYear: null,
     requestingMoreDeals: false,
     requestingMoreModelYears: false,
     residualPercent: null,
@@ -62553,11 +62566,14 @@ var reducer = function reducer(state, action) {
             });
         case ActionTypes.CLEAR_MODEL_YEAR:
             return Object.assign({}, state, {
-                modelIds: null
+                selectedModels: null,
+                filterPage: 'models'
             });
         case ActionTypes.SELECT_MODEL_YEAR:
             return Object.assign({}, state, {
-                filterPage: 'deals'
+                filterPage: 'deals',
+                selectedModels: [action.data.id],
+                selectedYear: action.data.id
             });
         case ActionTypes.RECEIVE_TARGETS:
             var targetKey = _util2.default.getTargetKeyForDealAndZip(action.data.deal, action.data.zipcode);

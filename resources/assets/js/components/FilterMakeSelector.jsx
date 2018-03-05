@@ -6,43 +6,48 @@ import zondicons from 'zondicons';
 import miscicons from 'miscicons';
 
 class FilterMakeSelector extends React.PureComponent {
+    constructor() {
+        super();
+
+        this.renderMake = this.renderMake.bind(this);
+    }
+
+    renderMake(make) {
+        let selected = R.contains(
+            make.id,
+            this.props.selectedMakes
+        );
+
+        let className = R.contains(
+            make.id,
+            this.props.selectedMakes
+        ) ? "filter-make-selector__make filter-make-selector__make--selected" : "filter-make-selector__make";
+
+        return (
+            <div className={className}
+                 key={make.id}
+                 onClick={this.props.onSelectMake.bind(
+                    null,
+                    make.id
+                )} >
+
+                <div className="filter-make-selector__icon" style={{backgroundImage: `url('${ make.attributes.logo }')`}}></div>
+                <div className="filter-make-selector__name">{make.attributes.name}</div>
+
+            </div>
+        );
+    }
+
     render() {
         return (
-            <div className="filter-selector">
-                {this.props.makes ? (
-                    this.props.makes.map((make, index) => {
-                        return (
-                            <div
-                                key={index}
-                                className={R.contains(
-                                    make.id,
-                                    this.props.selectedMakes
-                                ) ? "filter-selector__selector filter-selector__selector--selected" : "filter-selector__selector"}
-                                onClick={this.props.onSelectMake.bind(
-                                    null,
-                                    make.id
-                                )}
-                            >
-                                {R.contains(
-                                    make.id,
-                                    this.props.selectedMakes
-                                ) ? (
-                                    <SVGInline
-                                        width="15px"
-                                        height="15px"
-                                        className="filter-selector__checkbox filter-selector__checkbox--selected"
-                                        svg={zondicons['checkmark']}
-                                    />
-                                ) : (
-                                    <div className="filter-selector__checkbox" />
-                                )}
-                                {make.attributes.name}
-                            </div>
-                        );
-                    })
-                ) : (
-                    <SVGInline svg={miscicons['loading']} />
-                )}
+            <div className="filter-make-selector">
+                <div className="filter-make-selector__makes">
+                    {this.props.makes ? (
+                        this.props.makes.map(this.renderMake)
+                    ) : (
+                            <SVGInline svg={miscicons['loading']} />
+                        )}
+                </div>
             </div>
         );
     }

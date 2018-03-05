@@ -97,7 +97,7 @@ class Sortbar extends React.PureComponent {
         return (
             <div className="sortbar">
                 {this.renderFilterToggle()}
-                {this.renderSortbarDropdown()}
+                {this.props.filterPage === 'deals' ? this.renderSortbarDropdown() : ''}
             </div>
         );
     }
@@ -125,6 +125,7 @@ Sortbar.propTypes = {
 function mapStateToProps(state) {
     return {
         deals: state.deals,
+        filterPage: state.filterPage,
         sortColumn: state.sortColumn,
         sortAscending: state.sortAscending,
         compareList: state.compareList,
