@@ -40,7 +40,7 @@ class ViewDeals extends React.PureComponent {
             );
         }
     }
-    
+
     render() {
         return (
             <div>
@@ -103,13 +103,13 @@ ViewDeals.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        deals: state.deals,
-        dealsByMakeModelYear: state.dealsByMakeModelYear,
+        compareList: state.compareList,
         dealPage: state.dealPage,
         dealPageTotal: state.dealPageTotal,
-        compareList: state.compareList,
+        deals: state.deals,
+        dealsByMakeModelYear: state.dealsByMakeModelYear,
+        requestingMoreDeals: state.requestingMoreDeals,
         selectedDealGrouping: state.selectedDealGrouping,
-        requestingMoreDeals: state.requestingMoreDeals
     };
 }
 

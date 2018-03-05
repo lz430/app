@@ -18,7 +18,7 @@ Route::get('models', 'VehicleModelsController@index')->name('vehicleModels.index
 Route::get('body-styles', 'BodyStylesController@index')->name('bodyStyles.index');
 Route::get('versions', 'VersionsController@index')->name('versions.index');
 Route::get('deals', 'DealsController@getDeals')->name('deals.index');
-Route::get('dealsByModel', 'DealByModelController@getDealsByModel')->name('dealsByModel.index');
+Route::get('dealsByModelYear', 'DealsByModelYearController@getDealsByModelYear')->name('dealsByModelYear.index');
 Route::get('deals/{deal}/best-offer', 'DealBestOfferController@getBestOffer')->name('deals.best-offer');
 Route::get('features', 'FeaturesController@index')->name('features.index');
 Route::get('targets', 'TargetsController@getTargets')->name('targets.getTargets');

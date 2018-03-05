@@ -28,25 +28,25 @@ class ViewModels extends React.PureComponent {
 ViewModels.propTypes = {
     deals: PropTypes.arrayOf(
         PropTypes.shape({
-            year: PropTypes.string.isRequired,
-            msrp: PropTypes.number.isRequired,
             employee_price: PropTypes.number.isRequired,
-            supplier_price: PropTypes.number.isRequired,
+            id: PropTypes.number.isRequired,
             make: PropTypes.string.isRequired,
             model: PropTypes.string.isRequired,
-            id: PropTypes.number.isRequired,
+            msrp: PropTypes.number.isRequired,
+            supplier_price: PropTypes.number.isRequired,
+            year: PropTypes.string.isRequired,
         })
     ),
-    dealsByMakeModelYear: PropTypes.array,
     dealPage: PropTypes.number,
     dealPageTotal: PropTypes.number,
+    dealsByMakeModelYear: PropTypes.array,
     selectedDealGrouping: PropTypes.object,
 };
 
 function mapStateToProps(state) {
     return {
-        modelYears: state.modelYears,
         compareList: state.compareList,
+        modelYears: state.modelYears,
     };
 }
 

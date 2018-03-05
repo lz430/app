@@ -63,7 +63,6 @@ class ViewDealGroupings extends React.PureComponent {
     renderModels() {
         let modelsWithDeals = this.groupByModel(this.props.deals);
 
-        console.log(modelsWithDeals);
         return (
             <div>
                 <div className={'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>

@@ -14,14 +14,14 @@ use League\Fractal\Serializer\DataArraySerializer;
 use App\Http\Controllers\API\Traits\SearchesDeals;
 use App\JATO\VehicleModel;
 
-class DealByModelController extends BaseAPIController
+class DealsByModelYearController extends BaseAPIController
 {
     use SearchesDeals;
 
     private const TRANSFORMER = DealTransformer::class;
     private const RESOURCE_NAME = 'deals';
 
-    public function getDealsByModel(Request $request, Client $client)
+    public function getDealsByModelYear(Request $request, Client $client)
     {
         $this->validate($request, [
             'make_ids' => 'sometimes|required|array',
@@ -35,7 +35,7 @@ class DealByModelController extends BaseAPIController
         $deals = $this->buildSearchQuery($request)->paginate(400);
 
         /* @TODO – This is terrible and insanely memory intensive. Needs badly to be rewritten. Sorry ~DC */
-        $dealsByModel = $deals->map(function ($deal) {
+        $dealsByModelYear = $deals->map(function ($deal) {
             $deal->model_id = $deal->version->model_id;
             return $deal;
         })->groupBy(function ($item, $key) {
@@ -55,6 +55,6 @@ class DealByModelController extends BaseAPIController
             ];
         })->values();
 
-        return $dealsByModel;
+        return $dealsByModelYear;
     }
 }

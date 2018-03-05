@@ -19,8 +19,8 @@ class SidebarFilter extends React.PureComponent {
                             this.props.open ? (
                                 zondicons['cheveron-up']
                             ) : (
-                                    zondicons['cheveron-down']
-                                )
+                                zondicons['cheveron-down']
+                            )
                         }
                     />
                     {this.props.title}

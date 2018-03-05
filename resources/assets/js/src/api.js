@@ -108,7 +108,7 @@ const api = {
         year,
         zipcode,
     }) => {
-        return window.axios.get('/api/dealsByModel', {
+        return window.axios.get('/api/dealsByModelYear', {
             params: {
                 make_ids: makeIds,
                 model_ids: modelIds,
