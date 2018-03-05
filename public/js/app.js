@@ -22775,7 +22775,7 @@ var DealImage = function (_React$PureComponent) {
 
         _this.state = {
             featuredImage: props.deal.photos[0],
-            fallbackDealImage: '/images/dmr-logo.svg'
+            fallbackDealImage: '/images/dmr-placeholder.jpg'
         };
         return _this;
     }

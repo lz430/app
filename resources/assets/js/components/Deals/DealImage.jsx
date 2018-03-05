@@ -9,7 +9,7 @@ class DealImage extends React.PureComponent {
 
         this.state = {
             featuredImage: props.deal.photos[0],
-            fallbackDealImage: '/images/dmr-logo.svg',
+            fallbackDealImage: '/images/dmr-placeholder.jpg',
         };
     }
 
