@@ -454,6 +454,59 @@ class ComparePage extends React.PureComponent {
         });
     }
 
+    renderOptionalFeaturesTable(compareList) {
+        const tabHeader = 'Optional Equipment On This Vehicle';
+        const maxNumberCells = R.reduce(
+            (carry, dealAndSelectedFilters) => {
+                return R.max(
+                    R.propOr([], 'vauto_features', dealAndSelectedFilters.deal)
+                        .length,
+                    carry
+                );
+            },
+            0,
+            compareList
+        );
+
+        return (
+            <div className="compare-page-table">
+                {this.renderAccordionTabHeader(tabHeader)}
+                <div className={this.columnClass(tabHeader)}>
+                    {compareList.map((dealAndSelectedFilters, index) => {
+                        const alphabeticalFeatures = dealAndSelectedFilters.deal.vauto_features.sort();
+                        return (
+                            <div key={index}>
+                                {alphabeticalFeatures.map((feature, index) => {
+                                    return (
+                                        <div
+                                            className="compare-page-table__cell"
+                                            key={index}
+                                        >
+                                            {feature}
+                                        </div>
+                                    );
+                                })}
+                                {R.range(
+                                    0,
+                                    maxNumberCells - alphabeticalFeatures.length
+                                ).map((_, index) => {
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="compare-page-table__cell"
+                                        >
+                                            &nbsp;
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        );
+    }
+
     hasSelections() {
         const anyHaveFuelType = R.any(dealAndSelectedFilters => {
             return dealAndSelectedFilters.selectedFilters.selectedFuelType;
@@ -494,15 +547,6 @@ class ComparePage extends React.PureComponent {
                     ) : (
                         ''
                     )}
-
-                    {/* <AccordionTable>
-                            {() => {
-                                return this.renderTargetsTable(
-                                    this.props.compareList
-                                );
-                            }}
-                        </AccordionTable> */}
-
                     <AccordionTable>
                         {() => {
                             return this.renderPricingTable(
@@ -520,6 +564,13 @@ class ComparePage extends React.PureComponent {
                     {this.props.compareList.length
                         ? this.renderFeaturesTable(this.props.compareList)
                         : ''}
+                    <AccordionTable>
+                        {() => {
+                            return this.renderOptionalFeaturesTable(
+                                this.props.compareList
+                            );
+                        }}
+                    </AccordionTable>
                 </div>
 
                 {this.props.selectedDeal ? this.renderCalculatorModal() : ''}

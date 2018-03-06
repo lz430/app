@@ -65665,6 +65665,51 @@ var ComparePage = function (_React$PureComponent) {
             });
         }
     }, {
+        key: 'renderOptionalFeaturesTable',
+        value: function renderOptionalFeaturesTable(compareList) {
+            var tabHeader = 'Optional Equipment On This Vehicle';
+            var maxNumberCells = _ramda2.default.reduce(function (carry, dealAndSelectedFilters) {
+                return _ramda2.default.max(_ramda2.default.propOr([], 'vauto_features', dealAndSelectedFilters.deal).length, carry);
+            }, 0, compareList);
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'compare-page-table' },
+                this.renderAccordionTabHeader(tabHeader),
+                _react2.default.createElement(
+                    'div',
+                    { className: this.columnClass(tabHeader) },
+                    compareList.map(function (dealAndSelectedFilters, index) {
+                        var alphabeticalFeatures = dealAndSelectedFilters.deal.vauto_features.sort();
+                        return _react2.default.createElement(
+                            'div',
+                            { key: index },
+                            alphabeticalFeatures.map(function (feature, index) {
+                                return _react2.default.createElement(
+                                    'div',
+                                    {
+                                        className: 'compare-page-table__cell',
+                                        key: index
+                                    },
+                                    feature
+                                );
+                            }),
+                            _ramda2.default.range(0, maxNumberCells - alphabeticalFeatures.length).map(function (_, index) {
+                                return _react2.default.createElement(
+                                    'div',
+                                    {
+                                        key: index,
+                                        className: 'compare-page-table__cell'
+                                    },
+                                    '\xA0'
+                                );
+                            })
+                        );
+                    })
+                )
+            );
+        }
+    }, {
         key: 'hasSelections',
         value: function hasSelections() {
             var anyHaveFuelType = _ramda2.default.any(function (dealAndSelectedFilters) {
@@ -65718,7 +65763,14 @@ var ComparePage = function (_React$PureComponent) {
                             return _this7.renderWarrantyTable(_this7.props.compareList);
                         }
                     ),
-                    this.props.compareList.length ? this.renderFeaturesTable(this.props.compareList) : ''
+                    this.props.compareList.length ? this.renderFeaturesTable(this.props.compareList) : '',
+                    _react2.default.createElement(
+                        _AccordionTable2.default,
+                        null,
+                        function () {
+                            return _this7.renderOptionalFeaturesTable(_this7.props.compareList);
+                        }
+                    )
                 ),
                 this.props.selectedDeal ? this.renderCalculatorModal() : ''
             );
