@@ -65611,11 +65611,33 @@ var ComparePage = function (_React$PureComponent) {
             );
         }
     }, {
+        key: 'compareListDoesNotHavePickupCategory',
+        value: function compareListDoesNotHavePickupCategory(compareList) {
+            var allCategoryIds = [];
+            var pickupCategory = this.state.featureCategories.find(function (category) {
+                return category.attributes.slug === 'pickup';
+            });
+
+            compareList.map(function (_ref2) {
+                var deal = _ref2.deal;
+
+                deal.dmr_features.map(function (feature) {
+                    allCategoryIds.push(feature.category_id);
+                });
+            });
+
+            return !_ramda2.default.contains(pickupCategory.id, allCategoryIds);
+        }
+    }, {
         key: 'renderDMRFeaturesTable',
         value: function renderDMRFeaturesTable(compareList) {
             var _this7 = this;
 
             return this.state.featureCategories.map(function (featureCategory) {
+                if (featureCategory.attributes.slug === 'pickup' && _this7.compareListDoesNotHavePickupCategory(compareList)) {
+                    return;
+                }
+
                 return _react2.default.createElement(
                     _AccordionTable2.default,
                     { key: featureCategory.id },
@@ -65626,26 +65648,34 @@ var ComparePage = function (_React$PureComponent) {
                             _this7.renderAccordionTabHeader((0, _titlecase2.default)(featureCategory.attributes.title)),
                             _react2.default.createElement(
                                 'div',
-                                { className: _this7.columnClass((0, _titlecase2.default)(featureCategory.attributes.title)) },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'compare-page-table__column' },
-                                    compareList.map(function (_ref2, index) {
-                                        var deal = _ref2.deal;
+                                {
+                                    className: _this7.columnClass((0, _titlecase2.default)(featureCategory.attributes.title))
+                                },
+                                compareList.map(function (_ref3, index) {
+                                    var deal = _ref3.deal;
 
-                                        var features = deal.dmr_features.filter(function (dmr_feature) {
-                                            return dmr_feature.category_id == featureCategory.id;
-                                        });
+                                    var features = deal.dmr_features.filter(function (dmr_feature) {
+                                        return dmr_feature.category_id == featureCategory.id;
+                                    });
 
-                                        return features.map(function (feature) {
+                                    return _react2.default.createElement(
+                                        'div',
+                                        {
+                                            className: 'compare-page-table__column',
+                                            key: index
+                                        },
+                                        features.map(function (feature) {
                                             return _react2.default.createElement(
                                                 'div',
-                                                { className: 'compare-page-table__cell' },
+                                                {
+                                                    className: 'compare-page-table__cell',
+                                                    key: feature.slug
+                                                },
                                                 feature.title
                                             );
-                                        });
-                                    })
-                                )
+                                        })
+                                    );
+                                })
                             )
                         );
                     }
@@ -65657,8 +65687,8 @@ var ComparePage = function (_React$PureComponent) {
         value: function renderFeaturesTable(compareList) {
             var _this8 = this;
 
-            var featureSets = compareList.map(function (_ref3, index) {
-                var deal = _ref3.deal;
+            var featureSets = compareList.map(function (_ref4, index) {
+                var deal = _ref4.deal;
 
                 return deal.features;
             });
@@ -65681,8 +65711,8 @@ var ComparePage = function (_React$PureComponent) {
                                 {
                                     className: _this8.columnClass((0, _titlecase2.default)(featureSet[0].group) + ' Features')
                                 },
-                                compareList.map(function (_ref4, index) {
-                                    var deal = _ref4.deal;
+                                compareList.map(function (_ref5, index) {
+                                    var deal = _ref5.deal;
 
                                     return _react2.default.createElement(
                                         'div',
