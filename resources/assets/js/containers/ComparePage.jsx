@@ -28,6 +28,7 @@ class ComparePage extends React.PureComponent {
             ),
             openAccordion: 'Your Selections',
             dealWarranties: {},
+            featureCategories: {},
         };
         this.renderDeal = this.renderDeal.bind(this);
         this.intendedRoute = this.intendedRoute.bind(this);
@@ -35,6 +36,11 @@ class ComparePage extends React.PureComponent {
 
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
+        api.getFeatureCategories().then(data => {
+            this.setState({
+                featureCategories: data.data.data,
+            })
+        });
     }
 
     componentWillReceiveProps(props) {
@@ -54,6 +60,15 @@ class ComparePage extends React.PureComponent {
                     let dealWarranties = this.state.dealWarranties;
 
                     dealWarranties[dealAndSelectedFilters.deal.id] = data.data;
+
+                    this.setState({
+                        dealWarranties,
+                    });
+                })
+                .catch(e => {
+                    let dealWarranties = this.state.dealWarranties;
+
+                    dealWarranties[dealAndSelectedFilters.deal.id] = [];
 
                     this.setState({
                         dealWarranties,
@@ -375,6 +390,40 @@ class ComparePage extends React.PureComponent {
         );
     }
 
+    renderDMRFeaturesTable(compareList) {
+        return this.state.featureCategories.map(featureCategory => {
+            return (
+                <AccordionTable key={featureCategory.id}>
+                    {() => {
+                        return (
+                            <div className="compare-page-table">
+                                {this.renderAccordionTabHeader(toTitleCase(featureCategory.attributes.title))}
+                                <div className={this.columnClass(toTitleCase(featureCategory.attributes.title))}>
+                                    <div className="compare-page-table__column">
+                                        {compareList.map(({deal}, index) => {
+                                            let features = deal.dmr_features.filter(dmr_feature => {
+                                                return dmr_feature.category_id == featureCategory.id;
+                                            })
+
+                                            return features.map(feature => {
+                                                return (
+                                                    <div className="compare-page-table__cell">
+                                                        {feature.title}
+                                                    </div>
+                                                )
+                                            });
+                                        }
+                                    )}
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    }}
+                </AccordionTable>
+            );
+        })
+    }
+
     renderFeaturesTable(compareList) {
         let featureSets = compareList.map(({ deal }, index) => {
             return deal.features;
@@ -561,6 +610,14 @@ class ComparePage extends React.PureComponent {
                             );
                         }}
                     </AccordionTable>
+
+                    {this.state.featureCategories.length ?
+                    this.renderDMRFeaturesTable(this.props.compareList)
+                    : '' }
+
+
+
+
                     {this.props.compareList.length
                         ? this.renderFeaturesTable(this.props.compareList)
                         : ''}
