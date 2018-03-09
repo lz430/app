@@ -113,6 +113,23 @@ const util = {
 
         return `${vehicleId}-${zipcode}-${paymentType}-${targetString}`;
     },
+    groupDealsByMakeModelYear(deals) {
+        return R.values(
+            R.mapObjIndexed(
+                (index, key, value) => {
+                    return {
+                        make: value[key][0].make,
+                        model: value[key][0].model,
+                        year: value[key][0].year,
+                        deals: value[key]
+                    };
+                },
+                R.groupBy(deal => {
+                    return `${deal.year} ${deal.make} ${deal.model}`;
+                }, deals)
+            )
+        );
+    },
 };
 
 export default util;

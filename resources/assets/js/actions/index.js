@@ -9,7 +9,7 @@ const withStateDefaults = (state, changed) => {
         {},
         {
             makeIds: state.selectedMakes,
-            modelIds: R.map(R.prop('id'), state.selectedModels),
+            modelIds: state.selectedModels,
             bodyStyles: state.selectedStyles,
             fuelType: state.selectedFuelType,
             transmissionType: state.selectedTransmissionType,
@@ -20,6 +20,7 @@ const withStateDefaults = (state, changed) => {
             sortColumn: state.sortColumn,
             sortAscending: state.sortAscending,
             page: 1,
+            year: state.selectedYear,
             zipcode: state.zipcode,
             zipInRange: state.zipInRange,
         },
@@ -29,24 +30,24 @@ const withStateDefaults = (state, changed) => {
 
 export function requestMakes() {
     return dispatch => {
-        api.getMakes().then(data => {
-            dispatch(receiveMakes(data));
-        });
-
         dispatch({
             type: ActionTypes.REQUEST_MAKES,
+        });
+
+        api.getMakes().then(data => {
+            dispatch(receiveMakes(data));
         });
     };
 }
 
 export function requestModels() {
     return dispatch => {
-        api.getModels().then(data => {
-            dispatch(receiveModels(data));
-        });
-
         dispatch({
             type: ActionTypes.REQUEST_MODELS,
+        });
+
+        api.getModels().then(data => {
+            dispatch(receiveModels(data));
         });
     };
 }
@@ -67,24 +68,24 @@ export function receiveModels(data) {
 
 export function requestFeatures() {
     return dispatch => {
-        api.getFeatures().then(data => {
-            dispatch(receiveFeatures(data));
-        });
-
         dispatch({
             type: ActionTypes.REQUEST_FEATURES,
+        });
+
+        api.getFeatures().then(data => {
+            dispatch(receiveFeatures(data));
         });
     };
 }
 
 export function requestFeatureCategories() {
     return dispatch => {
-        api.getFeatureCategories().then(data => {
-            dispatch(receiveFeatureCategories(data));
-        });
-
         dispatch({
             type: ActionTypes.REQUEST_FEATURE_CATEGORIES,
+        });
+
+        api.getFeatureCategories().then(data => {
+            dispatch(receiveFeatureCategories(data));
         });
     };
 }
@@ -105,85 +106,56 @@ export function receiveFeatureCategories(data) {
 
 export function toggleFeature(feature) {
     return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
         const selectedFeatures = util.toggleItem(
             getState().selectedFeatures,
             feature
         );
 
-        api
-            .getDeals(
-                withStateDefaults(getState(), {
-                    features: selectedFeatures,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
-
         dispatch({
             type: ActionTypes.TOGGLE_FEATURE,
             selectedFeatures,
         });
+
+        dispatch(requestDealsOrModelYears({
+            features: selectedFeatures,
+        }));
     };
 }
 
 export function toggleMake(make_id) {
     return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
         const selectedMakes = util.toggleItem(
             getState().selectedMakes,
             make_id
         );
 
-        api
-            .getDeals(
-                withStateDefaults(getState(), {
-                    makeIds: selectedMakes,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
-
         dispatch({
             type: ActionTypes.TOGGLE_MAKE,
             selectedMakes,
         });
+
+        dispatch(requestDealsOrModelYears({
+            makeIds: selectedMakes,
+        }));
+
     };
 }
 
 export function toggleModel(model) {
     return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
         const selectedModels = util.toggleItem(
             getState().selectedModels,
             model
         );
 
-        api
-            .getDeals(
-                withStateDefaults(getState(), {
-                    modelIds: R.map(R.prop('id'), selectedModels),
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
-
         dispatch({
             type: ActionTypes.TOGGLE_MODEL,
             selectedModels,
         });
+
+        dispatch(requestDealsOrModelYears({
+            modelIds: R.map(R.prop('id'), selectedModels),
+        }));
     };
 }
 
@@ -197,6 +169,10 @@ export function requestTargets(deal) {
         const targetKey = util.getTargetKeyForDealAndZip(deal, zipcode);
         if (!R.isNil(getState().targetsAvailable[targetKey])) return;
 
+        dispatch({
+            type: ActionTypes.REQUEST_TARGETS,
+        });
+
         api.getTargets(zipcode, deal.vin).then(data => {
             dispatch(
                 receiveTargets({
@@ -205,10 +181,6 @@ export function requestTargets(deal) {
                     zipcode,
                 })
             );
-        });
-
-        dispatch({
-            type: ActionTypes.REQUEST_TARGETS,
         });
     };
 }
@@ -250,7 +222,8 @@ export function requestMoreDeals() {
         });
 
         api
-            .getDeals(
+            .applySearchFilters(
+                getState().filterPage,
                 withStateDefaults(getState(), {
                     page: getState().dealPage + 1,
                 })
@@ -269,6 +242,69 @@ export function sortDeals(sort) {
         });
 
         dispatch(requestDeals());
+    };
+}
+
+
+export function receiveModelYears(data) {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.RECEIVE_MODEL_YEARS,
+            data: data,
+        });
+    };
+}
+
+export function requestModelYears() {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.REQUEST_MODEL_YEARS,
+        });
+
+        api.getModelYears(withStateDefaults(getState())).then(data => {
+            dispatch(receiveModelYears(data));
+        });
+    };
+}
+
+export function clearModelYear() {
+    return dispatch => {
+            dispatch({
+            type: ActionTypes.CLEAR_MODEL_YEAR
+        });
+
+        dispatch(requestModelYears());
+    }
+}
+
+export function requestDealsOrModelYears(params = {}) {
+    return (dispatch, getState) => {
+        console.log('Fetching:', getState().filterPage);
+        
+        dispatch({
+            type: getState().filterPage == 'deals' ? ActionTypes.REQUEST_DEALS : ActionTypes.REQUEST_MODEL_YEARS
+        });
+
+        api.applySearchFilters(
+            getState().filterPage, withStateDefaults(getState(), params)
+        ).then(data => {
+            if(getState().filterPage == 'deals') {
+                dispatch(receiveDeals(data));
+            } else {
+                dispatch(receiveModelYears(data));
+            }
+        });
+    };
+}
+
+export function selectModelYear(vehicleModel) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.SELECT_MODEL_YEAR,
+            data: vehicleModel,
+        });
+
+        dispatch(requestDealsOrModelYears());
     };
 }
 
@@ -302,6 +338,8 @@ export function setZipInRange(data) {
                 supported: data.supported,
             });
         });
+
+        dispatch(requestDealsOrModelYears());
     };
 }
 
@@ -316,120 +354,81 @@ export function receiveMoreDeals(data) {
 
 export function requestBodyStyles() {
     return dispatch => {
-        api.getBodyStyles().then(data => {
-            dispatch(receiveBodyStyles(data));
-        });
-
         dispatch({
             type: ActionTypes.REQUEST_BODY_STYLES,
+        });
+
+        api.getBodyStyles().then(data => {
+            dispatch(receiveBodyStyles(data));
         });
     };
 }
 
 export function toggleStyle(style) {
     return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
         const selectedStyles = util.toggleItem(
             getState().selectedStyles,
             style
         );
 
-        api
-            .getDeals(
-                withStateDefaults(getState(), {
-                    bodyStyles: selectedStyles,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
-
         dispatch({
             type: ActionTypes.TOGGLE_STYLE,
             selectedStyles: selectedStyles,
         });
+
+        dispatch(requestDealsOrModelYears({
+            bodyStyles: getState().selectedStyles,
+        }));
     };
 }
 
 export function chooseFuelType(fuelType) {
     return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
         const selectedFuelType =
             getState().selectedFuelType === fuelType ? null : fuelType;
-
-        api
-            .getDeals(
-                withStateDefaults(getState(), {
-                    fuelType: selectedFuelType,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
 
         dispatch({
             type: ActionTypes.CHOOSE_FUEL_TYPE,
             selectedFuelType: selectedFuelType,
         });
+
+        requestDealsOrModelYears({
+            fuelType: selectedFuelType,
+        });
+
     };
 }
 
 export function chooseTransmissionType(transmissionType) {
     return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
         const selectedTransmissionType =
             getState().selectedTransmissionType === transmissionType
                 ? null
                 : transmissionType;
 
-        api
-            .getDeals(
-                withStateDefaults(getState(), {
-                    transmissionType: selectedTransmissionType,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
-
         dispatch({
             type: ActionTypes.CHOOSE_TRANSMISSION_TYPE,
             selectedTransmissionType,
+        });
+
+        requestDealsOrModelYears({
+            transmissionType: selectedTransmissionType,
         });
     };
 }
 
 export function chooseSegment(segment) {
     return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
         const selectedSegment =
             getState().selectedSegment === segment ? null : segment;
-
-        api
-            .getDeals(
-                withStateDefaults(getState(), {
-                    segment: selectedSegment,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
 
         dispatch({
             type: ActionTypes.CHOOSE_SEGMENT,
             selectedSegment,
+        });
+
+        requestDealsOrModelYears({
+            segment: selectedSegment,
         });
     };
 }
@@ -437,26 +436,17 @@ export function chooseSegment(segment) {
 export function clearAllFilters() {
     return (dispatch, getState) => {
         dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
-        api
-            .getDeals(
-                withStateDefaults(getState(), {
-                    makeIds: [],
-                    bodyStyles: [],
-                    fuelType: null,
-                    transmissionType: null,
-                    features: [],
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
-
-        dispatch({
             type: ActionTypes.CLEAR_ALL_FILTERS,
         });
+
+        dispatch(requestDealsOrModelYears({
+            makeIds: [],
+            bodyStyles: [],
+            fuelType: null,
+            transmissionType: null,
+            features: [],
+        }));
+
     };
 }
 
@@ -494,20 +484,6 @@ export function toggleCompare(deal) {
 export function setZipCode(zipcode) {
     return (dispatch, getState) => {
         dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
-        api
-            .getDeals(
-                withStateDefaults(getState(), {
-                    zipcode,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
-
-        dispatch({
             type: ActionTypes.SET_ZIP_CODE,
             zipcode,
         });
@@ -524,13 +500,13 @@ export function requestLocationInfo() {
         if (!getState().zipcode) {
             jsonp('//freegeoip.net/json/', null, function(err, data) {
                 if (err) {
-                    dispatch(requestDeals());
+                    dispatch(requestDealsOrModelYears());
                 } else {
                     dispatch(receiveLocationInfo(data));
                 }
             });
         } else {
-            dispatch(requestDeals());
+            dispatch(requestDealsOrModelYears());
         }
 
         dispatch({
@@ -541,22 +517,12 @@ export function requestLocationInfo() {
 
 export function receiveLocationInfo(data) {
     return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
         const zipcode = data.zip_code;
         const city = data.city;
 
-        api
-            .getDeals(
-                withStateDefaults(getState(), {
-                    zipcode,
-                })
-            )
-            .then(data => {
-                dispatch(receiveDeals(data));
-            });
+        dispatch(requestDealsOrModelYears({
+            zipcode,
+        }));
 
         dispatch({
             type: ActionTypes.RECEIVE_LOCATION_INFO,

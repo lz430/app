@@ -22,7 +22,7 @@ class VehicleModel extends Model
     {
         return $this->hasMany(Version::class, 'model_id');
     }
-    
+
     public function scopeFilterByMake(Builder $query, $makes) : Builder
     {
         if (! is_array($makes)) {

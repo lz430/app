@@ -10,6 +10,8 @@ import FilterSegmentSelector from 'components/FilterSegmentSelector';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import R from 'ramda';
+import SVGInline from 'react-svg-inline';
+import zondicons from 'zondicons';
 
 class FilterPanel extends React.PureComponent {
     constructor(props) {
@@ -17,7 +19,30 @@ class FilterPanel extends React.PureComponent {
 
         this.state = {
             openFilter: 'Vehicle Style',
+            sizeCategory: null,
+            sizeFeatures: [],
         };
+    }
+
+    componentWillReceiveProps() {
+        this.props.featureCategories.map((category, index) => {
+            let features = this.props.searchFeatures.filter(feature => {
+                let categoryFeatures = category.relationships.features.data.map(categoryFeature => {
+                    return categoryFeature.id;
+                });
+
+                return categoryFeatures.includes(feature.id);
+            });
+
+            if (category.attributes.slug === 'vehicle_size') {
+                this.setState({
+                    sizeCategory: category,
+                    sizeFeatures: features,
+                });
+
+                return;
+            }
+        });
     }
 
     toggleOpenFilter(openFilter) {
@@ -47,6 +72,10 @@ class FilterPanel extends React.PureComponent {
 
     renderSidebarFilters() {
         return this.props.featureCategories.map((category, index) => {
+            if (category.attributes.slug === 'vehicle_size') {
+                return;
+            }
+
             let features = this.props.searchFeatures.filter(feature => {
                 let categoryFeatures = category.relationships.features.data.map(categoryFeature => {
                     return categoryFeature.id;
@@ -55,13 +84,20 @@ class FilterPanel extends React.PureComponent {
                 return categoryFeatures.includes(feature.id);
             });
 
+            let localSelectedFeatures = features.filter(feature => {
+                return R.contains(
+                    feature.attributes.title,
+                    this.props.selectedFeatures
+                );
+            });
+
             return (
                 <SidebarFilter
                     key={index}
                     toggle={() => this.toggleOpenFilter(category.attributes.title)}
                     open={this.state.openFilter === category.attributes.title}
                     title={category.attributes.title}
-                    count={this.props.selectedStyles.length}
+                    count={localSelectedFeatures.length}
                 >
                     <FilterFeatureSelector
                         selectedFeatures={this.props.selectedFeatures}
@@ -74,49 +110,101 @@ class FilterPanel extends React.PureComponent {
     }
 
     render() {
+        let selectedSizeFeatures = this.state.sizeFeatures.filter(feature => {
+            return R.contains(
+                feature.attributes.title,
+                this.props.selectedFeatures
+            );
+        });
         return (
             <div>
                 <ZipcodeFinder />
 
                 <div className="sidebar-filters">
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Make')}
-                        open={this.state.openFilter === 'Make'}
-                        title="Vehicle Brand"
-                        count={this.props.selectedMakes.length}
-                    >
-                        <FilterMakeSelector
-                            makes={this.props.makes}
-                            selectedMakes={this.props.selectedMakes}
-                            onSelectMake={this.props.toggleMake}
-                        />
-                    </SidebarFilter>
-                    <SidebarFilter
-                        toggle={() => this.toggleOpenFilter('Vehicle Style')}
-                        open={this.state.openFilter === 'Vehicle Style'}
-                        title="Vehicle Style"
-                        count={this.props.selectedStyles.length}
-                    >
-                        <FilterStyleSelector
-                            styles={this.props.bodyStyles}
-                            selectedStyles={this.props.selectedStyles}
-                            onSelectStyle={this.props.toggleStyle}
-                        />
-                    </SidebarFilter>
-                    <div className="sidebar-filters__section-header sidebar-filters__filter-title">
-                        <p>Features & Options</p>
+                    <div className={`sidebar-filters__broad sidebar-filters__broad--${this.props.filterPage === 'deals' ? 'narrow' : 'broad'}`}>
+                        {
+                            this.props.filterPage === 'deals' ? (
+                                <div className="sidebar-filters__overlay">
+                                    <a onClick={ () => {this.props.clearModelYear()} }>
+                                        <SVGInline
+                                            height="20px"
+                                            width="20px"
+                                            className="sidebar-filters__clear-icon"
+                                            svg={zondicons['arrow-outline-left']}
+                                        />
+                                        Return to original search
+                                    </a>
+                                </div>
+                            ) : (
+                                <div className="sidebar-filters__instructive-heading">Refine this search</div>
+                            )
+                        }
+
+                        <SidebarFilter
+                            toggle={() => this.toggleOpenFilter('Vehicle Style')}
+                            open={this.state.openFilter === 'Vehicle Style' && this.props.filterPage !== 'deals' }
+                            title="Vehicle Style"
+                            count={this.props.selectedStyles.length}
+                        >
+                            <FilterStyleSelector
+                                styles={this.props.bodyStyles}
+                                selectedStyles={this.props.selectedStyles}
+                                onSelectStyle={this.props.toggleStyle}
+                            />
+                        </SidebarFilter>
+
+                        {this.state.sizeCategory ? (
+                                <SidebarFilter
+                                    toggle={() => this.toggleOpenFilter(this.state.sizeCategory.attributes.title)}
+                                    open={this.state.openFilter === this.state.sizeCategory.attributes.title && this.props.filterPage !== 'deals' }
+                                    title={this.state.sizeCategory.attributes.title}
+                                    count={selectedSizeFeatures.length}
+                                >
+                                    <FilterFeatureSelector
+                                        selectedFeatures={this.props.selectedFeatures}
+                                        features={this.state.sizeFeatures}
+                                        onSelectFeature={this.props.toggleFeature}
+                                    />
+                                </SidebarFilter>
+                        ) : (<div></div>) }
+                        
+                        <SidebarFilter
+                            toggle={() => this.toggleOpenFilter('Make')}
+                            open={this.state.openFilter === 'Make' && this.props.filterPage !== 'deals' }
+                            title="Vehicle Brand"
+                            count={this.props.selectedMakes.length}
+                        >
+                            <FilterMakeSelector
+                                makes={this.props.makes}
+                                selectedMakes={this.props.selectedMakes}
+                                onSelectMake={this.props.toggleMake}
+                            />
+                        </SidebarFilter>
                     </div>
-                    { this.renderSidebarFilters() }
+                    <div className={`sidebar-filters__narrow sidebar-filters__narrow--${status}`}>
+                        { this.props.filterPage === 'deals' ? (
+                            <div className="sidebar-filters__instructive-heading">Refine this search</div>
+                        ) : (
+                            ''
+                        ) }
+
+                        <div className="sidebar-filters__section-header sidebar-filters__filter-title">
+                            <p>Features & Options</p>
+                        </div>
+                        { this.renderSidebarFilters() }
+                    </div>
                 </div>
             </div>
         );
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
     return {
+        dealsByMakeModelYear: state.dealsByMakeModelYear,
         makes: state.makes,
         models: state.models,
+        filterPage: state.filterPage,
         fuelTypes: state.fuelTypes,
         selectedFuelType: state.selectedFuelType,
         transmissionTypes: state.transmissionTypes,

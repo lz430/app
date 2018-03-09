@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import R from 'ramda';
 import * as Actions from 'actions';
 import Deal from './Deal';
+import DealGrouping from './DealGrouping';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import { connect } from 'react-redux';
 
-class ViewDeals extends React.PureComponent {
+class ViewDealGroupings extends React.PureComponent {
     compareButtonClass(deal) {
         return (
             'deal__button deal__button--small deal__button--blue' +
@@ -41,12 +42,48 @@ class ViewDeals extends React.PureComponent {
         }
     }
 
-    render() {
+    groupByModel(deals) {
+        return R.values(
+            R.mapObjIndexed(
+                (index, key, value) => {
+                    return {
+                        make: value[key][0].make,
+                        model: value[key][0].model,
+                        year: value[key][0].year,
+                        deals: value[key]
+                    };
+                },
+                R.groupBy(deal => {
+                    return `${deal.year} ${deal.make} ${deal.model}`;
+                }, deals)
+            )
+        );
+    }
+    
+    renderModels() {
+        let modelsWithDeals = this.groupByModel(this.props.deals);
+
         return (
             <div>
                 <div className={'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
-                    {this.props.deals && this.props.deals.length ? (
-                       this.props.deals.map((deal, index) => {
+                    {modelsWithDeals ? (
+                        modelsWithDeals.map((model, index) => {
+                            return <DealGrouping dealGrouping={model} key={index} />
+                        })
+                    ) : (
+                        <SVGInline svg={miscicons['loading']} />
+                    )}
+                </div>
+            </div>
+        );
+    }
+    
+    renderDeals() {
+        return (
+            <div>
+                <div className={'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
+                    {this.props.deals ? (
+                        this.props.deals.map((deal, index) => {
                             return (
                                 <Deal deal={deal} key={index}>
                                     <div className="deal__buttons">
@@ -81,9 +118,13 @@ class ViewDeals extends React.PureComponent {
             </div>
         )
     }
+
+    render() {
+        return this.renderModels();
+    }
 }
 
-ViewDeals.propTypes = {
+ViewDealGroupings.propTypes = {
     deals: PropTypes.arrayOf(
         PropTypes.shape({
             year: PropTypes.string.isRequired,
@@ -95,22 +136,18 @@ ViewDeals.propTypes = {
             id: PropTypes.number.isRequired,
         })
     ),
-    dealsByMakeModelYear: PropTypes.array,
     dealPage: PropTypes.number,
     dealPageTotal: PropTypes.number,
-    selectedDealGrouping: PropTypes.object,
 };
 
 function mapStateToProps(state) {
     return {
-        compareList: state.compareList,
+        deals: state.deals,
         dealPage: state.dealPage,
         dealPageTotal: state.dealPageTotal,
-        deals: state.deals,
-        dealsByMakeModelYear: state.dealsByMakeModelYear,
-        requestingMoreDeals: state.requestingMoreDeals,
-        selectedDealGrouping: state.selectedDealGrouping,
+        compareList: state.compareList,
+        requestingMoreDeals: state.requestingMoreDeals
     };
 }
 
-export default connect(mapStateToProps, Actions)(ViewDeals);
+export default connect(mapStateToProps, Actions)(ViewDealGroupings);

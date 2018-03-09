@@ -11,9 +11,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Serializer\DataArraySerializer;
+use App\Http\Controllers\API\Traits\SearchesDeals;
 
 class DealsController extends BaseAPIController
 {
+    use SearchesDeals;
+
     private const TRANSFORMER = DealTransformer::class;
     private const RESOURCE_NAME = 'deals';
 
@@ -28,14 +31,10 @@ class DealsController extends BaseAPIController
             'zipcode' => 'sometimes|required|string',
         ]);
 
-        $dealsQuery = $this->makeDealsQuery($request);
-        $dealsQuery = $this->filterQueryByLocationDistance($dealsQuery, $request);
-        $dealsQuery = $this->filterQueryByFuelType($dealsQuery, $request);
-        $dealsQuery = $this->filterQueryByTransmissionType($dealsQuery, $request);
-        $dealsQuery = $this->filterQueryByFeatures($dealsQuery, $request);
+        $dealsQuery = $this->buildSearchQuery($request);
         $dealsQuery = Sort::sortQuery($dealsQuery, $request->get('sort', 'price'));
 
-        $deals = $dealsQuery->paginate(15);
+        $deals = $dealsQuery->paginate(24);
 
         return fractal()
             ->collection($deals)
@@ -44,67 +43,5 @@ class DealsController extends BaseAPIController
             ->serializeWith(new DataArraySerializer)
             ->paginateWith(new IlluminatePaginatorAdapter($deals))
             ->respond();
-    }
-
-    private function filterQueryByLocationDistance(Builder $query, Request $request) : Builder
-    {
-        if ($request->has('zipcode') && $zipcode = Zipcode::where('zipcode', $request->get('zipcode'))->first()) {
-            $query->filterByLocationDistance(
-                $zipcode->latitude,
-                $zipcode->longitude
-            );
-        }
-
-        return $query;
-    }
-
-    private function filterQueryByFuelType(Builder $query, Request $request) : Builder
-    {
-        if ($request->has('fuel_type')) {
-            $query->filterByFuelType($request->get('fuel_type'));
-        }
-
-        return $query;
-    }
-
-    private function makeDealsQuery(Request $request) : Builder
-    {
-        return Deal::whereHas('dealer')->whereHas('versions', function (Builder $query) use ($request) {
-            if ($request->has('body_styles')) {
-                $query->filterByBodyStyle($request->get('body_styles'));
-            }
-
-            $query->whereHas('model', function (Builder $query) use ($request) {
-                if ($request->has('make_ids')) {
-                    $query->filterByMake($request->get('make_ids'));
-                }
-            });
-        })->whereNotNull('price')->whereNotNull('msrp')->with(['photos' => function ($query) {
-            $query->orderBy('id');
-        },])->with('features')->with('versions.equipment')->with('dealer')->forSale();
-    }
-
-    private function filterQueryByTransmissionType(Builder $query, Request $request) : Builder
-    {
-        if ($request->has('transmission_type')) {
-            $request->get('transmission_type') === 'manual'
-                ? $query->filterByManualTransmission()
-                : $query->filterByAutomaticTransmission();
-        }
-
-        return $query;
-    }
-
-    private function filterQueryByFeatures(Builder $query, Request $request) : Builder
-    {
-        if ($request->has('features')) {
-            foreach ($request->get('features') as $feature) {
-                $query->whereHas('features', function ($subQuery) use ($feature) {
-                    $subQuery->where('title', $feature);
-                });
-            }
-        }
-
-        return $query;
     }
 }

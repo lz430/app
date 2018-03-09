@@ -13,7 +13,6 @@ class SidebarFilter extends React.PureComponent {
                         : ''}`}
                     onClick={this.props.toggle}
                 >
-                    {this.props.title}
                     <SVGInline
                         className="sidebar-filters__icon"
                         svg={
@@ -24,6 +23,10 @@ class SidebarFilter extends React.PureComponent {
                             )
                         }
                     />
+                    {this.props.title}
+                    <span className="sidebar-filters__count">
+                        { this.props.count }
+                    </span>
                 </div>
 
                 {this.props.open ? (

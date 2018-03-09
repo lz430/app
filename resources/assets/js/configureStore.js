@@ -32,15 +32,16 @@ const initialState = {
     downPayment: 0,
     employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
-    features: null,
     featureCategories: [],
+    features: null,
+    filterPage: 'models',
     fuelTypes: ['Gasoline', 'Electric', 'Flex Fuel', 'Diesel', 'Hybrid'],
     makes: null,
+    modelYears: null,
     models: null,
     requestingMoreDeals: false,
+    requestingMoreModelYears: false,
     residualPercent: null,
-    smallFiltersShown: false,
-    showMakeSelectorModal: true,
     searchFeatures: [],
     segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
     selectedDeal: null,
@@ -53,6 +54,9 @@ const initialState = {
     selectedTab: 'cash',
     selectedTargets: [],
     selectedTransmissionType: null,
+    selectedYear: null,
+    showMakeSelectorModal: true,
+    smallFiltersShown: false,
     sortAscending: true,
     sortColumn: 'price',
     targets: [],
@@ -69,9 +73,11 @@ const initialState = {
     ],
     termDuration: 36,
     transmissionTypes: ['automatic', 'manual'],
+    vehicleModel: null,
+    vehicleYear: null,
     window: { width: window.innerWidth },
-    zipcode: null,
     zipInRange: null,
+    zipcode: null,
 };
 
 export default () => {
@@ -90,7 +96,7 @@ export default () => {
             store.dispatch(requestLocationInfo());
         });
         store.dispatch(requestMakes());
-        store.dispatch(requestModels());
+        //store.dispatch(requestModels());
         store.dispatch(requestBodyStyles());
         store.dispatch(requestFeatures());
         store.dispatch(requestFeatureCategories());

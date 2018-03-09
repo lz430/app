@@ -1429,7 +1429,8 @@ body {
   white-space: nowrap;
 }
 
-.deals {
+.deals,
+.modelyears {
   background: #f2f2f2;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1447,11 +1448,13 @@ body {
 }
 
 @media (min-width: 768px) {
-  .deals {
+  .deals,
+  .modelyears {
     height: calc(100vh - 351px);
   }
 
-  .deals.no-compare {
+  .deals.no-compare,
+  .no-compare.modelyears {
     height: calc(100vh - 281px);
   }
 }
@@ -1577,7 +1580,8 @@ body {
   width: 100%;
 }
 
-.deals .deal {
+.deals .deal,
+.modelyears .deal {
   border-radius: 0.25rem;
   padding: 0.5rem;
 }
@@ -1735,6 +1739,186 @@ body {
 .deal__button--small {
   font-size: 0.8rem;
   padding: 10px 15px;
+}
+
+.modelyears .modelyear {
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+}
+
+.compare-page .modelyear {
+  border: none;
+}
+
+.modelyear {
+  background-color: #fff;
+  border: 1px solid #ced4d9;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  margin: 5px;
+  max-width: 300px;
+  min-width: 300px;
+}
+
+.modelyear__basic-info {
+  margin-bottom: 0.5rem;
+}
+
+.modelyear__basic-info-year-and-make {
+  color: #535d63;
+  font-size: small;
+  margin-bottom: 2px;
+}
+
+.modelyear__basic-info-model-and-series {
+  color: #484d50;
+  font-size: x-large;
+}
+
+.modelyear__count {
+  color: #41b1ac;
+  font-size: x-large;
+  -ms-flex-negative: true;
+      flex-shrink: true;
+}
+
+.modelyear__image {
+  border: 1px solid #ced4d9;
+  display: block;
+  height: 225px;
+  min-height: 225px;
+  width: 100%;
+  margin: 0 0 5px;
+}
+
+.modelyear__image--fallback {
+  padding: 25px;
+}
+
+.modelyear__buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin: 5px 0;
+}
+
+.modelyear__button {
+  background: transparent;
+  border: 1px solid #ccc;
+  color: #586368;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 5px 10px;
+  border-radius: 4px;
+  text-decoration: none;
+  text-align: center;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+}
+
+.modelyear__button--invert {
+  border: 2px solid #fff;
+}
+
+.modelyear__button--blue {
+  background-color: #41b1ac;
+  color: #fff;
+}
+
+.modelyear__button--pink {
+  background-color: #e70290;
+  color: #fff;
+}
+
+.modelyear__button--purple {
+  background-color: #e70290;
+  color: #fff;
+}
+
+.modelyear__button--white {
+  background-color: #fff;
+  color: #41b1ac;
+}
+
+.modelyear__button--small {
+  font-size: 0.9rem;
+  padding: 4px 15px;
+}
+
+.modelyear__button--no-border {
+  border: 2px solid transparent;
+}
+
+.modelyear__button--dark-bg {
+  color: #fff;
+}
+
+.modelyear__button--capitalize {
+  text-transform: capitalize;
+}
+
+.modelyear__button--facebook-blue {
+  background: #3b5998;
+  color: #fff;
+}
+
+.modelyear__button--twitter-blue {
+  background: #4099ff;
+  color: #fff;
+}
+
+.modelyear__button svg {
+  fill: #fff;
+  height: 12px;
+  margin-bottom: -1.5px;
+  margin-right: 5px;
+  width: 12px;
+}
+
+.modelyear__button.disabled {
+  background: #aaa;
+  pointer-events: none;
+}
+
+.modelyear__button--small {
+  font-size: 0.8rem;
+  padding: 10px 15px;
+}
+
+.modelyear__details {
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.modelyear__price {
+  font-size: x-large;
+  text-align: right;
+}
+
+.modelyear__price-label {
+  display: block;
+  font-size: x-small;
 }
 
 .apply-or-purchase {
@@ -2192,17 +2376,18 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background-color: #d7d7d7;
+  background-color: rgba(0, 0, 0, 0.4);
   border-radius: 15px;
   color: #fff;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  font-size: small;
   height: 22px;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  line-height: 1rem;
+  line-height: 1.2;
   margin-left: auto;
   padding: 5px;
   width: 30px;
@@ -2211,8 +2396,28 @@ body {
 .sidebar-filters__header {
   background-color: #343b3e;
   color: #586368;
-  padding: 5px 15px;
+  padding: 8px 15px;
   text-transform: uppercase;
+}
+
+.sidebar-filters__instructive-heading {
+  background-color: #41b1ac;
+  color: #fff;
+  padding: 8px 15px;
+  position: relative;
+}
+
+.sidebar-filters__instructive-heading::after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 8px solid #41b1ac;
+  position: absolute;
+  bottom: -5px;
+  left: 15px;
+  z-index: 10;
 }
 
 .sidebar-filters__filter {
@@ -2228,7 +2433,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  padding: 15px;
+  padding: 8px 15px;
   position: relative;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -2245,6 +2450,27 @@ body {
   fill: #fff;
 }
 
+.sidebar-filters__broad {
+  position: relative;
+}
+
+.sidebar-filters__broad .sidebar-filters__filter {
+  border-bottom: 2px solid #858585;
+}
+
+.sidebar-filters__broad .sidebar-filters__filter-title {
+  background: #666666;
+  color: #fff;
+}
+
+.sidebar-filters__narrow {
+  border-top: 5px solid #fff;
+}
+
+.sidebar-filters__narrow .sidebar-filters__count {
+  display: none;
+}
+
 .sidebar-filters__filter-body {
   background-color: #858585;
   border-top: 1px solid #d7d7d7;
@@ -2255,11 +2481,48 @@ body {
   fill: #484d50;
   height: 20px;
   line-height: 0;
-  margin-left: 10px;
+  margin-left: 0;
   margin-right: 10px;
+  -webkit-box-ordinal-group: 0;
+      -ms-flex-order: -1;
+          order: -1;
+  width: 20px;
+}
+
+.sidebar-filters__overlay {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: rgba(180, 180, 180, 0.8);
+  bottom: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  left: 0;
   position: absolute;
   right: 0;
-  width: 20px;
+  top: 0;
+  z-index: 10;
+}
+
+.sidebar-filters__overlay a {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  border: 3px solid;
+  color: #c8c8c8;
+  cursor: pointer;
+  padding: 10px 15px;
+}
+
+.sidebar-filters__overlay .sidebar-filters__clear-icon {
+  margin-right: 5px;
+}
+
+.sidebar-filters__overlay .sidebar-filters__clear-icon path {
+  fill: #c8c8c8;
 }
 
 .sidebar-filters__section-header {
@@ -2333,6 +2596,88 @@ body {
   color: #ced4d9;
   font-size: 0.7rem;
   margin-top: -1.5rem;
+  width: 100%;
+}
+
+.filter-make-selector {
+  text-align: center;
+}
+
+.filter-make-selector__makes {
+  -ms-flex-line-pack: start;
+      align-content: flex-start;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-right: 2px;
+}
+
+.filter-make-selector__make {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  height: 85px;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  margin: 5px 5px;
+  max-width: calc(33% - 10px);
+  min-height: 85px;
+  min-width: calc(33% - 10px);
+  opacity: 0.5;
+  padding: 5px 5px;
+  position: relative;
+  text-align: center;
+  width: calc(33% - 10px);
+}
+
+.filter-make-selector__make--selected {
+  border: 5px solid #279c99;
+  opacity: 1;
+}
+
+.filter-make-selector__make--selected .filter-make-selector__icon svg path {
+  fill: #fff;
+}
+
+.filter-make-selector__icon {
+  background-color: #fff;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 60px;
+  position: absolute;
+  top: 5px;
+  width: 100%;
+}
+
+.filter-make-selector__icon img {
+  height: auto;
+  width: 100%;
+}
+
+.filter-make-selector__name {
+  bottom: 0;
+  color: #484d50;
+  font-size: 0.7rem;
+  margin-top: -1.5rem;
+  position: absolute;
   width: 100%;
 }
 
