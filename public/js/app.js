@@ -65265,7 +65265,8 @@ var ComparePage = function (_React$PureComponent) {
             dealIndex: 0,
             zipcode: _ramda2.default.prop('zipcode', _qs2.default.parse(window.location.search.slice(1))),
             openAccordion: 'Your Selections',
-            dealWarranties: {}
+            dealWarranties: {},
+            featureCategories: {}
         };
         _this.renderDeal = _this.renderDeal.bind(_this);
         _this.intendedRoute = _this.intendedRoute.bind(_this);
@@ -65275,22 +65276,37 @@ var ComparePage = function (_React$PureComponent) {
     _createClass(ComparePage, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
+            var _this2 = this;
+
             this.componentWillReceiveProps(this.props);
+            _api2.default.getFeatureCategories().then(function (data) {
+                _this2.setState({
+                    featureCategories: data.data.data
+                });
+            });
         }
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(props) {
-            var _this2 = this;
+            var _this3 = this;
 
             props.compareList.map(function (dealAndSelectedFilters) {
-                if (_this2.state.dealWarranties.hasOwnProperty(dealAndSelectedFilters.deal.id)) return;
+                if (_this3.state.dealWarranties.hasOwnProperty(dealAndSelectedFilters.deal.id)) return;
 
                 _api2.default.getWarranties(dealAndSelectedFilters.deal.versions[0].jato_vehicle_id).then(function (data) {
-                    var dealWarranties = _this2.state.dealWarranties;
+                    var dealWarranties = _this3.state.dealWarranties;
 
                     dealWarranties[dealAndSelectedFilters.deal.id] = data.data;
 
-                    _this2.setState({
+                    _this3.setState({
+                        dealWarranties: dealWarranties
+                    });
+                }).catch(function (e) {
+                    var dealWarranties = _this3.state.dealWarranties;
+
+                    dealWarranties[dealAndSelectedFilters.deal.id] = [];
+
+                    _this3.setState({
                         dealWarranties: dealWarranties
                     });
                 });
@@ -65347,13 +65363,13 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderAccordionTabHeader',
         value: function renderAccordionTabHeader(accordionTab) {
-            var _this3 = this;
+            var _this4 = this;
 
             return _react2.default.createElement(
                 'div',
                 {
                     onClick: function onClick() {
-                        return _this3.toggleAccordion(accordionTab);
+                        return _this4.toggleAccordion(accordionTab);
                     },
                     className: 'compare-page-table__header ' + (this.state.openAccordion === accordionTab ? 'compare-page-table__header--open' : '')
                 },
@@ -65442,10 +65458,10 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderTargetsTable',
         value: function renderTargetsTable(compareList) {
-            var _this4 = this;
+            var _this5 = this;
 
             var maxNumberCells = _ramda2.default.reduce(function (carry, dealAndSelectedFilters) {
-                return _ramda2.default.max(_ramda2.default.propOr([], dealAndSelectedFilters.deal.id, _this4.props.dealTargets).length, carry);
+                return _ramda2.default.max(_ramda2.default.propOr([], dealAndSelectedFilters.deal.id, _this5.props.dealTargets).length, carry);
             }, 0, compareList);
 
             return _react2.default.createElement(
@@ -65463,8 +65479,8 @@ var ComparePage = function (_React$PureComponent) {
                                 className: 'compare-page-table__column'
                             },
                             '@TODO update this thing to be filtering by type correctly',
-                            _this4.props.dealTargets[dealAndSelectedFilters.deal.id].map(function (rebate, index) {
-                                return _ramda2.default.contains(_this4.props.selectedTab, rebate.types) ? _react2.default.createElement(
+                            _this5.props.dealTargets[dealAndSelectedFilters.deal.id].map(function (rebate, index) {
+                                return _ramda2.default.contains(_this5.props.selectedTab, rebate.types) ? _react2.default.createElement(
                                     'div',
                                     {
                                         key: index,
@@ -65474,7 +65490,7 @@ var ComparePage = function (_React$PureComponent) {
                                     '\xA0'
                                 ) : '';
                             }),
-                            _ramda2.default.range(0, maxNumberCells - _this4.props.dealTargets[dealAndSelectedFilters.deal.id].length).map(function (_, index) {
+                            _ramda2.default.range(0, maxNumberCells - _this5.props.dealTargets[dealAndSelectedFilters.deal.id].length).map(function (_, index) {
                                 return _react2.default.createElement(
                                     'div',
                                     {
@@ -65559,7 +65575,7 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'renderWarrantyTable',
         value: function renderWarrantyTable(compareList) {
-            var _this5 = this;
+            var _this6 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -65576,7 +65592,7 @@ var ComparePage = function (_React$PureComponent) {
                                 key: index,
                                 className: 'compare-page-table__column'
                             },
-                            _this5.state.dealWarranties.hasOwnProperty(deal.id) ? _this5.state.dealWarranties[deal.id].map(function (warranty, index) {
+                            _this6.state.dealWarranties.hasOwnProperty(deal.id) ? _this6.state.dealWarranties[deal.id].map(function (warranty, index) {
                                 return _react2.default.createElement(
                                     'div',
                                     {
@@ -65595,12 +65611,84 @@ var ComparePage = function (_React$PureComponent) {
             );
         }
     }, {
+        key: 'compareListDoesNotHavePickupCategory',
+        value: function compareListDoesNotHavePickupCategory(compareList) {
+            var allCategoryIds = [];
+            var pickupCategory = this.state.featureCategories.find(function (category) {
+                return category.attributes.slug === 'pickup';
+            });
+
+            compareList.map(function (_ref2) {
+                var deal = _ref2.deal;
+
+                deal.dmr_features.map(function (feature) {
+                    allCategoryIds.push(feature.category_id);
+                });
+            });
+
+            return !_ramda2.default.contains(pickupCategory.id, allCategoryIds);
+        }
+    }, {
+        key: 'renderDMRFeaturesTable',
+        value: function renderDMRFeaturesTable(compareList) {
+            var _this7 = this;
+
+            return this.state.featureCategories.map(function (featureCategory) {
+                if (featureCategory.attributes.slug === 'pickup' && _this7.compareListDoesNotHavePickupCategory(compareList)) {
+                    return;
+                }
+
+                return _react2.default.createElement(
+                    _AccordionTable2.default,
+                    { key: featureCategory.id },
+                    function () {
+                        return _react2.default.createElement(
+                            'div',
+                            { className: 'compare-page-table' },
+                            _this7.renderAccordionTabHeader((0, _titlecase2.default)(featureCategory.attributes.title)),
+                            _react2.default.createElement(
+                                'div',
+                                {
+                                    className: _this7.columnClass((0, _titlecase2.default)(featureCategory.attributes.title))
+                                },
+                                compareList.map(function (_ref3, index) {
+                                    var deal = _ref3.deal;
+
+                                    var features = deal.dmr_features.filter(function (dmr_feature) {
+                                        return dmr_feature.category_id == featureCategory.id;
+                                    });
+
+                                    return _react2.default.createElement(
+                                        'div',
+                                        {
+                                            className: 'compare-page-table__column',
+                                            key: index
+                                        },
+                                        features.map(function (feature) {
+                                            return _react2.default.createElement(
+                                                'div',
+                                                {
+                                                    className: 'compare-page-table__cell',
+                                                    key: feature.slug
+                                                },
+                                                feature.title
+                                            );
+                                        })
+                                    );
+                                })
+                            )
+                        );
+                    }
+                );
+            });
+        }
+    }, {
         key: 'renderFeaturesTable',
         value: function renderFeaturesTable(compareList) {
-            var _this6 = this;
+            var _this8 = this;
 
-            var featureSets = compareList.map(function (_ref2, index) {
-                var deal = _ref2.deal;
+            var featureSets = compareList.map(function (_ref4, index) {
+                var deal = _ref4.deal;
 
                 return deal.features;
             });
@@ -65617,14 +65705,14 @@ var ComparePage = function (_React$PureComponent) {
                         return _react2.default.createElement(
                             'div',
                             { className: 'compare-page-table' },
-                            _this6.renderAccordionTabHeader((0, _titlecase2.default)(featureSet[0].group) + ' Features'),
+                            _this8.renderAccordionTabHeader((0, _titlecase2.default)(featureSet[0].group) + ' Features'),
                             _react2.default.createElement(
                                 'div',
                                 {
-                                    className: _this6.columnClass((0, _titlecase2.default)(featureSet[0].group) + ' Features')
+                                    className: _this8.columnClass((0, _titlecase2.default)(featureSet[0].group) + ' Features')
                                 },
-                                compareList.map(function (_ref3, index) {
-                                    var deal = _ref3.deal;
+                                compareList.map(function (_ref5, index) {
+                                    var deal = _ref5.deal;
 
                                     return _react2.default.createElement(
                                         'div',
@@ -65665,6 +65753,51 @@ var ComparePage = function (_React$PureComponent) {
             });
         }
     }, {
+        key: 'renderOptionalFeaturesTable',
+        value: function renderOptionalFeaturesTable(compareList) {
+            var tabHeader = 'Optional Equipment On This Vehicle';
+            var maxNumberCells = _ramda2.default.reduce(function (carry, dealAndSelectedFilters) {
+                return _ramda2.default.max(_ramda2.default.propOr([], 'vauto_features', dealAndSelectedFilters.deal).length, carry);
+            }, 0, compareList);
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'compare-page-table' },
+                this.renderAccordionTabHeader(tabHeader),
+                _react2.default.createElement(
+                    'div',
+                    { className: this.columnClass(tabHeader) },
+                    compareList.map(function (dealAndSelectedFilters, index) {
+                        var alphabeticalFeatures = dealAndSelectedFilters.deal.vauto_features.sort();
+                        return _react2.default.createElement(
+                            'div',
+                            { key: index },
+                            alphabeticalFeatures.map(function (feature, index) {
+                                return _react2.default.createElement(
+                                    'div',
+                                    {
+                                        className: 'compare-page-table__cell',
+                                        key: index
+                                    },
+                                    feature
+                                );
+                            }),
+                            _ramda2.default.range(0, maxNumberCells - alphabeticalFeatures.length).map(function (_, index) {
+                                return _react2.default.createElement(
+                                    'div',
+                                    {
+                                        key: index,
+                                        className: 'compare-page-table__cell'
+                                    },
+                                    '\xA0'
+                                );
+                            })
+                        );
+                    })
+                )
+            );
+        }
+    }, {
         key: 'hasSelections',
         value: function hasSelections() {
             var anyHaveFuelType = _ramda2.default.any(function (dealAndSelectedFilters) {
@@ -65684,7 +65817,7 @@ var ComparePage = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
-            var _this7 = this;
+            var _this9 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -65701,24 +65834,32 @@ var ComparePage = function (_React$PureComponent) {
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this7.renderSelectionsTable(_this7.props.compareList);
+                            return _this9.renderSelectionsTable(_this9.props.compareList);
                         }
                     ) : '',
                     _react2.default.createElement(
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this7.renderPricingTable(_this7.props.compareList);
+                            return _this9.renderPricingTable(_this9.props.compareList);
                         }
                     ),
                     _react2.default.createElement(
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this7.renderWarrantyTable(_this7.props.compareList);
+                            return _this9.renderWarrantyTable(_this9.props.compareList);
                         }
                     ),
-                    this.props.compareList.length ? this.renderFeaturesTable(this.props.compareList) : ''
+                    this.state.featureCategories.length ? this.renderDMRFeaturesTable(this.props.compareList) : '',
+                    this.props.compareList.length ? this.renderFeaturesTable(this.props.compareList) : '',
+                    _react2.default.createElement(
+                        _AccordionTable2.default,
+                        null,
+                        function () {
+                            return _this9.renderOptionalFeaturesTable(_this9.props.compareList);
+                        }
+                    )
                 ),
                 this.props.selectedDeal ? this.renderCalculatorModal() : ''
             );

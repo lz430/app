@@ -28,6 +28,7 @@ class ComparePage extends React.PureComponent {
             ),
             openAccordion: 'Your Selections',
             dealWarranties: {},
+            featureCategories: {},
         };
         this.renderDeal = this.renderDeal.bind(this);
         this.intendedRoute = this.intendedRoute.bind(this);
@@ -35,6 +36,11 @@ class ComparePage extends React.PureComponent {
 
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
+        api.getFeatureCategories().then(data => {
+            this.setState({
+                featureCategories: data.data.data,
+            });
+        });
     }
 
     componentWillReceiveProps(props) {
@@ -54,6 +60,15 @@ class ComparePage extends React.PureComponent {
                     let dealWarranties = this.state.dealWarranties;
 
                     dealWarranties[dealAndSelectedFilters.deal.id] = data.data;
+
+                    this.setState({
+                        dealWarranties,
+                    });
+                })
+                .catch(e => {
+                    let dealWarranties = this.state.dealWarranties;
+
+                    dealWarranties[dealAndSelectedFilters.deal.id] = [];
 
                     this.setState({
                         dealWarranties,
@@ -375,6 +390,84 @@ class ComparePage extends React.PureComponent {
         );
     }
 
+    compareListDoesNotHavePickupCategory(compareList) {
+        let allCategoryIds = [];
+        const pickupCategory = this.state.featureCategories.find(category => {
+            return category.attributes.slug === 'pickup';
+        });
+
+        compareList.map(({ deal }) => {
+            deal.dmr_features.map(feature => {
+                allCategoryIds.push(feature.category_id);
+            });
+        });
+
+        return !R.contains(pickupCategory.id, allCategoryIds);
+    }
+
+    renderDMRFeaturesTable(compareList) {
+        return this.state.featureCategories.map(featureCategory => {
+            if (
+                featureCategory.attributes.slug === 'pickup' &&
+                this.compareListDoesNotHavePickupCategory(compareList)
+            ) {
+                return;
+            }
+
+            return (
+                <AccordionTable key={featureCategory.id}>
+                    {() => {
+                        return (
+                            <div className="compare-page-table">
+                                {this.renderAccordionTabHeader(
+                                    toTitleCase(
+                                        featureCategory.attributes.title
+                                    )
+                                )}
+                                <div
+                                    className={this.columnClass(
+                                        toTitleCase(
+                                            featureCategory.attributes.title
+                                        )
+                                    )}
+                                >
+                                    {compareList.map(({ deal }, index) => {
+                                        let features = deal.dmr_features.filter(
+                                            dmr_feature => {
+                                                return (
+                                                    dmr_feature.category_id ==
+                                                    featureCategory.id
+                                                );
+                                            }
+                                        );
+
+                                        return (
+                                            <div
+                                                className="compare-page-table__column"
+                                                key={index}
+                                            >
+                                                {features.map(feature => {
+                                                    return (
+                                                        <div
+                                                            className="compare-page-table__cell"
+                                                            key={feature.slug}
+                                                        >
+                                                            {feature.title}
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        );
+                    }}
+                </AccordionTable>
+            );
+        });
+    }
+
     renderFeaturesTable(compareList) {
         let featureSets = compareList.map(({ deal }, index) => {
             return deal.features;
@@ -454,6 +547,59 @@ class ComparePage extends React.PureComponent {
         });
     }
 
+    renderOptionalFeaturesTable(compareList) {
+        const tabHeader = 'Optional Equipment On This Vehicle';
+        const maxNumberCells = R.reduce(
+            (carry, dealAndSelectedFilters) => {
+                return R.max(
+                    R.propOr([], 'vauto_features', dealAndSelectedFilters.deal)
+                        .length,
+                    carry
+                );
+            },
+            0,
+            compareList
+        );
+
+        return (
+            <div className="compare-page-table">
+                {this.renderAccordionTabHeader(tabHeader)}
+                <div className={this.columnClass(tabHeader)}>
+                    {compareList.map((dealAndSelectedFilters, index) => {
+                        const alphabeticalFeatures = dealAndSelectedFilters.deal.vauto_features.sort();
+                        return (
+                            <div key={index}>
+                                {alphabeticalFeatures.map((feature, index) => {
+                                    return (
+                                        <div
+                                            className="compare-page-table__cell"
+                                            key={index}
+                                        >
+                                            {feature}
+                                        </div>
+                                    );
+                                })}
+                                {R.range(
+                                    0,
+                                    maxNumberCells - alphabeticalFeatures.length
+                                ).map((_, index) => {
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="compare-page-table__cell"
+                                        >
+                                            &nbsp;
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        );
+    }
+
     hasSelections() {
         const anyHaveFuelType = R.any(dealAndSelectedFilters => {
             return dealAndSelectedFilters.selectedFilters.selectedFuelType;
@@ -494,15 +640,6 @@ class ComparePage extends React.PureComponent {
                     ) : (
                         ''
                     )}
-
-                    {/* <AccordionTable>
-                            {() => {
-                                return this.renderTargetsTable(
-                                    this.props.compareList
-                                );
-                            }}
-                        </AccordionTable> */}
-
                     <AccordionTable>
                         {() => {
                             return this.renderPricingTable(
@@ -517,9 +654,21 @@ class ComparePage extends React.PureComponent {
                             );
                         }}
                     </AccordionTable>
+
+                    {this.state.featureCategories.length
+                        ? this.renderDMRFeaturesTable(this.props.compareList)
+                        : ''}
+
                     {this.props.compareList.length
                         ? this.renderFeaturesTable(this.props.compareList)
                         : ''}
+                    <AccordionTable>
+                        {() => {
+                            return this.renderOptionalFeaturesTable(
+                                this.props.compareList
+                            );
+                        }}
+                    </AccordionTable>
                 </div>
 
                 {this.props.selectedDeal ? this.renderCalculatorModal() : ''}

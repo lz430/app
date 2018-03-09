@@ -364,7 +364,7 @@ class Importer
             }
 
             /**
-             * Only add features that have _content_ that starts with "Standard", "Optional", "Yes".
+             * Only add features that have _content_ that starts with "Standard", "Yes".
              */
             if (starts_with($featureAndContent['content'], ['Standard', 'Yes'])) {
                 try {
