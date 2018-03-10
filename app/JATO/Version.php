@@ -41,7 +41,7 @@ class Version extends Model
 
     public function deals()
     {
-        return $this->belongsToMany(Deal::class);
+        return $this->hasMany(Deal::class);
     }
 
     public function scopeFilterByModel(Builder $query, array $modelIds) : Builder

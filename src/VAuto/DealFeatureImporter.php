@@ -17,7 +17,7 @@ class DealFeatureImporter
         $this->deal = $deal;
         $this->features = $features;
         $this->client = $client;
-        $this->version = $this->deal->versions->first();
+        $this->version = $this->deal->version;
     }
 
     public function import()

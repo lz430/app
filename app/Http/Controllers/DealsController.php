@@ -10,7 +10,7 @@ class DealsController extends Controller
 {
     public function show(int $id)
     {
-        $deal = Deal::with('jatoFeatures')->has('versions')->with('photos')->with('versions.equipment')->findOrFail($id);
+        $deal = Deal::with('jatoFeatures')->has('version')->with('photos')->with('version.equipment')->findOrFail($id);
 
         $title = "$deal->year $deal->make $deal->model $deal->series";
 

@@ -45,7 +45,7 @@ class DealDetails extends React.PureComponent {
         }
 
         api
-            .getDimensions(this.props.deal.versions[0].jato_vehicle_id)
+            .getDimensions(this.props.deal.version.jato_vehicle_id)
             .then(response => {
                 if (!this._isMounted) return;
 
@@ -55,7 +55,7 @@ class DealDetails extends React.PureComponent {
             });
 
         api
-            .getWarranties(this.props.deal.versions[0].jato_vehicle_id)
+            .getWarranties(this.props.deal.version.jato_vehicle_id)
             .then(response => {
                 if (!this._isMounted) return;
 
