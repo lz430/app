@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Transformers\DealTransformer;
 use App\Deal;
+use App\Http\Controllers\API\Traits\SearchesDeals;
+use App\JATO\VehicleModel;
+use App\Transformers\DealTransformer;
 use App\Zipcode;
 use DeliverMyRide\JATO\Client;
 use DeliverMyRide\JsonApi\Sort;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use League\Csv\Reader;
+use League\Csv\Statement;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Serializer\DataArraySerializer;
-use App\Http\Controllers\API\Traits\SearchesDeals;
-use App\JATO\VehicleModel;
 
 class DealsByModelYearController extends BaseAPIController
 {

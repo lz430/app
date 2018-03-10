@@ -34,6 +34,7 @@ if (App::environment(['staging', 'local'])) {
         Route::get('zip-tester/{zip}', 'ZipCodeTesterController');
         Route::get('jato-logs/{date}', 'JatoLogController@showDay');
         Route::get('jato-logs', 'JatoLogController@index');
+        Route::get('vauto-dump', 'VAutoDumpController');
         Route::get('statistics/deals', 'StatisticsController@deals');
         Route::get('deal-debugger/{deal}', 'DealDebuggerController@show');
         Route::get('deal-feature-debugger/{deal}', 'DealFeatureDebuggerController@show');
