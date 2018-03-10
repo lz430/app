@@ -50,10 +50,24 @@ class VAutoDumpController extends Controller
 
         echo '<hr>';
 
-        // @todo make this a huge table instead of a bunch of json dumps?
-        foreach ($records as $record) {
-            echo '<pre>' . json_encode($record, JSON_PRETTY_PRINT) . '</pre>';
-            echo '<hr>';
+        echo '<table cellpadding=15 border=1>';
+
+        foreach ($records as $i => $record) {
+            if ($i == 0) {
+                echo '<tr>';
+                foreach ($record as $key => $column) {
+                    echo '<th>' . $key . '</th>';
+                }
+                echo '</tr>';
+            }
+
+            echo '<tr>';
+            foreach ($record as $key => $column) {
+                echo '<td>' . $column . '</td>';
+            }
+            echo '</tr>';
         }
+
+        echo '</table>';
     }
 }
