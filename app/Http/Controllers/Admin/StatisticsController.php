@@ -7,15 +7,16 @@ use App\Dealer;
 use App\Http\Controllers\Controller;
 use App\JATO\Version;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use League\Csv\Reader;
 use League\Csv\Statement;
 
 class StatisticsController extends Controller
 {
+    use ReadsVAutoDump;
+
     public function deals()
     {
-        $records = $this->csvRecords();
+        $records = $this->vautoCsvRecords();
 
         $new_vehicle_count = $records->filter(function ($row) {
             return $row['New/Used'] == "N";
@@ -55,19 +56,7 @@ class StatisticsController extends Controller
         return $dealers;
     }
 
-    private function vautoFilePath()
-    {
-        $csvFiles = array_filter(
-            File::files(realpath(base_path(config('services.vauto.uploads_path')))),
-            function ($file) {
-                return pathinfo($file, PATHINFO_EXTENSION) === 'csv';
-            }
-        );
-
-        return reset($csvFiles);
-    }
-
-    private function csvRecords()
+    private function vautoCsvRecords()
     {
         $csv = Reader::createFromPath($this->vautoFilePath(), 'r');
         $csv->setHeaderOffset(0);
