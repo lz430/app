@@ -34,7 +34,7 @@ class DealsByModelYearController extends BaseAPIController
             'zipcode' => 'sometimes|required|string',
         ]);
 
-        $deals = $this->buildSearchQuery($request)->paginate(400);
+        $deals = $this->buildSearchQuery($request)->get();
 
         /* @TODO – This is terrible and insanely memory intensive. Needs badly to be rewritten. Sorry ~DC */
         $dealsByModelYear = $deals->map(function ($deal) {
