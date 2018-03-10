@@ -20,6 +20,7 @@ trait SearchesDeals
 
         return $dealsQuery;
     }
+
     private function filterQueryByLocationDistance(Builder $query, Request $request) : Builder
     {
         if ($request->has('zipcode') && $zipcode = Zipcode::where('zipcode', $request->get('zipcode'))->first()) {
@@ -61,7 +62,7 @@ trait SearchesDeals
                     $query->whereIn('model_id', $request->get('model_ids'));
                 }
             });
-            
+
         })->whereNotNull('price')->whereNotNull('msrp')->with(['photos' => function ($query) {
             $query->orderBy('id');
         },])->with('features')->with('versions.equipment')->with('dealer')->forSale();
