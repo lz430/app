@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Deal;
 use App\Dealer;
+use App\Http\Controllers\Admin\Traits\ReadsVAutoDump;
 use App\Http\Controllers\Controller;
 use App\JATO\Version;
 use Illuminate\Http\Request;
