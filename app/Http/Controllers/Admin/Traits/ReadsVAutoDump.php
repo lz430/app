@@ -17,6 +17,4 @@ trait ReadsVAutoDump
 
         return reset($csvFiles);
     }
-
-
 }
