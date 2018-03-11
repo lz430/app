@@ -14,7 +14,7 @@ class DeleteDealVersionTable extends Migration
     public function up()
     {
         Schema::table('deals', function (Blueprint $table) {
-            $table->integer('version_id')
+            $table->unsignedInteger('version_id')
                 ->default(123) // not actually true just left for sqlite @todo
                 ->references('id')
                 ->on('versions')
@@ -37,8 +37,28 @@ class DeleteDealVersionTable extends Migration
      */
     public function down()
     {
-        Schema::table('deal_versions', function (Blueprint $table) {
-            // Nope.
+        Schema::create('deal_version', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('deal_id');
+            $table->foreign('deal_id')->references('id')->on('deals')->onDelete('cascade');
+            $table->unsignedInteger('version_id');
+            $table->foreign('version_id')->references('id')->on('versions')->onDelete('cascade');
+            $table->unique(['deal_id', 'version_id']);
+        });
+
+        DB::table('deals')->get()->each(function ($deal) {
+            if (! $deal->version_id) {
+                return;
+            }
+
+            DB::table('deal_version')->insert([
+                'deal_id' => $deal->id,
+                'version_id' => $deal->version_id,
+            ]);
+        });
+
+        Schema::table('deals', function (Blueprint $table) {
+            $table->dropColumn('version_id');
         });
     }
 }
