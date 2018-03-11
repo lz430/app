@@ -23001,92 +23001,102 @@ var DealImage = function (_React$PureComponent) {
         key: 'requestFuelImages',
         value: function () {
             var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-                var deal, vehicleId, externalImages, _externalImages;
+                var deal, _vehicleId, externalImages, _externalImages;
 
                 return regeneratorRuntime.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
                                 deal = this.props.deal;
-                                _context.next = 3;
+                                _context.prev = 1;
+                                _context.next = 4;
                                 return _fuelapi2.default.getVehicleId(deal.year, deal.make, deal.model);
 
-                            case 3:
+                            case 4:
                                 _context.t0 = _context.sent.data[0].id;
 
                                 if (_context.t0) {
-                                    _context.next = 6;
+                                    _context.next = 7;
                                     break;
                                 }
 
                                 _context.t0 = false;
 
-                            case 6:
-                                vehicleId = _context.t0;
+                            case 7:
+                                _vehicleId = _context.t0;
 
-                                if (vehicleId) {
-                                    _context.next = 9;
+                                if (_vehicleId) {
+                                    _context.next = 10;
                                     break;
                                 }
 
                                 return _context.abrupt('return');
 
-                            case 9:
-                                _context.prev = 9;
-                                _context.t1 = this;
-                                _context.next = 13;
+                            case 10:
+                                _context.next = 15;
+                                break;
+
+                            case 12:
+                                _context.prev = 12;
+                                _context.t1 = _context['catch'](1);
+                                return _context.abrupt('return');
+
+                            case 15:
+                                _context.prev = 15;
+                                _context.t2 = this;
+                                _context.next = 19;
                                 return _fuelapi2.default.getExternalImages(vehicleId, _fuelColorMap2.default.convert(deal.color));
 
-                            case 13:
-                                _context.t2 = _context.sent;
-                                externalImages = _context.t1.extractFuelImages.call(_context.t1, _context.t2);
+                            case 19:
+                                _context.t3 = _context.sent;
+                                externalImages = _context.t2.extractFuelImages.call(_context.t2, _context.t3);
 
                                 if (this._isMounted) {
-                                    _context.next = 17;
+                                    _context.next = 23;
                                     break;
                                 }
 
                                 return _context.abrupt('return');
 
-                            case 17:
+                            case 23:
                                 this.setState({ featuredImage: externalImages[0] });
-                                _context.next = 35;
+                                _context.next = 41;
                                 break;
-
-                            case 20:
-                                _context.prev = 20;
-                                _context.t3 = _context['catch'](9);
-                                _context.prev = 22;
-                                _context.t4 = this;
-                                _context.next = 26;
-                                return _fuelapi2.default.getExternalImages(vehicleId, 'white');
 
                             case 26:
-                                _context.t5 = _context.sent;
-                                _externalImages = _context.t4.extractFuelImages.call(_context.t4, _context.t5);
+                                _context.prev = 26;
+                                _context.t4 = _context['catch'](15);
+                                _context.prev = 28;
+                                _context.t5 = this;
+                                _context.next = 32;
+                                return _fuelapi2.default.getExternalImages(vehicleId, 'white');
+
+                            case 32:
+                                _context.t6 = _context.sent;
+                                _externalImages = _context.t5.extractFuelImages.call(_context.t5, _context.t6);
 
                                 if (this._isMounted) {
-                                    _context.next = 30;
+                                    _context.next = 36;
                                     break;
                                 }
 
                                 return _context.abrupt('return');
 
-                            case 30:
+                            case 36:
                                 this.setState({ featuredImage: _externalImages[0] });
-                                _context.next = 35;
+                                _context.next = 41;
                                 break;
 
-                            case 33:
-                                _context.prev = 33;
-                                _context.t6 = _context['catch'](22);
+                            case 39:
+                                _context.prev = 39;
+                                _context.t7 = _context['catch'](28);
 
-                            case 35:
+                            case 41:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[9, 20], [22, 33]]);
+                }, _callee, this, [[1, 12], [15, 26], [28, 39]]);
             }));
 
             function requestFuelImages() {
@@ -59001,8 +59011,7 @@ var ModelYearImage = function (_React$PureComponent) {
                             case 11:
                                 _context.prev = 11;
                                 _context.t1 = _context['catch'](0);
-
-                                alert('error even getting id!');
+                                return _context.abrupt('return');
 
                             case 14:
                                 _context.prev = 14;
@@ -62911,83 +62920,93 @@ var DealDetails = function (_React$PureComponent) {
         key: 'requestFuelImages',
         value: function () {
             var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-                var vehicleId, externalImages, _externalImages;
+                var _vehicleId, externalImages, _externalImages;
 
                 return regeneratorRuntime.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
-                                _context.next = 2;
+                                _context.prev = 0;
+                                _context.next = 3;
                                 return _fuelapi2.default.getVehicleId(this.props.deal.year, this.props.deal.make, this.props.deal.model);
 
-                            case 2:
+                            case 3:
                                 _context.t0 = _context.sent.data[0].id;
 
                                 if (_context.t0) {
-                                    _context.next = 5;
+                                    _context.next = 6;
                                     break;
                                 }
 
                                 _context.t0 = false;
 
-                            case 5:
-                                vehicleId = _context.t0;
+                            case 6:
+                                _vehicleId = _context.t0;
 
-                                if (vehicleId) {
-                                    _context.next = 8;
+                                if (_vehicleId) {
+                                    _context.next = 9;
                                     break;
                                 }
 
                                 return _context.abrupt('return');
 
-                            case 8:
-                                _context.prev = 8;
-                                _context.t1 = this;
-                                _context.next = 12;
+                            case 9:
+                                _context.next = 14;
+                                break;
+
+                            case 11:
+                                _context.prev = 11;
+                                _context.t1 = _context['catch'](0);
+                                return _context.abrupt('return');
+
+                            case 14:
+                                _context.prev = 14;
+                                _context.t2 = this;
+                                _context.next = 18;
                                 return _fuelapi2.default.getExternalImages(vehicleId, _fuelColorMap2.default.convert(this.props.deal.color));
 
-                            case 12:
-                                _context.t2 = _context.sent;
-                                externalImages = _context.t1.extractFuelImages.call(_context.t1, _context.t2);
+                            case 18:
+                                _context.t3 = _context.sent;
+                                externalImages = _context.t2.extractFuelImages.call(_context.t2, _context.t3);
 
 
                                 this.setState({
                                     fuelExternalImages: externalImages,
                                     featuredImage: externalImages[0]
                                 });
-                                _context.next = 30;
+                                _context.next = 36;
                                 break;
 
-                            case 17:
-                                _context.prev = 17;
-                                _context.t3 = _context['catch'](8);
-                                _context.prev = 19;
-                                _context.t4 = this;
-                                _context.next = 23;
+                            case 23:
+                                _context.prev = 23;
+                                _context.t4 = _context['catch'](14);
+                                _context.prev = 25;
+                                _context.t5 = this;
+                                _context.next = 29;
                                 return _fuelapi2.default.getExternalImages(vehicleId, 'white');
 
-                            case 23:
-                                _context.t5 = _context.sent;
-                                _externalImages = _context.t4.extractFuelImages.call(_context.t4, _context.t5);
+                            case 29:
+                                _context.t6 = _context.sent;
+                                _externalImages = _context.t5.extractFuelImages.call(_context.t5, _context.t6);
 
 
                                 this.setState({
                                     fuelExternalImages: _externalImages,
                                     featuredImage: _externalImages[0]
                                 });
-                                _context.next = 30;
+                                _context.next = 36;
                                 break;
 
-                            case 28:
-                                _context.prev = 28;
-                                _context.t6 = _context['catch'](19);
+                            case 34:
+                                _context.prev = 34;
+                                _context.t7 = _context['catch'](25);
 
-                            case 30:
+                            case 36:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[8, 17], [19, 28]]);
+                }, _callee, this, [[0, 11], [14, 23], [25, 34]]);
             }));
 
             function requestFuelImages() {

@@ -48,7 +48,7 @@ class ModelYearImage extends React.PureComponent {
                     .data[0].id || false;
             if (!vehicleId) return;
         } catch (e) {
-            alert('error even getting id!')
+            return; // No Fuel ID available
         }
 
         try {
