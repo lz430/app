@@ -52507,15 +52507,29 @@ var Deals = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
-            if (!this.props.deals && this.props.requestingMoreDeals && this.props.zipInRange || !this.props.modelYears && this.props.requestingMoreModelYears && this.props.zipInRange) {
+            // Zip out of range
+            if (!this.props.zipInRange) {
+                return _react2.default.createElement(_NoDealsOutOfRange2.default, null);
+            }
+
+            // Requesting something
+            if (this.props.requestingMoreDeals || this.props.requestingMoreModelYears) {
                 return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
             }
 
-            if (this.props.zipInRange) {
-                return this.props.deals && this.props.deals.length ? _react2.default.createElement(_ViewDeals2.default, null) : this.props.modelYears && this.props.modelYears.length ? _react2.default.createElement(_ViewModels2.default, null) : _react2.default.createElement(_NoDealsInRange2.default, null);
+            // No matches at all
+            if (!this.props.deals && !this.props.modelYears) {
+                _react2.default.createElement(_NoDealsInRange2.default, null);
             }
 
-            return _react2.default.createElement(_NoDealsOutOfRange2.default, null);
+            // We have some results; which should we prefer?
+            // return this.props.deals ? (
+            return this.props.deals && this.props.deals.length ? _react2.default.createElement(_ViewDeals2.default, null) :
+            // this.props.modelYears && this.props.modelYears.length ? (
+            _react2.default.createElement(_ViewModels2.default, null)
+            // ) : (
+            // )
+            ;
         }
     }]);
 
