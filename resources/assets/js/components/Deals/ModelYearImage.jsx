@@ -42,14 +42,10 @@ class ModelYearImage extends React.PureComponent {
     }
 
     async requestFuelImages() {
-        try {
-            const vehicleId =
-                (await fuelapi.getVehicleId(this.props.modelYear.year, this.props.modelYear.make, this.props.modelYear.model))
-                    .data[0].id || false;
-            if (!vehicleId) return;
-        } catch (e) {
-            return; // No Fuel ID available
-        }
+        const vehicleId =
+            (await fuelapi.getVehicleId(this.props.modelYear.year, this.props.modelYear.make, this.props.modelYear.model))
+                .data[0].id || false;
+        if (!vehicleId) return;
 
         try {
             if (!this._isMounted) return;
