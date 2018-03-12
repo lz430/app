@@ -58995,30 +58995,34 @@ var ModelYearImage = function (_React$PureComponent) {
                             case 5:
                                 vehicleId = _context.t0;
 
+                                console.log('vehicle id ' + vehicleId);
+
                                 if (vehicleId) {
-                                    _context.next = 8;
+                                    _context.next = 9;
                                     break;
                                 }
 
                                 return _context.abrupt('return');
 
-                            case 8:
-                                _context.prev = 8;
+                            case 9:
+                                _context.prev = 9;
 
                                 if (this._isMounted) {
-                                    _context.next = 11;
+                                    _context.next = 12;
                                     break;
                                 }
 
                                 return _context.abrupt('return');
 
-                            case 11:
+                            case 12:
+                                console.log('trying first');
+
                                 _context.t1 = this;
                                 _context.t2 = this;
-                                _context.next = 15;
+                                _context.next = 17;
                                 return _fuelapi2.default.getExternalImages(vehicleId, _fuelColorMap2.default.random());
 
-                            case 15:
+                            case 17:
                                 _context.t3 = _context.sent;
                                 _context.t4 = _context.t2.extractFuelImages.call(_context.t2, _context.t3);
                                 _context.t5 = {
@@ -59027,28 +59031,30 @@ var ModelYearImage = function (_React$PureComponent) {
 
                                 _context.t1.setState.call(_context.t1, _context.t5);
 
-                                _context.next = 38;
+                                _context.next = 42;
                                 break;
 
-                            case 21:
-                                _context.prev = 21;
-                                _context.t6 = _context['catch'](8);
+                            case 23:
                                 _context.prev = 23;
+                                _context.t6 = _context['catch'](9);
+                                _context.prev = 25;
 
                                 if (this._isMounted) {
-                                    _context.next = 26;
+                                    _context.next = 28;
                                     break;
                                 }
 
                                 return _context.abrupt('return');
 
-                            case 26:
+                            case 28:
+                                console.log('trying second');
+
                                 _context.t7 = this;
                                 _context.t8 = this;
-                                _context.next = 30;
+                                _context.next = 33;
                                 return _fuelapi2.default.getExternalImages(vehicleId, 'white');
 
-                            case 30:
+                            case 33:
                                 _context.t9 = _context.sent;
                                 _context.t10 = _context.t8.extractFuelImages.call(_context.t8, _context.t9);
                                 _context.t11 = {
@@ -59057,19 +59063,22 @@ var ModelYearImage = function (_React$PureComponent) {
 
                                 _context.t7.setState.call(_context.t7, _context.t11);
 
-                                _context.next = 38;
+                                _context.next = 42;
                                 break;
 
-                            case 36:
-                                _context.prev = 36;
-                                _context.t12 = _context['catch'](23);
+                            case 39:
+                                _context.prev = 39;
+                                _context.t12 = _context['catch'](25);
 
-                            case 38:
+                                console.log('no images');
+                                // No Fuel Images Available.
+
+                            case 42:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[8, 21], [23, 36]]);
+                }, _callee, this, [[9, 23], [25, 39]]);
             }));
 
             function requestFuelImages() {
