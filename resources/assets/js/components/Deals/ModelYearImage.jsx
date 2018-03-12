@@ -45,10 +45,13 @@ class ModelYearImage extends React.PureComponent {
         const vehicleId =
             (await fuelapi.getVehicleId(this.props.modelYear.year, this.props.modelYear.make, this.props.modelYear.model))
                 .data[0].id || false;
+        console.log('vehicle id ' + vehicleId);
         if (!vehicleId) return;
+
 
         try {
             if (!this._isMounted) return;
+            console.log('trying first');
 
             this.setState({
                 externalImages: this.extractFuelImages(
@@ -61,6 +64,7 @@ class ModelYearImage extends React.PureComponent {
         } catch (e) {
             try {
                 if (!this._isMounted) return;
+                console.log('trying second');
 
                 this.setState({
                     externalImages: this.extractFuelImages(
@@ -68,6 +72,7 @@ class ModelYearImage extends React.PureComponent {
                     )
                 });
             } catch (e) {
+                console.log('no images');
                 // No Fuel Images Available.
             }
         }
