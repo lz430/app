@@ -52533,13 +52533,7 @@ var Deals = function (_React$PureComponent) {
             }
 
             // We have some results; which should we prefer?
-            // return this.props.deals ? (
-            return this.props.deals && this.props.deals.length ? _react2.default.createElement(_ViewDeals2.default, null) :
-            // this.props.modelYears && this.props.modelYears.length ? (
-            _react2.default.createElement(_ViewModels2.default, null)
-            // ) : (
-            // )
-            ;
+            return this.props.deals && this.props.deals.length ? _react2.default.createElement(_ViewDeals2.default, null) : _react2.default.createElement(_ViewModels2.default, null);
         }
     }]);
 
