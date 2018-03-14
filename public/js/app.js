@@ -66412,7 +66412,16 @@ var ComparePage = function (_React$PureComponent) {
             var featureSets = compareList.map(function (_ref4, index) {
                 var deal = _ref4.deal;
 
-                return deal.features;
+                return deal.dmr_features.map(function (feature) {
+                    return {
+                        id: feature.id,
+                        feature: feature.title,
+                        slug: feature.slug,
+                        group: _this8.state.featureCategories.length ? _this8.state.featureCategories.find(function (category) {
+                            return parseInt(category.id) === parseInt(feature.category_id);
+                        }).attributes.slug.replace('_', ' ') : ''
+                    };
+                }).concat(deal.features);
             });
 
             var groupedFeatureSet = Object.values(_ramda2.default.groupBy(function (feature) {
@@ -66573,7 +66582,6 @@ var ComparePage = function (_React$PureComponent) {
                             return _this9.renderWarrantyTable(_this9.props.compareList);
                         }
                     ),
-                    this.state.featureCategories.length ? this.renderDMRFeaturesTable(this.props.compareList) : '',
                     this.props.compareList.length ? this.renderFeaturesTable(this.props.compareList) : '',
                     _react2.default.createElement(
                         _AccordionTable2.default,

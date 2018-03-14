@@ -470,7 +470,16 @@ class ComparePage extends React.PureComponent {
 
     renderFeaturesTable(compareList) {
         let featureSets = compareList.map(({ deal }, index) => {
-            return deal.features;
+            return deal.dmr_features.map(feature => {
+                return {
+                    id: feature.id,
+                    feature: feature.title,
+                    slug: feature.slug,
+                    group: this.state.featureCategories.length ? this.state.featureCategories.find(category => {
+                        return parseInt(category.id) === parseInt(feature.category_id)
+                    }).attributes.slug.replace('_', ' ') : ''
+                }
+            }).concat(deal.features)
         });
 
         let groupedFeatureSet = Object.values(
@@ -655,13 +664,10 @@ class ComparePage extends React.PureComponent {
                         }}
                     </AccordionTable>
 
-                    {this.state.featureCategories.length
-                        ? this.renderDMRFeaturesTable(this.props.compareList)
-                        : ''}
-
                     {this.props.compareList.length
                         ? this.renderFeaturesTable(this.props.compareList)
                         : ''}
+
                     <AccordionTable>
                         {() => {
                             return this.renderOptionalFeaturesTable(
