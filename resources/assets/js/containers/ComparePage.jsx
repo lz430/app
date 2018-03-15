@@ -473,7 +473,7 @@ class ComparePage extends React.PureComponent {
             return deal.dmr_features.map(feature => {
                 return {
                     id: feature.id,
-                    feature: feature.title,
+                    feature: feature.title.trim(),
                     slug: feature.slug,
                     group: this.state.featureCategories.length ? this.state.featureCategories.find(category => {
                         return parseInt(category.id) === parseInt(feature.category_id)
@@ -485,7 +485,9 @@ class ComparePage extends React.PureComponent {
         let groupedFeatureSet = Object.values(
             R.groupBy(feature => {
                 return feature.group;
-            }, Object.values(R.mergeAll(featureSets)))
+            }, R.uniqBy(feature => {
+                return feature.group + '||' + feature.feature;
+            }, Object.values(R.mergeAll(featureSets))))
         );
 
         return groupedFeatureSet.map((featureSet, index) => {

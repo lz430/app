@@ -66423,7 +66423,7 @@ var ComparePage = function (_React$PureComponent) {
                 return deal.dmr_features.map(function (feature) {
                     return {
                         id: feature.id,
-                        feature: feature.title,
+                        feature: feature.title.trim(),
                         slug: feature.slug,
                         group: _this8.state.featureCategories.length ? _this8.state.featureCategories.find(function (category) {
                             return parseInt(category.id) === parseInt(feature.category_id);
@@ -66434,7 +66434,9 @@ var ComparePage = function (_React$PureComponent) {
 
             var groupedFeatureSet = Object.values(_ramda2.default.groupBy(function (feature) {
                 return feature.group;
-            }, Object.values(_ramda2.default.mergeAll(featureSets))));
+            }, _ramda2.default.uniqBy(function (feature) {
+                return feature.group + '||' + feature.feature;
+            }, Object.values(_ramda2.default.mergeAll(featureSets)))));
 
             return groupedFeatureSet.map(function (featureSet, index) {
                 return _react2.default.createElement(
