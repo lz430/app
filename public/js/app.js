@@ -66464,6 +66464,8 @@ var ComparePage = function (_React$PureComponent) {
                                         featureSet.map(function (feature, index) {
                                             if (deal.features.find(function (dealFeature) {
                                                 return dealFeature.id == feature.id;
+                                            }) || deal.dmr_features.find(function (dealFeature) {
+                                                return dealFeature.id == feature.id;
                                             })) {
                                                 return _react2.default.createElement(
                                                     'div',
@@ -66471,8 +66473,7 @@ var ComparePage = function (_React$PureComponent) {
                                                         key: index,
                                                         className: 'compare-page-table__cell'
                                                     },
-                                                    feature.feature,
-                                                    '\xA0'
+                                                    feature.feature
                                                 );
                                             } else {
                                                 return _react2.default.createElement(

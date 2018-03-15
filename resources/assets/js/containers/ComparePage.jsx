@@ -517,10 +517,12 @@ class ComparePage extends React.PureComponent {
                                                         if (
                                                             deal.features.find(
                                                                 dealFeature => {
-                                                                    return (
-                                                                        dealFeature.id ==
-                                                                        feature.id
-                                                                    );
+                                                                    return dealFeature.id == feature.id
+                                                                }
+                                                            ) ||
+                                                            deal.dmr_features.find(
+                                                                dealFeature => {
+                                                                    return dealFeature.id == feature.id
                                                                 }
                                                             )
                                                         ) {
@@ -531,7 +533,7 @@ class ComparePage extends React.PureComponent {
                                                                 >
                                                                     {
                                                                         feature.feature
-                                                                    }&nbsp;
+                                                                    }
                                                                 </div>
                                                             );
                                                         } else {
