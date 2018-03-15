@@ -35,7 +35,7 @@ class DealBestOfferController extends BaseAPIController
 
         // Generate the best offer cache key
         $sortedTargets = collect(request('targets'))->sort()->implode(',');
-        $jatoVehicleId = $deal->versions->first()->jato_vehicle_id;
+        $jatoVehicleId = $deal->version->jato_vehicle_id;
         $zipCode = request('zipcode');
         $cacheKey = "best-offer:{$jatoVehicleId}:{$paymentType}:{$zipCode}:{$sortedTargets}";
 

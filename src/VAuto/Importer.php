@@ -175,7 +175,7 @@ class Importer
                     // If the deal is new, then we need to attach it to its version and flesh out its relations from that version
                     if ($deal->wasRecentlyCreated) {
                         $this->info("   Saving new Deal");
-                        $deal->versions()->attach($version->id);
+                        $deal->version()->associate($version->id)->save();
                         $this->saveDealRelations($deal, $vAutoRow);
                     }
 
@@ -331,7 +331,7 @@ class Importer
 
     private function saveDealJatoFeatures(Deal $deal)
     {
-        $jatoVehicleId = $deal->versions->first()->jato_vehicle_id;
+        $jatoVehicleId = $deal->version->jato_vehicle_id;
 
         $promises = collect(JatoFeature::SYNC_GROUPS)->flatMap(function ($group) use ($jatoVehicleId) {
             return [$group['title'] => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, $group['id'])];
@@ -393,7 +393,7 @@ class Importer
 
     private function saveCustomHackyJatoFeatures(Deal $deal)
     {
-        $jatoVersion = $deal->versions->first();
+        $jatoVersion = $deal->version;
 
         if ($jatoVersion->body_style === 'Pickup') {
             try {

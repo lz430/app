@@ -68,7 +68,8 @@ class TargetsController extends Controller
 
     private function vehicleIdByVin($vin)
     {
-        $version = Deal::where('vin', $vin)->with('versions')->firstOrFail()->versions()->firstOrFail();
+        $version = Deal::where('vin', $vin)->with('version')->firstOrFail()->version;
+
         return $version->jato_vehicle_id;
     }
 }

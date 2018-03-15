@@ -24,7 +24,7 @@ class NewPurchaseInitiated
             'phone' => $user->phone_number,
             'zip' => $user->zip,
             'vin' => $purchase->deal->vin,
-            'bodystyle1' => $purchase->deal->versions()->first()->body_style,
+            'bodystyle1' => $purchase->deal->version->body_style,
             'brand' => $purchase->deal->make,
             'model1' => $purchase->deal->model,
             'color1' => $purchase->deal->color,

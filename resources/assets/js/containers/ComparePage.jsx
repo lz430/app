@@ -54,7 +54,7 @@ class ComparePage extends React.PureComponent {
 
             api
                 .getWarranties(
-                    dealAndSelectedFilters.deal.versions[0].jato_vehicle_id
+                    dealAndSelectedFilters.deal.version.jato_vehicle_id
                 )
                 .then(data => {
                     let dealWarranties = this.state.dealWarranties;
@@ -332,7 +332,7 @@ class ComparePage extends React.PureComponent {
                                 <div className="compare-page-table__cell">
                                     <strong>Invoice:</strong>{' '}
                                     {util.moneyFormat(
-                                        dealAndSelectedFilters.deal.versions[0]
+                                        dealAndSelectedFilters.deal.version
                                             .invoice
                                     )}
                                 </div>

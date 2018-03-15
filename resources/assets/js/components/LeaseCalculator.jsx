@@ -28,7 +28,7 @@ class LeaseCalculator extends React.PureComponent {
 
         api
             .getLeaseRates(
-                this.props.deal.versions[0].jato_vehicle_id,
+                this.props.deal.version.jato_vehicle_id,
                 this.props.zipcode
             )
             .then(data => {

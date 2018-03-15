@@ -2220,12 +2220,12 @@ var util = {
         }, value, zipped);
     },
     getTargetKeyForDealAndZip: function getTargetKeyForDealAndZip(deal, zipcode) {
-        var vehicleId = deal.versions[0].jato_vehicle_id;
+        var vehicleId = deal.version.jato_vehicle_id;
         var targetKey = vehicleId + '-' + zipcode;
         return targetKey;
     },
     getBestOfferKeyForDeal: function getBestOfferKeyForDeal(deal, zipcode, paymentType, selectedTargets) {
-        var vehicleId = deal.versions[0].jato_vehicle_id;
+        var vehicleId = deal.version.jato_vehicle_id;
         var targetString = _ramda2.default.sort(function (a, b) {
             return a - b;
         }, selectedTargets).join('-');
@@ -4200,7 +4200,7 @@ var dealTargetKey = (0, _reselect.createSelector)([deal, zipcode], function (dea
     if (!deal) {
         return null;
     }
-    var vehicleId = deal.versions[0].jato_vehicle_id;
+    var vehicleId = deal.version.jato_vehicle_id;
     return vehicleId + '-' + zipcode;
 });
 
@@ -4247,7 +4247,7 @@ var selectedTargetsString = (0, _reselect.createSelector)([dealTargetsSelected, 
 
 // Generate the best offer key for a specific deal
 var dealBestOfferKey = (0, _reselect.createSelector)([deal, zipcode, paymentType, selectedTargetsString], function (deal, zipcode, paymentType, selectedTargetsString) {
-    var vehicleId = deal.versions[0].jato_vehicle_id;
+    var vehicleId = deal.version.jato_vehicle_id;
     return vehicleId + '-' + zipcode + '-' + paymentType + '-' + selectedTargetsString;
 });
 
@@ -52517,15 +52517,23 @@ var Deals = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
-            if (!this.props.deals && this.props.requestingMoreDeals && this.props.zipInRange || !this.props.modelYears && this.props.requestingMoreModelYears && this.props.zipInRange) {
+            // Zip out of range
+            if (!this.props.zipInRange) {
+                return _react2.default.createElement(_NoDealsOutOfRange2.default, null);
+            }
+
+            // Requesting something
+            if (this.props.requestingMoreDeals || this.props.requestingMoreModelYears) {
                 return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
             }
 
-            if (this.props.zipInRange) {
-                return this.props.deals && this.props.deals.length ? _react2.default.createElement(_ViewDeals2.default, null) : this.props.modelYears && this.props.modelYears.length ? _react2.default.createElement(_ViewModels2.default, null) : _react2.default.createElement(_NoDealsInRange2.default, null);
+            // No matches at all
+            if (!this.props.deals && !this.props.modelYears) {
+                _react2.default.createElement(_NoDealsInRange2.default, null);
             }
 
-            return _react2.default.createElement(_NoDealsOutOfRange2.default, null);
+            // We have some results; which should we prefer?
+            return this.props.deals && this.props.deals.length ? _react2.default.createElement(_ViewDeals2.default, null) : _react2.default.createElement(_ViewModels2.default, null);
         }
     }]);
 
@@ -61423,7 +61431,7 @@ var LeaseCalculator = function (_React$PureComponent) {
             this.props.requestTargets(this.props.deal);
             this.props.requestBestOffer(this.props.deal);
 
-            _api2.default.getLeaseRates(this.props.deal.versions[0].jato_vehicle_id, this.props.zipcode).then(function (data) {
+            _api2.default.getLeaseRates(this.props.deal.version.jato_vehicle_id, this.props.zipcode).then(function (data) {
                 if (!_this2._isMounted) return;
 
                 var leaseRates = data.data;
@@ -62872,7 +62880,7 @@ var DealDetails = function (_React$PureComponent) {
                 this.setState({ featuredImage: this.props.deal.photos[0] });
             }
 
-            _api2.default.getDimensions(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
+            _api2.default.getDimensions(this.props.deal.version.jato_vehicle_id).then(function (response) {
                 if (!_this2._isMounted) return;
 
                 _this2.setState({
@@ -62880,7 +62888,7 @@ var DealDetails = function (_React$PureComponent) {
                 });
             });
 
-            _api2.default.getWarranties(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
+            _api2.default.getWarranties(this.props.deal.version.jato_vehicle_id).then(function (response) {
                 if (!_this2._isMounted) return;
 
                 _this2.setState({
@@ -66015,7 +66023,7 @@ var ComparePage = function (_React$PureComponent) {
             props.compareList.map(function (dealAndSelectedFilters) {
                 if (_this3.state.dealWarranties.hasOwnProperty(dealAndSelectedFilters.deal.id)) return;
 
-                _api2.default.getWarranties(dealAndSelectedFilters.deal.versions[0].jato_vehicle_id).then(function (data) {
+                _api2.default.getWarranties(dealAndSelectedFilters.deal.version.jato_vehicle_id).then(function (data) {
                     var dealWarranties = _this3.state.dealWarranties;
 
                     dealWarranties[dealAndSelectedFilters.deal.id] = data.data;
@@ -66264,7 +66272,7 @@ var ComparePage = function (_React$PureComponent) {
                                     'Invoice:'
                                 ),
                                 ' ',
-                                _util2.default.moneyFormat(dealAndSelectedFilters.deal.versions[0].invoice)
+                                _util2.default.moneyFormat(dealAndSelectedFilters.deal.version.invoice)
                             ),
                             _react2.default.createElement(
                                 'div',
@@ -67261,7 +67269,7 @@ var ConfirmDeal = function (_React$PureComponent) {
             this._isMounted = true;
             this.props.requestBestOffer(this.props.deal);
 
-            _api2.default.getDimensions(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
+            _api2.default.getDimensions(this.props.deal.version.jato_vehicle_id).then(function (response) {
                 if (!_this2._isMounted) return;
 
                 _this2.setState({
@@ -67269,7 +67277,7 @@ var ConfirmDeal = function (_React$PureComponent) {
                 });
             });
 
-            _api2.default.getWarranties(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
+            _api2.default.getWarranties(this.props.deal.version.jato_vehicle_id).then(function (response) {
                 if (!_this2._isMounted) return;
 
                 _this2.setState({
@@ -67843,13 +67851,13 @@ var ThankYouPage = function (_React$PureComponent) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            _api2.default.getDimensions(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
+            _api2.default.getDimensions(this.props.deal.version.jato_vehicle_id).then(function (response) {
                 _this2.setState({
                     dimensions: response.data
                 });
             });
 
-            _api2.default.getWarranties(this.props.deal.versions[0].jato_vehicle_id).then(function (response) {
+            _api2.default.getWarranties(this.props.deal.version.jato_vehicle_id).then(function (response) {
                 _this2.setState({
                     warranties: response.data
                 });

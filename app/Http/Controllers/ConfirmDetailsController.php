@@ -12,7 +12,7 @@ class ConfirmDetailsController extends Controller
     {
         $deal = Deal::with('features')->with(['photos' => function ($query) {
             $query->orderBy('id')->limit(7);
-        },])->with('versions.equipment')->findOrFail($id);
+        },])->with('version.equipment')->findOrFail($id);
 
         $title = "{$deal->year} {$deal->make} {$deal->model} {$deal->series}";
 
