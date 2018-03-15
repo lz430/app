@@ -66427,7 +66427,7 @@ var ComparePage = function (_React$PureComponent) {
                         slug: feature.slug,
                         group: _this8.state.featureCategories.length ? _this8.state.featureCategories.find(function (category) {
                             return parseInt(category.id) === parseInt(feature.category_id);
-                        }).attributes.slug.replace('_', ' ') : ''
+                        }).attributes.slug.replace(/_/g, ' ') : ''
                     };
                 }).concat(deal.features);
             });

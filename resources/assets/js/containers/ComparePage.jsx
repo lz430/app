@@ -477,7 +477,7 @@ class ComparePage extends React.PureComponent {
                     slug: feature.slug,
                     group: this.state.featureCategories.length ? this.state.featureCategories.find(category => {
                         return parseInt(category.id) === parseInt(feature.category_id)
-                    }).attributes.slug.replace('_', ' ') : ''
+                    }).attributes.slug.replace(/_/g, ' ') : ''
                 }
             }).concat(deal.features)
         });
