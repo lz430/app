@@ -17,14 +17,9 @@ class Deal extends Model
         'option_codes' => 'array'
     ];
 
-    public function versions()
+    public function version()
     {
-        return $this->belongsToMany(Version::class);
-    }
-
-    public function getVersionAttribute()
-    {
-        return $this->versions()->first();
+        return $this->belongsTo(Version::class);
     }
 
     public function purchases()

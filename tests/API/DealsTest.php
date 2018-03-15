@@ -30,7 +30,7 @@ class DealsTest extends TestCase
             'body_style' => 'Cargo Van',
         ]));
         $version->deals()->save(factory(Deal::class)->make());
-        
+
         $response = $this->getJson(route('deals.index', [
             'make_ids' => [$make->id, 2, 3],
             'body_styles' => ['cargo van', 'pickup'],
@@ -40,7 +40,7 @@ class DealsTest extends TestCase
 
         $this->assertEquals($version->id, $response->decodeResponseJson()['data'][0]['id']);
     }
-    
+
     /** @test */
     public function it_sorts_based_on_sort_input_string()
     {
@@ -60,7 +60,7 @@ class DealsTest extends TestCase
                 'msrp' => 1000,
             ]),
         ]);
-    
+
         $response = $this->getJson(route('deals.index', [
             'make_ids' => [$make->id, 2, 3],
             'body_styles' => ['cargo van', 'pickup'],
@@ -187,23 +187,23 @@ class DealsTest extends TestCase
 
         $this->assertCount(3, $response->decodeResponseJson()['data']);
     }
-    
+
     /** @test */
     public function it_filters_by_feature_string()
     {
         $make = factory(Make::class)->create(['name' => 'some-make']);
-        
+
         $model = $make->models()->save(factory(VehicleModel::class)->make());
         $version = $model->versions()->save(factory(Version::class)->make());
 
         $deals = factory(Deal::class, 3)->create();
 
         foreach ($deals as $deal) {
-            $version->deals()->attach($deal->id);
+            $version->deals()->save($deal);
         }
 
         $feature = factory(Feature::class)->create(['title' => 'ABS']);
-        
+
         $deals->first()->features()->attach($feature->id);
 
         $response = $this->getJson(route('deals.index', [
@@ -224,7 +224,7 @@ class DealsTest extends TestCase
         $deals = factory(Deal::class, 3)->create();
 
         foreach ($deals as $deal) {
-            $version->deals()->attach($deal->id);
+            $version->deals()->save($deal);
         }
 
         $absFeature = factory(Feature::class)->create(['title' => 'ABS']);
@@ -277,7 +277,7 @@ class DealsTest extends TestCase
             'dealer_id' => $dealer->dealer_id,
         ]);
 
-        $version->deals()->attach($deal->id);
+        $version->deals()->save($deal);
 
         /**
          * Outside max_delivery_miles

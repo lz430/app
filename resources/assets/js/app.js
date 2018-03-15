@@ -63,7 +63,6 @@ Array.from(document.getElementsByTagName('DealDetails')).map(element => {
     );
 });
 
-
 /**
  * ConfirmDetails
  */

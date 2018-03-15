@@ -101,12 +101,12 @@ const util = {
         );
     },
     getTargetKeyForDealAndZip(deal, zipcode) {
-        const vehicleId = deal.versions[0].jato_vehicle_id;
+        const vehicleId = deal.version.jato_vehicle_id;
         const targetKey = `${vehicleId}-${zipcode}`;
         return targetKey;
     },
     getBestOfferKeyForDeal(deal, zipcode, paymentType, selectedTargets) {
-        const vehicleId = deal.versions[0].jato_vehicle_id;
+        const vehicleId = deal.version.jato_vehicle_id;
         const targetString = R.sort((a, b) => {
             return a - b;
         }, selectedTargets).join('-');

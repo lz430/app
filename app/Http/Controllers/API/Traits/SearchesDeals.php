@@ -46,7 +46,7 @@ trait SearchesDeals
     {
         $dealsQuery = $rawQuery ?? Deal::query();
 
-        return $dealsQuery->whereHas('dealer')->whereHas('versions', function (Builder $query) use ($request) {
+        return $dealsQuery->whereHas('dealer')->whereHas('version', function (Builder $query) use ($request) {
             if ($request->has('body_styles')) {
                 $query->filterByBodyStyle($request->get('body_styles'));
             }
@@ -65,7 +65,7 @@ trait SearchesDeals
 
         })->whereNotNull('price')->whereNotNull('msrp')->with(['photos' => function ($query) {
             $query->orderBy('id');
-        },])->with('features')->with('versions.equipment')->with('dealer')->forSale();
+        },])->with('features')->with('version.equipment')->with('dealer')->forSale();
     }
 
     private function filterQueryByYear(Builder $query, Request $request) : Builder

@@ -52,7 +52,7 @@ class ApplyEmailsTest extends TestCase
     public function uses_email_from_session_if_it_exists()
     {
         $purchase = factory(Purchase::class)->create();
-        $purchase->deal->versions()->save(factory(Version::class)->make());
+        $purchase->deal->version()->associate(factory(Version::class)->create())->save();
 
         $response = $this->withSession([
             'email' => 'test@example.com',
@@ -80,7 +80,7 @@ class ApplyEmailsTest extends TestCase
     public function requests_email_from_user_if_not_in_session()
     {
         $purchase = factory(Purchase::class)->create();
-        $purchase->deal->versions()->save(factory(Version::class)->make());
+        $purchase->deal->version()->associate(factory(Version::class)->create())->save();
 
         $response = $this->post(
             route('applyOrPurchase'),

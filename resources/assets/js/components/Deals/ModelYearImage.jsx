@@ -54,6 +54,7 @@ class ModelYearImage extends React.PureComponent {
 
         if (!vehicleId) return;
 
+
         try {
             if (!this._isMounted) return;
 

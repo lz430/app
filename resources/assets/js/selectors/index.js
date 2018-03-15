@@ -18,7 +18,7 @@ const dealTargetKey = createSelector(
         if(!deal) {
             return null;
         }
-        const vehicleId = deal.versions[0].jato_vehicle_id;
+        const vehicleId = deal.version.jato_vehicle_id;
         return `${vehicleId}-${zipcode}`;
     }
 );
@@ -80,7 +80,7 @@ const selectedTargetsString = createSelector(
 const dealBestOfferKey = createSelector(
     [deal, zipcode, paymentType, selectedTargetsString],
     (deal, zipcode, paymentType, selectedTargetsString) => {
-        const vehicleId = deal.versions[0].jato_vehicle_id;
+        const vehicleId = deal.version.jato_vehicle_id;
         return `${vehicleId}-${zipcode}-${paymentType}-${selectedTargetsString}`;
     }
 );
