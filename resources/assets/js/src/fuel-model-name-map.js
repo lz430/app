@@ -52,5 +52,3 @@ const fuelModelName = {
 };
 
 export default fuelModelName;
-
-
