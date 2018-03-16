@@ -249,7 +249,11 @@ const reducer = (state, action) => {
                 ...state,
                 cancelTokens: [
                     ...state.cancelTokens,
-                    { dealId: action.deal.id, source: action.cancelToken },
+                    {
+                        dealId: action.deal.id,
+                        source: action.cancelToken,
+                        context: action.context,
+                    },
                 ],
             };
 
@@ -263,7 +267,13 @@ const reducer = (state, action) => {
             };
 
         case ActionTypes.CLEAR_CANCEL_TOKENS:
-            return { ...state, cancelTokens: [] };
+            return {
+                ...state,
+                cancelTokens: R.reject(
+                    R.propEq('context', action.context),
+                    state.cancelTokens
+                ),
+            };
     }
 
     return state;

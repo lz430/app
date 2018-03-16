@@ -794,7 +794,7 @@ exports.receiveBestOffer = receiveBestOffer;
 exports.appendCancelToken = appendCancelToken;
 exports.removeCancelToken = removeCancelToken;
 exports.clearCancelTokens = clearCancelTokens;
-exports.cancelAllBestOfferPromises = cancelAllBestOfferPromises;
+exports.cancelPromises = cancelPromises;
 exports.getBestOffersForLoadedDeals = getBestOffersForLoadedDeals;
 
 var _api = __webpack_require__(71);
@@ -1422,7 +1422,7 @@ function requestBestOffer(deal) {
             var CancelToken = window.axios.CancelToken;
             var source = CancelToken.source();
 
-            dispatch(appendCancelToken(deal, source));
+            dispatch(appendCancelToken(deal, source, 'bestOffer'));
             _api2.default.getBestOffer(deal.id, paymentType, zipcode, targets, source).then(function (data) {
                 dispatch(removeCancelToken(deal));
                 dispatch(receiveBestOffer(data, bestOfferKey, paymentType));
@@ -1442,8 +1442,6 @@ function requestBestOffer(deal) {
 
             dispatch({ type: ActionTypes.REQUEST_BEST_OFFER });
         });
-
-        dispatch(clearCancelTokens());
     };
 }
 
@@ -1465,11 +1463,14 @@ function receiveBestOffer(data, bestOfferKey, paymentType) {
 }
 
 function appendCancelToken(deal, cancelToken) {
+    var context = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'default';
+
     return function (dispatch) {
         dispatch({
             type: ActionTypes.APPEND_CANCEL_TOKEN,
             deal: deal,
-            cancelToken: cancelToken
+            cancelToken: cancelToken,
+            context: context
         });
     };
 }
@@ -1484,30 +1485,36 @@ function removeCancelToken(deal) {
 }
 
 function clearCancelTokens() {
+    var context = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
+
     return function (dispatch) {
         dispatch({
-            type: ActionTypes.CLEAR_CANCEL_TOKENS
+            type: ActionTypes.CLEAR_CANCEL_TOKENS,
+            context: context
         });
     };
 }
 
-function cancelAllBestOfferPromises() {
+function cancelPromises(context) {
     return function (dispatch, getState) {
-        getState().cancelTokens.map(function (cancelToken) {
+        getState().cancelTokens.filter(function (cancelToken) {
+            return cancelToken.context == context;
+        }).map(function (cancelToken) {
             try {
                 cancelToken.source.cancel();
             } catch (err) {
                 console.log('Cancel error: ', err);
             }
         });
+
         dispatch({ type: ActionTypes.CANCEL_ALL_PROMISES });
-        dispatch(clearCancelTokens());
+        dispatch(clearCancelTokens(context));
     };
 }
 
 function getBestOffersForLoadedDeals() {
     return function (dispatch, getState) {
-        dispatch(cancelAllBestOfferPromises());
+        dispatch(cancelPromises('bestOffer'));
         getState().deals.map(function (deal) {
             dispatch(requestBestOffer(deal));
         });
@@ -52516,7 +52523,7 @@ var Deals = function (_React$PureComponent) {
     _createClass(Deals, [{
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(nextProps) {
-            nextProps.cancelAllBestOfferPromises();
+            nextProps.cancelPromises('bestOffer');
 
             if (nextProps.deals) {
                 nextProps.deals.map(function (deal) {
@@ -62744,7 +62751,11 @@ var reducer = function reducer(state, action) {
                 bestOffers: _extends({}, state.bestOffers, _defineProperty({}, action.bestOfferKey, action.data)) });
         case ActionTypes.APPEND_CANCEL_TOKEN:
             return _extends({}, state, {
-                cancelTokens: [].concat(_toConsumableArray(state.cancelTokens), [{ dealId: action.deal.id, source: action.cancelToken }])
+                cancelTokens: [].concat(_toConsumableArray(state.cancelTokens), [{
+                    dealId: action.deal.id,
+                    source: action.cancelToken,
+                    context: action.context
+                }])
             });
 
         case ActionTypes.REMOVE_CANCEL_TOKEN:
@@ -62753,7 +62764,9 @@ var reducer = function reducer(state, action) {
             });
 
         case ActionTypes.CLEAR_CANCEL_TOKENS:
-            return _extends({}, state, { cancelTokens: [] });
+            return _extends({}, state, {
+                cancelTokens: _ramda2.default.reject(_ramda2.default.propEq('context', action.context), state.cancelTokens)
+            });
     }
 
     return state;

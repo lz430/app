@@ -116,9 +116,11 @@ export function toggleFeature(feature) {
             selectedFeatures,
         });
 
-        dispatch(requestDealsOrModelYears({
-            features: selectedFeatures,
-        }));
+        dispatch(
+            requestDealsOrModelYears({
+                features: selectedFeatures,
+            })
+        );
     };
 }
 
@@ -134,10 +136,11 @@ export function toggleMake(make_id) {
             selectedMakes,
         });
 
-        dispatch(requestDealsOrModelYears({
-            makeIds: selectedMakes,
-        }));
-
+        dispatch(
+            requestDealsOrModelYears({
+                makeIds: selectedMakes,
+            })
+        );
     };
 }
 
@@ -153,9 +156,11 @@ export function toggleModel(model) {
             selectedModels,
         });
 
-        dispatch(requestDealsOrModelYears({
-            modelIds: R.map(R.prop('id'), selectedModels),
-        }));
+        dispatch(
+            requestDealsOrModelYears({
+                modelIds: R.map(R.prop('id'), selectedModels),
+            })
+        );
     };
 }
 
@@ -245,7 +250,6 @@ export function sortDeals(sort) {
     };
 }
 
-
 export function receiveModelYears(data) {
     return dispatch => {
         dispatch({
@@ -269,31 +273,37 @@ export function requestModelYears() {
 
 export function clearModelYear() {
     return dispatch => {
-            dispatch({
-            type: ActionTypes.CLEAR_MODEL_YEAR
+        dispatch({
+            type: ActionTypes.CLEAR_MODEL_YEAR,
         });
 
         dispatch(requestModelYears());
-    }
+    };
 }
 
 export function requestDealsOrModelYears(params = {}) {
     return (dispatch, getState) => {
         console.log('Fetching:', getState().filterPage);
-        
+
         dispatch({
-            type: getState().filterPage == 'deals' ? ActionTypes.REQUEST_DEALS : ActionTypes.REQUEST_MODEL_YEARS
+            type:
+                getState().filterPage == 'deals'
+                    ? ActionTypes.REQUEST_DEALS
+                    : ActionTypes.REQUEST_MODEL_YEARS,
         });
 
-        api.applySearchFilters(
-            getState().filterPage, withStateDefaults(getState(), params)
-        ).then(data => {
-            if(getState().filterPage == 'deals') {
-                dispatch(receiveDeals(data));
-            } else {
-                dispatch(receiveModelYears(data));
-            }
-        });
+        api
+            .applySearchFilters(
+                getState().filterPage,
+                withStateDefaults(getState(), params)
+            )
+            .then(data => {
+                if (getState().filterPage == 'deals') {
+                    dispatch(receiveDeals(data));
+                } else {
+                    dispatch(receiveModelYears(data));
+                }
+            });
     };
 }
 
@@ -376,9 +386,11 @@ export function toggleStyle(style) {
             selectedStyles: selectedStyles,
         });
 
-        dispatch(requestDealsOrModelYears({
-            bodyStyles: getState().selectedStyles,
-        }));
+        dispatch(
+            requestDealsOrModelYears({
+                bodyStyles: getState().selectedStyles,
+            })
+        );
     };
 }
 
@@ -395,7 +407,6 @@ export function chooseFuelType(fuelType) {
         requestDealsOrModelYears({
             fuelType: selectedFuelType,
         });
-
     };
 }
 
@@ -439,14 +450,15 @@ export function clearAllFilters() {
             type: ActionTypes.CLEAR_ALL_FILTERS,
         });
 
-        dispatch(requestDealsOrModelYears({
-            makeIds: [],
-            bodyStyles: [],
-            fuelType: null,
-            transmissionType: null,
-            features: [],
-        }));
-
+        dispatch(
+            requestDealsOrModelYears({
+                makeIds: [],
+                bodyStyles: [],
+                fuelType: null,
+                transmissionType: null,
+                features: [],
+            })
+        );
     };
 }
 
@@ -520,9 +532,11 @@ export function receiveLocationInfo(data) {
         const zipcode = data.zip_code;
         const city = data.city;
 
-        dispatch(requestDealsOrModelYears({
-            zipcode,
-        }));
+        dispatch(
+            requestDealsOrModelYears({
+                zipcode,
+            })
+        );
 
         dispatch({
             type: ActionTypes.RECEIVE_LOCATION_INFO,
@@ -651,7 +665,7 @@ export function requestBestOffer(deal) {
             const CancelToken = window.axios.CancelToken;
             const source = CancelToken.source();
 
-            dispatch(appendCancelToken(deal, source));
+            dispatch(appendCancelToken(deal, source, 'bestOffer'));
             api
                 .getBestOffer(deal.id, paymentType, zipcode, targets, source)
                 .then(data => {
@@ -676,20 +690,19 @@ export function requestBestOffer(deal) {
 
             dispatch({ type: ActionTypes.REQUEST_BEST_OFFER });
         });
-
-        dispatch(clearCancelTokens());
     };
 }
 
 export function receiveBestOffer(data, bestOfferKey, paymentType) {
     // Although lease AND finance have the 'cash' wrapper, we are currently
     // displaying cash best offers in the finance tabs.
-    const bestOfferPrograms = paymentType === 'lease' ? data.data.cash : data.data;
+    const bestOfferPrograms =
+        paymentType === 'lease' ? data.data.cash : data.data;
     const rates = paymentType === 'lease' ? data.data.rates : [];
     const bestOffer = {
         ...bestOfferPrograms,
-        rates: rates
-    }
+        rates: rates,
+    };
     return dispatch => {
         dispatch({
             type: ActionTypes.RECEIVE_BEST_OFFER,
@@ -699,12 +712,13 @@ export function receiveBestOffer(data, bestOfferKey, paymentType) {
     };
 }
 
-export function appendCancelToken(deal, cancelToken) {
+export function appendCancelToken(deal, cancelToken, context = 'default') {
     return dispatch => {
         dispatch({
             type: ActionTypes.APPEND_CANCEL_TOKEN,
             deal,
             cancelToken,
+            context,
         });
     };
 }
@@ -718,31 +732,37 @@ export function removeCancelToken(deal) {
     };
 }
 
-export function clearCancelTokens() {
+export function clearCancelTokens(context = 'default') {
     return dispatch => {
         dispatch({
             type: ActionTypes.CLEAR_CANCEL_TOKENS,
+            context,
         });
     };
 }
 
-export function cancelAllBestOfferPromises() {
+export function cancelPromises(context) {
     return (dispatch, getState) => {
-        getState().cancelTokens.map(cancelToken => {
-            try {
-                cancelToken.source.cancel();
-            } catch (err) {
-                console.log('Cancel error: ', err);
-            }
-        });
+        getState()
+            .cancelTokens.filter(cancelToken => {
+                return cancelToken.context == context;
+            })
+            .map(cancelToken => {
+                try {
+                    cancelToken.source.cancel();
+                } catch (err) {
+                    console.log('Cancel error: ', err);
+                }
+            });
+
         dispatch({ type: ActionTypes.CANCEL_ALL_PROMISES });
-        dispatch(clearCancelTokens());
+        dispatch(clearCancelTokens(context));
     };
 }
 
 export function getBestOffersForLoadedDeals() {
     return (dispatch, getState) => {
-        dispatch(cancelAllBestOfferPromises());
+        dispatch(cancelPromises('bestOffer'));
         getState().deals.map(deal => {
             dispatch(requestBestOffer(deal));
         });

@@ -11,7 +11,7 @@ import ViewModels from './ViewModels';
 
 class Deals extends React.PureComponent {
     componentWillReceiveProps(nextProps) {
-        nextProps.cancelAllBestOfferPromises();
+        nextProps.cancelPromises('bestOffer');
 
         if (nextProps.deals) {
             nextProps.deals.map(deal => {
