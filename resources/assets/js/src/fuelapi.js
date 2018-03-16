@@ -1,3 +1,5 @@
+import fuelModelName from 'src/fuel-model-name-map';
+
 const fuelAxios = window.axios.create({
     baseURL: 'https://api.fuelapi.com/v1/json',
     auth: {
@@ -49,7 +51,7 @@ const fuel = {
             params: {
                 year: year,
                 make: make,
-                model: model,
+                model: fuelModelName.convert(model),
                 trim: trim,
                 body: body,
                 doors: doors,
@@ -57,15 +59,18 @@ const fuel = {
             },
         });
     },
-    getExternalImages: (vehicleID, color = 'white') => {
-        return fuelAxios.get(`/vehicle/${vehicleID}`, {
-            params: {
-                productID: 2,
-                productFormatIDs: '6,8,12',
-                proto: 'https',
-                color,
-            },
-        });
+    getExternalImages: (vehicleID, color = null) => {
+        let params = {
+            productID: 2,
+            productFormatIDs: '6,8,12',
+            proto: 'https'
+        };
+
+        if (color != null) {
+            params.color = color;
+        }
+
+        return fuelAxios.get(`/vehicle/${vehicleID}`, {params});
     },
     getInternalImages: vehicleID => {
         return fuelAxios.get(`/vehicle/${vehicleID}`, {
