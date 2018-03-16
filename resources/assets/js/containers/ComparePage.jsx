@@ -470,13 +470,24 @@ class ComparePage extends React.PureComponent {
 
     renderFeaturesTable(compareList) {
         let featureSets = compareList.map(({ deal }, index) => {
-            return deal.features;
+            return deal.dmr_features.map(feature => {
+                return {
+                    id: feature.id,
+                    feature: feature.title.trim(),
+                    slug: feature.slug,
+                    group: this.state.featureCategories.length ? this.state.featureCategories.find(category => {
+                        return parseInt(category.id) === parseInt(feature.category_id)
+                    }).attributes.slug.replace(/_/g, ' ') : ''
+                }
+            }).concat(deal.features)
         });
 
         let groupedFeatureSet = Object.values(
             R.groupBy(feature => {
                 return feature.group;
-            }, Object.values(R.mergeAll(featureSets)))
+            }, R.uniqBy(feature => {
+                return feature.group + '||' + feature.feature;
+            }, Object.values(R.mergeAll(featureSets))))
         );
 
         return groupedFeatureSet.map((featureSet, index) => {
@@ -506,10 +517,12 @@ class ComparePage extends React.PureComponent {
                                                         if (
                                                             deal.features.find(
                                                                 dealFeature => {
-                                                                    return (
-                                                                        dealFeature.id ==
-                                                                        feature.id
-                                                                    );
+                                                                    return dealFeature.id == feature.id
+                                                                }
+                                                            ) ||
+                                                            deal.dmr_features.find(
+                                                                dealFeature => {
+                                                                    return dealFeature.id == feature.id
                                                                 }
                                                             )
                                                         ) {
@@ -520,7 +533,7 @@ class ComparePage extends React.PureComponent {
                                                                 >
                                                                     {
                                                                         feature.feature
-                                                                    }&nbsp;
+                                                                    }
                                                                 </div>
                                                             );
                                                         } else {
@@ -568,7 +581,7 @@ class ComparePage extends React.PureComponent {
                     {compareList.map((dealAndSelectedFilters, index) => {
                         const alphabeticalFeatures = dealAndSelectedFilters.deal.vauto_features.sort();
                         return (
-                            <div key={index}>
+                            <div key={index} className="compare-page-table__column">
                                 {alphabeticalFeatures.map((feature, index) => {
                                     return (
                                         <div
@@ -655,13 +668,10 @@ class ComparePage extends React.PureComponent {
                         }}
                     </AccordionTable>
 
-                    {this.state.featureCategories.length
-                        ? this.renderDMRFeaturesTable(this.props.compareList)
-                        : ''}
-
                     {this.props.compareList.length
                         ? this.renderFeaturesTable(this.props.compareList)
                         : ''}
+
                     <AccordionTable>
                         {() => {
                             return this.renderOptionalFeaturesTable(

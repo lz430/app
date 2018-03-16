@@ -66420,12 +66420,23 @@ var ComparePage = function (_React$PureComponent) {
             var featureSets = compareList.map(function (_ref4, index) {
                 var deal = _ref4.deal;
 
-                return deal.features;
+                return deal.dmr_features.map(function (feature) {
+                    return {
+                        id: feature.id,
+                        feature: feature.title.trim(),
+                        slug: feature.slug,
+                        group: _this8.state.featureCategories.length ? _this8.state.featureCategories.find(function (category) {
+                            return parseInt(category.id) === parseInt(feature.category_id);
+                        }).attributes.slug.replace(/_/g, ' ') : ''
+                    };
+                }).concat(deal.features);
             });
 
             var groupedFeatureSet = Object.values(_ramda2.default.groupBy(function (feature) {
                 return feature.group;
-            }, Object.values(_ramda2.default.mergeAll(featureSets))));
+            }, _ramda2.default.uniqBy(function (feature) {
+                return feature.group + '||' + feature.feature;
+            }, Object.values(_ramda2.default.mergeAll(featureSets)))));
 
             return groupedFeatureSet.map(function (featureSet, index) {
                 return _react2.default.createElement(
@@ -66453,6 +66464,8 @@ var ComparePage = function (_React$PureComponent) {
                                         featureSet.map(function (feature, index) {
                                             if (deal.features.find(function (dealFeature) {
                                                 return dealFeature.id == feature.id;
+                                            }) || deal.dmr_features.find(function (dealFeature) {
+                                                return dealFeature.id == feature.id;
                                             })) {
                                                 return _react2.default.createElement(
                                                     'div',
@@ -66460,8 +66473,7 @@ var ComparePage = function (_React$PureComponent) {
                                                         key: index,
                                                         className: 'compare-page-table__cell'
                                                     },
-                                                    feature.feature,
-                                                    '\xA0'
+                                                    feature.feature
                                                 );
                                             } else {
                                                 return _react2.default.createElement(
@@ -66501,7 +66513,7 @@ var ComparePage = function (_React$PureComponent) {
                         var alphabeticalFeatures = dealAndSelectedFilters.deal.vauto_features.sort();
                         return _react2.default.createElement(
                             'div',
-                            { key: index },
+                            { key: index, className: 'compare-page-table__column' },
                             alphabeticalFeatures.map(function (feature, index) {
                                 return _react2.default.createElement(
                                     'div',
@@ -66581,7 +66593,6 @@ var ComparePage = function (_React$PureComponent) {
                             return _this9.renderWarrantyTable(_this9.props.compareList);
                         }
                     ),
-                    this.state.featureCategories.length ? this.renderDMRFeaturesTable(this.props.compareList) : '',
                     this.props.compareList.length ? this.renderFeaturesTable(this.props.compareList) : '',
                     _react2.default.createElement(
                         _AccordionTable2.default,

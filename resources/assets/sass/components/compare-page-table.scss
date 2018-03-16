@@ -56,6 +56,8 @@ $icon-size: 20px;
 
   &__cell {
     border-top: 1px solid $color-grey;
+    max-height: 2.25em;
+    overflow: hidden;
     padding: $deal-card-margin;
 
     &:first-child {

@@ -4122,6 +4122,8 @@ body {
 
 .compare-page-table__cell {
   border-top: 1px solid #ced4d9;
+  max-height: 2.25em;
+  overflow: hidden;
   padding: 5px;
 }
 
