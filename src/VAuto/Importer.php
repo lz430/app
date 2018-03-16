@@ -203,7 +203,7 @@ class Importer
                     $this->error('401 error connecting to JATO; cancelling the rest of the calls.');
                     throw $e;
                 }
-            } catch (QueryException $e || Exception $e) {
+            } catch (QueryException | Exception $e) {
                 Log::error('Importer error for vin [' . $vAutoRow['VIN']. ']: ' . $e->getMessage());
                 $this->error('Error: ' . $e->getMessage());
             }
@@ -264,7 +264,7 @@ class Importer
 
         // Get versions that match the Vin
         $jatoVersion = array_first($decodedVin['versions'], function ($version) use ($vAutoRow) {
-            return trim($version['trimName']) === trim($vAutoRow['Series']);
+            return trim($version['trimName']) === trim($vAutoRow['Series']) && $version['isCurrent'];
         });
 
         if ($jatoVersion) {
@@ -273,8 +273,8 @@ class Importer
 
         // if we couldn't match, try to use the Model Code; return null if none match
         return array_first($decodedVin['versions'], function ($version) use ($vAutoRow) {
-            return str_contains($version['modelCode'], $vAutoRow['Model Code']) ||
-                str_contains($version['localModelCode'], $vAutoRow['Model Code']);
+            return str_contains($version['modelCode'], $vAutoRow['Model Code']) && $version['isCurrent'] ||
+                str_contains($version['localModelCode'], $vAutoRow['Model Code']) && $version['isCurrent'];
         });
     }
 
