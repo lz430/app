@@ -14488,16 +14488,19 @@ var fuel = {
         });
     },
     getExternalImages: function getExternalImages(vehicleID) {
-        var color = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'white';
+        var color = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
-        return fuelAxios.get('/vehicle/' + vehicleID, {
-            params: {
-                productID: 2,
-                productFormatIDs: '6,8,12',
-                proto: 'https',
-                color: color
-            }
-        });
+        var params = {
+            productID: 2,
+            productFormatIDs: '6,8,12',
+            proto: 'https'
+        };
+
+        if (color != null) {
+            params.color = color;
+        }
+
+        return fuelAxios.get('/vehicle/' + vehicleID, { params: params });
     },
     getInternalImages: function getInternalImages(vehicleID) {
         return fuelAxios.get('/vehicle/' + vehicleID, {
@@ -59063,7 +59066,7 @@ var ModelYearImage = function (_React$PureComponent) {
                                 _context.t8 = this;
                                 _context.t9 = this;
                                 _context.next = 36;
-                                return _fuelapi2.default.getExternalImages(vehicleId, 'white');
+                                return _fuelapi2.default.getExternalImages(vehicleId);
 
                             case 36:
                                 _context.t10 = _context.sent;
