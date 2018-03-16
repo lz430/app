@@ -52914,7 +52914,7 @@ var modelNameMap = (_modelNameMap = {
     'A3 Sedan': 'A3',
     'A5 Coupe': 'A5',
     'A8': 'A8 L',
-    'Allroad': 'A4 allroad',
+    'allroad': 'A4 allroad',
     '6 Series Gran Turismo': '6-series',
     'ATS Sedan': 'ATS',
     'ATS-V Sedan': 'ATS-V',
