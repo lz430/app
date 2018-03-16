@@ -11,6 +11,7 @@ use App\JATO\Version;
 use App\Deal;
 use Carbon\Carbon;
 use DeliverMyRide\JATO\Client;
+use Exception;
 use Facades\App\JATO\Log;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
@@ -202,7 +203,7 @@ class Importer
                     $this->error('401 error connecting to JATO; cancelling the rest of the calls.');
                     throw $e;
                 }
-            } catch (QueryException $e) {
+            } catch (QueryException | Exception $e) {
                 Log::error('Importer error for vin [' . $vAutoRow['VIN']. ']: ' . $e->getMessage());
                 $this->error('Error: ' . $e->getMessage());
             }
@@ -216,7 +217,7 @@ class Importer
         $this->info("   Saving deal for vin: {$vAutoRow['VIN']}");
 
         $deal = Deal::updateOrCreate([
-            'file_hash' => $fileHash,
+            // 'file_hash' => $fileHash,
             'vin' => $vAutoRow['VIN'],
         ], [
             'file_hash' => $fileHash,
@@ -263,7 +264,7 @@ class Importer
 
         // Get versions that match the Vin
         $jatoVersion = array_first($decodedVin['versions'], function ($version) use ($vAutoRow) {
-            return trim($version['trimName']) === trim($vAutoRow['Series']);
+            return trim($version['trimName']) === trim($vAutoRow['Series']) && $version['isCurrent'];
         });
 
         if ($jatoVersion) {
@@ -272,8 +273,8 @@ class Importer
 
         // if we couldn't match, try to use the Model Code; return null if none match
         return array_first($decodedVin['versions'], function ($version) use ($vAutoRow) {
-            return str_contains($version['modelCode'], $vAutoRow['Model Code']) ||
-                str_contains($version['localModelCode'], $vAutoRow['Model Code']);
+            return str_contains($version['modelCode'], $vAutoRow['Model Code']) && $version['isCurrent'] ||
+                str_contains($version['localModelCode'], $vAutoRow['Model Code']) && $version['isCurrent'];
         });
     }
 
