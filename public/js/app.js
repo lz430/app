@@ -66513,7 +66513,7 @@ var ComparePage = function (_React$PureComponent) {
                         var alphabeticalFeatures = dealAndSelectedFilters.deal.vauto_features.sort();
                         return _react2.default.createElement(
                             'div',
-                            { key: index },
+                            { key: index, className: 'compare-page-table__column' },
                             alphabeticalFeatures.map(function (feature, index) {
                                 return _react2.default.createElement(
                                     'div',

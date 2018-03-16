@@ -581,7 +581,7 @@ class ComparePage extends React.PureComponent {
                     {compareList.map((dealAndSelectedFilters, index) => {
                         const alphabeticalFeatures = dealAndSelectedFilters.deal.vauto_features.sort();
                         return (
-                            <div key={index}>
+                            <div key={index} className="compare-page-table__column">
                                 {alphabeticalFeatures.map((feature, index) => {
                                     return (
                                         <div
