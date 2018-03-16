@@ -14457,6 +14457,13 @@ function warning(message) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _fuelModelNameMap = __webpack_require__(991);
+
+var _fuelModelNameMap2 = _interopRequireDefault(_fuelModelNameMap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var fuelAxios = window.axios.create({
     baseURL: 'https://api.fuelapi.com/v1/json',
     auth: {
@@ -14479,7 +14486,7 @@ var fuel = {
             params: {
                 year: year,
                 make: make,
-                model: model,
+                model: _fuelModelNameMap2.default.convert(model),
                 trim: trim,
                 body: body,
                 doors: doors,
@@ -68281,6 +68288,48 @@ exports.default = (0, _reactRedux.connect)(makeMapStateToProps, Actions)(ThankYo
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 987 */,
+/* 988 */,
+/* 989 */,
+/* 990 */,
+/* 991 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _modelNameMap;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var modelNameMap = (_modelNameMap = {
+    'A3 Sedan': 'A3',
+    'A5 Coupe': 'A5',
+    'A8': 'A8 L',
+    'Allroad': 'A4 allroad',
+    '6 Series Gran Turismo': '6-series',
+    'ATS Sedan': 'ATS',
+    'ATS-V Sedan': 'ATS-V',
+    'CTS Sedan': 'CTS',
+    'ATS Coupe': 'ATS',
+    'CTS-V Sedan': 'CTS-V',
+    'Corvette': 'Corvette Grandsport',
+    'Express Cargo': 'Express 2500 Cargo'
+}, _defineProperty(_modelNameMap, 'Express Cargo', 'Express 2500 Cargo'), _defineProperty(_modelNameMap, 'Silverado 2500HD', 'Silverado 2500HD'), _defineProperty(_modelNameMap, 'Ram 2500 Pickup', '2500'), _defineProperty(_modelNameMap, '500c', '500c'), _defineProperty(_modelNameMap, 'C-Max', 'C-Max Hybrid'), _defineProperty(_modelNameMap, 'Transit Van ', 'Transit Van 150'), _defineProperty(_modelNameMap, 'F-250 Super Duty', 'F-250 SD'), _defineProperty(_modelNameMap, 'F-350 Super Duty', 'F-350 SD DRW'), _defineProperty(_modelNameMap, 'Transit Van ', 'Transit Van 150'), _defineProperty(_modelNameMap, 'Sierra 1500 Denali ', 'Sierra 1500'), _defineProperty(_modelNameMap, 'Sierra 2500 Denali HD', 'Sierra 2500 HD'), _defineProperty(_modelNameMap, 'Clarity', 'Clarity Plug-In Hybrid'), _defineProperty(_modelNameMap, 'Ioniq', 'Ioniq Hybrid'), _defineProperty(_modelNameMap, 'Q60 Coupe', 'Q60'), _defineProperty(_modelNameMap, 'All-New Compass', 'Compass'), _defineProperty(_modelNameMap, 'AMG GT Coupe', 'AMG GT'), _defineProperty(_modelNameMap, 'C-Class Coupe', 'C-Class'), _defineProperty(_modelNameMap, 'C-Class Sedan', 'C-Class'), _defineProperty(_modelNameMap, 'CLA', 'CLA-Class'), _defineProperty(_modelNameMap, 'CLA', 'CLA-Class'), _defineProperty(_modelNameMap, 'E-Class', 'E-Class'), _defineProperty(_modelNameMap, 'SL Roadster', 'SL-Class'), _defineProperty(_modelNameMap, 'NV Cargo', 'NV200 Compact Cargo'), _defineProperty(_modelNameMap, 'NV Passenger', 'NV 3500 Passenger'), _defineProperty(_modelNameMap, 'Rogue Sport', 'Rogue'), _defineProperty(_modelNameMap, 'Versa Sedan', 'Versa'), _defineProperty(_modelNameMap, '718', '718 Boxter'), _defineProperty(_modelNameMap, '718', '719 Boxter'), _defineProperty(_modelNameMap, 'Prius Prime', 'Prius'), _defineProperty(_modelNameMap, 'Yaris iA', 'Yaris iA'), _defineProperty(_modelNameMap, 'Tiguan Limited', 'Tiguan'), _defineProperty(_modelNameMap, 'Golf', 'Golf GTI'), _modelNameMap);
+
+var fuelModelName = {
+    convert: function convert(modelNameString) {
+        return modelNameMap[modelNameString] || modelNameString;
+    }
+};
+
+exports.default = fuelModelName;
 
 /***/ })
 /******/ ]);

@@ -1,3 +1,5 @@
+import fuelModelName from 'src/fuel-model-name-map';
+
 const fuelAxios = window.axios.create({
     baseURL: 'https://api.fuelapi.com/v1/json',
     auth: {
@@ -49,7 +51,7 @@ const fuel = {
             params: {
                 year: year,
                 make: make,
-                model: model,
+                model: fuelModelName.convert(model),
                 trim: trim,
                 body: body,
                 doors: doors,
