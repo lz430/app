@@ -72,7 +72,7 @@ class ModelYearImage extends React.PureComponent {
 
                 this.setState({
                     externalImages: this.extractFuelImages(
-                        await fuelapi.getExternalImages(vehicleId, 'white')
+                        await fuelapi.getExternalImages(vehicleId)
                     )
                 });
             } catch (e) {

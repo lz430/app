@@ -57,15 +57,18 @@ const fuel = {
             },
         });
     },
-    getExternalImages: (vehicleID, color = 'white') => {
-        return fuelAxios.get(`/vehicle/${vehicleID}`, {
-            params: {
-                productID: 2,
-                productFormatIDs: '6,8,12',
-                proto: 'https',
-                color,
-            },
-        });
+    getExternalImages: (vehicleID, color = null) => {
+        let params = {
+            productID: 2,
+            productFormatIDs: '6,8,12',
+            proto: 'https'
+        };
+
+        if (color != null) {
+            params.color = color;
+        }
+
+        return fuelAxios.get(`/vehicle/${vehicleID}`, {params});
     },
     getInternalImages: vehicleID => {
         return fuelAxios.get(`/vehicle/${vehicleID}`, {
