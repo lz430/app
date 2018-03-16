@@ -11,6 +11,7 @@ use App\JATO\Version;
 use App\Deal;
 use Carbon\Carbon;
 use DeliverMyRide\JATO\Client;
+use Exception;
 use Facades\App\JATO\Log;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
@@ -202,7 +203,7 @@ class Importer
                     $this->error('401 error connecting to JATO; cancelling the rest of the calls.');
                     throw $e;
                 }
-            } catch (QueryException $e) {
+            } catch (QueryException $e || Exception $e) {
                 Log::error('Importer error for vin [' . $vAutoRow['VIN']. ']: ' . $e->getMessage());
                 $this->error('Error: ' . $e->getMessage());
             }
@@ -216,7 +217,7 @@ class Importer
         $this->info("   Saving deal for vin: {$vAutoRow['VIN']}");
 
         $deal = Deal::updateOrCreate([
-            'file_hash' => $fileHash,
+            // 'file_hash' => $fileHash,
             'vin' => $vAutoRow['VIN'],
         ], [
             'file_hash' => $fileHash,
