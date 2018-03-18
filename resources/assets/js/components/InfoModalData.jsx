@@ -258,7 +258,7 @@ class InfoModalData extends React.PureComponent {
                         <div className="info-modal-data__prices">
                             <div className="info-modal-data__costs">
                                 <div className="info-modal-data__label">
-                                    Suggested Retail:{' '}
+                                    MSRP:{' '}
                                 </div>
                                 <div className="info-modal-data__amount">
                                     {util.moneyFormat(this.props.deal.msrp)}
