@@ -284,6 +284,26 @@ class InfoModalData extends React.PureComponent {
                                 }`}
                             </div>
                         </div>
+
+                        <div className="deal__buttons">
+                            <button
+                                className={this.compareButtonClass()}
+                                onClick={this.props.toggleCompare.bind(
+                                    null,
+                                    this.props.deal
+                                )}
+                            >
+                                {this.isAlreadyInCompareList() ? 'Remove from compare' : 'Compare'}
+                            </button>
+                            <button
+                                onClick={() =>
+                                    (window.location = `/deals/${this.props.deal.id}`)}
+                                className="deal__button deal__button--small deal__button--pink deal__button"
+                            >
+                                Get Quote
+                            </button>
+                        </div>
+
                         <p className="info-modal-data__disclaimer">
                             * Price includes doc fees, sales tax, and dealer
                             fees but does not include license and registration
@@ -297,6 +317,19 @@ class InfoModalData extends React.PureComponent {
                     {this.props.children}
                 </div>
             </div>
+        );
+    }
+
+    isAlreadyInCompareList() {
+        return R.contains(this.props.deal, R.map(R.prop('deal'), this.props.compareList));
+    }
+
+    compareButtonClass() {
+        return (
+            'deal__button deal__button--small deal__button--blue' +
+            (this.isAlreadyInCompareList()
+                ? 'deal__button--blue'
+                : '')
         );
     }
 }
@@ -328,6 +361,7 @@ const makeMapStateToProps = () => {
             termDuration: state.termDuration,
             dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
             dealBestOffer: getDealBestOffer(state, props),
+            compareList: state.compareList,
         };
     };
     return mapStateToProps;
