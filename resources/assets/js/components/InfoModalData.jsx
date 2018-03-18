@@ -118,7 +118,7 @@ class InfoModalData extends React.PureComponent {
     renderAppliedRebatesLink() {
         return (
             <div>
-                <div className="info-modal-data__rebate-info info-modal-data__costs info-modal-data__bold">
+                <div className="info-modal-data__rebate-info info-modal-data__costs">
                     <div className="info-modal-data__rebate-info__title">
                         Rebates Applied:
                     </div>
