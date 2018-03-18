@@ -58227,6 +58227,56 @@ var InfoModalData = function (_React$PureComponent) {
             this.props.requestBestOffer(this.props.deal);
         }
     }, {
+        key: 'handleTabChange',
+        value: function handleTabChange(tabName) {
+            this.props.selectTab(tabName);
+            this.props.getBestOffersForLoadedDeals();
+        }
+    }, {
+        key: 'renderTabs',
+        value: function renderTabs() {
+            var _this2 = this;
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'deal-price' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'tabs' },
+                    _react2.default.createElement(
+                        'div',
+                        {
+                            onClick: function onClick() {
+                                _this2.handleTabChange('cash');
+                            },
+                            className: 'tabs__tab ' + (this.props.selectedTab === 'cash' ? 'tabs__tab--selected' : '')
+                        },
+                        'Cash'
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        {
+                            onClick: function onClick() {
+                                _this2.handleTabChange('finance');
+                            },
+                            className: 'tabs__tab ' + (this.props.selectedTab === 'finance' ? 'tabs__tab--selected' : '')
+                        },
+                        'Finance'
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        {
+                            onClick: function onClick() {
+                                _this2.handleTabChange('lease');
+                            },
+                            className: 'tabs__tab ' + (this.props.selectedTab === 'lease' ? 'tabs__tab--selected' : '')
+                        },
+                        'Lease'
+                    )
+                )
+            );
+        }
+    }, {
         key: 'finalPrice',
         value: function finalPrice() {
             switch (this.props.selectedTab) {
@@ -58256,7 +58306,7 @@ var InfoModalData = function (_React$PureComponent) {
                 null,
                 _react2.default.createElement(
                     'div',
-                    { className: 'info-modal-data__rebate-info info-modal-data__costs info-modal-data__bold' },
+                    { className: 'info-modal-data__rebate-info info-modal-data__costs' },
                     _react2.default.createElement(
                         'div',
                         { className: 'info-modal-data__rebate-info__title' },
@@ -58268,38 +58318,21 @@ var InfoModalData = function (_React$PureComponent) {
                         _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                     )
                 ),
-                this.props.dealBestOffer.programs.map(function (program, index) {
-                    return _react2.default.createElement(
-                        'div',
-                        {
-                            className: 'info-modal-data__rebate-info info-modal-data__costs',
-                            key: index
-                        },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'info-modal-data__rebate-info__title' },
-                            _strings2.default.toTitleCase(program.title)
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            null,
-                            '' + _util2.default.moneyFormat(program.value)
-                        )
-                    );
-                }),
                 _react2.default.createElement(
                     'div',
                     { className: 'info-modal-data__more-rebates info-modal-data__costs' },
                     _react2.default.createElement(
                         'div',
                         null,
+                        'Additional rebates may apply. ',
+                        ' ',
                         _react2.default.createElement(
                             'a',
                             {
                                 onClick: this.handleGetRebatesLink.bind(this),
                                 href: '#'
                             },
-                            'Get Rebates'
+                            'See more'
                         )
                     )
                 )
@@ -58437,6 +58470,8 @@ var InfoModalData = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
+            var _this3 = this;
+
             return _react2.default.createElement(
                 'div',
                 null,
@@ -58449,13 +58484,9 @@ var InfoModalData = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'p',
                             { className: 'info-modal-data__pricing-details' },
-                            'Pricing Details'
+                            'Pricing'
                         ),
-                        _react2.default.createElement(
-                            'p',
-                            null,
-                            _strings2.default.toTitleCase(this.props.selectedTab) + ' Terms'
-                        ),
+                        this.renderTabs(),
                         _react2.default.createElement(
                             'div',
                             { className: 'info-modal-data__prices' },
@@ -58465,7 +58496,7 @@ var InfoModalData = function (_React$PureComponent) {
                                 _react2.default.createElement(
                                     'div',
                                     { className: 'info-modal-data__label' },
-                                    'Suggested Retail:',
+                                    'MSRP:',
                                     ' '
                                 ),
                                 _react2.default.createElement(
@@ -58480,12 +58511,12 @@ var InfoModalData = function (_React$PureComponent) {
                                 _react2.default.createElement(
                                     'div',
                                     { className: 'info-modal-data__label' },
-                                    'Your Price:'
+                                    'Selling Price:'
                                 ),
                                 _react2.default.createElement(
                                     'div',
                                     { className: 'info-modal-data__amount' },
-                                    _util2.default.moneyFormat(this.props.deal.supplier_price) + '*'
+                                    '' + _util2.default.moneyFormat(this.props.deal.supplier_price)
                                 )
                             ),
                             this.props.selectedTab === 'cash' ? '' : this.renderPaymentDefaults(),
@@ -58503,7 +58534,30 @@ var InfoModalData = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'div',
                                 null,
-                                _util2.default.moneyFormat(this.finalPrice()) + '\n                                ' + (this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? ' /month' : '')
+                                _util2.default.moneyFormat(this.finalPrice()) + '\n                                ' + (this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? ' /month' : ''),
+                                ' *'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'deal__buttons' },
+                            _react2.default.createElement(
+                                'button',
+                                {
+                                    className: this.compareButtonClass(),
+                                    onClick: this.props.toggleCompare.bind(null, this.props.deal)
+                                },
+                                this.isAlreadyInCompareList() ? 'Remove from compare' : 'Compare'
+                            ),
+                            _react2.default.createElement(
+                                'button',
+                                {
+                                    onClick: function onClick() {
+                                        return window.location = '/deals/' + _this3.props.deal.id;
+                                    },
+                                    className: 'deal__button deal__button--small deal__button--pink deal__button'
+                                },
+                                'Get Quote'
                             )
                         ),
                         _react2.default.createElement(
@@ -58516,6 +58570,16 @@ var InfoModalData = function (_React$PureComponent) {
                     this.props.children
                 )
             );
+        }
+    }, {
+        key: 'isAlreadyInCompareList',
+        value: function isAlreadyInCompareList() {
+            return _ramda2.default.contains(this.props.deal, _ramda2.default.map(_ramda2.default.prop('deal'), this.props.compareList));
+        }
+    }, {
+        key: 'compareButtonClass',
+        value: function compareButtonClass() {
+            return 'deal__button deal__button--small deal__button--blue' + (this.isAlreadyInCompareList() ? 'deal__button--blue' : '');
         }
     }]);
 
@@ -58548,7 +58612,8 @@ var makeMapStateToProps = function makeMapStateToProps() {
             selectedDeal: state.selectedDeal,
             termDuration: state.termDuration,
             dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
-            dealBestOffer: getDealBestOffer(state, props)
+            dealBestOffer: getDealBestOffer(state, props),
+            compareList: state.compareList
         };
     };
     return mapStateToProps;

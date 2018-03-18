@@ -1174,8 +1174,11 @@ body {
 }
 
 .info-modal-data__prices a {
-  text-transform: uppercase;
   color: #41b1ac;
+}
+
+.info-modal-data__prices a:after {
+  content: ' >';
 }
 
 .info-modal-data__pricing-details {
