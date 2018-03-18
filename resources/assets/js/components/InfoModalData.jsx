@@ -20,6 +20,56 @@ class InfoModalData extends React.PureComponent {
         this.props.requestBestOffer(this.props.deal);
     }
 
+    handleTabChange(tabName) {
+        this.props.selectTab(tabName);
+        this.props.getBestOffersForLoadedDeals();
+    }
+
+    renderTabs() {
+        return (
+            <div className="deal-price">
+                <div className="tabs">
+                    <div
+                        onClick={() => {
+                            this.handleTabChange('cash');
+                        }}
+                        className={`tabs__tab ${
+                            this.props.selectedTab === 'cash'
+                                ? 'tabs__tab--selected'
+                                : ''
+                            }`}
+                    >
+                        Cash
+                    </div>
+                    <div
+                        onClick={() => {
+                            this.handleTabChange('finance');
+                        }}
+                        className={`tabs__tab ${
+                            this.props.selectedTab === 'finance'
+                                ? 'tabs__tab--selected'
+                                : ''
+                            }`}
+                    >
+                        Finance
+                    </div>
+                    <div
+                        onClick={() => {
+                            this.handleTabChange('lease');
+                        }}
+                        className={`tabs__tab ${
+                            this.props.selectedTab === 'lease'
+                                ? 'tabs__tab--selected'
+                                : ''
+                            }`}
+                    >
+                        Lease
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     finalPrice() {
         switch (this.props.selectedTab) {
             case 'cash':
@@ -200,11 +250,10 @@ class InfoModalData extends React.PureComponent {
                 <div className="info-modal-data">
                     <div className="info-modal-data__price">
                         <p className="info-modal-data__pricing-details">
-                            Pricing Details
+                            Pricing
                         </p>
-                        <p>{`${strings.toTitleCase(
-                            this.props.selectedTab
-                        )} Terms`}</p>
+
+                        { this.renderTabs() }
 
                         <div className="info-modal-data__prices">
                             <div className="info-modal-data__costs">
