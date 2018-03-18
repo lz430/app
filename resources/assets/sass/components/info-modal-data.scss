@@ -63,8 +63,11 @@
     font-size: 0.9em;
 
     a {
-      text-transform: uppercase;
       color: $color-blue;
+    }
+
+    a:after {
+      content: ' \003E';
     }
   }
 

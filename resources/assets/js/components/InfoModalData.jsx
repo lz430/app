@@ -126,27 +126,14 @@ class InfoModalData extends React.PureComponent {
                         {util.moneyFormat(this.props.dealBestOfferTotalValue)}
                     </div>
                 </div>
-                {this.props.dealBestOffer.programs.map((program, index) => {
-                    return (
-                        <div
-                            className="info-modal-data__rebate-info info-modal-data__costs"
-                            key={index}
-                        >
-                            <div className="info-modal-data__rebate-info__title">
-                                {strings.toTitleCase(program.title)}
-                            </div>
-                            <div>{`${util.moneyFormat(program.value)}`}</div>
-                        </div>
-                    );
-                })}
-
                 <div className="info-modal-data__more-rebates info-modal-data__costs">
                     <div>
+                        Additional rebates may apply. {' '}
                         <a
                             onClick={this.handleGetRebatesLink.bind(this)}
                             href="#"
                         >
-                            Get Rebates
+                            See more
                         </a>
                     </div>
                 </div>
