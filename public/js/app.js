@@ -58277,6 +58277,16 @@ var InfoModalData = function (_React$PureComponent) {
             );
         }
     }, {
+        key: 'calculateYourCashPrice',
+        value: function calculateYourCashPrice() {
+            switch (this.props.selectedTab) {
+                case 'cash':
+                case 'finance':
+                case 'lease':
+                    return _formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue);
+            }
+        }
+    }, {
         key: 'finalPrice',
         value: function finalPrice() {
             switch (this.props.selectedTab) {
@@ -58317,24 +58327,6 @@ var InfoModalData = function (_React$PureComponent) {
                         null,
                         _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
                     )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'info-modal-data__more-rebates info-modal-data__costs' },
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        'Additional rebates may apply. ',
-                        ' ',
-                        _react2.default.createElement(
-                            'a',
-                            {
-                                onClick: this.handleGetRebatesLink.bind(this),
-                                href: '#'
-                            },
-                            'See more'
-                        )
-                    )
                 )
             );
         }
@@ -58342,9 +58334,10 @@ var InfoModalData = function (_React$PureComponent) {
         key: 'renderPaymentDefaults',
         value: function renderPaymentDefaults() {
             var financeDownPaymentAmount = 0.1;
-            var leaseDownPaymentAmount = 0.05;
-            var defaultTermLength = '60 months';
-            var defaultMileage = '10,000 miles';
+            var financeTermLength = '60';
+            var leaseAnnualMiles = '10,000';
+            var leaseTermLength = '36';
+            var leaseCashDue = 500;
 
             if (this.props.selectedTab === 'finance') {
                 return _react2.default.createElement(
@@ -58352,39 +58345,45 @@ var InfoModalData = function (_React$PureComponent) {
                     null,
                     _react2.default.createElement(
                         'div',
-                        null,
+                        { className: 'info-modal-data__costs' },
                         _react2.default.createElement(
-                            'p',
-                            { className: 'info-modal-data__default-label' },
-                            'Terms'
+                            'div',
+                            { className: 'info-modal-data__label' },
+                            'Down Payment:'
                         ),
                         _react2.default.createElement(
-                            'select',
-                            {
-                                className: 'info-modal-data__default-option',
-                                disabled: true
-                            },
-                            _react2.default.createElement(
-                                'option',
-                                null,
-                                this.props.termDuration,
-                                ' months'
-                            )
+                            'div',
+                            { className: 'info-modal-data__amount' },
+                            '' + _util2.default.moneyFormat(this.props.deal.supplier_price * financeDownPaymentAmount)
                         )
                     ),
                     _react2.default.createElement(
                         'div',
-                        null,
+                        { className: 'info-modal-data__costs' },
                         _react2.default.createElement(
-                            'p',
-                            { className: 'info-modal-data__default-label' },
-                            'Down Payment'
+                            'div',
+                            { className: 'info-modal-data__label' },
+                            'Total Months:'
                         ),
-                        _react2.default.createElement('input', {
-                            className: 'info-modal-data__input',
-                            disabled: true,
-                            placeholder: _util2.default.moneyFormat(this.props.downPayment)
-                        })
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'info-modal-data__amount' },
+                            financeTermLength
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'info-modal-data__costs info-modal-data__costs--final' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'info-modal-data__label' },
+                            'Monthly Payments:'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'info-modal-data__amount' },
+                            _util2.default.moneyFormat(this.finalPrice())
+                        )
                     )
                 );
             } else {
@@ -58393,59 +58392,60 @@ var InfoModalData = function (_React$PureComponent) {
                     null,
                     _react2.default.createElement(
                         'div',
-                        { className: 'info-modal-data__defaults' },
+                        { className: 'info-modal-data__costs' },
                         _react2.default.createElement(
-                            'p',
-                            { className: 'info-modal-data__default-label' },
-                            'Terms'
+                            'div',
+                            { className: 'info-modal-data__label' },
+                            'Total Months:'
                         ),
                         _react2.default.createElement(
-                            'select',
-                            {
-                                className: 'info-modal-data__default-option',
-                                disabled: true
-                            },
-                            _react2.default.createElement(
-                                'option',
-                                null,
-                                defaultTermLength
-                            )
+                            'div',
+                            { className: 'info-modal-data__amount' },
+                            leaseTermLength
                         )
                     ),
                     _react2.default.createElement(
                         'div',
-                        null,
+                        { className: 'info-modal-data__costs' },
                         _react2.default.createElement(
-                            'p',
-                            { className: 'info-modal-data__default-label' },
-                            'Mileage'
+                            'div',
+                            { className: 'info-modal-data__label' },
+                            'Cash Due:'
                         ),
                         _react2.default.createElement(
-                            'select',
-                            {
-                                className: 'info-modal-data__default-option',
-                                disabled: true
-                            },
-                            _react2.default.createElement(
-                                'option',
-                                null,
-                                defaultMileage
-                            )
+                            'div',
+                            { className: 'info-modal-data__amount' },
+                            '$',
+                            _util2.default.moneyFormat(leaseCashDue)
                         )
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'info-modal-data__defaults' },
+                        { className: 'info-modal-data__costs' },
                         _react2.default.createElement(
-                            'p',
-                            { className: 'info-modal-data__default-label' },
-                            'Cash Due'
+                            'div',
+                            { className: 'info-modal-data__label' },
+                            'Annual Miles:'
                         ),
-                        _react2.default.createElement('input', {
-                            className: 'info-modal-data__default-option info-modal-data__input',
-                            disabled: true,
-                            placeholder: _util2.default.moneyFormat(this.props.deal.supplier_price * leaseDownPaymentAmount)
-                        })
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'info-modal-data__amount' },
+                            leaseAnnualMiles
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'info-modal-data__costs info-modal-data__costs--final' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'info-modal-data__label' },
+                            'Monthly Payments:'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'info-modal-data__amount' },
+                            _util2.default.moneyFormat(this.finalPrice())
+                        )
                     )
                 );
             }
@@ -58519,23 +58519,48 @@ var InfoModalData = function (_React$PureComponent) {
                                     '' + _util2.default.moneyFormat(this.props.deal.supplier_price)
                                 )
                             ),
-                            this.props.selectedTab === 'cash' ? '' : this.renderPaymentDefaults(),
-                            this.props.dealBestOfferTotalValue ? this.renderAppliedRebatesLink() : 'Loading Applied Rebates...'
+                            this.props.selectedTab === 'cash' && _react2.default.createElement(
+                                'div',
+                                { className: 'info-modal-data__costs info-modal-data__costs--final' },
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'info-modal-data__label' },
+                                    'Your Cash Price:'
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'info-modal-data__amount' },
+                                    _util2.default.moneyFormat(this.calculateYourCashPrice())
+                                )
+                            ),
+                            this.props.selectedTab !== 'cash' && _react2.default.createElement(
+                                'div',
+                                null,
+                                _react2.default.createElement('hr', null),
+                                _react2.default.createElement(
+                                    'div',
+                                    null,
+                                    this.renderPaymentDefaults()
+                                )
+                            )
                         ),
                         _react2.default.createElement('hr', null),
                         _react2.default.createElement(
                             'div',
-                            { className: 'info-modal-data__final-price info-modal-data__costs info-modal-data__bold' },
+                            { className: 'info-modal-data__more-rebates info-modal-data__costs' },
                             _react2.default.createElement(
                                 'div',
                                 null,
-                                'Your ' + _strings2.default.toTitleCase(this.props.selectedTab) + ' Price:'
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                null,
-                                _util2.default.moneyFormat(this.finalPrice()) + '\n                                ' + (this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? ' /month' : ''),
-                                ' *'
+                                'Additional rebates may apply. ',
+                                ' ',
+                                _react2.default.createElement(
+                                    'a',
+                                    {
+                                        onClick: this.handleGetRebatesLink.bind(this),
+                                        href: '#'
+                                    },
+                                    'See more'
+                                )
                             )
                         ),
                         _react2.default.createElement(
@@ -58553,7 +58578,7 @@ var InfoModalData = function (_React$PureComponent) {
                                 'button',
                                 {
                                     onClick: function onClick() {
-                                        return window.location = '/deals/' + _this3.props.deal.id;
+                                        return _this3.selectDeal();
                                     },
                                     className: 'deal__button deal__button--small deal__button--pink deal__button'
                                 },
@@ -58580,6 +58605,12 @@ var InfoModalData = function (_React$PureComponent) {
         key: 'compareButtonClass',
         value: function compareButtonClass() {
             return 'deal__button deal__button--small deal__button--blue' + (this.isAlreadyInCompareList() ? 'deal__button--blue' : '');
+        }
+    }, {
+        key: 'selectDeal',
+        value: function selectDeal() {
+            this.props.closeModal();
+            this.props.selectDeal(this.props.deal);
         }
     }]);
 

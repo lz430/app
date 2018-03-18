@@ -1134,6 +1134,14 @@ body {
   width: 100%;
 }
 
+.info-modal-data__costs--final {
+  line-height: 1.5rem;
+}
+
+.info-modal-data__costs--final .info-modal-data__amount {
+  font-size: 1.5rem;
+}
+
 .info-modal-data__default-label {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1169,16 +1177,22 @@ body {
           justify-content: space-between;
 }
 
+.info-modal-data__more-rebates a {
+  color: #41b1ac;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.info-modal-data__more-rebates a:after {
+  content: ' >';
+}
+
 .info-modal-data__prices {
   font-size: 0.9em;
 }
 
 .info-modal-data__prices a {
   color: #41b1ac;
-}
-
-.info-modal-data__prices a:after {
-  content: ' >';
 }
 
 .info-modal-data__pricing-details {

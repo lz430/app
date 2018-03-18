@@ -70,6 +70,23 @@ class InfoModalData extends React.PureComponent {
         );
     }
 
+    calculateYourCashPrice()
+    {
+        switch (this.props.selectedTab) {
+            case 'cash':
+            case 'finance':
+            case 'lease':
+                return formulas.calculateTotalCash(
+                    util.getEmployeeOrSupplierPrice(
+                        this.props.deal,
+                        this.props.employeeBrand
+                    ),
+                    this.props.deal.doc_fee,
+                    this.props.dealBestOfferTotalValue
+                );
+        }
+    }
+
     finalPrice() {
         switch (this.props.selectedTab) {
             case 'cash':
@@ -126,88 +143,70 @@ class InfoModalData extends React.PureComponent {
                         {util.moneyFormat(this.props.dealBestOfferTotalValue)}
                     </div>
                 </div>
-                <div className="info-modal-data__more-rebates info-modal-data__costs">
-                    <div>
-                        Additional rebates may apply. {' '}
-                        <a
-                            onClick={this.handleGetRebatesLink.bind(this)}
-                            href="#"
-                        >
-                            See more
-                        </a>
-                    </div>
-                </div>
             </div>
         );
     }
 
     renderPaymentDefaults() {
         const financeDownPaymentAmount = 0.1;
-        const leaseDownPaymentAmount = 0.05;
-        const defaultTermLength = '60 months';
-        const defaultMileage = '10,000 miles';
+        const financeTermLength = '60';
+        const leaseAnnualMiles = '10,000';
+        const leaseTermLength = '36';
+        const leaseCashDue = 500;
 
         if (this.props.selectedTab === 'finance') {
             return (
                 <div>
-                    <div>
-                        <p className="info-modal-data__default-label">Terms</p>
-                        <select
-                            className="info-modal-data__default-option"
-                            disabled
-                        >
-                            <option>{this.props.termDuration} months</option>
-                        </select>
+                    <div className="info-modal-data__costs">
+                        <div className="info-modal-data__label">
+                            Down Payment:
+                        </div>
+                        <div className="info-modal-data__amount">{`${util.moneyFormat(
+                            this.props.deal.supplier_price * financeDownPaymentAmount
+                        )}`}</div>
                     </div>
-                    <div>
-                        <p className="info-modal-data__default-label">
-                            Down Payment
-                        </p>
-                        <input
-                            className="info-modal-data__input"
-                            disabled
-                            placeholder={util.moneyFormat(
-                                this.props.downPayment
-                            )}
-                        />
+                    <div className="info-modal-data__costs">
+                        <div className="info-modal-data__label">
+                            Total Months:
+                        </div>
+                        <div className="info-modal-data__amount">{financeTermLength}</div>
+                    </div>
+                    <div className="info-modal-data__costs info-modal-data__costs--final">
+                        <div className="info-modal-data__label">
+                            Monthly Payments:
+                        </div>
+                        <div className="info-modal-data__amount">{util.moneyFormat(this.finalPrice())}</div>
                     </div>
                 </div>
             );
         } else {
             return (
                 <div>
-                    <div className="info-modal-data__defaults">
-                        <p className="info-modal-data__default-label">Terms</p>
-                        <select
-                            className="info-modal-data__default-option"
-                            disabled
-                        >
-                            <option>{defaultTermLength}</option>
-                        </select>
+
+                    <div className="info-modal-data__costs">
+                        <div className="info-modal-data__label">
+                            Total Months:
+                        </div>
+                        <div className="info-modal-data__amount">{leaseTermLength}</div>
                     </div>
-                    <div>
-                        <p className="info-modal-data__default-label">
-                            Mileage
-                        </p>
-                        <select
-                            className="info-modal-data__default-option"
-                            disabled
-                        >
-                            <option>{defaultMileage}</option>
-                        </select>
+                    <div className="info-modal-data__costs">
+                        <div className="info-modal-data__label">
+                            Cash Due:
+                        </div>
+                        <div className="info-modal-data__amount">${util.moneyFormat(leaseCashDue)}</div>
                     </div>
-                    <div className="info-modal-data__defaults">
-                        <p className="info-modal-data__default-label">
-                            Cash Due
-                        </p>
-                        <input
-                            className="info-modal-data__default-option info-modal-data__input"
-                            disabled
-                            placeholder={util.moneyFormat(
-                                this.props.deal.supplier_price *
-                                    leaseDownPaymentAmount
-                            )}
-                        />
+
+                    <div className="info-modal-data__costs">
+                        <div className="info-modal-data__label">
+                            Annual Miles:
+                        </div>
+                        <div className="info-modal-data__amount">{leaseAnnualMiles}</div>
+                    </div>
+                    <div className="info-modal-data__costs info-modal-data__costs--final">
+                        <div className="info-modal-data__label">
+                            Monthly Payments:
+                        </div>
+                        <div className="info-modal-data__amount">{util.moneyFormat(this.finalPrice())}</div>
                     </div>
                 </div>
             );
@@ -260,28 +259,33 @@ class InfoModalData extends React.PureComponent {
                                 )}`}</div>
                             </div>
 
-                            {this.props.selectedTab === 'cash'
-                                ? ''
-                                : this.renderPaymentDefaults()}
+                            {this.props.selectedTab === 'cash' &&
+                                <div className="info-modal-data__costs info-modal-data__costs--final">
+                                    <div className="info-modal-data__label">
+                                        Your Cash Price:
+                                    </div>
+                                    <div className="info-modal-data__amount">{util.moneyFormat(this.calculateYourCashPrice())}</div>
+                                </div>
+                            }
 
-                            {this.props.dealBestOfferTotalValue
-                                ? this.renderAppliedRebatesLink()
-                                : 'Loading Applied Rebates...'}
+                            {this.props.selectedTab !== 'cash' &&
+                                <div>
+                                    <hr />
+                                    <div>{this.renderPaymentDefaults()}</div>
+                                </div>
+                            }
                         </div>
-
                         <hr />
-                        <div className="info-modal-data__final-price info-modal-data__costs info-modal-data__bold">
-                            <div>{`Your ${strings.toTitleCase(
-                                this.props.selectedTab
-                            )} Price:`}</div>
+
+                        <div className="info-modal-data__more-rebates info-modal-data__costs">
                             <div>
-                                {`${util.moneyFormat(this.finalPrice())}
-                                ${
-                                    this.props.selectedTab === 'finance' ||
-                                    this.props.selectedTab === 'lease'
-                                        ? ` /month`
-                                        : ``
-                                }`} *
+                                Additional rebates may apply. {' '}
+                                <a
+                                    onClick={this.handleGetRebatesLink.bind(this)}
+                                    href="#"
+                                >
+                                    See more
+                                </a>
                             </div>
                         </div>
 
@@ -296,8 +300,7 @@ class InfoModalData extends React.PureComponent {
                                 {this.isAlreadyInCompareList() ? 'Remove from compare' : 'Compare'}
                             </button>
                             <button
-                                onClick={() =>
-                                    (window.location = `/deals/${this.props.deal.id}`)}
+                                onClick={() => this.selectDeal()}
                                 className="deal__button deal__button--small deal__button--pink deal__button"
                             >
                                 Get Quote
@@ -331,6 +334,11 @@ class InfoModalData extends React.PureComponent {
                 ? 'deal__button--blue'
                 : '')
         );
+    }
+
+    selectDeal() {
+        this.props.closeModal();
+        this.props.selectDeal(this.props.deal);
     }
 }
 
