@@ -33,7 +33,7 @@ class DealTransformer extends TransformerAbstract
             'color' => $deal->color,
             'interior_color' => $deal->interior_color,
             'employee_price' => (float) $deal->price,
-            'supplier_price' =>  (float) in_array(strtolower($deal->make), Make::DOMESTIC) ? $deal->price * 1.04 : $deal->price,
+            'supplier_price' =>  (float) (in_array(strtolower($deal->make), Make::DOMESTIC) ? $deal->price * 1.04 : $deal->price),
             'msrp' => (float) $deal->msrp,
             'inventory_date' => $deal->inventory_date,
             'certified' => $deal->certified,
