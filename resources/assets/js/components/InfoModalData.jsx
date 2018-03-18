@@ -257,7 +257,7 @@ class InfoModalData extends React.PureComponent {
                                 </div>
                                 <div className="info-modal-data__amount">{`${util.moneyFormat(
                                     this.props.deal.supplier_price
-                                )}*`}</div>
+                                )}`}</div>
                             </div>
 
                             {this.props.selectedTab === 'cash'
@@ -281,7 +281,7 @@ class InfoModalData extends React.PureComponent {
                                     this.props.selectedTab === 'lease'
                                         ? ` /month`
                                         : ``
-                                }`}
+                                }`} *
                             </div>
                         </div>
 
