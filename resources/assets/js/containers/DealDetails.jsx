@@ -91,18 +91,20 @@ class DealDetails extends React.PureComponent {
     }
 
     async requestFuelImages() {
+        let vehicleId = null;
+
         try {
-            const vehicleId =
+            vehicleId =
                 (await fuelapi.getVehicleId(
                     this.props.deal.year,
                     this.props.deal.make,
                     this.props.deal.model
                 )).data[0].id || false;
-
-            if (!vehicleId) return;
         } catch (e) {
-            return; // No Fuel Vehicle ID Available.
+            // Cannot return here because Babel
         }
+
+        if (!vehicleId) return;
 
         try {
             const externalImages = this.extractFuelImages(
