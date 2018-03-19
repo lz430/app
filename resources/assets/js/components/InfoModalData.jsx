@@ -2,7 +2,6 @@ import * as Actions from 'actions/index';
 import { connect } from 'react-redux';
 import formulas from 'src/formulas';
 import miscicons from 'miscicons';
-import Modal from 'components/Modal';
 import PropTypes from 'prop-types';
 import R from 'ramda';
 import React from 'react';
@@ -13,11 +12,87 @@ import {
     makeDealBestOfferTotalValue,
     makeDealBestOffer,
 } from 'selectors/index';
+import AccuPricingModal from 'components/AccuPricingModal';
 
 class InfoModalData extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            accuPricingModalIsOpen: false,
+        };
+    }
+
     componentDidMount() {
         this.props.requestTargets(this.props.deal);
         this.props.requestBestOffer(this.props.deal);
+    }
+
+    handleTabChange(tabName) {
+        this.props.selectTab(tabName);
+        this.props.getBestOffersForLoadedDeals();
+    }
+
+    renderTabs() {
+        return (
+            <div className="deal-price">
+                <div className="tabs">
+                    <div
+                        onClick={() => {
+                            this.handleTabChange('cash');
+                        }}
+                        className={`tabs__tab ${
+                            this.props.selectedTab === 'cash'
+                                ? 'tabs__tab--selected'
+                                : ''
+                            }`}
+                    >
+                        Cash
+                    </div>
+                    <div
+                        onClick={() => {
+                            this.handleTabChange('finance');
+                        }}
+                        className={`tabs__tab ${
+                            this.props.selectedTab === 'finance'
+                                ? 'tabs__tab--selected'
+                                : ''
+                            }`}
+                    >
+                        Finance
+                    </div>
+                    <div
+                        onClick={() => {
+                            this.handleTabChange('lease');
+                        }}
+                        className={`tabs__tab ${
+                            this.props.selectedTab === 'lease'
+                                ? 'tabs__tab--selected'
+                                : ''
+                            }`}
+                    >
+                        Lease
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    calculateYourCashPrice()
+    {
+        switch (this.props.selectedTab) {
+            case 'cash':
+            case 'finance':
+            case 'lease':
+                return formulas.calculateTotalCash(
+                    util.getEmployeeOrSupplierPrice(
+                        this.props.deal,
+                        this.props.employeeBrand
+                    ),
+                    this.props.deal.doc_fee,
+                    this.props.dealBestOfferTotalValue
+                );
+        }
     }
 
     finalPrice() {
@@ -68,36 +143,12 @@ class InfoModalData extends React.PureComponent {
     renderAppliedRebatesLink() {
         return (
             <div>
-                <div className="info-modal-data__rebate-info info-modal-data__costs info-modal-data__bold">
+                <div className="info-modal-data__rebate-info info-modal-data__costs">
                     <div className="info-modal-data__rebate-info__title">
                         Rebates Applied:
                     </div>
                     <div>
                         {util.moneyFormat(this.props.dealBestOfferTotalValue)}
-                    </div>
-                </div>
-                {this.props.dealBestOffer.programs.map((program, index) => {
-                    return (
-                        <div
-                            className="info-modal-data__rebate-info info-modal-data__costs"
-                            key={index}
-                        >
-                            <div className="info-modal-data__rebate-info__title">
-                                {strings.toTitleCase(program.title)}
-                            </div>
-                            <div>{`${util.moneyFormat(program.value)}`}</div>
-                        </div>
-                    );
-                })}
-
-                <div className="info-modal-data__more-rebates info-modal-data__costs">
-                    <div>
-                        <a
-                            onClick={this.handleGetRebatesLink.bind(this)}
-                            href="#"
-                        >
-                            Get Rebates
-                        </a>
                     </div>
                 </div>
             </div>
@@ -106,90 +157,66 @@ class InfoModalData extends React.PureComponent {
 
     renderPaymentDefaults() {
         const financeDownPaymentAmount = 0.1;
-        const leaseDownPaymentAmount = 0.05;
-        const defaultTermLength = '60 months';
-        const defaultMileage = '10,000 miles';
+        const financeTermLength = '60';
+        const leaseAnnualMiles = '10,000';
+        const leaseTermLength = '36';
+        const leaseCashDue = 500;
 
         if (this.props.selectedTab === 'finance') {
             return (
                 <div>
-                    <div>
-                        <p className="info-modal-data__default-label">Terms</p>
-                        <select
-                            className="info-modal-data__default-option"
-                            disabled
-                        >
-                            <option>{this.props.termDuration} months</option>
-                        </select>
+                    <div className="info-modal-data__costs">
+                        <div className="info-modal-data__label">
+                            Down Payment:
+                        </div>
+                        <div className="info-modal-data__amount">{`${util.moneyFormat(
+                            this.props.deal.supplier_price * financeDownPaymentAmount
+                        )}`}</div>
                     </div>
-                    <div>
-                        <p className="info-modal-data__default-label">
-                            Down Payment
-                        </p>
-                        <input
-                            className="info-modal-data__input"
-                            disabled
-                            placeholder={util.moneyFormat(
-                                this.props.downPayment
-                            )}
-                        />
+                    <div className="info-modal-data__costs">
+                        <div className="info-modal-data__label">
+                            Total Months:
+                        </div>
+                        <div className="info-modal-data__amount">{financeTermLength}</div>
+                    </div>
+                    <div className="info-modal-data__costs info-modal-data__costs--final">
+                        <div className="info-modal-data__label">
+                            Monthly Payments:
+                        </div>
+                        <div className="info-modal-data__amount">{util.moneyFormat(this.finalPrice())}</div>
                     </div>
                 </div>
             );
         } else {
             return (
                 <div>
-                    <div className="info-modal-data__defaults">
-                        <p className="info-modal-data__default-label">Terms</p>
-                        <select
-                            className="info-modal-data__default-option"
-                            disabled
-                        >
-                            <option>{defaultTermLength}</option>
-                        </select>
+
+                    <div className="info-modal-data__costs">
+                        <div className="info-modal-data__label">
+                            Total Months:
+                        </div>
+                        <div className="info-modal-data__amount">{leaseTermLength}</div>
                     </div>
-                    <div>
-                        <p className="info-modal-data__default-label">
-                            Mileage
-                        </p>
-                        <select
-                            className="info-modal-data__default-option"
-                            disabled
-                        >
-                            <option>{defaultMileage}</option>
-                        </select>
+                    <div className="info-modal-data__costs">
+                        <div className="info-modal-data__label">
+                            Cash Due:
+                        </div>
+                        <div className="info-modal-data__amount">{util.moneyFormat(leaseCashDue)}</div>
                     </div>
-                    <div className="info-modal-data__defaults">
-                        <p className="info-modal-data__default-label">
-                            Cash Due
-                        </p>
-                        <input
-                            className="info-modal-data__default-option info-modal-data__input"
-                            disabled
-                            placeholder={util.moneyFormat(
-                                this.props.deal.supplier_price *
-                                    leaseDownPaymentAmount
-                            )}
-                        />
+
+                    <div className="info-modal-data__costs">
+                        <div className="info-modal-data__label">
+                            Annual Miles:
+                        </div>
+                        <div className="info-modal-data__amount">{leaseAnnualMiles}</div>
+                    </div>
+                    <div className="info-modal-data__costs info-modal-data__costs--final">
+                        <div className="info-modal-data__label">
+                            Monthly Payments:
+                        </div>
+                        <div className="info-modal-data__amount">{util.moneyFormat(this.finalPrice())}</div>
                     </div>
                 </div>
-            );
-        }
-    }
-
-    renderPricingDisclaimer() {
-        if (this.selectedTab === 'finance') {
-            return (
-                <p className="info-modal-data__disclaimer">
-                    ** Monthly payment is based on 4% simple interest and
-                    assumes good to excellent credit rating.
-                </p>
-            );
-        } else {
-            return (
-                <p className="info-modal-data__disclaimer">
-                    ** Monthly Payment assumes good to excellent credit rating.
-                </p>
             );
         }
     }
@@ -200,16 +227,15 @@ class InfoModalData extends React.PureComponent {
                 <div className="info-modal-data">
                     <div className="info-modal-data__price">
                         <p className="info-modal-data__pricing-details">
-                            Pricing Details
+                            Pricing
                         </p>
-                        <p>{`${strings.toTitleCase(
-                            this.props.selectedTab
-                        )} Terms`}</p>
+
+                        { this.renderTabs() }
 
                         <div className="info-modal-data__prices">
                             <div className="info-modal-data__costs">
                                 <div className="info-modal-data__label">
-                                    Suggested Retail:{' '}
+                                    MSRP:{' '}
                                 </div>
                                 <div className="info-modal-data__amount">
                                     {util.moneyFormat(this.props.deal.msrp)}
@@ -217,51 +243,93 @@ class InfoModalData extends React.PureComponent {
                             </div>
                             <div className="info-modal-data__costs">
                                 <div className="info-modal-data__label">
-                                    Your Price:
+                                    Selling Price:
                                 </div>
                                 <div className="info-modal-data__amount">{`${util.moneyFormat(
                                     this.props.deal.supplier_price
-                                )}*`}</div>
+                                )}`}</div>
                             </div>
 
-                            {this.props.selectedTab === 'cash'
-                                ? ''
-                                : this.renderPaymentDefaults()}
+                            {this.props.selectedTab === 'cash' &&
+                                <div className="info-modal-data__costs info-modal-data__costs--final">
+                                    <div className="info-modal-data__label">
+                                        Your Price:
+                                    </div>
+                                    <div className="info-modal-data__amount">{util.moneyFormat(this.calculateYourCashPrice())}*</div>
+                                </div>
+                            }
 
-                            {this.props.dealBestOfferTotalValue
-                                ? this.renderAppliedRebatesLink()
-                                : 'Loading Applied Rebates...'}
+                            {this.props.selectedTab !== 'cash' &&
+                                <div>
+                                    <hr />
+                                    <div>{this.renderPaymentDefaults()}</div>
+                                </div>
+                            }
                         </div>
-
                         <hr />
-                        <div className="info-modal-data__final-price info-modal-data__costs info-modal-data__bold">
-                            <div>{`Your ${strings.toTitleCase(
-                                this.props.selectedTab
-                            )} Price:`}</div>
+
+                        <div className="info-modal-data__more-rebates info-modal-data__costs">
                             <div>
-                                {`${util.moneyFormat(this.finalPrice())}
-                                ${
-                                    this.props.selectedTab === 'finance' ||
-                                    this.props.selectedTab === 'lease'
-                                        ? ` /month`
-                                        : ``
-                                }`}
+                                Additional rebates may apply. {' '}
+                                <a
+                                    onClick={this.handleGetRebatesLink.bind(this)}
+                                    href="#"
+                                >
+                                    See more
+                                </a>
                             </div>
                         </div>
-                        <p className="info-modal-data__disclaimer">
-                            * Price includes doc fees, sales tax, and dealer
-                            fees but does not include license and registration
-                            fees.
-                        </p>
-                        {this.props.selectedTab === 'cash'
-                            ? ''
-                            : this.renderPricingDisclaimer()}
+
+                        <div className="deal__buttons">
+                            <button
+                                className={this.compareButtonClass()}
+                                onClick={this.props.toggleCompare.bind(
+                                    null,
+                                    this.props.deal
+                                )}
+                            >
+                                {this.isAlreadyInCompareList() ? 'Remove from compare' : 'Compare'}
+                            </button>
+                            <button
+                                onClick={() => this.selectDeal()}
+                                className="deal__button deal__button--small deal__button--pink deal__button"
+                            >
+                                Get Quote
+                            </button>
+                        </div>
+                        <AccuPricingModal isOpen={this.state.accuPricingModalIsOpen} onClose={() => this.setState({accuPricingModalIsOpen: false})} />
+                        <div className="accupricing-cta">
+                            <a onClick={() => this.setState({accuPricingModalIsOpen: true})}>
+                                <img src="/images/accupricing-logo.png" className="accupricing-cta__logo" />
+                            </a>
+                            <p className="accupricing-cta__disclaimer">
+                                * Includes taxes, dealer fees and rebates.
+                            </p>
+                        </div>
                     </div>
 
                     {this.props.children}
                 </div>
             </div>
         );
+    }
+
+    isAlreadyInCompareList() {
+        return R.contains(this.props.deal, R.map(R.prop('deal'), this.props.compareList));
+    }
+
+    compareButtonClass() {
+        return (
+            'deal__button deal__button--small deal__button--blue' +
+            (this.isAlreadyInCompareList()
+                ? 'deal__button--blue'
+                : '')
+        );
+    }
+
+    selectDeal() {
+        this.props.closeModal();
+        this.props.selectDeal(this.props.deal);
     }
 }
 
@@ -292,6 +360,7 @@ const makeMapStateToProps = () => {
             termDuration: state.termDuration,
             dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
             dealBestOffer: getDealBestOffer(state, props),
+            compareList: state.compareList,
         };
     };
     return mapStateToProps;

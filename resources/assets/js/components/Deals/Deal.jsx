@@ -40,10 +40,6 @@ class Deal extends React.PureComponent {
                     </div>
                 )}
 
-                <div className="tabs__title">
-                    Select Your Payment &amp; Rebates
-                </div>
-
                 <div className="deal__price">
                     <DealPrice deal={deal} />
                 </div>

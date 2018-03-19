@@ -901,7 +901,7 @@ body {
   position: fixed;
   top: 0;
   width: 100vw;
-  z-index: 1;
+  z-index: 20;
 }
 
 .modal__wrapper {
@@ -916,7 +916,7 @@ body {
   right: 0;
   top: 60px;
   width: 100vw;
-  z-index: 5;
+  z-index: 25;
 }
 
 .modal__content {
@@ -1134,6 +1134,14 @@ body {
   width: 100%;
 }
 
+.info-modal-data__costs--final {
+  line-height: 1.5rem;
+}
+
+.info-modal-data__costs--final .info-modal-data__amount {
+  font-size: 1.5rem;
+}
+
 .info-modal-data__default-label {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1169,12 +1177,21 @@ body {
           justify-content: space-between;
 }
 
+.info-modal-data__more-rebates a {
+  color: #41b1ac;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.info-modal-data__more-rebates a:after {
+  content: ' >';
+}
+
 .info-modal-data__prices {
   font-size: 0.9em;
 }
 
 .info-modal-data__prices a {
-  text-transform: uppercase;
   color: #41b1ac;
 }
 
@@ -1188,13 +1205,10 @@ body {
 }
 
 .sortbar {
-  border-bottom: 1px solid #ccc;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  height: 60px;
-  max-height: 60px;
-  padding: 5px 10px 5px 0;
+  padding-left: 1em;
 }
 
 .sortbar__buttons {
@@ -1227,6 +1241,8 @@ body {
   text-align: center;
   background-color: #f6f6f7;
   width: 200px;
+  font-size: 1rem;
+  padding: .35em;
 }
 
 .sortbar__button--invert {
@@ -1307,7 +1323,7 @@ body {
 
 .sortbar__sort-icon--right-side {
   float: right;
-  margin: -5px -5px 0 0;
+  margin: 0 -5px 0 0;
 }
 
 .sortbar__sort-icon svg {
@@ -1321,8 +1337,8 @@ body {
   max-width: calc(100% - 20px);
   padding: 5px;
   position: absolute;
-  right: 10px;
-  top: 57px;
+  right: 40px;
+  top: 2em;
 }
 
 .sortbar__dropdown div {
@@ -1377,6 +1393,8 @@ body {
   height: 45px;
   max-height: 45px;
   padding: 15px;
+  padding-right: 40px;
+  padding-left: 40px;
 }
 
 @media (min-width: 768px) {
@@ -4565,6 +4583,121 @@ body {
 .confirm-deal__pricing-details {
   font-size: 1.25em;
   text-decoration: underline;
+}
+
+.accupricing-cta {
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.accupricing-cta__logo {
+  max-width: 10rem;
+  height: auto;
+  display: block;
+  cursor: pointer;
+}
+
+.accupricing-cta__disclaimer {
+  margin: 0;
+  font-size: 12px;
+  color: #999;
+}
+
+.accupricing-cta--horizontal {
+  margin-top: 0;
+}
+
+.accupricing-cta--horizontal .accupricing-cta__logo {
+  display: inline-block;
+  line-height: 38px;
+  vertical-align: middle;
+}
+
+.accupricing-cta--horizontal .accupricing-cta__disclaimer {
+  display: inline;
+  line-height: 38px;
+  vertical-align: middle;
+}
+
+.accupricing-modal {
+  background-color: #fff;
+  border: 1px solid #ced4d9;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  margin: 5px;
+  max-width: 600px;
+  min-width: 300px;
+  padding: 1.5em;
+  text-align: left;
+}
+
+.accupricing-modal__logo {
+  max-width: 20rem;
+  height: auto;
+  display: block;
+}
+
+.accupricing-modal p em {
+  text-decoration: underline;
+  font-style: normal;
+}
+
+.button-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.button-group__button {
+  border: 1px solid #436d82;
+  border-right-width: 0;
+  background: #d5efef;
+  color: #535d63;
+  cursor: pointer;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  font-size: small;
+  line-height: 1.5em;
+  vertical-align: middle;
+  padding: .5em 1.5em .4em;
+}
+
+.button-group__button--selected {
+  background: #41b1ac;
+  color: #fff;
+}
+
+.button-group__button:first-child {
+  border-radius: 1em 0 0 1em;
+}
+
+.button-group__button:last-child {
+  border-radius: 0 1em 1em 0;
+  border-right-width: 1px;
+}
+
+.filter-page__top-row {
+  border-bottom: 1px solid #ccc;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-bottom: .5em;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.filter-page__top-row__section--accuPricing {
+  margin-right: auto;
 }
 
 .welcome__top {

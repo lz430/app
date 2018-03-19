@@ -52,6 +52,9 @@ class Modal extends React.Component {
             R.contains(targetClass, 'modal__wrapper') ||
             R.contains(targetClass, 'modal__overlay')
         ) {
+            // make sure we only close the outermost overlay
+            e.stopPropagation();
+
             close();
         }
     }
