@@ -52,15 +52,20 @@ class DealImage extends React.PureComponent {
 
     async requestFuelImages() {
         const deal = this.props.deal;
+        let vehicleId = null;
 
         try {
-            const vehicleId =
-                (await fuelapi.getVehicleId(deal.year, deal.make, deal.model))
-                    .data[0].id || false;
-            if (!vehicleId) return;
+            vehicleId =
+                (await fuelapi.getVehicleId(
+                    deal.year,
+                    deal.make,
+                    deal.model
+                )).data[0].id || false;
         } catch (e) {
-            return; // No Fuel Vehicle ID Available.
+            // Cannot return here because Babel
         }
+
+        if (!vehicleId) return;
 
         try {
             const externalImages = this.extractFuelImages(
