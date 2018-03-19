@@ -10632,11 +10632,6 @@ var Deal = function (_React$PureComponent) {
                 ),
                 _react2.default.createElement(
                     'div',
-                    { className: 'tabs__title' },
-                    'Select Your Payment & Rebates'
-                ),
-                _react2.default.createElement(
-                    'div',
                     { className: 'deal__price' },
                     _react2.default.createElement(_DealPrice2.default, { deal: deal })
                 ),
@@ -42389,6 +42384,10 @@ var _CashFinanceLeaseCalculator = __webpack_require__(158);
 
 var _CashFinanceLeaseCalculator2 = _interopRequireDefault(_CashFinanceLeaseCalculator);
 
+var _AccuPricingModal = __webpack_require__(943);
+
+var _AccuPricingModal2 = _interopRequireDefault(_AccuPricingModal);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -42402,10 +42401,15 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var FilterPage = function (_React$PureComponent) {
     _inherits(FilterPage, _React$PureComponent);
 
-    function FilterPage() {
+    function FilterPage(props) {
         _classCallCheck(this, FilterPage);
 
-        return _possibleConstructorReturn(this, (FilterPage.__proto__ || Object.getPrototypeOf(FilterPage)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (FilterPage.__proto__ || Object.getPrototypeOf(FilterPage)).call(this, props));
+
+        _this.state = {
+            accuPricingModalIsOpen: false
+        };
+        return _this;
     }
 
     _createClass(FilterPage, [{
@@ -42426,14 +42430,10 @@ var FilterPage = function (_React$PureComponent) {
     }, {
         key: 'renderCalculatorModal',
         value: function renderCalculatorModal() {
-            var _this2 = this;
-
             return _react2.default.createElement(
                 _Modal2.default,
                 {
-                    onClose: function onClose() {
-                        return _this2.props.clearSelectedDeal();
-                    },
+                    onClose: this.props.clearSelectedDeal,
                     closeText: 'Back to results'
                 },
                 _react2.default.createElement(_CashFinanceLeaseCalculator2.default, null)
@@ -42451,6 +42451,75 @@ var FilterPage = function (_React$PureComponent) {
             );
         }
     }, {
+        key: 'renderAccuPricingCta',
+        value: function renderAccuPricingCta() {
+            var _this2 = this;
+
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(_AccuPricingModal2.default, { isOpen: this.state.accuPricingModalIsOpen, onClose: function onClose() {
+                        return _this2.setState({ accuPricingModalIsOpen: false });
+                    } }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'accupricing-cta accupricing-cta--horizontal' },
+                    _react2.default.createElement(
+                        'a',
+                        { onClick: function onClick() {
+                                return _this2.setState({ accuPricingModalIsOpen: true });
+                            } },
+                        _react2.default.createElement('img', { src: '/images/accupricing-logo.png', className: 'accupricing-cta__logo' })
+                    ),
+                    _react2.default.createElement(
+                        'p',
+                        { className: 'accupricing-cta__disclaimer' },
+                        '* Includes taxes, dealer fees and rebates.'
+                    )
+                )
+            );
+        }
+    }, {
+        key: 'renderSelectedTabButtons',
+        value: function renderSelectedTabButtons() {
+            var _this3 = this;
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'button-group' },
+                _react2.default.createElement(
+                    'div',
+                    {
+                        onClick: function onClick() {
+                            _this3.handleTabChange('cash');
+                        },
+                        className: 'button-group__button ' + (this.props.selectedTab === 'cash' ? 'button-group__button--selected' : '')
+                    },
+                    'Cash'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    {
+                        onClick: function onClick() {
+                            _this3.handleTabChange('finance');
+                        },
+                        className: 'button-group__button ' + (this.props.selectedTab === 'finance' ? 'button-group__button--selected' : '')
+                    },
+                    'Finance'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    {
+                        onClick: function onClick() {
+                            _this3.handleTabChange('lease');
+                        },
+                        className: 'button-group__button ' + (this.props.selectedTab === 'lease' ? 'button-group__button--selected' : '')
+                    },
+                    'Lease'
+                )
+            );
+        }
+    }, {
         key: 'renderDeals',
         value: function renderDeals() {
             var className = 'filter-page__deals ' + (_util2.default.windowIsLargerThanSmall(this.props.window.width) ? '' : 'filter-page__deals--small ' + (this.props.smallFiltersShown ? 'filter-page__deals--small-filters-shown' : 'filter-page__deals--small-filters-hidden'));
@@ -42458,7 +42527,25 @@ var FilterPage = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 { className: className },
-                _react2.default.createElement(_Sortbar2.default, null),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'filter-page__top-row' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'filter-page__top-row__section filter-page__top-row__section--accuPricing' },
+                        this.renderAccuPricingCta()
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'filter-page__top-row__section filter-page__top-row__section--tabButtons' },
+                        this.renderSelectedTabButtons()
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'filter-page__top-row__section filter-page__top-row__section--sortbar' },
+                        _react2.default.createElement(_Sortbar2.default, null)
+                    )
+                ),
                 _react2.default.createElement(_Filterbar2.default, null),
                 _react2.default.createElement(_Deals2.default, null),
                 _react2.default.createElement(_CompareBar2.default, null)
@@ -42485,6 +42572,12 @@ var FilterPage = function (_React$PureComponent) {
                 this.renderFilterPanelAndDeals()
             );
         }
+    }, {
+        key: 'handleTabChange',
+        value: function handleTabChange(tabName) {
+            this.props.selectTab(tabName);
+            this.props.getBestOffersForLoadedDeals();
+        }
     }]);
 
     return FilterPage;
@@ -42502,7 +42595,8 @@ var mapStateToProps = function mapStateToProps(state) {
         clearSelectedDeal: state.clearSelectedDeal,
         smallFiltersShown: state.smallFiltersShown,
         showMakeSelectorModal: state.showMakeSelectorModal,
-        selectedDeal: state.selectedDeal
+        selectedDeal: state.selectedDeal,
+        selectedTab: state.selectedTab
     };
 };
 
@@ -53115,32 +53209,6 @@ var DealPrice = function (_React$PureComponent) {
             }
         }
     }, {
-        key: 'renderAppliedTargetsLink',
-        value: function renderAppliedTargetsLink() {
-            var _this2 = this;
-
-            return _react2.default.createElement(
-                'div',
-                { className: 'deal-price__rebates-applied' },
-                _react2.default.createElement(_reactSvgInline2.default, {
-                    height: '10px',
-                    width: '10px',
-                    className: 'deal-price__tag-icon',
-                    svg: _miscicons2.default['tag']
-                }),
-                _react2.default.createElement(
-                    'a',
-                    {
-                        onClick: function onClick() {
-                            return _this2.props.selectDeal(_this2.props.deal);
-                        },
-                        href: '#'
-                    },
-                    'See Available Targets'
-                )
-            );
-        }
-    }, {
         key: 'handleTabChange',
         value: function handleTabChange(tabName) {
             this.props.selectTab(tabName);
@@ -53149,51 +53217,14 @@ var DealPrice = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
-            var _this3 = this;
-
             return _react2.default.createElement(
                 'div',
                 { className: 'deal-price' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'tabs' },
-                    _react2.default.createElement(
-                        'div',
-                        {
-                            onClick: function onClick() {
-                                _this3.handleTabChange('cash');
-                            },
-                            className: 'tabs__tab ' + (this.props.selectedTab === 'cash' ? 'tabs__tab--selected' : '')
-                        },
-                        'Cash'
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        {
-                            onClick: function onClick() {
-                                _this3.handleTabChange('finance');
-                            },
-                            className: 'tabs__tab ' + (this.props.selectedTab === 'finance' ? 'tabs__tab--selected' : '')
-                        },
-                        'Finance'
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        {
-                            onClick: function onClick() {
-                                _this3.handleTabChange('lease');
-                            },
-                            className: 'tabs__tab ' + (this.props.selectedTab === 'lease' ? 'tabs__tab--selected' : '')
-                        },
-                        'Lease'
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
                     { className: 'tabs__content' },
                     this.renderSelectedTab()
-                ),
-                this.renderAppliedTargetsLink()
+                )
             );
         }
     }]);
@@ -59499,12 +59530,6 @@ var Sortbar = function (_React$PureComponent) {
                 'div',
                 { className: 'sortbar__buttons' },
                 _react2.default.createElement(
-                    'div',
-                    { className: 'sortbar__label' },
-                    'Sort results by: ',
-                    _react2.default.createElement('br', null)
-                ),
-                _react2.default.createElement(
                     'button',
                     {
                         className: 'sortbar__button sortbar__button',
@@ -59512,6 +59537,7 @@ var Sortbar = function (_React$PureComponent) {
                             return _this2.toggleDropdownShown();
                         }
                     },
+                    'Sort results by...',
                     _react2.default.createElement(_reactSvgInline2.default, {
                         height: '18px',
                         width: '18px',

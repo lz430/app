@@ -2,11 +2,8 @@
 @import '../variables';
 
 .sortbar {
-  border-bottom: 1px solid $color-section-bottom-border;
   display: flex;
-  height: $sortbar-height;
-  max-height: $sortbar-height;
-  padding: 5px 10px 5px 0;
+  padding-left: 1em;
 
   &__buttons {
     display: flex;
@@ -22,6 +19,8 @@
 
     background-color: $color-lightgrey;
     width: 200px;
+    font-size: 1rem;
+    padding: .35em;
 
     &:not(:last-of-type) {
       margin-right: 10px;
@@ -37,7 +36,7 @@
 
     &--right-side {
       float: right;
-      margin: -5px -5px 0 0;
+      margin: 0 -5px 0 0;
     }
 
     svg {
@@ -52,8 +51,8 @@
     max-width: calc(100% - 20px);
     padding: 5px;
     position: absolute;
-    right: 10px;
-    top: $sortbar-height - 3px;
+    right: 40px;
+    top: 2em;
 
     div {
       cursor: pointer;

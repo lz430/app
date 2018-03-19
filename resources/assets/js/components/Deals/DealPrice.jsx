@@ -123,25 +123,6 @@ class DealPrice extends React.PureComponent {
         }
     }
 
-    renderAppliedTargetsLink() {
-        return (
-            <div className="deal-price__rebates-applied">
-                <SVGInline
-                    height="10px"
-                    width="10px"
-                    className="deal-price__tag-icon"
-                    svg={miscicons['tag']}
-                />
-                <a
-                    onClick={() => this.props.selectDeal(this.props.deal)}
-                    href="#"
-                >
-                    See Available Targets
-                </a>
-            </div>
-        );
-    }
-
     handleTabChange(tabName) {
         this.props.selectTab(tabName);
         this.props.getBestOffersForLoadedDeals();
@@ -150,46 +131,7 @@ class DealPrice extends React.PureComponent {
     render() {
         return (
             <div className="deal-price">
-                <div className="tabs">
-                    <div
-                        onClick={() => {
-                            this.handleTabChange('cash');
-                        }}
-                        className={`tabs__tab ${
-                            this.props.selectedTab === 'cash'
-                                ? 'tabs__tab--selected'
-                                : ''
-                        }`}
-                    >
-                        Cash
-                    </div>
-                    <div
-                        onClick={() => {
-                            this.handleTabChange('finance');
-                        }}
-                        className={`tabs__tab ${
-                            this.props.selectedTab === 'finance'
-                                ? 'tabs__tab--selected'
-                                : ''
-                        }`}
-                    >
-                        Finance
-                    </div>
-                    <div
-                        onClick={() => {
-                            this.handleTabChange('lease');
-                        }}
-                        className={`tabs__tab ${
-                            this.props.selectedTab === 'lease'
-                                ? 'tabs__tab--selected'
-                                : ''
-                        }`}
-                    >
-                        Lease
-                    </div>
-                </div>
                 <div className="tabs__content">{this.renderSelectedTab()}</div>
-                {this.renderAppliedTargetsLink()}
             </div>
         );
     }
