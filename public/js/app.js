@@ -23004,7 +23004,9 @@ var DealImage = function (_React$PureComponent) {
         key: 'extractFuelImages',
         value: function extractFuelImages(data) {
             return data.data.products.map(function (product) {
-                return product.productFormats.map(function (format) {
+                return product.productFormats.filter(function (format) {
+                    return format.assets.length > 0;
+                }).map(function (format) {
                     return {
                         id: 'fuel_external_' + format.id,
                         url: format.assets[0].url
@@ -59273,7 +59275,9 @@ var ModelYearImage = function (_React$PureComponent) {
         key: 'extractFuelImages',
         value: function extractFuelImages(data) {
             return data.data.products.map(function (product) {
-                return product.productFormats.map(function (format) {
+                return product.productFormats.filter(function (format) {
+                    return format.assets.length > 0;
+                }).map(function (format) {
                     return {
                         id: 'fuel_external_' + format.id,
                         url: format.assets[0].url
@@ -63218,7 +63222,9 @@ var DealDetails = function (_React$PureComponent) {
         key: 'extractFuelImages',
         value: function extractFuelImages(data) {
             return data.data.products.map(function (product) {
-                return product.productFormats.map(function (format) {
+                return product.productFormats.filter(function (format) {
+                    return format.assets.length > 0;
+                }).map(function (format) {
                     return {
                         id: 'fuel_external_' + format.id,
                         url: format.assets[0].url
