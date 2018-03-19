@@ -1,0 +1,25 @@
+@import '../variables';
+@import '../mixins/button';
+
+.accupricing-modal {
+  background-color: $color-background-secondary;
+  border: 1px solid $color-grey;
+  height: fit-content;
+  margin: $deal-card-margin;
+  max-width: $deal-card-width * 2;
+  min-width: $deal-card-width;
+  padding: 1.5em;
+  text-align: left;
+
+  &__logo {
+    max-width: 20rem;
+    height: auto;
+    display: block;
+  }
+
+  p em {
+    text-decoration: underline;
+    font-style: normal;
+  }
+}
+

@@ -901,7 +901,7 @@ body {
   position: fixed;
   top: 0;
   width: 100vw;
-  z-index: 1;
+  z-index: 20;
 }
 
 .modal__wrapper {
@@ -916,7 +916,7 @@ body {
   right: 0;
   top: 60px;
   width: 100vw;
-  z-index: 5;
+  z-index: 25;
 }
 
 .modal__content {
@@ -4582,6 +4582,47 @@ body {
 .confirm-deal__pricing-details {
   font-size: 1.25em;
   text-decoration: underline;
+}
+
+.accupricing-cta {
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.accupricing-cta__logo {
+  max-width: 10rem;
+  height: auto;
+  display: block;
+  cursor: pointer;
+}
+
+.accupricing-cta__disclaimer {
+  margin: 0;
+  font-size: 12px;
+}
+
+.accupricing-modal {
+  background-color: #fff;
+  border: 1px solid #ced4d9;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  margin: 5px;
+  max-width: 600px;
+  min-width: 300px;
+  padding: 1.5em;
+  text-align: left;
+}
+
+.accupricing-modal__logo {
+  max-width: 20rem;
+  height: auto;
+  display: block;
+}
+
+.accupricing-modal p em {
+  text-decoration: underline;
+  font-style: normal;
 }
 
 .welcome__top {

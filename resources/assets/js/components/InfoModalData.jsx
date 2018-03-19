@@ -2,7 +2,6 @@ import * as Actions from 'actions/index';
 import { connect } from 'react-redux';
 import formulas from 'src/formulas';
 import miscicons from 'miscicons';
-import Modal from 'components/Modal';
 import PropTypes from 'prop-types';
 import R from 'ramda';
 import React from 'react';
@@ -13,8 +12,17 @@ import {
     makeDealBestOfferTotalValue,
     makeDealBestOffer,
 } from 'selectors/index';
+import AccuPricingModal from 'components/AccuPricingModal';
 
 class InfoModalData extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            accuPricingModalIsOpen: false,
+        };
+    }
+
     componentDidMount() {
         this.props.requestTargets(this.props.deal);
         this.props.requestBestOffer(this.props.deal);
@@ -213,23 +221,6 @@ class InfoModalData extends React.PureComponent {
         }
     }
 
-    renderPricingDisclaimer() {
-        if (this.selectedTab === 'finance') {
-            return (
-                <p className="info-modal-data__disclaimer">
-                    ** Monthly payment is based on 4% simple interest and
-                    assumes good to excellent credit rating.
-                </p>
-            );
-        } else {
-            return (
-                <p className="info-modal-data__disclaimer">
-                    ** Monthly Payment assumes good to excellent credit rating.
-                </p>
-            );
-        }
-    }
-
     render() {
         return (
             <div>
@@ -262,9 +253,9 @@ class InfoModalData extends React.PureComponent {
                             {this.props.selectedTab === 'cash' &&
                                 <div className="info-modal-data__costs info-modal-data__costs--final">
                                     <div className="info-modal-data__label">
-                                        Your Cash Price:
+                                        Your Price:
                                     </div>
-                                    <div className="info-modal-data__amount">{util.moneyFormat(this.calculateYourCashPrice())}</div>
+                                    <div className="info-modal-data__amount">{util.moneyFormat(this.calculateYourCashPrice())}*</div>
                                 </div>
                             }
 
@@ -306,15 +297,15 @@ class InfoModalData extends React.PureComponent {
                                 Get Quote
                             </button>
                         </div>
-
-                        <p className="info-modal-data__disclaimer">
-                            * Price includes doc fees, sales tax, and dealer
-                            fees but does not include license and registration
-                            fees.
-                        </p>
-                        {this.props.selectedTab === 'cash'
-                            ? ''
-                            : this.renderPricingDisclaimer()}
+                        <AccuPricingModal isOpen={this.state.accuPricingModalIsOpen} onClose={() => this.setState({accuPricingModalIsOpen: false})} />
+                        <div className="accupricing-cta">
+                            <a onClick={() => this.setState({accuPricingModalIsOpen: true})}>
+                                <img src="/images/accupricing-logo.png" className="accupricing-cta__logo" />
+                            </a>
+                            <p className="accupricing-cta__disclaimer">
+                                * Includes taxes, dealer fees and rebates.
+                            </p>
+                        </div>
                     </div>
 
                     {this.props.children}
