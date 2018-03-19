@@ -201,7 +201,7 @@ class InfoModalData extends React.PureComponent {
                         <div className="info-modal-data__label">
                             Cash Due:
                         </div>
-                        <div className="info-modal-data__amount">${util.moneyFormat(leaseCashDue)}</div>
+                        <div className="info-modal-data__amount">{util.moneyFormat(leaseCashDue)}</div>
                     </div>
 
                     <div className="info-modal-data__costs">
