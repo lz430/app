@@ -80,7 +80,9 @@ class DealDetails extends React.PureComponent {
     extractFuelImages(data) {
         return (
             data.data.products.map(product =>
-                product.productFormats.map(format => {
+                product.productFormats.filter(format => {
+                    return format.assets.length > 0;
+                }).map(format => {
                     return {
                         id: `fuel_external_${format.id}`,
                         url: format.assets[0].url,
