@@ -10636,6 +10636,11 @@ var Deal = function (_React$PureComponent) {
                                 'div',
                                 { className: 'deal__basic-info-model-and-series' },
                                 deal.model + ' ' + deal.series
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'deal__basic-info-color' },
+                                deal.color
                             )
                         )
                     ),
