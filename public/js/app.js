@@ -1008,12 +1008,23 @@ function requestDealsOrModelYears() {
             return;
         }
 
+        var cancelTokenContext = 'search';
+        dispatch(cancelPromises(cancelTokenContext));
+
+        var CancelToken = window.axios.CancelToken;
+        var source = CancelToken.source();
+        var cancelTokenIdentifier = 'search-' + getState().filterPage;
+
+        dispatch(appendCancelToken(source, cancelTokenContext, cancelTokenIdentifier));
         _api2.default.applySearchFilters(getState().filterPage, withStateDefaults(getState(), params)).then(function (data) {
+            dispatch(removeCancelToken(cancelTokenIdentifier));
             if (getState().filterPage == 'deals') {
                 dispatch(receiveDeals(data));
             } else {
                 dispatch(receiveModelYears(data));
             }
+        }).catch(function (e) {
+            dispatch(removeCancelToken(cancelTokenIdentifier));
         });
     };
 }
@@ -1367,12 +1378,12 @@ function requestBestOffer(deal) {
             var CancelToken = window.axios.CancelToken;
             var source = CancelToken.source();
 
-            dispatch(appendCancelToken(deal, source, 'bestOffer'));
+            dispatch(appendCancelToken(source, 'bestOffer', deal.id));
             _api2.default.getBestOffer(deal.id, paymentType, zipcode, targets, source).then(function (data) {
-                dispatch(removeCancelToken(deal));
+                dispatch(removeCancelToken(deal.id));
                 dispatch(receiveBestOffer(data, bestOfferKey, paymentType));
             }).catch(function (e) {
-                dispatch(removeCancelToken(deal));
+                dispatch(removeCancelToken(deal.id));
                 dispatch(receiveBestOffer({
                     data: {
                         data: {
@@ -1407,24 +1418,25 @@ function receiveBestOffer(data, bestOfferKey, paymentType) {
     };
 }
 
-function appendCancelToken(deal, cancelToken) {
-    var context = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'default';
+function appendCancelToken(cancelToken) {
+    var context = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'default';
+    var identifier = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
     return function (dispatch) {
         dispatch({
             type: ActionTypes.APPEND_CANCEL_TOKEN,
-            deal: deal,
+            identifier: identifier,
             cancelToken: cancelToken,
             context: context
         });
     };
 }
 
-function removeCancelToken(deal) {
+function removeCancelToken(identifier) {
     return function (dispatch) {
         dispatch({
             type: ActionTypes.REMOVE_CANCEL_TOKEN,
-            deal: deal
+            identifier: identifier
         });
     };
 }
@@ -1452,7 +1464,6 @@ function cancelPromises(context) {
             }
         });
 
-        dispatch({ type: ActionTypes.CANCEL_ALL_PROMISES });
         dispatch(clearCancelTokens(context));
     };
 }
@@ -22967,7 +22978,6 @@ var SAME_BEST_OFFERS = exports.SAME_BEST_OFFERS = 'SAME_BEST_OFFERS';
 var APPEND_CANCEL_TOKEN = exports.APPEND_CANCEL_TOKEN = 'APPEND_CANCEL_TOKEN';
 var REMOVE_CANCEL_TOKEN = exports.REMOVE_CANCEL_TOKEN = 'REMOVE_CANCEL_TOKEN';
 var CLEAR_CANCEL_TOKENS = exports.CLEAR_CANCEL_TOKENS = 'CLEAR_CANCEL_TOKENS';
-var CANCEL_ALL_PROMISES = exports.CANCEL_ALL_PROMISES = 'CANCEL_ALL_PROMISES';
 var REQUEST_ALL_BEST_OFFERS = exports.REQUEST_ALL_BEST_OFFERS = 'REQUEST_ALL_BEST_OFFERS';
 var SHOW_ACCUPRICING_MODAL = exports.SHOW_ACCUPRICING_MODAL = 'SHOW_ACCUPRICING_MODAL';
 var HIDE_ACCUPRICING_MODAL = exports.HIDE_ACCUPRICING_MODAL = 'HIDE_ACCUPRICING_MODAL';
@@ -62427,7 +62437,7 @@ var initialState = {
     annualMileage: 10000,
     bestOffers: [],
     bodyStyles: null,
-    cancelTokens: [], // A list of tokens to cancel axios calls for best offers
+    cancelTokens: [], // A list of tokens to cancel axios calls
     city: null,
     compareList: [],
     dealBestOffer: null,
@@ -63082,7 +63092,7 @@ var reducer = function reducer(state, action) {
         case ActionTypes.APPEND_CANCEL_TOKEN:
             return _extends({}, state, {
                 cancelTokens: [].concat(_toConsumableArray(state.cancelTokens), [{
-                    dealId: action.deal.id,
+                    identifier: action.identifier,
                     source: action.cancelToken,
                     context: action.context
                 }])
@@ -63090,7 +63100,7 @@ var reducer = function reducer(state, action) {
 
         case ActionTypes.REMOVE_CANCEL_TOKEN:
             return _extends({}, state, {
-                cancelTokens: _ramda2.default.reject(_ramda2.default.propEq('dealId', action.deal.id), state.cancelTokens)
+                cancelTokens: _ramda2.default.reject(_ramda2.default.propEq('identifier', action.identifier), state.cancelTokens)
             });
 
         case ActionTypes.CLEAR_CANCEL_TOKENS:

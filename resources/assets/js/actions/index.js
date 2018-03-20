@@ -295,17 +295,29 @@ export function requestDealsOrModelYears(params = {}) {
             return;
         }
 
+        const cancelTokenContext = 'search';
+        dispatch(cancelPromises(cancelTokenContext));
+
+        const CancelToken = window.axios.CancelToken;
+        const source = CancelToken.source();
+        const cancelTokenIdentifier = 'search-' + getState().filterPage;
+
+        dispatch(appendCancelToken(source, cancelTokenContext, cancelTokenIdentifier));
         api
             .applySearchFilters(
                 getState().filterPage,
                 withStateDefaults(getState(), params)
             )
             .then(data => {
+                dispatch(removeCancelToken(cancelTokenIdentifier));
                 if (getState().filterPage == 'deals') {
                     dispatch(receiveDeals(data));
                 } else {
                     dispatch(receiveModelYears(data));
                 }
+            })
+            .catch(e => {
+                dispatch(removeCancelToken(cancelTokenIdentifier));
             });
     };
 }
@@ -688,15 +700,15 @@ export function requestBestOffer(deal) {
             const CancelToken = window.axios.CancelToken;
             const source = CancelToken.source();
 
-            dispatch(appendCancelToken(deal, source, 'bestOffer'));
+            dispatch(appendCancelToken(source, 'bestOffer', deal.id));
             api
                 .getBestOffer(deal.id, paymentType, zipcode, targets, source)
                 .then(data => {
-                    dispatch(removeCancelToken(deal));
+                    dispatch(removeCancelToken(deal.id));
                     dispatch(receiveBestOffer(data, bestOfferKey, paymentType));
                 })
                 .catch(e => {
-                    dispatch(removeCancelToken(deal));
+                    dispatch(removeCancelToken(deal.id));
                     dispatch(
                         receiveBestOffer({
                             data: {
@@ -735,22 +747,22 @@ export function receiveBestOffer(data, bestOfferKey, paymentType) {
     };
 }
 
-export function appendCancelToken(deal, cancelToken, context = 'default') {
+export function appendCancelToken(cancelToken, context = 'default', identifier = null) {
     return dispatch => {
         dispatch({
             type: ActionTypes.APPEND_CANCEL_TOKEN,
-            deal,
+            identifier,
             cancelToken,
             context,
         });
     };
 }
 
-export function removeCancelToken(deal) {
+export function removeCancelToken(identifier) {
     return dispatch => {
         dispatch({
             type: ActionTypes.REMOVE_CANCEL_TOKEN,
-            deal,
+            identifier,
         });
     };
 }
@@ -778,7 +790,6 @@ export function cancelPromises(context) {
                 }
             });
 
-        dispatch({ type: ActionTypes.CANCEL_ALL_PROMISES });
         dispatch(clearCancelTokens(context));
     };
 }
