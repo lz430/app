@@ -23,6 +23,8 @@ class Filterbar extends React.PureComponent {
     }
 
     renderX() {
+        return (<span></span>);
+
         return (
             <SVGInline
                 height="10px"
@@ -37,11 +39,13 @@ class Filterbar extends React.PureComponent {
         return (
             <div
                 className="filterbar__filter"
+            >
+                {/*
                 onClick={this.props.chooseTransmissionType.bind(
                     null,
                     transmissionType
                 )}
-            >
+                */}
                 {transmissionType} {this.renderX()}
             </div>
         );
@@ -51,8 +55,10 @@ class Filterbar extends React.PureComponent {
         return (
             <div
                 className="filterbar__filter"
-                onClick={this.props.chooseFuelType.bind(null, fuelType)}
             >
+                {/*
+                onClick={this.props.chooseFuelType.bind(null, fuelType)}
+                */}
                 {fuelType} {this.renderX()}
             </div>
         );
@@ -62,8 +68,10 @@ class Filterbar extends React.PureComponent {
         return (
             <div
                 className="filterbar__filter"
-                onClick={this.props.chooseSegment.bind(null, segment)}
             >
+                {/*
+                onClick={this.props.chooseSegment.bind(null, segment)}
+                */}
                 {segment} {this.renderX()}
             </div>
         );
@@ -73,8 +81,10 @@ class Filterbar extends React.PureComponent {
         return (
             <div
                 className="filterbar__filter"
-                onClick={this.props.chooseYear.bind(null, year)}
             >
+            {/*
+                onClick={this.props.chooseYear.bind(null, year)}
+            */}
                 {year} {this.renderX()}
             </div>
         );
@@ -85,8 +95,10 @@ class Filterbar extends React.PureComponent {
             <div
                 key={index}
                 className="filterbar__filter"
-                onClick={this.props.toggleStyle.bind(null, style)}
             >
+            {/*
+                onClick={this.props.toggleStyle.bind(null, style)}
+            */}
                 {style} {this.renderX()}
             </div>
         );
@@ -99,8 +111,10 @@ class Filterbar extends React.PureComponent {
             <div
                 key={index}
                 className="filterbar__filter"
-                onClick={this.props.toggleMake.bind(null, makeId)}
             >
+            {/*
+                onClick={this.props.toggleMake.bind(null, makeId)}
+            */}
                 {make.attributes.name} {this.renderX()}
             </div>
         );
@@ -111,8 +125,10 @@ class Filterbar extends React.PureComponent {
             <div
                 key={index}
                 className="filterbar__filter"
-                onClick={this.props.toggleModel.bind(null, model)}
             >
+            {/*
+                onClick={this.props.toggleModel.bind(null, model)}
+            */}
                 {model.attributes.name} {this.renderX()}
             </div>
         );
@@ -123,8 +139,10 @@ class Filterbar extends React.PureComponent {
             <div
                 key={index}
                 className="filterbar__filter"
-                onClick={this.props.toggleFeature.bind(null, feature)}
             >
+            {/*
+                onClick={this.props.toggleFeature.bind(null, feature)}
+            */}
                 {feature} {this.renderX()}
             </div>
         );
