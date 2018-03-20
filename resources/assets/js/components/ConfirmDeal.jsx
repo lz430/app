@@ -262,7 +262,7 @@ class ConfirmDeal extends React.PureComponent {
                             onClick={() =>
                                 this.props.selectDeal(this.props.deal)
                             }
-                            href="#"
+                            className="link"
                         >
                             Get Rebates
                         </a>

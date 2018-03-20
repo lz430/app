@@ -8981,3 +8981,7 @@ comparepage {
   }
 }
 
+.link {
+  cursor: pointer;
+}
+
