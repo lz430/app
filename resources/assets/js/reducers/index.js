@@ -83,6 +83,7 @@ const reducer = (state, action) => {
         case ActionTypes.CLEAR_MODEL_YEAR:
             return Object.assign({}, state, {
                 selectedModels: null,
+                selectedYear: null,
                 filterPage: 'models',
             });
         case ActionTypes.SELECT_MODEL_YEAR:
