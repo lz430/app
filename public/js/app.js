@@ -997,9 +997,6 @@ function requestDealsOrModelYears() {
     var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
     return function (dispatch, getState) {
-        console.log('Fetching:', getState().filterPage);
-        console.log(getState());
-
         dispatch({
             type: getState().filterPage == 'deals' ? ActionTypes.REQUEST_DEALS : ActionTypes.REQUEST_MODEL_YEARS
         });

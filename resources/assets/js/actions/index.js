@@ -283,9 +283,6 @@ export function clearModelYear() {
 
 export function requestDealsOrModelYears(params = {}) {
     return (dispatch, getState) => {
-        console.log('Fetching:', getState().filterPage);
-        console.log(getState());
-
         dispatch({
             type:
                 getState().filterPage == 'deals'
