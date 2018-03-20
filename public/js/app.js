@@ -42650,7 +42650,7 @@ var FilterPage = function (_React$PureComponent) {
                         { className: 'filter-page__top-row__section filter-page__top-row__section--accuPricing' },
                         this.renderAccuPricingCta()
                     ),
-                    _react2.default.createElement(
+                    this.props.deals && this.props.deals.length > 0 && _react2.default.createElement(
                         'div',
                         { className: 'filter-page__top-row__section filter-page__top-row__section--tabButtons' },
                         this.renderSelectedTabButtons()
@@ -42711,7 +42711,8 @@ var mapStateToProps = function mapStateToProps(state) {
         smallFiltersShown: state.smallFiltersShown,
         showMakeSelectorModal: state.showMakeSelectorModal,
         selectedDeal: state.selectedDeal,
-        selectedTab: state.selectedTab
+        selectedTab: state.selectedTab,
+        deals: state.deals
     };
 };
 
