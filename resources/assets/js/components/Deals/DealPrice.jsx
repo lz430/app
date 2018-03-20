@@ -78,6 +78,10 @@ class DealPrice extends React.PureComponent {
                     {this.renderPriceExplanationModal()}
                 </div>
                 <div className="deal-price__hr" />
+                <div className="deal-price__cash-msrp">
+                    {util.moneyFormat(this.props.deal.msrp)}{' '}
+                    <span className="deal-price__cash-msrp-label">MSRP</span>
+                </div>
             </div>
         );
     }
@@ -108,6 +112,10 @@ class DealPrice extends React.PureComponent {
                     {this.renderPriceExplanationModal()}
                 </div>
                 <div className="deal-price__hr" />
+                <div className="deal-price__cash-msrp">
+                    {util.moneyFormat(this.props.deal.msrp)}{' '}
+                    <span className="deal-price__cash-msrp-label">MSRP</span>
+                </div>
             </div>
         );
     }

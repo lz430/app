@@ -1643,6 +1643,12 @@ body {
   font-size: x-large;
 }
 
+.deal__basic-info-color {
+  color: #535d63;
+  font-size: small;
+  margin-top: 2px;
+}
+
 .deal__basic-info-msrp {
   color: #1e2123;
   display: block;

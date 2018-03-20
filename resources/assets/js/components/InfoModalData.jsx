@@ -12,17 +12,8 @@ import {
     makeDealBestOfferTotalValue,
     makeDealBestOffer,
 } from 'selectors/index';
-import AccuPricingModal from 'components/AccuPricingModal';
 
 class InfoModalData extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            accuPricingModalIsOpen: false,
-        };
-    }
-
     componentDidMount() {
         this.props.requestTargets(this.props.deal);
         this.props.requestBestOffer(this.props.deal);
@@ -297,9 +288,8 @@ class InfoModalData extends React.PureComponent {
                                 Get Quote
                             </button>
                         </div>
-                        <AccuPricingModal isOpen={this.state.accuPricingModalIsOpen} onClose={() => this.setState({accuPricingModalIsOpen: false})} />
                         <div className="accupricing-cta">
-                            <a onClick={() => this.setState({accuPricingModalIsOpen: true})}>
+                            <a onClick={this.props.showAccuPricingModal}>
                                 <img src="/images/accupricing-logo.png" className="accupricing-cta__logo" />
                             </a>
                             <p className="accupricing-cta__disclaimer">

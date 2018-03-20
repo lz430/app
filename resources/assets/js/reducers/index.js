@@ -274,6 +274,16 @@ const reducer = (state, action) => {
                     state.cancelTokens
                 ),
             };
+        case ActionTypes.SHOW_ACCUPRICING_MODAL:
+            return {
+                ...state,
+                accuPricingModalIsShowing: true
+            };
+        case ActionTypes.HIDE_ACCUPRICING_MODAL:
+            return {
+                ...state,
+                accuPricingModalIsShowing: false
+            };
     }
 
     return state;

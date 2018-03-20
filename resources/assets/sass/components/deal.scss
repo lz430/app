@@ -42,6 +42,12 @@
     font-size: x-large;
   }
 
+  &__basic-info-color {
+    color: $color-darkergrey;
+    font-size: small;
+    margin-top: 2px;
+  }
+
   &__basic-info-msrp {
     color: $text-color-dark;
     display: block;
