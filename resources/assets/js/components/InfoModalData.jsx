@@ -264,7 +264,7 @@ class InfoModalData extends React.PureComponent {
                                 Additional rebates may apply. {' '}
                                 <a
                                     onClick={this.handleGetRebatesLink.bind(this)}
-                                    href="#"
+                                    className="link"
                                 >
                                     See more
                                 </a>

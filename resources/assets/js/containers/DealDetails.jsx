@@ -314,13 +314,12 @@ class DealDetails extends React.PureComponent {
                             return <li key={index}>{feature.feature}</li>;
                         })}
                     </ul>
-                    <a
-                        href="#"
-                        className="deal-details__deal-content-see-all"
+                    <span
+                        className="link deal-details__deal-content-see-all"
                         onClick={() => this.showStandardFeatures()}
                     >
                         See all standard features &gt;
-                    </a>
+                    </span>
                     <div className="deal-details__deal-content-subtitle">
                         Vehicle #{deal.vin.substr(deal.vin.length - 8)} Additional Options
                     </div>
@@ -332,9 +331,8 @@ class DealDetails extends React.PureComponent {
                             })}
                     </ul>
                     <a
-                        href="#"
-                        className="deal-details__deal-content-see-all"
-                        onClick={() => this.showFeatures()}
+                        className="link deal-details__deal-content-see-all"
+                        onClick={(e) => this.showFeatures(e)}
                     >
                         See all additional options &gt;
                     </a>

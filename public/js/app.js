@@ -692,6 +692,7 @@ exports.toggleStyle = toggleStyle;
 exports.chooseFuelType = chooseFuelType;
 exports.chooseTransmissionType = chooseTransmissionType;
 exports.chooseSegment = chooseSegment;
+exports.chooseYear = chooseYear;
 exports.clearAllFilters = clearAllFilters;
 exports.toggleCompare = toggleCompare;
 exports.setZipCode = setZipCode;
@@ -998,8 +999,6 @@ function requestDealsOrModelYears() {
     var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
     return function (dispatch, getState) {
-        console.log('Fetching:', getState().filterPage);
-
         dispatch({
             type: getState().filterPage == 'deals' ? ActionTypes.REQUEST_DEALS : ActionTypes.REQUEST_MODEL_YEARS
         });
@@ -1137,6 +1136,21 @@ function chooseSegment(segment) {
 
         requestDealsOrModelYears({
             segment: selectedSegment
+        });
+    };
+}
+
+function chooseYear(year) {
+    return function (dispatch, getState) {
+        var selectedYear = getState().selectedYear === year ? null : year;
+
+        dispatch({
+            type: ActionTypes.CHOOSE_YEAR,
+            selectedYear: selectedYear
+        });
+
+        requestDealsOrModelYears({
+            year: selectedYear
         });
     };
 }
@@ -22928,6 +22942,7 @@ var CLEAR_SELECTED_DEAL = exports.CLEAR_SELECTED_DEAL = 'CLEAR_SELECTED_DEAL';
 var TOGGLE_TARGET = exports.TOGGLE_TARGET = 'TOGGLE_TARGET';
 var SELECT_REBATE = exports.SELECT_REBATE = 'SELECT_REBATE';
 var CHOOSE_SEGMENT = exports.CHOOSE_SEGMENT = 'CHOOSE_SEGMENT';
+var CHOOSE_YEAR = exports.CHOOSE_YEAR = 'CHOOSE_YEAR';
 var UPDATE_DOWN_PAYMENT = exports.UPDATE_DOWN_PAYMENT = 'UPDATE_DOWN_PAYMENT';
 var SET_IS_EMPLOYEE = exports.SET_IS_EMPLOYEE = 'SET_IS_EMPLOYEE';
 var UPDATE_TERM_DURATION = exports.UPDATE_TERM_DURATION = 'UPDATE_TERM_DURATION';
@@ -58292,8 +58307,7 @@ var InfoModal = function (_React$PureComponent) {
                         onClick: function onClick() {
                             return _this3.toggleModal();
                         },
-                        href: '#',
-                        className: 'infomodal__button'
+                        className: 'link infomodal__button'
                     },
                     _react2.default.createElement(_reactSvgInline2.default, {
                         width: '15px',
@@ -58703,7 +58717,7 @@ var InfoModalData = function (_React$PureComponent) {
                                     'a',
                                     {
                                         onClick: this.handleGetRebatesLink.bind(this),
-                                        href: '#'
+                                        className: 'link'
                                     },
                                     'See more'
                                 )
@@ -59666,6 +59680,8 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -59685,6 +59701,7 @@ var Filterbar = function (_React$PureComponent) {
         _this.renderFilterModels = _this.renderFilterModels.bind(_this);
         _this.renderFilterTransmissionType = _this.renderFilterTransmissionType.bind(_this);
         _this.renderFilterSegment = _this.renderFilterSegment.bind(_this);
+        _this.renderFilterYear = _this.renderFilterYear.bind(_this);
         _this.renderFilterFeatures = _this.renderFilterFeatures.bind(_this);
         _this.renderX = _this.renderX.bind(_this);
         return _this;
@@ -59693,6 +59710,8 @@ var Filterbar = function (_React$PureComponent) {
     _createClass(Filterbar, [{
         key: 'renderX',
         value: function renderX() {
+            return _react2.default.createElement('span', null);
+
             return _react2.default.createElement(_reactSvgInline2.default, {
                 height: '10px',
                 width: '10px',
@@ -59706,8 +59725,7 @@ var Filterbar = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 {
-                    className: 'filterbar__filter',
-                    onClick: this.props.chooseTransmissionType.bind(null, transmissionType)
+                    className: 'filterbar__filter'
                 },
                 transmissionType,
                 ' ',
@@ -59720,8 +59738,7 @@ var Filterbar = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 {
-                    className: 'filterbar__filter',
-                    onClick: this.props.chooseFuelType.bind(null, fuelType)
+                    className: 'filterbar__filter'
                 },
                 fuelType,
                 ' ',
@@ -59734,10 +59751,22 @@ var Filterbar = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 {
-                    className: 'filterbar__filter',
-                    onClick: this.props.chooseSegment.bind(null, segment)
+                    className: 'filterbar__filter'
                 },
                 segment,
+                ' ',
+                this.renderX()
+            );
+        }
+    }, {
+        key: 'renderFilterYear',
+        value: function renderFilterYear(year) {
+            return _react2.default.createElement(
+                'div',
+                {
+                    className: 'filterbar__filter'
+                },
+                year,
                 ' ',
                 this.renderX()
             );
@@ -59749,8 +59778,7 @@ var Filterbar = function (_React$PureComponent) {
                 'div',
                 {
                     key: index,
-                    className: 'filterbar__filter',
-                    onClick: this.props.toggleStyle.bind(null, style)
+                    className: 'filterbar__filter'
                 },
                 style,
                 ' ',
@@ -59766,8 +59794,7 @@ var Filterbar = function (_React$PureComponent) {
                 'div',
                 {
                     key: index,
-                    className: 'filterbar__filter',
-                    onClick: this.props.toggleMake.bind(null, makeId)
+                    className: 'filterbar__filter'
                 },
                 make.attributes.name,
                 ' ',
@@ -59781,8 +59808,7 @@ var Filterbar = function (_React$PureComponent) {
                 'div',
                 {
                     key: index,
-                    className: 'filterbar__filter',
-                    onClick: this.props.toggleModel.bind(null, model)
+                    className: 'filterbar__filter'
                 },
                 model.attributes.name,
                 ' ',
@@ -59796,8 +59822,7 @@ var Filterbar = function (_React$PureComponent) {
                 'div',
                 {
                     key: index,
-                    className: 'filterbar__filter',
-                    onClick: this.props.toggleFeature.bind(null, feature)
+                    className: 'filterbar__filter'
                 },
                 feature,
                 ' ',
@@ -59821,6 +59846,7 @@ var Filterbar = function (_React$PureComponent) {
                     { className: 'filterbar__filters' },
                     this.props.selectedStyles.map(this.renderFilterStyles),
                     this.props.selectedSegment ? this.renderFilterSegment(this.props.selectedSegment) : '',
+                    this.props.selectedYear ? this.renderFilterYear(this.props.selectedYear) : '',
                     this.props.selectedMakes.map(this.renderFilterMakes),
                     this.props.selectedFuelType ? this.renderFilterFuelType(this.props.selectedFuelType) : '',
                     this.props.selectedTransmissionType ? this.renderFilterTransmissionType(this.props.selectedTransmissionType) : '',
@@ -59854,21 +59880,24 @@ Filterbar.propTypes = {
     selectedTransmissionType: _propTypes2.default.string,
     selectedFuelType: _propTypes2.default.string,
     selectedSegment: _propTypes2.default.string,
+    selectedYear: _propTypes2.default.string,
     selectedFeatures: _propTypes2.default.arrayOf(_propTypes2.default.string).isRequired
 };
 
 function mapStateToProps(state) {
-    return {
+    var _ref;
+
+    return _ref = {
         selectedStyles: state.selectedStyles,
+        selectedYear: state.selectedYear,
         makes: state.makes,
         models: state.selectedModels,
         selectedMakes: state.selectedMakes,
         selectedModels: state.selectedModels,
         selectedTransmissionType: state.selectedTransmissionType,
         selectedFuelType: state.selectedFuelType,
-        selectedSegment: state.selectedSegment,
-        selectedFeatures: state.selectedFeatures
-    };
+        selectedSegment: state.selectedSegment
+    }, _defineProperty(_ref, 'selectedYear', state.selectedYear), _defineProperty(_ref, 'selectedFeatures', state.selectedFeatures), _ref;
 }
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(Filterbar);
@@ -60178,6 +60207,7 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
         bodyStyles: state.bodyStyles,
         segments: state.segments,
         selectedSegment: state.selectedSegment,
+        selectedYear: state.selectedYear,
         selectedStyles: state.selectedStyles,
         selectedMakes: state.selectedMakes,
         selectedModels: state.selectedModels,
@@ -62897,13 +62927,14 @@ var reducer = function reducer(state, action) {
         case ActionTypes.CLEAR_MODEL_YEAR:
             return Object.assign({}, state, {
                 selectedModels: null,
+                selectedYear: null,
                 filterPage: 'models'
             });
         case ActionTypes.SELECT_MODEL_YEAR:
             return Object.assign({}, state, {
                 filterPage: 'deals',
                 selectedModels: [action.data.id],
-                selectedYear: action.data.id
+                selectedYear: action.data.year
             });
         case ActionTypes.RECEIVE_TARGETS:
             var targetKey = _util2.default.getTargetKeyForDealAndZip(action.data.deal, action.data.zipcode);
@@ -62985,6 +63016,10 @@ var reducer = function reducer(state, action) {
         case ActionTypes.CHOOSE_SEGMENT:
             return Object.assign({}, state, {
                 selectedSegment: action.selectedSegment
+            });
+        case ActionTypes.CHOOSE_YEAR:
+            return Object.assign({}, state, {
+                selectedYear: action.selectedYear
             });
         case ActionTypes.UPDATE_DOWN_PAYMENT:
             return Object.assign({}, state, {
@@ -63610,10 +63645,9 @@ var DealDetails = function (_React$PureComponent) {
                         })
                     ),
                     _react2.default.createElement(
-                        'a',
+                        'span',
                         {
-                            href: '#',
-                            className: 'deal-details__deal-content-see-all',
+                            className: 'link deal-details__deal-content-see-all',
                             onClick: function onClick() {
                                 return _this5.showStandardFeatures();
                             }
@@ -63641,10 +63675,9 @@ var DealDetails = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'a',
                         {
-                            href: '#',
-                            className: 'deal-details__deal-content-see-all',
-                            onClick: function onClick() {
-                                return _this5.showFeatures();
+                            className: 'link deal-details__deal-content-see-all',
+                            onClick: function onClick(e) {
+                                return _this5.showFeatures(e);
                             }
                         },
                         'See all additional options >'
@@ -67880,7 +67913,7 @@ var ConfirmDeal = function (_React$PureComponent) {
                                 onClick: function onClick() {
                                     return _this5.props.selectDeal(_this5.props.deal);
                                 },
-                                href: '#'
+                                className: 'link'
                             },
                             'Get Rebates'
                         )

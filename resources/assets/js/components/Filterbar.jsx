@@ -17,11 +17,14 @@ class Filterbar extends React.PureComponent {
             this
         );
         this.renderFilterSegment = this.renderFilterSegment.bind(this);
+        this.renderFilterYear = this.renderFilterYear.bind(this);
         this.renderFilterFeatures = this.renderFilterFeatures.bind(this);
         this.renderX = this.renderX.bind(this);
     }
 
     renderX() {
+        return (<span></span>);
+
         return (
             <SVGInline
                 height="10px"
@@ -36,11 +39,13 @@ class Filterbar extends React.PureComponent {
         return (
             <div
                 className="filterbar__filter"
+            >
+                {/*
                 onClick={this.props.chooseTransmissionType.bind(
                     null,
                     transmissionType
                 )}
-            >
+                */}
                 {transmissionType} {this.renderX()}
             </div>
         );
@@ -50,8 +55,10 @@ class Filterbar extends React.PureComponent {
         return (
             <div
                 className="filterbar__filter"
-                onClick={this.props.chooseFuelType.bind(null, fuelType)}
             >
+                {/*
+                onClick={this.props.chooseFuelType.bind(null, fuelType)}
+                */}
                 {fuelType} {this.renderX()}
             </div>
         );
@@ -61,9 +68,24 @@ class Filterbar extends React.PureComponent {
         return (
             <div
                 className="filterbar__filter"
-                onClick={this.props.chooseSegment.bind(null, segment)}
             >
+                {/*
+                onClick={this.props.chooseSegment.bind(null, segment)}
+                */}
                 {segment} {this.renderX()}
+            </div>
+        );
+    }
+
+    renderFilterYear(year) {
+        return (
+            <div
+                className="filterbar__filter"
+            >
+            {/*
+                onClick={this.props.chooseYear.bind(null, year)}
+            */}
+                {year} {this.renderX()}
             </div>
         );
     }
@@ -73,8 +95,10 @@ class Filterbar extends React.PureComponent {
             <div
                 key={index}
                 className="filterbar__filter"
-                onClick={this.props.toggleStyle.bind(null, style)}
             >
+            {/*
+                onClick={this.props.toggleStyle.bind(null, style)}
+            */}
                 {style} {this.renderX()}
             </div>
         );
@@ -87,8 +111,10 @@ class Filterbar extends React.PureComponent {
             <div
                 key={index}
                 className="filterbar__filter"
-                onClick={this.props.toggleMake.bind(null, makeId)}
             >
+            {/*
+                onClick={this.props.toggleMake.bind(null, makeId)}
+            */}
                 {make.attributes.name} {this.renderX()}
             </div>
         );
@@ -99,8 +125,10 @@ class Filterbar extends React.PureComponent {
             <div
                 key={index}
                 className="filterbar__filter"
-                onClick={this.props.toggleModel.bind(null, model)}
             >
+            {/*
+                onClick={this.props.toggleModel.bind(null, model)}
+            */}
                 {model.attributes.name} {this.renderX()}
             </div>
         );
@@ -111,8 +139,10 @@ class Filterbar extends React.PureComponent {
             <div
                 key={index}
                 className="filterbar__filter"
-                onClick={this.props.toggleFeature.bind(null, feature)}
             >
+            {/*
+                onClick={this.props.toggleFeature.bind(null, feature)}
+            */}
                 {feature} {this.renderX()}
             </div>
         );
@@ -132,6 +162,11 @@ class Filterbar extends React.PureComponent {
                     {this.props.selectedStyles.map(this.renderFilterStyles)}
                     {this.props.selectedSegment ? (
                         this.renderFilterSegment(this.props.selectedSegment)
+                    ) : (
+                        ''
+                    )}
+                    {this.props.selectedYear ? (
+                        this.renderFilterYear(this.props.selectedYear)
                     ) : (
                         ''
                     )}
@@ -175,12 +210,14 @@ Filterbar.propTypes = {
     selectedTransmissionType: PropTypes.string,
     selectedFuelType: PropTypes.string,
     selectedSegment: PropTypes.string,
+    selectedYear: PropTypes.string,
     selectedFeatures: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 function mapStateToProps(state) {
     return {
         selectedStyles: state.selectedStyles,
+        selectedYear: state.selectedYear,
         makes: state.makes,
         models: state.selectedModels,
         selectedMakes: state.selectedMakes,
@@ -188,6 +225,7 @@ function mapStateToProps(state) {
         selectedTransmissionType: state.selectedTransmissionType,
         selectedFuelType: state.selectedFuelType,
         selectedSegment: state.selectedSegment,
+        selectedYear: state.selectedYear,
         selectedFeatures: state.selectedFeatures,
     };
 }

@@ -50,8 +50,7 @@ class InfoModal extends React.PureComponent {
             <div className="infomodal__context">
                 <a
                     onClick={() => this.toggleModal()}
-                    href="#"
-                    className="infomodal__button"
+                    className="link infomodal__button"
                 >
                     <SVGInline
                         width="15px"

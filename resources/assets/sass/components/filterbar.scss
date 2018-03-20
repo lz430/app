@@ -31,7 +31,7 @@
 
   &__filter {
     background: $color-background-primary;
-    cursor: pointer;
+    // cursor: pointer; // temporarily removed because functionality broken
     margin: 5px;
     padding: 3px 8px;
     white-space: nowrap;

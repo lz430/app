@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\API\Traits\SearchesDeals;
 use App\Transformers\DealTransformer;
 use App\Deal;
 use App\Zipcode;
@@ -11,7 +12,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Serializer\DataArraySerializer;
-use App\Http\Controllers\API\Traits\SearchesDeals;
 
 class DealsController extends BaseAPIController
 {
@@ -26,6 +26,7 @@ class DealsController extends BaseAPIController
             'make_ids' => 'sometimes|required|array',
             'body_styles' => 'sometimes|required|array',
             'fuel_type' => 'sometimes|required|string',
+            'year' => 'sometimes|required|digits:4',
             'transmission_type' => 'sometimes|required|string|in:automatic,manual',
             'sort' => 'sometimes|required|string',
             'zipcode' => 'sometimes|required|string',
