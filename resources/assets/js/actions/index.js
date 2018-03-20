@@ -290,6 +290,11 @@ export function requestDealsOrModelYears(params = {}) {
                     : ActionTypes.REQUEST_MODEL_YEARS,
         });
 
+        // Disable all calls if the make selector modal is open
+        if (getState().showMakeSelectorModal) {
+            return;
+        }
+
         api
             .applySearchFilters(
                 getState().filterPage,
@@ -563,9 +568,13 @@ export function receiveLocationInfo(data) {
 }
 
 export function closeMakeSelectorModal() {
-    return {
-        type: ActionTypes.CLOSE_MAKE_SELECTOR_MODAL,
-    };
+    return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.CLOSE_MAKE_SELECTOR_MODAL,
+        });
+
+        dispatch(requestDealsOrModelYears());
+    }
 }
 
 export function windowResize(width) {
