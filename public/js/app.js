@@ -53271,7 +53271,18 @@ var DealPrice = function (_React$PureComponent) {
                     ),
                     this.renderPriceExplanationModal()
                 ),
-                _react2.default.createElement('div', { className: 'deal-price__hr' })
+                _react2.default.createElement('div', { className: 'deal-price__hr' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deal-price__cash-msrp' },
+                    _util2.default.moneyFormat(this.props.deal.msrp),
+                    ' ',
+                    _react2.default.createElement(
+                        'span',
+                        { className: 'deal-price__cash-msrp-label' },
+                        'MSRP'
+                    )
+                )
             );
         }
     }, {
@@ -53295,7 +53306,18 @@ var DealPrice = function (_React$PureComponent) {
                     ),
                     this.renderPriceExplanationModal()
                 ),
-                _react2.default.createElement('div', { className: 'deal-price__hr' })
+                _react2.default.createElement('div', { className: 'deal-price__hr' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deal-price__cash-msrp' },
+                    _util2.default.moneyFormat(this.props.deal.msrp),
+                    ' ',
+                    _react2.default.createElement(
+                        'span',
+                        { className: 'deal-price__cash-msrp-label' },
+                        'MSRP'
+                    )
+                )
             );
         }
     }, {
