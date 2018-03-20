@@ -255,7 +255,7 @@ const reducer = (state, action) => {
                 cancelTokens: [
                     ...state.cancelTokens,
                     {
-                        dealId: action.deal.id,
+                        identifier: action.identifier,
                         source: action.cancelToken,
                         context: action.context,
                     },
@@ -266,7 +266,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 cancelTokens: R.reject(
-                    R.propEq('dealId', action.deal.id),
+                    R.propEq('identifier', action.identifier),
                     state.cancelTokens
                 ),
             };
