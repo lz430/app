@@ -284,6 +284,7 @@ export function clearModelYear() {
 export function requestDealsOrModelYears(params = {}) {
     return (dispatch, getState) => {
         console.log('Fetching:', getState().filterPage);
+        console.log(getState());
 
         dispatch({
             type:
@@ -440,6 +441,22 @@ export function chooseSegment(segment) {
 
         requestDealsOrModelYears({
             segment: selectedSegment,
+        });
+    };
+}
+
+export function chooseYear(year) {
+    return (dispatch, getState) => {
+        const selectedYear =
+            getState().selectedYear === year ? null : year;
+
+        dispatch({
+            type: ActionTypes.CHOOSE_YEAR,
+            selectedYear,
+        });
+
+        requestDealsOrModelYears({
+            year: selectedYear,
         });
     };
 }

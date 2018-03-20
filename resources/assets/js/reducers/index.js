@@ -89,7 +89,7 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 filterPage: 'deals',
                 selectedModels: [action.data.id],
-                selectedYear: action.data.id,
+                selectedYear: action.data.year,
             });
         case ActionTypes.RECEIVE_TARGETS:
             const targetKey = util.getTargetKeyForDealAndZip(
@@ -191,6 +191,10 @@ const reducer = (state, action) => {
         case ActionTypes.CHOOSE_SEGMENT:
             return Object.assign({}, state, {
                 selectedSegment: action.selectedSegment,
+            });
+        case ActionTypes.CHOOSE_YEAR:
+            return Object.assign({}, state, {
+                selectedYear: action.selectedYear,
             });
         case ActionTypes.UPDATE_DOWN_PAYMENT:
             return Object.assign({}, state, {

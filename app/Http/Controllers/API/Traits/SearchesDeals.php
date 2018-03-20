@@ -13,6 +13,7 @@ trait SearchesDeals
     private function buildSearchQuery(Request $request, $rawQuery = null)
     {
         $dealsQuery = $this->makeDealsQuery($request, $rawQuery);
+        $dealsQuery = $this->filterQueryByYear($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByLocationDistance($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByFuelType($dealsQuery, $request);
         $dealsQuery = $this->filterQueryByTransmissionType($dealsQuery, $request);
@@ -71,7 +72,7 @@ trait SearchesDeals
     private function filterQueryByYear(Builder $query, Request $request) : Builder
     {
         if ($request->has('year')) {
-            $query->where('year', $year);
+            $query->where('year', $request->get('year'));
         }
 
         return $query;

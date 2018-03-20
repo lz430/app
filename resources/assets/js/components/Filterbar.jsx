@@ -17,6 +17,7 @@ class Filterbar extends React.PureComponent {
             this
         );
         this.renderFilterSegment = this.renderFilterSegment.bind(this);
+        this.renderFilterYear = this.renderFilterYear.bind(this);
         this.renderFilterFeatures = this.renderFilterFeatures.bind(this);
         this.renderX = this.renderX.bind(this);
     }
@@ -64,6 +65,17 @@ class Filterbar extends React.PureComponent {
                 onClick={this.props.chooseSegment.bind(null, segment)}
             >
                 {segment} {this.renderX()}
+            </div>
+        );
+    }
+
+    renderFilterYear(year) {
+        return (
+            <div
+                className="filterbar__filter"
+                onClick={this.props.chooseYear.bind(null, year)}
+            >
+                {year} {this.renderX()}
             </div>
         );
     }
@@ -135,6 +147,11 @@ class Filterbar extends React.PureComponent {
                     ) : (
                         ''
                     )}
+                    {this.props.selectedYear ? (
+                        this.renderFilterYear(this.props.selectedYear)
+                    ) : (
+                        ''
+                    )}
                     {this.props.selectedMakes.map(this.renderFilterMakes)}
                     {this.props.selectedFuelType ? (
                         this.renderFilterFuelType(this.props.selectedFuelType)
@@ -175,12 +192,14 @@ Filterbar.propTypes = {
     selectedTransmissionType: PropTypes.string,
     selectedFuelType: PropTypes.string,
     selectedSegment: PropTypes.string,
+    selectedYear: PropTypes.string,
     selectedFeatures: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 function mapStateToProps(state) {
     return {
         selectedStyles: state.selectedStyles,
+        selectedYear: state.selectedYear,
         makes: state.makes,
         models: state.selectedModels,
         selectedMakes: state.selectedMakes,
@@ -188,6 +207,7 @@ function mapStateToProps(state) {
         selectedTransmissionType: state.selectedTransmissionType,
         selectedFuelType: state.selectedFuelType,
         selectedSegment: state.selectedSegment,
+        selectedYear: state.selectedYear,
         selectedFeatures: state.selectedFeatures,
     };
 }

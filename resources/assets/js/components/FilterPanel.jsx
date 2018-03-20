@@ -167,7 +167,7 @@ class FilterPanel extends React.PureComponent {
                                     />
                                 </SidebarFilter>
                         ) : (<div></div>) }
-                        
+
                         <SidebarFilter
                             toggle={() => this.toggleOpenFilter('Make')}
                             open={this.state.openFilter === 'Make' && this.props.filterPage !== 'deals' }
@@ -212,6 +212,7 @@ const mapStateToProps = (state, ownProps) => {
         bodyStyles: state.bodyStyles,
         segments: state.segments,
         selectedSegment: state.selectedSegment,
+        selectedYear: state.selectedYear,
         selectedStyles: state.selectedStyles,
         selectedMakes: state.selectedMakes,
         selectedModels: state.selectedModels,

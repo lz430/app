@@ -83,6 +83,11 @@ class Deal extends Model
         });
     }
 
+    public function scopeFilterByYear(Builder $query, $year) : Builder
+    {
+        return $query->where('year', $year);
+    }
+
     public function scopeFilterByFuelType(Builder $query, $fuelType) : Builder
     {
         return $query->where('fuel', $fuelType);
