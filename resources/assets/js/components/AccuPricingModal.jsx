@@ -4,29 +4,11 @@ import {connect} from "react-redux";
 import Modal from 'components/Modal';
 
 class AccuPricingModal extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            isOpen: props.isOpen,
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.isOpen !== this.props.isOpen) {
-            this.setState({isOpen: nextProps.isOpen});
-        }
-    }
-
-    close() {
-        this.props.onClose();
-    }
-
     render() {
         return (
             <div>
-                {this.state.isOpen &&
-                    <Modal closeText={"Close"} onClose={() => this.close()}>
+                {this.props.accuPricingModalIsShowing &&
+                    <Modal onClose={this.props.hideAccuPricingModal}>
                         <div className="accupricing-modal">
                             <img src="/images/accupricing-logo.png" className="accupricing-modal__logo"/>
                             <p>
@@ -49,6 +31,7 @@ class AccuPricingModal extends React.PureComponent {
 const makeMapStateToProps = () => {
     return (state, props) => {
         return {
+            accuPricingModalIsShowing: state.accuPricingModalIsShowing,
         };
     };
 };

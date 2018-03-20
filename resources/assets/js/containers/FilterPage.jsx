@@ -15,14 +15,6 @@ import CashFinanceLeaseCalculator from '../components/CashFinanceLeaseCalculator
 import AccuPricingModal from 'components/AccuPricingModal';
 
 class FilterPage extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            accuPricingModalIsOpen: false,
-        };
-    }
-
     renderMakeSelectionModal() {
         return (
             <Modal
@@ -68,9 +60,8 @@ class FilterPage extends React.PureComponent {
     renderAccuPricingCta() {
         return (
             <div>
-                <AccuPricingModal isOpen={this.state.accuPricingModalIsOpen} onClose={() => this.setState({accuPricingModalIsOpen: false})} />
                 <div className="accupricing-cta accupricing-cta--horizontal">
-                    <a onClick={() => this.setState({accuPricingModalIsOpen: true})}>
+                    <a onClick={this.props.showAccuPricingModal}>
                         <img src="/images/accupricing-logo.png" className="accupricing-cta__logo" />
                     </a>
                     <p className="accupricing-cta__disclaimer">
@@ -177,6 +168,7 @@ class FilterPage extends React.PureComponent {
                 {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
 
                 {this.renderFilterPanelAndDeals()}
+                <AccuPricingModal />
             </div>
         );
     }

@@ -769,3 +769,15 @@ export function getBestOffersForLoadedDeals() {
         dispatch({ type: ActionTypes.REQUEST_ALL_BEST_OFFERS });
     };
 }
+
+export function showAccuPricingModal() {
+    return {
+        type: ActionTypes.SHOW_ACCUPRICING_MODAL
+    }
+}
+
+export function hideAccuPricingModal() {
+    return {
+        type: ActionTypes.HIDE_ACCUPRICING_MODAL
+    }
+}

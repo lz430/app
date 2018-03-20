@@ -716,6 +716,8 @@ exports.removeCancelToken = removeCancelToken;
 exports.clearCancelTokens = clearCancelTokens;
 exports.cancelPromises = cancelPromises;
 exports.getBestOffersForLoadedDeals = getBestOffersForLoadedDeals;
+exports.showAccuPricingModal = showAccuPricingModal;
+exports.hideAccuPricingModal = hideAccuPricingModal;
 
 var _api = __webpack_require__(71);
 
@@ -1439,6 +1441,18 @@ function getBestOffersForLoadedDeals() {
             dispatch(requestBestOffer(deal));
         });
         dispatch({ type: ActionTypes.REQUEST_ALL_BEST_OFFERS });
+    };
+}
+
+function showAccuPricingModal() {
+    return {
+        type: ActionTypes.SHOW_ACCUPRICING_MODAL
+    };
+}
+
+function hideAccuPricingModal() {
+    return {
+        type: ActionTypes.HIDE_ACCUPRICING_MODAL
     };
 }
 
@@ -22926,6 +22940,8 @@ var REMOVE_CANCEL_TOKEN = exports.REMOVE_CANCEL_TOKEN = 'REMOVE_CANCEL_TOKEN';
 var CLEAR_CANCEL_TOKENS = exports.CLEAR_CANCEL_TOKENS = 'CLEAR_CANCEL_TOKENS';
 var CANCEL_ALL_PROMISES = exports.CANCEL_ALL_PROMISES = 'CANCEL_ALL_PROMISES';
 var REQUEST_ALL_BEST_OFFERS = exports.REQUEST_ALL_BEST_OFFERS = 'REQUEST_ALL_BEST_OFFERS';
+var SHOW_ACCUPRICING_MODAL = exports.SHOW_ACCUPRICING_MODAL = 'SHOW_ACCUPRICING_MODAL';
+var HIDE_ACCUPRICING_MODAL = exports.HIDE_ACCUPRICING_MODAL = 'HIDE_ACCUPRICING_MODAL';
 
 /***/ }),
 /* 368 */
@@ -23176,42 +23192,21 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var AccuPricingModal = function (_React$PureComponent) {
     _inherits(AccuPricingModal, _React$PureComponent);
 
-    function AccuPricingModal(props) {
+    function AccuPricingModal() {
         _classCallCheck(this, AccuPricingModal);
 
-        var _this = _possibleConstructorReturn(this, (AccuPricingModal.__proto__ || Object.getPrototypeOf(AccuPricingModal)).call(this, props));
-
-        _this.state = {
-            isOpen: props.isOpen
-        };
-        return _this;
+        return _possibleConstructorReturn(this, (AccuPricingModal.__proto__ || Object.getPrototypeOf(AccuPricingModal)).apply(this, arguments));
     }
 
     _createClass(AccuPricingModal, [{
-        key: "componentWillReceiveProps",
-        value: function componentWillReceiveProps(nextProps) {
-            if (nextProps.isOpen !== this.props.isOpen) {
-                this.setState({ isOpen: nextProps.isOpen });
-            }
-        }
-    }, {
-        key: "close",
-        value: function close() {
-            this.props.onClose();
-        }
-    }, {
         key: "render",
         value: function render() {
-            var _this2 = this;
-
             return _react2.default.createElement(
                 "div",
                 null,
-                this.state.isOpen && _react2.default.createElement(
+                this.props.accuPricingModalIsShowing && _react2.default.createElement(
                     _Modal2.default,
-                    { closeText: "Close", onClose: function onClose() {
-                            return _this2.close();
-                        } },
+                    { onClose: this.props.hideAccuPricingModal },
                     _react2.default.createElement(
                         "div",
                         { className: "accupricing-modal" },
@@ -23244,7 +23239,9 @@ var AccuPricingModal = function (_React$PureComponent) {
 
 var makeMapStateToProps = function makeMapStateToProps() {
     return function (state, props) {
-        return {};
+        return {
+            accuPricingModalIsShowing: state.accuPricingModalIsShowing
+        };
     };
 };
 
@@ -42516,15 +42513,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var FilterPage = function (_React$PureComponent) {
     _inherits(FilterPage, _React$PureComponent);
 
-    function FilterPage(props) {
+    function FilterPage() {
         _classCallCheck(this, FilterPage);
 
-        var _this = _possibleConstructorReturn(this, (FilterPage.__proto__ || Object.getPrototypeOf(FilterPage)).call(this, props));
-
-        _this.state = {
-            accuPricingModalIsOpen: false
-        };
-        return _this;
+        return _possibleConstructorReturn(this, (FilterPage.__proto__ || Object.getPrototypeOf(FilterPage)).apply(this, arguments));
     }
 
     _createClass(FilterPage, [{
@@ -42568,22 +42560,15 @@ var FilterPage = function (_React$PureComponent) {
     }, {
         key: 'renderAccuPricingCta',
         value: function renderAccuPricingCta() {
-            var _this2 = this;
-
             return _react2.default.createElement(
                 'div',
                 null,
-                _react2.default.createElement(_AccuPricingModal2.default, { isOpen: this.state.accuPricingModalIsOpen, onClose: function onClose() {
-                        return _this2.setState({ accuPricingModalIsOpen: false });
-                    } }),
                 _react2.default.createElement(
                     'div',
                     { className: 'accupricing-cta accupricing-cta--horizontal' },
                     _react2.default.createElement(
                         'a',
-                        { onClick: function onClick() {
-                                return _this2.setState({ accuPricingModalIsOpen: true });
-                            } },
+                        { onClick: this.props.showAccuPricingModal },
                         _react2.default.createElement('img', { src: '/images/accupricing-logo.png', className: 'accupricing-cta__logo' })
                     ),
                     _react2.default.createElement(
@@ -42597,7 +42582,7 @@ var FilterPage = function (_React$PureComponent) {
     }, {
         key: 'renderSelectedTabButtons',
         value: function renderSelectedTabButtons() {
-            var _this3 = this;
+            var _this2 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -42606,7 +42591,7 @@ var FilterPage = function (_React$PureComponent) {
                     'div',
                     {
                         onClick: function onClick() {
-                            _this3.handleTabChange('cash');
+                            _this2.handleTabChange('cash');
                         },
                         className: 'button-group__button ' + (this.props.selectedTab === 'cash' ? 'button-group__button--selected' : '')
                     },
@@ -42616,7 +42601,7 @@ var FilterPage = function (_React$PureComponent) {
                     'div',
                     {
                         onClick: function onClick() {
-                            _this3.handleTabChange('finance');
+                            _this2.handleTabChange('finance');
                         },
                         className: 'button-group__button ' + (this.props.selectedTab === 'finance' ? 'button-group__button--selected' : '')
                     },
@@ -42626,7 +42611,7 @@ var FilterPage = function (_React$PureComponent) {
                     'div',
                     {
                         onClick: function onClick() {
-                            _this3.handleTabChange('lease');
+                            _this2.handleTabChange('lease');
                         },
                         className: 'button-group__button ' + (this.props.selectedTab === 'lease' ? 'button-group__button--selected' : '')
                     },
@@ -42684,7 +42669,8 @@ var FilterPage = function (_React$PureComponent) {
                 null,
                 this.props.showMakeSelectorModal ? this.renderMakeSelectionModal() : '',
                 this.props.selectedDeal ? this.renderCalculatorModal() : '',
-                this.renderFilterPanelAndDeals()
+                this.renderFilterPanelAndDeals(),
+                _react2.default.createElement(_AccuPricingModal2.default, null)
             );
         }
     }, {
@@ -58351,10 +58337,6 @@ var _strings2 = _interopRequireDefault(_strings);
 
 var _index2 = __webpack_require__(62);
 
-var _AccuPricingModal = __webpack_require__(369);
-
-var _AccuPricingModal2 = _interopRequireDefault(_AccuPricingModal);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
@@ -58368,15 +58350,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var InfoModalData = function (_React$PureComponent) {
     _inherits(InfoModalData, _React$PureComponent);
 
-    function InfoModalData(props) {
+    function InfoModalData() {
         _classCallCheck(this, InfoModalData);
 
-        var _this = _possibleConstructorReturn(this, (InfoModalData.__proto__ || Object.getPrototypeOf(InfoModalData)).call(this, props));
-
-        _this.state = {
-            accuPricingModalIsOpen: false
-        };
-        return _this;
+        return _possibleConstructorReturn(this, (InfoModalData.__proto__ || Object.getPrototypeOf(InfoModalData)).apply(this, arguments));
     }
 
     _createClass(InfoModalData, [{
@@ -58727,17 +58704,12 @@ var InfoModalData = function (_React$PureComponent) {
                                 'Get Quote'
                             )
                         ),
-                        _react2.default.createElement(_AccuPricingModal2.default, { isOpen: this.state.accuPricingModalIsOpen, onClose: function onClose() {
-                                return _this3.setState({ accuPricingModalIsOpen: false });
-                            } }),
                         _react2.default.createElement(
                             'div',
                             { className: 'accupricing-cta' },
                             _react2.default.createElement(
                                 'a',
-                                { onClick: function onClick() {
-                                        return _this3.setState({ accuPricingModalIsOpen: true });
-                                    } },
+                                { onClick: this.props.showAccuPricingModal },
                                 _react2.default.createElement('img', { src: '/images/accupricing-logo.png', className: 'accupricing-cta__logo' })
                             ),
                             _react2.default.createElement(
@@ -62385,6 +62357,7 @@ var initialState = {
     /** Version **/
     4: '<- increment the number to purge LocalStorage',
     /** End Version **/
+    accuPricingModalIsShowing: false,
     annualMileage: 10000,
     bestOffers: [],
     bodyStyles: null,
@@ -63052,6 +63025,14 @@ var reducer = function reducer(state, action) {
         case ActionTypes.CLEAR_CANCEL_TOKENS:
             return _extends({}, state, {
                 cancelTokens: _ramda2.default.reject(_ramda2.default.propEq('context', action.context), state.cancelTokens)
+            });
+        case ActionTypes.SHOW_ACCUPRICING_MODAL:
+            return _extends({}, state, {
+                accuPricingModalIsShowing: true
+            });
+        case ActionTypes.HIDE_ACCUPRICING_MODAL:
+            return _extends({}, state, {
+                accuPricingModalIsShowing: false
             });
     }
 
