@@ -12,6 +12,7 @@ class CashFinanceLeaseCalculator extends React.PureComponent {
             this.props.selectedDeal,
             this.props.employeeBrand
         ) * .1).toFixed(2));
+        this.props.updateTermDuration(60);
     }
 
     constructor() {
@@ -40,61 +41,6 @@ class CashFinanceLeaseCalculator extends React.PureComponent {
         return `tabs__tab ${
             tabName === this.props.selectedTab ? 'tabs__tab--selected' : ''
         }`;
-    }
-
-    renderLeaseForm() {
-        return (
-            <div className="tabs__content">
-                <div className="tabs__content__item">
-                    <label htmlFor="down-payment">Down Payment</label>
-                    <input
-                        className="lease__down-payment"
-                        type="number"
-                        name="down-payment"
-                    />
-                </div>
-                <div className="tabs__content__item">
-                    <label htmlFor="miles-year">Miles Per Year</label>
-                    <div className="range-slider">
-                        <input
-                            name="miles-year"
-                            type="range"
-                            min="0"
-                            max="100000"
-                            step="5000"
-                            defaultValue={this.state.milesPerYear}
-                            onChange={el =>
-                                this.setState({
-                                    milesPerYear: el.target.value,
-                                })
-                            }
-                        />
-                        <div className="range-slider__badge">
-                            {util.numbersWithCommas(this.state.milesPerYear)}
-                        </div>
-                    </div>
-                </div>
-                <div className="tabs__content__item">
-                    <label htmlFor="lease-term">Lease Term (Months)</label>
-                    <div className="range-slider">
-                        <input
-                            name="lease-term"
-                            type="range"
-                            min="0"
-                            max="72"
-                            step="1"
-                            defaultValue={this.state.leaseTerm}
-                            onChange={el =>
-                                this.setState({ leaseTerm: el.target.value })
-                            }
-                        />
-                        <div className="range-slider__badge">
-                            {this.state.leaseTerm}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
     }
 
     render() {
