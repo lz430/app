@@ -1,20 +1,23 @@
 import Decimal from 'decimal.js';
 
+const defaultEffCvrFee = 24;
+const defaultLicenseAndRegistration = 23;
+
 const formulas = {
-    calculateTotalCashFinance: (price, docFee, downPayment, rebatesTotal) => {
-        const total = new Decimal(price).plus(docFee);
-        const totalWithSalesTax = total.plus(total.times(0.06));
-
-        return Number(totalWithSalesTax.minus(rebatesTotal).minus(downPayment));
-    },
     calculateTotalCash: (price, docFee, rebatesTotal) => {
-        const total = new Decimal(price).plus(docFee);
+        const total = new Decimal(price).plus(docFee).plus(defaultEffCvrFee);
         const totalWithSalesTax = total.plus(total.times(0.06));
 
-        return Number(totalWithSalesTax.minus(rebatesTotal));
+        return Number(totalWithSalesTax.minus(rebatesTotal).plus(defaultLicenseAndRegistration));
+    },
+    calculateTotalCashFinance: (price, docFee, downPayment, rebatesTotal) => {
+        const total = new Decimal(price).plus(docFee).plus(defaultEffCvrFee);
+        const totalWithSalesTax = total.plus(total.times(0.06));
+
+        return Number(totalWithSalesTax.minus(rebatesTotal).minus(downPayment).plus(defaultLicenseAndRegistration));
     },
     calculateTotalLease: (price, docFee, rebatesTotal) => {
-        const total = price + docFee;
+        const total = price + docFee + defaultEffCvrFee;
         const downPayment = 0;
         const capCostReduction = new Decimal(rebatesTotal + downPayment);
 
@@ -25,12 +28,12 @@ const formulas = {
         return Number(totalTaxesDueAtSigning.plus(total));
     },
     calculateSalesTaxCashFinance: (price, docFee) => {
-        const total = new Decimal(price).plus(docFee);
+        const total = new Decimal(price).plus(docFee).plus(defaultEffCvrFee);
 
         return Number(total.times(0.06));
     },
     calculateLeaseTaxesDueAtSigning: (rebates, downPayment, docFee) => {
-        const capCostReduction = new Decimal(rebates).plus(downPayment);
+        const capCostReduction = new Decimal(rebates).plus(downPayment).plus(defaultEffCvrFee);
 
         return Number(
             capCostReduction.times(0.06).plus(new Decimal(docFee).times(0.06))

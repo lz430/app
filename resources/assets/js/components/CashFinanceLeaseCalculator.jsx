@@ -7,6 +7,13 @@ import { connect } from 'react-redux';
 import * as Actions from 'actions';
 
 class CashFinanceLeaseCalculator extends React.PureComponent {
+    componentWillMount() {
+        this.props.updateDownPayment((util.getEmployeeOrSupplierPrice(
+            this.props.selectedDeal,
+            this.props.employeeBrand
+        ) * .1).toFixed(2));
+    }
+
     constructor() {
         super();
 
@@ -124,6 +131,7 @@ function mapStateToProps(state) {
         zipcode: state.zipcode,
         selectedTab: state.selectedTab,
         selectedDeal: state.selectedDeal,
+        employeeBrand: state.employeeBrand,
     };
 }
 

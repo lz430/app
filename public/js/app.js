@@ -5666,21 +5666,24 @@ var _decimal2 = _interopRequireDefault(_decimal);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var defaultEffCvrFee = 24;
+var defaultLicenseAndRegistration = 23;
+
 var formulas = {
-    calculateTotalCashFinance: function calculateTotalCashFinance(price, docFee, downPayment, rebatesTotal) {
-        var total = new _decimal2.default(price).plus(docFee);
-        var totalWithSalesTax = total.plus(total.times(0.06));
-
-        return Number(totalWithSalesTax.minus(rebatesTotal).minus(downPayment));
-    },
     calculateTotalCash: function calculateTotalCash(price, docFee, rebatesTotal) {
-        var total = new _decimal2.default(price).plus(docFee);
+        var total = new _decimal2.default(price).plus(docFee).plus(defaultEffCvrFee);
         var totalWithSalesTax = total.plus(total.times(0.06));
 
-        return Number(totalWithSalesTax.minus(rebatesTotal));
+        return Number(totalWithSalesTax.minus(rebatesTotal).plus(defaultLicenseAndRegistration));
+    },
+    calculateTotalCashFinance: function calculateTotalCashFinance(price, docFee, downPayment, rebatesTotal) {
+        var total = new _decimal2.default(price).plus(docFee).plus(defaultEffCvrFee);
+        var totalWithSalesTax = total.plus(total.times(0.06));
+
+        return Number(totalWithSalesTax.minus(rebatesTotal).minus(downPayment).plus(defaultLicenseAndRegistration));
     },
     calculateTotalLease: function calculateTotalLease(price, docFee, rebatesTotal) {
-        var total = price + docFee;
+        var total = price + docFee + defaultEffCvrFee;
         var downPayment = 0;
         var capCostReduction = new _decimal2.default(rebatesTotal + downPayment);
 
@@ -5691,12 +5694,12 @@ var formulas = {
         return Number(totalTaxesDueAtSigning.plus(total));
     },
     calculateSalesTaxCashFinance: function calculateSalesTaxCashFinance(price, docFee) {
-        var total = new _decimal2.default(price).plus(docFee);
+        var total = new _decimal2.default(price).plus(docFee).plus(defaultEffCvrFee);
 
         return Number(total.times(0.06));
     },
     calculateLeaseTaxesDueAtSigning: function calculateLeaseTaxesDueAtSigning(rebates, downPayment, docFee) {
-        var capCostReduction = new _decimal2.default(rebates).plus(downPayment);
+        var capCostReduction = new _decimal2.default(rebates).plus(downPayment).plus(defaultEffCvrFee);
 
         return Number(capCostReduction.times(0.06).plus(new _decimal2.default(docFee).times(0.06)));
     },
@@ -10765,6 +10768,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var CashFinanceLeaseCalculator = function (_React$PureComponent) {
     _inherits(CashFinanceLeaseCalculator, _React$PureComponent);
 
+    _createClass(CashFinanceLeaseCalculator, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.props.updateDownPayment((_util2.default.getEmployeeOrSupplierPrice(this.props.selectedDeal, this.props.employeeBrand) * .1).toFixed(2));
+        }
+    }]);
+
     function CashFinanceLeaseCalculator() {
         _classCallCheck(this, CashFinanceLeaseCalculator);
 
@@ -10930,7 +10940,8 @@ function mapStateToProps(state) {
     return {
         zipcode: state.zipcode,
         selectedTab: state.selectedTab,
-        selectedDeal: state.selectedDeal
+        selectedDeal: state.selectedDeal,
+        employeeBrand: state.employeeBrand
     };
 }
 
@@ -58326,6 +58337,7 @@ var InfoModalData = function (_React$PureComponent) {
         value: function componentDidMount() {
             this.props.requestTargets(this.props.deal);
             this.props.requestBestOffer(this.props.deal);
+            this.props.updateDownPayment((_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) * .1).toFixed(2));
         }
     }, {
         key: 'handleTabChange',
@@ -58378,13 +58390,15 @@ var InfoModalData = function (_React$PureComponent) {
             );
         }
     }, {
-        key: 'calculateYourCashPrice',
-        value: function calculateYourCashPrice() {
+        key: 'calculateYourPrice',
+        value: function calculateYourPrice() {
             switch (this.props.selectedTab) {
                 case 'cash':
-                case 'finance':
-                case 'lease':
                     return _formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue);
+                case 'finance':
+                    return _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.downPayment, this.props.dealBestOfferTotalValue);
+                case 'lease':
+                    return _formulas2.default.calculateTotalLease(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue);
             }
         }
     }, {
@@ -58434,7 +58448,6 @@ var InfoModalData = function (_React$PureComponent) {
     }, {
         key: 'renderPaymentDefaults',
         value: function renderPaymentDefaults() {
-            var financeDownPaymentAmount = 0.1;
             var financeTermLength = '60';
             var leaseAnnualMiles = '10,000';
             var leaseTermLength = '36';
@@ -58455,7 +58468,7 @@ var InfoModalData = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'info-modal-data__amount' },
-                            '' + _util2.default.moneyFormat(this.props.deal.supplier_price * financeDownPaymentAmount)
+                            '' + _util2.default.moneyFormat(this.props.downPayment)
                         )
                     ),
                     _react2.default.createElement(
@@ -58599,10 +58612,11 @@ var InfoModalData = function (_React$PureComponent) {
                                 _react2.default.createElement(
                                     'div',
                                     { className: 'info-modal-data__amount' },
-                                    '' + _util2.default.moneyFormat(this.props.deal.supplier_price)
+                                    '' + _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand))
                                 )
                             ),
-                            this.props.selectedTab === 'cash' && _react2.default.createElement(
+                            this.renderAppliedRebatesLink(),
+                            _react2.default.createElement(
                                 'div',
                                 { className: 'info-modal-data__costs info-modal-data__costs--final' },
                                 _react2.default.createElement(
@@ -58613,7 +58627,7 @@ var InfoModalData = function (_React$PureComponent) {
                                 _react2.default.createElement(
                                     'div',
                                     { className: 'info-modal-data__amount' },
-                                    _util2.default.moneyFormat(this.calculateYourCashPrice()),
+                                    _util2.default.moneyFormat(this.calculateYourPrice()),
                                     '*'
                                 )
                             ),
