@@ -10677,7 +10677,9 @@ var Deal = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'div',
                                 { className: 'deal__basic-info-color' },
-                                deal.color
+                                deal.color,
+                                ', ',
+                                deal.interior_color
                             )
                         )
                     ),
@@ -59512,22 +59514,6 @@ var Sortbar = function (_React$PureComponent) {
                             } },
                         'Price ',
                         this.renderIcon('price')
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { onClick: function onClick() {
-                                return _this2.props.sortDeals('make');
-                            } },
-                        'Make ',
-                        this.renderIcon('make')
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { onClick: function onClick() {
-                                return _this2.props.sortDeals('year');
-                            } },
-                        'Year ',
-                        this.renderIcon('year')
                     )
                 ) : ''
             );

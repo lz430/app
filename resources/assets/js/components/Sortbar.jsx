@@ -77,12 +77,6 @@ class Sortbar extends React.PureComponent {
                         <div onClick={() => this.props.sortDeals('price')}>
                             Price {this.renderIcon('price')}
                         </div>
-                        <div onClick={() => this.props.sortDeals('make')}>
-                            Make {this.renderIcon('make')}
-                        </div>
-                        <div onClick={() => this.props.sortDeals('year')}>
-                            Year {this.renderIcon('year')}
-                        </div>
                     </div>
                 ) : (
                     ''
