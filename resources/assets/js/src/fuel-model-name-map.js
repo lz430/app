@@ -1,5 +1,6 @@
 const modelNameMap = {
     'A3 Sedan': 'A3',
+    'A3 Cabriolet': 'A3',
     'A5 Coupe': 'A5',
     'A8': 'A8 L',
     'allroad': 'A4 allroad',
@@ -12,6 +13,10 @@ const modelNameMap = {
     'Corvette': 'Corvette Grandsport',
     'Express Cargo': 'Express 2500 Cargo',
     'Express Cargo': 'Express 2500 Cargo',
+    'Wrangler JK': 'Wrangler',
+    'Wrangler JK Unlimited': 'Wrangler Unlimited',
+    'All-New Wrangler': 'Wrangler',
+    'All-New Wrangler Unlimited': 'Wrangler Unlimited',
     'Silverado 2500HD': 'Silverado 2500HD',
     'Ram 2500 Pickup': '2500',
     '500c': '500c',
