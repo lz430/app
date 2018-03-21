@@ -63108,6 +63108,10 @@ var _reactImageGallery = __webpack_require__(973);
 
 var _reactImageGallery2 = _interopRequireDefault(_reactImageGallery);
 
+var _AccuPricingModal = __webpack_require__(961);
+
+var _AccuPricingModal2 = _interopRequireDefault(_AccuPricingModal);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
@@ -63632,6 +63636,20 @@ var DealDetails = function (_React$PureComponent) {
                             },
                             'Buy Now'
                         )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'accupricing-cta' },
+                        _react2.default.createElement(
+                            'a',
+                            { onClick: this.props.showAccuPricingModal },
+                            _react2.default.createElement('img', { src: '/images/accupricing-logo.png', className: 'accupricing-cta__logo' })
+                        ),
+                        _react2.default.createElement(
+                            'p',
+                            { className: 'accupricing-cta__disclaimer' },
+                            '* Includes taxes, dealer fees and rebates.'
+                        )
                     )
                 )
             );
@@ -63685,7 +63703,8 @@ var DealDetails = function (_React$PureComponent) {
                 _react2.default.createElement(_CompareBar2.default, { 'class': 'compare-bar compare-bar--static' }),
                 this.state.showStandardFeatures ? this.renderStandardFeaturesModal(deal) : '',
                 this.state.showFeatures ? this.renderFeaturesModal(deal) : '',
-                this.props.selectedDeal ? this.renderCalculatorModal() : ''
+                this.props.selectedDeal ? this.renderCalculatorModal() : '',
+                _react2.default.createElement(_AccuPricingModal2.default, null)
             );
         }
     }]);

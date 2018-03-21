@@ -15,6 +15,7 @@ import strings from 'src/strings';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import ImageGallery from 'react-image-gallery';
+import AccuPricingModal from 'components/AccuPricingModal';
 
 class DealDetails extends React.PureComponent {
     constructor(props) {
@@ -362,6 +363,15 @@ class DealDetails extends React.PureComponent {
                             Buy Now
                         </button>
                     </div>
+
+                    <div className="accupricing-cta">
+                        <a onClick={this.props.showAccuPricingModal}>
+                            <img src="/images/accupricing-logo.png" className="accupricing-cta__logo" />
+                        </a>
+                        <p className="accupricing-cta__disclaimer">
+                            * Includes taxes, dealer fees and rebates.
+                        </p>
+                    </div>
                 </div>
             </Deal>
         );
@@ -402,6 +412,7 @@ class DealDetails extends React.PureComponent {
                 {this.state.showStandardFeatures ? this.renderStandardFeaturesModal(deal) : ''}
                 {this.state.showFeatures ? this.renderFeaturesModal(deal) : ''}
                 {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
+                <AccuPricingModal />
             </div>);
     }
 }
