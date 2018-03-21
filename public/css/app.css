@@ -4648,6 +4648,14 @@ body {
   font-style: normal;
 }
 
+.accupricing-modal-wrapper .modal__overlay {
+  z-index: 50;
+}
+
+.accupricing-modal-wrapper .modal__wrapper {
+  z-index: 55;
+}
+
 .button-group {
   display: -webkit-box;
   display: -ms-flexbox;

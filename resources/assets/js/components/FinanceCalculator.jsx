@@ -54,11 +54,11 @@ class FinanceCalculator extends React.PureComponent {
         return (
             <div>
                 <span className="cash-finance-lease-calculator__left-item">
-                    Total Cost of Vehicle
+                    Your price
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
                     {totalCostOfVehicle ? (
-                        util.moneyFormat(totalCostOfVehicle)
+                        `${util.moneyFormat(totalCostOfVehicle)}*`
                     ) : (
                         <SVGInline svg={miscicons['loading']} />
                     )}
@@ -85,7 +85,7 @@ class FinanceCalculator extends React.PureComponent {
     }
 
     renderAmountFinanced() {
-        const totalAmountToFinance = this.getAmountToFinance();
+        const totalAmountToFinance = this.getTotalVehicleCost();
 
         return (
             <div>
@@ -107,13 +107,13 @@ class FinanceCalculator extends React.PureComponent {
         return (
             <div>
                 <span className="cash-finance-lease-calculator__left-item">
-                    Your Monthly Finance Payment
+                    Your Monthly Payment
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
                     {this.props.dealBestOfferLoading ? (
                         <SVGInline svg={miscicons['loading']} />
                     ) : (
-                        util.moneyFormat(
+                        `${util.moneyFormat(
                             Math.round(
                                 formulas.calculateFinancedMonthlyPayments(
                                     util.getEmployeeOrSupplierPrice(
@@ -124,7 +124,7 @@ class FinanceCalculator extends React.PureComponent {
                                     this.props.termDuration
                                 )
                             )
-                        )
+                        )}*`
                     )}
                 </span>
             </div>
@@ -138,14 +138,21 @@ class FinanceCalculator extends React.PureComponent {
     render() {
         return (
             <div className="cash-finance-lease-calculator__calculator-content">
-                Finance Price{' '}
-                {util.moneyFormat(
-                    util.getEmployeeOrSupplierPrice(
-                        this.props.deal,
-                        this.props.employeeBrand
-                    )
-                )}
-                <CustomerTypeSelect deal={this.props.deal} />
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <div>
+                        <CustomerTypeSelect deal={this.props.deal} />
+                    </div>
+                    <div>
+                        Monthly Payments{' '}{util.moneyFormat(formulas.calculateFinancedMonthlyPayments(
+                            util.getEmployeeOrSupplierPrice(
+                                this.props.deal,
+                                this.props.employeeBrand
+                            ) - this.props.dealBestOfferTotalValue,
+                            this.props.downPayment,
+                            this.props.termDuration
+                    ))}*
+                    </div>
+                </div>
                 <hr />
                 <Targets
                     deal={this.props.deal}
@@ -164,37 +171,13 @@ class FinanceCalculator extends React.PureComponent {
                     </div>
                     <div>
                         <span className="cash-finance-lease-calculator__left-item">
-                            Your Price
+                            Selling Price
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
                             {util.moneyFormat(
                                 util.getEmployeeOrSupplierPrice(
                                     this.props.deal,
                                     this.props.employeeBrand
-                                )
-                            )}
-                        </span>
-                    </div>
-                    <div>
-                        <span className="cash-finance-lease-calculator__left-item">
-                            Documentation Fee
-                        </span>
-                        <span className="cash-finance-lease-calculator__right-item">
-                            {util.moneyFormat(this.props.deal.doc_fee)}
-                        </span>
-                    </div>
-                    <div>
-                        <span className="cash-finance-lease-calculator__left-item">
-                            Sales Tax
-                        </span>
-                        <span className="cash-finance-lease-calculator__right-item">
-                            {util.moneyFormat(
-                                formulas.calculateSalesTaxCashFinance(
-                                    util.getEmployeeOrSupplierPrice(
-                                        this.props.deal,
-                                        this.props.employeeBrand
-                                    ),
-                                    this.props.deal.doc_fee
                                 )
                             )}
                         </span>
@@ -208,7 +191,7 @@ class FinanceCalculator extends React.PureComponent {
                     {this.renderAmountFinanced()}
                     <div>
                         <span className="cash-finance-lease-calculator__left-item">
-                            Down Payment (10%)
+                            Down Payment
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
                             ${' '}
@@ -238,15 +221,15 @@ class FinanceCalculator extends React.PureComponent {
                         </span>
                     </div>
                 </div>
-                <div>
-                    <span className="cash-finance-lease-calculator__left-item">
-                        Annual Percentage Rate (* 4% is an estimated APR)
-                    </span>
-                    <span className="cash-finance-lease-calculator__right-item">
-                        4%
-                    </span>
-                </div>
                 {this.renderYourMonthlyFinancePayment()}
+                <div className="accupricing-cta">
+                    <a onClick={this.props.showAccuPricingModal}>
+                        <img src="/images/accupricing-logo.png" className="accupricing-cta__logo" />
+                    </a>
+                    <p className="accupricing-cta__disclaimer">
+                        * Includes taxes, dealer fees and rebates.
+                    </p>
+                </div>
             </div>
         );
     }

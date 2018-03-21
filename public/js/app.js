@@ -10774,6 +10774,7 @@ var CashFinanceLeaseCalculator = function (_React$PureComponent) {
         key: 'componentWillMount',
         value: function componentWillMount() {
             this.props.updateDownPayment((_util2.default.getEmployeeOrSupplierPrice(this.props.selectedDeal, this.props.employeeBrand) * .1).toFixed(2));
+            this.props.updateTermDuration(60);
         }
     }]);
 
@@ -10807,90 +10808,6 @@ var CashFinanceLeaseCalculator = function (_React$PureComponent) {
         key: 'tabClassName',
         value: function tabClassName(tabName) {
             return 'tabs__tab ' + (tabName === this.props.selectedTab ? 'tabs__tab--selected' : '');
-        }
-    }, {
-        key: 'renderLeaseForm',
-        value: function renderLeaseForm() {
-            var _this2 = this;
-
-            return _react2.default.createElement(
-                'div',
-                { className: 'tabs__content' },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'tabs__content__item' },
-                    _react2.default.createElement(
-                        'label',
-                        { htmlFor: 'down-payment' },
-                        'Down Payment'
-                    ),
-                    _react2.default.createElement('input', {
-                        className: 'lease__down-payment',
-                        type: 'number',
-                        name: 'down-payment'
-                    })
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'tabs__content__item' },
-                    _react2.default.createElement(
-                        'label',
-                        { htmlFor: 'miles-year' },
-                        'Miles Per Year'
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'range-slider' },
-                        _react2.default.createElement('input', {
-                            name: 'miles-year',
-                            type: 'range',
-                            min: '0',
-                            max: '100000',
-                            step: '5000',
-                            defaultValue: this.state.milesPerYear,
-                            onChange: function onChange(el) {
-                                return _this2.setState({
-                                    milesPerYear: el.target.value
-                                });
-                            }
-                        }),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'range-slider__badge' },
-                            _util2.default.numbersWithCommas(this.state.milesPerYear)
-                        )
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'tabs__content__item' },
-                    _react2.default.createElement(
-                        'label',
-                        { htmlFor: 'lease-term' },
-                        'Lease Term (Months)'
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'range-slider' },
-                        _react2.default.createElement('input', {
-                            name: 'lease-term',
-                            type: 'range',
-                            min: '0',
-                            max: '72',
-                            step: '1',
-                            defaultValue: this.state.leaseTerm,
-                            onChange: function onChange(el) {
-                                return _this2.setState({ leaseTerm: el.target.value });
-                            }
-                        }),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'range-slider__badge' },
-                            this.state.leaseTerm
-                        )
-                    )
-                )
-            );
         }
     }, {
         key: 'render',
@@ -61082,10 +60999,23 @@ var CashCalculator = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 { className: 'cash-finance-lease-calculator__calculator-content' },
-                'Cash Price',
-                ' ',
-                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
-                _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal }),
+                _react2.default.createElement(
+                    'div',
+                    { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        'Your Price',
+                        ' ',
+                        _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue)),
+                        '*'
+                    )
+                ),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(_Targets2.default, {
                     deal: this.props.deal,
@@ -61120,40 +61050,12 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__left-item' },
-                            'Your Price'
+                            'Selling Price'
                         ),
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
                             _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand))
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _react2.default.createElement(
-                            'span',
-                            { className: 'cash-finance-lease-calculator__left-item' },
-                            'Documentation Fee'
-                        ),
-                        _react2.default.createElement(
-                            'span',
-                            { className: 'cash-finance-lease-calculator__right-item' },
-                            _util2.default.moneyFormat(this.props.deal.doc_fee)
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _react2.default.createElement(
-                            'span',
-                            { className: 'cash-finance-lease-calculator__left-item' },
-                            'Sales Tax'
-                        ),
-                        _react2.default.createElement(
-                            'span',
-                            { className: 'cash-finance-lease-calculator__right-item' },
-                            _util2.default.moneyFormat(_formulas2.default.calculateSalesTaxCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee))
                         )
                     ),
                     _react2.default.createElement(
@@ -61176,13 +61078,27 @@ var CashCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__left-item' },
-                            'Total Cost of Vehicle'
+                            'Your Price'
                         ),
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue))
+                            this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(_formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue)) + '*'
                         )
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'accupricing-cta' },
+                    _react2.default.createElement(
+                        'a',
+                        { onClick: this.props.showAccuPricingModal },
+                        _react2.default.createElement('img', { src: '/images/accupricing-logo.png', className: 'accupricing-cta__logo' })
+                    ),
+                    _react2.default.createElement(
+                        'p',
+                        { className: 'accupricing-cta__disclaimer' },
+                        '* Includes taxes, dealer fees and rebates.'
                     )
                 )
             );
@@ -61322,12 +61238,12 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__left-item' },
-                    'Total Cost of Vehicle'
+                    'Your price'
                 ),
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    totalCostOfVehicle ? _util2.default.moneyFormat(totalCostOfVehicle) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    totalCostOfVehicle ? _util2.default.moneyFormat(totalCostOfVehicle) + '*' : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
                 )
             );
         }
@@ -61352,7 +61268,7 @@ var FinanceCalculator = function (_React$PureComponent) {
     }, {
         key: 'renderAmountFinanced',
         value: function renderAmountFinanced() {
-            var totalAmountToFinance = this.getAmountToFinance();
+            var totalAmountToFinance = this.getTotalVehicleCost();
 
             return _react2.default.createElement(
                 'div',
@@ -61378,12 +61294,12 @@ var FinanceCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__left-item' },
-                    'Your Monthly Finance Payment'
+                    'Your Monthly Payment'
                 ),
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration)))
+                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _util2.default.moneyFormat(Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration))) + '*'
                 )
             );
         }
@@ -61400,10 +61316,23 @@ var FinanceCalculator = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 { className: 'cash-finance-lease-calculator__calculator-content' },
-                'Finance Price',
-                ' ',
-                _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
-                _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal }),
+                _react2.default.createElement(
+                    'div',
+                    { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        'Monthly Payments',
+                        ' ',
+                        _util2.default.moneyFormat(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration)),
+                        '*'
+                    )
+                ),
                 _react2.default.createElement('hr', null),
                 _react2.default.createElement(_Targets2.default, {
                     deal: this.props.deal,
@@ -61438,40 +61367,12 @@ var FinanceCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__left-item' },
-                            'Your Price'
+                            'Selling Price'
                         ),
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
                             _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand))
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _react2.default.createElement(
-                            'span',
-                            { className: 'cash-finance-lease-calculator__left-item' },
-                            'Documentation Fee'
-                        ),
-                        _react2.default.createElement(
-                            'span',
-                            { className: 'cash-finance-lease-calculator__right-item' },
-                            _util2.default.moneyFormat(this.props.deal.doc_fee)
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _react2.default.createElement(
-                            'span',
-                            { className: 'cash-finance-lease-calculator__left-item' },
-                            'Sales Tax'
-                        ),
-                        _react2.default.createElement(
-                            'span',
-                            { className: 'cash-finance-lease-calculator__right-item' },
-                            _util2.default.moneyFormat(_formulas2.default.calculateSalesTaxCashFinance(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee))
                         )
                     ),
                     this.renderYourTargets(),
@@ -61493,7 +61394,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__left-item' },
-                            'Down Payment (10%)'
+                            'Down Payment'
                         ),
                         _react2.default.createElement(
                             'span',
@@ -61554,21 +61455,21 @@ var FinanceCalculator = function (_React$PureComponent) {
                         )
                     )
                 ),
+                this.renderYourMonthlyFinancePayment(),
                 _react2.default.createElement(
                     'div',
-                    null,
+                    { className: 'accupricing-cta' },
                     _react2.default.createElement(
-                        'span',
-                        { className: 'cash-finance-lease-calculator__left-item' },
-                        'Annual Percentage Rate (* 4% is an estimated APR)'
+                        'a',
+                        { onClick: this.props.showAccuPricingModal },
+                        _react2.default.createElement('img', { src: '/images/accupricing-logo.png', className: 'accupricing-cta__logo' })
                     ),
                     _react2.default.createElement(
-                        'span',
-                        { className: 'cash-finance-lease-calculator__right-item' },
-                        '4%'
+                        'p',
+                        { className: 'accupricing-cta__disclaimer' },
+                        '* Includes taxes, dealer fees and rebates.'
                     )
-                ),
-                this.renderYourMonthlyFinancePayment()
+                )
             );
         }
     }]);
@@ -62213,28 +62114,32 @@ var AccuPricingModal = function (_React$PureComponent) {
                 "div",
                 null,
                 this.props.accuPricingModalIsShowing && _react2.default.createElement(
-                    _Modal2.default,
-                    { onClose: this.props.hideAccuPricingModal },
+                    "div",
+                    { className: "accupricing-modal-wrapper" },
                     _react2.default.createElement(
-                        "div",
-                        { className: "accupricing-modal" },
-                        _react2.default.createElement("img", { src: "/images/accupricing-logo.png", className: "accupricing-modal__logo" }),
+                        _Modal2.default,
+                        { onClose: this.props.hideAccuPricingModal },
                         _react2.default.createElement(
-                            "p",
-                            null,
-                            "Deliver My Ride ",
+                            "div",
+                            { className: "accupricing-modal" },
+                            _react2.default.createElement("img", { src: "/images/accupricing-logo.png", className: "accupricing-modal__logo" }),
                             _react2.default.createElement(
-                                "em",
+                                "p",
                                 null,
-                                "includes"
-                            ),
-                            " all standard rebates, all taxes and all dealer fees in its pricing and payment quotes. When comparing to dealer or manufacturer advertised pricing, be sure to read all disclaimers. In most cases, advertised pricing ",
-                            _react2.default.createElement(
-                                "em",
-                                null,
-                                "does not include"
-                            ),
-                            " taxes and fees, but does include conditional or unrealistic rebates and significant cash due at signing. All payments assume good to excellent credit."
+                                "Deliver My Ride ",
+                                _react2.default.createElement(
+                                    "em",
+                                    null,
+                                    "includes"
+                                ),
+                                " all standard rebates, all taxes and all dealer fees in its pricing and payment quotes. When comparing to dealer or manufacturer advertised pricing, be sure to read all disclaimers. In most cases, advertised pricing ",
+                                _react2.default.createElement(
+                                    "em",
+                                    null,
+                                    "does not include"
+                                ),
+                                " taxes and fees, but does include conditional or unrealistic rebates and significant cash due at signing. All payments assume good to excellent credit."
+                            )
                         )
                     )
                 )
