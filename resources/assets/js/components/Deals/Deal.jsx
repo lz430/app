@@ -31,7 +31,7 @@ class Deal extends React.PureComponent {
                                     {`${deal.model} ${deal.series}`}
                                 </div>
                                 <div className="deal__basic-info-color">
-                                    {deal.color}
+                                    {deal.color}, {deal.interior_color}
                                 </div>
                             </div>
                         </div>
