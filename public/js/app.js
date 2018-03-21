@@ -58496,7 +58496,8 @@ var InfoModalData = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'info-modal-data__amount' },
-                            _util2.default.moneyFormat(this.finalPrice())
+                            _util2.default.moneyFormat(this.finalPrice()),
+                            '*'
                         )
                     )
                 );
@@ -58557,7 +58558,8 @@ var InfoModalData = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'info-modal-data__amount' },
-                            _util2.default.moneyFormat(this.finalPrice())
+                            _util2.default.moneyFormat(this.finalPrice()),
+                            '*'
                         )
                     )
                 );
