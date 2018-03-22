@@ -66435,73 +66435,6 @@ var ComparePage = function (_React$PureComponent) {
             );
         }
     }, {
-        key: 'renderPricingTable',
-        value: function renderPricingTable(compareList) {
-            return _react2.default.createElement(
-                'div',
-                { className: 'compare-page-table' },
-                this.renderAccordionTabHeader('Pricing'),
-                _react2.default.createElement(
-                    'div',
-                    { className: this.columnClass('Pricing') },
-                    compareList.map(function (dealAndSelectedFilters, index) {
-                        return _react2.default.createElement(
-                            'div',
-                            {
-                                key: index,
-                                className: 'compare-page-table__column'
-                            },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'compare-page-table__cell' },
-                                _react2.default.createElement(
-                                    'strong',
-                                    null,
-                                    'MSRP:'
-                                ),
-                                ' ',
-                                _util2.default.moneyFormat(dealAndSelectedFilters.deal.msrp)
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'compare-page-table__cell' },
-                                _react2.default.createElement(
-                                    'strong',
-                                    null,
-                                    'Invoice:'
-                                ),
-                                ' ',
-                                _util2.default.moneyFormat(dealAndSelectedFilters.deal.version.invoice)
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'compare-page-table__cell' },
-                                _react2.default.createElement(
-                                    'strong',
-                                    null,
-                                    'Delivery:'
-                                ),
-                                ' Always Free!'
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'compare-page-table__cell' },
-                                _react2.default.createElement(
-                                    'strong',
-                                    null,
-                                    'Deliver My Ride Price:'
-                                ),
-                                ' ',
-                                _react2.default.createElement(_Pricing2.default, {
-                                    deal: dealAndSelectedFilters.deal
-                                })
-                            )
-                        );
-                    })
-                )
-            );
-        }
-    }, {
         key: 'renderWarrantyTable',
         value: function renderWarrantyTable(compareList) {
             var _this6 = this;
@@ -66778,13 +66711,6 @@ var ComparePage = function (_React$PureComponent) {
                             return _this9.renderSelectionsTable(_this9.props.compareList);
                         }
                     ) : '',
-                    _react2.default.createElement(
-                        _AccordionTable2.default,
-                        null,
-                        function () {
-                            return _this9.renderPricingTable(_this9.props.compareList);
-                        }
-                    ),
                     _react2.default.createElement(
                         _AccordionTable2.default,
                         null,
