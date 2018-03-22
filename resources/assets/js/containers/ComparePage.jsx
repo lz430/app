@@ -312,47 +312,6 @@ class ComparePage extends React.PureComponent {
         );
     }
 
-    renderPricingTable(compareList) {
-        return (
-            <div className="compare-page-table">
-                {this.renderAccordionTabHeader('Pricing')}
-                <div className={this.columnClass('Pricing')}>
-                    {compareList.map((dealAndSelectedFilters, index) => {
-                        return (
-                            <div
-                                key={index}
-                                className="compare-page-table__column"
-                            >
-                                <div className="compare-page-table__cell">
-                                    <strong>MSRP:</strong>{' '}
-                                    {util.moneyFormat(
-                                        dealAndSelectedFilters.deal.msrp
-                                    )}
-                                </div>
-                                <div className="compare-page-table__cell">
-                                    <strong>Invoice:</strong>{' '}
-                                    {util.moneyFormat(
-                                        dealAndSelectedFilters.deal.version
-                                            .invoice
-                                    )}
-                                </div>
-                                <div className="compare-page-table__cell">
-                                    <strong>Delivery:</strong> Always Free!
-                                </div>
-                                <div className="compare-page-table__cell">
-                                    <strong>Deliver My Ride Price:</strong>{' '}
-                                    <Pricing
-                                        deal={dealAndSelectedFilters.deal}
-                                    />
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-        );
-    }
-
     renderWarrantyTable(compareList) {
         return (
             <div className="compare-page-table">
@@ -653,13 +612,6 @@ class ComparePage extends React.PureComponent {
                     ) : (
                         ''
                     )}
-                    <AccordionTable>
-                        {() => {
-                            return this.renderPricingTable(
-                                this.props.compareList
-                            );
-                        }}
-                    </AccordionTable>
                     <AccordionTable>
                         {() => {
                             return this.renderWarrantyTable(
