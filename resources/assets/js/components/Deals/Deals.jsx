@@ -31,13 +31,21 @@ class Deals extends React.PureComponent {
             return <SVGInline svg={miscicons['loading']} />;
         }
 
-        // No matches at all
-        if (!this.props.deals && !this.props.modelYears) {
-            <NoDealsInRange />
+        // No matches at all for initial search
+        if (
+            (!this.props.deals && !this.props.modelYears) ||
+            (!this.props.deals && this.props.modelYears.length == 0)
+        ) {
+            return <NoDealsInRange />;
+        }
+
+        // There were model card results for our initial search but we've modified it to an empty list
+        if (this.props.filterPage == 'deals' && this.props.deals.length == 0) {
+            return <NoDealsInRange />;
         }
 
         // We have some results; which should we prefer?
-        return this.props.deals && this.props.deals.length ? (
+        return this.props.filterPage == 'deals' ? (
             <ViewDeals />
         ) : (
             <ViewModels />
