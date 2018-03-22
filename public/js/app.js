@@ -42509,7 +42509,7 @@ var FilterPage = function (_React$PureComponent) {
                         { className: 'filter-page__top-row__section filter-page__top-row__section--accuPricing' },
                         this.renderAccuPricingCta()
                     ),
-                    this.props.deals && this.props.deals.length > 0 && _react2.default.createElement(
+                    this.props.filterPage == 'deals' && _react2.default.createElement(
                         'div',
                         { className: 'filter-page__top-row__section filter-page__top-row__section--tabButtons' },
                         this.renderSelectedTabButtons()
@@ -42572,7 +42572,8 @@ var mapStateToProps = function mapStateToProps(state) {
         showMakeSelectorModal: state.showMakeSelectorModal,
         selectedDeal: state.selectedDeal,
         selectedTab: state.selectedTab,
-        deals: state.deals
+        deals: state.deals,
+        filterPage: state.filterPage
     };
 };
 
@@ -52621,13 +52622,18 @@ var Deals = function (_React$PureComponent) {
                 return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
             }
 
-            // No matches at all
-            if (!this.props.deals && !this.props.modelYears) {
-                _react2.default.createElement(_NoDealsInRange2.default, null);
+            // No matches at all for initial search
+            if (!this.props.deals && !this.props.modelYears || !this.props.deals && this.props.modelYears.length == 0) {
+                return _react2.default.createElement(_NoDealsInRange2.default, null);
+            }
+
+            // There were model card results for our initial search but we've modified it to an empty list
+            if (this.props.filterPage == 'deals' && this.props.deals.length == 0) {
+                return _react2.default.createElement(_NoDealsInRange2.default, null);
             }
 
             // We have some results; which should we prefer?
-            return this.props.deals && this.props.deals.length ? _react2.default.createElement(_ViewDeals2.default, null) : _react2.default.createElement(_ViewModels2.default, null);
+            return this.props.filterPage == 'deals' ? _react2.default.createElement(_ViewDeals2.default, null) : _react2.default.createElement(_ViewModels2.default, null);
         }
     }]);
 
