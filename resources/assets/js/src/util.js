@@ -32,6 +32,9 @@ const util = {
     getInitialBodyStyleFromUrl: () => {
         return R.prop('style', qs.parse(window.location.search.slice(1)));
     },
+    getInitialSizeFromUrl: () => {
+        return R.prop('size', qs.parse(window.location.search.slice(1)));
+    },
     fromRefreshed: () => {
         return window.performance.navigation.type === 1;
     },

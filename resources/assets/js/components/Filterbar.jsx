@@ -70,6 +70,7 @@ class Filterbar extends React.PureComponent {
                 className="filterbar__filter"
             >
                 {/*
+                    @todo when restoring this, this won't work; segment is a feature now
                 onClick={this.props.chooseSegment.bind(null, segment)}
                 */}
                 {segment} {this.renderX()}

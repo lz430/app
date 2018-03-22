@@ -443,22 +443,6 @@ export function chooseTransmissionType(transmissionType) {
     };
 }
 
-export function chooseSegment(segment) {
-    return (dispatch, getState) => {
-        const selectedSegment =
-            getState().selectedSegment === segment ? null : segment;
-
-        dispatch({
-            type: ActionTypes.CHOOSE_SEGMENT,
-            selectedSegment,
-        });
-
-        requestDealsOrModelYears({
-            segment: selectedSegment,
-        });
-    };
-}
-
 export function chooseYear(year) {
     return (dispatch, getState) => {
         const selectedYear =
