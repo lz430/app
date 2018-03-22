@@ -6,7 +6,6 @@ import FilterMakeSelector from 'components/FilterMakeSelector';
 import FilterFuelTypeSelector from 'components/FilterFuelTypeSelector';
 import FilterFeatureSelector from 'components/FilterFeatureSelector';
 import FilterTransmissionTypeSelector from 'components/FilterTransmissionTypeSelector';
-import FilterSegmentSelector from 'components/FilterSegmentSelector';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import R from 'ramda';

@@ -14,10 +14,11 @@ import util from 'src/util';
 import { checkZipInRange, requestFeatureCategories } from './actions/index';
 
 const urlStyle = util.getInitialBodyStyleFromUrl();
+const urlSize = util.getInitialSizeFromUrl();
 
 const initialState = {
     /** Version **/
-    4: '<- increment the number to purge LocalStorage',
+    5: '<- increment the number to purge LocalStorage',
     /** End Version **/
     accuPricingModalIsShowing: false,
     annualMileage: 10000,
@@ -46,11 +47,10 @@ const initialState = {
     searchFeatures: [],
     segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
     selectedDeal: null,
-    selectedFeatures: [],
+    selectedFeatures: urlSize ? [urlSize] : [],
     selectedFuelType: null,
     selectedMakes: [],
     selectedModels: [],
-    selectedSegment: null,
     selectedStyles: urlStyle ? [urlStyle] : [],
     selectedTab: 'cash',
     selectedTargets: [],
