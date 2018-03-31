@@ -2040,6 +2040,14 @@ body {
   padding: 15px;
 }
 
+.cash-finance-lease-calculator .rebates h4 {
+  margin-bottom: 0;
+}
+
+.cash-finance-lease-calculator .rebates p:first-of-type {
+  margin-top: 0;
+}
+
 .cash-finance-lease-calculator__calculator-content {
   width: 100%;
 }

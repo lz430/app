@@ -364,7 +364,7 @@ class LeaseCalculator extends React.PureComponent {
                         this.props.employeeBrand
                     )
                 )}
-                <CustomerTypeSelect deal={this.props.deal} />
+                <CustomerTypeSelect {...R.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props)} />
                 <Targets
                     deal={this.props.deal}
                     targetsChanged={this.handleTargetsChange.bind(this)}

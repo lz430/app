@@ -14673,14 +14673,19 @@ var Targets = function (_React$PureComponent) {
                 this.props.dealTargetsAvailable.length == 0 ? _react2.default.createElement(
                     'h4',
                     null,
-                    'No Selectable Targets Available'
+                    'No Incentives Available'
                 ) : _react2.default.createElement(
                     'div',
                     null,
                     _react2.default.createElement(
                         'h4',
                         null,
-                        'Select Your Targets'
+                        'Available Incentives'
+                    ),
+                    _react2.default.createElement(
+                        'p',
+                        null,
+                        'Select all that apply. Proof of eligibility required.'
                     ),
                     this.props.dealTargetsAvailable.map(function (target, index) {
                         return _this2.renderTarget(target, index);
@@ -14825,13 +14830,7 @@ var CustomerTypeSelect = function (_React$PureComponent) {
     return CustomerTypeSelect;
 }(_react2.default.PureComponent);
 
-var mapStateToProps = function mapStateToProps(state) {
-    return {
-        employeeBrand: state.employeeBrand
-    };
-};
-
-exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(CustomerTypeSelect);
+exports.default = CustomerTypeSelect;
 
 /***/ }),
 /* 228 */
@@ -61011,7 +61010,7 @@ var CashCalculator = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         null,
-                        _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal })
+                        _react2.default.createElement(_CustomerTypeSelect2.default, _ramda2.default.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props))
                     ),
                     _react2.default.createElement(
                         'div',
@@ -61328,7 +61327,7 @@ var FinanceCalculator = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         null,
-                        _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal })
+                        _react2.default.createElement(_CustomerTypeSelect2.default, _ramda2.default.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props))
                     ),
                     _react2.default.createElement(
                         'div',
@@ -61885,7 +61884,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                 'Lease Price',
                 ' ',
                 _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand)),
-                _react2.default.createElement(_CustomerTypeSelect2.default, { deal: this.props.deal }),
+                _react2.default.createElement(_CustomerTypeSelect2.default, _ramda2.default.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props)),
                 _react2.default.createElement(_Targets2.default, {
                     deal: this.props.deal,
                     targetsChanged: this.handleTargetsChange.bind(this)
