@@ -5,6 +5,13 @@
   width: 450px;
   padding: 15px;
 
+  .rebates {
+    h4 { margin-bottom: 0; }
+    p:first-of-type {
+      margin-top: 0;
+    }
+  }
+
   &__calculator-content {
     width: 100%;
   }

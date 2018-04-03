@@ -31,7 +31,7 @@ const initialState = {
     dealPage: 1,
     dealPageTotal: 1,
     deals: null,
-    downPayment: 0,
+    downPayment: null,
     employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
     featureCategories: [],
@@ -72,7 +72,7 @@ const initialState = {
         45, // Captive Finance Customer
         52, // Auto Show Cash Recipient
     ],
-    termDuration: 36,
+    termDuration: 60,
     transmissionTypes: ['automatic', 'manual'],
     vehicleModel: null,
     vehicleYear: null,

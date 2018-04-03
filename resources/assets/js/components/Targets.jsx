@@ -63,10 +63,11 @@ class Targets extends React.PureComponent {
         return (
             <div className="rebates">
                 {this.props.dealTargetsAvailable.length == 0 ? (
-                    <h4>No Selectable Targets Available</h4>
+                    <h4>No Incentives Available</h4>
                 ) : (
                     <div>
-                        <h4>Select Your Targets</h4>
+                        <h4>Available Incentives</h4>
+                        <p>Select all that apply. Proof of eligibility required.</p>
                         {this.props.dealTargetsAvailable.map((target, index) =>
                             this.renderTarget(target, index)
                         )}

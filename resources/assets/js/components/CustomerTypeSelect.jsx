@@ -12,7 +12,6 @@ class CustomerTypeSelect extends React.PureComponent {
     }
 
     render() {
-
         return domesticBrands.includes(this.props.deal.make) ? (
             <div className="customer-type">
                 <select
@@ -33,10 +32,4 @@ class CustomerTypeSelect extends React.PureComponent {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        employeeBrand: state.employeeBrand,
-    };
-};
-
-export default connect(mapStateToProps, Actions)(CustomerTypeSelect);
+export default CustomerTypeSelect;

@@ -9,7 +9,6 @@ class InfoModal extends React.PureComponent {
         super(props);
 
         this.state = {
-            body: null,
             toggled: false,
         };
     }
@@ -22,7 +21,15 @@ class InfoModal extends React.PureComponent {
                     <div className="modal__content">
                         <InfoModalData
                             closeModal={() => this.toggleModal()}
-                            deal={this.props.deal}
+                            {...R.pick(['deal', 'selectedTab', 'compareList', 'dealPricing'], this.props)}
+                            {...R.pick([
+                                'selectDeal',
+                                'selectTab',
+                                'requestTargets',
+                                'requestBestOffer',
+                                'getBestOffersForLoadedDeals',
+                                'toggleCompare'
+                            ], this.props)}
                         />
                     </div>
                 </div>

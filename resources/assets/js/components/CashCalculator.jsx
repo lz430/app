@@ -25,7 +25,7 @@ class CashCalculator extends React.PureComponent {
             <div className="cash-finance-lease-calculator__calculator-content">
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                     <div>
-                        <CustomerTypeSelect deal={this.props.deal} />
+                        <CustomerTypeSelect {...R.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props)} />
                     </div>
                     <div>
                         Your Price{' '}{util.moneyFormat(formulas.calculateTotalCash(
