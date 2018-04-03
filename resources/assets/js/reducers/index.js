@@ -2,6 +2,7 @@ import * as ActionTypes from 'actiontypes/index';
 import R from 'ramda';
 import { REHYDRATE } from 'redux-persist/constants';
 import util from 'src/util';
+import isEqual from 'lodash.isEqual'
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -240,11 +241,18 @@ const reducer = (state, action) => {
                 zipInRange: action.supported,
             });
         case ActionTypes.RECEIVE_BEST_OFFER:
+            if (isEqual(state.bestOffers[action.bestOfferKey], action.data)) {
+                return state;
+            }
+
             return {
                 ...state,
                 bestOffers: {
                     ...state.bestOffers,
-                    [action.bestOfferKey]: action.data} }
+                    [action.bestOfferKey]: action.data
+                }
+
+            };
         case ActionTypes.APPEND_CANCEL_TOKEN:
             return {
                 ...state,

@@ -7,14 +7,6 @@ import { connect } from 'react-redux';
 import * as Actions from 'actions';
 
 class CashFinanceLeaseCalculator extends React.PureComponent {
-    componentWillMount() {
-        this.props.updateDownPayment((util.getEmployeeOrSupplierPrice(
-            this.props.selectedDeal,
-            this.props.employeeBrand
-        ) * .1).toFixed(2));
-        this.props.updateTermDuration(60);
-    }
-
     constructor() {
         super();
 

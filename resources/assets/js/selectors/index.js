@@ -10,6 +10,13 @@ const targetsSelected = state => state.targetsSelected;
 const bestOffers = state => state.bestOffers;
 const paymentType = state => state.selectedTab;
 const targetDefaults = state => state.targetDefaults;
+const employeeBrand = state => state.employeeBrand === false ? null : state.employeeBrand;
+
+const financeDownPayment = state => state.downPayment;
+const financeTerm = state => state.termDuration;
+
+const leaseAnnualMiles = state => state.annualMileage;
+const leaseTerm = state => state.termDuration;
 
 // Generate the target key for a specific deal
 const dealTargetKey = createSelector(
@@ -89,10 +96,13 @@ export const makeDealBestOfferKey = () => {
     return dealBestOfferKey;
 }
 
+const dealBestOfferLoadingTrue = true;
+const dealBestOfferLoadingFalse = false;
+
 const dealBestOfferLoading = createSelector(
     [bestOffers, dealBestOfferKey],
     (bestOffers, dealBestOfferKey) => {
-        return R.isNil(R.prop(dealBestOfferKey,  bestOffers));
+        return R.isNil(R.prop(dealBestOfferKey,  bestOffers)) ? dealBestOfferLoadingTrue : dealBestOfferLoadingFalse;
     }
 )
 
@@ -100,11 +110,13 @@ export const makeDealBestOfferLoading = () => {
     return dealBestOfferLoading;
 }
 
+const emptyBestOffer = {totalValue: 0, programs: []};
+
 // Show me the best offer for a specific deal or default to no best offer
 const dealBestOffer = createSelector(
     [bestOffers, dealBestOfferKey],
     (bestOffers, dealBestOfferKey) => {
-        return R.prop(dealBestOfferKey,  bestOffers) || {totalValue: 0, programs: []};
+        return R.prop(dealBestOfferKey,  bestOffers) || emptyBestOffer;
     }
 )
 
@@ -123,3 +135,45 @@ const dealBestOfferTotalValue = createSelector(
 export const makeDealBestOfferTotalValue = () => {
     return dealBestOfferTotalValue;
 }
+
+const dealPricing = createSelector(
+    deal,
+    dealBestOffer,
+    dealBestOfferLoading,
+    zipcode,
+    paymentType,
+    employeeBrand,
+    financeDownPayment,
+    financeTerm,
+    leaseAnnualMiles,
+    leaseTerm,
+    (
+        deal,
+        dealBestOffer,
+        dealBestOfferLoading,
+        zipcode,
+        paymentType,
+        employeeBrand,
+        financeDownPayment,
+        financeTerm,
+        leaseAnnualMiles,
+        leaseTerm,
+    ) => {
+        return {
+            deal,
+            bestOffer: dealBestOffer,
+            bestOffersIsLoading: dealBestOfferLoading,
+            zipcode,
+            paymentType,
+            employeeBrand,
+            financeDownPayment,
+            financeTerm,
+            leaseAnnualMiles,
+            leaseTerm,
+        };
+    }
+);
+
+export const makeDealPricing = () => {
+    return dealPricing;
+};
