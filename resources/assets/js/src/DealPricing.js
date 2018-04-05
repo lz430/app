@@ -1,44 +1,27 @@
 import formulas from 'src/formulas';
 import util from 'src/util';
 import R from "ramda";
+import Decimal from "decimal.js";
 
 export default class DealPricing {
-    constructor({
-                    deal,
-                    bestOffer,
-                    bestOffersIsLoading,
-                    zipcode,
-                    paymentType,
-                    employeeBrand,
-                    financeDownPayment,
-                    financeTerm,
-                    leaseAnnualMiles,
-                    leaseTerm,
-                    leaseResidualPercent
-                } = {}) {
-        this._deal = deal;
-        this._bestOffer = bestOffer;
-        this._bestOffersIsLoading = bestOffersIsLoading;
-        this._zipcode = zipcode;
-        this._paymentType = paymentType;
-        this._employeeBrand = employeeBrand;
-        this._financeDownPayment = financeDownPayment;
-        this._financeTerm = financeTerm;
-        this._leaseAnnualMiles = leaseAnnualMiles;
-        this._leaseTerm = leaseTerm;
-        this._leaseResidualPercent = leaseResidualPercent;
+    constructor(data) {
+        this.data = data;
+    }
+
+    update(data) {
+        this.data = data;
     }
 
     bestOffersIsLoading() {
-        return this._bestOffersIsLoading;
+        return this.data.bestOffersIsLoading;
     }
 
     deal() {
-        return this._deal;
+        return this.data.deal;
     }
 
     financeDownPaymentValue() {
-        return this._financeDownPayment;
+        return this.data.financeDownPayment === null ? this.yourPriceValue() * .10 : this.data.financeDownPayment;
     }
 
     financeDownPayment() {
@@ -46,7 +29,7 @@ export default class DealPricing {
     }
 
     financeTermValue() {
-        return this._financeTerm;
+        return this.data.financeTerm === null ? 60 : this.data.financeTerm;
     }
 
     financeTerm() {
@@ -54,15 +37,23 @@ export default class DealPricing {
     }
 
     leaseTermValue() {
-        return this._leaseTerm;
+        return this.data.leaseTerm === null ? 36 : this.data.leaseTerm;
     }
 
     leaseTerm() {
         return this.leaseTermValue();
     }
 
+    leaseAnnualMileageValue() {
+        return this.data.leaseAnnualMileage === null ? 10000 : this.data.leaseAnnualMileage;
+    }
+
+    leaseAnnualMileage() {
+        return this.leaseAnnualMileageValue();
+    }
+
     leaseResidualPercentValue() {
-        return this._leaseResidualPercent;
+        return this.data.leaseResidualPercent;
     }
 
     leaseResidualPercent() {
@@ -70,51 +61,112 @@ export default class DealPricing {
     }
 
     msrp() {
-        return util.moneyFormat(this._deal.msrp);
+        return util.moneyFormat(this.data.deal.msrp);
     }
 
     docFeeValue() {
-        return this._deal.doc_fee;
+        return this.data.deal.doc_fee;
     }
 
     docFee() {
         return util.moneyFormat(this.docFeeValue());
     }
 
+    effCvrFeeValue() {
+        return 24;
+    }
+
+    licenseAndRegistrationValue() {
+        return 23;
+    }
+
+    taxRate() {
+        return 0.06;
+    }
+
+    acquisitionFee() {
+        return 640;
+    }
+
     bestOfferValue() {
-        return this._bestOffer.totalValue || 0;
+        return this.data.bestOffer.totalValue || 0;
     }
 
     bestOffer() {
         return util.moneyFormat(this.bestOfferValue());
     }
 
-    basePriceValue() {
-        return util.getEmployeeOrSupplierPrice(this._deal, this._employeeBrand);
+    baseSellingPriceValue() {
+        return this.data.employeeBrand === this.data.deal.make
+            ? this.data.deal.employee_price
+            : this.data.deal.supplier_price;
     }
 
-    basePrice() {
-        return util.moneyFormat(this.basePriceValue());
+    baseSellingPrice() {
+        return util.moneyFormat(this.baseSellingPriceValue());
+    }
+
+    sellingPriceValue() {
+        switch (this.data.paymentType) {
+            case 'cash':
+            case 'finance':
+                const total = new Decimal(this.baseSellingPriceValue())
+                    .plus(this.docFeeValue())
+                    .plus(this.effCvrFeeValue());
+
+                const totalWithSalesTax = total.plus(total.times(this.taxRate()));
+
+                return Number(totalWithSalesTax.plus(this.licenseAndRegistrationValue()));
+            case 'lease':
+                return new Decimal(this.baseSellingPriceValue())
+                    .plus(this.docFeeValue())
+                    .plus(new Decimal(this.docFeeValue()).times(this.taxRate()))
+                    .plus(this.effCvrFeeValue())
+                    .plus(new Decimal(this.effCvrFeeValue()).times(this.taxRate()))
+                    .plus(this.licenseAndRegistrationValue())
+                    .plus(this.acquisitionFee());
+        }
+    }
+
+    sellingPrice() {
+        return util.moneyFormat(this.sellingPriceValue());
     }
 
     yourPriceValue() {
-        switch (this._paymentType) {
+        switch (this.data.paymentType) {
+            case 'cash':
+            case 'finance':
+                return new Decimal(this.sellingPriceValue())
+                    .minus(this.bestOfferValue());
+            case 'lease':
+                return new Decimal(this.sellingPriceValue())
+                    .minus(this.bestOfferValue());
+        }
+    }
+
+    yourPrice() {
+        return util.moneyFormat(this.yourPriceValue());
+    }
+
+    /*
+    yourPriceValue() {
+        switch (this.data.paymentType) {
             case 'cash':
                 return formulas.calculateTotalCash(
-                    this.basePriceValue(),
+                    this.baseSellingPriceValue(),
                     this.docFeeValue(),
                     this.bestOfferValue()
                 );
             case 'finance':
                 return formulas.calculateTotalCashFinance(
-                    this.basePriceValue(),
+                    this.baseSellingPriceValue(),
                     this.docFeeValue(),
                     this.financeDownPaymentValue(),
                     this.bestOfferValue()
                 );
             case 'lease':
                 return formulas.calculateTotalLease(
-                    this.basePriceValue(),
+                    this.baseSellingPriceValue(),
                     this.docFeeValue(),
                     this.bestOfferValue()
                 )
@@ -124,19 +176,16 @@ export default class DealPricing {
     yourPrice() {
         return util.moneyFormat(this.yourPriceValue());
     }
+    */
 
     finalPriceValue() {
-        switch (this._paymentType) {
+        switch (this.data.paymentType) {
             case 'cash':
-                return formulas.calculateTotalCash(
-                    this.basePriceValue(),
-                    this.docFeeValue(),
-                    this.bestOfferValue()
-                );
+                return this.yourPriceValue();
             case 'finance':
                 return Math.round(
                     formulas.calculateFinancedMonthlyPayments(
-                        this.basePriceValue() - this.bestOfferValue(),
+                        this.baseSellingPriceValue() - this.bestOfferValue(),
                         this.financeDownPaymentValue(),
                         this.financeTermValue()
                     )
@@ -144,7 +193,7 @@ export default class DealPricing {
             case 'lease':
                 return formulas.calculateTotalLeaseMonthlyPayment(
                     formulas.calculateLeasedMonthlyPayments(
-                        this.basePriceValue() - this.bestOfferValue(),
+                        this.baseSellingPriceValue() - this.bestOfferValue(),
                         0,
                         0,
                         this.leaseTerm(),

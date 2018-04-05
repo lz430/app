@@ -93,15 +93,15 @@ class InfoModalData extends React.PureComponent {
                         <div className="info-modal-data__label">
                             Down Payment:
                         </div>
-                        <div className="info-modal-data__amount">{this.props.dealPricing.financeDownPayment}</div>
+                        <div className="info-modal-data__amount">{this.props.dealPricing.financeDownPayment()}</div>
                     </div>
                     <div className="info-modal-data__costs">
                         <div className="info-modal-data__label">
                             Total Months:
                         </div>
-                        <div className="info-modal-data__amount">{this.props.dealPricing.financeTerm}</div>
+                        <div className="info-modal-data__amount">{this.props.dealPricing.financeTerm()}</div>
                     </div>
-                    <div className="info-modal-data__costs info-modal-data__costs--final">
+                    <div className="info-modal-data__costs info-modal-data__costs--final-payments">
                         <div className="info-modal-data__label">
                             Monthly Payments:
                         </div>
@@ -117,7 +117,7 @@ class InfoModalData extends React.PureComponent {
                         <div className="info-modal-data__label">
                             Total Months:
                         </div>
-                        <div className="info-modal-data__amount">{leaseTermLength}</div>
+                        <div className="info-modal-data__amount">{this.props.dealPricing.leaseTerm()}</div>
                     </div>
                     <div className="info-modal-data__costs">
                         <div className="info-modal-data__label">
@@ -130,9 +130,9 @@ class InfoModalData extends React.PureComponent {
                         <div className="info-modal-data__label">
                             Annual Miles:
                         </div>
-                        <div className="info-modal-data__amount">{leaseAnnualMiles}</div>
+                        <div className="info-modal-data__amount">{this.props.dealPricing.leaseAnnualMileage()}</div>
                     </div>
-                    <div className="info-modal-data__costs info-modal-data__costs--final">
+                    <div className="info-modal-data__costs info-modal-data__costs--final-payments">
                         <div className="info-modal-data__label">
                             Monthly Payments:
                         </div>
@@ -167,7 +167,7 @@ class InfoModalData extends React.PureComponent {
                                 <div className="info-modal-data__label">
                                     Selling Price:
                                 </div>
-                                <div className="info-modal-data__amount">{this.props.dealPricing.basePrice()}</div>
+                                <div className="info-modal-data__amount">{this.props.dealPricing.sellingPrice()}</div>
                             </div>
 
                             { this.renderAppliedRebatesLink() }
@@ -176,7 +176,15 @@ class InfoModalData extends React.PureComponent {
                                 <div className="info-modal-data__label">
                                     Your Price:
                                 </div>
-                                <div className="info-modal-data__amount">{this.props.dealPricing.finalPrice()}*</div>
+                                {this.props.selectedTab === 'cash' &&
+                                    <div className="info-modal-data__amount info-modal-data__amount--cash">{this.props.dealPricing.yourPrice()}*</div>
+                                }
+                                {this.props.selectedTab === 'finance' &&
+                                    <div className="info-modal-data__amount info-modal-data__amount--finance">{this.props.dealPricing.yourPrice()}*</div>
+                                }
+                                {this.props.selectedTab === 'lease' &&
+                                    <div className="info-modal-data__amount info-modal-data__amount--lease">{this.props.dealPricing.yourPrice()}*</div>
+                                }
                             </div>
 
                             {this.props.selectedTab !== 'cash' &&

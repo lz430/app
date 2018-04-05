@@ -623,24 +623,39 @@ export function toggleTarget(target, targetKey) {
     };
 }
 
-export function updateDownPayment(downPayment) {
+export function updateFinanceTerm(term) {
     return {
-        type: ActionTypes.UPDATE_DOWN_PAYMENT,
+        type: ActionTypes.UPDATE_FINANCE_TERM,
+        term,
+    };
+}
+
+export function updateFinanceDownPayment(downPayment) {
+    return {
+        type: ActionTypes.UPDATE_FINANCE_DOWN_PAYMENT,
         downPayment,
     };
 }
 
-export function updateTermDuration(termDuration) {
+
+export function updateLeaseAnnualMileage(annualMileage) {
     return {
-        type: ActionTypes.UPDATE_TERM_DURATION,
-        termDuration,
+        type: ActionTypes.UPDATE_LEASE_ANNUAL_MILEAGE,
+        annualMileage,
     };
 }
 
-export function updateAnnualMileage(annualMileage) {
+export function updateLeaseTerm(term) {
     return {
-        type: ActionTypes.UPDATE_ANNUAL_MILEAGE,
-        annualMileage,
+        type: ActionTypes.UPDATE_LEASE_TERM,
+        term,
+    };
+}
+
+export function updateLeaseCashDue(cashDue) {
+    return {
+        type: ActionTypes.UPDATE_LEASE_CASH_DUE,
+        cashDue,
     };
 }
 
@@ -797,5 +812,18 @@ export function showAccuPricingModal() {
 export function hideAccuPricingModal() {
     return {
         type: ActionTypes.HIDE_ACCUPRICING_MODAL
+    }
+}
+
+export function showInfoModal(dealId) {
+    return {
+        type: ActionTypes.SHOW_INFO_MODAL,
+        dealId,
+    }
+}
+
+export function hideInfoModal() {
+    return {
+        type: ActionTypes.HIDE_INFO_MODAL
     }
 }

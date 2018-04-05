@@ -5,14 +5,6 @@ import zondicons from '../zondicons';
 import SVGInline from 'react-svg-inline';
 
 class InfoModal extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            toggled: false,
-        };
-    }
-
     renderModal() {
         return (
             <div className="modal" onClick={e => this.closeIfOverlayClick(e)}>
@@ -20,7 +12,7 @@ class InfoModal extends React.PureComponent {
                 <div className="modal__wrapper">
                     <div className="modal__content">
                         <InfoModalData
-                            closeModal={() => this.toggleModal()}
+                            closeModal={() => this.props.hideInfoModel()}
                             {...R.pick(['deal', 'selectedTab', 'compareList', 'dealPricing'], this.props)}
                             {...R.pick([
                                 'selectDeal',
@@ -37,10 +29,6 @@ class InfoModal extends React.PureComponent {
         );
     }
 
-    toggleModal() {
-        this.setState({ toggled: !this.state.toggled });
-    }
-
     closeIfOverlayClick(e) {
         const targetClass = e.target.getAttribute('class');
 
@@ -48,7 +36,7 @@ class InfoModal extends React.PureComponent {
             R.contains(targetClass, 'modal__wrapper') ||
             R.contains(targetClass, 'modal__overlay')
         ) {
-            this.toggleModal();
+            this.props.hideInfoModal();
         }
     }
 
@@ -56,7 +44,7 @@ class InfoModal extends React.PureComponent {
         return (
             <div className="infomodal__context">
                 <a
-                    onClick={() => this.toggleModal()}
+                    onClick={() => this.props.showInfoModal(this.props.deal.id)}
                     className="link infomodal__button"
                 >
                     <SVGInline
@@ -65,7 +53,7 @@ class InfoModal extends React.PureComponent {
                         svg={zondicons['information-outline']}
                     />
                 </a>
-                {this.state.toggled ? this.renderModal() : ''}
+                {this.props.deal && this.props.infoModalIsShowingFor === this.props.deal.id ? this.renderModal() : ''}
             </div>
         );
     }
