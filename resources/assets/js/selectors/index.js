@@ -12,11 +12,12 @@ const paymentType = state => state.selectedTab;
 const targetDefaults = state => state.targetDefaults;
 const employeeBrand = state => state.employeeBrand === false ? null : state.employeeBrand;
 
-const financeDownPayment = state => state.downPayment;
-const financeTerm = state => state.termDuration;
+const financeDownPayment = state => state.financeDownPayment;
+const financeTerm = state => state.financeTerm;
 
-const leaseAnnualMiles = state => state.annualMileage;
-const leaseTerm = state => state.termDuration;
+const leaseAnnualMileage = state => state.leaseAnnualMileage;
+const leaseTerm = state => state.leaseTerm;
+const leaseCashDue = state => state.leaseCashDue;
 
 // Generate the target key for a specific deal
 const dealTargetKey = createSelector(
@@ -145,8 +146,9 @@ const dealPricing = createSelector(
     employeeBrand,
     financeDownPayment,
     financeTerm,
-    leaseAnnualMiles,
+    leaseAnnualMileage,
     leaseTerm,
+    leaseCashDue,
     (
         deal,
         dealBestOffer,
@@ -156,8 +158,9 @@ const dealPricing = createSelector(
         employeeBrand,
         financeDownPayment,
         financeTerm,
-        leaseAnnualMiles,
+        leaseAnnualMileage,
         leaseTerm,
+        leaseCashDue,
     ) => {
         return {
             deal,
@@ -168,8 +171,9 @@ const dealPricing = createSelector(
             employeeBrand,
             financeDownPayment,
             financeTerm,
-            leaseAnnualMiles,
+            leaseAnnualMileage,
             leaseTerm,
+            leaseCashDue,
         };
     }
 );

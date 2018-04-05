@@ -1138,7 +1138,23 @@ body {
   line-height: 1.5rem;
 }
 
-.info-modal-data__costs--final .info-modal-data__amount {
+.info-modal-data__costs--final .info-modal-data__amount--cash {
+  font-size: 1.5rem;
+}
+
+.info-modal-data__costs--final {
+  line-height: 1.5rem;
+}
+
+.info-modal-data__costs--final .info-modal-data__amount--cash {
+  font-size: 1.5rem;
+}
+
+.info-modal-data__costs--final-payments {
+  line-height: 1.5rem;
+}
+
+.info-modal-data__costs--final-payments .info-modal-data__amount {
   font-size: 1.5rem;
 }
 

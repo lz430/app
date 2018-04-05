@@ -293,6 +293,16 @@ const reducer = (state, action) => {
                 ...state,
                 accuPricingModalIsShowing: false
             };
+        case ActionTypes.SHOW_INFO_MODAL:
+            return {
+                ...state,
+                infoModalIsShowingFor: action.dealId
+            };
+        case ActionTypes.HIDE_INFO_MODAL:
+            return {
+                ...state,
+                infoModalIsShowingFor: null
+            };
     }
 
     return state;

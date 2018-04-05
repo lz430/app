@@ -21,7 +21,6 @@ const initialState = {
     5: '<- increment the number to purge LocalStorage',
     /** End Version **/
     accuPricingModalIsShowing: false,
-    annualMileage: 10000,
     bestOffers: [],
     bodyStyles: null,
     cancelTokens: [], // A list of tokens to cancel axios calls
@@ -31,13 +30,18 @@ const initialState = {
     dealPage: 1,
     dealPageTotal: 1,
     deals: null,
-    downPayment: null,
     employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
     featureCategories: [],
     features: null,
     filterPage: 'models',
+    financeDownPayment: null,
+    financeTerm: null,
     fuelTypes: ['Gasoline', 'Electric', 'Flex Fuel', 'Diesel', 'Hybrid'],
+    infoModalIsShowingFor: null,
+    leaseAnnualMileage: null,
+    leaseTerm: null,
+    leaseCashDue: null,
     makes: null,
     modelYears: null,
     models: null,
@@ -72,7 +76,6 @@ const initialState = {
         45, // Captive Finance Customer
         52, // Auto Show Cash Recipient
     ],
-    termDuration: 60,
     transmissionTypes: ['automatic', 'manual'],
     vehicleModel: null,
     vehicleYear: null,

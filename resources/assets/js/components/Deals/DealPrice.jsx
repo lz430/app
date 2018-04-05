@@ -21,7 +21,10 @@ class DealPrice extends React.PureComponent {
                 'requestTargets',
                 'requestBestOffer',
                 'getBestOffersForLoadedDeals',
-                'toggleCompare'
+                'toggleCompare',
+                'showInfoModal',
+                'hideInfoModal',
+                'infoModalIsShowingFor'
             ], this.props)}
         />;
     }
@@ -73,7 +76,8 @@ const makeMapStateToProps = () => {
         return {
             selectedTab: state.selectedTab,
             compareList: state.compareList, // should be selected
-            dealPricing: new DealPricing(getDealPricing(state, props))
+            dealPricing: new DealPricing(getDealPricing(state, props)),
+            infoModalIsShowingFor: state.infoModalIsShowingFor,
         };
     };
     return mapStateToProps;

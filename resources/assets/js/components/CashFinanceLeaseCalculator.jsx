@@ -10,11 +10,6 @@ class CashFinanceLeaseCalculator extends React.PureComponent {
     constructor() {
         super();
 
-        this.state = {
-            milesPerYear: 10000,
-            leaseTerm: 12,
-        };
-
         this.tabClassName = this.tabClassName.bind(this);
     }
 
