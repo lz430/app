@@ -25,7 +25,7 @@ class ConfirmDetails extends React.PureComponent {
                 onClose={this.props.clearSelectedDeal}
                 closeText="Back to results"
             >
-                <CashFinanceLeaseCalculator />
+                <CashFinanceLeaseCalculator deal={this.props.selectedDeal} />
             </Modal>
         );
     }

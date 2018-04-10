@@ -12,8 +12,8 @@ export default class DealPricing {
         this.data = data;
     }
 
-    bestOffersIsLoading() {
-        return this.data.bestOffersIsLoading;
+    bestOfferIsLoading() {
+        return this.data.bestOfferIsLoading;
     }
 
     deal() {
@@ -96,6 +96,10 @@ export default class DealPricing {
         return util.moneyFormat(this.bestOfferValue());
     }
 
+    employeeBrand() {
+        return this.data.employeeBrand;
+    }
+
     baseSellingPriceValue() {
         return this.data.employeeBrand === this.data.deal.make
             ? this.data.deal.employee_price
@@ -148,40 +152,22 @@ export default class DealPricing {
         return util.moneyFormat(this.yourPriceValue());
     }
 
-    /*
-    yourPriceValue() {
-        switch (this.data.paymentType) {
-            case 'cash':
-                return formulas.calculateTotalCash(
-                    this.baseSellingPriceValue(),
-                    this.docFeeValue(),
-                    this.bestOfferValue()
-                );
-            case 'finance':
-                return formulas.calculateTotalCashFinance(
-                    this.baseSellingPriceValue(),
-                    this.docFeeValue(),
-                    this.financeDownPaymentValue(),
-                    this.bestOfferValue()
-                );
-            case 'lease':
-                return formulas.calculateTotalLease(
-                    this.baseSellingPriceValue(),
-                    this.docFeeValue(),
-                    this.bestOfferValue()
-                )
-        }
-    }
-
-    yourPrice() {
-        return util.moneyFormat(this.yourPriceValue());
-    }
-    */
-
     finalPriceValue() {
         switch (this.data.paymentType) {
             case 'cash':
                 return this.yourPriceValue();
+            case 'finance':
+            case 'lease':
+                return this.monthlyPaymentsValue();
+        }
+    }
+
+    finalPrice() {
+        return util.moneyFormat(this.finalPriceValue());
+    }
+
+    monthlyPaymentsValue() {
+        switch (this.data.paymentType) {
             case 'finance':
                 return Math.round(
                     formulas.calculateFinancedMonthlyPayments(
@@ -203,7 +189,7 @@ export default class DealPricing {
         }
     }
 
-    finalPrice() {
-        return util.moneyFormat(this.finalPriceValue());
+    monthlyPayments() {
+        return util.moneyFormat(this.monthlyPaymentsValue());
     }
 }

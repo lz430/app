@@ -303,6 +303,24 @@ const reducer = (state, action) => {
                 ...state,
                 infoModalIsShowingFor: null
             };
+        case ActionTypes.UPDATE_FINANCE_DOWN_PAYMENT:
+            if (state.financeDownPayment === action.downPayment) {
+                return state;
+            }
+
+            return {
+                ...state,
+                financeDownPayment: action.downPayment
+            }
+        case ActionTypes.UPDATE_FINANCE_TERM:
+            if (state.financeTerm === action.term) {
+                return state;
+            }
+
+            return {
+                ...state,
+                financeTerm: action.term
+            }
     }
 
     return state;

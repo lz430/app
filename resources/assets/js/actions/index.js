@@ -718,7 +718,7 @@ export function requestBestOffer(deal) {
                                     },
                                 },
                             },
-                        })
+                        }, bestOfferKey, paymentType)
                     );
                 });
 

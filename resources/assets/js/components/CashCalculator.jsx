@@ -12,12 +12,12 @@ import { makeDealBestOfferTotalValue, makeDealBestOfferLoading } from 'selectors
 
 class CashCalculator extends React.PureComponent {
     componentWillMount() {
-        this.props.requestTargets(this.props.deal);
-        this.props.requestBestOffer(this.props.deal);
+        this.props.requestTargets(this.props.dealPricing.deal());
+        this.props.requestBestOffer(this.props.dealPricing.deal());
     }
 
     handleTargetsChange() {
-        this.props.requestBestOffer(this.props.deal);
+        this.props.requestBestOffer(this.props.dealPricing.deal());
     }
 
     render() {
@@ -28,20 +28,13 @@ class CashCalculator extends React.PureComponent {
                         <CustomerTypeSelect {...R.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props)} />
                     </div>
                     <div>
-                        Your Price{' '}{util.moneyFormat(formulas.calculateTotalCash(
-                        util.getEmployeeOrSupplierPrice(
-                            this.props.deal,
-                            this.props.employeeBrand
-                        ),
-                        this.props.deal.doc_fee,
-                        this.props.dealBestOfferTotalValue
-                    ))}*
+                        Your Price{' '}{this.props.dealPricing.yourPrice()}*
                     </div>
                 </div>
                 <hr />
                 <Targets
-                    deal={this.props.deal}
-                    targetsChanged={this.handleTargetsChange.bind(this)}
+                    deal={this.props.dealPricing.deal()}
+                    targetsChanged={() => this.handleTargetsChange()}
                 />
                 <hr />
                 <h4>Summary</h4>
@@ -51,7 +44,7 @@ class CashCalculator extends React.PureComponent {
                             MSRP
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {util.moneyFormat(this.props.deal.msrp)}
+                            {this.props.dealPricing.msrp()}
                         </span>
                     </div>
                     <div>
@@ -59,7 +52,7 @@ class CashCalculator extends React.PureComponent {
                             Selling Price
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {util.moneyFormat(util.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand))}
+                            {this.props.dealPricing.sellingPrice()}
                         </span>
                     </div>
                     <div>
@@ -67,13 +60,9 @@ class CashCalculator extends React.PureComponent {
                             Rebates Applied
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {this.props.dealBestOfferLoading ? (
+                            {this.props.dealPricing.bestOfferIsLoading() ? (
                                 <SVGInline svg={miscicons['loading']} />
-                            ) : (
-                                util.moneyFormat(
-                                    this.props.dealBestOfferTotalValue
-                                )
-                            )}
+                            ) : this.props.dealPricing.bestOffer()}
                         </span>
                     </div>
                     <div>
@@ -81,20 +70,9 @@ class CashCalculator extends React.PureComponent {
                             Your Price
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {this.props.dealBestOfferLoading ? (
+                            {this.props.dealPricing.bestOfferIsLoading() ? (
                                 <SVGInline svg={miscicons['loading']} />
-                            ) : (
-                                `${util.moneyFormat(
-                                    formulas.calculateTotalCash(
-                                        util.getEmployeeOrSupplierPrice(
-                                            this.props.deal,
-                                            this.props.employeeBrand
-                                        ),
-                                        this.props.deal.doc_fee,
-                                        this.props.dealBestOfferTotalValue
-                                    )
-                                )}*`
-                            )}
+                            ) : this.props.dealPricing.yourPrice()}*
                         </span>
                     </div>
                 </div>
@@ -112,20 +90,11 @@ class CashCalculator extends React.PureComponent {
 }
 
 const makeMapStateToProps = () => {
-    const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
-    const getDealBestOfferLoading = makeDealBestOfferLoading();
     const mapStateToProps = (state, props) => {
         return {
-            bestOffers: state.bestOffers,
-            downPayment: state.downPayment,
-            employeeBrand: state.employeeBrand,
-            selectedTab: state.selectedTab,
-            targetsSelected: state.targetsSelected,
-            targetDefaults: state.targetDefaults,
-            zipcode: state.zipcode,
-            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
-            dealBestOfferLoading: getDealBestOfferLoading(state, props),
-        };
+            deal: props.dealPricing.deal(),
+            employeeBrand: props.dealPricing.employeeBrand()
+        }
     };
     return mapStateToProps;
 };

@@ -12,44 +12,24 @@ import { makeDealBestOfferTotalValue, makeDealBestOfferLoading } from 'selectors
 
 class FinanceCalculator extends React.PureComponent {
     componentWillMount() {
-        this.props.requestTargets(this.props.deal);
-        this.props.requestBestOffer(this.props.deal);
+        this.props.requestTargets(this.props.dealPricing.deal());
+        this.props.requestBestOffer(this.props.dealPricing.deal());
+    }
+
+    handleTargetsChange() {
+        this.props.requestBestOffer(this.props.dealPricing.deal());
     }
 
     updateDownPayment(e) {
-        this.props.updateDownPayment(Math.max(e.target.value, 0));
+        this.props.updateFinanceDownPayment(Math.max(e.target.value, 0));
     }
 
     updateTermDuration(e) {
-        this.props.updateTermDuration(Number(e.target.value));
-    }
-
-    getTotalVehicleCost() {
-        return formulas.calculateTotalCashFinance(
-            util.getEmployeeOrSupplierPrice(
-                this.props.deal,
-                this.props.employeeBrand
-            ),
-            this.props.deal.doc_fee,
-            0,
-            this.props.dealBestOfferTotalValue
-        );
-    }
-
-    getAmountToFinance() {
-        return formulas.calculateTotalCashFinance(
-                  util.getEmployeeOrSupplierPrice(
-                      this.props.deal,
-                      this.props.employeeBrand
-                  ),
-                  this.props.deal.doc_fee,
-                  this.props.downPayment,
-                  this.props.dealBestOfferTotalValue
-              );
+        this.props.updateFinanceTerm(Number(e.target.value));
     }
 
     renderTotalCostOfVehicle() {
-        const totalCostOfVehicle = this.getTotalVehicleCost();
+        const totalCostOfVehicle = this.props.dealPricing.yourPrice();
 
         return (
             <div>
@@ -58,7 +38,7 @@ class FinanceCalculator extends React.PureComponent {
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
                     {totalCostOfVehicle ? (
-                        `${util.moneyFormat(totalCostOfVehicle)}*`
+                        `${totalCostOfVehicle}*`
                     ) : (
                         <SVGInline svg={miscicons['loading']} />
                     )}
@@ -74,10 +54,10 @@ class FinanceCalculator extends React.PureComponent {
                     Rebates Applied
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.props.dealBestOfferLoading ? (
+                    {this.props.dealPricing.bestOfferIsLoading() ? (
                         <SVGInline svg={miscicons['loading']} />
                     ) : (
-                        util.moneyFormat(this.props.dealBestOfferTotalValue)
+                        this.props.dealPricing.bestOffer()
                     )}
                 </span>
             </div>
@@ -85,7 +65,7 @@ class FinanceCalculator extends React.PureComponent {
     }
 
     renderAmountFinanced() {
-        const totalAmountToFinance = this.getTotalVehicleCost();
+        const totalAmountToFinance = this.props.dealPricing.yourPrice();
 
         return (
             <div>
@@ -94,7 +74,7 @@ class FinanceCalculator extends React.PureComponent {
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
                     {totalAmountToFinance ? (
-                        util.moneyFormat(totalAmountToFinance)
+                        totalAmountToFinance
                     ) : (
                         <SVGInline svg={miscicons['loading']} />
                     )}
@@ -110,29 +90,14 @@ class FinanceCalculator extends React.PureComponent {
                     Your Monthly Payment
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.props.dealBestOfferLoading ? (
+                    {this.props.dealPricing.bestOfferIsLoading() ? (
                         <SVGInline svg={miscicons['loading']} />
-                    ) : (
-                        `${util.moneyFormat(
-                            Math.round(
-                                formulas.calculateFinancedMonthlyPayments(
-                                    util.getEmployeeOrSupplierPrice(
-                                        this.props.deal,
-                                        this.props.employeeBrand
-                                    ) - this.props.dealBestOfferTotalValue,
-                                    this.props.downPayment,
-                                    this.props.termDuration
-                                )
-                            )
-                        )}*`
-                    )}
+                    ) :
+                        this.props.dealPricing.monthlyPayments()
+                    }*
                 </span>
             </div>
         );
-    }
-
-    handleTargetsChange() {
-        this.props.requestBestOffer(this.props.deal);
     }
 
     render() {
@@ -143,20 +108,13 @@ class FinanceCalculator extends React.PureComponent {
                         <CustomerTypeSelect {...R.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props)} />
                     </div>
                     <div>
-                        Monthly Payments{' '}{util.moneyFormat(formulas.calculateFinancedMonthlyPayments(
-                            util.getEmployeeOrSupplierPrice(
-                                this.props.deal,
-                                this.props.employeeBrand
-                            ) - this.props.dealBestOfferTotalValue,
-                            this.props.downPayment,
-                            this.props.termDuration
-                    ))}*
+                        {this.props.dealPricing.finalPrice()}*
                     </div>
                 </div>
                 <hr />
                 <Targets
-                    deal={this.props.deal}
-                    targetsChanged={this.handleTargetsChange.bind(this)}
+                    deal={this.props.dealPricing.deal()}
+                    targetsChanged={() => this.handleTargetsChange()}
                 />
                 <hr />
                 <h4>Summary</h4>
@@ -166,7 +124,7 @@ class FinanceCalculator extends React.PureComponent {
                             MSRP
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {util.moneyFormat(this.props.deal.msrp)}
+                            {this.props.dealPricing.msrp()}
                         </span>
                     </div>
                     <div>
@@ -174,12 +132,7 @@ class FinanceCalculator extends React.PureComponent {
                             Selling Price
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {util.moneyFormat(
-                                util.getEmployeeOrSupplierPrice(
-                                    this.props.deal,
-                                    this.props.employeeBrand
-                                )
-                            )}
+                            {this.props.dealPricing.sellingPrice()}
                         </span>
                     </div>
                     {this.renderYourTargets()}
@@ -199,7 +152,7 @@ class FinanceCalculator extends React.PureComponent {
                                 type="number"
                                 min="0"
                                 name="down-payment"
-                                value={this.props.downPayment}
+                                value={this.props.dealPricing.financeDownPaymentValue()}
                                 onChange={e => this.updateDownPayment(e)}
                             />
                         </span>
@@ -210,7 +163,7 @@ class FinanceCalculator extends React.PureComponent {
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
                             <select
-                                value={this.props.termDuration}
+                                value={this.props.dealPricing.financeTermValue()}
                                 onChange={e => this.updateTermDuration(e)}
                             >
                                 <option value="60">60</option>
@@ -236,20 +189,10 @@ class FinanceCalculator extends React.PureComponent {
 }
 
 const makeMapStateToProps = () => {
-    const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
-    const getDealBestOfferLoading = makeDealBestOfferLoading();
     const mapStateToProps = (state, props) => {
         return {
-            bestOffers: state.bestOffers,
-            downPayment: state.downPayment,
-            employeeBrand: state.employeeBrand,
-            selectedTab: state.selectedTab,
-            targetsSelected: state.targetsSelected,
-            targetDefaults: state.targetDefaults,
-            termDuration: state.termDuration,
-            zipcode: state.zipcode,
-            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
-            dealBestOfferLoading: getDealBestOfferLoading(state, props),
+            deal: props.dealPricing.deal(),
+            employeeBrand: props.dealPricing.employeeBrand()
         };
     };
     return mapStateToProps;

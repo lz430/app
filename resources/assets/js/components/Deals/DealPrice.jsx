@@ -24,7 +24,8 @@ class DealPrice extends React.PureComponent {
                 'toggleCompare',
                 'showInfoModal',
                 'hideInfoModal',
-                'infoModalIsShowingFor'
+                'infoModalIsShowingFor',
+                'showAccuPricingModal'
             ], this.props)}
         />;
     }
@@ -49,7 +50,7 @@ class DealPrice extends React.PureComponent {
                             {this.getLabel()}
                         </div>
                         <div className="deal-price__finance-lease-price">
-                            {this.props.dealPricing.bestOffersIsLoading() ? (
+                            {this.props.dealPricing.bestOfferIsLoading() ? (
                                 <SVGInline svg={miscicons['loading']} />
                             ) : (
                                 <div>

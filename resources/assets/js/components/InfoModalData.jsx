@@ -82,8 +82,6 @@ class InfoModalData extends React.PureComponent {
     }
 
     renderPaymentDefaults() {
-        const leaseAnnualMiles = '10,000';
-        const leaseTermLength = '36';
         const leaseCashDue = 500;
 
         if (this.props.selectedTab === 'finance') {

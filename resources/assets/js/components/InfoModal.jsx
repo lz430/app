@@ -12,7 +12,7 @@ class InfoModal extends React.PureComponent {
                 <div className="modal__wrapper">
                     <div className="modal__content">
                         <InfoModalData
-                            closeModal={() => this.props.hideInfoModel()}
+                            closeModal={() => this.props.hideInfoModal()}
                             {...R.pick(['deal', 'selectedTab', 'compareList', 'dealPricing'], this.props)}
                             {...R.pick([
                                 'selectDeal',
@@ -20,7 +20,8 @@ class InfoModal extends React.PureComponent {
                                 'requestTargets',
                                 'requestBestOffer',
                                 'getBestOffersForLoadedDeals',
-                                'toggleCompare'
+                                'toggleCompare',
+                                'showAccuPricingModal'
                             ], this.props)}
                         />
                     </div>
