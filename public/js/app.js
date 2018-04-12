@@ -23284,7 +23284,7 @@ var DealPricing = function () {
     }, {
         key: 'financeDownPaymentValue',
         value: function financeDownPaymentValue() {
-            return this.data.financeDownPayment === null ? this.yourPriceValue() * .10 : this.data.financeDownPayment;
+            return this.data.financeDownPayment === null ? new _decimal2.default(this.yourPriceValue() * .10).toFixed(2) : this.data.financeDownPayment;
         }
     }, {
         key: 'financeDownPayment',
@@ -23457,6 +23457,19 @@ var DealPricing = function () {
         key: 'monthlyPayments',
         value: function monthlyPayments() {
             return _util2.default.moneyFormat(this.monthlyPaymentsValue());
+        }
+    }, {
+        key: 'amountFinancedValue',
+        value: function amountFinancedValue() {
+            switch (this.data.paymentType) {
+                case 'finance':
+                    return this.yourPriceValue() - this.financeDownPaymentValue();
+            }
+        }
+    }, {
+        key: 'amountFinanced',
+        value: function amountFinanced() {
+            return _util2.default.moneyFormat(this.amountFinancedValue());
         }
     }]);
 
@@ -61421,7 +61434,7 @@ var FinanceCalculator = function (_React$PureComponent) {
     }, {
         key: 'renderAmountFinanced',
         value: function renderAmountFinanced() {
-            var totalAmountToFinance = this.props.dealPricing.yourPrice();
+            var totalAmountToFinance = this.props.dealPricing.amountFinanced();
 
             return _react2.default.createElement(
                 'div',

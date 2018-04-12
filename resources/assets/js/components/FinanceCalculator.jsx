@@ -65,7 +65,7 @@ class FinanceCalculator extends React.PureComponent {
     }
 
     renderAmountFinanced() {
-        const totalAmountToFinance = this.props.dealPricing.yourPrice();
+        const totalAmountToFinance = this.props.dealPricing.amountFinanced();
 
         return (
             <div>
