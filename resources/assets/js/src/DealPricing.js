@@ -75,19 +75,19 @@ export default class DealPricing {
     }
 
     effCvrFeeValue() {
-        return 24;
+        return this.data.deal.cvr_fee;
     }
 
     licenseAndRegistrationValue() {
-        return 23;
+        return this.data.deal.registration_fee;
     }
 
     taxRate() {
         return 0.06;
     }
 
-    acquisitionFee() {
-        return 640;
+    acquisitionFeeValue() {
+        return this.data.deal.acquisition_fee;
     }
 
     bestOfferValue() {
@@ -130,7 +130,7 @@ export default class DealPricing {
                     .plus(this.effCvrFeeValue())
                     .plus(new Decimal(this.effCvrFeeValue()).times(this.taxRate()))
                     .plus(this.licenseAndRegistrationValue())
-                    .plus(this.acquisitionFee());
+                    .plus(this.acquisitionFeeValue());
         }
     }
 
