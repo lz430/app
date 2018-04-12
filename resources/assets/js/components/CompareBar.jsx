@@ -86,21 +86,22 @@ class CompareBar extends React.PureComponent {
                 <div className="compare-bar__deals">
                     {this.props.compareList.map(
                         (dealAndSelectedFilters, index) => {
+                            const deal = dealAndSelectedFilters.deal;
+
                             return (
                                 <div key={index} className="compare-bar__deal">
                                     <div className="compare-bar__deal__info">
-                                        <div className="compare-bar__deal__title">
-                                            {dealAndSelectedFilters.deal.year}{' '}
-                                            {dealAndSelectedFilters.deal.make}{' '}
-                                            {dealAndSelectedFilters.deal.model}
+                                        <div className="compare-bar__deal__info__year-and-make">
+                                            {deal.year} {deal.make}
+                                            {deal.model} {deal.series}
                                         </div>
-                                        <div>
-                                            {util.moneyFormat(
-                                                util.getEmployeeOrSupplierPrice(
-                                                    dealAndSelectedFilters.deal,
-                                                    this.props.employeeBrand
-                                                )
-                                            )}
+
+                                        <div className="compare-bar__deal__info__color">
+                                            {deal.color}, {deal.interior_color}
+                                        </div>
+
+                                        <div className="compare-bar__deal__info__msrp">
+                                            {util.moneyFormat(deal.msrp)} MSRP
                                         </div>
                                     </div>
                                     <SVGInline

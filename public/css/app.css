@@ -3570,6 +3570,26 @@ body {
   justify-self: flex-end;
 }
 
+.compare-page__top-row {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: .5em;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.compare-page__top-row__section--accuPricing {
+  margin-right: auto;
+}
+
 .compare-deal {
   background-color: #fff;
   border: 1px solid #ced4d9;
@@ -3927,6 +3947,14 @@ body {
   font-weight: bold;
   margin-right: auto;
   padding-right: 10px;
+}
+
+.compare-bar__deal__info__color {
+  display: none;
+}
+
+.compare-bar__deal__info__msrp {
+  font-size: .5em;
 }
 
 .compare-bar__deal__title {

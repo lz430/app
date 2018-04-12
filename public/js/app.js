@@ -28393,6 +28393,8 @@ var CompareBar = function (_React$PureComponent) {
                     'div',
                     { className: 'compare-bar__deals' },
                     this.props.compareList.map(function (dealAndSelectedFilters, index) {
+                        var deal = dealAndSelectedFilters.deal;
+
                         return _react2.default.createElement(
                             'div',
                             { key: index, className: 'compare-bar__deal' },
@@ -28401,17 +28403,26 @@ var CompareBar = function (_React$PureComponent) {
                                 { className: 'compare-bar__deal__info' },
                                 _react2.default.createElement(
                                     'div',
-                                    { className: 'compare-bar__deal__title' },
-                                    dealAndSelectedFilters.deal.year,
+                                    { className: 'compare-bar__deal__info__year-and-make' },
+                                    deal.year,
                                     ' ',
-                                    dealAndSelectedFilters.deal.make,
+                                    deal.make,
+                                    deal.model,
                                     ' ',
-                                    dealAndSelectedFilters.deal.model
+                                    deal.series
                                 ),
                                 _react2.default.createElement(
                                     'div',
-                                    null,
-                                    _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(dealAndSelectedFilters.deal, _this3.props.employeeBrand))
+                                    { className: 'compare-bar__deal__info__color' },
+                                    deal.color,
+                                    ', ',
+                                    deal.interior_color
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'compare-bar__deal__info__msrp' },
+                                    _util2.default.moneyFormat(deal.msrp),
+                                    ' MSRP'
                                 )
                             ),
                             _react2.default.createElement(_reactSvgInline2.default, {
@@ -68186,6 +68197,10 @@ var _Pricing = __webpack_require__(985);
 
 var _Pricing2 = _interopRequireDefault(_Pricing);
 
+var _AccuPricingModal = __webpack_require__(373);
+
+var _AccuPricingModal2 = _interopRequireDefault(_AccuPricingModal);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -68278,6 +68293,16 @@ var ComparePage = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'div',
                     { className: 'deal__buttons' },
+                    _react2.default.createElement(
+                        'button',
+                        {
+                            className: 'deal__button deal__button--small',
+                            onClick: function onClick() {
+                                return window.location = '/deals/' + deal.id;
+                            }
+                        },
+                        'View Details'
+                    ),
                     _react2.default.createElement(
                         'button',
                         {
@@ -68703,9 +68728,71 @@ var ComparePage = function (_React$PureComponent) {
             return anyHaveFuelType || anyHaveTransmissionType || anyHaveFeatures;
         }
     }, {
+        key: 'renderAccuPricingCta',
+        value: function renderAccuPricingCta() {
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'div',
+                    { className: 'accupricing-cta accupricing-cta--horizontal' },
+                    _react2.default.createElement(
+                        'a',
+                        { onClick: this.props.showAccuPricingModal },
+                        _react2.default.createElement('img', { src: '/images/accupricing-logo.png', className: 'accupricing-cta__logo' })
+                    ),
+                    _react2.default.createElement(
+                        'p',
+                        { className: 'accupricing-cta__disclaimer' },
+                        '* Includes taxes, dealer fees and rebates.'
+                    )
+                )
+            );
+        }
+    }, {
+        key: 'renderSelectedTabButtons',
+        value: function renderSelectedTabButtons() {
+            var _this9 = this;
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'button-group' },
+                _react2.default.createElement(
+                    'div',
+                    {
+                        onClick: function onClick() {
+                            _this9.handleTabChange('cash');
+                        },
+                        className: 'button-group__button ' + (this.props.selectedTab === 'cash' ? 'button-group__button--selected' : '')
+                    },
+                    'Cash'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    {
+                        onClick: function onClick() {
+                            _this9.handleTabChange('finance');
+                        },
+                        className: 'button-group__button ' + (this.props.selectedTab === 'finance' ? 'button-group__button--selected' : '')
+                    },
+                    'Finance'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    {
+                        onClick: function onClick() {
+                            _this9.handleTabChange('lease');
+                        },
+                        className: 'button-group__button ' + (this.props.selectedTab === 'lease' ? 'button-group__button--selected' : '')
+                    },
+                    'Lease'
+                )
+            );
+        }
+    }, {
         key: 'render',
         value: function render() {
-            var _this9 = this;
+            var _this10 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -68715,6 +68802,20 @@ var ComparePage = function (_React$PureComponent) {
                     { className: 'compare-page__body' },
                     _react2.default.createElement(
                         'div',
+                        { className: 'compare-page__top-row' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'compare-page__top-row__section compare-page__top-row__section--accuPricing' },
+                            this.renderAccuPricingCta()
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'compare-page__top-row__section compare-page__top-row__section--tabButtons' },
+                            this.renderSelectedTabButtons()
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
                         { className: 'compare-page-deals' },
                         this.props.deals.map(this.renderDeal)
                     ),
@@ -68722,14 +68823,14 @@ var ComparePage = function (_React$PureComponent) {
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this9.renderSelectionsTable(_this9.props.compareList);
+                            return _this10.renderSelectionsTable(_this10.props.compareList);
                         }
                     ) : '',
                     _react2.default.createElement(
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this9.renderWarrantyTable(_this9.props.compareList);
+                            return _this10.renderWarrantyTable(_this10.props.compareList);
                         }
                     ),
                     this.props.compareList.length ? this.renderFeaturesTable(this.props.compareList) : '',
@@ -68737,12 +68838,19 @@ var ComparePage = function (_React$PureComponent) {
                         _AccordionTable2.default,
                         null,
                         function () {
-                            return _this9.renderOptionalFeaturesTable(_this9.props.compareList);
+                            return _this10.renderOptionalFeaturesTable(_this10.props.compareList);
                         }
                     )
                 ),
-                this.props.selectedDeal ? this.renderCalculatorModal() : ''
+                this.props.selectedDeal ? this.renderCalculatorModal() : '',
+                _react2.default.createElement(_AccuPricingModal2.default, null)
             );
+        }
+    }, {
+        key: 'handleTabChange',
+        value: function handleTabChange(tabName) {
+            this.props.selectTab(tabName);
+            this.props.getBestOffersForLoadedDeals();
         }
     }]);
 

@@ -43,6 +43,13 @@
       font-weight: bold;
       margin-right: auto;
       padding-right: 10px;
+
+      &__color {
+        display: none;
+      }
+      &__msrp {
+        font-size: .5em;
+      }
     }
 
     &__title {
