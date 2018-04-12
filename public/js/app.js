@@ -28393,6 +28393,8 @@ var CompareBar = function (_React$PureComponent) {
                     'div',
                     { className: 'compare-bar__deals' },
                     this.props.compareList.map(function (dealAndSelectedFilters, index) {
+                        var deal = dealAndSelectedFilters.deal;
+
                         return _react2.default.createElement(
                             'div',
                             { key: index, className: 'compare-bar__deal' },
@@ -28401,17 +28403,26 @@ var CompareBar = function (_React$PureComponent) {
                                 { className: 'compare-bar__deal__info' },
                                 _react2.default.createElement(
                                     'div',
-                                    { className: 'compare-bar__deal__title' },
-                                    dealAndSelectedFilters.deal.year,
+                                    { className: 'compare-bar__deal__info__year-and-make' },
+                                    deal.year,
                                     ' ',
-                                    dealAndSelectedFilters.deal.make,
+                                    deal.make,
+                                    deal.model,
                                     ' ',
-                                    dealAndSelectedFilters.deal.model
+                                    deal.series
                                 ),
                                 _react2.default.createElement(
                                     'div',
-                                    null,
-                                    _util2.default.moneyFormat(_util2.default.getEmployeeOrSupplierPrice(dealAndSelectedFilters.deal, _this3.props.employeeBrand))
+                                    { className: 'compare-bar__deal__info__color' },
+                                    deal.color,
+                                    ', ',
+                                    deal.interior_color
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'compare-bar__deal__info__msrp' },
+                                    _util2.default.moneyFormat(deal.msrp),
+                                    ' MSRP'
                                 )
                             ),
                             _react2.default.createElement(_reactSvgInline2.default, {

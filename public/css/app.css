@@ -3929,6 +3929,14 @@ body {
   padding-right: 10px;
 }
 
+.compare-bar__deal__info__color {
+  display: none;
+}
+
+.compare-bar__deal__info__msrp {
+  font-size: .5em;
+}
+
 .compare-bar__deal__title {
   color: #535d63;
   white-space: nowrap;
