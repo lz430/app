@@ -21,7 +21,9 @@ export default class DealPricing {
     }
 
     financeDownPaymentValue() {
-        return this.data.financeDownPayment === null ? this.yourPriceValue() * .10 : this.data.financeDownPayment;
+        return this.data.financeDownPayment === null ?
+            (new Decimal(this.yourPriceValue() * .10).toFixed(2)) :
+            this.data.financeDownPayment;
     }
 
     financeDownPayment() {
@@ -191,5 +193,16 @@ export default class DealPricing {
 
     monthlyPayments() {
         return util.moneyFormat(this.monthlyPaymentsValue());
+    }
+
+    amountFinancedValue() {
+        switch (this.data.paymentType) {
+            case 'finance':
+                return this.yourPriceValue() - this.financeDownPaymentValue();
+        }
+    }
+
+    amountFinanced() {
+        return util.moneyFormat(this.amountFinancedValue());
     }
 }
