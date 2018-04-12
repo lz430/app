@@ -36,11 +36,6 @@ php artisan key:generate
 php artisan migrate
 ```
 
-## Load data from JATO
-```
-php artisan jato:load 
-```
-
 ## Load data from Vauto
 ```
 php artisan vauto:load 
