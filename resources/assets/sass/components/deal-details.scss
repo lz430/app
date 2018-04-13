@@ -121,4 +121,28 @@
   &__modal-body {
     padding: 20px;
   }
+
+  &__top-row {
+    padding-top: .5em;
+    margin: 0 auto;
+    max-width: 75%;
+    border-bottom: 1px solid $color-section-bottom-border;
+    padding-bottom: .5em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    &__section {
+      &--accuPricing {
+        margin-right: auto;
+      }
+      &--sortbar {
+      }
+      &--tabButtons {
+      }
+    }
+
+    @media (min-width: $break-large) {
+      max-width: $break-large;
+    }
+  }
 }
