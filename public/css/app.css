@@ -3380,6 +3380,14 @@ body {
   margin-top: -10px;
 }
 
+.deal-details__stock-number {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: right;
+  margin-top: 11px;
+  padding-top: 1.2rem;
+}
+
 .deal-details__pricing {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -3514,6 +3522,34 @@ body {
 
 .deal-details__modal-body {
   padding: 20px;
+}
+
+.deal-details__top-row {
+  padding-top: .5em;
+  margin: 0 auto;
+  max-width: 75%;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: .5em;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.deal-details__top-row__section--accuPricing {
+  margin-right: auto;
+}
+
+@media (min-width: 992px) {
+  .deal-details__top-row {
+    max-width: 992px;
+  }
 }
 
 .rebates__rebate {

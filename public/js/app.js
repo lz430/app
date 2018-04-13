@@ -58895,7 +58895,7 @@ var InfoModalData = function (_React$PureComponent) {
                                     },
                                     className: 'deal__button deal__button--small deal__button--pink deal__button'
                                 },
-                                'Get Quote'
+                                'Customize Quote'
                             )
                         ),
                         _react2.default.createElement(
@@ -65596,6 +65596,68 @@ var DealDetails = function (_React$PureComponent) {
             );
         }
     }, {
+        key: 'renderAccuPricingCta',
+        value: function renderAccuPricingCta() {
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'div',
+                    { className: 'accupricing-cta accupricing-cta--horizontal' },
+                    _react2.default.createElement(
+                        'a',
+                        { onClick: this.props.showAccuPricingModal },
+                        _react2.default.createElement('img', { src: '/images/accupricing-logo.png', className: 'accupricing-cta__logo' })
+                    ),
+                    _react2.default.createElement(
+                        'p',
+                        { className: 'accupricing-cta__disclaimer' },
+                        '* Includes taxes, dealer fees and rebates.'
+                    )
+                )
+            );
+        }
+    }, {
+        key: 'renderSelectedTabButtons',
+        value: function renderSelectedTabButtons() {
+            var _this6 = this;
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'button-group' },
+                _react2.default.createElement(
+                    'div',
+                    {
+                        onClick: function onClick() {
+                            _this6.handleTabChange('cash');
+                        },
+                        className: 'button-group__button ' + (this.props.selectedTab === 'cash' ? 'button-group__button--selected' : '')
+                    },
+                    'Cash'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    {
+                        onClick: function onClick() {
+                            _this6.handleTabChange('finance');
+                        },
+                        className: 'button-group__button ' + (this.props.selectedTab === 'finance' ? 'button-group__button--selected' : '')
+                    },
+                    'Finance'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    {
+                        onClick: function onClick() {
+                            _this6.handleTabChange('lease');
+                        },
+                        className: 'button-group__button ' + (this.props.selectedTab === 'lease' ? 'button-group__button--selected' : '')
+                    },
+                    'Lease'
+                )
+            );
+        }
+    }, {
         key: 'render',
         value: function render() {
             var deal = this.props.deal;
@@ -65603,6 +65665,20 @@ var DealDetails = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 null,
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deal-details__top-row' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'deal-details__top-row__section deal-details__top-row__section--accuPricing' },
+                        this.renderAccuPricingCta()
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'deal-details__top-row__section deal-details__top-row__section--tabButtons' },
+                        this.renderSelectedTabButtons()
+                    )
+                ),
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-details' },
@@ -65638,7 +65714,17 @@ var DealDetails = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         { className: 'deal-details__pricing' },
-                        this.renderDeal(deal)
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'deal-details__stock-number' },
+                                'Stock# ',
+                                this.props.deal.stock_number
+                            ),
+                            this.renderDeal(deal)
+                        )
                     )
                 ),
                 _react2.default.createElement(_CompareBar2.default, { 'class': 'compare-bar compare-bar--static' }),
@@ -65647,6 +65733,12 @@ var DealDetails = function (_React$PureComponent) {
                 this.props.selectedDeal ? this.renderCalculatorModal() : '',
                 _react2.default.createElement(_AccuPricingModal2.default, null)
             );
+        }
+    }, {
+        key: 'handleTabChange',
+        value: function handleTabChange(tabName) {
+            this.props.selectTab(tabName);
+            this.props.getBestOffersForLoadedDeals();
         }
     }]);
 

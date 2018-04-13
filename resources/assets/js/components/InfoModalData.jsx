@@ -220,7 +220,7 @@ class InfoModalData extends React.PureComponent {
                                 onClick={() => this.selectDeal()}
                                 className="deal__button deal__button--small deal__button--pink deal__button"
                             >
-                                Get Quote
+                                Customize Quote
                             </button>
                         </div>
                         <div className="accupricing-cta">
