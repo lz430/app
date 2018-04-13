@@ -65638,7 +65638,17 @@ var DealDetails = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         { className: 'deal-details__pricing' },
-                        this.renderDeal(deal)
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'deal-details__stock-number' },
+                                'Stock# ',
+                                this.props.deal.stock_number
+                            ),
+                            this.renderDeal(deal)
+                        )
                     )
                 ),
                 _react2.default.createElement(_CompareBar2.default, { 'class': 'compare-bar compare-bar--static' }),

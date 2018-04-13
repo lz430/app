@@ -69,6 +69,15 @@
     margin-top: -10px;
   }
 
+  &__stock-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: right;
+
+    margin-top: 11px;
+    padding-top: 1.2rem;
+  }
+
   &__pricing {
     display: flex;
     flex-direction: row;

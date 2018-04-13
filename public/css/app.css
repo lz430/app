@@ -3380,6 +3380,14 @@ body {
   margin-top: -10px;
 }
 
+.deal-details__stock-number {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: right;
+  margin-top: 11px;
+  padding-top: 1.2rem;
+}
+
 .deal-details__pricing {
   display: -webkit-box;
   display: -ms-flexbox;

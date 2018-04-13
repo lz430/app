@@ -403,7 +403,12 @@ class DealDetails extends React.PureComponent {
                         </div>
                     </div>
                     <div className="deal-details__pricing">
-                        {this.renderDeal(deal)}
+                        <div>
+                            <div className="deal-details__stock-number">
+                                Stock# {this.props.deal.stock_number}
+                            </div>
+                            {this.renderDeal(deal)}
+                        </div>
                     </div>
                 </div>
 
