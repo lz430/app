@@ -58895,7 +58895,7 @@ var InfoModalData = function (_React$PureComponent) {
                                     },
                                     className: 'deal__button deal__button--small deal__button--pink deal__button'
                                 },
-                                'Get Quote'
+                                'Customize Quote'
                             )
                         ),
                         _react2.default.createElement(
