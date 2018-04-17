@@ -63,7 +63,9 @@ class InfoModalData extends React.PureComponent {
 
     handleGetRebatesLink() {
         this.props.selectDeal(this.props.dealPricing.deal());
-        this.props.closeModal();
+        if (this.props.closeModal) {
+            this.props.closeModal();
+        }
     }
 
     renderAppliedRebatesLink() {
@@ -146,9 +148,11 @@ class InfoModalData extends React.PureComponent {
             <div>
                 <div className="info-modal-data">
                     <div className="info-modal-data__price">
+                        {this.props.withPricingHeader &&
                         <p className="info-modal-data__pricing-details">
                             Pricing
                         </p>
+                        }
 
                         { this.renderTabs() }
 
@@ -253,9 +257,16 @@ class InfoModalData extends React.PureComponent {
     }
 
     selectDeal() {
-        this.props.closeModal();
+        if (this.props.closeModal) {
+            this.props.closeModal();
+        }
+
         this.props.selectDeal(this.props.dealPricing.deal());
     }
 }
+
+InfoModalData.defaultProps = {
+    withPricingHeader: true
+};
 
 export default InfoModalData;

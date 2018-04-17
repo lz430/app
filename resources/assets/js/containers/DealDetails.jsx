@@ -16,6 +16,9 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import ImageGallery from 'react-image-gallery';
 import AccuPricingModal from 'components/AccuPricingModal';
+import InfoModalData from 'components/InfoModalData';
+import DealPricing from 'src/DealPricing';
+import {makeDealPricing} from "../selectors";
 
 class DealDetails extends React.PureComponent {
     constructor(props) {
@@ -296,159 +299,83 @@ class DealDetails extends React.PureComponent {
         );
     }
 
-    renderDeal(deal, index) {
+    renderDeal(deal) {
+        return <InfoModalData
+            withPricingHeader={false}
+            {...R.pick(['deal', 'selectedTab', 'compareList', 'dealPricing'], this.props)}
+            {...R.pick([
+                'selectDeal',
+                'selectTab',
+                'requestTargets',
+                'requestBestOffer',
+                'getBestOffersForLoadedDeals',
+                'toggleCompare',
+                'showAccuPricingModal'
+            ], this.props)}
+        />
+
+    }
+
+    renderFeaturesAndOptions(deal, index) {
         const inCompareList = R.contains(
             deal,
             R.map(R.prop('deal'), this.props.compareList)
         );
         return (
-            <Deal deal={deal} key={index} hideImageAndTitle={true}>
                 <div className="deal-details__deal-content">
-                    <div className="deal-details__deal-content-at-a-glance">
-                        This Vehicle At-A-Glance
+                    <div className="deal-details__deal-content-header">
+                        <div className="deal-details__deal-content-at-a-glance">
+                            This Vehicle At-A-Glance
+                        </div>
+                        <div className="deal-details__deal-content-color">
+                            {deal.color}, {deal.interior_color}
+                        </div>
                     </div>
-                    <div className="deal-details__deal-content-subtitle">
-                        Vehicle #{deal.vin.substr(deal.vin.length - 8)} Standard Features
-                    </div>
-                    <ul className="deal-details__deal-content-features">
-                        {deal.features.slice(0, 5).map((feature, index) => {
-                            return <li key={index}>{feature.feature}</li>;
-                        })}
-                    </ul>
-                    <span
-                        className="link deal-details__deal-content-see-all"
-                        onClick={() => this.showStandardFeatures()}
-                    >
-                        See all standard features &gt;
-                    </span>
-                    <div className="deal-details__deal-content-subtitle">
-                        Vehicle #{deal.vin.substr(deal.vin.length - 8)} Additional Options
-                    </div>
-                    <ul className="deal-details__deal-content-features">
-                        {deal.vauto_features
-                            .slice(0, 5)
-                            .map((feature, index) => {
-                                return <li key={index}>{feature}</li>;
-                            })}
-                    </ul>
-                    <a
-                        className="link deal-details__deal-content-see-all"
-                        onClick={(e) => this.showFeatures(e)}
-                    >
-                        See all additional options &gt;
-                    </a>
-                    <div className="deal-details__buttons">
-                        <button
-                            onClick={() =>
-                                this.props.toggleCompare(this.props.deal)}
-                            className={
-                                'deal-details__button deal-details__button--small deal-details__button--blue ' +
-                                (inCompareList
-                                    ? 'deal-details__button--blue'
-                                    : '')
-                            }
-                        >
-                            {inCompareList ? (
-                                'Remove from Compare'
-                            ) : (
-                                'Add to Compare'
-                            )}
-                        </button>
-
-                        <button
-                            className="deal-details__button deal-details__button--small deal-details__button--pink"
-                            onClick={() => window.location=`/confirm/${this.props.deal.id}`}
-
-                        >
-                            Buy Now
-                        </button>
-                    </div>
-
-                    <div className="accupricing-cta">
-                        <a onClick={this.props.showAccuPricingModal}>
-                            <img src="/images/accupricing-logo.png" className="accupricing-cta__logo" />
-                        </a>
-                        <p className="accupricing-cta__disclaimer">
-                            * Includes taxes, dealer fees and rebates.
-                        </p>
+                    <div className="deal-details__deal-content-body">
+                        <div>
+                            <div className="deal-details__deal-content-subtitle">
+                                Standard Features
+                            </div>
+                            <ul className="deal-details__deal-content-features">
+                                {deal.features.slice(0, 5).map((feature, index) => {
+                                    return <li key={index}>{feature.feature}</li>;
+                                })}
+                            </ul>
+                            <span
+                                className="link deal-details__deal-content-see-all"
+                                onClick={() => this.showStandardFeatures()}
+                            >
+                                See all standard features &gt;
+                            </span>
+                        </div>
+                        <div>
+                            <div className="deal-details__deal-content-subtitle">
+                                Additional Options
+                            </div>
+                            <ul className="deal-details__deal-content-features">
+                                {deal.vauto_features
+                                    .slice(0, 5)
+                                    .map((feature, index) => {
+                                        return <li key={index}>{feature}</li>;
+                                    })}
+                            </ul>
+                            <a
+                                className="link deal-details__deal-content-see-all"
+                                onClick={(e) => this.showFeatures(e)}
+                            >
+                                See all additional options &gt;
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </Deal>
         );
     }
 
-    renderAccuPricingCta() {
-        return (
-            <div>
-                <div className="accupricing-cta accupricing-cta--horizontal">
-                    <a onClick={this.props.showAccuPricingModal}>
-                        <img src="/images/accupricing-logo.png" className="accupricing-cta__logo" />
-                    </a>
-                    <p className="accupricing-cta__disclaimer">
-                        * Includes taxes, dealer fees and rebates.
-                    </p>
-                </div>
-            </div>
-        );
-    }
-
-    renderSelectedTabButtons() {
-        return (
-            <div className="button-group">
-                <div
-                    onClick={() => {
-                        this.handleTabChange('cash');
-                    }}
-                    className={`button-group__button ${
-                        this.props.selectedTab === 'cash'
-                            ? 'button-group__button--selected'
-                            : ''
-                        }`}
-                >
-                    Cash
-                </div>
-                <div
-                    onClick={() => {
-                        this.handleTabChange('finance');
-                    }}
-                    className={`button-group__button ${
-                        this.props.selectedTab === 'finance'
-                            ? 'button-group__button--selected'
-                            : ''
-                        }`}
-                >
-                    Finance
-                </div>
-                <div
-                    onClick={() => {
-                        this.handleTabChange('lease');
-                    }}
-                    className={`button-group__button ${
-                        this.props.selectedTab === 'lease'
-                            ? 'button-group__button--selected'
-                            : ''
-                        }`}
-                >
-                    Lease
-                </div>
-            </div>
-        )
-    }
-    
     render() {
         const deal = this.props.deal;
 
         return (
             <div>
-                <div className="deal-details__top-row">
-                    <div className="deal-details__top-row__section deal-details__top-row__section--accuPricing">
-                        {this.renderAccuPricingCta()}
-                    </div>
-                    <div className="deal-details__top-row__section deal-details__top-row__section--tabButtons">
-                        {this.renderSelectedTabButtons()}
-                    </div>
-                </div>
-
                 <div className="deal-details">
                     <div className="deal-details__images-and-title">
                         <div className="deal-details__title">
@@ -468,6 +395,7 @@ class DealDetails extends React.PureComponent {
                                 showPlayButton={false}
                                 showFullscreenButton={false}/>
                         </div>
+                        {this.renderFeaturesAndOptions(this.props.deal)}
                     </div>
                     <div className="deal-details__pricing">
                         <div>
@@ -487,11 +415,6 @@ class DealDetails extends React.PureComponent {
                 <AccuPricingModal />
             </div>);
     }
-
-    handleTabChange(tabName) {
-        this.props.selectTab(tabName);
-        this.props.getBestOffersForLoadedDeals();
-    }
 }
 
 DealDetails.propTypes = {
@@ -507,16 +430,22 @@ DealDetails.propTypes = {
     }),
 };
 
-const mapStateToProps = state => {
-    return {
-        compareList: state.compareList,
-        selectedTab: state.selectedTab,
-        downPayment: state.downPayment,
-        termDuration: state.termDuration,
-        fallbackDealImage: state.fallbackDealImage,
-        selectedDeal: state.selectedDeal,
-        employeeBrand: state.employeeBrand,
+function mapStateToProps(state) {
+    const getDealPricing = makeDealPricing();
+    const mapStateToProps = (state, props) => {
+        return {
+            compareList: state.compareList,
+            selectedTab: state.selectedTab,
+            downPayment: state.downPayment,
+            termDuration: state.termDuration,
+            fallbackDealImage: state.fallbackDealImage,
+            selectedDeal: state.selectedDeal,
+            employeeBrand: state.employeeBrand,
+            dealPricing: new DealPricing(getDealPricing(state, props))
+        };
     };
-};
+    return mapStateToProps;
+}
+
 
 export default connect(mapStateToProps, Actions)(DealDetails);

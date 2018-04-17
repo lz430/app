@@ -58625,7 +58625,9 @@ var InfoModalData = function (_React$PureComponent) {
         key: 'handleGetRebatesLink',
         value: function handleGetRebatesLink() {
             this.props.selectDeal(this.props.dealPricing.deal());
-            this.props.closeModal();
+            if (this.props.closeModal) {
+                this.props.closeModal();
+            }
         }
     }, {
         key: 'renderAppliedRebatesLink',
@@ -58780,7 +58782,7 @@ var InfoModalData = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         { className: 'info-modal-data__price' },
-                        _react2.default.createElement(
+                        this.props.withPricingHeader && _react2.default.createElement(
                             'p',
                             { className: 'info-modal-data__pricing-details' },
                             'Pricing'
@@ -58930,13 +58932,20 @@ var InfoModalData = function (_React$PureComponent) {
     }, {
         key: 'selectDeal',
         value: function selectDeal() {
-            this.props.closeModal();
+            if (this.props.closeModal) {
+                this.props.closeModal();
+            }
+
             this.props.selectDeal(this.props.dealPricing.deal());
         }
     }]);
 
     return InfoModalData;
 }(_react2.default.PureComponent);
+
+InfoModalData.defaultProps = {
+    withPricingHeader: true
+};
 
 exports.default = InfoModalData;
 
@@ -64981,6 +64990,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = __webpack_require__(12);
@@ -65052,6 +65063,16 @@ var _reactImageGallery2 = _interopRequireDefault(_reactImageGallery);
 var _AccuPricingModal = __webpack_require__(228);
 
 var _AccuPricingModal2 = _interopRequireDefault(_AccuPricingModal);
+
+var _InfoModalData = __webpack_require__(943);
+
+var _InfoModalData2 = _interopRequireDefault(_InfoModalData);
+
+var _DealPricing = __webpack_require__(371);
+
+var _DealPricing2 = _interopRequireDefault(_DealPricing);
+
+var _selectors = __webpack_require__(51);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -65482,16 +65503,23 @@ var DealDetails = function (_React$PureComponent) {
         }
     }, {
         key: 'renderDeal',
-        value: function renderDeal(deal, index) {
+        value: function renderDeal(deal) {
+            return _react2.default.createElement(_InfoModalData2.default, _extends({
+                withPricingHeader: false
+            }, _ramda2.default.pick(['deal', 'selectedTab', 'compareList', 'dealPricing'], this.props), _ramda2.default.pick(['selectDeal', 'selectTab', 'requestTargets', 'requestBestOffer', 'getBestOffersForLoadedDeals', 'toggleCompare', 'showAccuPricingModal'], this.props)));
+        }
+    }, {
+        key: 'renderFeaturesAndOptions',
+        value: function renderFeaturesAndOptions(deal, index) {
             var _this5 = this;
 
             var inCompareList = _ramda2.default.contains(deal, _ramda2.default.map(_ramda2.default.prop('deal'), this.props.compareList));
             return _react2.default.createElement(
-                _Deal2.default,
-                { deal: deal, key: index, hideImageAndTitle: true },
+                'div',
+                { className: 'deal-details__deal-content' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'deal-details__deal-content' },
+                    { className: 'deal-details__deal-content-header' },
                     _react2.default.createElement(
                         'div',
                         { className: 'deal-details__deal-content-at-a-glance' },
@@ -65499,161 +65527,75 @@ var DealDetails = function (_React$PureComponent) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'deal-details__deal-content-subtitle' },
-                        'Vehicle #',
-                        deal.vin.substr(deal.vin.length - 8),
-                        ' Standard Features'
-                    ),
-                    _react2.default.createElement(
-                        'ul',
-                        { className: 'deal-details__deal-content-features' },
-                        deal.features.slice(0, 5).map(function (feature, index) {
-                            return _react2.default.createElement(
-                                'li',
-                                { key: index },
-                                feature.feature
-                            );
-                        })
-                    ),
-                    _react2.default.createElement(
-                        'span',
-                        {
-                            className: 'link deal-details__deal-content-see-all',
-                            onClick: function onClick() {
-                                return _this5.showStandardFeatures();
-                            }
-                        },
-                        'See all standard features >'
-                    ),
+                        { className: 'deal-details__deal-content-color' },
+                        deal.color,
+                        ', ',
+                        deal.interior_color
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'deal-details__deal-content-body' },
                     _react2.default.createElement(
                         'div',
-                        { className: 'deal-details__deal-content-subtitle' },
-                        'Vehicle #',
-                        deal.vin.substr(deal.vin.length - 8),
-                        ' Additional Options'
-                    ),
-                    _react2.default.createElement(
-                        'ul',
-                        { className: 'deal-details__deal-content-features' },
-                        deal.vauto_features.slice(0, 5).map(function (feature, index) {
-                            return _react2.default.createElement(
-                                'li',
-                                { key: index },
-                                feature
-                            );
-                        })
-                    ),
-                    _react2.default.createElement(
-                        'a',
-                        {
-                            className: 'link deal-details__deal-content-see-all',
-                            onClick: function onClick(e) {
-                                return _this5.showFeatures(e);
-                            }
-                        },
-                        'See all additional options >'
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'deal-details__buttons' },
+                        null,
                         _react2.default.createElement(
-                            'button',
-                            {
-                                onClick: function onClick() {
-                                    return _this5.props.toggleCompare(_this5.props.deal);
-                                },
-                                className: 'deal-details__button deal-details__button--small deal-details__button--blue ' + (inCompareList ? 'deal-details__button--blue' : '')
-                            },
-                            inCompareList ? 'Remove from Compare' : 'Add to Compare'
+                            'div',
+                            { className: 'deal-details__deal-content-subtitle' },
+                            'Standard Features'
                         ),
                         _react2.default.createElement(
-                            'button',
+                            'ul',
+                            { className: 'deal-details__deal-content-features' },
+                            deal.features.slice(0, 5).map(function (feature, index) {
+                                return _react2.default.createElement(
+                                    'li',
+                                    { key: index },
+                                    feature.feature
+                                );
+                            })
+                        ),
+                        _react2.default.createElement(
+                            'span',
                             {
-                                className: 'deal-details__button deal-details__button--small deal-details__button--pink',
+                                className: 'link deal-details__deal-content-see-all',
                                 onClick: function onClick() {
-                                    return window.location = '/confirm/' + _this5.props.deal.id;
+                                    return _this5.showStandardFeatures();
                                 }
-
                             },
-                            'Buy Now'
+                            'See all standard features >'
                         )
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'accupricing-cta' },
+                        null,
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'deal-details__deal-content-subtitle' },
+                            'Additional Options'
+                        ),
+                        _react2.default.createElement(
+                            'ul',
+                            { className: 'deal-details__deal-content-features' },
+                            deal.vauto_features.slice(0, 5).map(function (feature, index) {
+                                return _react2.default.createElement(
+                                    'li',
+                                    { key: index },
+                                    feature
+                                );
+                            })
+                        ),
                         _react2.default.createElement(
                             'a',
-                            { onClick: this.props.showAccuPricingModal },
-                            _react2.default.createElement('img', { src: '/images/accupricing-logo.png', className: 'accupricing-cta__logo' })
-                        ),
-                        _react2.default.createElement(
-                            'p',
-                            { className: 'accupricing-cta__disclaimer' },
-                            '* Includes taxes, dealer fees and rebates.'
+                            {
+                                className: 'link deal-details__deal-content-see-all',
+                                onClick: function onClick(e) {
+                                    return _this5.showFeatures(e);
+                                }
+                            },
+                            'See all additional options >'
                         )
                     )
-                )
-            );
-        }
-    }, {
-        key: 'renderAccuPricingCta',
-        value: function renderAccuPricingCta() {
-            return _react2.default.createElement(
-                'div',
-                null,
-                _react2.default.createElement(
-                    'div',
-                    { className: 'accupricing-cta accupricing-cta--horizontal' },
-                    _react2.default.createElement(
-                        'a',
-                        { onClick: this.props.showAccuPricingModal },
-                        _react2.default.createElement('img', { src: '/images/accupricing-logo.png', className: 'accupricing-cta__logo' })
-                    ),
-                    _react2.default.createElement(
-                        'p',
-                        { className: 'accupricing-cta__disclaimer' },
-                        '* Includes taxes, dealer fees and rebates.'
-                    )
-                )
-            );
-        }
-    }, {
-        key: 'renderSelectedTabButtons',
-        value: function renderSelectedTabButtons() {
-            var _this6 = this;
-
-            return _react2.default.createElement(
-                'div',
-                { className: 'button-group' },
-                _react2.default.createElement(
-                    'div',
-                    {
-                        onClick: function onClick() {
-                            _this6.handleTabChange('cash');
-                        },
-                        className: 'button-group__button ' + (this.props.selectedTab === 'cash' ? 'button-group__button--selected' : '')
-                    },
-                    'Cash'
-                ),
-                _react2.default.createElement(
-                    'div',
-                    {
-                        onClick: function onClick() {
-                            _this6.handleTabChange('finance');
-                        },
-                        className: 'button-group__button ' + (this.props.selectedTab === 'finance' ? 'button-group__button--selected' : '')
-                    },
-                    'Finance'
-                ),
-                _react2.default.createElement(
-                    'div',
-                    {
-                        onClick: function onClick() {
-                            _this6.handleTabChange('lease');
-                        },
-                        className: 'button-group__button ' + (this.props.selectedTab === 'lease' ? 'button-group__button--selected' : '')
-                    },
-                    'Lease'
                 )
             );
         }
@@ -65665,20 +65607,6 @@ var DealDetails = function (_React$PureComponent) {
             return _react2.default.createElement(
                 'div',
                 null,
-                _react2.default.createElement(
-                    'div',
-                    { className: 'deal-details__top-row' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'deal-details__top-row__section deal-details__top-row__section--accuPricing' },
-                        this.renderAccuPricingCta()
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'deal-details__top-row__section deal-details__top-row__section--tabButtons' },
-                        this.renderSelectedTabButtons()
-                    )
-                ),
                 _react2.default.createElement(
                     'div',
                     { className: 'deal-details' },
@@ -65709,7 +65637,8 @@ var DealDetails = function (_React$PureComponent) {
                                 showThumbnails: false,
                                 showPlayButton: false,
                                 showFullscreenButton: false })
-                        )
+                        ),
+                        this.renderFeaturesAndOptions(this.props.deal)
                     ),
                     _react2.default.createElement(
                         'div',
@@ -65734,12 +65663,6 @@ var DealDetails = function (_React$PureComponent) {
                 _react2.default.createElement(_AccuPricingModal2.default, null)
             );
         }
-    }, {
-        key: 'handleTabChange',
-        value: function handleTabChange(tabName) {
-            this.props.selectTab(tabName);
-            this.props.getBestOffersForLoadedDeals();
-        }
     }]);
 
     return DealDetails;
@@ -65758,17 +65681,22 @@ DealDetails.propTypes = {
     })
 };
 
-var mapStateToProps = function mapStateToProps(state) {
-    return {
-        compareList: state.compareList,
-        selectedTab: state.selectedTab,
-        downPayment: state.downPayment,
-        termDuration: state.termDuration,
-        fallbackDealImage: state.fallbackDealImage,
-        selectedDeal: state.selectedDeal,
-        employeeBrand: state.employeeBrand
+function mapStateToProps(state) {
+    var getDealPricing = (0, _selectors.makeDealPricing)();
+    var mapStateToProps = function mapStateToProps(state, props) {
+        return {
+            compareList: state.compareList,
+            selectedTab: state.selectedTab,
+            downPayment: state.downPayment,
+            termDuration: state.termDuration,
+            fallbackDealImage: state.fallbackDealImage,
+            selectedDeal: state.selectedDeal,
+            employeeBrand: state.employeeBrand,
+            dealPricing: new _DealPricing2.default(getDealPricing(state, props))
+        };
     };
-};
+    return mapStateToProps;
+}
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, Actions)(DealDetails);
 
