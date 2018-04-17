@@ -69389,16 +69389,6 @@ var ConfirmDetails = function (_React$PureComponent) {
     }
 
     _createClass(ConfirmDetails, [{
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            this._isMounted = false;
-        }
-    }, {
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this._isMounted = true;
-        }
-    }, {
         key: 'renderCalculatorModal',
         value: function renderCalculatorModal() {
             return _react2.default.createElement(

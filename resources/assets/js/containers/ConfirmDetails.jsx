@@ -11,14 +11,6 @@ import DealImage from 'components/Deals/DealImage';
 import { makeDealBestOfferTotalValue, makeDealBestOffer } from 'selectors/index';
 
 class ConfirmDetails extends React.PureComponent {
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
-
-    componentDidMount() {
-        this._isMounted = true;
-    }
-
     renderCalculatorModal() {
         return (
             <Modal
