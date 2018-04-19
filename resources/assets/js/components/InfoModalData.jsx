@@ -1,9 +1,7 @@
 import R from 'ramda';
 import React from 'react';
 import util from 'src/util';
-import {
-    makeDealPricing
-} from 'selectors/index';
+import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
 
 class InfoModalData extends React.PureComponent {
     componentDidMount() {
@@ -220,12 +218,11 @@ class InfoModalData extends React.PureComponent {
                             >
                                 {this.isAlreadyInCompareList() ? 'Remove from compare' : 'Compare'}
                             </button>
-                            <button
-                                onClick={() => this.selectDeal()}
-                                className="deal__button deal__button--small deal__button--pink deal__button"
-                            >
-                                Customize Quote
-                            </button>
+                            <CustomizeQuoteOrBuyNowButton
+                                onCustomizeQuote={() => this.selectDeal()}
+                                deal={this.props.dealPricing.deal()}
+                                hasCustomizedQuote={this.props.dealPricing.hasCustomizedQuote()}
+                            />
                         </div>
                         <div className="accupricing-cta">
                             <a onClick={this.props.showAccuPricingModal}>

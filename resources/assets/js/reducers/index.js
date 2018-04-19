@@ -215,6 +215,7 @@ const reducer = (state, action) => {
         case ActionTypes.SELECT_DEAL:
             return Object.assign({}, state, {
                 selectedDeal: action.selectedDeal,
+                dealsIdsWithCustomizedQuotes: R.union(state.dealsIdsWithCustomizedQuotes, [action.selectedDeal.id]),
             });
         case ActionTypes.CLEAR_SELECTED_DEAL:
             return Object.assign({}, state, { selectedDeal: null });

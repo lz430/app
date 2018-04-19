@@ -17,6 +17,7 @@ import miscicons from 'miscicons';
 import toTitleCase from 'titlecase';
 import Pricing from 'components/ComparePage/Pricing';
 import AccuPricingModal from 'components/AccuPricingModal';
+import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
 
 class ComparePage extends React.PureComponent {
     constructor(props) {
@@ -110,14 +111,11 @@ class ComparePage extends React.PureComponent {
                     >
                         View Details
                     </button>
-                    <button
-                        className="deal__button deal__button--small deal__button--pink"
-                        onClick={() =>
-                            (window.location = `/confirm/${deal.id}`)
-                        }
-                    >
-                        Buy Now
-                    </button>
+                    <CustomizeQuoteOrBuyNowButton
+                        onCustomizeQuote={() => this.selectDeal(deal)}
+                        deal={deal}
+                        hasCustomizedQuote={R.contains(deal.id, this.props.dealsIdsWithCustomizedQuotes)}
+                    />
                 </div>
             </Deal>
         );
@@ -127,7 +125,8 @@ class ComparePage extends React.PureComponent {
         return (
             <Modal
                 onClose={this.props.clearSelectedDeal}
-                closeText="Back to results"
+                closeText="Back to compare"
+                deal={this.props.selectedDeal}
             >
                 <CashFinanceLeaseCalculator deal={this.props.selectedDeal} />
             </Modal>
@@ -719,6 +718,10 @@ class ComparePage extends React.PureComponent {
         this.props.selectTab(tabName);
         this.props.getBestOffersForLoadedDeals();
     }
+
+    selectDeal(deal) {
+        this.props.selectDeal(deal);
+    }
 }
 
 const mapStateToProps = state => {
@@ -729,6 +732,7 @@ const mapStateToProps = state => {
         selectedTab: state.selectedTab,
         termDuration: state.termDuration,
         employeeBrand: state.employeeBrand,
+        dealsIdsWithCustomizedQuotes: state.dealsIdsWithCustomizedQuotes,
     };
 };
 

@@ -18,7 +18,7 @@ const urlSize = util.getInitialSizeFromUrl();
 
 const initialState = {
     /** Version **/
-    5: '<- increment the number to purge LocalStorage',
+    6: '<- increment the number to purge LocalStorage',
     /** End Version **/
     accuPricingModalIsShowing: false,
     bestOffers: [],
@@ -82,6 +82,7 @@ const initialState = {
     window: { width: window.innerWidth },
     zipInRange: null,
     zipcode: null,
+    dealsIdsWithCustomizedQuotes: []
 };
 
 export default () => {
