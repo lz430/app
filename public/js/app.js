@@ -23636,6 +23636,10 @@ var _CustomizeQuoteOrBuyNowButton = __webpack_require__(994);
 
 var _CustomizeQuoteOrBuyNowButton2 = _interopRequireDefault(_CustomizeQuoteOrBuyNowButton);
 
+var _strings = __webpack_require__(101);
+
+var _strings2 = _interopRequireDefault(_strings);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23875,7 +23879,36 @@ var InfoModalData = function (_React$PureComponent) {
                             { className: 'info-modal-data__pricing-details' },
                             'Pricing'
                         ),
-                        this.renderTabs(),
+                        this.props.withPricingTabs && this.renderTabs(),
+                        this.props.withFinalSelectionHeader && _react2.default.createElement(
+                            'div',
+                            { className: 'info-modal-data__final-selection-header' },
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'info-modal-data__final-selection-header__you-selected' },
+                                'You selected'
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'info-modal-data__final-selection-header__year-make-model-trim' },
+                                _strings2.default.dealYearMake(this.props.dealPricing.deal()),
+                                ' ',
+                                _strings2.default.dealModelTrim(this.props.dealPricing.deal())
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'info-modal-data__final-selection-header__stock-number' },
+                                'Stock #',
+                                this.props.dealPricing.deal().stock_number
+                            ),
+                            _react2.default.createElement('hr', null),
+                            _react2.default.createElement(
+                                'div',
+                                { className: 'info-modal-data__final-selection-header__payment-option' },
+                                _strings2.default.toTitleCase(this.props.selectedTab),
+                                ' Option'
+                            )
+                        ),
                         _react2.default.createElement(
                             'div',
                             { className: 'info-modal-data__prices' },
@@ -23948,7 +23981,7 @@ var InfoModalData = function (_React$PureComponent) {
                             )
                         ),
                         _react2.default.createElement('hr', null),
-                        _react2.default.createElement(
+                        !this.withConfirmPurchase && _react2.default.createElement(
                             'div',
                             { className: 'info-modal-data__more-rebates info-modal-data__costs' },
                             _react2.default.createElement(
@@ -23969,7 +24002,7 @@ var InfoModalData = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'deal__buttons' },
-                            _react2.default.createElement(
+                            this.props.withCompareInsteadOfBack && _react2.default.createElement(
                                 'button',
                                 {
                                     className: this.compareButtonClass(),
@@ -23977,13 +24010,31 @@ var InfoModalData = function (_React$PureComponent) {
                                 },
                                 this.isAlreadyInCompareList() ? 'Remove from compare' : 'Compare'
                             ),
-                            _react2.default.createElement(_CustomizeQuoteOrBuyNowButton2.default, {
+                            !this.props.withCompareInsteadOfBack && _react2.default.createElement(
+                                'button',
+                                {
+                                    className: this.backToDetailsButtonClass(),
+                                    onClick: function onClick() {
+                                        return window.location = '/deals/' + _this3.props.dealPricing.deal().id;
+                                    }
+                                },
+                                'Back to details'
+                            ),
+                            this.props.withCustomizeQuoteOrBuyNow && _react2.default.createElement(_CustomizeQuoteOrBuyNowButton2.default, {
                                 onCustomizeQuote: function onCustomizeQuote() {
                                     return _this3.selectDeal();
                                 },
                                 deal: this.props.dealPricing.deal(),
                                 hasCustomizedQuote: this.props.dealPricing.hasCustomizedQuote()
-                            })
+                            }),
+                            this.props.withConfirmPurchase && _react2.default.createElement(
+                                'button',
+                                {
+                                    className: 'deal__button deal__button--small deal__button--pink deal__button',
+                                    onClick: this.props.onConfirmPurchase
+                                },
+                                'Confirm purchase'
+                            )
                         ),
                         _react2.default.createElement(
                             'div',
@@ -24015,6 +24066,11 @@ var InfoModalData = function (_React$PureComponent) {
             return 'deal__button deal__button--small deal__button--blue' + (this.isAlreadyInCompareList() ? 'deal__button--blue' : '');
         }
     }, {
+        key: 'backToDetailsButtonClass',
+        value: function backToDetailsButtonClass() {
+            return 'deal__button deal__button--small deal__button--small--as-link deal__button--no-border';
+        }
+    }, {
         key: 'selectDeal',
         value: function selectDeal() {
             if (this.props.closeModal) {
@@ -24029,7 +24085,12 @@ var InfoModalData = function (_React$PureComponent) {
 }(_react2.default.PureComponent);
 
 InfoModalData.defaultProps = {
-    withPricingHeader: true
+    withPricingHeader: true,
+    withPricingTabs: true,
+    withCompareInsteadOfBack: true,
+    withFinalSelectionHeader: false,
+    withCustomizeQuoteOrBuyNow: true,
+    withConfirmPurchase: false
 };
 
 exports.default = InfoModalData;
@@ -69366,7 +69427,7 @@ var ConfirmDetails = function (_React$PureComponent) {
                 _Modal2.default,
                 {
                     onClose: this.props.clearSelectedDeal,
-                    closeText: 'Back to results'
+                    closeText: 'Back to confirmation'
                 },
                 _react2.default.createElement(_CashFinanceLeaseCalculator2.default, { deal: this.props.selectedDeal })
             );
@@ -69376,28 +69437,9 @@ var ConfirmDetails = function (_React$PureComponent) {
         value: function renderDeal(deal, index) {
             var _this2 = this;
 
-            return _react2.default.createElement(
-                _ConfirmDeal2.default,
-                { deal: deal, key: index, hideImageAndTitle: true },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'deal-details__deal-content' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'deal-details__buttons' },
-                        _react2.default.createElement(
-                            'button',
-                            {
-                                className: 'deal-details__button deal-details__button--small deal-details__button--pink',
-                                onClick: function onClick() {
-                                    return _purchase2.default.start(deal, _this2.props.selectedTab, _this2.props.downPayment, _this2.props.dealBestOfferTotalValue, _this2.props.dealBestOffer, _this2.props.termDuration, _this2.props.employeeBrand);
-                                }
-                            },
-                            'Confirm Purchase'
-                        )
-                    )
-                )
-            );
+            return _react2.default.createElement(_ConfirmDeal2.default, { deal: deal, key: index, hideImageAndTitle: true, onConfirmPurchase: function onConfirmPurchase() {
+                    return _purchase2.default.start(deal, _this2.props.selectedTab, _this2.props.downPayment, _this2.props.dealBestOfferTotalValue, _this2.props.dealBestOffer, _this2.props.termDuration, _this2.props.employeeBrand);
+                } });
         }
     }, {
         key: 'render',
@@ -69418,13 +69460,8 @@ var ConfirmDetails = function (_React$PureComponent) {
                             { className: 'deal-details__title' },
                             _react2.default.createElement(
                                 'div',
-                                { className: 'deal-details__title-year-make' },
-                                _strings2.default.dealYearMake(this.props.deal)
-                            ),
-                            _react2.default.createElement(
-                                'div',
                                 { className: 'deal-details__title-model-trim' },
-                                _strings2.default.dealModelTrim(this.props.deal)
+                                'Say hello to your new car!'
                             )
                         ),
                         _react2.default.createElement(
@@ -69434,6 +69471,11 @@ var ConfirmDetails = function (_React$PureComponent) {
                                 featureImageClass: 'deal-details__primary-image',
                                 deal: this.props.deal
                             })
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            'Confirming this purchase is not a binding contract. You may cancel at any time. Once you confirm this purchase, we will finalize financing and delivery details.'
                         )
                     ),
                     _react2.default.createElement(
@@ -69495,6 +69537,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _api = __webpack_require__(72);
@@ -69545,6 +69589,18 @@ var _formulas = __webpack_require__(89);
 
 var _formulas2 = _interopRequireDefault(_formulas);
 
+var _InfoModalData = __webpack_require__(372);
+
+var _InfoModalData2 = _interopRequireDefault(_InfoModalData);
+
+var _DealPricing = __webpack_require__(226);
+
+var _DealPricing2 = _interopRequireDefault(_DealPricing);
+
+var _ramda = __webpack_require__(8);
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -69558,485 +69614,28 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var ConfirmDeal = function (_React$PureComponent) {
     _inherits(ConfirmDeal, _React$PureComponent);
 
-    function ConfirmDeal(props) {
+    function ConfirmDeal() {
         _classCallCheck(this, ConfirmDeal);
 
-        var _this = _possibleConstructorReturn(this, (ConfirmDeal.__proto__ || Object.getPrototypeOf(ConfirmDeal)).call(this, props));
-
-        _this.state = {
-            showStandardFeatures: false,
-            showFeatures: false,
-            warranties: null,
-            dimensions: null
-        };
-        return _this;
+        return _possibleConstructorReturn(this, (ConfirmDeal.__proto__ || Object.getPrototypeOf(ConfirmDeal)).apply(this, arguments));
     }
 
     _createClass(ConfirmDeal, [{
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            this._isMounted = false;
-        }
-    }, {
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            var _this2 = this;
-
-            this._isMounted = true;
-            this.props.requestBestOffer(this.props.deal);
-
-            _api2.default.getDimensions(this.props.deal.version.jato_vehicle_id).then(function (response) {
-                if (!_this2._isMounted) return;
-
-                _this2.setState({
-                    dimensions: response.data
-                });
-            });
-
-            _api2.default.getWarranties(this.props.deal.version.jato_vehicle_id).then(function (response) {
-                if (!_this2._isMounted) return;
-
-                _this2.setState({
-                    warranties: response.data
-                });
-            });
-        }
-    }, {
-        key: 'displayFinalPrice',
-        value: function displayFinalPrice() {
-            switch (this.props.selectedTab) {
-                case 'cash':
-                    return _formulas2.default.calculateTotalCash(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand), this.props.deal.doc_fee, this.props.dealBestOfferTotalValue);
-                case 'finance':
-                    {
-                        return Math.round(_formulas2.default.calculateFinancedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, this.props.downPayment, this.props.termDuration));
-                    }
-                case 'lease':
-                    {
-                        return _formulas2.default.calculateTotalLeaseMonthlyPayment(_formulas2.default.calculateLeasedMonthlyPayments(_util2.default.getEmployeeOrSupplierPrice(this.props.deal, this.props.employeeBrand) - this.props.dealBestOfferTotalValue, 0, 0, this.props.termDuration, R.or(this.props.residualPercent, 31)));
-                    }
-            }
-        }
-    }, {
-        key: 'hideModals',
-        value: function hideModals() {
-            this.setState({
-                showStandardFeatures: false,
-                showFeatures: false
-            });
-        }
-    }, {
-        key: 'renderStandardFeaturesModal',
-        value: function renderStandardFeaturesModal(deal) {
-            var _this3 = this;
-
-            return _react2.default.createElement(
-                _Modal2.default,
-                {
-                    nowrapper: true,
-                    onClose: function onClose() {
-                        _this3.hideModals();
-                    }
-                },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'modal__content' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'modal__sticker-container' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'modal__sticker' },
-                            'Standard Features'
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'modal__header' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'modal__titles modal__titles--center' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'modal__subtitle modal__subtitle--center' },
-                                _strings2.default.dealYearMake(deal)
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'modal__title modal_title--center' },
-                                _strings2.default.dealModelTrim(deal)
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'modal__close' },
-                            _react2.default.createElement(_reactSvgInline2.default, {
-                                onClick: function onClick() {
-                                    return _this3.hideModals();
-                                },
-                                height: '20px',
-                                width: '20px',
-                                className: 'modal__close-x',
-                                svg: _zondicons2.default['close']
-                            })
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'modal__body deal-details__modal-body' },
-                        _react2.default.createElement(
-                            'h3',
-                            null,
-                            'Specifications'
-                        ),
-                        _react2.default.createElement('hr', null),
-                        _react2.default.createElement(
-                            'h4',
-                            null,
-                            'Dimensions'
-                        ),
-                        _react2.default.createElement(
-                            'ul',
-                            null,
-                            this.state.dimensions ? this.state.dimensions.map(function (dimension, index) {
-                                return _react2.default.createElement(
-                                    'li',
-                                    { key: index },
-                                    dimension.feature,
-                                    ':',
-                                    ' ',
-                                    dimension.content
-                                );
-                            }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
-                        ),
-                        _react2.default.createElement(
-                            'h4',
-                            null,
-                            'Warranties'
-                        ),
-                        _react2.default.createElement(
-                            'ul',
-                            null,
-                            this.state.warranties ? this.state.warranties.map(function (dimension, index) {
-                                return _react2.default.createElement(
-                                    'li',
-                                    { key: index },
-                                    dimension.feature,
-                                    ':',
-                                    ' ',
-                                    dimension.content
-                                );
-                            }) : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
-                        ),
-                        _react2.default.createElement(
-                            'h3',
-                            null,
-                            'Features'
-                        ),
-                        _react2.default.createElement('hr', null),
-                        _react2.default.createElement(
-                            'ul',
-                            null,
-                            deal.features.map(function (feature, index) {
-                                return _react2.default.createElement(
-                                    'li',
-                                    { key: index },
-                                    feature.feature
-                                );
-                            })
-                        )
-                    )
-                )
-            );
-        }
-    }, {
-        key: 'renderFeaturesModal',
-        value: function renderFeaturesModal() {
-            var _this4 = this;
-
-            return _react2.default.createElement(
-                _Modal2.default,
-                {
-                    nowrapper: true,
-                    onClose: function onClose() {
-                        _this4.hideModals();
-                    }
-                },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'modal__content' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'modal__sticker-container' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'modal__sticker' },
-                            'Additional Options'
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'modal__header' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'modal__titles modal__titles--center' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'modal__subtitle modal__subtitle--center' },
-                                _strings2.default.dealYearMake(this.props.deal)
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'modal__title modal_title--center' },
-                                _strings2.default.dealModelTrim(this.props.deal)
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'modal__close' },
-                            _react2.default.createElement(_reactSvgInline2.default, {
-                                onClick: function onClick() {
-                                    return _this4.hideModals();
-                                },
-                                height: '20px',
-                                width: '20px',
-                                className: 'modal__close-x',
-                                svg: _zondicons2.default['close']
-                            })
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'modal__body deal-details__modal-body' },
-                        _react2.default.createElement(
-                            'ul',
-                            null,
-                            this.props.deal.vauto_features.map(function (feature, index) {
-                                return _react2.default.createElement(
-                                    'li',
-                                    { key: index },
-                                    feature
-                                );
-                            })
-                        )
-                    )
-                )
-            );
-        }
-    }, {
-        key: 'showStandardFeatures',
-        value: function showStandardFeatures() {
-            this.setState({
-                showStandardFeatures: true
-            });
-        }
-    }, {
-        key: 'showFeatures',
-        value: function showFeatures() {
-            this.setState({
-                showFeatures: true
-            });
-        }
-    }, {
-        key: 'renderAppliedRebatesLink',
-        value: function renderAppliedRebatesLink() {
-            var _this5 = this;
-
-            if (!this.props.dealBestOfferTotalValue) {
-                return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
-            }
-
-            return _react2.default.createElement(
-                'div',
-                null,
-                _react2.default.createElement(
-                    'div',
-                    { className: 'confirm-deal__rebate-info confirm-deal__costs confirm-deal__bold' },
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        'Rebates Applied:'
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        '' + _util2.default.moneyFormat(this.props.dealBestOfferTotalValue)
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'confirm-deal__more-rebates confirm-deal__costs' },
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _react2.default.createElement(
-                            'a',
-                            {
-                                onClick: function onClick() {
-                                    return _this5.props.selectDeal(_this5.props.deal);
-                                },
-                                className: 'link'
-                            },
-                            'Get Rebates'
-                        )
-                    )
-                )
-            );
-        }
-    }, {
         key: 'render',
         value: function render() {
-            var _this6 = this;
-
             var deal = this.props.deal;
 
             return _react2.default.createElement(
                 'div',
-                null,
-                _react2.default.createElement(
-                    'div',
-                    { className: 'confirm-deal' },
-                    this.props.hideImageAndTitle ? '' : _react2.default.createElement(
-                        'div',
-                        null,
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'confirm-deal__basic-info' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'confirm-deal__basic-info-year-and-model' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'confirm-deal__basic-info-year-and-make' },
-                                    deal.year + ' ' + deal.make
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'confirm-deal__basic-info-model-and-series' },
-                                    deal.model + ' ' + deal.series
-                                )
-                            )
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'tabs__title' },
-                        'You Selected...'
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'confirm-deal__vehicle-info' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'model-vin' },
-                            _react2.default.createElement(
-                                'p',
-                                null,
-                                deal.year + ' ' + deal.make + ' ' + deal.model + ' ' + deal.series,
-                                ' ',
-                                _react2.default.createElement('br', null),
-                                'Stock #' + deal.vin
-                            )
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'confirm-deal__feature-buttons' },
-                        _react2.default.createElement(
-                            'button',
-                            {
-                                onClick: function onClick() {
-                                    return _this6.showStandardFeatures(deal);
-                                },
-                                className: 'confirm-deal__button confirm-deal__button--spacing confirm-deal__button--white confirm-deal__button--small'
-                            },
-                            _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['binoculars'] }),
-                            'Review Standard Features'
-                        ),
-                        _react2.default.createElement(
-                            'button',
-                            {
-                                onClick: function onClick() {
-                                    return _this6.showFeatures(deal);
-                                },
-                                className: 'confirm-deal__button confirm-deal__button--spacing confirm-deal__button--white confirm-deal__button--small'
-                            },
-                            _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['binoculars'] }),
-                            'Review Additional Options'
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'confirm-deal__price' },
-                        _react2.default.createElement(
-                            'p',
-                            { className: 'confirm-deal__pricing-details' },
-                            'Pricing Details'
-                        ),
-                        _react2.default.createElement(
-                            'p',
-                            null,
-                            _strings2.default.toTitleCase(this.props.selectedTab) + ' Terms'
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'confirm-deal__prices' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'confirm-deal__costs' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'confirm-deal__label' },
-                                    'Suggested Retail:',
-                                    ' '
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'confirm-deal__amount' },
-                                    _util2.default.moneyFormat(this.props.deal.msrp)
-                                )
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'confirm-deal__costs' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'confirm-deal__label' },
-                                    'Your Price:'
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'confirm-deal__amount' },
-                                    _util2.default.moneyFormat(this.props.deal.supplier_price) + '*'
-                                )
-                            ),
-                            this.renderAppliedRebatesLink()
-                        ),
-                        _react2.default.createElement('hr', null),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'confirm-deal__final-price confirm-deal__costs confirm-deal__bold' },
-                            _react2.default.createElement(
-                                'div',
-                                null,
-                                'Your ' + _strings2.default.toTitleCase(this.props.selectedTab) + '  Price:'
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                null,
-                                _util2.default.moneyFormat(this.displayFinalPrice()) + '\n                                ' + (this.props.selectedTab === 'finance' || this.props.selectedTab === 'lease' ? ' /month' : '')
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'p',
-                            { className: 'confirm-deal__disclaimer' },
-                            '*Includes sales tax and dealer fees. License plate fees not included.'
-                        )
-                    ),
-                    this.props.children
-                ),
-                this.state.showStandardFeatures ? this.renderStandardFeaturesModal(deal) : '',
-                this.state.showFeatures ? this.renderFeaturesModal(deal) : ''
+                { className: 'confirm-deal' },
+                _react2.default.createElement(_InfoModalData2.default, _extends({
+                    withPricingHeader: false,
+                    withPricingTabs: false,
+                    withCompareInsteadOfBack: false,
+                    withFinalSelectionHeader: true,
+                    withCustomizeQuoteOrBuyNow: false,
+                    withConfirmPurchase: true
+                }, _ramda2.default.pick(['deal', 'selectedTab', 'compareList', 'dealPricing', 'onConfirmPurchase'], this.props), _ramda2.default.pick(['selectDeal', 'selectTab', 'requestTargets', 'requestBestOffer', 'getBestOffersForLoadedDeals', 'toggleCompare', 'showAccuPricingModal'], this.props)))
             );
         }
     }]);
@@ -70059,6 +69658,7 @@ ConfirmDeal.propTypes = {
 
 var makeMapStateToProps = function makeMapStateToProps() {
     var getDealBestOfferTotalValue = (0, _index2.makeDealBestOfferTotalValue)();
+    var getDealPricing = (0, _index2.makeDealPricing)();
     var mapStateToProps = function mapStateToProps(state, props) {
         return {
             compareList: state.compareList,
@@ -70070,7 +69670,8 @@ var makeMapStateToProps = function makeMapStateToProps() {
             residualPercent: state.residualPercent,
             dealTargets: state.dealTargets,
             selectedTargets: state.selectedTargets,
-            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props)
+            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealPricing: new _DealPricing2.default(getDealPricing(state, props))
         };
     };
     return mapStateToProps;
