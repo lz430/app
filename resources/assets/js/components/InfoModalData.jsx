@@ -1,9 +1,8 @@
 import R from 'ramda';
 import React from 'react';
 import util from 'src/util';
-import {
-    makeDealPricing
-} from 'selectors/index';
+import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
+import strings from 'src/strings';
 
 class InfoModalData extends React.PureComponent {
     componentDidMount() {
@@ -154,7 +153,25 @@ class InfoModalData extends React.PureComponent {
                         </p>
                         }
 
-                        { this.renderTabs() }
+                        {this.props.withPricingTabs && this.renderTabs()}
+
+                        {this.props.withFinalSelectionHeader &&
+                            <div className="info-modal-data__final-selection-header">
+                                <div className="info-modal-data__final-selection-header__you-selected">
+                                    You selected
+                                </div>
+                                <div className="info-modal-data__final-selection-header__year-make-model-trim">
+                                    {strings.dealYearMake(this.props.dealPricing.deal())} {strings.dealModelTrim(this.props.dealPricing.deal())}
+                                </div>
+                                <div className="info-modal-data__final-selection-header__stock-number">
+                                    Stock #{this.props.dealPricing.deal().stock_number}
+                                </div>
+                                <hr />
+                                <div className="info-modal-data__final-selection-header__payment-option">
+                                    {strings.toTitleCase(this.props.selectedTab)} Option
+                                </div>
+                            </div>
+                        }
 
                         <div className="info-modal-data__prices">
                             <div className="info-modal-data__costs">
@@ -198,34 +215,55 @@ class InfoModalData extends React.PureComponent {
                         </div>
                         <hr />
 
-                        <div className="info-modal-data__more-rebates info-modal-data__costs">
-                            <div>
-                                Additional rebates may apply. {' '}
-                                <a
-                                    onClick={this.handleGetRebatesLink.bind(this)}
-                                    className="link"
-                                >
-                                    See more
-                                </a>
+                        {! this.withConfirmPurchase &&
+                            <div className="info-modal-data__more-rebates info-modal-data__costs">
+                                <div>
+                                    Additional rebates may apply. {' '}
+                                    <a
+                                        onClick={this.handleGetRebatesLink.bind(this)}
+                                        className="link"
+                                    >
+                                        See more
+                                    </a>
+                                </div>
                             </div>
-                        </div>
+                        }
 
                         <div className="deal__buttons">
-                            <button
-                                className={this.compareButtonClass()}
-                                onClick={this.props.toggleCompare.bind(
-                                    null,
-                                    this.props.dealPricing.deal()
-                                )}
-                            >
-                                {this.isAlreadyInCompareList() ? 'Remove from compare' : 'Compare'}
-                            </button>
-                            <button
-                                onClick={() => this.selectDeal()}
-                                className="deal__button deal__button--small deal__button--pink deal__button"
-                            >
-                                Customize Quote
-                            </button>
+                            {this.props.withCompareInsteadOfBack &&
+                                <button
+                                    className={this.compareButtonClass()}
+                                    onClick={this.props.toggleCompare.bind(
+                                        null,
+                                        this.props.dealPricing.deal()
+                                    )}
+                                >
+                                    {this.isAlreadyInCompareList() ? 'Remove from compare' : 'Compare'}
+                                </button>
+                            }
+                            {!this.props.withCompareInsteadOfBack &&
+                                <button
+                                    className={this.backToDetailsButtonClass()}
+                                    onClick={() => (window.location = `/deals/${this.props.dealPricing.deal().id}`)}
+                                >
+                                    Back to details
+                                </button>
+                            }
+                            {this.props.withCustomizeQuoteOrBuyNow &&
+                                <CustomizeQuoteOrBuyNowButton
+                                    onCustomizeQuote={() => this.selectDeal()}
+                                    deal={this.props.dealPricing.deal()}
+                                    hasCustomizedQuote={this.props.dealPricing.hasCustomizedQuote()}
+                                />
+                            }
+                            {this.props.withConfirmPurchase &&
+                                <button
+                                    className='deal__button deal__button--small deal__button--pink deal__button'
+                                    onClick={this.props.onConfirmPurchase}
+                                >
+                                    Confirm purchase
+                                </button>
+                            }
                         </div>
                         <div className="accupricing-cta">
                             <a onClick={this.props.showAccuPricingModal}>
@@ -256,6 +294,10 @@ class InfoModalData extends React.PureComponent {
         );
     }
 
+    backToDetailsButtonClass() {
+        return 'deal__button deal__button--small deal__button--small--as-link deal__button--no-border';
+    }
+
     selectDeal() {
         if (this.props.closeModal) {
             this.props.closeModal();
@@ -266,7 +308,12 @@ class InfoModalData extends React.PureComponent {
 }
 
 InfoModalData.defaultProps = {
-    withPricingHeader: true
+    withPricingHeader: true,
+    withPricingTabs: true,
+    withCompareInsteadOfBack: true,
+    withFinalSelectionHeader: false,
+    withCustomizeQuoteOrBuyNow: true,
+    withConfirmPurchase: false
 };
 
 export default InfoModalData;

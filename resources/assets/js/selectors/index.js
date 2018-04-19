@@ -19,6 +19,8 @@ const leaseAnnualMileage = state => state.leaseAnnualMileage;
 const leaseTerm = state => state.leaseTerm;
 const leaseCashDue = state => state.leaseCashDue;
 
+const dealsIdsWithCustomizedQuotes = state => state.dealsIdsWithCustomizedQuotes;
+
 export const makeSelectedDeal = () => {
     return selectedDeal;
 };
@@ -141,6 +143,18 @@ export const makeDealBestOfferTotalValue = () => {
     return dealBestOfferTotalValue;
 }
 
+const dealHasCustomizedQuote = createSelector(
+    deal,
+    dealsIdsWithCustomizedQuotes,
+    (
+        deal,
+        dealsIdsWithCustomizedQuotes
+    ) => {
+        return R.contains(deal.id, dealsIdsWithCustomizedQuotes);
+    }
+
+);
+
 const dealPricing = createSelector(
     deal,
     dealBestOffer,
@@ -153,6 +167,7 @@ const dealPricing = createSelector(
     leaseAnnualMileage,
     leaseTerm,
     leaseCashDue,
+    dealHasCustomizedQuote,
     (
         deal,
         dealBestOffer,
@@ -165,6 +180,7 @@ const dealPricing = createSelector(
         leaseAnnualMileage,
         leaseTerm,
         leaseCashDue,
+        dealHasCustomizedQuote
     ) => {
         return {
             deal,
@@ -178,6 +194,7 @@ const dealPricing = createSelector(
             leaseAnnualMileage,
             leaseTerm,
             leaseCashDue,
+            dealHasCustomizedQuote
         };
     }
 );

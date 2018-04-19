@@ -82,6 +82,11 @@
     &--small {
       font-size: 0.8rem;
       padding: 10px 15px;
+
+      &--as-link {
+        padding: 0;
+        text-decoration: underline;
+      }
     }
   }
 }

@@ -166,7 +166,8 @@ class DealDetails extends React.PureComponent {
         return (
             <Modal
                 onClose={this.props.clearSelectedDeal}
-                closeText="Back to results"
+                closeText="Back to details"
+                deal={this.props.selectedDeal}
             >
                 <CashFinanceLeaseCalculator deal={this.props.selectedDeal} />
             </Modal>

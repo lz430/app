@@ -34,6 +34,7 @@ class FilterPage extends React.PureComponent {
             <Modal
                 onClose={this.props.clearSelectedDeal}
                 closeText="Back to results"
+                deal={this.props.selectedDeal}
             >
                 <CashFinanceLeaseCalculator deal={this.props.selectedDeal} />
             </Modal>

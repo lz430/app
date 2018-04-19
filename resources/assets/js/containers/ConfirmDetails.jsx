@@ -15,7 +15,7 @@ class ConfirmDetails extends React.PureComponent {
         return (
             <Modal
                 onClose={this.props.clearSelectedDeal}
-                closeText="Back to results"
+                closeText="Back to confirmation"
             >
                 <CashFinanceLeaseCalculator deal={this.props.selectedDeal} />
             </Modal>
@@ -24,27 +24,15 @@ class ConfirmDetails extends React.PureComponent {
 
     renderDeal(deal, index) {
         return (
-            <ConfirmDeal deal={deal} key={index} hideImageAndTitle={true}>
-                <div className="deal-details__deal-content">
-                    <div className="deal-details__buttons">
-                        <button
-                            className="deal-details__button deal-details__button--small deal-details__button--pink"
-                            onClick={() =>
-                                purchase.start(
-                                    deal,
-                                    this.props.selectedTab,
-                                    this.props.downPayment,
-                                    this.props.dealBestOfferTotalValue,
-                                    this.props.dealBestOffer,
-                                    this.props.termDuration,
-                                    this.props.employeeBrand
-                                )}
-                        >
-                            Confirm Purchase
-                        </button>
-                    </div>
-                </div>
-            </ConfirmDeal>
+            <ConfirmDeal deal={deal} key={index} hideImageAndTitle={true} onConfirmPurchase={() => purchase.start(
+                deal,
+                this.props.selectedTab,
+                this.props.downPayment,
+                this.props.dealBestOfferTotalValue,
+                this.props.dealBestOffer,
+                this.props.termDuration,
+                this.props.employeeBrand
+            )} />
         );
     }
 
@@ -56,11 +44,8 @@ class ConfirmDetails extends React.PureComponent {
                 <div className="deal-details">
                     <div className="deal-details__images-and-title">
                         <div className="deal-details__title">
-                            <div className="deal-details__title-year-make">
-                                {strings.dealYearMake(this.props.deal)}
-                            </div>
                             <div className="deal-details__title-model-trim">
-                                {strings.dealModelTrim(this.props.deal)}
+                                Say hello to your new car!
                             </div>
                         </div>
                         <div className="deal-details__images">
@@ -68,6 +53,11 @@ class ConfirmDetails extends React.PureComponent {
                                 featureImageClass="deal-details__primary-image"
                                 deal={this.props.deal}
                             />
+                        </div>
+                        <div>
+                            Confirming this purchase is not a binding contract.
+                            You may cancel at any time.
+                            Once you confirm this purchase, we will finalize financing and delivery details.
                         </div>
                     </div>
                     <div className="deal-details__pricing">

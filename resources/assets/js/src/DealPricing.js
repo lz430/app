@@ -20,6 +20,10 @@ export default class DealPricing {
         return this.data.deal;
     }
 
+    hasCustomizedQuote() {
+        return this.data.dealHasCustomizedQuote;
+    }
+
     financeDownPaymentValue() {
         return this.data.financeDownPayment === null ?
             (new Decimal(this.yourPriceValue() * .10).toFixed(2)) :

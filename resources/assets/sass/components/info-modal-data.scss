@@ -108,4 +108,20 @@
       text-align: left;
     }
   }
+
+  &__final-selection-header {
+    &__you-selected {
+      font-size: .8rem;
+    }
+    &__year-make-model-trim {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    &__stock-number {
+      font-size: .8rem;
+    }
+    &__payment-option {
+      font-weight: bold;
+    }
+  }
 }

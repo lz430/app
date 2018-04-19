@@ -40,6 +40,10 @@ class Modal extends React.Component {
     }
 
     buttonClass() {
+        if (this.props.deal) {
+            return 'deal__button deal__button--small deal__button--blue';
+        }
+
         return `modal__close-button modal__close-button--blue modal__close-button--small ${
             this.state.animating ? 'animated rubberBand' : ''
         } ${this.props.buttonCloseDisabled ? 'disabled' : ''}`;
@@ -116,14 +120,28 @@ class Modal extends React.Component {
                         >
                             {childrenWithProps}
                         </div>
-                        {this.props.closeText ? (
+                        {this.props.closeText || this.props.deal ? (
                             <div className="modal__footer">
-                                <button
-                                    onClick={this.props.onClose}
-                                    className={this.buttonClass()}
-                                >
-                                    {this.props.closeText}
-                                </button>
+                                {this.props.closeText ? (
+                                    <button
+                                        onClick={this.props.onClose}
+                                        className={this.buttonClass()}
+                                    >
+                                        {this.props.closeText}
+                                    </button>
+                                ) : ''}
+                                {this.props.deal ? (
+                                    <button
+                                        onClick={() => {
+                                            this.props.onClose();
+
+                                            window.location = `/confirm/${this.props.deal.id}`;
+                                        }}
+                                        className="deal__button deal__button--small deal__button--pink deal__button"
+                                    >
+                                        Buy Now
+                                    </button>
+                                ) : ''}
                             </div>
                         ) : (
                             ''
