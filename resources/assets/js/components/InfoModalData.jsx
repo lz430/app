@@ -215,7 +215,7 @@ class InfoModalData extends React.PureComponent {
                         </div>
                         <hr />
 
-                        {! this.withConfirmPurchase &&
+                        {! this.props.withConfirmPurchase &&
                             <div className="info-modal-data__more-rebates info-modal-data__costs">
                                 <div>
                                     Additional rebates may apply. {' '}
