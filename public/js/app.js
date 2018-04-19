@@ -23981,7 +23981,7 @@ var InfoModalData = function (_React$PureComponent) {
                             )
                         ),
                         _react2.default.createElement('hr', null),
-                        !this.withConfirmPurchase && _react2.default.createElement(
+                        !this.props.withConfirmPurchase && _react2.default.createElement(
                             'div',
                             { className: 'info-modal-data__more-rebates info-modal-data__costs' },
                             _react2.default.createElement(
