@@ -13,3 +13,5 @@ Homestead.yaml
 .env
 /storage/debugbar
 /.vscode
+.DS_Store
+*.log
