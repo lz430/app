@@ -27,88 +27,29 @@ class DealFeatureImporter
 
     public function featureIds()
     {
-        //return collect($this->client->equipmentByVehicleId($this->version->jato_vehicle_id)['results']);
-        // Package code 27G
-
-        //$this->get($path, $options, $async);
-
-
-        //\Log::info($this->client->equipmentByVehicleId('742048320180301'));
-        //$test = collect($this->client->equipmentByVehicleId('742048320180301')['results']);
-
-        //\Log::info($this->client->optionsByVehicleId('792222620180309/Type/P')['options']);
-        
-        /* [2018-04-23 15:43:01] local.INFO: array (
-            0 => 'ADE',
-            1 => 'AAJ',
-            2 => 'AEM',
-            3 => 'AHQ',
-          )*/
-
-          /*[2018-04-23 17:20:08] local.INFO: array (
-            0 => 33401,
-            1 => 43401,
-            2 => 7801,
-            3 => 17801,
-            4 => 17801,
-            5 => 15101,
-            6 => 37701,
-            7 => 44801,
-            8 => 46901,
-            9 => 11901,
-            10 => 18401,
-            11 => 33801,
-            12 => 15101,
-            13 => 37701,
-            14 => 44801,
-            15 => 46901,
-            16 => 11901,
-            17 => 18401,
-            18 => 33801,
-            19 => 1601,
-            20 => 15101,
-            21 => 6601,
-          )*/
-        
-        $findPackages = $this->client->optionsByVehicleId("792222620180309/Type/P")['options']; //$this->version->jato_vehicle_id
+        /** Package Decoding Options Logic */
+        $vehicleId = $this->version->jato_vehicle_id;
+        // Gets options codes that are packages from vehicle id
+        $findPackages = $this->client->optionsByVehicleId("$vehicleId/Type/P")['options'];
         $pArray = array();
         foreach($findPackages as $package) {
             $optionCode = $package['optionCode'];
             if(!in_array($optionCode, ['AEM'])){
-                $searchCode = $this->client->equipmentByVehicleId("792222620180309?packageCode=$optionCode")['results']; //$this->version->jato_vehicle_id
-                
+                // Gets schema id's within the option codes that are packages
+                $searchCode = $this->client->equipmentByVehicleId("$vehicleId?packageCode=$optionCode")['results'];
                 foreach($searchCode as $equipment) {
                     $pArray[] = $equipment['schemaId'];
                  }
             }
         }
-       \Log::info($pArray);
-       
-        /*[2018-04-23 12:07:26] local.INFO: array (
-            0 => 1601,
-            1 => 15101,
-            2 => 6601,
-          )
-          */
-          /* [2018-04-23 12:18:25] local.INFO: array (
-            0 => '24S',
-            1 => 'DFT',
-            2 => 'ADE',
-            3 => 'ADC',
-          ) */
-        
-        //merge package codes from deals array with new array
-        //\Log::info(array_merge($testArray, $array));
+        // Combines the current deal options codes with the newly searched package schema id's
+        $combinedDealCodes = array_merge($this->deal->option_codes, $pArray);
+        /** End of Package Decoding Options Logic */
 
-
-        // $optionCodes = array_merge($this->deal->option_codes, $array);
-
-        // TODO::possibly place code here to look up option code and place in below
-        // $this->deal->option_codes function to insert other package option codes into for lookup
         return $this->jatoEquipment()->reject(function ($equipment) {
             return $equipment['availability'] === 'not available';
-        })->flatMap(function ($equipment) {
-            if ($equipment['optionCode'] !== 'N/A' && in_array($equipment['optionCode'], $this->deal->option_codes)) {
+        })->flatMap(function ($equipment) use($combinedDealCodes){
+            if ($equipment['optionCode'] !== 'N/A' && in_array($equipment['optionCode'], $combinedDealCodes)) {
                 $matchingFeatures = Feature::where('jato_schema_ids', $equipment['schemaId'])->get();
 
                 // Some of the custom mappings have more than one feature with the same schemaIds, so if multiple features are returned here,
