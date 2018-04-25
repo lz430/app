@@ -30,29 +30,39 @@ class DealFeatureImporter
         /** Package Decoding Options Logic */
         $vehicleId = $this->version->jato_vehicle_id;
         // Gets options codes that are packages from vehicle id
-        $findPackages = $this->client->optionsByVehicleId("$vehicleId/Type/P")['options'];
+        //$findPackages = $this->client->optionsByVehicleId("$vehicleId/Type/P")['options'];
+       /* $findPackages = $this->client->optionsByVehicleId("742048320180301/Type/P")['options'];
         $pArray = array();
         foreach($findPackages as $package) {
             $optionCode = $package['optionCode'];
+            \Log::info($optionCode);
             if(!in_array($optionCode, ['AEM'])){
                 // Gets schema id's within the option codes that are packages
-                $searchCode = $this->client->equipmentByVehicleId("$vehicleId?packageCode=$optionCode")['results'];
+                //$searchCode = $this->client->equipmentByVehicleId("$vehicleId?packageCode=$optionCode")['results'];
+                $searchCode = $this->client->equipmentByVehicleId("742048320180301?packageCode=AAD")['results'];
+                \Log::info($searchCode);
                 foreach($searchCode as $equipment) {
-                    $pArray[] = $equipment['schemaId'];
+                    //$pArray[] = $equipment['schemaId'];
                  }
             }
-        }
+        } */
+        //\Log::info($pArray);
         // Combines the current deal options codes with the newly searched package schema id's
-        $combinedDealCodes = array_merge($this->deal->option_codes, $pArray);
+        //$combinedDealCodes = array_merge($this->deal->option_codes, $pArray);
+        //\Log::info($combinedDealCodes);
+        //\Log::info($equipment['optionCode']);
         /** End of Package Decoding Options Logic */
-
         return $this->jatoEquipment()->reject(function ($equipment) {
+            //\Log::info("availability not available");
             return $equipment['availability'] === 'not available';
-        })->flatMap(function ($equipment) use($combinedDealCodes){
-            if ($equipment['optionCode'] !== 'N/A' && in_array($equipment['optionCode'], $combinedDealCodes)) {
+        })->flatMap(function ($equipment) { // use ($combinedDealCodes)
+            //\Log::info($equipment['optionCode']);
+            if ($equipment['optionCode'] !== 'N/A' && in_array($equipment['optionCode'], $this->deal->option_codes)) { // $this->deal->option_codes
+                //\Log::info("combined option/package codes here");
                 $matchingFeatures = Feature::where('jato_schema_ids', $equipment['schemaId'])->get();
+                //\Log::info($equipment['schemaId']);
 
-                // Some of the custom mappings have more than one feature with the same schemaIds, so if multiple features are returned here,
+                // Some of the custom mappings have more th an one feature with the same schemaIds, so if multiple features are returned here,
                 // we'll have to loop through them below in parseCustomJatoMappingDmrCategories() to handle string comparison
                 // If there's only one match, however, we can assume that deal has that optional feature
                 if ($matchingFeatures->count() === 1) {
