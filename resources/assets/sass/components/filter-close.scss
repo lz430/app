@@ -1,0 +1,13 @@
+@import '../variables';
+
+.filter-close {
+  display: flex;
+  justify-content: flex-end;
+  &__icon {
+    cursor: pointer;
+    fill: $color-text-white;
+    stroke: $color-text-white;
+    margin-top: 1rem;
+    margin-right: 1rem;
+  }
+}
