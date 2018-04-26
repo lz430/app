@@ -5,8 +5,7 @@
 .nav {
   background-color: $color-background-secondary;
   border-top: 4px solid $color-blue;
-  height: $nav-height;
-  max-height: $nav-height;
+  min-height: $nav-height;
 
   @include constrained {
     align-items: center;
@@ -24,7 +23,11 @@
   }
 
   &__links {
-    display: flex;
+    display: none;
+
+    @media (min-width: $break-medium) {
+      display: flex;
+    }
 
     a {
       color: $color-darkergrey;
@@ -35,5 +38,44 @@
         text-decoration: underline;
       }
     }
+
+    &-mobile {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: height 0.35s ease-out;
+      height: auto;
+      a {
+        color: $color-darkergrey;
+        padding: 1em;
+        text-decoration: none;
+        border-top: 1px solid $color-grey;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
+
+  &__icon{
+    margin: 1rem;
+    display: block;
+    background: none;
+    border: none;
+
+    @media (min-width: $break-medium) {
+      display: none;
+    }
+
+    svg {
+      width: 25px;
+    }
+
+  }
+
+  .hidden {
+    display: none;
+  }
+
 }
