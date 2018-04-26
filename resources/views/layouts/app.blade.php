@@ -40,20 +40,7 @@
     </head>
     <body class="{{ $bodyClass ?? '' }}">
         @section('nav')
-            <nav class="nav">
-                <div class="nav__constrained">
-                    <a class="nav__logo" href="{{ url('/') }}">
-                        <img src="/images/dmr-logo.svg">
-                    </a>
-
-                    <div class="nav__links">
-                        <a href="{{ marketing_url('about/') }}">About</a>
-                        <a href="{{ marketing_url('contact/') }}">Contact</a>
-                        <a href="{{ marketing_url('blog/') }}">Blog</a>
-                        <a href="/#findNewCar">Find New Vehicle</a>
-                    </div>
-                </div>
-            </nav>
+            @include('nav')
         @show
 
         @yield('precontent')
