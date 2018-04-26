@@ -70,7 +70,7 @@
                 var section = document.querySelector('.nav__links-mobile');
                 var menu = document.querySelector('.nav__icon-menu');
                 var close = document.querySelector('.nav__icon-close');
-                var isCollapsed = section.getAttribute('data-collapsed') === 'true';
+                var isCollapsed = section.getAttribute('data-collapsed') === 'true' || section.getAttribute('data-collapsed') === null;
                 if (isCollapsed) {
                     expandSection(section);
                     menu.classList.add('hidden');
