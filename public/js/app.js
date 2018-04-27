@@ -8858,8 +8858,6 @@ var DealPricing = function () {
     }, {
         key: 'leaseMonthlyPaymentsValue',
         value: function leaseMonthlyPaymentsValue() {
-            console.log(this.data.dealLeasePayments);
-
             if (!this.data.dealLeasePayments) {
                 return null;
             }
@@ -9061,19 +9059,13 @@ var DealPricing = function () {
     }, {
         key: 'isSelectedLeasePaymentForTermAndCashDown',
         value: function isSelectedLeasePaymentForTermAndCashDown(term, cashDown) {
-            console.log({ 'checking': { term: term, cashDown: cashDown, myTerm: this.leaseTermValue(), myCashDown: this.leaseCashDownValue() } });
-
             if (term != this.leaseTermValue()) {
-                console.log({ msg: 'NOPE term', term: term, cashDown: cashDown, myTerm: this.leaseTermValue(), myCashDown: this.leaseCashDownValue() });
                 return false;
             }
 
             if (cashDown != this.leaseCashDownValue()) {
-                console.log({ msg: 'NOPE cash down', term: term, cashDown: cashDown, myTerm: this.leaseTermValue(), myCashDown: this.leaseCashDownValue() });
                 return false;
             }
-
-            console.log('YES MATCH!!!!!!');
 
             return true;
         }
@@ -62589,10 +62581,6 @@ var LeaseCalculator = function (_React$PureComponent) {
         key: 'render',
         value: function render() {
             var _this2 = this;
-
-            console.log({
-                foo: this.props.dealPricing.leaseTermsAvailable()
-            });
 
             return this.state.leaseRates && this.state.leaseRates.length == 0 ? _react2.default.createElement(
                 'div',

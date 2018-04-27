@@ -59,10 +59,6 @@ class LeaseCalculator extends React.PureComponent {
     }
 
     render() {
-        console.log({
-            foo: this.props.dealPricing.leaseTermsAvailable()
-        });
-
         return this.state.leaseRates && this.state.leaseRates.length == 0 ? (
             <div className="cash-finance-lease-calculator__calculator-content">
                 <h4>Currently there are no competitive lease rates available on this vehicle.</h4>
