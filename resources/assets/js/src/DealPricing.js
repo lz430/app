@@ -12,6 +12,14 @@ export default class DealPricing {
         this.data = data;
     }
 
+    id() {
+        return this.data.deal.id;
+    }
+
+    allCashDownOptions() {
+        return [0, 500, 1000, 2500, 5000];
+    }
+
     bestOfferIsLoading() {
         return this.data.bestOfferIsLoading;
     }
@@ -50,6 +58,14 @@ export default class DealPricing {
         return this.leaseTermValue();
     }
 
+    leaseCashDownValue() {
+        return this.data.leaseCashDown === null ? 500 : this.data.leaseCashDown;
+    }
+
+    leaseCashDown() {
+        return util.moneyFormat(this.leaseCashDownValue());
+    }
+
     leaseAnnualMileageValue() {
         return this.data.leaseAnnualMileage === null ? 10000 : this.data.leaseAnnualMileage;
     }
@@ -58,12 +74,8 @@ export default class DealPricing {
         return this.leaseAnnualMileageValue();
     }
 
-    leaseResidualPercentValue() {
-        return this.data.leaseResidualPercent;
-    }
-
-    leaseResidualPercent() {
-        return this.leaseResidualPercentValue();
+    msrpValue() {
+        return this.data.deal.msrp;
     }
 
     msrp() {
@@ -116,6 +128,14 @@ export default class DealPricing {
         return util.moneyFormat(this.baseSellingPriceValue());
     }
 
+    isLease() {
+        return this.data.paymentType === 'lease';
+    }
+
+    isNotLease() {
+        return this.data.paymentType !== 'lease';
+    }
+
     sellingPriceValue() {
         switch (this.data.paymentType) {
             case 'cash':
@@ -134,7 +154,8 @@ export default class DealPricing {
                     .plus(this.effCvrFeeValue())
                     .plus(new Decimal(this.effCvrFeeValue()).times(this.taxRate()))
                     .plus(this.licenseAndRegistrationValue())
-                    .plus(this.acquisitionFeeValue());
+                    .plus(this.acquisitionFeeValue())
+                    .toFixed(2);
         }
     }
 
@@ -169,7 +190,9 @@ export default class DealPricing {
     }
 
     finalPrice() {
-        return util.moneyFormat(this.finalPriceValue());
+        const price = this.finalPriceValue();
+
+        return price ? util.moneyFormat(price) : null;
     }
 
     monthlyPaymentsValue() {
@@ -183,20 +206,153 @@ export default class DealPricing {
                     )
                 );
             case 'lease':
-                return formulas.calculateTotalLeaseMonthlyPayment(
-                    formulas.calculateLeasedMonthlyPayments(
-                        this.baseSellingPriceValue() - this.bestOfferValue(),
-                        0,
-                        0,
-                        this.leaseTerm(),
-                        R.or(this.leaseResidualPercent(), 31)
-                    )
-                );
+                return this.leaseMonthlyPaymentsValue();
         }
     }
 
+    leaseMonthlyPaymentsValue() {
+        console.log(this.data.dealLeasePayments);
+
+        if (! this.data.dealLeasePayments) {
+            return null;
+        }
+
+        if (! this.data.dealLeasePayments[this.leaseTerm()]) {
+            return null;
+        }
+
+        if (! this.data.dealLeasePayments[this.leaseTerm()][this.leaseCashDownValue()]) {
+            return null;
+        }
+
+        if (! this.data.dealLeasePayments[this.leaseTerm()][this.leaseCashDownValue()][this.leaseAnnualMileageValue()]) {
+            return null;
+        }
+
+        return this.data.dealLeasePayments[this.leaseTerm()][this.leaseCashDownValue()][this.leaseAnnualMileageValue()].monthlyPayment;
+    }
+
+    leaseTermsAvailable() {
+        if (! this.data.dealLeasePayments) {
+            return null;
+        }
+
+        return Object.keys(this.data.dealLeasePayments);
+    }
+
+    leaseCashDownAvailable() {
+        if (! this.data.dealLeasePayments) {
+            return null;
+        }
+
+        const cashDownOptions = [];
+
+        for (let term of Object.keys(this.data.dealLeasePayments)) {
+            for (let cashDown of Object.keys(this.data.dealLeasePayments[term])) {
+                if (R.indexOf(cashDown, cashDownOptions) !== -1) {
+                    continue;
+                }
+
+                cashDownOptions.push(cashDown);
+            }
+        }
+
+        return cashDownOptions;
+    }
+
+    leaseAnnualMileageAvailable() {
+        if (! this.data.dealLeasePayments) {
+            return null;
+        }
+
+        const annualMileageOptions = [];
+
+        for (let term of Object.keys(this.data.dealLeasePayments)) {
+            for (let cashDown of Object.keys(this.data.dealLeasePayments[term])) {
+
+                for (let annualMileage of Object.keys(this.data.dealLeasePayments[term][cashDown])) {
+                    if (R.indexOf(annualMileage, annualMileageOptions) !== -1) {
+                        continue;
+                    }
+
+                    annualMileageOptions.push(annualMileage);
+                }
+            }
+        }
+
+        return annualMileageOptions;
+    }
+
+    leasePaymentsForTermAndCashDownValue(term, cashDown) {
+        if (! this.data.dealLeasePayments[term]) {
+            return null;
+        }
+
+        if (! this.data.dealLeasePayments[term][cashDown]) {
+            return null;
+        }
+
+        if (! this.data.dealLeasePayments[term][cashDown][this.leaseAnnualMileageValue()]) {
+            return null;
+        }
+
+        return this.data.dealLeasePayments[term][cashDown][this.leaseAnnualMileageValue()].monthlyPayment;
+    }
+
+    leasePaymentsForTermAndCashDown(term, cashDown) {
+        const payment = this.leasePaymentsForTermAndCashDownValue(term, cashDown);
+
+        return payment ? util.moneyFormat(payment) : null;
+    }
+
+    isSelectedLeasePaymentForTermAndCashDown(term, cashDown) {
+        console.log({'checking': {term, cashDown, myTerm: this.leaseTermValue(), myCashDown: this.leaseCashDownValue()}});
+
+        if (term != this.leaseTermValue()) {
+            console.log({msg:'NOPE term', term, cashDown, myTerm: this.leaseTermValue(), myCashDown: this.leaseCashDownValue()});
+            return false;
+        }
+
+        if (cashDown != this.leaseCashDownValue()) {
+            console.log({msg:'NOPE cash down', term, cashDown, myTerm: this.leaseTermValue(), myCashDown: this.leaseCashDownValue()});
+            return false;
+        }
+
+        console.log('YES MATCH!!!!!!');
+
+        return true;
+    }
+
+    leaseTotalAmountAtDriveOffValue() {
+        if (! this.data.dealLeasePayments) {
+            return null;
+        }
+
+        if (! this.data.dealLeasePayments[this.leaseTerm()]) {
+            return null;
+        }
+
+        if (! this.data.dealLeasePayments[this.leaseTerm()][this.leaseCashDownValue()]) {
+            return null;
+        }
+
+        if (! this.data.dealLeasePayments[this.leaseTerm()][this.leaseCashDownValue()][this.leaseAnnualMileageValue()]) {
+            return null;
+        }
+
+        return this.data.dealLeasePayments[this.leaseTerm()][this.leaseCashDownValue()][this.leaseAnnualMileageValue()].cashDown;
+    }
+
+    leaseTotalAmountAtDriveOff() {
+        const total = this.leaseTotalAmountAtDriveOffValue();
+
+        return total ? util.moneyFormat(total) : null;
+    }
+
     monthlyPayments() {
-        return util.moneyFormat(this.monthlyPaymentsValue());
+        const monthlyPayments = this.monthlyPaymentsValue();
+
+        return monthlyPayments ? util.moneyFormat(monthlyPayments) : null;
     }
 
     amountFinancedValue() {
@@ -208,5 +364,27 @@ export default class DealPricing {
 
     amountFinanced() {
         return util.moneyFormat(this.amountFinancedValue());
+    }
+
+    apiTerms() {
+        const terms = {};
+
+        for (let termRaw of this.data.dealLeaseRates) {
+            const termData = {
+                moneyFactor: termRaw.moneyFactor,
+                residualPercent: termRaw.residualPercent,
+                annualMileage: {}
+            };
+
+            for (let residuals of termRaw.residuals) {
+                termData.annualMileage[residuals.annualMileage] = {
+                    residualPercent: residuals.residualPercent
+                };
+            }
+
+            terms[termRaw.termMonths] = termData;
+        }
+
+        return terms;
     }
 }

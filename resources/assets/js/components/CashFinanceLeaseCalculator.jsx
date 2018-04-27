@@ -33,7 +33,7 @@ class CashFinanceLeaseCalculator extends React.PureComponent {
                 />;
             case 'lease':
                 return <LeaseCalculator
-                    {...R.pick(['dealPricing'], this.props)}
+                    {...R.pick(['dealPricing', 'deal'], this.props)}
                     {...R.pick([
                         'requestTargets',
                         'requestBestOffer',

@@ -52,4 +52,10 @@ return [
     'hubspot' => [
         'api_key' => env('HUBSPOT_API_KEY'),
     ],
+
+    'carleton' => [
+        'username' => env('CARLETON_USERNAME'),
+        'password' => env('CARLETON_PASSWORD'),
+        'url' => env('CARLETON_URL'),
+    ]
 ];

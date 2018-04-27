@@ -157,14 +157,28 @@ class Client
     // KEEP THIS ONE! it's for lease rates
     public function incentivesByVehicleIdAndZipcode($vehicleId, $zipcode, $additionalParams = [])
     {
+        $cacheKey = 'JATO::Client::incentivesByVehicleIdAndZipcode.'.$vehicleId.'.'.$zipcode;
+
+        if (Cache::has($cacheKey)) {
+            Log::debug("Vehicle ID $vehicleId cache HIT ($cacheKey)");
+            return Cache::get($cacheKey);
+        }
+
         try {
-            return $this->get("incentives/programs/$vehicleId", [
+            Log::debug("Vehicle ID $vehicleId cache MISS ($cacheKey)");
+
+            $response = $this->get("incentives/programs/$vehicleId", [
                 'query' => array_merge([
                     'zipCode' => $zipcode,
                     ], $additionalParams)
             ]);
+
+            Cache::put($cacheKey, $response, 60);
+
+            return $response;
         } catch (ClientException $e) {
             Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode");
+            Cache::put($cacheKey, [], 60);
             return [];
         }
     }
