@@ -161,7 +161,7 @@ class CompareBar extends React.PureComponent {
     render() {
         return util.windowIsLargerThanMedium(this.props.window.width)
             ? this.renderCompareBar()
-            : this.renderCompareBubble();
+            : null
     }
 }
 
