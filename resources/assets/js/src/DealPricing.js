@@ -211,8 +211,6 @@ export default class DealPricing {
     }
 
     leaseMonthlyPaymentsValue() {
-        console.log(this.data.dealLeasePayments);
-
         if (! this.data.dealLeasePayments) {
             return null;
         }
@@ -306,19 +304,13 @@ export default class DealPricing {
     }
 
     isSelectedLeasePaymentForTermAndCashDown(term, cashDown) {
-        console.log({'checking': {term, cashDown, myTerm: this.leaseTermValue(), myCashDown: this.leaseCashDownValue()}});
-
         if (term != this.leaseTermValue()) {
-            console.log({msg:'NOPE term', term, cashDown, myTerm: this.leaseTermValue(), myCashDown: this.leaseCashDownValue()});
             return false;
         }
 
         if (cashDown != this.leaseCashDownValue()) {
-            console.log({msg:'NOPE cash down', term, cashDown, myTerm: this.leaseTermValue(), myCashDown: this.leaseCashDownValue()});
             return false;
         }
-
-        console.log('YES MATCH!!!!!!');
 
         return true;
     }
