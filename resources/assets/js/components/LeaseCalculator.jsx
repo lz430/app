@@ -111,7 +111,7 @@ class LeaseCalculator extends React.PureComponent {
                             <select value={this.props.dealPricing.leaseTermValue()} onChange={e => this.props.updateLeaseTerm(this.props.deal, e.target.value)} >
                                 {this.props.dealPricing.leaseTermsAvailable().map((term, termIndex) => {
                                     return (
-                                        <option value={term}>{term} Months</option>
+                                        <option key={termIndex} value={term}>{term} Months</option>
                                     )
                                 })}
                             </select>
@@ -123,10 +123,22 @@ class LeaseCalculator extends React.PureComponent {
                             <select value={this.props.dealPricing.leaseAnnualMileageValue()} onChange={e => this.props.updateLeaseAnnualMileage(this.props.deal, e.target.value)} >
                                 {this.props.dealPricing.leaseAnnualMileageAvailable().map((annualMileage, annualMileageIndex) => {
                                     return (
-                                        <option value={annualMileage}>{annualMileage}</option>
+                                        <option key={annualMileageIndex} value={annualMileage}>{annualMileage}</option>
                                     )
                                 })}
                             </select>
+                        </span>
+                    </div>
+                    <div style={{clear: 'both'}}>
+                        <span>Cash Down</span>
+                        <span style={{ float: 'right' }}>
+                            {this.props.dealPricing.leaseCashDown()}
+                        </span>
+                    </div>
+                    <div style={{clear: 'both'}}>
+                        <span>Monthly Payment</span>
+                        <span style={{ float: 'right' }}>
+                            {this.props.dealPricing.monthlyPayments()}*
                         </span>
                     </div>
 
@@ -141,7 +153,6 @@ class LeaseCalculator extends React.PureComponent {
                                     return (
                                         <td
                                             className="cash-finance-lease-calculator__lease-table-cell--dark"
-                                            value={term}
                                             key={index}
                                         >
                                             {term}{' '}
@@ -164,7 +175,10 @@ class LeaseCalculator extends React.PureComponent {
                                             'cash-finance-lease-calculator__lease-table-cell--selectable';
 
                                         return (
-                                            <td className={className}>
+                                            <td className={className} key={termIndex} onClick={e => {
+                                                this.props.updateLeaseTerm(this.props.deal, term);
+                                                this.props.updateLeaseCashDown(this.props.deal, cashDown);
+                                            }}>
                                                 {this.props.dealPricing.leasePaymentsForTermAndCashDown(term, cashDown)}
                                             </td>
 
@@ -174,59 +188,15 @@ class LeaseCalculator extends React.PureComponent {
                             )
                         })}
                         </tbody>
-
-
-                        {this.state.leaseRates ? (
-                            <tbody>
-                                <tr>
-                                    <td className="cash-finance-lease-calculator__lease-table-cell--darker">
-                                        $0
-                                    </td>
-                                    {this.state.leaseRates.map(
-                                        this.renderMonthlyRateCell.bind(this, 0)
-                                    )}
-                                </tr>
-
-                                <tr>
-                                    <td className="cash-finance-lease-calculator__lease-table-cell--darker">
-                                        $1000
-                                    </td>
-                                    {this.state.leaseRates.map(
-                                        this.renderMonthlyRateCell.bind(
-                                            this,
-                                            1000
-                                        )
-                                    )}
-                                </tr>
-
-                                <tr>
-                                    <td className="cash-finance-lease-calculator__lease-table-cell--darker">
-                                        $2500
-                                    </td>
-                                    {this.state.leaseRates.map(
-                                        this.renderMonthlyRateCell.bind(
-                                            this,
-                                            2500
-                                        )
-                                    )}
-                                </tr>
-
-                                <tr>
-                                    <td className="cash-finance-lease-calculator__lease-table-cell--darker">
-                                        $5000
-                                    </td>
-                                    {this.state.leaseRates.map(
-                                        this.renderMonthlyRateCell.bind(
-                                            this,
-                                            5000
-                                        )
-                                    )}
-                                </tr>
-                            </tbody>
-                        ) : (
-                            <tbody />
-                        )}
                     </table>
+                </div>
+                <div className="accupricing-cta">
+                    <a onClick={this.props.showAccuPricingModal}>
+                        <img src="/images/accupricing-logo.png" className="accupricing-cta__logo" />
+                    </a>
+                    <p className="accupricing-cta__disclaimer">
+                        * Includes taxes, dealer fees and rebates.
+                    </p>
                 </div>
             </div>
         );
