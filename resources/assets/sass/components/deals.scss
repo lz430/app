@@ -24,9 +24,14 @@
     font-size: 1.5em;
     justify-content: center;
     flex-flow: column;
-    margin: 1rem auto;
+    margin: .5rem auto;
     text-align: center;
-    width: 70%;
+    width: 85%;
+
+    @media (min-width: $break-small) {
+      margin: 1rem auto;
+      width: 70%;
+    }
   }
 
   &__show-more {
@@ -37,6 +42,11 @@
 
   &__button {
     @include button;
+
+    &--zip {
+      margin: 1em auto;
+      width: 50%;
+    }
   }
 
   &__input {
