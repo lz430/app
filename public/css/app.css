@@ -586,6 +586,10 @@ body {
   width: 25px;
 }
 
+.nav__icon:focus {
+  outline: 0;
+}
+
 .nav .hidden {
   display: none;
 }
