@@ -34,7 +34,7 @@ class FinanceCalculator extends React.PureComponent {
         return (
             <div>
                 <span className="cash-finance-lease-calculator__left-item">
-                    Your price
+                    Your Price
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
                     {totalCostOfVehicle ? (
@@ -108,7 +108,7 @@ class FinanceCalculator extends React.PureComponent {
                         <CustomerTypeSelect {...R.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props)} />
                     </div>
                     <div>
-                        {this.props.dealPricing.finalPrice()}*
+                        Your Price{' '}{this.props.dealPricing.yourPrice()}*
                     </div>
                 </div>
                 <hr />

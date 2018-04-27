@@ -83,8 +83,6 @@ class InfoModalData extends React.PureComponent {
     }
 
     renderPaymentDefaults() {
-        const leaseCashDue = 500;
-
         if (this.props.selectedTab === 'finance') {
             return (
                 <div>
@@ -120,9 +118,9 @@ class InfoModalData extends React.PureComponent {
                     </div>
                     <div className="info-modal-data__costs">
                         <div className="info-modal-data__label">
-                            Cash Due:
+                            Cash Down:
                         </div>
-                        <div className="info-modal-data__amount">{util.moneyFormat(leaseCashDue)}</div>
+                        <div className="info-modal-data__amount">{this.props.dealPricing.leaseCashDown()}</div>
                     </div>
 
                     <div className="info-modal-data__costs">
