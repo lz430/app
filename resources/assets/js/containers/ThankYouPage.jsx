@@ -203,14 +203,28 @@ class ThankYouPage extends React.PureComponent {
                         <div className="thank-you__title-year-make">
                             {`${this.props.deal.year} ${this.props.deal.make} ${
                                 this.props.deal.model
+                            }`}
+                           {/*  {`${this.props.deal.year} ${this.props.deal.make} ${
+                                this.props.deal.model
                             } ${this.props.deal.series} VIN#:${
                                 this.props.deal.vin
-                            }`}
+                            }`} */}
                         </div>
                         <div className="thank-you__primary-image">
                             <img src={this.props.deal.photos[1].url} />
                         </div>
-                        <div className="thank-you__left-panel-buttons">
+                        <div className="thank-you__congrats-text">
+                            <div className="thank-you__congrats-headline">
+                                Congratulations on your purchase!
+                            </div>
+                            <div className="thank-you__congrats-body">
+                                A Deliver My Ride representative will contact you shortly to schedule your delivery. If past regular hours of operation, you can expect a call early the next business day.
+                            </div>
+                            <div className="thank-you__congrats-subheadline">
+                                Vehicle availability subject to change. See Terms of Use for details.
+                            </div>
+                        </div>
+                        {/* <div className="thank-you__left-panel-buttons">
                             <button
                                 onClick={() => this.showStandardFeatures()}
                                 className="thank-you__button thank-you__button--blue"
@@ -223,7 +237,7 @@ class ThankYouPage extends React.PureComponent {
                             >
                                 Review Additional Options
                             </button>
-                        </div>
+                        </div> */}
                     </div>
                     <div className="thank-you__pricing">
                         <div className="thank-you__choice">

@@ -156,6 +156,10 @@ body {
   color: #535d63;
 }
 
+.footer-signup__email::-ms-input-placeholder {
+  color: #535d63;
+}
+
 .footer-signup__email::placeholder {
   color: #535d63;
 }
@@ -5650,6 +5654,23 @@ comparepage {
 
 .thank-you__finalize-items {
   padding-left: 10px;
+}
+
+.thank-you__congrats-text {
+  text-align: center;
+}
+
+.thank-you__congrats-headline {
+  font-weight: bold;
+  font-size: large;
+}
+
+.thank-you__congrats-body {
+  font-size: large;
+}
+
+.thank-you_congrats-subheadline {
+  font-size: small;
 }
 
 /*!
