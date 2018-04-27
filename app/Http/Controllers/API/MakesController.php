@@ -12,7 +12,8 @@ class MakesController extends BaseAPIController
 
     public function index()
     {
-        $makes = Make::whiteListed()->orderBy('name')->get();
+        //$makes = Make::whiteListed()->orderBy('name')->get();
+        $makes = Make::whiteListed()->whereNotIn('name', ['Aston Martin', 'MINI', 'Mitsubishi'])->orderBy('name')->get();
 
         return fractal()
             ->collection($makes)
