@@ -18,7 +18,7 @@ const urlSize = util.getInitialSizeFromUrl();
 
 const initialState = {
     /** Version **/
-    6: '<- increment the number to purge LocalStorage',
+    9: '<- increment the number to purge LocalStorage',
     /** End Version **/
     accuPricingModalIsShowing: false,
     bestOffers: [],
@@ -39,9 +39,9 @@ const initialState = {
     financeTerm: null,
     fuelTypes: ['Gasoline', 'Electric', 'Flex Fuel', 'Diesel', 'Hybrid'],
     infoModalIsShowingFor: null,
-    leaseAnnualMileage: null,
-    leaseTerm: null,
-    leaseCashDue: null,
+    leaseAnnualMileage: {},
+    leaseTerm: {},
+    leaseCashDown: {},
     makes: null,
     modelYears: null,
     models: null,
@@ -82,7 +82,9 @@ const initialState = {
     window: { width: window.innerWidth },
     zipInRange: null,
     zipcode: null,
-    dealsIdsWithCustomizedQuotes: []
+    dealsIdsWithCustomizedQuotes: [],
+    leaseRates: null,
+    leasePayments: null
 };
 
 export default () => {

@@ -72,6 +72,10 @@
       width: 25px;
     }
 
+    &:focus {
+      outline:0;
+    }
+
   }
 
   .hidden {

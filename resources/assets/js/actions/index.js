@@ -3,6 +3,8 @@ import util from 'src/util';
 import R from 'ramda';
 import * as ActionTypes from 'actiontypes/index';
 import jsonp from 'jsonp';
+import DealPricing from 'src/DealPricing';
+import {makeDealPricing} from "selectors/index";
 
 const withStateDefaults = (state, changed) => {
     return Object.assign(
@@ -638,32 +640,121 @@ export function updateFinanceDownPayment(downPayment) {
 }
 
 
-export function updateLeaseAnnualMileage(annualMileage) {
-    return {
-        type: ActionTypes.UPDATE_LEASE_ANNUAL_MILEAGE,
-        annualMileage,
+export function updateLeaseAnnualMileage(deal, annualMileage) {
+    return (dispatch, getState) => {
+        const zipcode = getState().zipcode;
+
+        if (!zipcode) return;
+
+        dispatch({
+            type: ActionTypes.UPDATE_LEASE_ANNUAL_MILEAGE,
+            deal,
+            annualMileage,
+            zipcode,
+        });
     };
 }
 
-export function updateLeaseTerm(term) {
-    return {
-        type: ActionTypes.UPDATE_LEASE_TERM,
-        term,
+export function updateLeaseTerm(deal, term) {
+    return (dispatch, getState) => {
+        const zipcode = getState().zipcode;
+
+        if (!zipcode) return;
+
+        dispatch({
+            type: ActionTypes.UPDATE_LEASE_TERM,
+            deal,
+            term,
+            zipcode,
+        });
     };
 }
 
-export function updateLeaseCashDue(cashDue) {
-    return {
-        type: ActionTypes.UPDATE_LEASE_CASH_DUE,
-        cashDue,
+export function updateLeaseCashDown(deal, cashDown) {
+    return (dispatch, getState) => {
+        const zipcode = getState().zipcode;
+
+        if (!zipcode) return;
+
+        dispatch({
+            type: ActionTypes.UPDATE_LEASE_CASH_DOWN,
+            deal,
+            cashDown,
+            zipcode,
+        });
     };
 }
 
-export function updateResidualPercent(residualPercent) {
-    return {
-        type: ActionTypes.UPDATE_RESIDUAL_PERCENT,
-        residualPercent,
-    };
+
+const getDealPricing = makeDealPricing();
+
+export function requestLeasePayments(deal) {
+    return (dispatch, getState) => {
+        const zipcode = getState().zipcode;
+
+        if (!zipcode) return;
+
+        const dealPricing = new DealPricing(getDealPricing(getState(), {deal, zipcode}));
+
+        if (dealPricing.isNotLease()) return;
+
+        dispatch({
+            type: ActionTypes.REQUEST_LEASE_PAYMENTS,
+            dealPricing,
+            zipcode
+        });
+
+        api
+            .getLeasePayments(dealPricing)
+            .then(data => {
+                dispatch(receiveLeasePayments(dealPricing, zipcode, data.data));
+            })
+            .catch(e => {
+                dispatch(receiveLeasePayments(dealPricing, zipcode));
+            });
+    }
+}
+
+function receiveLeasePayments(dealPricing, zipcode, data) {
+    return dispatch => dispatch({
+        type: ActionTypes.RECEIVE_LEASE_PAYMENTS,
+        dealPricing,
+        zipcode,
+        data
+    })
+}
+
+export function requestLeaseRates(deal) {
+    return (dispatch, getState) => {
+        const zipcode = getState().zipcode;
+
+        if (!zipcode) return;
+
+        dispatch({
+            type: ActionTypes.REQUEST_LEASE_RATES,
+            deal,
+            zipcode
+        });
+
+        api
+            .getLeaseRates(deal, zipcode)
+            .then(data => {
+                dispatch(receiveLeaseRates(deal, zipcode, data.data));
+                dispatch(requestLeasePayments(deal));
+            })
+            .catch(e => {
+                dispatch(receiveLeaseRates(deal, zipcode, null))
+            });
+    }
+}
+
+function receiveLeaseRates(deal, zipcode, data) {
+    return dispatch => dispatch({
+        type: ActionTypes.RECEIVE_LEASE_RATES,
+        deal,
+        zipcode,
+        data
+    })
 }
 
 export function requestBestOffer(deal) {
@@ -705,6 +796,7 @@ export function requestBestOffer(deal) {
                 .then(data => {
                     dispatch(removeCancelToken(deal.id));
                     dispatch(receiveBestOffer(data, bestOfferKey, paymentType));
+                    dispatch(requestLeaseRates(deal));
                 })
                 .catch(e => {
                     dispatch(removeCancelToken(deal.id));
