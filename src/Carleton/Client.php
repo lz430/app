@@ -58,8 +58,6 @@ class Client
             $quote = $quotes[$i];
             $input = $quoteParameters[$i];
 
-            print_r($quote);
-
             $results[$i] = [
                 'term' => $input->getTerm(),
                 'cash_down' => (float) $input->getCashDown(),
