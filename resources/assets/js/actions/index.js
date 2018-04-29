@@ -767,16 +767,12 @@ export function requestBestOffer(deal) {
         const zipcode = getState().zipcode;
 
         if (!zipcode) {
-            console.log('going to request location info because zipcode is empty...');
             dispatch(requestLocationInfo()).then((new_zipcode) => {
-                console.log({new_zipcode, stateZipcode: getState().zipcode})
                 dispatch(requestBestOffer(deal));
             });
 
             return;
         }
-
-        console.log('Ok, we have a legit zipcode...');
 
         const targetKey = util.getTargetKeyForDealAndZip(deal, zipcode);
         const selectedTargetIds = getState().targetsSelected[targetKey]
