@@ -60458,7 +60458,7 @@ var Sortbar = function (_React$PureComponent) {
                 'div',
                 { className: 'sortbar' },
                 this.renderFilterToggle(),
-                this.renderCompareButton(),
+                this.props.filterPage === 'deals' ? this.renderCompareButton() : '',
                 this.props.filterPage === 'deals' ? this.renderSortbarDropdown() : ''
             );
         }

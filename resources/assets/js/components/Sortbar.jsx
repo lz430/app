@@ -108,7 +108,7 @@ class Sortbar extends React.PureComponent {
         return (
             <div className="sortbar">
                 {this.renderFilterToggle()}
-                {this.renderCompareButton()}
+                {this.props.filterPage === 'deals' ? this.renderCompareButton() : ''}
                 {this.props.filterPage === 'deals' ? this.renderSortbarDropdown() : ''}
             </div>
         );
