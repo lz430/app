@@ -1,6 +1,6 @@
 import * as ActionTypes from 'actiontypes/index';
 import R from 'ramda';
-import { REHYDRATE } from 'redux-persist/constants';
+import { REHYDRATE } from 'redux-persist';
 import util from 'src/util';
 import isEqual from 'lodash.isEqual'
 

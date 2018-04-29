@@ -165,7 +165,7 @@ class LeaseCalculator extends React.PureComponent {
                         <tbody>
                         {this.props.dealPricing.leaseTermsAvailable() && this.props.dealPricing.leaseCashDownAvailable() && this.props.dealPricing.leaseCashDownAvailable().map((cashDown, indexCashDown) => {
                             return (
-                                <tr>
+                                <tr key={indexCashDown}>
                                     <td className="cash-finance-lease-calculator__lease-table-cell--darker">
                                         {util.moneyFormat(cashDown)}
                                     </td>
