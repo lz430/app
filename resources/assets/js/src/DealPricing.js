@@ -166,6 +166,10 @@ export default class DealPricing {
         return this.data.paymentType !== 'lease';
     }
 
+    hasNoLeaseTerms() {
+        return ! this.data.dealLeaseRates || this.data.dealLeaseRates.length === 0;
+    }
+
     sellingPriceValue() {
         switch (this.data.paymentType) {
             case 'cash':

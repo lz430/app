@@ -1383,6 +1383,7 @@ function requestLeasePayments(deal) {
         var dealPricing = new _DealPricing2.default(getDealPricing(getState(), { deal: deal, zipcode: zipcode }));
 
         if (dealPricing.isNotLease()) return;
+        if (dealPricing.hasNoLeaseTerms()) return;
 
         dispatch({
             type: ActionTypes.REQUEST_LEASE_PAYMENTS,
@@ -8856,6 +8857,11 @@ var DealPricing = function () {
         key: 'isNotLease',
         value: function isNotLease() {
             return this.data.paymentType !== 'lease';
+        }
+    }, {
+        key: 'hasNoLeaseTerms',
+        value: function hasNoLeaseTerms() {
+            return !this.data.dealLeaseRates || this.data.dealLeaseRates.length === 0;
         }
     }, {
         key: 'sellingPriceValue',
