@@ -3,6 +3,7 @@ import React from 'react';
 import util from 'src/util';
 import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
 import strings from 'src/strings';
+import {requestBestOffer} from "../actions";
 
 class InfoModalData extends React.PureComponent {
     componentDidMount() {
@@ -12,7 +13,7 @@ class InfoModalData extends React.PureComponent {
 
     handleTabChange(tabName) {
         this.props.selectTab(tabName);
-        this.props.getBestOffersForLoadedDeals();
+        this.props.requestBestOffer(this.props.dealPricing.deal());
     }
 
     renderTabs() {

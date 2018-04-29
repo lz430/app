@@ -4,19 +4,24 @@ import ReactDOM from 'react-dom';
 import FilterPage from 'containers/FilterPage';
 import Financing from 'containers/Financing';
 import { Provider } from 'react-redux';
-import store from 'configureStore';
+import configureStore from 'configureStore';
 import DealDetails from 'containers/DealDetails';
 import ComparePage from 'containers/ComparePage';
 import ConfirmDetails from 'containers/ConfirmDetails';
 import ThankYouPage from 'containers/ThankYouPage';
+import { PersistGate } from 'redux-persist/integration/react';
+
+const {store, persistor} = configureStore();
 
 /**
  * Filter
  */
 Array.from(document.getElementsByTagName('FilterPage')).map(element => {
     ReactDOM.render(
-        <Provider store={store()}>
-            <FilterPage />
+        <Provider store={store}>
+            <PersistGate persistor={persistor}>
+                <FilterPage />
+            </PersistGate>
         </Provider>,
         element
     );
@@ -41,8 +46,10 @@ Array.from(document.getElementsByTagName('Financing')).map(element => {
  */
 Array.from(document.getElementsByTagName('ComparePage')).map(element => {
     ReactDOM.render(
-        <Provider store={store()}>
-            <ComparePage />
+        <Provider store={store}>
+            <PersistGate persistor={persistor}>
+                <ComparePage />
+            </PersistGate>
         </Provider>,
         element
     );
@@ -53,11 +60,13 @@ Array.from(document.getElementsByTagName('ComparePage')).map(element => {
  */
 Array.from(document.getElementsByTagName('DealDetails')).map(element => {
     ReactDOM.render(
-        <Provider store={store()}>
-            <DealDetails
-                deal={JSON.parse(element.getAttribute('deal')).data}
-                intendedRoute={window.location.pathname}
-            />
+        <Provider store={store}>
+            <PersistGate persistor={persistor}>
+                <DealDetails
+                    deal={JSON.parse(element.getAttribute('deal')).data}
+                    intendedRoute={window.location.pathname}
+                />
+            </PersistGate>
         </Provider>,
         element
     );
@@ -68,11 +77,13 @@ Array.from(document.getElementsByTagName('DealDetails')).map(element => {
  */
 Array.from(document.getElementsByTagName('ConfirmDetails')).map(element => {
     ReactDOM.render(
-        <Provider store={store()}>
-            <ConfirmDetails
-                deal={JSON.parse(element.getAttribute('deal')).data}
-                intendedRoute={window.location.pathname}
-            />
+        <Provider store={store}>
+            <PersistGate persistor={persistor}>
+                <ConfirmDetails
+                    deal={JSON.parse(element.getAttribute('deal')).data}
+                    intendedRoute={window.location.pathname}
+                />
+            </PersistGate>
         </Provider>,
         element
     );
@@ -83,12 +94,14 @@ Array.from(document.getElementsByTagName('ConfirmDetails')).map(element => {
  */
 Array.from(document.getElementsByTagName('ThankYouPage')).map(element => {
     ReactDOM.render(
-        <Provider store={store()}>
-            <ThankYouPage
-                purchase={JSON.parse(element.getAttribute('purchase'))}
-                deal={JSON.parse(element.getAttribute('deal'))}
-                features={JSON.parse(element.getAttribute('features'))}
-            />
+        <Provider store={store}>
+            <PersistGate persistor={persistor}>
+                <ThankYouPage
+                    purchase={JSON.parse(element.getAttribute('purchase'))}
+                    deal={JSON.parse(element.getAttribute('deal'))}
+                    features={JSON.parse(element.getAttribute('features'))}
+                />
+            </PersistGate>
         </Provider>,
         element
     );

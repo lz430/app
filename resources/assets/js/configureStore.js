@@ -1,6 +1,6 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
-import { persistStore, autoRehydrate } from 'redux-persist';
+import { persistStore, persistReducer } from 'redux-persist';
 import reducer from 'reducers/index';
 import {
     requestMakes,
@@ -12,6 +12,7 @@ import {
 } from 'actions/index';
 import util from 'src/util';
 import { checkZipInRange, requestFeatureCategories } from './actions/index';
+import storage from 'redux-persist/lib/storage';
 
 const urlStyle = util.getInitialBodyStyleFromUrl();
 const urlSize = util.getInitialSizeFromUrl();
@@ -87,35 +88,37 @@ const initialState = {
     leasePayments: null
 };
 
+const config = {
+    key: 'primary',
+    storage
+};
 export default () => {
     const composeEnhancers =
         window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
     const store = createStore(
-        reducer,
+        persistReducer(config, reducer),
         initialState,
-        composeEnhancers(applyMiddleware(reduxThunk)),
-        autoRehydrate()
+        composeEnhancers(applyMiddleware(reduxThunk))
     );
 
-    persistStore(store, {}, () => {
-        window.setTimeout(() => {
-            store.dispatch(requestLocationInfo());
-        });
-        store.dispatch(requestMakes());
-        //store.dispatch(requestModels());
-        store.dispatch(requestBodyStyles());
-        store.dispatch(requestFeatures());
-        store.dispatch(requestFeatureCategories());
+    const persistor = persistStore(store, null, () => {
+        store.dispatch(requestLocationInfo()).then(() => {
+            store.dispatch(requestMakes());
+            //store.dispatch(requestModels());
+            store.dispatch(requestBodyStyles());
+            store.dispatch(requestFeatures());
+            store.dispatch(requestFeatureCategories());
 
-        if (store.getState().zipcode) {
-            store.dispatch(checkZipInRange(store.getState().zipcode));
-        }
+            if (store.getState().zipcode) {
+                store.dispatch(checkZipInRange(store.getState().zipcode));
+            }
+        });
 
         window.addEventListener('resize', () => {
             store.dispatch(windowResize(window.innerWidth));
         });
     });
 
-    return store;
+    return {store, persistor};
 };
