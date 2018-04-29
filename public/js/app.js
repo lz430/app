@@ -1446,16 +1446,12 @@ function requestBestOffer(deal) {
         var zipcode = getState().zipcode;
 
         if (!zipcode) {
-            console.log('going to request location info because zipcode is empty...');
             dispatch(requestLocationInfo()).then(function (new_zipcode) {
-                console.log({ new_zipcode: new_zipcode, stateZipcode: getState().zipcode });
                 dispatch(requestBestOffer(deal));
             });
 
             return;
         }
-
-        console.log('Ok, we have a legit zipcode...');
 
         var targetKey = _util2.default.getTargetKeyForDealAndZip(deal, zipcode);
         var selectedTargetIds = getState().targetsSelected[targetKey] ? _ramda2.default.map(_ramda2.default.prop('targetId'), getState().targetsSelected[targetKey]) : [];
@@ -8729,7 +8725,22 @@ var DealPricing = function () {
     }, {
         key: 'leaseTermValue',
         value: function leaseTermValue() {
-            return this.data.leaseTerm === null ? 36 : this.data.leaseTerm;
+            if (!this.data.leaseTerm) {
+                var leaseTermsAvailable = this.leaseTermsAvailable();
+
+                if (!leaseTermsAvailable || leaseTermsAvailable.length === 0) {
+                    return null;
+                }
+
+                if (leaseTermsAvailable.includes(36)) {
+                    return 36;
+                }
+
+                // Return the first lease terms available.
+                return leaseTermsAvailable[0];
+            }
+
+            return this.data.leaseTerm;
         }
     }, {
         key: 'leaseTerm',
@@ -8749,7 +8760,22 @@ var DealPricing = function () {
     }, {
         key: 'leaseAnnualMileageValue',
         value: function leaseAnnualMileageValue() {
-            return this.data.leaseAnnualMileage === null ? 10000 : this.data.leaseAnnualMileage;
+            if (!this.data.leaseAnnualMileage) {
+                var leaseAnnualMileageAvailable = this.leaseAnnualMileageAvailable();
+
+                if (!leaseAnnualMileageAvailable || leaseAnnualMileageAvailable.length === 0) {
+                    return null;
+                }
+
+                if (leaseAnnualMileageAvailable.includes(10000)) {
+                    return 10000;
+                }
+
+                // Return the first lease annual mileages available.
+                return leaseAnnualMileageAvailable[0];
+            }
+
+            return this.data.leaseAnnualMileage;
         }
     }, {
         key: 'leaseAnnualMileage',
@@ -8923,7 +8949,11 @@ var DealPricing = function () {
                 return null;
             }
 
-            return Object.keys(this.data.dealLeasePayments);
+            return Object.keys(this.data.dealLeasePayments).map(function (item) {
+                return parseInt(item, 10);
+            }).sort(function (a, b) {
+                return a - b;
+            });
         }
     }, {
         key: 'leaseCashDownAvailable',
@@ -8985,7 +9015,9 @@ var DealPricing = function () {
                 }
             }
 
-            return cashDownOptions;
+            return cashDownOptions.map(function (item) {
+                return parseInt(item, 10);
+            });
         }
     }, {
         key: 'leaseAnnualMileageAvailable',
@@ -9070,7 +9102,11 @@ var DealPricing = function () {
                 }
             }
 
-            return annualMileageOptions;
+            return annualMileageOptions.map(function (item) {
+                return parseInt(item, 10);
+            }).sort(function (a, b) {
+                return a - b;
+            });
         }
     }, {
         key: 'leasePaymentsForTermAndCashDownValue',
