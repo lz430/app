@@ -1,6 +1,7 @@
 import React from 'react';
 import SidebarFilter from 'components/SidebarFilter';
 import ZipcodeFinder from 'components/ZipcodeFinder';
+import FilterClose from 'components/FilterClose';
 import FilterStyleSelector from 'components/FilterStyleSelector';
 import FilterMakeSelector from 'components/FilterMakeSelector';
 import FilterFuelTypeSelector from 'components/FilterFuelTypeSelector';
@@ -11,6 +12,7 @@ import * as Actions from 'actions/index';
 import R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
+import util from 'src/util';
 
 class FilterPanel extends React.PureComponent {
     constructor(props) {
@@ -117,6 +119,12 @@ class FilterPanel extends React.PureComponent {
         });
         return (
             <div>
+                {util.windowIsLargerThanSmall(this.props.window.width) ? (
+                    null
+                ) : (
+                    <FilterClose />
+                )}
+
                 <ZipcodeFinder />
 
                 <div className="sidebar-filters">
@@ -220,6 +228,7 @@ const mapStateToProps = (state, ownProps) => {
         features: state.features,
         featureCategories: state.featureCategories,
         searchFeatures: state.searchFeatures,
+        window: state.window,
     };
 };
 

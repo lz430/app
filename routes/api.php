@@ -23,6 +23,7 @@ Route::get('deals/{deal}/best-offer', 'DealBestOfferController@getBestOffer')->n
 Route::get('features', 'FeaturesController@index')->name('features.index');
 Route::get('targets', 'TargetsController@getTargets')->name('targets.getTargets');
 Route::get('warranties', 'WarrantiesController@getWarranties')->name('warranties.getWarranties');
+Route::get('lease-payments', 'LeasePaymentsController@getLeasePayments')->name('lease-payments.getLeasePayments');
 Route::get('lease-rates', 'LeaseRatesController@getLeaseRates')->name('lease-rates.getLeaseRates');
 Route::get('dimensions', 'DimensionsController@getDimensions')->name('dimensions.getDimensions');
 Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');

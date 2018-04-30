@@ -3,6 +3,8 @@ import util from 'src/util';
 import R from 'ramda';
 import * as ActionTypes from 'actiontypes/index';
 import jsonp from 'jsonp';
+import DealPricing from 'src/DealPricing';
+import {makeDealPricing} from "selectors/index";
 
 const withStateDefaults = (state, changed) => {
     return Object.assign(
@@ -521,23 +523,26 @@ export function setZipCode(zipcode) {
 
 export function requestLocationInfo() {
     return (dispatch, getState) => {
-        /**
-         * If we don't already have a loaded zipcode, try to get one from freegeoip.net
-         */
-        if (!getState().zipcode) {
-            jsonp('//freegeoip.net/json/', null, function(err, data) {
-                if (err) {
-                    dispatch(requestDealsOrModelYears());
-                } else {
-                    dispatch(receiveLocationInfo(data));
-                }
-            });
-        } else {
-            dispatch(requestDealsOrModelYears());
-        }
+        return new Promise((resolve) => {
+            /**
+             * If we don't already have a loaded zipcode, try to get one from freegeoip.net
+             */
+            if (!getState().zipcode) {
+                jsonp('//freegeoip.net/json/', null, function(err, data) {
+                    if (err) {
+                        dispatch(requestDealsOrModelYears());
+                    } else {
+                        dispatch(receiveLocationInfo(data));
+                        resolve(data.zip_code)
+                    }
+                });
+            } else {
+                dispatch(requestDealsOrModelYears());
+            }
 
-        dispatch({
-            type: ActionTypes.REQUEST_LOCATION_INFO,
+            dispatch({
+                type: ActionTypes.REQUEST_LOCATION_INFO,
+            });
         });
     };
 }
@@ -589,10 +594,12 @@ export function toggleSmallFiltersShown() {
 }
 
 export function selectTab(tab) {
-    return {
-        type: ActionTypes.SELECT_TAB,
-        data: tab,
-    };
+    return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.SELECT_TAB,
+            data: tab,
+        });
+    }
 }
 
 export function selectDeal(deal) {
@@ -638,38 +645,136 @@ export function updateFinanceDownPayment(downPayment) {
 }
 
 
-export function updateLeaseAnnualMileage(annualMileage) {
-    return {
-        type: ActionTypes.UPDATE_LEASE_ANNUAL_MILEAGE,
-        annualMileage,
+export function updateLeaseAnnualMileage(deal, annualMileage) {
+    return (dispatch, getState) => {
+        const zipcode = getState().zipcode;
+
+        if (!zipcode) return;
+
+        dispatch({
+            type: ActionTypes.UPDATE_LEASE_ANNUAL_MILEAGE,
+            deal,
+            annualMileage,
+            zipcode,
+        });
     };
 }
 
-export function updateLeaseTerm(term) {
-    return {
-        type: ActionTypes.UPDATE_LEASE_TERM,
-        term,
+export function updateLeaseTerm(deal, term) {
+    return (dispatch, getState) => {
+        const zipcode = getState().zipcode;
+
+        if (!zipcode) return;
+
+        dispatch({
+            type: ActionTypes.UPDATE_LEASE_TERM,
+            deal,
+            term,
+            zipcode,
+        });
     };
 }
 
-export function updateLeaseCashDue(cashDue) {
-    return {
-        type: ActionTypes.UPDATE_LEASE_CASH_DUE,
-        cashDue,
+export function updateLeaseCashDown(deal, cashDown) {
+    return (dispatch, getState) => {
+        const zipcode = getState().zipcode;
+
+        if (!zipcode) return;
+
+        dispatch({
+            type: ActionTypes.UPDATE_LEASE_CASH_DOWN,
+            deal,
+            cashDown,
+            zipcode,
+        });
     };
 }
 
-export function updateResidualPercent(residualPercent) {
-    return {
-        type: ActionTypes.UPDATE_RESIDUAL_PERCENT,
-        residualPercent,
-    };
+
+const getDealPricing = makeDealPricing();
+
+export function requestLeasePayments(deal) {
+    return (dispatch, getState) => {
+        const zipcode = getState().zipcode;
+
+        if (!zipcode) return;
+
+        const dealPricing = new DealPricing(getDealPricing(getState(), {deal, zipcode}));
+
+        if (dealPricing.isNotLease()) return;
+        if (dealPricing.hasNoLeaseTerms()) return;
+
+        dispatch({
+            type: ActionTypes.REQUEST_LEASE_PAYMENTS,
+            dealPricing,
+            zipcode
+        });
+
+        api
+            .getLeasePayments(dealPricing)
+            .then(data => {
+                dispatch(receiveLeasePayments(dealPricing, zipcode, data.data));
+            })
+            .catch(e => {
+                dispatch(receiveLeasePayments(dealPricing, zipcode));
+            });
+    }
+}
+
+function receiveLeasePayments(dealPricing, zipcode, data) {
+    return dispatch => dispatch({
+        type: ActionTypes.RECEIVE_LEASE_PAYMENTS,
+        dealPricing,
+        zipcode,
+        data
+    })
+}
+
+export function requestLeaseRates(deal) {
+    return (dispatch, getState) => {
+        const zipcode = getState().zipcode;
+
+        if (!zipcode) return;
+
+        dispatch({
+            type: ActionTypes.REQUEST_LEASE_RATES,
+            deal,
+            zipcode
+        });
+
+        api
+            .getLeaseRates(deal, zipcode)
+            .then(data => {
+                dispatch(receiveLeaseRates(deal, zipcode, data.data));
+                dispatch(requestLeasePayments(deal));
+            })
+            .catch(e => {
+                dispatch(receiveLeaseRates(deal, zipcode, null))
+            });
+    }
+}
+
+function receiveLeaseRates(deal, zipcode, data) {
+    return dispatch => dispatch({
+        type: ActionTypes.RECEIVE_LEASE_RATES,
+        deal,
+        zipcode,
+        data
+    })
 }
 
 export function requestBestOffer(deal) {
     return (dispatch, getState) => {
         const zipcode = getState().zipcode;
-        if (!zipcode) return;
+
+        if (!zipcode) {
+            dispatch(requestLocationInfo()).then((new_zipcode) => {
+                dispatch(requestBestOffer(deal));
+            });
+
+            return;
+        }
+
         const targetKey = util.getTargetKeyForDealAndZip(deal, zipcode);
         const selectedTargetIds = getState().targetsSelected[targetKey]
             ? R.map(R.prop('targetId'), getState().targetsSelected[targetKey])
@@ -705,6 +810,7 @@ export function requestBestOffer(deal) {
                 .then(data => {
                     dispatch(removeCancelToken(deal.id));
                     dispatch(receiveBestOffer(data, bestOfferKey, paymentType));
+                    dispatch(requestLeaseRates(deal));
                 })
                 .catch(e => {
                     dispatch(removeCancelToken(deal.id));
@@ -796,10 +902,14 @@ export function cancelPromises(context) {
 export function getBestOffersForLoadedDeals() {
     return (dispatch, getState) => {
         dispatch(cancelPromises('bestOffer'));
-        getState().deals.map(deal => {
-            dispatch(requestBestOffer(deal));
-        });
-        dispatch({ type: ActionTypes.REQUEST_ALL_BEST_OFFERS });
+        const deals = getState().deals;
+
+        if (deals) {
+            getState().deals.map(deal => {
+                dispatch(requestBestOffer(deal));
+            });
+            dispatch({type: ActionTypes.REQUEST_ALL_BEST_OFFERS});
+        }
     };
 }
 

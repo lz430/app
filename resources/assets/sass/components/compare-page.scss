@@ -6,11 +6,18 @@
     padding-bottom: .5em;
     width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
+
+    @media (min-width: $break-small) {
+      flex-direction: row;
+    }
+
     &__section {
       &--accuPricing {
-        margin-right: auto;
+        @media (min-width: $break-medium) {
+          margin-right: auto;
+        }
       }
       &--sortbar {
       }

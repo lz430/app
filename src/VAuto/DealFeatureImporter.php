@@ -27,13 +27,33 @@ class DealFeatureImporter
 
     public function featureIds()
     {
+        /** Package Decoding Options Logic */
+        $vehicleId = $this->version->jato_vehicle_id;
+        // Gets options codes that are packages from vehicle id
+        $findPackages = $this->client->optionsByVehicleId("$vehicleId/Type/P")['options'];
+        $pArray = array();
+        foreach($findPackages as $package) {
+            $optionCode = $package['optionCode'];
+            // Packages that are considered empty meaning no schema id's associated
+            $doNotInclude = ['S5', 'Z5', 'PCX', '96J', 'PDL', 'PEF', 'PDH', 'PDQ', 'PDV', 'PDT', 'C9', 'Q5', 'M4', 'Z4', 'Q3', 'Q2', 'Z1', '301A', 'PCO', 'PDM', 'PDP', 'PDE', 'PDC', 'PDW', 'PDO', 'PCM', 'PCN', 'PDZ', 'C1'];
+            if(!in_array($optionCode, $doNotInclude)){
+                // Gets schema id's within the option codes that are packages
+                $searchCode = $this->client->equipmentByVehicleId("$vehicleId?packageCode=$optionCode")['results'];
+                foreach($searchCode as $equipment) {
+                    $pArray[] = $equipment['schemaId'];
+                 }
+            }
+        }
+        // Combines the current deal options codes with the newly searched package schema id's
+        $combinedDealCodes = array_merge($this->deal->option_codes, $pArray);
+        /** End of Package Decoding Options Logic */
         return $this->jatoEquipment()->reject(function ($equipment) {
             return $equipment['availability'] === 'not available';
-        })->flatMap(function ($equipment) {
-            if ($equipment['optionCode'] !== 'N/A' && in_array($equipment['optionCode'], $this->deal->option_codes)) {
+        })->flatMap(function ($equipment) use($combinedDealCodes){ // use ($combinedDealCodes)
+            if ($equipment['optionCode'] !== 'N/A' && in_array($equipment['optionCode'], $combinedDealCodes)) { // $this->deal->option_codes
                 $matchingFeatures = Feature::where('jato_schema_ids', $equipment['schemaId'])->get();
 
-                // Some of the custom mappings have more than one feature with the same schemaIds, so if multiple features are returned here,
+                // Some of the custom mappings have more th an one feature with the same schemaIds, so if multiple features are returned here,
                 // we'll have to loop through them below in parseCustomJatoMappingDmrCategories() to handle string comparison
                 // If there's only one match, however, we can assume that deal has that optional feature
                 if ($matchingFeatures->count() === 1) {

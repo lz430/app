@@ -1,6 +1,6 @@
 import * as ActionTypes from 'actiontypes/index';
 import R from 'ramda';
-import { REHYDRATE } from 'redux-persist/constants';
+import { REHYDRATE } from 'redux-persist';
 import util from 'src/util';
 import isEqual from 'lodash.isEqual'
 
@@ -321,7 +321,55 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 financeTerm: action.term
+            };
+
+        case ActionTypes.UPDATE_LEASE_TERM:
+            return {...state, leaseTerm: {...state.leaseTerm, [`${action.deal.id}.${action.zipcode}`]: action.term}};
+
+        case ActionTypes.UPDATE_LEASE_ANNUAL_MILEAGE:
+            return {...state, leaseAnnualMileage: {...state.leaseAnnualMileage, [`${action.deal.id}.${action.zipcode}`]: action.annualMileage}};
+
+        case ActionTypes.UPDATE_LEASE_CASH_DOWN:
+            return {...state, leaseCashDown: {...state.leaseCashDown, [`${action.deal.id}.${action.zipcode}`]: action.cashDown}};
+
+        case ActionTypes.REQUEST_LEASE_RATES:
+            return state;
+
+        case ActionTypes.RECEIVE_LEASE_RATES:
+            const leaseRatesKey = `${action.deal.id}.${action.zipcode}`;
+
+            return {...state, leaseRates: {
+                    ...state.leaseRates,
+                    [leaseRatesKey]: action.data
+                }};
+
+        case ActionTypes.REQUEST_LEASE_PAYMENTS:
+            return state;
+
+        case ActionTypes.RECEIVE_LEASE_PAYMENTS:
+            const leasePaymentsKey = `${action.dealPricing.id()}.${action.zipcode}`;
+
+            const leasePaymentsMatrix = {};
+
+            for (let leasePayment of action.data) {
+                if (! leasePaymentsMatrix[leasePayment.term]) {
+                    leasePaymentsMatrix[leasePayment.term] = {};
+                }
+
+                if (! leasePaymentsMatrix[leasePayment.term][leasePayment.cash_down]) {
+                    leasePaymentsMatrix[leasePayment.term][leasePayment.cash_down] = {};
+                }
+
+                leasePaymentsMatrix[leasePayment.term][leasePayment.cash_down][leasePayment.annual_mileage] = {
+                    monthlyPayment: leasePayment.monthly_payment,
+                    totalAmountAtDriveOff: leasePayment.total_amount_at_drive_off
+                };
             }
+
+            return {...state, leasePayments: {
+                    ...state.leasePayments,
+                    [leasePaymentsKey]: leasePaymentsMatrix
+                }};
     }
 
     return state;

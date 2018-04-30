@@ -19,10 +19,26 @@ const api = {
             },
         });
     },
-    getLeaseRates: (jato_vehicle_id, zipcode) => {
+    getLeasePayments: (dealPricing) => {
+        return window.axios.get('/api/lease-payments', {
+            params: {
+                tax_rate: dealPricing.taxRate() * 100,
+                acquisition_fee: dealPricing.acquisitionFeeValue(),
+                doc_fee: dealPricing.docFeeValue(),
+                rebate: dealPricing.bestOfferValue(),
+                license_fee: dealPricing.licenseAndRegistrationValue(),
+                cvr_fee: dealPricing.effCvrFeeValue(),
+                msrp: dealPricing.msrpValue(),
+                cash_advance: dealPricing.sellingPriceValue(),
+                cash_down: dealPricing.allCashDownOptions(),
+                terms: dealPricing.apiTerms()
+            }
+        });
+    },
+    getLeaseRates: (deal, zipcode) => {
         return window.axios.get('/api/lease-rates', {
             params: {
-                jato_vehicle_id,
+                jato_vehicle_id: deal.version.jato_vehicle_id,
                 zipcode,
             },
         });
