@@ -8,7 +8,8 @@ import purchase from 'src/purchase';
 import React from 'react';
 import strings from 'src/strings';
 import DealImage from 'components/Deals/DealImage';
-import { makeDealBestOfferTotalValue, makeDealBestOffer } from 'selectors/index';
+import { makeDealBestOfferTotalValue, makeDealBestOffer, makeDealPricing } from 'selectors/index';
+import DealPricing from 'src/DealPricing';
 
 class ConfirmDetails extends React.PureComponent {
     renderCalculatorModal() {
@@ -25,13 +26,7 @@ class ConfirmDetails extends React.PureComponent {
     renderDeal(deal, index) {
         return (
             <ConfirmDeal deal={deal} key={index} hideImageAndTitle={true} onConfirmPurchase={() => purchase.start(
-                deal,
-                this.props.selectedTab,
-                this.props.downPayment,
-                this.props.dealBestOfferTotalValue,
-                this.props.dealBestOffer,
-                this.props.termDuration,
-                this.props.employeeBrand
+                this.props.dealPricing
             )} />
         );
     }
@@ -87,6 +82,7 @@ ConfirmDetails.propTypes = {
 const makeMapStateToProps = () => {
     const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
     const getDealBestOffer = makeDealBestOffer();
+    const getDealPricing = makeDealPricing();
     const mapStateToProps = (state, props) => {
         return {
             selectedTab: state.selectedTab,
@@ -98,6 +94,7 @@ const makeMapStateToProps = () => {
             employeeBrand: state.employeeBrand,
             dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
             dealBestOffer: getDealBestOffer(state, props),
+            dealPricing: new DealPricing(getDealPricing(state, props)),
         };
     };
     return mapStateToProps;
