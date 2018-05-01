@@ -4,6 +4,9 @@ namespace DeliverMyRide\VAuto;
 
 use App\Feature;
 use Facades\App\JATO\Log;
+use Exception;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 
 class DealFeatureImporter
 {
@@ -34,14 +37,16 @@ class DealFeatureImporter
         $pArray = array();
         foreach($findPackages as $package) {
             $optionCode = $package['optionCode'];
-            // Packages that are considered empty meaning no schema id's associated
-            $doNotInclude = ['S5', 'Z5', 'PCX', '96J', 'PDL', 'PEF', 'PDH', 'PDQ', 'PDV', 'PDT', 'C9', 'Q5', 'M4', 'Z4', 'Q3', 'Q2', 'Z1', '301A', 'PCO', 'PDM', 'PDP', 'PDE', 'PDC', 'PDW', 'PDO', 'PCM', 'PCN', 'PDZ', 'C1'];
-            if(!in_array($optionCode, $doNotInclude)){
-                // Gets schema id's within the option codes that are packages
+            // Gets schema id's within the option codes that are packages and checks for empty package codes and skips
+            try {
                 $searchCode = $this->client->equipmentByVehicleId("$vehicleId?packageCode=$optionCode")['results'];
                 foreach($searchCode as $equipment) {
                     $pArray[] = $equipment['schemaId'];
-                 }
+                }
+            } catch(ClientException | ServerException $e) {
+                if($e->getCode() === 404){
+                    return null;
+                }
             }
         }
         // Combines the current deal options codes with the newly searched package schema id's
