@@ -2,7 +2,7 @@ import * as ActionTypes from 'actiontypes/index';
 import R from 'ramda';
 import { REHYDRATE } from 'redux-persist';
 import util from 'src/util';
-import isEqual from 'lodash.isEqual'
+import isEqual from 'lodash.isequal';
 
 const reducer = (state, action) => {
     switch (action.type) {
