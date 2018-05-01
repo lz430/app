@@ -1904,6 +1904,12 @@ body {
   text-decoration: underline;
 }
 
+.deal__button[disabled],
+.deal__button:disabled {
+  cursor: default;
+  opacity: .25;
+}
+
 .modelyears .modelyear {
   border-radius: 0.25rem;
   padding: 0.5rem;

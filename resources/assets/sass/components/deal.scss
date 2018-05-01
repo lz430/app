@@ -89,4 +89,10 @@
       }
     }
   }
+
+  &__button[disabled],
+  &__button:disabled {
+    cursor: default;
+    opacity: .25;
+  }
 }

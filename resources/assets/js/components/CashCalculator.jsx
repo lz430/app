@@ -20,6 +20,12 @@ class CashCalculator extends React.PureComponent {
         this.props.requestBestOffer(this.props.dealPricing.deal());
     }
 
+    showWhenPricingIsLoaded(fn) {
+        return this.props.dealPricing.isPricingLoading() ? (
+            <SVGInline svg={miscicons['loading']} />
+        ) : fn();
+    }
+
     render() {
         return (
             <div className="cash-finance-lease-calculator__calculator-content">
