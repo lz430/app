@@ -18,6 +18,12 @@ class LeaseCalculator extends React.PureComponent {
         this.state = {};
     }
 
+    showWhenPricingIsLoaded(fn) {
+        return this.props.dealPricing.isPricingLoading() ? (
+            <SVGInline svg={miscicons['loading']} />
+        ) : fn();
+    }
+
     renderYourTargets() {
         return (
             <div>
@@ -25,30 +31,20 @@ class LeaseCalculator extends React.PureComponent {
                     Rebates Applied
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.props.dealBestOfferLoading ? (
-                        <SVGInline svg={miscicons['loading']} />
-                    ) : (
-                        this.props.dealPricing.bestOffer()
-                    )}
+                    {this.showWhenPricingIsLoaded(() => this.props.dealPricing.bestOffer())}
                 </span>
             </div>
         );
     }
 
     renderTotalCostOfVehicle() {
-        const totalCostOfVehicle = this.props.dealPricing.yourPrice();
-
         return (
             <div>
                 <span className="cash-finance-lease-calculator__left-item">
                     Your price
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {totalCostOfVehicle ? (
-                        `${totalCostOfVehicle}*`
-                    ) : (
-                        <SVGInline svg={miscicons['loading']} />
-                    )}
+                    {this.showWhenPricingIsLoaded(() => this.props.dealPricing.yourPrice())}
                 </span>
             </div>
         );
@@ -59,18 +55,24 @@ class LeaseCalculator extends React.PureComponent {
     }
 
     render() {
-        return this.state.leaseRates && this.state.leaseRates.length == 0 ? (
-            <div className="cash-finance-lease-calculator__calculator-content">
-                <h4>Currently there are no competitive lease rates available on this vehicle.</h4>
-            </div>
-        ) : (
+        if (this.props.dealPricing.isPricingAvailable() && this.props.dealPricing.hasNoLeaseTerms()) {
+            // Pricing is completely and we do not have any lease terms. This means that we cannot
+            // calculate lease pricing at all.
+            return (
+                <div className="cash-finance-lease-calculator__calculator-content">
+                    <h4>Currently there are no competitive lease rates available on this vehicle.</h4>
+                </div>
+            )
+        }
+
+        return (
             <div className="cash-finance-lease-calculator__calculator-content">
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                     <div>
                         <CustomerTypeSelect {...R.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props)} />
                     </div>
                     <div>
-                        Your price{' '}{this.props.dealPricing.yourPrice()}*
+                        Your price{' '}{this.showWhenPricingIsLoaded(() => this.props.dealPricing.yourPrice())}*
                     </div>
                 </div>
                 <hr />
@@ -86,7 +88,7 @@ class LeaseCalculator extends React.PureComponent {
                             MSRP
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {this.props.dealPricing.msrp()}
+                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.msrp())}
                         </span>
                     </div>
                     <div>
@@ -94,7 +96,7 @@ class LeaseCalculator extends React.PureComponent {
                             Selling Price
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {this.props.dealPricing.sellingPrice()}
+                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.sellingPrice())}
                         </span>
                     </div>
                     {this.renderYourTargets()}
@@ -165,7 +167,7 @@ class LeaseCalculator extends React.PureComponent {
                         <tbody>
                         {this.props.dealPricing.leaseTermsAvailable() && this.props.dealPricing.leaseCashDownAvailable() && this.props.dealPricing.leaseCashDownAvailable().map((cashDown, indexCashDown) => {
                             return (
-                                <tr>
+                                <tr key={indexCashDown}>
                                     <td className="cash-finance-lease-calculator__lease-table-cell--darker">
                                         {util.moneyFormat(cashDown)}
                                     </td>
@@ -199,7 +201,7 @@ class LeaseCalculator extends React.PureComponent {
                     </p>
                 </div>
             </div>
-        );
+        )
     }
 }
 

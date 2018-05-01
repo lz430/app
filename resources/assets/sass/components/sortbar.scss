@@ -4,6 +4,7 @@
 .sortbar {
   display: flex;
   padding-left: 1em;
+  justify-content: space-around;
 
   &__buttons {
     display: flex;
@@ -18,13 +19,17 @@
     @include button;
 
     background-color: $color-lightgrey;
-    width: 200px;
     font-size: 1rem;
-    padding: .35em;
+    padding: .5em;
 
-    &:not(:last-of-type) {
-      margin-right: 10px;
+    @media (min-width: $break-small) {
+      width: 100px;
+      padding: .35em;
+      &:not(:last-of-type) {
+        margin-right: 10px;
+      }
     }
+
   }
 
   &__label {
@@ -82,6 +87,25 @@
     margin-bottom: -5px;
     margin-right: 8px;
     padding-left: 10px;
+  }
+
+  &__compare-count {
+    $small-size: 2em;
+    background: $color-darkgrey;
+    border-radius: 50%;
+    box-shadow: -1px 1px 1px $color-black;
+    color: $color-text-white;
+    font-size: small;
+    height: $small-size;
+    text-align: center;
+    display: inline-flex;
+    width: $small-size;
+    padding-left: 8px;
+    padding-top: 5px;
+
+    &--ready {
+      background: red;
+    }
   }
 
   // Pixel perfect icons inside buttons

@@ -49,7 +49,7 @@
     "react-redux": "^5.0.5",
     "react-svg-inline": "^2.0.0",
     "redux": "^3.6.0",
-    "redux-persist": "^4.8.1",
+    "redux-persist": "^5",
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
     "titlecase": "^1.1.2"

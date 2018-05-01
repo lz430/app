@@ -42,6 +42,8 @@ class DealDetails extends React.PureComponent {
     componentDidMount() {
         this._isMounted = true;
 
+        this.props.requestBestOffer(this.props.deal);
+
         if (this.props.deal.photos.length === 0) {
             this.requestFuelImages();
         } else {

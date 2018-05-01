@@ -16,6 +16,14 @@ export default class DealPricing {
         return this.data.deal.id;
     }
 
+    jatoVehicleId() {
+        return this.data.deal.version.jato_vehicle_id;
+    }
+
+    paymentType() {
+        return this.data.paymentType;
+    }
+
     allCashDownOptions() {
         return [0, 500, 1000, 2500, 5000];
     }
@@ -51,7 +59,22 @@ export default class DealPricing {
     }
 
     leaseTermValue() {
-        return this.data.leaseTerm === null ? 36 : this.data.leaseTerm;
+        if (! this.data.leaseTerm) {
+            const leaseTermsAvailable = this.leaseTermsAvailable();
+
+            if (! leaseTermsAvailable || leaseTermsAvailable.length === 0) {
+                return null;
+            }
+
+            if (leaseTermsAvailable.includes(36)) {
+                return 36;
+            }
+
+            // Return the first lease terms available.
+            return leaseTermsAvailable[0];
+        }
+
+        return this.data.leaseTerm;
     }
 
     leaseTerm() {
@@ -67,7 +90,22 @@ export default class DealPricing {
     }
 
     leaseAnnualMileageValue() {
-        return this.data.leaseAnnualMileage === null ? 10000 : this.data.leaseAnnualMileage;
+        if (! this.data.leaseAnnualMileage) {
+            const leaseAnnualMileageAvailable = this.leaseAnnualMileageAvailable();
+
+            if (! leaseAnnualMileageAvailable || leaseAnnualMileageAvailable.length === 0) {
+                return null;
+            }
+
+            if (leaseAnnualMileageAvailable.includes(10000)) {
+                return 10000;
+            }
+
+            // Return the first lease annual mileages available.
+            return leaseAnnualMileageAvailable[0];
+        }
+
+        return this.data.leaseAnnualMileage;
     }
 
     leaseAnnualMileage() {
@@ -114,6 +152,10 @@ export default class DealPricing {
         return util.moneyFormat(this.bestOfferValue());
     }
 
+    bestOfferPrograms() {
+        return this.data.bestOffer.programs;
+    }
+
     employeeBrand() {
         return this.data.employeeBrand;
     }
@@ -128,12 +170,28 @@ export default class DealPricing {
         return util.moneyFormat(this.baseSellingPriceValue());
     }
 
+    isFinance() {
+        return this.data.paymentType === 'finance';
+    }
+
+    isNotFinance() {
+        return this.data.paymentType !== 'finance';
+    }
+
     isLease() {
         return this.data.paymentType === 'lease';
     }
 
     isNotLease() {
         return this.data.paymentType !== 'lease';
+    }
+
+    hasNoLeaseTerms() {
+        return ! this.data.dealLeaseRates || this.data.dealLeaseRates.length === 0;
+    }
+
+    hasLeaseTerms() {
+        return ! this.hasNoLeaseTerms();
     }
 
     sellingPriceValue() {
@@ -235,7 +293,7 @@ export default class DealPricing {
             return null;
         }
 
-        return Object.keys(this.data.dealLeasePayments);
+        return Object.keys(this.data.dealLeasePayments).map((item) => parseInt(item, 10)).sort((a, b) => a - b);
     }
 
     leaseCashDownAvailable() {
@@ -255,7 +313,7 @@ export default class DealPricing {
             }
         }
 
-        return cashDownOptions;
+        return cashDownOptions.map((item) => parseInt(item, 10));
     }
 
     leaseAnnualMileageAvailable() {
@@ -278,7 +336,7 @@ export default class DealPricing {
             }
         }
 
-        return annualMileageOptions;
+        return annualMileageOptions.map((item) => parseInt(item, 10)).sort((a, b) => a - b);
     }
 
     leasePaymentsForTermAndCashDownValue(term, cashDown) {
@@ -378,5 +436,47 @@ export default class DealPricing {
         }
 
         return terms;
+    }
+
+    isPricingLoading() {
+        return ! this.isPricingAvailable();
+    }
+
+    isPricingAvailable() {
+        if (this.bestOfferIsLoading()) {
+            return false;
+        }
+
+        switch (this.data.paymentType) {
+            case 'cash':
+            case 'finance':
+                return true;
+            case 'lease':
+                if (this.data.dealLeaseRatesLoaded && this.data.dealLeaseRates.length === 0) {
+                    // If rates are loaded but there are no actual rates, then pricing is "available"
+                    // in that there is no lease pricing ever going to be available.
+                    return true;
+                }
+
+                return this.data.dealLeasePaymentsLoaded;
+        }
+    }
+
+    canPurchase() {
+        switch (this.data.paymentType) {
+            case 'cash':
+            case 'finance':
+                return this.isPricingAvailable();
+            case 'lease':
+                return this.canLease();
+        }
+    }
+
+    canLease() {
+        if (this.isPricingLoading()) {
+            return false;
+        }
+
+        return this.hasLeaseTerms();
     }
 }

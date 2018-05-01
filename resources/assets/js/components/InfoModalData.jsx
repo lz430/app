@@ -3,6 +3,9 @@ import React from 'react';
 import util from 'src/util';
 import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
 import strings from 'src/strings';
+import {requestBestOffer} from "../actions";
+import SVGInline from 'react-svg-inline';
+import miscicons from 'miscicons';
 
 class InfoModalData extends React.PureComponent {
     componentDidMount() {
@@ -12,7 +15,13 @@ class InfoModalData extends React.PureComponent {
 
     handleTabChange(tabName) {
         this.props.selectTab(tabName);
-        this.props.getBestOffersForLoadedDeals();
+        this.props.requestBestOffer(this.props.dealPricing.deal());
+    }
+
+    showWhenPricingIsLoaded(fn) {
+        return this.props.dealPricing.isPricingLoading() ? (
+            <SVGInline svg={miscicons['loading']} />
+        ) : fn();
     }
 
     renderTabs() {
@@ -75,7 +84,7 @@ class InfoModalData extends React.PureComponent {
                         Rebates Applied:
                     </div>
                     <div>
-                        {this.props.dealPricing.bestOffer()}
+                        {this.showWhenPricingIsLoaded(() => this.props.dealPricing.bestOffer())}
                     </div>
                 </div>
             </div>
@@ -90,23 +99,37 @@ class InfoModalData extends React.PureComponent {
                         <div className="info-modal-data__label">
                             Down Payment:
                         </div>
-                        <div className="info-modal-data__amount">{this.props.dealPricing.financeDownPayment()}</div>
+                        <div className="info-modal-data__amount">
+                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.financeDownPayment())}
+                        </div>
                     </div>
                     <div className="info-modal-data__costs">
                         <div className="info-modal-data__label">
                             Total Months:
                         </div>
-                        <div className="info-modal-data__amount">{this.props.dealPricing.financeTerm()}</div>
+                        <div className="info-modal-data__amount">
+                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.financeTerm())}
+                        </div>
                     </div>
                     <div className="info-modal-data__costs info-modal-data__costs--final-payments">
                         <div className="info-modal-data__label">
                             Monthly Payments:
                         </div>
-                        <div className="info-modal-data__amount">{this.props.dealPricing.finalPrice()}*</div>
+                        <div className="info-modal-data__amount">
+                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.finalPrice())}*
+                        </div>
                     </div>
                 </div>
             );
         } else {
+            if (this.props.dealPricing.isPricingAvailable() && this.props.dealPricing.hasNoLeaseTerms()) {
+                return (
+                    <div className="cash-finance-lease-calculator__calculator-content">
+                        <h4>Currently there are no competitive lease rates available on this vehicle.</h4>
+                    </div>
+                )
+            }
+
             return (
                 <div>
 
@@ -114,26 +137,34 @@ class InfoModalData extends React.PureComponent {
                         <div className="info-modal-data__label">
                             Total Months:
                         </div>
-                        <div className="info-modal-data__amount">{this.props.dealPricing.leaseTerm()}</div>
+                        <div className="info-modal-data__amount">
+                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.leaseTerm())}
+                        </div>
                     </div>
                     <div className="info-modal-data__costs">
                         <div className="info-modal-data__label">
                             Cash Down:
                         </div>
-                        <div className="info-modal-data__amount">{this.props.dealPricing.leaseCashDown()}</div>
+                        <div className="info-modal-data__amount">
+                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.leaseCashDown())}
+                        </div>
                     </div>
 
                     <div className="info-modal-data__costs">
                         <div className="info-modal-data__label">
                             Annual Miles:
                         </div>
-                        <div className="info-modal-data__amount">{this.props.dealPricing.leaseAnnualMileage()}</div>
+                        <div className="info-modal-data__amount">
+                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.leaseAnnualMileage())}
+                        </div>
                     </div>
                     <div className="info-modal-data__costs info-modal-data__costs--final-payments">
                         <div className="info-modal-data__label">
                             Monthly Payments:
                         </div>
-                        <div className="info-modal-data__amount">{this.props.dealPricing.finalPrice()}*</div>
+                        <div className="info-modal-data__amount">
+                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.finalPrice())}*
+                        </div>
                     </div>
                 </div>
             );
@@ -184,7 +215,9 @@ class InfoModalData extends React.PureComponent {
                                 <div className="info-modal-data__label">
                                     Selling Price:
                                 </div>
-                                <div className="info-modal-data__amount">{this.props.dealPricing.sellingPrice()}</div>
+                                <div className="info-modal-data__amount">
+                                    {this.showWhenPricingIsLoaded(() => this.props.dealPricing.sellingPrice())}
+                                </div>
                             </div>
 
                             { this.renderAppliedRebatesLink() }
@@ -194,13 +227,19 @@ class InfoModalData extends React.PureComponent {
                                     Your Price:
                                 </div>
                                 {this.props.selectedTab === 'cash' &&
-                                    <div className="info-modal-data__amount info-modal-data__amount--cash">{this.props.dealPricing.yourPrice()}*</div>
+                                    <div className="info-modal-data__amount info-modal-data__amount--cash">
+                                        {this.showWhenPricingIsLoaded(() => this.props.dealPricing.yourPrice())}*
+                                    </div>
                                 }
                                 {this.props.selectedTab === 'finance' &&
-                                    <div className="info-modal-data__amount info-modal-data__amount--finance">{this.props.dealPricing.yourPrice()}*</div>
+                                    <div className="info-modal-data__amount info-modal-data__amount--finance">
+                                        {this.showWhenPricingIsLoaded(() => this.props.dealPricing.yourPrice())}*
+                                    </div>
                                 }
                                 {this.props.selectedTab === 'lease' &&
-                                    <div className="info-modal-data__amount info-modal-data__amount--lease">{this.props.dealPricing.yourPrice()}*</div>
+                                    <div className="info-modal-data__amount info-modal-data__amount--lease">
+                                        {this.showWhenPricingIsLoaded(() => this.props.dealPricing.yourPrice())}*
+                                    </div>
                                 }
                             </div>
 
@@ -252,6 +291,7 @@ class InfoModalData extends React.PureComponent {
                                     onCustomizeQuote={() => this.selectDeal()}
                                     deal={this.props.dealPricing.deal()}
                                     hasCustomizedQuote={this.props.dealPricing.hasCustomizedQuote()}
+                                    disabled={! this.props.dealPricing.canPurchase()}
                                 />
                             }
                             {this.props.withConfirmPurchase &&

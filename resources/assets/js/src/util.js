@@ -61,9 +61,13 @@ const util = {
         return formatter.format(num);
     },
     sameStateSchema(a, b) {
+        if (!a || !b) {
+            return false;
+        }
+
         return (
-            JSON.stringify(Object.keys(a).sort()) ===
-            JSON.stringify(Object.keys(b).sort())
+            JSON.stringify(Object.keys(a).filter(k => k !== '_persist').sort()) ===
+            JSON.stringify(Object.keys(b).filter(k => k !== '_persist').sort())
         );
     },
     getClosestNumberInRange(value, values) {

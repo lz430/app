@@ -1,6 +1,6 @@
 import * as ActionTypes from 'actiontypes/index';
 import R from 'ramda';
-import { REHYDRATE } from 'redux-persist/constants';
+import { REHYDRATE } from 'redux-persist';
 import util from 'src/util';
 import isEqual from 'lodash.isEqual'
 
@@ -215,7 +215,7 @@ const reducer = (state, action) => {
         case ActionTypes.SELECT_DEAL:
             return Object.assign({}, state, {
                 selectedDeal: action.selectedDeal,
-                dealsIdsWithCustomizedQuotes: R.union(state.dealsIdsWithCustomizedQuotes, [action.selectedDeal.id]),
+                dealsIdsWithCustomizedQuotes: R.union(state.dealsIdsWithCustomizedQuotes, [action.selectedDeal.version.jato_vehicle_id]),
             });
         case ActionTypes.CLEAR_SELECTED_DEAL:
             return Object.assign({}, state, { selectedDeal: null });
@@ -336,18 +336,21 @@ const reducer = (state, action) => {
             return state;
 
         case ActionTypes.RECEIVE_LEASE_RATES:
-            const leaseRatesKey = `${action.deal.id}.${action.zipcode}`;
+            const leaseRatesKey = `${action.deal.version.jato_vehicle_id}.${action.zipcode}`;
 
             return {...state, leaseRates: {
                     ...state.leaseRates,
                     [leaseRatesKey]: action.data
+                }, leaseRatesLoaded: {
+                    ...state.leaseRatesLoaded,
+                    [leaseRatesKey]: true,
                 }};
 
         case ActionTypes.REQUEST_LEASE_PAYMENTS:
             return state;
 
         case ActionTypes.RECEIVE_LEASE_PAYMENTS:
-            const leasePaymentsKey = `${action.dealPricing.id()}.${action.zipcode}`;
+            const leasePaymentsKey = `${action.dealPricing.jatoVehicleId()}.${action.zipcode}`;
 
             const leasePaymentsMatrix = {};
 
@@ -369,6 +372,9 @@ const reducer = (state, action) => {
             return {...state, leasePayments: {
                     ...state.leasePayments,
                     [leasePaymentsKey]: leasePaymentsMatrix
+                }, leasePaymentsLoaded: {
+                    ...state.leasePaymentsLoaded,
+                    [leasePaymentsKey]: true,
                 }};
     }
 
