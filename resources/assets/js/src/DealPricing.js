@@ -20,6 +20,10 @@ export default class DealPricing {
         return this.data.deal.version.jato_vehicle_id;
     }
 
+    paymentType() {
+        return this.data.paymentType;
+    }
+
     allCashDownOptions() {
         return [0, 500, 1000, 2500, 5000];
     }
@@ -148,6 +152,10 @@ export default class DealPricing {
         return util.moneyFormat(this.bestOfferValue());
     }
 
+    bestOfferPrograms() {
+        return this.data.bestOffer.programs;
+    }
+
     employeeBrand() {
         return this.data.employeeBrand;
     }
@@ -160,6 +168,14 @@ export default class DealPricing {
 
     baseSellingPrice() {
         return util.moneyFormat(this.baseSellingPriceValue());
+    }
+
+    isFinance() {
+        return this.data.paymentType === 'finance';
+    }
+
+    isNotFinance() {
+        return this.data.paymentType !== 'finance';
     }
 
     isLease() {

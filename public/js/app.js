@@ -8705,6 +8705,11 @@ var DealPricing = function () {
             return this.data.deal.version.jato_vehicle_id;
         }
     }, {
+        key: 'paymentType',
+        value: function paymentType() {
+            return this.data.paymentType;
+        }
+    }, {
         key: 'allCashDownOptions',
         value: function allCashDownOptions() {
             return [0, 500, 1000, 2500, 5000];
@@ -8855,6 +8860,11 @@ var DealPricing = function () {
             return _util2.default.moneyFormat(this.bestOfferValue());
         }
     }, {
+        key: 'bestOfferPrograms',
+        value: function bestOfferPrograms() {
+            return this.data.bestOffer.programs;
+        }
+    }, {
         key: 'employeeBrand',
         value: function employeeBrand() {
             return this.data.employeeBrand;
@@ -8868,6 +8878,16 @@ var DealPricing = function () {
         key: 'baseSellingPrice',
         value: function baseSellingPrice() {
             return _util2.default.moneyFormat(this.baseSellingPriceValue());
+        }
+    }, {
+        key: 'isFinance',
+        value: function isFinance() {
+            return this.data.paymentType === 'finance';
+        }
+    }, {
+        key: 'isNotFinance',
+        value: function isNotFinance() {
+            return this.data.paymentType !== 'finance';
         }
     }, {
         key: 'isLease',
@@ -30322,7 +30342,7 @@ var _util2 = _interopRequireDefault(_util);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var purchase = {
-    start: function start(deal, selectedTab, downPayment, dealBestOfferTotalValue, dealBestOffer, termDuration, employeeBrand) {
+    start: function start(dealPricing) {
         var form = document.createElement('form');
         form.setAttribute('method', 'post');
         form.setAttribute('action', '/apply-or-purchase');
@@ -30334,37 +30354,44 @@ var purchase = {
 
         var type = document.createElement('input');
         type.setAttribute('name', 'type');
-        type.setAttribute('value', selectedTab);
+        type.setAttribute('value', dealPricing.paymentType());
         form.appendChild(type);
 
-        if (selectedTab === 'finance') {
+        if (dealPricing.isFinance()) {
             var amount_financed = document.createElement('input');
             amount_financed.setAttribute('name', 'amount_financed');
-            amount_financed.setAttribute('value', _formulas2.default.calculateTotalCashFinance(_util2.default.getEmployeeOrSupplierPrice(deal, employeeBrand), deal.doc_fee, downPayment, dealBestOfferTotalValue).toString());
+            amount_financed.setAttribute('value', dealPricing.amountFinancedValue());
             form.appendChild(amount_financed);
 
             var term = document.createElement('input');
             term.setAttribute('name', 'term');
-            term.setAttribute('value', termDuration);
+            term.setAttribute('value', dealPricing.financeTermValue());
             form.appendChild(term);
 
             var down_payment = document.createElement('input');
             down_payment.setAttribute('name', 'down_payment');
-            down_payment.setAttribute('value', downPayment);
+            down_payment.setAttribute('value', dealPricing.financeDownPaymentValue());
             form.appendChild(down_payment);
-        } else if (selectedTab === 'lease') {
+        }
+
+        if (dealPricing.isLease()) {
             var _term = document.createElement('input');
             _term.setAttribute('name', 'term');
-            _term.setAttribute('value', termDuration);
+            _term.setAttribute('value', dealPricing.leaseTermValue());
             form.appendChild(_term);
+
+            var _down_payment = document.createElement('input');
+            _down_payment.setAttribute('name', 'down_payment');
+            _down_payment.setAttribute('value', dealPricing.leaseCashDownValue());
+            form.appendChild(_down_payment);
         }
 
         var deal_id = document.createElement('input');
         deal_id.setAttribute('name', 'deal_id');
-        deal_id.setAttribute('value', deal.id);
+        deal_id.setAttribute('value', dealPricing.id());
         form.appendChild(deal_id);
 
-        dealBestOffer.programs.forEach(function (program, index) {
+        dealPricing.bestOfferPrograms().forEach(function (program, index) {
             var rebateName = document.createElement('input');
             rebateName.setAttribute('name', 'rebates[' + index + '][title]');
             rebateName.setAttribute('value', program.title);
@@ -30378,12 +30405,12 @@ var purchase = {
 
         var msrp = document.createElement('input');
         msrp.setAttribute('name', 'msrp');
-        msrp.setAttribute('value', deal.msrp);
+        msrp.setAttribute('value', dealPricing.msrpValue());
         form.appendChild(msrp);
 
         var dmr_price = document.createElement('input');
         dmr_price.setAttribute('name', 'dmr_price');
-        dmr_price.setAttribute('value', (_util2.default.getEmployeeOrSupplierPrice(deal, employeeBrand) - dealBestOfferTotalValue).toString());
+        dmr_price.setAttribute('value', dealPricing.yourPriceValue().toString());
         form.appendChild(dmr_price);
 
         document.body.appendChild(form);
@@ -70353,6 +70380,10 @@ var _DealImage2 = _interopRequireDefault(_DealImage);
 
 var _index2 = __webpack_require__(46);
 
+var _DealPricing = __webpack_require__(117);
+
+var _DealPricing2 = _interopRequireDefault(_DealPricing);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
@@ -70390,7 +70421,7 @@ var ConfirmDetails = function (_React$PureComponent) {
             var _this2 = this;
 
             return _react2.default.createElement(_ConfirmDeal2.default, { deal: deal, key: index, hideImageAndTitle: true, onConfirmPurchase: function onConfirmPurchase() {
-                    return _purchase2.default.start(deal, _this2.props.selectedTab, _this2.props.downPayment, _this2.props.dealBestOfferTotalValue, _this2.props.dealBestOffer, _this2.props.termDuration, _this2.props.employeeBrand);
+                    return _purchase2.default.start(_this2.props.dealPricing);
                 } });
         }
     }, {
@@ -70460,6 +70491,7 @@ ConfirmDetails.propTypes = {
 var makeMapStateToProps = function makeMapStateToProps() {
     var getDealBestOfferTotalValue = (0, _index2.makeDealBestOfferTotalValue)();
     var getDealBestOffer = (0, _index2.makeDealBestOffer)();
+    var getDealPricing = (0, _index2.makeDealPricing)();
     var mapStateToProps = function mapStateToProps(state, props) {
         return {
             selectedTab: state.selectedTab,
@@ -70470,7 +70502,8 @@ var makeMapStateToProps = function makeMapStateToProps() {
             selectedDeal: state.selectedDeal,
             employeeBrand: state.employeeBrand,
             dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
-            dealBestOffer: getDealBestOffer(state, props)
+            dealBestOffer: getDealBestOffer(state, props),
+            dealPricing: new _DealPricing2.default(getDealPricing(state, props))
         };
     };
     return mapStateToProps;
