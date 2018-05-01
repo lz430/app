@@ -42,6 +42,7 @@
     "cross-env": "^5.0.5",
     "decimal.js": "^7.3.0",
     "jsonp": "^0.2.1",
+    "lodash.isequal": "^4.5.0",
     "lodash.debounce": "^4.0.8",
     "react-image-gallery": "^0.8.6",
     "react-redux": "^5.0.5",

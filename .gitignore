@@ -3,6 +3,8 @@
 /resources/assets/js/zondicons.js
 /public/storage
 /public/hot
+/public/css/
+/public/js/
 /storage/*.key
 /storage/vauto
 /vendor
@@ -15,3 +17,5 @@ Homestead.yaml
 /.vscode
 .DS_Store
 *.log
+
+!.gitkeep
