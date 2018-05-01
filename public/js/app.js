@@ -3809,14 +3809,14 @@ var makeDealBestOfferTotalValue = exports.makeDealBestOfferTotalValue = function
 };
 
 var dealHasCustomizedQuote = (0, _reselect.createSelector)(deal, dealsIdsWithCustomizedQuotes, function (deal, dealsIdsWithCustomizedQuotes) {
-    return _ramda2.default.contains(deal.id, dealsIdsWithCustomizedQuotes);
+    return _ramda2.default.contains(deal.version.jato_vehicle_id, dealsIdsWithCustomizedQuotes);
 });
 
 var dealLeaseRatesKey = (0, _reselect.createSelector)([deal, zipcode], function (deal, zipcode) {
     if (!deal) {
         return null;
     }
-    return deal.id + '.' + zipcode;
+    return deal.version.jato_vehicle_id + '.' + zipcode;
 });
 
 var makeDealLeaseRatesKey = exports.makeDealLeaseRatesKey = function makeDealLeaseRatesKey() {
@@ -3827,22 +3827,36 @@ var dealLeasePaymentsKey = (0, _reselect.createSelector)([deal, zipcode], functi
     if (!deal) {
         return null;
     }
-    return deal.id + '.' + zipcode;
+    return deal.version.jato_vehicle_id + '.' + zipcode;
 });
 
 var makeDealLeasePaymentsKey = exports.makeDealLeasePaymentsKey = function makeDealLeasePaymentsKey() {
     return dealLeasePaymentsKey;
 };
 
+var leaseRatesLoaded = function leaseRatesLoaded(state) {
+    return state.leaseRatesLoaded;
+};
 var leaseRates = function leaseRates(state) {
     return state.leaseRates;
+};
+var leasePaymentsLoaded = function leasePaymentsLoaded(state) {
+    return state.leasePaymentsLoaded;
 };
 var leasePayments = function leasePayments(state) {
     return state.leasePayments;
 };
 
+var dealLeaseRatesLoaded = (0, _reselect.createSelector)(leaseRatesLoaded, dealLeaseRatesKey, function (leaseRatesLoaded, dealLeaseRatesKey) {
+    return leaseRatesLoaded ? leaseRatesLoaded[dealLeaseRatesKey] : false;
+});
+
 var dealLeaseRates = (0, _reselect.createSelector)(leaseRates, dealLeaseRatesKey, function (leaseRates, dealLeaseRatesKey) {
     return leaseRates ? leaseRates[dealLeaseRatesKey] : [];
+});
+
+var dealLeasePaymentsLoaded = (0, _reselect.createSelector)(leasePaymentsLoaded, dealLeasePaymentsKey, function (leasePaymentsLoaded, dealLeasePaymentsKey) {
+    return leasePaymentsLoaded ? leasePaymentsLoaded[dealLeasePaymentsKey] : false;
 });
 
 var dealLeasePayments = (0, _reselect.createSelector)(leasePayments, dealLeasePaymentsKey, function (leasePayments, dealLeasePaymentsKey) {
@@ -3867,7 +3881,7 @@ var dealLeaseCashDown = (0, _reselect.createSelector)(deal, zipcode, leaseCashDo
     return leaseCashDown[key] ? leaseCashDown[key] : null;
 });
 
-var dealPricing = (0, _reselect.createSelector)(deal, dealBestOffer, dealBestOfferLoading, zipcode, paymentType, employeeBrand, financeDownPayment, financeTerm, dealLeaseAnnualMileage, dealLeaseTerm, dealLeaseCashDown, dealHasCustomizedQuote, dealLeaseRates, dealLeasePayments, function (deal, dealBestOffer, dealBestOfferLoading, zipcode, paymentType, employeeBrand, financeDownPayment, financeTerm, dealLeaseAnnualMileage, dealLeaseTerm, dealLeaseCashDown, dealHasCustomizedQuote, dealLeaseRates, dealLeasePayments) {
+var dealPricing = (0, _reselect.createSelector)(deal, dealBestOffer, dealBestOfferLoading, zipcode, paymentType, employeeBrand, financeDownPayment, financeTerm, dealLeaseAnnualMileage, dealLeaseTerm, dealLeaseCashDown, dealHasCustomizedQuote, dealLeaseRatesLoaded, dealLeaseRates, dealLeasePaymentsLoaded, dealLeasePayments, function (deal, dealBestOffer, dealBestOfferLoading, zipcode, paymentType, employeeBrand, financeDownPayment, financeTerm, dealLeaseAnnualMileage, dealLeaseTerm, dealLeaseCashDown, dealHasCustomizedQuote, dealLeaseRatesLoaded, dealLeaseRates, dealLeasePaymentsLoaded, dealLeasePayments) {
     return {
         deal: deal,
         bestOffer: dealBestOffer,
@@ -3881,7 +3895,9 @@ var dealPricing = (0, _reselect.createSelector)(deal, dealBestOffer, dealBestOff
         leaseTerm: dealLeaseTerm,
         leaseCashDown: dealLeaseCashDown,
         dealHasCustomizedQuote: dealHasCustomizedQuote,
+        dealLeaseRatesLoaded: dealLeaseRatesLoaded,
         dealLeaseRates: dealLeaseRates,
+        dealLeasePaymentsLoaded: dealLeasePaymentsLoaded,
         dealLeasePayments: dealLeasePayments
     };
 });
@@ -8684,6 +8700,11 @@ var DealPricing = function () {
             return this.data.deal.id;
         }
     }, {
+        key: 'jatoVehicleId',
+        value: function jatoVehicleId() {
+            return this.data.deal.version.jato_vehicle_id;
+        }
+    }, {
         key: 'allCashDownOptions',
         value: function allCashDownOptions() {
             return [0, 500, 1000, 2500, 5000];
@@ -8862,6 +8883,11 @@ var DealPricing = function () {
         key: 'hasNoLeaseTerms',
         value: function hasNoLeaseTerms() {
             return !this.data.dealLeaseRates || this.data.dealLeaseRates.length === 0;
+        }
+    }, {
+        key: 'hasLeaseTerms',
+        value: function hasLeaseTerms() {
+            return !this.hasNoLeaseTerms();
         }
     }, {
         key: 'sellingPriceValue',
@@ -9263,6 +9289,52 @@ var DealPricing = function () {
             }
 
             return terms;
+        }
+    }, {
+        key: 'isPricingLoading',
+        value: function isPricingLoading() {
+            return !this.isPricingAvailable();
+        }
+    }, {
+        key: 'isPricingAvailable',
+        value: function isPricingAvailable() {
+            if (this.bestOfferIsLoading()) {
+                return false;
+            }
+
+            switch (this.data.paymentType) {
+                case 'cash':
+                case 'finance':
+                    return true;
+                case 'lease':
+                    if (this.data.dealLeaseRatesLoaded && this.data.dealLeaseRates.length === 0) {
+                        // If rates are loaded but there are no actual rates, then pricing is "available"
+                        // in that there is no lease pricing ever going to be available.
+                        return true;
+                    }
+
+                    return this.data.dealLeasePaymentsLoaded;
+            }
+        }
+    }, {
+        key: 'canPurchase',
+        value: function canPurchase() {
+            switch (this.data.paymentType) {
+                case 'cash':
+                case 'finance':
+                    return this.isPricingAvailable();
+                case 'lease':
+                    return this.canLease();
+            }
+        }
+    }, {
+        key: 'canLease',
+        value: function canLease() {
+            if (this.isPricingLoading()) {
+                return false;
+            }
+
+            return this.hasLeaseTerms();
         }
     }]);
 
@@ -15578,6 +15650,14 @@ var _strings2 = _interopRequireDefault(_strings);
 
 var _actions = __webpack_require__(10);
 
+var _reactSvgInline = __webpack_require__(15);
+
+var _reactSvgInline2 = _interopRequireDefault(_reactSvgInline);
+
+var _miscicons = __webpack_require__(29);
+
+var _miscicons2 = _interopRequireDefault(_miscicons);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -15606,6 +15686,11 @@ var InfoModalData = function (_React$PureComponent) {
         value: function handleTabChange(tabName) {
             this.props.selectTab(tabName);
             this.props.requestBestOffer(this.props.dealPricing.deal());
+        }
+    }, {
+        key: 'showWhenPricingIsLoaded',
+        value: function showWhenPricingIsLoaded(fn) {
+            return this.props.dealPricing.isPricingLoading() ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : fn();
         }
     }, {
         key: 'renderTabs',
@@ -15662,6 +15747,8 @@ var InfoModalData = function (_React$PureComponent) {
     }, {
         key: 'renderAppliedRebatesLink',
         value: function renderAppliedRebatesLink() {
+            var _this3 = this;
+
             return _react2.default.createElement(
                 'div',
                 null,
@@ -15676,7 +15763,9 @@ var InfoModalData = function (_React$PureComponent) {
                     _react2.default.createElement(
                         'div',
                         null,
-                        this.props.dealPricing.bestOffer()
+                        this.showWhenPricingIsLoaded(function () {
+                            return _this3.props.dealPricing.bestOffer();
+                        })
                     )
                 )
             );
@@ -15684,6 +15773,8 @@ var InfoModalData = function (_React$PureComponent) {
     }, {
         key: 'renderPaymentDefaults',
         value: function renderPaymentDefaults() {
+            var _this4 = this;
+
             if (this.props.selectedTab === 'finance') {
                 return _react2.default.createElement(
                     'div',
@@ -15699,7 +15790,9 @@ var InfoModalData = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'info-modal-data__amount' },
-                            this.props.dealPricing.financeDownPayment()
+                            this.showWhenPricingIsLoaded(function () {
+                                return _this4.props.dealPricing.financeDownPayment();
+                            })
                         )
                     ),
                     _react2.default.createElement(
@@ -15713,7 +15806,9 @@ var InfoModalData = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'info-modal-data__amount' },
-                            this.props.dealPricing.financeTerm()
+                            this.showWhenPricingIsLoaded(function () {
+                                return _this4.props.dealPricing.financeTerm();
+                            })
                         )
                     ),
                     _react2.default.createElement(
@@ -15727,12 +15822,26 @@ var InfoModalData = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'info-modal-data__amount' },
-                            this.props.dealPricing.finalPrice(),
+                            this.showWhenPricingIsLoaded(function () {
+                                return _this4.props.dealPricing.finalPrice();
+                            }),
                             '*'
                         )
                     )
                 );
             } else {
+                if (this.props.dealPricing.isPricingAvailable() && this.props.dealPricing.hasNoLeaseTerms()) {
+                    return _react2.default.createElement(
+                        'div',
+                        { className: 'cash-finance-lease-calculator__calculator-content' },
+                        _react2.default.createElement(
+                            'h4',
+                            null,
+                            'Currently there are no competitive lease rates available on this vehicle.'
+                        )
+                    );
+                }
+
                 return _react2.default.createElement(
                     'div',
                     null,
@@ -15747,7 +15856,9 @@ var InfoModalData = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'info-modal-data__amount' },
-                            this.props.dealPricing.leaseTerm()
+                            this.showWhenPricingIsLoaded(function () {
+                                return _this4.props.dealPricing.leaseTerm();
+                            })
                         )
                     ),
                     _react2.default.createElement(
@@ -15761,7 +15872,9 @@ var InfoModalData = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'info-modal-data__amount' },
-                            this.props.dealPricing.leaseCashDown()
+                            this.showWhenPricingIsLoaded(function () {
+                                return _this4.props.dealPricing.leaseCashDown();
+                            })
                         )
                     ),
                     _react2.default.createElement(
@@ -15775,7 +15888,9 @@ var InfoModalData = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'info-modal-data__amount' },
-                            this.props.dealPricing.leaseAnnualMileage()
+                            this.showWhenPricingIsLoaded(function () {
+                                return _this4.props.dealPricing.leaseAnnualMileage();
+                            })
                         )
                     ),
                     _react2.default.createElement(
@@ -15789,7 +15904,9 @@ var InfoModalData = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'info-modal-data__amount' },
-                            this.props.dealPricing.finalPrice(),
+                            this.showWhenPricingIsLoaded(function () {
+                                return _this4.props.dealPricing.finalPrice();
+                            }),
                             '*'
                         )
                     )
@@ -15799,7 +15916,7 @@ var InfoModalData = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
-            var _this3 = this;
+            var _this5 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -15874,7 +15991,9 @@ var InfoModalData = function (_React$PureComponent) {
                                 _react2.default.createElement(
                                     'div',
                                     { className: 'info-modal-data__amount' },
-                                    this.props.dealPricing.sellingPrice()
+                                    this.showWhenPricingIsLoaded(function () {
+                                        return _this5.props.dealPricing.sellingPrice();
+                                    })
                                 )
                             ),
                             this.renderAppliedRebatesLink(),
@@ -15889,19 +16008,25 @@ var InfoModalData = function (_React$PureComponent) {
                                 this.props.selectedTab === 'cash' && _react2.default.createElement(
                                     'div',
                                     { className: 'info-modal-data__amount info-modal-data__amount--cash' },
-                                    this.props.dealPricing.yourPrice(),
+                                    this.showWhenPricingIsLoaded(function () {
+                                        return _this5.props.dealPricing.yourPrice();
+                                    }),
                                     '*'
                                 ),
                                 this.props.selectedTab === 'finance' && _react2.default.createElement(
                                     'div',
                                     { className: 'info-modal-data__amount info-modal-data__amount--finance' },
-                                    this.props.dealPricing.yourPrice(),
+                                    this.showWhenPricingIsLoaded(function () {
+                                        return _this5.props.dealPricing.yourPrice();
+                                    }),
                                     '*'
                                 ),
                                 this.props.selectedTab === 'lease' && _react2.default.createElement(
                                     'div',
                                     { className: 'info-modal-data__amount info-modal-data__amount--lease' },
-                                    this.props.dealPricing.yourPrice(),
+                                    this.showWhenPricingIsLoaded(function () {
+                                        return _this5.props.dealPricing.yourPrice();
+                                    }),
                                     '*'
                                 )
                             ),
@@ -15951,17 +16076,18 @@ var InfoModalData = function (_React$PureComponent) {
                                 {
                                     className: this.backToDetailsButtonClass(),
                                     onClick: function onClick() {
-                                        return window.location = '/deals/' + _this3.props.dealPricing.deal().id;
+                                        return window.location = '/deals/' + _this5.props.dealPricing.deal().id;
                                     }
                                 },
                                 'Back to details'
                             ),
                             this.props.withCustomizeQuoteOrBuyNow && _react2.default.createElement(_CustomizeQuoteOrBuyNowButton2.default, {
                                 onCustomizeQuote: function onCustomizeQuote() {
-                                    return _this3.selectDeal();
+                                    return _this5.selectDeal();
                                 },
                                 deal: this.props.dealPricing.deal(),
-                                hasCustomizedQuote: this.props.dealPricing.hasCustomizedQuote()
+                                hasCustomizedQuote: this.props.dealPricing.hasCustomizedQuote(),
+                                disabled: !this.props.dealPricing.canPurchase()
                             }),
                             this.props.withConfirmPurchase && _react2.default.createElement(
                                 'button',
@@ -29667,9 +29793,10 @@ var CustomizeQuoteOrBuyNowButton = function (_React$PureComponent) {
                 "button",
                 {
                     onClick: function onClick() {
-                        return _this2.props.onBuyNow(_this2.props.deal);
+                        return !_this2.props.disabled && _this2.props.onBuyNow(_this2.props.deal);
                     },
-                    className: "deal__button deal__button--small deal__button--pink deal__button"
+                    className: "deal__button deal__button--small deal__button--pink deal__button",
+                    disabled: this.props.disabled
                 },
                 "Buy Now"
             );
@@ -29703,7 +29830,8 @@ var CustomizeQuoteOrBuyNowButton = function (_React$PureComponent) {
 CustomizeQuoteOrBuyNowButton.defaultProps = {
     onBuyNow: function onBuyNow(deal) {
         return window.location = "/confirm/" + deal.id;
-    }
+    },
+    disabled: true
 };
 
 exports.default = CustomizeQuoteOrBuyNowButton;
@@ -59617,6 +59745,23 @@ var DealPrice = function (_React$PureComponent) {
             return _react2.default.createElement(_InfoModal2.default, _extends({}, _ramda2.default.pick(['deal', 'selectedTab', 'compareList', 'dealPricing'], this.props), _ramda2.default.pick(['selectDeal', 'selectTab', 'requestTargets', 'requestBestOffer', 'getBestOffersForLoadedDeals', 'toggleCompare', 'showInfoModal', 'hideInfoModal', 'infoModalIsShowingFor', 'showAccuPricingModal'], this.props)));
         }
     }, {
+        key: 'showWhenPricingIsLoaded',
+        value: function showWhenPricingIsLoaded() {
+            if (this.props.dealPricing.isPricingLoading()) {
+                return _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] });
+            }
+
+            if (this.props.dealPricing.isLease() && this.props.dealPricing.hasNoLeaseTerms()) {
+                return _react2.default.createElement(
+                    'span',
+                    null,
+                    'N/A'
+                );
+            }
+
+            return this.props.dealPricing.finalPrice();
+        }
+    }, {
         key: 'getLabel',
         value: function getLabel() {
             switch (this.props.selectedTab) {
@@ -59648,11 +59793,7 @@ var DealPrice = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'div',
                             { className: 'deal-price__finance-lease-price' },
-                            this.props.dealPricing.bestOfferIsLoading() ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : _react2.default.createElement(
-                                'div',
-                                null,
-                                this.props.dealPricing.finalPrice()
-                            ),
+                            this.showWhenPricingIsLoaded(),
                             this.renderPriceExplanationModal()
                         ),
                         _react2.default.createElement('div', { className: 'deal-price__hr' }),
@@ -62014,6 +62155,11 @@ var CashCalculator = function (_React$PureComponent) {
             this.props.requestBestOffer(this.props.dealPricing.deal());
         }
     }, {
+        key: 'showWhenPricingIsLoaded',
+        value: function showWhenPricingIsLoaded(fn) {
+            return this.props.dealPricing.isPricingLoading() ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : fn();
+        }
+    }, {
         key: 'render',
         value: function render() {
             var _this2 = this;
@@ -62237,6 +62383,11 @@ var FinanceCalculator = function (_React$PureComponent) {
         key: 'updateTermDuration',
         value: function updateTermDuration(e) {
             this.props.updateFinanceTerm(Number(e.target.value));
+        }
+    }, {
+        key: 'showWhenPricingIsLoaded',
+        value: function showWhenPricingIsLoaded(fn) {
+            return this.props.dealPricing.isPricingLoading() ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : fn();
         }
     }, {
         key: 'renderTotalCostOfVehicle',
@@ -62578,8 +62729,15 @@ var LeaseCalculator = function (_React$PureComponent) {
     }
 
     _createClass(LeaseCalculator, [{
+        key: 'showWhenPricingIsLoaded',
+        value: function showWhenPricingIsLoaded(fn) {
+            return this.props.dealPricing.isPricingLoading() ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : fn();
+        }
+    }, {
         key: 'renderYourTargets',
         value: function renderYourTargets() {
+            var _this2 = this;
+
             return _react2.default.createElement(
                 'div',
                 null,
@@ -62591,14 +62749,16 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    this.props.dealBestOfferLoading ? _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] }) : this.props.dealPricing.bestOffer()
+                    this.showWhenPricingIsLoaded(function () {
+                        return _this2.props.dealPricing.bestOffer();
+                    })
                 )
             );
         }
     }, {
         key: 'renderTotalCostOfVehicle',
         value: function renderTotalCostOfVehicle() {
-            var totalCostOfVehicle = this.props.dealPricing.yourPrice();
+            var _this3 = this;
 
             return _react2.default.createElement(
                 'div',
@@ -62611,7 +62771,9 @@ var LeaseCalculator = function (_React$PureComponent) {
                 _react2.default.createElement(
                     'span',
                     { className: 'cash-finance-lease-calculator__right-item' },
-                    totalCostOfVehicle ? totalCostOfVehicle + '*' : _react2.default.createElement(_reactSvgInline2.default, { svg: _miscicons2.default['loading'] })
+                    this.showWhenPricingIsLoaded(function () {
+                        return _this3.props.dealPricing.yourPrice();
+                    })
                 )
             );
         }
@@ -62623,17 +62785,23 @@ var LeaseCalculator = function (_React$PureComponent) {
     }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this4 = this;
 
-            return this.state.leaseRates && this.state.leaseRates.length == 0 ? _react2.default.createElement(
-                'div',
-                { className: 'cash-finance-lease-calculator__calculator-content' },
-                _react2.default.createElement(
-                    'h4',
-                    null,
-                    'Currently there are no competitive lease rates available on this vehicle.'
-                )
-            ) : _react2.default.createElement(
+            if (this.props.dealPricing.isPricingAvailable() && this.props.dealPricing.hasNoLeaseTerms()) {
+                // Pricing is completely and we do not have any lease terms. This means that we cannot
+                // calculate lease pricing at all.
+                return _react2.default.createElement(
+                    'div',
+                    { className: 'cash-finance-lease-calculator__calculator-content' },
+                    _react2.default.createElement(
+                        'h4',
+                        null,
+                        'Currently there are no competitive lease rates available on this vehicle.'
+                    )
+                );
+            }
+
+            return _react2.default.createElement(
                 'div',
                 { className: 'cash-finance-lease-calculator__calculator-content' },
                 _react2.default.createElement(
@@ -62649,7 +62817,9 @@ var LeaseCalculator = function (_React$PureComponent) {
                         null,
                         'Your price',
                         ' ',
-                        this.props.dealPricing.yourPrice(),
+                        this.showWhenPricingIsLoaded(function () {
+                            return _this4.props.dealPricing.yourPrice();
+                        }),
                         '*'
                     )
                 ),
@@ -62678,7 +62848,9 @@ var LeaseCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            this.props.dealPricing.msrp()
+                            this.showWhenPricingIsLoaded(function () {
+                                return _this4.props.dealPricing.msrp();
+                            })
                         )
                     ),
                     _react2.default.createElement(
@@ -62692,7 +62864,9 @@ var LeaseCalculator = function (_React$PureComponent) {
                         _react2.default.createElement(
                             'span',
                             { className: 'cash-finance-lease-calculator__right-item' },
-                            this.props.dealPricing.sellingPrice()
+                            this.showWhenPricingIsLoaded(function () {
+                                return _this4.props.dealPricing.sellingPrice();
+                            })
                         )
                     ),
                     this.renderYourTargets(),
@@ -62725,7 +62899,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'select',
                                 { value: this.props.dealPricing.leaseTermValue(), onChange: function onChange(e) {
-                                        return _this2.props.updateLeaseTerm(_this2.props.deal, e.target.value);
+                                        return _this4.props.updateLeaseTerm(_this4.props.deal, e.target.value);
                                     } },
                                 this.props.dealPricing.leaseTermsAvailable().map(function (term, termIndex) {
                                     return _react2.default.createElement(
@@ -62752,7 +62926,7 @@ var LeaseCalculator = function (_React$PureComponent) {
                             _react2.default.createElement(
                                 'select',
                                 { value: this.props.dealPricing.leaseAnnualMileageValue(), onChange: function onChange(e) {
-                                        return _this2.props.updateLeaseAnnualMileage(_this2.props.deal, e.target.value);
+                                        return _this4.props.updateLeaseAnnualMileage(_this4.props.deal, e.target.value);
                                     } },
                                 this.props.dealPricing.leaseAnnualMileageAvailable().map(function (annualMileage, annualMileageIndex) {
                                     return _react2.default.createElement(
@@ -62838,16 +63012,16 @@ var LeaseCalculator = function (_React$PureComponent) {
                                         { className: 'cash-finance-lease-calculator__lease-table-cell--darker' },
                                         _util2.default.moneyFormat(cashDown)
                                     ),
-                                    _this2.props.dealPricing.leaseTermsAvailable().map(function (term, termIndex) {
-                                        var className = _this2.props.dealPricing.isSelectedLeasePaymentForTermAndCashDown(term, cashDown) ? 'cash-finance-lease-calculator__lease-table-cell--selected' : 'cash-finance-lease-calculator__lease-table-cell--selectable';
+                                    _this4.props.dealPricing.leaseTermsAvailable().map(function (term, termIndex) {
+                                        var className = _this4.props.dealPricing.isSelectedLeasePaymentForTermAndCashDown(term, cashDown) ? 'cash-finance-lease-calculator__lease-table-cell--selected' : 'cash-finance-lease-calculator__lease-table-cell--selectable';
 
                                         return _react2.default.createElement(
                                             'td',
                                             { className: className, key: termIndex, onClick: function onClick(e) {
-                                                    _this2.props.updateLeaseTerm(_this2.props.deal, term);
-                                                    _this2.props.updateLeaseCashDown(_this2.props.deal, cashDown);
+                                                    _this4.props.updateLeaseTerm(_this4.props.deal, term);
+                                                    _this4.props.updateLeaseCashDown(_this4.props.deal, cashDown);
                                                 } },
-                                            _this2.props.dealPricing.leasePaymentsForTermAndCashDown(term, cashDown)
+                                            _this4.props.dealPricing.leasePaymentsForTermAndCashDown(term, cashDown)
                                         );
                                     })
                                 );
@@ -63078,7 +63252,7 @@ var urlSize = _util2.default.getInitialSizeFromUrl();
 
 var initialState = {
     /** Version **/
-    9: '<- increment the number to purge LocalStorage',
+    10: '<- increment the number to purge LocalStorage',
     /** End Version **/
     accuPricingModalIsShowing: false,
     bestOffers: [],
@@ -63141,7 +63315,9 @@ var initialState = {
     zipInRange: null,
     zipcode: null,
     dealsIdsWithCustomizedQuotes: [],
+    leaseRatesLoaded: {},
     leaseRates: null,
+    leasePaymentsLoaded: {},
     leasePayments: null
 };
 
@@ -63732,7 +63908,7 @@ var reducer = function reducer(state, action) {
         case ActionTypes.SELECT_DEAL:
             return Object.assign({}, state, {
                 selectedDeal: action.selectedDeal,
-                dealsIdsWithCustomizedQuotes: _ramda2.default.union(state.dealsIdsWithCustomizedQuotes, [action.selectedDeal.id])
+                dealsIdsWithCustomizedQuotes: _ramda2.default.union(state.dealsIdsWithCustomizedQuotes, [action.selectedDeal.version.jato_vehicle_id])
             });
         case ActionTypes.CLEAR_SELECTED_DEAL:
             return Object.assign({}, state, { selectedDeal: null });
@@ -63831,15 +64007,15 @@ var reducer = function reducer(state, action) {
             return state;
 
         case ActionTypes.RECEIVE_LEASE_RATES:
-            var leaseRatesKey = action.deal.id + '.' + action.zipcode;
+            var leaseRatesKey = action.deal.version.jato_vehicle_id + '.' + action.zipcode;
 
-            return _extends({}, state, { leaseRates: _extends({}, state.leaseRates, _defineProperty({}, leaseRatesKey, action.data)) });
+            return _extends({}, state, { leaseRates: _extends({}, state.leaseRates, _defineProperty({}, leaseRatesKey, action.data)), leaseRatesLoaded: _extends({}, state.leaseRatesLoaded, _defineProperty({}, leaseRatesKey, true)) });
 
         case ActionTypes.REQUEST_LEASE_PAYMENTS:
             return state;
 
         case ActionTypes.RECEIVE_LEASE_PAYMENTS:
-            var leasePaymentsKey = action.dealPricing.id() + '.' + action.zipcode;
+            var leasePaymentsKey = action.dealPricing.jatoVehicleId() + '.' + action.zipcode;
 
             var leasePaymentsMatrix = {};
 
@@ -63879,7 +64055,7 @@ var reducer = function reducer(state, action) {
                 }
             }
 
-            return _extends({}, state, { leasePayments: _extends({}, state.leasePayments, _defineProperty({}, leasePaymentsKey, leasePaymentsMatrix)) });
+            return _extends({}, state, { leasePayments: _extends({}, state.leasePayments, _defineProperty({}, leasePaymentsKey, leasePaymentsMatrix)), leasePaymentsLoaded: _extends({}, state.leasePaymentsLoaded, _defineProperty({}, leasePaymentsKey, true)) });
     }
 
     return state;
