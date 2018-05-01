@@ -16,6 +16,14 @@ export default class DealPricing {
         return this.data.deal.id;
     }
 
+    jatoVehicleId() {
+        return this.data.deal.version.jato_vehicle_id;
+    }
+
+    paymentType() {
+        return this.data.paymentType;
+    }
+
     allCashDownOptions() {
         return [0, 500, 1000, 2500, 5000];
     }
@@ -144,6 +152,10 @@ export default class DealPricing {
         return util.moneyFormat(this.bestOfferValue());
     }
 
+    bestOfferPrograms() {
+        return this.data.bestOffer.programs;
+    }
+
     employeeBrand() {
         return this.data.employeeBrand;
     }
@@ -158,6 +170,14 @@ export default class DealPricing {
         return util.moneyFormat(this.baseSellingPriceValue());
     }
 
+    isFinance() {
+        return this.data.paymentType === 'finance';
+    }
+
+    isNotFinance() {
+        return this.data.paymentType !== 'finance';
+    }
+
     isLease() {
         return this.data.paymentType === 'lease';
     }
@@ -168,6 +188,10 @@ export default class DealPricing {
 
     hasNoLeaseTerms() {
         return ! this.data.dealLeaseRates || this.data.dealLeaseRates.length === 0;
+    }
+
+    hasLeaseTerms() {
+        return ! this.hasNoLeaseTerms();
     }
 
     sellingPriceValue() {
@@ -412,5 +436,47 @@ export default class DealPricing {
         }
 
         return terms;
+    }
+
+    isPricingLoading() {
+        return ! this.isPricingAvailable();
+    }
+
+    isPricingAvailable() {
+        if (this.bestOfferIsLoading()) {
+            return false;
+        }
+
+        switch (this.data.paymentType) {
+            case 'cash':
+            case 'finance':
+                return true;
+            case 'lease':
+                if (this.data.dealLeaseRatesLoaded && this.data.dealLeaseRates.length === 0) {
+                    // If rates are loaded but there are no actual rates, then pricing is "available"
+                    // in that there is no lease pricing ever going to be available.
+                    return true;
+                }
+
+                return this.data.dealLeasePaymentsLoaded;
+        }
+    }
+
+    canPurchase() {
+        switch (this.data.paymentType) {
+            case 'cash':
+            case 'finance':
+                return this.isPricingAvailable();
+            case 'lease':
+                return this.canLease();
+        }
+    }
+
+    canLease() {
+        if (this.isPricingLoading()) {
+            return false;
+        }
+
+        return this.hasLeaseTerms();
     }
 }
