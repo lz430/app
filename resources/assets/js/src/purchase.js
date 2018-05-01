@@ -54,7 +54,7 @@ const purchase = {
         deal_id.setAttribute('value', dealPricing.id());
         form.appendChild(deal_id);
 
-        dealPricing.bestOfferPrograms().forEach((program, index) => {
+        /*dealPricing.bestOfferPrograms().forEach((program, index) => {
             let rebateName = document.createElement('input');
             rebateName.setAttribute('name', `rebates[${index}][title]`);
             rebateName.setAttribute('value', program.title);
@@ -64,7 +64,7 @@ const purchase = {
             rebateValue.setAttribute('name', `rebates[${index}][value]`);
             rebateValue.setAttribute('value', program.value);
             form.appendChild(rebateValue);
-        });
+        });*/
 
         let msrp = document.createElement('input');
         msrp.setAttribute('name', 'msrp');
