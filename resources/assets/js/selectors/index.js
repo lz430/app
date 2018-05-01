@@ -17,7 +17,7 @@ const financeTerm = state => state.financeTerm;
 
 const leaseAnnualMileage = state => state.leaseAnnualMileage;
 const leaseTerm = state => state.leaseTerm;
-const leaseCashDue = state => state.leaseCashDue;
+const leaseCashDown = state => state.leaseCashDown;
 
 const dealsIdsWithCustomizedQuotes = state => state.dealsIdsWithCustomizedQuotes;
 
@@ -150,7 +150,124 @@ const dealHasCustomizedQuote = createSelector(
         deal,
         dealsIdsWithCustomizedQuotes
     ) => {
-        return R.contains(deal.id, dealsIdsWithCustomizedQuotes);
+        return R.contains(deal.version.jato_vehicle_id, dealsIdsWithCustomizedQuotes);
+    }
+
+);
+
+const dealLeaseRatesKey = createSelector(
+    [deal, zipcode],
+    (deal, zipcode) => {
+        if(!deal) {
+            return null;
+        }
+        return `${deal.version.jato_vehicle_id}.${zipcode}`;
+    }
+);
+
+export const makeDealLeaseRatesKey = () => {
+    return dealLeaseRatesKey;
+};
+
+const dealLeasePaymentsKey = createSelector(
+    [deal, zipcode],
+    (deal, zipcode) => {
+        if(!deal) {
+            return null;
+        }
+        return `${deal.version.jato_vehicle_id}.${zipcode}`;
+    }
+);
+
+export const makeDealLeasePaymentsKey = () => {
+    return dealLeasePaymentsKey;
+};
+
+const leaseRatesLoaded = (state) => state.leaseRatesLoaded;
+const leaseRates = (state) => state.leaseRates;
+const leasePaymentsLoaded = (state) => state.leasePaymentsLoaded;
+const leasePayments = (state) => state.leasePayments;
+
+const dealLeaseRatesLoaded = createSelector(
+    leaseRatesLoaded,
+    dealLeaseRatesKey,
+    (
+        leaseRatesLoaded,
+        dealLeaseRatesKey
+    ) => leaseRatesLoaded ? leaseRatesLoaded[dealLeaseRatesKey] : false
+);
+
+const dealLeaseRates = createSelector(
+    leaseRates,
+    dealLeaseRatesKey,
+    (
+        leaseRates,
+        dealLeaseRatesKey
+    ) => leaseRates ? leaseRates[dealLeaseRatesKey] : []
+);
+
+const dealLeasePaymentsLoaded = createSelector(
+    leasePaymentsLoaded,
+    dealLeasePaymentsKey,
+    (
+        leasePaymentsLoaded,
+        dealLeasePaymentsKey
+    ) => leasePaymentsLoaded ? leasePaymentsLoaded[dealLeasePaymentsKey] : false
+);
+
+const dealLeasePayments = createSelector(
+    leasePayments,
+    dealLeasePaymentsKey,
+    (
+        leasePayments,
+        dealLeasePaymentsKey
+    ) => leasePayments ? leasePayments[dealLeasePaymentsKey] : []
+);
+
+const dealLeaseAnnualMileage = createSelector(
+    deal,
+    zipcode,
+    leaseAnnualMileage,
+    (
+        deal,
+        zipcode,
+        leaseAnnualMileage
+    ) => {
+        const key = `${deal.id}.${zipcode}`;
+
+        return leaseAnnualMileage[key] ? leaseAnnualMileage[key] : null;
+    }
+
+);
+
+const dealLeaseTerm = createSelector(
+    deal,
+    zipcode,
+    leaseTerm,
+    (
+        deal,
+        zipcode,
+        leaseTerm
+    ) => {
+        const key = `${deal.id}.${zipcode}`;
+
+        return leaseTerm[key] ? leaseTerm[key] : null;
+    }
+
+);
+
+const dealLeaseCashDown = createSelector(
+    deal,
+    zipcode,
+    leaseCashDown,
+    (
+        deal,
+        zipcode,
+        leaseCashDown
+    ) => {
+        const key = `${deal.id}.${zipcode}`;
+
+        return leaseCashDown[key] ? leaseCashDown[key] : null;
     }
 
 );
@@ -164,10 +281,14 @@ const dealPricing = createSelector(
     employeeBrand,
     financeDownPayment,
     financeTerm,
-    leaseAnnualMileage,
-    leaseTerm,
-    leaseCashDue,
+    dealLeaseAnnualMileage,
+    dealLeaseTerm,
+    dealLeaseCashDown,
     dealHasCustomizedQuote,
+    dealLeaseRatesLoaded,
+    dealLeaseRates,
+    dealLeasePaymentsLoaded,
+    dealLeasePayments,
     (
         deal,
         dealBestOffer,
@@ -177,10 +298,14 @@ const dealPricing = createSelector(
         employeeBrand,
         financeDownPayment,
         financeTerm,
-        leaseAnnualMileage,
-        leaseTerm,
-        leaseCashDue,
-        dealHasCustomizedQuote
+        dealLeaseAnnualMileage,
+        dealLeaseTerm,
+        dealLeaseCashDown,
+        dealHasCustomizedQuote,
+        dealLeaseRatesLoaded,
+        dealLeaseRates,
+        dealLeasePaymentsLoaded,
+        dealLeasePayments
     ) => {
         return {
             deal,
@@ -191,10 +316,14 @@ const dealPricing = createSelector(
             employeeBrand,
             financeDownPayment,
             financeTerm,
-            leaseAnnualMileage,
-            leaseTerm,
-            leaseCashDue,
-            dealHasCustomizedQuote
+            leaseAnnualMileage: dealLeaseAnnualMileage,
+            leaseTerm: dealLeaseTerm,
+            leaseCashDown: dealLeaseCashDown,
+            dealHasCustomizedQuote,
+            dealLeaseRatesLoaded,
+            dealLeaseRates,
+            dealLeasePaymentsLoaded,
+            dealLeasePayments
         };
     }
 );

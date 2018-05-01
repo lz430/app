@@ -42,7 +42,7 @@ class ApplyOrPurchaseController extends Controller
                 'rebates.*.value' => 'required_with:rebates|numeric',
                 // Finance and lease values.
                 'term' => 'required_if:type,finance,lease|integer',
-                'down_payment' => 'required_if:type,finance|integer',
+                'down_payment' => 'required_if:type,finance,lease|numeric',
                 'amount_financed' => 'required_if:type,finance|numeric',
             ]);
 
@@ -72,7 +72,7 @@ class ApplyOrPurchaseController extends Controller
 
             return redirect('/request-email?payment=' . request('type'));
         } catch (ValidationException $e) {
-            Log::notice('Invalid applyOrPurchase submission: ' . json_encode(request()->all()));
+            Log::notice('Invalid applyOrPurchase submission: ' . json_encode(['request' => request()->all(), 'errors' => $e->errors()]));
 
             return abort(500);
         }

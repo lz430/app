@@ -13,24 +13,24 @@ class Sortbar extends React.PureComponent {
         this.state = {
             dropdownShown: false,
         };
+
+        this.compareReady = this.compareReady.bind(this);
+        this.redirectToCompare = this.redirectToCompare.bind(this);
     }
 
     renderFilterToggle() {
         return util.windowIsLargerThanSmall(this.props.window.width) ? (
             ''
         ) : (
-            <div
-                onClick={this.props.toggleSmallFiltersShown}
-                className="sortbar__filter-toggle"
-            >
+            <button className="sortbar__button sortbar__button--pink" onClick={this.props.toggleSmallFiltersShown}>
                 <SVGInline
                     height="20px"
                     width="20px"
                     className="sortbar__filter-toggle-icon"
                     svg={zondicons['tuning']}
                 />{' '}
-                <span className="sortbar__filter-toggle-text">Filter</span>
-            </div>
+                Filter
+            </button>
         );
     }
 
@@ -55,32 +55,51 @@ class Sortbar extends React.PureComponent {
         );
     }
 
+
+    redirectToCompare() {
+        if (this.compareReady()) {
+            window.location.href =
+                '/compare?' +
+                this.props.compareList
+                    .map(
+                        dealAndSelectedFilters =>
+                            `deals[]=${dealAndSelectedFilters.deal.id}`
+                    )
+                    .join('&') +
+                `&zipcode=${this.props.zipcode}`;
+        }
+    }
+
+    compareReady() {
+        return this.props.compareList.length >= 2;
+    }
+
+    renderCompareButton() {
+        return util.windowIsLargerThanSmall(this.props.window.width) ? (
+            ''
+        ) : (
+            <div>
+                <button
+                    className={`sortbar__button sortbar__button--blue ${this.compareReady() ? '' : 'disabled'}`}
+                    onClick={this.redirectToCompare}
+                >
+                    Compare{' '}
+                    <div className={`sortbar__compare-count ${this.compareReady() ? 'sortbar__compare-count--ready' : ''}`}>
+                        {this.props.compareList.length}
+                    </div>
+                </button>
+            </div>
+        );
+    }
+
     renderSortbarDropdown() {
         const icon = this.state.dropdownShown ? 'cheveron-down' : 'cheveron-up';
 
         return (
-            <div className="sortbar__buttons">
-                <button
-                    className="sortbar__button sortbar__button"
-                    onClick={() => this.toggleDropdownShown()}
-                >
-                    Sort results by...
-                    <SVGInline
-                        height="18px"
-                        width="18px"
-                        className="sortbar__sort-icon sortbar__sort-icon--right-side"
-                        svg={zondicons[icon]}
-                    />
-                </button>
-                {this.state.dropdownShown ? (
-                    <div className="sortbar__dropdown">
-                        <div onClick={() => this.props.sortDeals('price')}>
-                            Price {this.renderIcon('price')}
-                        </div>
-                    </div>
-                ) : (
-                    ''
-                )}
+            <div className="sortbar__button">
+                <div onClick={() => this.props.sortDeals('price')}>
+                    Price {this.renderIcon('price')}
+                </div>
             </div>
         );
     }
@@ -89,6 +108,7 @@ class Sortbar extends React.PureComponent {
         return (
             <div className="sortbar">
                 {this.renderFilterToggle()}
+                {this.props.filterPage === 'deals' ? this.renderCompareButton() : ''}
                 {this.props.filterPage === 'deals' ? this.renderSortbarDropdown() : ''}
             </div>
         );
@@ -122,6 +142,7 @@ function mapStateToProps(state) {
         sortAscending: state.sortAscending,
         compareList: state.compareList,
         window: state.window,
+        zipcode: state.zipcode,
     };
 }
 

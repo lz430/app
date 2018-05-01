@@ -28,13 +28,19 @@ class FinanceCalculator extends React.PureComponent {
         this.props.updateFinanceTerm(Number(e.target.value));
     }
 
+    showWhenPricingIsLoaded(fn) {
+        return this.props.dealPricing.isPricingLoading() ? (
+            <SVGInline svg={miscicons['loading']} />
+        ) : fn();
+    }
+
     renderTotalCostOfVehicle() {
         const totalCostOfVehicle = this.props.dealPricing.yourPrice();
 
         return (
             <div>
                 <span className="cash-finance-lease-calculator__left-item">
-                    Your price
+                    Your Price
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
                     {totalCostOfVehicle ? (
@@ -108,7 +114,7 @@ class FinanceCalculator extends React.PureComponent {
                         <CustomerTypeSelect {...R.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props)} />
                     </div>
                     <div>
-                        {this.props.dealPricing.finalPrice()}*
+                        Your Price{' '}{this.props.dealPricing.yourPrice()}*
                     </div>
                 </div>
                 <hr />

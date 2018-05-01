@@ -4,9 +4,13 @@
 .filter-page {
   background: $color-background-secondary;
   display: flex;
-  height: calc(100vh - #{$header-height});
+  height: 100vh;
   overflow: hidden;
   position: relative;
+
+  @media (min-width: $break-medium) {
+    height: calc(100vh - #{$header-height});
+  }
 
   &__deals {
     height: 100%;
