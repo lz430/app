@@ -8,20 +8,15 @@ use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
 use App\Purchase;
 use App\Transformers\PurchaseTransformer;
-use App\Transformers\DealTransformer;
 use App\User;
-use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Laracasts\Utilities\JavaScript\JavaScriptFacade;
-use USDLRegex\Validator as LicenseValidator;
 
 class ApplyOrPurchaseController extends Controller
 {
