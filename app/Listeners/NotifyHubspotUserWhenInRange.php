@@ -2,8 +2,6 @@
 
 namespace App\Listeners;
 
-use App\Events\UserWantsNotificationWhenInRange;
-use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use \Exception;
 use DeliverMyRide\HubSpot\Client;
 
@@ -21,7 +19,9 @@ class NotifyHubspotUserWhenInRange
         try {
             $this->client->notifyUserWhenInRange($event);
         } catch (Exception $exception) {
-            Bugsnag::notifyException($exception);
+            if (app()->bound('sentry')) {
+                app('sentry')->captureException($exception);
+            }
         }
     }
 }

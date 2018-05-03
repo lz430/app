@@ -7,7 +7,6 @@
     "require": {
         "php": ">=7.1",
         "adambullmer/usdl-regex": "^1.0",
-        "bugsnag/bugsnag-laravel": "^2.0",
         "doctrine/dbal": "^2.5",
         "greggilbert/recaptcha": "^2.2",
         "guzzlehttp/guzzle": "^6.2",
