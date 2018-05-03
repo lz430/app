@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API;
 use App\Events\UserDataChanged;
 use App\Purchase;
 use App\User;
-use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -51,7 +50,9 @@ class RouteOneWebhookController extends BaseAPIController
 
             event(UserDataChanged::class, ['email' => $email, 'creditapproval' => $applicationStatus]);
         } catch (ValidationException | ModelNotFoundException $e) {
-            Bugsnag::notifyException($e);
+            if (app()->bound('sentry')) {
+                app('sentry')->captureException($e);
+            }
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
 

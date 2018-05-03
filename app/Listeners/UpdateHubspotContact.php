@@ -2,7 +2,6 @@
 
 namespace App\Listeners;
 
-use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use DeliverMyRide\HubSpot\Client;
 use Exception;
 
@@ -22,7 +21,9 @@ class UpdateHubspotContact
             $this->client->submitBuyNowContactInfoForm($event->payload);
             return;
         } catch (Exception $exception) {
-            Bugsnag::notifyException($exception);
+            if (app()->bound('sentry')) {
+                app('sentry')->captureException($exception);
+            }
         }
     }
 }
