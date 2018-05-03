@@ -76,6 +76,13 @@
             @include('footer')
         @show
 
+        @if (App::environment(['staging', 'production']))
+            <script src="https://cdn.ravenjs.com/3.24.2/raven.min.js" crossorigin="anonymous"></script>
+            <script>
+                Raven.config('https://4e802d8f79514015b7b3c05a9a8487dc@sentry.io/1200027').install()
+            </script>
+        @endif
+
         <script src="{{ asset('js/app.js') }}"></script>
         @stack('scripts')
         @if (App::environment(['staging', 'production']))
