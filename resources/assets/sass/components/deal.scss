@@ -15,8 +15,12 @@
   border: 1px solid $color-grey;
   height: fit-content;
   margin: $deal-card-margin;
-  max-width: $deal-card-width;
-  min-width: $deal-card-width;
+  width: 100%;
+
+  @media (min-width: $break-small) {
+    max-width: $deal-card-width;
+    min-width: $deal-card-width;
+  }
 
   &__basic-info {
     margin-bottom : 0.5rem;
