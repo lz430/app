@@ -14,7 +14,7 @@ class Financing extends Component {
     componentWillMount() {
         this.setState({
             url:
-                `https://itl.routeone.net/XRD/turnKeyOcaStart.do?rteOneDmsId=${this.props.purchase.deal.dealer.route_one_id}` +
+                `https://www.routeone.net/XRD/turnKeyOcaStart.do?rteOneDmsId=${this.props.purchase.deal.dealer.route_one_id}` +
                 `&dealerId=${this.props.purchase.deal.dealer.dealer_id}` +
                 `&buyOrLease=${this.props.purchase.type === 'finance' ? 1 : 2}` +
                 `&email=${this.props.user.email}` +
