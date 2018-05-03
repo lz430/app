@@ -438,13 +438,27 @@ class ComparePage extends React.PureComponent {
     renderFeaturesTable(compareList) {
         let featureSets = compareList.map(({ deal }, index) => {
             return deal.dmr_features.map(feature => {
+
+                let group = '';
+
+                if (this.state.featureCategories.length) {
+
+                    group = this.state.featureCategories.find(category => {
+                        return parseInt(category.id) === parseInt(feature.category_id);
+                    });
+
+                    if (group) {
+                        group = group.attributes.slug.replace(/_/g, ' ');
+                    } else {
+                        group = '';
+                    }
+                }
+
                 return {
                     id: feature.id,
                     feature: feature.title.trim(),
                     slug: feature.slug,
-                    group: this.state.featureCategories.length ? this.state.featureCategories.find(category => {
-                        return parseInt(category.id) === parseInt(feature.category_id)
-                    }).attributes.slug.replace(/_/g, ' ') : ''
+                    group: group,
                 }
             }).concat(deal.features)
         });
