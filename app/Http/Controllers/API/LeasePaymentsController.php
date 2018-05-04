@@ -70,8 +70,6 @@ class LeasePaymentsController extends BaseAPIController
                         ->withTerm($term)
                         ->withAnnualMileage($annualMileage);
 
-                    Log::debug($quoteParameter->toArray());
-
                     $quoteParameters[] = $quoteParameter;
                 }
             }

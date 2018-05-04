@@ -18,7 +18,8 @@ import ImageGallery from 'react-image-gallery';
 import AccuPricingModal from 'components/AccuPricingModal';
 import InfoModalData from 'components/InfoModalData';
 import DealPricing from 'src/DealPricing';
-import {makeDealPricing} from "../selectors";
+import {makeDealPricing} from '../selectors';
+import util from 'src/util';
 
 class DealDetails extends React.PureComponent {
     constructor(props) {
@@ -302,21 +303,37 @@ class DealDetails extends React.PureComponent {
         );
     }
 
-    renderDeal(deal) {
-        return <InfoModalData
-            withPricingHeader={false}
-            {...R.pick(['deal', 'selectedTab', 'compareList', 'dealPricing'], this.props)}
-            {...R.pick([
-                'selectDeal',
-                'selectTab',
-                'requestTargets',
-                'requestBestOffer',
-                'getBestOffersForLoadedDeals',
-                'toggleCompare',
-                'showAccuPricingModal'
-            ], this.props)}
-        />
+    renderStockNumber() {
+        return (
+            <div className="deal-details__stock-number">
+                Stock# {this.props.deal.stock_number}
+            </div>
+        );
+    }
 
+    renderDeal(deal, { shouldRenderStockNumber } = {}) {
+        return (
+            <div className="deal-details__pricing">
+                <div>
+                    {shouldRenderStockNumber && (
+                        this.renderStockNumber()
+                    )}
+                    <InfoModalData
+                        withPricingHeader={false}
+                        {...R.pick(['deal', 'selectedTab', 'compareList', 'dealPricing'], this.props)}
+                        {...R.pick([
+                            'selectDeal',
+                            'selectTab',
+                            'requestTargets',
+                            'requestBestOffer',
+                            'getBestOffersForLoadedDeals',
+                            'toggleCompare',
+                            'showAccuPricingModal'
+                        ], this.props)}
+                    />
+                </div>
+            </div>
+        );
     }
 
     renderFeaturesAndOptions(deal, index) {
@@ -375,8 +392,6 @@ class DealDetails extends React.PureComponent {
     }
 
     render() {
-        const deal = this.props.deal;
-
         return (
             <div>
                 <div className="deal-details">
@@ -388,6 +403,10 @@ class DealDetails extends React.PureComponent {
                             <div className="deal-details__title-model-trim">
                                 {strings.dealModelTrim(this.props.deal)}
                             </div>
+                            {util.windowIsLargerThanSmall(this.props.window.width)
+                                ? null
+                                : this.renderStockNumber()
+                            }
                         </div>
                         <div className="deal-details__images">
                             <ImageGallery
@@ -398,22 +417,22 @@ class DealDetails extends React.PureComponent {
                                 showPlayButton={false}
                                 showFullscreenButton={false}/>
                         </div>
+                        {util.windowIsLargerThanSmall(this.props.window.width)
+                            ? null
+                            : this.renderDeal(this.props.deal, { shouldRenderStockNumber: false })
+                        }
                         {this.renderFeaturesAndOptions(this.props.deal)}
                     </div>
-                    <div className="deal-details__pricing">
-                        <div>
-                            <div className="deal-details__stock-number">
-                                Stock# {this.props.deal.stock_number}
-                            </div>
-                            {this.renderDeal(deal)}
-                        </div>
-                    </div>
+                    {util.windowIsLargerThanSmall(this.props.window.width)
+                        ? this.renderDeal(this.props.deal, { shouldRenderStockNumber: true })
+                        : null
+                    }
                 </div>
 
                 <CompareBar class="compare-bar compare-bar--static" />
 
-                {this.state.showStandardFeatures ? this.renderStandardFeaturesModal(deal) : ''}
-                {this.state.showFeatures ? this.renderFeaturesModal(deal) : ''}
+                {this.state.showStandardFeatures ? this.renderStandardFeaturesModal(this.props.deal) : ''}
+                {this.state.showFeatures ? this.renderFeaturesModal(this.props.deal) : ''}
                 {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
                 <AccuPricingModal />
             </div>);
@@ -444,7 +463,8 @@ function mapStateToProps(state) {
             fallbackDealImage: state.fallbackDealImage,
             selectedDeal: state.selectedDeal,
             employeeBrand: state.employeeBrand,
-            dealPricing: new DealPricing(getDealPricing(state, props))
+            dealPricing: new DealPricing(getDealPricing(state, props)),
+            window: state.window,
         };
     };
     return mapStateToProps;

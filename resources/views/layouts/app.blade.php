@@ -124,5 +124,12 @@
             </script>
             <!-- End of LiveChat code -->
         @endif
+
+        @if (App::environment(['staging']))
+            <script type="text/javascript">
+                (function() { var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = '//api.usersnap.com/load/9877ffc2-47ca-4205-a6da-a616b05ddc02.js';
+                    var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); })();
+            </script>
+        @endif
     </body>
 </html>

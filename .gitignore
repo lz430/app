@@ -1,6 +1,7 @@
 /node_modules
 /resources/assets/js/body-styles.js
 /resources/assets/js/zondicons.js
+/resources/assets/js/miscicons.js
 /public/storage
 /public/hot
 /public/css/
@@ -19,3 +20,4 @@ Homestead.yaml
 *.log
 
 !.gitkeep
+
