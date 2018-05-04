@@ -51,6 +51,14 @@ class Client
         $xml = new \SimpleXMLElement($data);
         $xml->registerXPathNamespace('lease', 'http://www.carletoninc.com/calcs/lease');
 
+
+        $faults = $xml->xpath('/soap:Envelope/soap:Body/soap:Fault');
+        if ($faults) {
+            Log::info('Could not find lease calculations (response): ' . (string) $faults[0]->faultstring);
+
+            return [];
+        }
+
         $results = [];
         $quotes = $xml->xpath('/soap:Envelope/soap:Body/lease:GetQuotesResponse/lease:GetQuotesResult/lease:Quote');
 
