@@ -173,12 +173,12 @@ class Client
                     ], $additionalParams)
             ]);
 
-            Cache::put($cacheKey, $response, 60);
+            Cache::put($cacheKey, $response, count($response) > 0 ? 60 : 15);
 
             return $response;
         } catch (ClientException $e) {
             Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode");
-            Cache::put($cacheKey, [], 60);
+            Cache::put($cacheKey, [], 5);
             return [];
         }
     }
