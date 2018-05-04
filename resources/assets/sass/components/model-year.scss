@@ -18,8 +18,12 @@
   border: 1px solid $color-grey;
   height: fit-content;
   margin: $modelyear-card-margin;
-  max-width: $modelyear-card-width;
-  min-width: $modelyear-card-width;
+  width: 100%;
+
+  @media (min-width: $break-small) {
+    max-width: $modelyear-card-width;
+    min-width: $modelyear-card-width;
+  }
 
   &__basic-info {
     margin-bottom : 0.5rem;
