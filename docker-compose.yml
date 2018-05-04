@@ -1,0 +1,48 @@
+version: '2'
+
+volumes:
+  db_data_dev: {}
+
+services:
+
+  ###
+  # DBs, Caches, ETC Services
+  ###
+  mysql:
+    build: ./compose/mysql
+    volumes:
+      - db_data_dev:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=delivermyride
+      - MYSQL_USER=delivermyride
+      - MYSQL_PASSWORD=delivermyride
+      - MYSQL_ROOT_PASSWORD=delivermyride
+
+  redis:
+    image: redis:latest
+
+  ###
+  # Actual Application
+  ###
+  app:
+    container_name: sf.app
+    build: ./compose/php-fpm
+    ports:
+        - "9000:9000"
+    volumes:
+      - .:/app
+    links:
+        - mysql
+
+  nginx:
+    build: ./compose/nginx
+    ports:
+        - "80:80"
+    links:
+        - mysql
+    volumes_from:
+        - app
+    volumes:
+        - ./logs/nginx/:/var/log/nginx:cached
+
+
