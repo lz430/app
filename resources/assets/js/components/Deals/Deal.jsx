@@ -15,7 +15,7 @@ class Deal extends React.PureComponent {
                 {this.props.hideImageAndTitle ? (
                     ''
                 ) : (
-                    <div className="deal__header">
+                    <div className="deal__content">
                         <div className="deal__basic-info">
                             <div
                                 onClick={() =>
