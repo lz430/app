@@ -4,6 +4,11 @@
   background: #fff;
   border-top: 1px solid #ddd;
   box-shadow: inset 0px 4px 8px 0 rgba(0, 0, 0, 0.05);
+  display: none;
+
+  @media (min-width: $break-small) {
+    display: block;
+  }
 
   a {
     color: $color-blue;
@@ -23,9 +28,13 @@
 .steps-bar {
   background-color: $color-sidebar-background-primary;
   color: #fff;
-  display: flex;
   margin-bottom: 0.5em;
   padding-left: 0.5em;
+  display: none;
+
+  @media (min-width: $break-small) {
+    display: flex;
+  }
 
   .inner {
     display: flex;

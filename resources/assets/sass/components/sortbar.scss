@@ -3,8 +3,11 @@
 
 .sortbar {
   display: flex;
-  padding-left: 1em;
   justify-content: space-around;
+
+  @media (min-width: $break-small) {
+    padding-left: 1em;
+  }
 
   &__buttons {
     display: flex;
