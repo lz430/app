@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Cache;
 
 class Client
 {
-    // Types that should be exlcluded for every best offer call
+    // Types that should be excluded for every best offer call
     const TYPE_BLACKLIST = [
         7, // Cash Certificate Coupon ** Coupon **
         11, // Gift

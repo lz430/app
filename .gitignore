@@ -19,5 +19,8 @@ Homestead.yaml
 .DS_Store
 *.log
 
+.phpstorm.meta.php
+_ide_helper.php
+
 !.gitkeep
 
