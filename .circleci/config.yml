@@ -11,6 +11,9 @@ jobs:
         - MYSQL_USER=dmr
         - MYSQL_PASSWORD=dmr
 
+      - image: redis:latest
+
+
     working_directory: ~/app
 
     steps:
