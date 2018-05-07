@@ -162,6 +162,7 @@ $factory->define(App\Purchase::class, function (Faker\Generator $faker) {
         'deal_id' => factory(App\Deal::class),
         'user_id' => factory(App\User::class),
         'dmr_price' => 30000,
+        'monthly_payment' => 500,
         'msrp' => 28000,
     ];
 });
