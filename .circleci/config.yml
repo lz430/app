@@ -15,9 +15,18 @@ jobs:
 
     steps:
       - checkout
-      - run: sudo apt install -y zlib1g-dev
-      - run: sudo docker-php-ext-install zip
-      - run: sudo composer self-update
+
+
+      - run:
+          name: Install system packages
+          command: sudo apt install -y zlib1g-dev
+      - run:
+          name: Install PHP extensions
+          command: sudo docker-php-ext-install pdo_mysql zip
+      - run:
+          name: Update composer
+          command: sudo composer self-update
+
       - restore_cache:
           keys:
             - composer-v1-{{ checksum "composer.lock" }}
@@ -36,7 +45,7 @@ jobs:
           key: node-v1-{{ checksum "package.json" }}
           paths:
             - node_modules
-      - run: touch storage/testing.sqlite
+
       - run: php artisan migrate --env=testing --force
       - run: ./vendor/bin/codecept build
       - run: ./vendor/bin/codecept run
