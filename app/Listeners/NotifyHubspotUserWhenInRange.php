@@ -9,11 +9,19 @@ class NotifyHubspotUserWhenInRange
 {
     private $client;
 
+    /**
+     * NotifyHubspotUserWhenInRange constructor.
+     *
+     * @param Client $client
+     */
     public function __construct(Client $client)
     {
         $this->client = $client;
     }
 
+    /**
+     * @param $event
+     */
     public function handle($event)
     {
         try {

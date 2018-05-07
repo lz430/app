@@ -18,6 +18,7 @@ class NewPurchaseInitiated
     public function __construct(User $user, Purchase $purchase)
     {
         $this->payload = [
+
             //
             // Buyer Contact Info
             'firstname' => $user->first_name,
@@ -49,14 +50,15 @@ class NewPurchaseInitiated
             'payment' => title_case($purchase->type),
             'msrp' => $purchase->deal->msrp,
             'final_sale_price' => $purchase->dmr_price,
-            'length_of_lease' => $purchase->deal,
             'cash_at_delivery' => $purchase->down_payment,
-            'monthly_payment' => $purchase->deal,
 
-            'creditapproval' => $purchase->application_status,
+            'length_of_lease' => $purchase->term,
+            'monthly_payment' => $purchase->monthly_payment,
 
-            'rebates_amount' => $purchase->deal,
-            'voucher_title' => $purchase->rebates,
+            'credit_approval' => $purchase->application_status,
+
+            'rebates_amount' => $purchase->rebatesTotalValue(),
+            'voucher_title' => $purchase->rebatesAsTitle(),
         ];
     }
 }

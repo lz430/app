@@ -1,11 +1,10 @@
-import R from 'ramda';
-import formulas from 'src/formulas';
-import util from 'src/util';
-
+/**
+ * TODO: Rewrite this into not a form
+ * @type {{start: purchase.start}}
+ */
 const purchase = {
-    start: (
-        dealPricing
-    ) => {
+    start: (dealPricing) => {
+        console.log(dealPricing);
         let form = document.createElement('form');
         form.setAttribute('method', 'post');
         form.setAttribute('action', '/apply-or-purchase');
@@ -47,6 +46,13 @@ const purchase = {
             down_payment.setAttribute('name', 'down_payment');
             down_payment.setAttribute('value', dealPricing.leaseCashDownValue());
             form.appendChild(down_payment);
+        }
+        
+        if (dealPricing.isFinance() || dealPricing.isLease()) {
+            let monthly_payment = document.createElement('input');
+            monthly_payment.setAttribute('name', 'monthly_payment');
+            monthly_payment.setAttribute('value', dealPricing.monthlyPaymentsValue());
+            form.appendChild(monthly_payment);
         }
 
         let deal_id = document.createElement('input');
