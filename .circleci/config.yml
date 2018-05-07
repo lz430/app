@@ -7,7 +7,7 @@ jobs:
 
       - image: circleci/mysql:5.7
         environment:
-        - MYSQL_DATABASE=dmr
+        - MYSQL_DATABASE=delivermyridetesting
         - MYSQL_USER=dmr
         - MYSQL_PASSWORD=dmr
 
@@ -16,7 +16,9 @@ jobs:
     steps:
       - checkout
 
-
+      ##################################################################
+      # Install Things
+      ##################################################################
       - run:
           name: Install system packages
           command: sudo apt install -y zlib1g-dev
@@ -27,6 +29,9 @@ jobs:
           name: Update composer
           command: sudo composer self-update
 
+      ##################################################################
+      # Composer
+      ##################################################################
       - restore_cache:
           keys:
             - composer-v1-{{ checksum "composer.lock" }}
@@ -36,6 +41,10 @@ jobs:
           key: composer-v1-{{ checksum "composer.lock" }}
           paths:
             - vendor
+
+      ##################################################################
+      # NPM
+      ##################################################################
       - restore_cache:
           keys:
             - node-v1-{{ checksum "package.json" }}
@@ -46,6 +55,21 @@ jobs:
           paths:
             - node_modules
 
-      - run: php artisan migrate --env=testing --force
-      - run: ./vendor/bin/codecept build
-      - run: ./vendor/bin/codecept run
+
+      ##################################################################
+      # Application Setup
+      ##################################################################
+      - run:
+          name: Build frontend assets
+          command: yarn production
+
+      - run:
+          name: Migrate database
+          command:  php artisan migrate --env=testing --force
+
+      ##################################################################
+      # Tests
+      ##################################################################
+      - run:
+          name: Run PHPunit tests
+          command:  phpunit
