@@ -26,14 +26,14 @@ class Client
             }, $quoteParameters)),
         ]);
 
-        $headers = array(
+        $headers = [
             'Content-Type: text/xml; charset="utf-8"',
-            'Content-Length: '.strlen($body),
+            'Content-Length: ' . strlen($body),
             'Accept: text/xml',
             'Cache-Control: no-cache',
             'Pragma: no-cache',
             'SOAPAction: "http://www.carletoninc.com/calcs/lease/GetQuotes"'
-        );
+        ];
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -48,13 +48,19 @@ class Client
 
         $data = curl_exec($ch);
 
+        if ($data === false) {
+            $error = curl_error($ch);
+            Log::info(var_export($error, true));
+            return [];
+        }
+
         $xml = new \SimpleXMLElement($data);
         $xml->registerXPathNamespace('lease', 'http://www.carletoninc.com/calcs/lease');
 
 
         $faults = $xml->xpath('/soap:Envelope/soap:Body/soap:Fault');
         if ($faults) {
-            Log::info('Could not find lease calculations (response): ' . (string) $faults[0]->faultstring);
+            Log::info('Could not find lease calculations (response): ' . (string)$faults[0]->faultstring);
 
             return [];
         }
@@ -68,10 +74,10 @@ class Client
 
             $results[$i] = [
                 'term' => $input->getTerm(),
-                'cash_down' => (float) $input->getCashDown(),
+                'cash_down' => (float)$input->getCashDown(),
                 'annual_mileage' => $input->getAnnualMileage(),
-                'monthly_payment' => (float) sprintf("%.02f", $quote->RegularPayment),
-                'total_amount_at_drive_off' => (float) sprintf("%.02f", $quote->TotalAmountAtDriveOff),
+                'monthly_payment' => (float)sprintf("%.02f", $quote->RegularPayment),
+                'total_amount_at_drive_off' => (float)sprintf("%.02f", $quote->TotalAmountAtDriveOff),
             ];
         }
 

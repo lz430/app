@@ -1,4 +1,6 @@
 # Deliver My Ride
+
+
 ## Requirements
 - PHP >= 7.0
 - Composer
@@ -7,6 +9,9 @@
 - Cross-env
   - `npm install -g cross-env`
   
+# Install & Run
+See https://delivermyride.atlassian.net/wiki/spaces/GEN/pages/786500/Running+Developing+Locally
+
 ## Testing
 
 ### PHP Test Setup
@@ -15,7 +20,6 @@ Create a test db:
 ```bash
 create database delivermyridetesting;
 ```
-
 
 ## Install Project Dependencies
 ```

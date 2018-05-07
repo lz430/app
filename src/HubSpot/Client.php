@@ -7,7 +7,7 @@ use GuzzleHttp\Client as GuzzleClient;
 class Client
 {
     private $guzzleClient;
-    
+
     public function __construct()
     {
         $this->guzzleClient = new GuzzleClient([
@@ -16,18 +16,28 @@ class Client
         ]);
     }
 
+    /**
+     * @param $payload
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function createOrUpdateContact($payload)
     {
-        return json_decode(
-            (string) $this->guzzleClient->request(
-                'POST',
-                "/contacts/v1/contact/createOrUpdate/email/{$payload['email']}?hapikey=" . config('services.hubspot.api_key'),
-                ['json' => ['properties' => $this->generateHubspotPayloadFrom($payload)]]
-            )->getBody(),
-            true
+
+        $response = $this->guzzleClient->post(
+            "/contacts/v1/contact/createOrUpdate/email/{$payload['email']}?hapikey=" . config('services.hubspot.api_key'),
+            [
+                'json' => ['properties' => $this->generateHubspotPayloadFrom($payload)],
+            ]
         );
+
+        return json_decode((string) $response->getBody(), true);
     }
 
+    /**
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getContacts()
     {
         return json_decode(
@@ -39,6 +49,11 @@ class Client
         );
     }
 
+    /**
+     * @param $email
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function notifyUserWhenInRange($email)
     {
         return json_decode(
@@ -55,6 +70,11 @@ class Client
         );
     }
 
+    /**
+     * @param $payload
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function submitBuyNowContactInfoForm($payload)
     {
         return json_decode(
@@ -73,13 +93,13 @@ class Client
             true
         );
     }
-
+    
+    /**
+     * Transforms ['email' => 'hello@email.com'] to hubspot's preferred
+     * ['property' => 'email', 'value' => 'hello@email.com']
+     */
     private function generateHubspotPayloadFrom($payload)
     {
-        /**
-         * Transforms ['email' => 'hello@email.com'] to hubspot's preferred
-         * ['property' => 'email', 'value' => 'hello@email.com']
-         */
         return array_map(function ($key, $value) {
             return ['property' => $key, 'value' => $value];
         }, array_keys($payload), $payload);
