@@ -35,7 +35,7 @@ class NewPurchaseInitiated
             'brand' => $purchase->deal->make,
             'model1' => $purchase->deal->model,
             'color1' => $purchase->deal->color,
-            'year' => $purchase->deal->year,
+            'year_of_vehicle' => $purchase->deal->year,
             'trim' => $purchase->deal->series,
             'interior_color' => $purchase->interior_color,
 
@@ -50,14 +50,14 @@ class NewPurchaseInitiated
             'payment' => title_case($purchase->type),
             'msrp' => $purchase->deal->msrp,
             'final_sale_price' => $purchase->dmr_price,
-            'cash_at_delivery' => $purchase->down_payment,
+            'downpayment' => $purchase->down_payment,
 
             'length_of_lease' => $purchase->term,
             'monthly_payment' => $purchase->monthly_payment,
 
-            'credit_approval' => $purchase->application_status,
+            'creditapproval' => $purchase->application_status,
 
-            'rebates_amount' => $purchase->rebatesTotalValue(),
+            'standard_rebate_amount' => $purchase->rebatesTotalValue(),
             'voucher_title' => $purchase->rebatesAsTitle(),
         ];
     }
