@@ -76,3 +76,7 @@ jobs:
       - run:
           name: Run PHPunit tests
           command:  vendor/bin/phpunit
+
+      - run:
+          name: Run Javascript tests
+          command:  yarn run test
