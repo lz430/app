@@ -49,7 +49,7 @@ test('calculates_total_cash_finance_price_via_formula', () => {
             downPayment,
             dealBestOfferTotalValue
         )
-    ).toEqual(39122.6);
+    ).toEqual(39171.04);
 });
 
 test('calculates_total_lease_price_via_formula', () => {
@@ -58,7 +58,7 @@ test('calculates_total_lease_price_via_formula', () => {
     const totalRebates = 4250;
 
     expect(formulas.calculateTotalLease(price, docFee, totalRebates)).toEqual(
-        40477.6
+        40501.6
     );
 });
 
@@ -75,7 +75,7 @@ test('calculates_cash_finance_sales_tax', () => {
     const docFee = 210;
 
     expect(formulas.calculateSalesTaxCashFinance(price, docFee)).toEqual(
-        2412.6
+        2414.04
     );
 });
 
@@ -90,5 +90,5 @@ test('calculates_lease_due_at_signing', () => {
             downPayment,
             docFee
         )
-    ).toEqual(267.6);
+    ).toEqual(269.04);
 });

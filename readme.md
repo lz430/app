@@ -7,8 +7,15 @@
 - Cross-env
   - `npm install -g cross-env`
   
-## Create test database (uses mysql for tests)
-`delivermyride-testing`
+## Testing
+
+### PHP Test Setup
+
+Create a test db:
+```bash
+create database delivermyridetesting;
+```
+
 
 ## Install Project Dependencies
 ```
