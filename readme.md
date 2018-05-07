@@ -12,11 +12,14 @@
 # Install & Run
 See https://delivermyride.atlassian.net/wiki/spaces/GEN/pages/786500/Running+Developing+Locally
 
-  
-## Initial Setup
-  
-## Create test database (uses mysql for tests)
-`delivermyride-testing`
+## Testing
+
+### PHP Test Setup
+
+Create a test db:
+```bash
+create database delivermyridetesting;
+```
 
 ## Install Project Dependencies
 ```

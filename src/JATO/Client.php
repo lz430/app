@@ -173,12 +173,12 @@ class Client
                     ], $additionalParams)
             ]);
 
-            Cache::put($cacheKey, $response, 60);
+            Cache::put($cacheKey, $response, count($response) > 0 ? 60 : 15);
 
             return $response;
         } catch (ClientException $e) {
-            Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode");
-            Cache::put($cacheKey, [], 60);
+            Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode, token:".Cache::get(self::TOKEN_KEY).", error: ".$e->getMessage());
+            Cache::put($cacheKey, [], 5);
             return [];
         }
     }
@@ -192,7 +192,7 @@ class Client
                 ]
             ]);
         } catch (ClientException $e) {
-            Log::debug("Unable to get targets for Vehicle ID $vehicleId. URL: incentives/bestOffer/$vehicleId/targets");
+            Log::debug("Unable to get targets for Vehicle ID $vehicleId. URL: incentives/bestOffer/$vehicleId/targets, token:".Cache::get(self::TOKEN_KEY).", error: ".$e->getMessage());
             return [];
         }
     }
@@ -208,7 +208,7 @@ class Client
                 ])
             ]);
         } catch (ClientException $e) {
-            Log::debug("Vehicle ID $vehicleId returns no Best Offers. URL: incentives/bestOffer/$vehicleId/$paymentType?zipCode=$zipcode&targets=$targets");
+            Log::debug("Vehicle ID $vehicleId returns no Best Offers. URL: incentives/bestOffer/$vehicleId/$paymentType?zipCode=$zipcode&targets=$targets, token:".Cache::get(self::TOKEN_KEY).", error: ".$e->getMessage());
             return ['totalValue' => 0, 'programs' => []];
         }
     }

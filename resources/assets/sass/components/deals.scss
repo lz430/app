@@ -4,14 +4,15 @@
 
 .deals {
   background: $color-background-primary;
-  display: flex;
+  display: flex ;
   flex-flow: row wrap;
-  height: calc(100vh - #{$nav-height + $sortbar-height});
+  height: calc(100vh - #{$footer-height});
   justify-content: center;
   overflow-y: scroll;
   padding: 10px;
 
   @media (min-width: $break-small) {
+    height: calc(100vh - #{$nav-height + $sortbar-height});
     padding: 10px 40px 20px;
   }
 
