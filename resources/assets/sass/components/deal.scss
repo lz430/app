@@ -9,21 +9,13 @@
 .deal {
   background-color: $color-background-secondary;
   height: fit-content;
-  margin: 2px;
-  width: calc(50% - 4px);
+  margin: 3px;
+  width: calc(50% - 6px);
 
   @media (min-width: $break-small) {
     max-width: $deal-card-width;
     min-width: $deal-card-width;
     margin: $deal-card-margin;
-  }
-
-  &__header {
-    display: flex;
-    flex-direction: row;
-    @media (min-width: $break-small) {
-      flex-direction: column;
-    }
   }
 
   &__basic-info {
@@ -76,8 +68,7 @@
   &__image {
     border-bottom: 0;
     display: block;
-    height: 100%;
-    width: 50%;
+    width: 100%;
 
     @media (min-width: $break-small) {
       height: 225px;
