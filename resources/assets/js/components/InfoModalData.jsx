@@ -25,13 +25,11 @@ class InfoModalData extends React.PureComponent {
             )
         }
 
-/*
-        if (this.props.dealPricing.isLease() && this.props.dealPricing.leasePaymentsAreNotAvailable()) {
+        if (this.props.dealPricing.cannotPurchase()) {
             return (
                 <span>N/A</span>
             )
         }
-*/
 
         return fn();
     }
