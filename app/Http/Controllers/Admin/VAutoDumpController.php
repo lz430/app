@@ -22,11 +22,18 @@ class VAutoDumpController extends Controller
 
     private function vautoCsvRecords()
     {
-        $csv = Reader::createFromPath($this->vautoFilePath(), 'r');
+        /*$csv = Reader::createFromPath($this->vautoFilePath(), 'r');
         $csv->setHeaderOffset(0);
         $records = collect((new Statement)->process($csv));
 
-        return $records;
+        return $records;*/
+
+        header('Content-Type: text/csv; charset=UTF-8');
+        header('Content-Disposition: attachment; filename="vAutoDump-'. date('m/d/Y') .'.csv"');
+
+        $reader = Reader::createFromPath($this->vautoFilePath(), 'r');
+        $reader->output();
+        die;
     }
 
     public function __invoke()

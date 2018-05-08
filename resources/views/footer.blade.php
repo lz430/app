@@ -40,7 +40,7 @@
         <a href="{{ marketing_url('terms-of-service/') }}">Terms</a> |
         <a href="{{ marketing_url('privacy-policy/') }}">Privacy</a> |
         &copy; {{ date('Y') }} Deliver My Ride. All Rights Reserved. |
-        Headquarters: 135 W Huron Street, Suite 1000, Pontiac, MI 48342  |
+        Headquarters: 35 W Huron Street, Suite 1000, Pontiac, MI 48342  |
         Phone: 248.590.0360
     </div>
 </footer>

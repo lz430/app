@@ -37,6 +37,29 @@
             <!-- End Facebook Pixel Code -->
         @endif
 
+        @if (App::environment(['staging', 'production']))
+        <!-- Fullstory -->
+        <script>
+            window['_fs_debug'] = false;
+            window['_fs_host'] = 'fullstory.com';
+            window['_fs_org'] = 'BDWF3';
+            window['_fs_namespace'] = 'FS';
+            (function(m,n,e,t,l,o,g,y){
+                if (e in m) {if(m.console && m.console.log) { m.console.log('FullStory namespace conflict. Please set window["_fs_namespace"].');} return;}
+                g=m[e]=function(a,b){g.q?g.q.push([a,b]):g._api(a,b);};g.q=[];
+                o=n.createElement(t);o.async=1;o.src='https://'+_fs_host+'/s/fs.js';
+                y=n.getElementsByTagName(t)[0];y.parentNode.insertBefore(o,y);
+                g.identify=function(i,v){g(l,{uid:i});if(v)g(l,v)};g.setUserVars=function(v){g(l,v)};
+                g.shutdown=function(){g("rec",!1)};g.restart=function(){g("rec",!0)};
+                g.consent=function(a){g("consent",!arguments.length||a)};
+                g.identifyAccount=function(i,v){o='account';v=v||{};v.acctId=i;g(o,v)};
+                g.clearUserCookie=function(){};
+            })(window,document,window['_fs_namespace'],'script','user');
+        </script>
+        <!-- Fullstory -->
+        @endif
+
+
     </head>
     <body class="{{ $bodyClass ?? '' }}">
         @section('nav')
@@ -52,6 +75,13 @@
         @section('footer')
             @include('footer')
         @show
+
+        @if (App::environment(['staging', 'production']))
+            <script src="https://cdn.ravenjs.com/3.24.2/raven.min.js" crossorigin="anonymous"></script>
+            <script>
+                Raven.config('https://4e802d8f79514015b7b3c05a9a8487dc@sentry.io/1200027').install()
+            </script>
+        @endif
 
         <script src="{{ asset('js/app.js') }}"></script>
         @stack('scripts')
@@ -93,6 +123,13 @@
             })();
             </script>
             <!-- End of LiveChat code -->
+        @endif
+
+        @if (App::environment(['staging']))
+            <script type="text/javascript">
+                (function() { var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = '//api.usersnap.com/load/9877ffc2-47ca-4205-a6da-a616b05ddc02.js';
+                    var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); })();
+            </script>
         @endif
     </body>
 </html>

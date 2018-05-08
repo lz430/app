@@ -4,11 +4,19 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class Dealer extends Model
 {
+    /**
+     * @var array
+     */
     protected $guarded = ['id'];
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'dealer_id',
         'latitude',
@@ -25,7 +33,10 @@ class Dealer extends Model
         'contact_title',
     ];
 
-    public function deals()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function deals() : HasMany
     {
         return $this->hasMany(
             Deal::class,

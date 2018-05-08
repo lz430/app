@@ -4,6 +4,9 @@ namespace DeliverMyRide\VAuto;
 
 use App\Feature;
 use Facades\App\JATO\Log;
+use Exception;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 
 class DealFeatureImporter
 {
@@ -29,8 +32,6 @@ class DealFeatureImporter
     {
         /** Package Decoding Options Logic */
         $vehicleId = $this->version->jato_vehicle_id;
-        $optionCodesFromCsv = $this->deal->option_codes;
-        \Log::info($optionCodesFromCsv);
 
         // For each option code from VAuto
         // Find which are packages
@@ -114,7 +115,6 @@ class DealFeatureImporter
             });
         })->unique()->toArray();
     }
-
 
     private function equipmentMatchesFeature($schemaId, $feature) {
         return in_array($schemaId, $feature->jato_schema_ids);

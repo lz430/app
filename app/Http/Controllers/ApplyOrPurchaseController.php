@@ -8,20 +8,15 @@ use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
 use App\Purchase;
 use App\Transformers\PurchaseTransformer;
-use App\Transformers\DealTransformer;
 use App\User;
-use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Laracasts\Utilities\JavaScript\JavaScriptFacade;
-use USDLRegex\Validator as LicenseValidator;
 
 class ApplyOrPurchaseController extends Controller
 {
@@ -42,7 +37,8 @@ class ApplyOrPurchaseController extends Controller
                 'rebates.*.value' => 'required_with:rebates|numeric',
                 // Finance and lease values.
                 'term' => 'required_if:type,finance,lease|integer',
-                'down_payment' => 'required_if:type,finance|integer',
+                'down_payment' => 'required_if:type,finance,lease|numeric',
+                'monthly_payment' => 'required_if:type,finance,lease|numeric',
                 'amount_financed' => 'required_if:type,finance|numeric',
             ]);
 
@@ -54,11 +50,12 @@ class ApplyOrPurchaseController extends Controller
                 'deal_id' => request('deal_id'),
                 'completed_at' => null,
                 'type' => request('type'),
-                'rebates' => json_encode(request('rebates', []), JSON_NUMERIC_CHECK),
+                'rebates' => request('rebates', []),
                 'dmr_price' => request('dmr_price'),
                 'msrp' => request('msrp'),
                 'term' => request('term') ?: 60,
                 'down_payment' => request('down_payment') ?: 0,
+                'monthly_payment' => request('monthly_payment') ?: 0,
                 'amount_financed' => request('amount_financed') ?: 0,
             ]);
             session(['purchase' => $purchase]);
@@ -72,7 +69,7 @@ class ApplyOrPurchaseController extends Controller
 
             return redirect('/request-email?payment=' . request('type'));
         } catch (ValidationException $e) {
-            Log::notice('Invalid applyOrPurchase submission: ' . json_encode(request()->all()));
+            Log::notice('Invalid applyOrPurchase submission: ' . json_encode(['request' => request()->all(), 'errors' => $e->errors()]));
 
             return abort(500);
         }
@@ -102,6 +99,9 @@ class ApplyOrPurchaseController extends Controller
             ]
         );
 
+
+        //
+        // User
         $user = DB::transaction(function () use ($request) {
             /**
              * If we already have a user with this email, let's use that account
@@ -126,21 +126,28 @@ class ApplyOrPurchaseController extends Controller
             return $user;
         });
 
+
+        //
+        // If we don't have a purchase stored in session give up
         if (! session()->has('purchase') || ! is_object(session('purchase'))) {
             return redirect()->back();
         }
 
-        $purchaseData = session('purchase');
-        $purchaseData->user_id = $user->id;
-        $purchase = Purchase::where('user_id', $user->id)
-            ->where('deal_id', $purchaseData->deal_id)
+        //
+        // Retrieve and store purchase
+        $purchase = session('purchase');
+        $purchase->user_id = $user->id;
+
+        $existing_purchase = Purchase::where('user_id', $user->id)
+            ->where('deal_id', $purchase->deal_id)
             ->whereNull('completed_at')
             ->first();
 
-        if (! $purchase) {
-            unset($purchaseData['deal']);
-            $purchase = Purchase::create($purchaseData->toArray());
+        if ($existing_purchase) {
+            $purchase = $existing_purchase;
         }
+
+        $purchase->save();
 
         event(new NewPurchaseInitiated($user, $purchase));
 

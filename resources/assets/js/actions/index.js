@@ -701,8 +701,13 @@ export function requestLeasePayments(deal) {
 
         const dealPricing = new DealPricing(getDealPricing(getState(), {deal, zipcode}));
 
-        if (dealPricing.isNotLease()) return;
-        if (dealPricing.hasNoLeaseTerms()) return;
+        if (dealPricing.isNotLease()) {
+            return;
+        }
+
+        if (dealPricing.hasNoLeaseTerms()) {
+            return;
+        }
 
         dispatch({
             type: ActionTypes.REQUEST_LEASE_PAYMENTS,
@@ -746,7 +751,9 @@ export function requestLeaseRates(deal) {
             .getLeaseRates(deal, zipcode)
             .then(data => {
                 dispatch(receiveLeaseRates(deal, zipcode, data.data));
-                dispatch(requestLeasePayments(deal));
+                if (data.data.length > 0) {
+                    dispatch(requestLeasePayments(deal));
+                }
             })
             .catch(e => {
                 dispatch(receiveLeaseRates(deal, zipcode, null))

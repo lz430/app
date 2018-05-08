@@ -1,8 +1,11 @@
 /node_modules
 /resources/assets/js/body-styles.js
 /resources/assets/js/zondicons.js
+/resources/assets/js/miscicons.js
 /public/storage
 /public/hot
+/public/css/
+/public/js/
 /storage/*.key
 /storage/vauto
 /vendor
@@ -15,3 +18,9 @@ Homestead.yaml
 /.vscode
 .DS_Store
 *.log
+
+.phpstorm.meta.php
+_ide_helper.php
+
+!.gitkeep
+

@@ -28,6 +28,12 @@ class FinanceCalculator extends React.PureComponent {
         this.props.updateFinanceTerm(Number(e.target.value));
     }
 
+    showWhenPricingIsLoaded(fn) {
+        return this.props.dealPricing.isPricingLoading() ? (
+            <SVGInline svg={miscicons['loading']} />
+        ) : fn();
+    }
+
     renderTotalCostOfVehicle() {
         const totalCostOfVehicle = this.props.dealPricing.yourPrice();
 

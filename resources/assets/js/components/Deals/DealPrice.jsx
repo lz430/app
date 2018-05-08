@@ -30,6 +30,22 @@ class DealPrice extends React.PureComponent {
         />;
     }
 
+    showWhenPricingIsLoaded() {
+        if (this.props.dealPricing.isPricingLoading()) {
+            return (
+                <SVGInline svg={miscicons['loading']} />
+            )
+        }
+
+        if (this.props.dealPricing.cannotPurchase()) {
+            return (
+                <span>N/A</span>
+            )
+        }
+
+        return this.props.dealPricing.finalPrice();
+    }
+
     getLabel() {
         switch (this.props.selectedTab) {
             case 'cash':
@@ -50,13 +66,7 @@ class DealPrice extends React.PureComponent {
                             {this.getLabel()}
                         </div>
                         <div className="deal-price__finance-lease-price">
-                            {this.props.dealPricing.bestOfferIsLoading() ? (
-                                <SVGInline svg={miscicons['loading']} />
-                            ) : (
-                                <div>
-                                    {this.props.dealPricing.finalPrice()}
-                                </div>
-                            )}
+                            {this.showWhenPricingIsLoaded()}
                             {this.renderPriceExplanationModal()}
                         </div>
                         <div className="deal-price__hr" />

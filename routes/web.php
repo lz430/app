@@ -28,7 +28,7 @@ Route::group(['middleware' => 'auth'], function () {
 Route::post('set-email', 'OptinMonsterController@setEmailSession')->name('set-email');
 
 /** Admin */
-if (App::environment(['staging', 'local'])) {
+if (App::environment(['staging', 'local', 'production'])) {
     Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::view('/', 'admin');
         Route::get('zip-tester/{zip}', 'ZipCodeTesterController');

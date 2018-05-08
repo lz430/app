@@ -38,9 +38,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        setlocale(LC_MONETARY, 'en_US.UTF-8');
+        if ($this->app->environment() !== 'production') {
+            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+        }
 
-        $this->app->alias('bugsnag.multi', Log::class);
-        $this->app->alias('bugsnag.multi', LoggerInterface::class);
+        setlocale(LC_MONETARY, 'en_US.UTF-8');
     }
 }

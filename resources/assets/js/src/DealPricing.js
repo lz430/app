@@ -16,6 +16,14 @@ export default class DealPricing {
         return this.data.deal.id;
     }
 
+    jatoVehicleId() {
+        return this.data.deal.version.jato_vehicle_id;
+    }
+
+    paymentType() {
+        return this.data.paymentType;
+    }
+
     allCashDownOptions() {
         return [0, 500, 1000, 2500, 5000];
     }
@@ -144,6 +152,10 @@ export default class DealPricing {
         return util.moneyFormat(this.bestOfferValue());
     }
 
+    bestOfferPrograms() {
+        return this.data.bestOffer.programs;
+    }
+
     employeeBrand() {
         return this.data.employeeBrand;
     }
@@ -158,16 +170,20 @@ export default class DealPricing {
         return util.moneyFormat(this.baseSellingPriceValue());
     }
 
+    isFinance() {
+        return this.data.paymentType === 'finance';
+    }
+
+    isNotFinance() {
+        return this.data.paymentType !== 'finance';
+    }
+
     isLease() {
         return this.data.paymentType === 'lease';
     }
 
     isNotLease() {
         return this.data.paymentType !== 'lease';
-    }
-
-    hasNoLeaseTerms() {
-        return ! this.data.dealLeaseRates || this.data.dealLeaseRates.length === 0;
     }
 
     sellingPriceValue() {
@@ -412,5 +428,109 @@ export default class DealPricing {
         }
 
         return terms;
+    }
+
+    isPricingLoading() {
+        return ! this.isPricingAvailable();
+    }
+
+    isPricingAvailable() {
+        if (this.bestOfferIsLoading()) {
+            return false;
+        }
+
+        switch (this.data.paymentType) {
+            case 'cash':
+            case 'finance':
+                return true;
+            case 'lease':
+                if (this.data.dealLeaseRatesLoading) {
+                    return false;
+                }
+
+                if (this.data.dealLeaseRates.length === 0) {
+                    // If we have deal lease rates loaded but there are no rates available,
+                    // then pricing IS available in the sense that there is no pricing.
+                    return true;
+                }
+
+                return ! this.data.dealLeasePaymentsLoading;
+        }
+    }
+
+    canPurchase() {
+        switch (this.data.paymentType) {
+            case 'cash':
+            case 'finance':
+                return this.isPricingAvailable();
+            case 'lease':
+                return this.canLease();
+        }
+    }
+
+    cannotPurchase() {
+        return ! this.canPurchase();
+    }
+
+    canLease() {
+        return this.hasLeaseTerms() && this.hasLeasePayments();
+    }
+
+    hasNoLeaseTerms() {
+        return ! this.hasLeaseTerms();
+    }
+
+    hasLeaseTerms() {
+        if (!this.data.dealLeaseRates) {
+            return false;
+        }
+
+        if (Object.keys(this.data.dealLeaseRates.length) === 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    hasNoLeasePayments() {
+        return ! this.hasLeasePayments();
+    }
+
+    hasLeasePayments() {
+        if (! this.data.dealLeasePayments) {
+            return false;
+        }
+
+        if (Object.keys(this.data.dealLeasePayments).length === 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    leasePaymentsAreNotAvailable()
+    {
+        return ! this.leasePaymentsAreAvailable();
+    }
+
+    leasePaymentsAreAvailable()
+    {
+        if (! this.data.dealLeaseRates) {
+            // If lease rates are still loading, lease payments
+            // are not yet available.
+            return false;
+        }
+
+        if (this.data.dealLeaseRates.length === 0) {
+            // If there are no lease rates at all, lease payments
+            // are available (they should be empty).
+            return true;
+        }
+
+        if (! this.data.dealLeasePayments) {
+            return false;
+        }
+
+        return true;
     }
 }

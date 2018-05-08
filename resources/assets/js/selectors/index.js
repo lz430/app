@@ -150,7 +150,7 @@ const dealHasCustomizedQuote = createSelector(
         deal,
         dealsIdsWithCustomizedQuotes
     ) => {
-        return R.contains(deal.id, dealsIdsWithCustomizedQuotes);
+        return R.contains(deal.version.jato_vehicle_id, dealsIdsWithCustomizedQuotes);
     }
 
 );
@@ -161,7 +161,7 @@ const dealLeaseRatesKey = createSelector(
         if(!deal) {
             return null;
         }
-        return `${deal.id}.${zipcode}`;
+        return `${deal.version.jato_vehicle_id}.${zipcode}`;
     }
 );
 
@@ -175,7 +175,7 @@ const dealLeasePaymentsKey = createSelector(
         if(!deal) {
             return null;
         }
-        return `${deal.id}.${zipcode}`;
+        return `${deal.version.jato_vehicle_id}.${zipcode}`;
     }
 );
 
@@ -183,8 +183,19 @@ export const makeDealLeasePaymentsKey = () => {
     return dealLeasePaymentsKey;
 };
 
+const leaseRatesLoaded = (state) => state.leaseRatesLoaded;
 const leaseRates = (state) => state.leaseRates;
+const leasePaymentsLoaded = (state) => state.leasePaymentsLoaded;
 const leasePayments = (state) => state.leasePayments;
+
+const dealLeaseRatesLoading = createSelector(
+    leaseRatesLoaded,
+    dealLeaseRatesKey,
+    (
+        leaseRatesLoaded,
+        dealLeaseRatesKey
+    ) => R.isNil(R.prop(dealLeaseRatesKey, leaseRatesLoaded))
+);
 
 const dealLeaseRates = createSelector(
     leaseRates,
@@ -193,6 +204,15 @@ const dealLeaseRates = createSelector(
         leaseRates,
         dealLeaseRatesKey
     ) => leaseRates ? leaseRates[dealLeaseRatesKey] : []
+);
+
+const dealLeasePaymentsLoading = createSelector(
+    leasePaymentsLoaded,
+    dealLeasePaymentsKey,
+    (
+        leasePaymentsLoaded,
+        dealLeasePaymentsKey
+    ) => R.isNil(R.prop(dealLeasePaymentsKey, leasePaymentsLoaded))
 );
 
 const dealLeasePayments = createSelector(
@@ -265,7 +285,9 @@ const dealPricing = createSelector(
     dealLeaseTerm,
     dealLeaseCashDown,
     dealHasCustomizedQuote,
+    dealLeaseRatesLoading,
     dealLeaseRates,
+    dealLeasePaymentsLoading,
     dealLeasePayments,
     (
         deal,
@@ -280,7 +302,9 @@ const dealPricing = createSelector(
         dealLeaseTerm,
         dealLeaseCashDown,
         dealHasCustomizedQuote,
+        dealLeaseRatesLoading,
         dealLeaseRates,
+        dealLeasePaymentsLoading,
         dealLeasePayments
     ) => {
         return {
@@ -296,7 +320,9 @@ const dealPricing = createSelector(
             leaseTerm: dealLeaseTerm,
             leaseCashDown: dealLeaseCashDown,
             dealHasCustomizedQuote,
+            dealLeaseRatesLoading,
             dealLeaseRates,
+            dealLeasePaymentsLoading,
             dealLeasePayments
         };
     }
