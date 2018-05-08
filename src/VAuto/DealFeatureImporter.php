@@ -25,33 +25,69 @@ class DealFeatureImporter
         $this->deal->features()->syncWithoutDetaching($this->featureIds());
     }
 
-    public function featureIds()
+    private function mergedSchemaIds()
     {
         /** Package Decoding Options Logic */
         $vehicleId = $this->version->jato_vehicle_id;
+        $optionCodesFromCsv = $this->deal->option_codes;
+        \Log::info($optionCodesFromCsv);
+
+        // For each option code from VAuto
+        // Find which are packages
+        // For those which are packages, delete them from the list of option codes
+        // Then convert them into a list of option codes
+        // Then merge those option codes back in
+
         // Gets options codes that are packages from vehicle id
         $findPackages = $this->client->optionsByVehicleId("$vehicleId/Type/P")['options'];
-        $pArray = array();
-        foreach($findPackages as $package) {
+
+        // @todo: Only use results from $findPackages which are in the VAuto-provided option codes list
+        $packagesOnThisVehicle = $findPackages;
+
+        $decodedPackageEquipment = [];
+
+        foreach ($packagesOnThisVehicle as $package) {
             $optionCode = $package['optionCode'];
-            // Packages that are considered empty meaning no schema id's associated
-            $doNotInclude = ['S5', 'Z5', 'PCX', '96J', 'PDL', 'PEF', 'PDH', 'PDQ', 'PDV', 'PDT', 'C9', 'Q5', 'M4', 'Z4', 'Q3', 'Q2', 'Z1', '301A', 'PCO', 'PDM', 'PDP', 'PDE', 'PDC', 'PDW', 'PDO', 'PCM', 'PCN', 'PDZ', 'C1'];
-            if(!in_array($optionCode, $doNotInclude)){
-                // Gets schema id's within the option codes that are packages
+
+            // Decode package into a list of equipment and add to our array
+            try {
                 $searchCode = $this->client->equipmentByVehicleId("$vehicleId?packageCode=$optionCode")['results'];
-                foreach($searchCode as $equipment) {
-                    $pArray[] = $equipment['schemaId'];
-                 }
+
+                foreach ($searchCode as $equipment) {
+                    $decodedPackageEquipment[] = $equipment['schemaId'];
+                }
+            } catch (ClientException | ServerException $e) {
+                if ($e->getCode() === 404) {
+                    // @todo log
+                    continue;
+                }
             }
         }
+
         // Combines the current deal options codes with the newly searched package schema id's
-        $combinedDealCodes = array_merge($this->deal->option_codes, $pArray);
+        $combinedDealCodes = array_merge($this->deal->option_codes, $decodedPackageEquipment);
+        /*
+                \Log::info($equipment['optionCode']);
+                \Log::info($this->deal->option_codes);
+                \Log::info($pArray);
+                \Log::info($combinedDealCodes);
+                \Log::info("---------------------------------------------------------");*/
         /** End of Package Decoding Options Logic */
+
+        return $combinedDealCodes;
+    }
+
+    public function featureIds()
+    {
+        $combinedDealCodes = $this->mergedSchemaIds();
+
         return $this->jatoEquipment()->reject(function ($equipment) {
             return $equipment['availability'] === 'not available';
-        })->flatMap(function ($equipment) use($combinedDealCodes){ // use ($combinedDealCodes)
-            if ($equipment['optionCode'] !== 'N/A' && in_array($equipment['optionCode'], $combinedDealCodes)) { // $this->deal->option_codes
-                $matchingFeatures = Feature::where('jato_schema_ids', $equipment['schemaId'])->get();
+        })->flatMap(function ($equipment){ // use ($combinedDealCodes)
+            if ($equipment['optionCode'] !== 'N/A' && in_array($equipment['optionCode'], $this->deal->option_codes)) { // $this->deal->option_codes
+                //$matchingFeatures = Feature::where('jato_schema_ids', $equipment['schemaId'])->get();
+                $equipmentSchemaId = $equipment['schemaId'];
+                $matchingFeatures = Feature::whereRaw("JSON_CONTAINS(jato_schema_ids, '[$equipmentSchemaId]')")->get();
 
                 // Some of the custom mappings have more th an one feature with the same schemaIds, so if multiple features are returned here,
                 // we'll have to loop through them below in parseCustomJatoMappingDmrCategories() to handle string comparison
@@ -78,6 +114,7 @@ class DealFeatureImporter
             });
         })->unique()->toArray();
     }
+
 
     private function equipmentMatchesFeature($schemaId, $feature) {
         return in_array($schemaId, $feature->jato_schema_ids);
