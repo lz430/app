@@ -2,25 +2,111 @@
 
 namespace DeliverMyRide\Carleton;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class Client
 {
+    private $url;
+    private $username;
+    private $password;
+
+    /**
+     * Client constructor.
+     * @param $url
+     * @param $username
+     * @param $password
+     */
+    public function __construct($url, $username, $password)
+    {
+        $this->url = $url;
+        $this->username = $username;
+        $this->password = $password;
+    }
+
+
+    public function getLeasePaymentsFor(
+        array $cashDownOptions,
+        $terms,
+        $taxRate,
+        $acquisitionFee,
+        $docFee,
+        $rebate,
+        $licenseFee,
+        $cvrFee,
+        $msrp,
+        $cashAdvance,
+        $contractDate = null
+    ) {
+        if (! $contractDate) {
+            $contractDate = new \DateTime();
+        }
+
+        $cacheKey = implode('--', [
+            implode('-', $cashDownOptions),
+            $terms,
+            $taxRate,
+            $acquisitionFee,
+            $docFee,
+            $rebate,
+            $licenseFee,
+            $cvrFee,
+            $msrp,
+            $cashAdvance,
+            $contractDate->format('Y-m-d'),
+            'v1'
+        ]);
+
+        if (Cache::has($cacheKey)) {
+            Log::debug("Cache HIT ($cacheKey)");
+            return Cache::get($cacheKey);
+        }
+
+        Log::debug("Cache MISS ($cacheKey)");
+
+        $quoteParameters = [];
+        foreach ($cashDownOptions as $cashDown) {
+            foreach (json_decode($terms, true) as $term => $termData) {
+                $annualMileages = $termData['annualMileage'];
+                foreach ($annualMileages as $annualMileage => $annualMileageData) {
+                    $quoteParameter = QuoteParameters::create($contractDate)
+                        ->withTaxRate($taxRate)
+                        ->withAcquisitionFee($acquisitionFee)
+                        ->withDocFee($docFee)
+                        ->withCashDown($cashDown)
+                        ->withRebate($rebate)
+                        ->withLicenseFee($licenseFee)
+                        ->withCvrFee($cvrFee)
+                        ->withMsrp($msrp)
+                        ->withCashAdvance($cashAdvance)
+                        ->withMoneyFactor($termData['moneyFactor'])
+                        ->withResidualPercentage($annualMileageData['residualPercent'])
+                        ->withTerm($term)
+                        ->withAnnualMileage($annualMileage);
+
+                    $quoteParameters[] = $quoteParameter;
+                }
+            }
+        }
+
+        $leasePayments = $this->getLeasePaymentsForQuoteParameters($quoteParameters);
+
+        Cache::put($cacheKey, $leasePayments, count($leasePayments) > 0 ? 360: 15);
+
+        return $leasePayments;
+    }
+
     /**
      * @param $quoteParameters QuoteParameters[]
      */
-    public function getLeasePaymentsFor($quoteParameters)
+    public function getLeasePaymentsForQuoteParameters($quoteParameters)
     {
-        $url = config('services.carleton.url');
-        $username = config('services.carleton.username');
-        $password = config('services.carleton.password');
-
         $getQuotesTemplate = file_get_contents(resource_path('xml/carleton/GetQuotes.xml'));
         $quoteParametersTemplate = file_get_contents(resource_path('xml/carleton/QuoteParameters.xml'));
 
         $body = strtr($getQuotesTemplate, [
-            '%USERNAME%' => $username,
-            '%PASSWORD%' => $password,
+            '%USERNAME%' => $this->username,
+            '%PASSWORD%' => $this->password,
             '%PARAMETERS%' => implode('', array_map(function (QuoteParameters $quoteParameters) use ($quoteParametersTemplate) {
                 return $quoteParameters->transformTemplate($quoteParametersTemplate);
             }, $quoteParameters)),
@@ -37,7 +123,7 @@ class Client
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_URL, $this->url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 60);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -56,7 +142,6 @@ class Client
 
         $xml = new \SimpleXMLElement($data);
         $xml->registerXPathNamespace('lease', 'http://www.carletoninc.com/calcs/lease');
-
 
         $faults = $xml->xpath('/soap:Envelope/soap:Body/soap:Fault');
         if ($faults) {

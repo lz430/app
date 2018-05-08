@@ -19,9 +19,21 @@ class InfoModalData extends React.PureComponent {
     }
 
     showWhenPricingIsLoaded(fn) {
-        return this.props.dealPricing.isPricingLoading() ? (
-            <SVGInline svg={miscicons['loading']} />
-        ) : fn();
+        if (this.props.dealPricing.isPricingLoading()) {
+            return (
+                <SVGInline svg={miscicons['loading']} />
+            )
+        }
+
+/*
+        if (this.props.dealPricing.isLease() && this.props.dealPricing.leasePaymentsAreNotAvailable()) {
+            return (
+                <span>N/A</span>
+            )
+        }
+*/
+
+        return fn();
     }
 
     renderTabs() {

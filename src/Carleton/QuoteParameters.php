@@ -4,23 +4,6 @@ namespace DeliverMyRide\Carleton;
 
 class QuoteParameters
 {
-    /*
-     *
-        '%TAX_RATE%' => 6,
-        '%ACQUISITION_FEE%' => 650,
-        '%DOC_FEE%' => 210,
-        '%CASH_DOWN%' => -750,
-        '%REBATE%' => -1500,
-        '%LICENSE_FEE%' => 23,
-        '%CVR_FEE%' => 24,
-        '%MONEY_FACTOR%' => 0.00001,
-        '%CASH_ADVANCE%' => 29579,
-        '%RESIDUAL_PERCENTAGE%' => 59,
-        '%MSRP%' => 31214,
-        '%TERM%' => 36,
-        '%CONTRACT_DATE%' => '2018-04-12',
-     *
-     */
     private $taxRate;
     private $acquisitionFee;
     private $docFee;
@@ -41,9 +24,9 @@ class QuoteParameters
         $this->contractDate = $contractDate;
     }
 
-    public static function create()
+    public static function create(\DateTime $contractDate = null)
     {
-        return new static(new \DateTime());
+        return new static($contractDate ?? new \DateTime());
     }
 
     public function withTaxRate($taxRate)

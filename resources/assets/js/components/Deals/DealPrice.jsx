@@ -37,7 +37,7 @@ class DealPrice extends React.PureComponent {
             )
         }
 
-        if (this.props.dealPricing.isLease() && this.props.dealPricing.hasNoLeaseTerms()) {
+        if (this.props.dealPricing.cannotPurchase()) {
             return (
                 <span>N/A</span>
             )
