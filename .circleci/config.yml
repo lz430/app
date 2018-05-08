@@ -1,0 +1,82 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/php:7.2-node-browsers
+
+      - image: circleci/mysql:5.7
+        environment:
+        - MYSQL_DATABASE=delivermyridetesting
+        - MYSQL_USER=dmr
+        - MYSQL_PASSWORD=dmr
+
+      - image: redis:latest
+
+
+    working_directory: ~/app
+
+    steps:
+      - checkout
+
+      ##################################################################
+      # Install Things
+      ##################################################################
+      - run:
+          name: Install system packages
+          command: sudo apt install -y zlib1g-dev
+      - run:
+          name: Install PHP extensions
+          command: sudo docker-php-ext-install pdo_mysql zip
+      - run:
+          name: Update composer
+          command: sudo composer self-update
+
+      ##################################################################
+      # Composer
+      ##################################################################
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-v1-
+      - run: composer install -n --prefer-dist
+      - save_cache:
+          key: composer-v1-{{ checksum "composer.lock" }}
+          paths:
+            - vendor
+
+      ##################################################################
+      # NPM
+      ##################################################################
+      - restore_cache:
+          keys:
+            - node-v1-{{ checksum "package.json" }}
+            - node-v1-
+      - run: yarn install
+      - save_cache:
+          key: node-v1-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+
+
+      ##################################################################
+      # Application Setup
+      ##################################################################
+      - run:
+          name: Build frontend assets
+          command: yarn production
+
+      - run:
+          name: Migrate database
+          command:  php artisan migrate --env=testing --force
+
+      ##################################################################
+      # Tests
+      ##################################################################
+      - run:
+          name: Run PHPunit tests
+          command:  vendor/bin/phpunit
+
+      - run:
+          name: Run Javascript tests
+          command:  yarn run test

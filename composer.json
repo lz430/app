@@ -21,6 +21,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.0",
+        "barryvdh/laravel-ide-helper": "^2.4",
         "fzaninotto/faker": "~1.4",
         "laravel/homestead": "^7.3",
         "mockery/mockery": "0.9.*",

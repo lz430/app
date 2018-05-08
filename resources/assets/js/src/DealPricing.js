@@ -186,14 +186,6 @@ export default class DealPricing {
         return this.data.paymentType !== 'lease';
     }
 
-    hasNoLeaseTerms() {
-        return ! this.data.dealLeaseRates || this.data.dealLeaseRates.length === 0;
-    }
-
-    hasLeaseTerms() {
-        return ! this.hasNoLeaseTerms();
-    }
-
     sellingPriceValue() {
         switch (this.data.paymentType) {
             case 'cash':
@@ -452,13 +444,17 @@ export default class DealPricing {
             case 'finance':
                 return true;
             case 'lease':
-                if (this.data.dealLeaseRatesLoaded && this.data.dealLeaseRates.length === 0) {
-                    // If rates are loaded but there are no actual rates, then pricing is "available"
-                    // in that there is no lease pricing ever going to be available.
+                if (this.data.dealLeaseRatesLoading) {
+                    return false;
+                }
+
+                if (this.data.dealLeaseRates.length === 0) {
+                    // If we have deal lease rates loaded but there are no rates available,
+                    // then pricing IS available in the sense that there is no pricing.
                     return true;
                 }
 
-                return this.data.dealLeasePaymentsLoaded;
+                return ! this.data.dealLeasePaymentsLoading;
         }
     }
 
@@ -472,11 +468,69 @@ export default class DealPricing {
         }
     }
 
+    cannotPurchase() {
+        return ! this.canPurchase();
+    }
+
     canLease() {
-        if (this.isPricingLoading()) {
+        return this.hasLeaseTerms() && this.hasLeasePayments();
+    }
+
+    hasNoLeaseTerms() {
+        return ! this.hasLeaseTerms();
+    }
+
+    hasLeaseTerms() {
+        if (!this.data.dealLeaseRates) {
             return false;
         }
 
-        return this.hasLeaseTerms();
+        if (Object.keys(this.data.dealLeaseRates.length) === 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    hasNoLeasePayments() {
+        return ! this.hasLeasePayments();
+    }
+
+    hasLeasePayments() {
+        if (! this.data.dealLeasePayments) {
+            return false;
+        }
+
+        if (Object.keys(this.data.dealLeasePayments).length === 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    leasePaymentsAreNotAvailable()
+    {
+        return ! this.leasePaymentsAreAvailable();
+    }
+
+    leasePaymentsAreAvailable()
+    {
+        if (! this.data.dealLeaseRates) {
+            // If lease rates are still loading, lease payments
+            // are not yet available.
+            return false;
+        }
+
+        if (this.data.dealLeaseRates.length === 0) {
+            // If there are no lease rates at all, lease payments
+            // are available (they should be empty).
+            return true;
+        }
+
+        if (! this.data.dealLeasePayments) {
+            return false;
+        }
+
+        return true;
     }
 }

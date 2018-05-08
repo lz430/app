@@ -67,12 +67,12 @@ class DealFeatureImporter
 
         // Combines the current deal options codes with the newly searched package schema id's
         $combinedDealCodes = array_merge($this->deal->option_codes, $decodedPackageEquipment);
-/*
-        \Log::info($equipment['optionCode']);
-        \Log::info($this->deal->option_codes);
-        \Log::info($pArray);
-        \Log::info($combinedDealCodes);
-        \Log::info("---------------------------------------------------------");*/
+        /*
+                \Log::info($equipment['optionCode']);
+                \Log::info($this->deal->option_codes);
+                \Log::info($pArray);
+                \Log::info($combinedDealCodes);
+                \Log::info("---------------------------------------------------------");*/
         /** End of Package Decoding Options Logic */
 
         return $combinedDealCodes;
@@ -80,7 +80,7 @@ class DealFeatureImporter
 
     public function featureIds()
     {
-        //$combinedDealCodes = $this->mergedSchemaIds();
+        $combinedDealCodes = $this->mergedSchemaIds();
 
         return $this->jatoEquipment()->reject(function ($equipment) {
             return $equipment['availability'] === 'not available';
