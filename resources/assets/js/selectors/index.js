@@ -188,13 +188,13 @@ const leaseRates = (state) => state.leaseRates;
 const leasePaymentsLoaded = (state) => state.leasePaymentsLoaded;
 const leasePayments = (state) => state.leasePayments;
 
-const dealLeaseRatesLoaded = createSelector(
+const dealLeaseRatesLoading = createSelector(
     leaseRatesLoaded,
     dealLeaseRatesKey,
     (
         leaseRatesLoaded,
         dealLeaseRatesKey
-    ) => leaseRatesLoaded ? leaseRatesLoaded[dealLeaseRatesKey] : false
+    ) => R.isNil(R.prop(dealLeaseRatesKey, leaseRatesLoaded))
 );
 
 const dealLeaseRates = createSelector(
@@ -206,13 +206,13 @@ const dealLeaseRates = createSelector(
     ) => leaseRates ? leaseRates[dealLeaseRatesKey] : []
 );
 
-const dealLeasePaymentsLoaded = createSelector(
+const dealLeasePaymentsLoading = createSelector(
     leasePaymentsLoaded,
     dealLeasePaymentsKey,
     (
         leasePaymentsLoaded,
         dealLeasePaymentsKey
-    ) => leasePaymentsLoaded ? leasePaymentsLoaded[dealLeasePaymentsKey] : false
+    ) => R.isNil(R.prop(dealLeasePaymentsKey, leasePaymentsLoaded))
 );
 
 const dealLeasePayments = createSelector(
@@ -285,9 +285,9 @@ const dealPricing = createSelector(
     dealLeaseTerm,
     dealLeaseCashDown,
     dealHasCustomizedQuote,
-    dealLeaseRatesLoaded,
+    dealLeaseRatesLoading,
     dealLeaseRates,
-    dealLeasePaymentsLoaded,
+    dealLeasePaymentsLoading,
     dealLeasePayments,
     (
         deal,
@@ -302,9 +302,9 @@ const dealPricing = createSelector(
         dealLeaseTerm,
         dealLeaseCashDown,
         dealHasCustomizedQuote,
-        dealLeaseRatesLoaded,
+        dealLeaseRatesLoading,
         dealLeaseRates,
-        dealLeasePaymentsLoaded,
+        dealLeasePaymentsLoading,
         dealLeasePayments
     ) => {
         return {
@@ -320,9 +320,9 @@ const dealPricing = createSelector(
             leaseTerm: dealLeaseTerm,
             leaseCashDown: dealLeaseCashDown,
             dealHasCustomizedQuote,
-            dealLeaseRatesLoaded,
+            dealLeaseRatesLoading,
             dealLeaseRates,
-            dealLeasePaymentsLoaded,
+            dealLeasePaymentsLoading,
             dealLeasePayments
         };
     }
