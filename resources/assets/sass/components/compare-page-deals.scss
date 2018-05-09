@@ -6,6 +6,9 @@
 
   // compare-page only mobile deal card adjustments
   @media (max-width: $break-small) {
+    background: $color-background-secondary;
+    margin-top: 0;
+
     .deal {
       max-width: $deal-card-width;
       min-width: $deal-card-width;
