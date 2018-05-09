@@ -8,22 +8,14 @@
 
 .deal {
   background-color: $color-background-secondary;
-  border-right: 1px solid $color-grey;
   height: fit-content;
-  margin: $deal-card-margin;
-  width: 100%;
+  margin: 3px;
+  width: calc(50% - 6px);
 
   @media (min-width: $break-small) {
     max-width: $deal-card-width;
     min-width: $deal-card-width;
-  }
-
-  &__header {
-    display: flex;
-    flex-direction: row;
-    @media (min-width: $break-small) {
-      flex-direction: column;
-    }
+    margin: $deal-card-margin;
   }
 
   &__basic-info {
@@ -42,19 +34,29 @@
 
   &__basic-info-year-and-make {
     color: $color-darkergrey;
-    font-size: small;
+    font-size: x-small;
     margin-bottom: 2px;
+
+    @media (min-width: $break-small) {
+      font-size: small;
+    }
   }
 
   &__basic-info-model-and-series {
     color: $color-darkestgrey;
-    font-size: x-large;
+    font-size: large;
+    @media (min-width: $break-small) {
+      font-size: x-large;
+    }
   }
 
   &__basic-info-color {
     color: $color-darkergrey;
-    font-size: small;
+    font-size: x-small;
     margin-top: 2px;
+    @media (min-width: $break-small) {
+      font-size: small;
+    }
   }
 
   &__basic-info-msrp {
@@ -66,12 +68,11 @@
   &__image {
     border-bottom: 0;
     display: block;
-    height: 100%;
-    width: 50%;
+    width: 100%;
 
     @media (min-width: $break-small) {
-      width: 100%;
-      height: 100%;
+      height: 225px;
+      min-height: 225px;
     }
 
     &--fallback {
@@ -94,7 +95,11 @@
 
     &--small {
       font-size: 0.8rem;
-      padding: 10px 15px;
+      padding: 4px 0px;
+
+      @media (min-width: $break-small) {
+        padding: 10px 15px;
+      }
 
       &--as-link {
         padding: 0;

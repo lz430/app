@@ -55,14 +55,20 @@ class Client
             if ($e->getCode() === 401) {
                 if ($this->retryCount > 2) {
                     Log::error('Three failures authenticating in a row. Quitting out. Message: ' . $e->getMessage());
+                    $this->retryCount = 0;
 
                     throw $e;
                 }
 
+                Log::info('Waiting to re-authorize with JATO.');
+                // Wait for something between 200 and 500 ms between token acquisition retries.
+                // Our Auth API responds in under 100 ms, but the network could be
+                // introducing some lagging.
+                usleep(500000);
                 Log::info('Re-authorizing with JATO.');
 
                 $this->retryCount++;
-                $this->authorize();
+                $this->authorize(true);
 
                 return $this->get($path, $options, $async);
             }
@@ -246,9 +252,9 @@ class Client
         return strtolower(str_replace([' ', '%20'], ['-', '-'], $modelName));
     }
 
-    protected function authorize()
+    protected function authorize($forceRefreshAuthorizationToken = false)
     {
-        if (! Cache::has(self::TOKEN_KEY)) {
+        if (! Cache::has(self::TOKEN_KEY) || $forceRefreshAuthorizationToken) {
             $this->refreshAuthorizationToken();
         }
 
@@ -263,6 +269,8 @@ class Client
 
     private function refreshAuthorizationToken()
     {
+        Log::debug("Refreshing authorization token (". (Cache::has(self::TOKEN_KEY) ? 'Overwriting old token' : 'No previously existing token') .")");
+
         $guzzleClient = new GuzzleClient(['connect_timeout' => 5]);
 
         $response = json_decode((string) $guzzleClient->request('POST', 'https://auth.jatoflex.com/oauth/token', [

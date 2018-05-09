@@ -3,6 +3,31 @@
 .compare-page-deals {
   display: flex;
   margin-top: 12px;
+
+  // compare-page only mobile deal card adjustments
+  @media (max-width: $break-small) {
+    .deal {
+      max-width: $deal-card-width;
+      min-width: $deal-card-width;
+      margin: $deal-card-margin;
+
+      &__content {
+        display: flex;
+        justify-content: space-around
+      }
+
+      &__image {
+        width: 50%;
+        height: 50%;
+        border: none;
+      }
+
+      &__button--small {
+        padding: 10px 15px;
+      }
+    }
+  }
+
 }
 
 
