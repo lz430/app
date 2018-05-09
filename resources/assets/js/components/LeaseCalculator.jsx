@@ -55,7 +55,7 @@ class LeaseCalculator extends React.PureComponent {
     }
 
     render() {
-        if (this.props.dealPricing.isPricingAvailable() && this.props.dealPricing.hasNoLeaseTerms()) {
+        if (this.props.dealPricing.isPricingAvailable() && this.props.dealPricing.cannotPurchase()) {
             // Pricing is completely and we do not have any lease terms. This means that we cannot
             // calculate lease pricing at all.
             return (
