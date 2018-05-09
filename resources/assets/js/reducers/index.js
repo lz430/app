@@ -350,7 +350,7 @@ const reducer = (state, action) => {
             return state;
 
         case ActionTypes.RECEIVE_LEASE_PAYMENTS:
-            const leasePaymentsKey = `${action.dealPricing.jatoVehicleId()}.${action.zipcode}`;
+            const leasePaymentsKey = `${action.dealPricing.vin()}.${action.zipcode}`;
 
             const leasePaymentsMatrix = {};
 
