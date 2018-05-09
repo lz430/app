@@ -175,7 +175,7 @@ const dealLeasePaymentsKey = createSelector(
         if(!deal) {
             return null;
         }
-        return `${deal.version.jato_vehicle_id}.${zipcode}`;
+        return `${deal.vin}.${zipcode}`;
     }
 );
 

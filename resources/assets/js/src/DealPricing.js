@@ -20,6 +20,10 @@ export default class DealPricing {
         return this.data.deal.version.jato_vehicle_id;
     }
 
+    vin() {
+        return this.data.deal.vin;
+    }
+
     paymentType() {
         return this.data.paymentType;
     }
