@@ -22,13 +22,15 @@ class Sortbar extends React.PureComponent {
         return util.windowIsLargerThanSmall(this.props.window.width) ? (
             ''
         ) : (
-            <button className="sortbar__button sortbar__button--pink" onClick={this.props.toggleSmallFiltersShown}>
-                <SVGInline
-                    height="20px"
-                    width="20px"
-                    className="sortbar__filter-toggle-icon"
-                    svg={zondicons['tuning']}
-                />{' '}
+            <button className="sortbar__button sortbar__button--pink sortbar__button--with-icon" onClick={this.props.toggleSmallFiltersShown}>
+                <div>
+                    <SVGInline
+                        height="20px"
+                        width="20px"
+                        className="sortbar__filter-toggle-icon"
+                        svg={zondicons['tuning']}
+                    />
+                </div>
                 Filter
             </button>
         );
