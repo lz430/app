@@ -28,32 +28,62 @@ class DealFeatureImporter
         $this->deal->features()->syncWithoutDetaching($this->featureIds());
     }
 
+    /**
+     * Sends call to jato for getting all possible package codes for a vehicle
+     * @return array
+     */
+    private function getAllAvailablePackageCodes()
+    {
+        $vehicleId = $this->version->jato_vehicle_id;
+        $findPackages = $this->client->optionsByVehicleId("$vehicleId/Type/P")['options'];
+        $packagesOnThisVehicle = $findPackages;
+
+        $foundPackages = [];
+        foreach($packagesOnThisVehicle as $package) {
+            $foundPackages[] = $package['optionCode'];
+        }
+
+        return $foundPackages;
+    }
+
+    /**
+     * Compares option codes from csv to the available packages from jato and removes package codes
+     * from the original list of option codes from csv
+     * @return array
+     */
+    private function removeFoundPackagesFromOptionsList()
+    {
+        $optionCodesFromCsv = $this->deal->option_codes;
+        $jatoPackagesOnVehicle = $this->getAllAvailablePackageCodes();
+        $compareOptionsWithPackages = array_intersect($optionCodesFromCsv, $jatoPackagesOnVehicle);
+        $pullPackagesOutOfList = array_diff($optionCodesFromCsv, $compareOptionsWithPackages);
+
+        $revisedOptionCodesList = $pullPackagesOutOfList;
+
+        return $revisedOptionCodesList;
+    }
+
     private function mergedSchemaIds()
     {
         /** Package Decoding Options Logic */
         $vehicleId = $this->version->jato_vehicle_id;
+        $originalOptionCodes = $this->deal->option_codes;
+        $revisedListOfOptionCodes = $this->removeFoundPackagesFromOptionsList();
 
-        // For each option code from VAuto
-        // Find which are packages
-        // For those which are packages, delete them from the list of option codes
-        // Then convert them into a list of option codes
-        // Then merge those option codes back in
+        $jatoPackagesOnVehicle = $this->getAllAvailablePackageCodes();
+        $matchedPackageCode = array_intersect($originalOptionCodes, $jatoPackagesOnVehicle);
 
-        // Gets options codes that are packages from vehicle id
-        $findPackages = $this->client->optionsByVehicleId("$vehicleId/Type/P")['options'];
-
-        // @todo: Only use results from $findPackages which are in the VAuto-provided option codes list
-        $packagesOnThisVehicle = $findPackages;
+        $packagesOnThisVehicle = $matchedPackageCode;
 
         $decodedPackageEquipment = [];
 
         foreach ($packagesOnThisVehicle as $package) {
-            $optionCode = $package['optionCode'];
+            $optionCode = $package;
+
 
             // Decode package into a list of equipment and add to our array
             try {
                 $searchCode = $this->client->equipmentByVehicleId("$vehicleId?packageCode=$optionCode")['results'];
-
                 foreach ($searchCode as $equipment) {
                     $decodedPackageEquipment[] = $equipment['schemaId'];
                 }
@@ -66,13 +96,8 @@ class DealFeatureImporter
         }
 
         // Combines the current deal options codes with the newly searched package schema id's
-        $combinedDealCodes = array_merge($this->deal->option_codes, $decodedPackageEquipment);
-        /*
-                \Log::info($equipment['optionCode']);
-                \Log::info($this->deal->option_codes);
-                \Log::info($pArray);
-                \Log::info($combinedDealCodes);
-                \Log::info("---------------------------------------------------------");*/
+        //$combinedDealCodes = array_merge($this->deal->option_codes, $decodedPackageEquipment);
+        $combinedDealCodes = array_merge($revisedListOfOptionCodes, $decodedPackageEquipment);
         /** End of Package Decoding Options Logic */
 
         return $combinedDealCodes;
@@ -84,8 +109,8 @@ class DealFeatureImporter
 
         return $this->jatoEquipment()->reject(function ($equipment) {
             return $equipment['availability'] === 'not available';
-        })->flatMap(function ($equipment){ // use ($combinedDealCodes)
-            if ($equipment['optionCode'] !== 'N/A' && in_array($equipment['optionCode'], $this->deal->option_codes)) { // $this->deal->option_codes
+        })->flatMap(function ($equipment) use($combinedDealCodes) { // use ($combinedDealCodes)
+            if ($equipment['optionCode'] !== 'N/A' && in_array($equipment['optionCode'], $combinedDealCodes)) { // $this->deal->option_codes
                 //$matchingFeatures = Feature::where('jato_schema_ids', $equipment['schemaId'])->get();
                 $equipmentSchemaId = $equipment['schemaId'];
                 $matchingFeatures = Feature::whereRaw("JSON_CONTAINS(jato_schema_ids, '[$equipmentSchemaId]')")->get();
