@@ -29,7 +29,7 @@ export default class DealPricing {
     }
 
     allCashDownOptions() {
-        return [0, 500, 1000, 2500];
+        return [500, 1000, 2500];
     }
 
     bestOfferIsLoading() {
