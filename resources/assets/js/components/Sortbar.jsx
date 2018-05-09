@@ -16,6 +16,7 @@ class Sortbar extends React.PureComponent {
 
         this.compareReady = this.compareReady.bind(this);
         this.redirectToCompare = this.redirectToCompare.bind(this);
+        this.renderBackButton = this.renderBackButton.bind(this);
     }
 
     renderFilterToggle() {
@@ -74,6 +75,29 @@ class Sortbar extends React.PureComponent {
         return this.props.compareList.length >= 2;
     }
 
+
+    renderBackButton() {
+        const nativeBack = () => window.history.back();
+        const clearFilters = () => this.props.clearModelYear();
+        const onDealsPage = this.props.filterPage === 'deals';
+
+        return util.windowIsLargerThanSmall(this.props.window.width) ? (
+            ''
+        ) : (
+            <button
+                className="sortbar__button sortbar__button--with-icon"
+                onClick={() => onDealsPage ? clearFilters() : nativeBack()}
+            >
+                <SVGInline
+                    height="20px"
+                    width="20px"
+                    className="sortbar__back-icon"
+                    svg={zondicons['cheveron-left']}
+                />
+            </button>
+        );
+    }
+
     renderCompareButton() {
         return util.windowIsLargerThanSmall(this.props.window.width) ? (
             ''
@@ -98,18 +122,43 @@ class Sortbar extends React.PureComponent {
         return (
             <div className="sortbar__button">
                 <div onClick={() => this.props.sortDeals('price')}>
-                    Price {this.renderIcon('price')}
+                    
+                    {this.renderIcon('price')}
                 </div>
             </div>
+        );
+    }
+
+    renderSortButton() {
+        const nativeBack = () => window.history.back();
+        const clearFilters = () => this.props.clearModelYear();
+        const onDealsPage = this.props.filterPage === 'deals';
+
+        return util.windowIsLargerThanSmall(this.props.window.width) ? (
+            ''
+        ) : (
+            <button
+                className="sortbar__button sortbar__button--with-icon"
+                onClick={() => this.props.sortDeals('price')}
+            >
+                <SVGInline
+                    height="20px"
+                    width="20px"
+                    className="sortbar__back-icon"
+                    svg={zondicons['tag']}
+                />
+                {this.renderIcon('price')}
+            </button>
         );
     }
 
     render() {
         return (
             <div className="sortbar">
+                {this.renderBackButton()}
                 {this.renderFilterToggle()}
                 {this.props.filterPage === 'deals' ? this.renderCompareButton() : ''}
-                {this.props.filterPage === 'deals' ? this.renderSortbarDropdown() : ''}
+                {this.props.filterPage === 'deals' ? this.renderSortButton() : ''}
             </div>
         );
     }
