@@ -39,6 +39,12 @@
     font-size: small;
   }
 
+  &__back-icon  {
+    svg {
+      fill: $text-color;
+    }
+  }
+
   &__sort-icon {
     margin-right: 3px;
 

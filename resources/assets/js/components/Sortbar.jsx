@@ -134,19 +134,21 @@ class Sortbar extends React.PureComponent {
         const clearFilters = () => this.props.clearModelYear();
         const onDealsPage = this.props.filterPage === 'deals';
 
-        return util.windowIsLargerThanSmall(this.props.window.width) ? (
-            ''
-        ) : (
+        return  (
             <button
                 className="sortbar__button sortbar__button--with-icon"
                 onClick={() => this.props.sortDeals('price')}
             >
-                <SVGInline
-                    height="20px"
-                    width="20px"
-                    className="sortbar__back-icon"
-                    svg={zondicons['tag']}
-                />
+                {util.windowIsLargerThanSmall(this.props.window.width)
+                    ? 'Price '
+                    : (
+                        <SVGInline
+                            height="20px"
+                            width="20px"
+                            className="sortbar__back-icon"
+                            svg={zondicons['tag']}
+                        />
+                )}
                 {this.renderIcon('price')}
             </button>
         );
