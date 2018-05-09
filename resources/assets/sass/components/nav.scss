@@ -5,7 +5,10 @@
 .nav {
   background-color: $color-background-secondary;
   border-top: 4px solid $color-blue;
-  min-height: $nav-height;
+
+  @media (min-width: $break-small) {
+    min-height: $nav-height;
+  }
 
   @include constrained {
     align-items: center;
@@ -18,7 +21,11 @@
     display: flex;
 
     img {
-      height: 70px;
+      max-width: 175px;
+      @media (min-width: $break-small) {
+        max-width: unset;
+        height: 70px;
+      }
     }
   }
 
@@ -59,7 +66,7 @@
   }
 
   &__icon{
-    margin: 1rem;
+    margin: 0.75rem;
     display: block;
     background: none;
     border: none;
@@ -69,7 +76,7 @@
     }
 
     svg {
-      width: 25px;
+      width: 18px;
     }
 
     &:focus {
