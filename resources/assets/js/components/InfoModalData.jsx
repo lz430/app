@@ -182,6 +182,30 @@ class InfoModalData extends React.PureComponent {
     }
 
     render() {
+        if (this.props.dealPricing.isPricingAvailable() && this.props.dealPricing.isLease() && this.props.dealPricing.cannotPurchase()) {
+            // Pricing is completely and we do not have any lease terms. This means that we cannot
+            // calculate lease pricing at all.
+            return (
+                <div>
+                    <div className="info-modal-data">
+                        <div className="info-modal-data__price">
+                            {this.props.withPricingHeader &&
+                            <p className="info-modal-data__pricing-details">
+                                Pricing
+                            </p>
+                            }
+
+                            {this.props.withPricingTabs && this.renderTabs()}
+
+                            <div className="cash-finance-lease-calculator__calculator-content">
+                                <h4>Currently there are no competitive lease rates available on this vehicle.</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+
         return (
             <div>
                 <div className="info-modal-data">
@@ -308,6 +332,7 @@ class InfoModalData extends React.PureComponent {
                                 <button
                                     className='deal__button deal__button--small deal__button--pink deal__button'
                                     onClick={this.props.onConfirmPurchase}
+                                    disabled={! this.props.dealPricing.canPurchase()}
                                 >
                                     Confirm purchase
                                 </button>
