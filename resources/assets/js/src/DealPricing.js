@@ -20,12 +20,16 @@ export default class DealPricing {
         return this.data.deal.version.jato_vehicle_id;
     }
 
+    vin() {
+        return this.data.deal.vin;
+    }
+
     paymentType() {
         return this.data.paymentType;
     }
 
     allCashDownOptions() {
-        return [0, 500, 1000, 2500, 5000];
+        return [500, 1000, 2500];
     }
 
     bestOfferIsLoading() {
