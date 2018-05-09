@@ -203,7 +203,7 @@ const dealLeaseRates = createSelector(
     (
         leaseRates,
         dealLeaseRatesKey
-    ) => leaseRates ? leaseRates[dealLeaseRatesKey] : []
+    ) => ( leaseRates && leaseRates[dealLeaseRatesKey] ) ? leaseRates[dealLeaseRatesKey] : []
 );
 
 const dealLeasePaymentsLoading = createSelector(
@@ -221,7 +221,7 @@ const dealLeasePayments = createSelector(
     (
         leasePayments,
         dealLeasePaymentsKey
-    ) => leasePayments ? leasePayments[dealLeasePaymentsKey] : []
+    ) => ( leasePayments && leasePayments[dealLeasePaymentsKey] ) ? leasePayments[dealLeasePaymentsKey] : {}
 );
 
 const dealLeaseAnnualMileage = createSelector(
