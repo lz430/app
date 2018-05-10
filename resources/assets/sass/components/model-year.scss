@@ -17,12 +17,13 @@
   background-color: $color-background-secondary;
   border: 1px solid $color-grey;
   height: fit-content;
-  margin: $modelyear-card-margin;
-  width: 100%;
+  margin: 3px;
+  width: calc(50% - 6px);
 
   @media (min-width: $break-small) {
     max-width: $modelyear-card-width;
     min-width: $modelyear-card-width;
+    margin: $modelyear-card-margin;
   }
 
   &__basic-info {
@@ -31,32 +32,45 @@
 
   &__basic-info-year-and-make {
     color: $color-darkergrey;
-    font-size: small;
+    font-size: x-small;
     margin-bottom: 2px;
+
+    @media (min-width: $break-small) {
+      font-size: small;
+    }
   }
 
   &__basic-info-model-and-series {
     color: $color-darkestgrey;
-    font-size: x-large;
+    font-size: large;
+    @media (min-width: $break-small) {
+      font-size: x-large;
+    }
   }
 
   &__count {
     color: $color-blue;
-    font-size: x-large;
+    font-size: large;
     flex-shrink: true;
+    @media (min-width: $break-small) {
+      font-size: x-large;
+    }
   }
 
   &__image {
-    border: 1px solid $color-grey;
+    border-bottom: 0;
     display: block;
-    height: 225px;
-    min-height: 225px;
     width: 100%;
-    margin: 0 0 5px;
+
+    @media (min-width: $break-small) {
+      height: 225px;
+      min-height: 225px;
+    }
 
     &--fallback {
       padding: 25px;
     }
+
   }
 
   &__buttons {
@@ -86,8 +100,12 @@
   }
 
   &__price {
-    font-size: x-large;
+    font-size: large;
     text-align: right;
+
+    @media (min-width: $break-small) {
+      font-size: x-large;
+    }
 
     &-label {
       display: block;
