@@ -18,6 +18,7 @@ import toTitleCase from 'titlecase';
 import Pricing from 'components/ComparePage/Pricing';
 import AccuPricingModal from 'components/AccuPricingModal';
 import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
+import { StickyContainer, Sticky } from 'react-sticky';
 
 class ComparePage extends React.PureComponent {
     constructor(props) {
@@ -673,9 +674,29 @@ class ComparePage extends React.PureComponent {
         )
     }
 
+    renderDeals(style) {
+        return (
+            <div className="compare-page-deals" style={style}>
+                {this.props.deals.map(this.renderDeal)}
+            </div>
+        )
+    }
+
+    renderDealsContainer() {
+        if (util.windowIsLargerThanSmall(this.props.window.width)) {
+            return this.renderDeals();
+        } else {
+            return (
+                <Sticky>
+                    {({style}) => this.renderDeals(style)}
+                </Sticky>
+            )
+        }
+    }
+
     render() {
         return (
-            <div className="compare-page">
+            <StickyContainer className="compare-page">
                 <div className="compare-page__body">
                     <div className="compare-page__top-row">
                         <div className="compare-page__top-row__section compare-page__top-row__section--accuPricing">
@@ -686,9 +707,8 @@ class ComparePage extends React.PureComponent {
                         </div>
                     </div>
 
-                    <div className="compare-page-deals">
-                        {this.props.deals.map(this.renderDeal)}
-                    </div>
+                    {this.renderDealsContainer()}
+
                     {this.props.compareList &&
                     this.hasSelections(this.props.compareList) ? (
                         <AccordionTable>
@@ -724,7 +744,7 @@ class ComparePage extends React.PureComponent {
 
                 {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
                 <AccuPricingModal />
-            </div>
+            </StickyContainer>
         );
     }
 
@@ -747,6 +767,7 @@ const mapStateToProps = state => {
         termDuration: state.termDuration,
         employeeBrand: state.employeeBrand,
         dealsIdsWithCustomizedQuotes: state.dealsIdsWithCustomizedQuotes,
+        window: state.window,
     };
 };
 
