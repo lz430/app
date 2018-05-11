@@ -94,7 +94,11 @@ trait SearchesDeals
         if ($request->has('features')) {
             foreach ($request->get('features') as $feature) {
                 $query->whereHas('features', function ($subQuery) use ($feature) {
-                    $subQuery->where('title', $feature);
+                    if(in_array($feature, ['Subcompact', 'Compact', 'Mid-size', 'Full-size', 'Sports'])) {
+                        $subQuery->whereIn('title', [$feature]);
+                    } else {
+                        $subQuery->where('title', $feature);
+                    }
                 });
             }
         }
