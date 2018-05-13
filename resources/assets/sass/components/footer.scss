@@ -5,7 +5,7 @@
   color: #fff;
   height: $footer-height-mobile;
   max-height: $footer-height-mobile;
-  padding-top: 1.5rem;
+  padding-top: .5rem;
   text-align: center;
 
   a {
@@ -15,6 +15,10 @@
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  @media (min-width: $break-small) {
+    padding-top: 1.5rem;
   }
 
   @media (min-width: $break-large) {
@@ -91,4 +95,11 @@
 .footer-meta, .footer-meta a {
   color: $color-grey;
   font-size: 0.9em;
+}
+
+.footer-meta--desktop {
+  display: none;
+  @media (min-width: $break-small) {
+    display: inline;
+  }
 }
