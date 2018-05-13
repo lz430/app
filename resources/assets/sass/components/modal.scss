@@ -33,19 +33,28 @@ $modal-footer-height: 60px;
   &__wrapper {
     display: flex;
     justify-content: center;
-    max-height: calc(100vh - #{$offset-top});
     position: fixed;
     right: 0;
     top: $modal-footer-height;
     width: 100vw;
     z-index: 25;
+
+    @media (min-width: $break-small) {
+      max-height: calc(100vh - #{$offset-top});
+    }
   }
 
   &__content {
     background-color: $color-background-primary;
     max-height: 100%;
-    max-width: calc(100vw - #{$offset-horizontal * 2});
     opacity: 1;
+    width: 100%;
+    max-width: calc(100vw - #{$offset-horizontal / 2});
+
+    @media (min-width: $break-small) {
+      width: auto;
+      max-width: calc(100vw - #{$offset-horizontal * 2});
+    }
   }
 
   &__header {
