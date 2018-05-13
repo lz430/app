@@ -4,9 +4,8 @@
 .filter-page {
   &__top-row {
     border-bottom: 1px solid $color-section-bottom-border;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: .5em;
+    padding: .5em 20px 0;
+    background-color: $color-background-secondary;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -14,8 +13,7 @@
 
     @media (min-width: $break-medium) {
       flex-direction: row;
-      padding-left: 40px;
-      padding-right: 40px;
+      padding: 0 40px .5em 40px;
     }
 
     &__section {
