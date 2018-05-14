@@ -93,7 +93,7 @@ trait SearchesDeals
     {
         if ($request->has('features')) {
             foreach ($request->get('features') as $feature) {
-               $query->whereHas('features', function ($subQuery) use ($feature){
+               $query->whereHas('features', function ($subQuery) use ($feature) {
                     $subQuery->where('title', $feature);
                });
             }
