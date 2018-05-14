@@ -10,6 +10,6 @@ class Category extends Model
 
     public function features()
     {
-        return $this->hasMany(Feature::class)->whereNotIn('features.id', [19, 21, 29, 44, 61]);
+        return $this->hasMany(Feature::class)->whereNotIn('features.id', [5, 19, 21, 29, 44, 61]);
     }
 }

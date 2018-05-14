@@ -11,6 +11,15 @@ class InfoModal extends React.PureComponent {
                 <div className="modal__overlay" />
                 <div className="modal__wrapper">
                     <div className="modal__content">
+                        <div className="modal__close--info">
+                            <SVGInline
+                                onClick={this.props.hideInfoModal}
+                                height="20px"
+                                width="20px"
+                                className="modal__close-x--info"
+                                svg={zondicons['close']}
+                            />
+                        </div>
                         <InfoModalData
                             closeModal={() => this.props.hideInfoModal()}
                             {...R.pick(['deal', 'selectedTab', 'compareList', 'dealPricing'], this.props)}
