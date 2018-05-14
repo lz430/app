@@ -13,6 +13,7 @@ import * as Actions from 'actions/index';
 import util from 'src/util';
 import CashFinanceLeaseCalculator from '../components/CashFinanceLeaseCalculator';
 import AccuPricingModal from 'components/AccuPricingModal';
+import { StickyContainer, Sticky } from 'react-sticky';
 
 class FilterPage extends React.PureComponent {
     renderMakeSelectionModal() {
@@ -128,19 +129,23 @@ class FilterPage extends React.PureComponent {
 
         return (
             <div className={className}>
-                <div className="filter-page__top-row">
-                    <div className="filter-page__top-row__section filter-page__top-row__section--accuPricing">
-                        {this.renderAccuPricingCta()}
-                    </div>
-                    {(this.props.filterPage == 'deals') &&
-                        <div className="filter-page__top-row__section filter-page__top-row__section--tabButtons">
-                            {this.renderSelectedTabButtons()}
+                <Sticky>
+                    {({style}) => (
+                        <div className="filter-page__top-row" style={style}>
+                            <div className="filter-page__top-row__section filter-page__top-row__section--accuPricing">
+                                {this.renderAccuPricingCta()}
+                            </div>
+                            {(this.props.filterPage == 'deals') &&
+                                <div className="filter-page__top-row__section filter-page__top-row__section--tabButtons">
+                                    {this.renderSelectedTabButtons()}
+                                </div>
+                            }
+                            <div className="filter-page__top-row__section filter-page__top-row__section--sortbar">
+                                <Sortbar />
+                            </div>
                         </div>
-                    }
-                    <div className="filter-page__top-row__section filter-page__top-row__section--sortbar">
-                        <Sortbar />
-                    </div>
-                </div>
+                    )}
+                </Sticky>
                 <Filterbar />
                 <Deals />
                 <CompareBar />
@@ -159,7 +164,7 @@ class FilterPage extends React.PureComponent {
 
     render() {
         return (
-            <div>
+            <StickyContainer>
                 {this.props.showMakeSelectorModal ? (
                     this.renderMakeSelectionModal()
                 ) : (
@@ -170,7 +175,7 @@ class FilterPage extends React.PureComponent {
 
                 {this.renderFilterPanelAndDeals()}
                 <AccuPricingModal />
-            </div>
+            </StickyContainer>
         );
     }
 
