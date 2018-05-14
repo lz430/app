@@ -3,7 +3,7 @@
 
 .sortbar {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 
   @media (min-width: $break-small) {
     padding-left: 1em;
@@ -44,6 +44,12 @@
     font-size: small;
   }
 
+  &__back-icon  {
+    svg {
+      fill: $text-color;
+    }
+  }
+
   &__sort-icon {
     margin-right: 3px;
 
@@ -56,6 +62,13 @@
       fill: $text-color;
     }
   }
+
+  &__back-icon  {
+    svg {
+      fill: $text-color;
+    }
+  }
+
 
   &__dropdown {
     background: $color-background-secondary;
