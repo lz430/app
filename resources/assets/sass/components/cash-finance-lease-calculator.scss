@@ -2,8 +2,11 @@
 
 .cash-finance-lease-calculator {
   background: $color-text-white;
-  width: 450px;
   padding: 15px;
+
+  @media (min-width: $break-small) {
+    width: 450px;
+  }
 
   .rebates {
     h4 { margin-bottom: 0; }

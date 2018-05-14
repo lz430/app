@@ -6,9 +6,10 @@
   border: 1px solid $color-grey;
   height: fit-content;
   margin: $deal-card-margin;
-  padding: 1.5em;
+  padding: .5em;
 
   @media (min-width: $break-small) {
+    padding: 1.5em;
     max-width: $deal-card-width;
     min-width: $deal-card-width;
   }
@@ -104,6 +105,11 @@
   &__pricing-details {
     font-size: 1.25em;
     text-decoration: underline;
+    margin: 0.25em;
+
+    @media (min-width: $break-small) {
+      margin: 1em;
+    }
   }
 
   &__rebate-info{
