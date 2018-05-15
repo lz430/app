@@ -4,6 +4,7 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
+import util from 'src/util';
 
 class Modal extends React.Component {
     constructor(props) {
@@ -118,6 +119,19 @@ class Modal extends React.Component {
                                     : 'modal__body--no-footer'
                             }`}
                         >
+                            {!this.props.title && !util.windowIsLargerThanSmall(this.props.window.width)
+                                ? (
+                                    <div className="modal__close--info modal__close--info--color-secondary">
+                                        <SVGInline
+                                            onClick={this.props.onClose}
+                                            height="20px"
+                                            width="20px"
+                                            className="modal__close-x--info"
+                                            svg={zondicons['close']}
+                                        />
+                                    </div>
+                                ) : ''
+                            }
                             {childrenWithProps}
                         </div>
                         {this.props.closeText || this.props.deal ? (
@@ -156,6 +170,7 @@ class Modal extends React.Component {
 const mapStateToProps = state => {
     return {
         selectedMakes: state.selectedMakes,
+        window: state.window,
     };
 };
 
