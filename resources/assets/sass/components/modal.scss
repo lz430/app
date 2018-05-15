@@ -135,6 +135,10 @@ $modal-footer-height: 60px;
     &--info {
       display: flex;
       justify-content: flex-end;
+
+      &--color-secondary {
+        background-color: $color-background-secondary;
+      }
     }
   }
 
