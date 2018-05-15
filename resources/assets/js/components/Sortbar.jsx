@@ -156,11 +156,30 @@ class Sortbar extends React.PureComponent {
         );
     }
 
+    renderClearFiltersButton() {
+        return util.windowIsLargerThanSmall(this.props.window.width) ? (
+            ''
+        ) : (
+            <div>
+                <button
+                    className="sortbar__button sortbar__button--blue"
+                    onClick={() => {
+                        this.props.clearAllFilters();
+                        this.props.toggleSmallFiltersShown();
+                    }}
+                >
+                    Clear All Filters
+                </button>
+            </div>
+        );
+    }
+
     render() {
         return (
             <div className="sortbar">
                 {this.renderBackButton()}
                 {this.renderFilterToggle()}
+                {this.props.filterPage === 'models' ? this.renderClearFiltersButton() : ''}
                 {this.props.filterPage === 'deals' ? this.renderCompareButton() : ''}
                 {this.props.filterPage === 'deals' ? this.renderSortButton() : ''}
             </div>
