@@ -150,7 +150,6 @@ class CoxClient
      */
     private function handleResponse(Response $response)
     {
-        print_r($response->getHeaders());
         $stream = stream_for($response->getBody());
         $raw_response = json_decode($stream->getContents());
         return $raw_response;
