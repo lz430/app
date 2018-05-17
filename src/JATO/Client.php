@@ -2,7 +2,7 @@
 
 namespace DeliverMyRide\JATO;
 
-use Facades\App\JATO\Log;
+use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Cache;
@@ -54,18 +54,18 @@ class Client
         } catch (ClientException $e) {
             if ($e->getCode() === 401) {
                 if ($this->retryCount > 2) {
-                    Log::error('Three failures authenticating in a row. Quitting out. Message: ' . $e->getMessage());
+                    Log::channel('jato')->error('Three failures authenticating in a row. Quitting out. Message: ' . $e->getMessage());
                     $this->retryCount = 0;
 
                     throw $e;
                 }
 
-                Log::info('Waiting to re-authorize with JATO.');
+                Log::channel('jato')->info('Waiting to re-authorize with JATO.');
                 // Wait for something between 200 and 500 ms between token acquisition retries.
                 // Our Auth API responds in under 100 ms, but the network could be
                 // introducing some lagging.
                 usleep(500000);
-                Log::info('Re-authorizing with JATO.');
+                Log::channel('jato')->info('Re-authorizing with JATO.');
 
                 $this->retryCount++;
                 $this->authorize(true);
@@ -142,7 +142,7 @@ class Client
 
     public function equipmentByVehicleId($vehicleId)
     {
-        //\Log::info(Cache::get(TOKEN_KEY));
+        //\Log::channel('jato')->info(Cache::get(TOKEN_KEY));
         return $this->get("equipment/$vehicleId");
     }
 
@@ -167,12 +167,12 @@ class Client
         $cacheKey = 'JATO::Client::incentivesByVehicleIdAndZipcode.'.$vehicleId.'.'.$zipcode;
 
         if (Cache::has($cacheKey)) {
-            Log::debug("Vehicle ID $vehicleId cache HIT ($cacheKey)");
+            Log::channel('jato')->debug("Vehicle ID $vehicleId cache HIT ($cacheKey)");
             return Cache::get($cacheKey);
         }
 
         try {
-            Log::debug("Vehicle ID $vehicleId cache MISS ($cacheKey)");
+            Log::channel('jato')->debug("Vehicle ID $vehicleId cache MISS ($cacheKey)");
 
             $response = $this->get("incentives/programs/$vehicleId", [
                 'query' => array_merge([
@@ -184,7 +184,7 @@ class Client
 
             return $response;
         } catch (ClientException $e) {
-            Log::debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode, token:".Cache::get(self::TOKEN_KEY).", error: ".$e->getMessage());
+            Log::channel('jato')->debug("Vehicle ID $vehicleId returns no incentives. URL: incentives/programs/$vehicleId?zipCode=$zipcode, token:".Cache::get(self::TOKEN_KEY).", error: ".$e->getMessage());
             Cache::put($cacheKey, [], 5);
             return [];
         }
@@ -195,12 +195,12 @@ class Client
         $cacheKey = 'JATO::Client::targetsByVehicleIdAndZipcode.'.$vehicleId.'.'.$zipcode;
 
         if (Cache::has($cacheKey)) {
-            Log::debug("Vehicle ID $vehicleId cache HIT ($cacheKey)");
+            Log::channel('jato')->debug("Vehicle ID $vehicleId cache HIT ($cacheKey)");
             return Cache::get($cacheKey);
         }
 
         try {
-            Log::debug("Vehicle ID $vehicleId cache MISS ($cacheKey)");
+            Log::channel('jato')->debug("Vehicle ID $vehicleId cache MISS ($cacheKey)");
 
             $response = $this->get("incentives/bestOffer/$vehicleId/targets", [
                 'query' => [
@@ -212,7 +212,7 @@ class Client
 
             return $response;
         } catch (ClientException $e) {
-            Log::debug("Unable to get targets for Vehicle ID $vehicleId. URL: incentives/bestOffer/$vehicleId/targets, token:".Cache::get(self::TOKEN_KEY).", error: ".$e->getMessage());
+            Log::channel('jato')->debug("Unable to get targets for Vehicle ID $vehicleId. URL: incentives/bestOffer/$vehicleId/targets, token:".Cache::get(self::TOKEN_KEY).", error: ".$e->getMessage());
             Cache::put($cacheKey, [], 5);
             return [];
         }
@@ -223,12 +223,12 @@ class Client
         $cacheKey = 'JATO::Client::bestOffer.'.$vehicleId.'.'.$zipcode.'.'.$paymentType.'.'.$targets;
 
         if (Cache::has($cacheKey)) {
-            Log::debug("Vehicle ID $vehicleId cache HIT ($cacheKey)");
+            Log::channel('jato')->debug("Vehicle ID $vehicleId cache HIT ($cacheKey)");
             return Cache::get($cacheKey);
         }
 
         try {
-            Log::debug("Vehicle ID $vehicleId cache MISS ($cacheKey)");
+            Log::channel('jato')->debug("Vehicle ID $vehicleId cache MISS ($cacheKey)");
 
             $response = $this->get("incentives/bestOffer/$vehicleId/$paymentType", [
                 'query' => array_merge([
@@ -242,7 +242,7 @@ class Client
 
             return $response;
         } catch (ClientException $e) {
-            Log::debug("Vehicle ID $vehicleId returns no Best Offers. URL: incentives/bestOffer/$vehicleId/$paymentType?zipCode=$zipcode&targets=$targets, token:".Cache::get(self::TOKEN_KEY).", error: ".$e->getMessage());
+            Log::channel('jato')->debug("Vehicle ID $vehicleId returns no Best Offers. URL: incentives/bestOffer/$vehicleId/$paymentType?zipCode=$zipcode&targets=$targets, token:".Cache::get(self::TOKEN_KEY).", error: ".$e->getMessage());
             Cache::put($cacheKey, [], 5);
             return ['totalValue' => 0, 'programs' => []];
         }
@@ -271,7 +271,7 @@ class Client
 
     private function refreshAuthorizationToken()
     {
-        Log::debug("Refreshing authorization token (". (Cache::has(self::TOKEN_KEY) ? 'Overwriting old token' : 'No previously existing token') .")");
+        Log::channel('jato')->debug("Refreshing authorization token (". (Cache::has(self::TOKEN_KEY) ? 'Overwriting old token' : 'No previously existing token') .")");
 
         $guzzleClient = new GuzzleClient(['connect_timeout' => 5]);
 
