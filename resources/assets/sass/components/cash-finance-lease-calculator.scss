@@ -19,7 +19,13 @@
     width: 100%;
   }
 
+  &__lease-table-container {
+    overflow: scroll;
+  }
+
   &__lease-table {
+    width: 100%;
+
     td {
       padding: 5px;
     }
