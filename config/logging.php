@@ -32,26 +32,26 @@ return [
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
-            'level' => 'debug',
+            'level' => 'notice',
         ],
         'jato' => [
             'driver' => 'single',
             'path' => storage_path('logs/jato.log'),
-            'level' => 'debug',
+            'level' => 'notice',
         ],
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
-            'level' => 'debug',
+            'level' => 'notice',
             'days' => 7,
         ],
         'syslog' => [
             'driver' => 'syslog',
-            'level' => 'debug',
+            'level' => 'notice',
         ],
         'errorlog' => [
             'driver' => 'errorlog',
-            'level' => 'debug',
+            'level' => 'notice',
         ],
         'sentry' => [
             'driver' => 'sentry',
