@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 class ViewDeals extends React.PureComponent {
     compareButtonClass(deal) {
         return (
-            'deal__button deal__button--small deal__button--blue' +
+            'deal__button deal__button--x-small deal__button--blue' +
             (R.contains(deal, R.map(R.prop('deal'), this.props.compareList))
                 ? 'deal__button--blue'
                 : '')
@@ -64,7 +64,7 @@ class ViewDeals extends React.PureComponent {
                                         <button
                                             onClick={() =>
                                                 (window.location = `/deals/${deal.id}`)}
-                                            className="deal__button deal__button--small deal__button--pink deal__button"
+                                            className="deal__button deal__button--x-small deal__button--pink deal__button"
                                         >
                                             View Details
                                         </button>
