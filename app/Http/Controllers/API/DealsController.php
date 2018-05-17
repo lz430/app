@@ -4,8 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\Traits\SearchesDeals;
 use App\Transformers\DealTransformer;
-use App\Deal;
-use App\Zipcode;
+use App\Models\Deal;
+use App\Models\Zipcode;
 use DeliverMyRide\JATO\Client;
 use DeliverMyRide\JsonApi\Sort;
 use Illuminate\Database\Eloquent\Builder;

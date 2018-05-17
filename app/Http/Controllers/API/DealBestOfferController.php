@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Deal;
+use App\Models\Deal;
 use DeliverMyRide\JATO\Client;
 use Cache;
 

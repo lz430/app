@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Deal;
-use App\Purchase;
+use App\Models\Deal;
+use App\Models\Purchase;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

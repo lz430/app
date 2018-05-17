@@ -2,8 +2,8 @@
 
 namespace Tests\API;
 
-use App\JATO\Make;
-use App\JATO\VehicleModel;
+use App\Models\JATO\Make;
+use App\Models\JATO\VehicleModel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

@@ -2,17 +2,18 @@
 
 namespace Tests\API;
 
-use App\Dealer;
-use App\JatoFeature;
-use App\JATO\Make;
-use App\JATO\VehicleModel;
-use App\JATO\Version;
-use App\Deal;
-use App\Zipcode;
+use App\Models\Dealer;
+use App\Models\JatoFeature;
+use App\Models\JATO\Make;
+use App\Models\JATO\VehicleModel;
+use App\Models\JATO\Version;
+use App\Models\Deal;
+use App\Models\Zipcode;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Fluent;
 use Tests\TestCase;
-use App\Feature;
+use App\Models\Feature;
+use App\Models\Category;
 
 class DealsTest extends TestCase
 {

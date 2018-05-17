@@ -2,9 +2,9 @@
 
 namespace Tests\Unit;
 
-use App\Deal;
-use App\JatoFeature;
-use App\Purchase;
+use App\Models\Deal;
+use App\Models\JatoFeature;
+use App\Models\Purchase;
 use App\Transformers\DealTransformer;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
