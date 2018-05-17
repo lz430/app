@@ -130,18 +130,6 @@ class LeaseCalculator extends React.PureComponent {
                 </div>
                 <div>
                     <div style={{clear: 'both'}}>
-                        <span>Term</span>
-                        <span style={{ float: 'right' }}>
-                            <select value={this.props.dealPricing.leaseTermValue()} onChange={e => this.props.updateLeaseTerm(this.props.deal, e.target.value)} >
-                                {this.props.dealPricing.leaseTermsAvailable().map((term, termIndex) => {
-                                    return (
-                                        <option key={termIndex} value={term}>{term} Months</option>
-                                    )
-                                })}
-                            </select>
-                        </span>
-                    </div>
-                    <div style={{clear: 'both'}}>
                         <span>Annual Mileage</span>
                         <span style={{ float: 'right' }}>
                             <select value={this.props.dealPricing.leaseAnnualMileageValue()} onChange={e => this.props.updateLeaseAnnualMileage(this.props.deal, e.target.value)} >
@@ -151,6 +139,12 @@ class LeaseCalculator extends React.PureComponent {
                                     )
                                 })}
                             </select>
+                        </span>
+                    </div>
+                    <div style={{clear: 'both'}}>
+                        <span>Term</span>
+                        <span style={{ float: 'right' }}>
+                            {this.props.dealPricing.leaseTerm()}
                         </span>
                     </div>
                     <div style={{clear: 'both'}}>
