@@ -12,7 +12,7 @@ use App\Models\Deal;
 use Carbon\Carbon;
 use DeliverMyRide\JATO\Client;
 use Exception;
-use Facades\App\JATO\Log;
+use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use function GuzzleHttp\Promise\unwrap;
@@ -158,7 +158,7 @@ class Importer
                 $decodedVin = $this->client->decodeVin($vAutoRow['VIN']);
 
                 if (! $jatoVersion = $this->matchVersion($decodedVin, $vAutoRow)) {
-                    Log::error('Could not find exact match for VIN -> JATO Version', [
+                    Log::channel('jato')->error('Could not find exact match for VIN -> JATO Version', [
                         'VAuto Row' => $vAutoRow,
                         'JATO VIN Decode' => $decodedVin,
                     ]);
@@ -197,7 +197,7 @@ class Importer
                     }
                 });
             } catch (ClientException | ServerException $e) {
-                Log::error('Importer error for vin [' . $vAutoRow['VIN']. ']: ' . $e->getMessage());
+                Log::channel('jato')->error('Importer error for vin [' . $vAutoRow['VIN']. ']: ' . $e->getMessage());
                 $this->error('Error: ' . $e->getMessage());
 
                 if ($e->getCode() === 401) {
@@ -205,7 +205,7 @@ class Importer
                     throw $e;
                 }
             } catch (QueryException | Exception $e) {
-                Log::error('Importer error for vin [' . $vAutoRow['VIN']. ']: ' . $e->getMessage());
+                Log::channel('jato')->error('Importer error for vin [' . $vAutoRow['VIN']. ']: ' . $e->getMessage());
                 $this->error('Error: ' . $e->getMessage());
             }
         }
@@ -555,7 +555,7 @@ class Importer
                 }, explode('(', $content));
 
                 if (count($features) != count($contents)) {
-                    Log::debug("Cannot parse feature: title[$feature] content[$content]");
+                    Log::channel('jato')->debug("Cannot parse feature: title[$feature] content[$content]");
                     return $all;
                 }
 

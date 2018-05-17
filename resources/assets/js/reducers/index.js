@@ -3,6 +3,8 @@ import R from 'ramda';
 import { REHYDRATE } from 'redux-persist';
 import util from 'src/util';
 import isEqual from 'lodash.isequal';
+const urlStyle = util.getInitialBodyStyleFromUrl();
+const urlSize = util.getInitialSizeFromUrl();
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -21,6 +23,16 @@ const reducer = (state, action) => {
              */
             if (util.wasReferredFromHomePage()) {
                 localStorage.clear();
+
+                return state;
+            }
+
+            /**
+             * If we have a new url style / url size
+             */
+            if (urlSize || urlStyle) {
+                state.selectedStyles = [urlStyle];
+                state.selectedFeatures = [urlSize];
 
                 return state;
             }
