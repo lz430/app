@@ -123,28 +123,6 @@ class FinanceCalculator extends React.PureComponent {
                     targetsChanged={() => this.handleTargetsChange()}
                 />
                 <hr />
-                <h4>Summary</h4>
-                <div>
-                    <div>
-                        <span className="cash-finance-lease-calculator__left-item">
-                            MSRP
-                        </span>
-                        <span className="cash-finance-lease-calculator__right-item">
-                            {this.props.dealPricing.msrp()}
-                        </span>
-                    </div>
-                    <div>
-                        <span className="cash-finance-lease-calculator__left-item">
-                            Selling Price
-                        </span>
-                        <span className="cash-finance-lease-calculator__right-item">
-                            {this.props.dealPricing.sellingPrice()}
-                        </span>
-                    </div>
-                    {this.renderYourTargets()}
-                    {this.renderTotalCostOfVehicle()}
-                </div>
-                <hr />
                 <div>
                     <h4>Calculate Your Payment</h4>
                     {this.renderAmountFinanced()}
@@ -181,6 +159,28 @@ class FinanceCalculator extends React.PureComponent {
                     </div>
                 </div>
                 {this.renderYourMonthlyFinancePayment()}
+                <hr />
+                <h4>Summary</h4>
+                <div>
+                    <div>
+                        <span className="cash-finance-lease-calculator__left-item">
+                            MSRP
+                        </span>
+                        <span className="cash-finance-lease-calculator__right-item">
+                            {this.props.dealPricing.msrp()}
+                        </span>
+                    </div>
+                    <div>
+                        <span className="cash-finance-lease-calculator__left-item">
+                            Selling Price
+                        </span>
+                        <span className="cash-finance-lease-calculator__right-item">
+                            {this.props.dealPricing.sellingPrice()}
+                        </span>
+                    </div>
+                    {this.renderYourTargets()}
+                    {this.renderTotalCostOfVehicle()}
+                </div>
                 <div className="accupricing-cta">
                     <a onClick={this.props.showAccuPricingModal}>
                         <img src="/images/accupricing-logo.png" className="accupricing-cta__logo" />

@@ -75,69 +75,7 @@ class LeaseCalculator extends React.PureComponent {
                     targetsChanged={this.handleTargetsChange.bind(this)}
                 />
                 <hr />
-                <h4>Summary</h4>
                 <div>
-                    <div>
-                        <span className="cash-finance-lease-calculator__left-item">
-                            MSRP
-                        </span>
-                        <span className="cash-finance-lease-calculator__right-item">
-                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.msrp())}
-                        </span>
-                    </div>
-                    <div>
-                        <span className="cash-finance-lease-calculator__left-item">
-                            Selling Price
-                        </span>
-                        <span className="cash-finance-lease-calculator__right-item">
-                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.sellingPrice())}
-                        </span>
-                    </div>
-                    {this.renderYourTargets()}
-                    {this.renderTotalCostOfVehicle()}
-                </div>
-                <hr />
-                <div>
-                    <h4>Lease Summary</h4>
-                </div>
-                <div>
-                    <div style={{clear: 'both'}}>
-                        <span>Term</span>
-                        <span style={{ float: 'right' }}>
-                            <select value={this.props.dealPricing.leaseTermValue()} onChange={e => this.props.updateLeaseTerm(this.props.deal, e.target.value)} >
-                                {this.props.dealPricing.leaseTermsAvailable().map((term, termIndex) => {
-                                    return (
-                                        <option key={termIndex} value={term}>{term} Months</option>
-                                    )
-                                })}
-                            </select>
-                        </span>
-                    </div>
-                    <div style={{clear: 'both'}}>
-                        <span>Annual Mileage</span>
-                        <span style={{ float: 'right' }}>
-                            <select value={this.props.dealPricing.leaseAnnualMileageValue()} onChange={e => this.props.updateLeaseAnnualMileage(this.props.deal, e.target.value)} >
-                                {this.props.dealPricing.leaseAnnualMileageAvailable().map((annualMileage, annualMileageIndex) => {
-                                    return (
-                                        <option key={annualMileageIndex} value={annualMileage}>{annualMileage}</option>
-                                    )
-                                })}
-                            </select>
-                        </span>
-                    </div>
-                    <div style={{clear: 'both'}}>
-                        <span>Cash Down</span>
-                        <span style={{ float: 'right' }}>
-                            {this.props.dealPricing.leaseCashDown()}
-                        </span>
-                    </div>
-                    <div style={{clear: 'both'}}>
-                        <span>Monthly Payment</span>
-                        <span style={{ float: 'right' }}>
-                            {this.props.dealPricing.monthlyPayments()}*
-                        </span>
-                    </div>
-
                     <h4>Select Desired Lease Payment</h4>
                     <table className="cash-finance-lease-calculator__lease-table">
                         <thead>
@@ -185,6 +123,70 @@ class LeaseCalculator extends React.PureComponent {
                         })}
                         </tbody>
                     </table>
+                </div>
+
+                <div>
+                    <h4>Lease Summary</h4>
+                </div>
+                <div>
+                    <div style={{clear: 'both'}}>
+                        <span>Term</span>
+                        <span style={{ float: 'right' }}>
+                            <select value={this.props.dealPricing.leaseTermValue()} onChange={e => this.props.updateLeaseTerm(this.props.deal, e.target.value)} >
+                                {this.props.dealPricing.leaseTermsAvailable().map((term, termIndex) => {
+                                    return (
+                                        <option key={termIndex} value={term}>{term} Months</option>
+                                    )
+                                })}
+                            </select>
+                        </span>
+                    </div>
+                    <div style={{clear: 'both'}}>
+                        <span>Annual Mileage</span>
+                        <span style={{ float: 'right' }}>
+                            <select value={this.props.dealPricing.leaseAnnualMileageValue()} onChange={e => this.props.updateLeaseAnnualMileage(this.props.deal, e.target.value)} >
+                                {this.props.dealPricing.leaseAnnualMileageAvailable().map((annualMileage, annualMileageIndex) => {
+                                    return (
+                                        <option key={annualMileageIndex} value={annualMileage}>{annualMileage}</option>
+                                    )
+                                })}
+                            </select>
+                        </span>
+                    </div>
+                    <div style={{clear: 'both'}}>
+                        <span>Cash Down</span>
+                        <span style={{ float: 'right' }}>
+                            {this.props.dealPricing.leaseCashDown()}
+                        </span>
+                    </div>
+                    <div style={{clear: 'both'}}>
+                        <span>Monthly Payment</span>
+                        <span style={{ float: 'right' }}>
+                            {this.props.dealPricing.monthlyPayments()}*
+                        </span>
+                    </div>
+                </div>
+                <hr />
+                <h4>Summary</h4>
+                <div>
+                    <div>
+                        <span className="cash-finance-lease-calculator__left-item">
+                            MSRP
+                        </span>
+                        <span className="cash-finance-lease-calculator__right-item">
+                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.msrp())}
+                        </span>
+                    </div>
+                    <div>
+                        <span className="cash-finance-lease-calculator__left-item">
+                            Selling Price
+                        </span>
+                        <span className="cash-finance-lease-calculator__right-item">
+                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.sellingPrice())}
+                        </span>
+                    </div>
+                    {this.renderYourTargets()}
+                    {this.renderTotalCostOfVehicle()}
                 </div>
                 <div className="accupricing-cta">
                     <a onClick={this.props.showAccuPricingModal}>
