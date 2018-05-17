@@ -11,12 +11,12 @@
         "greggilbert/recaptcha": "^2.2",
         "guzzlehttp/guzzle": "^6.2",
         "laracasts/utilities": "^2.1",
-        "laravel/framework": "5.5.*",
+        "laravel/framework": "5.6.*",
         "laravel/tinker": "~1.0",
         "league/csv": "^9.0",
         "pda/pheanstalk": "^3.1",
         "predis/predis": "^1.1",
-        "sentry/sentry-laravel": "^0.8.0",
+        "sentry/sentry-laravel": "^0.9.0",
         "spatie/laravel-fractal": "^5.0"
     },
     "require-dev": {
@@ -26,7 +26,7 @@
         "laravel/homestead": "^7.3",
         "mockery/mockery": "0.9.*",
         "nunomaduro/collision": "^1.1",
-        "phpunit/phpunit": "~6.0"
+        "phpunit/phpunit": "~7.0"
     },
     "autoload": {
         "classmap": [
@@ -53,12 +53,10 @@
             "php artisan key:generate"
         ],
         "post-install-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postInstall",
-            "php artisan optimize"
+            "Illuminate\\Foundation\\ComposerScripts::postInstall"
         ],
         "post-update-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
-            "php artisan optimize"
+            "Illuminate\\Foundation\\ComposerScripts::postUpdate"
         ]
     },
     "config": {
