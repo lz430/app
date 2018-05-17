@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\API;
+namespace Tests\Api;
 
 use App\Events\UserDataChanged;
 use App\Purchase;

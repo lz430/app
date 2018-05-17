@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\API;
+namespace Tests\Api;
 
 use App\Dealer;
 use App\JatoFeature;

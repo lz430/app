@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\API;
+namespace Tests\Api;
 
 use App\JATO\VehicleModel;
 use Illuminate\Foundation\Testing\RefreshDatabase;

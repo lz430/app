@@ -21,6 +21,18 @@ Create a test db:
 create database delivermyridetesting;
 ```
 
+```bash
+# list test suits
+phpunit --list-suites
+
+#run all tests
+phpunit
+
+#run specific test suite
+phpunit --testsuite external,feature
+
+```
+
 ## Install Project Dependencies
 ```
 composer install && yarn

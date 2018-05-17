@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\API;
+namespace Tests\Api;
 
 use App\Zipcode;
 use Illuminate\Foundation\Testing\RefreshDatabase;
