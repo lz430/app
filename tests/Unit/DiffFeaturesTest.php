@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Deal;
-use App\JatoFeature;
+use App\Models\Deal;
+use App\Models\JatoFeature;
 use App\Transformers\DealTransformer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

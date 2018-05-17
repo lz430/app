@@ -2,7 +2,7 @@
 
 namespace Tests\Api;
 
-use App\JATO\VehicleModel;
+use App\Models\JATO\VehicleModel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

@@ -2,8 +2,8 @@
 
 namespace App\Transformers;
 
-use App\JATO\Equipment;
-use App\JATO\Version;
+use App\Models\JATO\Equipment;
+use App\Models\JATO\Version;
 use League\Fractal\TransformerAbstract;
 
 class VersionTransformer extends TransformerAbstract

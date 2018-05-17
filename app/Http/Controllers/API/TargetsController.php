@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Deal;
+use App\Models\Deal;
 use App\Http\Controllers\Controller;
 use DeliverMyRide\JATO\JatoClient;
 use Illuminate\Foundation\Validation\ValidatesRequests;

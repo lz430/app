@@ -2,7 +2,7 @@
 
 namespace App\Transformers;
 
-use App\Feature;
+use App\Models\Feature;
 use League\Fractal\TransformerAbstract;
 
 class DmrFeatureTransformer extends TransformerAbstract

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\JATO\VehicleModel;
+use App\Models\JATO\VehicleModel;
 use App\Transformers\VehicleModelTransformer;
 
 class VehicleModelsController extends BaseAPIController

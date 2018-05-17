@@ -1,6 +1,6 @@
 <?php
 
-use App\Dealer;
+use App\Models\Dealer;
 use Illuminate\Database\Seeder;
 
 class InitialVAUTOData extends Seeder

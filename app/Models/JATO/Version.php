@@ -1,8 +1,8 @@
 <?php
 
-namespace App\JATO;
+namespace App\Models\JATO;
 
-use App\Deal;
+use App\Models\Deal;
 use DeliverMyRide\JATO\BodyStyles;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;

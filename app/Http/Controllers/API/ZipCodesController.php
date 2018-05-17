@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Zipcode;
+use App\Models\Zipcode;
 use App\Http\Controllers\Controller;
 
 class ZipCodesController extends Controller

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Deal;
-use App\Feature;
+use App\Models\Deal;
+use App\Models\Feature;
 use App\Http\Controllers\Controller;
 use DeliverMyRide\JATO\JatoClient;
 use DeliverMyRide\VAuto\DealFeatureImporter;

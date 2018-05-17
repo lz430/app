@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Category;
-use App\Feature;
+use App\Models\Category;
+use App\Models\Feature;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

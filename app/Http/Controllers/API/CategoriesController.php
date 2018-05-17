@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Category;
-use App\Feature;
+use App\Models\Category;
+use App\Models\Feature;
 use App\Transformers\DmrCategoryTransformer;
 use Illuminate\Http\Request;
 

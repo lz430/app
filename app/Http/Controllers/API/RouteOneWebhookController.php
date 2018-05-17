@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Events\UserDataChanged;
-use App\Purchase;
-use App\User;
+use App\Models\Purchase;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;

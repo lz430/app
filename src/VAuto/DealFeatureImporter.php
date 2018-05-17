@@ -2,10 +2,10 @@
 
 namespace DeliverMyRide\VAuto;
 
-use App\Feature;
+use App\Models\Feature;
+use Illuminate\Support\Facades\Log;
 use DeliverMyRide\JATO\JatoClient;
-use Facades\App\JATO\Log;
-use Exception;
+
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 
@@ -207,7 +207,7 @@ class DealFeatureImporter
         }
 
         if (! $feature || $feature->isEmpty() || ! $feature->first()) {
-            // Log::error('Importer error for vin [' . $this->deal['VIN']. ']: could not find mapping for schemaId ' . $equipment->schemaId);
+            // Log::channel('jato')->error('Importer error for vin [' . $this->deal['VIN']. ']: could not find mapping for schemaId ' . $equipment['schemaId']);
             return null;
         }
 

@@ -1,22 +1,22 @@
 <?php
 
-namespace App\JATO;
+namespace App\Models\JATO;
 
 use App\SavedVehicle;
 use Illuminate\Database\Eloquent\Model;
 
-class Option extends Model
+class Equipment extends Model
 {
-    protected $guarded = [];
-
-    protected $casts = [
-        'msrp' => 'float',
-        'invoice' => 'float',
-    ];
+    protected $guarded = ['id'];
 
     public function version()
     {
         return $this->belongsTo(Version::class, 'jato_vehicle_id');
+    }
+
+    public function option()
+    {
+        return $this->belongsTo(Option::class, 'jato_option_id');
     }
 
     public function savedVehicle()
