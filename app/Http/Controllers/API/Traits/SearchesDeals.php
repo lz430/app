@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\API\Traits;
 
-use App\Deal;
-use App\Zipcode;
+use App\Models\Deal;
+use App\Models\Zipcode;
 use Illuminate\Http\Request;
 use DeliverMyRide\JsonApi\Sort;
 use Illuminate\Database\Eloquent\Builder;

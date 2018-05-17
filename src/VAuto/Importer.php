@@ -2,13 +2,13 @@
 
 namespace DeliverMyRide\VAuto;
 
-use App\Feature;
-use App\JatoFeature;
-use App\JATO\Make;
-use App\JATO\Manufacturer;
-use App\JATO\VehicleModel;
-use App\JATO\Version;
-use App\Deal;
+use App\Models\Feature;
+use App\Models\JatoFeature;
+use App\Models\JATO\Make;
+use App\Models\JATO\Manufacturer;
+use App\Models\JATO\VehicleModel;
+use App\Models\JATO\Version;
+use App\Models\Deal;
 use Carbon\Carbon;
 use DeliverMyRide\JATO\Client;
 use Exception;

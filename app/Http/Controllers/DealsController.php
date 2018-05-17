@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Deal;
+use App\Models\Deal;
 use App\Transformers\DealTransformer;
 use League\Fractal\Serializer\DataArraySerializer;
 

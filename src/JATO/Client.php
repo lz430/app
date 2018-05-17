@@ -142,6 +142,7 @@ class Client
 
     public function equipmentByVehicleId($vehicleId)
     {
+        //\Log::info(Cache::get(TOKEN_KEY));
         return $this->get("equipment/$vehicleId");
     }
 
@@ -257,6 +258,7 @@ class Client
         if (! Cache::has(self::TOKEN_KEY) || $forceRefreshAuthorizationToken) {
             $this->refreshAuthorizationToken();
         }
+
 
         $this->guzzleClient = new GuzzleClient([
             'base_uri' => 'https://api.jatoflex.com/api/en-us/',

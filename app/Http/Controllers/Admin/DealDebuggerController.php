@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Deal;
+use App\Models\Deal;
 use App\Http\Controllers\Controller;
 
 class DealDebuggerController extends Controller

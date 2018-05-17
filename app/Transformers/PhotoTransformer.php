@@ -2,7 +2,7 @@
 
 namespace App\Transformers;
 
-use App\DealPhoto;
+use App\Models\DealPhoto;
 use League\Fractal\TransformerAbstract;
 
 class PhotoTransformer extends TransformerAbstract
