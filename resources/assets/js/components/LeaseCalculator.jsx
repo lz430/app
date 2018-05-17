@@ -12,12 +12,6 @@ import miscicons from 'miscicons';
 import { makeDealBestOfferTotalValue, makeDealBestOfferLoading } from 'selectors/index';
 
 class LeaseCalculator extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {};
-    }
-
     showWhenPricingIsLoaded(fn) {
         return this.props.dealPricing.isPricingLoading() ? (
             <SVGInline svg={miscicons['loading']} />
