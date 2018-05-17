@@ -335,7 +335,7 @@ class Importer
         $jatoVehicleId = $deal->version->jato_vehicle_id;
 
         $promises = collect(JatoFeature::SYNC_GROUPS)->flatMap(function ($group) use ($jatoVehicleId) {
-            return [$group['title'] => $this->client->feature->get($jatoVehicleId, $group['id'], 0, 100, TRUE)];
+            return [$group['title'] => $this->client->feature->get($jatoVehicleId, $group['id'], 1, 100, TRUE)];
         });
 
         $results = unwrap($promises);
