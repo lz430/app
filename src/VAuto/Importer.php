@@ -10,7 +10,7 @@ use App\JATO\VehicleModel;
 use App\JATO\Version;
 use App\Deal;
 use Carbon\Carbon;
-use DeliverMyRide\JATO\Client;
+use DeliverMyRide\JATO\JatoClient;
 use Exception;
 use Facades\App\JATO\Log;
 use GuzzleHttp\Exception\ClientException;
@@ -72,7 +72,7 @@ class Importer
     private $filesystem;
     private $info;
 
-    public function __construct(Filesystem $filesystem, Client $client)
+    public function __construct(Filesystem $filesystem, JatoClient $client)
     {
         $this->filesystem = $filesystem;
         $this->client = $client;
@@ -154,7 +154,7 @@ class Importer
 
             try {
                 $deal = $this->saveOrUpdateDeal($fileHash, $vAutoRow);
-                $decodedVin = $this->client->decodeVin($vAutoRow['VIN']);
+                $decodedVin = $this->client->vin->decode($vAutoRow['VIN']);
 
                 if (! $jatoVersion = $this->matchVersion($decodedVin, $vAutoRow)) {
                     Log::error('Could not find exact match for VIN -> JATO Version', [
@@ -289,7 +289,7 @@ class Importer
         if (! $manufacturer = Manufacturer::where('name', $decodedVin['manufacturer'])->first()) {
             // Save/Update manufacturer, make, model, then versions
             $manufacturer = $this->saveManufacturer(
-                $this->client->manufacturerByName($decodedVin['manufacturer'])
+                $this->client->manufacturer->get($decodedVin['manufacturer'])
             );
         }
 
@@ -297,7 +297,7 @@ class Importer
             // Save/Update and save new make
             $make = $this->saveManufacturerMake(
                 $manufacturer,
-                $this->client->makeByName($decodedVin['make'])
+                $this->client->make->get($decodedVin['make'])
             );
         }
 
@@ -305,13 +305,13 @@ class Importer
             // Save/Update and save new model
             $model = $this->saveMakeModel(
                 $make,
-                $this->client->modelByName($jatoVersion['urlModelName'])
+                $this->client->model->get($jatoVersion['urlModelName'])
             );
         }
 
         return $this->saveModelVersion(
             $model,
-            $this->client->modelsVersionsByVehicleId($jatoVersion['vehicle_ID'])
+            $this->client->version->get($jatoVersion['vehicle_ID'])
         );
     }
 
@@ -335,7 +335,7 @@ class Importer
         $jatoVehicleId = $deal->version->jato_vehicle_id;
 
         $promises = collect(JatoFeature::SYNC_GROUPS)->flatMap(function ($group) use ($jatoVehicleId) {
-            return [$group['title'] => $this->client->featuresByVehicleIdAndCategoryIdAsync($jatoVehicleId, $group['id'])];
+            return [$group['title'] => $this->client->feature->get($jatoVehicleId, $group['id'], 0, 100, TRUE)];
         });
 
         $results = unwrap($promises);

@@ -3,6 +3,7 @@
 namespace DeliverMyRide\VAuto;
 
 use App\Feature;
+use DeliverMyRide\JATO\JatoClient;
 use Facades\App\JATO\Log;
 use Exception;
 use GuzzleHttp\Exception\ClientException;
@@ -15,7 +16,13 @@ class DealFeatureImporter
     private $features;
     private $version;
 
-    public function __construct($deal, $features, $client)
+    /**
+     * DealFeatureImporter constructor.
+     * @param $deal
+     * @param $features
+     * @param JatoClient $client
+     */
+    public function __construct($deal, $features, JatoClient $client)
     {
         $this->deal = $deal;
         $this->features = $features;
@@ -23,6 +30,9 @@ class DealFeatureImporter
         $this->version = $this->deal->version;
     }
 
+    /**
+     *
+     */
     public function import()
     {
         $this->deal->features()->syncWithoutDetaching($this->featureIds());
@@ -35,7 +45,7 @@ class DealFeatureImporter
     private function getAllAvailablePackageCodes()
     {
         $vehicleId = $this->version->jato_vehicle_id;
-        $findPackages = $this->client->optionsByVehicleId("$vehicleId/Type/P")['options'];
+        $findPackages = $this->client->option->get($vehicleId, 'P')->options;
         $packagesOnThisVehicle = $findPackages;
 
         $foundPackages = [];
@@ -83,7 +93,7 @@ class DealFeatureImporter
 
             // Decode package into a list of equipment and add to our array
             try {
-                $searchCode = $this->client->equipmentByVehicleId("$vehicleId?packageCode=$optionCode")['results'];
+                $searchCode = $this->client->equipment->get($vehicleId, ['packageCode' => $optionCode])->results;
                 foreach ($searchCode as $equipment) {
                     $decodedPackageEquipment[] = $equipment['schemaId'];
                 }
@@ -164,7 +174,7 @@ class DealFeatureImporter
 
     private function jatoEquipment()
     {
-        return collect($this->client->equipmentByVehicleId($this->version->jato_vehicle_id)['results']);
+        return collect($this->client->equipment->get($this->version->jato_vehicle_id)->results;
     }
 
     private function parseCustomJatoMappingDmrCategories($category, $equipment)

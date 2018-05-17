@@ -4,9 +4,7 @@ namespace Tests\Unit;
 
 use App\Deal;
 use App\JatoFeature;
-use App\Purchase;
 use App\Transformers\DealTransformer;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

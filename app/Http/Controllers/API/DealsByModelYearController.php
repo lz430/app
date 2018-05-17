@@ -7,7 +7,7 @@ use App\Http\Controllers\API\Traits\SearchesDeals;
 use App\JATO\VehicleModel;
 use App\Transformers\DealTransformer;
 use App\Zipcode;
-use DeliverMyRide\JATO\Client;
+use DeliverMyRide\JATO\JatoClient;
 use DeliverMyRide\JsonApi\Sort;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -23,7 +23,7 @@ class DealsByModelYearController extends BaseAPIController
     private const TRANSFORMER = DealTransformer::class;
     private const RESOURCE_NAME = 'deals';
 
-    public function getDealsByModelYear(Request $request, Client $client)
+    public function getDealsByModelYear(Request $request, JatoClient $client)
     {
         $this->validate($request, [
             'make_ids' => 'sometimes|required|array',

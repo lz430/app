@@ -85,12 +85,11 @@ No version associated. Probably an error importing.
 
             <h2>Lease information</h2>
             @php
-            $client = app(\DeliverMyRide\JATO\Client::class);
-            $rates = $client->incentivesByVehicleIdAndZipcode(
+            $client = app(\DeliverMyRide\JATO\JatoClient::class);
+            $rates = $client->incentive->listPrograms(
                 $deal->version ? $deal->version->jato_vehicle_id : 0,
-                48103,
-                ['category' => 8]
-            )[0]['leaseRates'] ?? [];
+                ['category' => 8, 'zipCode' => 48103]
+            )[0]->leaseRates ?? [];
             @endphp
 
             <a href="#" id="expand-button-lease-rates" onClick="expand('lease-rates'); return false;">expand</a>

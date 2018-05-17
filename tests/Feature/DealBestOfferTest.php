@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use App\Deal;
 use App\JATO\Version;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
