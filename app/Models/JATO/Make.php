@@ -1,6 +1,6 @@
 <?php
 
-namespace App\JATO;
+namespace App\Models\JATO;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Deal;
-use App\Dealer;
+use App\Models\Deal;
+use App\Models\Dealer;
 use App\Http\Controllers\Admin\Traits\ReadsVAutoDump;
 use App\Http\Controllers\Controller;
-use App\JATO\Version;
+use App\Models\JATO\Version;
 use Illuminate\Http\Request;
 use League\Csv\Reader;
 use League\Csv\Statement;

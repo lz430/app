@@ -1,6 +1,6 @@
 <?php
 
-namespace App\JATO;
+namespace App\Models\JATO;
 
 use App\Deal;
 use DeliverMyRide\JATO\BodyStyles;

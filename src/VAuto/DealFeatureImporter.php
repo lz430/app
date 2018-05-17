@@ -2,7 +2,7 @@
 
 namespace DeliverMyRide\VAuto;
 
-use App\Feature;
+use App\Models\Feature;
 use Facades\App\JATO\Log;
 use Exception;
 use GuzzleHttp\Exception\ClientException;

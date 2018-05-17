@@ -2,7 +2,7 @@
 
 namespace App\Transformers;
 
-use App\Category;
+use App\Models\Category;
 use App\Transformers\DmrFeatureTransformer;
 use League\Fractal\TransformerAbstract;
 

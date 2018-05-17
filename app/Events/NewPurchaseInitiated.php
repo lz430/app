@@ -2,8 +2,8 @@
 
 namespace App\Events;
 
-use App\Purchase;
-use App\User;
+use App\Models\Purchase;
+use App\Models\User;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;

@@ -2,7 +2,7 @@
 
 namespace App\Transformers;
 
-use App\JATO\VehicleModel;
+use App\Models\JATO\VehicleModel;
 use League\Fractal\TransformerAbstract;
 
 class VehicleModelTransformer extends TransformerAbstract
