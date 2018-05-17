@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import * as Actions from 'actions';
 import SVGInline from 'react-svg-inline';
 import strings from 'src/strings';
-import util from 'src/util';
 import miscicons from 'miscicons';
 import zondicons from 'zondicons';
 import {

@@ -5,15 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Deal;
 use App\Models\Feature;
 use App\Http\Controllers\Controller;
-use DeliverMyRide\JATO\Client;
+use DeliverMyRide\JATO\JatoClient;
 use DeliverMyRide\VAuto\DealFeatureImporter;
 
 class DealFeatureDebuggerController extends Controller
 {
-    public function show(Deal $deal, Client $client)
+    public function show(Deal $deal, JatoClient $client)
     {
         $importer = new DealFeatureImporter($deal, Feature::with('category')->get(), $client);
-        $equipment = collect($client->equipmentByVehicleId($deal->version->jato_vehicle_id)['results']);
+        $equipment = collect($client->equipment->get($deal->version->jato_vehicle_id)->results);
 
         return view('admin.deal-feature-debugger')
             ->with('deal', $deal)

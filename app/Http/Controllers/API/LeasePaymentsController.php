@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use DeliverMyRide\Carleton\Client;
-use DeliverMyRide\Carleton\QuoteParameters;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
 class LeasePaymentsController extends BaseAPIController
 {

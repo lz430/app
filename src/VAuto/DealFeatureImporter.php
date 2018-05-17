@@ -4,6 +4,8 @@ namespace DeliverMyRide\VAuto;
 
 use App\Models\Feature;
 use Illuminate\Support\Facades\Log;
+use DeliverMyRide\JATO\JatoClient;
+
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 
@@ -14,7 +16,13 @@ class DealFeatureImporter
     private $features;
     private $version;
 
-    public function __construct($deal, $features, $client)
+    /**
+     * DealFeatureImporter constructor.
+     * @param $deal
+     * @param $features
+     * @param JatoClient $client
+     */
+    public function __construct($deal, $features, JatoClient $client)
     {
         $this->deal = $deal;
         $this->features = $features;
@@ -22,6 +30,9 @@ class DealFeatureImporter
         $this->version = $this->deal->version;
     }
 
+    /**
+     *
+     */
     public function import()
     {
         $this->deal->features()->syncWithoutDetaching($this->featureIds());
@@ -34,12 +45,12 @@ class DealFeatureImporter
     private function getAllAvailablePackageCodes()
     {
         $vehicleId = $this->version->jato_vehicle_id;
-        $findPackages = $this->client->optionsByVehicleId("$vehicleId/Type/P")['options'];
+        $findPackages = $this->client->option->get($vehicleId, 'P')->options;
         $packagesOnThisVehicle = $findPackages;
 
         $foundPackages = [];
         foreach($packagesOnThisVehicle as $package) {
-            $foundPackages[] = $package['optionCode'];
+            $foundPackages[] = $package->optionCode;
         }
 
         return $foundPackages;
@@ -82,9 +93,9 @@ class DealFeatureImporter
 
             // Decode package into a list of equipment and add to our array
             try {
-                $searchCode = $this->client->equipmentByVehicleId("$vehicleId?packageCode=$optionCode")['results'];
+                $searchCode = $this->client->equipment->get($vehicleId, ['packageCode' => $optionCode])->results;
                 foreach ($searchCode as $equipment) {
-                    $decodedPackageEquipment[] = $equipment['schemaId'];
+                    $decodedPackageEquipment[] = $equipment->schemaId;
                 }
             } catch (ClientException | ServerException $e) {
                 if ($e->getCode() === 404) {
@@ -107,11 +118,11 @@ class DealFeatureImporter
         $combinedDealCodes = $this->mergedSchemaIds();
 
         return $this->jatoEquipment()->reject(function ($equipment) {
-            return $equipment['availability'] === 'not available';
+            return $equipment->availability === 'not available';
         })->flatMap(function ($equipment) use($combinedDealCodes) { // use ($combinedDealCodes)
-            if ($equipment['optionCode'] !== 'N/A' && in_array($equipment['optionCode'], $combinedDealCodes)) { // $this->deal->option_codes
-                //$matchingFeatures = Feature::where('jato_schema_ids', $equipment['schemaId'])->get();
-                $equipmentSchemaId = $equipment['schemaId'];
+            if ($equipment->optionCode !== 'N/A' && in_array($equipment->optionCode, $combinedDealCodes)) { // $this->deal->option_codes
+                //$matchingFeatures = Feature::where('jato_schema_ids', $equipment->schemaId)->get();
+                $equipmentSchemaId = $equipment->schemaId;
                 $matchingFeatures = Feature::whereRaw("JSON_CONTAINS(jato_schema_ids, '[$equipmentSchemaId]')")->get();
 
                 // Some of the custom mappings have more th an one feature with the same schemaIds, so if multiple features are returned here,
@@ -131,7 +142,7 @@ class DealFeatureImporter
                     return $this->parseCustomJatoMappingDmrCategories($feature->category, $equipment);
                 }
 
-                if ($equipment['availability'] === 'standard') {
+                if ($equipment->availability === 'standard') {
                     return $this->schemaIdMatches($equipment, $feature);
                 }
             })->flatten()->reject(function ($schema) {
@@ -150,12 +161,12 @@ class DealFeatureImporter
 
     private function schemaIdMatches($equipment, $feature)
     {
-        if ($this->equipmentMatchesFeature($equipment['schemaId'], $feature)) {
+        if ($this->equipmentMatchesFeature($equipment->schemaId, $feature)) {
             return [$feature->id];
         }
 
-        $matchedAttributes = collect($equipment['attributes'])->filter(function ($attribute) use ($feature) {
-            return $this->equipmentMatchesFeature($attribute['schemaId'], $feature) && $this->attributeValueIsTruthy($attribute['value']);
+        $matchedAttributes = collect($equipment->attributes)->filter(function ($attribute) use ($feature) {
+            return $this->equipmentMatchesFeature($attribute->schemaId, $feature) && $this->attributeValueIsTruthy($attribute->value);
         });
 
         return $matchedAttributes->count() ? [$feature->id] : null;
@@ -163,7 +174,7 @@ class DealFeatureImporter
 
     private function jatoEquipment()
     {
-        return collect($this->client->equipmentByVehicleId($this->version->jato_vehicle_id)['results']);
+        return collect($this->client->equipment->get($this->version->jato_vehicle_id)->results);
     }
 
     private function parseCustomJatoMappingDmrCategories($category, $equipment)
@@ -205,7 +216,7 @@ class DealFeatureImporter
 
     private function syncVehicleSize($equipment)
     {
-        if ($equipment['schemaId'] !== 176) {
+        if ($equipment->schemaId !== 176) {
             return;
         }
 
@@ -218,7 +229,7 @@ class DealFeatureImporter
             'sports' => ['sports'],
         ])->filter(function ($value) use ($equipment) {
             // Pull from value instead of availability--per Derek at JATO 2018-02-12
-            return str_contains(strtolower($equipment['value']), $value);
+            return str_contains(strtolower($equipment->value), $value);
         })->keys()->first();
 
         return Feature::where('slug', $segment)->get();
@@ -226,12 +237,12 @@ class DealFeatureImporter
 
     private function syncFuelType($equipment)
     {
-        if ($equipment['schemaId'] !== 8701) {
+        if ($equipment->schemaId !== 8701) {
             return;
         }
 
-        return collect($equipment['attributes'])->filter(function ($attribute) {
-            return $attribute['name'] == "Fuel type";
+        return collect($equipment->attributes)->filter(function ($attribute) {
+            return $attribute->name == "Fuel type";
         })->pluck('value')->map(function ($value) {
             if (str_contains(strtolower($value), ['diesel', 'biodiesel'])) {
                 return 'fuel_type_diesel';
@@ -247,12 +258,12 @@ class DealFeatureImporter
 
     private function syncTransmission($equipment)
     {
-        if ($equipment['schemaId'] !== 20601) {
+        if ($equipment->schemaId !== 20601) {
             return;
         }
 
-        return collect($equipment['attributes'])->filter(function ($attribute) {
-            return $attribute['name'] == "Transmission type";
+        return collect($equipment->attributes)->filter(function ($attribute) {
+            return $attribute->name == "Transmission type";
         })->pluck('value')->map(function ($slugKey) {
             return Feature::where('slug', 'transmission_' . $slugKey)->first();
         });
@@ -260,12 +271,12 @@ class DealFeatureImporter
 
     private function syncDriveTrain($equipment)
     {
-        if ($equipment['schemaId'] !== 6501) {
+        if ($equipment->schemaId !== 6501) {
             return;
         }
 
-        return collect($equipment['attributes'])->filter(function ($attribute) {
-            return $attribute['name'] == "Driven wheels";
+        return collect($equipment->attributes)->filter(function ($attribute) {
+            return $attribute->name == "Driven wheels";
         })->pluck('value')->map(function ($slugKey) {
             return Feature::where('slug', 'drive_train_' . strtolower($slugKey))->first();
         });
@@ -273,12 +284,12 @@ class DealFeatureImporter
 
     private function syncSeatMaterials($equipment)
     {
-        if ($equipment['schemaId'] !== 17401) {
+        if ($equipment->schemaId !== 17401) {
             return;
         }
 
-        return collect($equipment['attributes'])->filter(function ($attribute) {
-            return $attribute['name'] == "main seat material";
+        return collect($equipment->attributes)->filter(function ($attribute) {
+            return $attribute->name == "main seat material";
         })->pluck('value')->map(function ($value) {
             if (str_contains(strtolower($value), ['cloth', 'synthetic suede'])) {
                 return 'seat_main_upholstery_cloth';
@@ -296,12 +307,12 @@ class DealFeatureImporter
 
     private function syncSeatingConfiguration($equipment)
     {
-        if ($equipment['schemaId'] !== 701) {
+        if ($equipment->schemaId !== 701) {
             return;
         }
 
-        return collect($equipment['attributes'])->filter(function ($attribute) {
-            return $attribute['name'] == "seating configuration";
+        return collect($equipment->attributes)->filter(function ($attribute) {
+            return $attribute->name == "seating configuration";
         })->pluck('value')->map(function ($value) {
             if (str_contains(strtolower($value), ['2+3+3+4'])) {
                 return 'fourth_row_seating';
@@ -319,12 +330,12 @@ class DealFeatureImporter
 
     private function syncPickupSeatingConfiguration($equipment)
     {
-        if ($equipment['schemaId'] !== 701) {
+        if ($equipment->schemaId !== 701) {
             return;
         }
 
-        return collect($equipment['attributes'])->filter(function ($attribute) {
-            return $attribute['name'] == "seating configuration";
+        return collect($equipment->attributes)->filter(function ($attribute) {
+            return $attribute->name == "seating configuration";
         })->pluck('value')->map(function ($value) {
             if (str_contains(strtolower($value), ['2+0', '3+0'])) {
                 return 'regular_cab';
@@ -338,12 +349,12 @@ class DealFeatureImporter
 
     private function syncPickup($equipment)
     {
-        if ($equipment['schemaId'] !== 14201) {
+        if ($equipment->schemaId !== 14201) {
             return;
         }
 
-        return collect($equipment['attributes'])->filter(function ($attribute) {
-            return $attribute['name'] == "box length";
+        return collect($equipment->attributes)->filter(function ($attribute) {
+            return $attribute->name == "box length";
         })->pluck('value')->map(function ($slugKey) {
             return Feature::where('slug', strtolower($slugKey) . '_bed')->first();
         });

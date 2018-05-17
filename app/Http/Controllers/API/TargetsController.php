@@ -4,15 +4,16 @@ namespace App\Http\Controllers\API;
 
 use App\Models\Deal;
 use App\Http\Controllers\Controller;
-use DeliverMyRide\JATO\Client;
+use DeliverMyRide\JATO\JatoClient;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Cache;
+
+use GuzzleHttp\Exception\GuzzleException;
+
 
 class TargetsController extends Controller
 {
     use ValidatesRequests;
-
-    const CACHE_LENGTH = 1440;
 
     // Targets that should not selected
     const TARGET_BLACKLIST = [
@@ -38,35 +39,58 @@ class TargetsController extends Controller
         52 // Auto Show Cash Recipient
     ];
 
-    public function getTargets(Client $client)
+    public function getTargets(JatoClient $client)
     {
         $this->validate(request(), [
             'zipcode' => 'required|string',
             'vin' => 'required|string',
         ]);
 
-        $targets = Cache::remember($this->getCacheKey(), self::CACHE_LENGTH, function () use ($client) {
-            $response = $client->targetsByVehicleIdAndZipcode(
-                $this->vehicleIdByVin(request('vin')),
-                request('zipcode')
-            );
+        if (Cache::has($this->getCacheKey())) {
+            $targets = Cache::get($this->getCacheKey());
+        }
+        else {
+            try {
+                $response = $client->incentive->listTargets(
+                    $this->vehicleIdByVin(request('vin')),
+                    ['zipCode' => request('zipcode')]
+                );
 
-            return collect($response)->reject(function ($target) {
-                return in_array($target['targetId'], array_merge(self::TARGET_BLACKLIST, self::TARGET_OPEN_OFFERS));
-            })->values()->all();
-        });
+                $targets = collect($response)->reject(function ($target) {
+                    return in_array($target->targetId,
+                        array_merge(
+                            self::TARGET_BLACKLIST,
+                            self::TARGET_OPEN_OFFERS
+                        )
+                    );
+                })->values()->all();
+
+                Cache::put($this->getCacheKey(), $targets, 1440);
+            } catch (GuzzleException $e) {
+                Cache::put($this->getCacheKey(), [], 5);
+                $targets = [];
+            }
+        }
 
         return response()->json([
             'targets' => $targets
         ]);
     }
 
-    private function getCacheKey()
+    /**
+     * @return string
+     */
+    private function getCacheKey() : string
     {
         return 'JATO_TARGETS:' . request('vin') . ':' . request('zipcode');
     }
 
-    private function vehicleIdByVin($vin)
+    /**
+     * Return jato vehicle id from vin.
+     * @param $vin
+     * @return string
+     */
+    private function vehicleIdByVin($vin) : string
     {
         $version = Deal::where('vin', $vin)->with('version')->firstOrFail()->version;
 

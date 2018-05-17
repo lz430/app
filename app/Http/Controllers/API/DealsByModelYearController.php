@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\Traits\SearchesDeals;
 use App\Models\JATO\VehicleModel;
-use DeliverMyRide\JATO\Client;
+use DeliverMyRide\JATO\JatoClient;
 use Illuminate\Http\Request;
 
 
@@ -12,7 +12,7 @@ class DealsByModelYearController extends BaseAPIController
 {
     use SearchesDeals;
 
-    public function getDealsByModelYear(Request $request, Client $client)
+    public function getDealsByModelYear(Request $request, JatoClient $client)
     {
         $this->validate($request, [
             'make_ids' => 'sometimes|required|array',

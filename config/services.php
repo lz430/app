@@ -1,5 +1,4 @@
 <?php
-
 return [
 
     /*
@@ -57,5 +56,9 @@ return [
         'username' => env('CARLETON_USERNAME'),
         'password' => env('CARLETON_PASSWORD'),
         'url' => env('CARLETON_URL'),
+    ],
+
+    'cox' => [
+        'api_key' => env('COX_API_KEY'),
     ]
 ];

@@ -16,11 +16,10 @@ class DealsController extends Controller
 
         $dealTransformed = fractal($deal)
             ->transformWith(DealTransformer::class)
-            ->serializeWith(new DataArraySerializer)
-            ->toJson();
+            ->serializeWith(new DataArraySerializer);
 
         return view('deals.show')
-            ->with('deal', $dealTransformed)
+            ->with('deal', $dealTransformed->toJson())
             ->with('title', $title);
     }
 }

@@ -47,6 +47,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \DateTime $created_at
  * @property \DateTime $updated_at
  * @property int $version_id
+ * @property Version $version
  */
 class Deal extends Model
 {
