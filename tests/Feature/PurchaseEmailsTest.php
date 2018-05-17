@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use App\Mail\DealPurchasedDMR;
-use App\Purchase;
-use App\User;
-use App\Deal;
+use App\Models\Purchase;
+use App\Models\User;
+use App\Models\Deal;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;

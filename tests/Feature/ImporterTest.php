@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\User;
-use App\Deal;
-use App\Purchase;
+use App\Models\User;
+use App\Models\Deal;
+use App\Models\Purchase;
 use Tests\TestCase;
-use App\JATO\Version;
+use App\Models\JATO\Version;
 use Illuminate\Mail\Mailable;
 use DeliverMyRide\VAuto\Importer;
 use Illuminate\Support\Facades\Mail;

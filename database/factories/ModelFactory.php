@@ -167,7 +167,7 @@ $factory->define(App\Models\Purchase::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(Category::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\Category::class, function (Faker\Generator $faker) {
     return [
         'title'                     => $faker->unique()->company,
         'slug'                      => $faker->unique()->slug,

@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\JATO\Version;
+use App\Models\JATO\Version;
 use App\Mail\ApplicationSubmittedDMR;
 use App\Mail\ApplicationSubmittedUser;
-use App\Purchase;
-use App\User;
+use App\Models\Purchase;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Mail\Mailable;

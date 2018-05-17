@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Deal;
+use App\Models\Deal;
 use App\Http\Controllers\API\Traits\SearchesDeals;
 use App\JATO\VehicleModel;
 use App\Transformers\DealTransformer;
