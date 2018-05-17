@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Api;
+namespace Tests\Feature\Api;
 
 use App\Models\JatoFeature;
 use Illuminate\Foundation\Testing\RefreshDatabase;

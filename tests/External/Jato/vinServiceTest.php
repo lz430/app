@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Service\Jato\Integration;
+namespace Tests\External\Jato;
 
 use GuzzleHttp\Exception\ClientException;
 use Tests\TestCase;

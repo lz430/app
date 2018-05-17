@@ -33,7 +33,7 @@ const reducer = (state, action) => {
             if (urlSize || urlStyle) {
                 state.selectedStyles = [urlStyle];
                 state.selectedFeatures = [urlSize];
-
+                state.selectedMakes = [];
                 return state;
             }
 
