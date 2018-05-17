@@ -155,6 +155,7 @@ class Importer
 
             try {
                 $deal = $this->saveOrUpdateDeal($fileHash, $vAutoRow);
+
                 $decodedVin = $this->client->vin->decode($vAutoRow['VIN']);
 
                 if (! $jatoVersion = $this->matchVersion($decodedVin, $vAutoRow)) {
@@ -168,7 +169,7 @@ class Importer
 
                 DB::transaction(function () use ($jatoVersion, $deal, $decodedVin, $vAutoRow) {
                     // If this version is new (based on UUID-year), fill its version relations
-                    if (! $version = Version::where('jato_uid', $jatoVersion['uid'])->where('year', $deal->year)->first()) {
+                    if (! $version = Version::where('jato_uid', $jatoVersion->uid)->where('year', $deal->year)->first()) {
                         $version = $this->saveVersionAndRelations($decodedVin, $jatoVersion);
                     }
 
@@ -182,14 +183,14 @@ class Importer
                     }
 
                     // New version or Old version; but nothing has changed in this JATO Vehicle ID, so we can quit
-                    if ($version->jato_vehicle_id == $jatoVersion['vehicle_ID']) {
+                    if ($version->jato_vehicle_id == $jatoVersion->vehicle_ID) {
                         $this->info("   Vehicle ID is new or unchanged.");
                         return true;
                     }
 
                     // JATO Vehicle ID has changed for this version; so we need to wipe and update all features for all related deals
                     $this->info("   JATO Vehicle ID has changed. Wiping features.");
-                    $version->update(['jato_vehicle_id' => $jatoVersion['vehicle_ID']]);
+                    $version->update(['jato_vehicle_id' => $jatoVersion->vehicle_ID]);
 
                     foreach ($version->fresh()->deals as $attachedDeal) {
                         $this->wipeDealFeatures($attachedDeal);
@@ -218,7 +219,6 @@ class Importer
         $this->info("   Saving deal for vin: {$vAutoRow['VIN']}");
 
         $deal = Deal::updateOrCreate([
-            // 'file_hash' => $fileHash,
             'vin' => $vAutoRow['VIN'],
         ], [
             'file_hash' => $fileHash,
@@ -259,13 +259,13 @@ class Importer
     private function matchVersion($decodedVin, $vAutoRow)
     {
         // If there is just one version then use that
-        if (count($decodedVin['versions']) === 1) {
-            return $decodedVin['versions'][0];
+        if (count($decodedVin->versions) === 1) {
+            return $decodedVin->versions[0];
         }
 
         // Get versions that match the Vin
-        $jatoVersion = array_first($decodedVin['versions'], function ($version) use ($vAutoRow) {
-            return trim($version['trimName']) === trim($vAutoRow['Series']) && $version['isCurrent'];
+        $jatoVersion = array_first($decodedVin->versions, function ($version) use ($vAutoRow) {
+            return trim($version->trimName) === trim($vAutoRow['Series']) && $version->isCurrent;
         });
 
         if ($jatoVersion) {
@@ -273,9 +273,9 @@ class Importer
         }
 
         // if we couldn't match, try to use the Model Code; return null if none match
-        return array_first($decodedVin['versions'], function ($version) use ($vAutoRow) {
-            return str_contains($version['modelCode'], $vAutoRow['Model Code']) && $version['isCurrent'] ||
-                str_contains($version['localModelCode'], $vAutoRow['Model Code']) && $version['isCurrent'];
+        return array_first($decodedVin->versions, function ($version) use ($vAutoRow) {
+            return str_contains($version->modelCode, $vAutoRow['Model Code']) && $version->isCurrent ||
+                str_contains($version['localModelCode'], $vAutoRow['Model Code']) && $version->isCurrent;
         });
     }
 
@@ -285,7 +285,7 @@ class Importer
      */
     private function saveVersionAndRelations($decodedVin, $jatoVersion)
     {
-        $this->info("   Saving version and relations for UID " . $jatoVersion['uid']);
+        $this->info("   Saving version and relations for UID " . $jatoVersion->uid);
 
         if (! $manufacturer = Manufacturer::where('name', $decodedVin['manufacturer'])->first()) {
             // Save/Update manufacturer, make, model, then versions
@@ -312,7 +312,7 @@ class Importer
 
         return $this->saveModelVersion(
             $model,
-            $this->client->version->get($jatoVersion['vehicle_ID'])
+            $this->client->version->get($jatoVersion->vehicle_ID)
         );
     }
 
@@ -455,7 +455,7 @@ class Importer
             'name' => ! in_array($version['versionName'], ['-', ''])
                 ? $version['versionName']
                 : null,
-            'trim_name' => $version['trimName'],
+            'trim_name' => $version->trimName,
             'description' => rtrim($version['headerDescription'], ' -'),
             'driven_wheels' => $version['drivenWheels'],
             'doors' => $version['numberOfDoors'],
@@ -477,7 +477,7 @@ class Importer
             'delivery_price' => $version['delivery'] !== ''
                 ? $version['delivery']
                 : null,
-            'is_current' => $version['isCurrent'],
+            'is_current' => $version->isCurrent,
         ]);
     }
 

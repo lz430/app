@@ -21,7 +21,7 @@ class JatoClient extends ApiClient
 
     const TOKEN_KEY = 'JATO_AUTH_TOKEN';
 
-    private $token;
+    public $token;
 
     /** @var string $username */
     protected $username;
@@ -85,7 +85,9 @@ class JatoClient extends ApiClient
         // Typically we'd put something like this in the constructor...
         // But this class is used on the import which runs for 4+ hours, so we validate the
         // token on every request in order to ensure it doesn't expire in the middle.
-        if (!$this->token || strtotime($this->token->expires_on) > (time() - 420)) {
+
+        // refresh token if it will expire within the next 5 mins.
+        if (!$this->token || strtotime($this->token->expires_on) > (time() + 300)) {
             $this->refreshAuthorizationToken();
         }
 

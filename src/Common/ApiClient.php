@@ -3,6 +3,7 @@
 namespace DeliverMyRide\Common;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Psr7\Response;
 use function GuzzleHttp\Psr7\stream_for;
 
@@ -61,7 +62,11 @@ class ApiClient {
                 'headers' => $this->getRequestHeaders()
             ]);
 
-        return $this->handleResponse($response, $async);
+        if ($async) {
+            return $this->handleAsyncResponse($response);
+        } else {
+            return $this->handleResponse($response);
+        }
     }
 
     /**
@@ -82,7 +87,11 @@ class ApiClient {
                 'headers' => $this->getRequestHeaders()
             ]);
 
-        return $this->handleResponse($response, $async);
+        if ($async) {
+            return $this->handleAsyncResponse($response);
+        } else {
+            return $this->handleResponse($response);
+        }
     }
 
     /**
@@ -101,7 +110,11 @@ class ApiClient {
                 'headers' => $this->getRequestHeaders()
             ]);
 
-        return $this->handleResponse($response, $async);
+        if ($async) {
+            return $this->handleAsyncResponse($response);
+        } else {
+            return $this->handleResponse($response);
+        }
     }
 
     /**
@@ -122,7 +135,11 @@ class ApiClient {
 
             ]);
 
-        return $this->handleResponse($response, $async);
+        if ($async) {
+            return $this->handleAsyncResponse($response);
+        } else {
+            return $this->handleResponse($response);
+        }
     }
 
     /**
@@ -130,16 +147,20 @@ class ApiClient {
      * @param bool $async
      * @return mixed
      */
-    private function handleResponse(Response $response, bool $async = FALSE)
+    private function handleResponse(Response $response)
     {
-        // Async we just return the raw promise
-        if ($async){
-            return $response;
-        } else {
-            $stream = stream_for($response->getBody());
-            $raw_response = json_decode($stream->getContents());
-            return $raw_response;
-        }
+        $stream = stream_for($response->getBody());
+        $raw_response = json_decode($stream->getContents());
+        return $raw_response;
+    }
+
+    /**
+     * @param Promise $response
+     * @return mixed
+     */
+    private function handleAsyncResponse(Promise $response) : Promise
+    {
+        return $response;
     }
 
 }
