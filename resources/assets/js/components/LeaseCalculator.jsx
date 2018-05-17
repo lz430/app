@@ -72,7 +72,7 @@ class LeaseCalculator extends React.PureComponent {
                         <CustomerTypeSelect {...R.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props)} />
                     </div>
                     <div>
-                        Your price{' '}{this.showWhenPricingIsLoaded(() => this.props.dealPricing.yourPrice())}*
+                        Your Monthly Price{' '}{this.showWhenPricingIsLoaded(() => this.props.dealPricing.monthlyPayments())}*
                     </div>
                 </div>
                 <hr />
