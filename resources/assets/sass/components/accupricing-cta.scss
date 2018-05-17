@@ -6,14 +6,10 @@
   text-align: left;
 
   &__logo {
-    max-width: 5rem;
+    max-width: 10rem;
     height: auto;
     display: block;
     cursor: pointer;
-
-    @media (min-width: $break-small) {
-      max-width: 10rem;
-    }
   }
 
   &__disclaimer {
