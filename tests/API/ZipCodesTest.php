@@ -2,7 +2,7 @@
 
 namespace Tests\API;
 
-use App\Zipcode;
+use App\Models\Zipcode;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

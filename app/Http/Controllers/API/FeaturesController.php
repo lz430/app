@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\JatoFeature;
+use App\Models\JatoFeature;
 use App\Transformers\FeatureTransformer;
 
 class FeaturesController extends BaseAPIController
