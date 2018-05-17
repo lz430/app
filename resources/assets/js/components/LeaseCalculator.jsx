@@ -83,17 +83,20 @@ class LeaseCalculator extends React.PureComponent {
                                 <td className="cash-finance-lease-calculator__lease-table-cell--darker">
                                     Cash Due
                                 </td>
-                                {this.props.dealPricing.leaseTermsAvailable() && this.props.dealPricing.leaseTermsAvailable().map((term, index) => {
-                                    return (
-                                        <td
-                                            className="cash-finance-lease-calculator__lease-table-cell--dark"
-                                            key={index}
-                                        >
-                                            {term}{' '}
-                                            Months
-                                        </td>
-                                    )
-                                })}
+                                {this.props.dealPricing.leaseTermsAvailable() && this.props.dealPricing.leaseTermsAvailable().filter(term => {
+                                    return this.props.dealPricing.hasLeasePaymentsForTerm(term);
+                                }).map((term, index) => {
+                                        return (
+                                            <td
+                                                className="cash-finance-lease-calculator__lease-table-cell--dark"
+                                                key={index}
+                                            >
+                                                {term}{' '}
+                                                Months
+                                            </td>
+                                        )
+                                    })
+                                }
                             </tr>
                         </thead>
                         <tbody>
@@ -103,7 +106,9 @@ class LeaseCalculator extends React.PureComponent {
                                     <td className="cash-finance-lease-calculator__lease-table-cell--darker">
                                         {util.moneyFormat(cashDown)}
                                     </td>
-                                    {this.props.dealPricing.leaseTermsAvailable().map((term, termIndex) => {
+                                    {this.props.dealPricing.leaseTermsAvailable().filter(term => {
+                                        return this.props.dealPricing.hasLeasePaymentsForTerm(term);
+                                    }).map((term, termIndex) => {
                                         let className = this.props.dealPricing.isSelectedLeasePaymentForTermAndCashDown(term, cashDown) ?
                                             'cash-finance-lease-calculator__lease-table-cell--selected' :
                                             'cash-finance-lease-calculator__lease-table-cell--selectable';
