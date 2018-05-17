@@ -55,6 +55,7 @@ return [
         ],
         'sentry' => [
             'driver' => 'sentry',
+            'level' => 'notice',
         ],
     ],
 ];
