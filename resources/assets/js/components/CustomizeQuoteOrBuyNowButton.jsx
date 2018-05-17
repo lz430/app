@@ -5,7 +5,7 @@ class CustomizeQuoteOrBuyNowButton extends React.PureComponent {
         return (
             <button
                 onClick={() => ! this.props.disabled && this.props.onBuyNow(this.props.deal)}
-                className="deal__button deal__button--small deal__button--pink deal__button"
+                className="deal__button deal__button--x-small deal__button--pink deal__button"
                 disabled={this.props.disabled}
             >
                 Buy Now
@@ -17,7 +17,7 @@ class CustomizeQuoteOrBuyNowButton extends React.PureComponent {
         return (
             <button
                 onClick={() => this.props.onCustomizeQuote(this.props.deal)}
-                className="deal__button deal__button--small deal__button--pink deal__button"
+                className="deal__button deal__button--x-small deal__button--pink deal__button"
             >
                 Customize Quote
             </button>

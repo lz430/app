@@ -32,7 +32,7 @@ class Sortbar extends React.PureComponent {
                         svg={zondicons['tuning']}
                     />
                 </div>
-                Filter
+                Filter{this.props.filterPage === 'models' ? ' Results' : ''}
             </button>
         );
     }

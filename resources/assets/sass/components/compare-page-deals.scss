@@ -9,7 +9,10 @@
     background: $color-background-secondary;
     margin-top: 0;
     .deal {
-      min-width: calc(50vw - 6px);
+      min-width: 50vw;
+      margin: 0;
+      padding: 3px;
+      border-top: 1px solid $color-section-bottom-border;
     }
   }
 

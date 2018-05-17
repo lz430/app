@@ -93,13 +93,23 @@
     justify-content: center;
     margin: 0 5px;
 
-    &--small {
+    &--x-small {
       font-size: 0.8rem;
       padding: 4px 0px;
 
       @media (min-width: $break-small) {
         padding: 10px 15px;
       }
+
+      &--as-link {
+        padding: 0;
+        text-decoration: underline;
+      }
+    }
+
+    &--small {
+      font-size: 0.8rem;
+      padding: 10px 15px;
 
       &--as-link {
         padding: 0;

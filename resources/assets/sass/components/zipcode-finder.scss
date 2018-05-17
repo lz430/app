@@ -6,8 +6,13 @@
   background-color: $color-sidebar-background-primary;
   color: $color-text-white;
   display: flex;
-  height: $sortbar-height + $filterbar-height;
-  padding: 20px 15px;
+  height: $sortbar-height + $filterbar-height - #{$filterbar-vertical-padding * 2};
+  padding: 0 15px $filterbar-vertical-padding 15px;
+
+  @media (min-width: $break-small) {
+    padding: 20px 15px;
+    height: $sortbar-height + $filterbar-height;
+  }
 
   &__button {
     @include button;
