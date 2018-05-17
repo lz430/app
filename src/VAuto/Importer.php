@@ -60,6 +60,7 @@ class Importer
         "Fuel",
         "Age",
         "Option Codes",
+
     ];
 
     private const MAKE_BLACKLIST = [
@@ -116,7 +117,7 @@ class Importer
         foreach ($csvFiles as $file) {
             $handle = fopen($file, 'r');
 
-            $this->checkHeaders(fgetcsv($handle));
+            //$this->checkHeaders(fgetcsv($handle)); // commented out to limit import to only use the specified header rows instead of checking for header comparison
 
             $this->saveVersionDeals($handle, md5_file($file));
         };
@@ -130,7 +131,7 @@ class Importer
             $this->info("VAuto import row: #{$rowNumber}");
             $rowNumber++;
 
-            $vAutoRow = array_combine(self::HEADERS, $csvRow);
+            $vAutoRow = array_combine(self::HEADERS, array_slice($csvRow, 0, 35)); // originally array_combine(self::HEADERS, $csvRow)
 
             if ($vAutoRow['New/Used'] !== 'N') {
                 $this->info("   Skipping Used Vehicle.");

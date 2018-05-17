@@ -46,8 +46,13 @@ $icon-size: 20px;
 
   &__column {
     border-left: 1px solid $color-grey;
-    max-width: $deal-card-width + ($deal-card-margin * 2);
-    min-width: $deal-card-width + ($deal-card-margin * 2);
+    min-width: 50vw;
+    max-width: 50vw;
+
+    @media (min-width: $break-small) {
+      max-width: $deal-card-width + ($deal-card-margin * 2);
+      min-width: $deal-card-width + ($deal-card-margin * 2);
+    }
 
     &:first-child {
       border-left: 0;

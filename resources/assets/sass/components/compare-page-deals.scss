@@ -8,26 +8,11 @@
   @media (max-width: $break-small) {
     background: $color-background-secondary;
     margin-top: 0;
-
     .deal {
-      max-width: $deal-card-width;
-      min-width: $deal-card-width;
-      margin: $deal-card-margin;
-
-      &__content {
-        display: flex;
-        justify-content: space-around
-      }
-
-      &__image {
-        width: 50%;
-        height: 50%;
-        border: none;
-      }
-
-      &__button--small {
-        padding: 10px 15px;
-      }
+      min-width: 50vw;
+      margin: 0;
+      padding: 3px;
+      border-top: 1px solid $color-section-bottom-border;
     }
   }
 
