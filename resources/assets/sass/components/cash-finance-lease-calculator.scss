@@ -19,7 +19,13 @@
     width: 100%;
   }
 
+  &__lease-table-container {
+    overflow: scroll;
+  }
+
   &__lease-table {
+    width: 100%;
+
     td {
       padding: 5px;
     }
@@ -60,5 +66,16 @@
 
   &__right-item {
     float: right;
+
+    input {
+      text-align: right;
+      width: 5rem;
+    }
+
+    input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
+      -webkit-appearance: none !important;
+      margin: 0 !important;
+      -moz-appearance:textfield !important;
+    }
   }
 }
