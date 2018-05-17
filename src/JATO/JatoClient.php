@@ -5,7 +5,6 @@ namespace DeliverMyRide\JATO;
 use DeliverMyRide\Common\ApiClient;
 use Facades\App\JATO\Log;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Cache;
 
 /**
