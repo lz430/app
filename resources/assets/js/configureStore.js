@@ -19,7 +19,7 @@ const urlSize = util.getInitialSizeFromUrl();
 
 const initialState = {
     /** Version **/
-    10: '<- increment the number to purge LocalStorage',
+    11: '<- increment the number to purge LocalStorage',
     /** End Version **/
     accuPricingModalIsShowing: false,
     bestOffers: [],
