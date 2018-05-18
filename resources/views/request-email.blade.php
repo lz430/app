@@ -172,7 +172,7 @@
                     </div>
 
                     <div class = "request-email__footer">
-                        <a href="/privacy-policy"> Privacy Policy</a> We will not share your information
+                        <a href="https://delivermyride.com/privacy-policy" target="_blank"> Privacy Policy</a> We will not share your information
                     </div>
                 </form>
             </div>
