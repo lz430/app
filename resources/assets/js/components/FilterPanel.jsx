@@ -160,7 +160,7 @@ class FilterPanel extends React.PureComponent {
                             />
                         </SidebarFilter>
 
-                        {this.state.sizeCategory ? (
+                        {/*this.state.sizeCategory */ false ? (
                                 <SidebarFilter
                                     toggle={() => this.toggleOpenFilter(this.state.sizeCategory.attributes.title)}
                                     open={this.state.openFilter === this.state.sizeCategory.attributes.title && this.props.filterPage !== 'deals' }

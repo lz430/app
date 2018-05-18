@@ -31,10 +31,17 @@ const reducer = (state, action) => {
              * If we have a new url style / url size
              */
             if (urlSize || urlStyle) {
-                state.selectedStyles = [urlStyle];
-                state.selectedFeatures = [urlSize];
-                state.selectedMakes = [];
 
+                if (urlStyle) {
+                    state.selectedStyles = [urlStyle];
+                }
+                /*
+                if (urlSize) {
+                    state.selectedFeatures = [urlSize];
+                }
+                */
+                state.selectedFeatures = [];
+                state.selectedMakes = [];
                 return state;
             }
 
