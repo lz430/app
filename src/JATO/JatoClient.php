@@ -121,8 +121,6 @@ class JatoClient extends ApiClient
      */
     public function refreshAuthorizationToken()
     {
-
-        print "NEW TOKEN";
         //
         // Request new token
         $client = new Client(['connect_timeout' => 5]);
