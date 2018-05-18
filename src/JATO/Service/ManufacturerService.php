@@ -26,7 +26,7 @@ class ManufacturerService extends BaseService
      * GET
      * @see https://www.jatoflex.com/docs/services/55a6878974be090c745812a3/operations/55a6f9e674be090c745812ae?
      * @param string $name
-     * @return mixed
+     * @return \stdClass
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */

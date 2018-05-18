@@ -158,7 +158,7 @@ class Importer
 
                 $decodedVin = $this->client->vin->decode($vAutoRow['VIN']);
 
-                if (! $jatoVersion = $this->matchVersion($decodedVin, $vAutoRow)) {
+                if (!$jatoVersion = $this->matchVersion($decodedVin, $vAutoRow)) {
                     Log::channel('jato')->error('Could not find exact match for VIN -> JATO Version', [
                         'VAuto Row' => $vAutoRow,
                         'JATO VIN Decode' => $decodedVin,
@@ -169,7 +169,7 @@ class Importer
 
                 DB::transaction(function () use ($jatoVersion, $deal, $decodedVin, $vAutoRow) {
                     // If this version is new (based on UUID-year), fill its version relations
-                    if (! $version = Version::where('jato_uid', $jatoVersion->uid)->where('year', $deal->year)->first()) {
+                    if (!$version = Version::where('jato_uid', $jatoVersion->uid)->where('year', $deal->year)->first()) {
                         $version = $this->saveVersionAndRelations($decodedVin, $jatoVersion);
                     }
 
@@ -198,7 +198,7 @@ class Importer
                     }
                 });
             } catch (ClientException | ServerException $e) {
-                Log::channel('jato')->error('Importer error for vin [' . $vAutoRow['VIN']. ']: ' . $e->getMessage());
+                Log::channel('jato')->error('Importer error for vin [' . $vAutoRow['VIN'] . ']: ' . $e->getMessage());
                 $this->error('Error: ' . $e->getMessage());
 
                 if ($e->getCode() === 401) {
@@ -206,7 +206,7 @@ class Importer
                     throw $e;
                 }
             } catch (QueryException | Exception $e) {
-                Log::channel('jato')->error('Importer error for vin [' . $vAutoRow['VIN']. ']: ' . $e->getMessage());
+                Log::channel('jato')->error('Importer error for vin [' . $vAutoRow['VIN'] . ']: ' . $e->getMessage());
                 $this->error('Error: ' . $e->getMessage());
             }
         }
@@ -214,7 +214,7 @@ class Importer
         Deal::where('file_hash', '!=', $fileHash)->whereDoesntHave('purchases')->delete();
     }
 
-    private function saveOrUpdateDeal(string $fileHash, array $vAutoRow) : Deal
+    private function saveOrUpdateDeal(string $fileHash, array $vAutoRow): Deal
     {
         $this->info("   Saving deal for vin: {$vAutoRow['VIN']}");
 
@@ -287,14 +287,14 @@ class Importer
     {
         $this->info("   Saving version and relations for UID " . $jatoVersion->uid);
 
-        if (! $manufacturer = Manufacturer::where('name', $decodedVin->manufacturer)->first()) {
+        if (!$manufacturer = Manufacturer::where('name', $decodedVin->manufacturer)->first()) {
             // Save/Update manufacturer, make, model, then versions
             $manufacturer = $this->saveManufacturer(
                 $this->client->manufacturer->get($decodedVin->manufacturer)
             );
         }
 
-        if (! $make = Make::where('name', $decodedVin->make)->first()) {
+        if (!$make = Make::where('name', $decodedVin->make)->first()) {
             // Save/Update and save new make
             $make = $this->saveManufacturerMake(
                 $manufacturer,
@@ -302,7 +302,7 @@ class Importer
             );
         }
 
-        if (! $model = VehicleModel::where('name', $decodedVin['model'])->first()) {
+        if (!$model = VehicleModel::where('name', $decodedVin->model)->first()) {
             // Save/Update and save new model
             $model = $this->saveMakeModel(
                 $make,
@@ -345,7 +345,7 @@ class Importer
             /** @var Response $response */
             $this->saveDealJatoFeaturesByGroup(
                 $deal,
-                json_decode((string) $response->getBody(), true)['results'],
+                json_decode((string)$response->getBody(), true)['results'],
                 $group
             );
         }
@@ -443,87 +443,110 @@ class Importer
         }
     }
 
-    private function saveModelVersion(VehicleModel $vehicleModel, array $version)
+    /**
+     * @param VehicleModel $vehicleModel
+     * @param \stdClass $version
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    private function saveModelVersion(VehicleModel $vehicleModel, \stdClass $version)
     {
-        $this->info('   Saving Model Version: ' . $version['vehicleId']);
+        $this->info('   Saving Model Version: ' . $version->vehicleId);
 
         return $vehicleModel->versions()->create([
-            'jato_vehicle_id' => $version['vehicleId'],
-            'jato_uid' => $version['uid'],
-            'jato_model_id' => $version['modelId'],
-            'year' => str_before($version['modelYear'], '.'), // trim off .5
-            'name' => ! in_array($version['versionName'], ['-', ''])
-                ? $version['versionName']
+            'jato_vehicle_id' => $version->vehicleId,
+            'jato_uid' => $version->uid,
+            'jato_model_id' => $version->modelId,
+            'year' => str_before($version->modelYear, '.'), // trim off .5
+            'name' => !in_array($version->versionName, ['-', ''])
+                ? $version->versionName
                 : null,
             'trim_name' => $version->trimName,
-            'description' => rtrim($version['headerDescription'], ' -'),
-            'driven_wheels' => $version['drivenWheels'],
-            'doors' => $version['numberOfDoors'],
-            'transmission_type' => $version['transmissionType'],
-            'msrp' => $version['msrp'] !== '' ? $version['msrp'] : null,
-            'invoice' => $version['invoice'] !== '' ? $version['invoice'] : null,
-            'body_style' => $version['bodyStyleName'],
-            'cab' => $version['cabType'] !== '' ? $version['cabType'] : null,
-            'photo_path' => $version['photoPath'],
-            'fuel_econ_city' => $version['fuelEconCity'] !== ''
-                ? $version['fuelEconCity']
+            'description' => rtrim($version->headerDescription, ' -'),
+            'driven_wheels' => $version->drivenWheels,
+            'doors' => $version->numberOfDoors,
+            'transmission_type' => $version->transmissionType,
+            'msrp' => $version->msrp !== '' ? $version->msrp : null,
+            'invoice' => $version->invoice !== '' ? $version->invoice : null,
+            'body_style' => $version->bodyStyleName,
+            'cab' => $version->cabType !== '' ? $version->cabType : null,
+            'photo_path' => $version->photoPath,
+            'fuel_econ_city' => $version->fuelEconCity !== ''
+                ? $version->fuelEconCity
                 : null,
-            'fuel_econ_hwy' => $version['fuelEconHwy'] !== ''
-                ? $version['fuelEconHwy']
+            'fuel_econ_hwy' => $version->fuelEconHwy !== ''
+                ? $version->fuelEconHwy
                 : null,
-            'manufacturer_code' => ! in_array($version['manufacturerCode'], ['-', ''])
-                ? $version['manufacturerCode']
+            'manufacturer_code' => !in_array($version->manufacturerCode, ['-', ''])
+                ? $version->manufacturerCode
                 : null,
-            'delivery_price' => $version['delivery'] !== ''
-                ? $version['delivery']
+            'delivery_price' => $version->delivery !== ''
+                ? $version->delivery
                 : null,
             'is_current' => $version->isCurrent,
         ]);
     }
 
-    private function backfillNullMsrpsFromVersionMsrp($deal, $version)
+    /**
+     * @param Deal $deal
+     * @param $version
+     */
+    private function backfillNullMsrpsFromVersionMsrp(Deal $deal, $version)
     {
-        if (! $deal->msrp && $version['msrp']) {
-            $deal->update(['msrp' => $version['msrp']]);
+        if (!$deal->msrp && $version->msrp) {
+            $deal->update(['msrp' => $version->msrp]);
         }
     }
 
-    private function saveManufacturer(array $manufacturer)
+    /**
+     * @param \stdClass $manufacturer
+     * @return Manufacturer
+     */
+    private function saveManufacturer(\stdClass $manufacturer): Manufacturer
     {
-        $this->info('   Saving Manufacturer: ' . $manufacturer['manufacturerName']);
+        $this->info('   Saving Manufacturer: ' . $manufacturer->manufacturerName);
 
         return Manufacturer::updateOrCreate([
-            'url_name' => $manufacturer['urlManufacturerName'],
+            'url_name' => $manufacturer->urlManufacturerName,
         ], [
-            'name' => $manufacturer['manufacturerName'],
-            'url_name' => $manufacturer['urlManufacturerName'],
-            'is_current' => $manufacturer['isCurrent'],
+            'name' => $manufacturer->manufacturerName,
+            'url_name' => $manufacturer->urlManufacturerName,
+            'is_current' => $manufacturer->isCurrent,
         ]);
     }
 
-    private function saveManufacturerMake(Manufacturer $manufacturer, array $make)
+    /**
+     * @param Manufacturer $manufacturer
+     * @param \stdClass $make
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    private function saveManufacturerMake(Manufacturer $manufacturer, \stdClass $make)
     {
-        $this->info('   Saving Manufacturer Make: ' . $make['makeName']);
+        $this->info('   Saving Manufacturer Make: ' . $make->makeName);
 
         return $manufacturer->makes()->updateOrCreate([
-            'url_name' => $make['urlMakeName'],
+            'url_name' => $make->urlMakeName,
         ], [
-            'name' => $make['makeName'],
-            'url_name' => $make['urlMakeName'],
-            'is_current' => $make['isCurrent'],
+            'name' => $make->makeName,
+            'url_name' => $make->urlMakeName,
+            'is_current' => $make->isCurrent,
         ]);
     }
 
-    private function saveMakeModel(Make $make, array $model)
+    /**
+     * @param Make $make
+     * @param \stdClass $model
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    private function saveMakeModel(Make $make, \stdClass $model)
     {
-        $this->info('   Saving Make Model: ' . $model['modelName']);
+        $this->info('   Saving Make Model: ' . $model->modelName);
 
         return $make->models()->updateOrCreate([
-            'url_name' => $model['urlModelName'],
+            'url_name' => $model->urlModelName,
         ], [
-            'name' => $model['modelName'],
-            'url_name' => $model['urlModelName'],
-            'is_current' => $model['isCurrent'],
+            'name' => $model->modelName,
+            'url_name' => $model->urlModelName,
+            'is_current' => $model->isCurrent,
         ]);
     }
 
@@ -551,7 +574,7 @@ class Importer
             } else {
                 $features = [$prefix, $prefix . ' ' . trim($suffix, '() ')];
                 $contents = array_map(function ($str) {
-                    return trim($str, ') ') ;
+                    return trim($str, ') ');
                 }, explode('(', $content));
 
                 if (count($features) != count($contents)) {
