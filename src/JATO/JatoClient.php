@@ -85,8 +85,8 @@ class JatoClient extends ApiClient
         // But this class is used on the import which runs for 4+ hours, so we validate the
         // token on every request in order to ensure it doesn't expire in the middle.
 
-        // refresh token if it will expire within the next 5 mins.
-        if (!$this->token || strtotime($this->token->expires_on) > (time() + 300)) {
+        // refresh token if it will expire within the next 10 seconds.
+        if (!$this->token || strtotime($this->token->expires_on) < (time() + 10)) {
             $this->refreshAuthorizationToken();
         }
 
@@ -121,6 +121,8 @@ class JatoClient extends ApiClient
      */
     public function refreshAuthorizationToken()
     {
+
+        print "NEW TOKEN";
         //
         // Request new token
         $client = new Client(['connect_timeout' => 5]);
