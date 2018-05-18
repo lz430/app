@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use DeliverMyRide\JATO\JatoClient;
+use GuzzleHttp\Exception\GuzzleException;
+
 
 class DimensionsController extends BaseAPIController
 {
@@ -12,6 +14,12 @@ class DimensionsController extends BaseAPIController
             'jato_vehicle_id' => 'required|exists:versions,jato_vehicle_id',
         ]);
 
-        return $client->feature->get(request('jato_vehicle_id'), 2, 1, 100)->results;
+        try {
+            $data = $client->feature->get(request('jato_vehicle_id'), 2, 1, 100)->results;
+        } catch (GuzzleException $e) {
+            $data = [];
+        }
+
+        return $data;
     }
 }
