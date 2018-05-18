@@ -287,18 +287,18 @@ class Importer
     {
         $this->info("   Saving version and relations for UID " . $jatoVersion->uid);
 
-        if (! $manufacturer = Manufacturer::where('name', $decodedVin['manufacturer'])->first()) {
+        if (! $manufacturer = Manufacturer::where('name', $decodedVin->manufacturer)->first()) {
             // Save/Update manufacturer, make, model, then versions
             $manufacturer = $this->saveManufacturer(
-                $this->client->manufacturer->get($decodedVin['manufacturer'])
+                $this->client->manufacturer->get($decodedVin->manufacturer)
             );
         }
 
-        if (! $make = Make::where('name', $decodedVin['make'])->first()) {
+        if (! $make = Make::where('name', $decodedVin->make)->first()) {
             // Save/Update and save new make
             $make = $this->saveManufacturerMake(
                 $manufacturer,
-                $this->client->make->get($decodedVin['make'])
+                $this->client->make->get($decodedVin->make)
             );
         }
 
