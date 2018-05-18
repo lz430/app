@@ -16,7 +16,7 @@ class WarrantiesController extends BaseAPIController
         ]);
 
         try {
-            $data = $client->feature->get(request('jato_vehicle_id'), 14, 0, 100)->results;
+            $data = $client->feature->get(request('jato_vehicle_id'), 14, 1, 100)->results;
         } catch (GuzzleException $e) {
             $data = [];
         }
