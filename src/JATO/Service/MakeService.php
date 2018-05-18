@@ -58,7 +58,7 @@ class MakeService
      * GET
      * @see https://www.jatoflex.com/docs/services/55a6878974be090c745812a3/operations/55a96b4374be090dc82f15f6?
      * @param string $name
-     * @return mixed
+     * @return \stdClass
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */

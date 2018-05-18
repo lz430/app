@@ -54,7 +54,7 @@ class ModelService extends BaseService
      * @param string $name
      * @param string $style
      * @param int $year
-     * @return mixed
+     * @return \stdClass
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
