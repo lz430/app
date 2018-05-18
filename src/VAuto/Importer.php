@@ -275,7 +275,7 @@ class Importer
         // if we couldn't match, try to use the Model Code; return null if none match
         return array_first($decodedVin->versions, function ($version) use ($vAutoRow) {
             return str_contains($version->modelCode, $vAutoRow['Model Code']) && $version->isCurrent ||
-                str_contains($version['localModelCode'], $vAutoRow['Model Code']) && $version->isCurrent;
+                str_contains($version->localModelCode, $vAutoRow['Model Code']) && $version->isCurrent;
         });
     }
 
