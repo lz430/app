@@ -9,6 +9,7 @@ use App\Models\JATO\Manufacturer;
 use App\Models\JATO\VehicleModel;
 use App\Models\JATO\Version;
 use App\Models\Deal;
+use App\Models\Dealer;
 use Carbon\Carbon;
 use DeliverMyRide\JATO\JatoClient;
 use Exception;
@@ -214,9 +215,70 @@ class Importer
         Deal::where('file_hash', '!=', $fileHash)->whereDoesntHave('purchases')->delete();
     }
 
+    /**
+     * @param array $row
+     * @return array
+     */
+    private function getDealPrice($row)
+    {
+        $map = [
+            'msrp' => 'msrp',
+            'supplier' => 'price',
+        ];
+
+        $return = [
+            'msrp' => $row['MSRP'] !== '' ? $row['MSRP'] : null,
+            'price' => $row['Price'] !== '' ? $row['Price'] : null,
+            'employee' => null,
+        ];
+
+        $dealer = $user = Dealer::where('dealer_id', $row['DealerId'])->first();
+
+
+        if (!$dealer || !$dealer->price_rules) {
+            return $return;
+        }
+
+
+        foreach ($dealer->price_rules as $attr => $field) {
+            if (!$row[$field->base_field]) {
+                continue;
+            }
+
+            $return[$map[$attr]] = $row[$field->base_field];
+
+            if ($field->rules) {
+                $original = $return[$map[$attr]];
+                foreach ($field->rules as $rule) {
+                    switch ($rule->modifier) {
+                        case 'add_value':
+                            $return[$map[$attr]] += $rule->value;
+                            break;
+                        case 'subtract_value':
+                            $return[$map[$attr]] -= $rule->value;
+                            break;
+                        case 'percent':
+                            $return[$map[$attr]] = ($rule->value / 100) * $return[$map[$attr]];
+                            break;
+                    }
+                }
+            }
+
+        }
+
+        return $return;
+    }
+
+    /**
+     * @param string $fileHash
+     * @param array $vAutoRow
+     * @return Deal
+     */
     private function saveOrUpdateDeal(string $fileHash, array $vAutoRow): Deal
     {
         $this->info("   Saving deal for vin: {$vAutoRow['VIN']}");
+
+        $prices = $this->getDealPrice($vAutoRow);
 
         $deal = Deal::updateOrCreate([
             'vin' => $vAutoRow['VIN'],
@@ -240,8 +302,8 @@ class Importer
             'fuel' => $vAutoRow['Fuel'],
             'color' => $vAutoRow['Colour'],
             'interior_color' => $vAutoRow['Interior Color'],
-            'price' => $vAutoRow['Price'] !== '' ? $vAutoRow['Price'] : null,
-            'msrp' => $vAutoRow['MSRP'] !== '' ? $vAutoRow['MSRP'] : null,
+            'price' => $prices['price'],
+            'msrp' => $prices['msrp'],
             'vauto_features' => $vAutoRow['Features'] !== '' ? $vAutoRow['Features'] : null,
             'inventory_date' => Carbon::createFromFormat('m/d/Y', $vAutoRow['Inventory Date']),
             'certified' => $vAutoRow['Certified'] === 'Yes',

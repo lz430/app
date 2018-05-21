@@ -6,22 +6,14 @@ if (isset($field['value']) && (is_array($field['value']) || is_object($field['va
     $field['value'] = json_encode($field['value']);
 }
 
-$default_rules = new \stdClass();
-$default_rules->msrp = new \stdClass();
-$default_rules->msrp->base_field = 'msrp';
-$default_rules->employee = new \stdClass();
-$default_rules->employee->base_field = 'msrp';
-$default_rules->supplier = new \stdClass();
-$default_rules->supplier->base_field = 'msrp';
-
-$default_rules = json_encode($default_rules);
 
 $price_col_options = [
+    'Price' => 'Price',
     'MSRP' => 'MSRP',
-    'MEMOLINE1' => "MEMOLINE1",
-    'SALESCOST L11' => "SALESCOST L11",
-    'FLOORPLAN L8' => "FLOORPLAN L8",
-    'LISTPRICE L9' => "LISTPRICE L9",
+    //'MEMOLINE1' => "MEMOLINE1",
+    //'SALESCOST L11' => "SALESCOST L11",
+    //'FLOORPLAN L8' => "FLOORPLAN L8",
+    //'LISTPRICE L9' => "LISTPRICE L9",
 ];
 
 $price_fields = [
@@ -29,15 +21,27 @@ $price_fields = [
         'label' => "MSRP",
         'description' => "MSRP"
     ],
+    /*
     'employee' => [
         'label' => "Employee",
         'description' => "Employee Pricing"
     ],
+    */
     'supplier' => [
         'label' => "Supplier",
         'description' => "Supplier Pricing"
     ],
 ];
+
+$default_rules = new \stdClass();
+foreach($price_fields as $key => $price_field){
+    $default_rules->{$key} = new \stdClass();
+    $default_rules->{$key}->base_field = '';
+    $default_rules->{$key}->rules = [];
+}
+$default_rules = json_encode($default_rules);
+
+
 ?>
 
 <div id="rules-editor" @include('crud::inc.field_wrapper_attributes') >
@@ -131,8 +135,8 @@ $price_fields = [
                 html += '<div class="rule">';
                 html += '<select class="rule-modifier form-control">';
                 html += '<option value="percent">Percent Of Value</option>';
-                html += '<option value="add_value">Subtract</option>';
-                html += '<option value="subtract_value">Add</option>';
+                html += '<option value="subtract_value">Subtract</option>';
+                html += '<option value="add_value">Add</option>';
                 html += '</select>';
                 html += '<input class="rule-value form-control" />';
                 html += '<button class="remove-rule btn btn-danger btn-sm"><i class="fa fa-remove"></button>';
