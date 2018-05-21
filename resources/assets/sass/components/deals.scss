@@ -10,7 +10,7 @@
   justify-content: center;
   overflow-y: scroll;
   padding: 2px;
-  padding-bottom: 5rem;
+  padding-bottom: 15px;
 
   @media (min-width: $break-small) {
     height: calc(100vh - #{$nav-height + $sortbar-height});

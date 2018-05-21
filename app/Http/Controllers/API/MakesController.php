@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\JATO\Make;
+use App\Models\JATO\Make;
 use App\Transformers\MakeTransformer;
 
 class MakesController extends BaseAPIController

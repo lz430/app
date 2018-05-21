@@ -2,7 +2,7 @@
 
 namespace App\Transformers;
 
-use App\JatoFeature;
+use App\Models\JatoFeature;
 use League\Fractal\TransformerAbstract;
 
 class FeatureTransformer extends TransformerAbstract

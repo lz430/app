@@ -4,7 +4,6 @@
  */
 const purchase = {
     start: (dealPricing) => {
-        console.log(dealPricing);
         let form = document.createElement('form');
         form.setAttribute('method', 'post');
         form.setAttribute('action', '/apply-or-purchase');

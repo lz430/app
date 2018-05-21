@@ -351,6 +351,20 @@ export default class DealPricing {
         return this.data.dealLeasePayments[term][cashDown][this.leaseAnnualMileageValue()].monthlyPayment;
     }
 
+    hasLeasePaymentsForTerm(term) {
+        if (! this.data.dealLeasePayments[term]) {
+            return false;
+        }
+
+        for (let cashDown in this.data.dealLeasePayments[term]) {
+            if (! this.data.dealLeasePayments[term][cashDown][this.leaseAnnualMileageValue()]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     leasePaymentsForTermAndCashDown(term, cashDown) {
         const payment = this.leasePaymentsForTermAndCashDownValue(term, cashDown);
 

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Deal;
-use App\Dealer;
+use App\Models\Deal;
+use App\Models\Dealer;
 use App\Http\Controllers\Controller;
-use App\Zipcode;
+use App\Models\Zipcode;
 use Illuminate\Support\Facades\DB;
 
 class ZipCodeTesterController extends Controller

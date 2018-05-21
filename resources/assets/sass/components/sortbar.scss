@@ -38,6 +38,11 @@
       display: inline-flex;
     }
 
+    &--clear-filters {
+      min-height: 40px;
+      padding-bottom: 11px;
+    }
+
   }
 
   &__label {

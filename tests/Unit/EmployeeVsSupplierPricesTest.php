@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Deal;
+use App\Models\Deal;
 use App\Transformers\DealTransformer;
 use Tests\TestCase;
 

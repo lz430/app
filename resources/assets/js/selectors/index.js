@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { selectDeal } from '../actions/index';
 import R from 'ramda';
 
 const selectedDeal = state => state.selectedDeal;
@@ -51,7 +50,7 @@ const dealTargetsAvailableLoading = createSelector(
 
 export const makeDealTargetsAvailableLoading = () => {
     return dealTargetsAvailableLoading;
-}
+};
 
 // Show me all available targets for a specific deal
 const dealTargetsAvailable = createSelector(
@@ -63,7 +62,7 @@ const dealTargetsAvailable = createSelector(
 
 export const makeDealTargetsAvailable = () => {
     return dealTargetsAvailable;
-}
+};
 
 // Show me all selected targets for a specific deal
 const dealTargetsSelected = createSelector(
@@ -71,11 +70,11 @@ const dealTargetsSelected = createSelector(
     (dealTargetKey, targetsSelected) => {
         return R.prop(dealTargetKey, targetsSelected) || [];
     }
-)
+);
 
 export const makeDealTargetsSelected = () => {
     return dealTargetsSelected;
-}
+};
 
 // Generate a string of unique target ids joined by '-'
 // This will be used to cache best offers on the front-end
@@ -88,7 +87,7 @@ const selectedTargetsString = createSelector(
             return a - b;
         }, uniqueSelectedTargetIds).join('-');
     }
-)
+);
 
 // Generate the best offer key for a specific deal
 const dealBestOfferKey = createSelector(
@@ -104,18 +103,18 @@ const dealBestOfferKey = createSelector(
 
 export const makeDealBestOfferKey = () => {
     return dealBestOfferKey;
-}
+};
 
 const dealBestOfferLoading = createSelector(
     [bestOffers, dealBestOfferKey],
     (bestOffers, dealBestOfferKey) => {
         return R.isNil(R.prop(dealBestOfferKey,  bestOffers));
     }
-)
+);
 
 export const makeDealBestOfferLoading = () => {
     return dealBestOfferLoading;
-}
+};
 
 const emptyBestOffer = {totalValue: 0, programs: []};
 
@@ -125,11 +124,11 @@ const dealBestOffer = createSelector(
     (bestOffers, dealBestOfferKey) => {
         return R.prop(dealBestOfferKey,  bestOffers) || emptyBestOffer;
     }
-)
+);
 
 export const makeDealBestOffer = () => {
     return dealBestOffer;
-}
+};
 
 // Get the total value of the best offer for the deal
 const dealBestOfferTotalValue = createSelector(
@@ -137,11 +136,11 @@ const dealBestOfferTotalValue = createSelector(
     (dealBestOffer) => {
         return R.prop('totalValue', dealBestOffer) || 0;
     }
-)
+);
 
 export const makeDealBestOfferTotalValue = () => {
     return dealBestOfferTotalValue;
-}
+};
 
 const dealHasCustomizedQuote = createSelector(
     deal,

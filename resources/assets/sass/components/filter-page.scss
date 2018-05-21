@@ -17,8 +17,12 @@
     }
 
     &__section {
-      margin-bottom: 1em;
+      margin-bottom: 0.5em;
       width: 100%;
+
+      @media (min-width: $break-small) {
+        margin-bottom: 1em;
+      }
 
       @media (min-width: $break-medium) {
         margin-bottom: 0;

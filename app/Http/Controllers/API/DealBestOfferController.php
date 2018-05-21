@@ -4,9 +4,10 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Deal;
-use DeliverMyRide\JATO\Client;
+use App\Models\Deal;
+use DeliverMyRide\JATO\JatoClient;
 use Cache;
+use GuzzleHttp\Exception\GuzzleException;
 
 class DealBestOfferController extends BaseAPIController
 {
@@ -14,7 +15,7 @@ class DealBestOfferController extends BaseAPIController
 
     public $client;
 
-    public function __construct(Client $client)
+    public function __construct(JatoClient $client)
     {
         $this->client = $client;
     }
@@ -39,8 +40,25 @@ class DealBestOfferController extends BaseAPIController
         $zipCode = request('zipcode');
         $cacheKey = "best-offer:{$jatoVehicleId}:{$paymentType}:{$zipCode}:{$sortedTargets}";
 
-        return Cache::tags(['best-offers'])->remember($cacheKey, self::CACHE_LENGTH, function () use ($jatoVehicleId, $paymentType, $zipCode, $sortedTargets) {
-            return $this->client->bestOffer($jatoVehicleId, $paymentType, $zipCode, $sortedTargets);
-        });
+        if (Cache::tags(['best-offers'])->has($cacheKey)) {
+            $data = Cache::tags(['best-offers'])->get($cacheKey);
+        } else {
+            try {
+                $data = $this->client->incentive->bestOffer($jatoVehicleId, $paymentType, $zipCode, $sortedTargets);
+                Cache::tags(['best-offers'])->put($cacheKey, $data, self::CACHE_LENGTH);
+
+            } catch (GuzzleException $e) {
+                Cache::tags(['best-offers'])->put($cacheKey, new \stdClass(), 5);
+                $data = new \stdClass();
+            }
+        }
+
+        if (!isset($data->totalValue)) {
+            $data->totalValue = 0;
+            $data->programs = [];
+        }
+
+        return response()->json($data);
     }
+
 }

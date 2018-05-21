@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Deal;
+use App\Models\Deal;
 use App\Transformers\DealTransformer;
 use League\Fractal\Serializer\DataArraySerializer;
 
@@ -16,11 +16,10 @@ class DealsController extends Controller
 
         $dealTransformed = fractal($deal)
             ->transformWith(DealTransformer::class)
-            ->serializeWith(new DataArraySerializer)
-            ->toJson();
+            ->serializeWith(new DataArraySerializer);
 
         return view('deals.show')
-            ->with('deal', $dealTransformed)
+            ->with('deal', $dealTransformed->toJson())
             ->with('title', $title);
     }
 }

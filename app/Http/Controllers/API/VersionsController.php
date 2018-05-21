@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
-use App\JATO\Make;
-use App\JATO\Version;
+use App\Models\JATO\Make;
+use App\Models\JATO\Version;
 use App\Transformers\VersionTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

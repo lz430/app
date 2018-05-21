@@ -2,8 +2,8 @@
 
 namespace App\Transformers;
 
-use App\Deal;
-use App\JATO\Make;
+use App\Models\Deal;
+use App\Models\JATO\Make;
 use League\Fractal\TransformerAbstract;
 
 class DealTransformer extends TransformerAbstract

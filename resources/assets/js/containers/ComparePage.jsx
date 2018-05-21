@@ -105,7 +105,7 @@ class ComparePage extends React.PureComponent {
             <Deal deal={deal} key={index}>
                 <div className="deal__buttons">
                     <button
-                        className="deal__button deal__button--small deal__button--blue"
+                        className="deal__button deal__button--x-small deal__button--blue"
                         onClick={() =>
                             (window.location = `/deals/${deal.id}`)
                         }
