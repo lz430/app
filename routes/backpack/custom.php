@@ -11,7 +11,16 @@ Route::group([
     'middleware' => ['web', config('backpack.base.middleware_key', 'admin')],
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () {
+    //
+    // General admin things
     Route::get('dashboard', 'DashboardController@index');
+
+    //
+    // Models
+    CRUD::resource('dealer', 'DealerCrudController');
+
+    //
+    // Custom Debug tools
     Route::get('zip-tester/{zip}', 'ZipCodeTesterController');
     Route::get('jato-logs/{date}', 'JatoLogController@showDay');
     Route::get('jato-logs', 'JatoLogController@index');

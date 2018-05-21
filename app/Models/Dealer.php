@@ -5,14 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Backpack\CRUD\CrudTrait;
+
 
 
 class Dealer extends Model
 {
+    use CrudTrait;
+
     /**
      * @var array
      */
     protected $guarded = ['id'];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'price_rules' => 'object',
+    ];
+
 
     /**
      * @var array
@@ -31,6 +43,7 @@ class Dealer extends Model
         'phone',
         'contact_name',
         'contact_title',
+        'price_rules',
     ];
 
     /**

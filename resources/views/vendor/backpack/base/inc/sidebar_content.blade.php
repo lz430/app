@@ -5,15 +5,13 @@
     </a>
 </li>
 
-<li class="treeview">
-    <a href="#">
-        <i class="fa fa-laptop"></i>
-        <span>Debug Tools</span>
-        <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+<li class="header">System Data</li>
+<li>
+    <a href="/admin/dealer">
+        <i class="fa fa-car"></i>Dealers
     </a>
-    <ul class="treeview-menu">
-        <li><a href="/admin/zip-tester/48116"><i class="fa fa-circle-o"></i> Zip Tester</a></li>
-    </ul>
 </li>
+
+
+<li class="header">Debug Tools</li>
+<li><a href="/admin/zip-tester/48116"><i class="fa fa-circle-o"></i> Zip Tester</a></li>
