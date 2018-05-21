@@ -42,6 +42,8 @@ const reducer = (state, action) => {
                 */
                 state.selectedFeatures = [];
                 state.selectedMakes = [];
+
+                window.history.replaceState({}, document.title, "/filter");
                 return state;
             }
 
