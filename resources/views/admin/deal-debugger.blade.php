@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('backpack::layout')
 
 @section('content')
 <style>.hide{display:none;}.show{display:block;}</style>
