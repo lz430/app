@@ -18,6 +18,7 @@ Route::group([
     //
     // Models
     CRUD::resource('dealer', 'DealerCrudController');
+    CRUD::resource('user', 'UserCrudController');
 
     //
     // Custom Debug tools

@@ -11,7 +11,11 @@
         <i class="fa fa-car"></i>Dealers
     </a>
 </li>
-
+<li>
+    <a href="/admin/user">
+        <i class="fa fa-user"></i>Users
+    </a>
+</li>
 
 <li class="header">Debug Tools</li>
 <li><a href="/admin/zip-tester/48116"><i class="fa fa-circle-o"></i> Zip Tester</a></li>
