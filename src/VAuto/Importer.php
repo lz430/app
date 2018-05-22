@@ -232,7 +232,7 @@ class Importer
             'employee' => null,
         ];
 
-        $dealer = $user = Dealer::where('dealer_id', $row['DealerId'])->first();
+        $dealer = Dealer::where('dealer_id', $row['DealerId'])->first();
 
 
         if (!$dealer || !$dealer->price_rules) {
@@ -248,7 +248,6 @@ class Importer
             $return[$map[$attr]] = $row[$field->base_field];
 
             if ($field->rules) {
-                $original = $return[$map[$attr]];
                 foreach ($field->rules as $rule) {
                     switch ($rule->modifier) {
                         case 'add_value':

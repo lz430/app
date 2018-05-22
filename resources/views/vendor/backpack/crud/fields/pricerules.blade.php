@@ -138,7 +138,7 @@ $default_rules = json_encode($default_rules);
                 html += '<option value="subtract_value">Subtract</option>';
                 html += '<option value="add_value">Add</option>';
                 html += '</select>';
-                html += '<input class="rule-value form-control" />';
+                html += '<input min="0" type="number" class="rule-value form-control" />';
                 html += '<button class="remove-rule btn btn-danger btn-sm"><i class="fa fa-remove"></button>';
                 html += '</div>';
 
@@ -204,7 +204,7 @@ $default_rules = json_encode($default_rules);
                     price_field_data['rules'] = [];
 
                     $(".rule", $(this)).each(function () {
-                        var value = $(".rule-value", $(this)).val();
+                        var value = $(".rule-value", $(this)).val().trim();
 
                         var rule_data = {
                             modifier: $(".rule-modifier", $(this)).val(),
