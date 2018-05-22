@@ -43,7 +43,7 @@ const purchase = {
 
             let down_payment = document.createElement('input');
             down_payment.setAttribute('name', 'down_payment');
-            down_payment.setAttribute('value', dealPricing.leaseCashDownValue());
+            down_payment.setAttribute('value', dealPricing.leaseCashDueValue());
             form.appendChild(down_payment);
         }
         
