@@ -675,16 +675,16 @@ export function updateLeaseTerm(deal, term) {
     };
 }
 
-export function updateLeaseCashDown(deal, cashDown) {
+export function updateLeaseCashDue(deal, cashDue) {
     return (dispatch, getState) => {
         const zipcode = getState().zipcode;
 
         if (!zipcode) return;
 
         dispatch({
-            type: ActionTypes.UPDATE_LEASE_CASH_DOWN,
+            type: ActionTypes.UPDATE_LEASE_CASH_DUE,
             deal,
-            cashDown,
+            cashDue,
             zipcode,
         });
     };

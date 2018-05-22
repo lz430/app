@@ -12,7 +12,7 @@ class LeasePaymentsController extends BaseAPIController
             'tax_rate' => 'required',
             'acquisition_fee' => 'required',
             'doc_fee' => 'required',
-            'cash_down.*' => 'required',
+            'cash_due.*' => 'required',
             'rebate' => 'required',
             'license_fee' => 'required',
             'cvr_fee' => 'required',
@@ -25,7 +25,7 @@ class LeasePaymentsController extends BaseAPIController
         ]);
 
         return $client->getLeasePaymentsFor(
-            request('cash_down'),
+            request('cash_due'),
             request('terms'),
             request('tax_rate'),
             request('acquisition_fee'),
