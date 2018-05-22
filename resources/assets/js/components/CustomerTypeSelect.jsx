@@ -9,6 +9,7 @@ const domesticBrands = ['Chrysler', 'Dodge', 'Jeep', 'Ford', 'Lincoln', 'Chevrol
 class CustomerTypeSelect extends React.PureComponent {
     handleChange(e) {
         this.props.setEmployeeBrand(e.target.value === 'employee' ? this.props.deal.make : false);
+        this.props.onChange(this.props.deal, e.target.value);
     }
 
     render() {
@@ -31,5 +32,9 @@ class CustomerTypeSelect extends React.PureComponent {
         ) : <div />;
     }
 }
+
+CustomerTypeSelect.defaultProps = {
+    onChange: (deal, newValue) => {}
+};
 
 export default CustomerTypeSelect;

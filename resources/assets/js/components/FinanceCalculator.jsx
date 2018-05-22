@@ -114,7 +114,7 @@ class FinanceCalculator extends React.PureComponent {
                         <CustomerTypeSelect {...R.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props)} />
                     </div>
                     <div>
-                        Your Monthly Price{' '}{this.showWhenPricingIsLoaded(() => this.props.dealPricing.monthlyPayments())}*
+                        Your Monthly Payment{' '}{this.showWhenPricingIsLoaded(() => this.props.dealPricing.monthlyPayments())}*
                     </div>
                 </div>
                 <hr />
@@ -150,6 +150,8 @@ class FinanceCalculator extends React.PureComponent {
                                 value={this.props.dealPricing.financeTermValue()}
                                 onChange={e => this.updateTermDuration(e)}
                             >
+                                <option value="84">84</option>
+                                <option value="72">72</option>
                                 <option value="60">60</option>
                                 <option value="48">48</option>
                                 <option value="36">36</option>
