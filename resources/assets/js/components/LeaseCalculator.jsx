@@ -70,7 +70,7 @@ class LeaseCalculator extends React.PureComponent {
                         />
                     </div>
                     <div>
-                        Your Monthly Price{' '}{this.showWhenPricingIsLoaded(() => this.props.dealPricing.monthlyPayments())}*
+                        Your Monthly Payment{' '}{this.showWhenPricingIsLoaded(() => this.props.dealPricing.monthlyPayments())}*
                     </div>
                 </div>
                 <hr />
