@@ -5,7 +5,7 @@
     </a>
 </li>
 
-<li class="header">System Data</li>
+<li class="header">Data</li>
 <li>
     <a href="/admin/dealer">
         <i class="fa fa-car"></i>Dealers

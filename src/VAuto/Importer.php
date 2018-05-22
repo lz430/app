@@ -280,6 +280,7 @@ class Importer
 
         $prices = $this->getDealPrice($vAutoRow);
 
+
         $deal = Deal::updateOrCreate([
             'vin' => $vAutoRow['VIN'],
         ], [
