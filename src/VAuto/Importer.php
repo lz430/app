@@ -217,55 +217,27 @@ class Importer
 
     /**
      * @param array $row
-     * @return array
+     * @return \stdClass
      */
-    private function getDealPrice($row)
+    private function getDealSourcePrice($row)
     {
+
+        /**
+         * key: internal value
+         * value: vauto row header
+         */
         $map = [
-            'msrp' => 'msrp',
-            'supplier' => 'price',
+            'msrp' => "MSRP",
+            'price' => "Price",
         ];
 
-        $return = [
-            'msrp' => $row['MSRP'] !== '' ? $row['MSRP'] : null,
-            'price' => $row['Price'] !== '' ? $row['Price'] : null,
-            'employee' => null,
-        ];
+        $return = [];
 
-        $dealer = Dealer::where('dealer_id', $row['DealerId'])->first();
-
-
-        if (!$dealer || !$dealer->price_rules) {
-            return $return;
+        foreach ($map as $key => $value) {
+            $return[$key] = $row[$value];
         }
 
-
-        foreach ($dealer->price_rules as $attr => $field) {
-            if (!$row[$field->base_field]) {
-                continue;
-            }
-
-            $return[$map[$attr]] = $row[$field->base_field];
-
-            if ($field->rules) {
-                foreach ($field->rules as $rule) {
-                    switch ($rule->modifier) {
-                        case 'add_value':
-                            $return[$map[$attr]] += $rule->value;
-                            break;
-                        case 'subtract_value':
-                            $return[$map[$attr]] -= $rule->value;
-                            break;
-                        case 'percent':
-                            $return[$map[$attr]] = ($rule->value / 100) * $return[$map[$attr]];
-                            break;
-                    }
-                }
-            }
-
-        }
-
-        return $return;
+        return (object)$return;
     }
 
     /**
@@ -276,9 +248,6 @@ class Importer
     private function saveOrUpdateDeal(string $fileHash, array $vAutoRow): Deal
     {
         $this->info("   Saving deal for vin: {$vAutoRow['VIN']}");
-
-        $prices = $this->getDealPrice($vAutoRow);
-
 
         $deal = Deal::updateOrCreate([
             'vin' => $vAutoRow['VIN'],
@@ -302,8 +271,8 @@ class Importer
             'fuel' => $vAutoRow['Fuel'],
             'color' => $vAutoRow['Colour'],
             'interior_color' => $vAutoRow['Interior Color'],
-            'price' => $prices['price'],
-            'msrp' => $prices['msrp'],
+            'price' => $vAutoRow['Price'] !== '' ? $vAutoRow['Price'] : null,
+            'msrp' => $vAutoRow['MSRP'] !== '' ? $vAutoRow['MSRP'] : null,
             'vauto_features' => $vAutoRow['Features'] !== '' ? $vAutoRow['Features'] : null,
             'inventory_date' => Carbon::createFromFormat('m/d/Y', $vAutoRow['Inventory Date']),
             'certified' => $vAutoRow['Certified'] === 'Yes',
@@ -313,6 +282,7 @@ class Importer
             'fuel_econ_hwy' => $vAutoRow['Highway MPG'] !== '' ? $vAutoRow['Highway MPG'] : null,
             'dealer_name' => $vAutoRow['Dealer Name'],
             'days_old' => $vAutoRow['Age'],
+            'source_price' => $this->getDealSourcePrice($vAutoRow),
         ]);
 
         return $deal;

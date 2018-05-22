@@ -7,9 +7,12 @@ if (isset($field['value']) && (is_array($field['value']) || is_object($field['va
 }
 
 
+/**
+ * These options represent the $deal->source_price object attributes.
+ */
 $price_col_options = [
-    'Price' => 'Price',
-    'MSRP' => 'MSRP',
+    'price' => 'Price',
+    'msrp' => 'MSRP',
     //'MEMOLINE1' => "MEMOLINE1",
     //'SALESCOST L11' => "SALESCOST L11",
     //'FLOORPLAN L8' => "FLOORPLAN L8",
@@ -21,12 +24,10 @@ $price_fields = [
         'label' => "MSRP",
         'description' => "MSRP"
     ],
-    /*
     'employee' => [
         'label' => "Employee",
         'description' => "Employee Pricing"
     ],
-    */
     'supplier' => [
         'label' => "Supplier",
         'description' => "Supplier Pricing"
@@ -36,7 +37,7 @@ $price_fields = [
 $default_rules = new \stdClass();
 foreach($price_fields as $key => $price_field){
     $default_rules->{$key} = new \stdClass();
-    $default_rules->{$key}->base_field = '';
+    $default_rules->{$key}->base_field = 'msrp';
     $default_rules->{$key}->rules = [];
 }
 $default_rules = json_encode($default_rules);
@@ -120,9 +121,6 @@ $default_rules = json_encode($default_rules);
             var $editor = $("#rules-editor");
             var $value = $('input[name="price_rules"]');
             var $form = $editor.parents("form");
-
-
-
 
             /**
              * returns a jquery object representing a new rule that can be inserted.

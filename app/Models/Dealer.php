@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Backpack\CRUD\CrudTrait;
 
 
-
+/**
+ * @property int $id
+ * @property  \stdClass $price_rules
+ */
 class Dealer extends Model
 {
     use CrudTrait;
