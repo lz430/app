@@ -150,6 +150,8 @@ class FinanceCalculator extends React.PureComponent {
                                 value={this.props.dealPricing.financeTermValue()}
                                 onChange={e => this.updateTermDuration(e)}
                             >
+                                <option value="84">84</option>
+                                <option value="72">72</option>
                                 <option value="60">60</option>
                                 <option value="48">48</option>
                                 <option value="36">36</option>
