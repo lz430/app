@@ -10,6 +10,7 @@ import * as Actions from 'actions';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import { makeDealBestOfferTotalValue, makeDealBestOfferLoading } from 'selectors/index';
+import CustomizeQuoteOrBuyNowButton from "./CustomizeQuoteOrBuyNowButton";
 
 class LeaseCalculator extends React.PureComponent {
     showWhenPricingIsLoaded(fn) {
@@ -63,7 +64,10 @@ class LeaseCalculator extends React.PureComponent {
             <div className="cash-finance-lease-calculator__calculator-content">
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                     <div>
-                        <CustomerTypeSelect {...R.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props)} />
+                        <CustomerTypeSelect
+                            {...R.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props)}
+                            onChange={(deal) => this.props.requestBestOffer(this.props.dealPricing.deal())}
+                        />
                     </div>
                     <div>
                         Your Monthly Price{' '}{this.showWhenPricingIsLoaded(() => this.props.dealPricing.monthlyPayments())}*
