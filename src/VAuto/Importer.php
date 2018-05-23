@@ -9,6 +9,7 @@ use App\Models\JATO\Manufacturer;
 use App\Models\JATO\VehicleModel;
 use App\Models\JATO\Version;
 use App\Models\Deal;
+use App\Models\Dealer;
 use Carbon\Carbon;
 use DeliverMyRide\JATO\JatoClient;
 use Exception;
@@ -214,6 +215,36 @@ class Importer
         Deal::where('file_hash', '!=', $fileHash)->whereDoesntHave('purchases')->delete();
     }
 
+    /**
+     * @param array $row
+     * @return \stdClass
+     */
+    private function getDealSourcePrice($row)
+    {
+
+        /**
+         * key: internal value
+         * value: vauto row header
+         */
+        $map = [
+            'msrp' => "MSRP",
+            'price' => "Price",
+        ];
+
+        $return = [];
+
+        foreach ($map as $key => $value) {
+            $return[$key] = $row[$value];
+        }
+
+        return (object)$return;
+    }
+
+    /**
+     * @param string $fileHash
+     * @param array $vAutoRow
+     * @return Deal
+     */
     private function saveOrUpdateDeal(string $fileHash, array $vAutoRow): Deal
     {
         $this->info("   Saving deal for vin: {$vAutoRow['VIN']}");
@@ -251,6 +282,7 @@ class Importer
             'fuel_econ_hwy' => $vAutoRow['Highway MPG'] !== '' ? $vAutoRow['Highway MPG'] : null,
             'dealer_name' => $vAutoRow['Dealer Name'],
             'days_old' => $vAutoRow['Age'],
+            'source_price' => $this->getDealSourcePrice($vAutoRow),
         ]);
 
         return $deal;

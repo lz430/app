@@ -39,7 +39,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \DateTime $inventory_date
  * @property boolean|null $certified
  * @property string|null $description
- * @property array|null $option_codes
+ * @property array||null $option_codes
+ * @property \stdClass|null $source_price
  * @property int|null $fuel_econ_city
  * @property int|null $fuel_econ_hwy
  * @property string $dealer_name
@@ -67,7 +68,8 @@ class Deal extends Model
      * @var array
      */
     protected $casts = [
-        'option_codes' => 'array'
+        'option_codes' => 'array',
+        'source_price' => 'object'
     ];
 
     /**

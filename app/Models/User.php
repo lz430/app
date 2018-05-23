@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Backpack\CRUD\CrudTrait;
 
 
 /**
@@ -27,12 +28,21 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable;
+    use CrudTrait;
+
 
     /**
      * @var array
      */
     protected $fillable = [
-        'drivers_license_number', 'drivers_license_state', 'first_name', 'last_name', 'email', 'password', 'phone_number', 'zip',
+        'drivers_license_number',
+        'drivers_license_state',
+        'first_name',
+        'last_name',
+        'email',
+        'password',
+        'phone_number',
+        'zip',
     ];
 
     /**
@@ -60,5 +70,19 @@ class User extends Authenticatable
         static::creating(function ($user) {
             $user->api_token = str_random(60);
         });
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param string $token
+     *
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        /*
+        $this->notify(new ResetPasswordNotification($token));
+        */
     }
 }

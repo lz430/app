@@ -8,9 +8,69 @@ use League\Fractal\TransformerAbstract;
 
 class DealTransformer extends TransformerAbstract
 {
+
+    /**
+     * @param Deal $deal
+     * Generate Pricing
+     */
+    public function prices(Deal $deal) {
+
+        //
+        // Migration help
+        if (!$deal->source_price) {
+            $deal->source_price = (object) [
+              'msrp' => $deal->msrp,
+              'price' => $deal->price,
+            ];
+        }
+
+        // The defaults when no rules exist.
+        $prices = [
+            'msrp' => $deal->source_price->msrp !== '' ? $deal->source_price->msrp : null,
+            'employee' => $deal->source_price->price !== '' ? $deal->source_price->price : null,
+            'supplier' => (in_array(strtolower($deal->make), Make::DOMESTIC) ?  $deal->source_price->price * 1.04 :  $deal->source_price->price)
+        ];
+
+        $dealer = $deal->dealer;
+        // Dealer has some special rules
+        if ($dealer->price_rules) {
+            foreach ($dealer->price_rules as $attr => $field) {
+
+                // If for whatever reason the selected base price for the field doesn't exist or it's false, we fall out
+                // so the default role price is used.
+                if (!isset($deal->source_price->{$field->base_field}) || !$deal->source_price->{$field->base_field}) {
+                    continue;
+                }
+
+                $prices[$attr] = $deal->source_price->{$field->base_field};
+
+                if ($field->rules) {
+                    foreach ($field->rules as $rule) {
+                        switch ($rule->modifier) {
+                            case 'add_value':
+                                $prices[$attr] += $rule->value;
+                                break;
+                            case 'subtract_value':
+                                $prices[$attr] -= $rule->value;
+                                break;
+                            case 'percent':
+                                $prices[$attr] = ($rule->value / 100) * $prices[$attr];
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return (object) array_map('floatval', $prices);
+    }
+
+
     public function transform(Deal $deal)
     {
         $deal->photos->shift();
+
+        $prices = $this->prices($deal);
         return [
             'id' => $deal->id,
             'file_hash' => $deal->file_hash,
@@ -32,9 +92,9 @@ class DealTransformer extends TransformerAbstract
             'fuel' => $deal->fuel,
             'color' => $deal->color,
             'interior_color' => $deal->interior_color,
-            'employee_price' => (float) $deal->price,
-            'supplier_price' =>  (float) (in_array(strtolower($deal->make), Make::DOMESTIC) ? $deal->price * 1.04 : $deal->price),
-            'msrp' => (float) $deal->msrp,
+            'employee_price' => $prices->employee,
+            'supplier_price' =>  $prices->supplier,
+            'msrp' => $prices->msrp,
             'inventory_date' => $deal->inventory_date,
             'certified' => $deal->certified,
             'description' => $deal->description,

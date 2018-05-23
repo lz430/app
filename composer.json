@@ -7,6 +7,7 @@
     "require": {
         "php": ">=7.1",
         "adambullmer/usdl-regex": "^1.0",
+        "backpack/crud": "^3.4",
         "doctrine/dbal": "^2.5",
         "greggilbert/recaptcha": "^2.2",
         "guzzlehttp/guzzle": "^6.2",
@@ -20,9 +21,11 @@
         "spatie/laravel-fractal": "^5.0"
     },
     "require-dev": {
+        "backpack/generators": "^1.1",
         "barryvdh/laravel-debugbar": "^3.0",
         "barryvdh/laravel-ide-helper": "^2.4",
         "fzaninotto/faker": "~1.4",
+        "laracasts/generators": "dev-master",
         "laravel/homestead": "^7.3",
         "mockery/mockery": "0.9.*",
         "nunomaduro/collision": "^1.1",
