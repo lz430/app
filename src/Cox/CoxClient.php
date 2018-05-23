@@ -8,7 +8,7 @@ use DeliverMyRide\Common\ApiClient;
  * Class CoxClient
  * @package DeliverMyRide\Cox
 
- * @see https://incentives.homenetiol.com/v2.2/metadata
+ * @see https://incentives.homenetiol.com/v2.4/metadata
  *  For information about endpoints
  */
 class CoxClient extends ApiClient
@@ -19,8 +19,10 @@ class CoxClient extends ApiClient
     /** @var string baseUrl */
     protected $baseUrl;
 
-    /** @var Service\TestService $test */
-    public $test;
+    public $vin;
+    public $hashcode;
+    public $program;
+    public $vehicle;
 
     /**
      * CoxClient constructor.
@@ -31,11 +33,14 @@ class CoxClient extends ApiClient
         parent::__construct();
 
         // Setup services
-        $this->test = new Service\TestService($this);
+        $this->vin = new Service\VinService($this);
+        $this->hashcode = new Service\HashcodeService($this);
+        $this->program = new Service\ProgramService($this);
+        $this->vehicle = new Service\VehicleService($this);
 
         // Configure
         $this->apiKey = $apiKey;
-        $this->baseUrl = "https://incentives.homenetiol.com/v2.2/json/reply";
+        $this->baseUrl = "https://incentives.homenetiol.com/v2.4/json/reply";
     }
 
     protected function getRequestHeaders() {
