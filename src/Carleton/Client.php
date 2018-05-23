@@ -26,7 +26,7 @@ class Client
 
 
     public function getLeasePaymentsFor(
-        array $cashDownOptions,
+        array $cashDueOptions,
         $terms,
         $taxRate,
         $acquisitionFee,
@@ -43,7 +43,7 @@ class Client
         }
 
         $cacheKey = implode('--', [
-            implode('-', $cashDownOptions),
+            implode('-', $cashDueOptions),
             $terms,
             $taxRate,
             $acquisitionFee,
@@ -54,7 +54,7 @@ class Client
             $msrp,
             $cashAdvance,
             $contractDate->format('Y-m-d'),
-            'v1'
+            'v2'
         ]);
 
         if (Cache::has($cacheKey)) {
@@ -65,7 +65,7 @@ class Client
         Log::debug("Cache MISS ($cacheKey)");
 
         $quoteParameters = [];
-        foreach ($cashDownOptions as $cashDown) {
+        foreach ($cashDueOptions as $cashDue) {
             foreach (json_decode($terms, true) as $term => $termData) {
                 $annualMileages = $termData['annualMileage'];
                 foreach ($annualMileages as $annualMileage => $annualMileageData) {
@@ -73,7 +73,7 @@ class Client
                         ->withTaxRate($taxRate)
                         ->withAcquisitionFee($acquisitionFee)
                         ->withDocFee($docFee)
-                        ->withCashDown($cashDown)
+                        ->withCashDown($cashDue)
                         ->withRebate($rebate)
                         ->withLicenseFee($licenseFee)
                         ->withCvrFee($cvrFee)
@@ -159,7 +159,7 @@ class Client
 
             $results[$i] = [
                 'term' => $input->getTerm(),
-                'cash_down' => (float)$input->getCashDown(),
+                'cash_due' => (float)$input->getCashDown(),
                 'annual_mileage' => $input->getAnnualMileage(),
                 'monthly_payment' => (float)sprintf("%.02f", $quote->RegularPayment),
                 'total_amount_at_drive_off' => (float)sprintf("%.02f", $quote->TotalAmountAtDriveOff),

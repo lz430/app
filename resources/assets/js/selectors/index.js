@@ -16,7 +16,7 @@ const financeTerm = state => state.financeTerm;
 
 const leaseAnnualMileage = state => state.leaseAnnualMileage;
 const leaseTerm = state => state.leaseTerm;
-const leaseCashDown = state => state.leaseCashDown;
+const leaseCashDue = state => state.leaseCashDue;
 
 const dealsIdsWithCustomizedQuotes = state => state.dealsIdsWithCustomizedQuotes;
 
@@ -255,18 +255,18 @@ const dealLeaseTerm = createSelector(
 
 );
 
-const dealLeaseCashDown = createSelector(
+const dealLeaseCashDue = createSelector(
     deal,
     zipcode,
-    leaseCashDown,
+    leaseCashDue,
     (
         deal,
         zipcode,
-        leaseCashDown
+        leaseCashDue
     ) => {
         const key = `${deal.id}.${zipcode}`;
 
-        return leaseCashDown[key] ? leaseCashDown[key] : null;
+        return leaseCashDue[key] ? leaseCashDue[key] : null;
     }
 
 );
@@ -282,7 +282,7 @@ const dealPricing = createSelector(
     financeTerm,
     dealLeaseAnnualMileage,
     dealLeaseTerm,
-    dealLeaseCashDown,
+    dealLeaseCashDue,
     dealHasCustomizedQuote,
     dealLeaseRatesLoading,
     dealLeaseRates,
@@ -299,7 +299,7 @@ const dealPricing = createSelector(
         financeTerm,
         dealLeaseAnnualMileage,
         dealLeaseTerm,
-        dealLeaseCashDown,
+        dealLeaseCashDue,
         dealHasCustomizedQuote,
         dealLeaseRatesLoading,
         dealLeaseRates,
@@ -317,7 +317,7 @@ const dealPricing = createSelector(
             financeTerm,
             leaseAnnualMileage: dealLeaseAnnualMileage,
             leaseTerm: dealLeaseTerm,
-            leaseCashDown: dealLeaseCashDown,
+            leaseCashDue: dealLeaseCashDue,
             dealHasCustomizedQuote,
             dealLeaseRatesLoading,
             dealLeaseRates,

@@ -351,8 +351,8 @@ const reducer = (state, action) => {
         case ActionTypes.UPDATE_LEASE_ANNUAL_MILEAGE:
             return {...state, leaseAnnualMileage: {...state.leaseAnnualMileage, [`${action.deal.id}.${action.zipcode}`]: action.annualMileage}};
 
-        case ActionTypes.UPDATE_LEASE_CASH_DOWN:
-            return {...state, leaseCashDown: {...state.leaseCashDown, [`${action.deal.id}.${action.zipcode}`]: action.cashDown}};
+        case ActionTypes.UPDATE_LEASE_CASH_DUE:
+            return {...state, leaseCashDue: {...state.leaseCashDue, [`${action.deal.id}.${action.zipcode}`]: action.cashDue}};
 
         case ActionTypes.REQUEST_LEASE_RATES:
             return state;
@@ -381,11 +381,11 @@ const reducer = (state, action) => {
                     leasePaymentsMatrix[leasePayment.term] = {};
                 }
 
-                if (! leasePaymentsMatrix[leasePayment.term][leasePayment.cash_down]) {
-                    leasePaymentsMatrix[leasePayment.term][leasePayment.cash_down] = {};
+                if (! leasePaymentsMatrix[leasePayment.term][leasePayment.cash_due]) {
+                    leasePaymentsMatrix[leasePayment.term][leasePayment.cash_due] = {};
                 }
 
-                leasePaymentsMatrix[leasePayment.term][leasePayment.cash_down][leasePayment.annual_mileage] = {
+                leasePaymentsMatrix[leasePayment.term][leasePayment.cash_due][leasePayment.annual_mileage] = {
                     monthlyPayment: leasePayment.monthly_payment,
                     totalAmountAtDriveOff: leasePayment.total_amount_at_drive_off
                 };

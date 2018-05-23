@@ -30,7 +30,7 @@ const api = {
                 cvr_fee: dealPricing.effCvrFeeValue(),
                 msrp: dealPricing.msrpValue(),
                 cash_advance: dealPricing.sellingPriceValue(),
-                cash_down: dealPricing.allCashDownOptions(),
+                cash_due: dealPricing.allLeaseCashDueOptions(),
                 terms: dealPricing.apiTerms()
             }
         });
