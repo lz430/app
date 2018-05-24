@@ -19,7 +19,7 @@ class FilterPanel extends React.PureComponent {
         super(props);
 
         this.state = {
-            openFilter: 'Vehicle Style',
+            openFilter: null,
             sizeCategory: null,
             sizeFeatures: [],
         };
@@ -96,7 +96,8 @@ class FilterPanel extends React.PureComponent {
                 <SidebarFilter
                     key={index}
                     toggle={() => this.toggleOpenFilter(category.attributes.title)}
-                    open={this.state.openFilter === category.attributes.title}
+                    open={true}
+                    canToggle={false}
                     title={category.attributes.title}
                     count={localSelectedFeatures.length}
                 >
