@@ -38,11 +38,19 @@ const api = {
     getLeaseRates: (deal, zipcode) => {
         return window.axios.get('/api/lease-rates', {
             params: {
-                jato_vehicle_id: deal.version.jato_vehicle_id,
+                vin: deal.vin,
                 zipcode,
             },
         });
     },
+    /*getLeaseRates: (deal, zipcode) => {
+        return window.axios.get('/api/lease-rates', {
+            params: {
+                jato_vehicle_id: deal.version.jato_vehicle_id,
+                zipcode,
+            },
+        });
+    },*/
     getWarranties: jato_vehicle_id => {
         return window.axios.get('/api/warranties', {
             params: {
@@ -164,15 +172,22 @@ const api = {
     postNotifyWhenInRange: (email = null) => {
         return window.axios.post('/api/hubspot/not-in-area', { email });
     },
-    getBestOffer: (dealId, paymentType, zipcode, targets, cancelToken) => {
-        return window.axios.get(`/api/deals/${dealId}/best-offer`, {
+    getBestOffer: (dealId, paymentType, zipcode, cancelToken) => { //dealId, paymentType, zipcode, targets, cancelToken
+        return window.axios.get(`/api/deals/${dealId}/best-price`, {
+            cancelToken: cancelToken.token,
+            params: {
+                payment_type: paymentType,
+                zipcode,
+            },
+        });
+        /*return window.axios.get(`/api/deals/${dealId}/best-offer`, {
             cancelToken: cancelToken.token,
             params: {
                 payment_type: paymentType,
                 zipcode,
                 targets,
             },
-        });
+        });*/
     },
 };
 
