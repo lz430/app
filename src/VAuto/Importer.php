@@ -212,6 +212,8 @@ class Importer
 
         $rules = [
             "/(?<=(?i)Quick Order Package )(.*?)(?=\|| )/",
+            "/(?<=(?i)Preferred Equipment Group )(.*?)(?=\|| )/",
+            "/(?<=(?i)Equipment Group )(.*?)(?=\|| )/"
         ];
 
         foreach($rules as $rule) {
@@ -259,6 +261,7 @@ class Importer
             }
             $this->info("    -- Version ID: {$version->id}");
             $this->info("    -- Deal ID: {$deal->id}");
+            $this->info("    -- Deal Title: {$deal->title()}");
             $this->info("    -- Is New: " . ($deal->wasRecentlyCreated ? "Yes" : "No"));
 
             DB::transaction(function () use ($version, $shouldRefreshDeals, $deal, $decodedVin, $row) {

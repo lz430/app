@@ -130,6 +130,21 @@ class Deal extends Model
             : null;
     }
 
+    /**
+     *
+     * Human title for vehicle.
+     * @return string
+     */
+    public function title() : string {
+        return implode(" ", [
+            $this->year,
+            $this->make,
+            $this->model,
+            $this->series,
+        ]);
+    }
+
+
     public static function allFuelTypes()
     {
         return self::select('fuel')->where('fuel', '!=', '')->groupBy('fuel')->get()->pluck('fuel');
