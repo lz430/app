@@ -13,10 +13,14 @@ if (isset($field['value']) && (is_array($field['value']) || is_object($field['va
 $price_col_options = [
     'price' => 'Price',
     'msrp' => 'MSRP',
-    //'MEMOLINE1' => "MEMOLINE1",
-    //'SALESCOST L11' => "SALESCOST L11",
-    //'FLOORPLAN L8' => "FLOORPLAN L8",
-    //'LISTPRICE L9' => "LISTPRICE L9",
+    'invoice' => "Invoice",
+    'sticker' => "Sticker",
+    'dealerdiscounted' => "Dealer Discounted",
+    'memoline1' => "Memo Line 1",
+    'memoline2' => "Memo Line 2",
+    'floorplanamount' => "Floor Plan Amount",
+    'salescost' => "Sales Cost",
+    'invoiceamount' => "Invoice Amount",
 ];
 
 $price_fields = [
