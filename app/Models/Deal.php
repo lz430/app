@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\JATO\Version;
 use App\DealIndexConfigurator;
+use App\Models\JATO\Make;
+
 use Carbon\Carbon;
 use ScoutElastic\Searchable;
 use Illuminate\Database\Eloquent\Builder;
@@ -183,6 +185,68 @@ class Deal extends Model
             $this->model,
             $this->series,
         ]);
+    }
+
+    public function prices() {
+
+        //
+        // Migration help
+        if (!$this->source_price) {
+            $this->source_price = (object) [
+                'msrp' => $this->msrp,
+                'price' => $this->price,
+            ];
+        }
+
+        if (!$this->source_price->price) {
+            $this->source_price->price =  ($this->price ? $this->price : $this->msrp);
+        }
+
+        if (!$this->source_price->msrp) {
+            $this->source_price->msrp  = $this->msrp;
+        }
+
+        // The defaults when no rules exist.
+        $prices = [
+            'msrp' => $this->msrp !== '' ? $this->msrp : null,
+            'default' => $this->source_price->price !== '' ? $this->source_price->price : null,
+            'employee' => $this->source_price->price !== '' ? $this->source_price->price : null,
+            'supplier' => (in_array(strtolower($this->make), Make::DOMESTIC) ?  $this->source_price->price * 1.04 :  $this->source_price->price)
+        ];
+
+        $dealer = $this->dealer;
+
+        // Dealer has some special rules
+        if ($dealer->price_rules) {
+            foreach ($dealer->price_rules as $attr => $field) {
+
+                // If for whatever reason the selected base price for the field doesn't exist or it's false, we fall out
+                // so the default role price is used.
+                if (!isset($this->source_price->{$field->base_field}) || !$this->source_price->{$field->base_field}) {
+                    continue;
+                }
+
+                $prices[$attr] = $this->source_price->{$field->base_field};
+
+                if ($field->rules) {
+                    foreach ($field->rules as $rule) {
+                        switch ($rule->modifier) {
+                            case 'add_value':
+                                $prices[$attr] += $rule->value;
+                                break;
+                            case 'subtract_value':
+                                $prices[$attr] -= $rule->value;
+                                break;
+                            case 'percent':
+                                $prices[$attr] = ($rule->value / 100) * $prices[$attr];
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return (object) array_map('floatval', $prices);
     }
 
 
