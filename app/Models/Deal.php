@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Models\JATO\Version;
+use App\DealIndexConfigurator;
 use Carbon\Carbon;
+use ScoutElastic\Searchable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $body
  * @property string $transmission
  * @property string $series
- * @property string $series_Detail
+ * @property string $series_detail
  * @property string $door_count
  * @property string $odometer
  * @property string $engine
@@ -39,7 +41,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \DateTime $inventory_date
  * @property boolean|null $certified
  * @property string|null $description
- * @property array||null $option_codes
+ * @property array|null $option_codes
  * @property \stdClass|null $source_price
  * @property int|null $fuel_econ_city
  * @property int|null $fuel_econ_hwy
@@ -49,10 +51,49 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \DateTime $updated_at
  * @property int $version_id
  * @property Version $version
+ * @property Purchase[] $purchases
+ * @property DealOption[] $options
+ * @property DealPhoto[] $photos
+ * @property jatoFeature[] $jatoFeatures
+ * @property Feature[] $features
  */
 class Deal extends Model
 {
+    use Searchable;
+
+    protected $indexConfigurator = DealIndexConfigurator::class;
+
+
     const HOLD_HOURS = 48;
+
+    /**
+     * @var array
+     */
+    protected $mapping = [
+        'properties' => [
+            'make' => [
+                'type' => 'text',
+                'fields' => [
+                    'raw' => [
+                        'type' => 'text',
+                        'index' => true,
+                    ]
+                ]
+            ],
+            'model' => [
+                'type' => 'text',
+                'fields' => [
+                    'raw' => [
+                        'type' => 'text',
+                        'index' => true,
+                    ]
+                ]
+            ],
+            'location' => [
+                'type' => 'geo_point',
+            ],
+        ]
+    ];
 
     /**
      * @var array
@@ -239,5 +280,93 @@ class Deal extends Model
         return $query->whereDoesntHave('purchases', function (Builder $q) {
             $q->where('completed_at', '>=', Carbon::now()->subHours(self::HOLD_HOURS));
         });
+    }
+
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $record = [];
+
+        //
+        // Basic record information
+        $record['id'] = $this->id;
+        $record['created_at'] = $this->created_at;
+        $record['updated_at'] = $this->updated_at;
+
+        //
+        // Vehicle identification information
+        $record['vin'] = $this->vin;
+        $record['stock'] = $this->stock_number;
+
+        $record['title'] = $this->title();
+
+        //
+        // Vehicle type
+        $record['year'] = $this->year;
+        $record['make'] = $this->make;
+        $record['model'] = $this->model;
+        $record['series'] = $this->series;
+
+        $record['style'] = $this->version->body_style;
+
+        //
+        // Required vehicle attributes
+        $record['body'] = $this->body;
+        $record['engine'] = $this->engine;
+        $record['transmission'] = $this->transmission;
+        $record['doors'] = $this->door_count;
+        $record['color'] = $this->color;
+        $record['interior_color'] = $this->interior_color;
+
+        $record['msrp'] = $this->msrp;
+
+        $record['fuel_econ_city'] = $this->fuel_econ_city;
+        $record['fuel_econ_hwy'] = $this->fuel_econ_hwy;
+
+        //
+        // Photos
+        $record['photos'] = [];
+        foreach($this->photos as $photo) {
+            $record['photos'][] = $photo->url;
+        }
+
+        $thumbnail = $this->featuredPhoto();
+        $record['thumbnail'] = ($thumbnail ? $thumbnail->url : null);
+
+        //
+        // Delivery Info
+        $record['location'] = (object)[
+            'lat' => $this->dealer->latitude,
+            'lon' => $this->dealer->longitude,
+        ];
+
+        $record['max_delivery_distance'] = $this->dealer->max_delivery_miles;
+
+        //
+        // Features
+        foreach ($this->features as $feature) {
+            if (!isset($record[$feature->category->slug]) || !is_array($record[$feature->category->slug])) {
+                $record[$feature->category->slug] = [];
+            }
+
+            $record[$feature->category->slug][] = $feature->title;
+        }
+
+        //
+        // Catchall
+        if ($this->vauto_features) {
+            $record['misc'] = [];
+
+            $misc = explode("|", $this->vauto_features);
+            $misc = array_map('trim', $misc);
+            $record['misc'] = $misc;
+        }
+
+        return $record;
     }
 }

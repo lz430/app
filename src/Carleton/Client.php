@@ -24,7 +24,6 @@ class Client
         $this->password = $password;
     }
 
-
     public function getLeasePaymentsFor(
         array $cashDueOptions,
         $terms,
