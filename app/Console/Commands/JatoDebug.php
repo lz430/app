@@ -5,21 +5,21 @@ namespace App\Console\Commands;
 use DeliverMyRide\JATO\JatoClient;
 use Illuminate\Console\Command;
 
-class JatoDebug extends Command
+class JatoVersionReport extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'dmr:jato {vin}';
+    protected $signature = 'dmr:jatoversionreport';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Jato Debugger';
+    protected $description = 'Jato Version Report';
 
     /* @var JatoClient */
     private $client;

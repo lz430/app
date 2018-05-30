@@ -6,7 +6,6 @@ if (isset($field['value']) && (is_array($field['value']) || is_object($field['va
     $field['value'] = json_encode($field['value']);
 }
 
-
 /**
  * These options represent the $deal->source_price object attributes.
  */
@@ -24,32 +23,71 @@ $price_col_options = [
 ];
 
 $price_fields = [
-    'msrp' => [
-        'label' => "MSRP",
-        'description' => "MSRP"
-    ],
-    'employee' => [
-        'label' => "Employee",
-        'description' => "Employee Pricing"
+    'default' => [
+        'label' => "Default / DMR Pricing",
+        'description' => "Pricing available to anyone"
     ],
     'supplier' => [
         'label' => "Supplier",
         'description' => "Supplier Pricing"
     ],
+    'employee' => [
+        'label' => "Employee",
+        'description' => "Employee Pricing"
+    ],
 ];
 
 $default_rules = new \stdClass();
-foreach($price_fields as $key => $price_field){
+foreach ($price_fields as $key => $price_field) {
     $default_rules->{$key} = new \stdClass();
     $default_rules->{$key}->base_field = 'msrp';
     $default_rules->{$key}->rules = [];
 }
 $default_rules = json_encode($default_rules);
 
+$deals = $entry->deals()->take(5)->get();
+$deal_data = [];
 
 ?>
 
+<div class="preview col-xs-12">
+    <h3>Preview</h3>
+    <p>Note: Only updates on save.</p>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>MSRP</th>
+            <th>Default Price</th>
+            <th>Supplier Price</th>
+            <th>Employee Price</th>
+            <th>Source Pricing</th>
+        </tr>
+        <tbody>
+        @foreach ($deals as $deal)
+            <tr>
+                <td>{{ $deal->id }}</td>
+                <td>{{ $deal->title() }}</td>
+                <td>${{ number_format($deal->prices()->msrp, 2) }}</td>
+                <td>${{ number_format($deal->prices()->default, 2) }}</td>
+                <td>${{ number_format($deal->prices()->supplier, 2) }}</td>
+                <td>${{ number_format($deal->prices()->employee, 2) }}</td>
+                <td style="font-size:80%;">
+                    @foreach ($deal->source_price as $key => $value)
+                        <span>{{$key}} : ${{ number_format($value, 2) }}</span> <br />
+                    @endforeach
+                </td>
+            </tr>
+        @endforeach
+
+        </tbody>
+    </table>
+
+</div>
+
 <div id="rules-editor" @include('crud::inc.field_wrapper_attributes') >
+    <h3>Rules</h3>
     <input type="hidden"
            value="{{ old($field['name']) ? old($field['name']) : (isset($field['value']) ? $field['value'] : (isset($default_rules) ? $default_rules : '' )) }}"
            name="{{ $field['name'] }}">
@@ -177,17 +215,17 @@ $default_rules = json_encode($default_rules);
              * On init we just rebuild the form.
              */
             var data = JSON.parse($value.val());
-            $.each(data, function(key, value) {
-                var $field = $('fieldset[data-field="'+key+'"]');
+            $.each(data, function (key, value) {
+                var $field = $('fieldset[data-field="' + key + '"]');
                 if (value['base_field']) {
                     $('select[name="base_field"] option[value="' + value['base_field'] + '"]', $field).attr("selected", "selected");
                 }
 
                 if (value['rules']) {
-                    $.each(value['rules'], function(key, value) {
+                    $.each(value['rules'], function (key, value) {
                         $rule = rule_factory(value['modifier'], value['value']);
                         $('.rules', $field).append($rule);
-                    }) ;
+                    });
                 }
             });
 

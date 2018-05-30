@@ -14,57 +14,8 @@ class DealTransformer extends TransformerAbstract
      * Generate Pricing
      */
     public function prices(Deal $deal) {
-
-        //
-        // Migration help
-        if (!$deal->source_price) {
-            $deal->source_price = (object) [
-              'msrp' => $deal->msrp,
-              'price' => $deal->price,
-            ];
-        }
-
-        // The defaults when no rules exist.
-        $prices = [
-            'msrp' => $deal->source_price->msrp !== '' ? $deal->source_price->msrp : null,
-            'employee' => $deal->source_price->price !== '' ? $deal->source_price->price : null,
-            'supplier' => (in_array(strtolower($deal->make), Make::DOMESTIC) ?  $deal->source_price->price * 1.04 :  $deal->source_price->price)
-        ];
-
-        $dealer = $deal->dealer;
-        // Dealer has some special rules
-        if ($dealer->price_rules) {
-            foreach ($dealer->price_rules as $attr => $field) {
-
-                // If for whatever reason the selected base price for the field doesn't exist or it's false, we fall out
-                // so the default role price is used.
-                if (!isset($deal->source_price->{$field->base_field}) || !$deal->source_price->{$field->base_field}) {
-                    continue;
-                }
-
-                $prices[$attr] = $deal->source_price->{$field->base_field};
-
-                if ($field->rules) {
-                    foreach ($field->rules as $rule) {
-                        switch ($rule->modifier) {
-                            case 'add_value':
-                                $prices[$attr] += $rule->value;
-                                break;
-                            case 'subtract_value':
-                                $prices[$attr] -= $rule->value;
-                                break;
-                            case 'percent':
-                                $prices[$attr] = ($rule->value / 100) * $prices[$attr];
-                                break;
-                        }
-                    }
-                }
-            }
-        }
-
-        return (object) array_map('floatval', $prices);
+        return $deal->prices();
     }
-
 
     public function transform(Deal $deal)
     {
@@ -92,6 +43,7 @@ class DealTransformer extends TransformerAbstract
             'fuel' => $deal->fuel,
             'color' => $deal->color,
             'interior_color' => $deal->interior_color,
+            'default_price' => $prices->default,
             'employee_price' => $prices->employee,
             'supplier_price' =>  $prices->supplier,
             'msrp' => $prices->msrp,
@@ -114,6 +66,7 @@ class DealTransformer extends TransformerAbstract
             })->toArray())),
             'dealer' => $deal->dealer,
             'dmr_features' => $deal->features,
+            'pricing' => $prices,
         ];
     }
 }
