@@ -189,12 +189,13 @@ class VersionMunger
     /**
      * @param Make $make
      * @return VehicleModel
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function model(Make $make): VehicleModel
     {
         $model = VehicleModel::where('name', $this->decodedVin->model)->first();
 
-        if ($model) {
+        if (!$model) {
             $data = $this->client->model->get($this->jatoVersion->urlModelName);
 
             $model = $make->models()->updateOrCreate([
