@@ -61,7 +61,6 @@ class BestPriceTransformer extends TransformerAbstract
                     $totals['residualPercentage'] = 66;
                     $totals['residuals']['annualMileage'] = 10000;
                     $totals['residuals']['residualPercent'] = 66;
-                    //$totals['months'] = $tier[2]->length;
                 }
             }
             $residuals = [];
@@ -70,33 +69,7 @@ class BestPriceTransformer extends TransformerAbstract
                 $residuals[] = $lease->programs[0]->residuals[1];
             }
 
-
-            //return $totals;
-            //return $this->getResiduals($params);
-            //{"rates":[{"moneyFactor":0.00247083325,"residualPercentage":64,"residuals":[{"annualMileage":10000,"residualPercent":66}
-            $testing = [
-                'rates' => [
-                    $totals,
-                ],
-            ];
-
             return $totals;
-
-
-            /*$named_array = array(
-                "nome_array" => array(
-                    array(
-                        "foo" => "bar"
-                    ),
-                    array(
-                        "foo" => "baz"
-                    )
-                )
-            );
-            echo json_encode($named_array);*/
-
-
-
         }
     }
 
@@ -115,10 +88,6 @@ class BestPriceTransformer extends TransformerAbstract
                 ]
             ];
         }
-
-        //return [
-       //     'totalValue' => $incentives->totalConsumerCash
-       // ];
     }
 }
 

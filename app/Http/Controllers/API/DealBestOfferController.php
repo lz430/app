@@ -27,7 +27,7 @@ class DealBestOfferController extends BaseAPIController
         $this->client = $client;
     }*/
 
-    public function getPrice(Deal $deal)
+    public function getBestOffer(Deal $deal)
     {
         $this->validate(request(), [
             'payment_type' => 'required|string|in:cash,finance,lease',
