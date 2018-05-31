@@ -20,7 +20,6 @@ Route::get('versions', 'VersionsController@index')->name('versions.index');
 Route::get('deals', 'DealsController@getDeals')->name('deals.index');
 Route::get('dealsByModelYear', 'DealsByModelYearController@getDealsByModelYear')->name('dealsByModelYear.index');
 Route::get('deals/{deal}/best-offer', 'DealBestOfferController@getBestOffer')->name('deals.best-offer');
-Route::get('deals/{deal}/best-price', 'DealBestOfferController@getPrice')->name('deals.best-price');
 Route::get('features', 'FeaturesController@index')->name('features.index');
 Route::get('targets', 'TargetsController@getTargets')->name('targets.getTargets');
 Route::get('warranties', 'WarrantiesController@getWarranties')->name('warranties.getWarranties');

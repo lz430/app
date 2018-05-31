@@ -18,6 +18,13 @@ class LeaseRatesController extends BaseAPIController
         $this->client = $client;
     }
 
+    /**
+     * @param $results
+     * @param $tLength
+     * @param $modelCode
+     * @return array
+     * Gets all residual data from cox for each mileage range
+     */
     public function getResiduals($results, $tLength, $modelCode)
     {
         $residuals = [];
@@ -26,14 +33,22 @@ class LeaseRatesController extends BaseAPIController
         foreach($programs as $i => $program) {
             $data = $program->programs[$i]->residuals;
             foreach($data as $d) {
-                $terms = [];
-                foreach($d->vehicles as $vehicle){
-                    if($vehicle->modelCode === $modelCode) {
-                        foreach($vehicle->termValues as $length) {
-                            if($length->termLength === $tLength){
-                                $terms = $length->percentage;
+                $terms = null;
+                if(count($d->vehicles) > 1) { // if more than one vehicle model exists for a single vin
+                    foreach($d->vehicles as $vehicle){
+                        if($vehicle->modelCode === $modelCode) {
+                            foreach($vehicle->termValues as $length) {
+                                if($length->termLength === $tLength){
+                                    $terms = $length->percentage;
+                                }
                             }
-
+                        }
+                    }
+                } else {
+                    $termValues = $d->vehicles[0]->termValues;
+                    foreach($termValues as $value){
+                        if($value->termLength === $tLength){
+                            $terms = $value->percentage;
                         }
                     }
                 }
@@ -43,81 +58,52 @@ class LeaseRatesController extends BaseAPIController
         return array_values(array_sort($residuals));
     }
 
+    /**
+     * @param $results
+     * @param $tLength
+     * @param $modelCode
+     * @return null
+     */
     public function getInitialResidualPercent($results, $tLength, $modelCode)
     {
         $initialPercent = $this->getResiduals($results, $tLength, $modelCode);
         return ($initialPercent[0]['residualPercent']) ? $initialPercent[0]['residualPercent'] : null;
     }
 
+    /**
+     * @param $results
+     * @param $modelCode
+     * @return array
+     */
     public function getTiers($results, $modelCode)
     {
-        $testing = [];
+        $leaseData = [];
         $tiersData = $results->programDealScenarios;
         foreach($tiersData as $i => $program) {
-            $tiers = $program->programs[$i]->tiers;
-            foreach($tiers as $t) {
-                if($t->name === 'A+') {
-                    foreach($t->leaseTerms as $term){
-                        $apr = $term->adjRate * 2400;
-                        $testing[] = array('termMonths' => $term->length, 'moneyFactor' => $term->adjRate, 'apr' => $apr, 'residualPercent' => $this->getInitialResidualPercent($results, $term->length, $modelCode), 'residuals' => $this->getResiduals($results, $term->length, $modelCode));
-                    }
-                }
+            $tiers = $program->programs[$i]->tiers[$i];
+            foreach($tiers->leaseTerms as $term) {
+                $apr = $term->adjRate * 2400; // math to get the apr number for making lease calculations, cox does not supply apr
+                $leaseData[] = array('termMonths' => $term->length, 'moneyFactor' => $term->adjRate, 'apr' => $apr, 'residualPercent' => $this->getInitialResidualPercent($results, $term->length, $modelCode), 'residuals' => $this->getResiduals($results, $term->length, $modelCode));
             }
         }
-        return $testing;
+        return $leaseData;
     }
 
     public function getLeaseRates()
     {
         $this->validate(request(), [
             'vin' => 'required|string',
-            'modelcode' => 'required|string',
+            'modelcode' => 'string',
+            'trim' => 'string',
+            'model' => 'string',
             'zipcode' => 'required|string',
         ]);
 
-        $results = $this->client->vehicle->findByVehicleAndPostalcode(request('vin'), request('zipcode'), [9], [])->response;
-        //$collection = collect($results);
-        //return $collection;
+        $hints = ['TRIM' => request('trim'), 'MODEL' => request('model'), 'MODEL_CODE' => request('modelcode')];
+        $results = $this->client->vehicle->findByVehicleAndPostalcode(request('vin'), request('zipcode'), [9], [$hints])->response;
         $leaseRates = collect($results)->first();
         $retrieveLeaseRates = $this->getTiers($leaseRates, request('modelcode'));
-        return json_encode($retrieveLeaseRates);
+        return response()->json($retrieveLeaseRates);
 
     }
-
-    /*public function getLeaseRates(JatoClient $client)
-    {
-        $this->validate(request(), [
-            'jato_vehicle_id' => 'required|exists:versions,jato_vehicle_id',
-            'zipcode' => 'required|string',
-        ]);
-
-
-        if (Cache::has($this->getCacheKey())) {
-            $leases = Cache::get($this->getCacheKey());
-        }
-        else {
-            try {
-                $leases = $client->incentive->listPrograms(
-                        request('jato_vehicle_id'),
-                        [
-                            'category' => 8,
-                            'zipCode' =>  request('zipcode')
-                        ]
-                    )[0]->leaseRates ?? [];
-
-                Cache::put($this->getCacheKey(), $leases, 1440);
-            } catch (GuzzleException $e) {
-                Cache::put($this->getCacheKey(), [], 5);
-                $leases = [];
-            }
-        }
-        print_r($leases);
-        //return response()->json($leases);
-
-    }
-
-    private function getCacheKey()
-    {
-        return 'JATO_LEASES:' . request('jato_vehicle_id') . ':' . request('zipcode');
-    }*/
 }
