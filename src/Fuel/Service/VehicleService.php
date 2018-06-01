@@ -89,7 +89,6 @@ class VehicleService extends BaseService
     )
     {
 
-
         $query = [
             'year' => $year,
             'make' => $make,
@@ -117,7 +116,6 @@ class VehicleService extends BaseService
 
         return $this->client->get("vehicles", $query);
     }
-
 
     /**
      * vehicle media
