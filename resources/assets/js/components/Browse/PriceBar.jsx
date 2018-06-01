@@ -72,7 +72,6 @@ class PriceBar extends React.Component {
         return (
             <div className="filter-page__top-row">
 
-                asdf
                 <div className="filter-page__top-row__section filter-page__top-row__section--accuPricing">
                     {this.renderAccuPricingCta()}
                 </div>
