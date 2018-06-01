@@ -70,13 +70,15 @@ class BestPriceTransformer extends TransformerAbstract
             $cashValue = [];
             $tiersData = $results->programDealScenarios;
             foreach($tiersData as $i => $program) {
-                $tiers = $program->programs[$i]->tiers[$i];
-                $totalLeaseCash = $program->programs[$i]->consumerCash;
-                foreach($tiers->leaseTerms as $term) {
-                    $apr = $term->adjRate * 2400;
-                    $leaseData[] = array('moneyFactor' => $term->adjRate, 'residualPercent' => $this->getInitialResidualPercent($params), 'residuals' => $this->getResiduals($params));
+                if(!empty($program->programs)) { // revisit when new lease rates populated after first of month
+                    $tiers = $program->programs[$i]->tiers[$i];
+                    $totalLeaseCash = $program->programs[$i]->consumerCash;
+                    foreach ($tiers->leaseTerms as $term) {
+                        $apr = $term->adjRate * 2400;
+                        $leaseData[] = array('moneyFactor' => $term->adjRate, 'residualPercent' => $this->getInitialResidualPercent($params), 'residuals' => $this->getResiduals($params));
+                    }
+                    $cashValue['totalValue'] = $totalLeaseCash->totalConsumerCash;
                 }
-                $cashValue['totalValue'] = $totalLeaseCash->totalConsumerCash;
             }
             $array = [
                 'rates' => $leaseData,
