@@ -39,6 +39,9 @@ const api = {
         return window.axios.get('/api/lease-rates', {
             params: {
                 vin: deal.vin,
+                modelcode: deal.model_code,
+                trim: deal.series,
+                model: deal.model,
                 zipcode,
             },
         });
@@ -173,7 +176,7 @@ const api = {
         return window.axios.post('/api/hubspot/not-in-area', { email });
     },
     getBestOffer: (dealId, paymentType, zipcode, cancelToken) => { //dealId, paymentType, zipcode, targets, cancelToken
-        return window.axios.get(`/api/deals/${dealId}/best-price`, {
+        return window.axios.get(`/api/deals/${dealId}/best-offer`, {
             cancelToken: cancelToken.token,
             params: {
                 payment_type: paymentType,

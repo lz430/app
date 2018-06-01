@@ -17,25 +17,40 @@ class BestPriceTransformer extends TransformerAbstract
     public function getResiduals($params)
     {
         $results = $params['results']->response[0];
-        $data = [];
-        $modelCodes = [];
-        // gets residual data for best price
-        foreach($results->programDealScenarios as $lease) {
-            $residuals = $lease->programs[0]->residuals[1];
-            $data['annualMileage'] = $residuals->miles;
-            $data['residualPercent'] = 58;
-            foreach($residuals->vehicles as $vehicle) {
-                $modelCodes[] = $vehicle->modelCode;
+        $residuals = [];
+
+        $programs = $results->programDealScenarios;
+        foreach($programs as $i => $program) {
+            $data = $program->programs[$i]->residuals;
+            foreach($data as $d) {
+                $terms = null;
+                if(count($d->vehicles) > 1) {
+                    foreach($d->vehicles as $vehicle){
+                        if($vehicle->modelCode === $params['model_code']) {
+                            foreach($vehicle->termValues as $length) {
+                                $terms = $length->percentage;
+                            }
+                        }
+                    }
+                } else {
+                    $termValues = $d->vehicles[0]->termValues;
+                    foreach($termValues as $value){
+                        $terms = $value->percentage;
+                    }
+                }
+                $residuals[] = array('annualMileage' => $d->miles, 'residualPercent' => $terms);
             }
         }
-        if(in_array($params['model_code'], $modelCodes)) {
-            //return
-        }
-
-        return $data;
-
-
+        return array_values(array_sort($residuals));
     }
+
+    public function getInitialResidualPercent($params)
+    {
+        $initialPercent = $this->getResiduals($params);
+        return ($initialPercent[0]['residualPercent']) ? $initialPercent[0]['residualPercent'] : null;
+    }
+
+
 
     /**
      * @param params
@@ -51,74 +66,36 @@ class BestPriceTransformer extends TransformerAbstract
             }
         }
         if($params['paymentType'] === 'lease'){
-            $details = [];
-            $totals = [];
-            // gets lease length and money factor
-            foreach($results->programDealScenarios as $lease) {
-                $details[] = $lease->programs[0]->tiers[0]->leaseTerms;
-                foreach($details as $tier) {
-                    $totals['moneyFactor'] = $tier[2]->adjRate;
-                    $totals['residualPercentage'] = 66;
-                    $totals['residuals']['annualMileage'] = 10000;
-                    $totals['residuals']['residualPercent'] = 66;
-                    //$totals['months'] = $tier[2]->length;
+            $leaseData = [];
+            $cashValue = [];
+            $tiersData = $results->programDealScenarios;
+            foreach($tiersData as $i => $program) {
+                $tiers = $program->programs[$i]->tiers[$i];
+                $totalLeaseCash = $program->programs[$i]->consumerCash;
+                foreach($tiers->leaseTerms as $term) {
+                    $apr = $term->adjRate * 2400;
+                    $leaseData[] = array('moneyFactor' => $term->adjRate, 'residualPercent' => $this->getInitialResidualPercent($params), 'residuals' => $this->getResiduals($params));
                 }
+                $cashValue['totalValue'] = $totalLeaseCash->totalConsumerCash;
             }
-            $residuals = [];
-            // gets residual data for best price
-            foreach($results->programDealScenarios as $lease) {
-                $residuals[] = $lease->programs[0]->residuals[1];
-            }
-
-
-            //return $totals;
-            //return $this->getResiduals($params);
-            //{"rates":[{"moneyFactor":0.00247083325,"residualPercentage":64,"residuals":[{"annualMileage":10000,"residualPercent":66}
-            $testing = [
-                'rates' => [
-                    $totals,
-                ],
+            $array = [
+                'rates' => $leaseData,
+                'cash' => $cashValue
             ];
-
-            return $totals;
-
-
-            /*$named_array = array(
-                "nome_array" => array(
-                    array(
-                        "foo" => "bar"
-                    ),
-                    array(
-                        "foo" => "baz"
-                    )
-                )
-            );
-            echo json_encode($named_array);*/
-
-
-
+            return $array;
         }
     }
 
     public function transform($params)
     {
         $incentives = $this->incentives($params);
-        //return $incentives;
         if(in_array($params['paymentType'], ['cash', 'finance'])){
             return [
                 'totalValue' => $incentives->totalConsumerCash
             ];
         } else {
-            return [
-                'rates' => [
-                    $this->incentives($params)
-                ]
-            ];
+            return $this->incentives($params);
         }
-
-        //return [
-       //     'totalValue' => $incentives->totalConsumerCash
-       // ];
     }
 }
 

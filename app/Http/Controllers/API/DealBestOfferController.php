@@ -22,12 +22,7 @@ class DealBestOfferController extends BaseAPIController
         $this->client = $client;
     }
 
-    /*public function __construct(JatoClient $client)
-    {
-        $this->client = $client;
-    }*/
-
-    public function getPrice(Deal $deal)
+    public function getBestOffer(Deal $deal)
     {
         $this->validate(request(), [
             'payment_type' => 'required|string|in:cash,finance,lease',
@@ -51,46 +46,5 @@ class DealBestOfferController extends BaseAPIController
         $results = $this->client->vehicle->findByVehicleAndPostalcode($deal->vin, request('zipcode'), [$type], $hints);
         return (new BestPriceTransformer)->transform(['results' => $results, 'paymentType' => $paymentType, 'model_code' => $deal->model_code]);
     }
-
-    /*public function getBestOffer(Deal $deal)
-    {
-        $this->validate(request(), [
-            'payment_type' => 'required|string|in:cash,finance,lease',
-            'zipcode' => 'required|string',
-            'targets' => 'required|array',
-        ]);
-
-        // We want to show the cash best offer information even in the finance tabs
-        $paymentType = request('payment_type');
-        if ($paymentType == 'finance') {
-            $paymentType = 'cash';
-        }
-
-        // Generate the best offer cache key
-        $sortedTargets = collect(request('targets'))->sort()->implode(',');
-        $jatoVehicleId = $deal->version->jato_vehicle_id;
-        $zipCode = request('zipcode');
-        $cacheKey = "best-offer:{$jatoVehicleId}:{$paymentType}:{$zipCode}:{$sortedTargets}";
-
-        if (Cache::tags(['best-offers'])->has($cacheKey)) {
-            $data = Cache::tags(['best-offers'])->get($cacheKey);
-        } else {
-            try {
-                $data = $this->client->incentive->bestOffer($jatoVehicleId, $paymentType, $zipCode, $sortedTargets);
-                Cache::tags(['best-offers'])->put($cacheKey, $data, self::CACHE_LENGTH);
-
-            } catch (GuzzleException $e) {
-                Cache::tags(['best-offers'])->put($cacheKey, new \stdClass(), 5);
-                $data = new \stdClass();
-            }
-        }
-
-        if (!isset($data->totalValue)) {
-            $data->totalValue = 0;
-            $data->programs = [];
-        }
-
-        return response()->json($data);
-    }*/
 
 }
