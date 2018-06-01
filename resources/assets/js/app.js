@@ -2,6 +2,7 @@ import 'bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import FilterPage from 'containers/FilterPage';
+import BrowsePage from 'containers/BrowsePage';
 import Financing from 'containers/Financing';
 import { Provider } from 'react-redux';
 import configureStore from 'configureStore';
@@ -21,6 +22,21 @@ Array.from(document.getElementsByTagName('FilterPage')).map(element => {
         <Provider store={store}>
             <PersistGate persistor={persistor}>
                 <FilterPage />
+            </PersistGate>
+        </Provider>,
+        element
+    );
+});
+
+
+/**
+ * Browse
+ */
+Array.from(document.getElementsByTagName('BrowsePage')).map(element => {
+    ReactDOM.render(
+        <Provider store={store}>
+            <PersistGate persistor={persistor}>
+                <BrowsePage />
             </PersistGate>
         </Provider>,
         element

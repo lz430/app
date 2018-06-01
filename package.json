@@ -35,12 +35,17 @@
     "react-dom": "^15.5.3"
   },
   "dependencies": {
+    "@appbaseio/reactivesearch": "^2.6.5",
     "animate.css": "^3.5.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.12",
+    "babel-preset-stage-2": "^6.24.1",
     "browser-sync": "^2.18.13",
     "browser-sync-webpack-plugin": "^1.2.0",
+    "classnames": "^2.2.5",
     "cross-env": "^5.0.5",
     "decimal.js": "^7.3.0",
+    "downshift": "^1.31.15",
+    "emotion-theming": "^9.1.2",
     "gulp": "^3.9.1",
     "jsonp": "^0.2.1",
     "laravel-elixir-template": "^1.0.2",

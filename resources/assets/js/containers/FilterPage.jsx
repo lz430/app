@@ -1,5 +1,4 @@
 import React from 'react';
-import R from 'ramda';
 import Modal from 'components/Modal';
 import MakeSelector from 'components/MakeSelector';
 import PropTypes from 'prop-types';
@@ -8,12 +7,12 @@ import Sortbar from 'components/Sortbar';
 import Filterbar from 'components/Filterbar';
 import CompareBar from 'components/CompareBar';
 import FilterPanel from 'components/FilterPanel';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import * as Actions from 'actions/index';
 import util from 'src/util';
 import CashFinanceLeaseCalculator from '../components/CashFinanceLeaseCalculator';
 import AccuPricingModal from 'components/AccuPricingModal';
-import { StickyContainer, Sticky } from 'react-sticky';
+import {StickyContainer, Sticky} from 'react-sticky';
 
 class FilterPage extends React.PureComponent {
     renderMakeSelectionModal() {
@@ -25,7 +24,7 @@ class FilterPage extends React.PureComponent {
                 closeText="Show available vehicles"
                 buttonCloseDisabled={this.props.selectedMakes.length == 0}
             >
-                <MakeSelector />
+                <MakeSelector/>
             </Modal>
         );
     }
@@ -37,7 +36,7 @@ class FilterPage extends React.PureComponent {
                 closeText="Back to results"
                 deal={this.props.selectedDeal}
             >
-                <CashFinanceLeaseCalculator deal={this.props.selectedDeal} />
+                <CashFinanceLeaseCalculator deal={this.props.selectedDeal}/>
             </Modal>
         );
     }
@@ -48,13 +47,13 @@ class FilterPage extends React.PureComponent {
             (util.windowIsLargerThanSmall(this.props.window.width)
                 ? ''
                 : 'filter-page__filter-panel--small ' +
-                  (this.props.smallFiltersShown
-                      ? 'filter-page__filter-panel--small-filters-shown'
-                      : 'filter-page__filter-panel--small-filters-hidden'));
+                (this.props.smallFiltersShown
+                    ? 'filter-page__filter-panel--small-filters-shown'
+                    : 'filter-page__filter-panel--small-filters-hidden'));
 
         return (
             <div className={className}>
-                <FilterPanel />
+                <FilterPanel/>
             </div>
         );
     }
@@ -64,7 +63,7 @@ class FilterPage extends React.PureComponent {
             <div>
                 <div className="accupricing-cta accupricing-cta--horizontal">
                     <a onClick={this.props.showAccuPricingModal}>
-                        <img src="/images/accupricing-logo.png" className="accupricing-cta__logo" />
+                        <img src="/images/accupricing-logo.png" className="accupricing-cta__logo"/>
                     </a>
                     <p className="accupricing-cta__disclaimer">
                         * Includes taxes, dealer fees and rebates.
@@ -123,9 +122,9 @@ class FilterPage extends React.PureComponent {
             (util.windowIsLargerThanSmall(this.props.window.width)
                 ? ''
                 : 'filter-page__deals--small ' +
-                  (this.props.smallFiltersShown
-                      ? 'filter-page__deals--small-filters-shown'
-                      : 'filter-page__deals--small-filters-hidden'));
+                (this.props.smallFiltersShown
+                    ? 'filter-page__deals--small-filters-shown'
+                    : 'filter-page__deals--small-filters-hidden'));
 
         return (
             <div className={className}>
@@ -136,19 +135,19 @@ class FilterPage extends React.PureComponent {
                                 {this.renderAccuPricingCta()}
                             </div>
                             {(this.props.filterPage == 'deals') &&
-                                <div className="filter-page__top-row__section filter-page__top-row__section--tabButtons">
-                                    {this.renderSelectedTabButtons()}
-                                </div>
+                            <div className="filter-page__top-row__section filter-page__top-row__section--tabButtons">
+                                {this.renderSelectedTabButtons()}
+                            </div>
                             }
                             <div className="filter-page__top-row__section filter-page__top-row__section--sortbar">
-                                <Sortbar />
+                                <Sortbar/>
                             </div>
                         </div>
                     )}
                 </Sticky>
-                <Filterbar />
-                <Deals />
-                <CompareBar />
+                <Filterbar/>
+                <Deals/>
+                <CompareBar/>
             </div>
         );
     }
@@ -174,7 +173,7 @@ class FilterPage extends React.PureComponent {
                 {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
 
                 {this.renderFilterPanelAndDeals()}
-                <AccuPricingModal />
+                <AccuPricingModal/>
             </StickyContainer>
         );
     }

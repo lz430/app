@@ -71,6 +71,7 @@ class JatoVersionReport extends Command
                     $deal->id,
                     $deal->vin,
                     $version->uid,
+                    $version->vehicle_ID,
                     $version->versionName,
                     $version->modelName,
                     $version->modelCode,

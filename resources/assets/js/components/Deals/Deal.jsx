@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import PropTypes from 'prop-types';
-import R from 'ramda';
-import util from 'src/util';
+
+
 import DealImage from 'components/Deals/DealImage';
 import DealPrice from 'components/Deals/DealPrice';
 
