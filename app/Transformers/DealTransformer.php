@@ -3,7 +3,6 @@
 namespace App\Transformers;
 
 use App\Models\Deal;
-use App\Models\JATO\Make;
 use League\Fractal\TransformerAbstract;
 
 class DealTransformer extends TransformerAbstract
@@ -11,37 +10,18 @@ class DealTransformer extends TransformerAbstract
 
     /**
      * @param Deal $deal
-     * Generate Pricing
+     * @return object
      */
     public function prices(Deal $deal) {
         return $deal->prices();
     }
 
+    /**
+     * @param Deal $deal
+     * @return array
+     */
     public function photos(Deal $deal) {
-
-        //
-        // Try real photos
-        $photos = $deal->photos()->get();
-        if (count($photos) > 1) {
-            $photos->shift();
-            return $photos;
-        }
-
-        //
-        // Try stock photos in the right color
-        $photos = $deal->version->photos()->where('color', '=', $deal->color)->get();
-        if (count($photos)) {
-            return $photos;
-        }
-
-        //
-        // Try stock photos in the wrong color
-        $photos = $deal->version->photos()->where('color', '=', 'default')->get();
-        if (count($photos)) {
-            return $photos;
-        }
-
-        return [];
+        return $deal->marketingPhotos();
     }
 
     public function transform(Deal $deal)
