@@ -79,11 +79,13 @@ class LeaseRatesController extends BaseAPIController
     {
         $leaseData = [];
         $tiersData = $results->programDealScenarios;
-        foreach($tiersData as $i => $program) {
-            $tiers = $program->programs[$i]->tiers[$i];
-            foreach($tiers->leaseTerms as $term) {
-                $apr = $term->adjRate * 2400; // math to get the apr number for making lease calculations, cox does not supply apr
-                $leaseData[] = array('termMonths' => $term->length, 'moneyFactor' => $term->adjRate, 'apr' => $apr, 'residualPercent' => $this->getInitialResidualPercent($results, $term->length, $modelCode), 'residuals' => $this->getResiduals($results, $term->length, $modelCode));
+        foreach ($tiersData as $i => $program) {
+            if(!empty($program->programs)){  // revisit when new lease rates populated after first of month
+                $tiers = $program->programs[$i]->tiers[$i];
+                foreach ($tiers->leaseTerms as $term) {
+                    $apr = $term->adjRate * 2400; // math to get the apr number for making lease calculations, cox does not supply apr
+                    $leaseData[] = array('termMonths' => $term->length, 'moneyFactor' => $term->adjRate, 'apr' => $apr, 'residualPercent' => $this->getInitialResidualPercent($results, $term->length, $modelCode), 'residuals' => $this->getResiduals($results, $term->length, $modelCode));
+                }
             }
         }
         return $leaseData;
@@ -104,6 +106,5 @@ class LeaseRatesController extends BaseAPIController
         $leaseRates = collect($results)->first();
         $retrieveLeaseRates = $this->getTiers($leaseRates, request('modelcode'));
         return response()->json($retrieveLeaseRates);
-
     }
 }
