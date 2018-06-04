@@ -79,6 +79,9 @@ class Deal extends Model
             'max_delivery_distance' => [
                 'type' => 'double',
             ],
+            'category' => [
+                'type' => 'nested',
+            ],
         ]
     ];
 
@@ -400,7 +403,6 @@ class Deal extends Model
         $record['make'] = $this->make;
         $record['model'] = $this->model;
         $record['series'] = $this->series;
-
         $record['style'] = $this->version->body_style;
 
         //
@@ -420,12 +422,22 @@ class Deal extends Model
         //
         // Photos
         $record['photos'] = [];
-        foreach ($this->photos as $photo) {
+        foreach ($this->marketingPhotos() as $photo) {
             $record['photos'][] = $photo->url;
         }
 
         $thumbnail = $this->featuredPhoto();
         $record['thumbnail'] = ($thumbnail ? $thumbnail->url : null);
+
+        $record['category'] = (object)[
+            'id' => $this->version->model->id,
+            'title' => implode(" ", [
+                $this->year,
+                $this->make,
+                $this->model,
+            ]),
+            'thumbnail' => ($this->version->thumbnail() ? $this->version->thumbnail()->url : null),
+        ];
 
         //
         // Delivery Info
@@ -450,7 +462,6 @@ class Deal extends Model
         // Catchall
         if ($this->vauto_features) {
             $record['misc'] = [];
-
             $misc = explode("|", $this->vauto_features);
             $misc = array_map('trim', $misc);
             $record['misc'] = $misc;
@@ -468,6 +479,13 @@ class Deal extends Model
         $record['cvr_fee'] = (float)$this->dealer->cvr_fee;
         $record['registration_fee'] = (float)$this->dealer->registration_fee;
         $record['acquisition_fee'] = (float)$this->dealer->acquisition_fee;
+
+        //
+        // All the features in the current UI are just jammed together.
+        $record['legacy_features'] = [];
+        foreach ($this->features as $feature) {
+            $record['legacy_features'][] = $feature->title;
+        }
 
         return $record;
     }
