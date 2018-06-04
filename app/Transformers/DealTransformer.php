@@ -17,10 +17,36 @@ class DealTransformer extends TransformerAbstract
         return $deal->prices();
     }
 
+    public function photos(Deal $deal) {
+
+        //
+        // Try real photos
+        $photos = $deal->photos()->get();
+        if (count($photos) > 1) {
+            $photos->shift();
+            return $photos;
+        }
+
+        //
+        // Try stock photos in the right color
+        $photos = $deal->version->photos()->where('color', '=', $deal->color)->get();
+        if (count($photos)) {
+            return $photos;
+        }
+
+        //
+        // Try stock photos in the wrong color
+        $photos = $deal->version->photos()->where('color', '=', 'default')->get();
+        if (count($photos)) {
+            return $photos;
+        }
+
+        return [];
+    }
+
     public function transform(Deal $deal)
     {
-        $deal->photos->shift();
-
+        $photos = $this->photos($deal);
         $prices = $this->prices($deal);
         return [
             'id' => $deal->id,
@@ -54,7 +80,7 @@ class DealTransformer extends TransformerAbstract
             'fuel_econ_hwy' => $deal->fuel_econ_hwy,
             'dealer_name' => $deal->dealer_name,
             'days_old' => $deal->days_old,
-            'photos' => $deal->photos,
+            'photos' => $photos,
             'version' => $deal->version,
             'features' => $deal->jatoFeatures,
             'doc_fee' => (float) $deal->dealer->doc_fee,

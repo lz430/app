@@ -10,6 +10,7 @@ use App\Models\JATO\VehicleModel;
 use App\Models\JATO\Version;
 use App\Models\Deal;
 use Carbon\Carbon;
+use DeliverMyRide\Fuel\FuelClient;
 use DeliverMyRide\JATO\JatoClient;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -22,7 +23,7 @@ use Illuminate\Support\Facades\DB;
 
 use League\Csv\Reader;
 use League\Csv\Statement;
-
+use DeliverMyRide\Fuel\VersionToFuel;
 /**
  *
  */
@@ -81,17 +82,20 @@ class Importer
 
     private const PROCESS_BATCH_SIZE = 100;
 
-    private $client;
+    private $jatoClient;
+    private $fuelClient;
     private $error;
     private $features;
     private $filesystem;
     private $info;
     private $debug;
 
-    public function __construct(Filesystem $filesystem, JatoClient $client)
+    public function __construct(Filesystem $filesystem, JatoClient $jatoClient, FuelClient $fuelClient)
     {
         $this->filesystem = $filesystem;
-        $this->client = $client;
+        $this->jatoClient = $jatoClient;
+        $this->fuelClient = $fuelClient;
+
         $this->debug = [
             'start' => microtime(true),
         ];
@@ -239,7 +243,8 @@ class Importer
     private function processRecord(array $row, \stdClass $decodedVin)
     {
         try {
-            list($version, $shouldRefreshDeals, $versionDebugData) = (new VersionMunger($row, $decodedVin, $this->client))->build();
+
+            list($version, $shouldRefreshDeals, $versionDebugData) = (new VersionMunger($row, $decodedVin, $this->jatoClient, $this->fuelClient))->build();
 
             $this->info("Deal: {$row['VIN']} - {$row['Stock #']}");
 
@@ -256,9 +261,11 @@ class Importer
             $deal = $this->saveOrUpdateDeal($version, $row['file_hash'], $row);
 
             $this->info("    -- Version Options: {$versionDebugData['possible_versions']}");
+
             if (isset($versionDebugData['name_search_term'])) {
                 $this->info("    -- Version Matching: {$versionDebugData['name_search_term']} | {$versionDebugData['name_search_name']} | {$versionDebugData['name_search_score']} ");
             }
+
             $this->info("    -- Version ID: {$version->id}");
             $this->info("    -- Deal ID: {$deal->id}");
             $this->info("    -- Deal Title: {$deal->title()}");
@@ -268,6 +275,11 @@ class Importer
 
                 if ($deal->wasRecentlyCreated) {
                     $this->saveDealRelations($deal, $row);
+                }
+                else {
+                    if (!$deal->photos()->count()) {
+                        $this->saveDealStockPhotos($deal);
+                    }
                 }
 
                 // Refresh existing deals if version has changed
@@ -302,7 +314,7 @@ class Importer
         $start = microtime(true);
         $decodedVinData = [];
         try {
-            $decodedVinData = $this->client->vin->decodeBulk($vins);
+            $decodedVinData = $this->jatoClient->vin->decodeBulk($vins);
         } catch (ClientException $e) {
             // If we get back a 404 it means one or more of the vins
             // were invalid.
@@ -494,14 +506,14 @@ class Importer
     {
         $this->saveDealJatoFeatures($deal);
         $this->saveDealPhotos($deal, $row['Photos']);
-        (new DealFeatureImporter($deal, $this->features, $this->client))->import();
+        (new DealFeatureImporter($deal, $this->features, $this->jatoClient))->import();
     }
 
 
     private function getCategorizedFeaturesByVehicleId(string $vehicleId)
     {
 
-        $response = $this->client->feature->get($vehicleId, '', 1, 400, false);
+        $response = $this->jatoClient->feature->get($vehicleId, '', 1, 400, false);
 
         $data = [];
 
@@ -602,35 +614,62 @@ class Importer
         }
     }
 
+    /**
+     * @param Deal $deal
+     * @param string $photos
+     */
     private function saveDealPhotos(Deal $deal, string $photos)
     {
+        $saved_some_photos = FALSE;
         collect(explode('|', $photos))
             ->reject(function ($photoUrl) {
                 return $photoUrl == '';
             })
-            ->each(function ($photoUrl) use ($deal) {
+            ->each(function ($photoUrl) use ($deal, &$saved_some_photos) {
                 $deal->photos()->firstOrCreate(['url' => str_replace('http', 'https', $photoUrl)]);
+                $saved_some_photos = TRUE;
             });
+
+        if (!$saved_some_photos) {
+            $this->saveDealStockPhotos($deal);
+        }
     }
 
+    /**
+     * In the event a deal does not have any photos, we attempt to load some from fuel api.
+     * @param Deal $deal
+     */
+    private function saveDealStockPhotos(Deal $deal) {
+        // only do this if we have a color.
+        if (!$deal->color) {
+            return;
+        }
+
+        // Only save stock photos if we don't have any already.
+        if ($deal->version->photos()->where('color', '=', $deal->color)->count()) {
+            return;
+        }
+
+        $assets = (new VersionToFuel($deal->version, $this->fuelClient))->assets($deal->color);
+        foreach ($assets as $asset) {
+            $deal->version->photos()->create([
+                'url' => $asset->url,
+                'shot_code' => $asset->shotCode->code,
+                'color' => $deal->color,
+            ]);
+        }
+    }
+
+    /**
+     * @param array $headers
+     * @throws MismatchedHeadersException
+     */
     private function checkHeaders(array $headers)
     {
         if (self::HEADERS !== $headers) {
             throw new MismatchedHeadersException(
                 implode(', ', $headers) . ' does not match expected headers: ' . implode(', ', self::HEADERS)
             );
-        }
-    }
-
-    /**
-     * @param Deal $deal
-     * @param $version
-     */
-    private function backfillNullMsrpsFromVersionMsrp(Deal $deal, $version)
-    {
-
-        if (!$deal->msrp && $version->msrp) {
-            $deal->update(['msrp' => $version->msrp]);
         }
     }
 

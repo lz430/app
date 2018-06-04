@@ -5,11 +5,7 @@ namespace DeliverMyRide\Fuel;
 use DeliverMyRide\Common\ApiClient;
 
 /**
- * Class CoxClient
- * @package DeliverMyRide\Cox
-
- * @see https://incentives.homenetiol.com/v2.4/metadata
- *  For information about endpoints
+ *
  */
 class FuelClient extends ApiClient
 {

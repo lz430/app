@@ -79,4 +79,14 @@ class Version extends Model
             array_map('strtolower', $bodyStylesWithSubStyles)
         );
     }
+
+    /**
+     * @return VersionPhoto|null
+     */
+    public function thumbnail(): ?VersionPhoto {
+        return  $this->photos()
+            ->where('shot_code', '=', '116')
+            ->where('color', '=', 'default')
+            ->first();
+    }
 }
