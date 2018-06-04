@@ -6,16 +6,18 @@ use App\Models\JATO\Make;
 use App\Models\JATO\Manufacturer;
 use App\Models\JATO\VehicleModel;
 use App\Models\JATO\Version;
+use DeliverMyRide\Fuel\FuelClient;
+use DeliverMyRide\Fuel\VersionToFuel;
 use DeliverMyRide\JATO\JatoClient;
+use GuzzleHttp\Exception\ClientException;
+
 
 
 class VersionMunger
 {
-    private const FEATURE_CATEGORY_BLACKLIST = [
-        'Pricing'
-    ];
 
-    private $client;
+    private $jatoClient;
+    private $fuelClient;
     private $row;
     private $decodedVin;
     private $version;
@@ -25,11 +27,13 @@ class VersionMunger
     /**
      * @param array $row
      * @param \stdClass $decodedVin
-     * @param JatoClient $client
+     * @param JatoClient $jatoClient
+     * @param FuelClient $fuelClient
      */
-    public function __construct(array $row, \stdClass $decodedVin, JatoClient $client)
+    public function __construct(array $row, \stdClass $decodedVin, JatoClient $jatoClient, FuelClient $fuelClient)
     {
-        $this->client = $client;
+        $this->jatoClient = $jatoClient;
+        $this->fuelClient = $fuelClient;
         $this->decodedVin = $decodedVin;
         $this->row = $row;
     }
@@ -148,7 +152,7 @@ class VersionMunger
         $manufacturer = Manufacturer::where('name', $this->decodedVin->manufacturer)->first();
 
         if (!$manufacturer) {
-            $data = $this->client->manufacturer->get($this->decodedVin->manufacturer);
+            $data = $this->jatoClient->manufacturer->get($this->decodedVin->manufacturer);
 
             $manufacturer = Manufacturer::updateOrCreate([
                 'url_name' => $data->urlManufacturerName,
@@ -171,7 +175,7 @@ class VersionMunger
         $make = Make::where('name', $this->decodedVin->make)->first();
 
         if (!$make) {
-            $data = $this->client->make->get($this->decodedVin->make);
+            $data = $this->jatoClient->make->get($this->decodedVin->make);
 
             $make = $manufacturer->makes()->updateOrCreate([
                 'url_name' => $data->urlMakeName,
@@ -196,7 +200,7 @@ class VersionMunger
         $model = VehicleModel::where('name', $this->decodedVin->model)->first();
 
         if (!$model) {
-            $data = $this->client->model->get($this->jatoVersion->urlModelName);
+            $data = $this->jatoClient->model->get($this->jatoVersion->urlModelName);
 
             $model = $make->models()->updateOrCreate([
                 'url_name' => $data->urlModelName,
@@ -210,13 +214,14 @@ class VersionMunger
         return $model;
     }
 
+
     /**
      * @return Version
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function create(): Version
     {
-        $data = $this->client->version->get($this->jatoVersion->vehicle_ID);
+        $data = $this->jatoClient->version->get($this->jatoVersion->vehicle_ID);
 
         $manufacturer = $this->manufacturer();
         $make = $this->make($manufacturer);
@@ -245,7 +250,40 @@ class VersionMunger
             'is_current' => $data->isCurrent,
         ]);
 
+        $this->photos($version);
+
         return $version;
+    }
+
+    /**
+     * Clear all photos attached to the version and get some basic defaults we can use.
+     * All versions need photos for the intro page.
+     * @param Version $version
+     */
+    private function photos(Version $version)
+    {
+        $assets = (new VersionToFuel($version, $this->fuelClient))->assets('default');
+        $version->photos()->delete();
+
+        foreach ($assets as $asset) {
+            $version->photos()->create([
+                'url' => $asset->url,
+                'shot_code' => $asset->shotCode->code,
+                'color' => 'default',
+            ]);
+        }
+    }
+
+    /**
+     * This happens when the jato vehicle id changed, meaning the spec for the actual vehicle is different
+     * for whatever reason
+     * @param Version $version
+     * @param \stdClass $jatoVersion
+     */
+    private function refresh(Version $version, \stdClass $jatoVersion)
+    {
+        $version->update(['jato_vehicle_id' => $jatoVersion->vehicle_ID]);
+        $this->photos($version);
     }
 
     /**
@@ -254,7 +292,6 @@ class VersionMunger
      */
     public function build(): array
     {
-
         //
         // Match Jato Version
         $jatoVersion = $this->matchVinToVersion();
@@ -262,7 +299,6 @@ class VersionMunger
             return [FALSE, FALSE, FALSE];
         }
         $this->jatoVersion = $jatoVersion;
-
 
         //
         // Decide if we need to create
@@ -277,8 +313,11 @@ class VersionMunger
             $shouldRefreshDeals = FALSE;
         } else {
             $shouldRefreshDeals = TRUE;
-            $version->update(['jato_vehicle_id' => $jatoVersion->vehicle_ID]);
+            $this->refresh($version, $jatoVersion);
+        }
 
+        if (!$version->photos()->count()) {
+            $this->photos($version);
         }
 
         return [$version, $shouldRefreshDeals, $this->debug];

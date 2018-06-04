@@ -34,6 +34,10 @@
             <directory suffix="Test.php">./tests/External/Cox</directory>
         </testsuite>
 
+        <testsuite name="external.fuel">
+            <directory suffix="Test.php">./tests/External/Fuel</directory>
+        </testsuite>
+
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">

@@ -6,6 +6,7 @@ use App\Models\Deal;
 use DeliverMyRide\JATO\BodyStyles;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
 class Version extends Model
@@ -32,6 +33,14 @@ class Version extends Model
     public function equipment()
     {
         return $this->hasMany(Equipment::class, 'jato_vehicle_id', 'jato_vehicle_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function photos(): HasMany
+    {
+        return $this->hasMany(VersionPhoto::class);
     }
 
     public function taxesAndDiscounts()
@@ -69,5 +78,15 @@ class Version extends Model
             DB::raw('lower(body_style)'),
             array_map('strtolower', $bodyStylesWithSubStyles)
         );
+    }
+
+    /**
+     * @return VersionPhoto|null
+     */
+    public function thumbnail(): ?VersionPhoto {
+        return  $this->photos()
+            ->where('shot_code', '=', '116')
+            ->where('color', '=', 'default')
+            ->first();
     }
 }

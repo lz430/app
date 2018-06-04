@@ -149,17 +149,49 @@ class Deal extends Model
     }
 
     /**
+     * In some situations we don't have photos for the specific vehicle,
+     * so we use stock photos in some situations, which are stored on the version.
+     *
+     * @return array
+     */
+    public function marketingPhotos()
+    {
+
+        //
+        // Try real photos
+        $photos = $this->photos()->get();
+        if (count($photos) > 1) {
+            $photos->shift();
+            return $photos;
+        }
+
+        //
+        // Try stock photos in the right color
+        $photos = $this->version->photos()->where('color', '=', $this->color)->get();
+        if (count($photos)) {
+            return $photos;
+        }
+
+        //
+        // Try stock photos in the wrong color
+        $photos = $this->version->photos()->where('color', '=', 'default')->get();
+        if (count($photos)) {
+            return $photos;
+        }
+
+        return [];
+    }
+
+    /**
      * @return string|null
      */
     public function featuredPhoto()
     {
-        return ($this->photos && $this->photos->first())
-            ? $this->photos->first()
-            : null;
+        $photos = $this->marketingPhotos();
+        return (isset($photos[0]) ? $photos[0] : null);
     }
 
     /**
-     *
      * Human title for vehicle.
      * @return string
      */
@@ -173,7 +205,12 @@ class Deal extends Model
         ]);
     }
 
-    public function prices()
+    /**
+     * Returns an object of various price roles for this deal. Applies
+     * dealer pricing rules and whatnot.
+     * @return object
+     */
+    public function prices(): \stdClass
     {
         $source = $this->source_price;
 
