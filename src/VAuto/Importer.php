@@ -306,7 +306,7 @@ class Importer
             // Save/Update and save new model
             $model = $this->saveMakeModel(
                 $make,
-                $this->client->model->get($jatoVersion['urlModelName'])
+                $this->client->model->get($jatoVersion->urlModelName)
             );
         }
 
