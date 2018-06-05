@@ -122,7 +122,7 @@ class FinanceCalculator extends React.PureComponent {
                     deal={this.props.dealPricing.deal()}
                     targetsChanged={() => this.handleTargetsChange()}
                 />
-                <hr />
+               {/* <hr />*/}
                 <div>
                     <h4>Calculate Your Payment</h4>
                     {this.renderAmountFinanced()}
