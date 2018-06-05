@@ -192,7 +192,6 @@ class DealsByModelYearController extends BaseAPIController
             $filters['styles'] = $request->get('body_styles');
         }
 
-
         if ($request->get('make_ids')) {
             $makes = Make::whereIn('id', $request->get('make_ids'))->pluck('name')->toArray();
             $filters['makes'] = $makes;

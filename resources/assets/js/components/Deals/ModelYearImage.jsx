@@ -14,8 +14,6 @@ class ModelYearImage extends React.PureComponent {
         if (this.props.modelYear.thumbnail) {
             return this.props.modelYear.thumbnail.url;
         }
-
-        console.log(this.props.modelYear);
         return this.state.fallbackDealImage;
     }
 
