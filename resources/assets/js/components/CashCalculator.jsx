@@ -42,7 +42,7 @@ class CashCalculator extends React.PureComponent {
                     deal={this.props.dealPricing.deal()}
                     targetsChanged={() => this.handleTargetsChange()}
                 />
-                <hr />
+               {/* <hr />*/}
                 <h4>Summary</h4>
                 <div>
                     <div>
