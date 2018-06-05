@@ -4,9 +4,6 @@ namespace DeliverMyRide\VAuto;
 
 use App\Models\Feature;
 use App\Models\JatoFeature;
-use App\Models\JATO\Make;
-use App\Models\JATO\Manufacturer;
-use App\Models\JATO\VehicleModel;
 use App\Models\JATO\Version;
 use App\Models\Deal;
 use Carbon\Carbon;
@@ -24,6 +21,8 @@ use Illuminate\Support\Facades\DB;
 use League\Csv\Reader;
 use League\Csv\Statement;
 use DeliverMyRide\Fuel\VersionToFuel;
+
+
 /**
  *
  */

@@ -82,6 +82,18 @@ class Deal extends Model
             'category' => [
                 'type' => 'nested',
             ],
+            'msrp' => [
+                'type' => 'double',
+            ],
+            'supplier_price' => [
+                'type' => 'double',
+            ],
+            'employee_price' => [
+                'type' => 'double',
+            ],
+            'default_price' => [
+                'type' => 'double',
+            ],
         ]
     ];
 
@@ -389,6 +401,7 @@ class Deal extends Model
         $record['id'] = $this->id;
         $record['created_at'] = $this->created_at;
         $record['updated_at'] = $this->updated_at;
+        $record['inventory_date'] = $this->inventory_date;
 
         //
         // Vehicle identification information
@@ -402,6 +415,7 @@ class Deal extends Model
         $record['year'] = $this->year;
         $record['make'] = $this->make;
         $record['model'] = $this->model;
+        $record['model_code'] = $this->model_code;
         $record['series'] = $this->series;
         $record['style'] = $this->version->body_style;
 
@@ -414,8 +428,6 @@ class Deal extends Model
         $record['color'] = $this->color;
         $record['interior_color'] = $this->interior_color;
 
-        $record['msrp'] = $this->msrp;
-
         $record['fuel_econ_city'] = $this->fuel_econ_city;
         $record['fuel_econ_hwy'] = $this->fuel_econ_hwy;
 
@@ -423,7 +435,7 @@ class Deal extends Model
         // Photos
         $record['photos'] = [];
         foreach ($this->marketingPhotos() as $photo) {
-            $record['photos'][] = $photo->url;
+            $record['photos'][] = $photo;
         }
 
         $thumbnail = $this->featuredPhoto();
@@ -468,23 +480,23 @@ class Deal extends Model
         }
 
         $pricing = $this->prices();
-        $record['pricing'] = $this->prices();
+        $record['pricing'] = $pricing;
 
         //
         // Backwards compatibility with existing frontend stuff
         $record['version'] = $this->version;
-        $record['employee_price'] = $pricing->employee;
-        $record['supplier_price'] = $pricing->supplier;
-        $record['doc_fee'] = (float)$this->dealer->doc_fee;
-        $record['cvr_fee'] = (float)$this->dealer->cvr_fee;
-        $record['registration_fee'] = (float)$this->dealer->registration_fee;
-        $record['acquisition_fee'] = (float)$this->dealer->acquisition_fee;
+        $record['dealer'] = $this->dealer;
 
         //
         // All the features in the current UI are just jammed together.
         $record['legacy_features'] = [];
         foreach ($this->features as $feature) {
             $record['legacy_features'][] = $feature->title;
+        }
+
+        $record['jato_features'] = [];
+        foreach($this->jatoFeatures as $feature) {
+            $record['jato_features'][] = $feature;
         }
 
         return $record;

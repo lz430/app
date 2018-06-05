@@ -18,7 +18,6 @@ class DealFeatureImporter
     private $version;
 
     /**
-     * DealFeatureImporter constructor.
      * @param Deal $deal
      * @param $features
      * @param JatoClient $client
