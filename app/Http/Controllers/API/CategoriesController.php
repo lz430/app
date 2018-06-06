@@ -14,7 +14,7 @@ class CategoriesController extends BaseAPIController
     
     public function index()
     {
-        $categories = Category::has('features')->whereNotIn('title', ['Interior', 'Transmission'])->orderBy('display_order')->get();
+        $categories = Category::has('features')->whereNotIn('title', ['Interior', 'Transmission', 'Seating Configuration'])->orderBy('display_order')->get();
 
         return fractal()
             ->collection($categories)
