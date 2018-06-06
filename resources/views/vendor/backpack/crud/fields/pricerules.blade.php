@@ -45,8 +45,11 @@ foreach ($price_fields as $key => $price_field) {
 }
 $default_rules = json_encode($default_rules);
 
-$deals = $entry->deals()->take(5)->get();
-$deal_data = [];
+if (isset($entry)) {
+    $deals = $entry->deals()->take(5)->get();
+} else {
+    $deals = [];
+}
 
 ?>
 

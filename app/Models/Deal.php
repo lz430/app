@@ -157,11 +157,11 @@ class Deal extends Model
             ];
         }
 
-        if (!$this->source_price->price) {
+        if (!isset($this->source_price->price) || !$this->source_price->price) {
             $this->source_price->price =  ($this->price ? $this->price : $this->msrp);
         }
 
-        if (!$this->source_price->msrp) {
+        if (!isset($this->source_price->msrp) || !$this->source_price->msrp) {
             $this->source_price->msrp  = $this->msrp;
         }
 
