@@ -33,8 +33,12 @@ class DealsByModelYearController extends BaseAPIController
             return $item->model_id . '--' . $item->year;
         })->map(function ($deals, $modelId) {
             $model = VehicleModel::find($modelId);
+            $thumbnail = $deals[0]->version->thumbnail();
+
             return [
                 'id' => str_before($modelId, '--'),
+                'version_id' => $deals[0]->version->id,
+                'thumbnail' => $thumbnail,
                 'make' => $model->make->name,
                 'model' => $model->name,
                 'year' =>  str_after($modelId, '--'),

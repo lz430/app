@@ -19,6 +19,14 @@
     </a>
 </li>
 
+<li class="header">Reports</li>
+<li>
+    <a href="/admin/reports/versions-missing-images">
+        <i class="fa fa-image"></i>
+        <span>Version w/ No Photos</span>
+    </a>
+</li>
+
 <li class="header">Debug Tools</li>
 <li>
     <a href="/admin/zip-tester/48116">

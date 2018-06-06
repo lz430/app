@@ -3,9 +3,6 @@ import api from 'src/api';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import CompareBar from 'components/CompareBar';
 import { connect } from 'react-redux';
-import Deal from 'components/Deals/Deal';
-import fuelapi from 'src/fuelapi';
-import fuelcolor from 'src/fuel-color-map';
 import Modal from 'components/Modal';
 import miscicons from 'miscicons';
 import PropTypes from 'prop-types';
@@ -45,9 +42,7 @@ class DealDetails extends React.PureComponent {
 
         this.props.requestBestOffer(this.props.deal);
 
-        if (this.props.deal.photos.length === 0) {
-            this.requestFuelImages();
-        } else {
+        if (this.props.deal.photos.length) {
             this.setState({featuredImage: this.props.deal.photos[0]});
         }
 
@@ -82,65 +77,6 @@ class DealDetails extends React.PureComponent {
         this.setState({
             showFeatures: true,
         });
-    }
-
-    extractFuelImages(data) {
-        return (
-            data.data.products.map(product =>
-                product.productFormats.filter(format => {
-                    return format.assets.length > 0;
-                }).map(format => {
-                    return {
-                        id: `fuel_external_${format.id}`,
-                        url: format.assets[0].url,
-                    };
-                })
-            )[0] || []
-        );
-    }
-
-    async requestFuelImages() {
-        let vehicleId = null;
-
-        try {
-            vehicleId =
-                (await fuelapi.getVehicleId(
-                    this.props.deal.year,
-                    this.props.deal.make,
-                    this.props.deal.model
-                )).data[0].id || false;
-        } catch (e) {
-            // Cannot return here because Babel
-        }
-
-        if (!vehicleId) return;
-
-        try {
-            const externalImages = this.extractFuelImages(
-                await fuelapi.getExternalImages(
-                    vehicleId,
-                    fuelcolor.convert(this.props.deal.color)
-                )
-            );
-
-            this.setState({
-                fuelExternalImages: externalImages,
-                featuredImage: externalImages[0]
-            });
-        } catch (e) {
-            try {
-                const externalImages = this.extractFuelImages(
-                    await fuelapi.getExternalImages(vehicleId, 'white')
-                );
-
-                this.setState({
-                    fuelExternalImages: externalImages,
-                    featuredImage: externalImages[0]
-                });
-            } catch (e) {
-                // No Fuel Images Available.
-            }
-        }
     }
 
     selectFeaturedImage(index) {

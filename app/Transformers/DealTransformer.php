@@ -3,7 +3,6 @@
 namespace App\Transformers;
 
 use App\Models\Deal;
-use App\Models\JATO\Make;
 use League\Fractal\TransformerAbstract;
 
 class DealTransformer extends TransformerAbstract
@@ -11,16 +10,23 @@ class DealTransformer extends TransformerAbstract
 
     /**
      * @param Deal $deal
-     * Generate Pricing
+     * @return object
      */
     public function prices(Deal $deal) {
         return $deal->prices();
     }
 
+    /**
+     * @param Deal $deal
+     * @return array
+     */
+    public function photos(Deal $deal) {
+        return $deal->marketingPhotos();
+    }
+
     public function transform(Deal $deal)
     {
-        $deal->photos->shift();
-
+        $photos = $this->photos($deal);
         $prices = $this->prices($deal);
         return [
             'id' => $deal->id,
@@ -54,7 +60,7 @@ class DealTransformer extends TransformerAbstract
             'fuel_econ_hwy' => $deal->fuel_econ_hwy,
             'dealer_name' => $deal->dealer_name,
             'days_old' => $deal->days_old,
-            'photos' => $deal->photos,
+            'photos' => $photos,
             'version' => $deal->version,
             'features' => $deal->jatoFeatures,
             'doc_fee' => (float) $deal->dealer->doc_fee,

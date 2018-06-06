@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         Commands\LoadDealsFromVauto::class,
         Commands\TestCoxAPI::class,
         Commands\JatoVersionReport::class,
+        Commands\VersionFillMissingPhotos::class,
     ];
 
     /**
