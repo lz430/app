@@ -109,12 +109,129 @@ const reducer = (state, action) => {
                 selectedYear: null,
                 filterPage: 'models',
             });
+
         case ActionTypes.SELECT_MODEL_YEAR:
-            return Object.assign({}, state, {
+            return {
+                ...state,
+                searchQuery: {
+                    ...state.searchQuery,
+                    page: 1,
+                    entity: 'deal',
+                    models: [
+                        action.data.id
+                    ],
+                    years: [
+                        action.data.year
+                    ]
+                },
+
+                // Deprecated
                 filterPage: 'deals',
                 selectedModels: [action.data.id],
                 selectedYear: action.data.year,
+            };
+
+        // Search query update
+        case ActionTypes.SORT_DEALS:
+            return {
+                ...state,
+                searchQuery: {
+                    ...state.searchQuery,
+                    page: 1,
+                    sort: {
+                        attribute: action.sort,
+                        direction: (state.sortAscending ? 'asc' : 'desc'),
+                    }
+                },
+
+                // Deprecated
+                sortColumn: action.sort,
+                sortAscending: !state.sortAscending,
+            };
+
+        // Search query update
+        case ActionTypes.TOGGLE_MAKE:
+            return {
+                ...state,
+                searchQuery: {
+                    ...state.searchQuery,
+                    page: 1,
+                    makes: action.selectedMakes
+                },
+
+                // Deprecated
+                selectedMakes: action.selectedMakes
+            };
+
+        // Search query update
+        case ActionTypes.TOGGLE_MODEL:
+            return {
+                ...state,
+                searchQuery: {
+                    ...state.searchQuery,
+                    page: 1,
+                    models: action.selectedModels
+                },
+
+                // Deprecated
+                selectedModels: action.selectedModels
+            };
+
+
+        // Search query update
+        case ActionTypes.TOGGLE_STYLE:
+            return {
+                ...state,
+                searchQuery: {
+                    ...state.searchQuery,
+                    page: 1,
+                    styles: action.selectedStyles
+                },
+
+                // Deprecated
+                selectedStyles: action.selectedStyles
+            };
+
+        // Search query update
+        case ActionTypes.TOGGLE_FEATURE:
+            return {
+                ...state,
+                searchQuery: {
+                    ...state.searchQuery,
+                    page: 1,
+                    features: action.selectedFeatures
+                },
+
+                // Deprecated
+                selectedFeatures: action.selectedFeatures
+            };
+
+        case ActionTypes.RECEIVE_BODY_STYLES:
+            return Object.assign({}, state, {
+                bodyStyles: action.data.data.data,
             });
+        case ActionTypes.RECEIVE_FEATURES:
+            return Object.assign({}, state, {
+                features: action.data.data.data,
+            });
+        case ActionTypes.RECEIVE_FEATURE_CATEGORIES:
+            return Object.assign({}, state, {
+                featureCategories: action.data.data.data,
+                searchFeatures: action.data.data.included
+            });
+
+        case ActionTypes.SELECT_REBATE:
+            if (!R.contains(action.rebate, state.selectedRebates)) {
+                return Object.assign({}, state, {
+                    selectedRebates: util.toggleItem(
+                        state.selectedRebates,
+                        action.rebate
+                    ),
+                });
+            }
+
+            return state;
+
         case ActionTypes.RECEIVE_TARGETS:
             const targetKey = util.getTargetKeyForDealAndZip(
                 action.data.deal,
@@ -139,11 +256,6 @@ const reducer = (state, action) => {
                     ),
                 },
             };
-        case ActionTypes.SORT_DEALS:
-            return Object.assign({}, state, {
-                sortColumn: action.sort,
-                sortAscending: !state.sortAscending,
-            });
         case ActionTypes.SELECT_TAB:
             return Object.assign({}, state, { selectedTab: action.data });
         case ActionTypes.RECEIVE_MORE_DEALS:
@@ -156,50 +268,11 @@ const reducer = (state, action) => {
                 requestingMoreDeals: false,
                 requestingMoreModelYears: false,
             });
-        case ActionTypes.TOGGLE_MAKE:
-            return Object.assign({}, state, {
-                selectedMakes: action.selectedMakes,
-            });
-        case ActionTypes.TOGGLE_MODEL:
-            return Object.assign({}, state, {
-                selectedModels: action.selectedModels,
-            });
         case ActionTypes.SET_IS_EMPLOYEE:
             return Object.assign({}, state, {
                 employeeBrand: action.employeeBrand,
             });
-        case ActionTypes.TOGGLE_FEATURE:
-            return Object.assign({}, state, {
-                selectedFeatures: action.selectedFeatures,
-            });
-        case ActionTypes.RECEIVE_BODY_STYLES:
-            return Object.assign({}, state, {
-                bodyStyles: action.data.data.data,
-            });
-        case ActionTypes.RECEIVE_FEATURES:
-            return Object.assign({}, state, {
-                features: action.data.data.data,
-            });
-        case ActionTypes.RECEIVE_FEATURE_CATEGORIES:
-            return Object.assign({}, state, {
-                featureCategories: action.data.data.data,
-                searchFeatures: action.data.data.included
-            });
-        case ActionTypes.TOGGLE_STYLE:
-            return Object.assign({}, state, {
-                selectedStyles: action.selectedStyles,
-            });
-        case ActionTypes.SELECT_REBATE:
-            if (!R.contains(action.rebate, state.selectedRebates)) {
-                return Object.assign({}, state, {
-                    selectedRebates: util.toggleItem(
-                        state.selectedRebates,
-                        action.rebate
-                    ),
-                });
-            }
 
-            return state;
         case ActionTypes.CHOOSE_FUEL_TYPE:
             return Object.assign({}, state, {
                 selectedFuelType: action.selectedFuelType,
@@ -234,16 +307,57 @@ const reducer = (state, action) => {
         case ActionTypes.TOGGLE_COMPARE:
             return { ...state, compareList: action.compareList };
         case ActionTypes.SET_ZIP_CODE:
-            return { ...state, zipcode: action.zipcode, city: null };
+            return {
+                ...state,
+                searchQuery: {
+                    ...state.searchQuery,
+                    page: 1,
+                    location: {
+                        ...state.searchQuery.location,
+                        zipcode: action.zipcode,
+                        city: null,
+                    }
+                },
+
+                // Deprecated
+                zipcode: action.zipcode,
+                city: null
+            };
+
         case ActionTypes.RECEIVE_LOCATION_INFO:
-            return Object.assign({}, state, {
+            return {
+                ...state,
+                searchQuery: {
+                    ...state.searchQuery,
+                    page: 1,
+                    location: {
+                        ...state.searchQuery.location,
+                        zipcode: action.zipcode,
+                        city: action.city,
+                    }
+                },
+
+                // Deprecated
                 zipcode: action.zipcode,
                 city: action.city,
-            });
+            };
+
         case ActionTypes.SET_ZIP_IN_RANGE:
-            return Object.assign({}, state, {
+            return {
+                ...state,
+                searchQuery: {
+                    ...state.searchQuery,
+                    page: 1,
+                    location: {
+                        ...state.searchQuery.location,
+                        in_range: action.supported,
+                    }
+                },
+
+                // Deprecated
                 zipInRange: action.supported,
-            });
+            };
+
         case ActionTypes.RECEIVE_BEST_OFFER:
             if (isEqual(state.bestOffers[action.bestOfferKey], action.data)) {
                 return state;
@@ -285,6 +399,13 @@ const reducer = (state, action) => {
                     state.cancelTokens
                 ),
             };
+
+        case ActionTypes.REQUEST_SEARCH:
+            return state;
+
+        case ActionTypes.RECEIVE_SEARCH:
+            return state;
+
         case ActionTypes.SHOW_ACCUPRICING_MODAL:
             return {
                 ...state,
@@ -313,7 +434,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 financeDownPayment: action.downPayment
-            }
+            };
         case ActionTypes.UPDATE_FINANCE_TERM:
             if (state.financeTerm === action.term) {
                 return state;

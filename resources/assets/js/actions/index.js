@@ -99,11 +99,9 @@ export function toggleFeature(feature) {
             selectedFeatures,
         });
 
-        dispatch(
-            requestDealsOrModelYears({
-                features: selectedFeatures,
-            })
-        );
+        dispatch({
+            type: ActionTypes.REQUEST_SEARCH,
+        });
     };
 }
 
@@ -119,11 +117,9 @@ export function toggleMake(make_id) {
             selectedMakes,
         });
 
-        dispatch(
-            requestDealsOrModelYears({
-                makeIds: selectedMakes,
-            })
-        );
+        dispatch({
+            type: ActionTypes.REQUEST_SEARCH,
+        });
     };
 }
 
@@ -139,11 +135,9 @@ export function toggleModel(model) {
             selectedModels,
         });
 
-        dispatch(
-            requestDealsOrModelYears({
-                modelIds: R.map(R.prop('id'), selectedModels),
-            })
-        );
+        dispatch({
+            type: ActionTypes.REQUEST_SEARCH,
+        });
     };
 }
 
@@ -230,7 +224,9 @@ export function sortDeals(sort) {
             sort,
         });
 
-        dispatch(requestDeals());
+        dispatch({
+            type: ActionTypes.REQUEST_SEARCH,
+        });
     };
 }
 
@@ -265,51 +261,6 @@ export function clearModelYear() {
     };
 }
 
-
-export function requestDealsOrModelYears(params = {}) {
-    return (dispatch, getState) => {
-        return;
-        dispatch({
-            type:
-                getState().filterPage == 'deals'
-                    ? ActionTypes.REQUEST_DEALS
-                    : ActionTypes.REQUEST_MODEL_YEARS,
-        });
-
-        // Disable all calls if the make selector modal is open
-        if (getState().showMakeSelectorModal) {
-            return;
-        }
-
-        const cancelTokenContext = 'search';
-        dispatch(cancelPromises(cancelTokenContext));
-
-        const CancelToken = window.axios.CancelToken;
-        const source = CancelToken.source();
-        const cancelTokenIdentifier = 'search-' + getState().filterPage;
-
-        dispatch(appendCancelToken(source, cancelTokenContext, cancelTokenIdentifier));
-
-        api
-            .applySearchFilters(
-                getState().filterPage,
-                withStateDefaults(getState(), params)
-            )
-            .then(data => {
-                dispatch(removeCancelToken(cancelTokenIdentifier));
-                if (getState().filterPage == 'deals') {
-                    dispatch(receiveDeals(data));
-                } else {
-                    dispatch(receiveModelYears(data));
-                }
-            })
-            .catch(e => {
-                dispatch(removeCancelToken(cancelTokenIdentifier));
-            });
-
-    };
-}
-
 export function selectModelYear(vehicleModel) {
     return (dispatch, getState) => {
         dispatch({
@@ -317,7 +268,9 @@ export function selectModelYear(vehicleModel) {
             data: vehicleModel,
         });
 
-        dispatch(requestDealsOrModelYears());
+        dispatch({
+            type: ActionTypes.REQUEST_SEARCH,
+        });
     };
 }
 
@@ -352,7 +305,9 @@ export function setZipInRange(data) {
             });
         });
 
-        dispatch(requestDealsOrModelYears());
+        dispatch({
+            type: ActionTypes.REQUEST_SEARCH,
+        });
     };
 }
 
@@ -389,11 +344,9 @@ export function toggleStyle(style) {
             selectedStyles: selectedStyles,
         });
 
-        dispatch(
-            requestDealsOrModelYears({
-                bodyStyles: getState().selectedStyles,
-            })
-        );
+        dispatch({
+            type: ActionTypes.REQUEST_SEARCH,
+        });
     };
 }
 
@@ -407,8 +360,8 @@ export function chooseFuelType(fuelType) {
             selectedFuelType: selectedFuelType,
         });
 
-        requestDealsOrModelYears({
-            fuelType: selectedFuelType,
+        dispatch({
+            type: ActionTypes.REQUEST_SEARCH,
         });
     };
 }
@@ -425,8 +378,8 @@ export function chooseTransmissionType(transmissionType) {
             selectedTransmissionType,
         });
 
-        requestDealsOrModelYears({
-            transmissionType: selectedTransmissionType,
+        dispatch({
+            type: ActionTypes.REQUEST_SEARCH,
         });
     };
 }
@@ -441,8 +394,8 @@ export function chooseYear(year) {
             selectedYear,
         });
 
-        requestDealsOrModelYears({
-            year: selectedYear,
+        dispatch({
+            type: ActionTypes.REQUEST_SEARCH,
         });
     };
 }
@@ -453,15 +406,9 @@ export function clearAllFilters() {
             type: ActionTypes.CLEAR_ALL_FILTERS,
         });
 
-        dispatch(
-            requestDealsOrModelYears({
-                makeIds: [],
-                bodyStyles: [],
-                fuelType: null,
-                transmissionType: null,
-                features: [],
-            })
-        );
+        dispatch({
+            type: ActionTypes.REQUEST_SEARCH,
+        });
     };
 }
 
@@ -516,14 +463,18 @@ export function requestLocationInfo() {
             if (!getState().zipcode) {
                 jsonp('//freegeoip.net/json/', null, function(err, data) {
                     if (err) {
-                        dispatch(requestDealsOrModelYears());
+                        dispatch({
+                            type: ActionTypes.REQUEST_SEARCH,
+                        });
                     } else {
                         dispatch(receiveLocationInfo(data));
                         resolve(data.zip_code)
                     }
                 });
             } else {
-                dispatch(requestDealsOrModelYears());
+                dispatch({
+                    type: ActionTypes.REQUEST_SEARCH,
+                });
             }
 
             dispatch({
@@ -538,12 +489,6 @@ export function receiveLocationInfo(data) {
         const zipcode = data.zip_code;
         const city = data.city;
 
-        dispatch(
-            requestDealsOrModelYears({
-                zipcode,
-            })
-        );
-
         dispatch({
             type: ActionTypes.RECEIVE_LOCATION_INFO,
             zipcode,
@@ -551,6 +496,10 @@ export function receiveLocationInfo(data) {
         });
 
         dispatch(checkZipInRange(zipcode));
+
+        dispatch({
+            type: ActionTypes.REQUEST_SEARCH,
+        });
     };
 }
 
@@ -560,7 +509,9 @@ export function closeMakeSelectorModal() {
             type: ActionTypes.CLOSE_MAKE_SELECTOR_MODAL,
         });
 
-        dispatch(requestDealsOrModelYears());
+        dispatch({
+            type: ActionTypes.REQUEST_SEARCH,
+        });
     }
 }
 

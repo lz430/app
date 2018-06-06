@@ -9,12 +9,21 @@ import miscicons from 'miscicons';
 import { connect } from 'react-redux';
 
 class ViewModels extends React.PureComponent {
+
+    /**
+     * @param model
+     * @returns {string}
+     */
+    buildModelKey(model) {
+        return model.year + "--" + model.id;
+    }
+
     render() {
         return (
             <div>
                 <div className={'modelyears ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
                     {this.props.modelYears ? (this.props.modelYears.map((model, index) => {
-                            return <ModelYear modelYear={model} key={index} />
+                            return <ModelYear modelYear={model} key={this.buildModelKey(model)} />
                         })
                     ) : (
                         <SVGInline svg={miscicons['loading']} />

@@ -89,12 +89,31 @@ const initialState = {
     leaseRates: null,
     leasePaymentsLoaded: {},
     leasePayments: null,
+
+    searchQuery: {
+        entity: 'model', // deal or model depending on the page we're on.
+        sort: {
+          attribute: 'price',
+          direction: 'asc',
+        },
+        location: {
+            zipcode: null,
+            city: null,
+            in_range: false,
+        },
+        page: 1,
+        years: [],
+        makes: [],
+        models: [],
+        styles: [],
+        features: [],
+    },
 };
 
 const config = {
     key: 'primary',
     storage,
-    blacklist: ['deals']
+    blacklist: ['deals', 'dealPage', 'dealPageTotal', 'modelYears', 'searchQuery'],
 };
 
 export default () => {

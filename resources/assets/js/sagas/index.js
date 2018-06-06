@@ -1,52 +1,27 @@
 import { take, put, call, fork, select, takeLatest, all } from 'redux-saga/effects'
-
+import ApiClient from 'store/api';
 import * as ActionTypes from 'actiontypes/index';
 import * as Actions from 'actions/index';
-import api from 'src/api';
 
-const withStateDefaults = (state, changed) => {
-    return Object.assign(
-        {},
-        {
-            makeIds: state.selectedMakes,
-            modelIds: state.selectedModels,
-            bodyStyles: state.selectedStyles,
-            fuelType: state.selectedFuelType,
-            transmissionType: state.selectedTransmissionType,
-            segment: state.selectedSegment,
-            features: state.selectedFeatures,
-            featureCategories: state.featureCategories,
-            includes: ['photos'],
-            sortColumn: state.sortColumn,
-            sortAscending: state.sortAscending,
-            page: 1,
-            year: state.selectedYear,
-            zipcode: state.zipcode,
-            zipInRange: state.zipInRange,
-        },
-        changed
-    );
-};
-
-export function* getAllProducts() {
+/**
+ * @returns {IterableIterator<*>}
+ */
+export function* requestSearch() {
     const state = yield select();
-    console.log("getAllProducts");
-    const products = yield call(api.getDeals, withStateDefaults(state));
-    console.log(products);
-    yield put(Actions.receiveDeals(products));
+
+    const results = yield call(ApiClient.search, state.searchQuery);
+
+    if (state.searchQuery.entity === "deal") {
+        yield put(Actions.receiveDeals(results));
+    } else {
+        yield put(Actions.receiveModelYears(results));
+    }
 }
 
-export function* watchGetProducts() {
-    console.log("watchGetProducts");
-    const state = yield select();
-
-    const action = (state.filterPage === 'deals'
-        ? ActionTypes.REQUEST_DEALS
-        : ActionTypes.REQUEST_MODEL_YEARS);
-
-    yield takeLatest(ActionTypes.TOGGLE_FEATURE, getAllProducts)
+export function* watchRequestSearch() {
+    yield takeLatest(ActionTypes.REQUEST_SEARCH, requestSearch)
 }
 
 export default function* root() {
-    yield all([fork(getAllProducts), fork(watchGetProducts)])
+    yield all([fork(requestSearch), fork(watchRequestSearch)])
 }

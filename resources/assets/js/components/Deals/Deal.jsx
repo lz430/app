@@ -28,10 +28,6 @@ class Deal extends React.Component {
         return true;
     }
 
-    componentWillUpdate() {
-        console.log("WTF");
-    }
-
     render() {
         const deal = this.props.deal;
         return (

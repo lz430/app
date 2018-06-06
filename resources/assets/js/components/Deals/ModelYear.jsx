@@ -6,8 +6,20 @@ import util from 'src/util';
 import ModelYearImage from 'components/Deals/ModelYearImage';
 
 class ModelYear extends React.PureComponent {
+    static PropTypes = {
+        modelYear: PropTypes.object.isRequired,
+    };
+
     selectModelYear(modelYear) {
         this.props.selectModelYear(modelYear);
+    }
+
+    /**
+     * @param model
+     * @returns {string}
+     */
+    buildModelKey() {
+        return this.props.modelYear.year + "--" +  this.props.modelYear.id;
     }
 
     render() {
@@ -29,7 +41,7 @@ class ModelYear extends React.PureComponent {
                                 </div>
                             </div>
 
-                            <ModelYearImage modelYear={modelYear} />
+                            <ModelYearImage modelYear={modelYear} key={this.buildModelKey()} />
 
                             <div className="modelyear__details">
                                 <div className="modelyear__count">{ modelYear.deals.count } in stock.</div>
@@ -64,10 +76,6 @@ const mapStateToProps = state => {
         targets: state.targets,
         targetDefaults: state.targetDefaults,
     };
-};
-
-ModelYear.PropTypes = {
-    modelyear: PropTypes.object.isRequired,
 };
 
 export default connect(mapStateToProps, Actions)(ModelYear);
