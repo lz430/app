@@ -38,7 +38,7 @@ class ESPaginatorAdapter implements PaginatorInterface {
      */
     public function getLastPage()
     {
-        return 1;
+        return ceil($this->getTotal() / $this->getPerPage());
     }
     /**
      * Get the total.

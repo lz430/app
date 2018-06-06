@@ -4,9 +4,7 @@ import ZipcodeFinder from 'components/ZipcodeFinder';
 import FilterClose from 'components/FilterClose';
 import FilterStyleSelector from 'components/FilterStyleSelector';
 import FilterMakeSelector from 'components/FilterMakeSelector';
-import FilterFuelTypeSelector from 'components/FilterFuelTypeSelector';
 import FilterFeatureSelector from 'components/FilterFeatureSelector';
-import FilterTransmissionTypeSelector from 'components/FilterTransmissionTypeSelector';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import R from 'ramda';
@@ -91,7 +89,6 @@ class FilterPanel extends React.PureComponent {
                     this.props.selectedFeatures
                 );
             });
-
             return (
                 <SidebarFilter
                     key={index}

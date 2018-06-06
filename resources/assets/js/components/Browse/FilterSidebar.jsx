@@ -95,7 +95,7 @@ class FilterSidebar extends React.Component {
 
                     <DynamicRangeSlider
                         componentId="MsrpFilter"
-                        dataField="employee_price"
+                        dataField="pricing.msrp"
                     />
 
                 </div>

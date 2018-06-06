@@ -48,7 +48,7 @@ class ZipcodeFinder extends React.PureComponent {
                     <div className="zipcode-finder__info">
                         <div className="zipcode-finder___count">
                             {this.props.deals ? (
-                                `${this.props.deals.length} results for:`
+                                `${!this.props.deals || this.props.deals.length} results for:`
                             ) : (
                                 ''
                             )}

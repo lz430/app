@@ -1,8 +1,4 @@
 const strings = {
-    dealFullTitle: deal => {
-        return this.dealYearMake(deal) + ' ' + this.dealModelTrim(deal);
-    },
-
     dealYearMake: deal => {
         return `${deal.year} ${deal.make}`;
     },

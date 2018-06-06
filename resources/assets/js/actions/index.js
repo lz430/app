@@ -42,28 +42,9 @@ export function requestMakes() {
     };
 }
 
-export function requestModels() {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.REQUEST_MODELS,
-        });
-
-        api.getModels().then(data => {
-            dispatch(receiveModels(data));
-        });
-    };
-}
-
 export function receiveMakes(data) {
     return {
         type: ActionTypes.RECEIVE_MAKES,
-        data: data,
-    };
-}
-
-export function receiveModels(data) {
-    return {
-        type: ActionTypes.RECEIVE_MODELS,
         data: data,
     };
 }
@@ -210,6 +191,7 @@ export function receiveDeals(data) {
     };
 }
 
+
 export function requestDeals() {
     return (dispatch, getState) => {
         dispatch({
@@ -283,8 +265,10 @@ export function clearModelYear() {
     };
 }
 
+
 export function requestDealsOrModelYears(params = {}) {
     return (dispatch, getState) => {
+        return;
         dispatch({
             type:
                 getState().filterPage == 'deals'
@@ -305,6 +289,7 @@ export function requestDealsOrModelYears(params = {}) {
         const cancelTokenIdentifier = 'search-' + getState().filterPage;
 
         dispatch(appendCancelToken(source, cancelTokenContext, cancelTokenIdentifier));
+
         api
             .applySearchFilters(
                 getState().filterPage,
@@ -321,6 +306,7 @@ export function requestDealsOrModelYears(params = {}) {
             .catch(e => {
                 dispatch(removeCancelToken(cancelTokenIdentifier));
             });
+
     };
 }
 
@@ -644,7 +630,6 @@ export function updateFinanceDownPayment(downPayment) {
     };
 }
 
-
 export function updateLeaseAnnualMileage(deal, annualMileage) {
     return (dispatch, getState) => {
         const zipcode = getState().zipcode;
@@ -689,7 +674,6 @@ export function updateLeaseCashDue(deal, cashDue) {
         });
     };
 }
-
 
 const getDealPricing = makeDealPricing();
 

@@ -1,10 +1,11 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
+import rootSaga from './sagas';
 import { persistStore, persistReducer } from 'redux-persist';
 import reducer from 'reducers/index';
 import {
     requestMakes,
-    requestModels,
     requestBodyStyles,
     requestFeatures,
     requestLocationInfo,
@@ -92,22 +93,26 @@ const initialState = {
 
 const config = {
     key: 'primary',
-    storage
+    storage,
+    blacklist: ['deals']
 };
+
 export default () => {
     const composeEnhancers =
         window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+    const sagaMiddleware = createSagaMiddleware();
+
     const store = createStore(
         persistReducer(config, reducer),
         initialState,
-        composeEnhancers(applyMiddleware(reduxThunk))
+        composeEnhancers(applyMiddleware(sagaMiddleware, reduxThunk)),
     );
+    sagaMiddleware.run(rootSaga);
 
     const persistor = persistStore(store, null, () => {
         store.dispatch(requestLocationInfo()).then(() => {
             store.dispatch(requestMakes());
-            //store.dispatch(requestModels());
             store.dispatch(requestBodyStyles());
             store.dispatch(requestFeatures());
             store.dispatch(requestFeatureCategories());

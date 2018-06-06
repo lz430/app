@@ -12,12 +12,13 @@ import ViewModels from './ViewModels';
 class Deals extends React.PureComponent {
     componentWillReceiveProps(nextProps) {
         nextProps.cancelPromises('bestOffer');
-
+        /*
         if (nextProps.deals) {
             nextProps.deals.map(deal => {
                 nextProps.requestBestOffer(deal);
             });
         }
+        */
     }
 
     render() {
@@ -34,13 +35,13 @@ class Deals extends React.PureComponent {
         // No matches at all for initial search
         if (
             (!this.props.deals && !this.props.modelYears) ||
-            (!this.props.deals && this.props.modelYears.length == 0)
+            (!this.props.deals && this.props.modelYears.length === 0)
         ) {
             return <NoDealsInRange />;
         }
 
         // There were model card results for our initial search but we've modified it to an empty list
-        if (this.props.filterPage == 'deals' && this.props.deals.length == 0) {
+        if (this.props.filterPage === 'deals' && (!this.props.deals || this.props.deals.length === 0)) {
             return <NoDealsInRange />;
         }
 

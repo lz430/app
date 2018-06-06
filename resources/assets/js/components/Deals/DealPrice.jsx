@@ -11,7 +11,19 @@ import {
 } from 'selectors/index';
 import DealPricing from 'src/DealPricing';
 
-class DealPrice extends React.PureComponent {
+class DealPrice extends React.Component {
+    static propTypes = {
+        deal: PropTypes.object.isRequired,
+    };
+
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
+
+    }
+
     renderPriceExplanationModal() {
         return <InfoModal
             {...R.pick(['deal', 'selectedTab', 'compareList', 'dealPricing'], this.props)}
@@ -92,10 +104,6 @@ const makeMapStateToProps = () => {
         };
     };
     return mapStateToProps;
-};
-
-DealPrice.PropTypes = {
-    deal: PropTypes.object.isRequired,
 };
 
 export default connect(makeMapStateToProps, Actions)(DealPrice);

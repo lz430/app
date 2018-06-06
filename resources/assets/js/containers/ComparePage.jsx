@@ -1,7 +1,6 @@
 import React from 'react';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
-import purchase from 'src/purchase';
 import R from 'ramda';
 import qs from 'qs';
 import { connect } from 'react-redux';
@@ -13,9 +12,7 @@ import string from 'src/strings';
 import AccordionTable from 'components/AccordionTable';
 import util from 'src/util';
 import api from 'src/api';
-import miscicons from 'miscicons';
 import toTitleCase from 'titlecase';
-import Pricing from 'components/ComparePage/Pricing';
 import AccuPricingModal from 'components/AccuPricingModal';
 import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
 import { StickyContainer, Sticky } from 'react-sticky';

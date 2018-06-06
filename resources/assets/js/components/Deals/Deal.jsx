@@ -7,7 +7,31 @@ import PropTypes from 'prop-types';
 import DealImage from 'components/Deals/DealImage';
 import DealPrice from 'components/Deals/DealPrice';
 
-class Deal extends React.PureComponent {
+class Deal extends React.Component {
+    static PropTypes = {
+        deal: PropTypes.object.isRequired,
+    };
+
+    componentDidMount() {
+        console.log('componentDidMount');
+        this.props.requestBestOffer(this.props.deal);
+    }
+
+    componentDidUpdate() {
+        this.props.requestBestOffer(this.props.deal);
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if (nextProps.deal.id === this.props.deal.id){
+            return false;
+        }
+        return true;
+    }
+
+    componentWillUpdate() {
+        console.log("WTF");
+    }
+
     render() {
         const deal = this.props.deal;
         return (
@@ -39,12 +63,17 @@ class Deal extends React.PureComponent {
                         <DealImage
                             featureImageClass="deal__image"
                             deal={this.props.deal}
+                            key={this.props.deal.id}
                         />
                     </div>
                 )}
 
                 <div className="deal__price">
-                    <DealPrice deal={deal} />
+                    <DealPrice
+                        deal={this.props.deal}
+                        key={this.props.deal.id}
+
+                    />
                 </div>
 
                 {this.props.children}
@@ -64,8 +93,5 @@ const mapStateToProps = state => {
     };
 };
 
-Deal.PropTypes = {
-    deal: PropTypes.object.isRequired,
-};
 
 export default connect(mapStateToProps, Actions)(Deal);

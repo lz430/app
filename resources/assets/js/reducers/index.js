@@ -128,14 +128,6 @@ const reducer = (state, action) => {
                     [targetKey]: action.data.data.data.targets,
                 },
             };
-        case ActionTypes.RECEIVE_DEAL_TARGETS:
-            let nextDealTargets = Object.assign({}, state.dealTargets);
-
-            nextDealTargets[action.data.dealId] = action.data.data.data.targets;
-
-            return Object.assign({}, state, {
-                dealTargets: nextDealTargets,
-            });
         case ActionTypes.TOGGLE_TARGET:
             return {
                 ...state,
@@ -216,20 +208,10 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 selectedYear: action.selectedYear,
             });
-        case ActionTypes.UPDATE_DOWN_PAYMENT:
-            return Object.assign({}, state, {
-                downPayment: action.downPayment,
-            });
-        case ActionTypes.UPDATE_ANNUAL_MILEAGE:
-            return Object.assign({}, state, {
-                annualMileage: action.annualMileage,
-            });
         case ActionTypes.UPDATE_RESIDUAL_PERCENT:
             return Object.assign({}, state, {
                 residualPercent: action.residualPercent,
             });
-        case ActionTypes.UPDATE_TERM_DURATION:
-            return {...state, termDuration: action.termDuration}
         case ActionTypes.CHOOSE_TRANSMISSION_TYPE:
             return Object.assign({}, state, {
                 selectedTransmissionType: action.selectedTransmissionType,
@@ -258,7 +240,6 @@ const reducer = (state, action) => {
                 zipcode: action.zipcode,
                 city: action.city,
             });
-
         case ActionTypes.SET_ZIP_IN_RANGE:
             return Object.assign({}, state, {
                 zipInRange: action.supported,
@@ -288,7 +269,6 @@ const reducer = (state, action) => {
                     },
                 ],
             };
-
         case ActionTypes.REMOVE_CANCEL_TOKEN:
             return {
                 ...state,
@@ -297,7 +277,6 @@ const reducer = (state, action) => {
                     state.cancelTokens
                 ),
             };
-
         case ActionTypes.CLEAR_CANCEL_TOKENS:
             return {
                 ...state,
@@ -344,19 +323,14 @@ const reducer = (state, action) => {
                 ...state,
                 financeTerm: action.term
             };
-
         case ActionTypes.UPDATE_LEASE_TERM:
             return {...state, leaseTerm: {...state.leaseTerm, [`${action.deal.id}.${action.zipcode}`]: action.term}};
-
         case ActionTypes.UPDATE_LEASE_ANNUAL_MILEAGE:
             return {...state, leaseAnnualMileage: {...state.leaseAnnualMileage, [`${action.deal.id}.${action.zipcode}`]: action.annualMileage}};
-
         case ActionTypes.UPDATE_LEASE_CASH_DUE:
             return {...state, leaseCashDue: {...state.leaseCashDue, [`${action.deal.id}.${action.zipcode}`]: action.cashDue}};
-
         case ActionTypes.REQUEST_LEASE_RATES:
             return state;
-
         case ActionTypes.RECEIVE_LEASE_RATES:
             const leaseRatesKey = `${action.deal.version.jato_vehicle_id}.${action.zipcode}`;
 
@@ -367,10 +341,8 @@ const reducer = (state, action) => {
                     ...state.leaseRatesLoaded,
                     [leaseRatesKey]: true,
                 }};
-
         case ActionTypes.REQUEST_LEASE_PAYMENTS:
             return state;
-
         case ActionTypes.RECEIVE_LEASE_PAYMENTS:
             const leasePaymentsKey = `${action.dealPricing.vin()}.${action.zipcode}`;
 

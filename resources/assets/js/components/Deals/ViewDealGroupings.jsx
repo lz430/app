@@ -85,7 +85,7 @@ class ViewDealGroupings extends React.PureComponent {
                     {this.props.deals ? (
                         this.props.deals.map((deal, index) => {
                             return (
-                                <Deal deal={deal} key={index}>
+                                <Deal deal={deal} key={deal.id}>
                                     <div className="deal__buttons">
                                         <button
                                             className={this.compareButtonClass(
