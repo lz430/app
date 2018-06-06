@@ -20,6 +20,7 @@ class VersionToFuel
         'allroad' => 'A4 allroad',
         '6 Series Gran Turismo' => '6-series',
         'M2 Coupe' => ['2-series', 'M2'],
+        'AMG® GT Roadster' => 'AMG GT',
         'ATS Sedan' => 'ATS',
         'ATS-V Sedan' => 'ATS-V',
         'CTS Sedan' => 'CTS',
@@ -34,12 +35,13 @@ class VersionToFuel
         'Silverado 2500HD' => 'Silverado 2500HD',
         'Ram 1500 Pickup' => '1500',
         'Ram 2500 Pickup' => '2500',
+        'Ram 3500 Pickup' => '3500',
         'C-Max' => 'C-Max Hybrid',
         'Transit Van ' => 'Transit Van 150',
         'F-250 Super Duty' => 'F-250 SD',
         'F-350 Super Duty' => 'F-350 SD DRW',
-        'Transit Van' => 'Transit Van 150',
-        'Sierra 1500 Denali ' => 'Sierra 1500',
+        'Transit Connect' => 'Transit Connect Van',
+        'Sierra 1500 Denali' => ['Sierra 1500', 'Denali'],
         'Sierra 2500 Denali HD' => 'Sierra 2500 HD',
         'Clarity' => 'Clarity Plug-In Hybrid',
         'Ioniq' => 'Ioniq Hybrid',
@@ -51,16 +53,19 @@ class VersionToFuel
         'CLA' => 'CLA-Class',
         'E-Class' => 'E-Class',
         'SL Roadster' => 'SL-Class',
+        'NV200' => 'NV200 Compact Cargo',
         'NV Cargo' => 'NV200 Compact Cargo',
-        'NV Passenger' => 'NV 3500 Passenger',
+        'NV Passenger' => 'NV Passenger',
+        'NV 3500 Passenger' => 'NV Passenger',
         'Rogue Sport' => 'Rogue',
         'Versa Sedan' => 'Versa',
-        '718' => '718 Boxter',
-        '719' => '719 Boxter',
+        '718' => '718 Boxster',
+        '719' => '719 Boxster',
         'Prius Prime' => 'Prius',
         'Yaris iA' => 'Yaris iA',
         'Tiguan Limited' => 'Tiguan',
         'Golf' => 'Golf GTI',
+        'ProMaster Cargo Van' => 'ProMaster 2500',
     ];
 
     private const COLOR_MAP = [
@@ -81,7 +86,7 @@ class VersionToFuel
         'Orange' => 'Orange',
         'Purple' => 'Purple',
         'Green' => 'Green',
-        'Hypergreen Clearcoat'  => 'Green',
+        'Hypergreen Clearcoat' => 'Green',
         'Gray' => 'Gray',
         'Dark Cordovan Pearl' => 'Gray',
         'Cordovan' => 'Gray',
@@ -162,11 +167,14 @@ class VersionToFuel
     }
 
     /**
-     * @return null|\stdClass
+     * @return array
      */
-    private function matchFuelVehicleToVersion(): ?\stdClass
+    public function getSearchParams(): array
     {
-        $vehicles = [];
+        $params = [
+            'year' => $this->version->year,
+            'make' => $this->version->model->make->name,
+        ];
 
         $model = $this->translateModelName($this->version->model->name);
         $trim = $this->version->trim_name;
@@ -176,21 +184,41 @@ class VersionToFuel
             list($model, $trim) = $model;
         }
 
-        try {
-            $vehicles = $this->client->vehicle->getVehicleId($this->version->year, $this->version->model->make->name, $model);
-        } catch (ClientException $exception) {
-            if ($exception->getCode() == '404') {
-                print "CANNOT FIND FUEL VEHICLE\n";
-                print_r([
-                    $this->version->year,
-                    $this->version->model->make->name,
-                    $model
-                ]);
-            }
+        $params['model'] = $model;
+        $params['trim'] = $trim;
+        $params['doors'] = $this->version->doors;
+        $params['body'] = $this->version->body_style;
+
+        //
+        // TODO: Do this better
+        if ($params['year'] == '2017' && $params['make'] == 'Toyota' && $params['model'] == 'Corolla iM') {
+            $params['model'] = 'Corolla';
+            $params['trim'] = 'iM';
         }
 
-        $vehicles = $this->filterUnlessNone($vehicles, 'num_doors', $this->version->doors);
-        $vehicles = $this->filterUnlessNone($vehicles, 'trim', $trim);
+        return $params;
+    }
+
+    /**
+     * @return null|\stdClass
+     */
+    public function matchFuelVehicleToVersion(): ?\stdClass
+    {
+        $vehicles = [];
+
+        $params = $this->getSearchParams();
+
+        try {
+            $vehicles = $this->client->vehicle->getVehicleId(
+                $params['year'],
+                $params['make'],
+                $params['model']);
+        } catch (ClientException $exception) {
+            //TODO: Log
+        }
+
+        $vehicles = $this->filterUnlessNone($vehicles, 'num_doors', $params['doors']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'trim', $params['trim']);
 
         if (count($vehicles)) {
             return end($vehicles);
@@ -206,11 +234,11 @@ class VersionToFuel
     public function assets($color = 'default'): array
     {
         $product_id = '1';
-        $product_format_id = ['18'];
+        $product_format_id = [['18', '1']];
 
         if ($color != 'default') {
             $product_id = '2';
-            $product_format_id = ['5', '7', '10'];
+            $product_format_id = [['5'], ['7'], ['10']];
         }
 
         $vehicle = $this->matchFuelVehicleToVersion();
@@ -231,6 +259,8 @@ class VersionToFuel
         try {
             $media = $this->client->vehicle->vehicleMedia($vehicle->id, $product_id, '', $color);
         } catch (ClientException $exception) {
+            print_r($exception->getCode());
+            print_r($exception->getMessage());
             if ($exception->getCode() == '404') {
                 // TODO: Log these
             }
@@ -240,15 +270,26 @@ class VersionToFuel
             return [];
         }
 
+        $asset_groups = [];
         foreach ($media->products as $product) {
-            if ($product->id == $product_id) {
-                foreach ($product->productFormats as $format) {
-                    if (in_array($format->id, $product_format_id)) {
-                        $assets = $format->assets;
-                    }
+            foreach ($product->productFormats as $format) {
+                $key = "{$product->id}--{$format->id}";
+                if (count($format->assets)) {
+                    $asset_groups[$key] = $format->assets;
                 }
             }
         }
+
+        foreach ($product_format_id as $group_of_ids) {
+            foreach ($group_of_ids as $id) {
+                $key = "{$product_id}--{$id}";
+                if (isset($asset_groups[$key])) {
+                    $assets = array_merge($assets, $asset_groups[$key]);
+                    break;
+                }
+            }
+        }
+
         return $assets;
     }
 }

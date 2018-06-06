@@ -21,6 +21,10 @@ Route::group([
     CRUD::resource('user', 'UserCrudController');
 
     //
+    // Reports
+    Route::get('reports/versions-missing-images', 'ReportVersionsMissingPhotosController@index');
+
+    //
     // Custom Debug tools
     Route::get('zip-tester/{zip}', 'ZipCodeTesterController');
     Route::get('jato-logs/{date}', 'JatoLogController@showDay');
