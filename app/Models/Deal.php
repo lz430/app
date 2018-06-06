@@ -189,6 +189,24 @@ class Deal extends Model
 
                 if ($field->rules) {
                     foreach ($field->rules as $rule) {
+                        //
+                        // Conditions
+                        if (isset($rule->conditions)) {
+                            if ($rule->conditions->vin && $rule->conditions->vin != $this->vin) {
+                                continue;
+                            }
+
+                            if ($rule->conditions->make && $rule->conditions->make != $this->make) {
+                                continue;
+                            }
+
+                            if ($rule->conditions->model && $rule->conditions->model != $this->model) {
+                                continue;
+                            }
+                        }
+
+                        //
+                        // Modifier
                         switch ($rule->modifier) {
                             case 'add_value':
                                 $prices[$attr] += $rule->value;
