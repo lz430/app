@@ -104,7 +104,18 @@ class LeaseRatesController extends BaseAPIController
 
         $hints = ['TRIM' => request('trim'), 'MODEL' => request('model'), 'MODEL_CODE' => request('modelcode')];
         $manufacturerLeaseResults = $this->client->vehicle->findByVehicleAndPostalcode(request('vin'), request('zipcode'), [9], [$hints])->response; //9 //11 for jeep
-        if(empty($manufacturerLeaseResults->programDealScenarios[0]->programs)) {
+        $leaseRates = collect($manufacturerLeaseResults)->first();
+        if(!empty($leaseRates->programDealScenarios[0]->programs)) {
+            $retrieveLeaseRates = $this->getTiers($leaseRates, request('modelcode'), request('make'));
+            return response()->json($retrieveLeaseRates);
+        } else {
+            $affiliateLeaseResults = $this->client->vehicle->findByVehicleAndPostalcode(request('vin'), request('zipcode'), [11], [$hints])->response;
+            $leaseRates = collect($affiliateLeaseResults)->first();
+            $retrieveLeaseRates = $this->getTiers($leaseRates, request('modelcode'), request('make'));
+            return response()->json($retrieveLeaseRates);
+        }
+
+        /*if(empty($manufacturerLeaseResults->programDealScenarios[0]->programs)) {
             $affiliateLeaseResults = $this->client->vehicle->findByVehicleAndPostalcode(request('vin'), request('zipcode'), [11], [$hints])->response;
             $leaseRates = collect($affiliateLeaseResults)->first();
             $retrieveLeaseRates = $this->getTiers($leaseRates, request('modelcode'), request('make'));
@@ -113,6 +124,6 @@ class LeaseRatesController extends BaseAPIController
             $leaseRates = collect($manufacturerLeaseResults)->first();
             $retrieveLeaseRates = $this->getTiers($leaseRates, request('modelcode'), request('make'));
             return response()->json($retrieveLeaseRates);
-        }
+        }*/
     }
 }

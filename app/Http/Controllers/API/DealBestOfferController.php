@@ -46,7 +46,6 @@ class DealBestOfferController extends BaseAPIController
         $manufacturerResults = $this->client->vehicle->findByVehicleAndPostalcode($deal->vin, request('zipcode'), [$type], $hints);
         $bestOffers = null;
         if($paymentType === 'lease' && empty($manufacturerResults->response[0]->programDealScenarios[0]->programs)) {
-        //if(empty($manufacturerResults->response[0]->programDealScenarios[0]->programs)) {
             $bestOffers = $this->client->vehicle->findByVehicleAndPostalcode($deal->vin, request('zipcode'), [11], $hints);
         } else {
             $bestOffers = $manufacturerResults;
