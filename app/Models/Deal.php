@@ -139,6 +139,10 @@ class Deal extends Model
             return $photos;
         }
 
+        if (!$this->version) {
+            return [];
+        }
+
         //
         // Try stock photos in the right color
         $photos = $this->version->photos()->where('color', '=', $this->color)->get();
