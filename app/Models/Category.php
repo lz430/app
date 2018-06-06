@@ -13,6 +13,6 @@ class Category extends Model
 
     public function features()
     {
-        return $this->hasMany(Feature::class)->whereNotIn('features.id', [5, 14, 19, 21, 29, 44, 61]);
+        return $this->hasMany(Feature::class)->whereNotIn('features.id', [5, 9, 10, 14, 19, 20, 21, 29, 42, 44, 46, 54, 55, 59, 61])->orderBy('display_order', 'asc');
     }
 }

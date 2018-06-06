@@ -59,7 +59,7 @@ class Targets extends React.PureComponent {
     }
 
     renderAvailableTargets() {
-        return (
+        /*return (
             <div className="rebates">
                 {this.props.dealTargetsAvailable.length == 0 ? (
                     <h4>No Incentives Available</h4>
@@ -73,7 +73,7 @@ class Targets extends React.PureComponent {
                     </div>
                 )}
             </div>
-        );
+        );*/
     }
 
     render() {

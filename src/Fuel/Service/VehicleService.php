@@ -52,7 +52,7 @@ class VehicleService extends BaseService
         }
 
         if ($trim) {
-            if ($trim === 'base') {
+            if (strtolower($trim) === 'base') {
                 $trim = '';
             }
             $query['trim'] = $trim;

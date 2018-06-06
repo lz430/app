@@ -78,7 +78,7 @@ class LeaseCalculator extends React.PureComponent {
                     deal={this.props.deal}
                     targetsChanged={this.handleTargetsChange.bind(this)}
                 />
-                <hr />
+                {/*<hr />*/}
                 <div>
                     <h4>Select Desired Lease Payment</h4>
                     <div className="cash-finance-lease-calculator__lease-table-container">

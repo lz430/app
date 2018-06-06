@@ -50,21 +50,24 @@ class BestPriceTransformer extends TransformerAbstract
         return ($initialPercent[0]['residualPercent']) ? $initialPercent[0]['residualPercent'] : null;
     }
 
-
-
     /**
-     * @param params
      * Generates formatted incentive pricing for payment scenarios
+     * @param params
      */
-
     public function incentives($params)
     {
+        if (!isset($params['results']->response[0])) {
+            return false;
+        }
+
         $results = $params['results']->response[0];
+
         if(in_array($params['paymentType'], ['cash', 'finance'])){
             foreach($results->cashDealScenarios as $cash) {
                 return $cash->consumerCash;
             }
         }
+
         if($params['paymentType'] === 'lease'){
             $leaseData = [];
             $cashValue = [];
@@ -74,8 +77,7 @@ class BestPriceTransformer extends TransformerAbstract
                     $tiers = $program->programs[$i]->tiers[$i];
                     $totalLeaseCash = $program->programs[$i]->consumerCash;
                     foreach ($tiers->leaseTerms as $term) {
-                        $apr = $term->adjRate * 2400;
-                        $leaseData[] = array('moneyFactor' => $term->adjRate, 'residualPercent' => $this->getInitialResidualPercent($params), 'residuals' => $this->getResiduals($params));
+                        $leaseData[] = array('moneyFactor' => (in_array($params['make'], ['Ford', 'Lincoln'])) ? $term->adjRate / 2400 : $term->adjRate, 'residualPercent' => $this->getInitialResidualPercent($params), 'residuals' => $this->getResiduals($params));
                     }
                     $cashValue['totalValue'] = $totalLeaseCash->totalConsumerCash;
                 }
@@ -91,6 +93,13 @@ class BestPriceTransformer extends TransformerAbstract
     public function transform($params)
     {
         $incentives = $this->incentives($params);
+
+        if (!$incentives) {
+            return [
+                'totalValue' => 0
+            ];
+        }
+
         if(in_array($params['paymentType'], ['cash', 'finance'])){
             return [
                 'totalValue' => $incentives->totalConsumerCash

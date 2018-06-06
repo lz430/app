@@ -75,7 +75,7 @@ class LeaseRatesController extends BaseAPIController
      * @param $modelCode
      * @return array
      */
-    public function getTiers($results, $modelCode)
+    public function getTiers($results, $modelCode, $make)
     {
         $leaseData = [];
         $tiersData = $results->programDealScenarios;
@@ -83,8 +83,8 @@ class LeaseRatesController extends BaseAPIController
             if(!empty($program->programs)){  // revisit when new lease rates populated after first of month
                 $tiers = $program->programs[$i]->tiers[$i];
                 foreach ($tiers->leaseTerms as $term) {
-                    $apr = $term->adjRate * 2400; // math to get the apr number for making lease calculations, cox does not supply apr
-                    $leaseData[] = array('termMonths' => $term->length, 'moneyFactor' => $term->adjRate, 'apr' => $apr, 'residualPercent' => $this->getInitialResidualPercent($results, $term->length, $modelCode), 'residuals' => $this->getResiduals($results, $term->length, $modelCode));
+                    $apr = (($term->adjRate == null) ? null : ((in_array($make, ['Ford', 'Lincoln'])) ? $term->adjRate : $term->adjRate * 2400)); // math to get the apr number for making lease calculations, cox does not supply apr
+                    $leaseData[] = array('termMonths' => $term->length, 'moneyFactor' => (in_array($make, ['Ford', 'Lincoln'])) ? $term->adjRate / 2400 : $term->adjRate, 'apr' => $apr, 'residualPercent' => $this->getInitialResidualPercent($results, $term->length, $modelCode), 'residuals' => $this->getResiduals($results, $term->length, $modelCode));
                 }
             }
         }
@@ -98,13 +98,14 @@ class LeaseRatesController extends BaseAPIController
             'modelcode' => 'string',
             'trim' => 'string',
             'model' => 'string',
+            'make' => 'string',
             'zipcode' => 'required|string',
         ]);
 
         $hints = ['TRIM' => request('trim'), 'MODEL' => request('model'), 'MODEL_CODE' => request('modelcode')];
-        $results = $this->client->vehicle->findByVehicleAndPostalcode(request('vin'), request('zipcode'), [9], [$hints])->response;
+        $results = $this->client->vehicle->findByVehicleAndPostalcode(request('vin'), request('zipcode'), [9], [$hints])->response; //9 //11 for jeep
         $leaseRates = collect($results)->first();
-        $retrieveLeaseRates = $this->getTiers($leaseRates, request('modelcode'));
+        $retrieveLeaseRates = $this->getTiers($leaseRates, request('modelcode'), request('make'));
         return response()->json($retrieveLeaseRates);
     }
 }

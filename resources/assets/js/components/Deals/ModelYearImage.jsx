@@ -11,9 +11,10 @@ class ModelYearImage extends React.PureComponent {
     }
 
     featuredImageUrl() {
-        if (this.props.modelYear.thumbnail) {
+        if (this.props.modelYear.thumbnail && this.props.modelYear.thumbnail.url) {
             return this.props.modelYear.thumbnail.url;
         }
+
         return this.state.fallbackDealImage;
     }
 

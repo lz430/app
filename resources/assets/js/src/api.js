@@ -42,6 +42,7 @@ const api = {
                 modelcode: deal.model_code,
                 trim: deal.series,
                 model: deal.model,
+                make: deal.make,
                 zipcode,
             },
         });
