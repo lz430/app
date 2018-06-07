@@ -5,7 +5,7 @@ class ModelYearImage extends React.PureComponent {
         super(props);
 
         this.state = {
-            fallbackDealImage: '/images/dmr-logo.svg',
+            fallbackDealImage: '/images/dmr-placeholder.jpg',
             externalImages: null,
         };
     }

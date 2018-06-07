@@ -43,8 +43,14 @@ class DealBestOfferController extends BaseAPIController
         }
 
         $hints = ['TRIM' => $deal->series, 'BODY_TYPE' => $deal->body, 'MODEL' => $deal->model, 'MODEL_CODE' => $deal->model_code];
-        $results = $this->client->vehicle->findByVehicleAndPostalcode($deal->vin, request('zipcode'), [$type], $hints);
-        return (new BestPriceTransformer)->transform(['results' => $results, 'paymentType' => $paymentType, 'model_code' => $deal->model_code, 'make' => $deal->make]);
+        $manufacturerResults = $this->client->vehicle->findByVehicleAndPostalcode($deal->vin, request('zipcode'), [$type], $hints);
+        $bestOffers = null;
+        if($paymentType === 'lease' && empty($manufacturerResults->response[0]->programDealScenarios[0]->programs)) {
+            $bestOffers = $this->client->vehicle->findByVehicleAndPostalcode($deal->vin, request('zipcode'), [11], $hints);
+        } else {
+            $bestOffers = $manufacturerResults;
+        }
+        return (new BestPriceTransformer)->transform(['results' => $bestOffers, 'paymentType' => $paymentType, 'model_code' => $deal->model_code, 'make' => $deal->make]);
     }
 
 }
