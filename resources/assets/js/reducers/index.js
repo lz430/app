@@ -285,6 +285,7 @@ const reducer = (state, action) => {
                 ...state,
                 searchQuery: {
                     ...state.searchQuery,
+                    entity: "model",
                     page: 1,
                     years: [],
                     makes: [],

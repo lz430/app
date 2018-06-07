@@ -429,7 +429,7 @@ export default class DealPricing {
     apiTerms() {
         const terms = {};
 
-        for (let termRaw of this.data.dealLeaseRates) {
+        for (let termRaw of this.data.dealLeaseRates.data) {
             const termData = {
                 moneyFactor: termRaw.moneyFactor,
                 residualPercent: termRaw.residualPercent,

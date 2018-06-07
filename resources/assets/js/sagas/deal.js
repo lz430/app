@@ -8,7 +8,7 @@ import ApiClient from 'store/api';
 
 import * as ActionTypes from 'actiontypes/index';
 import R from "ramda";
-import {receiveBestOffer, requestLeaseRates, receiveLeaseRates, receiveLeasePayments} from "actions/index";
+import {receiveBestOffer, receiveLeaseRates, receiveLeasePayments} from "actions/index";
 
 /**
  *
@@ -19,7 +19,7 @@ import {receiveBestOffer, requestLeaseRates, receiveLeaseRates, receiveLeasePaym
  * @returns {IterableIterator<*>}
  */
 function* requestDealBestOffer(deal, zipcode, paymentType, targets) {
-    console.log('requestDealBestOffer');
+    ///]\console.log('requestDealBestOffer');
 
     const bestOfferKey = util.getBestOfferKeyForDeal(deal, zipcode, paymentType, targets);
 
@@ -60,7 +60,7 @@ function* requestDealBestOffer(deal, zipcode, paymentType, targets) {
  * @returns {IterableIterator<*|CallEffect>}
  */
 function* requestDealLeaseRates(deal, zipcode) {
-    console.log('requestDealLeaseRates');
+    //console.log('requestDealLeaseRates');
 
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
@@ -91,11 +91,14 @@ function* requestDealLeaseRates(deal, zipcode) {
  * @param zipcode
  * @returns {IterableIterator<*>}
  */
+
 function* requestDealLeasePayments(deal, zipcode) {
-    console.log('requestDealLeasePayments');
+    //console.log('requestDealLeasePayments');
 
     const state = yield select();
-    const dealPricing = new DealPricing(makeDealPricing(state, {deal, zipcode}));
+    const getDealPricing = makeDealPricing();
+    let data = getDealPricing(state, {deal, zipcode});
+    const dealPricing = new DealPricing(data);
 
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
@@ -111,7 +114,8 @@ function* requestDealLeasePayments(deal, zipcode) {
 
     let results = null;
     try {
-        results = yield call(ApiClient.dealGetLeasePayments, dealPricing, source.token).data;
+        results = yield call(ApiClient.dealGetLeasePayments, dealPricing, source.token);
+        results = results.data;
     } catch (e) {
         console.log(e);
     }  finally {
@@ -120,8 +124,7 @@ function* requestDealLeasePayments(deal, zipcode) {
             source.cancel();
         }
     }
-
-    yield put(receiveLeasePayments(dealPricing, zipcode, data));
+    yield put(receiveLeasePayments(dealPricing, zipcode, results));
 }
 
 /**
