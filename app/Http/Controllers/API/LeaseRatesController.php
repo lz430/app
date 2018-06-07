@@ -83,8 +83,16 @@ class LeaseRatesController extends BaseAPIController
             if(!empty($program->programs)){  // revisit when new lease rates populated after first of month
                 $tiers = $program->programs[$i]->tiers[$i];
                 foreach ($tiers->leaseTerms as $term) {
-                    $apr = (($term->adjRate == null) ? null : ((in_array($make, ['Ford', 'Lincoln', 'Jeep'])) ? $term->adjRate : $term->adjRate * 2400)); // math to get the apr number for making lease calculations, cox does not supply apr
-                    $leaseData[] = array('termMonths' => $term->length, 'moneyFactor' => (in_array($make, ['Ford', 'Lincoln', 'Jeep'])) ? $term->adjRate / 2400 : $term->adjRate, 'apr' => $apr, 'residualPercent' => $this->getInitialResidualPercent($results, $term->length, $modelCode), 'residuals' => $this->getResiduals($results, $term->length, $modelCode));
+                    if($term->adjRate !== 'STD') {
+                        //$apr = (($term->adjRate == null) ? null : ((in_array($make, ['Ford', 'Lincoln', 'Jeep'])) ? $term->adjRate : $term->adjRate * 2400)); // math to get the apr number for making lease calculations, cox does not supply apr
+                        $calculatedApr = null;
+                        if (in_array($make, ['Ford', 'Lincoln', 'Jeep', 'Dodge'])) {
+                            $calculatedApr = floatval($term->adjRate) * 2400;
+                        }
+                        $moneyFactor = floatval($term->adjRate);
+                        $apr = (in_array($make, ['Ford', 'Lincoln', 'Jeep'])) ? floatval($term->adjRate) : $calculatedApr;
+                        $leaseData[] = array('termMonths' => $term->length, 'moneyFactor' => (in_array($make, ['Ford', 'Lincoln', 'Jeep'])) ? $moneyFactor / 2400 : $moneyFactor, 'apr' => $apr, 'residualPercent' => $this->getInitialResidualPercent($results, $term->length, $modelCode), 'residuals' => $this->getResiduals($results, $term->length, $modelCode));
+                    }
                 }
             }
         }
@@ -114,16 +122,5 @@ class LeaseRatesController extends BaseAPIController
             $retrieveLeaseRates = $this->getTiers($leaseRates, request('modelcode'), request('make'));
             return response()->json($retrieveLeaseRates);
         }
-
-        /*if(empty($manufacturerLeaseResults->programDealScenarios[0]->programs)) {
-            $affiliateLeaseResults = $this->client->vehicle->findByVehicleAndPostalcode(request('vin'), request('zipcode'), [11], [$hints])->response;
-            $leaseRates = collect($affiliateLeaseResults)->first();
-            $retrieveLeaseRates = $this->getTiers($leaseRates, request('modelcode'), request('make'));
-            return response()->json($retrieveLeaseRates);
-        } else {
-            $leaseRates = collect($manufacturerLeaseResults)->first();
-            $retrieveLeaseRates = $this->getTiers($leaseRates, request('modelcode'), request('make'));
-            return response()->json($retrieveLeaseRates);
-        }*/
     }
 }
