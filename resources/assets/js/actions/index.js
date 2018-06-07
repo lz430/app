@@ -6,6 +6,14 @@ import jsonp from 'jsonp';
 import DealPricing from 'src/DealPricing';
 import {makeDealPricing} from "selectors/index";
 
+
+export function requestDealQuote(deal) {
+    return {
+        type: ActionTypes.REQUEST_DEAL_QUOTE,
+        deal: deal,
+    };
+}
+
 export function requestMakes() {
     return dispatch => {
         dispatch({
@@ -571,7 +579,7 @@ export function requestLeasePayments(deal) {
     }
 }
 
-function receiveLeasePayments(dealPricing, zipcode, data) {
+export function receiveLeasePayments(dealPricing, zipcode, data) {
     return dispatch => dispatch({
         type: ActionTypes.RECEIVE_LEASE_PAYMENTS,
         dealPricing,
@@ -580,6 +588,9 @@ function receiveLeasePayments(dealPricing, zipcode, data) {
     })
 }
 
+/**
+ * @deprecated
+ */
 export function requestLeaseRates(deal) {
     return (dispatch, getState) => {
         const zipcode = getState().zipcode;
@@ -606,7 +617,7 @@ export function requestLeaseRates(deal) {
     }
 }
 
-function receiveLeaseRates(deal, zipcode, data) {
+export function receiveLeaseRates(deal, zipcode, data) {
     return dispatch => dispatch({
         type: ActionTypes.RECEIVE_LEASE_RATES,
         deal,
@@ -615,6 +626,9 @@ function receiveLeaseRates(deal, zipcode, data) {
     })
 }
 
+/**
+ * @deprecated
+ */
 export function requestBestOffer(deal) {
     return (dispatch, getState) => {
         const zipcode = getState().zipcode;
@@ -688,13 +702,13 @@ export function requestBestOffer(deal) {
 export function receiveBestOffer(data, bestOfferKey, paymentType) {
     // Although lease AND finance have the 'cash' wrapper, we are currently
     // displaying cash best offers in the finance tabs.
-    const bestOfferPrograms =
-        paymentType === 'lease' ? data.data.cash : data.data;
+    const bestOfferPrograms = paymentType === 'lease' ? data.data.cash : data.data;
     const rates = paymentType === 'lease' ? data.data.rates : [];
     const bestOffer = {
         ...bestOfferPrograms,
         rates: rates,
     };
+
     return dispatch => {
         dispatch({
             type: ActionTypes.RECEIVE_BEST_OFFER,

@@ -269,6 +269,13 @@ const reducer = (state, action) => {
             return Object.assign({}, state, {
                 selectedTransmissionType: action.selectedTransmissionType,
             });
+
+        case ActionTypes.REQUEST_DEAL_QUOTE:
+            return state;
+
+        case ActionTypes.REGISTER_REQUEST_DEAL_QUOTE:
+            return state;
+
         case ActionTypes.SELECT_DEAL:
             return Object.assign({}, state, {
                 selectedDeal: action.selectedDeal,

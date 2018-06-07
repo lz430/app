@@ -1,9 +1,7 @@
 import R from 'ramda';
 import React from 'react';
-import util from 'src/util';
 import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
 import strings from 'src/strings';
-import {requestBestOffer} from "../actions";
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 

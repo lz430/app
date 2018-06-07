@@ -503,7 +503,7 @@ export default class DealPricing {
             return false;
         }
 
-        if (Object.keys(this.data.dealLeaseRates.length) === 0) {
+        if (Object.keys(this.data.dealLeaseRates).length === 0) {
             return false;
         }
 

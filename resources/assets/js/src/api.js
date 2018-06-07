@@ -12,6 +12,9 @@ const api = {
         return window.axios.post('/zip-codes/', { code });
     },
 
+    /**
+     * @deprecated
+     */
     getLeasePayments: (dealPricing) => {
         return window.axios.get('/api/lease-payments', {
             params: {
@@ -28,6 +31,10 @@ const api = {
             }
         });
     },
+
+    /**
+     * @deprecated
+     */
     getLeaseRates: (deal, zipcode) => {
         return window.axios.get('/api/lease-rates', {
             params: {
@@ -91,7 +98,10 @@ const api = {
         return window.axios.post('/api/hubspot/not-in-area', { email });
     },
 
-    getBestOffer: (dealId, paymentType, zipcode, cancelToken) => { //dealId, paymentType, zipcode, targets, cancelToken
+    /**
+     * @deprecated
+     */
+    getBestOffer: (dealId, paymentType, zipcode, cancelToken) => {
         return window.axios.get(`/api/deals/${dealId}/best-offer`, {
             cancelToken: cancelToken.token,
             params: {

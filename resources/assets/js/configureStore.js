@@ -83,7 +83,7 @@ const initialState = {
     leaseRates: null,
     leasePaymentsLoaded: {},
     leasePayments: null,
-
+    tasks: [],
     searchQuery: {
         entity: 'model', // deal or model depending on the page we're on.
         sort: {
@@ -107,7 +107,7 @@ const initialState = {
 const config = {
     key: 'primary',
     storage,
-    blacklist: ['deals', 'dealPage', 'dealPageTotal', 'modelYears'],
+    blacklist: ['deals', 'dealPage', 'dealPageTotal', 'modelYears', 'tasks'],
 };
 
 export default () => {
