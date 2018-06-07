@@ -54,7 +54,7 @@ class DealsController extends BaseAPIController
             $query = $query->filterMustLegacyFeatures($request->get('features'));
         }
 
-        $page = ($request->get('page') ? $request->get('page') : 0);
+        $page = ($request->get('page') ? $request->get('page') - 1 : 0);
         $per_page = 24;
         $query = $query
             ->size($per_page)

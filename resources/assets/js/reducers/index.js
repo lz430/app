@@ -35,13 +35,9 @@ const reducer = (state, action) => {
                 if (urlStyle) {
                     state.selectedStyles = [urlStyle];
                 }
-                /*
-                if (urlSize) {
-                    state.selectedFeatures = [urlSize];
-                }
-                */
-                state.selectedFeatures = [];
-                state.selectedMakes = [];
+
+                state.searchQuery.features = [];
+                state.searchQuery.makes = [];
 
                 window.history.replaceState({}, document.title, "/filter");
                 return state;
@@ -104,11 +100,16 @@ const reducer = (state, action) => {
                 modelYears: action.data.data,
             });
         case ActionTypes.CLEAR_MODEL_YEAR:
-            return Object.assign({}, state, {
-                selectedModels: null,
-                selectedYear: null,
-                filterPage: 'models',
-            });
+            return {
+                ...state,
+                searchQuery: {
+                    ...state.searchQuery,
+                    page: 1,
+                    entity: 'model',
+                    models: [],
+                    years: []
+                },
+            };
 
         case ActionTypes.SELECT_MODEL_YEAR:
             return {
@@ -124,11 +125,6 @@ const reducer = (state, action) => {
                         action.data.year
                     ]
                 },
-
-                // Deprecated
-                filterPage: 'deals',
-                selectedModels: [action.data.id],
-                selectedYear: action.data.year,
             };
 
         // Search query update
@@ -143,10 +139,6 @@ const reducer = (state, action) => {
                         direction: (state.sortAscending ? 'asc' : 'desc'),
                     }
                 },
-
-                // Deprecated
-                sortColumn: action.sort,
-                sortAscending: !state.sortAscending,
             };
 
         // Search query update
@@ -158,9 +150,6 @@ const reducer = (state, action) => {
                     page: 1,
                     makes: action.selectedMakes
                 },
-
-                // Deprecated
-                selectedMakes: action.selectedMakes
             };
 
         // Search query update
@@ -172,9 +161,6 @@ const reducer = (state, action) => {
                     page: 1,
                     models: action.selectedModels
                 },
-
-                // Deprecated
-                selectedModels: action.selectedModels
             };
 
 
@@ -187,9 +173,6 @@ const reducer = (state, action) => {
                     page: 1,
                     styles: action.selectedStyles
                 },
-
-                // Deprecated
-                selectedStyles: action.selectedStyles
             };
 
         // Search query update
@@ -201,9 +184,6 @@ const reducer = (state, action) => {
                     page: 1,
                     features: action.selectedFeatures
                 },
-
-                // Deprecated
-                selectedFeatures: action.selectedFeatures
             };
 
         case ActionTypes.RECEIVE_BODY_STYLES:
@@ -297,13 +277,18 @@ const reducer = (state, action) => {
         case ActionTypes.CLEAR_SELECTED_DEAL:
             return Object.assign({}, state, { selectedDeal: null });
         case ActionTypes.CLEAR_ALL_FILTERS:
-            return Object.assign({}, state, {
-                selectedStyles: [],
-                selectedTransmissionType: null,
-                selectedFuelType: null,
-                selectedMakes: [],
-                selectedFeatures: [],
-            });
+            return {
+                ...state,
+                searchQuery: {
+                    ...state.searchQuery,
+                    page: 1,
+                    years: [],
+                    makes: [],
+                    models: [],
+                    styles: [],
+                    features: [],
+                },
+            };
         case ActionTypes.TOGGLE_COMPARE:
             return { ...state, compareList: action.compareList };
         case ActionTypes.SET_ZIP_CODE:

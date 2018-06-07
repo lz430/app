@@ -65,7 +65,7 @@ class FilterPanel extends React.PureComponent {
                 R.path(['attributes', 'feature']),
                 this.getFeaturesByGroup(group)
             ),
-            this.props.selectedFeatures
+            this.props.searchQuery.features
         ).length;
     }
 
@@ -86,7 +86,7 @@ class FilterPanel extends React.PureComponent {
             let localSelectedFeatures = features.filter(feature => {
                 return R.contains(
                     feature.attributes.title,
-                    this.props.selectedFeatures
+                    this.props.searchQuery.features
                 );
             });
             return (
@@ -99,7 +99,7 @@ class FilterPanel extends React.PureComponent {
                     count={localSelectedFeatures.length}
                 >
                     <FilterFeatureSelector
-                        selectedFeatures={this.props.selectedFeatures}
+                        selectedFeatures={this.props.searchQuery.features}
                         features={features}
                         onSelectFeature={this.props.toggleFeature}
                     />
@@ -112,7 +112,7 @@ class FilterPanel extends React.PureComponent {
         let selectedSizeFeatures = this.state.sizeFeatures.filter(feature => {
             return R.contains(
                 feature.attributes.title,
-                this.props.selectedFeatures
+                this.props.searchQuery.features
             );
         });
         return (
@@ -126,9 +126,9 @@ class FilterPanel extends React.PureComponent {
                 <ZipcodeFinder />
 
                 <div className="sidebar-filters">
-                    <div className={`sidebar-filters__broad sidebar-filters__broad--${this.props.filterPage === 'deals' ? 'narrow' : 'broad'}`}>
+                    <div className={`sidebar-filters__broad sidebar-filters__broad--${this.props.searchQuery.entity === 'deal' ? 'narrow' : 'broad'}`}>
                         {
-                            this.props.filterPage === 'deals' ? (
+                            this.props.searchQuery.entity === 'deal' ? (
                                 <div className="sidebar-filters__overlay">
                                     <a onClick={ () => {this.props.clearModelYear()} }>
                                         <SVGInline
@@ -147,13 +147,13 @@ class FilterPanel extends React.PureComponent {
 
                         <SidebarFilter
                             toggle={() => this.toggleOpenFilter('Vehicle Style')}
-                            open={this.state.openFilter === 'Vehicle Style' && this.props.filterPage !== 'deals' }
+                            open={this.state.openFilter === 'Vehicle Style' && this.props.searchQuery.entity !== 'deal' }
                             title="Vehicle Style"
-                            count={this.props.selectedStyles.length}
+                            count={this.props.searchQuery.styles.length}
                         >
                             <FilterStyleSelector
                                 styles={this.props.bodyStyles}
-                                selectedStyles={this.props.selectedStyles}
+                                selectedStyles={this.props.searchQuery.styles}
                                 onSelectStyle={this.props.toggleStyle}
                             />
                         </SidebarFilter>
@@ -161,12 +161,12 @@ class FilterPanel extends React.PureComponent {
                         {/*this.state.sizeCategory */ false ? (
                                 <SidebarFilter
                                     toggle={() => this.toggleOpenFilter(this.state.sizeCategory.attributes.title)}
-                                    open={this.state.openFilter === this.state.sizeCategory.attributes.title && this.props.filterPage !== 'deals' }
+                                    open={this.state.openFilter === this.state.sizeCategory.attributes.title && this.props.searchQuery.entity !== 'deal' }
                                     title={this.state.sizeCategory.attributes.title}
                                     count={selectedSizeFeatures.length}
                                 >
                                     <FilterFeatureSelector
-                                        selectedFeatures={this.props.selectedFeatures}
+                                        selectedFeatures={this.props.searchQuery.features}
                                         features={this.state.sizeFeatures}
                                         onSelectFeature={this.props.toggleFeature}
                                     />
@@ -175,19 +175,19 @@ class FilterPanel extends React.PureComponent {
 
                         <SidebarFilter
                             toggle={() => this.toggleOpenFilter('Make')}
-                            open={this.state.openFilter === 'Make' && this.props.filterPage !== 'deals' }
+                            open={this.state.openFilter === 'Make' && this.props.searchQuery.entity !== 'deal' }
                             title="Vehicle Brand"
-                            count={this.props.selectedMakes.length}
+                            count={this.props.searchQuery.makes.length}
                         >
                             <FilterMakeSelector
                                 makes={this.props.makes}
-                                selectedMakes={this.props.selectedMakes}
+                                selectedMakes={this.props.searchQuery.makes}
                                 onSelectMake={this.props.toggleMake}
                             />
                         </SidebarFilter>
                     </div>
                     <div className={`sidebar-filters__narrow sidebar-filters__narrow--${status}`}>
-                        { this.props.filterPage === 'deals' ? (
+                        { this.props.searchQuery.entity === 'deal' ? (
                             <div className="sidebar-filters__instructive-heading">Refine this search</div>
                         ) : (
                             ''
@@ -209,24 +209,13 @@ const mapStateToProps = (state, ownProps) => {
         dealsByMakeModelYear: state.dealsByMakeModelYear,
         makes: state.makes,
         models: state.models,
-        filterPage: state.filterPage,
-        fuelTypes: state.fuelTypes,
-        selectedFuelType: state.selectedFuelType,
-        transmissionTypes: state.transmissionTypes,
-        selectedTransmissionType: state.selectedTransmissionType,
         bodyStyles: state.bodyStyles,
-        segments: state.segments,
-        selectedSegment: state.selectedSegment,
-        selectedYear: state.selectedYear,
-        selectedStyles: state.selectedStyles,
-        selectedMakes: state.selectedMakes,
-        selectedModels: state.selectedModels,
         fallbackLogoImage: state.fallbackLogoImage,
-        selectedFeatures: state.selectedFeatures,
         features: state.features,
         featureCategories: state.featureCategories,
         searchFeatures: state.searchFeatures,
         window: state.window,
+        searchQuery: state.searchQuery
     };
 };
 

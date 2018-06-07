@@ -10,16 +10,20 @@ import * as Actions from 'actions/index';
 import ViewModels from './ViewModels';
 
 class Deals extends React.PureComponent {
-    componentWillReceiveProps(nextProps) {
-        /*
-        nextProps.cancelPromises('bestOffer');
-        if (nextProps.deals) {
-            nextProps.deals.map(deal => {
-                nextProps.requestBestOffer(deal);
-            });
-        }
-        */
-    }
+    static propTypes = {
+        deals: PropTypes.arrayOf(
+            PropTypes.shape({
+                year: PropTypes.string.isRequired,
+                msrp: PropTypes.number.isRequired,
+                employee_price: PropTypes.number.isRequired,
+                supplier_price: PropTypes.number.isRequired,
+                make: PropTypes.string.isRequired,
+                model: PropTypes.string.isRequired,
+                id: PropTypes.number.isRequired,
+            })
+        ),
+        zipInRange: PropTypes.bool,
+    };
 
     render() {
         // Zip out of range
@@ -41,33 +45,18 @@ class Deals extends React.PureComponent {
         }
 
         // There were model card results for our initial search but we've modified it to an empty list
-        if (this.props.filterPage === 'deals' && (!this.props.deals || this.props.deals.length === 0)) {
+        if (this.props.searchQuery.entity === 'deal' && (!this.props.deals || this.props.deals.length === 0)) {
             return <NoDealsInRange/>;
         }
 
         // We have some results; which should we prefer?
-        return this.props.filterPage == 'deals' ? (
+        return this.props.searchQuery.entity === 'deal' ? (
             <ViewDeals/>
         ) : (
             <ViewModels/>
         );
     }
 }
-
-Deals.propTypes = {
-    deals: PropTypes.arrayOf(
-        PropTypes.shape({
-            year: PropTypes.string.isRequired,
-            msrp: PropTypes.number.isRequired,
-            employee_price: PropTypes.number.isRequired,
-            supplier_price: PropTypes.number.isRequired,
-            make: PropTypes.string.isRequired,
-            model: PropTypes.string.isRequired,
-            id: PropTypes.number.isRequired,
-        })
-    ),
-    zipInRange: PropTypes.bool,
-};
 
 function mapStateToProps(state) {
     return {
@@ -76,7 +65,7 @@ function mapStateToProps(state) {
         requestingMoreModelYears: state.requestingMoreModelYears,
         zipInRange: state.zipInRange,
         modelYears: state.modelYears,
-        filterPage: state.filterPage,
+        searchQuery: state.searchQuery,
     };
 }
 

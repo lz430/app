@@ -5,6 +5,18 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
 class FilterFeatureSelector extends React.PureComponent {
+    static propTypes = {
+        features: PropTypes.arrayOf(
+            PropTypes.shape({
+                attributes: PropTypes.shape({
+                    title: PropTypes.string.isRequired,
+                }),
+            }).isRequired
+        ).isRequired,
+        selectedFeatures: PropTypes.arrayOf(PropTypes.string).isRequired,
+        onSelectFeature: PropTypes.func.isRequired,
+    };
+
     render() {
         return (
             <div className="filter-selector">
@@ -39,17 +51,5 @@ class FilterFeatureSelector extends React.PureComponent {
         );
     }
 }
-
-FilterFeatureSelector.propTypes = {
-    features: PropTypes.arrayOf(
-        PropTypes.shape({
-            attributes: PropTypes.shape({
-                title: PropTypes.string.isRequired,
-            }),
-        }).isRequired
-    ).isRequired,
-    selectedFeatures: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onSelectFeature: PropTypes.func.isRequired,
-};
 
 export default FilterFeatureSelector;

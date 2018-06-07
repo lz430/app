@@ -436,8 +436,8 @@ class Deal extends Model
         //
         // Vehicle type
         $record['year'] = $this->year;
-        $record['make'] = $this->make;
-        $record['model'] = $this->model;
+        $record['make'] = $this->version->model->make->name;
+        $record['model'] = $this->version->model->name;
         $record['model_code'] = $this->model_code;
         $record['series'] = $this->series;
         $record['style'] = $this->version->body_style;
@@ -467,9 +467,9 @@ class Deal extends Model
         $record['category'] = (object)[
             'id' => $this->version->model->id,
             'title' => implode(" ", [
-                $this->year,
-                $this->make,
-                $this->model,
+                $record['year'],
+                $record['make'],
+                $record['model'],
             ]),
             'thumbnail' => ($this->version->thumbnail() ? $this->version->thumbnail()->url : null),
         ];
@@ -518,7 +518,7 @@ class Deal extends Model
         }
 
         $record['jato_features'] = [];
-        foreach($this->jatoFeatures as $feature) {
+        foreach ($this->jatoFeatures as $feature) {
             $record['jato_features'][] = $feature;
         }
 

@@ -6,30 +6,6 @@ import jsonp from 'jsonp';
 import DealPricing from 'src/DealPricing';
 import {makeDealPricing} from "selectors/index";
 
-const withStateDefaults = (state, changed) => {
-    return Object.assign(
-        {},
-        {
-            makeIds: state.selectedMakes,
-            modelIds: state.selectedModels,
-            bodyStyles: state.selectedStyles,
-            fuelType: state.selectedFuelType,
-            transmissionType: state.selectedTransmissionType,
-            segment: state.selectedSegment,
-            features: state.selectedFeatures,
-            featureCategories: state.featureCategories,
-            includes: ['photos'],
-            sortColumn: state.sortColumn,
-            sortAscending: state.sortAscending,
-            page: 1,
-            year: state.selectedYear,
-            zipcode: state.zipcode,
-            zipInRange: state.zipInRange,
-        },
-        changed
-    );
-};
-
 export function requestMakes() {
     return dispatch => {
         dispatch({
@@ -90,7 +66,7 @@ export function receiveFeatureCategories(data) {
 export function toggleFeature(feature) {
     return (dispatch, getState) => {
         const selectedFeatures = util.toggleItem(
-            getState().selectedFeatures,
+            getState().searchQuery.features,
             feature
         );
 
@@ -107,8 +83,9 @@ export function toggleFeature(feature) {
 
 export function toggleMake(make_id) {
     return (dispatch, getState) => {
+
         const selectedMakes = util.toggleItem(
-            getState().selectedMakes,
+            getState().searchQuery.makes,
             make_id
         );
 
@@ -126,7 +103,7 @@ export function toggleMake(make_id) {
 export function toggleModel(model) {
     return (dispatch, getState) => {
         const selectedModels = util.toggleItem(
-            getState().selectedModels,
+            getState().searchQuery.models,
             model
         );
 
@@ -185,35 +162,15 @@ export function receiveDeals(data) {
     };
 }
 
-
-export function requestDeals() {
-    return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_DEALS,
-        });
-
-        api.getDeals(withStateDefaults(getState())).then(data => {
-            dispatch(receiveDeals(data));
-        });
-    };
-}
-
 export function requestMoreDeals() {
     return (dispatch, getState) => {
         dispatch({
             type: ActionTypes.REQUEST_MORE_DEALS,
         });
 
-        api
-            .applySearchFilters(
-                getState().filterPage,
-                withStateDefaults(getState(), {
-                    page: getState().dealPage + 1,
-                })
-            )
-            .then(data => {
-                dispatch(receiveMoreDeals(data));
-            });
+        dispatch({
+            type: ActionTypes.REQUEST_SEARCH,
+        });
     };
 }
 
@@ -239,25 +196,15 @@ export function receiveModelYears(data) {
     };
 }
 
-export function requestModelYears() {
-    return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.REQUEST_MODEL_YEARS,
-        });
-
-        api.getModelYears(withStateDefaults(getState())).then(data => {
-            dispatch(receiveModelYears(data));
-        });
-    };
-}
-
 export function clearModelYear() {
     return dispatch => {
         dispatch({
             type: ActionTypes.CLEAR_MODEL_YEAR,
         });
 
-        dispatch(requestModelYears());
+        dispatch({
+            type: ActionTypes.REQUEST_SEARCH,
+        });
     };
 }
 
@@ -335,47 +282,13 @@ export function requestBodyStyles() {
 export function toggleStyle(style) {
     return (dispatch, getState) => {
         const selectedStyles = util.toggleItem(
-            getState().selectedStyles,
+            getState().searchQuery.styles,
             style
         );
 
         dispatch({
             type: ActionTypes.TOGGLE_STYLE,
             selectedStyles: selectedStyles,
-        });
-
-        dispatch({
-            type: ActionTypes.REQUEST_SEARCH,
-        });
-    };
-}
-
-export function chooseFuelType(fuelType) {
-    return (dispatch, getState) => {
-        const selectedFuelType =
-            getState().selectedFuelType === fuelType ? null : fuelType;
-
-        dispatch({
-            type: ActionTypes.CHOOSE_FUEL_TYPE,
-            selectedFuelType: selectedFuelType,
-        });
-
-        dispatch({
-            type: ActionTypes.REQUEST_SEARCH,
-        });
-    };
-}
-
-export function chooseTransmissionType(transmissionType) {
-    return (dispatch, getState) => {
-        const selectedTransmissionType =
-            getState().selectedTransmissionType === transmissionType
-                ? null
-                : transmissionType;
-
-        dispatch({
-            type: ActionTypes.CHOOSE_TRANSMISSION_TYPE,
-            selectedTransmissionType,
         });
 
         dispatch({
@@ -421,12 +334,9 @@ export function toggleCompare(deal) {
                 deal: d,
                 selectedFilters: R.propOr(
                     {
-                        selectedStyles: getState().selectedStyles,
-                        selectedMakes: getState().selectedMakes,
-                        selectedFuelType: getState().selectedFuelType,
-                        selectedTransmissionType: getState()
-                            .selectedTransmissionType,
-                        selectedFeatures: getState().selectedFeatures,
+                        selectedStyles: getState().searchQuery.styles,
+                        selectedMakes: getState().searchQuery.makes,
+                        selectedFeatures: getState().searchQuery.features,
                     },
                     'selectedFilters',
                     R.find(dealAndSelectedFilters => {

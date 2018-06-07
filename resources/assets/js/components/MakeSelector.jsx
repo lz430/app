@@ -7,6 +7,20 @@ import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 
 class MakeSelector extends React.PureComponent {
+    static propTypes = {
+        makes: PropTypes.arrayOf(
+            PropTypes.shape({
+                id: PropTypes.string.isRequired,
+                attributes: PropTypes.shape({
+                    name: PropTypes.string.isRequired,
+                    logo: PropTypes.string.isRequired,
+                }),
+            })
+        ),
+        selectedMakes: PropTypes.arrayOf(PropTypes.string),
+        fallbackLogoImage: PropTypes.string.isRequired,
+    };
+
     constructor() {
         super();
         this.state = {
@@ -64,20 +78,6 @@ class MakeSelector extends React.PureComponent {
         );
     }
 }
-
-MakeSelector.propTypes = {
-    makes: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            attributes: PropTypes.shape({
-                name: PropTypes.string.isRequired,
-                logo: PropTypes.string.isRequired,
-            }),
-        })
-    ),
-    selectedMakes: PropTypes.arrayOf(PropTypes.string),
-    fallbackLogoImage: PropTypes.string.isRequired,
-};
 
 const mapStateToProps = state => {
     return {

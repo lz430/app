@@ -3,20 +3,31 @@ import PropTypes from 'prop-types';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import R from 'ramda';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import * as Actions from 'actions';
 
+/**
+ *
+ */
 class Filterbar extends React.PureComponent {
+    static propTypes = {
+        searchQuery: PropTypes.object.isRequired,
+        makes: PropTypes.arrayOf(
+            PropTypes.shape({
+                id: PropTypes.string.isRequired,
+                attributes: PropTypes.shape({
+                    name: PropTypes.string.isRequired,
+                }),
+            })
+        ),
+    };
+
     constructor(props) {
         super(props);
 
         this.renderFilterStyles = this.renderFilterStyles.bind(this);
         this.renderFilterMakes = this.renderFilterMakes.bind(this);
         this.renderFilterModels = this.renderFilterModels.bind(this);
-        this.renderFilterTransmissionType = this.renderFilterTransmissionType.bind(
-            this
-        );
-        this.renderFilterSegment = this.renderFilterSegment.bind(this);
         this.renderFilterYear = this.renderFilterYear.bind(this);
         this.renderFilterFeatures = this.renderFilterFeatures.bind(this);
         this.renderX = this.renderX.bind(this);
@@ -35,55 +46,13 @@ class Filterbar extends React.PureComponent {
         );
     }
 
-    renderFilterTransmissionType(transmissionType) {
-        return (
-            <div
-                className="filterbar__filter"
-            >
-                {/*
-                onClick={this.props.chooseTransmissionType.bind(
-                    null,
-                    transmissionType
-                )}
-                */}
-                {transmissionType} {this.renderX()}
-            </div>
-        );
-    }
-
-    renderFilterFuelType(fuelType) {
-        return (
-            <div
-                className="filterbar__filter"
-            >
-                {/*
-                onClick={this.props.chooseFuelType.bind(null, fuelType)}
-                */}
-                {fuelType} {this.renderX()}
-            </div>
-        );
-    }
-
-    renderFilterSegment(segment) {
-        return (
-            <div
-                className="filterbar__filter"
-            >
-                {/*
-                    @todo when restoring this, this won't work; segment is a feature now
-                onClick={this.props.chooseSegment.bind(null, segment)}
-                */}
-                {segment} {this.renderX()}
-            </div>
-        );
-    }
 
     renderFilterYear(year) {
         return (
             <div
                 className="filterbar__filter"
             >
-            {/*
+                {/*
                 onClick={this.props.chooseYear.bind(null, year)}
             */}
                 {year} {this.renderX()}
@@ -97,7 +66,7 @@ class Filterbar extends React.PureComponent {
                 key={index}
                 className="filterbar__filter"
             >
-            {/*
+                {/*
                 onClick={this.props.toggleStyle.bind(null, style)}
             */}
                 {style} {this.renderX()}
@@ -113,7 +82,7 @@ class Filterbar extends React.PureComponent {
                 key={index}
                 className="filterbar__filter"
             >
-            {/*
+                {/*
                 onClick={this.props.toggleMake.bind(null, makeId)}
             */}
                 {make.attributes.name} {this.renderX()}
@@ -127,7 +96,7 @@ class Filterbar extends React.PureComponent {
                 key={index}
                 className="filterbar__filter"
             >
-            {/*
+                {/*
                 onClick={this.props.toggleModel.bind(null, model)}
             */}
                 {model.attributes.name} {this.renderX()}
@@ -141,7 +110,7 @@ class Filterbar extends React.PureComponent {
                 key={index}
                 className="filterbar__filter"
             >
-            {/*
+                {/*
                 onClick={this.props.toggleFeature.bind(null, feature)}
             */}
                 {feature} {this.renderX()}
@@ -160,31 +129,15 @@ class Filterbar extends React.PureComponent {
                 />
 
                 <div className="filterbar__filters">
-                    {this.props.selectedStyles.map(this.renderFilterStyles)}
-                    {this.props.selectedSegment ? (
-                        this.renderFilterSegment(this.props.selectedSegment)
+                    {this.props.searchQuery.styles.map(this.renderFilterStyles)}
+
+                    {this.props.searchQuery.years[0] ? (
+                        this.renderFilterYear(this.props.searchQuery.years[0])
                     ) : (
                         ''
                     )}
-                    {this.props.selectedYear ? (
-                        this.renderFilterYear(this.props.selectedYear)
-                    ) : (
-                        ''
-                    )}
-                    {this.props.selectedMakes.map(this.renderFilterMakes)}
-                    {this.props.selectedFuelType ? (
-                        this.renderFilterFuelType(this.props.selectedFuelType)
-                    ) : (
-                        ''
-                    )}
-                    {this.props.selectedTransmissionType ? (
-                        this.renderFilterTransmissionType(
-                            this.props.selectedTransmissionType
-                        )
-                    ) : (
-                        ''
-                    )}
-                    {this.props.selectedFeatures.map(this.renderFilterFeatures)}
+                    {this.props.searchQuery.makes.map(this.renderFilterMakes)}
+                    {this.props.searchQuery.features.map(this.renderFilterFeatures)}
                 </div>
 
                 <div className="filterbar__clear">
@@ -197,37 +150,10 @@ class Filterbar extends React.PureComponent {
     }
 }
 
-Filterbar.propTypes = {
-    selectedStyles: PropTypes.arrayOf(PropTypes.string).isRequired,
-    makes: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            attributes: PropTypes.shape({
-                name: PropTypes.string.isRequired,
-            }),
-        })
-    ),
-    selectedMakes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    selectedTransmissionType: PropTypes.string,
-    selectedFuelType: PropTypes.string,
-    selectedSegment: PropTypes.string,
-    selectedYear: PropTypes.string,
-    selectedFeatures: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
-
 function mapStateToProps(state) {
     return {
-        selectedStyles: state.selectedStyles,
-        selectedYear: state.selectedYear,
         makes: state.makes,
-        models: state.selectedModels,
-        selectedMakes: state.selectedMakes,
-        selectedModels: state.selectedModels,
-        selectedTransmissionType: state.selectedTransmissionType,
-        selectedFuelType: state.selectedFuelType,
-        selectedSegment: state.selectedSegment,
-        selectedYear: state.selectedYear,
-        selectedFeatures: state.selectedFeatures,
+        searchQuery: state.searchQuery,
     };
 }
 

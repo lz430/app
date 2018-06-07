@@ -2,10 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import R from 'ramda';
 import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
 import miscicons from 'miscicons';
 
 class FilterMakeSelector extends React.PureComponent {
+    static propTypes = {
+        makes: PropTypes.arrayOf(
+            PropTypes.shape({
+                name: PropTypes.string,
+                logo: PropTypes.string,
+            })
+        ),
+        selectedMakes: PropTypes.arrayOf(PropTypes.string),
+        onSelectMake: PropTypes.func.isRequired,
+    };
+
     constructor() {
         super();
 
@@ -52,16 +62,5 @@ class FilterMakeSelector extends React.PureComponent {
         );
     }
 }
-
-FilterMakeSelector.propTypes = {
-    makes: PropTypes.arrayOf(
-        PropTypes.shape({
-            name: PropTypes.string,
-            logo: PropTypes.string,
-        })
-    ),
-    selectedMakes: PropTypes.arrayOf(PropTypes.string),
-    onSelectMake: PropTypes.func.isRequired,
-};
 
 export default FilterMakeSelector;

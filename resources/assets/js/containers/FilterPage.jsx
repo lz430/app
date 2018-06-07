@@ -15,6 +15,10 @@ import AccuPricingModal from 'components/AccuPricingModal';
 import {StickyContainer, Sticky} from 'react-sticky';
 
 class FilterPage extends React.PureComponent {
+    static propTypes = {
+        searchQuery: PropTypes.object.isRequired,
+    };
+
     renderMakeSelectionModal() {
         return (
             <Modal
@@ -22,7 +26,7 @@ class FilterPage extends React.PureComponent {
                 title="Select brand preference"
                 subtitle="Select one or more brands to compare"
                 closeText="Show available vehicles"
-                buttonCloseDisabled={this.props.selectedMakes.length == 0}
+                buttonCloseDisabled={this.props.searchQuery.makes.length == 0}
             >
                 <MakeSelector/>
             </Modal>
@@ -184,13 +188,8 @@ class FilterPage extends React.PureComponent {
     }
 }
 
-FilterPage.propTypes = {
-    selectedMakes: PropTypes.arrayOf(PropTypes.string),
-};
-
 const mapStateToProps = state => {
     return {
-        selectedMakes: state.selectedMakes,
         window: state.window,
         closeMakeSelectorModal: state.closeMakeSelectorModal,
         clearSelectedDeal: state.clearSelectedDeal,
@@ -198,8 +197,8 @@ const mapStateToProps = state => {
         showMakeSelectorModal: state.showMakeSelectorModal,
         selectedDeal: state.selectedDeal,
         selectedTab: state.selectedTab,
-        deals: state.deals,
         filterPage: state.filterPage,
+        searchQuery: state.searchQuery,
     };
 };
 

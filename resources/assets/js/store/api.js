@@ -12,6 +12,7 @@ class API {
      */
     search(query) {
         let sort = query.sort.attribute;
+
         if (query.sort.direction === "desc") {
             sort = "-" . sort;
         }

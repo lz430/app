@@ -13,7 +13,6 @@ class Deal extends React.Component {
     };
 
     componentDidMount() {
-        console.log('componentDidMount');
         this.props.requestBestOffer(this.props.deal);
     }
 

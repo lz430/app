@@ -53,15 +53,9 @@ const initialState = {
     searchFeatures: [],
     segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
     selectedDeal: null,
-    selectedFeatures: urlSize ? [urlSize] : [],
-    selectedFuelType: null,
-    selectedMakes: [],
-    selectedModels: [],
-    selectedStyles: urlStyle ? [urlStyle] : [],
+
     selectedTab: 'cash',
     selectedTargets: [],
-    selectedTransmissionType: null,
-    selectedYear: null,
     showMakeSelectorModal: true,
     smallFiltersShown: false,
     sortAscending: true,
@@ -105,15 +99,15 @@ const initialState = {
         years: [],
         makes: [],
         models: [],
-        styles: [],
-        features: [],
+        styles: urlStyle ? [urlStyle] : [],
+        features: urlSize ? [urlSize] : [],
     },
 };
 
 const config = {
     key: 'primary',
     storage,
-    blacklist: ['deals', 'dealPage', 'dealPageTotal', 'modelYears', 'searchQuery'],
+    blacklist: ['deals', 'dealPage', 'dealPageTotal', 'modelYears'],
 };
 
 export default () => {
