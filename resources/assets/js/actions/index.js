@@ -738,44 +738,9 @@ export function removeCancelToken(identifier) {
     };
 }
 
-export function clearCancelTokens(context = 'default') {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.CLEAR_CANCEL_TOKENS,
-            context,
-        });
-    };
-}
-
-export function cancelPromises(context) {
-    return (dispatch, getState) => {
-        getState()
-            .cancelTokens.filter(cancelToken => {
-                return cancelToken.context == context;
-            })
-            .map(cancelToken => {
-                try {
-                    cancelToken.source.cancel();
-                } catch (err) {
-                    console.log('Cancel error: ', err);
-                }
-            });
-
-        dispatch(clearCancelTokens(context));
-    };
-}
-
 export function getBestOffersForLoadedDeals() {
     return (dispatch, getState) => {
-        dispatch(cancelPromises('bestOffer'));
-        const deals = getState().deals;
-
-        if (deals) {
-            getState().deals.map(deal => {
-                dispatch(requestBestOffer(deal));
-            });
-            dispatch({type: ActionTypes.REQUEST_ALL_BEST_OFFERS});
-        }
+        dispatch({type: ActionTypes.REQUEST_ALL_BEST_OFFERS});
     };
 }
 

@@ -238,6 +238,7 @@ const reducer = (state, action) => {
             };
         case ActionTypes.SELECT_TAB:
             return Object.assign({}, state, { selectedTab: action.data });
+
         case ActionTypes.RECEIVE_MORE_DEALS:
             return Object.assign({}, state, {
                 deals: R.concat(state.deals || [], action.data.data.data),
@@ -264,10 +265,6 @@ const reducer = (state, action) => {
         case ActionTypes.UPDATE_RESIDUAL_PERCENT:
             return Object.assign({}, state, {
                 residualPercent: action.residualPercent,
-            });
-        case ActionTypes.CHOOSE_TRANSMISSION_TYPE:
-            return Object.assign({}, state, {
-                selectedTransmissionType: action.selectedTransmissionType,
             });
 
         case ActionTypes.REQUEST_DEAL_QUOTE:

@@ -12,7 +12,8 @@ class Deal extends React.Component {
     };
 
     shouldComponentUpdate(nextProps, nextState) {
-        return nextProps.deal.id !== this.props.deal.id;
+        return true;
+        //return nextProps.deal.id !== this.props.deal.id;
     }
 
     render() {

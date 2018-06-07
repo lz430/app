@@ -2,7 +2,7 @@ import {makeDealPricing} from "selectors/index";
 import DealPricing from 'src/DealPricing';
 import axios from 'axios';
 
-import {  all, put, call, select, take, takeEvery, fork, spawn, cancelled } from 'redux-saga/effects'
+import {  all, put, call, select, take, takeEvery, takeLatest, fork, spawn, cancelled } from 'redux-saga/effects'
 import util from 'src/util';
 import ApiClient from 'store/api';
 
@@ -161,9 +161,25 @@ export function* batchRequestDealQuotes(deals) {
     })));
 }
 
+
+function* requestQuoteRefresh() {
+    const state = yield select();
+    if (state.deals && state.deals.length) {
+        yield fork(batchRequestDealQuotes, state.deals);
+    }
+}
+
 /**
  * @returns {IterableIterator<ForkEffect | *>}
  */
 export function* watchDealQuote() {
     yield takeEvery(ActionTypes.REQUEST_DEAL_QUOTE, requestDealQuote);
+}
+
+/**
+ * When the user changes payment tab.
+ * @returns {IterableIterator<*>}
+ */
+export function* watchRequestQuoteRefresh() {
+    yield takeLatest(ActionTypes.REQUEST_ALL_BEST_OFFERS, requestQuoteRefresh);
 }
