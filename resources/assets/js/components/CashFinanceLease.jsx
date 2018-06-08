@@ -19,9 +19,9 @@ class CashFinanceLease extends React.PureComponent {
     }
 
     tabClassName(tabName) {
-        return `tabs__tab ${tabName === this.state.selectedTab
-            ? 'tabs__tab--selected'
-            : ''}`;
+        return `tabs__tab ${
+            tabName === this.state.selectedTab ? 'tabs__tab--selected' : ''
+        }`;
     }
 
     renderLeaseForm() {
@@ -48,7 +48,8 @@ class CashFinanceLease extends React.PureComponent {
                             onChange={el =>
                                 this.setState({
                                     milesPerYear: el.target.value,
-                                })}
+                                })
+                            }
                         />
                         <div className="range-slider__badge">
                             {util.numbersWithCommas(this.state.milesPerYear)}
@@ -66,7 +67,8 @@ class CashFinanceLease extends React.PureComponent {
                             step="1"
                             defaultValue={this.state.leaseTerm}
                             onChange={el =>
-                                this.setState({ leaseTerm: el.target.value })}
+                                this.setState({ leaseTerm: el.target.value })
+                            }
                         />
                         <div className="range-slider__badge">
                             {this.state.leaseTerm}
@@ -100,11 +102,9 @@ class CashFinanceLease extends React.PureComponent {
                         Lease
                     </div>
                 </div>
-                {this.state.selectedTab === 'lease' ? (
-                    this.renderLeaseForm()
-                ) : (
-                    ''
-                )}
+                {this.state.selectedTab === 'lease'
+                    ? this.renderLeaseForm()
+                    : ''}
             </div>
         );
     }
