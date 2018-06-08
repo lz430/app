@@ -16,6 +16,10 @@ class DealImage extends React.PureComponent {
     }
 
     featuredImageUrl() {
+        if (this.props.deal.thumbnail && this.props.deal.thumbnail.url) {
+            return this.props.deal.thumbnail.url;
+        }
+
         if (this.props.deal.photos[0]) {
             return this.props.deal.photos[0].url;
         }

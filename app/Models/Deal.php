@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-
 /**
  * @property int $id
  * @property string $file_hash
@@ -185,7 +184,7 @@ class Deal extends Model
         }
 
         //
-        // Try stock photos in the right color
+        // Try stock photos in the exact color
         $photos = $this->version->photos()->where('color', '=', $this->color)->get();
         if (count($photos)) {
             return $photos;
@@ -207,7 +206,29 @@ class Deal extends Model
     public function featuredPhoto()
     {
         $photos = $this->marketingPhotos();
-        return (isset($photos[0]) ? $photos[0] : null);
+
+        $collection = collect($photos);
+
+        $photo = null;
+
+        // Color specific outside shot.
+        $photo = $collection->first(function ($photo) {
+            return isset($photo->shot_code) && $photo->shot_code === 'KAD';
+        });
+
+        // Default shot.
+        if (!$photo) {
+            $photo = $collection->first(function ($photo) {
+                return isset($photo->shot_code) && $photo->shot_code === '116';
+            });
+        }
+
+        // We probably have real photos. use the first one
+        if (!$photo && isset($photos[0])) {
+            $photo = $photos[0];
+        }
+
+        return $photo;
     }
 
     /**
@@ -231,8 +252,9 @@ class Deal extends Model
      */
     public function prices(): \stdClass
     {
-        $source = $this->source_price;
 
+
+        $source = $this->source_price;
 
         //
         // Migration help
@@ -243,18 +265,17 @@ class Deal extends Model
             ];
         }
 
-        if (!isset($source->price) || !$source->price) {
-            $source->price = ($this->price ? $this->price : $this->msrp);
-        }
-
         if (!isset($source->msrp) || !$source->msrp) {
             $source->msrp = $this->msrp;
         }
 
+        if (!isset($source->price) || !$source->price) {
+            $source->price = ($this->price ? $this->price : $this->msrp);
+        }
 
         // The defaults when no rules exist.
         $prices = [
-            'msrp' => $this->msrp !== '' ? $this->msrp : null,
+            'msrp' =>  $source->msrp,
             'default' => $source->price !== '' ? $source->price : null,
             'employee' => $source->price !== '' ? $source->price : null,
             'supplier' => (in_array(strtolower($this->make), Make::DOMESTIC) ? $source->price * 1.04 : $source->price)
