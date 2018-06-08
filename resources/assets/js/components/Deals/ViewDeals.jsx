@@ -20,7 +20,7 @@ class ViewDeals extends React.PureComponent {
     renderShowMoreButton() {
         if (this.props.deals && this.props.requestingMoreDeals) {
             // Deals are already loaded and we have already requested more deals
-            return <SVGInline svg={miscicons['loading']}/>;
+            return <SVGInline svg={miscicons['loading']} />;
         }
 
         if (
@@ -44,9 +44,14 @@ class ViewDeals extends React.PureComponent {
     render() {
         return (
             <div>
-                <div className={'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
+                <div
+                    className={
+                        'deals ' +
+                        (this.props.compareList.length > 0 ? '' : 'no-compare')
+                    }
+                >
                     {this.props.deals && this.props.deals.length ? (
-                       this.props.deals.map((deal, index) => {
+                        this.props.deals.map((deal, index) => {
                             return (
                                 <Deal deal={deal} key={index}>
                                     <div className="deal__buttons">
@@ -63,7 +68,10 @@ class ViewDeals extends React.PureComponent {
                                         </button>
                                         <button
                                             onClick={() =>
-                                                (window.location = `/deals/${deal.id}`)}
+                                                (window.location = `/deals/${
+                                                    deal.id
+                                                }`)
+                                            }
                                             className="deal__button deal__button--x-small deal__button--pink deal__button"
                                         >
                                             View Details
@@ -73,13 +81,13 @@ class ViewDeals extends React.PureComponent {
                             );
                         })
                     ) : (
-                        <SVGInline svg={miscicons['loading']}/>
+                        <SVGInline svg={miscicons['loading']} />
                     )}
 
                     {this.renderShowMoreButton()}
                 </div>
             </div>
-        )
+        );
     }
 }
 
@@ -113,4 +121,7 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, Actions)(ViewDeals);
+export default connect(
+    mapStateToProps,
+    Actions
+)(ViewDeals);

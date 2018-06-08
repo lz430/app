@@ -19,48 +19,59 @@ class ModelYear extends React.PureComponent {
      * @returns {string}
      */
     buildModelKey() {
-        return this.props.modelYear.year + "--" +  this.props.modelYear.id;
+        return this.props.modelYear.year + '--' + this.props.modelYear.id;
     }
 
     render() {
         const modelYear = this.props.modelYear;
         return (
             <div className="modelyear">
-                {
-                    this.props.hideImageAndTitle ? ('') : (
-                        <div>
-                            <div className="modelyear__basic-info">
-                                <div className="modelyear__basic-info-year-and-model">
-                                    <div className="modelyear__basic-info-year-and-make">
-                                        {`${modelYear.year} ${modelYear.make}`}
-                                    </div>
+                {this.props.hideImageAndTitle ? (
+                    ''
+                ) : (
+                    <div>
+                        <div className="modelyear__basic-info">
+                            <div className="modelyear__basic-info-year-and-model">
+                                <div className="modelyear__basic-info-year-and-make">
+                                    {`${modelYear.year} ${modelYear.make}`}
+                                </div>
 
-                                    <div className="modelyear__basic-info-model-and-series">
-                                        {`${modelYear.model}`}
-                                    </div>
+                                <div className="modelyear__basic-info-model-and-series">
+                                    {`${modelYear.model}`}
                                 </div>
                             </div>
-
-                            <ModelYearImage modelYear={modelYear} key={this.buildModelKey()} />
-
-                            <div className="modelyear__details">
-                                <div className="modelyear__count">{ modelYear.deals.count } in stock.</div>
-
-                                <div className="modelyear__price">
-                                    <span className="modelyear__price-label">MSRP starts at</span> { util.moneyFormat(modelYear.lowest_msrp) }
-                                </div>
-                            </div>
-
-                            <div className="modelyear__buttons">
-                                <button className="modelyear__button modelyear__button--small modelyear__button--pink modelyear__button"
-                                    onClick={ () => {this.selectModelYear(modelYear) }}>
-                                    View Inventory
-                                </button>
-                            </div>
-                                
                         </div>
-                    )
-                }
+
+                        <ModelYearImage
+                            modelYear={modelYear}
+                            key={this.buildModelKey()}
+                        />
+
+                        <div className="modelyear__details">
+                            <div className="modelyear__count">
+                                {modelYear.deals.count} in stock.
+                            </div>
+
+                            <div className="modelyear__price">
+                                <span className="modelyear__price-label">
+                                    MSRP starts at
+                                </span>{' '}
+                                {util.moneyFormat(modelYear.lowest_msrp)}
+                            </div>
+                        </div>
+
+                        <div className="modelyear__buttons">
+                            <button
+                                className="modelyear__button modelyear__button--small modelyear__button--pink modelyear__button"
+                                onClick={() => {
+                                    this.selectModelYear(modelYear);
+                                }}
+                            >
+                                View Inventory
+                            </button>
+                        </div>
+                    </div>
+                )}
                 {this.props.children}
             </div>
         );
@@ -78,4 +89,7 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, Actions)(ModelYear);
+export default connect(
+    mapStateToProps,
+    Actions
+)(ModelYear);

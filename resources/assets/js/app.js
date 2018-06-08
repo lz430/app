@@ -12,7 +12,7 @@ import ConfirmDetails from 'containers/ConfirmDetails';
 import ThankYouPage from 'containers/ThankYouPage';
 import { PersistGate } from 'redux-persist/integration/react';
 
-const {store, persistor} = configureStore();
+const { store, persistor } = configureStore();
 
 /**
  * Filter
@@ -27,7 +27,6 @@ Array.from(document.getElementsByTagName('FilterPage')).map(element => {
         element
     );
 });
-
 
 /**
  * Browse

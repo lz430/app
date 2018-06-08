@@ -4,7 +4,6 @@ const defaultEffCvrFee = 24;
 const defaultLicenseAndRegistration = 23;
 
 const formulas = {
-
     /**
      *
      * @param price
@@ -16,7 +15,11 @@ const formulas = {
         const total = new Decimal(price).plus(docFee).plus(defaultEffCvrFee);
         const totalWithSalesTax = total.plus(total.times(0.06));
 
-        return Number(totalWithSalesTax.minus(rebatesTotal).plus(defaultLicenseAndRegistration));
+        return Number(
+            totalWithSalesTax
+                .minus(rebatesTotal)
+                .plus(defaultLicenseAndRegistration)
+        );
     },
 
     /**
@@ -31,7 +34,12 @@ const formulas = {
         const total = new Decimal(price).plus(docFee).plus(defaultEffCvrFee);
         const totalWithSalesTax = total.plus(total.times(0.06));
 
-        return Number(totalWithSalesTax.minus(rebatesTotal).minus(downPayment).plus(defaultLicenseAndRegistration));
+        return Number(
+            totalWithSalesTax
+                .minus(rebatesTotal)
+                .minus(downPayment)
+                .plus(defaultLicenseAndRegistration)
+        );
     },
 
     /**
@@ -73,7 +81,9 @@ const formulas = {
      * @returns {number}
      */
     calculateLeaseTaxesDueAtSigning: (rebates, downPayment, docFee) => {
-        const capCostReduction = new Decimal(rebates).plus(downPayment).plus(defaultEffCvrFee);
+        const capCostReduction = new Decimal(rebates)
+            .plus(downPayment)
+            .plus(defaultEffCvrFee);
 
         return Number(
             capCostReduction.times(0.06).plus(new Decimal(docFee).times(0.06))
@@ -109,9 +119,8 @@ const formulas = {
 
         return Math.round(
             (price - downPayment) *
-                (interestRate /
-                    1200 *
-                    Math.pow(1 + interestRate / 1200, term) /
+                (((interestRate / 1200) *
+                    Math.pow(1 + interestRate / 1200, term)) /
                     (Math.pow(1 + interestRate / 1200, term) - 1))
         );
     },

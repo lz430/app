@@ -24,21 +24,21 @@ class ThankYouPage extends React.PureComponent {
     }
 
     componentDidMount() {
-        api
-            .getDimensions(this.props.deal.version.jato_vehicle_id)
-            .then(response => {
+        api.getDimensions(this.props.deal.version.jato_vehicle_id).then(
+            response => {
                 this.setState({
                     dimensions: response.data,
                 });
-            });
+            }
+        );
 
-        api
-            .getWarranties(this.props.deal.version.jato_vehicle_id)
-            .then(response => {
+        api.getWarranties(this.props.deal.version.jato_vehicle_id).then(
+            response => {
                 this.setState({
                     warranties: response.data,
                 });
-            });
+            }
+        );
     }
 
     showStandardFeatures() {
@@ -204,7 +204,7 @@ class ThankYouPage extends React.PureComponent {
                             {`${this.props.deal.year} ${this.props.deal.make} ${
                                 this.props.deal.model
                             }`}
-                           {/*  {`${this.props.deal.year} ${this.props.deal.make} ${
+                            {/*  {`${this.props.deal.year} ${this.props.deal.make} ${
                                 this.props.deal.model
                             } ${this.props.deal.series} VIN#:${
                                 this.props.deal.vin
@@ -218,10 +218,14 @@ class ThankYouPage extends React.PureComponent {
                                 Congratulations on your purchase!
                             </div>
                             <div className="thank-you__congrats-body">
-                                A Deliver My Ride representative will contact you shortly to schedule your delivery. If past regular hours of operation, you can expect a call early the next business day.
+                                A Deliver My Ride representative will contact
+                                you shortly to schedule your delivery. If past
+                                regular hours of operation, you can expect a
+                                call early the next business day.
                             </div>
                             <div className="thank-you__congrats-subheadline">
-                                Vehicle availability subject to change. See Terms of Use for details.
+                                Vehicle availability subject to change. See
+                                Terms of Use for details.
                             </div>
                         </div>
                         {/* <div className="thank-you__left-panel-buttons">
@@ -318,4 +322,7 @@ const makeMapStateToProps = () => {
     return mapStateToProps;
 };
 
-export default connect(makeMapStateToProps, Actions)(ThankYouPage);
+export default connect(
+    makeMapStateToProps,
+    Actions
+)(ThankYouPage);

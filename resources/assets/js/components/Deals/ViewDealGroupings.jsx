@@ -21,7 +21,7 @@ class ViewDealGroupings extends React.PureComponent {
     renderShowMoreButton() {
         if (this.props.deals && this.props.requestingMoreDeals) {
             // Deals are already loaded and we have already requested more deals
-            return <SVGInline svg={miscicons['loading']}/>;
+            return <SVGInline svg={miscicons['loading']} />;
         }
 
         if (
@@ -50,7 +50,7 @@ class ViewDealGroupings extends React.PureComponent {
                         make: value[key][0].make,
                         model: value[key][0].model,
                         year: value[key][0].year,
-                        deals: value[key]
+                        deals: value[key],
                     };
                 },
                 R.groupBy(deal => {
@@ -59,16 +59,26 @@ class ViewDealGroupings extends React.PureComponent {
             )
         );
     }
-    
+
     renderModels() {
         let modelsWithDeals = this.groupByModel(this.props.deals);
 
         return (
             <div>
-                <div className={'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
+                <div
+                    className={
+                        'deals ' +
+                        (this.props.compareList.length > 0 ? '' : 'no-compare')
+                    }
+                >
                     {modelsWithDeals ? (
                         modelsWithDeals.map((model, index) => {
-                            return <DealGrouping dealGrouping={model} key={index} />
+                            return (
+                                <DealGrouping
+                                    dealGrouping={model}
+                                    key={index}
+                                />
+                            );
                         })
                     ) : (
                         <SVGInline svg={miscicons['loading']} />
@@ -77,11 +87,16 @@ class ViewDealGroupings extends React.PureComponent {
             </div>
         );
     }
-    
+
     renderDeals() {
         return (
             <div>
-                <div className={'deals ' + (this.props.compareList.length > 0 ? '' : 'no-compare')}>
+                <div
+                    className={
+                        'deals ' +
+                        (this.props.compareList.length > 0 ? '' : 'no-compare')
+                    }
+                >
                     {this.props.deals ? (
                         this.props.deals.map((deal, index) => {
                             return (
@@ -100,7 +115,10 @@ class ViewDealGroupings extends React.PureComponent {
                                         </button>
                                         <button
                                             onClick={() =>
-                                                (window.location = `/deals/${deal.id}`)}
+                                                (window.location = `/deals/${
+                                                    deal.id
+                                                }`)
+                                            }
                                             className="deal__button deal__button--small deal__button--pink deal__button"
                                         >
                                             View Details
@@ -110,13 +128,13 @@ class ViewDealGroupings extends React.PureComponent {
                             );
                         })
                     ) : (
-                        <SVGInline svg={miscicons['loading']}/>
+                        <SVGInline svg={miscicons['loading']} />
                     )}
 
                     {this.renderShowMoreButton()}
                 </div>
             </div>
-        )
+        );
     }
 
     render() {
@@ -146,8 +164,11 @@ function mapStateToProps(state) {
         dealPage: state.dealPage,
         dealPageTotal: state.dealPageTotal,
         compareList: state.compareList,
-        requestingMoreDeals: state.requestingMoreDeals
+        requestingMoreDeals: state.requestingMoreDeals,
     };
 }
 
-export default connect(mapStateToProps, Actions)(ViewDealGroupings);
+export default connect(
+    mapStateToProps,
+    Actions
+)(ViewDealGroupings);

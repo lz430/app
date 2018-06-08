@@ -113,4 +113,7 @@ const makeMapStateToProps = () => {
     };
 };
 
-export default connect(makeMapStateToProps, Actions)(Targets);
+export default connect(
+    makeMapStateToProps,
+    Actions
+)(Targets);

@@ -31,7 +31,6 @@ const reducer = (state, action) => {
              * If we have a new url style / url size
              */
             if (urlSize || urlStyle) {
-
                 if (urlStyle) {
                     state.selectedStyles = [urlStyle];
                 }
@@ -39,7 +38,7 @@ const reducer = (state, action) => {
                 state.searchQuery.features = [];
                 state.searchQuery.makes = [];
 
-                window.history.replaceState({}, document.title, "/filter");
+                window.history.replaceState({}, document.title, '/filter');
                 return state;
             }
 
@@ -107,7 +106,7 @@ const reducer = (state, action) => {
                     page: 1,
                     entity: 'model',
                     models: [],
-                    years: []
+                    years: [],
                 },
             };
 
@@ -118,12 +117,8 @@ const reducer = (state, action) => {
                     ...state.searchQuery,
                     page: 1,
                     entity: 'deal',
-                    models: [
-                        action.data.id
-                    ],
-                    years: [
-                        action.data.year
-                    ]
+                    models: [action.data.id],
+                    years: [action.data.year],
                 },
             };
 
@@ -136,8 +131,8 @@ const reducer = (state, action) => {
                     page: 1,
                     sort: {
                         attribute: action.sort,
-                        direction: (state.sortAscending ? 'asc' : 'desc'),
-                    }
+                        direction: state.sortAscending ? 'asc' : 'desc',
+                    },
                 },
             };
 
@@ -148,7 +143,7 @@ const reducer = (state, action) => {
                 searchQuery: {
                     ...state.searchQuery,
                     page: 1,
-                    makes: action.selectedMakes
+                    makes: action.selectedMakes,
                 },
             };
 
@@ -159,10 +154,9 @@ const reducer = (state, action) => {
                 searchQuery: {
                     ...state.searchQuery,
                     page: 1,
-                    models: action.selectedModels
+                    models: action.selectedModels,
                 },
             };
-
 
         // Search query update
         case ActionTypes.TOGGLE_STYLE:
@@ -171,7 +165,7 @@ const reducer = (state, action) => {
                 searchQuery: {
                     ...state.searchQuery,
                     page: 1,
-                    styles: action.selectedStyles
+                    styles: action.selectedStyles,
                 },
             };
 
@@ -182,7 +176,7 @@ const reducer = (state, action) => {
                 searchQuery: {
                     ...state.searchQuery,
                     page: 1,
-                    features: action.selectedFeatures
+                    features: action.selectedFeatures,
                 },
             };
 
@@ -197,7 +191,7 @@ const reducer = (state, action) => {
         case ActionTypes.RECEIVE_FEATURE_CATEGORIES:
             return Object.assign({}, state, {
                 featureCategories: action.data.data.data,
-                searchFeatures: action.data.data.included
+                searchFeatures: action.data.data.included,
             });
 
         case ActionTypes.SELECT_REBATE:
@@ -276,7 +270,10 @@ const reducer = (state, action) => {
         case ActionTypes.SELECT_DEAL:
             return Object.assign({}, state, {
                 selectedDeal: action.selectedDeal,
-                dealsIdsWithCustomizedQuotes: R.union(state.dealsIdsWithCustomizedQuotes, [action.selectedDeal.version.jato_vehicle_id]),
+                dealsIdsWithCustomizedQuotes: R.union(
+                    state.dealsIdsWithCustomizedQuotes,
+                    [action.selectedDeal.version.jato_vehicle_id]
+                ),
             });
         case ActionTypes.CLEAR_SELECTED_DEAL:
             return Object.assign({}, state, { selectedDeal: null });
@@ -285,7 +282,7 @@ const reducer = (state, action) => {
                 ...state,
                 searchQuery: {
                     ...state.searchQuery,
-                    entity: "model",
+                    entity: 'model',
                     page: 1,
                     years: [],
                     makes: [],
@@ -306,12 +303,12 @@ const reducer = (state, action) => {
                         ...state.searchQuery.location,
                         zipcode: action.zipcode,
                         city: null,
-                    }
+                    },
                 },
 
                 // Deprecated
                 zipcode: action.zipcode,
-                city: null
+                city: null,
             };
 
         case ActionTypes.RECEIVE_LOCATION_INFO:
@@ -324,7 +321,7 @@ const reducer = (state, action) => {
                         ...state.searchQuery.location,
                         zipcode: action.zipcode,
                         city: action.city,
-                    }
+                    },
                 },
 
                 // Deprecated
@@ -341,7 +338,7 @@ const reducer = (state, action) => {
                     location: {
                         ...state.searchQuery.location,
                         in_range: action.supported,
-                    }
+                    },
                 },
 
                 // Deprecated
@@ -357,9 +354,8 @@ const reducer = (state, action) => {
                 ...state,
                 bestOffers: {
                     ...state.bestOffers,
-                    [action.bestOfferKey]: action.data
-                }
-
+                    [action.bestOfferKey]: action.data,
+                },
             };
         case ActionTypes.APPEND_CANCEL_TOKEN:
             return {
@@ -399,22 +395,22 @@ const reducer = (state, action) => {
         case ActionTypes.SHOW_ACCUPRICING_MODAL:
             return {
                 ...state,
-                accuPricingModalIsShowing: true
+                accuPricingModalIsShowing: true,
             };
         case ActionTypes.HIDE_ACCUPRICING_MODAL:
             return {
                 ...state,
-                accuPricingModalIsShowing: false
+                accuPricingModalIsShowing: false,
             };
         case ActionTypes.SHOW_INFO_MODAL:
             return {
                 ...state,
-                infoModalIsShowingFor: action.dealId
+                infoModalIsShowingFor: action.dealId,
             };
         case ActionTypes.HIDE_INFO_MODAL:
             return {
                 ...state,
-                infoModalIsShowingFor: null
+                infoModalIsShowingFor: null,
             };
         case ActionTypes.UPDATE_FINANCE_DOWN_PAYMENT:
             if (state.financeDownPayment === action.downPayment) {
@@ -423,7 +419,7 @@ const reducer = (state, action) => {
 
             return {
                 ...state,
-                financeDownPayment: action.downPayment
+                financeDownPayment: action.downPayment,
             };
         case ActionTypes.UPDATE_FINANCE_TERM:
             if (state.financeTerm === action.term) {
@@ -432,55 +428,96 @@ const reducer = (state, action) => {
 
             return {
                 ...state,
-                financeTerm: action.term
+                financeTerm: action.term,
             };
         case ActionTypes.UPDATE_LEASE_TERM:
-            return {...state, leaseTerm: {...state.leaseTerm, [`${action.deal.id}.${action.zipcode}`]: action.term}};
+            return {
+                ...state,
+                leaseTerm: {
+                    ...state.leaseTerm,
+                    [`${action.deal.id}.${action.zipcode}`]: action.term,
+                },
+            };
         case ActionTypes.UPDATE_LEASE_ANNUAL_MILEAGE:
-            return {...state, leaseAnnualMileage: {...state.leaseAnnualMileage, [`${action.deal.id}.${action.zipcode}`]: action.annualMileage}};
+            return {
+                ...state,
+                leaseAnnualMileage: {
+                    ...state.leaseAnnualMileage,
+                    [`${action.deal.id}.${
+                        action.zipcode
+                    }`]: action.annualMileage,
+                },
+            };
         case ActionTypes.UPDATE_LEASE_CASH_DUE:
-            return {...state, leaseCashDue: {...state.leaseCashDue, [`${action.deal.id}.${action.zipcode}`]: action.cashDue}};
+            return {
+                ...state,
+                leaseCashDue: {
+                    ...state.leaseCashDue,
+                    [`${action.deal.id}.${action.zipcode}`]: action.cashDue,
+                },
+            };
         case ActionTypes.REQUEST_LEASE_RATES:
             return state;
         case ActionTypes.RECEIVE_LEASE_RATES:
-            const leaseRatesKey = `${action.deal.version.jato_vehicle_id}.${action.zipcode}`;
+            const leaseRatesKey = `${action.deal.version.jato_vehicle_id}.${
+                action.zipcode
+            }`;
 
-            return {...state, leaseRates: {
+            return {
+                ...state,
+                leaseRates: {
                     ...state.leaseRates,
-                    [leaseRatesKey]: action.data
-                }, leaseRatesLoaded: {
+                    [leaseRatesKey]: action.data,
+                },
+                leaseRatesLoaded: {
                     ...state.leaseRatesLoaded,
                     [leaseRatesKey]: true,
-                }};
+                },
+            };
         case ActionTypes.REQUEST_LEASE_PAYMENTS:
             return state;
         case ActionTypes.RECEIVE_LEASE_PAYMENTS:
-            const leasePaymentsKey = `${action.dealPricing.vin()}.${action.zipcode}`;
+            const leasePaymentsKey = `${action.dealPricing.vin()}.${
+                action.zipcode
+            }`;
 
             const leasePaymentsMatrix = {};
 
             for (let leasePayment of action.data) {
-                if (! leasePaymentsMatrix[leasePayment.term]) {
+                if (!leasePaymentsMatrix[leasePayment.term]) {
                     leasePaymentsMatrix[leasePayment.term] = {};
                 }
 
-                if (! leasePaymentsMatrix[leasePayment.term][leasePayment.cash_due]) {
-                    leasePaymentsMatrix[leasePayment.term][leasePayment.cash_due] = {};
+                if (
+                    !leasePaymentsMatrix[leasePayment.term][
+                        leasePayment.cash_due
+                    ]
+                ) {
+                    leasePaymentsMatrix[leasePayment.term][
+                        leasePayment.cash_due
+                    ] = {};
                 }
 
-                leasePaymentsMatrix[leasePayment.term][leasePayment.cash_due][leasePayment.annual_mileage] = {
+                leasePaymentsMatrix[leasePayment.term][leasePayment.cash_due][
+                    leasePayment.annual_mileage
+                ] = {
                     monthlyPayment: leasePayment.monthly_payment,
-                    totalAmountAtDriveOff: leasePayment.total_amount_at_drive_off
+                    totalAmountAtDriveOff:
+                        leasePayment.total_amount_at_drive_off,
                 };
             }
 
-            return {...state, leasePayments: {
+            return {
+                ...state,
+                leasePayments: {
                     ...state.leasePayments,
-                    [leasePaymentsKey]: leasePaymentsMatrix
-                }, leasePaymentsLoaded: {
+                    [leasePaymentsKey]: leasePaymentsMatrix,
+                },
+                leasePaymentsLoaded: {
                     ...state.leasePaymentsLoaded,
                     [leasePaymentsKey]: true,
-                }};
+                },
+            };
     }
 
     return state;

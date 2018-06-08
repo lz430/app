@@ -1,5 +1,4 @@
 const api = {
-
     getBodyStyles: () => {
         return window.axios.get('/api/body-styles');
     },
@@ -15,7 +14,7 @@ const api = {
     /**
      * @deprecated
      */
-    getLeasePayments: (dealPricing) => {
+    getLeasePayments: dealPricing => {
         return window.axios.get('/api/lease-payments', {
             params: {
                 tax_rate: dealPricing.taxRate() * 100,
@@ -27,8 +26,8 @@ const api = {
                 msrp: dealPricing.msrpValue(),
                 cash_advance: dealPricing.sellingPriceValue(),
                 cash_due: dealPricing.allLeaseCashDueOptions(),
-                terms: dealPricing.apiTerms()
-            }
+                terms: dealPricing.apiTerms(),
+            },
         });
     },
 
@@ -72,8 +71,8 @@ const api = {
     getFeatureCategories: () => {
         return window.axios.get('/api/categories', {
             params: {
-                include: 'features'
-            }
+                include: 'features',
+            },
         });
     },
 

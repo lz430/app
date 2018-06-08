@@ -4,8 +4,7 @@ import R from 'ramda';
 import * as ActionTypes from 'actiontypes/index';
 import jsonp from 'jsonp';
 import DealPricing from 'src/DealPricing';
-import {makeDealPricing} from "selectors/index";
-
+import { makeDealPricing } from 'selectors/index';
 
 export function requestDealQuote(deal) {
     return {
@@ -91,7 +90,6 @@ export function toggleFeature(feature) {
 
 export function toggleMake(make_id) {
     return (dispatch, getState) => {
-
         const selectedMakes = util.toggleItem(
             getState().searchQuery.makes,
             make_id
@@ -307,8 +305,7 @@ export function toggleStyle(style) {
 
 export function chooseYear(year) {
     return (dispatch, getState) => {
-        const selectedYear =
-            getState().selectedYear === year ? null : year;
+        const selectedYear = getState().selectedYear === year ? null : year;
 
         dispatch({
             type: ActionTypes.CHOOSE_YEAR,
@@ -374,7 +371,7 @@ export function setZipCode(zipcode) {
 
 export function requestLocationInfo() {
     return (dispatch, getState) => {
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
             /**
              * If we don't already have a loaded zipcode, try to get one from freegeoip.net
              */
@@ -386,7 +383,7 @@ export function requestLocationInfo() {
                         });
                     } else {
                         dispatch(receiveLocationInfo(data));
-                        resolve(data.zip_code)
+                        resolve(data.zip_code);
                     }
                 });
             } else {
@@ -430,7 +427,7 @@ export function closeMakeSelectorModal() {
         dispatch({
             type: ActionTypes.REQUEST_SEARCH,
         });
-    }
+    };
 }
 
 export function windowResize(width) {
@@ -454,7 +451,7 @@ export function selectTab(tab) {
             type: ActionTypes.SELECT_TAB,
             data: tab,
         });
-    }
+    };
 }
 
 export function selectDeal(deal) {
@@ -552,7 +549,9 @@ export function requestLeasePayments(deal) {
 
         if (!zipcode) return;
 
-        const dealPricing = new DealPricing(getDealPricing(getState(), {deal, zipcode}));
+        const dealPricing = new DealPricing(
+            getDealPricing(getState(), { deal, zipcode })
+        );
 
         if (dealPricing.isNotLease()) {
             return;
@@ -565,27 +564,27 @@ export function requestLeasePayments(deal) {
         dispatch({
             type: ActionTypes.REQUEST_LEASE_PAYMENTS,
             dealPricing,
-            zipcode
+            zipcode,
         });
 
-        api
-            .getLeasePayments(dealPricing)
+        api.getLeasePayments(dealPricing)
             .then(data => {
                 dispatch(receiveLeasePayments(dealPricing, zipcode, data.data));
             })
             .catch(e => {
                 dispatch(receiveLeasePayments(dealPricing, zipcode));
             });
-    }
+    };
 }
 
 export function receiveLeasePayments(dealPricing, zipcode, data) {
-    return dispatch => dispatch({
-        type: ActionTypes.RECEIVE_LEASE_PAYMENTS,
-        dealPricing,
-        zipcode,
-        data
-    })
+    return dispatch =>
+        dispatch({
+            type: ActionTypes.RECEIVE_LEASE_PAYMENTS,
+            dealPricing,
+            zipcode,
+            data,
+        });
 }
 
 /**
@@ -600,11 +599,10 @@ export function requestLeaseRates(deal) {
         dispatch({
             type: ActionTypes.REQUEST_LEASE_RATES,
             deal,
-            zipcode
+            zipcode,
         });
 
-        api
-            .getLeaseRates(deal, zipcode)
+        api.getLeaseRates(deal, zipcode)
             .then(data => {
                 dispatch(receiveLeaseRates(deal, zipcode, data.data));
                 if (data.data.length > 0) {
@@ -612,18 +610,19 @@ export function requestLeaseRates(deal) {
                 }
             })
             .catch(e => {
-                dispatch(receiveLeaseRates(deal, zipcode, null))
+                dispatch(receiveLeaseRates(deal, zipcode, null));
             });
-    }
+    };
 }
 
 export function receiveLeaseRates(deal, zipcode, data) {
-    return dispatch => dispatch({
-        type: ActionTypes.RECEIVE_LEASE_RATES,
-        deal,
-        zipcode,
-        data
-    })
+    return dispatch =>
+        dispatch({
+            type: ActionTypes.RECEIVE_LEASE_RATES,
+            deal,
+            zipcode,
+            data,
+        });
 }
 
 /**
@@ -634,7 +633,7 @@ export function requestBestOffer(deal) {
         const zipcode = getState().zipcode;
 
         if (!zipcode) {
-            dispatch(requestLocationInfo()).then((new_zipcode) => {
+            dispatch(requestLocationInfo()).then(new_zipcode => {
                 dispatch(requestBestOffer(deal));
             });
 
@@ -671,8 +670,7 @@ export function requestBestOffer(deal) {
             const source = CancelToken.source();
 
             dispatch(appendCancelToken(source, 'bestOffer', deal.id));
-            api
-                .getBestOffer(deal.id, paymentType, zipcode, targets, source)
+            api.getBestOffer(deal.id, paymentType, zipcode, targets, source)
                 .then(data => {
                     dispatch(removeCancelToken(deal.id));
                     dispatch(receiveBestOffer(data, bestOfferKey, paymentType));
@@ -681,16 +679,20 @@ export function requestBestOffer(deal) {
                 .catch(e => {
                     dispatch(removeCancelToken(deal.id));
                     dispatch(
-                        receiveBestOffer({
-                            data: {
+                        receiveBestOffer(
+                            {
                                 data: {
-                                    cash: {
-                                        totalValue: 0,
-                                        programs: [],
+                                    data: {
+                                        cash: {
+                                            totalValue: 0,
+                                            programs: [],
+                                        },
                                     },
                                 },
                             },
-                        }, bestOfferKey, paymentType)
+                            bestOfferKey,
+                            paymentType
+                        )
                     );
                 });
 
@@ -702,7 +704,8 @@ export function requestBestOffer(deal) {
 export function receiveBestOffer(data, bestOfferKey, paymentType) {
     // Although lease AND finance have the 'cash' wrapper, we are currently
     // displaying cash best offers in the finance tabs.
-    const bestOfferPrograms = paymentType === 'lease' ? data.data.cash : data.data;
+    const bestOfferPrograms =
+        paymentType === 'lease' ? data.data.cash : data.data;
     const rates = paymentType === 'lease' ? data.data.rates : [];
     const bestOffer = {
         ...bestOfferPrograms,
@@ -718,7 +721,11 @@ export function receiveBestOffer(data, bestOfferKey, paymentType) {
     };
 }
 
-export function appendCancelToken(cancelToken, context = 'default', identifier = null) {
+export function appendCancelToken(
+    cancelToken,
+    context = 'default',
+    identifier = null
+) {
     return dispatch => {
         dispatch({
             type: ActionTypes.APPEND_CANCEL_TOKEN,
@@ -740,31 +747,31 @@ export function removeCancelToken(identifier) {
 
 export function getBestOffersForLoadedDeals() {
     return (dispatch, getState) => {
-        dispatch({type: ActionTypes.REQUEST_ALL_BEST_OFFERS});
+        dispatch({ type: ActionTypes.REQUEST_ALL_BEST_OFFERS });
     };
 }
 
 export function showAccuPricingModal() {
     return {
-        type: ActionTypes.SHOW_ACCUPRICING_MODAL
-    }
+        type: ActionTypes.SHOW_ACCUPRICING_MODAL,
+    };
 }
 
 export function hideAccuPricingModal() {
     return {
-        type: ActionTypes.HIDE_ACCUPRICING_MODAL
-    }
+        type: ActionTypes.HIDE_ACCUPRICING_MODAL,
+    };
 }
 
 export function showInfoModal(dealId) {
     return {
         type: ActionTypes.SHOW_INFO_MODAL,
         dealId,
-    }
+    };
 }
 
 export function hideInfoModal() {
     return {
-        type: ActionTypes.HIDE_INFO_MODAL
-    }
+        type: ActionTypes.HIDE_INFO_MODAL,
+    };
 }

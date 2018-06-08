@@ -30,4 +30,7 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-export default connect(mapStateToProps, Actions)(FilterClose);
+export default connect(
+    mapStateToProps,
+    Actions
+)(FilterClose);

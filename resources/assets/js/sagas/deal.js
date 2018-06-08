@@ -1,14 +1,29 @@
-import {makeDealPricing} from "selectors/index";
+import { makeDealPricing } from 'selectors/index';
 import DealPricing from 'src/DealPricing';
 import axios from 'axios';
 
-import {  all, put, call, select, take, takeEvery, takeLatest, fork, spawn, cancelled } from 'redux-saga/effects'
+import {
+    all,
+    put,
+    call,
+    select,
+    take,
+    takeEvery,
+    takeLatest,
+    fork,
+    spawn,
+    cancelled,
+} from 'redux-saga/effects';
 import util from 'src/util';
 import ApiClient from 'store/api';
 
 import * as ActionTypes from 'actiontypes/index';
-import R from "ramda";
-import {receiveBestOffer, receiveLeaseRates, receiveLeasePayments} from "actions/index";
+import R from 'ramda';
+import {
+    receiveBestOffer,
+    receiveLeaseRates,
+    receiveLeasePayments,
+} from 'actions/index';
 
 /**
  *
@@ -21,16 +36,26 @@ import {receiveBestOffer, receiveLeaseRates, receiveLeasePayments} from "actions
 function* requestDealBestOffer(deal, zipcode, paymentType, targets) {
     ///]\console.log('requestDealBestOffer');
 
-    const bestOfferKey = util.getBestOfferKeyForDeal(deal, zipcode, paymentType, targets);
+    const bestOfferKey = util.getBestOfferKeyForDeal(
+        deal,
+        zipcode,
+        paymentType,
+        targets
+    );
 
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
 
-
     let results = null;
 
     try {
-        results = yield call(ApiClient.dealGetQuote, deal.id, paymentType, zipcode, source.token);
+        results = yield call(
+            ApiClient.dealGetQuote,
+            deal.id,
+            paymentType,
+            zipcode,
+            source.token
+        );
     } catch (e) {
         console.log(e);
         results = {
@@ -45,7 +70,7 @@ function* requestDealBestOffer(deal, zipcode, paymentType, targets) {
         };
     } finally {
         if (yield cancelled()) {
-            console.log("Cancelled requestDealBestOffer");
+            console.log('Cancelled requestDealBestOffer');
             source.cancel();
         }
     }
@@ -68,12 +93,17 @@ function* requestDealLeaseRates(deal, zipcode) {
     let results = null;
 
     try {
-        results = yield call(ApiClient.dealGetLeaseRates, deal, zipcode, source.token);
+        results = yield call(
+            ApiClient.dealGetLeaseRates,
+            deal,
+            zipcode,
+            source.token
+        );
     } catch (e) {
         console.log(e);
     } finally {
         if (yield cancelled()) {
-            console.log("Cancelled requestDealLeaseRates");
+            console.log('Cancelled requestDealLeaseRates');
             source.cancel();
         }
     }
@@ -97,12 +127,11 @@ function* requestDealLeasePayments(deal, zipcode) {
 
     const state = yield select();
     const getDealPricing = makeDealPricing();
-    let data = getDealPricing(state, {deal, zipcode});
+    let data = getDealPricing(state, { deal, zipcode });
     const dealPricing = new DealPricing(data);
 
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
-
 
     if (dealPricing.isNotLease()) {
         return;
@@ -114,13 +143,17 @@ function* requestDealLeasePayments(deal, zipcode) {
 
     let results = null;
     try {
-        results = yield call(ApiClient.dealGetLeasePayments, dealPricing, source.token);
+        results = yield call(
+            ApiClient.dealGetLeasePayments,
+            dealPricing,
+            source.token
+        );
         results = results.data;
     } catch (e) {
         console.log(e);
-    }  finally {
+    } finally {
         if (yield cancelled()) {
-            console.log("Cancelled requestDealLeasePayments");
+            console.log('Cancelled requestDealLeasePayments');
             source.cancel();
         }
     }
@@ -133,7 +166,9 @@ function* requestDealLeasePayments(deal, zipcode) {
 function* requestDealQuote(action) {
     const deal = action.deal;
     const state = yield select();
-    const dealPricing = new DealPricing(makeDealPricing(state, {deal, zipcode}));
+    const dealPricing = new DealPricing(
+        makeDealPricing(state, { deal, zipcode })
+    );
 
     const zipcode = state.zipcode;
 
@@ -158,12 +193,15 @@ function* requestDealQuote(action) {
 }
 
 export function* batchRequestDealQuotes(deals) {
-    yield all(deals.map(deal => fork(requestDealQuote, {
-        type: ActionTypes.REQUEST_DEAL_QUOTE,
-        deal: deal,
-    })));
+    yield all(
+        deals.map(deal =>
+            fork(requestDealQuote, {
+                type: ActionTypes.REQUEST_DEAL_QUOTE,
+                deal: deal,
+            })
+        )
+    );
 }
-
 
 function* requestQuoteRefresh() {
     const state = yield select();

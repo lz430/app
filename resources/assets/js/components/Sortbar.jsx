@@ -23,7 +23,10 @@ class Sortbar extends React.PureComponent {
         return util.windowIsLargerThanSmall(this.props.window.width) ? (
             ''
         ) : (
-            <button className="sortbar__button sortbar__button--pink sortbar__button--with-icon" onClick={this.props.toggleSmallFiltersShown}>
+            <button
+                className="sortbar__button sortbar__button--pink sortbar__button--with-icon"
+                onClick={this.props.toggleSmallFiltersShown}
+            >
                 <div>
                     <SVGInline
                         height="20px"
@@ -58,7 +61,6 @@ class Sortbar extends React.PureComponent {
         );
     }
 
-
     redirectToCompare() {
         if (this.compareReady()) {
             window.location.href =
@@ -77,7 +79,6 @@ class Sortbar extends React.PureComponent {
         return this.props.compareList.length >= 2;
     }
 
-
     renderBackButton() {
         const nativeBack = () => window.history.back();
         const clearFilters = () => this.props.clearModelYear();
@@ -88,7 +89,7 @@ class Sortbar extends React.PureComponent {
         ) : (
             <button
                 className="sortbar__button sortbar__button--with-icon"
-                onClick={() => onDealsPage ? clearFilters() : nativeBack()}
+                onClick={() => (onDealsPage ? clearFilters() : nativeBack())}
             >
                 <SVGInline
                     height="20px"
@@ -106,11 +107,19 @@ class Sortbar extends React.PureComponent {
         ) : (
             <div>
                 <button
-                    className={`sortbar__button sortbar__button--blue ${this.compareReady() ? '' : 'disabled'}`}
+                    className={`sortbar__button sortbar__button--blue ${
+                        this.compareReady() ? '' : 'disabled'
+                    }`}
                     onClick={this.redirectToCompare}
                 >
                     Compare{' '}
-                    <div className={`sortbar__compare-count ${this.compareReady() ? 'sortbar__compare-count--ready' : ''}`}>
+                    <div
+                        className={`sortbar__compare-count ${
+                            this.compareReady()
+                                ? 'sortbar__compare-count--ready'
+                                : ''
+                        }`}
+                    >
                         {this.props.compareList.length}
                     </div>
                 </button>
@@ -124,7 +133,6 @@ class Sortbar extends React.PureComponent {
         return (
             <div className="sortbar__button">
                 <div onClick={() => this.props.sortDeals('price')}>
-                    
                     {this.renderIcon('price')}
                 </div>
             </div>
@@ -136,20 +144,20 @@ class Sortbar extends React.PureComponent {
         const clearFilters = () => this.props.clearModelYear();
         const onDealsPage = this.props.filterPage === 'deals';
 
-        return  (
+        return (
             <button
                 className="sortbar__button sortbar__button--with-icon"
                 onClick={() => this.props.sortDeals('price')}
             >
-                {util.windowIsLargerThanSmall(this.props.window.width)
-                    ? 'Price '
-                    : (
-                        <SVGInline
-                            height="20px"
-                            width="20px"
-                            className="sortbar__back-icon"
-                            svg={zondicons['tag']}
-                        />
+                {util.windowIsLargerThanSmall(this.props.window.width) ? (
+                    'Price '
+                ) : (
+                    <SVGInline
+                        height="20px"
+                        width="20px"
+                        className="sortbar__back-icon"
+                        svg={zondicons['tag']}
+                    />
                 )}
                 {this.renderIcon('price')}
             </button>
@@ -179,9 +187,15 @@ class Sortbar extends React.PureComponent {
             <div className="sortbar">
                 {this.renderBackButton()}
                 {this.renderFilterToggle()}
-                {this.props.filterPage === 'models' ? this.renderClearFiltersButton() : ''}
-                {this.props.filterPage === 'deals' ? this.renderCompareButton() : ''}
-                {this.props.filterPage === 'deals' ? this.renderSortButton() : ''}
+                {this.props.filterPage === 'models'
+                    ? this.renderClearFiltersButton()
+                    : ''}
+                {this.props.filterPage === 'deals'
+                    ? this.renderCompareButton()
+                    : ''}
+                {this.props.filterPage === 'deals'
+                    ? this.renderSortButton()
+                    : ''}
             </div>
         );
     }
@@ -218,4 +232,7 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, Actions)(Sortbar);
+export default connect(
+    mapStateToProps,
+    Actions
+)(Sortbar);

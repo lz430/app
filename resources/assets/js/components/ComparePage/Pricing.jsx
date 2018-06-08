@@ -51,4 +51,7 @@ Pricing.PropTypes = {
     deal: PropTypes.object.isRequired,
 };
 
-export default connect(makeMapStateToProps, Actions)(Pricing);
+export default connect(
+    makeMapStateToProps,
+    Actions
+)(Pricing);

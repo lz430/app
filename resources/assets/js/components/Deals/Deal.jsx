@@ -1,6 +1,6 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {requestDealQuote} from 'actions/index';
+import { connect } from 'react-redux';
+import { requestDealQuote } from 'actions/index';
 import PropTypes from 'prop-types';
 
 import DealImage from 'components/Deals/DealImage';
@@ -56,7 +56,6 @@ class Deal extends React.Component {
                     <DealPrice
                         deal={this.props.deal}
                         key={this.props.deal.id}
-
                     />
                 </div>
 
@@ -81,8 +80,11 @@ const mapDispatchToProps = dispatch => {
     return {
         onRequestDealQuote: deal => {
             return dispatch(requestDealQuote(deal));
-        }
-    }
+        },
+    };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Deal);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Deal);

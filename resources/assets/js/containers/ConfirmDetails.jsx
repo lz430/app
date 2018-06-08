@@ -8,7 +8,11 @@ import purchase from 'src/purchase';
 import React from 'react';
 import strings from 'src/strings';
 import DealImage from 'components/Deals/DealImage';
-import { makeDealBestOfferTotalValue, makeDealBestOffer, makeDealPricing } from 'selectors/index';
+import {
+    makeDealBestOfferTotalValue,
+    makeDealBestOffer,
+    makeDealPricing,
+} from 'selectors/index';
 import DealPricing from 'src/DealPricing';
 
 class ConfirmDetails extends React.PureComponent {
@@ -25,9 +29,12 @@ class ConfirmDetails extends React.PureComponent {
 
     renderDeal(deal, index) {
         return (
-            <ConfirmDeal deal={deal} key={index} hideImageAndTitle={true} onConfirmPurchase={() => purchase.start(
-                this.props.dealPricing
-            )} />
+            <ConfirmDeal
+                deal={deal}
+                key={index}
+                hideImageAndTitle={true}
+                onConfirmPurchase={() => purchase.start(this.props.dealPricing)}
+            />
         );
     }
 
@@ -51,14 +58,17 @@ class ConfirmDetails extends React.PureComponent {
                         </div>
                         <div>
                             Confirming this purchase is not a binding contract.
-                            You may cancel at any time.
-                            Once you confirm this purchase, we will finalize financing and delivery details.
+                            You may cancel at any time. Once you confirm this
+                            purchase, we will finalize financing and delivery
+                            details.
                         </div>
                     </div>
                     <div className="deal-details__pricing">
                         {this.renderDeal(deal)}
                     </div>
-                    {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
+                    {this.props.selectedDeal
+                        ? this.renderCalculatorModal()
+                        : ''}
                 </div>
             </div>
         );
@@ -77,7 +87,6 @@ ConfirmDetails.propTypes = {
         vin: PropTypes.string.isRequired,
     }),
 };
-
 
 const makeMapStateToProps = () => {
     const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
@@ -100,4 +109,7 @@ const makeMapStateToProps = () => {
     return mapStateToProps;
 };
 
-export default connect(makeMapStateToProps, Actions)(ConfirmDetails);
+export default connect(
+    makeMapStateToProps,
+    Actions
+)(ConfirmDetails);

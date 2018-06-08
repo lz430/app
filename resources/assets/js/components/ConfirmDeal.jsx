@@ -11,9 +11,9 @@ import { connect } from 'react-redux';
 import Modal from 'components/Modal';
 import { makeDealBestOfferTotalValue, makeDealPricing } from 'selectors/index';
 import formulas from 'src/formulas';
-import InfoModalData from "./InfoModalData";
+import InfoModalData from './InfoModalData';
 import DealPricing from 'src/DealPricing';
-import R from "ramda";
+import R from 'ramda';
 
 class ConfirmDeal extends React.PureComponent {
     render() {
@@ -28,16 +28,28 @@ class ConfirmDeal extends React.PureComponent {
                     withFinalSelectionHeader={true}
                     withCustomizeQuoteOrBuyNow={false}
                     withConfirmPurchase={true}
-                    {...R.pick(['deal', 'selectedTab', 'compareList', 'dealPricing', 'onConfirmPurchase'], this.props)}
-                    {...R.pick([
-                        'selectDeal',
-                        'selectTab',
-                        'requestTargets',
-                        'requestBestOffer',
-                        'getBestOffersForLoadedDeals',
-                        'toggleCompare',
-                        'showAccuPricingModal'
-                    ], this.props)}
+                    {...R.pick(
+                        [
+                            'deal',
+                            'selectedTab',
+                            'compareList',
+                            'dealPricing',
+                            'onConfirmPurchase',
+                        ],
+                        this.props
+                    )}
+                    {...R.pick(
+                        [
+                            'selectDeal',
+                            'selectTab',
+                            'requestTargets',
+                            'requestBestOffer',
+                            'getBestOffersForLoadedDeals',
+                            'toggleCompare',
+                            'showAccuPricingModal',
+                        ],
+                        this.props
+                    )}
                 />
             </div>
         );
@@ -72,10 +84,13 @@ const makeMapStateToProps = () => {
             dealTargets: state.dealTargets,
             selectedTargets: state.selectedTargets,
             dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
-            dealPricing: new DealPricing(getDealPricing(state, props))
+            dealPricing: new DealPricing(getDealPricing(state, props)),
         };
     };
     return mapStateToProps;
 };
 
-export default connect(makeMapStateToProps, Actions)(ConfirmDeal);
+export default connect(
+    makeMapStateToProps,
+    Actions
+)(ConfirmDeal);

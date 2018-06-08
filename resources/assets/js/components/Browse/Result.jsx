@@ -7,7 +7,8 @@ class Result extends React.PureComponent {
     render() {
         const result = this.props.result;
 
-        let image = 'http://www.asfera.info/files/images/1_aprela/4/deloreyn.jpg';
+        let image =
+            'http://www.asfera.info/files/images/1_aprela/4/deloreyn.jpg';
 
         if (result.thumbnail) {
             image = result.thumbnail;
@@ -16,7 +17,6 @@ class Result extends React.PureComponent {
         return (
             <div className="browser-page__results__result deal">
                 <div className="deal__content">
-
                     <div className="deal__basic-info">
                         <div
                             onClick={() =>
@@ -36,10 +36,7 @@ class Result extends React.PureComponent {
                             </div>
                         </div>
                     </div>
-                    <DealImage
-                        featureImageClass="deal__image"
-                        deal={result}
-                    />
+                    <DealImage featureImageClass="deal__image" deal={result} />
                 </div>
 
                 <div className="deal__price">

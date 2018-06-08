@@ -15,7 +15,7 @@ import ImageGallery from 'react-image-gallery';
 import AccuPricingModal from 'components/AccuPricingModal';
 import InfoModalData from 'components/InfoModalData';
 import DealPricing from 'src/DealPricing';
-import {makeDealPricing} from '../selectors';
+import { makeDealPricing } from '../selectors';
 import util from 'src/util';
 
 class DealDetails extends React.PureComponent {
@@ -43,28 +43,28 @@ class DealDetails extends React.PureComponent {
         this.props.requestBestOffer(this.props.deal);
 
         if (this.props.deal.photos.length) {
-            this.setState({featuredImage: this.props.deal.photos[0]});
+            this.setState({ featuredImage: this.props.deal.photos[0] });
         }
 
-        api
-            .getDimensions(this.props.deal.version.jato_vehicle_id)
-            .then(response => {
+        api.getDimensions(this.props.deal.version.jato_vehicle_id).then(
+            response => {
                 if (!this._isMounted) return;
 
                 this.setState({
                     dimensions: response.data,
                 });
-            });
+            }
+        );
 
-        api
-            .getWarranties(this.props.deal.version.jato_vehicle_id)
-            .then(response => {
+        api.getWarranties(this.props.deal.version.jato_vehicle_id).then(
+            response => {
                 if (!this._isMounted) return;
 
                 this.setState({
                     warranties: response.data,
                 });
-            });
+            }
+        );
     }
 
     showStandardFeatures() {
@@ -124,7 +124,9 @@ class DealDetails extends React.PureComponent {
         return (
             <Modal
                 nowrapper={true}
-                onClose={() => { this.hideModals() }}
+                onClose={() => {
+                    this.hideModals();
+                }}
             >
                 <div className="modal__content">
                     <div className="modal__sticker-container">
@@ -156,13 +158,16 @@ class DealDetails extends React.PureComponent {
                         <h4>Dimensions</h4>
                         <ul>
                             {this.state.dimensions ? (
-                                this.state.dimensions.map((dimension, index) => {
-                                    return (
-                                        <li key={index}>
-                                            {dimension.feature}: {dimension.content}
-                                        </li>
-                                    );
-                                })
+                                this.state.dimensions.map(
+                                    (dimension, index) => {
+                                        return (
+                                            <li key={index}>
+                                                {dimension.feature}:{' '}
+                                                {dimension.content}
+                                            </li>
+                                        );
+                                    }
+                                )
                             ) : (
                                 <SVGInline svg={miscicons['loading']} />
                             )}
@@ -171,13 +176,16 @@ class DealDetails extends React.PureComponent {
                         <h4>Warranties</h4>
                         <ul>
                             {this.state.warranties ? (
-                                this.state.warranties.map((dimension, index) => {
-                                    return (
-                                        <li key={index}>
-                                            {dimension.feature}: {dimension.content}
-                                        </li>
-                                    );
-                                })
+                                this.state.warranties.map(
+                                    (dimension, index) => {
+                                        return (
+                                            <li key={index}>
+                                                {dimension.feature}:{' '}
+                                                {dimension.content}
+                                            </li>
+                                        );
+                                    }
+                                )
                             ) : (
                                 <SVGInline svg={miscicons['loading']} />
                             )}
@@ -199,9 +207,10 @@ class DealDetails extends React.PureComponent {
         return (
             <Modal
                 nowrapper={true}
-                onClose={() => { this.hideModals() }}
+                onClose={() => {
+                    this.hideModals();
+                }}
             >
-
                 <div className="modal__content">
                     <div className="modal__sticker-container">
                         <div className="modal__sticker">Additional Options</div>
@@ -251,21 +260,30 @@ class DealDetails extends React.PureComponent {
         return (
             <div className="deal-details__pricing">
                 <div>
-                    {shouldRenderStockNumber && (
-                        this.renderStockNumber()
-                    )}
+                    {shouldRenderStockNumber && this.renderStockNumber()}
                     <InfoModalData
                         withPricingHeader={false}
-                        {...R.pick(['deal', 'selectedTab', 'compareList', 'dealPricing'], this.props)}
-                        {...R.pick([
-                            'selectDeal',
-                            'selectTab',
-                            'requestTargets',
-                            'requestBestOffer',
-                            'getBestOffersForLoadedDeals',
-                            'toggleCompare',
-                            'showAccuPricingModal'
-                        ], this.props)}
+                        {...R.pick(
+                            [
+                                'deal',
+                                'selectedTab',
+                                'compareList',
+                                'dealPricing',
+                            ],
+                            this.props
+                        )}
+                        {...R.pick(
+                            [
+                                'selectDeal',
+                                'selectTab',
+                                'requestTargets',
+                                'requestBestOffer',
+                                'getBestOffersForLoadedDeals',
+                                'toggleCompare',
+                                'showAccuPricingModal',
+                            ],
+                            this.props
+                        )}
                     />
                 </div>
             </div>
@@ -278,52 +296,52 @@ class DealDetails extends React.PureComponent {
             R.map(R.prop('deal'), this.props.compareList)
         );
         return (
-                <div className="deal-details__deal-content">
-                    <div className="deal-details__deal-content-header">
-                        <div className="deal-details__deal-content-at-a-glance">
-                            This Vehicle At-A-Glance
-                        </div>
-                        <div className="deal-details__deal-content-color">
-                            {deal.color}, {deal.interior_color}
-                        </div>
+            <div className="deal-details__deal-content">
+                <div className="deal-details__deal-content-header">
+                    <div className="deal-details__deal-content-at-a-glance">
+                        This Vehicle At-A-Glance
                     </div>
-                    <div className="deal-details__deal-content-body">
-                        <div>
-                            <div className="deal-details__deal-content-subtitle">
-                                Standard Features
-                            </div>
-                            <ul className="deal-details__deal-content-features">
-                                {deal.features.slice(0, 5).map((feature, index) => {
-                                    return <li key={index}>{feature.feature}</li>;
-                                })}
-                            </ul>
-                            <span
-                                className="link deal-details__deal-content-see-all"
-                                onClick={() => this.showStandardFeatures()}
-                            >
-                                See all standard features &gt;
-                            </span>
-                        </div>
-                        <div>
-                            <div className="deal-details__deal-content-subtitle">
-                                Additional Options
-                            </div>
-                            <ul className="deal-details__deal-content-features">
-                                {deal.vauto_features
-                                    .slice(0, 5)
-                                    .map((feature, index) => {
-                                        return <li key={index}>{feature}</li>;
-                                    })}
-                            </ul>
-                            <a
-                                className="link deal-details__deal-content-see-all"
-                                onClick={(e) => this.showFeatures(e)}
-                            >
-                                See all additional options &gt;
-                            </a>
-                        </div>
+                    <div className="deal-details__deal-content-color">
+                        {deal.color}, {deal.interior_color}
                     </div>
                 </div>
+                <div className="deal-details__deal-content-body">
+                    <div>
+                        <div className="deal-details__deal-content-subtitle">
+                            Standard Features
+                        </div>
+                        <ul className="deal-details__deal-content-features">
+                            {deal.features.slice(0, 5).map((feature, index) => {
+                                return <li key={index}>{feature.feature}</li>;
+                            })}
+                        </ul>
+                        <span
+                            className="link deal-details__deal-content-see-all"
+                            onClick={() => this.showStandardFeatures()}
+                        >
+                            See all standard features &gt;
+                        </span>
+                    </div>
+                    <div>
+                        <div className="deal-details__deal-content-subtitle">
+                            Additional Options
+                        </div>
+                        <ul className="deal-details__deal-content-features">
+                            {deal.vauto_features
+                                .slice(0, 5)
+                                .map((feature, index) => {
+                                    return <li key={index}>{feature}</li>;
+                                })}
+                        </ul>
+                        <a
+                            className="link deal-details__deal-content-see-all"
+                            onClick={e => this.showFeatures(e)}
+                        >
+                            See all additional options &gt;
+                        </a>
+                    </div>
+                </div>
+            </div>
         );
     }
 
@@ -339,10 +357,11 @@ class DealDetails extends React.PureComponent {
                             <div className="deal-details__title-model-trim">
                                 {strings.dealModelTrim(this.props.deal)}
                             </div>
-                            {util.windowIsLargerThanSmall(this.props.window.width)
+                            {util.windowIsLargerThanSmall(
+                                this.props.window.width
+                            )
                                 ? null
-                                : this.renderStockNumber()
-                            }
+                                : this.renderStockNumber()}
                         </div>
                         <div className="deal-details__images">
                             <ImageGallery
@@ -351,27 +370,35 @@ class DealDetails extends React.PureComponent {
                                 showIndex={true}
                                 showThumbnails={false}
                                 showPlayButton={false}
-                                showFullscreenButton={false}/>
+                                showFullscreenButton={false}
+                            />
                         </div>
                         {util.windowIsLargerThanSmall(this.props.window.width)
                             ? null
-                            : this.renderDeal(this.props.deal, { shouldRenderStockNumber: false })
-                        }
+                            : this.renderDeal(this.props.deal, {
+                                  shouldRenderStockNumber: false,
+                              })}
                         {this.renderFeaturesAndOptions(this.props.deal)}
                     </div>
                     {util.windowIsLargerThanSmall(this.props.window.width)
-                        ? this.renderDeal(this.props.deal, { shouldRenderStockNumber: true })
-                        : null
-                    }
+                        ? this.renderDeal(this.props.deal, {
+                              shouldRenderStockNumber: true,
+                          })
+                        : null}
                 </div>
 
                 <CompareBar class="compare-bar compare-bar--static" />
 
-                {this.state.showStandardFeatures ? this.renderStandardFeaturesModal(this.props.deal) : ''}
-                {this.state.showFeatures ? this.renderFeaturesModal(this.props.deal) : ''}
+                {this.state.showStandardFeatures
+                    ? this.renderStandardFeaturesModal(this.props.deal)
+                    : ''}
+                {this.state.showFeatures
+                    ? this.renderFeaturesModal(this.props.deal)
+                    : ''}
                 {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
                 <AccuPricingModal />
-            </div>);
+            </div>
+        );
     }
 }
 
@@ -406,5 +433,7 @@ function mapStateToProps(state) {
     return mapStateToProps;
 }
 
-
-export default connect(mapStateToProps, Actions)(DealDetails);
+export default connect(
+    mapStateToProps,
+    Actions
+)(DealDetails);

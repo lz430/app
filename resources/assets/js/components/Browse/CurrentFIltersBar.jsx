@@ -1,12 +1,9 @@
 import React from 'react';
 
-import {
-    SelectedFilters,
-} from '@appbaseio/reactivesearch';
+import { SelectedFilters } from '@appbaseio/reactivesearch';
 
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
-
 
 /**
  *
@@ -25,7 +22,6 @@ class CurrentFiltersBar extends React.Component {
             </div>
         );
     }
-
 }
 
 export default CurrentFiltersBar;

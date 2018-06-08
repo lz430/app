@@ -14,9 +14,9 @@ class FilterStyleSelector extends React.PureComponent {
 
     renderStyle(style) {
         let selected = R.contains(style.style, this.props.selectedStyles);
-        let className = `filter-style-selector__style ${selected
-            ? 'filter-style-selector__style--selected'
-            : ''}`;
+        let className = `filter-style-selector__style ${
+            selected ? 'filter-style-selector__style--selected' : ''
+        }`;
 
         return (
             <div

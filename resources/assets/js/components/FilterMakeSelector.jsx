@@ -23,27 +23,27 @@ class FilterMakeSelector extends React.PureComponent {
     }
 
     renderMake(make) {
-        let selected = R.contains(
-            make.id,
-            this.props.selectedMakes
-        );
+        let selected = R.contains(make.id, this.props.selectedMakes);
 
-        let className = R.contains(
-            make.id,
-            this.props.selectedMakes
-        ) ? "filter-make-selector__make filter-make-selector__make--selected" : "filter-make-selector__make";
+        let className = R.contains(make.id, this.props.selectedMakes)
+            ? 'filter-make-selector__make filter-make-selector__make--selected'
+            : 'filter-make-selector__make';
 
         return (
-            <div className={className}
-                 key={make.id}
-                 onClick={this.props.onSelectMake.bind(
-                    null,
-                    make.id
-                )} >
-
-                <div className="filter-make-selector__icon" style={{backgroundImage: `url('${ make.attributes.logo }')`}}></div>
-                <div className="filter-make-selector__name">{make.attributes.name}</div>
-
+            <div
+                className={className}
+                key={make.id}
+                onClick={this.props.onSelectMake.bind(null, make.id)}
+            >
+                <div
+                    className="filter-make-selector__icon"
+                    style={{
+                        backgroundImage: `url('${make.attributes.logo}')`,
+                    }}
+                />
+                <div className="filter-make-selector__name">
+                    {make.attributes.name}
+                </div>
             </div>
         );
     }
@@ -55,8 +55,8 @@ class FilterMakeSelector extends React.PureComponent {
                     {this.props.makes ? (
                         this.props.makes.map(this.renderMake)
                     ) : (
-                            <SVGInline svg={miscicons['loading']} />
-                        )}
+                        <SVGInline svg={miscicons['loading']} />
+                    )}
                 </div>
             </div>
         );

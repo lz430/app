@@ -46,9 +46,9 @@ class MakeSelector extends React.PureComponent {
         const selected =
             this.props.selectedMakes &&
             R.contains(make.id, this.props.selectedMakes);
-        const className = `make-selector__make ${selected
-            ? 'make-selector__make--selected'
-            : ''}`;
+        const className = `make-selector__make ${
+            selected ? 'make-selector__make--selected' : ''
+        }`;
 
         return (
             <div
@@ -87,4 +87,7 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, Actions)(MakeSelector);
+export default connect(
+    mapStateToProps,
+    Actions
+)(MakeSelector);

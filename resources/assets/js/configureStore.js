@@ -87,8 +87,8 @@ const initialState = {
     searchQuery: {
         entity: 'model', // deal or model depending on the page we're on.
         sort: {
-          attribute: 'price',
-          direction: 'asc',
+            attribute: 'price',
+            direction: 'asc',
         },
         location: {
             zipcode: null,
@@ -119,7 +119,7 @@ export default () => {
     const store = createStore(
         persistReducer(config, reducer),
         initialState,
-        composeEnhancers(applyMiddleware(sagaMiddleware, reduxThunk)),
+        composeEnhancers(applyMiddleware(sagaMiddleware, reduxThunk))
     );
     sagaMiddleware.run(rootSaga);
 
@@ -140,5 +140,5 @@ export default () => {
         });
     });
 
-    return {store, persistor};
+    return { store, persistor };
 };

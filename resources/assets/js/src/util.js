@@ -66,8 +66,16 @@ const util = {
         }
 
         return (
-            JSON.stringify(Object.keys(a).filter(k => k !== '_persist').sort()) ===
-            JSON.stringify(Object.keys(b).filter(k => k !== '_persist').sort())
+            JSON.stringify(
+                Object.keys(a)
+                    .filter(k => k !== '_persist')
+                    .sort()
+            ) ===
+            JSON.stringify(
+                Object.keys(b)
+                    .filter(k => k !== '_persist')
+                    .sort()
+            )
         );
     },
     getClosestNumberInRange(value, values) {

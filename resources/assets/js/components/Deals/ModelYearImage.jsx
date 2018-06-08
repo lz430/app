@@ -11,7 +11,10 @@ class ModelYearImage extends React.PureComponent {
     }
 
     featuredImageUrl() {
-        if (this.props.modelYear.thumbnail && this.props.modelYear.thumbnail.url) {
+        if (
+            this.props.modelYear.thumbnail &&
+            this.props.modelYear.thumbnail.url
+        ) {
             return this.props.modelYear.thumbnail.url;
         }
 
@@ -20,10 +23,7 @@ class ModelYearImage extends React.PureComponent {
 
     render() {
         return (
-            <img
-                className='modelyear__image'
-                src={this.featuredImageUrl()}
-            />
+            <img className="modelyear__image" src={this.featuredImageUrl()} />
         );
     }
 }

@@ -72,15 +72,17 @@ class CompareBar extends React.PureComponent {
     }
 
     compareButtonClass() {
-        return `compare-bar__compare-button ${this.compareReady()
-            ? ''
-            : 'compare-bar__compare-button--not-ready'}`;
+        return `compare-bar__compare-button ${
+            this.compareReady() ? '' : 'compare-bar__compare-button--not-ready'
+        }`;
     }
 
     renderCompareBar() {
         return (
             <div
-                className={`${this.props.class ? this.props.class : 'compare-bar'}
+                className={`${
+                    this.props.class ? this.props.class : 'compare-bar'
+                }
                     ${this.state.count == 0 ? 'hidden' : ''}`}
             >
                 <div className="compare-bar__deals">
@@ -137,9 +139,9 @@ class CompareBar extends React.PureComponent {
     }
 
     renderCompareBubble() {
-        const className = `compare-bubble ${this.state.shaking
-            ? 'compare-bubble--shake'
-            : ''}`;
+        const className = `compare-bubble ${
+            this.state.shaking ? 'compare-bubble--shake' : ''
+        }`;
 
         return (
             <div>
@@ -161,7 +163,7 @@ class CompareBar extends React.PureComponent {
     render() {
         return util.windowIsLargerThanMedium(this.props.window.width)
             ? this.renderCompareBar()
-            : null
+            : null;
     }
 }
 
@@ -174,4 +176,7 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, Actions)(CompareBar);
+export default connect(
+    mapStateToProps,
+    Actions
+)(CompareBar);

@@ -52,10 +52,9 @@ class ComparePage extends React.PureComponent {
             )
                 return;
 
-            api
-                .getWarranties(
-                    dealAndSelectedFilters.deal.version.jato_vehicle_id
-                )
+            api.getWarranties(
+                dealAndSelectedFilters.deal.version.jato_vehicle_id
+            )
                 .then(data => {
                     let dealWarranties = this.state.dealWarranties;
 
@@ -103,16 +102,17 @@ class ComparePage extends React.PureComponent {
                 <div className="deal__buttons">
                     <button
                         className="deal__button deal__button--x-small deal__button--blue"
-                        onClick={() =>
-                            (window.location = `/deals/${deal.id}`)
-                        }
+                        onClick={() => (window.location = `/deals/${deal.id}`)}
                     >
                         View Details
                     </button>
                     <CustomizeQuoteOrBuyNowButton
                         onCustomizeQuote={() => this.selectDeal(deal)}
                         deal={deal}
-                        hasCustomizedQuote={R.contains(deal.id, this.props.dealsIdsWithCustomizedQuotes)}
+                        hasCustomizedQuote={R.contains(
+                            deal.id,
+                            this.props.dealsIdsWithCustomizedQuotes
+                        )}
                     />
                 </div>
             </Deal>
@@ -435,38 +435,44 @@ class ComparePage extends React.PureComponent {
 
     renderFeaturesTable(compareList) {
         let featureSets = compareList.map(({ deal }, index) => {
-            return deal.dmr_features.map(feature => {
+            return deal.dmr_features
+                .map(feature => {
+                    let group = '';
 
-                let group = '';
+                    if (this.state.featureCategories.length) {
+                        group = this.state.featureCategories.find(category => {
+                            return (
+                                parseInt(category.id) ===
+                                parseInt(feature.category_id)
+                            );
+                        });
 
-                if (this.state.featureCategories.length) {
-
-                    group = this.state.featureCategories.find(category => {
-                        return parseInt(category.id) === parseInt(feature.category_id);
-                    });
-
-                    if (group) {
-                        group = group.attributes.slug.replace(/_/g, ' ');
-                    } else {
-                        group = '';
+                        if (group) {
+                            group = group.attributes.slug.replace(/_/g, ' ');
+                        } else {
+                            group = '';
+                        }
                     }
-                }
 
-                return {
-                    id: feature.id,
-                    feature: feature.title.trim(),
-                    slug: feature.slug,
-                    group: group,
-                }
-            }).concat(deal.features)
+                    return {
+                        id: feature.id,
+                        feature: feature.title.trim(),
+                        slug: feature.slug,
+                        group: group,
+                    };
+                })
+                .concat(deal.features);
         });
 
         let groupedFeatureSet = Object.values(
-            R.groupBy(feature => {
-                return feature.group;
-            }, R.uniqBy(feature => {
-                return feature.group + '||' + feature.feature;
-            }, Object.values(R.mergeAll(featureSets))))
+            R.groupBy(
+                feature => {
+                    return feature.group;
+                },
+                R.uniqBy(feature => {
+                    return feature.group + '||' + feature.feature;
+                }, Object.values(R.mergeAll(featureSets)))
+            )
         );
 
         return groupedFeatureSet.map((featureSet, index) => {
@@ -496,12 +502,18 @@ class ComparePage extends React.PureComponent {
                                                         if (
                                                             deal.features.find(
                                                                 dealFeature => {
-                                                                    return dealFeature.id == feature.id
+                                                                    return (
+                                                                        dealFeature.id ==
+                                                                        feature.id
+                                                                    );
                                                                 }
                                                             ) ||
                                                             deal.dmr_features.find(
                                                                 dealFeature => {
-                                                                    return dealFeature.id == feature.id
+                                                                    return (
+                                                                        dealFeature.id ==
+                                                                        feature.id
+                                                                    );
                                                                 }
                                                             )
                                                         ) {
@@ -560,7 +572,10 @@ class ComparePage extends React.PureComponent {
                     {compareList.map((dealAndSelectedFilters, index) => {
                         const alphabeticalFeatures = dealAndSelectedFilters.deal.vauto_features.sort();
                         return (
-                            <div key={index} className="compare-page-table__column">
+                            <div
+                                key={index}
+                                className="compare-page-table__column"
+                            >
                                 {alphabeticalFeatures.map((feature, index) => {
                                     return (
                                         <div
@@ -618,7 +633,10 @@ class ComparePage extends React.PureComponent {
             <div>
                 <div className="accupricing-cta accupricing-cta--horizontal">
                     <a onClick={this.props.showAccuPricingModal}>
-                        <img src="/images/accupricing-logo.png" className="accupricing-cta__logo" />
+                        <img
+                            src="/images/accupricing-logo.png"
+                            className="accupricing-cta__logo"
+                        />
                     </a>
                     <p className="accupricing-cta__disclaimer">
                         * Includes taxes, dealer fees and rebates.
@@ -639,7 +657,7 @@ class ComparePage extends React.PureComponent {
                         this.props.selectedTab === 'cash'
                             ? 'button-group__button--selected'
                             : ''
-                        }`}
+                    }`}
                 >
                     Cash
                 </div>
@@ -651,7 +669,7 @@ class ComparePage extends React.PureComponent {
                         this.props.selectedTab === 'finance'
                             ? 'button-group__button--selected'
                             : ''
-                        }`}
+                    }`}
                 >
                     Finance
                 </div>
@@ -663,12 +681,12 @@ class ComparePage extends React.PureComponent {
                         this.props.selectedTab === 'lease'
                             ? 'button-group__button--selected'
                             : ''
-                        }`}
+                    }`}
                 >
                     Lease
                 </div>
             </div>
-        )
+        );
     }
 
     renderDeals(style) {
@@ -676,18 +694,14 @@ class ComparePage extends React.PureComponent {
             <div className="compare-page-deals" style={style}>
                 {this.props.deals.map(this.renderDeal)}
             </div>
-        )
+        );
     }
 
     renderDealsContainer() {
         if (util.windowIsLargerThanSmall(this.props.window.width)) {
             return this.renderDeals();
         } else {
-            return (
-                <Sticky>
-                    {({style}) => this.renderDeals(style)}
-                </Sticky>
-            )
+            return <Sticky>{({ style }) => this.renderDeals(style)}</Sticky>;
         }
     }
 
@@ -768,4 +782,7 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, Actions)(ComparePage);
+export default connect(
+    mapStateToProps,
+    Actions
+)(ComparePage);

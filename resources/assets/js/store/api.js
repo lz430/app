@@ -1,7 +1,6 @@
 import httpclient from 'store/httpclient';
 
 class API {
-
     /**
      * Searches for deals and model years.
      *
@@ -13,8 +12,8 @@ class API {
     search(query) {
         let sort = query.sort.attribute;
 
-        if (query.sort.direction === "desc") {
-            sort = "-" . sort;
+        if (query.sort.direction === 'desc') {
+            sort = '-'.sort;
         }
 
         let params = {
@@ -29,14 +28,14 @@ class API {
         };
 
         let endpoint = '/api/deals';
-        if (query.entity === "model") {
+        if (query.entity === 'model') {
             endpoint = '/api/dealsByModelYear';
         }
 
         return httpclient.get(endpoint, {
-            params: params
+            params: params,
         });
-    };
+    }
 
     /**
      * @param dealId
@@ -51,9 +50,9 @@ class API {
             params: {
                 payment_type: paymentType,
                 zipcode,
-            }
-        })
-    };
+            },
+        });
+    }
 
     /**
      * @param dealPricing
@@ -72,10 +71,10 @@ class API {
                 msrp: dealPricing.msrpValue(),
                 cash_advance: dealPricing.sellingPriceValue(),
                 cash_due: dealPricing.allLeaseCashDueOptions(),
-                terms: dealPricing.apiTerms()
-            }
+                terms: dealPricing.apiTerms(),
+            },
         });
-    };
+    }
 
     /**
      *
@@ -93,11 +92,9 @@ class API {
                 model: deal.model,
                 make: deal.make,
                 zipcode,
-            }
-        })
+            },
+        });
     }
-
 }
 
 export default new API();
-

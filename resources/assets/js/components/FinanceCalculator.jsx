@@ -8,7 +8,10 @@ import { connect } from 'react-redux';
 import * as Actions from 'actions';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
-import { makeDealBestOfferTotalValue, makeDealBestOfferLoading } from 'selectors/index';
+import {
+    makeDealBestOfferTotalValue,
+    makeDealBestOfferLoading,
+} from 'selectors/index';
 
 class FinanceCalculator extends React.PureComponent {
     componentWillMount() {
@@ -31,7 +34,9 @@ class FinanceCalculator extends React.PureComponent {
     showWhenPricingIsLoaded(fn) {
         return this.props.dealPricing.isPricingLoading() ? (
             <SVGInline svg={miscicons['loading']} />
-        ) : fn();
+        ) : (
+            fn()
+        );
     }
 
     renderTotalCostOfVehicle() {
@@ -98,9 +103,9 @@ class FinanceCalculator extends React.PureComponent {
                 <span className="cash-finance-lease-calculator__right-item">
                     {this.props.dealPricing.bestOfferIsLoading() ? (
                         <SVGInline svg={miscicons['loading']} />
-                    ) :
+                    ) : (
                         this.props.dealPricing.monthlyPayments()
-                    }*
+                    )}*
                 </span>
             </div>
         );
@@ -109,12 +114,26 @@ class FinanceCalculator extends React.PureComponent {
     render() {
         return (
             <div className="cash-finance-lease-calculator__calculator-content">
-                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                >
                     <div>
-                        <CustomerTypeSelect {...R.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props)} />
+                        <CustomerTypeSelect
+                            {...R.pick(
+                                ['deal', 'employeeBrand', 'setEmployeeBrand'],
+                                this.props
+                            )}
+                        />
                     </div>
                     <div>
-                        Your Monthly Payment{' '}{this.showWhenPricingIsLoaded(() => this.props.dealPricing.monthlyPayments())}*
+                        Your Monthly Payment{' '}
+                        {this.showWhenPricingIsLoaded(() =>
+                            this.props.dealPricing.monthlyPayments()
+                        )}*
                     </div>
                 </div>
                 <hr />
@@ -122,7 +141,7 @@ class FinanceCalculator extends React.PureComponent {
                     deal={this.props.dealPricing.deal()}
                     targetsChanged={() => this.handleTargetsChange()}
                 />
-               {/* <hr />*/}
+                {/* <hr />*/}
                 <div>
                     <h4>Calculate Your Payment</h4>
                     {this.renderAmountFinanced()}
@@ -185,7 +204,10 @@ class FinanceCalculator extends React.PureComponent {
                 </div>
                 <div className="accupricing-cta">
                     <a onClick={this.props.showAccuPricingModal}>
-                        <img src="/images/accupricing-logo.png" className="accupricing-cta__logo" />
+                        <img
+                            src="/images/accupricing-logo.png"
+                            className="accupricing-cta__logo"
+                        />
                     </a>
                     <p className="accupricing-cta__disclaimer">
                         * Includes taxes, dealer fees and rebates.
@@ -200,10 +222,13 @@ const makeMapStateToProps = () => {
     const mapStateToProps = (state, props) => {
         return {
             deal: props.dealPricing.deal(),
-            employeeBrand: props.dealPricing.employeeBrand()
+            employeeBrand: props.dealPricing.employeeBrand(),
         };
     };
     return mapStateToProps;
 };
 
-export default connect(makeMapStateToProps, Actions)(FinanceCalculator);
+export default connect(
+    makeMapStateToProps,
+    Actions
+)(FinanceCalculator);

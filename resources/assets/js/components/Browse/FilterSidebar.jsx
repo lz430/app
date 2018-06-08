@@ -1,19 +1,26 @@
 import React from 'react';
 
-import { MultiList,
+import {
+    MultiList,
     CategorySearch,
-    DynamicRangeSlider } from '@appbaseio/reactivesearch';
-
+    DynamicRangeSlider,
+} from '@appbaseio/reactivesearch';
 
 /**
  *
  */
 class FilterSidebar extends React.Component {
-
     render() {
-
         let reactOn = {
-            and: ["SearchFilter", "MakeFilter", "ModelFilter", "StyleFilter", "ColorFilter", "ComfortFilter", "MsrpFilter"]
+            and: [
+                'SearchFilter',
+                'MakeFilter',
+                'ModelFilter',
+                'StyleFilter',
+                'ColorFilter',
+                'ComfortFilter',
+                'MsrpFilter',
+            ],
         };
 
         return (
@@ -29,7 +36,7 @@ class FilterSidebar extends React.Component {
                     className="browser-page__sidebar__search"
                     filterLabel="Search"
                     componentId="SearchFilter"
-                    dataField={["make", "model"]}
+                    dataField={['make', 'model']}
                     react={reactOn}
                     categoryField="group_topics"
                 />
@@ -38,7 +45,9 @@ class FilterSidebar extends React.Component {
                 Primary Filters
                 */}
                 <div className="sidebar-filters__broad sidebar-filters__broad--broad">
-                    <div className="sidebar-filters__instructive-heading">Refine this search</div>
+                    <div className="sidebar-filters__instructive-heading">
+                        Refine this search
+                    </div>
 
                     <MultiList
                         className="browser-page__sidebar__filter"
@@ -56,7 +65,6 @@ class FilterSidebar extends React.Component {
                         showSearch={false}
                         size={100}
                         react={reactOn}
-
                     />
 
                     <MultiList
@@ -66,7 +74,6 @@ class FilterSidebar extends React.Component {
                         showSearch={false}
                         size={100}
                         react={reactOn}
-
                     />
                 </div>
 
@@ -74,7 +81,9 @@ class FilterSidebar extends React.Component {
                 Secondary Filters
                 */}
                 <div className="sidebar-filters__narrow sidebar-filters__narrow--">
-                    <div className="sidebar-filters__instructive-heading">Features & Options</div>
+                    <div className="sidebar-filters__instructive-heading">
+                        Features & Options
+                    </div>
                     <MultiList
                         className="browser-page__sidebar__filter"
                         componentId="ColorFilter"
@@ -82,7 +91,6 @@ class FilterSidebar extends React.Component {
                         showSearch={false}
                         size={100}
                         react={reactOn}
-
                     />
                     <MultiList
                         className="browser-page__sidebar__filter"
@@ -97,12 +105,10 @@ class FilterSidebar extends React.Component {
                         componentId="MsrpFilter"
                         dataField="pricing.msrp"
                     />
-
                 </div>
             </div>
         );
     }
-
 }
 
 export default FilterSidebar;

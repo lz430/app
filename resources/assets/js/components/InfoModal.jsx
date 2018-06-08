@@ -22,16 +22,27 @@ class InfoModal extends React.PureComponent {
                         </div>
                         <InfoModalData
                             closeModal={() => this.props.hideInfoModal()}
-                            {...R.pick(['deal', 'selectedTab', 'compareList', 'dealPricing'], this.props)}
-                            {...R.pick([
-                                'selectDeal',
-                                'selectTab',
-                                'requestTargets',
-                                'requestBestOffer',
-                                'getBestOffersForLoadedDeals',
-                                'toggleCompare',
-                                'showAccuPricingModal'
-                            ], this.props)}
+                            {...R.pick(
+                                [
+                                    'deal',
+                                    'selectedTab',
+                                    'compareList',
+                                    'dealPricing',
+                                ],
+                                this.props
+                            )}
+                            {...R.pick(
+                                [
+                                    'selectDeal',
+                                    'selectTab',
+                                    'requestTargets',
+                                    'requestBestOffer',
+                                    'getBestOffersForLoadedDeals',
+                                    'toggleCompare',
+                                    'showAccuPricingModal',
+                                ],
+                                this.props
+                            )}
                         />
                     </div>
                 </div>
@@ -63,7 +74,10 @@ class InfoModal extends React.PureComponent {
                         svg={zondicons['information-outline']}
                     />
                 </a>
-                {this.props.deal && this.props.infoModalIsShowingFor === this.props.deal.id ? this.renderModal() : ''}
+                {this.props.deal &&
+                this.props.infoModalIsShowingFor === this.props.deal.id
+                    ? this.renderModal()
+                    : ''}
             </div>
         );
     }

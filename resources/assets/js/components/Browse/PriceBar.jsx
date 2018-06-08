@@ -1,20 +1,20 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
-
-
 
 /**
  *
  */
 class PriceBar extends React.Component {
-
     renderAccuPricingCta() {
         return (
             <div>
                 <div className="accupricing-cta accupricing-cta--horizontal">
                     <a onClick={this.props.showAccuPricingModal}>
-                        <img src="/images/accupricing-logo.png" className="accupricing-cta__logo"/>
+                        <img
+                            src="/images/accupricing-logo.png"
+                            className="accupricing-cta__logo"
+                        />
                     </a>
                     <p className="accupricing-cta__disclaimer">
                         * Includes taxes, dealer fees and rebates.
@@ -35,7 +35,7 @@ class PriceBar extends React.Component {
                         this.props.selectedTab === 'cash'
                             ? 'button-group__button--selected'
                             : ''
-                        }`}
+                    }`}
                 >
                     Cash
                 </div>
@@ -47,7 +47,7 @@ class PriceBar extends React.Component {
                         this.props.selectedTab === 'finance'
                             ? 'button-group__button--selected'
                             : ''
-                        }`}
+                    }`}
                 >
                     Finance
                 </div>
@@ -59,19 +59,17 @@ class PriceBar extends React.Component {
                         this.props.selectedTab === 'lease'
                             ? 'button-group__button--selected'
                             : ''
-                        }`}
+                    }`}
                 >
                     Lease
                 </div>
             </div>
-        )
+        );
     }
-
 
     render() {
         return (
             <div className="filter-page__top-row">
-
                 <div className="filter-page__top-row__section filter-page__top-row__section--accuPricing">
                     {this.renderAccuPricingCta()}
                 </div>
@@ -79,8 +77,6 @@ class PriceBar extends React.Component {
                 <div className="filter-page__top-row__section filter-page__top-row__section--tabButtons">
                     {this.renderSelectedTabButtons()}
                 </div>
-
-
             </div>
         );
     }
@@ -93,7 +89,6 @@ class PriceBar extends React.Component {
         this.props.selectTab(tabName);
         this.props.getBestOffersForLoadedDeals();
     }
-
 }
 
 const mapStateToProps = state => {
@@ -104,4 +99,7 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, Actions)(PriceBar);
+export default connect(
+    mapStateToProps,
+    Actions
+)(PriceBar);

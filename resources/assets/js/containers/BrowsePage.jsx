@@ -8,15 +8,12 @@ import ResultsContainer from 'components/Browse/ResultsContainer';
 class BrowsePage extends React.Component {
     render() {
         return (
-            <ReactiveBase
-                app="deal"
-                url="http://dmr.local.test:9200/">
+            <ReactiveBase app="deal" url="http://dmr.local.test:9200/">
                 <FilterSidebar />
                 <ResultsContainer />
             </ReactiveBase>
         );
     }
-
 }
 
 export default BrowsePage;

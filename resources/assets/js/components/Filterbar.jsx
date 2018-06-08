@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import R from 'ramda';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import * as Actions from 'actions';
 
 /**
@@ -34,7 +34,7 @@ class Filterbar extends React.PureComponent {
     }
 
     renderX() {
-        return (<span></span>);
+        return <span />;
 
         return (
             <SVGInline
@@ -46,12 +46,9 @@ class Filterbar extends React.PureComponent {
         );
     }
 
-
     renderFilterYear(year) {
         return (
-            <div
-                className="filterbar__filter"
-            >
+            <div className="filterbar__filter">
                 {/*
                 onClick={this.props.chooseYear.bind(null, year)}
             */}
@@ -62,10 +59,7 @@ class Filterbar extends React.PureComponent {
 
     renderFilterStyles(style, index) {
         return (
-            <div
-                key={index}
-                className="filterbar__filter"
-            >
+            <div key={index} className="filterbar__filter">
                 {/*
                 onClick={this.props.toggleStyle.bind(null, style)}
             */}
@@ -78,10 +72,7 @@ class Filterbar extends React.PureComponent {
         const make = R.find(R.propEq('id', makeId), this.props.makes);
 
         return (
-            <div
-                key={index}
-                className="filterbar__filter"
-            >
+            <div key={index} className="filterbar__filter">
                 {/*
                 onClick={this.props.toggleMake.bind(null, makeId)}
             */}
@@ -92,10 +83,7 @@ class Filterbar extends React.PureComponent {
 
     renderFilterModels(model, index) {
         return (
-            <div
-                key={index}
-                className="filterbar__filter"
-            >
+            <div key={index} className="filterbar__filter">
                 {/*
                 onClick={this.props.toggleModel.bind(null, model)}
             */}
@@ -106,10 +94,7 @@ class Filterbar extends React.PureComponent {
 
     renderFilterFeatures(feature, index) {
         return (
-            <div
-                key={index}
-                className="filterbar__filter"
-            >
+            <div key={index} className="filterbar__filter">
                 {/*
                 onClick={this.props.toggleFeature.bind(null, feature)}
             */}
@@ -131,13 +116,13 @@ class Filterbar extends React.PureComponent {
                 <div className="filterbar__filters">
                     {this.props.searchQuery.styles.map(this.renderFilterStyles)}
 
-                    {this.props.searchQuery.years[0] ? (
-                        this.renderFilterYear(this.props.searchQuery.years[0])
-                    ) : (
-                        ''
-                    )}
+                    {this.props.searchQuery.years[0]
+                        ? this.renderFilterYear(this.props.searchQuery.years[0])
+                        : ''}
                     {this.props.searchQuery.makes.map(this.renderFilterMakes)}
-                    {this.props.searchQuery.features.map(this.renderFilterFeatures)}
+                    {this.props.searchQuery.features.map(
+                        this.renderFilterFeatures
+                    )}
                 </div>
 
                 <div className="filterbar__clear">
@@ -157,4 +142,7 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, Actions)(Filterbar);
+export default connect(
+    mapStateToProps,
+    Actions
+)(Filterbar);

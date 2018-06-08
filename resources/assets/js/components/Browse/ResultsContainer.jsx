@@ -11,15 +11,21 @@ import CurrentFiltersBar from 'components/Browse/CurrentFiltersBar';
  */
 class ResultsContainer extends React.Component {
     render() {
-
         let reactOn = {
-            and: ["SearchFilter", "MakeFilter", "ModelFilter", "StyleFilter", "ColorFilter", "ComfortFilter"]
+            and: [
+                'SearchFilter',
+                'MakeFilter',
+                'ModelFilter',
+                'StyleFilter',
+                'ColorFilter',
+                'ComfortFilter',
+            ],
         };
 
         return (
             <div className="browser-page__results">
-                <PriceBar/>
-                <CurrentFiltersBar/>
+                <PriceBar />
+                <CurrentFiltersBar />
                 <ReactiveList
                     className="browser-page__results__list"
                     componentId="results"
@@ -32,17 +38,13 @@ class ResultsContainer extends React.Component {
                     showResultStats={true}
                     loader="Loading Results.."
                     react={reactOn}
-                    onData={(res) => {
-
-                        return (
-                            <Result key={res._id} result={res} />
-                        )
+                    onData={res => {
+                        return <Result key={res._id} result={res} />;
                     }}
                 />
             </div>
         );
     }
-
 }
 
 export default ResultsContainer;
