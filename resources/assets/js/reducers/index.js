@@ -124,6 +124,13 @@ const reducer = (state, action) => {
 
         // Search query update
         case ActionTypes.SORT_DEALS:
+            let current = state.searchQuery.sort.direction;
+            let direction = 'asc';
+
+            if (current === 'asc') {
+                direction = 'desc';
+            }
+
             return {
                 ...state,
                 searchQuery: {
@@ -131,7 +138,7 @@ const reducer = (state, action) => {
                     page: 1,
                     sort: {
                         attribute: action.sort,
-                        direction: state.sortAscending ? 'asc' : 'desc',
+                        direction: direction,
                     },
                 },
             };

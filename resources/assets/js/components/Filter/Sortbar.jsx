@@ -19,11 +19,10 @@ class Sortbar extends React.PureComponent {
                 id: PropTypes.number.isRequired,
             })
         ),
-        sortColumn: PropTypes.oneOf(['price', 'make', 'year']).isRequired,
-        sortAscending: PropTypes.bool.isRequired,
         window: PropTypes.shape({
             width: PropTypes.number.isRequired,
         }).isRequired,
+        searchQuery: PropTypes.object.isRequired,
     };
 
     constructor() {
@@ -54,21 +53,19 @@ class Sortbar extends React.PureComponent {
                         svg={zondicons['tuning']}
                     />
                 </div>
-                Filter{this.props.filterPage === 'models' ? ' Results' : ''}
+                Filter{this.props.searchQuery.entity === 'model'
+                    ? ' Results'
+                    : ''}
             </button>
         );
     }
 
-    toggleDropdownShown() {
-        this.setState({
-            dropdownShown: !this.state.dropdownShown,
-        });
-    }
-
     renderIcon(column) {
-        const icon = this.props.sortAscending ? 'cheveron-up' : 'cheveron-down';
-
-        return this.props.sortColumn === column ? (
+        const icon =
+            this.props.searchQuery.sort.direction === 'asc'
+                ? 'cheveron-up'
+                : 'cheveron-down';
+        return this.props.searchQuery.sort.attribute === column ? (
             <SVGInline
                 height="18px"
                 width="18px"
@@ -101,7 +98,7 @@ class Sortbar extends React.PureComponent {
     renderBackButton() {
         const nativeBack = () => window.history.back();
         const clearFilters = () => this.props.clearModelYear();
-        const onDealsPage = this.props.filterPage === 'deals';
+        const onDealsPage = this.props.searchQuery.entity === 'deal';
 
         return util.windowIsLargerThanSmall(this.props.window.width) ? (
             ''
@@ -146,23 +143,10 @@ class Sortbar extends React.PureComponent {
         );
     }
 
-    renderSortbarDropdown() {
-        const icon = this.state.dropdownShown ? 'cheveron-down' : 'cheveron-up';
-
-        return (
-            <div className="sortbar__button">
-                <div onClick={() => this.props.sortDeals('price')}>
-                    {this.renderIcon('price')}
-                </div>
-            </div>
-        );
-    }
-
+    /**
+     * @returns {*}
+     */
     renderSortButton() {
-        const nativeBack = () => window.history.back();
-        const clearFilters = () => this.props.clearModelYear();
-        const onDealsPage = this.props.filterPage === 'deals';
-
         return (
             <button
                 className="sortbar__button sortbar__button--with-icon"
@@ -206,13 +190,13 @@ class Sortbar extends React.PureComponent {
             <div className="sortbar">
                 {this.renderBackButton()}
                 {this.renderFilterToggle()}
-                {this.props.filterPage === 'models'
+                {this.props.searchQuery.entity === 'model'
                     ? this.renderClearFiltersButton()
                     : ''}
-                {this.props.filterPage === 'deals'
+                {this.props.searchQuery.entity === 'deal'
                     ? this.renderCompareButton()
                     : ''}
-                {this.props.filterPage === 'deals'
+                {this.props.searchQuery.entity === 'deal'
                     ? this.renderSortButton()
                     : ''}
             </div>
@@ -220,17 +204,15 @@ class Sortbar extends React.PureComponent {
     }
 }
 
-function mapStateToProps(state) {
+const mapStateToProps = state => {
     return {
         deals: state.deals,
-        filterPage: state.filterPage,
-        sortColumn: state.sortColumn,
-        sortAscending: state.sortAscending,
         compareList: state.compareList,
         window: state.window,
         zipcode: state.zipcode,
+        searchQuery: state.searchQuery,
     };
-}
+};
 
 export default connect(
     mapStateToProps,

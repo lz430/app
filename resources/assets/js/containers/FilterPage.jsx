@@ -142,7 +142,7 @@ class FilterPage extends React.PureComponent {
                             <div className="filter-page__top-row__section filter-page__top-row__section--accuPricing">
                                 {this.renderAccuPricingCta()}
                             </div>
-                            {this.props.filterPage === 'deals' && (
+                            {this.props.searchQuery.entity === 'deal' && (
                                 <div className="filter-page__top-row__section filter-page__top-row__section--tabButtons">
                                     {this.renderSelectedTabButtons()}
                                 </div>
@@ -199,7 +199,6 @@ const mapStateToProps = state => {
         showMakeSelectorModal: state.showMakeSelectorModal,
         selectedDeal: state.selectedDeal,
         selectedTab: state.selectedTab,
-        filterPage: state.filterPage,
         searchQuery: state.searchQuery,
     };
 };

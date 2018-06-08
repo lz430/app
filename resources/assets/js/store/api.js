@@ -13,8 +13,10 @@ class API {
         let sort = query.sort.attribute;
 
         if (query.sort.direction === 'desc') {
-            sort = '-'.sort;
+            sort = '-' + sort;
         }
+
+        console.log(sort);
 
         let params = {
             make_ids: query.makes,

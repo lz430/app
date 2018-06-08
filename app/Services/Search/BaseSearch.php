@@ -35,6 +35,30 @@ abstract class BaseSearch
         return $this;
     }
 
+    public function sort(string $sort) {
+
+        $direction = 'asc';
+        if (substr( $sort, 0, 1 ) === "-") {
+            $direction = 'desc';
+        }
+
+        $sort = str_replace('-', '', $sort);
+
+        switch ($sort) {
+            case 'price':
+                $sort = 'pricing.msrp';
+                break;
+        }
+
+        $this->query['sort'] = [
+          [
+            $sort => $direction,
+          ],
+        ];
+
+        return $this;
+    }
+
     public function filterMustLocation($location, $format = 'latlon') {
         if ($format == 'latlon') {
             $lat = (float) $location['lat'];
