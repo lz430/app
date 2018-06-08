@@ -191,29 +191,31 @@ class Deal extends Model
     public function prices(): \stdClass
     {
 
+        $source = $this->source_price;
+
         //
         // Migration help
-        if (!$this->source_price) {
-            $this->source_price = (object)[
+        if (!$source) {
+            $source = (object)[
                 'msrp' => $this->msrp,
                 'price' => $this->price,
             ];
         }
 
-        if (!isset($this->source_price->price) || !$this->source_price->price) {
-            $this->source_price->price = ($this->price ? $this->price : $this->msrp);
+        if (!isset($source->msrp) || !$source->msrp) {
+            $source->msrp = $this->msrp;
         }
 
-        if (!isset($this->source_price->msrp) || !$this->source_price->msrp) {
-            $this->source_price->msrp = $this->msrp;
+        if (!isset($source->price) || !$source->price) {
+            $source->price = ($this->price ? $this->price : $this->msrp);
         }
 
         // The defaults when no rules exist.
         $prices = [
-            'msrp' => $this->msrp !== '' ? $this->msrp : null,
-            'default' => $this->source_price->price !== '' ? $this->source_price->price : null,
-            'employee' => $this->source_price->price !== '' ? $this->source_price->price : null,
-            'supplier' => (in_array(strtolower($this->make), Make::DOMESTIC) ? $this->source_price->price * 1.04 : $this->source_price->price)
+            'msrp' =>  $source->msrp,
+            'default' => $source->price !== '' ? $source->price : null,
+            'employee' => $source->price !== '' ? $source->price : null,
+            'supplier' => (in_array(strtolower($this->make), Make::DOMESTIC) ? $source->price * 1.04 : $source->price)
         ];
 
         $dealer = $this->dealer;
@@ -224,11 +226,11 @@ class Deal extends Model
 
                 // If for whatever reason the selected base price for the field doesn't exist or it's false, we fall out
                 // so the default role price is used.
-                if (!isset($this->source_price->{$field->base_field}) || !$this->source_price->{$field->base_field}) {
+                if (!isset($source->{$field->base_field}) || !$source->{$field->base_field}) {
                     continue;
                 }
 
-                $prices[$attr] = $this->source_price->{$field->base_field};
+                $prices[$attr] = $source->{$field->base_field};
 
                 if ($field->rules) {
                     foreach ($field->rules as $rule) {
