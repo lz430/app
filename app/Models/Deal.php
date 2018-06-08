@@ -483,7 +483,7 @@ class Deal extends Model
         }
 
         $thumbnail = $this->featuredPhoto();
-        $record['thumbnail'] = ($thumbnail ? $thumbnail->url : null);
+        $record['thumbnail'] = $thumbnail;
 
         $record['category'] = (object)[
             'id' => $this->version->model->id,
