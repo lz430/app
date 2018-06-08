@@ -229,7 +229,7 @@ $price_col_options = array_intersect_key($price_col_options, array_flip($source_
                     html += '<option value="subtract_value">Subtract</option>';
                     html += '<option value="add_value">Add</option>';
                     html += '</select>';
-                    html += '<input min="0" type="number" class="rule-value form-control" />';
+                    html += '<input min="0" step="0.001" type="number" class="rule-value form-control" />';
                 html += '</div>';
 
                 html += '<div class="rule-operations">';

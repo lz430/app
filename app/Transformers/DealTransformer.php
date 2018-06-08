@@ -61,6 +61,7 @@ class DealTransformer extends TransformerAbstract
             'dealer_name' => $deal->dealer_name,
             'days_old' => $deal->days_old,
             'photos' => $photos,
+            'thumbnail' => $deal->featuredPhoto(),
             'version' => $deal->version,
             'features' => $deal->jatoFeatures,
             'doc_fee' => (float) $deal->dealer->doc_fee,
