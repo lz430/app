@@ -189,7 +189,7 @@ class Filterbar extends React.PureComponent {
 
                 <div className="filterbar__clear">
                     <a onClick={this.props.clearAllFilters}>
-                        Clear all filters
+                        Clear Options
                     </a>
                 </div>
             </div>
