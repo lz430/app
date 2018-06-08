@@ -312,12 +312,7 @@ const reducer = (state, action) => {
                 deals: [],
                 searchQuery: {
                     ...state.searchQuery,
-                    entity: 'model',
                     page: 1,
-                    years: [],
-                    makes: [],
-                    models: [],
-                    styles: [],
                     features: [],
                 },
             };
