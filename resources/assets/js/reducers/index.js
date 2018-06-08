@@ -62,12 +62,26 @@ const reducer = (state, action) => {
             });
         case ActionTypes.RECEIVE_MAKES:
             return { ...state, makes: action.data.data.data };
-        case ActionTypes.RECEIVE_MODELS:
-            return Object.assign({}, state, {
-                models: action.data.data.data,
-            });
-        case ActionTypes.REQUEST_MORE_DEALS:
-            return Object.assign({}, state, { requestingMoreDeals: true });
+
+        case ActionTypes.SEARCH_INCREMENT_PAGE:
+            return {
+                ...state,
+                searchQuery: {
+                    ...state.searchQuery,
+                    page: state.searchQuery.page + 1,
+                },
+
+                // Deprecated
+                //requestingMoreDeals: true
+            };
+        case ActionTypes.SEARCH_REQUEST:
+            return {
+                ...state,
+            };
+
+        case ActionTypes.SEARCH_RECEIVE:
+            return state;
+
         case ActionTypes.REQUEST_DEALS:
             return {
                 ...state,
@@ -76,15 +90,23 @@ const reducer = (state, action) => {
                 dealPage: null,
                 requestingMoreDeals: true,
             };
+
         case ActionTypes.RECEIVE_DEALS:
-            return Object.assign({}, state, {
-                deals: action.data.data.data,
+            let deals = [];
+            if (state.searchQuery.page !== 1) {
+                deals.push(...state.deals);
+            }
+            deals.push(...action.data.data.data);
+            return {
+                ...state,
+                deals: deals,
                 dealPageTotal: action.data.data.meta.pagination.total_pages,
                 dealPage: action.data.data.meta.pagination.current_page,
                 requestingMoreDeals: false,
                 requestingMoreModelYears: false,
                 filterPage: 'deals',
-            });
+            };
+
         case ActionTypes.REQUEST_MODEL_YEARS:
             return {
                 ...state,
@@ -122,7 +144,6 @@ const reducer = (state, action) => {
                 },
             };
 
-        // Search query update
         case ActionTypes.SORT_DEALS:
             let current = state.searchQuery.sort.direction;
             let direction = 'asc';
@@ -301,7 +322,11 @@ const reducer = (state, action) => {
                 },
             };
         case ActionTypes.TOGGLE_COMPARE:
-            return { ...state, compareList: action.compareList };
+            return {
+                ...state,
+                compareList: action.compareList,
+            };
+
         case ActionTypes.SET_ZIP_CODE:
             return {
                 ...state,
@@ -366,40 +391,6 @@ const reducer = (state, action) => {
                     [action.bestOfferKey]: action.data,
                 },
             };
-        case ActionTypes.APPEND_CANCEL_TOKEN:
-            return {
-                ...state,
-                cancelTokens: [
-                    ...state.cancelTokens,
-                    {
-                        identifier: action.identifier,
-                        source: action.cancelToken,
-                        context: action.context,
-                    },
-                ],
-            };
-        case ActionTypes.REMOVE_CANCEL_TOKEN:
-            return {
-                ...state,
-                cancelTokens: R.reject(
-                    R.propEq('identifier', action.identifier),
-                    state.cancelTokens
-                ),
-            };
-        case ActionTypes.CLEAR_CANCEL_TOKENS:
-            return {
-                ...state,
-                cancelTokens: R.reject(
-                    R.propEq('context', action.context),
-                    state.cancelTokens
-                ),
-            };
-
-        case ActionTypes.REQUEST_SEARCH:
-            return state;
-
-        case ActionTypes.RECEIVE_SEARCH:
-            return state;
 
         case ActionTypes.SHOW_ACCUPRICING_MODAL:
             return {

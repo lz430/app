@@ -81,7 +81,7 @@ export function toggleFeature(feature) {
         });
 
         dispatch({
-            type: ActionTypes.REQUEST_SEARCH,
+            type: ActionTypes.SEARCH_REQUEST,
         });
     };
 }
@@ -99,7 +99,7 @@ export function toggleMake(make_id) {
         });
 
         dispatch({
-            type: ActionTypes.REQUEST_SEARCH,
+            type: ActionTypes.SEARCH_REQUEST,
         });
     };
 }
@@ -117,7 +117,7 @@ export function toggleModel(model) {
         });
 
         dispatch({
-            type: ActionTypes.REQUEST_SEARCH,
+            type: ActionTypes.SEARCH_REQUEST,
         });
     };
 }
@@ -167,13 +167,13 @@ export function receiveDeals(data) {
 }
 
 export function requestMoreDeals() {
-    return (dispatch, getState) => {
+    return dispatch => {
         dispatch({
-            type: ActionTypes.REQUEST_MORE_DEALS,
+            type: ActionTypes.SEARCH_INCREMENT_PAGE,
         });
 
         dispatch({
-            type: ActionTypes.REQUEST_SEARCH,
+            type: ActionTypes.SEARCH_REQUEST,
         });
     };
 }
@@ -186,7 +186,7 @@ export function sortDeals(sort) {
         });
 
         dispatch({
-            type: ActionTypes.REQUEST_SEARCH,
+            type: ActionTypes.SEARCH_REQUEST,
         });
     };
 }
@@ -207,7 +207,7 @@ export function clearModelYear() {
         });
 
         dispatch({
-            type: ActionTypes.REQUEST_SEARCH,
+            type: ActionTypes.SEARCH_REQUEST,
         });
     };
 }
@@ -220,7 +220,7 @@ export function selectModelYear(vehicleModel) {
         });
 
         dispatch({
-            type: ActionTypes.REQUEST_SEARCH,
+            type: ActionTypes.SEARCH_REQUEST,
         });
     };
 }
@@ -257,7 +257,7 @@ export function setZipInRange(data) {
         });
 
         dispatch({
-            type: ActionTypes.REQUEST_SEARCH,
+            type: ActionTypes.SEARCH_REQUEST,
         });
     };
 }
@@ -296,7 +296,7 @@ export function toggleStyle(style) {
         });
 
         dispatch({
-            type: ActionTypes.REQUEST_SEARCH,
+            type: ActionTypes.SEARCH_REQUEST,
         });
     };
 }
@@ -311,7 +311,7 @@ export function chooseYear(year) {
         });
 
         dispatch({
-            type: ActionTypes.REQUEST_SEARCH,
+            type: ActionTypes.SEARCH_REQUEST,
         });
     };
 }
@@ -323,7 +323,7 @@ export function clearAllFilters() {
         });
 
         dispatch({
-            type: ActionTypes.REQUEST_SEARCH,
+            type: ActionTypes.SEARCH_REQUEST,
         });
     };
 }
@@ -377,7 +377,7 @@ export function requestLocationInfo() {
                 jsonp('//freegeoip.net/json/', null, function(err, data) {
                     if (err) {
                         dispatch({
-                            type: ActionTypes.REQUEST_SEARCH,
+                            type: ActionTypes.SEARCH_REQUEST,
                         });
                     } else {
                         dispatch(receiveLocationInfo(data));
@@ -386,7 +386,7 @@ export function requestLocationInfo() {
                 });
             } else {
                 dispatch({
-                    type: ActionTypes.REQUEST_SEARCH,
+                    type: ActionTypes.SEARCH_REQUEST,
                 });
             }
 
@@ -411,7 +411,7 @@ export function receiveLocationInfo(data) {
         dispatch(checkZipInRange(zipcode));
 
         dispatch({
-            type: ActionTypes.REQUEST_SEARCH,
+            type: ActionTypes.SEARCH_REQUEST,
         });
     };
 }
@@ -423,7 +423,7 @@ export function closeMakeSelectorModal() {
         });
 
         dispatch({
-            type: ActionTypes.REQUEST_SEARCH,
+            type: ActionTypes.SEARCH_REQUEST,
         });
     };
 }
@@ -585,30 +585,6 @@ export function receiveBestOffer(data, bestOfferKey, paymentType) {
             type: ActionTypes.RECEIVE_BEST_OFFER,
             data: bestOffer,
             bestOfferKey,
-        });
-    };
-}
-
-export function appendCancelToken(
-    cancelToken,
-    context = 'default',
-    identifier = null
-) {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.APPEND_CANCEL_TOKEN,
-            identifier,
-            cancelToken,
-            context,
-        });
-    };
-}
-
-export function removeCancelToken(identifier) {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.REMOVE_CANCEL_TOKEN,
-            identifier,
         });
     };
 }

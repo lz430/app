@@ -1,52 +1,49 @@
 @import '../variables';
 @import '../mixins/button';
 
-
 #browse-page {
-
-  > div {
-    display:flex;
-    flex-direction: row;
-  }
-
+    > div {
+        display: flex;
+        flex-direction: row;
+    }
 }
 .browser-page__sidebar {
-  padding:10px;
-  flex: 0 0 300px;
+    padding: 10px;
+    flex: 0 0 300px;
 }
 
 .browser-page__results {
-  flex: 1;
+    flex: 1;
 }
 .browser-page__sidebar__search {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 .browser-page__sidebar__filter {
-  margin-bottom:20px;
-  border:1px solid #ccc;
-  background: #f9f9f9;
-  padding:10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    padding: 10px;
 }
 
 .browser-page__results__list {
-  display:flex;
-  flex-direction: column;
-  > div {
-    display:flex;
+    display: flex;
     flex-direction: column;
-    flex-flow: wrap;
-    justify-content: center;
-  }
+    > div {
+        display: flex;
+        flex-direction: column;
+        flex-flow: wrap;
+        justify-content: center;
+    }
 }
 
 .browser-page__results__result {
-  margin:10px;
-  padding:10px;
-  border:1px solid #ccc;
-  box-shadow: 2px 1px 2px 0px rgba(224,224,224,1);
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 2px 1px 2px 0px rgba(224, 224, 224, 1);
 
-  img {
-    max-width: 300px;
-  }
-  flex:0 0 300px;
+    img {
+        max-width: 300px;
+    }
+    flex: 0 0 300px;
 }

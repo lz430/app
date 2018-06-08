@@ -31,7 +31,7 @@ const initialState = {
     dealBestOffer: null,
     dealPage: 1,
     dealPageTotal: 1,
-    deals: null,
+    deals: [],
     employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
     featureCategories: [],
@@ -39,27 +39,22 @@ const initialState = {
     filterPage: 'models',
     financeDownPayment: null,
     financeTerm: null,
-    fuelTypes: ['Gasoline', 'Electric', 'Flex Fuel', 'Diesel', 'Hybrid'],
     infoModalIsShowingFor: null,
     leaseAnnualMileage: {},
     leaseTerm: {},
     leaseCashDue: {},
     makes: null,
-    modelYears: null,
+    modelYears: [],
     models: null,
     requestingMoreDeals: false,
     requestingMoreModelYears: false,
     residualPercent: null,
     searchFeatures: [],
-    segments: ['Subcompact', 'Compact', 'Mid-size', 'Full-size'],
     selectedDeal: null,
-
     selectedTab: 'cash',
     selectedTargets: [],
     showMakeSelectorModal: true,
     smallFiltersShown: false,
-    sortAscending: true,
-    sortColumn: 'price',
     targets: [],
     targetsAvailable: {},
     targetsSelected: {},
@@ -72,7 +67,6 @@ const initialState = {
         45, // Captive Finance Customer
         52, // Auto Show Cash Recipient
     ],
-    transmissionTypes: ['automatic', 'manual'],
     vehicleModel: null,
     vehicleYear: null,
     window: { width: window.innerWidth },
@@ -83,7 +77,6 @@ const initialState = {
     leaseRates: null,
     leasePaymentsLoaded: {},
     leasePayments: null,
-    tasks: [],
     searchQuery: {
         entity: 'model', // deal or model depending on the page we're on.
         sort: {

@@ -16,8 +16,6 @@ class API {
             sort = '-' + sort;
         }
 
-        console.log(sort);
-
         let params = {
             make_ids: query.makes,
             model_ids: query.models,
