@@ -7,6 +7,25 @@ import * as Actions from 'actions';
 import util from 'src/util';
 
 class Sortbar extends React.PureComponent {
+    static propTypes = {
+        deals: PropTypes.arrayOf(
+            PropTypes.shape({
+                year: PropTypes.string.isRequired,
+                msrp: PropTypes.number.isRequired,
+                employee_price: PropTypes.number.isRequired,
+                supplier_price: PropTypes.number.isRequired,
+                make: PropTypes.string.isRequired,
+                model: PropTypes.string.isRequired,
+                id: PropTypes.number.isRequired,
+            })
+        ),
+        sortColumn: PropTypes.oneOf(['price', 'make', 'year']).isRequired,
+        sortAscending: PropTypes.bool.isRequired,
+        window: PropTypes.shape({
+            width: PropTypes.number.isRequired,
+        }).isRequired,
+    };
+
     constructor() {
         super();
 
@@ -200,25 +219,6 @@ class Sortbar extends React.PureComponent {
         );
     }
 }
-
-Sortbar.propTypes = {
-    deals: PropTypes.arrayOf(
-        PropTypes.shape({
-            year: PropTypes.string.isRequired,
-            msrp: PropTypes.number.isRequired,
-            employee_price: PropTypes.number.isRequired,
-            supplier_price: PropTypes.number.isRequired,
-            make: PropTypes.string.isRequired,
-            model: PropTypes.string.isRequired,
-            id: PropTypes.number.isRequired,
-        })
-    ),
-    sortColumn: PropTypes.oneOf(['price', 'make', 'year']).isRequired,
-    sortAscending: PropTypes.bool.isRequired,
-    window: PropTypes.shape({
-        width: PropTypes.number.isRequired,
-    }).isRequired,
-};
 
 function mapStateToProps(state) {
     return {

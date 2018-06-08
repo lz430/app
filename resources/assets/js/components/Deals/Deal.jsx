@@ -7,7 +7,7 @@ import DealImage from 'components/Deals/DealImage';
 import DealPrice from 'components/Deals/DealPrice';
 
 class Deal extends React.Component {
-    static PropTypes = {
+    static propTypes = {
         deal: PropTypes.object.isRequired,
     };
 

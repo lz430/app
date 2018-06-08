@@ -1,15 +1,21 @@
 import React from 'react';
-import * as Actions from 'actions/index';
+import { hideAccuPricingModal } from 'actions/index';
 import { connect } from 'react-redux';
 import Modal from 'components/Modal';
+import PropTypes from 'prop-types';
 
 class AccuPricingModal extends React.PureComponent {
+    static propTypes = {
+        accuPricingModalIsShowing: PropTypes.bool,
+        onHideAccuPricingModal: PropTypes.func.isRequired,
+    };
+
     render() {
         return (
             <div>
                 {this.props.accuPricingModalIsShowing && (
                     <div className="accupricing-modal-wrapper">
-                        <Modal onClose={this.props.hideAccuPricingModal}>
+                        <Modal onClose={this.props.onHideAccuPricingModal}>
                             <div className="accupricing-modal">
                                 <img
                                     src="/images/accupricing-logo.png"
@@ -37,15 +43,21 @@ class AccuPricingModal extends React.PureComponent {
     }
 }
 
-const makeMapStateToProps = () => {
-    return (state, props) => {
-        return {
-            accuPricingModalIsShowing: state.accuPricingModalIsShowing,
-        };
+const mapStateToProps = state => {
+    return {
+        accuPricingModalIsShowing: state.accuPricingModalIsShowing,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onHideAccuPricingModal: () => {
+            return dispatch(hideAccuPricingModal);
+        },
     };
 };
 
 export default connect(
-    makeMapStateToProps,
-    Actions
+    mapStateToProps,
+    mapDispatchToProps
 )(AccuPricingModal);

@@ -3,8 +3,6 @@ import util from 'src/util';
 import R from 'ramda';
 import * as ActionTypes from 'actiontypes/index';
 import jsonp from 'jsonp';
-import DealPricing from 'src/DealPricing';
-import { makeDealPricing } from 'selectors/index';
 
 export function requestDealQuote(deal) {
     return {
@@ -541,42 +539,6 @@ export function updateLeaseCashDue(deal, cashDue) {
     };
 }
 
-const getDealPricing = makeDealPricing();
-
-export function requestLeasePayments(deal) {
-    return (dispatch, getState) => {
-        const zipcode = getState().zipcode;
-
-        if (!zipcode) return;
-
-        const dealPricing = new DealPricing(
-            getDealPricing(getState(), { deal, zipcode })
-        );
-
-        if (dealPricing.isNotLease()) {
-            return;
-        }
-
-        if (dealPricing.hasNoLeaseTerms()) {
-            return;
-        }
-
-        dispatch({
-            type: ActionTypes.REQUEST_LEASE_PAYMENTS,
-            dealPricing,
-            zipcode,
-        });
-
-        api.getLeasePayments(dealPricing)
-            .then(data => {
-                dispatch(receiveLeasePayments(dealPricing, zipcode, data.data));
-            })
-            .catch(e => {
-                dispatch(receiveLeasePayments(dealPricing, zipcode));
-            });
-    };
-}
-
 export function receiveLeasePayments(dealPricing, zipcode, data) {
     return dispatch =>
         dispatch({
@@ -585,34 +547,6 @@ export function receiveLeasePayments(dealPricing, zipcode, data) {
             zipcode,
             data,
         });
-}
-
-/**
- * @deprecated
- */
-export function requestLeaseRates(deal) {
-    return (dispatch, getState) => {
-        const zipcode = getState().zipcode;
-
-        if (!zipcode) return;
-
-        dispatch({
-            type: ActionTypes.REQUEST_LEASE_RATES,
-            deal,
-            zipcode,
-        });
-
-        api.getLeaseRates(deal, zipcode)
-            .then(data => {
-                dispatch(receiveLeaseRates(deal, zipcode, data.data));
-                if (data.data.length > 0) {
-                    dispatch(requestLeasePayments(deal));
-                }
-            })
-            .catch(e => {
-                dispatch(receiveLeaseRates(deal, zipcode, null));
-            });
-    };
 }
 
 export function receiveLeaseRates(deal, zipcode, data) {
@@ -629,75 +563,9 @@ export function receiveLeaseRates(deal, zipcode, data) {
  * @deprecated
  */
 export function requestBestOffer(deal) {
-    return (dispatch, getState) => {
-        const zipcode = getState().zipcode;
-
-        if (!zipcode) {
-            dispatch(requestLocationInfo()).then(new_zipcode => {
-                dispatch(requestBestOffer(deal));
-            });
-
-            return;
-        }
-
-        const targetKey = util.getTargetKeyForDealAndZip(deal, zipcode);
-        const selectedTargetIds = getState().targetsSelected[targetKey]
-            ? R.map(R.prop('targetId'), getState().targetsSelected[targetKey])
-            : [];
-        const targets = R.uniq(
-            getState().targetDefaults.concat(selectedTargetIds)
-        );
-
-        // Temporarily limit to only selected payment type until we can address performance issues
-        let paymentTypes = [getState().selectedTab];
-        // We can ask for all payment types by uncommenting this:
-        // const paymentTypes = ['cash', 'finance', 'lease'];
-
-        paymentTypes.map(paymentType => {
-            const bestOfferKey = util.getBestOfferKeyForDeal(
-                deal,
-                zipcode,
-                getState().selectedTab,
-                targets
-            );
-
-            // if the best offer is already in store, do not call for it again
-            if (R.props(bestOfferKey, getState().bestOffers)) {
-                dispatch({ type: ActionTypes.SAME_BEST_OFFERS });
-            }
-
-            const CancelToken = window.axios.CancelToken;
-            const source = CancelToken.source();
-
-            dispatch(appendCancelToken(source, 'bestOffer', deal.id));
-            api.getBestOffer(deal.id, paymentType, zipcode, targets, source)
-                .then(data => {
-                    dispatch(removeCancelToken(deal.id));
-                    dispatch(receiveBestOffer(data, bestOfferKey, paymentType));
-                    dispatch(requestLeaseRates(deal));
-                })
-                .catch(e => {
-                    dispatch(removeCancelToken(deal.id));
-                    dispatch(
-                        receiveBestOffer(
-                            {
-                                data: {
-                                    data: {
-                                        cash: {
-                                            totalValue: 0,
-                                            programs: [],
-                                        },
-                                    },
-                                },
-                            },
-                            bestOfferKey,
-                            paymentType
-                        )
-                    );
-                });
-
-            dispatch({ type: ActionTypes.REQUEST_BEST_OFFER });
-        });
+    return {
+        type: ActionTypes.REQUEST_DEAL_QUOTE,
+        deal: deal,
     };
 }
 

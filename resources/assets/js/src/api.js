@@ -11,42 +11,6 @@ const api = {
         return window.axios.post('/zip-codes/', { code });
     },
 
-    /**
-     * @deprecated
-     */
-    getLeasePayments: dealPricing => {
-        return window.axios.get('/api/lease-payments', {
-            params: {
-                tax_rate: dealPricing.taxRate() * 100,
-                acquisition_fee: dealPricing.acquisitionFeeValue(),
-                doc_fee: dealPricing.docFeeValue(),
-                rebate: dealPricing.bestOfferValue(),
-                license_fee: dealPricing.licenseAndRegistrationValue(),
-                cvr_fee: dealPricing.effCvrFeeValue(),
-                msrp: dealPricing.msrpValue(),
-                cash_advance: dealPricing.sellingPriceValue(),
-                cash_due: dealPricing.allLeaseCashDueOptions(),
-                terms: dealPricing.apiTerms(),
-            },
-        });
-    },
-
-    /**
-     * @deprecated
-     */
-    getLeaseRates: (deal, zipcode) => {
-        return window.axios.get('/api/lease-rates', {
-            params: {
-                vin: deal.vin,
-                modelcode: deal.model_code,
-                trim: deal.series,
-                model: deal.model,
-                make: deal.make,
-                zipcode,
-            },
-        });
-    },
-
     getDimensions: jato_vehicle_id => {
         return window.axios.get('/api/dimensions', {
             params: {

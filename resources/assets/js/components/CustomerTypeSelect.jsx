@@ -1,6 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import * as Actions from 'actions/index';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 

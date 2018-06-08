@@ -1,10 +1,10 @@
 import React from 'react';
-import SidebarFilter from 'components/SidebarFilter';
+import SidebarFilter from 'components/Filter/SidebarFilter';
 import ZipcodeFinder from 'components/ZipcodeFinder';
-import FilterClose from 'components/FilterClose';
-import FilterStyleSelector from 'components/FilterStyleSelector';
-import FilterMakeSelector from 'components/FilterMakeSelector';
-import FilterFeatureSelector from 'components/FilterFeatureSelector';
+import FilterClose from 'components/Filter/FilterClose';
+import FilterStyleSelector from 'components/Filter/FilterStyleSelector';
+import FilterMakeSelector from 'components/Filter/FilterMakeSelector';
+import FilterFeatureSelector from 'components/Filter/FilterFeatureSelector';
 import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 import R from 'ramda';

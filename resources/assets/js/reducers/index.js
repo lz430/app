@@ -277,9 +277,11 @@ const reducer = (state, action) => {
             });
         case ActionTypes.CLEAR_SELECTED_DEAL:
             return Object.assign({}, state, { selectedDeal: null });
+
         case ActionTypes.CLEAR_ALL_FILTERS:
             return {
                 ...state,
+                deals: [],
                 searchQuery: {
                     ...state.searchQuery,
                     entity: 'model',

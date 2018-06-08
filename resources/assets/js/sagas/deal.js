@@ -57,7 +57,6 @@ function* requestDealBestOffer(deal, zipcode, paymentType, targets) {
             source.token
         );
     } catch (e) {
-        console.log(e);
         results = {
             data: {
                 data: {
@@ -70,7 +69,6 @@ function* requestDealBestOffer(deal, zipcode, paymentType, targets) {
         };
     } finally {
         if (yield cancelled()) {
-            console.log('Cancelled requestDealBestOffer');
             source.cancel();
         }
     }
@@ -85,8 +83,6 @@ function* requestDealBestOffer(deal, zipcode, paymentType, targets) {
  * @returns {IterableIterator<*|CallEffect>}
  */
 function* requestDealLeaseRates(deal, zipcode) {
-    //console.log('requestDealLeaseRates');
-
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
 
@@ -103,7 +99,6 @@ function* requestDealLeaseRates(deal, zipcode) {
         console.log(e);
     } finally {
         if (yield cancelled()) {
-            console.log('Cancelled requestDealLeaseRates');
             source.cancel();
         }
     }
@@ -123,8 +118,6 @@ function* requestDealLeaseRates(deal, zipcode) {
  */
 
 function* requestDealLeasePayments(deal, zipcode) {
-    //console.log('requestDealLeasePayments');
-
     const state = yield select();
     const getDealPricing = makeDealPricing();
     let data = getDealPricing(state, { deal, zipcode });
@@ -153,7 +146,6 @@ function* requestDealLeasePayments(deal, zipcode) {
         console.log(e);
     } finally {
         if (yield cancelled()) {
-            console.log('Cancelled requestDealLeasePayments');
             source.cancel();
         }
     }
@@ -166,10 +158,6 @@ function* requestDealLeasePayments(deal, zipcode) {
 function* requestDealQuote(action) {
     const deal = action.deal;
     const state = yield select();
-    const dealPricing = new DealPricing(
-        makeDealPricing(state, { deal, zipcode })
-    );
-
     const zipcode = state.zipcode;
 
     // TODO: Add lazy lookup

@@ -8,6 +8,25 @@ import miscicons from 'miscicons';
 import { connect } from 'react-redux';
 
 class ViewDeals extends React.PureComponent {
+    static propTypes = {
+        deals: PropTypes.arrayOf(
+            PropTypes.shape({
+                year: PropTypes.string.isRequired,
+                msrp: PropTypes.number.isRequired,
+                employee_price: PropTypes.number.isRequired,
+                supplier_price: PropTypes.number.isRequired,
+                make: PropTypes.string.isRequired,
+                model: PropTypes.string.isRequired,
+                id: PropTypes.number.isRequired,
+            })
+        ),
+        compareList: PropTypes.array,
+        dealsByMakeModelYear: PropTypes.array,
+        dealPage: PropTypes.number,
+        dealPageTotal: PropTypes.number,
+        selectedDealGrouping: PropTypes.object,
+    };
+
     compareButtonClass(deal) {
         return (
             'deal__button deal__button--x-small deal__button--blue' +
@@ -91,25 +110,7 @@ class ViewDeals extends React.PureComponent {
     }
 }
 
-ViewDeals.propTypes = {
-    deals: PropTypes.arrayOf(
-        PropTypes.shape({
-            year: PropTypes.string.isRequired,
-            msrp: PropTypes.number.isRequired,
-            employee_price: PropTypes.number.isRequired,
-            supplier_price: PropTypes.number.isRequired,
-            make: PropTypes.string.isRequired,
-            model: PropTypes.string.isRequired,
-            id: PropTypes.number.isRequired,
-        })
-    ),
-    dealsByMakeModelYear: PropTypes.array,
-    dealPage: PropTypes.number,
-    dealPageTotal: PropTypes.number,
-    selectedDealGrouping: PropTypes.object,
-};
-
-function mapStateToProps(state) {
+const mapStateToProps = state => {
     return {
         compareList: state.compareList,
         dealPage: state.dealPage,
@@ -119,7 +120,7 @@ function mapStateToProps(state) {
         requestingMoreDeals: state.requestingMoreDeals,
         selectedDealGrouping: state.selectedDealGrouping,
     };
-}
+};
 
 export default connect(
     mapStateToProps,

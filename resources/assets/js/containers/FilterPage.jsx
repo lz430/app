@@ -1,16 +1,17 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
 import Modal from 'components/Modal';
 import MakeSelector from 'components/MakeSelector';
 import PropTypes from 'prop-types';
 import Deals from 'components/Deals/Deals';
 import Sortbar from 'components/Sortbar';
-import Filterbar from 'components/Filterbar';
+import Filterbar from 'components/Filter/Filterbar';
 import CompareBar from 'components/CompareBar';
-import FilterPanel from 'components/FilterPanel';
-import { connect } from 'react-redux';
+import FilterPanel from 'components/Filter/FilterPanel';
 import * as Actions from 'actions/index';
 import util from 'src/util';
-import CashFinanceLeaseCalculator from '../components/CashFinanceLeaseCalculator';
+import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import AccuPricingModal from 'components/AccuPricingModal';
 import { StickyContainer, Sticky } from 'react-sticky';
 

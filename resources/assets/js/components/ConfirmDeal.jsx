@@ -1,24 +1,14 @@
-import api from 'src/api';
-import miscicons from 'miscicons';
 import React from 'react';
-import strings from 'src/strings';
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
-import util from 'src/util';
 import PropTypes from 'prop-types';
 import * as Actions from 'actions/index';
 import { connect } from 'react-redux';
-import Modal from 'components/Modal';
 import { makeDealBestOfferTotalValue, makeDealPricing } from 'selectors/index';
-import formulas from 'src/formulas';
 import InfoModalData from './InfoModalData';
 import DealPricing from 'src/DealPricing';
 import R from 'ramda';
 
 class ConfirmDeal extends React.PureComponent {
     render() {
-        const deal = this.props.deal;
-
         return (
             <div className={'confirm-deal'}>
                 <InfoModalData
