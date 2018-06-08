@@ -3,9 +3,7 @@ import util from 'src/util';
 import R from 'ramda';
 import Targets from 'components/Targets';
 import CustomerTypeSelect from 'components/CustomerTypeSelect';
-import formulas from 'src/formulas';
 import { connect } from 'react-redux';
-import api from 'src/api';
 import * as Actions from 'actions';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
@@ -13,7 +11,6 @@ import {
     makeDealBestOfferTotalValue,
     makeDealBestOfferLoading,
 } from 'selectors/index';
-import CustomizeQuoteOrBuyNowButton from './CustomizeQuoteOrBuyNowButton';
 
 class LeaseCalculator extends React.PureComponent {
     showWhenPricingIsLoaded(fn) {

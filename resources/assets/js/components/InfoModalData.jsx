@@ -6,6 +6,15 @@ import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 
 class InfoModalData extends React.PureComponent {
+    static defaultProps = {
+        withPricingHeader: true,
+        withPricingTabs: true,
+        withCompareInsteadOfBack: true,
+        withFinalSelectionHeader: false,
+        withCustomizeQuoteOrBuyNow: true,
+        withConfirmPurchase: false,
+    };
+
     componentDidMount() {
         this.props.requestTargets(this.props.dealPricing.deal());
         this.props.requestBestOffer(this.props.dealPricing.deal());
@@ -434,14 +443,5 @@ class InfoModalData extends React.PureComponent {
         this.props.selectDeal(this.props.dealPricing.deal());
     }
 }
-
-InfoModalData.defaultProps = {
-    withPricingHeader: true,
-    withPricingTabs: true,
-    withCompareInsteadOfBack: true,
-    withFinalSelectionHeader: false,
-    withCustomizeQuoteOrBuyNow: true,
-    withConfirmPurchase: false,
-};
 
 export default InfoModalData;

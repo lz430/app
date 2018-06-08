@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import { connect } from 'react-redux';
-import * as Actions from 'actions';
+import * as Actions from 'actions/index';
 import util from 'src/util';
 
 class Sortbar extends React.PureComponent {

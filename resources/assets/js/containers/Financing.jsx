@@ -3,6 +3,12 @@ import PropTypes from 'prop-types';
 import api from 'src/api';
 
 class Financing extends Component {
+    static propTypes = {
+        featuredPhoto: PropTypes.object.isRequired,
+        purchase: PropTypes.object.isRequired,
+        user: PropTypes.object.isRequired,
+    };
+
     constructor(props) {
         super(props);
 
@@ -99,11 +105,5 @@ class Financing extends Component {
         );
     }
 }
-
-PropTypes.Financing = {
-    featuredPhoto: PropTypes.object.isRequired,
-    purchase: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
-};
 
 export default Financing;

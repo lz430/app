@@ -6,7 +6,6 @@ import zondicons from 'zondicons';
 import Modal from 'components/Modal';
 import strings from 'src/strings';
 import api from 'src/api';
-import R from 'ramda';
 import util from 'src/util';
 import miscicons from 'miscicons';
 import { makeDealBestOfferTotalValue } from 'selectors/index';

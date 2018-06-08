@@ -1,6 +1,11 @@
 import React from 'react';
 
 class CustomizeQuoteOrBuyNowButton extends React.PureComponent {
+    static defaultProps = {
+        onBuyNow: deal => (window.location = `/confirm/${deal.id}`),
+        disabled: true,
+    };
+
     renderBuyNow() {
         return (
             <button
@@ -32,10 +37,5 @@ class CustomizeQuoteOrBuyNowButton extends React.PureComponent {
             : this.renderCustomizeQuote();
     }
 }
-
-CustomizeQuoteOrBuyNowButton.defaultProps = {
-    onBuyNow: deal => (window.location = `/confirm/${deal.id}`),
-    disabled: true,
-};
 
 export default CustomizeQuoteOrBuyNowButton;

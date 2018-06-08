@@ -23,8 +23,6 @@ class FilterMakeSelector extends React.PureComponent {
     }
 
     renderMake(make) {
-        let selected = R.contains(make.id, this.props.selectedMakes);
-
         let className = R.contains(make.id, this.props.selectedMakes)
             ? 'filter-make-selector__make filter-make-selector__make--selected'
             : 'filter-make-selector__make';

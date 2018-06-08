@@ -9,7 +9,7 @@ import Deal from 'components/Deals/Deal';
 import Modal from 'components/Modal';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import string from 'src/strings';
-import AccordionTable from 'components/AccordionTable';
+import AccordionTable from 'components/ComparePage/AccordionTable';
 import util from 'src/util';
 import api from 'src/api';
 import toTitleCase from 'titlecase';

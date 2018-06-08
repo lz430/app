@@ -15,6 +15,10 @@ const domesticBrands = [
 ];
 
 class CustomerTypeSelect extends React.PureComponent {
+    static defaultProps = {
+        onChange: (deal, newValue) => {},
+    };
+
     handleChange(e) {
         this.props.setEmployeeBrand(
             e.target.value === 'employee' ? this.props.deal.make : false
@@ -53,9 +57,5 @@ class CustomerTypeSelect extends React.PureComponent {
         );
     }
 }
-
-CustomerTypeSelect.defaultProps = {
-    onChange: (deal, newValue) => {},
-};
 
 export default CustomerTypeSelect;

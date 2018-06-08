@@ -8,6 +8,19 @@ import DealPricing from 'src/DealPricing';
 import R from 'ramda';
 
 class ConfirmDeal extends React.PureComponent {
+    static propTypes = {
+        deal: PropTypes.shape({
+            year: PropTypes.string.isRequired,
+            msrp: PropTypes.number.isRequired,
+            employee_price: PropTypes.number.isRequired,
+            supplier_price: PropTypes.number.isRequired,
+            make: PropTypes.string.isRequired,
+            model: PropTypes.string.isRequired,
+            id: PropTypes.number.isRequired,
+            vin: PropTypes.string.isRequired,
+        }),
+    };
+
     render() {
         return (
             <div className={'confirm-deal'}>
@@ -45,19 +58,6 @@ class ConfirmDeal extends React.PureComponent {
         );
     }
 }
-
-ConfirmDeal.propTypes = {
-    deal: PropTypes.shape({
-        year: PropTypes.string.isRequired,
-        msrp: PropTypes.number.isRequired,
-        employee_price: PropTypes.number.isRequired,
-        supplier_price: PropTypes.number.isRequired,
-        make: PropTypes.string.isRequired,
-        model: PropTypes.string.isRequired,
-        id: PropTypes.number.isRequired,
-        vin: PropTypes.string.isRequired,
-    }),
-};
 
 const makeMapStateToProps = () => {
     const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();

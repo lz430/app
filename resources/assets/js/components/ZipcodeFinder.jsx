@@ -4,6 +4,13 @@ import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 
 class ZipcodeFinder extends React.PureComponent {
+    static propTypes = {
+        deals: PropTypes.array,
+        zipcode: PropTypes.string,
+        city: PropTypes.string,
+        zipInRange: PropTypes.bool,
+    };
+
     constructor(props) {
         super(props);
 
@@ -88,12 +95,6 @@ class ZipcodeFinder extends React.PureComponent {
         );
     }
 }
-
-ZipcodeFinder.propTypes = {
-    zipcode: PropTypes.string,
-    city: PropTypes.string,
-    zipInRange: PropTypes.bool,
-};
 
 const mapStateToProps = state => {
     return {

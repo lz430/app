@@ -5,9 +5,9 @@ import Modal from 'components/Modal';
 import MakeSelector from 'components/MakeSelector';
 import PropTypes from 'prop-types';
 import Deals from 'components/Deals/Deals';
-import Sortbar from 'components/Sortbar';
+import Sortbar from 'components/Filter/Sortbar';
 import Filterbar from 'components/Filter/Filterbar';
-import CompareBar from 'components/CompareBar';
+import CompareBar from 'components/Filter/CompareBar';
 import FilterPanel from 'components/Filter/FilterPanel';
 import * as Actions from 'actions/index';
 import util from 'src/util';
@@ -27,7 +27,7 @@ class FilterPage extends React.PureComponent {
                 title="Select brand preference"
                 subtitle="Select one or more brands to compare"
                 closeText="Show available vehicles"
-                buttonCloseDisabled={this.props.searchQuery.makes.length == 0}
+                buttonCloseDisabled={this.props.searchQuery.makes.length === 0}
             >
                 <MakeSelector />
             </Modal>
@@ -142,7 +142,7 @@ class FilterPage extends React.PureComponent {
                             <div className="filter-page__top-row__section filter-page__top-row__section--accuPricing">
                                 {this.renderAccuPricingCta()}
                             </div>
-                            {this.props.filterPage == 'deals' && (
+                            {this.props.filterPage === 'deals' && (
                                 <div className="filter-page__top-row__section filter-page__top-row__section--tabButtons">
                                     {this.renderSelectedTabButtons()}
                                 </div>
