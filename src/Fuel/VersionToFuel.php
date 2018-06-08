@@ -110,7 +110,7 @@ class VersionToFuel
     private $client;
     private $version;
 
-    public function __construct(Version $version, FuelClient $client)
+    public function __construct(Version $version, FuelClient $client = null)
     {
         $this->version = $version;
         $this->client = $client;
@@ -154,7 +154,7 @@ class VersionToFuel
         }
     }
 
-    private function translateColorName($color)
+    public function translateColorName($color)
     {
 
         foreach (self::COLOR_MAP as $needle => $value) {
