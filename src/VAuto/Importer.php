@@ -272,9 +272,7 @@ class Importer
             $this->info("    -- Is New: " . ($deal->wasRecentlyCreated ? "Yes" : "No"));
 
             DB::transaction(function () use ($version, $shouldRefreshDeals, $deal, $decodedVin, $row) {
-                $this->saveDealRelations($deal, $row);
 
-                /*
                 if ($deal->wasRecentlyCreated) {
                     $this->saveDealRelations($deal, $row);
                 }
@@ -291,7 +289,7 @@ class Importer
                         $this->saveDealRelations($attachedDeal, $row);
                     }
                 }
-                */
+
             });
         } catch (ClientException | ServerException $e) {
             Log::channel('jato')->error('Importer error for vin [' . $row['VIN'] . ']: ' . $e->getMessage());
