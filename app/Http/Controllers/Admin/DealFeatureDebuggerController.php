@@ -18,6 +18,6 @@ class DealFeatureDebuggerController extends Controller
         return view('admin.deal-feature-debugger')
             ->with('deal', $deal)
             ->with('equipment', $equipment)
-            ->with('features', Feature::whereIn('id', $importer->featureIds())->get());
+            ->with('features', Feature::whereIn('id', $importer->getFeaturesForDeal())->get());
     }
 }
