@@ -82,15 +82,6 @@ const reducer = (state, action) => {
         case ActionTypes.SEARCH_RECEIVE:
             return state;
 
-        case ActionTypes.REQUEST_DEALS:
-            return {
-                ...state,
-                deals: null,
-                dealPageTotal: null,
-                dealPage: null,
-                requestingMoreDeals: true,
-            };
-
         case ActionTypes.RECEIVE_DEALS:
             let deals = [];
             if (state.searchQuery.page !== 1) {
@@ -144,7 +135,7 @@ const reducer = (state, action) => {
                 },
             };
 
-        case ActionTypes.SORT_DEALS:
+        case ActionTypes.SEARCH_CHANGE_SORT:
             let current = state.searchQuery.sort.direction;
             let direction = 'asc';
 
@@ -154,6 +145,7 @@ const reducer = (state, action) => {
 
             return {
                 ...state,
+                deals: [],
                 searchQuery: {
                     ...state.searchQuery,
                     page: 1,
@@ -162,6 +154,17 @@ const reducer = (state, action) => {
                         direction: direction,
                     },
                 },
+            };
+
+        case ActionTypes.SEARCH_CHANGE_FINANCING:
+            return {
+                ...state,
+                deals: [],
+                searchQuery: {
+                    ...state.searchQuery,
+                    page: 1,
+                },
+                selectedTab: action.data,
             };
 
         // Search query update

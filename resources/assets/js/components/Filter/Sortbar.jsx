@@ -3,22 +3,11 @@ import PropTypes from 'prop-types';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import { connect } from 'react-redux';
-import * as Actions from 'actions/index';
 import util from 'src/util';
+import { toggleSearchSort } from 'actions/index';
 
 class Sortbar extends React.PureComponent {
     static propTypes = {
-        deals: PropTypes.arrayOf(
-            PropTypes.shape({
-                year: PropTypes.string.isRequired,
-                msrp: PropTypes.number.isRequired,
-                employee_price: PropTypes.number.isRequired,
-                supplier_price: PropTypes.number.isRequired,
-                make: PropTypes.string.isRequired,
-                model: PropTypes.string.isRequired,
-                id: PropTypes.number.isRequired,
-            })
-        ),
         window: PropTypes.shape({
             width: PropTypes.number.isRequired,
         }).isRequired,
@@ -150,7 +139,7 @@ class Sortbar extends React.PureComponent {
         return (
             <button
                 className="sortbar__button sortbar__button--with-icon"
-                onClick={() => this.props.sortDeals('price')}
+                onClick={() => this.props.onToggleSearchSort('price')}
             >
                 {util.windowIsLargerThanSmall(this.props.window.width) ? (
                     'Price '
@@ -179,7 +168,7 @@ class Sortbar extends React.PureComponent {
                         this.props.toggleSmallFiltersShown();
                     }}
                 >
-                    Clear Options
+                    asdfasdfasd Clear Options
                 </button>
             </div>
         );
@@ -206,7 +195,6 @@ class Sortbar extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
-        deals: state.deals,
         compareList: state.compareList,
         window: state.window,
         zipcode: state.zipcode,
@@ -214,7 +202,15 @@ const mapStateToProps = state => {
     };
 };
 
+const mapDispatchToProps = dispatch => {
+    return {
+        onToggleSearchSort: sort => {
+            return dispatch(toggleSearchSort(sort));
+        },
+    };
+};
+
 export default connect(
     mapStateToProps,
-    Actions
+    mapDispatchToProps
 )(Sortbar);

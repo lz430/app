@@ -122,6 +122,32 @@ export function toggleModel(model) {
     };
 }
 
+export function toggleSearchSort(sort) {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.SEARCH_CHANGE_SORT,
+            sort,
+        });
+
+        dispatch({
+            type: ActionTypes.SEARCH_REQUEST,
+        });
+    };
+}
+
+export function toggleSearchFinancing(financing) {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.SEARCH_CHANGE_FINANCING,
+            data: financing,
+        });
+
+        dispatch({
+            type: ActionTypes.SEARCH_REQUEST,
+        });
+    };
+}
+
 export function requestTargets(deal) {
     return (dispatch, getState) => {
         // If no zipcode has been set, do not request targets
@@ -170,19 +196,6 @@ export function requestMoreDeals() {
     return dispatch => {
         dispatch({
             type: ActionTypes.SEARCH_INCREMENT_PAGE,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
-    };
-}
-
-export function sortDeals(sort) {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.SORT_DEALS,
-            sort,
         });
 
         dispatch({
@@ -444,7 +457,7 @@ export function toggleSmallFiltersShown() {
 }
 
 export function selectTab(tab) {
-    return (dispatch, getState) => {
+    return dispatch => {
         dispatch({
             type: ActionTypes.SELECT_TAB,
             data: tab,

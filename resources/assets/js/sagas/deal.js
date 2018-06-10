@@ -34,8 +34,6 @@ import {
  * @returns {IterableIterator<*>}
  */
 function* requestDealBestOffer(deal, zipcode, paymentType, targets) {
-    ///]\console.log('requestDealBestOffer');
-
     const bestOfferKey = util.getBestOfferKeyForDeal(
         deal,
         zipcode,
@@ -175,9 +173,9 @@ function* requestDealQuote(action) {
 
     yield fork(requestDealBestOffer, deal, zipcode, state.selectedTab, targets);
 
-    // TODO Why do we bother to do this for each request?
-    // shouldn't we only do this if the payment type is lease?
-    yield fork(requestDealLeaseRates, deal, zipcode);
+    if (state.selectedTab === 'lease') {
+        yield fork(requestDealLeaseRates, deal, zipcode);
+    }
 }
 
 export function* batchRequestDealQuotes(deals) {

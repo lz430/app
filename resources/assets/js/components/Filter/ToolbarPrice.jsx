@@ -1,24 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
 import Sortbar from 'components/Filter/Sortbar';
 import { connect } from 'react-redux';
-import * as Actions from 'actions/index';
+import { showAccuPricingModal, toggleSearchFinancing } from 'actions/index';
 
 /**
  *
  */
 class ToolbarPrice extends React.Component {
     handleTabChange(tabName) {
-        this.props.selectTab(tabName);
-        this.props.getBestOffersForLoadedDeals();
+        this.props.onSelectTab(tabName);
     }
 
     renderAccuPricingCta() {
         return (
             <div>
                 <div className="accupricing-cta accupricing-cta--horizontal">
-                    <a onClick={this.props.showAccuPricingModal}>
+                    <a onClick={this.props.onShowAccuPricingModal}>
                         <img
                             src="/images/accupricing-logo.png"
                             className="accupricing-cta__logo"
@@ -102,7 +99,19 @@ const mapStateToProps = state => {
     };
 };
 
+const mapDispatchToProps = dispatch => {
+    return {
+        onShowAccuPricingModal: () => {
+            return dispatch(showAccuPricingModal);
+        },
+
+        onSelectTab: tab => {
+            return dispatch(toggleSearchFinancing(tab));
+        },
+    };
+};
+
 export default connect(
     mapStateToProps,
-    Actions
+    mapDispatchToProps
 )(ToolbarPrice);
