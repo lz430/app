@@ -85,16 +85,12 @@ class ViewDeals extends React.PureComponent {
                                         >
                                             Add to Compare
                                         </button>
-                                        <button
-                                            onClick={() =>
-                                                (window.location = `/deals/${
-                                                    deal.id
-                                                }`)
-                                            }
+                                        <a
                                             className="deal__button deal__button--x-small deal__button--pink deal__button"
+                                            href={`/deals/${deal.id}`}
                                         >
                                             View Details
-                                        </button>
+                                        </a>
                                     </div>
                                 </Deal>
                             );

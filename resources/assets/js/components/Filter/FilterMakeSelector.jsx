@@ -33,12 +33,6 @@ class FilterMakeSelector extends React.PureComponent {
                 key={make.id}
                 onClick={this.props.onSelectMake.bind(null, make.id)}
             >
-                <div
-                    className="filter-make-selector__icon"
-                    style={{
-                        backgroundImage: `url('${make.attributes.logo}')`,
-                    }}
-                />
                 <div className="filter-make-selector__name">
                     {make.attributes.name}
                 </div>
