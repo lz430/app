@@ -9,7 +9,7 @@ import * as Actions from 'actions';
 /**
  *
  */
-class Filterbar extends React.PureComponent {
+class ToolbarSelectedFilters extends React.PureComponent {
     static propTypes = {
         searchQuery: PropTypes.object.isRequired,
         makes: PropTypes.arrayOf(
@@ -143,4 +143,4 @@ function mapStateToProps(state) {
 export default connect(
     mapStateToProps,
     Actions
-)(Filterbar);
+)(ToolbarSelectedFilters);

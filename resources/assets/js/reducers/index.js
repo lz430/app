@@ -259,7 +259,10 @@ const reducer = (state, action) => {
                 },
             };
         case ActionTypes.SELECT_TAB:
-            return Object.assign({}, state, { selectedTab: action.data });
+            return {
+                ...state,
+                selectedTab: action.data,
+            };
 
         case ActionTypes.RECEIVE_MORE_DEALS:
             return Object.assign({}, state, {
