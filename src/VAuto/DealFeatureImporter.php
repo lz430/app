@@ -120,8 +120,8 @@ class DealFeatureImporter
                 return $equipment->availability === 'not available';
             })
             ->flatMap(function ($equipment) use ($combinedDealCodes) {
-                if ($equipment->optionCode !== 'N/A' && in_array($equipment->optionCode, $combinedDealCodes)) { // $this->deal->option_codes
-                    //$matchingFeatures = Feature::where('jato_schema_ids', $equipment->schemaId)->get();
+
+                if($equipment->optionCode !== 'N/A') {
                     $equipmentSchemaId = $equipment->schemaId;
                     $matchingFeatures = Feature::whereRaw("JSON_CONTAINS(jato_schema_ids, '[$equipmentSchemaId]')")->get();
 
