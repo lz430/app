@@ -4,14 +4,16 @@ namespace DeliverMyRide\VAuto;
 
 use App\Models\Feature;
 use App\Models\JatoFeature;
-use App\Models\JATO\Make;
-use App\Models\JATO\Manufacturer;
-use App\Models\JATO\VehicleModel;
 use App\Models\JATO\Version;
 use App\Models\Deal;
-use Carbon\Carbon;
+
 use DeliverMyRide\Fuel\FuelClient;
 use DeliverMyRide\JATO\JatoClient;
+use DeliverMyRide\Fuel\VersionToFuel;
+use DeliverMyRide\VAuto\Deal\DealEquipmentMunger;
+use DeliverMyRide\VAuto\Deal\DealMunger;
+
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Exception\ClientException;
@@ -23,7 +25,8 @@ use Illuminate\Support\Facades\DB;
 
 use League\Csv\Reader;
 use League\Csv\Statement;
-use DeliverMyRide\Fuel\VersionToFuel;
+
+
 /**
  *
  */
@@ -84,6 +87,7 @@ class Importer
 
     private $jatoClient;
     private $fuelClient;
+
     private $error;
     private $features;
     private $filesystem;
@@ -128,7 +132,7 @@ class Importer
     /**
      * @return array
      */
-    private function buildSourceData() : array
+    private function buildSourceData(): array
     {
         $sources = [];
 
@@ -208,7 +212,7 @@ class Importer
      * @param array $row
      * @return array
      */
-    private function transformRecord(array $row) : array
+    private function transformRecord(array $row): array
     {
 
         // Option Codes
@@ -220,7 +224,7 @@ class Importer
             "/(?<=(?i)Equipment Group )(.*?)(?=\|| )/"
         ];
 
-        foreach($rules as $rule) {
+        foreach ($rules as $rule) {
             $matches = [];
             preg_match($rule, $row['Features'], $matches);
             if (count($matches)) {
@@ -228,7 +232,7 @@ class Importer
             }
         }
 
-        $optionCodes =  array_unique($optionCodes);
+        $optionCodes = array_unique($optionCodes);
 
         $row['Option Codes'] = implode(",", $optionCodes);
         return $row;
@@ -271,21 +275,20 @@ class Importer
             $this->info("    -- Deal Title: {$deal->title()}");
             $this->info("    -- Is New: " . ($deal->wasRecentlyCreated ? "Yes" : "No"));
 
-            DB::transaction(function () use ($version, $shouldRefreshDeals, $deal, $decodedVin, $row) {
+
+
+            DB::transaction(function () use ($version, $shouldRefreshDeals, $deal, $row) {
+                $debug = (new DealMunger($deal, $this->jatoClient, $this->fuelClient, $this->features, $row));
 
                 if ($deal->wasRecentlyCreated) {
                     $this->saveDealRelations($deal, $row);
-                }
-                else {
-                    if (!$deal->photos()->count()) {
-                        $this->saveDealStockPhotos($deal);
-                    }
                 }
 
                 // Refresh existing deals if version has changed
                 if ($shouldRefreshDeals) {
                     foreach ($version->fresh()->deals as $attachedDeal) {
                         $this->wipeDealFeatures($attachedDeal);
+                        // BUG! row != $attachedDeal here.
                         $this->saveDealRelations($attachedDeal, $row);
                     }
                 }
@@ -304,6 +307,7 @@ class Importer
             $this->error('Error: ' . $e->getMessage());
         }
     }
+
     /**
      * @param array $vins
      * @return array
@@ -372,12 +376,11 @@ class Importer
     }
 
     /**
-     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function import()
     {
         $this->features = Feature::with('category')->get();
-
 
         $sources = $this->buildSourceData();
         $hashes = [];
@@ -427,6 +430,7 @@ class Importer
                 $return[$key] = trim($row[$value]);
             }
         }
+
         return (object)$return;
     }
 
@@ -466,7 +470,7 @@ class Importer
             'color' => $row['Colour'],
             'interior_color' => $row['Interior Color'],
             'price' => isset($pricing->price) ? $pricing->price : null,
-            'msrp' => isset($pricing->msrp) ? $pricing->msrp: null,
+            'msrp' => isset($pricing->msrp) ? $pricing->msrp : null,
             'vauto_features' => $row['Features'] !== '' ? $row['Features'] : null,
             'inventory_date' => Carbon::createFromFormat('m/d/Y', $row['Inventory Date']),
             'certified' => $row['Certified'] === 'Yes',
@@ -494,14 +498,14 @@ class Importer
 
     /**
      * @param Deal $deal
-     * @param $row
+     * @param array $row
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function saveDealRelations(Deal $deal, $row)
+    private function saveDealRelations(Deal $deal, array $row)
     {
         $this->saveDealJatoFeatures($deal);
         $this->saveDealPhotos($deal, $row['Photos']);
-        $debug = (new DealFeatureImporter($deal, $this->features, $this->jatoClient))->import();
+        $debug = (new DealEquipmentMunger($deal, $this->features, $this->jatoClient))->import();
 
         $this->info("    -- Feature Count: {$debug['feature_count']}");
 
@@ -547,36 +551,38 @@ class Importer
 
     private function saveDealJatoFeaturesByGroup(Deal $deal, array $features, string $group)
     {
-        collect($features)->reduce(function (Collection $carry, $jatoFeature) {
-            return $carry->merge(self::splitJATOFeaturesAndContent($jatoFeature->feature, $jatoFeature->content));
-        }, collect())->each(function ($featureAndContent) use ($deal, $group) {
-            /**
-             * Only interior features that contain "seat" should be added to seating
-             */
-            if ($group === JatoFeature::GROUP_SEATING_KEY && !str_contains($featureAndContent['feature'], 'seat')) {
-                return;
-            }
-
-            /**
-             * Only add features that have _content_ that starts with "Standard", "Yes".
-             */
-            if (starts_with($featureAndContent['content'], ['Standard', 'Yes'])) {
-                try {
-                    $feature = JatoFeature::updateOrCreate([
-                        'feature' => $featureAndContent['feature'],
-                        'content' => $featureAndContent['content'],
-                    ], [
-                        'feature' => $featureAndContent['feature'],
-                        'content' => $featureAndContent['content'],
-                        'group' => $this->getGroupWithOverrides($featureAndContent['feature'], $group),
-                    ]);
-
-                    $feature->deals()->save($deal);
-                } catch (QueryException $e) {
-                    // Already saved.
+        collect($features)
+            ->reduce(function (Collection $carry, $jatoFeature) {
+                return $carry->merge(self::splitJATOFeaturesAndContent($jatoFeature->feature, $jatoFeature->content));
+            }, collect())
+            ->each(function ($featureAndContent) use ($deal, $group) {
+                /**
+                 * Only interior features that contain "seat" should be added to seating
+                 */
+                if ($group === JatoFeature::GROUP_SEATING_KEY && !str_contains($featureAndContent['feature'], 'seat')) {
+                    return;
                 }
-            }
-        });
+
+                /**
+                 * Only add features that have _content_ that starts with "Standard", "Yes".
+                 */
+                if (starts_with($featureAndContent['content'], ['Standard', 'Yes'])) {
+                    try {
+                        $feature = JatoFeature::updateOrCreate([
+                            'feature' => $featureAndContent['feature'],
+                            'content' => $featureAndContent['content'],
+                        ], [
+                            'feature' => $featureAndContent['feature'],
+                            'content' => $featureAndContent['content'],
+                            'group' => $this->getGroupWithOverrides($featureAndContent['feature'], $group),
+                        ]);
+
+                        $feature->deals()->save($deal);
+                    } catch (QueryException $e) {
+                        // Already saved.
+                    }
+                }
+            });
     }
 
     private function getGroupWithOverrides(string $feature, string $group)
@@ -642,7 +648,8 @@ class Importer
      * In the event a deal does not have any photos, we attempt to load some from fuel api.
      * @param Deal $deal
      */
-    private function saveDealStockPhotos(Deal $deal) {
+    private function saveDealStockPhotos(Deal $deal)
+    {
         // only do this if we have a color.
         if (!$deal->color) {
             return;
@@ -660,19 +667,6 @@ class Importer
                 'shot_code' => $asset->shotCode->code,
                 'color' => $deal->color,
             ]);
-        }
-    }
-
-    /**
-     * @param array $headers
-     * @throws MismatchedHeadersException
-     */
-    private function checkHeaders(array $headers)
-    {
-        if (self::HEADERS !== $headers) {
-            throw new MismatchedHeadersException(
-                implode(', ', $headers) . ' does not match expected headers: ' . implode(', ', self::HEADERS)
-            );
         }
     }
 

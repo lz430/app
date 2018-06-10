@@ -40,7 +40,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \DateTime $inventory_date
  * @property boolean|null $certified
  * @property string|null $description
- * @property array||null $option_codes
+ * @property array|null $option_codes
  * @property \stdClass|null $source_price
  * @property int|null $fuel_econ_city
  * @property int|null $fuel_econ_hwy
