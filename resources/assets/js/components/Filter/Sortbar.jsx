@@ -14,6 +14,13 @@ class Sortbar extends React.PureComponent {
         searchQuery: PropTypes.object.isRequired,
     };
 
+    shouldComponentUpdate(nextProps) {
+        return (
+            this.props.searchQuery.sort !== nextProps.searchQuery.sort ||
+            this.props.searchQuery.entity !== nextProps.searchQuery.entity
+        );
+    }
+
     constructor() {
         super();
 

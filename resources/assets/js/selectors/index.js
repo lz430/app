@@ -98,8 +98,7 @@ const dealBestOfferKey = createSelector(
         if (!deal) {
             return null;
         }
-        const vehicleId = deal.version.jato_vehicle_id;
-        return `${vehicleId}-${zipcode}-${paymentType}-${selectedTargetsString}`;
+        return `${deal.id}-${zipcode}-${paymentType}-${selectedTargetsString}`;
     }
 );
 
@@ -148,10 +147,7 @@ const dealHasCustomizedQuote = createSelector(
     deal,
     dealsIdsWithCustomizedQuotes,
     (deal, dealsIdsWithCustomizedQuotes) => {
-        return R.contains(
-            deal.version.jato_vehicle_id,
-            dealsIdsWithCustomizedQuotes
-        );
+        return R.contains(deal.id, dealsIdsWithCustomizedQuotes);
     }
 );
 
@@ -159,12 +155,8 @@ const dealLeaseRatesKey = createSelector([deal, zipcode], (deal, zipcode) => {
     if (!deal) {
         return null;
     }
-    return `${deal.version.jato_vehicle_id}.${zipcode}`;
+    return `${deal.id}.${zipcode}`;
 });
-
-export const makeDealLeaseRatesKey = () => {
-    return dealLeaseRatesKey;
-};
 
 const dealLeasePaymentsKey = createSelector(
     [deal, zipcode],
@@ -172,7 +164,7 @@ const dealLeasePaymentsKey = createSelector(
         if (!deal) {
             return null;
         }
-        return `${deal.vin}.${zipcode}`;
+        return `${deal.id}.${zipcode}`;
     }
 );
 
@@ -274,7 +266,7 @@ const dealPricing = createSelector(
         zipcode,
         paymentType,
         employeeBrand,
-        financeDownPayment,
+        financeDownPaymentment,
         financeTerm,
         dealLeaseAnnualMileage,
         dealLeaseTerm,

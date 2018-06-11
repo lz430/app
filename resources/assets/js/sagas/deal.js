@@ -7,11 +7,9 @@ import {
     put,
     call,
     select,
-    take,
     takeEvery,
     takeLatest,
     fork,
-    spawn,
     cancelled,
 } from 'redux-saga/effects';
 import util from 'src/util';
@@ -48,7 +46,7 @@ function* requestDealBestOffer(deal, zipcode, paymentType, targets) {
 
     try {
         results = yield call(
-            ApiClient.dealGetQuote,
+            ApiClient.deal.dealGetQuote,
             deal.id,
             paymentType,
             zipcode,
@@ -88,7 +86,7 @@ function* requestDealLeaseRates(deal, zipcode) {
 
     try {
         results = yield call(
-            ApiClient.dealGetLeaseRates,
+            ApiClient.deal.dealGetLeaseRates,
             deal,
             zipcode,
             source.token
@@ -135,7 +133,7 @@ function* requestDealLeasePayments(deal, zipcode) {
     let results = null;
     try {
         results = yield call(
-            ApiClient.dealGetLeasePayments,
+            ApiClient.deal.dealGetLeasePayments,
             dealPricing,
             source.token
         );

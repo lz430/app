@@ -28,10 +28,9 @@ const takeSearch = (patternOrChannel, saga, ...args) =>
  * @returns {IterableIterator<*>}
  */
 function* requestSearch() {
-    console.log('requestSearch');
     const state = yield select();
 
-    const results = yield call(ApiClient.search, state.searchQuery);
+    const results = yield call(ApiClient.browse.search, state.searchQuery);
 
     if (state.searchQuery.entity === 'deal') {
         yield put(Actions.receiveDeals(results));

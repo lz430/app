@@ -121,12 +121,11 @@ const util = {
         return targetKey;
     },
     getBestOfferKeyForDeal(deal, zipcode, paymentType, selectedTargets) {
-        const vehicleId = deal.version.jato_vehicle_id;
         const targetString = R.sort((a, b) => {
             return a - b;
         }, selectedTargets).join('-');
 
-        return `${vehicleId}-${zipcode}-${paymentType}-${targetString}`;
+        return `${deal.id}-${zipcode}-${paymentType}-${targetString}`;
     },
 };
 

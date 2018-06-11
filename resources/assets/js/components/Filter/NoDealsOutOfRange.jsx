@@ -75,9 +75,8 @@ class NoDealsOutOfRange extends Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = state => {
     return {
-        filterPage: state.filterPage,
         window: state.window,
     };
 };

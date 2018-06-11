@@ -74,9 +74,7 @@ class PriceBar extends React.Component {
                     {this.renderAccuPricingCta()}
                 </div>
 
-                <div className="filter-page__top-row__section filter-page__top-row__section--tabButtons">
-                    {this.renderSelectedTabButtons()}
-                </div>
+                <div className="filter-page__top-row__section filter-page__top-row__section--tabButtons" />
             </div>
         );
     }

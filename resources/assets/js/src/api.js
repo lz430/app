@@ -1,3 +1,8 @@
+/**
+ * @deprecated
+ *
+ * @see store/api
+ */
 const api = {
     getBodyStyles: () => {
         return window.axios.get('/api/body-styles');
@@ -59,19 +64,6 @@ const api = {
 
     postNotifyWhenInRange: (email = null) => {
         return window.axios.post('/api/hubspot/not-in-area', { email });
-    },
-
-    /**
-     * @deprecated
-     */
-    getBestOffer: (dealId, paymentType, zipcode, cancelToken) => {
-        return window.axios.get(`/api/deals/${dealId}/best-offer`, {
-            cancelToken: cancelToken.token,
-            params: {
-                payment_type: paymentType,
-                zipcode,
-            },
-        });
     },
 };
 

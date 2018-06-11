@@ -38,10 +38,6 @@ class Result extends React.PureComponent {
                     </div>
                     <DealImage featureImageClass="deal__image" deal={result} />
                 </div>
-
-                <div className="deal__price">
-                    <DealPrice deal={result} />
-                </div>
             </div>
         );
     }

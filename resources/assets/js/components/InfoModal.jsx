@@ -1,5 +1,7 @@
-import InfoModalData from 'components/InfoModalData';
 import React from 'react';
+
+import InfoModalData from 'components/InfoModalData';
+
 import R from 'ramda';
 import zondicons from '../zondicons';
 import SVGInline from 'react-svg-inline';

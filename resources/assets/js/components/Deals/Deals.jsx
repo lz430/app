@@ -11,6 +11,9 @@ import ViewModels from './ViewModels';
 
 class Deals extends React.PureComponent {
     static propTypes = {
+        modelYears: PropTypes.array,
+        requestingMoreDeals: PropTypes.bool,
+        requestingMoreModelYears: PropTypes.bool,
         deals: PropTypes.arrayOf(
             PropTypes.shape({
                 year: PropTypes.string.isRequired,
@@ -23,6 +26,7 @@ class Deals extends React.PureComponent {
             })
         ),
         zipInRange: PropTypes.bool,
+        searchQuery: PropTypes.object.isRequired,
     };
 
     render() {
@@ -75,7 +79,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(
-    mapStateToProps,
-    Actions
-)(Deals);
+export default connect(mapStateToProps)(Deals);

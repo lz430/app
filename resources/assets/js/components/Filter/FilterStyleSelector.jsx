@@ -6,6 +6,17 @@ import bodyStyleIcons from 'body-styles';
 import miscicons from 'miscicons';
 
 class FilterStyleSelector extends React.PureComponent {
+    static propTypes = {
+        styles: PropTypes.arrayOf(
+            PropTypes.shape({
+                style: PropTypes.string,
+                icon: PropTypes.string,
+            })
+        ),
+        selectedStyles: PropTypes.arrayOf(PropTypes.string).isRequired,
+        onSelectStyle: PropTypes.func.isRequired,
+    };
+
     constructor() {
         super();
 
@@ -53,16 +64,5 @@ class FilterStyleSelector extends React.PureComponent {
         );
     }
 }
-
-FilterStyleSelector.propTypes = {
-    styles: PropTypes.arrayOf(
-        PropTypes.shape({
-            style: PropTypes.string,
-            icon: PropTypes.string,
-        })
-    ),
-    selectedStyles: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onSelectStyle: PropTypes.func.isRequired,
-};
 
 export default FilterStyleSelector;

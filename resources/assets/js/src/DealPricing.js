@@ -8,16 +8,8 @@ export default class DealPricing {
         this.data = data;
     }
 
-    update(data) {
-        this.data = data;
-    }
-
     id() {
         return this.data.deal.id;
-    }
-
-    jatoVehicleId() {
-        return this.data.deal.version.jato_vehicle_id;
     }
 
     vin() {
@@ -560,10 +552,6 @@ export default class DealPricing {
         return true;
     }
 
-    hasNoLeasePayments() {
-        return !this.hasLeasePayments();
-    }
-
     hasLeasePayments() {
         if (!this.data.dealLeasePayments) {
             return false;
@@ -574,10 +562,6 @@ export default class DealPricing {
         }
 
         return true;
-    }
-
-    leasePaymentsAreNotAvailable() {
-        return !this.leasePaymentsAreAvailable();
     }
 
     leasePaymentsAreAvailable() {

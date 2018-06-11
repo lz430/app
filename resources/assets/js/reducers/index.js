@@ -84,10 +84,13 @@ const reducer = (state, action) => {
 
         case ActionTypes.RECEIVE_DEALS:
             let deals = [];
+
             if (state.searchQuery.page !== 1) {
                 deals.push(...state.deals);
             }
+
             deals.push(...action.data.data.data);
+
             return {
                 ...state,
                 deals: deals,
@@ -95,7 +98,6 @@ const reducer = (state, action) => {
                 dealPage: action.data.data.meta.pagination.current_page,
                 requestingMoreDeals: false,
                 requestingMoreModelYears: false,
-                filterPage: 'deals',
             };
 
         case ActionTypes.REQUEST_MODEL_YEARS:
@@ -121,6 +123,7 @@ const reducer = (state, action) => {
                     models: [],
                     years: [],
                 },
+                deals: [],
             };
 
         case ActionTypes.SELECT_MODEL_YEAR:
@@ -282,10 +285,6 @@ const reducer = (state, action) => {
                 employeeBrand: action.employeeBrand,
             });
 
-        case ActionTypes.CHOOSE_FUEL_TYPE:
-            return Object.assign({}, state, {
-                selectedFuelType: action.selectedFuelType,
-            });
         case ActionTypes.CHOOSE_YEAR:
             return Object.assign({}, state, {
                 selectedYear: action.selectedYear,
@@ -478,7 +477,7 @@ const reducer = (state, action) => {
         case ActionTypes.REQUEST_LEASE_PAYMENTS:
             return state;
         case ActionTypes.RECEIVE_LEASE_PAYMENTS:
-            const leasePaymentsKey = `${action.dealPricing.vin()}.${
+            const leasePaymentsKey = `${action.dealPricing.id()}.${
                 action.zipcode
             }`;
 

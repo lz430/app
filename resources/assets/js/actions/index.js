@@ -226,7 +226,7 @@ export function clearModelYear() {
 }
 
 export function selectModelYear(vehicleModel) {
-    return (dispatch, getState) => {
+    return dispatch => {
         dispatch({
             type: ActionTypes.SELECT_MODEL_YEAR,
             data: vehicleModel,

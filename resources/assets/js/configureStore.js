@@ -19,37 +19,22 @@ const urlStyle = util.getInitialBodyStyleFromUrl();
 const urlSize = util.getInitialSizeFromUrl();
 
 const initialState = {
-    /** Version **/
     12: '<- increment the number to purge LocalStorage',
-    /** End Version **/
     accuPricingModalIsShowing: false,
     bestOffers: [],
-    bodyStyles: null,
-    cancelTokens: [], // A list of tokens to cancel axios calls
     city: null,
     compareList: [],
     dealBestOffer: null,
-    dealPage: 1,
-    dealPageTotal: 1,
-    deals: [],
     employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
     featureCategories: [],
-    features: null,
-    filterPage: 'models',
     financeDownPayment: null,
     financeTerm: null,
     infoModalIsShowingFor: null,
     leaseAnnualMileage: {},
     leaseTerm: {},
     leaseCashDue: {},
-    makes: null,
-    modelYears: [],
-    models: null,
-    requestingMoreDeals: false,
-    requestingMoreModelYears: false,
     residualPercent: null,
-    searchFeatures: [],
     selectedDeal: null,
     selectedTab: 'cash',
     selectedTargets: [],
@@ -77,6 +62,9 @@ const initialState = {
     leaseRates: null,
     leasePaymentsLoaded: {},
     leasePayments: null,
+
+    //
+    // Browse / Search
     searchQuery: {
         entity: 'model', // deal or model depending on the page we're on.
         sort: {
@@ -95,12 +83,27 @@ const initialState = {
         styles: urlStyle ? [urlStyle] : [],
         features: urlSize ? [urlSize] : [],
     },
+
+    modelYears: [],
+
+    dealPage: 1,
+    dealPageTotal: 1,
+    deals: [],
+
+    bodyStyles: null,
+    makes: null,
+    models: null,
+    features: null,
+    searchFeatures: [],
+
+    requestingMoreDeals: false,
+    requestingMoreModelYears: false,
 };
 
 const config = {
     key: 'primary',
     storage,
-    blacklist: ['deals', 'dealPage', 'dealPageTotal', 'modelYears', 'tasks'],
+    blacklist: ['deals', 'dealPage', 'dealPageTotal', 'modelYears'],
 };
 
 export default () => {

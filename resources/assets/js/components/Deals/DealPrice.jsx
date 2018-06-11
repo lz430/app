@@ -8,21 +8,18 @@ import miscicons from 'miscicons';
 import InfoModal from 'components/InfoModal';
 import { makeDealPricing } from 'selectors/index';
 import DealPricing from 'src/DealPricing';
+import DealPriceWrapper from 'components/Hoc/DealPriceWrapper';
 
 class DealPrice extends React.Component {
     static propTypes = {
         deal: PropTypes.object.isRequired,
+        selectedTab: PropTypes.string.isRequired,
     };
-
-    constructor(props) {
-        super(props);
-    }
-
-    componentDidMount() {}
 
     renderPriceExplanationModal() {
         return (
             <InfoModal
+                key={this.props.deal.id}
                 {...R.pick(
                     ['deal', 'selectedTab', 'compareList', 'dealPricing'],
                     this.props
@@ -47,6 +44,7 @@ class DealPrice extends React.Component {
     }
 
     showWhenPricingIsLoaded() {
+        console.log(this.props.dealPricing);
         if (this.props.dealPricing.isPricingLoading()) {
             return <SVGInline svg={miscicons['loading']} />;
         }
@@ -111,4 +109,4 @@ const makeMapStateToProps = () => {
 export default connect(
     makeMapStateToProps,
     Actions
-)(DealPrice);
+)(DealPriceWrapper(DealPrice));

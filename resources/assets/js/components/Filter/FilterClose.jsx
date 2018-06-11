@@ -27,10 +27,8 @@ class FilterClose extends React.PureComponent {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        filterPage: state.filterPage,
-    };
+const mapStateToProps = () => {
+    return {};
 };
 
 const mapDispatchToProps = dispatch => {

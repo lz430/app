@@ -13,7 +13,7 @@ import * as Actions from 'actions/index';
 import util from 'src/util';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import AccuPricingModal from 'components/AccuPricingModal';
-import { StickyContainer, Sticky } from 'react-sticky';
+import { StickyContainer } from 'react-sticky';
 
 class FilterPage extends React.PureComponent {
     static propTypes = {
