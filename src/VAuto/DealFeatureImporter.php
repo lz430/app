@@ -4,7 +4,6 @@ namespace DeliverMyRide\VAuto;
 
 use App\Models\Feature;
 use App\Models\Deal;
-use Illuminate\Support\Facades\Log;
 use DeliverMyRide\JATO\JatoClient;
 
 use GuzzleHttp\Exception\ClientException;
@@ -12,10 +11,20 @@ use GuzzleHttp\Exception\ServerException;
 
 class DealFeatureImporter
 {
+    private $debug;
     private $client;
     private $deal;
     private $features;
     private $version;
+
+    /* @var \Illuminate\Support\Collection */
+    private $equipment;
+
+    /* @var \Illuminate\Support\Collection */
+    private $packages;
+
+    /* @var \Illuminate\Support\Collection */
+    private $options;
 
     /**
      * @param Deal $deal
@@ -28,38 +37,119 @@ class DealFeatureImporter
         $this->features = $features;
         $this->client = $client;
         $this->version = $this->deal->version;
+
+        $this->debug = [
+            'extracted_codes' => [],
+            'feature_count' => 0,
+        ];
+    }
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function import()
+    {
+        //
+        // Get get data sources
+        $this->equipment = $this->fetchVersionEquipment();
+        $this->packages = $this->fetchVersionPackages();
+        $this->options = $this->fetchVersionOptions();
+
+        //
+        // Do some additional transformation
+        $this->extractAdditionalOptionCodes();
+
+        //
+        // Finally get some features.
+        $featureIds = $this->getFeaturesForDeal();
+        $this->debug['feature_count'] = count($featureIds);
+        $this->deal->features()->syncWithoutDetaching($featureIds);
+
+        return $this->debug;
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function fetchVersionEquipment(): \Illuminate\Support\Collection
+    {
+        return collect($this->client->equipment->get($this->version->jato_vehicle_id)->results);
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function fetchVersionPackages(): \Illuminate\Support\Collection
+    {
+        return collect($this->client->option->get($this->version->jato_vehicle_id, 'P')->options);
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function fetchVersionOptions(): \Illuminate\Support\Collection
+    {
+        return collect($this->client->option->get($this->version->jato_vehicle_id, 'O')->options);
     }
 
     /**
      *
      */
-    public function import()
+    private function extractAdditionalOptionCodes()
     {
-        $this->deal->features()->syncWithoutDetaching($this->featureIds());
+        $option_codes = $original_options = $this->deal->option_codes;
+
+        $options = $this->options
+            ->map(function ($option) {
+                return [$option->optionName, $option->optionCode];
+            })->toArray();
+
+        // TODO: Probably some smarter way to do this.
+        $all_version_optional = [];
+        foreach ($options as $option) {
+            $all_version_optional[$option[1]] = $option[0];
+        }
+
+        $features = explode("|", $this->deal->vauto_features);
+        $features = array_map('trim', $features);
+
+        $additional_option_codes = [];
+        foreach ($features as $feature) {
+            foreach ($all_version_optional as $code => $optional) {
+                $score = levenshtein($optional, $feature);
+                if ($score < 5) {
+                    $additional_option_codes[] = $code;
+                }
+            }
+        }
+        $additional_option_codes = array_diff($additional_option_codes, $original_options);
+        $option_codes = array_merge($additional_option_codes, $option_codes);
+        $this->debug['extracted_codes'] = array_merge($this->debug['extracted_codes'], $additional_option_codes);
+        if ($option_codes != $original_options) {
+            $this->deal->option_codes = $option_codes;
+            $this->deal->save();
+        }
     }
 
     /**
-     * Sends call to jato for getting all possible package codes for a vehicle
+     * Returns an array of package codes.
      * @return array
      */
     private function getAllAvailablePackageCodes()
     {
-        $vehicleId = $this->version->jato_vehicle_id;
-        $findPackages = $this->client->option->get($vehicleId, 'P')->options;
-        $packagesOnThisVehicle = $findPackages;
-
-        $foundPackages = [];
-        foreach ($packagesOnThisVehicle as $package) {
-            $foundPackages[] = $package->optionCode;
-        }
-
-        return $foundPackages;
+        $packages = $this->packages->pluck('optionCode')->toArray();
+        return $packages;
     }
 
     /**
      * Compares option codes from csv to the available packages from jato and removes package codes
      * from the original list of option codes from csv
+     *
      * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function removeFoundPackagesFromOptionsList()
     {
@@ -73,6 +163,10 @@ class DealFeatureImporter
         return $revisedOptionCodesList;
     }
 
+    /**
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     private function mergedSchemaIds()
     {
         /** Package Decoding Options Logic */
@@ -87,11 +181,8 @@ class DealFeatureImporter
         $decodedPackageEquipment = [];
 
         foreach ($packagesOnThisVehicle as $package) {
-            $optionCode = $package;
-
-            // Decode package into a list of equipment and add to our array
             try {
-                $searchCode = $this->client->equipment->get($vehicleId, ['packageCode' => $optionCode])->results;
+                $searchCode = $this->client->equipment->get($vehicleId)->results;
                 foreach ($searchCode as $equipment) {
                     $decodedPackageEquipment[] = $equipment->schemaId;
                 }
@@ -103,19 +194,20 @@ class DealFeatureImporter
             }
         }
 
-        // Combines the current deal options codes with the newly searched package schema id's
-        //$combinedDealCodes = array_merge($this->deal->option_codes, $decodedPackageEquipment);
         $combinedDealCodes = array_merge($revisedListOfOptionCodes, $decodedPackageEquipment);
-        /** End of Package Decoding Options Logic */
 
         return $combinedDealCodes;
     }
 
-    public function featureIds()
+    /**
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getFeaturesForDeal()
     {
         $combinedDealCodes = $this->mergedSchemaIds();
 
-        return $this->jatoEquipment()
+        return $this->equipment
             ->reject(function ($equipment) {
                 return $equipment->availability === 'not available';
             })
@@ -176,11 +268,11 @@ class DealFeatureImporter
         return $matchedAttributes->count() ? [$feature->id] : null;
     }
 
-    private function jatoEquipment()
-    {
-        return collect($this->client->equipment->get($this->version->jato_vehicle_id)->results);
-    }
-
+    /**
+     * @param $category
+     * @param $equipment
+     * @return null
+     */
     private function parseCustomJatoMappingDmrCategories($category, $equipment)
     {
         $isPickup = $this->version->body_style === 'Pickup';
@@ -218,6 +310,9 @@ class DealFeatureImporter
         return $feature->count() ? $feature->first()->id : null;
     }
 
+    /**
+     * @param $equipment
+     */
     private function syncVehicleSize($equipment)
     {
         if ($equipment->schemaId !== 176) {
@@ -252,7 +347,8 @@ class DealFeatureImporter
             ->filter(function ($attribute) {
                 return $attribute->name == "Fuel type";
             })
-            ->pluck('value')->map(function ($value) {
+            ->pluck('value')
+            ->map(function ($value) {
                 if (str_contains(strtolower($value), ['diesel', 'biodiesel'])) {
                     return 'fuel_type_diesel';
                 } elseif (str_contains(strtolower($value), ['hybrid', 'electric'])) {
@@ -261,7 +357,9 @@ class DealFeatureImporter
                     return 'fuel_type_gas';
                 }
             })
-            ->filter()->unique()->map(function ($slugKey) {
+            ->filter()
+            ->unique()
+            ->map(function ($slugKey) {
                 return Feature::where('slug', $slugKey)->first();
             });
     }
