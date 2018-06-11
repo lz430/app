@@ -353,22 +353,18 @@ class Importer
     private function skipSourceRecord(array $row): bool
     {
         if ($row['New/Used'] !== 'N') {
-            //$this->info("   Skipping Used Vehicle.");
             return false;
         }
 
         if (in_array($row['Make'], self::MAKE_BLACKLIST)) {
-            //$this->info("   Skipping banned make: " . $row['Make']);
             return false;
         }
 
         if (strlen($row['Price']) > 6) {
-            //$this->info("   Skipping high price: " . $row['Price']);
             return false;
         }
 
         if (is_null($row['Price'])) {
-            // $this->info("   Skipping no price");
             return false;
         }
 
@@ -431,9 +427,6 @@ class Importer
                 $return[$key] = trim($row[$value]);
             }
         }
-
-
-
         return (object)$return;
     }
 
@@ -445,13 +438,10 @@ class Importer
      */
     private function saveOrUpdateDeal(Version $version, string $fileHash, array $row): Deal
     {
-
         $pricing = $this->getDealSourcePrice($row);
         if (!isset($pricing->msrp) && $version->msrp) {
             $pricing->msrp = $version->msrp;
         }
-
-
 
         $deal = Deal::updateOrCreate([
             'vin' => $row['VIN'],
@@ -502,11 +492,24 @@ class Importer
         $deal->jatoFeatures()->sync([]);
     }
 
+    /**
+     * @param Deal $deal
+     * @param $row
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     private function saveDealRelations(Deal $deal, $row)
     {
         $this->saveDealJatoFeatures($deal);
         $this->saveDealPhotos($deal, $row['Photos']);
-        (new DealFeatureImporter($deal, $this->features, $this->jatoClient))->import();
+        $debug = (new DealFeatureImporter($deal, $this->features, $this->jatoClient))->import();
+
+        $this->info("    -- Feature Count: {$debug['feature_count']}");
+
+        if (count($debug['extracted_codes'])) {
+            $msg = implode(", ", $debug['extracted_codes']);
+            $this->info("    -- Extracted Option Codes: {$msg}");
+        }
+
     }
 
 
