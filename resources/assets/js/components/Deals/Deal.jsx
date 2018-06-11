@@ -10,10 +10,6 @@ class Deal extends React.Component {
         deal: PropTypes.object.isRequired,
     };
 
-    shouldComponentUpdate(nextProps) {
-        return nextProps.deal.id !== this.props.deal.id;
-    }
-
     render() {
         const deal = this.props.deal;
         return (

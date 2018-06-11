@@ -456,7 +456,7 @@ class ComparePage extends React.PureComponent {
 
                     return {
                         id: feature.id,
-                        feature: feature.title.trim(),
+                        feature: feature.title,
                         slug: feature.slug,
                         group: group,
                     };
