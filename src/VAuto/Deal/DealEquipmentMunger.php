@@ -261,7 +261,7 @@ class DealEquipmentMunger
                 return true;
             });
 
-        $this->categorizeDiscoveredFeatures($features);
+        //$this->categorizeDiscoveredFeatures($features);
 
         return null;
     }
@@ -339,11 +339,6 @@ class DealEquipmentMunger
     {
         $features = $this->equipment
             ->reject(function ($equipment) {
-                /*
-                if ($equipment->category === "Comfort & Convenience") {
-                    print_r($equipment);
-                }
-                */
                 return $equipment->availability !== 'standard';
             })
             ->map(function ($equipment) {
@@ -356,15 +351,13 @@ class DealEquipmentMunger
     }
 
     /**
-     * Build features based on standard equipment
+     * Just a helper
      */
     public function equipmentDebugger()
     {
         $this->equipment
             ->map(function ($equipment) {
-                if ($equipment->category === "Comfort & Convenience") {
-                    //print_r($equipment);
-                }
+
             });
     }
 
