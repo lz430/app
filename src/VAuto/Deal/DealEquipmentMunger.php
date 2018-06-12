@@ -5,6 +5,7 @@ namespace DeliverMyRide\VAuto\Deal;
 use App\Models\Feature;
 use App\Models\Deal;
 use DeliverMyRide\JATO\JatoClient;
+use PhpParser\Node\Expr\Cast\Object_;
 
 /**
  *
@@ -82,20 +83,50 @@ class DealEquipmentMunger
         $this->buildFeaturesFromGuessedVautoNames();
 
         //
+        // Remove conflicting features
+        $this->removeConflictingFeatures();
+
+        //
         // Save discovered features to deal.
         $this->updateDealWithDiscoveredFeatures();
 
         return $this->debug;
     }
 
+    /**
+     * Reduce & Remove conflicting. We do this here in order to persist the
+     * original data for debugging purposes.
+     *
+     * Basically if two schema ids are found we use the one with the greater option id. Which "should"
+     * mean that standard equipment that has an option id of zero are overriden by non zero option ids.
+     */
+    private function removeConflictingFeatures()
+    {
+        $reduced = [];
+
+        foreach ($this->discovered_features as $category => $features) {
+            foreach($features as $feature) {
+                if (!isset($reduced[$feature->equipment->schemaId])) {
+                    $reduced[$feature->equipment->schemaId] = $feature;
+                }
+                elseif ($reduced[$feature->equipment->schemaId]->equipment->optionId < $feature->equipment->optionId) {
+                    $reduced[$feature->equipment->schemaId] = $feature;
+                }
+            }
+        }
+
+        $this->categorizeDiscoveredFeatures($reduced, true);
+    }
+
+    /**
+     *
+     */
     private function updateDealWithDiscoveredFeatures()
     {
         $featureIds = [];
-
         foreach ($this->discovered_features as $category => $features) {
             $featureIds = array_merge($featureIds, array_keys($features));
         }
-
         $this->deal->features()->sync($featureIds);
     }
 
@@ -107,8 +138,7 @@ class DealEquipmentMunger
         foreach ($this->discovered_features as $category => $features) {
             print "======= {$category} ======= \n";
             foreach ($features as $feature) {
-                print "  --- {$feature->title} \n";
-
+                print "  --- {$feature->feature->title} - {$feature->equipment->schemaId} - {$feature->equipment->optionId}\n";
             }
         }
     }
@@ -234,21 +264,26 @@ class DealEquipmentMunger
         $this->categorizeDiscoveredFeatures($features);
 
         return null;
-
     }
 
     /**
      * @param $features
+     * @param bool $reset
      */
-    private function categorizeDiscoveredFeatures($features)
+    private function categorizeDiscoveredFeatures($features,  $reset = FALSE)
     {
+
+        if ($reset) {
+            $this->discovered_features = [];
+        }
+
         foreach ($features as $feature) {
-            $category = $feature->category->title;
+            $category = $feature->feature->category->title;
             if (!isset($this->discovered_features[$category])) {
                 $this->discovered_features[$category] = [];
             }
 
-            $this->discovered_features[$feature->category->title][$feature->id] = $feature;
+            $this->discovered_features[$category][$feature->feature->id] = $feature;
         }
     }
 
@@ -320,7 +355,6 @@ class DealEquipmentMunger
         $this->categorizeDiscoveredFeatures($features);
     }
 
-
     /**
      * Build features based on standard equipment
      */
@@ -336,9 +370,9 @@ class DealEquipmentMunger
 
     /**
      * @param \stdClass $equipment
-     * @return Feature|null
+     * @return \stdClass|null
      */
-    private function getFeatureFromEquipment(\stdClass $equipment): ?Feature
+    private function getFeatureFromEquipment(\stdClass $equipment): ?\stdClass
     {
         $feature = $this->getFeatureFromSlugLookup($equipment);
 
@@ -346,7 +380,11 @@ class DealEquipmentMunger
             $feature = $this->getFeatureFromJatoSchemaId($equipment);
         }
 
-        return $feature;
+        if ($feature) {
+           return  (object) ['feature' => $feature, 'equipment' => $equipment];
+        }
+
+        return null;
     }
 
     /**
@@ -436,6 +474,10 @@ class DealEquipmentMunger
         return Feature::where('slug', $segment)->first();
     }
 
+    /**
+     * @param $equipment
+     * @return Feature|null
+     */
     private function syncFuelType($equipment): ?Feature
     {
         if ($equipment->schemaId !== 8701) {
