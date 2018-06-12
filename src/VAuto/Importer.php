@@ -3,14 +3,11 @@
 namespace DeliverMyRide\VAuto;
 
 use App\Models\Feature;
-use App\Models\JatoFeature;
 use App\Models\JATO\Version;
 use App\Models\Deal;
 
 use DeliverMyRide\Fuel\FuelClient;
 use DeliverMyRide\JATO\JatoClient;
-use DeliverMyRide\Fuel\VersionToFuel;
-use DeliverMyRide\VAuto\Deal\DealEquipmentMunger;
 use DeliverMyRide\VAuto\Deal\DealMunger;
 
 use Carbon\Carbon;
@@ -20,7 +17,6 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use Illuminate\Database\QueryException;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 use League\Csv\Reader;
@@ -184,7 +180,6 @@ class Importer
         if (count($batch)) {
             $this->processBatchOfRecords($batch);
         }
-
     }
 
     /**
@@ -238,7 +233,6 @@ class Importer
         return $row;
     }
 
-
     /**
      * @param array $row
      * @param \stdClass $decodedVin
@@ -247,9 +241,7 @@ class Importer
     private function processRecord(array $row, \stdClass $decodedVin)
     {
         try {
-
-            list($version, $shouldRefreshDeals, $versionDebugData) = (new VersionMunger($row, $decodedVin, $this->jatoClient, $this->fuelClient))->build();
-
+            list($version, $versionDebugData) = (new VersionMunger($row, $decodedVin, $this->jatoClient, $this->fuelClient))->build();
             $this->info("Deal: {$row['VIN']} - {$row['Stock #']}");
 
             //
@@ -275,23 +267,26 @@ class Importer
             $this->info("    -- Deal Title: {$deal->title()}");
             $this->info("    -- Is New: " . ($deal->wasRecentlyCreated ? "Yes" : "No"));
 
+            DB::transaction(function () use ($deal, $row) {
+                $debug = (new DealMunger($deal, $this->jatoClient, $this->fuelClient, $this->features, $row))->import(TRUE);
 
-
-            DB::transaction(function () use ($version, $shouldRefreshDeals, $deal, $row) {
-                $debug = (new DealMunger($deal, $this->jatoClient, $this->fuelClient, $this->features, $row));
-
-                if ($deal->wasRecentlyCreated) {
-                    $this->saveDealRelations($deal, $row);
+                // Equipment
+                if (count($debug['equipment_extracted_codes'])) {
+                    $msg = implode(", ", $debug['equipment_extracted_codes']);
+                    $this->info("    -- Equipment: Extracted Option Codes: {$msg}");
                 }
 
-                // Refresh existing deals if version has changed
-                if ($shouldRefreshDeals) {
-                    foreach ($version->fresh()->deals as $attachedDeal) {
-                        $this->wipeDealFeatures($attachedDeal);
-                        // BUG! row != $attachedDeal here.
-                        $this->saveDealRelations($attachedDeal, $row);
-                    }
-                }
+                $this->info("    -- Equipment: Known: {$debug['equipment_known_feature_count']}");
+                $this->info("    -- Equipment: Vauto Guessed: {$debug['equipment_vauto_feature_count']}");
+                $this->info("    -- Equipment: Vauto New: {$debug['equipment_vauto_extra_feature_count']}");
+                $this->info("    -- Equipment: Total: {$debug['equipment_feature_count']}");
+
+                // Features
+                $this->info("    -- Features: New Jato Features: {$debug['feature_count']}");
+
+                // Photos
+                $this->info("    -- Photos: Deal Photos: {$debug['deal_photos']}");
+                $this->info("    -- Photos: Stock Photos: {$debug['stock_photos']}");
 
             });
         } catch (ClientException | ServerException $e) {
@@ -485,251 +480,5 @@ class Importer
         ]);
 
         return $deal;
-    }
-
-    /**
-     * @param $deal
-     */
-    private function wipeDealFeatures(Deal $deal)
-    {
-        $deal->features()->sync([]);
-        $deal->jatoFeatures()->sync([]);
-    }
-
-    /**
-     * @param Deal $deal
-     * @param array $row
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    private function saveDealRelations(Deal $deal, array $row)
-    {
-        $this->saveDealJatoFeatures($deal);
-        $this->saveDealPhotos($deal, $row['Photos']);
-        $debug = (new DealEquipmentMunger($deal, $this->features, $this->jatoClient))->import();
-
-        $this->info("    -- Feature Count: {$debug['feature_count']}");
-
-        if (count($debug['extracted_codes'])) {
-            $msg = implode(", ", $debug['extracted_codes']);
-            $this->info("    -- Extracted Option Codes: {$msg}");
-        }
-
-    }
-
-
-    private function getCategorizedFeaturesByVehicleId(string $vehicleId)
-    {
-
-        $response = $this->jatoClient->feature->get($vehicleId, '', 1, 400, false);
-
-        $data = [];
-
-        foreach ($response->results as $feature) {
-            if (!isset($data[$feature->categoryId])) {
-                $data[$feature->categoryId] = [];
-            }
-            $data[$feature->categoryId][] = $feature;
-        }
-
-        return $data;
-    }
-
-    private function saveDealJatoFeatures(Deal $deal)
-    {
-
-        $jatoVehicleId = $deal->version->jato_vehicle_id;
-        $features = $this->getCategorizedFeaturesByVehicleId($jatoVehicleId);
-
-        foreach (JatoFeature::SYNC_GROUPS as $group) {
-            if (isset($features[$group['id']])) {
-                $this->saveDealJatoFeaturesByGroup($deal, $features[$group['id']], $group['title']);
-            }
-        }
-
-        $this->saveCustomHackyJatoFeatures($deal);
-    }
-
-    private function saveDealJatoFeaturesByGroup(Deal $deal, array $features, string $group)
-    {
-        collect($features)
-            ->reduce(function (Collection $carry, $jatoFeature) {
-                return $carry->merge(self::splitJATOFeaturesAndContent($jatoFeature->feature, $jatoFeature->content));
-            }, collect())
-            ->each(function ($featureAndContent) use ($deal, $group) {
-                /**
-                 * Only interior features that contain "seat" should be added to seating
-                 */
-                if ($group === JatoFeature::GROUP_SEATING_KEY && !str_contains($featureAndContent['feature'], 'seat')) {
-                    return;
-                }
-
-                /**
-                 * Only add features that have _content_ that starts with "Standard", "Yes".
-                 */
-                if (starts_with($featureAndContent['content'], ['Standard', 'Yes'])) {
-                    try {
-                        $feature = JatoFeature::updateOrCreate([
-                            'feature' => $featureAndContent['feature'],
-                            'content' => $featureAndContent['content'],
-                        ], [
-                            'feature' => $featureAndContent['feature'],
-                            'content' => $featureAndContent['content'],
-                            'group' => $this->getGroupWithOverrides($featureAndContent['feature'], $group),
-                        ]);
-
-                        $feature->deals()->save($deal);
-                    } catch (QueryException $e) {
-                        // Already saved.
-                    }
-                }
-            });
-    }
-
-    private function getGroupWithOverrides(string $feature, string $group)
-    {
-        /** If group contains "seat" then it should be in "seating" category */
-        return str_contains($feature, 'seat') ? JatoFeature::GROUP_SEATING_KEY : $group;
-    }
-
-    private function saveCustomHackyJatoFeatures(Deal $deal)
-    {
-        $jatoVersion = $deal->version;
-
-        if ($jatoVersion->body_style === 'Pickup') {
-            try {
-                $doorCount = JatoFeature::updateOrCreate([
-                    'feature' => "$deal->door_count Door",
-                    'content' => $deal->door_count,
-                ], [
-                    'feature' => "$deal->door_count Door",
-                    'content' => $deal->door_count,
-                    'group' => JatoFeature::GROUP_TRUCK_KEY,
-                ]);
-
-                $cabType = JatoFeature::updateOrCreate([
-                    'feature' => "$jatoVersion->cab Cab",
-                    'content' => $jatoVersion->cab,
-                ], [
-                    'feature' => "$jatoVersion->cab Cab",
-                    'content' => $jatoVersion->cab,
-                    'group' => JatoFeature::GROUP_TRUCK_KEY,
-                ]);
-
-                $doorCount->deals()->save($deal);
-                $cabType->deals()->save($deal);
-            } catch (QueryException $e) {
-                // Already Saved.
-            }
-        }
-    }
-
-    /**
-     * @param Deal $deal
-     * @param string $photos
-     */
-    private function saveDealPhotos(Deal $deal, string $photos)
-    {
-        $saved_some_photos = FALSE;
-        collect(explode('|', $photos))
-            ->reject(function ($photoUrl) {
-                return $photoUrl == '';
-            })
-            ->each(function ($photoUrl) use ($deal, &$saved_some_photos) {
-                $deal->photos()->firstOrCreate(['url' => str_replace('http', 'https', $photoUrl)]);
-                $saved_some_photos = TRUE;
-            });
-
-        if (!$saved_some_photos) {
-            $this->saveDealStockPhotos($deal);
-        }
-    }
-
-    /**
-     * In the event a deal does not have any photos, we attempt to load some from fuel api.
-     * @param Deal $deal
-     */
-    private function saveDealStockPhotos(Deal $deal)
-    {
-        // only do this if we have a color.
-        if (!$deal->color) {
-            return;
-        }
-
-        // Only save stock photos if we don't have any already.
-        if ($deal->version->photos()->where('color', '=', $deal->color)->count()) {
-            return;
-        }
-
-        $assets = (new VersionToFuel($deal->version, $this->fuelClient))->assets($deal->color);
-        foreach ($assets as $asset) {
-            $deal->version->photos()->create([
-                'url' => $asset->url,
-                'shot_code' => $asset->shotCode->code,
-                'color' => $deal->color,
-            ]);
-        }
-    }
-
-    public static function splitJATOFeaturesAndContent($feature, $content)
-    {
-        $all = [];
-
-        if (str_contains($feature, '(')) {
-            [$prefix, $suffix] = array_map('trim', explode('(', $feature));
-
-            if (str_contains($suffix, ' / ')) {
-                $features = array_map(function ($str) {
-                    return trim($str, '() ');
-                }, explode(' / ', $suffix));
-
-                $contents = array_map('trim', explode(' / ', $content));
-
-                foreach ($features as $index => $thisfeature) {
-                    $all[] = [
-                        'feature' => "$prefix $thisfeature",
-                        // If there's only one content value for more than one features, grab the first on fail
-                        'content' => array_get($contents, $index, reset($contents)),
-                    ];
-                }
-            } else {
-                $features = [$prefix, $prefix . ' ' . trim($suffix, '() ')];
-                $contents = array_map(function ($str) {
-                    return trim($str, ') ');
-                }, explode('(', $content));
-
-                if (count($features) != count($contents)) {
-                    Log::channel('jato')->debug("Cannot parse feature: title[$feature] content[$content]");
-                    return $all;
-                }
-
-                foreach ($features as $index => $feature) {
-                    $all[] = [
-                        'feature' => $feature,
-                        'content' => $contents[$index],
-                    ];
-                }
-            }
-
-            return $all;
-        } elseif (str_contains($feature, ' / ')) {
-            $features = array_map('trim', explode(' / ', $feature));
-            $contents = array_map('trim', explode(' / ', $content));
-
-            foreach ($features as $index => $feature) {
-                $all[] = [
-                    'feature' => $feature,
-                    'content' => $contents[$index],
-                ];
-            }
-        } else {
-            $all = [
-                [
-                    'feature' => trim($feature),
-                    'content' => trim($content),
-                ],
-            ];
-        }
-
-        return $all;
     }
 }

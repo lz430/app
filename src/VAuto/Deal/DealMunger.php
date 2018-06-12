@@ -3,14 +3,8 @@
 namespace DeliverMyRide\VAuto\Deal;
 
 use App\Models\Deal;
-use App\Models\JATO\Make;
-use App\Models\JATO\Manufacturer;
-use App\Models\JATO\VehicleModel;
-use App\Models\JATO\Version;
 use DeliverMyRide\Fuel\FuelClient;
-use DeliverMyRide\Fuel\VersionToFuel;
 use DeliverMyRide\JATO\JatoClient;
-use GuzzleHttp\Exception\ClientException;
 
 
 class DealMunger
@@ -22,37 +16,43 @@ class DealMunger
     private $jatoClient;
     private $fuelClient;
 
+    /** @deprecated */
     private $features;
 
     /**
      * @param Deal $deal
      * @param JatoClient $jatoClient
      * @param FuelClient $fuelClient
-     * @param array $features
+     * @param $features
      * @param array $row
      */
     public function __construct(Deal $deal,
                                 JatoClient $jatoClient,
                                 FuelClient $fuelClient,
-                                array $features,
+                                $features,
                                 array $row)
     {
-        $this->deal;
+        $this->deal = $deal;
+        $this->features = $features;
+        $this->row = $row;
         $this->jatoClient = $jatoClient;
         $this->fuelClient = $fuelClient;
     }
 
     /**
+     * @param bool $force
+     * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function import()
+    public function import(bool $force)
     {
         $debug = [];
 
-        $equipment_debug = (new DealEquipmentMunger($this->deal, $this->features, $this->jatoClient))->import();
-        $photos_debug = (new DealPhotosMunger($this->deal, $this->row, $this->fuelClient))->import();
+        $equipment_debug = (new DealEquipmentMunger($this->deal, $this->features, $this->jatoClient))->import($force);
+        $features_debug = (new DealFeaturesMunger($this->deal, $this->jatoClient))->import($force);
+        $photos_debug = (new DealPhotosMunger($this->deal, $this->row, $this->fuelClient))->import($force);
 
-        return array_merge($debug, $equipment_debug, $photos_debug);
+        return array_merge($debug, $equipment_debug, $photos_debug, $features_debug);
 
     }
 

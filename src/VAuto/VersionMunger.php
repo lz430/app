@@ -145,7 +145,8 @@ class VersionMunger
     }
 
     /**
-     *
+     * @return Manufacturer
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function manufacturer(): Manufacturer
     {
@@ -169,6 +170,7 @@ class VersionMunger
     /**
      * @param Manufacturer $manufacturer
      * @return Make
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function make(Manufacturer $manufacturer): Make
     {
@@ -282,8 +284,20 @@ class VersionMunger
      */
     private function refresh(Version $version, \stdClass $jatoVersion)
     {
+        //
+        // Update vehicle id
         $version->update(['jato_vehicle_id' => $jatoVersion->vehicle_ID]);
+
+        //
+        // New photos
         $this->photos($version);
+
+        //
+        // Ensure existing deals attached to this version are forced to refresh.
+        foreach ($version->fresh()->deals as $attachedDeal) {
+            $attachedDeal->features()->sync([]);
+            $attachedDeal->jatoFeatures()->sync([]);
+        }
     }
 
     /**
@@ -309,10 +323,7 @@ class VersionMunger
 
         //
         // If the vehicle id has changed we need to update the vehicle id.
-        if ($version->jato_vehicle_id == $jatoVersion->vehicle_ID) {
-            $shouldRefreshDeals = FALSE;
-        } else {
-            $shouldRefreshDeals = TRUE;
+        if ($version->jato_vehicle_id != $jatoVersion->vehicle_ID) {
             $this->refresh($version, $jatoVersion);
         }
 
@@ -320,7 +331,7 @@ class VersionMunger
             $this->photos($version);
         }
 
-        return [$version, $shouldRefreshDeals, $this->debug];
+        return [$version, $this->debug];
     }
 
 }

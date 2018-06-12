@@ -25,21 +25,28 @@ class DealPhotosMunger
     {
         $this->deal = $deal;
         $this->row = $row;
-        $this->fuelClient;
+        $this->fuelClient = $fuelClient;
+
+        $this->debug = [
+          'deal_photos' => 0,
+          'stock_photos' => 0,
+        ];
     }
 
     /**
-     *
+     * @param bool $force
+     * @return array
      */
-    public function import() {
+    public function import(bool $force = FALSE)
+    {
 
         // On create or no photos
-        if ($this->deal->wasRecentlyCreated || !$this->deal->photos()->count()) {
+        if ($this->deal->wasRecentlyCreated || !$this->deal->photos()->count() || $force) {
             $this->saveDealPhotos();
         }
 
         // If still no photos attempt to attach some stock photos to the version.
-        if (!$this->deal->photos()->count()) {
+        if (!$this->deal->photos()->count() || $force) {
             $this->saveDealStockPhotos();
         }
 
@@ -52,17 +59,20 @@ class DealPhotosMunger
     private function saveDealPhotos()
     {
         $deal = $this->deal;
+        $deal->photos()->delete();
         $photos = $this->row['Photos'];
 
-        $saved_some_photos = FALSE;
+        $saved_some_photos = 0;
         collect(explode('|', $photos))
             ->reject(function ($photoUrl) {
                 return $photoUrl == '';
             })
             ->each(function ($photoUrl) use ($deal, &$saved_some_photos) {
                 $deal->photos()->firstOrCreate(['url' => str_replace('http', 'https', $photoUrl)]);
-                $saved_some_photos = TRUE;
+                $saved_some_photos++;
             });
+
+        $this->debug['deal_photos'] = $saved_some_photos;
     }
 
     /**
@@ -81,6 +91,7 @@ class DealPhotosMunger
         if ($deal->version->photos()->where('color', '=', $deal->color)->count()) {
             return;
         }
+        $count = 0;
 
         $assets = (new VersionToFuel($deal->version, $this->fuelClient))->assets($deal->color);
         foreach ($assets as $asset) {
@@ -89,6 +100,9 @@ class DealPhotosMunger
                 'shot_code' => $asset->shotCode->code,
                 'color' => $deal->color,
             ]);
+            $count++;
         }
+
+        $this->debug['stock_photos'] = $count;
     }
 }

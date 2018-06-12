@@ -15,6 +15,7 @@ class DealEquipmentMunger
     private $client;
     private $deal;
     private $version;
+    private $option_codes;
 
     /* @var \Illuminate\Support\Collection */
     private $features;
@@ -35,39 +36,71 @@ class DealEquipmentMunger
      */
     public function __construct(Deal $deal, $features, JatoClient $client)
     {
+
         $this->deal = $deal;
         $this->client = $client;
         $this->version = $this->deal->version;
+        $this->features = $features;
 
         $this->debug = [
-            'extracted_codes' => [],
-            'feature_count' => 0,
+            'equipment_extracted_codes' => [],
+            'equipment_feature_count' => 0,
         ];
+    }
+
+    /**
+     * @param bool $force
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function import(bool $force = FALSE)
+    {
+        if (!$this->deal->features()->count() && !$force){
+            return $this->debug;
+        }
+
+        //
+        // Get get data sources
+        $this->initializeData();
+        //
+        // Do some additional transformation
+        $this->extractAdditionalOptionCodes();
+        $this->initializeOptionCodes();
+
+        //
+        // Finally get some features.
+        $featureIds = [];
+        $knownFeatureIds = $this->getFeaturesForDeal();
+        $this->debug['equipment_known_feature_count'] = count($knownFeatureIds);
+
+        $vautoGuessedFeatureIds = $this->getGuessedvAutoFeatureIds();
+        $this->debug['equipment_vauto_feature_count'] = count($vautoGuessedFeatureIds);
+
+        $this->debug['equipment_vauto_extra_feature_count'] = count(array_diff($vautoGuessedFeatureIds, $knownFeatureIds));
+
+        $featureIds = array_merge($featureIds, $knownFeatureIds, $vautoGuessedFeatureIds);
+        $featureIds = array_unique($featureIds);
+        $this->debug['equipment_feature_count'] = count($featureIds);
+        $this->deal->features()->sync($featureIds);
+
+        return $this->debug;
     }
 
     /**
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function import()
-    {
-
-        //
-        // Get get data sources
+    public function initializeData() {
         $this->equipment = $this->fetchVersionEquipment();
         $this->packages = $this->fetchVersionPackages();
         $this->options = $this->fetchVersionOptions();
+    }
 
-        //
-        // Do some additional transformation
-        $this->extractAdditionalOptionCodes();
-
-        //
-        // Finally get some features.
-        $featureIds = $this->getFeaturesForDeal();
-        $this->debug['feature_count'] = count($featureIds);
-        $this->deal->features()->syncWithoutDetaching($featureIds);
-
-        return $this->debug;
+    public function initializeOptionCodes($override = []) {
+        if (count($override)) {
+            $this->option_codes = $override;
+        } else {
+            $this->option_codes = $this->deal->option_codes;
+        }
     }
 
     /**
@@ -97,22 +130,48 @@ class DealEquipmentMunger
         return collect($this->client->option->get($this->version->jato_vehicle_id, 'O')->options);
     }
 
+    /**
+     * This is not at all performant, but getting pretty desperate.
+     */
+    public function getGuessedvAutoFeatureIds() {
+        $features = $this->features
+            ->map(function ($feature) {
+                return [$feature->title, $feature->id];
+            })->toArray();
+
+
+        $vautoFeatures = explode("|", $this->deal->vauto_features);
+        $vautoFeatures = array_map('trim', $vautoFeatures);
+
+        $found_features = [];
+        foreach($vautoFeatures as $name) {
+            foreach($features as $feature) {
+                $score = levenshtein($name, $feature[0]);
+                if ($score < 5) {
+                    $found_features[] = $feature[1];
+                }
+            }
+        }
+
+        return $found_features;
+
+    }
 
     /**
      * Attempts to extract additional option codes for a given deal by checking how similar
      * a vauto feature is to a known jato optional equipment. if a feature is pretty close we assume
      * it's an option code the deal has and attach it to the vehicle.
      */
-    private function extractAdditionalOptionCodes()
+    public function extractAdditionalOptionCodes()
     {
         $option_codes = $original_options = $this->deal->option_codes;
 
+        // TODO: Probably some smarter way to do this.
         $options = $this->options
             ->map(function ($option) {
                 return [$option->optionName, $option->optionCode];
             })->toArray();
 
-        // TODO: Probably some smarter way to do this.
         $all_version_optional = [];
         foreach ($options as $option) {
             $all_version_optional[$option[1]] = $option[0];
@@ -130,13 +189,16 @@ class DealEquipmentMunger
                 }
             }
         }
+        $found_option_codes = $additional_option_codes;
+
         $additional_option_codes = array_diff($additional_option_codes, $original_options);
         $option_codes = array_merge($additional_option_codes, $option_codes);
-        $this->debug['extracted_codes'] = array_merge($this->debug['extracted_codes'], $additional_option_codes);
+        $this->debug['equipment_extracted_codes'] = array_merge($this->debug['equipment_extracted_codes'], $additional_option_codes);
         if ($option_codes != $original_options) {
             $this->deal->option_codes = $option_codes;
             $this->deal->save();
         }
+        return $found_option_codes;
     }
 
     /**
@@ -158,8 +220,8 @@ class DealEquipmentMunger
     private function removeFoundPackagesFromOptionsList()
     {
         $jatoPackagesOnVehicle = $this->getAllAvailablePackageCodes();
-        $compareOptionsWithPackages = array_intersect($this->deal->option_codes, $jatoPackagesOnVehicle);
-        $pullPackagesOutOfList = array_diff($this->deal->option_codes, $compareOptionsWithPackages);
+        $compareOptionsWithPackages = array_intersect($this->option_codes, $jatoPackagesOnVehicle);
+        $pullPackagesOutOfList = array_diff($this->option_codes, $compareOptionsWithPackages);
 
         $revisedOptionCodesList = $pullPackagesOutOfList;
 
@@ -191,8 +253,12 @@ class DealEquipmentMunger
             })
             ->flatMap(function ($equipment) use ($combinedDealCodes) {
 
-                if ($equipment->optionCode !== 'N/A') {
+                //
+                //
+                if($equipment->optionCode !== 'N/A' && in_array($equipment->optionCode, $this->option_codes)) {
+
                     $equipmentSchemaId = $equipment->schemaId;
+
                     $matchingFeatures = Feature::whereRaw("JSON_CONTAINS(jato_schema_ids, '[$equipmentSchemaId]')")->get();
 
                     // Some of the custom mappings have more th an one feature with the same schemaIds, so if multiple features are returned here,
@@ -203,6 +269,8 @@ class DealEquipmentMunger
                     }
 
                     if ($matchingFeatures->isEmpty()) {
+
+                        print " WTF === {$equipment->optionCode} | {$equipment->optionName} \n";
                         return null;
                     }
                 }
@@ -350,6 +418,7 @@ class DealEquipmentMunger
         if ($equipment->schemaId !== 20601) {
             return;
         }
+
 
         return collect($equipment->attributes)
             ->filter(function ($attribute) {
