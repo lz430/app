@@ -41,7 +41,7 @@ class DealMunger
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function import(bool $force)
+    public function import(bool $force = FALSE)
     {
         $debug = [];
 
