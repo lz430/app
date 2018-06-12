@@ -28,8 +28,8 @@ class DealPhotosMunger
         $this->fuelClient = $fuelClient;
 
         $this->debug = [
-          'deal_photos' => 0,
-          'stock_photos' => 0,
+            'deal_photos' => 0,
+            'stock_photos' => 0,
         ];
     }
 
@@ -39,14 +39,14 @@ class DealPhotosMunger
      */
     public function import(bool $force = FALSE)
     {
-
-        // On create or no photos
-        if ($this->deal->wasRecentlyCreated || !$this->deal->photos()->count() || $force) {
+        // When No photos.
+        if (!$this->deal->photos()->count() || $force) {
             $this->saveDealPhotos();
         }
 
-        // If still no photos attempt to attach some stock photos to the version.
-        if (!$this->deal->photos()->count() || $force) {
+        //
+        // Usually we skip the first photo, so load some stock if have less than two deal photos.
+        if ($this->deal->photos()->count() < 2) {
             $this->saveDealStockPhotos();
         }
 
@@ -91,6 +91,7 @@ class DealPhotosMunger
         if ($deal->version->photos()->where('color', '=', $deal->color)->count()) {
             return;
         }
+
         $count = 0;
 
         $assets = (new VersionToFuel($deal->version, $this->fuelClient))->assets($deal->color);

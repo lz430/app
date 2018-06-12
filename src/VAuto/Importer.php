@@ -85,7 +85,6 @@ class Importer
     private $fuelClient;
 
     private $error;
-    private $features;
     private $filesystem;
     private $info;
     private $debug;
@@ -193,13 +192,9 @@ class Importer
             $vins[] = $row['VIN'];
         }
 
-        $decodedData = $this->decodeVins($vins);
-
         foreach ($batch as $row) {
-            if (isset($decodedData[$row['VIN']])) {
-                $row = $this->transformRecord($row);
-                $this->processRecord($row, $decodedData[$row['VIN']]);
-            }
+            $row = $this->transformRecord($row);
+            $this->processRecord($row);
         }
     }
 
@@ -235,13 +230,12 @@ class Importer
 
     /**
      * @param array $row
-     * @param \stdClass $decodedVin
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function processRecord(array $row, \stdClass $decodedVin)
+    private function processRecord(array $row)
     {
         try {
-            list($version, $versionDebugData) = (new VersionMunger($row, $decodedVin, $this->jatoClient, $this->fuelClient))->build();
+            list($version, $versionDebugData) = (new VersionMunger($row, $this->jatoClient, $this->fuelClient))->build();
             $this->info("Deal: {$row['VIN']} - {$row['Stock #']}");
 
             //
@@ -249,8 +243,8 @@ class Importer
             if (!$version) {
                 Log::channel('jato')->error('Could not find exact match for VIN -> JATO Version', [
                     'VAuto Row' => $row,
-                    'JATO VIN Decode' => $decodedVin,
                 ]);
+                $this->info("    -- Error: Could not find match for vin");
                 return;
             }
 
@@ -268,18 +262,19 @@ class Importer
             $this->info("    -- Is New: " . ($deal->wasRecentlyCreated ? "Yes" : "No"));
 
             DB::transaction(function () use ($deal, $row) {
-                $debug = (new DealMunger($deal, $this->jatoClient, $this->fuelClient, $this->features, $row))->import(TRUE);
+                $debug = (new DealMunger($deal, $this->jatoClient, $this->fuelClient, $row))->import(TRUE);
 
                 // Equipment
                 if (count($debug['equipment_extracted_codes'])) {
-                    $msg = implode(", ", $debug['equipment_extracted_codes']);
+                    $codes = collect($debug['equipment_extracted_codes'])->pluck('Option Code')->all();
+                    $msg = implode(", ", $codes);
                     $this->info("    -- Equipment: Extracted Option Codes: {$msg}");
                 }
 
-                $this->info("    -- Equipment: Known: {$debug['equipment_known_feature_count']}");
-                $this->info("    -- Equipment: Vauto Guessed: {$debug['equipment_vauto_feature_count']}");
-                $this->info("    -- Equipment: Vauto New: {$debug['equipment_vauto_extra_feature_count']}");
-                $this->info("    -- Equipment: Total: {$debug['equipment_feature_count']}");
+                //$this->info("    -- Equipment: Known: {$debug['equipment_known_feature_count']}");
+                //$this->info("    -- Equipment: Vauto Guessed: {$debug['equipment_vauto_feature_count']}");
+                //$this->info("    -- Equipment: Vauto New: {$debug['equipment_vauto_extra_feature_count']}");
+                //$this->info("    -- Equipment: Total: {$debug['equipment_feature_count']}");
 
                 // Features
                 $this->info("    -- Features: New Jato Features: {$debug['feature_count']}");
@@ -301,47 +296,6 @@ class Importer
             Log::channel('jato')->error('Importer error for vin [' . $row['VIN'] . ']: ' . $e->getMessage());
             $this->error('Error: ' . $e->getMessage());
         }
-    }
-
-    /**
-     * @param array $vins
-     * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    private function decodeVins(array $vins): array
-    {
-        $start = microtime(true);
-        $decodedVinData = [];
-        try {
-            $decodedVinData = $this->jatoClient->vin->decodeBulk($vins);
-        } catch (ClientException $e) {
-            // If we get back a 404 it means one or more of the vins
-            // were invalid.
-            if ($e->getCode() == '404') {
-                $body = $e->getResponse()->getBody()->getContents();
-                preg_match('/\'([^"]+)\'/', $body, $m);
-                $m = end($m);
-                if (array_search($m, $vins) !== FALSE) {
-                    unset($vins[array_search($m, $vins)]);
-                    $this->decodeVins($vins);
-                } else {
-                    // something probably failed to extract the vin info
-                    return [];
-                }
-            } else {
-                return [];
-            }
-        }
-
-        $data = [];
-        foreach ($decodedVinData as $vehicle) {
-            $data[$vehicle->vin] = $vehicle;
-        }
-
-        $stop = microtime(true);
-        $time = $stop - $start;
-        $this->info("decodeVins: {$time}");
-        return $data;
     }
 
     /**
@@ -375,8 +329,6 @@ class Importer
      */
     public function import()
     {
-        $this->features = Feature::with('category')->get();
-
         $sources = $this->buildSourceData();
         $hashes = [];
         foreach ($sources as $source) {
