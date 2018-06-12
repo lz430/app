@@ -45,7 +45,11 @@ class DealFeaturesMunger
      */
     public function import(bool $force = FALSE)
     {
-        if (!$this->deal->jatoFeatures()->count() && !$force){
+        if ($force) {
+            $this->deal->jatoFeatures()->sync([]);
+        }
+
+        if ($this->deal->jatoFeatures()->count()){
             return $this->debug;
         }
 
@@ -128,7 +132,6 @@ class DealFeaturesMunger
 
                         $feature->deals()->save($this->deal);
                         $this->debug['feature_count']++;
-                        print_r($this->debug);
                     } catch (QueryException $e) {
                         // Already saved.
                     }

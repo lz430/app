@@ -23,17 +23,14 @@ class DealMunger
      * @param Deal $deal
      * @param JatoClient $jatoClient
      * @param FuelClient $fuelClient
-     * @param $features
      * @param array $row
      */
     public function __construct(Deal $deal,
                                 JatoClient $jatoClient,
                                 FuelClient $fuelClient,
-                                $features,
                                 array $row)
     {
         $this->deal = $deal;
-        $this->features = $features;
         $this->row = $row;
         $this->jatoClient = $jatoClient;
         $this->fuelClient = $fuelClient;
@@ -48,7 +45,7 @@ class DealMunger
     {
         $debug = [];
 
-        $equipment_debug = (new DealEquipmentMunger($this->deal, $this->features, $this->jatoClient))->import($force);
+        $equipment_debug = (new DealEquipmentMunger($this->deal, $this->jatoClient))->import($force);
         $features_debug = (new DealFeaturesMunger($this->deal, $this->jatoClient))->import($force);
         $photos_debug = (new DealPhotosMunger($this->deal, $this->row, $this->fuelClient))->import($force);
 

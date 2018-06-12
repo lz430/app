@@ -29,18 +29,20 @@ class DealEquipmentMunger
     /* @var \Illuminate\Support\Collection */
     private $options;
 
+    private $discovered_features;
+
     /**
      * @param Deal $deal
-     * @param $features
      * @param JatoClient $client
      */
-    public function __construct(Deal $deal, $features, JatoClient $client)
+    public function __construct(Deal $deal, JatoClient $client)
     {
 
         $this->deal = $deal;
         $this->client = $client;
         $this->version = $this->deal->version;
-        $this->features = $features;
+        $this->features = Feature::with('category')->get();
+        $this->discovered_features = [];
 
         $this->debug = [
             'equipment_extracted_codes' => [],
@@ -55,13 +57,18 @@ class DealEquipmentMunger
      */
     public function import(bool $force = FALSE)
     {
-        if (!$this->deal->features()->count() && !$force){
+        if ($force) {
+            $this->deal->features()->sync([]);
+        }
+
+        if ($this->deal->features()->count()) {
             return $this->debug;
         }
 
         //
         // Get get data sources
         $this->initializeData();
+
         //
         // Do some additional transformation
         $this->extractAdditionalOptionCodes();
@@ -69,33 +76,55 @@ class DealEquipmentMunger
 
         //
         // Finally get some features.
-        $featureIds = [];
-        $knownFeatureIds = $this->getFeaturesForDeal();
-        $this->debug['equipment_known_feature_count'] = count($knownFeatureIds);
+        $this->buildFeaturesForMiscData();
+        $this->buildFeaturesForStandardEquipment();
+        $this->buildFeaturesForOptionCodes();
+        $this->buildFeaturesFromGuessedVautoNames();
 
-        $vautoGuessedFeatureIds = $this->getGuessedvAutoFeatureIds();
-        $this->debug['equipment_vauto_feature_count'] = count($vautoGuessedFeatureIds);
-
-        $this->debug['equipment_vauto_extra_feature_count'] = count(array_diff($vautoGuessedFeatureIds, $knownFeatureIds));
-
-        $featureIds = array_merge($featureIds, $knownFeatureIds, $vautoGuessedFeatureIds);
-        $featureIds = array_unique($featureIds);
-        $this->debug['equipment_feature_count'] = count($featureIds);
-        $this->deal->features()->sync($featureIds);
+        //
+        // Save discovered features to deal.
+        $this->updateDealWithDiscoveredFeatures();
 
         return $this->debug;
+    }
+
+    private function updateDealWithDiscoveredFeatures()
+    {
+        $featureIds = [];
+
+        foreach ($this->discovered_features as $category => $features) {
+            $featureIds = array_merge($featureIds, array_keys($features));
+        }
+
+        $this->deal->features()->sync($featureIds);
+    }
+
+    /**
+     * Fancy print Discovered Features
+     */
+    public function printDiscoveredFeatures()
+    {
+        foreach ($this->discovered_features as $category => $features) {
+            print "======= {$category} ======= \n";
+            foreach ($features as $feature) {
+                print "  --- {$feature->title} \n";
+
+            }
+        }
     }
 
     /**
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function initializeData() {
+    public function initializeData()
+    {
         $this->equipment = $this->fetchVersionEquipment();
         $this->packages = $this->fetchVersionPackages();
         $this->options = $this->fetchVersionOptions();
     }
 
-    public function initializeOptionCodes($override = []) {
+    public function initializeOptionCodes($override = [])
+    {
         if (count($override)) {
             $this->option_codes = $override;
         } else {
@@ -131,33 +160,6 @@ class DealEquipmentMunger
     }
 
     /**
-     * This is not at all performant, but getting pretty desperate.
-     */
-    public function getGuessedvAutoFeatureIds() {
-        $features = $this->features
-            ->map(function ($feature) {
-                return [$feature->title, $feature->id];
-            })->toArray();
-
-
-        $vautoFeatures = explode("|", $this->deal->vauto_features);
-        $vautoFeatures = array_map('trim', $vautoFeatures);
-
-        $found_features = [];
-        foreach($vautoFeatures as $name) {
-            foreach($features as $feature) {
-                $score = levenshtein($name, $feature[0]);
-                if ($score < 5) {
-                    $found_features[] = $feature[1];
-                }
-            }
-        }
-
-        return $found_features;
-
-    }
-
-    /**
      * Attempts to extract additional option codes for a given deal by checking how similar
      * a vauto feature is to a known jato optional equipment. if a feature is pretty close we assume
      * it's an option code the deal has and attach it to the vehicle.
@@ -181,10 +183,17 @@ class DealEquipmentMunger
         $features = array_map('trim', $features);
 
         $additional_option_codes = [];
+
         foreach ($features as $feature) {
             foreach ($all_version_optional as $code => $optional) {
                 $score = levenshtein($optional, $feature);
                 if ($score < 5) {
+                    $this->debug['equipment_extracted_codes'][] = [
+                        'Option Code' => $code,
+                        'Option Title' => $optional,
+                        'Feature' => $feature,
+                        'Score' => $score,
+                    ];
                     $additional_option_codes[] = $code;
                 }
             }
@@ -193,7 +202,9 @@ class DealEquipmentMunger
 
         $additional_option_codes = array_diff($additional_option_codes, $original_options);
         $option_codes = array_merge($additional_option_codes, $option_codes);
-        $this->debug['equipment_extracted_codes'] = array_merge($this->debug['equipment_extracted_codes'], $additional_option_codes);
+        //$this->debug['equipment_extracted_codes'] = array_merge($this->debug['equipment_extracted_codes'], $additional_option_codes);
+
+
         if ($option_codes != $original_options) {
             $this->deal->option_codes = $option_codes;
             $this->deal->save();
@@ -202,13 +213,230 @@ class DealEquipmentMunger
     }
 
     /**
-     * Returns an array of package codes.
+     * This is not at all performant, but getting pretty desperate.
+     */
+    public function buildFeaturesFromGuessedVautoNames()
+    {
+        $vautoFeatures = explode("|", $this->deal->vauto_features);
+        $vautoFeatures = array_map('trim', $vautoFeatures);
+
+        $features = $this->features
+            ->reject(function ($feature) use ($vautoFeatures) {
+                foreach ($vautoFeatures as $name) {
+                    $score = levenshtein($name, $feature[0]);
+                    if ($score < 5) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+
+        $this->categorizeDiscoveredFeatures($features);
+
+        return null;
+
+    }
+
+    /**
+     * @param $features
+     */
+    private function categorizeDiscoveredFeatures($features)
+    {
+        foreach ($features as $feature) {
+            $category = $feature->category->title;
+            if (!isset($this->discovered_features[$category])) {
+                $this->discovered_features[$category] = [];
+            }
+
+            $this->discovered_features[$feature->category->title][$feature->id] = $feature;
+        }
+    }
+
+    /**
+     * Build features based on option codes.
+     */
+    public function buildFeaturesForOptionCodes()
+    {
+        $features = $this->equipment
+            ->reject(function ($equipment) {
+                return $equipment->availability !== "optional";
+            })
+            ->reject(function ($equipment) {
+                return $equipment->optionCode === 'N/A';
+            })
+            ->reject(function ($equipment) {
+                return !in_array($equipment->optionCode, $this->option_codes);
+            })
+            ->map(function ($equipment) {
+                return $this->getFeatureFromEquipment($equipment);
+            })
+            ->filter()
+            ->unique();
+
+        $this->categorizeDiscoveredFeatures($features);
+    }
+
+    /**
+     * Build features based on option codes.
+     */
+    public function buildFeaturesForMiscData()
+    {
+        $features = $this->equipment
+            ->reject(function ($equipment) {
+                return $equipment->availability != '-';
+            })
+            ->reject(function ($equipment) {
+                return $equipment->optionId !== 0;
+            })
+            ->map(function ($equipment) {
+                return $this->getFeatureFromEquipment($equipment);
+            })
+            ->filter()
+            ->unique();
+
+        $this->categorizeDiscoveredFeatures($features);
+    }
+
+    /**
+     * Build features based on standard equipment
+     */
+    public function buildFeaturesForStandardEquipment()
+    {
+        $features = $this->equipment
+            ->reject(function ($equipment) {
+                /*
+                if ($equipment->category === "Comfort & Convenience") {
+                    print_r($equipment);
+                }
+                */
+                return $equipment->availability !== 'standard';
+            })
+            ->map(function ($equipment) {
+                return $this->getFeatureFromEquipment($equipment);
+            })
+            ->filter()
+            ->unique();
+
+        $this->categorizeDiscoveredFeatures($features);
+    }
+
+
+    /**
+     * Build features based on standard equipment
+     */
+    public function equipmentDebugger()
+    {
+        $this->equipment
+            ->map(function ($equipment) {
+                if ($equipment->category === "Comfort & Convenience") {
+                    //print_r($equipment);
+                }
+            });
+    }
+
+    /**
+     * Build features using our custom direct schema id mapping.
+     * TODO: Rewrite this whole entire concept.
+     */
+    public function buildFeaturesForDirectMapping()
+    {
+        $features = $this->equipment
+            ->reject(function ($equipment) {
+                return false;
+                return $equipment->availability !== 'standard';
+            })
+            ->map(function ($equipment) {
+                print "==== {$equipment->category} \n";
+                $matchingFeatures = Feature::whereRaw("JSON_CONTAINS(jato_schema_ids, '[$equipment->schemaId]')")->get();
+                return $matchingFeatures->first();
+            })
+            ->filter();
+
+
+        $this->categorizeDiscoveredFeatures($features);
+    }
+
+    /**
+     * @param \stdClass $equipment
+     * @return Feature|null
+     */
+    private function getFeatureFromEquipment(\stdClass $equipment): ?Feature
+    {
+        $feature = $this->getFeatureFromSlugLookup($equipment);
+
+        if (!$feature) {
+            $feature = $this->getFeatureFromJatoSchemaId($equipment);
+        }
+
+        return $feature;
+    }
+
+    /**
+     * @param \stdClass $equipment
+     * @return Feature|null
+     */
+    private function getFeatureFromJatoSchemaId(\stdClass $equipment): ?Feature
+    {
+        $features = Feature::whereRaw("JSON_CONTAINS(jato_schema_ids, '[$equipment->schemaId]')")->get();
+
+        if (count($features) > 1) {
+            //print_r($features);
+        }
+
+        return $features->first();
+    }
+
+    /**
+     * Given a specific equipment, return a feature or null if no feature was found.
+     * @param \stdClass $equipment
+     * @return Feature|null
+     */
+    private function getFeatureFromSlugLookup(\stdClass $equipment): ?Feature
+    {
+        $feature = null;
+
+        //
+        // Specifically pull out the schema ids we know we care about.
+        switch ($equipment->schemaId) {
+            case 176:
+                $feature = $this->syncVehicleSize($equipment);
+                break;
+            case 8701:
+                $feature = $this->syncFuelType($equipment);
+                break;
+            case 20601:
+                $feature = $this->syncTransmission($equipment);
+                break;
+            case 6501:
+                $feature = $this->syncDriveTrain($equipment);
+                break;
+            case 17401:
+                $feature = $this->syncSeatMaterials($equipment);
+                break;
+            case 14201:
+                $feature = $this->syncPickup($equipment);
+                break;
+            case 701:
+                $feature = $this->syncSeatingConfiguration($equipment);
+                break;
+        }
+
+
+        if ($feature) {
+            return $feature;
+        }
+
+
+        return $feature;
+    }
+
+    /**
+     * Returns all the package codes available on this vehicle
      * @return array
      */
     private function getAllAvailablePackageCodes()
     {
-        $packages = $this->packages->pluck('optionCode')->toArray();
-        return $packages;
+        return $this->packages->pluck('optionCode')->toArray();
     }
 
     /**
@@ -219,8 +447,9 @@ class DealEquipmentMunger
      */
     private function removeFoundPackagesFromOptionsList()
     {
-        $jatoPackagesOnVehicle = $this->getAllAvailablePackageCodes();
-        $compareOptionsWithPackages = array_intersect($this->option_codes, $jatoPackagesOnVehicle);
+        $allPackages = $this->getAllAvailablePackageCodes();
+
+        $compareOptionsWithPackages = array_intersect($this->option_codes, $allPackages);
         $pullPackagesOutOfList = array_diff($this->option_codes, $compareOptionsWithPackages);
 
         $revisedOptionCodesList = $pullPackagesOutOfList;
@@ -255,7 +484,7 @@ class DealEquipmentMunger
 
                 //
                 //
-                if($equipment->optionCode !== 'N/A' && in_array($equipment->optionCode, $this->option_codes)) {
+                if ($equipment->optionCode !== 'N/A' && in_array($equipment->optionCode, $this->option_codes)) {
 
                     $equipmentSchemaId = $equipment->schemaId;
 
@@ -359,12 +588,13 @@ class DealEquipmentMunger
     }
 
     /**
-     * @param $equipment
+     * @param \stdClass $equipment
+     * @return Feature|null
      */
-    private function syncVehicleSize($equipment)
+    private function syncVehicleSize(\stdClass $equipment): ?Feature
     {
         if ($equipment->schemaId !== 176) {
-            return;
+            return null;
         }
 
         $segment = collect([
@@ -382,13 +612,13 @@ class DealEquipmentMunger
             ->keys()
             ->first();
 
-        return Feature::where('slug', $segment)->get();
+        return Feature::where('slug', $segment)->first();
     }
 
-    private function syncFuelType($equipment)
+    private function syncFuelType($equipment): ?Feature
     {
         if ($equipment->schemaId !== 8701) {
-            return;
+            return null;
         }
 
         return collect($equipment->attributes)
@@ -410,15 +640,18 @@ class DealEquipmentMunger
             ->unique()
             ->map(function ($slugKey) {
                 return Feature::where('slug', $slugKey)->first();
-            });
+            })->first();
     }
 
-    private function syncTransmission($equipment)
+    /**
+     * @param \stdClass $equipment
+     * @return Feature|null
+     */
+    private function syncTransmission(\stdClass $equipment): ?Feature
     {
         if ($equipment->schemaId !== 20601) {
-            return;
+            return null;
         }
-
 
         return collect($equipment->attributes)
             ->filter(function ($attribute) {
@@ -427,13 +660,17 @@ class DealEquipmentMunger
             ->pluck('value')
             ->map(function ($slugKey) {
                 return Feature::where('slug', 'transmission_' . $slugKey)->first();
-            });
+            })->first();
     }
 
-    private function syncDriveTrain($equipment)
+    /**
+     * @param $equipment
+     * @return Feature|null
+     */
+    private function syncDriveTrain($equipment): ?Feature
     {
         if ($equipment->schemaId !== 6501) {
-            return;
+            return null;
         }
 
         return collect($equipment->attributes)
@@ -443,13 +680,17 @@ class DealEquipmentMunger
             ->pluck('value')
             ->map(function ($slugKey) {
                 return Feature::where('slug', 'drive_train_' . strtolower($slugKey))->first();
-            });
+            })->first();
     }
 
-    private function syncSeatMaterials($equipment)
+    /**
+     * @param $equipment
+     * @return Feature|null
+     */
+    private function syncSeatMaterials($equipment): ?Feature
     {
         if ($equipment->schemaId !== 17401) {
-            return;
+            return null;
         }
 
         return collect($equipment->attributes)
@@ -473,13 +714,17 @@ class DealEquipmentMunger
             ->unique()
             ->map(function ($slugKey) {
                 return Feature::where('slug', $slugKey)->first();
-            });
+            })->first();
     }
 
-    private function syncSeatingConfiguration($equipment)
+    /**
+     * @param $equipment
+     * @return Feature|null
+     */
+    private function syncSeatingConfiguration($equipment): ?Feature
     {
         if ($equipment->schemaId !== 701) {
-            return;
+            return null;
         }
 
         return collect($equipment->attributes)
@@ -502,13 +747,18 @@ class DealEquipmentMunger
             ->unique()
             ->map(function ($slugKey) {
                 return Feature::where('slug', $slugKey)->first();
-            });
+            })->first();
     }
 
-    private function syncPickupSeatingConfiguration($equipment)
+    /**
+     * TODO: Why does this exist?
+     * @param $equipment
+     * @return Feature|null
+     */
+    private function syncPickupSeatingConfiguration($equipment): ?Feature
     {
         if ($equipment->schemaId !== 701) {
-            return;
+            return null;
         }
 
         return collect($equipment->attributes)
@@ -528,13 +778,17 @@ class DealEquipmentMunger
             ->unique()
             ->map(function ($slugKey) {
                 return Feature::where('slug', $slugKey)->first();
-            });
+            })->first();
     }
 
-    private function syncPickup($equipment)
+    /**
+     * @param $equipment
+     * @return Feature|null
+     */
+    private function syncPickup($equipment): ?Feature
     {
         if ($equipment->schemaId !== 14201) {
-            return;
+            return null;
         }
 
         return collect($equipment->attributes)
@@ -544,6 +798,6 @@ class DealEquipmentMunger
             ->pluck('value')
             ->map(function ($slugKey) {
                 return Feature::where('slug', strtolower($slugKey) . '_bed')->first();
-            });
+            })->first();
     }
 }

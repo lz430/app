@@ -48,9 +48,18 @@ class DealFeatureDebugger extends Command
         $dealId = $this->argument('deal');
 
         $deal = Deal::find($dealId);
+        $this->info($deal->id);
+        $this->info($deal->title());
+        $this->info(" -- Option Codes: " . implode(", ", $deal->option_codes));
 
-        $munger = new DealEquipmentMunger($deal, $this->features, $this->client);
-        $munger->initializeData();
+        $munger = new DealEquipmentMunger($deal, $this->client);
+        $debug = $munger->import(true);
+
+        $munger->printDiscoveredFeatures();
+        print_r($debug['equipment_extracted_codes']);
+
+        /*
+        $munger->initializeData();}
 
         $header = [
             'Source: Features',
@@ -136,5 +145,6 @@ class DealFeatureDebugger extends Command
             $rows[$key][4] = $feature;
         }
         $this->table($header, $rows);
+        */
     }
 }

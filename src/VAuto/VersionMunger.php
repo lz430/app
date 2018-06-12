@@ -26,16 +26,27 @@ class VersionMunger
 
     /**
      * @param array $row
-     * @param \stdClass $decodedVin
      * @param JatoClient $jatoClient
      * @param FuelClient $fuelClient
      */
-    public function __construct(array $row, \stdClass $decodedVin, JatoClient $jatoClient, FuelClient $fuelClient)
+    public function __construct(array $row, JatoClient $jatoClient, FuelClient $fuelClient)
     {
         $this->jatoClient = $jatoClient;
         $this->fuelClient = $fuelClient;
-        $this->decodedVin = $decodedVin;
         $this->row = $row;
+    }
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function decodeVin()
+    {
+        try {
+            $decodedVin = $this->jatoClient->vin->decode($this->row['VIN']);
+        } catch (\Exception $e) {
+            $decodedVin = null;
+        }
+        $this->decodedVin = $decodedVin;
     }
 
     /**
@@ -308,10 +319,16 @@ class VersionMunger
     {
         //
         // Match Jato Version
+        $this->decodeVin();
+        if (!$this->decodedVin) {
+            return [FALSE, FALSE, FALSE];
+        }
+
         $jatoVersion = $this->matchVinToVersion();
         if (!$jatoVersion) {
             return [FALSE, FALSE, FALSE];
         }
+
         $this->jatoVersion = $jatoVersion;
 
         //
