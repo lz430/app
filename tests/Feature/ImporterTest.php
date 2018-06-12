@@ -2,17 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use App\Models\Deal;
-use App\Models\Purchase;
 use Tests\TestCase;
 use App\Models\JATO\Version;
-use Illuminate\Mail\Mailable;
 use DeliverMyRide\VAuto\Importer;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\ApplicationSubmittedDMR;
 use Illuminate\Support\Facades\Config;
-use App\Mail\ApplicationSubmittedUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 

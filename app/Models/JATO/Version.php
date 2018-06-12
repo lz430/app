@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @property int $id
+ * @property int $jato_vehicle_id
+ * @property \DateTime $created_at
+ * @property \DateTime $updated_at
+ */
 class Version extends Model
 {
     protected $guarded = ['id'];
