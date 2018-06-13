@@ -5,7 +5,6 @@ namespace DeliverMyRide\VAuto\Deal;
 use App\Models\Feature;
 use App\Models\Deal;
 use DeliverMyRide\JATO\JatoClient;
-use PhpParser\Node\Expr\Cast\Object_;
 
 /**
  *
@@ -17,6 +16,9 @@ class DealEquipmentMunger
     private $deal;
     private $version;
     private $option_codes;
+
+    /* @var \Illuminate\Support\Collection */
+    private $vauto_features;
 
     /* @var \Illuminate\Support\Collection */
     private $features;
@@ -44,6 +46,7 @@ class DealEquipmentMunger
         $this->version = $this->deal->version;
         $this->features = Feature::with('category')->get();
         $this->discovered_features = [];
+        $this->vauto_features = [];
 
         $this->debug = [
             'equipment_extracted_codes' => [],
@@ -69,6 +72,7 @@ class DealEquipmentMunger
         //
         // Get get data sources
         $this->initializeData();
+        $this->processVautoFeature();
 
         //
         // Do some additional transformation
@@ -80,14 +84,10 @@ class DealEquipmentMunger
         $this->buildFeaturesForMiscData();
         $this->buildFeaturesForStandardEquipment();
         $this->buildFeaturesForOptionCodes();
-
         $this->buildFeaturesForKnownAttributes();
+        $this->buildFeaturesForMappedVautoData();
 
-        //$this->buildFeaturesFromGuessedVautoNames();
-
-
-
-        $this->equipmentDebugger();
+        //$this->equipmentDebugger();
 
         //
         // Remove conflicting features
@@ -112,11 +112,10 @@ class DealEquipmentMunger
         $reduced = [];
 
         foreach ($this->discovered_features as $category => $features) {
-            foreach($features as $feature) {
+            foreach ($features as $feature) {
                 if (!isset($reduced[$feature->equipment->schemaId])) {
                     $reduced[$feature->equipment->schemaId] = $feature;
-                }
-                elseif ($reduced[$feature->equipment->schemaId]->equipment->optionId < $feature->equipment->optionId) {
+                } elseif ($reduced[$feature->equipment->schemaId]->equipment->optionId < $feature->equipment->optionId) {
                     $reduced[$feature->equipment->schemaId] = $feature;
                 }
             }
@@ -253,10 +252,31 @@ class DealEquipmentMunger
     }
 
     /**
+     * Turn the vauto features into something more useful.
+     */
+    private function processVautoFeature()
+    {
+        $vautoFeatures = explode("|", $this->deal->vauto_features);
+        $vautoFeatures = array_map('trim', $vautoFeatures);
+
+        $collection = collect($vautoFeatures)
+            ->map(function ($item) {
+                return trim($item);
+            })
+            ->map(function ($item) {
+                return preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $item);
+            })
+            ->filter();
+
+        $this->vauto_features = $collection;
+    }
+
+    /**
      * This is not at all performant, but getting pretty desperate.
      */
     public function buildFeaturesFromGuessedVautoNames()
     {
+
         $vautoFeatures = explode("|", $this->deal->vauto_features);
         $vautoFeatures = array_map('trim', $vautoFeatures);
 
@@ -280,10 +300,33 @@ class DealEquipmentMunger
     }
 
     /**
+     *
+     */
+    public function buildFeaturesForMappedVautoData()
+    {
+        $features = $this->vauto_features
+            ->map(function ($item) {
+                return Feature::withVautoFeature($item)->get()->first();
+            })
+            ->filter()
+            ->unique()
+            ->map(function ($feature) {
+                return (object)[
+                    'feature' => $feature,
+                    'equipment' => (object)[
+                        'optionId' => 0,
+                        'schemaId' => "VA|".$feature->title,
+                    ],
+                ];
+            });
+        $this->categorizeDiscoveredFeatures($features);
+    }
+
+    /**
      * @param $features
      * @param bool $reset
      */
-    private function categorizeDiscoveredFeatures($features,  $reset = FALSE)
+    private function categorizeDiscoveredFeatures($features, $reset = FALSE)
     {
 
         if ($reset) {
@@ -387,17 +430,17 @@ class DealEquipmentMunger
                 return $attribute->value != 'yes';
             })
             ->map(function ($attribute) {
-                $feature = $this->getFeatureFromJatoSchemaId((object) ['schemaId' => $attribute->schemaId]);
+                $feature = $this->getFeatureFromJatoSchemaId((object)['schemaId' => $attribute->schemaId]);
                 if (!$feature) {
                     return null;
                 }
 
-                return (object) [
+                return (object)[
                     'feature' => $feature,
-                    'equipment' => (object) [
+                    'equipment' => (object)[
                         'optionId' => 0,
                         'schemaId' => $attribute->schemaId,
-                  ],
+                    ],
                 ];
 
             })
@@ -413,7 +456,7 @@ class DealEquipmentMunger
     {
         $this->equipment
             ->map(function ($equipment) {
-                if ($equipment->category == "Safety & Driver Assist"){
+                if ($equipment->category == "Safety & Driver Assist") {
                 }
             });
     }
@@ -431,7 +474,7 @@ class DealEquipmentMunger
         }
 
         if ($feature) {
-           return  (object) ['feature' => $feature, 'equipment' => $equipment];
+            return (object)['feature' => $feature, 'equipment' => $equipment];
         }
 
         return null;
@@ -443,7 +486,7 @@ class DealEquipmentMunger
      */
     private function getFeatureFromJatoSchemaId(\stdClass $equipment): ?Feature
     {
-        $features = Feature::whereRaw("JSON_CONTAINS(jato_schema_ids, '[$equipment->schemaId]')")->get();
+        $features = Feature::withJatoSchemaId($equipment->schemaId)->get();
         return $features->first();
     }
 

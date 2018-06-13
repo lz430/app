@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         Commands\JatoVersionReport::class,
         Commands\VersionFillMissingPhotos::class,
         Commands\DealFeatureDebugger::class,
+        Commands\ImportVautoMapData::class,
     ];
 
     /**
