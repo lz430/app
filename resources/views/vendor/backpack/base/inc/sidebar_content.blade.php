@@ -7,6 +7,18 @@
 
 <li class="header">Data</li>
 <li>
+    <a href="/admin/feature">
+        <i class="fa fa-rocket"></i>
+        <span>Features</span>
+    </a>
+</li>
+<li>
+    <a href="/admin/category">
+        <i class="fa fa-object-group"></i>
+        <span>Categories</span>
+    </a>
+</li>
+<li>
     <a href="/admin/dealer">
         <i class="fa fa-car"></i>
         <span>Dealers</span>
