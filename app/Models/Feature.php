@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+use Backpack\CRUD\CrudTrait;
+
+
 /**
  * TODO: Rename jato_schema_ids to map_jato_features
  *
@@ -23,6 +26,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Feature extends Model
 {
+    use CrudTrait;
+
+
     /**
      * @var array
      */

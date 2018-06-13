@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Backpack\CRUD\CrudTrait;
 
 /**
  * Class Category
  */
 class Category extends Model
 {
+    use CrudTrait;
+
     protected $fillable = [
         'title',
         'slug',
