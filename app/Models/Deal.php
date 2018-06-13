@@ -72,6 +72,15 @@ class Deal extends Model
      */
     protected $mapping = [
         'properties' => [
+            'created_at' => [
+                'type' => 'date',
+            ],
+            'updated_at' => [
+                'type' => 'date',
+            ],
+            'inventory_date' => [
+                'type' => 'date',
+            ],
             'location' => [
                 'type' => 'geo_point',
             ],
@@ -432,6 +441,18 @@ class Deal extends Model
     }
 
     /**
+     * @return mixed
+     */
+    public function shouldBeSearchable()
+    {
+        if (!$this->dealer) {
+            return FALSE;
+        }
+
+        return true;
+    }
+
+    /**
      * Get the indexable data array for the model.
      *
      * @return array
@@ -443,9 +464,9 @@ class Deal extends Model
         //
         // Basic record information
         $record['id'] = $this->id;
-        $record['created_at'] = $this->created_at;
-        $record['updated_at'] = $this->updated_at;
-        $record['inventory_date'] = $this->inventory_date;
+        $record['created_at'] = $this->created_at->format('c');
+        $record['updated_at'] = $this->updated_at->format('c');
+        $record['inventory_date'] = $this->inventory_date->format('c');
 
         //
         // Vehicle identification information
@@ -467,7 +488,6 @@ class Deal extends Model
         // Required vehicle attributes
         $record['body'] = $this->body;
         $record['engine'] = $this->engine;
-        $record['transmission'] = $this->transmission;
         $record['doors'] = $this->door_count;
         $record['color'] = $this->color;
         $record['interior_color'] = $this->interior_color;

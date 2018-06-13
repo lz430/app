@@ -19,6 +19,15 @@ class ResultsContainer extends React.Component {
                 'StyleFilter',
                 'ColorFilter',
                 'ComfortFilter',
+                'DriveTrainFilter',
+                'FuelTypeFilter',
+                'SeatingFilter',
+                'SeatingConfigFilter',
+                'MsrpFilter',
+                'TransmissionFilter',
+                'InfotainmentFilter',
+                'SafetyFilter',
+                'PickupFilter',
             ],
         };
 
