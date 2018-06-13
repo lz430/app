@@ -486,8 +486,7 @@ class DealEquipmentMunger
      */
     private function getFeatureFromJatoSchemaId(\stdClass $equipment): ?Feature
     {
-        $features = Feature::withJatoSchemaId($equipment->schemaId)->get();
-        return $features->first();
+        return Feature::withJatoSchemaId($equipment->schemaId)->get()->first();
     }
 
     /**
@@ -675,51 +674,29 @@ class DealEquipmentMunger
         if ($equipment->schemaId !== 701) {
             return null;
         }
+        $isPickup = $this->version->body_style === 'Pickup';
 
         return collect($equipment->attributes)
             ->filter(function ($attribute) {
                 return $attribute->name == "seating configuration";
             })
-            ->pluck('value')->map(function ($value) {
-                if (str_contains(strtolower($value), ['2+3+3+4'])) {
-                    return 'fourth_row_seating';
-                } elseif (str_contains(strtolower($value), ['2+3+2', '2+3+3', '2+2+2', '2+2+3', '2+3+3'])) {
-                    return 'third_row_seating';
-                } elseif (str_contains(strtolower($value), ['2+3'])) {
-                    return 'second_row_bench';
-                } elseif (str_contains(strtolower($value), ['2+2'])) {
-                    return 'second_row_captains_chairs';
-                }
-                return null;
-            })
-            ->filter()
-            ->unique()
-            ->map(function ($slugKey) {
-                return Feature::where('slug', $slugKey)->first();
-            })->first();
-    }
-
-    /**
-     * TODO: Why does this exist?
-     * @param $equipment
-     * @return Feature|null
-     */
-    private function syncPickupSeatingConfiguration($equipment): ?Feature
-    {
-        if ($equipment->schemaId !== 701) {
-            return null;
-        }
-
-        return collect($equipment->attributes)
-            ->filter(function ($attribute) {
-                return $attribute->name == "seating configuration";
-            })
-            ->pluck('value')
-            ->map(function ($value) {
-                if (str_contains(strtolower($value), ['2+0', '3+0'])) {
-                    return 'regular_cab';
-                } elseif (str_contains(strtolower($value), ['2+2', '2+3', '3+3'])) {
-                    return strtolower($this->version->cab) . '_cab';
+            ->pluck('value')->map(function ($value) use ($isPickup) {
+                if ($isPickup) {
+                    if (str_contains(strtolower($value), ['2+0', '3+0'])) {
+                        return 'regular_cab';
+                    } elseif (str_contains(strtolower($value), ['2+2', '2+3', '3+3'])) {
+                        return strtolower($this->version->cab) . '_cab';
+                    }
+                } else {
+                    if (str_contains(strtolower($value), ['2+3+3+4'])) {
+                        return 'fourth_row_seating';
+                    } elseif (str_contains(strtolower($value), ['2+3+2', '2+3+3', '2+2+2', '2+2+3', '2+3+3'])) {
+                        return 'third_row_seating';
+                    } elseif (str_contains(strtolower($value), ['2+3'])) {
+                        return 'second_row_bench';
+                    } elseif (str_contains(strtolower($value), ['2+2'])) {
+                        return 'second_row_captains_chairs';
+                    }
                 }
                 return null;
             })
