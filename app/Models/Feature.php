@@ -3,21 +3,44 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * TODO: Rename jato_schema_ids to map_jato_features
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property array|null jato_schema_ids
+ * @property array|null map_vauto_features
+ * @property int $display_order
+ * @property \DateTime $created_at
+ * @property \DateTime $updated_at
+ * @property int $category_id
+ * @property Category $category
+ */
 class Feature extends Model
 {
     /**
      * @var array
      */
-    protected $fillable = ['title', 'slug', 'dmr_category_id', 'display_order', 'jato_schema_ids'];
+    protected $fillable = [
+        'title',
+        'slug',
+        'category_id',
+        'display_order',
+        'jato_schema_ids',
+        'map_vauto_features'
+    ];
 
     /**
      * @var array
      */
     protected $casts = [
-        'jato_schema_ids' => 'array'
+        'jato_schema_ids' => 'array',
+        'map_vauto_features' => 'array',
     ];
 
     /**
@@ -35,4 +58,25 @@ class Feature extends Model
     {
         return $this->belongsToMany(Deal::class);
     }
+
+    /**
+     * @param Builder $query
+     * @param int $schemaId
+     * @return Builder
+     */
+    public function scopeWithJatoSchemaId(Builder $query, int $schemaId): Builder
+    {
+        return $query->whereRaw("JSON_CONTAINS(jato_schema_ids, ?)", [[(string) $schemaId]]);
+    }
+
+    /**
+     * @param Builder $query
+     * @param string $feature
+     * @return Builder
+     */
+    public function scopeWithVautoFeature(Builder $query, string $feature): Builder
+    {
+        return $query->whereRaw("JSON_CONTAINS(map_vauto_features, JSON_ARRAY(?))", [$feature]);
+    }
+
 }
