@@ -80,7 +80,14 @@ class DealEquipmentMunger
         $this->buildFeaturesForMiscData();
         $this->buildFeaturesForStandardEquipment();
         $this->buildFeaturesForOptionCodes();
-        $this->buildFeaturesFromGuessedVautoNames();
+
+        $this->buildFeaturesForKnownAttributes();
+
+        //$this->buildFeaturesFromGuessedVautoNames();
+
+
+
+        $this->equipmentDebugger();
 
         //
         // Remove conflicting features
@@ -193,6 +200,9 @@ class DealEquipmentMunger
      * Attempts to extract additional option codes for a given deal by checking how similar
      * a vauto feature is to a known jato optional equipment. if a feature is pretty close we assume
      * it's an option code the deal has and attach it to the vehicle.
+     *
+     * TODO errors:
+     *  - Alloy Seats vs Black Seats returns "4"
      */
     public function extractAdditionalOptionCodes()
     {
@@ -260,6 +270,9 @@ class DealEquipmentMunger
                 }
                 return true;
             });
+
+        //print "SUP";
+        //print_r($features->toArray());
 
         //$this->categorizeDiscoveredFeatures($features);
 
@@ -351,13 +364,57 @@ class DealEquipmentMunger
     }
 
     /**
+     * Build from attributes. These are mostly known.
+     */
+    public function buildFeaturesForKnownAttributes()
+    {
+        $parentSchemasIds = [
+            59801,  // mobile (android etc)
+            1301, // audio system 1301
+        ];
+
+        $features = $this->equipment
+            ->reject(function ($equipment) {
+                return $equipment->availability !== 'standard';
+            })
+            ->reject(function ($equipment) use ($parentSchemasIds) {
+                return !in_array($equipment->schemaId, $parentSchemasIds);
+            })
+            ->flatMap(function ($equipment) {
+                return $equipment->attributes;
+            })
+            ->reject(function ($attribute) {
+                return $attribute->value != 'yes';
+            })
+            ->map(function ($attribute) {
+                $feature = $this->getFeatureFromJatoSchemaId((object) ['schemaId' => $attribute->schemaId]);
+                if (!$feature) {
+                    return null;
+                }
+
+                return (object) [
+                    'feature' => $feature,
+                    'equipment' => (object) [
+                        'optionId' => 0,
+                        'schemaId' => $attribute->schemaId,
+                  ],
+                ];
+
+            })
+            ->filter();
+
+        $this->categorizeDiscoveredFeatures($features);
+    }
+
+    /**
      * Just a helper
      */
     public function equipmentDebugger()
     {
         $this->equipment
             ->map(function ($equipment) {
-
+                if ($equipment->category == "Safety & Driver Assist"){
+                }
             });
     }
 
@@ -387,11 +444,6 @@ class DealEquipmentMunger
     private function getFeatureFromJatoSchemaId(\stdClass $equipment): ?Feature
     {
         $features = Feature::whereRaw("JSON_CONTAINS(jato_schema_ids, '[$equipment->schemaId]')")->get();
-
-        if (count($features) > 1) {
-            //print_r($features);
-        }
-
         return $features->first();
     }
 
@@ -430,11 +482,9 @@ class DealEquipmentMunger
                 break;
         }
 
-
         if ($feature) {
             return $feature;
         }
-
 
         return $feature;
     }

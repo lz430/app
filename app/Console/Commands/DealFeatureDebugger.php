@@ -56,6 +56,6 @@ class DealFeatureDebugger extends Command
         $debug = $munger->import(true);
 
         $munger->printDiscoveredFeatures();
-        print_r($debug['equipment_extracted_codes']);
+        //print_r($debug['equipment_extracted_codes']);
     }
 }
