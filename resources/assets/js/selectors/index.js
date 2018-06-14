@@ -266,7 +266,7 @@ const dealPricing = createSelector(
         zipcode,
         paymentType,
         employeeBrand,
-        financeDownPaymentment,
+        financeDownPayment,
         financeTerm,
         dealLeaseAnnualMileage,
         dealLeaseTerm,

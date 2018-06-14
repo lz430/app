@@ -5,6 +5,7 @@ import * as ActionTypes from 'actiontypes/index';
 import jsonp from 'jsonp';
 
 export function requestDealQuote(deal) {
+    console.log('requestDealQuote');
     return {
         type: ActionTypes.REQUEST_DEAL_QUOTE,
         deal: deal,
@@ -261,6 +262,7 @@ export function checkZipInRange(code) {
 }
 
 export function setZipInRange(data) {
+    console.log('setZipInRange');
     return dispatch => {
         api.setZip(data.code).then(() => {
             return dispatch({
@@ -411,6 +413,7 @@ export function requestLocationInfo() {
 }
 
 export function receiveLocationInfo(data) {
+    console.log('receiveLocationInfo');
     return (dispatch, getState) => {
         const zipcode = data.zip_code;
         const city = data.city;
@@ -576,6 +579,8 @@ export function receiveLeaseRates(deal, zipcode, data) {
  * @deprecated
  */
 export function requestBestOffer(deal) {
+    console.log('requestBestOffer');
+
     return {
         type: ActionTypes.REQUEST_DEAL_QUOTE,
         deal: deal,

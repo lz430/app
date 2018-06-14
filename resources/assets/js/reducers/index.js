@@ -459,9 +459,7 @@ const reducer = (state, action) => {
         case ActionTypes.REQUEST_LEASE_RATES:
             return state;
         case ActionTypes.RECEIVE_LEASE_RATES:
-            const leaseRatesKey = `${action.deal.version.jato_vehicle_id}.${
-                action.zipcode
-            }`;
+            const leaseRatesKey = `${action.deal.id}.${action.zipcode}`;
 
             return {
                 ...state,

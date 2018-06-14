@@ -44,7 +44,6 @@ class DealPrice extends React.Component {
     }
 
     showWhenPricingIsLoaded() {
-        console.log(this.props.dealPricing);
         if (this.props.dealPricing.isPricingLoading()) {
             return <SVGInline svg={miscicons['loading']} />;
         }

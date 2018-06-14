@@ -37,9 +37,13 @@ export default class DealPricing {
     }
 
     financeDownPaymentValue() {
-        return this.data.financeDownPayment === null
-            ? new Decimal(this.yourPriceValue() * 0.1).toFixed(2)
-            : this.data.financeDownPayment;
+        let value = null;
+        if (this.data.financeDownPayment === null) {
+            value = new Decimal(this.yourPriceValue() * 0.1).toFixed(2);
+        } else {
+            value = this.data.financeDownPayment;
+        }
+        return value;
     }
 
     financeDownPayment() {
@@ -248,20 +252,20 @@ export default class DealPricing {
 
     finalPrice() {
         const price = this.finalPriceValue();
-
         return price ? util.moneyFormat(price) : null;
     }
 
     monthlyPaymentsValue() {
         switch (this.data.paymentType) {
             case 'finance':
-                return Math.round(
+                const value = Math.round(
                     formulas.calculateFinancedMonthlyPayments(
                         this.baseSellingPriceValue() - this.bestOfferValue(),
                         this.financeDownPaymentValue(),
                         this.financeTermValue()
                     )
                 );
+                return value;
             case 'lease':
                 return this.leaseMonthlyPaymentsValue();
         }

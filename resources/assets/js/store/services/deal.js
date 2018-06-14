@@ -12,6 +12,7 @@ class DealService {
      * @returns {*}
      */
     dealGetQuote(dealId, paymentType, zipcode, cancelToken) {
+        console.log('dealGetQuote');
         return httpclient.get(`/api/deals/${dealId}/best-offer`, {
             cancelToken: cancelToken,
             params: {

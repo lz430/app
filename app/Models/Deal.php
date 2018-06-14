@@ -449,6 +449,10 @@ class Deal extends Model
             return FALSE;
         }
 
+        if (!$this->features->count()) {
+            return FALSE;
+        }
+
         return true;
     }
 
@@ -548,19 +552,22 @@ class Deal extends Model
 
         //
         // Backwards compatibility with existing frontend stuff
+        $version = $this->version;
+        unset($version['model']);
         $record['version'] = $this->version;
-        $record['dealer'] = $this->dealer;
+
+        $dealer = $this->dealer->toArray();
+        unset($dealer['price_rules']);
+        unset($dealer['max_delivery_miles']);
+        unset($dealer['longitude']);
+        unset($dealer['latitude']);
+        $record['dealer'] = $dealer;
 
         //
         // All the features in the current UI are just jammed together.
         $record['legacy_features'] = [];
         foreach ($this->features as $feature) {
             $record['legacy_features'][] = $feature->title;
-        }
-
-        $record['jato_features'] = [];
-        foreach ($this->jatoFeatures as $feature) {
-            $record['jato_features'][] = $feature;
         }
 
         return $record;

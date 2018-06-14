@@ -117,6 +117,7 @@ export default () => {
         initialState,
         composeEnhancers(applyMiddleware(sagaMiddleware, reduxThunk))
     );
+
     sagaMiddleware.run(rootSaga);
 
     const persistor = persistStore(store, null, () => {
