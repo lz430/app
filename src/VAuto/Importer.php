@@ -193,7 +193,6 @@ class Importer
         }
 
         foreach ($batch as $row) {
-            //$row = $this->transformRecord($row);
             $this->processRecord($row);
         }
     }

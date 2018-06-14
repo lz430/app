@@ -98,7 +98,7 @@ class DealEquipmentMunger
         $this->updateDealWithDiscoveredFeatures();
 
         // Performs option/package code transformations
-        $this->transformRecord();
+        $this->findingAdditionalPackageCodesFromFeatures();
         $this->extractAdditionalOptionCodes();
         $this->stripPackageCodesFromOptions();
 
@@ -258,6 +258,9 @@ class DealEquipmentMunger
         return $found_option_codes;
     }
 
+    /**
+     * Grabs all available package codes from jato for a vehicle
+     */
     private function getAllAvailablePackageCodes()
     {
         $findPackages = $this->packages;
@@ -271,6 +274,10 @@ class DealEquipmentMunger
         return $foundPackages;
     }
 
+    /**
+     * Compares the options codes that are in the deals.option_codes column and removes the found package
+     * codes from the list to place into the deals.package_codes column
+     */
     private function stripPackageCodesFromOptions()
     {
         $optionCodesFromCsv = $this->deal->option_codes;
@@ -282,15 +289,18 @@ class DealEquipmentMunger
         $this->deal->save();
     }
 
+    /**
+     * Reduces the deals.option_codes table column data by comparing the package codes and only leaving the options codes
+     * in the deals.option_codes column instead of before leaving both package and option codes together
+     */
     private function reduceOptionCodesFromPackages()
     {
         $filter_options = array_diff($this->deal->option_codes, $this->deal->package_codes);
-
         $this->deal->option_codes = array_values($filter_options);
         $this->deal->save();
     }
 
-    private function transformRecord()
+    private function findingAdditionalPackageCodesFromFeatures()
     {
         // Option Codes
         $optionCodes = array_filter($this->deal->option_codes);
