@@ -70,9 +70,6 @@ const reducer = (state, action) => {
                     ...state.searchQuery,
                     page: state.searchQuery.page + 1,
                 },
-
-                // Deprecated
-                //requestingMoreDeals: true
             };
         case ActionTypes.SEARCH_REQUEST:
             return {
@@ -80,7 +77,21 @@ const reducer = (state, action) => {
             };
 
         case ActionTypes.SEARCH_RECEIVE:
-            return state;
+            return {
+                ...state,
+            };
+
+        case ActionTypes.SEARCH_LOADING_START:
+            return {
+                ...state,
+                loadingSearchResults: true,
+            };
+
+        case ActionTypes.SEARCH_LOADING_FINISHED:
+            return {
+                ...state,
+                loadingSearchResults: false,
+            };
 
         case ActionTypes.RECEIVE_DEALS:
             let deals = [];
@@ -97,19 +108,16 @@ const reducer = (state, action) => {
                 dealPageTotal: action.data.data.meta.pagination.total_pages,
                 dealPage: action.data.data.meta.pagination.current_page,
                 requestingMoreDeals: false,
-                requestingMoreModelYears: false,
             };
 
         case ActionTypes.REQUEST_MODEL_YEARS:
             return {
                 ...state,
-                requestingMoreModelYears: true,
                 modelYears: null,
                 deals: null,
             };
         case ActionTypes.RECEIVE_MODEL_YEARS:
             return Object.assign({}, state, {
-                requestingMoreModelYears: false,
                 requestingMoreDeals: false,
                 modelYears: action.data.data,
             });
@@ -278,7 +286,6 @@ const reducer = (state, action) => {
                     action.data.data.meta.pagination.total_pages
                 ),
                 requestingMoreDeals: false,
-                requestingMoreModelYears: false,
             });
         case ActionTypes.SET_IS_EMPLOYEE:
             return Object.assign({}, state, {

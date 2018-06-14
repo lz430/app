@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import R from 'ramda';
 import * as Actions from 'actions';
-import Deal from './Deal';
 import ModelYear from './ModelYear';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';

@@ -42,6 +42,10 @@ function* requestSearch() {
     const state = yield select();
     let results = null;
 
+    if (state.searchQuery.page === 1) {
+        yield put({ type: ActionTypes.SEARCH_LOADING_START });
+    }
+
     try {
         results = yield call(ApiClient.browse.search, state.searchQuery);
     } catch (e) {
@@ -59,6 +63,10 @@ function* requestSearch() {
         } else {
             yield put(Actions.receiveModelYears(results));
         }
+    }
+
+    if (state.searchQuery.page === 1) {
+        yield put({ type: ActionTypes.SEARCH_LOADING_FINISHED });
     }
 }
 

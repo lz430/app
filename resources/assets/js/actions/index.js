@@ -579,8 +579,6 @@ export function receiveLeaseRates(deal, zipcode, data) {
  * @deprecated
  */
 export function requestBestOffer(deal) {
-    console.log('requestBestOffer');
-
     return {
         type: ActionTypes.REQUEST_DEAL_QUOTE,
         deal: deal,

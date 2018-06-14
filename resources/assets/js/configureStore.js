@@ -97,7 +97,7 @@ const initialState = {
     searchFeatures: [],
 
     requestingMoreDeals: false,
-    requestingMoreModelYears: false,
+    loadingSearchResults: false,
 };
 
 const config = {

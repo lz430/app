@@ -12,8 +12,7 @@ import ViewModels from './ViewModels';
 class Deals extends React.PureComponent {
     static propTypes = {
         modelYears: PropTypes.array,
-        requestingMoreDeals: PropTypes.bool,
-        requestingMoreModelYears: PropTypes.bool,
+        loadingSearchResults: PropTypes.bool,
         deals: PropTypes.arrayOf(
             PropTypes.shape({
                 year: PropTypes.string.isRequired,
@@ -36,10 +35,7 @@ class Deals extends React.PureComponent {
         }
 
         // Requesting something
-        if (
-            this.props.requestingMoreDeals ||
-            this.props.requestingMoreModelYears
-        ) {
+        if (this.props.loadingSearchResults) {
             return <SVGInline svg={miscicons['loading']} />;
         }
 
@@ -71,8 +67,7 @@ class Deals extends React.PureComponent {
 function mapStateToProps(state) {
     return {
         deals: state.deals,
-        requestingMoreDeals: state.requestingMoreDeals,
-        requestingMoreModelYears: state.requestingMoreModelYears,
+        loadingSearchResults: state.loadingSearchResults,
         zipInRange: state.zipInRange,
         modelYears: state.modelYears,
         searchQuery: state.searchQuery,
