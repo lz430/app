@@ -76,6 +76,13 @@ class DealerCrudController extends CrudController
         ]);
 
         $this->crud->addField([
+            'name'  => 'acquisition_fee',
+            'label' => 'Acquisition Fee',
+            'type'  => 'number',
+            'tab'   => 'General',
+        ]);
+
+        $this->crud->addField([
             'name'  => 'latitude',
             'label' => 'Latitude',
             'type'  => 'text',

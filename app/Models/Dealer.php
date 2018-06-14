@@ -37,6 +37,7 @@ class Dealer extends Model
         'latitude',
         'longitude',
         'name',
+        'acquisition_fee',
         'max_delivery_miles',
         'route_one_id',
         'address',
