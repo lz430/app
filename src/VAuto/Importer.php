@@ -193,7 +193,7 @@ class Importer
         }
 
         foreach ($batch as $row) {
-            $row = $this->transformRecord($row);
+            //$row = $this->transformRecord($row);
             $this->processRecord($row);
         }
     }
@@ -202,7 +202,7 @@ class Importer
      * @param array $row
      * @return array
      */
-    private function transformRecord(array $row): array
+    /*private function transformRecord(array $row): array
     {
 
         // Option Codes
@@ -226,7 +226,7 @@ class Importer
 
         $row['Option Codes'] = implode(",", $optionCodes);
         return $row;
-    }
+    }*/
 
     /**
      * @param array $row
