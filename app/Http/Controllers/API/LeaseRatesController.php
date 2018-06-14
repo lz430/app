@@ -84,14 +84,18 @@ class LeaseRatesController extends BaseAPIController
                 $tiers = $program->programs[$i]->tiers[$i];
                 foreach ($tiers->leaseTerms as $term) {
                     if($term->adjRate !== 'STD') {
-                        //$apr = (($term->adjRate == null) ? null : ((in_array($make, ['Ford', 'Lincoln', 'Jeep'])) ? $term->adjRate : $term->adjRate * 2400)); // math to get the apr number for making lease calculations, cox does not supply apr
-                        $calculatedApr = null;
-                        if (in_array($make, ['Ford', 'Lincoln', 'Jeep', 'Dodge'])) {
-                            $calculatedApr = floatval($term->adjRate) * 2400;
+                        $adjRate = floatval($term->adjRate);
+                        $isNumberWhat = strlen(strrchr($adjRate, '.')) -1;
+                        $aprRate = null;
+                        $moneyFactorRate = null;
+                        if($isNumberWhat > 3){
+                            $aprRate = $adjRate * 2400;
+                            $moneyFactorRate = $adjRate;
+                        } else {
+                            $aprRate = $adjRate;
+                            $moneyFactorRate = $adjRate / 2400;
                         }
-                        $moneyFactor = floatval($term->adjRate);
-                        $apr = (in_array($make, ['Ford', 'Lincoln', 'Jeep'])) ? floatval($term->adjRate) : $calculatedApr;
-                        $leaseData[] = array('termMonths' => $term->length, 'moneyFactor' => (in_array($make, ['Ford', 'Lincoln', 'Jeep'])) ? $moneyFactor / 2400 : $moneyFactor, 'apr' => $apr, 'residualPercent' => $this->getInitialResidualPercent($results, $term->length, $modelCode), 'residuals' => $this->getResiduals($results, $term->length, $modelCode));
+                        $leaseData[] = array('termMonths' => $term->length, 'moneyFactor' => $moneyFactorRate, 'apr' => $aprRate, 'residualPercent' => $this->getInitialResidualPercent($results, $term->length, $modelCode), 'residuals' => $this->getResiduals($results, $term->length, $modelCode));
                     }
                 }
             }
