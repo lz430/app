@@ -42,7 +42,7 @@ class DealBestOfferController extends BaseAPIController
                 break;
         }
 
-        $hints = ['TRIM' => $deal->series, 'BODY_TYPE' => $deal->body, 'MODEL' => $deal->model, 'MODEL_CODE' => $deal->model_code];
+        $hints = ['TRIM' => $deal->version->trim_name, 'BODY_TYPE' => $deal->body, 'MODEL' => $deal->model, 'MODEL_CODE' => $deal->model_code];
         $manufacturerResults = $this->client->vehicle->findByVehicleAndPostalcode($deal->vin, request('zipcode'), [$type], $hints);
         $bestOffers = null;
         if($paymentType === 'lease' && empty($manufacturerResults->response[0]->programDealScenarios[0]->programs)) {
