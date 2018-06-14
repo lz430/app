@@ -193,39 +193,8 @@ class Importer
         }
 
         foreach ($batch as $row) {
-            $row = $this->transformRecord($row);
             $this->processRecord($row);
         }
-    }
-
-    /**
-     * @param array $row
-     * @return array
-     */
-    private function transformRecord(array $row): array
-    {
-
-        // Option Codes
-        $optionCodes = array_filter(array_map('trim', explode(",", $row['Option Codes'])));
-
-        $rules = [
-            "/(?<=(?i)Quick Order Package )(.*?)(?=\|| )/",
-            "/(?<=(?i)Preferred Equipment Group )(.*?)(?=\|| )/",
-            "/(?<=(?i)Equipment Group )(.*?)(?=\|| )/"
-        ];
-
-        foreach ($rules as $rule) {
-            $matches = [];
-            preg_match($rule, $row['Features'], $matches);
-            if (count($matches)) {
-                $optionCodes += $matches;
-            }
-        }
-
-        $optionCodes = array_unique($optionCodes);
-
-        $row['Option Codes'] = implode(",", $optionCodes);
-        return $row;
     }
 
     /**
