@@ -40,7 +40,7 @@ const api = {
             params: {
                 vin: deal.vin,
                 modelcode: deal.model_code,
-                trim: deal.series,
+                trim: deal.version.trim_name,
                 model: deal.model,
                 make: deal.make,
                 zipcode,
