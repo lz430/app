@@ -102,7 +102,7 @@ function* requestDealLeaseRates(deal, zipcode) {
     yield put(receiveLeaseRates(deal, zipcode, results));
 
     if (results && results.data.length > 0) {
-        yield fork(requestDealLeasePayments, deal);
+        yield fork(requestDealLeasePayments, deal, zipcode);
     }
 }
 
@@ -145,6 +145,7 @@ function* requestDealLeasePayments(deal, zipcode) {
             source.cancel();
         }
     }
+
     yield put(receiveLeasePayments(dealPricing, zipcode, results));
 }
 

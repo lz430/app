@@ -20,6 +20,7 @@ class DealSearchTransformer extends TransformerAbstract
             'year' => $deal->year,
             'make' => $deal->make,
             'model' => $deal->model,
+            'model_code' => $deal->model_code,
             'body' => $deal->body,
             'transmission' => $deal->transmission,
             'series' => $deal->series,

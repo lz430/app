@@ -473,6 +473,11 @@ export default class DealPricing {
     }
 
     apiTerms() {
+        if (this.id() == '5514') {
+            console.log('APITERMS');
+            console.log(this.data.dealLeaseRates.data);
+        }
+
         const terms = {};
 
         for (let termRaw of this.data.dealLeaseRates.data) {
