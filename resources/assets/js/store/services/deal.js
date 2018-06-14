@@ -1,36 +1,5 @@
 import httpclient from 'store/httpclient';
 
-/*
-    getLeasePayments: (dealPricing) => {
-        return window.axios.get('/api/lease-payments', {
-            params: {
-                tax_rate: dealPricing.taxRate() * 100,
-                acquisition_fee: dealPricing.acquisitionFeeValue(),
-                doc_fee: dealPricing.docFeeValue(),
-                rebate: dealPricing.bestOfferValue(),
-                license_fee: dealPricing.licenseAndRegistrationValue(),
-                cvr_fee: dealPricing.effCvrFeeValue(),
-                msrp: dealPricing.msrpValue(),
-                cash_advance: dealPricing.sellingPriceValue(),
-                cash_due: dealPricing.allLeaseCashDueOptions(),
-                terms: dealPricing.apiTerms()
-            }
-        });
-    },
-    getLeaseRates: (deal, zipcode) => {
-        return window.axios.get('/api/lease-rates', {
-            params: {
-                vin: deal.vin,
-                modelcode: deal.model_code,
-                trim: deal.version.trim_name,
-                model: deal.model,
-                make: deal.make,
-                zipcode,
-            },
-        });
-    },
- */
-
 /**
  * Browse specific API calls.
  */
