@@ -6,7 +6,6 @@ namespace DeliverMyRide\Fuel\Service;
 class ProductService extends BaseService {
 
     /**
-     * VIN decoder
      * @see http://fuelapi.com/support/documentation#product-data
      * @param bool $showShotCodes
      * @param bool $showProductFormats

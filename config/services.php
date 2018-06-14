@@ -60,5 +60,10 @@ return [
 
     'cox' => [
         'api_key' => env('COX_API_KEY'),
+    ],
+
+    'datadelivery' => [
+        'id' => env('DATADELIVERY_ID'),
+        'api_key' => env('DATADELIVERY_API_KEY'),
     ]
 ];

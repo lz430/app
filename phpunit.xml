@@ -38,6 +38,10 @@
             <directory suffix="Test.php">./tests/External/Fuel</directory>
         </testsuite>
 
+        <testsuite name="external.datadelivery">
+            <directory suffix="Test.php">./tests/External/DataDelivery</directory>
+        </testsuite>
+
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
