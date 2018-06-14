@@ -10,9 +10,10 @@ class BrowseService {
      * The responses are totally different between the two calls
      * but the api call is pretty much the same.
      * @param query
+     * @param cancelToken
      * @returns {string}
      */
-    search(query) {
+    search(query, cancelToken) {
         let sort = query.sort.attribute;
 
         if (query.sort.direction === 'desc') {
@@ -37,6 +38,7 @@ class BrowseService {
         }
 
         return httpclient.get(endpoint, {
+            cancelToken: cancelToken,
             params: params,
         });
     }

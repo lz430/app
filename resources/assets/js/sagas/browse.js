@@ -1,5 +1,14 @@
-import { fork, put, call, select, take, cancel } from 'redux-saga/effects';
+import {
+    fork,
+    put,
+    call,
+    select,
+    take,
+    cancel,
+    cancelled,
+} from 'redux-saga/effects';
 import ApiClient from 'store/api';
+import axios from 'axios';
 import * as ActionTypes from 'actiontypes/index';
 import * as Actions from 'actions/index';
 import * as DealSagas from 'sagas/deal';
@@ -28,16 +37,28 @@ const takeSearch = (patternOrChannel, saga, ...args) =>
  * @returns {IterableIterator<*>}
  */
 function* requestSearch() {
-    console.log('requestSearch');
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
     const state = yield select();
+    let results = null;
 
-    const results = yield call(ApiClient.browse.search, state.searchQuery);
+    try {
+        results = yield call(ApiClient.browse.search, state.searchQuery);
+    } catch (e) {
+        console.log(e);
+    } finally {
+        if (yield cancelled()) {
+            source.cancel();
+        }
+    }
 
-    if (state.searchQuery.entity === 'deal') {
-        yield put(Actions.receiveDeals(results));
-        yield fork(DealSagas.batchRequestDealQuotes, results.data.data);
-    } else {
-        yield put(Actions.receiveModelYears(results));
+    if (results) {
+        if (state.searchQuery.entity === 'deal') {
+            yield put(Actions.receiveDeals(results));
+            yield fork(DealSagas.batchRequestDealQuotes, results.data.data);
+        } else {
+            yield put(Actions.receiveModelYears(results));
+        }
     }
 }
 
