@@ -39,8 +39,6 @@ class vehicleProgramServiceTest extends TestCase
             print_r($e->getMessage());
         }
 
-        //print_r($response->Affinities->Affinity[0]->attributes()['affinityID'][0]);
-
         $this->assertTrue((bool) $response);
     }
 

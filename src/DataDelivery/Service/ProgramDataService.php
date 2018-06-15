@@ -6,37 +6,6 @@ namespace DeliverMyRide\DataDelivery\Service;
 class ProgramDataService extends BaseService
 {
 
-    /**
-     * @param $array
-     * @param \SimpleXMLElement $element
-     */
-    private function mungeAttributesIntoArray(&$array, \SimpleXMLElement $element)
-    {
-        foreach ($element->attributes() as $k => $v) {
-            $array[(string)$k] = (string)$v;
-        }
-    }
-
-    private function mungeChildrenIntoArray(&$array, \SimpleXMLElement $element, $parent_keys = [])
-    {
-
-        foreach ($element->children() as $key => $childData) {
-            if (isset($parent_keys[$key])) {
-                $parent_key = $parent_keys[$key];
-            } else {
-                $parent_key = strtolower($key) . "s";
-            }
-
-            if (!isset($array[$parent_key])) {
-                $array[$parent_key] = [];
-            }
-
-            $child = [];
-            $this->mungeAttributesIntoArray($child, $childData);
-            $this->mungeChildrenIntoArray($child, $childData);
-            $array[$parent_key][] = (object)$child;
-        }
-    }
 
     /**
      * @param \SimpleXMLElement $element
@@ -46,6 +15,11 @@ class ProgramDataService extends BaseService
     {
         $response = new \stdClass();
         $response->status = (string)$element->status->attributes()['returnCode'];
+        if (isset($element->status->attributes()['errorMsg'])) {
+            $response->error = (string)$element->status->attributes()['errorMsg'];
+            return $response;
+        }
+
         $response->affinities = new \stdClass();
 
         foreach ($element->Affinities->Affinity as $affinity) {
@@ -57,19 +31,18 @@ class ProgramDataService extends BaseService
 
             foreach ($element->describedVehicle as $vehicleData) {
                 $vehicle = [];
-                $this->mungeAttributesIntoArray($vehicle, $vehicleData);
-                $this->mungeChildrenIntoArray($vehicle, $vehicleData);
-                $response->vehicles[] = (object) $vehicle;
+                $this->client->mungeAttributesIntoArray($vehicle, $vehicleData);
+                $this->client->mungeChildrenIntoArray($vehicle, $vehicleData);
+                $response->vehicles[] = (object)$vehicle;
             }
 
-        }
-        else {
+        } else {
             $response->groups = [];
-            foreach($element->describedVehicleGroup as $groupData) {
+            foreach ($element->describedVehicleGroup as $groupData) {
                 $group = [];
-                $this->mungeAttributesIntoArray($group, $groupData);
-                $this->mungeChildrenIntoArray($group, $groupData, ['describedVehicle' => 'vehicles']);
-                $response->groups[] = (object) $group;
+                $this->client->mungeAttributesIntoArray($group, $groupData);
+                $this->client->mungeChildrenIntoArray($group, $groupData, ['describedVehicle' => 'vehicles']);
+                $response->groups[] = (object)$group;
             }
         }
 
@@ -85,6 +58,8 @@ class ProgramDataService extends BaseService
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      *
+     * @see http://xmlasvr.aisrebates.com/ais_xml/test.html (request 1)
+     *
      */
     public function get(string $vin, string $customerZip, string $dealerZip, bool $extended = false, array $searchData = [])
     {
@@ -93,7 +68,7 @@ class ProgramDataService extends BaseService
             'VIN' => $vin,
             'CustomerZip' => $customerZip,
             'DealerZip' => $dealerZip,
-            'extended' => ($extended ? "yes" :  "no"),
+            'extended' => ($extended ? "yes" : "no"),
         ];
 
         $data = array_merge($data, $searchData);
