@@ -50,7 +50,7 @@ class DealBestOfferController extends BaseAPIController
         } else {
             $bestOffers = $manufacturerResults;
         }
-        return (new BestPriceTransformer)->transform(['results' => $bestOffers, 'paymentType' => $paymentType, 'model_code' => $deal->model_code, 'make' => $deal->make]);
+        return (new BestPriceTransformer)->transform(['results' => $bestOffers, 'paymentType' => $paymentType, 'model_code' => $deal->model_code, 'make' => $deal->make, 'trim' => $deal->series]);
     }
 
 }
