@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
         Commands\VersionFillMissingPhotos::class,
         Commands\DealFeatureDebugger::class,
         Commands\ImportVautoMapData::class,
+        Commands\DealProgramDebugger::class,
     ];
 
     /**
