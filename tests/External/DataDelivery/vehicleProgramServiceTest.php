@@ -22,17 +22,22 @@ class vehicleProgramServiceTest extends TestCase
 
     /** @test **/
     public function it_can_get_program_data() {
-        $vin = '1C4RJFAG5JC424261';
+        $vin = '1FTEW1E52JFC62101';
         $zipcode = '48116';
+        $search = [
+            'Trim' => 'XL',
+            'Year' => '2018',
+            'Body' => 'Super Crew',
+            'OptionGroup' => 'Base',
+        ];
 
         $client = $this->getClient();
         $response = [];
         try {
-            $response = $client->programdata->get($vin, $zipcode);
+            $response = $client->programdata->get($vin, $zipcode, $zipcode, false, $search);
         } catch (ClientException $e) {
             print_r($e->getMessage());
         }
-        print "\n\n";
 
         //print_r($response->Affinities->Affinity[0]->attributes()['affinityID'][0]);
 
