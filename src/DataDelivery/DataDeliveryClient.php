@@ -39,10 +39,44 @@ class DataDeliveryClient extends ApiClient
         $this->baseUrl = "https://xmlasvr.aisrebates.com/ais_xml/get_data.php";
     }
 
-    protected function getRequestHeaders() {
+    protected function getRequestHeaders()
+    {
         return [
             'Content-Type' => 'application/x-www-form-urlencoded',
         ];
+    }
+
+
+    /**
+     * @param $array
+     * @param \SimpleXMLElement $element
+     */
+    public function mungeAttributesIntoArray(&$array, \SimpleXMLElement $element)
+    {
+        foreach ($element->attributes() as $k => $v) {
+            $array[(string)$k] = (string)$v;
+        }
+    }
+
+    public function mungeChildrenIntoArray(&$array, \SimpleXMLElement $element, $parent_keys = [])
+    {
+
+        foreach ($element->children() as $key => $childData) {
+            if (isset($parent_keys[$key])) {
+                $parent_key = $parent_keys[$key];
+            } else {
+                $parent_key = strtolower($key) . "s";
+            }
+
+            if (!isset($array[$parent_key])) {
+                $array[$parent_key] = [];
+            }
+
+            $child = [];
+            $this->mungeAttributesIntoArray($child, $childData);
+            $this->mungeChildrenIntoArray($child, $childData);
+            $array[$parent_key][] = (object)$child;
+        }
     }
 
     /**
@@ -76,7 +110,24 @@ class DataDeliveryClient extends ApiClient
         $stream = stream_for($response->getBody());
         $data = $stream->getContents();
         $raw_response = simplexml_load_string($data);
+        print_r($data);
         return $raw_response;
+    }
+
+
+    public function get($endpoint, $query = [], bool $async = FALSE)
+    {
+        throw new \BadMethodCallException();
+    }
+
+    public function put($endpoint, $json, bool $async = FALSE)
+    {
+        throw new \BadMethodCallException();
+    }
+
+    public function delete($endpoint, bool $async = FALSE)
+    {
+        throw new \BadMethodCallException();
     }
 
 }
