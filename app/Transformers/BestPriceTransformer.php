@@ -114,6 +114,7 @@ class BestPriceTransformer extends TransformerAbstract
         if(in_array($params['paymentType'], ['cash', 'finance'])){
             return [
                 'totalValue' => $incentives->totalConsumerCash
+
             ];
         } else {
             return $this->incentives($params);
