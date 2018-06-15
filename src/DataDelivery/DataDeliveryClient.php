@@ -74,7 +74,8 @@ class DataDeliveryClient extends ApiClient
     public function handleResponse(Response $response)
     {
         $stream = stream_for($response->getBody());
-        $raw_response = simplexml_load_string($stream->getContents());
+        $data = $stream->getContents();
+        $raw_response = simplexml_load_string($data);
         return $raw_response;
     }
 

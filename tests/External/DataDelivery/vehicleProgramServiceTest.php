@@ -22,7 +22,7 @@ class vehicleProgramServiceTest extends TestCase
 
     /** @test **/
     public function it_can_get_program_data() {
-        $vin = '1FM5K7B83JGA96934';
+        $vin = '1C4RJFAG5JC424261';
         $zipcode = '48116';
 
         $client = $this->getClient();
@@ -32,6 +32,7 @@ class vehicleProgramServiceTest extends TestCase
         } catch (ClientException $e) {
             print_r($e->getMessage());
         }
+        print "\n\n";
 
         //print_r($response->Affinities->Affinity[0]->attributes()['affinityID'][0]);
 
