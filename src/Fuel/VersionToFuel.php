@@ -19,7 +19,7 @@ class VersionToFuel
         'A8' => 'A8 L',
         'allroad' => 'A4 allroad',
         '6 Series Gran Turismo' => '6-series',
-        'M2 Coupe' => ['2-series', 'M2'],
+        'M2 Coupe' => '2-series',
         'AMG® GT Roadster' => 'AMG GT',
         'ATS Sedan' => 'ATS',
         'ATS-V Sedan' => 'ATS-V',
@@ -41,7 +41,7 @@ class VersionToFuel
         'F-250 Super Duty' => 'F-250 SD',
         'F-350 Super Duty' => 'F-350 SD DRW',
         'Transit Connect' => 'Transit Connect Van',
-        'Sierra 1500 Denali' => ['Sierra 1500', 'Denali'],
+        'Sierra 1500 Denali' => 'Sierra 1500',
         'Sierra 2500 Denali HD' => 'Sierra 2500 HD',
         'Clarity' => 'Clarity Plug-In Hybrid',
         'Ioniq' => 'Ioniq Hybrid',
@@ -66,6 +66,16 @@ class VersionToFuel
         'Tiguan Limited' => 'Tiguan',
         'Golf' => 'Golf GTI',
         'ProMaster Cargo Van' => 'ProMaster 2500',
+    ];
+
+    private const TRIM_MAP = [
+        'BY_MODEL' => [
+            'Sierra 1500 Denali' => 'Denali',
+            'M2 Coupe' => 'M2',
+        ],
+        'BY_TRIM' => [
+            'Sport S' => 'Sport',
+        ],
     ];
 
     private const COLOR_MAP = [
@@ -107,6 +117,10 @@ class VersionToFuel
         'Mocha Steel Metallic' => 'Brown',
     ];
 
+    private const BODY_STYLE_MAP = [
+        'sport utility vehicle' => "SUV",
+    ];
+
     private $client;
     private $version;
 
@@ -142,11 +156,11 @@ class VersionToFuel
 
     /**
      * Translate our model names to Fuel model names.
-     * @param $model
      * @return mixed
      */
-    private function translateModelName($model)
+    private function translateModelName(): string
     {
+        $model = $this->version->model->name;
         if (isset(self::MODEL_MAP[$model])) {
             return self::MODEL_MAP[$model];
         } else {
@@ -154,9 +168,38 @@ class VersionToFuel
         }
     }
 
-    public function translateColorName($color)
+    private function translateTrimName(): string
     {
+        $trim = $this->version->trim_name;
+        $model = $this->version->model->name;
 
+        if (isset(self::TRIM_MAP['BY_MODEL'][$model])) {
+            return self::TRIM_MAP['BY_MODEL'][$model];
+        }
+
+        if (isset(self::TRIM_MAP['BY_TRIM'][$trim])) {
+            return self::TRIM_MAP['BY_TRIM'][$trim];
+        }
+
+        return $trim;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function translateBodyStyle(): string
+    {
+        $body = strtolower($this->version->body_style);
+
+        if (isset(self::BODY_STYLE_MAP[$body])) {
+            return self::BODY_STYLE_MAP[$body];
+        } else {
+            return $body;
+        }
+    }
+
+    public function translateColorName($color): string
+    {
         foreach (self::COLOR_MAP as $needle => $value) {
             if (str_contains($color, $needle)) {
                 return $value;
@@ -164,6 +207,19 @@ class VersionToFuel
         }
 
         return $color;
+    }
+
+    public function translateNumberDoors()
+    {
+        $doors = $this->version->doors;
+
+        if (in_array($this->version->body_style, [
+            'Sport Utility Vehicle'
+        ])) {
+            $doors = $doors - 1;
+        }
+
+        return $doors;
     }
 
     /**
@@ -174,20 +230,11 @@ class VersionToFuel
         $params = [
             'year' => $this->version->year,
             'make' => $this->version->model->make->name,
+            'model' => $this->translateModelName(),
+            'trim' => $this->translateTrimName(),
+            'doors' => $this->translateNumberDoors(),
+            'body' => $this->translateBodyStyle()
         ];
-
-        $model = $this->translateModelName($this->version->model->name);
-        $trim = $this->version->trim_name;
-
-        // In some situations our model actually includes model and trim.
-        if (is_array($model)) {
-            list($model, $trim) = $model;
-        }
-
-        $params['model'] = $model;
-        $params['trim'] = $trim;
-        $params['doors'] = $this->version->doors;
-        $params['body'] = $this->version->body_style;
 
         //
         // TODO: Do this better
@@ -219,7 +266,7 @@ class VersionToFuel
 
         $vehicles = $this->filterUnlessNone($vehicles, 'num_doors', $params['doors']);
         $vehicles = $this->filterUnlessNone($vehicles, 'trim', $params['trim']);
-
+        $vehicles = $this->filterUnlessNone($vehicles, 'bodytype', $params['body']);
         if (count($vehicles)) {
             return end($vehicles);
         }
@@ -230,6 +277,7 @@ class VersionToFuel
     /**
      * @param string $color
      * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function assets($color = 'default'): array
     {
@@ -259,8 +307,6 @@ class VersionToFuel
         try {
             $media = $this->client->vehicle->vehicleMedia($vehicle->id, $product_id, '', $color);
         } catch (ClientException $exception) {
-            print_r($exception->getCode());
-            print_r($exception->getMessage());
             if ($exception->getCode() == '404') {
                 // TODO: Log these
             }
