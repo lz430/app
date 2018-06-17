@@ -77,7 +77,18 @@ class BestPriceTransformer extends TransformerAbstract
                     $tiers = $program->programs[$i]->tiers[$i];
                     $totalLeaseCash = $program->programs[$i]->consumerCash;
                     foreach ($tiers->leaseTerms as $term) {
-                        $leaseData[] = array('moneyFactor' => (in_array($params['make'], ['Ford', 'Lincoln'])) ? floatval($term->adjRate) / 2400 : floatval($term->adjRate), 'residualPercent' => $this->getInitialResidualPercent($params), 'residuals' => $this->getResiduals($params));
+                        if($term->adjRate !== 'STD') {
+                            $adjRate = floatval($term->adjRate);
+                            $isNumberWhat = strlen(strrchr($adjRate, '.')) -1;
+                            $moneyFactorRate = null;
+                            if($isNumberWhat > 3){
+                                $moneyFactorRate = $adjRate;
+                            } else {
+                                $moneyFactorRate = $adjRate / 2400;
+                            }
+                            $leaseData[] = array('moneyFactor' => $moneyFactorRate, 'residualPercent' => $this->getInitialResidualPercent($params), 'residuals' => $this->getResiduals($params));
+                            //$leaseData[] = array('moneyFactor' => (in_array($params['make'], ['Ford', 'Lincoln'])) ? floatval($term->adjRate) / 2400 : floatval($term->adjRate), 'residualPercent' => $this->getInitialResidualPercent($params), 'residuals' => $this->getResiduals($params));
+                        }
                     }
                     $cashValue['totalValue'] = $totalLeaseCash->totalConsumerCash;
                 }
@@ -103,6 +114,7 @@ class BestPriceTransformer extends TransformerAbstract
         if(in_array($params['paymentType'], ['cash', 'finance'])){
             return [
                 'totalValue' => $incentives->totalConsumerCash
+
             ];
         } else {
             return $this->incentives($params);

@@ -37,7 +37,7 @@ class DealService {
                 rebate: dealPricing.bestOfferValue(),
                 license_fee: dealPricing.licenseAndRegistrationValue(),
                 cvr_fee: dealPricing.effCvrFeeValue(),
-                msrp: dealPricing.msrpValue(),
+                msrp: dealPricing.baseSellingPriceValue(),
                 cash_advance: dealPricing.sellingPriceValue(),
                 cash_due: dealPricing.allLeaseCashDueOptions(),
                 terms: dealPricing.apiTerms(),

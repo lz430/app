@@ -120,6 +120,7 @@ class Deal extends Model
      */
     protected $casts = [
         'option_codes' => 'array',
+        'package_codes' => 'array',
         'source_price' => 'object'
     ];
 
