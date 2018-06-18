@@ -23,7 +23,7 @@ const api = {
         return window.axios.get('/api/deals/'+ dealPricing.id() +'/lease-payments', {
             params: {
                 rebate: dealPricing.bestOfferValue(),
-                msrp: dealPricing.baseSellingPriceValue(),
+                msrp: dealPricing.msrpValue(),
                 cash_advance: dealPricing.sellingPriceValue(),
                 cash_due: dealPricing.allLeaseCashDueOptions(),
                 terms: dealPricing.apiTerms()
