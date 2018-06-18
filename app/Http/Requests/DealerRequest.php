@@ -27,7 +27,8 @@ class DealerRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'dealer_id' => 'required'
+            'dealer_id' => 'required',
+            'acquisition_fee' => 'required'
         ];
     }
 
