@@ -6,7 +6,7 @@ use App\Models\Deal;
 use App\Models\Feature;
 use App\Http\Controllers\Controller;
 use DeliverMyRide\JATO\JatoClient;
-use DeliverMyRide\VAuto\DealEquipmentMunger;
+use DeliverMyRide\VAuto\Deal\DealEquipmentMunger;
 
 class DealFeatureDebuggerController extends Controller
 {
