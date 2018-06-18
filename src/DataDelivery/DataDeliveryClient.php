@@ -46,7 +46,6 @@ class DataDeliveryClient extends ApiClient
         ];
     }
 
-
     /**
      * @param $array
      * @param \SimpleXMLElement $element
