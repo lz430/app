@@ -30,28 +30,12 @@ class Version extends Model
     {
         return $this->belongsTo(VehicleModel::class, 'model_id');
     }
-
-    public function options()
-    {
-        return $this->hasMany(Option::class, 'jato_vehicle_id');
-    }
-
-    public function equipment()
-    {
-        return $this->hasMany(Equipment::class, 'jato_vehicle_id', 'jato_vehicle_id');
-    }
-
     /**
      * @return HasMany
      */
     public function photos(): HasMany
     {
         return $this->hasMany(VersionPhoto::class);
-    }
-
-    public function taxesAndDiscounts()
-    {
-        return $this->hasMany(VersionTaxAndDiscount::class);
     }
 
     public function deals()
