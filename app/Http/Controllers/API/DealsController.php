@@ -2,24 +2,17 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\API\Traits\SearchesDeals;
 use App\Services\Search\DealSearch;
 use App\Services\Search\ESPaginatorAdapter;
 use App\Transformers\DealSearchTransformer;
-use App\Transformers\DealTransformer;
-use DeliverMyRide\JsonApi\Sort;
 use Illuminate\Http\Request;
-use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 use League\Fractal\Serializer\DataArraySerializer;
 
 class DealsController extends BaseAPIController
 {
-    use SearchesDeals;
-
-    private const TRANSFORMER = DealTransformer::class;
     private const RESOURCE_NAME = 'deals';
-
+]
     public function getDeals(Request $request)
     {
         $this->validate($request, [
@@ -32,6 +25,7 @@ class DealsController extends BaseAPIController
             'sort' => 'sometimes|required|string',
             'zipcode' => 'sometimes|required|string',
         ]);
+
         $query = new DealSearch();
 
         if ($request->get('zipcode')) {
