@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('makes', 'MakesController@index')->name('makes.index');
 Route::get('models', 'VehicleModelsController@index')->name('vehicleModels.index');
 Route::get('body-styles', 'BodyStylesController@index')->name('bodyStyles.index');
-Route::get('versions', 'VersionsController@index')->name('versions.index');
 Route::get('deals', 'DealsController@getDeals')->name('deals.index');
 Route::get('dealsByModelYear', 'DealsByModelYearController@getDealsByModelYear')->name('dealsByModelYear.index');
 Route::get('deals/{deal}/best-offer', 'DealBestOfferController@getBestOffer')->name('deals.best-offer');
