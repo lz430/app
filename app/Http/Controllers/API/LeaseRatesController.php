@@ -62,6 +62,37 @@ class LeaseRatesController extends BaseAPIController
      * @param $results
      * @param $tLength
      * @param $modelCode
+     * @return array
+     * Used to return array of termlengths to compare to rate term lengths to eliminate the issue where
+     * termlengths are not matching for both residuals and tiers
+     * REVISIT: Very sloppy implementation, make nicer
+     */
+    public function getRange($results, $tLength, $modelCode)
+    {
+        $residuals = [];
+
+        $programs = $results->programDealScenarios;
+        foreach($programs as $i => $program) {
+            $data = $program->programs[$i]->residuals;
+            foreach($data as $d) {
+                $terms = null;
+                foreach($d->vehicles as $vehicle){
+                    if($vehicle->modelCode === $modelCode) {
+                        foreach($vehicle->termValues as $value){
+                            $terms[] = $value->termLength;
+                        }
+                    }
+                }
+                $residuals = $terms;
+            }
+        }
+        return array_values(array_sort($residuals));
+    }
+
+    /**
+     * @param $results
+     * @param $tLength
+     * @param $modelCode
      * @return null
      */
     public function getInitialResidualPercent($results, $tLength, $modelCode)
@@ -85,17 +116,19 @@ class LeaseRatesController extends BaseAPIController
                 foreach ($tiers->leaseTerms as $term) {
                     if($term->adjRate !== 'STD') {
                         $adjRate = floatval($term->adjRate);
-                        $isNumberWhat = strlen(strrchr($adjRate, '.')) -1;
+                        $isNumberWhat = strlen(strrchr($adjRate, '.')) - 1;
                         $aprRate = null;
                         $moneyFactorRate = null;
-                        if($isNumberWhat > 3){
+                        if ($isNumberWhat > 3) {
                             $aprRate = $adjRate * 2400;
                             $moneyFactorRate = $adjRate;
                         } else {
                             $aprRate = $adjRate;
                             $moneyFactorRate = $adjRate / 2400;
                         }
-                        $leaseData[] = array('termMonths' => $term->length, 'moneyFactor' => $moneyFactorRate, 'apr' => $aprRate, 'residualPercent' => $this->getInitialResidualPercent($results, $term->length, $modelCode), 'residuals' => $this->getResiduals($results, $term->length, $modelCode));
+                        if (in_array($term->length, $this->getRange($results, $term->length, $modelCode))) {
+                            $leaseData[] = array('termMonths' => $term->length, 'moneyFactor' => $moneyFactorRate, 'apr' => $aprRate, 'residualPercent' => $this->getInitialResidualPercent($results, $term->length, $modelCode), 'residuals' => $this->getResiduals($results, $term->length, $modelCode));
+                        }
                     }
                 }
             }
