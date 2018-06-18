@@ -3,36 +3,39 @@
 namespace App\Http\Controllers\API;
 
 use DeliverMyRide\Carleton\Client;
+use App\Models\Deal;
 
-class LeasePaymentsController extends BaseAPIController
+class DealLeasePaymentsController extends BaseAPIController
 {
-    public function getLeasePayments(Client $client)
+    public function getLeasePayments(Deal $deal, Client $client)
     {
         $this->validate(request(), [
-            'tax_rate' => 'required',
-            'acquisition_fee' => 'required',
-            'doc_fee' => 'required',
             'cash_due.*' => 'required',
             'rebate' => 'required',
-            'license_fee' => 'required',
-            'cvr_fee' => 'required',
             'msrp' => 'required',
             'cash_advance' => 'required',
             'terms.*.moneyFactor' => 'required',
             'terms.*.residualPercent' => 'required',
             'terms.*.annualMileage.*.residualPercent' => 'required',
-
         ]);
+
+        $params = [
+            'tax_rate' => 6,
+            'acquisition_fee' => $deal->dealer->acquisition_fee,
+            'doc_fee' => $deal->dealer->doc_fee,
+            'registration_fee' => $deal->dealer->registration_fee,
+            'cvr_fee' => $deal->dealer->cvr_fee,
+        ];
 
         return $client->getLeasePaymentsFor(
             request('cash_due'),
             request('terms'),
-            request('tax_rate'),
-            request('acquisition_fee'),
-            request('doc_fee'),
+            $params['tax_rate'],
+            $params['acquisition_fee'],
+            $params['doc_fee'],
             request('rebate'),
-            request('license_fee'),
-            request('cvr_fee'),
+            $params['doc_fee'],
+            $params['cvr_fee'],
             request('msrp'),
             request('cash_advance')
         );

@@ -2,13 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Deal;
-use DeliverMyRide\JATO\JatoClient;
 use DeliverMyRide\Cox\CoxClient;
-use Cache;
-use GuzzleHttp\Exception\GuzzleException;
 use App\Transformers\BestPriceTransformer;
 
 class DealBestOfferController extends BaseAPIController

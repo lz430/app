@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use DeliverMyRide\JATO\JatoClient;
-
-use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Support\Facades\Cache;
 use DeliverMyRide\Cox\CoxClient;
+use App\Models\Deal;
 
-class LeaseRatesController extends BaseAPIController
+class DealLeaseRatesController extends BaseAPIController
 {
 
     public $client;
@@ -30,15 +27,15 @@ class LeaseRatesController extends BaseAPIController
         $residuals = [];
 
         $programs = $results->programDealScenarios;
-        foreach($programs as $i => $program) {
+        foreach ($programs as $i => $program) {
             $data = $program->programs[$i]->residuals;
-            foreach($data as $d) {
+            foreach ($data as $d) {
                 $terms = null;
-                if(count($d->vehicles) > 1) { // if more than one vehicle model exists for a single vin
-                    foreach($d->vehicles as $vehicle){
-                        if($vehicle->modelCode === $modelCode) {
-                            foreach($vehicle->termValues as $length) {
-                                if($length->termLength === $tLength){
+                if (count($d->vehicles) > 1) { // if more than one vehicle model exists for a single vin
+                    foreach ($d->vehicles as $vehicle) {
+                        if ($vehicle->modelCode === $modelCode) {
+                            foreach ($vehicle->termValues as $length) {
+                                if ($length->termLength === $tLength) {
                                     $terms = $length->percentage;
                                 }
                             }
@@ -46,8 +43,8 @@ class LeaseRatesController extends BaseAPIController
                     }
                 } else {
                     $termValues = $d->vehicles[0]->termValues;
-                    foreach($termValues as $value){
-                        if($value->termLength === $tLength){
+                    foreach ($termValues as $value) {
+                        if ($value->termLength === $tLength) {
                             $terms = $value->percentage;
                         }
                     }
@@ -111,10 +108,10 @@ class LeaseRatesController extends BaseAPIController
         $leaseData = [];
         $tiersData = $results->programDealScenarios;
         foreach ($tiersData as $i => $program) {
-            if(!empty($program->programs)){  // revisit when new lease rates populated after first of month
+            if (!empty($program->programs)) {  // revisit when new lease rates populated after first of month
                 $tiers = $program->programs[$i]->tiers[$i];
                 foreach ($tiers->leaseTerms as $term) {
-                    if($term->adjRate !== 'STD') {
+                    if ($term->adjRate !== 'STD') {
                         $adjRate = floatval($term->adjRate);
                         $isNumberWhat = strlen(strrchr($adjRate, '.')) - 1;
                         $aprRate = null;
@@ -136,27 +133,36 @@ class LeaseRatesController extends BaseAPIController
         return $leaseData;
     }
 
-    public function getLeaseRates()
+    public function getLeaseRates(Deal $deal)
     {
         $this->validate(request(), [
-            'vin' => 'required|string',
-            'modelcode' => 'string',
-            'trim' => 'string',
-            'model' => 'string',
-            'make' => 'string',
             'zipcode' => 'required|string',
         ]);
 
-        $hints = ['TRIM' => request('trim'), 'MODEL' => request('model'), 'MODEL_CODE' => request('modelcode')];
-        $manufacturerLeaseResults = $this->client->vehicle->findByVehicleAndPostalcode(request('vin'), request('zipcode'), [9], [$hints])->response; //9 //11 for jeep
+        $params = [
+            'vin' => $deal->vin,
+            'model_code' => $deal->model_code,
+            'trim' => $deal->version->trim_name,
+            'model' => $deal->version->model->name,
+            'make' => $deal->version->model->make->name,
+            'zipcode' => request('zipcode'),
+        ];
+
+        $hints = [
+            'TRIM' => $params['trim'],
+            'MODEL' => $params['model'],
+            'MODEL_CODE' => $params['model_code']
+        ];
+
+        $manufacturerLeaseResults = $this->client->vehicle->findByVehicleAndPostalcode($params['vin'], $params['zipcode'], [9], [$hints])->response; //9 //11 for jeep
         $leaseRates = collect($manufacturerLeaseResults)->first();
-        if(!empty($leaseRates->programDealScenarios[0]->programs)) {
-            $retrieveLeaseRates = $this->getTiers($leaseRates, request('modelcode'), request('make'));
+        if (!empty($leaseRates->programDealScenarios[0]->programs)) {
+            $retrieveLeaseRates = $this->getTiers($leaseRates, $params['model_code'], $params['make']);
             return response()->json($retrieveLeaseRates);
         } else {
-            $affiliateLeaseResults = $this->client->vehicle->findByVehicleAndPostalcode(request('vin'), request('zipcode'), [11], [$hints])->response;
+            $affiliateLeaseResults = $this->client->vehicle->findByVehicleAndPostalcode($params['vin'], $params['zipcode'], [11], [$hints])->response;
             $leaseRates = collect($affiliateLeaseResults)->first();
-            $retrieveLeaseRates = $this->getTiers($leaseRates, request('modelcode'), request('make'));
+            $retrieveLeaseRates = $this->getTiers($leaseRates, $params['model_code'], $params['make']);
             return response()->json($retrieveLeaseRates);
         }
     }

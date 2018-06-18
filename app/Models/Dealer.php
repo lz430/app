@@ -11,6 +11,10 @@ use Backpack\CRUD\CrudTrait;
 /**
  * @property int $id
  * @property  \stdClass $price_rules
+ * @property $acquisition_fee
+ * @property $doc_fee
+ * @property $registration_fee
+ * @property $cvr_fee
  */
 class Dealer extends Model
 {
