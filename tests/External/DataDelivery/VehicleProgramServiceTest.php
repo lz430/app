@@ -34,6 +34,7 @@ class vehicleProgramServiceTest extends TestCase
         $client = $this->getClient();
         $response = [];
         try {
+
             $response = $client->programdata->get($vin, $zipcode, $zipcode, false, $search);
         } catch (ClientException $e) {
             print_r($e->getMessage());

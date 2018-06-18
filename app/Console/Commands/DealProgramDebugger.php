@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
+use DeliverMyRide\DataDelivery\DealPrograms;
 use Illuminate\Console\Command;
+use App\Models\Deal;
 
 class DealProgramDebugger extends Command
 {
@@ -23,8 +25,6 @@ class DealProgramDebugger extends Command
     /* @var DataDeliveryClient */
     private $client;
 
-    private $features;
-
     /**
      * @param DataDeliveryClient $client
      */
@@ -42,12 +42,18 @@ class DealProgramDebugger extends Command
     public function handle()
     {
         $vin = $this->argument('vin');
-        $response = $this->client->programdata->get(
-            $vin,
-            '48116',
-            '48116');
+        $deal = Deal::where('vin', $vin)->first();
+        $is_lease = true;
 
+        $dealPrograms = new DealPrograms($deal, '48116', $is_lease, $this->client);
+        $dealPrograms->getData();
+
+        /*
         foreach ($response->vehicles as $vehicle) {
+            print_r($vehicle);
+            if (!isset($vehicle->programs)) {
+                continue;
+            }
             foreach ($vehicle->programs as $program) {
                 if (in_array($program->ProgramType, ['Text Only'])) {
                     continue;
@@ -93,7 +99,7 @@ class DealProgramDebugger extends Command
                 $this->table(['key', 'value'], $rows);
             }
         }
-
+        */
 
         //print_r($response);
 
