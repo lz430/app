@@ -28,8 +28,13 @@ class TotalRateService extends BaseService
         }
 
         $response->residuals = [];
-        $this->client->mungeAttributesIntoArray($response->residuals, $element->AisResidualData);
-        $this->client->mungeChildrenIntoArray($response->residuals, $element->AisResidualData);
+
+        foreach ($element->AisResidualData->FinanceCompany as $companyData) {
+            $data = [];
+            $this->client->mungeAttributesIntoArray($data, $companyData);
+            $this->client->mungeChildrenIntoArray($data, $companyData);
+            $response->residuals[] = (object) $data;
+        }
 
         $response->standardRates = [];
         $this->client->mungeAttributesIntoArray($response->standardRates, $element->StandardRates);
@@ -67,6 +72,4 @@ class TotalRateService extends BaseService
 
         return null;
     }
-
-
 }
