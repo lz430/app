@@ -20,14 +20,9 @@ const api = {
         });
     },
     getLeasePayments: (dealPricing) => {
-        return window.axios.get('/api/lease-payments', {
+        return window.axios.get('/api/deals/'+ dealPricing.id() +'/lease-payments', {
             params: {
-                tax_rate: dealPricing.taxRate() * 100,
-                acquisition_fee: dealPricing.acquisitionFeeValue(),
-                doc_fee: dealPricing.docFeeValue(),
                 rebate: dealPricing.bestOfferValue(),
-                license_fee: dealPricing.licenseAndRegistrationValue(),
-                cvr_fee: dealPricing.effCvrFeeValue(),
                 msrp: dealPricing.baseSellingPriceValue(),
                 cash_advance: dealPricing.sellingPriceValue(),
                 cash_due: dealPricing.allLeaseCashDueOptions(),
@@ -36,13 +31,8 @@ const api = {
         });
     },
     getLeaseRates: (deal, zipcode) => {
-        return window.axios.get('/api/lease-rates', {
+        return window.axios.get('/api/deals/'+ deal.id +'/lease-rates', {
             params: {
-                vin: deal.vin,
-                modelcode: deal.model_code,
-                trim: deal.version.trim_name,
-                model: deal.model,
-                make: deal.make,
                 zipcode,
             },
         });
