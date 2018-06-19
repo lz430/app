@@ -1,6 +1,6 @@
 <?php
 
-namespace DeliverMyRide\DataDelivery\Map;
+namespace DeliverMyRide\DataDelivery\Manager;
 
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
 

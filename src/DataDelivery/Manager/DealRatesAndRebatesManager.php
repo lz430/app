@@ -1,6 +1,6 @@
 <?php
 
-namespace DeliverMyRide\DataDelivery\Map;
+namespace DeliverMyRide\DataDelivery\Manager;
 
 use App\Models\Deal;
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
@@ -9,7 +9,7 @@ use GuzzleHttp\Exception\ClientException;
 /**
  *
  */
-class DealPrograms
+class DealRatesAndRebatesManager
 {
     private $client;
     private $deal;
@@ -174,7 +174,7 @@ class DealPrograms
      * Cash value for applied programs
      * @return mixed
      */
-    private function appliedPrograms()
+    private function appliedCashPrograms()
     {
 
         $scenario = $this->scenarios
@@ -288,8 +288,7 @@ class DealPrograms
         $programIds = $this->programIds();
 
         //
-        // Next we do some other shit...
-        print_r($this->vehicleId);
+        //
         $totalRateResponse = $this->client->totalrate->get(
             $this->vehicleId,
             $this->zipcode,
@@ -298,12 +297,9 @@ class DealPrograms
         );
 
 
-        //print_r($totalRateResponse->residuals);
         $this->scenarios = collect($totalRateResponse->scenarios);
         $this->residuals = collect($totalRateResponse->residuals);
         $this->standardRates = collect($totalRateResponse->standardRates);
-
-        // TODO: Remove invalid cash offers.
     }
 
     /**
@@ -314,9 +310,10 @@ class DealPrograms
         $response = new \stdClass();
         $response->isLease = $this->isLease;
 
-        $response->rebates = (object)[
+        // Everybody Rebates
+        $response->cashRebates = (object)[
             'totalValue' => $this->totalCashValue(),
-            'programs' => $this->appliedPrograms()
+            'programs' => $this->appliedCashPrograms()
         ];
 
         if ($response->isLease) {

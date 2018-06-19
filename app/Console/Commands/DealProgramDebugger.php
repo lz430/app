@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
-use DeliverMyRide\DataDelivery\Map\DealPrograms;
+use DeliverMyRide\DataDelivery\Manager\DealRatesAndRebatesManager;
 use Illuminate\Console\Command;
 use App\Models\Deal;
 
@@ -31,9 +31,7 @@ class DealProgramDebugger extends Command
     public function __construct(DataDeliveryClient $client)
     {
         parent::__construct();
-
         $this->client = $client;
-
     }
 
     /**
@@ -45,64 +43,8 @@ class DealProgramDebugger extends Command
         $deal = Deal::where('vin', $vin)->first();
         $is_lease = true;
 
-        $dealPrograms = new DealPrograms($deal, '48116', $is_lease, $this->client);
+        $dealPrograms = new DealRatesAndRebatesManager($deal, '48116', $is_lease, $this->client);
         $data = $dealPrograms->getData();
         print_r($data);
-
-        /*
-        foreach ($response->vehicles as $vehicle) {
-            print_r($vehicle);
-            if (!isset($vehicle->programs)) {
-                continue;
-            }
-            foreach ($vehicle->programs as $program) {
-                if (in_array($program->ProgramType, ['Text Only'])) {
-                    continue;
-                }
-                $rows = [];
-                $scenarios = $program->dealscenarios;
-
-                unset($program->dealscenarios);
-                unset($program->ProgramContent);
-                foreach ($program as $key => $value) {
-                    $rows[] = [$key, $value];
-                }
-                $rows[] = ["", ""];
-                $rows[] = ["", ""];
-
-                foreach ($scenarios as $scenario) {
-                    $rows[] = ['DealScenarioType', $scenario->DealScenarioType];
-
-                    if (isset($scenario->terms)) {
-                        foreach ($scenario->terms as $term) {
-                            $rows[] = [$term->QualifyingTermStart . " - " . $term->QualifyingTermEnd,];
-                            $value = "";
-
-                            foreach ($term->tiers[0] as $k => $v) {
-                                $value .= "{$k} = {$v}\n";
-                            }
-                            $rows[] = ["Tier: {$term->tiers[0]->TierNo}", $value];
-                        }
-                    }
-
-                    if (isset($scenario->tiers)) {
-                        $value = "";
-
-                        foreach ($scenario->tiers[0] as $k => $v) {
-                            $value .= "{$k} = {$v}\n";
-                        }
-                        $rows[] = ["Tier: {$scenario->tiers[0]->TierNo}", $value];
-                    }
-
-
-                }
-
-                $this->table(['key', 'value'], $rows);
-            }
-        }
-        */
-
-        //print_r($response);
-
     }
 }
