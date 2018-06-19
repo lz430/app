@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
-use DeliverMyRide\DataDelivery\DealPrograms;
+use DeliverMyRide\DataDelivery\Map\DealPrograms;
 use Illuminate\Console\Command;
 use App\Models\Deal;
 
