@@ -339,7 +339,7 @@ class DealRatesAndRebatesManager
 
             $terms = collect($terms)
                 ->reject(function ($term) {
-                    return $term->Factor == "STD";
+                    return isset($term->Factor) && $term->Factor == "STD";
                 })->all();
 
             $response->leaseTerms = $terms;
