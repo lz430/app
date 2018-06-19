@@ -75,8 +75,8 @@ class DealEquipmentMunger
         $this->processVautoFeature();
 
         //
-        // Do some additional transformation
-        $this->extractAdditionalOptionCodes();
+        // Option codes & package codes
+        $this->buildOptionsAndPackages();
         $this->initializeOptionCodes();
 
         //
@@ -96,13 +96,6 @@ class DealEquipmentMunger
         //
         // Save discovered features to deal.
         $this->updateDealWithDiscoveredFeatures();
-
-        // Performs option/package code transformations
-        $this->findingAdditionalPackageCodesFromFeatures();
-        $this->extractAdditionalOptionCodes();
-        $this->stripPackageCodesFromOptions();
-
-        $this->reduceOptionCodesFromPackages();
 
         return $this->debug;
     }
@@ -171,7 +164,7 @@ class DealEquipmentMunger
         if (count($override)) {
             $this->option_codes = $override;
         } else {
-            $this->option_codes = $this->deal->option_codes;
+            $this->option_codes = array_merge($this->deal->option_codes, $this->deal->package_codes);
         }
     }
 
@@ -200,6 +193,38 @@ class DealEquipmentMunger
     private function fetchVersionOptions(): \Illuminate\Support\Collection
     {
         return collect($this->client->option->get($this->version->jato_vehicle_id, 'O')->options);
+    }
+
+    public function buildOptionsAndPackages()
+    {
+        $packages = $this->deal->package_codes ? $this->deal->package_codes : [];
+        $packages = array_merge($packages, $this->extractPackageCodesFromVautoFeatures());
+
+        $options = $this->deal->option_codes ? $this->deal->option_codes : [];
+        $options = array_merge($options, $this->extractAdditionalOptionCodes());
+
+        // This is an assumption that that packages and options have unique codes.
+        $packagesAndOptions = array_merge($packages, $options);
+        $packagesAndOptions = array_filter($packagesAndOptions);
+        $packagesAndOptions = array_unique($packagesAndOptions);
+
+        $packages = $this->packages
+            ->reject(function($package) use ($packagesAndOptions) {
+              return !in_array($package->optionCode, $packagesAndOptions);
+            })
+            ->pluck('optionCode')
+            ->all();
+
+        $options = $this->options
+            ->reject(function($option) use ($packagesAndOptions) {
+                return !in_array($option->optionCode, $packagesAndOptions);
+            })
+            ->pluck('optionCode')
+            ->all();
+
+        $this->deal->package_codes = $packages;
+        $this->deal->option_codes = $options;
+        $this->deal->save();
     }
 
     /**
@@ -244,66 +269,26 @@ class DealEquipmentMunger
                 }
             }
         }
+
         $found_option_codes = $additional_option_codes;
 
+        /*
         $additional_option_codes = array_diff($additional_option_codes, $original_options);
-        $option_codes = array_merge($additional_option_codes, $option_codes);
-        //$this->debug['equipment_extracted_codes'] = array_merge($this->debug['equipment_extracted_codes'], $additional_option_codes);
-
-
+      $option_codes = array_merge($additional_option_codes, $option_codes);
         if ($option_codes != $original_options) {
             $this->deal->option_codes = $option_codes;
             $this->deal->save();
         }
-        return $found_option_codes;
+        */
+        return $additional_option_codes;
     }
 
     /**
-     * Grabs all available package codes from jato for a vehicle
+     * @return array
      */
-    private function getAllAvailablePackageCodes()
+    private function extractPackageCodesFromVautoFeatures()
     {
-        $findPackages = $this->packages;
-        $packagesOnThisVehicle = $findPackages;
-
-        $foundPackages = [];
-        foreach($packagesOnThisVehicle as $package) {
-            $foundPackages[] = $package->optionCode;
-        }
-
-        return $foundPackages;
-    }
-
-    /**
-     * Compares the options codes that are in the deals.option_codes column and removes the found package
-     * codes from the list to place into the deals.package_codes column
-     */
-    private function stripPackageCodesFromOptions()
-    {
-        $optionCodesFromCsv = $this->deal->option_codes;
-        $jatoPackagesOnVehicle = $this->getAllAvailablePackageCodes();
-        $compareOptionsWithPackages = array_intersect($optionCodesFromCsv, $jatoPackagesOnVehicle);
-        $pullPackagesOutOfList = array_diff($optionCodesFromCsv, $compareOptionsWithPackages);
-
-        $this->deal->package_codes = array_values($pullPackagesOutOfList);
-        $this->deal->save();
-    }
-
-    /**
-     * Reduces the deals.option_codes table column data by comparing the package codes and only leaving the options codes
-     * in the deals.option_codes column instead of before leaving both package and option codes together
-     */
-    private function reduceOptionCodesFromPackages()
-    {
-        $filter_options = array_diff($this->deal->option_codes, $this->deal->package_codes);
-        $this->deal->option_codes = array_values($filter_options);
-        $this->deal->save();
-    }
-
-    private function findingAdditionalPackageCodesFromFeatures()
-    {
-        // Option Codes
-        $optionCodes = array_filter($this->deal->option_codes);
+        $packageCodes = [];
 
         $rules = [
             "/(?<=(?i)Quick Order Package )(.*?)(?=\|| )/",
@@ -315,15 +300,11 @@ class DealEquipmentMunger
             $matches = [];
             preg_match($rule, $this->deal->vauto_features, $matches);
             if (count($matches)) {
-                $optionCodes += $matches;
+                $packageCodes += $matches;
             }
         }
-        $optionCodes = array_unique($optionCodes);
-
-        if ($optionCodes != $this->deal->option_codes) {
-            $this->deal->option_codes = $optionCodes;
-            $this->deal->save();
-        }
+        $packageCodes = array_unique($packageCodes);
+        return $packageCodes;
     }
 
     /**
@@ -347,34 +328,6 @@ class DealEquipmentMunger
     }
 
     /**
-     * This is not at all performant, but getting pretty desperate.
-     */
-    public function buildFeaturesFromGuessedVautoNames()
-    {
-
-        $vautoFeatures = explode("|", $this->deal->vauto_features);
-        $vautoFeatures = array_map('trim', $vautoFeatures);
-
-        $features = $this->features
-            ->reject(function ($feature) use ($vautoFeatures) {
-                foreach ($vautoFeatures as $name) {
-                    $score = levenshtein($name, $feature[0]);
-                    if ($score < 5) {
-                        return false;
-                    }
-                }
-                return true;
-            });
-
-        //print "SUP";
-        //print_r($features->toArray());
-
-        //$this->categorizeDiscoveredFeatures($features);
-
-        return null;
-    }
-
-    /**
      *
      */
     public function buildFeaturesForMappedVautoData()
@@ -390,7 +343,7 @@ class DealEquipmentMunger
                     'feature' => $feature,
                     'equipment' => (object)[
                         'optionId' => 0,
-                        'schemaId' => "VA|".$feature->title,
+                        'schemaId' => "VA|" . $feature->title,
                     ],
                 ];
             });

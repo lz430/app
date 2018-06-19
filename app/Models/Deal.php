@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\JATO\Version;
 use App\Models\JATO\Make;
+use Backpack\CRUD\CrudTrait;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -54,6 +55,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Deal extends Model
 {
+    use CrudTrait;
+
     const HOLD_HOURS = 48;
 
     /**
