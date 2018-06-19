@@ -235,7 +235,6 @@ class DealRatesAndRebatesManager
         return $programIds;
     }
 
-
     private function bestFinanceCompany()
     {
         $companies = $this->residuals
