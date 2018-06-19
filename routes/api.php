@@ -18,6 +18,7 @@ Route::get('models', 'VehicleModelsController@index')->name('vehicleModels.index
 Route::get('body-styles', 'BodyStylesController@index')->name('bodyStyles.index');
 Route::get('deals', 'DealsController@getDeals')->name('deals.index');
 Route::get('dealsByModelYear', 'DealsByModelYearController@getDealsByModelYear')->name('dealsByModelYear.index');
+Route::post('deals/{deal}/quote', 'DealQuoteController@quote')->name('deals.quote');
 Route::get('deals/{deal}/best-offer', 'DealBestOfferController@getBestOffer')->name('deals.best-offer');
 Route::get('deals/{deal}/lease-payments', 'DealLeasePaymentsController@getLeasePayments')->name('lease-payments.getLeasePayments');
 Route::get('deals/{deal}/lease-rates', 'DealLeaseRatesController@getLeaseRates')->name('lease-rates.getLeaseRates');
