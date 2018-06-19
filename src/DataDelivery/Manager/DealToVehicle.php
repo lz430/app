@@ -49,7 +49,6 @@ class DealToVehicle
      */
     private function filterUnlessNone(array $data, $attribute, $value): array
     {
-
         $filtered = array_filter($data, function ($record) use ($attribute, $value) {
             if (is_array($value) && isset($record->{$attribute}) && in_array($record->{$attribute}, $value)) {
                 return true;

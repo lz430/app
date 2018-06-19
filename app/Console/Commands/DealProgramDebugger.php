@@ -41,10 +41,14 @@ class DealProgramDebugger extends Command
     {
         $vin = $this->argument('vin');
         $deal = Deal::where('vin', $vin)->first();
-        $is_lease = true;
 
-        $dealPrograms = new DealRatesAndRebatesManager($deal, '48116', $is_lease, $this->client);
-        $data = $dealPrograms->getData();
+        $manager = new DealRatesAndRebatesManager($deal, '48116', $this->client);
+        $manager->setFinanceStrategy('lease');
+        $manager->setConsumerRole('default');
+        $manager->searchForVehicleAndPrograms();
+        $manager->setScenario();
+
+        $data = $manager->getData();
         print_r($data);
     }
 }
