@@ -9,14 +9,16 @@ const targetsSelected = state => state.targetsSelected;
 const bestOffers = state => state.bestOffers;
 const paymentType = state => state.selectedTab;
 const targetDefaults = state => state.targetDefaults;
-const employeeBrand = state => state.employeeBrand === false ? null : state.employeeBrand;
+const employeeBrand = state =>  state.containers.dealDetails.selectDiscount.employeeBrand === false ? null : state.containers.dealDetails.selectDiscount.employeeBrand;
+const supplierBrand = state =>  state.containers.dealDetails.selectDiscount.supplierBrand === false ? null : state.containers.dealDetails.selectDiscount.supplierBrand;
+const discountType = state => state.containers.dealDetails.selectDiscount.discountType;
 
-const financeDownPayment = state => state.financeDownPayment;
-const financeTerm = state => state.financeTerm;
+const financeDownPayment = state => state.containers.dealDetails.finance.downPayment;
+const financeTerm = state => state.containers.dealDetails.finance.term;
 
-const leaseAnnualMileage = state => state.leaseAnnualMileage;
-const leaseTerm = state => state.leaseTerm;
-const leaseCashDue = state => state.leaseCashDue;
+const leaseAnnualMileage = state => state.containers.dealDetails.lease.annualMileage;
+const leaseTerm = state => state.containers.dealDetails.lease.term;
+const leaseCashDue = state => state.containers.dealDetails.lease.cashDue;
 
 const dealsIdsWithCustomizedQuotes = state => state.dealsIdsWithCustomizedQuotes;
 
@@ -278,6 +280,7 @@ const dealPricing = createSelector(
     zipcode,
     paymentType,
     employeeBrand,
+    supplierBrand,
     financeDownPayment,
     financeTerm,
     dealLeaseAnnualMileage,
@@ -288,6 +291,7 @@ const dealPricing = createSelector(
     dealLeaseRates,
     dealLeasePaymentsLoading,
     dealLeasePayments,
+    discountType,
     (
         deal,
         dealBestOffer,
@@ -295,6 +299,7 @@ const dealPricing = createSelector(
         zipcode,
         paymentType,
         employeeBrand,
+        supplierBrand,
         financeDownPayment,
         financeTerm,
         dealLeaseAnnualMileage,
@@ -304,7 +309,8 @@ const dealPricing = createSelector(
         dealLeaseRatesLoading,
         dealLeaseRates,
         dealLeasePaymentsLoading,
-        dealLeasePayments
+        dealLeasePayments,
+        discountType
     ) => {
         return {
             deal,
@@ -313,6 +319,7 @@ const dealPricing = createSelector(
             zipcode,
             paymentType,
             employeeBrand,
+            supplierBrand,
             financeDownPayment,
             financeTerm,
             leaseAnnualMileage: dealLeaseAnnualMileage,
@@ -322,7 +329,8 @@ const dealPricing = createSelector(
             dealLeaseRatesLoading,
             dealLeaseRates,
             dealLeasePaymentsLoading,
-            dealLeasePayments
+            dealLeasePayments,
+            discountType
         };
     }
 );

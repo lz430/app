@@ -2,6 +2,7 @@ import { createStore, compose, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist';
 import reducer from 'reducers/index';
+
 import {
     requestMakes,
     requestModels,
@@ -36,13 +37,8 @@ const initialState = {
     featureCategories: [],
     features: null,
     filterPage: 'models',
-    financeDownPayment: null,
-    financeTerm: null,
     fuelTypes: ['Gasoline', 'Electric', 'Flex Fuel', 'Diesel', 'Hybrid'],
     infoModalIsShowingFor: null,
-    leaseAnnualMileage: {},
-    leaseTerm: {},
-    leaseCashDue: {},
     makes: null,
     modelYears: null,
     models: null,
@@ -88,12 +84,31 @@ const initialState = {
     leaseRates: null,
     leasePaymentsLoaded: {},
     leasePayments: null,
+    containers: {
+        dealDetails: {
+            finance: {
+                downPayment: null,
+                term: null
+            },
+            lease: {
+                cashDue: {},
+                term: {},
+                annualMileage: {}
+            },
+            selectDiscount: {
+                discountType: 'dmr',
+                employeeBrand: false,
+                supplierBrand: false
+            }
+        }
+    }
 };
 
 const config = {
     key: 'primary',
     storage
 };
+
 export default () => {
     const composeEnhancers =
         window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

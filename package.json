@@ -37,6 +37,7 @@
   "dependencies": {
     "animate.css": "^3.5.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.12",
+    "babel-preset-stage-2": "^6.24.1",
     "browser-sync": "^2.18.13",
     "browser-sync-webpack-plugin": "^1.2.0",
     "cross-env": "^5.0.5",
@@ -50,6 +51,7 @@
     "react-redux": "^5.0.5",
     "react-sticky": "^6.0.2",
     "react-svg-inline": "^2.0.0",
+    "reduce-reducers": "^0.3.0",
     "redux": "^3.6.0",
     "redux-persist": "^5",
     "redux-thunk": "^2.2.0",

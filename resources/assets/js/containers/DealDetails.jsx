@@ -1,4 +1,4 @@
-import * as Actions from 'actions/index';
+import * as legacyActions from 'actions/index';
 import api from 'src/api';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import CompareBar from 'components/CompareBar';
@@ -13,10 +13,18 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import ImageGallery from 'react-image-gallery';
 import AccuPricingModal from 'components/AccuPricingModal';
-import InfoModalData from 'components/InfoModalData';
 import DealPricing from 'src/DealPricing';
 import {makeDealPricing} from '../selectors';
 import util from 'src/util';
+import CashPricingPane from "./dealDetails/components/pricing/CashPane";
+import FinancePricingPane from "./dealDetails/components/pricing/FinancePane";
+import LeasePricingPane from "./dealDetails/components/pricing/LeasePane";
+import PaymentTypes from "./dealDetails/components/pricing/PaymentTypes";
+import mapAndBindActionCreators from "../util/mapAndBindActionCreators";
+
+import * as selectDiscountActions from './dealDetails/modules/selectDiscount';
+import * as financeActions from './dealDetails/modules/finance';
+import * as leaseActions from './dealDetails/modules/lease';
 
 class DealDetails extends React.PureComponent {
     constructor(props) {
@@ -40,7 +48,7 @@ class DealDetails extends React.PureComponent {
     componentDidMount() {
         this._isMounted = true;
 
-        this.props.requestBestOffer(this.props.deal);
+        this.props.legacyActions.requestBestOffer(this.props.deal);
 
         if (this.props.deal.photos.length) {
             this.setState({featuredImage: this.props.deal.photos[0]});
@@ -99,18 +107,6 @@ class DealDetails extends React.PureComponent {
         return this.allImages().map(image => {
             return { original: image.url };
         });
-    }
-
-    renderCalculatorModal() {
-        return (
-            <Modal
-                onClose={this.props.clearSelectedDeal}
-                closeText="Back to details"
-                deal={this.props.selectedDeal}
-            >
-                <CashFinanceLeaseCalculator deal={this.props.selectedDeal} />
-            </Modal>
-        );
     }
 
     hideModals() {
@@ -239,38 +235,79 @@ class DealDetails extends React.PureComponent {
         );
     }
 
-    renderStockNumber() {
-        return (
-            <div className="deal-details__stock-number">
-                Stock# {this.props.deal.stock_number}
-            </div>
-        );
-    }
-
     renderDeal(deal, { shouldRenderStockNumber } = {}) {
+        const {selectedTab, dealPricing} = this.props;
+
         return (
             <div className="deal-details__pricing">
                 <div>
                     {shouldRenderStockNumber && (
-                        this.renderStockNumber()
+                        <div className="deal-details__stock-number">
+                            Stock# {this.props.deal.stock_number}
+                        </div>
                     )}
-                    <InfoModalData
-                        withPricingHeader={false}
-                        {...R.pick(['deal', 'selectedTab', 'compareList', 'dealPricing'], this.props)}
-                        {...R.pick([
-                            'selectDeal',
-                            'selectTab',
-                            'requestTargets',
-                            'requestBestOffer',
-                            'getBestOffersForLoadedDeals',
-                            'toggleCompare',
-                            'showAccuPricingModal'
-                        ], this.props)}
-                    />
+                    <div className="info-modal-data">
+                        <div className="info-modal-data__price">
+                            <PaymentTypes {...{selectedTab}} onChange={this.handlePaymentTypeChange}/>
+                            {this.props.selectedTab === 'cash' &&
+                            <CashPricingPane
+                                {...{dealPricing}}
+                                onDiscountChange={this.handleDiscountChange}
+                                onRebatesChange={this.handleRebatesChange}
+                            />}
+                            {this.props.selectedTab === 'finance' &&
+                            <FinancePricingPane
+                                {...{dealPricing}}
+                                onDiscountChange={this.handleDiscountChange}
+                                onRebatesChange={this.handleRebatesChange}
+                                onDownPaymentChange={this.handleFinanceDownPaymentChange}
+                                onTermChange={this.handleFinanceTermChange}
+                            />}
+                            {this.props.selectedTab === 'lease' &&
+                            <LeasePricingPane
+                                {...{dealPricing}}
+                                onDiscountChange={this.handleDiscountChange}
+                                onRebatesChange={this.handleRebatesChange}
+                            />}
+                        </div>
+                    </div>
                 </div>
             </div>
         );
     }
+
+    handlePaymentTypeChange = (tabName) => {
+        this.props.legacyActions.selectTab(tabName);
+        this.props.legacyActions.requestBestOffer(this.props.deal);
+    };
+
+    handleDiscountChange = (discountType, make) => {
+        switch(discountType) {
+            case 'dmr':
+                this.props.selectDiscountActions.selectDmrDiscount();
+                break;
+
+            case 'employee':
+                this.props.selectDiscountActions.selectEmployeeDiscount(make);
+                break;
+
+            case 'supplier':
+                this.props.selectDiscountActions.selectSupplierDiscount(make);
+                break;
+        }
+    };
+
+    handleRebatesChange = () => {
+        this.props.legacyActions.requestBestOffer(this.props.deal);
+    };
+
+    handleFinanceDownPaymentChange = (downPayment) => {
+        this.props.financeActions.updateDownPayment(downPayment);
+    };
+
+    handleFinanceTermChange = (term) => {
+        this.props.financeActions.updateTerm(term);
+    };
 
     renderFeaturesAndOptions(deal, index) {
         const inCompareList = R.contains(
@@ -369,7 +406,6 @@ class DealDetails extends React.PureComponent {
 
                 {this.state.showStandardFeatures ? this.renderStandardFeaturesModal(this.props.deal) : ''}
                 {this.state.showFeatures ? this.renderFeaturesModal(this.props.deal) : ''}
-                {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
                 <AccuPricingModal />
             </div>);
     }
@@ -406,5 +442,12 @@ function mapStateToProps(state) {
     return mapStateToProps;
 }
 
+const mapDispatchToProps = mapAndBindActionCreators({
+    financeActions,
+    leaseActions,
+    selectDiscountActions,
 
-export default connect(mapStateToProps, Actions)(DealDetails);
+    legacyActions
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DealDetails);

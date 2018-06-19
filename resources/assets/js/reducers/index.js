@@ -1,3 +1,5 @@
+import { combineReducers } from 'redux';
+import reduceReducers from 'reduce-reducers';
 import * as ActionTypes from 'actiontypes/index';
 import R from 'ramda';
 import { REHYDRATE } from 'redux-persist';
@@ -6,7 +8,9 @@ import isEqual from 'lodash.isequal';
 const urlStyle = util.getInitialBodyStyleFromUrl();
 const urlSize = util.getInitialSizeFromUrl();
 
-const reducer = (state, action) => {
+import dealDetailsReducer from '../containers/dealDetails/reducer'
+
+const rootReducer = (state, action) => {
     switch (action.type) {
         case REHYDRATE:
             /**
@@ -171,10 +175,6 @@ const reducer = (state, action) => {
         case ActionTypes.TOGGLE_MODEL:
             return Object.assign({}, state, {
                 selectedModels: action.selectedModels,
-            });
-        case ActionTypes.SET_IS_EMPLOYEE:
-            return Object.assign({}, state, {
-                employeeBrand: action.employeeBrand,
             });
         case ActionTypes.TOGGLE_FEATURE:
             return Object.assign({}, state, {
@@ -403,4 +403,13 @@ const reducer = (state, action) => {
     return state;
 };
 
-export default reducer;
+const containersReducer = combineReducers({
+    dealDetails: dealDetailsReducer
+});
+
+export default (state, action) => {
+    return rootReducer({
+        ...state,
+        containers: containersReducer(state.containers, action)
+    }, action);
+}
