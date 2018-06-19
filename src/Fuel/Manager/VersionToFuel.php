@@ -1,8 +1,9 @@
 <?php
 
-namespace DeliverMyRide\Fuel;
+namespace DeliverMyRide\Fuel\Manager;
 
 use App\Models\JATO\Version;
+use DeliverMyRide\Fuel\FuelClient;
 
 use GuzzleHttp\Exception\ClientException;
 
