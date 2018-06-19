@@ -1,6 +1,6 @@
 <?php
 
-namespace DeliverMyRide\DataDelivery\Map;
+namespace DeliverMyRide\DataDelivery\Manager;
 
 use App\Models\Deal;
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
@@ -9,7 +9,7 @@ use GuzzleHttp\Exception\ClientException;
 /**
  *
  */
-class DealPrograms
+class DealRatesAndRebatesManager
 {
     private $client;
     private $deal;
@@ -30,14 +30,12 @@ class DealPrograms
     /**
      * @param Deal $deal
      * @param string $zipcode
-     * @param bool $isLease
      * @param DataDeliveryClient|null $client
      */
-    public function __construct(Deal $deal, string $zipcode, $isLease, DataDeliveryClient $client = null)
+    public function __construct(Deal $deal, string $zipcode, DataDeliveryClient $client = null)
     {
         $this->deal = $deal;
         $this->zipcode = $zipcode;
-        $this->isLease = $isLease;
         $this->client = $client;
     }
 
@@ -54,9 +52,11 @@ class DealPrograms
         }
 
         foreach ($response->vehicles[0]->programs as $program) {
+
             if (in_array($program->ProgramType, ["Text Only", 'IVC/DVC'])) {
                 continue;
             }
+
             $data = $program;
 
             $mungedScenarios = [];
@@ -77,7 +77,7 @@ class DealPrograms
                 $mungedScenarios[$scenario->DealScenarioType] = $scenario;
             }
             $data->dealscenarios = $mungedScenarios;
-            $programs[] = $data;
+            $programs[$data->ProgramID] = $data;
         }
 
         $this->programs = collect($programs);
@@ -108,6 +108,8 @@ class DealPrograms
     }
 
     /**
+     *
+     * We select the best lease program and the scenario at the same time.
      * Priority:
      *
      * Manufacturer - Lease Special
@@ -120,11 +122,14 @@ class DealPrograms
         $selectedProgram = null;
         $selectedType = null;
 
-        foreach ([
-                     'Manufacturer - Lease Special',
-                     'Affiliate - Lease Special',
-                     'Manufacturer - Lease Standard',
-                     'Affiliate - Lease Standard'] as $type) {
+        $scenarios = [
+            'Manufacturer - Lease Special',
+            'Affiliate - Lease Special',
+            'Manufacturer - Lease Standard',
+            'Affiliate - Lease Standard'
+        ];
+
+        foreach ($scenarios as $type) {
 
             $programs = $this->leaseProgramsWithScenario($type);
 
@@ -146,6 +151,10 @@ class DealPrograms
         $this->scenario = $selectedType;
     }
 
+    /**
+     * Cash value for applied programs
+     * @return mixed
+     */
     private function totalCashValue()
     {
         $scenario = $this->scenarios
@@ -162,6 +171,49 @@ class DealPrograms
                 return $program->Cash;
             })
             ->sum();
+    }
+
+    /**
+     * Cash value for applied programs
+     * @return mixed
+     */
+    private function appliedCashPrograms()
+    {
+
+        $scenario = $this->scenarios
+            ->reject(function ($scenario) {
+                return $scenario->DealScenarioType != $this->scenario;
+            })
+            ->first();
+
+        $ids = collect($scenario->tiers[0]->aprprograms[0]->programs)
+            ->reject(function ($program) {
+                return !isset($program->Cash);
+            })
+            ->map(function ($program) {
+                return $program->ProgramID;
+            })->all();
+
+        return $this->programs
+            ->reject(function ($program) use ($ids) {
+                return !in_array($program->ProgramID, $ids);
+            })
+            ->map(function ($program) {
+                $scenario = $program->dealscenarios[$this->scenario];
+
+                $program = clone $program;
+                unset($program->dealscenarios);
+
+                $data = [
+                    'value' => $scenario->Cash,
+                    'scenario' => $scenario,
+                    'program' => $program,
+                ];
+
+                return (object)$data;
+
+            })
+            ->all();
     }
 
     private function programIds()
@@ -239,8 +291,7 @@ class DealPrograms
         $programIds = $this->programIds();
 
         //
-        // Next we do some other shit...
-        print_r($this->vehicleId);
+        //
         $totalRateResponse = $this->client->totalrate->get(
             $this->vehicleId,
             $this->zipcode,
@@ -249,12 +300,9 @@ class DealPrograms
         );
 
 
-        //print_r($totalRateResponse->residuals);
         $this->scenarios = collect($totalRateResponse->scenarios);
         $this->residuals = collect($totalRateResponse->residuals);
         $this->standardRates = collect($totalRateResponse->standardRates);
-
-        // TODO: Remove invalid cash offers.
     }
 
     /**
@@ -265,8 +313,10 @@ class DealPrograms
         $response = new \stdClass();
         $response->isLease = $this->isLease;
 
-        $response->cash = (object) [
-          'total' => $this->totalCashValue(),
+        // Everybody Rebates
+        $response->cashRebates = (object)[
+            'totalValue' => $this->totalCashValue(),
+            'programs' => $this->appliedCashPrograms()
         ];
 
         if ($response->isLease) {
@@ -300,23 +350,69 @@ class DealPrograms
     }
 
     /**
+     * @param $strategy
+     *
+     * strategy should be either lease/finance/cash
+     */
+    public function setFinanceStrategy($strategy)
+    {
+        if ($strategy === 'lease') {
+            $this->isLease = true;
+        } else {
+            $this->isLease = false;
+        }
+    }
+
+    /**
+     * @param $role
+     *
+     * role should be either default/employee/supplier
+     */
+    public function setConsumerRole($role)
+    {
+
+    }
+
+    /**
+     * @param null $scenario
+     * TODO: Support Lease + passed in scenario.
+     */
+    public function setScenario($scenario = null) {
+        if (!$scenario) {
+            if ($this->isLease) {
+                $this->bestLeaseProgram();
+            } else {
+                $this->scenario = 'Cash - Bank APR';
+            }
+        }
+    }
+
+    /**
+     * We need to find one specific vehicle that matches our deal and then using
+     * that vehicle find all the valid programs and information associated it.
+     *
+     * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function searchForVehicleAndPrograms(): bool
+    {
+        $results = (new DealToVehicle($this->deal, $this->zipcode, $this->client))->get();
+
+        if (!$results || !isset($results->vehicles[0]->DescVehicleID)) {
+            return false;
+        }
+
+        $this->extractProgramData($results);
+        $this->vehicleId = $results->vehicles[0]->DescVehicleID;
+
+        return true;
+    }
+
+    /**
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getData()
     {
-        //
-        // First we get all the programs.
-        $results = (new DealToVehicle($this->deal, $this->zipcode, $this->client))->get();
-        $this->extractProgramData($results);
-        $this->vehicleId = $results->vehicles[0]->DescVehicleID;
-
-        //
-        // Then we pick a scenario and a specific lease program.
-        if ($this->isLease) {
-            $this->bestLeaseProgram();
-        } else {
-            $this->scenario = 'Cash - Bank APR';
-        }
 
         //
         // Get totals

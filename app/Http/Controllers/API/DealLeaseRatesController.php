@@ -69,13 +69,13 @@ class DealLeaseRatesController extends BaseAPIController
         $residuals = [];
 
         $programs = $results->programDealScenarios;
-        foreach($programs as $i => $program) {
+        foreach ($programs as $i => $program) {
             $data = $program->programs[$i]->residuals;
-            foreach($data as $d) {
+            foreach ($data as $d) {
                 $terms = null;
-                foreach($d->vehicles as $vehicle){
-                    if($vehicle->modelCode === $modelCode) {
-                        foreach($vehicle->termValues as $value){
+                foreach ($d->vehicles as $vehicle) {
+                    if ($vehicle->modelCode === $modelCode) {
+                        foreach ($vehicle->termValues as $value) {
                             $terms[] = $value->termLength;
                         }
                     }
