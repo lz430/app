@@ -46,7 +46,8 @@ class DealProgramDebugger extends Command
         $is_lease = true;
 
         $dealPrograms = new DealPrograms($deal, '48116', $is_lease, $this->client);
-        $dealPrograms->getData();
+        $data = $dealPrograms->getData();
+        print_r($data);
 
         /*
         foreach ($response->vehicles as $vehicle) {

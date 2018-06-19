@@ -54,9 +54,11 @@ class DealPrograms
         }
 
         foreach ($response->vehicles[0]->programs as $program) {
+
             if (in_array($program->ProgramType, ["Text Only", 'IVC/DVC'])) {
                 continue;
             }
+
             $data = $program;
 
             $mungedScenarios = [];
@@ -77,7 +79,7 @@ class DealPrograms
                 $mungedScenarios[$scenario->DealScenarioType] = $scenario;
             }
             $data->dealscenarios = $mungedScenarios;
-            $programs[] = $data;
+            $programs[$data->ProgramID] = $data;
         }
 
         $this->programs = collect($programs);
@@ -146,6 +148,10 @@ class DealPrograms
         $this->scenario = $selectedType;
     }
 
+    /**
+     * Cash value for applied programs
+     * @return mixed
+     */
     private function totalCashValue()
     {
         $scenario = $this->scenarios
@@ -162,6 +168,49 @@ class DealPrograms
                 return $program->Cash;
             })
             ->sum();
+    }
+
+    /**
+     * Cash value for applied programs
+     * @return mixed
+     */
+    private function appliedPrograms()
+    {
+
+        $scenario = $this->scenarios
+            ->reject(function ($scenario) {
+                return $scenario->DealScenarioType != $this->scenario;
+            })
+            ->first();
+
+        $ids = collect($scenario->tiers[0]->aprprograms[0]->programs)
+            ->reject(function ($program) {
+                return !isset($program->Cash);
+            })
+            ->map(function ($program) {
+                return $program->ProgramID;
+            })->all();
+
+        return $this->programs
+            ->reject(function ($program) use ($ids) {
+                return !in_array($program->ProgramID, $ids);
+            })
+            ->map(function ($program) {
+                $scenario = $program->dealscenarios[$this->scenario];
+
+                $program = clone $program;
+                unset($program->dealscenarios);
+
+                $data = [
+                    'value' => $scenario->Cash,
+                    'scenario' => $scenario,
+                    'program' => $program,
+                ];
+
+                return (object)$data;
+
+            })
+            ->all();
     }
 
     private function programIds()
@@ -265,8 +314,9 @@ class DealPrograms
         $response = new \stdClass();
         $response->isLease = $this->isLease;
 
-        $response->cash = (object) [
-          'total' => $this->totalCashValue(),
+        $response->rebates = (object)[
+            'totalValue' => $this->totalCashValue(),
+            'programs' => $this->appliedPrograms()
         ];
 
         if ($response->isLease) {
