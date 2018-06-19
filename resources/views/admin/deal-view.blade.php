@@ -61,7 +61,31 @@
             </div>
         </div>
     </div>
+    <h3>
+        Media
+    </h3>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default">
+                <div class="box-header">
+                    <div class="box-title">
+                        Deal Photos
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
 
+                    @foreach ($deal->marketingPhotos() as $photo)
+                        <div class="col-md-2">
+                            <img style="max-width:100%; margin-bottom:20px;" src="{{$photo->url}}" />
+                        </div>
+                    @endforeach
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
     <h3>
         Features
     </h3>
