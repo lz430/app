@@ -3048,16 +3048,16 @@
         },
         {
             "name": "sentry/sentry",
-            "version": "1.9.0",
+            "version": "1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getsentry/sentry-php.git",
-                "reference": "c90567d78382b803e563939654d1563ddee61707"
+                "reference": "7ebc06dcab248bdf12e807bed3b308ef9c8a6ebf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/c90567d78382b803e563939654d1563ddee61707",
-                "reference": "c90567d78382b803e563939654d1563ddee61707",
+                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/7ebc06dcab248bdf12e807bed3b308ef9c8a6ebf",
+                "reference": "7ebc06dcab248bdf12e807bed3b308ef9c8a6ebf",
                 "shasum": ""
             },
             "require": {
@@ -3084,7 +3084,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.9.x-dev"
+                    "dev-master": "1.10.x-dev"
                 }
             },
             "autoload": {
@@ -3108,7 +3108,7 @@
                 "log",
                 "logging"
             ],
-            "time": "2018-05-03T12:06:52+00:00"
+            "time": "2018-06-19T15:02:57+00:00"
         },
         {
             "name": "sentry/sentry-laravel",
@@ -3227,16 +3227,16 @@
         },
         {
             "name": "spatie/laravel-fractal",
-            "version": "5.3.1",
+            "version": "5.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-fractal.git",
-                "reference": "e39e0865b66ca541337b45fed4ad6c22200b85d0"
+                "reference": "a0db87cf01593cc2cfe7aec3f82ce57c83566f3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-fractal/zipball/e39e0865b66ca541337b45fed4ad6c22200b85d0",
-                "reference": "e39e0865b66ca541337b45fed4ad6c22200b85d0",
+                "url": "https://api.github.com/repos/spatie/laravel-fractal/zipball/a0db87cf01593cc2cfe7aec3f82ce57c83566f3b",
+                "reference": "a0db87cf01593cc2cfe7aec3f82ce57c83566f3b",
                 "shasum": ""
             },
             "require": {
@@ -3291,7 +3291,7 @@
                 "spatie",
                 "transform"
             ],
-            "time": "2018-02-07T23:06:44+00:00"
+            "time": "2018-06-13T20:45:45+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -4880,16 +4880,16 @@
         },
         {
             "name": "laravel/homestead",
-            "version": "v7.7.0",
+            "version": "v7.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/homestead.git",
-                "reference": "4895d028e1214c9df34ed0104775e6ae1eb23d77"
+                "reference": "5b2e6fb35a80314af38328dca04273d782b36724"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/homestead/zipball/4895d028e1214c9df34ed0104775e6ae1eb23d77",
-                "reference": "4895d028e1214c9df34ed0104775e6ae1eb23d77",
+                "url": "https://api.github.com/repos/laravel/homestead/zipball/5b2e6fb35a80314af38328dca04273d782b36724",
+                "reference": "5b2e6fb35a80314af38328dca04273d782b36724",
                 "shasum": ""
             },
             "require": {
@@ -4899,6 +4899,7 @@
                 "symfony/yaml": "~3.3|~4.0"
             },
             "require-dev": {
+                "phly/changelog-generator": "^2.2",
                 "phpunit/phpunit": "^5.7 || ^6.0"
             },
             "bin": [
@@ -4926,7 +4927,7 @@
                 }
             ],
             "description": "A virtual machine for web artisans.",
-            "time": "2018-06-03T21:17:32+00:00"
+            "time": "2018-06-18T13:10:20+00:00"
         },
         {
             "name": "maximebf/debugbar",
@@ -5860,16 +5861,16 @@
         },
         {
             "name": "sebastian/comparator",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "ed5fd2281113729f1ebcc64d101ad66028aeb3d5"
+                "reference": "591a30922f54656695e59b1f39501aec513403da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/ed5fd2281113729f1ebcc64d101ad66028aeb3d5",
-                "reference": "ed5fd2281113729f1ebcc64d101ad66028aeb3d5",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/591a30922f54656695e59b1f39501aec513403da",
+                "reference": "591a30922f54656695e59b1f39501aec513403da",
                 "shasum": ""
             },
             "require": {
@@ -5920,7 +5921,7 @@
                 "compare",
                 "equality"
             ],
-            "time": "2018-04-18T13:33:00+00:00"
+            "time": "2018-06-14T15:05:28+00:00"
         },
         {
             "name": "sebastian/diff",
