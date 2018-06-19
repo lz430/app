@@ -28,21 +28,19 @@ class DealService {
      * @returns {*}
      */
     dealGetLeasePayments(dealPricing, cancelToken) {
-        return httpclient.get('/api/lease-payments', {
-            cancelToken: cancelToken,
-            params: {
-                tax_rate: dealPricing.taxRate() * 100,
-                acquisition_fee: dealPricing.acquisitionFeeValue(),
-                doc_fee: dealPricing.docFeeValue(),
-                rebate: dealPricing.bestOfferValue(),
-                license_fee: dealPricing.licenseAndRegistrationValue(),
-                cvr_fee: dealPricing.effCvrFeeValue(),
-                msrp: dealPricing.baseSellingPriceValue(),
-                cash_advance: dealPricing.sellingPriceValue(),
-                cash_due: dealPricing.allLeaseCashDueOptions(),
-                terms: dealPricing.apiTerms(),
-            },
-        });
+        return httpclient.get(
+            '/api/deals/' + dealPricing.id() + '/lease-payments',
+            {
+                cancelToken: cancelToken,
+                params: {
+                    rebate: dealPricing.bestOfferValue(),
+                    msrp: dealPricing.msrpValue(),
+                    cash_advance: dealPricing.sellingPriceValue(),
+                    cash_due: dealPricing.allLeaseCashDueOptions(),
+                    terms: dealPricing.apiTerms(),
+                },
+            }
+        );
     }
 
     /**
@@ -52,14 +50,9 @@ class DealService {
      * @returns {*}
      */
     dealGetLeaseRates(deal, zipcode, cancelToken) {
-        return httpclient.get('/api/lease-rates', {
+        return httpclient.get('/api/deals/' + deal.id + '/lease-rates', {
             cancelToken: cancelToken,
             params: {
-                vin: deal.vin,
-                modelcode: deal.model_code,
-                trim: deal.version.trim_name,
-                model: deal.model,
-                make: deal.make,
                 zipcode,
             },
         });

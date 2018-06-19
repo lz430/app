@@ -4,7 +4,7 @@ namespace DeliverMyRide\VAuto\Deal;
 
 use App\Models\Deal;
 use DeliverMyRide\Fuel\FuelClient;
-use DeliverMyRide\Fuel\VersionToFuel;
+use DeliverMyRide\Fuel\Manager\VersionToFuel;
 
 /**
  *

@@ -12,7 +12,6 @@ class Client
     private $password;
 
     /**
-     * Client constructor.
      * @param $url
      * @param $username
      * @param $password

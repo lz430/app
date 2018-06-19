@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
         Commands\JatoDealDecode::class,
         Commands\DealFeatureDebugger::class,
         Commands\ImportVautoMapData::class,
+        Commands\DealProgramDebugger::class,
     ];
 
     /**

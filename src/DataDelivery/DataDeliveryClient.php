@@ -46,7 +46,6 @@ class DataDeliveryClient extends ApiClient
         ];
     }
 
-
     /**
      * @param $array
      * @param \SimpleXMLElement $element
@@ -60,7 +59,6 @@ class DataDeliveryClient extends ApiClient
 
     public function mungeChildrenIntoArray(&$array, \SimpleXMLElement $element, $parent_keys = [])
     {
-
         foreach ($element->children() as $key => $childData) {
             if (isset($parent_keys[$key])) {
                 $parent_key = $parent_keys[$key];
