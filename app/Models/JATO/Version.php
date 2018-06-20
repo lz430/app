@@ -6,8 +6,15 @@ use App\Models\Deal;
 use DeliverMyRide\JATO\BodyStyles;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @property int $id
+ * @property int $jato_vehicle_id
+ * @property \DateTime $created_at
+ * @property \DateTime $updated_at
+ */
 class Version extends Model
 {
     protected $guarded = ['id'];
@@ -23,20 +30,12 @@ class Version extends Model
     {
         return $this->belongsTo(VehicleModel::class, 'model_id');
     }
-
-    public function options()
+    /**
+     * @return HasMany
+     */
+    public function photos(): HasMany
     {
-        return $this->hasMany(Option::class, 'jato_vehicle_id');
-    }
-
-    public function equipment()
-    {
-        return $this->hasMany(Equipment::class, 'jato_vehicle_id', 'jato_vehicle_id');
-    }
-
-    public function taxesAndDiscounts()
-    {
-        return $this->hasMany(VersionTaxAndDiscount::class);
+        return $this->hasMany(VersionPhoto::class);
     }
 
     public function deals()
@@ -69,5 +68,15 @@ class Version extends Model
             DB::raw('lower(body_style)'),
             array_map('strtolower', $bodyStylesWithSubStyles)
         );
+    }
+
+    /**
+     * @return VersionPhoto|null
+     */
+    public function thumbnail(): ?VersionPhoto {
+        return  $this->photos()
+            ->where('shot_code', '=', '116')
+            ->where('color', '=', 'default')
+            ->first();
     }
 }

@@ -15,7 +15,7 @@ use function GuzzleHttp\Psr7\stream_for;
 class ApiClient {
 
     /** @var Client $http_client */
-    private $http_client;
+    protected $http_client;
 
     /** @var string baseUrl */
     protected $baseUrl;
@@ -147,7 +147,7 @@ class ApiClient {
      * @param bool $async
      * @return mixed
      */
-    private function handleResponse(Response $response)
+    public function handleResponse(Response $response)
     {
         $stream = stream_for($response->getBody());
         $raw_response = json_decode($stream->getContents());

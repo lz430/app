@@ -14,12 +14,12 @@ class OptionService extends BaseService
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function get(string $vehicleId, $type = '')
+    public function get(string $vehicleId, string $type = '')
     {
         if ($type) {
-            $path = "options/{$vehicleId}";
-        } else {
             $path = "options/{$vehicleId}/type/{$type}";
+        } else {
+            $path = "options/{$vehicleId}";
         }
 
         return $this->client->get($path);

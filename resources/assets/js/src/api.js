@@ -20,14 +20,9 @@ const api = {
         });
     },
     getLeasePayments: (dealPricing) => {
-        return window.axios.get('/api/lease-payments', {
+        return window.axios.get('/api/deals/'+ dealPricing.id() +'/lease-payments', {
             params: {
-                tax_rate: dealPricing.taxRate() * 100,
-                acquisition_fee: dealPricing.acquisitionFeeValue(),
-                doc_fee: dealPricing.docFeeValue(),
                 rebate: dealPricing.bestOfferValue(),
-                license_fee: dealPricing.licenseAndRegistrationValue(),
-                cvr_fee: dealPricing.effCvrFeeValue(),
                 msrp: dealPricing.msrpValue(),
                 cash_advance: dealPricing.sellingPriceValue(),
                 cash_due: dealPricing.allLeaseCashDueOptions(),
@@ -36,13 +31,20 @@ const api = {
         });
     },
     getLeaseRates: (deal, zipcode) => {
+        return window.axios.get('/api/deals/'+ deal.id +'/lease-rates', {
+            params: {
+                zipcode,
+            },
+        });
+    },
+    /*getLeaseRates: (deal, zipcode) => {
         return window.axios.get('/api/lease-rates', {
             params: {
                 jato_vehicle_id: deal.version.jato_vehicle_id,
                 zipcode,
             },
         });
-    },
+    },*/
     getWarranties: jato_vehicle_id => {
         return window.axios.get('/api/warranties', {
             params: {
@@ -164,15 +166,22 @@ const api = {
     postNotifyWhenInRange: (email = null) => {
         return window.axios.post('/api/hubspot/not-in-area', { email });
     },
-    getBestOffer: (dealId, paymentType, zipcode, targets, cancelToken) => {
+    getBestOffer: (dealId, paymentType, zipcode, cancelToken) => { //dealId, paymentType, zipcode, targets, cancelToken
         return window.axios.get(`/api/deals/${dealId}/best-offer`, {
+            cancelToken: cancelToken.token,
+            params: {
+                payment_type: paymentType,
+                zipcode,
+            },
+        });
+        /*return window.axios.get(`/api/deals/${dealId}/best-offer`, {
             cancelToken: cancelToken.token,
             params: {
                 payment_type: paymentType,
                 zipcode,
                 targets,
             },
-        });
+        });*/
     },
 };
 

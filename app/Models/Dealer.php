@@ -5,14 +5,33 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Backpack\CRUD\CrudTrait;
 
 
+/**
+ * @property int $id
+ * @property  \stdClass $price_rules
+ * @property $acquisition_fee
+ * @property $doc_fee
+ * @property $registration_fee
+ * @property $cvr_fee
+ */
 class Dealer extends Model
 {
+    use CrudTrait;
+
     /**
      * @var array
      */
     protected $guarded = ['id'];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'price_rules' => 'object',
+    ];
+
 
     /**
      * @var array
@@ -22,6 +41,7 @@ class Dealer extends Model
         'latitude',
         'longitude',
         'name',
+        'acquisition_fee',
         'max_delivery_miles',
         'route_one_id',
         'address',
@@ -31,6 +51,7 @@ class Dealer extends Model
         'phone',
         'contact_name',
         'contact_title',
+        'price_rules',
     ];
 
     /**

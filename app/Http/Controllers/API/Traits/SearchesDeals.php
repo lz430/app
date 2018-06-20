@@ -66,7 +66,7 @@ trait SearchesDeals
 
         })->whereNotNull('price')->whereNotNull('msrp')->with(['photos' => function ($query) {
             $query->orderBy('id');
-        },])->with('features')->with('version.equipment')->with('dealer')->forSale();
+        },])->with('features')->with('dealer')->forSale();
     }
 
     private function filterQueryByYear(Builder $query, Request $request) : Builder

@@ -11,9 +11,9 @@ class SidebarFilter extends React.PureComponent {
                     className={`sidebar-filters__filter-title ${this.props.open
                         ? 'sidebar-filters__filter-title--open'
                         : ''}`}
-                    onClick={this.props.toggle}
+                    onClick={this.props.canToggle ? this.props.toggle : () => {}}
                 >
-                    <SVGInline
+                    {this.props.canToggle && <SVGInline
                         className="sidebar-filters__icon"
                         svg={
                             this.props.open ? (
@@ -22,7 +22,7 @@ class SidebarFilter extends React.PureComponent {
                                 zondicons['cheveron-down']
                             )
                         }
-                    />
+                    />}
                     {this.props.title}
                     <span className="sidebar-filters__count">
                         { this.props.count }
@@ -47,6 +47,11 @@ SidebarFilter.propTypes = {
     title: PropTypes.string.isRequired,
     children: PropTypes.object.isRequired,
     count: PropTypes.number,
+    canToggle: PropTypes.bool,
+};
+
+SidebarFilter.defaultProps = {
+    canToggle: true
 };
 
 export default SidebarFilter;

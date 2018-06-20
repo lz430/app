@@ -3,14 +3,31 @@
 namespace App\Transformers;
 
 use App\Models\Deal;
-use App\Models\JATO\Make;
 use League\Fractal\TransformerAbstract;
 
 class DealTransformer extends TransformerAbstract
 {
+
+    /**
+     * @param Deal $deal
+     * @return object
+     */
+    public function prices(Deal $deal) {
+        return $deal->prices();
+    }
+
+    /**
+     * @param Deal $deal
+     * @return array
+     */
+    public function photos(Deal $deal) {
+        return $deal->marketingPhotos();
+    }
+
     public function transform(Deal $deal)
     {
-        $deal->photos->shift();
+        $photos = $this->photos($deal);
+        $prices = $this->prices($deal);
         return [
             'id' => $deal->id,
             'file_hash' => $deal->file_hash,
@@ -32,9 +49,10 @@ class DealTransformer extends TransformerAbstract
             'fuel' => $deal->fuel,
             'color' => $deal->color,
             'interior_color' => $deal->interior_color,
-            'employee_price' => (float) $deal->price,
-            'supplier_price' =>  (float) (in_array(strtolower($deal->make), Make::DOMESTIC) ? $deal->price * 1.04 : $deal->price),
-            'msrp' => (float) $deal->msrp,
+            'default_price' => $prices->default,
+            'employee_price' => $prices->employee,
+            'supplier_price' =>  $prices->supplier,
+            'msrp' => $prices->msrp,
             'inventory_date' => $deal->inventory_date,
             'certified' => $deal->certified,
             'description' => $deal->description,
@@ -42,7 +60,8 @@ class DealTransformer extends TransformerAbstract
             'fuel_econ_hwy' => $deal->fuel_econ_hwy,
             'dealer_name' => $deal->dealer_name,
             'days_old' => $deal->days_old,
-            'photos' => $deal->photos,
+            'photos' => $photos,
+            'thumbnail' => $deal->featuredPhoto(),
             'version' => $deal->version,
             'features' => $deal->jatoFeatures,
             'doc_fee' => (float) $deal->dealer->doc_fee,
@@ -54,6 +73,7 @@ class DealTransformer extends TransformerAbstract
             })->toArray())),
             'dealer' => $deal->dealer,
             'dmr_features' => $deal->features,
+            'pricing' => $prices,
         ];
     }
 }

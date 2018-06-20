@@ -30,6 +30,18 @@
             <directory suffix="Test.php">./tests/External/Jato</directory>
         </testsuite>
 
+        <testsuite name="external.cox">
+            <directory suffix="Test.php">./tests/External/Cox</directory>
+        </testsuite>
+
+        <testsuite name="external.fuel">
+            <directory suffix="Test.php">./tests/External/Fuel</directory>
+        </testsuite>
+
+        <testsuite name="external.datadelivery">
+            <directory suffix="Test.php">./tests/External/DataDelivery</directory>
+        </testsuite>
+
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">

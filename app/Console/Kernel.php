@@ -15,7 +15,11 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\LoadDealsFromVauto::class,
         Commands\TestCoxAPI::class,
-        Commands\JatoDebug::class,
+        Commands\JatoVersionReport::class,
+        Commands\VersionFillMissingPhotos::class,
+        Commands\DealFeatureDebugger::class,
+        Commands\ImportVautoMapData::class,
+        Commands\DealProgramDebugger::class,
     ];
 
     /**

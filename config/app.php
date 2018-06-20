@@ -153,6 +153,7 @@ return [
          */
         Laravel\Tinker\TinkerServiceProvider::class,
         Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
+        Backpack\Base\BaseServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -162,6 +163,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\CarletonServiceProvider::class,
         App\Providers\CoxServiceProvider::class,
+        App\Providers\DataDeliveryServiceProvider::class,
+        App\Providers\FuelServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\JATOServiceProvider::class,

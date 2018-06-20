@@ -36,7 +36,7 @@ class LeaseCalculator extends React.PureComponent {
         return (
             <div>
                 <span className="cash-finance-lease-calculator__left-item">
-                    Your price
+                    Your Price
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
                     {this.showWhenPricingIsLoaded(() => this.props.dealPricing.yourPrice())}
@@ -78,7 +78,7 @@ class LeaseCalculator extends React.PureComponent {
                     deal={this.props.deal}
                     targetsChanged={this.handleTargetsChange.bind(this)}
                 />
-                <hr />
+                {/*<hr />*/}
                 <div>
                     <h4>Select Desired Lease Payment</h4>
                     <div className="cash-finance-lease-calculator__lease-table-container">

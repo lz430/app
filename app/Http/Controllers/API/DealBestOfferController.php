@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Deal;
-use DeliverMyRide\JATO\JatoClient;
-use Cache;
-use GuzzleHttp\Exception\GuzzleException;
+use DeliverMyRide\Cox\CoxClient;
+use App\Transformers\BestPriceTransformer;
 
 class DealBestOfferController extends BaseAPIController
 {
@@ -15,7 +12,7 @@ class DealBestOfferController extends BaseAPIController
 
     public $client;
 
-    public function __construct(JatoClient $client)
+    public function __construct(CoxClient $client)
     {
         $this->client = $client;
     }
@@ -25,40 +22,30 @@ class DealBestOfferController extends BaseAPIController
         $this->validate(request(), [
             'payment_type' => 'required|string|in:cash,finance,lease',
             'zipcode' => 'required|string',
-            'targets' => 'required|array',
         ]);
 
         // We want to show the cash best offer information even in the finance tabs
         $paymentType = request('payment_type');
-        if ($paymentType == 'finance') {
-            $paymentType = 'cash';
+
+        switch($paymentType) {
+            case 'cash':
+            case 'finance':
+                $type = 2;
+                break;
+            case 'lease':
+                $type = 9;
+                break;
         }
 
-        // Generate the best offer cache key
-        $sortedTargets = collect(request('targets'))->sort()->implode(',');
-        $jatoVehicleId = $deal->version->jato_vehicle_id;
-        $zipCode = request('zipcode');
-        $cacheKey = "best-offer:{$jatoVehicleId}:{$paymentType}:{$zipCode}:{$sortedTargets}";
-
-        if (Cache::tags(['best-offers'])->has($cacheKey)) {
-            $data = Cache::tags(['best-offers'])->get($cacheKey);
+        $hints = ['TRIM' => $deal->version->trim_name, 'BODY_TYPE' => $deal->body, 'MODEL' => $deal->model, 'MODEL_CODE' => $deal->model_code];
+        $manufacturerResults = $this->client->vehicle->findByVehicleAndPostalcode($deal->vin, request('zipcode'), [$type], $hints);
+        $bestOffers = null;
+        if($paymentType === 'lease' && empty($manufacturerResults->response[0]->programDealScenarios[0]->programs)) {
+            $bestOffers = $this->client->vehicle->findByVehicleAndPostalcode($deal->vin, request('zipcode'), [11], $hints);
         } else {
-            try {
-                $data = $this->client->incentive->bestOffer($jatoVehicleId, $paymentType, $zipCode, $sortedTargets);
-                Cache::tags(['best-offers'])->put($cacheKey, $data, self::CACHE_LENGTH);
-
-            } catch (GuzzleException $e) {
-                Cache::tags(['best-offers'])->put($cacheKey, new \stdClass(), 5);
-                $data = new \stdClass();
-            }
+            $bestOffers = $manufacturerResults;
         }
-
-        if (!isset($data->totalValue)) {
-            $data->totalValue = 0;
-            $data->programs = [];
-        }
-
-        return response()->json($data);
+        return (new BestPriceTransformer)->transform(['results' => $bestOffers, 'paymentType' => $paymentType, 'model_code' => $deal->model_code, 'make' => $deal->make, 'trim' => $deal->series]);
     }
 
 }

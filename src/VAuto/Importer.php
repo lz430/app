@@ -3,25 +3,29 @@
 namespace DeliverMyRide\VAuto;
 
 use App\Models\Feature;
-use App\Models\JatoFeature;
-use App\Models\JATO\Make;
-use App\Models\JATO\Manufacturer;
-use App\Models\JATO\VehicleModel;
 use App\Models\JATO\Version;
 use App\Models\Deal;
-use Carbon\Carbon;
+
+use DeliverMyRide\Fuel\FuelClient;
 use DeliverMyRide\JATO\JatoClient;
+use DeliverMyRide\VAuto\Deal\DealMunger;
+
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
-use function GuzzleHttp\Promise\unwrap;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\QueryException;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
+use League\Csv\Reader;
+use League\Csv\Statement;
+
+
+/**
+ *
+ */
 class Importer
 {
     private const HEADERS = [
@@ -60,6 +64,14 @@ class Importer
         "Fuel",
         "Age",
         "Option Codes",
+        "Invoice",
+        "Sticker",
+        "Dealer Discounted",
+        "MEMOLINE1",
+        "MEMOLINE2",
+        "FLOORPLANAMOUNT",
+        "SALESCOST",
+        "INVOICEAMOUNT",
 
     ];
 
@@ -67,16 +79,25 @@ class Importer
         'smart',
     ];
 
-    private $client;
+    private const PROCESS_BATCH_SIZE = 100;
+
+    private $jatoClient;
+    private $fuelClient;
+
     private $error;
-    private $features;
     private $filesystem;
     private $info;
+    private $debug;
 
-    public function __construct(Filesystem $filesystem, JatoClient $client)
+    public function __construct(Filesystem $filesystem, JatoClient $jatoClient, FuelClient $fuelClient)
     {
         $this->filesystem = $filesystem;
-        $this->client = $client;
+        $this->jatoClient = $jatoClient;
+        $this->fuelClient = $fuelClient;
+
+        $this->debug = [
+            'start' => microtime(true),
+        ];
     }
 
     public function setInfoFunction(callable $infoFunction)
@@ -103,513 +124,282 @@ class Importer
         }
     }
 
-    public function import()
+    /**
+     * @return array
+     */
+    private function buildSourceData(): array
     {
-        $this->features = Feature::with('category')->get();
+        $sources = [];
 
-        $csvFiles = array_filter(
+        $files = array_filter(
             $this->filesystem->files(realpath(base_path(config('services.vauto.uploads_path')))),
             function ($file) {
                 return pathinfo($file, PATHINFO_EXTENSION) === 'csv';
             }
         );
 
-        foreach ($csvFiles as $file) {
-            $handle = fopen($file, 'r');
-
-            //$this->checkHeaders(fgetcsv($handle)); // commented out to limit import to only use the specified header rows instead of checking for header comparison
-
-            $this->saveVersionDeals($handle, md5_file($file));
-        };
-    }
-
-    private function saveVersionDeals($handle, string $fileHash)
-    {
-        $rowNumber = 2;
-
-        while (($csvRow = fgetcsv($handle)) !== false) {
-            $this->info("VAuto import row: #{$rowNumber}");
-            $rowNumber++;
-
-            $vAutoRow = array_combine(self::HEADERS, array_slice($csvRow, 0, 35)); // originally array_combine(self::HEADERS, $csvRow)
-
-            if ($vAutoRow['New/Used'] !== 'N') {
-                $this->info("   Skipping Used Vehicle.");
-                continue;
-            }
-
-            if (in_array($vAutoRow['Make'], self::MAKE_BLACKLIST)) {
-                $this->info("   Skipping banned make: " . $vAutoRow['Make']);
-                continue;
-            }
-
-            if (strlen($vAutoRow['Price']) > 6) {
-                $this->info("   Skipping high price: " . $vAutoRow['Price']);
-                continue;
-            }
-
-            if (is_null($vAutoRow['Price'])) {
-                $this->info("   Skipping no price");
-                continue;
-            }
-
-            try {
-                $deal = $this->saveOrUpdateDeal($fileHash, $vAutoRow);
-
-                $decodedVin = $this->client->vin->decode($vAutoRow['VIN']);
-
-                if (!$jatoVersion = $this->matchVersion($decodedVin, $vAutoRow)) {
-                    Log::channel('jato')->error('Could not find exact match for VIN -> JATO Version', [
-                        'VAuto Row' => $vAutoRow,
-                        'JATO VIN Decode' => $decodedVin,
-                    ]);
-
-                    continue;
-                }
-
-                DB::transaction(function () use ($jatoVersion, $deal, $decodedVin, $vAutoRow) {
-                    // If this version is new (based on UUID-year), fill its version relations
-                    if (!$version = Version::where('jato_uid', $jatoVersion->uid)->where('year', $deal->year)->first()) {
-                        $version = $this->saveVersionAndRelations($decodedVin, $jatoVersion);
-                    }
-
-                    $this->backfillNullMsrpsFromVersionMsrp($deal, $version);
-
-                    // If the deal is new, then we need to attach it to its version and flesh out its relations from that version
-                    if ($deal->wasRecentlyCreated) {
-                        $this->info("   Saving new Deal");
-                        $deal->version()->associate($version->id)->save();
-                        $this->saveDealRelations($deal, $vAutoRow);
-                    }
-
-                    // New version or Old version; but nothing has changed in this JATO Vehicle ID, so we can quit
-                    if ($version->jato_vehicle_id == $jatoVersion->vehicle_ID) {
-                        $this->info("   Vehicle ID is new or unchanged.");
-                        return true;
-                    }
-
-                    // JATO Vehicle ID has changed for this version; so we need to wipe and update all features for all related deals
-                    $this->info("   JATO Vehicle ID has changed. Wiping features.");
-                    $version->update(['jato_vehicle_id' => $jatoVersion->vehicle_ID]);
-
-                    foreach ($version->fresh()->deals as $attachedDeal) {
-                        $this->wipeDealFeatures($attachedDeal);
-                        $this->saveDealRelations($attachedDeal, $vAutoRow);
-                    }
-                });
-            } catch (ClientException | ServerException $e) {
-                Log::channel('jato')->error('Importer error for vin [' . $vAutoRow['VIN'] . ']: ' . $e->getMessage());
-                $this->error('Error: ' . $e->getMessage());
-
-                if ($e->getCode() === 401) {
-                    $this->error('401 error connecting to JATO; cancelling the rest of the calls.');
-                    throw $e;
-                }
-            } catch (QueryException | Exception $e) {
-                Log::channel('jato')->error('Importer error for vin [' . $vAutoRow['VIN'] . ']: ' . $e->getMessage());
-                $this->error('Error: ' . $e->getMessage());
-            }
-        }
-
-        Deal::where('file_hash', '!=', $fileHash)->whereDoesntHave('purchases')->delete();
-    }
-
-    private function saveOrUpdateDeal(string $fileHash, array $vAutoRow): Deal
-    {
-        $this->info("   Saving deal for vin: {$vAutoRow['VIN']}");
-
-        $deal = Deal::updateOrCreate([
-            'vin' => $vAutoRow['VIN'],
-        ], [
-            'file_hash' => $fileHash,
-            'dealer_id' => $vAutoRow['DealerId'],
-            'stock_number' => $vAutoRow['Stock #'],
-            'vin' => $vAutoRow['VIN'],
-            'new' => $vAutoRow['New/Used'] === 'N',
-            'year' => $vAutoRow['Year'],
-            'make' => $vAutoRow['Make'],
-            'model' => $vAutoRow['Model'],
-            'model_code' => $vAutoRow['Model Code'],
-            'body' => $vAutoRow['Body'],
-            'transmission' => $vAutoRow['Transmission'],
-            'series' => $vAutoRow['Series'],
-            'series_detail' => $vAutoRow['Series Detail'],
-            'door_count' => $vAutoRow['Door Count'],
-            'odometer' => $vAutoRow['Odometer'],
-            'engine' => $vAutoRow['Engine'],
-            'fuel' => $vAutoRow['Fuel'],
-            'color' => $vAutoRow['Colour'],
-            'interior_color' => $vAutoRow['Interior Color'],
-            'price' => $vAutoRow['Price'] !== '' ? $vAutoRow['Price'] : null,
-            'msrp' => $vAutoRow['MSRP'] !== '' ? $vAutoRow['MSRP'] : null,
-            'vauto_features' => $vAutoRow['Features'] !== '' ? $vAutoRow['Features'] : null,
-            'inventory_date' => Carbon::createFromFormat('m/d/Y', $vAutoRow['Inventory Date']),
-            'certified' => $vAutoRow['Certified'] === 'Yes',
-            'description' => $vAutoRow['Description'],
-            'option_codes' => array_filter(explode(',', $vAutoRow['Option Codes'])),
-            'fuel_econ_city' => $vAutoRow['City MPG'] !== '' ? $vAutoRow['City MPG'] : null,
-            'fuel_econ_hwy' => $vAutoRow['Highway MPG'] !== '' ? $vAutoRow['Highway MPG'] : null,
-            'dealer_name' => $vAutoRow['Dealer Name'],
-            'days_old' => $vAutoRow['Age'],
-        ]);
-
-        return $deal;
-    }
-
-    private function matchVersion($decodedVin, $vAutoRow)
-    {
-        // If there is just one version then use that
-        if (count($decodedVin->versions) === 1) {
-            return $decodedVin->versions[0];
-        }
-
-        // Get versions that match the Vin
-        $jatoVersion = array_first($decodedVin->versions, function ($version) use ($vAutoRow) {
-            return trim($version->trimName) === trim($vAutoRow['Series']) && $version->isCurrent;
-        });
-
-        if ($jatoVersion) {
-            return $jatoVersion;
-        }
-
-        // if we couldn't match, try to use the Model Code; return null if none match
-        return array_first($decodedVin->versions, function ($version) use ($vAutoRow) {
-            return str_contains($version->modelCode, $vAutoRow['Model Code']) && $version->isCurrent ||
-                str_contains($version->localModelCode, $vAutoRow['Model Code']) && $version->isCurrent;
-        });
-    }
-
-    /**
-     * Save the related data for a version--data that won't change if the JATO
-     * vehicle ID changes
-     */
-    private function saveVersionAndRelations($decodedVin, $jatoVersion)
-    {
-        $this->info("   Saving version and relations for UID " . $jatoVersion->uid);
-
-        if (!$manufacturer = Manufacturer::where('name', $decodedVin->manufacturer)->first()) {
-            // Save/Update manufacturer, make, model, then versions
-            $manufacturer = $this->saveManufacturer(
-                $this->client->manufacturer->get($decodedVin->manufacturer)
-            );
-        }
-
-        if (!$make = Make::where('name', $decodedVin->make)->first()) {
-            // Save/Update and save new make
-            $make = $this->saveManufacturerMake(
-                $manufacturer,
-                $this->client->make->get($decodedVin->make)
-            );
-        }
-
-        if (!$model = VehicleModel::where('name', $decodedVin->model)->first()) {
-            // Save/Update and save new model
-            $model = $this->saveMakeModel(
-                $make,
-                $this->client->model->get($jatoVersion->urlModelName)
-            );
-        }
-
-        return $this->saveModelVersion(
-            $model,
-            $this->client->version->get($jatoVersion->vehicle_ID)
-        );
-    }
-
-    private function wipeDealFeatures($deal)
-    {
-        $deal->features()->sync([]);
-        $deal->jatoFeatures()->sync([]);
-    }
-
-    private function saveDealRelations($deal, $vAutoRow)
-    {
-        $this->saveDealJatoFeatures($deal);
-        $this->saveDealPhotos($deal, $vAutoRow['Photos']);
-
-        $importer = new DealFeatureImporter($deal, $this->features, $this->client);
-        $importer->import();
-    }
-
-    private function saveDealJatoFeatures(Deal $deal)
-    {
-        $jatoVehicleId = $deal->version->jato_vehicle_id;
-
-        $promises = collect(JatoFeature::SYNC_GROUPS)->flatMap(function ($group) use ($jatoVehicleId) {
-            return [$group['title'] => $this->client->feature->get($jatoVehicleId, $group['id'], 1, 100, TRUE)];
-        });
-
-        $results = unwrap($promises);
-
-        foreach ($results as $group => $response) {
-            /** @var Response $response */
-            $this->saveDealJatoFeaturesByGroup(
-                $deal,
-                json_decode((string)$response->getBody(), true)['results'],
-                $group
-            );
-        }
-
-        $this->saveCustomHackyJatoFeatures($deal);
-    }
-
-    private function saveDealJatoFeaturesByGroup(Deal $deal, array $features, string $group)
-    {
-        collect($features)->reduce(function (Collection $carry, $jatoFeature) {
-            return $carry->merge(self::splitJATOFeaturesAndContent($jatoFeature['feature'], $jatoFeature['content']));
-        }, collect())->each(function ($featureAndContent) use ($deal, $group) {
-            /**
-             * Only interior features that contain "seat" should be added to seating
-             */
-            if ($group === JatoFeature::GROUP_SEATING_KEY && !str_contains($featureAndContent['feature'], 'seat')) {
-                return;
-            }
-
-            /**
-             * Only add features that have _content_ that starts with "Standard", "Yes".
-             */
-            if (starts_with($featureAndContent['content'], ['Standard', 'Yes'])) {
-                try {
-                    $feature = JatoFeature::updateOrCreate([
-                        'feature' => $featureAndContent['feature'],
-                        'content' => $featureAndContent['content'],
-                    ], [
-                        'feature' => $featureAndContent['feature'],
-                        'content' => $featureAndContent['content'],
-                        'group' => $this->getGroupWithOverrides($featureAndContent['feature'], $group),
-                    ]);
-
-                    $feature->deals()->save($deal);
-                } catch (QueryException $e) {
-                    // Already saved.
-                }
-            }
-        });
-    }
-
-    private function getGroupWithOverrides(string $feature, string $group)
-    {
-        /** If group contains "seat" then it should be in "seating" category */
-        return str_contains($feature, 'seat') ? JatoFeature::GROUP_SEATING_KEY : $group;
-    }
-
-    private function saveCustomHackyJatoFeatures(Deal $deal)
-    {
-        $jatoVersion = $deal->version;
-
-        if ($jatoVersion->body_style === 'Pickup') {
-            try {
-                $doorCount = JatoFeature::updateOrCreate([
-                    'feature' => "$deal->door_count Door",
-                    'content' => $deal->door_count,
-                ], [
-                    'feature' => "$deal->door_count Door",
-                    'content' => $deal->door_count,
-                    'group' => JatoFeature::GROUP_TRUCK_KEY,
-                ]);
-
-                $cabType = JatoFeature::updateOrCreate([
-                    'feature' => "$jatoVersion->cab Cab",
-                    'content' => $jatoVersion->cab,
-                ], [
-                    'feature' => "$jatoVersion->cab Cab",
-                    'content' => $jatoVersion->cab,
-                    'group' => JatoFeature::GROUP_TRUCK_KEY,
-                ]);
-
-                $doorCount->deals()->save($deal);
-                $cabType->deals()->save($deal);
-            } catch (QueryException $e) {
-                // Already Saved.
-            }
-        }
-    }
-
-    private function saveDealPhotos(Deal $deal, string $photos)
-    {
-        collect(explode('|', $photos))->reject(function ($photoUrl) {
-            return $photoUrl == '';
-        })->each(function ($photoUrl) use ($deal) {
-            $deal->photos()->firstOrCreate(['url' => str_replace('http', 'https', $photoUrl)]);
-        });
-    }
-
-    private function checkHeaders(array $headers)
-    {
-        if (self::HEADERS !== $headers) {
-            throw new MismatchedHeadersException(
-                implode(', ', $headers) . ' does not match expected headers: ' . implode(', ', self::HEADERS)
-            );
-        }
-    }
-
-    /**
-     * @param VehicleModel $vehicleModel
-     * @param \stdClass $version
-     * @return \Illuminate\Database\Eloquent\Model
-     */
-    private function saveModelVersion(VehicleModel $vehicleModel, \stdClass $version)
-    {
-        $this->info('   Saving Model Version: ' . $version->vehicleId);
-
-        return $vehicleModel->versions()->create([
-            'jato_vehicle_id' => $version->vehicleId,
-            'jato_uid' => $version->uid,
-            'jato_model_id' => $version->modelId,
-            'year' => str_before($version->modelYear, '.'), // trim off .5
-            'name' => !in_array($version->versionName, ['-', ''])
-                ? $version->versionName
-                : null,
-            'trim_name' => $version->trimName,
-            'description' => rtrim($version->headerDescription, ' -'),
-            'driven_wheels' => $version->drivenWheels,
-            'doors' => $version->numberOfDoors,
-            'transmission_type' => $version->transmissionType,
-            'msrp' => $version->msrp !== '' ? $version->msrp : null,
-            'invoice' => $version->invoice !== '' ? $version->invoice : null,
-            'body_style' => $version->bodyStyleName,
-            'cab' => $version->cabType !== '' ? $version->cabType : null,
-            'photo_path' => $version->photoPath,
-            'fuel_econ_city' => $version->fuelEconCity !== ''
-                ? $version->fuelEconCity
-                : null,
-            'fuel_econ_hwy' => $version->fuelEconHwy !== ''
-                ? $version->fuelEconHwy
-                : null,
-            'manufacturer_code' => !in_array($version->manufacturerCode, ['-', ''])
-                ? $version->manufacturerCode
-                : null,
-            'delivery_price' => $version->delivery !== ''
-                ? $version->delivery
-                : null,
-            'is_current' => $version->isCurrent,
-        ]);
-    }
-
-    /**
-     * @param Deal $deal
-     * @param $version
-     */
-    private function backfillNullMsrpsFromVersionMsrp(Deal $deal, $version)
-    {
-        if (!$deal->msrp && $version->msrp) {
-            $deal->update(['msrp' => $version->msrp]);
-        }
-    }
-
-    /**
-     * @param \stdClass $manufacturer
-     * @return Manufacturer
-     */
-    private function saveManufacturer(\stdClass $manufacturer): Manufacturer
-    {
-        $this->info('   Saving Manufacturer: ' . $manufacturer->manufacturerName);
-
-        return Manufacturer::updateOrCreate([
-            'url_name' => $manufacturer->urlManufacturerName,
-        ], [
-            'name' => $manufacturer->manufacturerName,
-            'url_name' => $manufacturer->urlManufacturerName,
-            'is_current' => $manufacturer->isCurrent,
-        ]);
-    }
-
-    /**
-     * @param Manufacturer $manufacturer
-     * @param \stdClass $make
-     * @return \Illuminate\Database\Eloquent\Model
-     */
-    private function saveManufacturerMake(Manufacturer $manufacturer, \stdClass $make)
-    {
-        $this->info('   Saving Manufacturer Make: ' . $make->makeName);
-
-        return $manufacturer->makes()->updateOrCreate([
-            'url_name' => $make->urlMakeName,
-        ], [
-            'name' => $make->makeName,
-            'url_name' => $make->urlMakeName,
-            'is_current' => $make->isCurrent,
-        ]);
-    }
-
-    /**
-     * @param Make $make
-     * @param \stdClass $model
-     * @return \Illuminate\Database\Eloquent\Model
-     */
-    private function saveMakeModel(Make $make, \stdClass $model)
-    {
-        $this->info('   Saving Make Model: ' . $model->modelName);
-
-        return $make->models()->updateOrCreate([
-            'url_name' => $model->urlModelName,
-        ], [
-            'name' => $model->modelName,
-            'url_name' => $model->urlModelName,
-            'is_current' => $model->isCurrent,
-        ]);
-    }
-
-    public static function splitJATOFeaturesAndContent($feature, $content)
-    {
-        $all = [];
-
-        if (str_contains($feature, '(')) {
-            [$prefix, $suffix] = array_map('trim', explode('(', $feature));
-
-            if (str_contains($suffix, ' / ')) {
-                $features = array_map(function ($str) {
-                    return trim($str, '() ');
-                }, explode(' / ', $suffix));
-
-                $contents = array_map('trim', explode(' / ', $content));
-
-                foreach ($features as $index => $thisfeature) {
-                    $all[] = [
-                        'feature' => "$prefix $thisfeature",
-                        // If there's only one content value for more than one features, grab the first on fail
-                        'content' => array_get($contents, $index, reset($contents)),
-                    ];
-                }
-            } else {
-                $features = [$prefix, $prefix . ' ' . trim($suffix, '() ')];
-                $contents = array_map(function ($str) {
-                    return trim($str, ') ');
-                }, explode('(', $content));
-
-                if (count($features) != count($contents)) {
-                    Log::channel('jato')->debug("Cannot parse feature: title[$feature] content[$content]");
-                    return $all;
-                }
-
-                foreach ($features as $index => $feature) {
-                    $all[] = [
-                        'feature' => $feature,
-                        'content' => $contents[$index],
-                    ];
-                }
-            }
-
-            return $all;
-        } elseif (str_contains($feature, ' / ')) {
-            $features = array_map('trim', explode(' / ', $feature));
-            $contents = array_map('trim', explode(' / ', $content));
-
-            foreach ($features as $index => $feature) {
-                $all[] = [
-                    'feature' => $feature,
-                    'content' => $contents[$index],
-                ];
-            }
-        } else {
-            $all = [
-                [
-                    'feature' => trim($feature),
-                    'content' => trim($content),
-                ],
+        foreach ($files as $path) {
+            $sources[] = [
+                'path' => $path,
+                'hash' => md5_file($path),
             ];
         }
 
-        return $all;
+        return $sources;
+    }
+
+    /**
+     * @param array $source
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function parseSourceData(array $source)
+    {
+
+        $reader = Reader::createFromPath($source['path'], 'r');
+
+        $stmt = (new Statement())
+            ->where(function ($row) {
+                return $this->skipSourceRecord($row);
+            });
+
+        $records = $stmt->process($reader, self::HEADERS);
+
+        $batch = [];
+        foreach ($records as $record) {
+            $record['file_hash'] = $source['hash'];
+            $batch[] = $record;
+
+            if (count($batch) >= self::PROCESS_BATCH_SIZE) {
+                $this->processBatchOfRecords($batch);
+                $batch = [];
+            }
+        }
+
+        // Leftovers
+        if (count($batch)) {
+            $this->processBatchOfRecords($batch);
+        }
+    }
+
+    /**
+     * @param array $batch
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function processBatchOfRecords(array $batch)
+    {
+        $vins = [];
+        foreach ($batch as $row) {
+            $vins[] = $row['VIN'];
+        }
+
+        foreach ($batch as $row) {
+            $this->processRecord($row);
+        }
+    }
+
+    /**
+     * @param array $row
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function processRecord(array $row)
+    {
+        try {
+            list($version, $versionDebugData) = (new VersionMunger($row, $this->jatoClient, $this->fuelClient))->build();
+            $this->info("Deal: {$row['VIN']} - {$row['Stock #']}");
+
+            //
+            // Fail if we don't have a version
+            if (!$version) {
+                Log::channel('jato')->error('Could not find exact match for VIN -> JATO Version', [
+                    'VAuto Row' => $row,
+                ]);
+                $this->info("    -- Error: Could not find match for vin");
+                return;
+            }
+
+            $deal = $this->saveOrUpdateDeal($version, $row['file_hash'], $row);
+
+            $this->info("    -- Version Options: {$versionDebugData['possible_versions']}");
+
+            if (isset($versionDebugData['name_search_term'])) {
+                $this->info("    -- Version Matching: {$versionDebugData['name_search_term']} | {$versionDebugData['name_search_name']} | {$versionDebugData['name_search_score']} ");
+            }
+
+            $this->info("    -- Version ID: {$version->id}");
+            $this->info("    -- Deal ID: {$deal->id}");
+            $this->info("    -- Deal Title: {$deal->title()}");
+            $this->info("    -- Is New: " . ($deal->wasRecentlyCreated ? "Yes" : "No"));
+
+            DB::transaction(function () use ($deal, $row) {
+                $debug = (new DealMunger($deal, $this->jatoClient, $this->fuelClient, $row))->import(true);
+
+                // Equipment
+                if (count($debug['equipment_extracted_codes'])) {
+                    $codes = collect($debug['equipment_extracted_codes'])->pluck('Option Code')->all();
+                    $msg = implode(", ", $codes);
+                    $this->info("    -- Equipment: Extracted Option Codes: {$msg}");
+                }
+
+                //$this->info("    -- Equipment: Known: {$debug['equipment_known_feature_count']}");
+                //$this->info("    -- Equipment: Vauto Guessed: {$debug['equipment_vauto_feature_count']}");
+                //$this->info("    -- Equipment: Vauto New: {$debug['equipment_vauto_extra_feature_count']}");
+                //$this->info("    -- Equipment: Total: {$debug['equipment_feature_count']}");
+
+                // Features
+                $this->info("    -- Features: New Jato Features: {$debug['feature_count']}");
+
+                // Photos
+                $this->info("    -- Photos: Deal Photos: {$debug['deal_photos']}");
+                $this->info("    -- Photos: Stock Photos: {$debug['stock_photos']}");
+
+            });
+        } catch (ClientException | ServerException $e) {
+            Log::channel('jato')->error('Importer error for vin [' . $row['VIN'] . ']: ' . $e->getMessage());
+            $this->error('Error: ' . $e->getMessage());
+
+            if ($e->getCode() === 401) {
+                $this->error('401 error connecting to JATO; cancelling the rest of the calls.');
+                throw $e;
+            }
+        } catch (QueryException | Exception $e) {
+            Log::channel('jato')->error('Importer error for vin [' . $row['VIN'] . ']: ' . $e->getMessage());
+            $this->error('Error: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     *
+     * @param $row
+     * @return bool returns true if we should skip the row.
+     */
+    private function skipSourceRecord(array $row): bool
+    {
+        if ($row['New/Used'] !== 'N') {
+            return false;
+        }
+
+        if (in_array($row['Make'], self::MAKE_BLACKLIST)) {
+            return false;
+        }
+
+        if (strlen($row['Price']) > 6) {
+            return false;
+        }
+
+        if (is_null($row['Price'])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function import()
+    {
+        $sources = $this->buildSourceData();
+        $hashes = [];
+        foreach ($sources as $source) {
+            $this->parseSourceData($source);
+            $hashes[] = $source['hash'];
+        }
+
+        //
+        // Delete all the hashes
+        Deal::whereNotIn('file_hash', $hashes)->whereDoesntHave('purchases')->delete();
+
+        $this->debug['stop'] = microtime(true);
+        $time = $this->debug['stop'] - $this->debug['start'];
+        $this->info("Execution Time: {$time}");
+    }
+
+
+    /**
+     * @param array $row
+     * @return \stdClass
+     */
+    private function getDealSourcePrice($row)
+    {
+
+        /**
+         * key: internal value
+         * value: vauto row header
+         */
+        $map = [
+            'msrp' => "MSRP",
+            'price' => "Price",
+            'invoice' => "Invoice",
+            'sticker' => "Sticker",
+            'dealerdiscounted' => "Dealer Discounted",
+            'memoline1' => "MEMOLINE1",
+            'memoline2' => "MEMOLINE2",
+            'floorplanamount' => "FLOORPLANAMOUNT",
+            'salescost' => "SALESCOST",
+            'invoiceamount' => "INVOICEAMOUNT",
+        ];
+
+        $return = [];
+
+        foreach ($map as $key => $value) {
+            if ($row[$value]) {
+                $return[$key] = trim($row[$value]);
+            }
+        }
+
+        return (object)$return;
+    }
+
+    /**
+     * @param Version $version
+     * @param string $fileHash
+     * @param array $row
+     * @return Deal
+     */
+    private function saveOrUpdateDeal(Version $version, string $fileHash, array $row): Deal
+    {
+        $pricing = $this->getDealSourcePrice($row);
+        if (!isset($pricing->msrp) && $version->msrp) {
+            $pricing->msrp = $version->msrp;
+        }
+
+        $deal = Deal::updateOrCreate([
+            'vin' => $row['VIN'],
+        ], [
+            'file_hash' => $fileHash,
+            'dealer_id' => $row['DealerId'],
+            'stock_number' => $row['Stock #'],
+            'vin' => $row['VIN'],
+            'new' => $row['New/Used'] === 'N',
+            'year' => $row['Year'],
+            'make' => $row['Make'],
+            'model' => $row['Model'],
+            'model_code' => $row['Model Code'],
+            'body' => $row['Body'],
+            'transmission' => $row['Transmission'],
+            'series' => $row['Series'],
+            'series_detail' => $row['Series Detail'],
+            'door_count' => $row['Door Count'],
+            'odometer' => $row['Odometer'],
+            'engine' => $row['Engine'],
+            'fuel' => $row['Fuel'],
+            'color' => $row['Colour'],
+            'interior_color' => $row['Interior Color'],
+            'price' => isset($pricing->price) ? $pricing->price : null,
+            'msrp' => isset($pricing->msrp) ? $pricing->msrp : null,
+            'vauto_features' => $row['Features'] !== '' ? $row['Features'] : null,
+            'inventory_date' => Carbon::createFromFormat('m/d/Y', $row['Inventory Date']),
+            'certified' => $row['Certified'] === 'Yes',
+            'description' => $row['Description'],
+            'option_codes' => array_filter(explode(',', $row['Option Codes'])),
+            'fuel_econ_city' => $row['City MPG'] !== '' ? $row['City MPG'] : null,
+            'fuel_econ_hwy' => $row['Highway MPG'] !== '' ? $row['Highway MPG'] : null,
+            'dealer_name' => $row['Dealer Name'],
+            'days_old' => $row['Age'],
+            'version_id' => $version->id,
+            'source_price' => $pricing,
+        ]);
+
+        return $deal;
     }
 }
