@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Deal;
-use DeliverMyRide\Cox\CoxClient;
-use App\Transformers\BestPriceTransformer;
+use DeliverMyRide\DataDelivery\DataDeliveryClient;
+use App\Transformers\BestOfferTransformer;
+use DeliverMyRide\DataDelivery\Manager\DealRatesAndRebatesManager;
 
 class DealBestOfferController extends BaseAPIController
 {
@@ -12,7 +13,7 @@ class DealBestOfferController extends BaseAPIController
 
     public $client;
 
-    public function __construct(CoxClient $client)
+    public function __construct(DataDeliveryClient $client)
     {
         $this->client = $client;
     }
@@ -24,28 +25,16 @@ class DealBestOfferController extends BaseAPIController
             'zipcode' => 'required|string',
         ]);
 
-        // We want to show the cash best offer information even in the finance tabs
+        $manager = new DealRatesAndRebatesManager($deal, request('zipcode'), $this->client);
+        $manager->setFinanceStrategy('lease');
+        $manager->setConsumerRole('default');
+        $manager->searchForVehicleAndPrograms();
+        $manager->setScenario();
+
+        $data = $manager->getData();
         $paymentType = request('payment_type');
 
-        switch($paymentType) {
-            case 'cash':
-            case 'finance':
-                $type = 2;
-                break;
-            case 'lease':
-                $type = 9;
-                break;
-        }
-
-        $hints = ['TRIM' => $deal->version->trim_name, 'BODY_TYPE' => $deal->body, 'MODEL' => $deal->model, 'MODEL_CODE' => $deal->model_code];
-        $manufacturerResults = $this->client->vehicle->findByVehicleAndPostalcode($deal->vin, request('zipcode'), [$type], $hints);
-        $bestOffers = null;
-        if($paymentType === 'lease' && empty($manufacturerResults->response[0]->programDealScenarios[0]->programs)) {
-            $bestOffers = $this->client->vehicle->findByVehicleAndPostalcode($deal->vin, request('zipcode'), [11], $hints);
-        } else {
-            $bestOffers = $manufacturerResults;
-        }
-        return (new BestPriceTransformer)->transform(['results' => $bestOffers, 'paymentType' => $paymentType, 'model_code' => $deal->model_code, 'make' => $deal->make, 'trim' => $deal->series]);
+        return (new BestOfferTransformer)->transform(['results' => $data, 'paymentType' => $paymentType]);
     }
 
 }
