@@ -22,7 +22,151 @@ class Client
         $this->username = $username;
         $this->password = $password;
     }
+    /**
+     * @param array $cashDueOptions
+     * @param $terms
+     * @param $taxRate
+     * @param $acquisitionFee
+     * @param $docFee
+     * @param $rebate
+     * @param $licenseFee
+     * @param $cvrFee
+     * @param $msrp
+     * @param $cashAdvance
+     * @param $contractDate
+     * @return array
+     */
+    public function buildRequestParams(
+        array $cashDueOptions,
+        $terms,
+        $taxRate,
+        $acquisitionFee,
+        $docFee,
+        $rebate,
+        $licenseFee,
+        $cvrFee,
+        $msrp,
+        $cashAdvance,
+        $contractDate)
+    {
+        $data = [
+            'username' => $this->username,
+            'password' => $this->password,
+            'quotes' => [],
+        ];
 
+        $fees = [
+            'acquisition' => [
+                'Amount' => $acquisitionFee,
+                'Type' => 'Financed',
+                'Base' => 'Fixed',
+                'DescriptionType' => 'RegularFee',
+                'TaxIndex' => '0',
+                'FinanceTaxes' => 'Yes',
+                'RoundToOption' => 'NearestPenny',
+            ],
+            'doc' => [
+                'Amount' => $docFee,
+                'Type' => 'Financed',
+                'Base' => 'Fixed',
+                'DescriptionType' => 'RegularFee',
+                'TaxIndex' => '0',
+                'FinanceTaxes' => 'Yes',
+                'RoundToOption' => 'NearestPenny',
+            ],
+            'rebate' => [
+                'Amount' => $rebate,
+                'Type' => 'Financed',
+                'Base' => 'Fixed',
+                'DescriptionType' => 'Rebate',
+                'TaxIndex' => '1',
+                'FinanceTaxes' => 'No',
+                'CCRPortionFeeTaxed' => 'Yes',
+                'RoundToOption' => 'NearestPenny',
+            ],
+
+            'license' => [
+                'Amount' => $licenseFee,
+                'Type' => 'Upfront',
+                'Base' => 'Fixed',
+                'DescriptionType' => 'RegularFee',
+                'TaxIndex' => '0',
+                'FinanceTaxes' => 'Yes',
+                'RoundToOption' => 'NearestPenny',
+            ],
+            'cvr' => [
+                'Amount' => $cvrFee,
+                'Type' => 'Upfront',
+                'Base' => 'Fixed',
+                'DescriptionType' => 'RegularFee',
+                'TaxIndex' => '1',
+                'FinanceTaxes' => 'No',
+                'RoundToOption' => 'NearestPenny',
+            ],
+        ];
+
+        $terms = json_decode($terms, true);
+
+        foreach ($cashDueOptions as $cashDueValue) {
+            foreach($terms as $term => $termData) {
+                foreach ($termData['annualMileage'] as $annualMileage => $annualMileageData) {
+                    $quote = [
+                        'taxRate' => $taxRate,
+                        'moneyFactor' => $termData['moneyFactor'],
+                        'residualPercent' => $annualMileageData['residualPercent'],
+                        'term' => $term,
+                        'annualMileage' => $annualMileage,
+                        'contractDate' => $contractDate->format('Y-m-d'),
+                        'msrp' => $msrp,
+                        'cashAdvance' => $cashAdvance,
+                        'fees' => $fees,
+                    ];
+
+                    $quote['fees']['cashDown'] = [
+                        'Amount' => $cashDueValue,
+                        'Type' => 'Financed',
+                        'Base' => 'Fixed',
+                        'DescriptionType' => 'CashDown',
+                        'TaxIndex' => '1',
+                        'FinanceTaxes' => 'No',
+                        'CCRPortionFeeTaxed' => 'Yes',
+                        'RoundToOption' => 'NearestPenny',
+                    ];
+
+                    $data['quotes'][] = $quote;
+                }
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * @param $data
+     * @return string
+     * @throws \Throwable
+     */
+    public function buildRequest($data) {
+        $contents = view('carleton.request', $data)->render();
+        $contents = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" . $contents;
+        $contents = trim(preg_replace('/\s+/', ' ', $contents));
+        return $contents;
+    }
+
+    /**
+     * @param array $cashDueOptions
+     * @param $terms
+     * @param $taxRate
+     * @param $acquisitionFee
+     * @param $docFee
+     * @param $rebate
+     * @param $licenseFee
+     * @param $cvrFee
+     * @param $msrp
+     * @param $cashAdvance
+     * @param null $contractDate
+     * @return array|mixed
+     * @throws \Throwable
+     */
     public function getLeasePaymentsFor(
         array $cashDueOptions,
         $terms,
@@ -35,13 +179,14 @@ class Client
         $msrp,
         $cashAdvance,
         $contractDate = null
-    ) {
-        if (! $contractDate) {
+    )
+    {
+        if (!$contractDate) {
             $contractDate = new \DateTime();
         }
 
-        $cacheKey = implode('--', [
-            implode('-', $cashDueOptions),
+        $params = $this->buildRequestParams(
+            $cashDueOptions,
             $terms,
             $taxRate,
             $acquisitionFee,
@@ -51,68 +196,35 @@ class Client
             $cvrFee,
             $msrp,
             $cashAdvance,
-            $contractDate->format('Y-m-d'),
-            'v2'
-        ]);
+            $contractDate
+        );
 
-        if (Cache::has($cacheKey)) {
+        $request = $this->buildRequest($params);
+
+        $hash = md5($request);
+        $cacheKey = "lease-rates-" . $hash;
+
+        if (false && Cache::has($cacheKey)) {
             Log::debug("Cache HIT ($cacheKey)");
             return Cache::get($cacheKey);
         }
 
         Log::debug("Cache MISS ($cacheKey)");
-
-        $quoteParameters = [];
-        foreach ($cashDueOptions as $cashDue) {
-            foreach (json_decode($terms, true) as $term => $termData) {
-                $annualMileages = $termData['annualMileage'];
-                foreach ($annualMileages as $annualMileage => $annualMileageData) {
-                    $quoteParameter = QuoteParameters::create($contractDate)
-                        ->withTaxRate($taxRate)
-                        ->withAcquisitionFee($acquisitionFee)
-                        ->withDocFee($docFee)
-                        ->withCashDown($cashDue)
-                        ->withRebate($rebate)
-                        ->withLicenseFee($licenseFee)
-                        ->withCvrFee($cvrFee)
-                        ->withMsrp($msrp)
-                        ->withCashAdvance($cashAdvance)
-                        ->withMoneyFactor($termData['moneyFactor'])
-                        ->withResidualPercentage($annualMileageData['residualPercent'])
-                        ->withTerm($term)
-                        ->withAnnualMileage($annualMileage);
-
-                    $quoteParameters[] = $quoteParameter;
-                }
-            }
-        }
-
-        $leasePayments = $this->getLeasePaymentsForQuoteParameters($quoteParameters);
-
-        Cache::put($cacheKey, $leasePayments, count($leasePayments) > 0 ? 360: 15);
-
+        $leasePayments = $this->getLeasePaymentsForQuoteParameters($params, $request);
+        Cache::put($cacheKey, $leasePayments, count($leasePayments) > 0 ? 360 : 15);
         return $leasePayments;
     }
 
     /**
-     * @param $quoteParameters QuoteParameters[]
+     * @param $params
+     * @param $request
+     * @return array
      */
-    public function getLeasePaymentsForQuoteParameters($quoteParameters)
+    public function getLeasePaymentsForQuoteParameters($params, $request)
     {
-        $getQuotesTemplate = file_get_contents(resource_path('xml/carleton/GetQuotes.xml'));
-        $quoteParametersTemplate = file_get_contents(resource_path('xml/carleton/QuoteParameters.xml'));
-
-        $body = strtr($getQuotesTemplate, [
-            '%USERNAME%' => $this->username,
-            '%PASSWORD%' => $this->password,
-            '%PARAMETERS%' => implode('', array_map(function (QuoteParameters $quoteParameters) use ($quoteParametersTemplate) {
-                return $quoteParameters->transformTemplate($quoteParametersTemplate);
-            }, $quoteParameters)),
-        ]);
-
         $headers = [
             'Content-Type: text/xml; charset="utf-8"',
-            'Content-Length: ' . strlen($body),
+            'Content-Length: ' . strlen($request),
             'Accept: text/xml',
             'Cache-Control: no-cache',
             'Pragma: no-cache',
@@ -128,10 +240,9 @@ class Client
         curl_setopt($ch, CURLOPT_USERAGENT, 'DMR');
 
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
 
         $data = curl_exec($ch);
-
         if ($data === false) {
             $error = curl_error($ch);
             Log::info(var_export($error, true));
@@ -150,20 +261,17 @@ class Client
 
         $results = [];
         $quotes = $xml->xpath('/soap:Envelope/soap:Body/lease:GetQuotesResponse/lease:GetQuotesResult/lease:Quote');
-
         for ($i = 0; $i < count($quotes); $i++) {
             $quote = $quotes[$i];
-            $input = $quoteParameters[$i];
-
+            $input = $params['quotes'][$i];
             $results[$i] = [
-                'term' => $input->getTerm(),
-                'cash_due' => (float)$input->getCashDown(),
-                'annual_mileage' => $input->getAnnualMileage(),
+                'term' => $input['term'],
+                'cash_due' => (float)$input['fees']['cashDown']['Amount'],
+                'annual_mileage' => $input['annualMileage'],
                 'monthly_payment' => (float)sprintf("%.02f", $quote->RegularPayment),
                 'total_amount_at_drive_off' => (float)sprintf("%.02f", $quote->TotalAmountAtDriveOff),
             ];
         }
-
         return $results;
     }
 }

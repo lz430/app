@@ -1,0 +1,1 @@
+<a href="/deals/{{ $entry->getKey() }}" class="btn btn-xs btn-default"><i class="fa fa-eye"></i> App</a>
