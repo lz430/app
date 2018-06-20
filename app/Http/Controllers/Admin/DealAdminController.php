@@ -63,7 +63,7 @@ class DealAdminController extends Controller
         return collect($this->potentialVersionPackages())
             ->map(function ($option) {
                 return [
-                    'isOnDeal' => in_array($option->optionCode, $this->deal->package_codes),
+                    'isOnDeal' => is_array($this->deal->package_codes) && in_array($option->optionCode, $this->deal->package_codes),
                     'option' => $option,
                     'equipment' => $this->buildEquipmentForOptionCode($option->optionCode)
                 ];
@@ -74,7 +74,7 @@ class DealAdminController extends Controller
         return collect($this->potentialVersionOptions())
             ->map(function ($option)  {
                 return [
-                    'isOnDeal' => in_array($option->optionCode, $this->deal->option_codes),
+                    'isOnDeal' => is_array($this->deal->option_codes) && in_array($option->optionCode, $this->deal->option_codes),
                     'option' => $option,
                     'equipment' => $this->buildEquipmentForOptionCode($option->optionCode)
                 ];
@@ -120,12 +120,27 @@ class DealAdminController extends Controller
         $this->version = $deal->version;
         $this->equipment = collect($this->potentialVersionEquipment());
 
+        $debug_models = [];
+        $debug_deal = $deal->toArray();
+        unset($debug_deal['features']);
+        unset($debug_deal['version']);
+
+        $debug_models[] = [
+            'title' => 'Deal',
+            'model' => $debug_deal,
+        ];
+        $debug_models[] = [
+            'title' => 'Version',
+            'model' => $this->version->toArray(),
+        ];
+
         $data = [
             'deal' => $deal,
             'standardEquipment' => $this->buildStandardEquipment(),
             'options' => $this->buildOptions(),
             'packages' => $this->buildPackages(),
             'features' => $this->buildFeatures(),
+            'models' => $debug_models,
         ];
 
         return view('admin.deal-view',

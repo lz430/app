@@ -21,6 +21,35 @@
         <div class="col-md-4">
             <div class="box box-default">
                 <div class="box-header with-border">
+                    <div class="box-title">General</div>
+                </div>
+                <div class="box-body">
+                    <strong>ID: </strong> {{$deal->id}}<br />
+                    <strong>Stock #: </strong> {{$deal->stock_number}}<br />
+                    <strong>VIN: </strong> {{$deal->vin}}<br />
+                    <strong>Packages: </strong> {{$deal->package_codes ? implode(", ", $deal->package_codes) : "None"}}<br />
+                    <strong>Options: </strong> {{$deal->option_codes ? implode(", ", $deal->option_codes) : "None"}}<br />
+                </div>
+                <div class="box-footer">
+                    <a href="/admin/dealer/{{$deal->dealer->id}}/edit">Edit Dealer</a>
+                </div>
+            </div>
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <div class="box-title">Dealer</div>
+                </div>
+                <div class="box-body">
+                    <strong>{{$deal->dealer->name}}</strong> <br />
+                    {{$deal->dealer->dealer_id}} <br />
+                </div>
+                <div class="box-footer">
+                    <a href="/admin/dealer/{{$deal->dealer->id}}/edit">Edit Dealer</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="box box-default">
+                <div class="box-header with-border">
                     <div class="box-title">Source Prices</div>
                 </div>
                 <div class="box-body">
@@ -50,16 +79,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="box box-default">
-                <div class="box-header with-border">
-                    <div class="box-title">Vauto Features</div>
-                </div>
-                <div class="box-body">
-                    {{implode(', ', explode("|",$deal->vauto_features))}}
-                </div>
-            </div>
-        </div>
     </div>
     <h3>
         Media
@@ -69,17 +88,17 @@
             <div class="box box-default">
                 <div class="box-header">
                     <div class="box-title">
-                        Deal Photos
+                        Marketing Photos
                     </div>
                 </div>
                 <div class="box-body">
                     <div class="row">
 
-                    @foreach ($deal->marketingPhotos() as $photo)
-                        <div class="col-md-2">
-                            <img style="max-width:100%; margin-bottom:20px;" src="{{$photo->url}}" />
-                        </div>
-                    @endforeach
+                        @foreach ($deal->marketingPhotos() as $photo)
+                            <div class="col-md-2">
+                                <img style="max-width:100%; margin-bottom:20px;" src="{{$photo->url}}"/>
+                            </div>
+                        @endforeach
                     </div>
 
                 </div>
@@ -111,6 +130,18 @@
                 @endforeach
             </div>
         @endforeach
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <div class="box-title">Vauto Features</div>
+                </div>
+                <div class="box-body">
+                    {{implode(', ', explode("|",$deal->vauto_features))}}
+                </div>
+            </div>
+        </div>
     </div>
 
     <h1>
@@ -181,13 +212,15 @@
                                                     <div class="panel box box-primary">
                                                         <div class="box-header with-border">
                                                             <h4 class="box-title">
-                                                                <a data-toggle="collapse" data-parent="#accordion" href="#pe-{{$key}}"
+                                                                <a data-toggle="collapse" data-parent="#accordion"
+                                                                   href="#pe-{{$key}}"
                                                                    aria-expanded="false" class="collapsed">
                                                                     {{$equipment->name}}
                                                                 </a>
                                                             </h4>
                                                         </div>
-                                                        <div id="pe-{{$key}}" class="panel-collapse collapse" aria-expanded="false"
+                                                        <div id="pe-{{$key}}" class="panel-collapse collapse"
+                                                             aria-expanded="false"
                                                              style="height: 0px;">
                                                             <div class="box-body">
                                                                 <pre>{{ json_encode($equipment, JSON_PRETTY_PRINT) }}</pre>
@@ -237,13 +270,15 @@
                                                     <div class="panel box box-primary">
                                                         <div class="box-header with-border">
                                                             <h4 class="box-title">
-                                                                <a data-toggle="collapse" data-parent="#accordion" href="#oe-{{$key}}"
+                                                                <a data-toggle="collapse" data-parent="#accordion"
+                                                                   href="#oe-{{$key}}"
                                                                    aria-expanded="false" class="collapsed">
                                                                     {{$equipment->name}}
                                                                 </a>
                                                             </h4>
                                                         </div>
-                                                        <div id="oe-{{$key}}" class="panel-collapse collapse" aria-expanded="false"
+                                                        <div id="oe-{{$key}}" class="panel-collapse collapse"
+                                                             aria-expanded="false"
                                                              style="height: 0px;">
                                                             <div class="box-body">
                                                                 <pre>{{ json_encode($equipment, JSON_PRETTY_PRINT) }}</pre>
@@ -267,22 +302,24 @@
     </h1>
     <div class="row">
         <div class="col-md-12">
-            <div class="panel box box-primary">
-                <div class="box-header with-border">
-                    <h4 class="box-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#deal-debug"
-                           aria-expanded="false" class="collapsed">
-                            Deal Model
-                        </a>
-                    </h4>
-                </div>
-                <div id="deal-debug" class="panel-collapse collapse" aria-expanded="false"
-                     style="height: 0px;">
-                    <div class="box-body">
-                        <pre>{{ json_encode($deal->toArray(), JSON_PRETTY_PRINT) }}</pre>
+            @foreach ($models as $key => $model)
+                <div class="panel box box-primary">
+                    <div class="box-header with-border">
+                        <h4 class="box-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#model-{{$key}}"
+                               aria-expanded="false" class="collapsed">
+                                {{$model['title']}}
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="model-{{$key}}" class="panel-collapse collapse" aria-expanded="false"
+                         style="height: 0px;">
+                        <div class="box-body">
+                            <pre>{{ json_encode($model['model'], JSON_PRETTY_PRINT) }}</pre>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endforeach
         </div>
     </div>
 

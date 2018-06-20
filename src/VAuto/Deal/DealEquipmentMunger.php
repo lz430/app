@@ -198,13 +198,12 @@ class DealEquipmentMunger
     public function buildOptionsAndPackages()
     {
         $packages = $this->deal->package_codes ? $this->deal->package_codes : [];
-        $packages = array_merge($packages, $this->extractPackageCodesFromVautoFeatures());
-
         $options = $this->deal->option_codes ? $this->deal->option_codes : [];
-        $options = array_merge($options, $this->extractAdditionalOptionCodes());
 
-        // This is an assumption that that packages and options have unique codes.
         $packagesAndOptions = array_merge($packages, $options);
+        $packagesAndOptions = array_merge($packagesAndOptions, $this->extractPackageCodesFromVautoFeatures());
+        $packagesAndOptions = array_merge($packagesAndOptions, $this->extractAdditionalOptionCodes());
+        $packagesAndOptions = array_merge($packagesAndOptions, $this->extractPackagesOrOptionsFromTransmission());
         $packagesAndOptions = array_filter($packagesAndOptions);
         $packagesAndOptions = array_unique($packagesAndOptions);
 
@@ -232,12 +231,11 @@ class DealEquipmentMunger
      * a vauto feature is to a known jato optional equipment. if a feature is pretty close we assume
      * it's an option code the deal has and attach it to the vehicle.
      *
-     * TODO errors:
+     * TODO:
      *  - Alloy Seats vs Black Seats returns "4"
      */
     public function extractAdditionalOptionCodes()
     {
-        $option_codes = $original_options = $this->deal->option_codes;
 
         // TODO: Probably some smarter way to do this.
         $options = $this->options
@@ -269,17 +267,6 @@ class DealEquipmentMunger
                 }
             }
         }
-
-        $found_option_codes = $additional_option_codes;
-
-        /*
-        $additional_option_codes = array_diff($additional_option_codes, $original_options);
-      $option_codes = array_merge($additional_option_codes, $option_codes);
-        if ($option_codes != $original_options) {
-            $this->deal->option_codes = $option_codes;
-            $this->deal->save();
-        }
-        */
         return $additional_option_codes;
     }
 
@@ -305,6 +292,43 @@ class DealEquipmentMunger
         }
         $packageCodes = array_unique($packageCodes);
         return $packageCodes;
+    }
+
+    /**
+     * In many situations manual trans is standard and option codes / vauto features do not have any info
+     * regarding transmission, so we see if we've got any options or packages for transmissions that might match.
+     */
+    private function extractPackagesOrOptionsFromTransmission() {
+        $transmission = $this->deal->transmission;
+
+        // Most packages actually include the word transmission but vauto does not.
+        if (!str_contains($transmission, "Transmission")) {
+            $transmission .= " Transmission";
+        }
+
+        $allOptional = $this->packages->merge($this->options);
+        $codes = $allOptional
+            ->reject(function($option) use ($transmission) {
+                $score = levenshtein($option->optionName, $transmission);
+                if ($score < 3) {
+                    $this->debug['equipment_extracted_codes'][] = [
+                        'Option Code' => $option->optionCode,
+                        'Option Title' => $option->optionName,
+                        'Feature' => "Transmission",
+                        'Score' => $score,
+                    ];
+
+                    return false;
+                }
+                return true;
+            })
+            ->map(function($option) {
+                return $option->optionCode;
+            })
+            ->unique()
+            ->all();
+
+        return $codes;
     }
 
     /**
