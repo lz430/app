@@ -238,7 +238,9 @@ class DealEquipmentMunger
     {
 
         // TODO: Probably some smarter way to do this.
-        $options = $this->options
+        $allOptional = $this->packages->merge($this->options);
+
+        $options = $allOptional
             ->map(function ($option) {
                 return [$option->optionName, $option->optionCode];
             })->toArray();
