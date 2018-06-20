@@ -93,7 +93,6 @@
                 </div>
                 <div class="box-body">
                     <div class="row">
-
                         @foreach ($deal->marketingPhotos() as $photo)
                             <div class="col-md-2">
                                 <img style="max-width:100%; margin-bottom:20px;" src="{{$photo->url}}"/>
