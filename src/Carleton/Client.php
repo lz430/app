@@ -23,7 +23,7 @@ class Client
         $this->password = $password;
     }
     /**
-     * @param array $cashDueOptions
+     * @param $cashDueOptions
      * @param $terms
      * @param $taxRate
      * @param $acquisitionFee
@@ -37,7 +37,7 @@ class Client
      * @return array
      */
     public function buildRequestParams(
-        array $cashDueOptions,
+        $cashDueOptions,
         $terms,
         $taxRate,
         $acquisitionFee,
@@ -84,10 +84,9 @@ class Client
                 'CCRPortionFeeTaxed' => 'Yes',
                 'RoundToOption' => 'NearestPenny',
             ],
-
             'license' => [
-                'Amount' => $licenseFee,
-                'Type' => 'Upfront',
+                'Amount' => 23,
+                'Type' => 'Financed', // Upfront
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
                 'TaxIndex' => '0',
@@ -96,7 +95,7 @@ class Client
             ],
             'cvr' => [
                 'Amount' => $cvrFee,
-                'Type' => 'Upfront',
+                'Type' => 'Financed',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
                 'TaxIndex' => '1',
@@ -107,7 +106,7 @@ class Client
 
         $terms = json_decode($terms, true);
 
-        foreach ($cashDueOptions as $cashDueValue) {
+        //foreach ($cashDueOptions as $cashDueValue) {
             foreach($terms as $term => $termData) {
                 foreach ($termData['annualMileage'] as $annualMileage => $annualMileageData) {
                     $quote = [
@@ -123,7 +122,7 @@ class Client
                     ];
 
                     $quote['fees']['cashDown'] = [
-                        'Amount' => $cashDueValue,
+                        'Amount' => $cashDueOptions, //$cashDueValue
                         'Type' => 'Financed',
                         'Base' => 'Fixed',
                         'DescriptionType' => 'CashDown',
@@ -136,7 +135,7 @@ class Client
                     $data['quotes'][] = $quote;
                 }
             }
-        }
+        //}
         return $data;
     }
 
@@ -153,7 +152,7 @@ class Client
     }
 
     /**
-     * @param array $cashDueOptions
+     * @param $cashDueOptions
      * @param $terms
      * @param $taxRate
      * @param $acquisitionFee
@@ -168,7 +167,7 @@ class Client
      * @throws \Throwable
      */
     public function getLeasePaymentsFor(
-        array $cashDueOptions,
+        $cashDueOptions,
         $terms,
         $taxRate,
         $acquisitionFee,

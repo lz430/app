@@ -151,14 +151,14 @@ class InfoModalData extends React.PureComponent {
                             {this.showWhenPricingIsLoaded(() => this.props.dealPricing.leaseTerm())}
                         </div>
                     </div>
-                    <div className="info-modal-data__costs">
+                    {/*<div className="info-modal-data__costs">
                         <div className="info-modal-data__label">
                             Cash Due:
                         </div>
                         <div className="info-modal-data__amount">
-                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.leaseCashDue())}
+                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.finalPrice())}*
                         </div>
-                    </div>
+                    </div>*/}
 
                     <div className="info-modal-data__costs">
                         <div className="info-modal-data__label">
