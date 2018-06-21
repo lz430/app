@@ -1,6 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class DealImage extends React.PureComponent {
+    static propTypes = {
+        deal: PropTypes.object.isRequired,
+        featureImageClass: PropTypes.string.isRequired,
+    };
+
     constructor(props) {
         super(props);
 

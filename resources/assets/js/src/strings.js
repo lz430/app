@@ -1,5 +1,4 @@
 const strings = {
-
     dealYearMake: deal => {
         return `${deal.year} ${deal.make}`;
     },

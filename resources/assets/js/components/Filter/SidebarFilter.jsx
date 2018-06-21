@@ -8,24 +8,28 @@ class SidebarFilter extends React.PureComponent {
         return (
             <div className="sidebar-filters__filter">
                 <div
-                    className={`sidebar-filters__filter-title ${this.props.open
-                        ? 'sidebar-filters__filter-title--open'
-                        : ''}`}
-                    onClick={this.props.canToggle ? this.props.toggle : () => {}}
+                    className={`sidebar-filters__filter-title ${
+                        this.props.open
+                            ? 'sidebar-filters__filter-title--open'
+                            : ''
+                    }`}
+                    onClick={
+                        this.props.canToggle ? this.props.toggle : () => {}
+                    }
                 >
-                    {this.props.canToggle && <SVGInline
-                        className="sidebar-filters__icon"
-                        svg={
-                            this.props.open ? (
-                                zondicons['cheveron-up']
-                            ) : (
-                                zondicons['cheveron-down']
-                            )
-                        }
-                    />}
+                    {this.props.canToggle && (
+                        <SVGInline
+                            className="sidebar-filters__icon"
+                            svg={
+                                this.props.open
+                                    ? zondicons['cheveron-up']
+                                    : zondicons['cheveron-down']
+                            }
+                        />
+                    )}
                     {this.props.title}
                     <span className="sidebar-filters__count">
-                        { this.props.count }
+                        {this.props.count}
                     </span>
                 </div>
 
@@ -51,7 +55,7 @@ SidebarFilter.propTypes = {
 };
 
 SidebarFilter.defaultProps = {
-    canToggle: true
+    canToggle: true,
 };
 
 export default SidebarFilter;

@@ -1,13 +1,10 @@
 <?php
 
 namespace App\Models\JATO;
-
+use DeliverMyRide\JATO\Manager\Maps;
 use App\Models\Deal;
-use DeliverMyRide\JATO\BodyStyles;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\DB;
 
 /**
  * @property int $id
@@ -43,33 +40,6 @@ class Version extends Model
         return $this->hasMany(Deal::class);
     }
 
-    public function scopeFilterByModel(Builder $query, array $modelIds) : Builder
-    {
-        return $query->whereIn('model_id', $modelIds);
-    }
-
-    public function scopeFilterByBodyStyle(Builder $query, $bodyStyles) : Builder
-    {
-        if (! is_array($bodyStyles)) {
-            $bodyStyles = [$bodyStyles];
-        }
-
-        /**
-         * Add subStyles (Sub-categories of body styles)
-         */
-        $bodyStylesWithSubStyles = array_map(
-            'strtolower',
-            array_reduce($bodyStyles, function ($acc, $bodyStyle) {
-                return array_merge($acc, BodyStyles::ALL[strtolower($bodyStyle)]['subStyles'] ?? []);
-            }, $bodyStyles)
-        );
-
-        return $query->whereIn(
-            DB::raw('lower(body_style)'),
-            array_map('strtolower', $bodyStylesWithSubStyles)
-        );
-    }
-
     /**
      * @return VersionPhoto|null
      */
@@ -78,5 +48,12 @@ class Version extends Model
             ->where('shot_code', '=', '116')
             ->where('color', '=', 'default')
             ->first();
+    }
+
+    public function style() {
+        if (isset(Maps::BODY_STYLE_MAP[$this->body_style])) {
+            return Maps::BODY_STYLE_MAP[$this->body_style];
+        }
+        return null;
     }
 }

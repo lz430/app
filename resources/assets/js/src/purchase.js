@@ -3,7 +3,7 @@
  * @type {{start: purchase.start}}
  */
 const purchase = {
-    start: (dealPricing) => {
+    start: dealPricing => {
         let form = document.createElement('form');
         form.setAttribute('method', 'post');
         form.setAttribute('action', '/apply-or-purchase');
@@ -21,7 +21,10 @@ const purchase = {
         if (dealPricing.isFinance()) {
             let amount_financed = document.createElement('input');
             amount_financed.setAttribute('name', 'amount_financed');
-            amount_financed.setAttribute('value', dealPricing.amountFinancedValue());
+            amount_financed.setAttribute(
+                'value',
+                dealPricing.amountFinancedValue()
+            );
             form.appendChild(amount_financed);
 
             let term = document.createElement('input');
@@ -31,7 +34,10 @@ const purchase = {
 
             let down_payment = document.createElement('input');
             down_payment.setAttribute('name', 'down_payment');
-            down_payment.setAttribute('value', dealPricing.financeDownPaymentValue());
+            down_payment.setAttribute(
+                'value',
+                dealPricing.financeDownPaymentValue()
+            );
             form.appendChild(down_payment);
         }
 
@@ -46,11 +52,14 @@ const purchase = {
             down_payment.setAttribute('value', dealPricing.monthlyPaymentsValue());
             form.appendChild(down_payment);
         }
-        
+
         if (dealPricing.isFinance() || dealPricing.isLease()) {
             let monthly_payment = document.createElement('input');
             monthly_payment.setAttribute('name', 'monthly_payment');
-            monthly_payment.setAttribute('value', dealPricing.monthlyPaymentsValue());
+            monthly_payment.setAttribute(
+                'value',
+                dealPricing.monthlyPaymentsValue()
+            );
             form.appendChild(monthly_payment);
         }
 

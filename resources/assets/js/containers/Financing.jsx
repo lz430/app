@@ -3,12 +3,18 @@ import PropTypes from 'prop-types';
 import api from 'src/api';
 
 class Financing extends Component {
+    static propTypes = {
+        featuredPhoto: PropTypes.object.isRequired,
+        purchase: PropTypes.object.isRequired,
+        user: PropTypes.object.isRequired,
+    };
+
     constructor(props) {
         super(props);
 
         this.state = {
             method: 'cash',
-        }
+        };
     }
 
     componentWillMount() {
@@ -16,7 +22,9 @@ class Financing extends Component {
             url:
                 `https://www.routeone.net/XRD/turnKeyOcaStart.do?rteOneDmsId=F00DMR` +
                 `&dealerId=${this.props.purchase.deal.dealer.route_one_id}` +
-                `&buyOrLease=${this.props.purchase.type === 'finance' ? 1 : 2}` +
+                `&buyOrLease=${
+                    this.props.purchase.type === 'finance' ? 1 : 2
+                }` +
                 `&email=${this.props.user.email}` +
                 `&vehicleYear=${this.props.purchase.deal.year}` +
                 `&vehicleMake=${this.props.purchase.deal.make}` +
@@ -33,7 +41,7 @@ class Financing extends Component {
                     this.props.featuredPhoto ? this.props.featuredPhoto.url : ''
                 }` +
                 `&dealership_name=${this.props.purchase.deal.dealer.name}`,
-        })
+        });
     }
 
     componentDidMount() {
@@ -45,7 +53,7 @@ class Financing extends Component {
             api.getApplicationStatus(this.props.purchase.id).then(response => {
                 if (response.data) {
                     this.setState({
-                        method: 'finance'
+                        method: 'finance',
                     });
 
                     document.purchase.submit();
@@ -71,7 +79,11 @@ class Financing extends Component {
                                 name="purchase_id"
                                 value={this.props.purchase.id}
                             />
-                            <input type="hidden" name="method" value={this.state.method} />
+                            <input
+                                type="hidden"
+                                name="method"
+                                value={this.state.method}
+                            />
                             <button
                                 onClick={() => document.purchase.submit()}
                                 className="financing__button financing__button--blue"
@@ -92,12 +104,6 @@ class Financing extends Component {
             </div>
         );
     }
-}
-
-PropTypes.Financing = {
-    featuredPhoto: PropTypes.object.isRequired,
-    purchase: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
 }
 
 export default Financing;

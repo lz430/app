@@ -5,41 +5,54 @@ import LeaseCalculator from 'components/LeaseCalculator';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
 import DealPricing from 'src/DealPricing';
-import R from "ramda";
-import {
-    makeDealPricing
-} from "../selectors";
+import R from 'ramda';
+import { makeDealPricing } from '../selectors';
 
 class CashFinanceLeaseCalculator extends React.PureComponent {
     renderSelectedTab() {
         switch (this.props.selectedTab) {
             case 'cash':
-                return <CashCalculator
-                    {...R.pick(['dealPricing'], this.props)}
-                    {...R.pick([
-                        'requestTargets',
-                        'requestBestOffer',
-                        'showAccuPricingModal'
-                    ], this.props)}
-                />;
+                return (
+                    <CashCalculator
+                        {...R.pick(['dealPricing'], this.props)}
+                        {...R.pick(
+                            [
+                                'requestTargets',
+                                'requestBestOffer',
+                                'showAccuPricingModal',
+                            ],
+                            this.props
+                        )}
+                    />
+                );
             case 'finance':
-                return <FinanceCalculator
-                    {...R.pick(['dealPricing'], this.props)}
-                    {...R.pick([
-                        'requestTargets',
-                        'requestBestOffer',
-                        'showAccuPricingModal'
-                    ], this.props)}
-                />;
+                return (
+                    <FinanceCalculator
+                        {...R.pick(['dealPricing'], this.props)}
+                        {...R.pick(
+                            [
+                                'requestTargets',
+                                'requestBestOffer',
+                                'showAccuPricingModal',
+                            ],
+                            this.props
+                        )}
+                    />
+                );
             case 'lease':
-                return <LeaseCalculator
-                    {...R.pick(['dealPricing', 'deal'], this.props)}
-                    {...R.pick([
-                        'requestTargets',
-                        'requestBestOffer',
-                        'showAccuPricingModal'
-                    ], this.props)}
-                />;
+                return (
+                    <LeaseCalculator
+                        {...R.pick(['dealPricing', 'deal'], this.props)}
+                        {...R.pick(
+                            [
+                                'requestTargets',
+                                'requestBestOffer',
+                                'showAccuPricingModal',
+                            ],
+                            this.props
+                        )}
+                    />
+                );
         }
     }
 
@@ -88,10 +101,13 @@ function mapStateToProps(state) {
     const mapStateToProps = (state, props) => {
         return {
             selectedTab: state.selectedTab,
-            dealPricing: new DealPricing(getDealPricing(state, props))
+            dealPricing: new DealPricing(getDealPricing(state, props)),
         };
     };
     return mapStateToProps;
 }
 
-export default connect(mapStateToProps, Actions)(CashFinanceLeaseCalculator);
+export default connect(
+    mapStateToProps,
+    Actions
+)(CashFinanceLeaseCalculator);
