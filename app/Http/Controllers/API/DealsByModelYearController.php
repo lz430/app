@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\API\Traits\SearchesDeals;
-
 use App\Services\Search\ModelYearSearch;
 use Illuminate\Http\Request;
 
 class DealsByModelYearController extends BaseAPIController
 {
-    use SearchesDeals;
-
     public function getDealsByModelYear(Request $request)
     {
         $this->validate($request, [
@@ -34,7 +30,7 @@ class DealsByModelYearController extends BaseAPIController
         }
 
         if ($request->get('make_ids')) {
-            $query = $query->filterMustMakes($request->get('make_ids'), 'id');
+            $query = $query->filterMustMakes($request->get('make_ids'), 'name');
         }
 
         if ($request->get('features')) {

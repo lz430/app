@@ -347,12 +347,6 @@ class Deal extends Model
         return (object)array_map('floatval', $prices);
     }
 
-
-    public static function allFuelTypes()
-    {
-        return self::select('fuel')->where('fuel', '!=', '')->groupBy('fuel')->get()->pluck('fuel');
-    }
-
     /**
      * Mysql spatial function use to find spherical (earth) distance between 2 coordinate pairs
      * Mysql point : longitude, latitude.
@@ -377,16 +371,6 @@ class Deal extends Model
         });
     }
 
-    public function scopeFilterByYear(Builder $query, $year): Builder
-    {
-        return $query->where('year', $year);
-    }
-
-    public function scopeFilterByFuelType(Builder $query, $fuelType): Builder
-    {
-        return $query->where('fuel', $fuelType);
-    }
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -396,40 +380,6 @@ class Deal extends Model
             Dealer::class,
             'dealer_id',
             'dealer_id'
-        );
-    }
-
-    /**
-     * @param Builder $query
-     * @return Builder
-     */
-    public function scopeFilterByAutomaticTransmission(Builder $query): Builder
-    {
-        return $query->where(
-            'transmission',
-            'like',
-            '%auto%'
-        )->orWhere(
-            'transmission',
-            'like',
-            '%cvt%'
-        );
-    }
-
-    /**
-     * @param Builder $query
-     * @return Builder
-     */
-    public function scopeFilterByManualTransmission(Builder $query): Builder
-    {
-        return $query->where(
-            'transmission',
-            'not like',
-            '%auto%'
-        )->where(
-            'transmission',
-            'not like',
-            '%cvt%'
         );
     }
 
@@ -480,7 +430,6 @@ class Deal extends Model
         // Vehicle identification information
         $record['vin'] = $this->vin;
         $record['stock'] = $this->stock_number;
-
         $record['title'] = $this->title();
 
         //
@@ -490,11 +439,11 @@ class Deal extends Model
         $record['model'] = $this->version->model->name;
         $record['model_code'] = $this->model_code;
         $record['series'] = $this->series;
-        $record['style'] = $this->version->body_style;
+        $record['style'] = $this->version->style();
 
         //
         // Required vehicle attributes
-        $record['body'] = $this->body;
+        $record['body'] = $this->body; // Deprecated
         $record['engine'] = $this->engine;
         $record['doors'] = $this->door_count;
         $record['color'] = $this->color;

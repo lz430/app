@@ -23,19 +23,17 @@ class FilterMakeSelector extends React.PureComponent {
     }
 
     renderMake(make) {
-        let className = R.contains(make.id, this.props.selectedMakes)
+        let className = R.contains(make.name, this.props.selectedMakes)
             ? 'filter-make-selector__make filter-make-selector__make--selected'
             : 'filter-make-selector__make';
 
         return (
             <div
                 className={className}
-                key={make.id}
-                onClick={this.props.onSelectMake.bind(null, make.id)}
+                key={make.name}
+                onClick={this.props.onSelectMake.bind(null, make.name)}
             >
-                <div className="filter-make-selector__name">
-                    {make.attributes.name}
-                </div>
+                <div className="filter-make-selector__name">{make.name}</div>
             </div>
         );
     }

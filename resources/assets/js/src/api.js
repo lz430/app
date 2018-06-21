@@ -7,6 +7,19 @@ const api = {
     getBodyStyles: () => {
         return window.axios.get('/api/body-styles');
     },
+    getMakes: () => {
+        return window.axios.get('/api/makes');
+    },
+    getFeatures: () => {
+        return window.axios.get('/api/features');
+    },
+    getFeatureCategories: () => {
+        return window.axios.get('/api/categories', {
+            params: {
+                include: 'features',
+            },
+        });
+    },
 
     checkZipInRange: code => {
         return window.axios.get(`/api/zip-codes/${code}`);
@@ -28,19 +41,6 @@ const api = {
         return window.axios.get('/api/warranties', {
             params: {
                 jato_vehicle_id,
-            },
-        });
-    },
-    getMakes: () => {
-        return window.axios.get('/api/makes');
-    },
-    getFeatures: () => {
-        return window.axios.get('/api/features');
-    },
-    getFeatureCategories: () => {
-        return window.axios.get('/api/categories', {
-            params: {
-                include: 'features',
             },
         });
     },

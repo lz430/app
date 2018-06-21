@@ -10,14 +10,11 @@ class MakeSelector extends React.PureComponent {
     static propTypes = {
         makes: PropTypes.arrayOf(
             PropTypes.shape({
-                id: PropTypes.string.isRequired,
-                attributes: PropTypes.shape({
-                    name: PropTypes.string.isRequired,
-                    logo: PropTypes.string.isRequired,
-                }),
+                name: PropTypes.string.isRequired,
+                logo: PropTypes.string.isRequired,
             })
         ),
-        selectedMakes: PropTypes.arrayOf(PropTypes.string),
+        searchQuery: PropTypes.object.isRequired,
         fallbackLogoImage: PropTypes.string.isRequired,
     };
 
@@ -36,16 +33,17 @@ class MakeSelector extends React.PureComponent {
 
     getLogoFor(make) {
         return R.ifElse(
-            this.logoMissing(make.attributes),
+            this.logoMissing(make),
             () => this.props.fallbackLogoImage,
             R.prop('logo')
-        ).bind(this)(make.attributes);
+        ).bind(this)(make);
     }
 
     renderMake(make) {
+        console.log(this.props.searchQuery.makes);
         const selected =
-            this.props.selectedMakes &&
-            R.contains(make.id, this.props.selectedMakes);
+            this.props.searchQuery.makes &&
+            R.contains(make.name, this.props.searchQuery.makes);
         const className = `make-selector__make ${
             selected ? 'make-selector__make--selected' : ''
         }`;
@@ -53,13 +51,11 @@ class MakeSelector extends React.PureComponent {
         return (
             <div
                 className={className}
-                onClick={() => this.props.toggleMake(make.id)}
-                key={make.id}
+                onClick={() => this.props.toggleMake(make.name)}
+                key={make.name}
             >
                 <img src={this.getLogoFor(make)} />
-                <div className="make-selector__make-name">
-                    {make.attributes.name}
-                </div>
+                <div className="make-selector__make-name">{make.name}</div>
             </div>
         );
     }
@@ -82,7 +78,7 @@ class MakeSelector extends React.PureComponent {
 const mapStateToProps = state => {
     return {
         makes: state.makes,
-        selectedMakes: state.selectedMakes,
+        searchQuery: state.searchQuery,
         fallbackLogoImage: state.fallbackLogoImage,
     };
 };

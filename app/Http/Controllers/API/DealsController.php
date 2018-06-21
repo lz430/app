@@ -37,7 +37,7 @@ class DealsController extends BaseAPIController
         }
 
         if ($request->get('make_ids')) {
-            $query = $query->filterMustMakes($request->get('make_ids'), 'id');
+            $query = $query->filterMustMakes($request->get('make_ids'), 'name');
         }
 
         if ($request->get('model_ids')) {

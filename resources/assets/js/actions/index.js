@@ -87,11 +87,11 @@ export function toggleFeature(feature) {
     };
 }
 
-export function toggleMake(make_id) {
+export function toggleMake(name) {
     return (dispatch, getState) => {
         const selectedMakes = util.toggleItem(
             getState().searchQuery.makes,
-            make_id
+            name
         );
 
         dispatch({

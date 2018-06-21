@@ -14,10 +14,8 @@ class ToolbarSelectedFilters extends React.PureComponent {
         searchQuery: PropTypes.object.isRequired,
         makes: PropTypes.arrayOf(
             PropTypes.shape({
-                id: PropTypes.string.isRequired,
-                attributes: PropTypes.shape({
-                    name: PropTypes.string.isRequired,
-                }),
+                name: PropTypes.string.isRequired,
+                logo: PropTypes.string.isRequired,
             })
         ),
     };
@@ -68,15 +66,15 @@ class ToolbarSelectedFilters extends React.PureComponent {
         );
     }
 
-    renderFilterMakes(makeId, index) {
-        const make = R.find(R.propEq('id', makeId), this.props.makes);
+    renderFilterMakes(name, index) {
+        const make = R.find(R.propEq('name', name), this.props.makes);
 
         return (
             <div key={index} className="filterbar__filter">
                 {/*
                 onClick={this.props.toggleMake.bind(null, makeId)}
             */}
-                {make.attributes.name} {this.renderX()}
+                {make.name} {this.renderX()}
             </div>
         );
     }

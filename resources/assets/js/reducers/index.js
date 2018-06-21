@@ -61,7 +61,10 @@ const reducer = (state, action) => {
                 showMakeSelectorModal: false,
             });
         case ActionTypes.RECEIVE_MAKES:
-            return { ...state, makes: action.data.data.data };
+            return {
+                ...state,
+                makes: action.data.data.data,
+            };
 
         case ActionTypes.SEARCH_INCREMENT_PAGE:
             return {
