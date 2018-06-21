@@ -26,18 +26,6 @@ class MakesRequestTest extends TestCase
     }
 
     /** @test */
-    public function it_only_shows_whitelisted_makes()
-    {
-        factory(Make::class)->create([
-            'name' => 'non-existent make',
-        ]);
-
-        $response = $this->get(route('makes.index'));
-
-        $response->assertJson(['data' => []]);
-    }
-    
-    /** @test */
     public function it_includes_models_data_if_requested_via_query_parameters()
     {
         $make = factory(Make::class)->create([

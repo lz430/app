@@ -1,62 +1,14 @@
-const sort = (column, sortAscending) => {
-    return sortAscending ? column : '-' + column;
-};
-
+/**
+ * @deprecated
+ *
+ * @see store/api
+ */
 const api = {
     getBodyStyles: () => {
         return window.axios.get('/api/body-styles');
     },
-    checkZipInRange: code => {
-        return window.axios.get(`/api/zip-codes/${code}`);
-    },
-    setZip: code => {
-        return window.axios.post('/zip-codes/', { code });
-    },
-    getDimensions: jato_vehicle_id => {
-        return window.axios.get('/api/dimensions', {
-            params: {
-                jato_vehicle_id,
-            },
-        });
-    },
-    getLeasePayments: (dealPricing) => {
-        return window.axios.get('/api/deals/'+ dealPricing.id() +'/lease-payments', {
-            params: {
-                rebate: dealPricing.bestOfferValue(),
-                msrp: dealPricing.msrpValue(),
-                cash_advance: dealPricing.sellingPriceValue(),
-                cash_due: dealPricing.allLeaseCashDueOptions(),
-                terms: dealPricing.apiTerms()
-            }
-        });
-    },
-    getLeaseRates: (deal, zipcode) => {
-        return window.axios.get('/api/deals/'+ deal.id +'/lease-rates', {
-            params: {
-                zipcode,
-            },
-        });
-    },
-    /*getLeaseRates: (deal, zipcode) => {
-        return window.axios.get('/api/lease-rates', {
-            params: {
-                jato_vehicle_id: deal.version.jato_vehicle_id,
-                zipcode,
-            },
-        });
-    },*/
-    getWarranties: jato_vehicle_id => {
-        return window.axios.get('/api/warranties', {
-            params: {
-                jato_vehicle_id,
-            },
-        });
-    },
     getMakes: () => {
         return window.axios.get('/api/makes');
-    },
-    getModels: () => {
-        return window.axios.get('/api/models');
     },
     getFeatures: () => {
         return window.axios.get('/api/features');
@@ -64,90 +16,35 @@ const api = {
     getFeatureCategories: () => {
         return window.axios.get('/api/categories', {
             params: {
-                include: 'features'
-            }
-        });
-    },
-    getFuelTypes: () => {
-        return window.axios.get('/api/fuel-types');
-    },
-    getDeals: ({
-        filterPage,
-        makeIds,
-        modelIds,
-        bodyStyles,
-        fuelType,
-        transmissionType,
-        segment,
-        features,
-        includes,
-        sortColumn,
-        sortAscending,
-        page,
-        latitude,
-        longitude,
-        year,
-        zipcode,
-    }) => {
-        return window.axios.get('/api/deals', {
-            params: {
-                make_ids: makeIds,
-                model_ids: modelIds,
-                body_styles: bodyStyles,
-                fuel_type: fuelType,
-                transmission_type: transmissionType,
-                segment: segment,
-                features,
-                includes,
-                sort: sort(sortColumn, sortAscending),
-                page,
-                latitude,
-                longitude,
-                year,
-                zipcode,
+                include: 'features',
             },
         });
     },
-    getModelYears: ({
-        filterPage,
-        makeIds,
-        modelIds,
-        bodyStyles,
-        fuelType,
-        transmissionType,
-        segment,
-        features,
-        includes,
-        sortColumn,
-        sortAscending,
-        page,
-        latitude,
-        longitude,
-        year,
-        zipcode,
-    }) => {
-        return window.axios.get('/api/dealsByModelYear', {
+
+    checkZipInRange: code => {
+        return window.axios.get(`/api/zip-codes/${code}`);
+    },
+
+    setZip: code => {
+        return window.axios.post('/zip-codes/', { code });
+    },
+
+    getDimensions: jato_vehicle_id => {
+        return window.axios.get('/api/dimensions', {
             params: {
-                make_ids: makeIds,
-                model_ids: modelIds,
-                body_styles: bodyStyles,
-                fuel_type: fuelType,
-                transmission_type: transmissionType,
-                segment: segment,
-                features,
-                includes,
-                sort: sort(sortColumn, sortAscending),
-                page,
-                latitude,
-                longitude,
-                year,
-                zipcode,
+                jato_vehicle_id,
             },
         });
     },
-    applySearchFilters: (type, searchParams) => {
-        return type === 'deals' ? api.getDeals(searchParams) : api.getModelYears(searchParams);
+
+    getWarranties: jato_vehicle_id => {
+        return window.axios.get('/api/warranties', {
+            params: {
+                jato_vehicle_id,
+            },
+        });
     },
+
     getTargets: (zipcode, vin) => {
         return window.axios.get('/api/targets', {
             params: {
@@ -156,6 +53,7 @@ const api = {
             },
         });
     },
+
     getApplicationStatus: purchaseId => {
         return window.axios.get('/api/application-status', {
             params: {
@@ -163,25 +61,9 @@ const api = {
             },
         });
     },
+
     postNotifyWhenInRange: (email = null) => {
         return window.axios.post('/api/hubspot/not-in-area', { email });
-    },
-    getBestOffer: (dealId, paymentType, zipcode, cancelToken) => { //dealId, paymentType, zipcode, targets, cancelToken
-        return window.axios.get(`/api/deals/${dealId}/best-offer`, {
-            cancelToken: cancelToken.token,
-            params: {
-                payment_type: paymentType,
-                zipcode,
-            },
-        });
-        /*return window.axios.get(`/api/deals/${dealId}/best-offer`, {
-            cancelToken: cancelToken.token,
-            params: {
-                payment_type: paymentType,
-                zipcode,
-                targets,
-            },
-        });*/
     },
 };
 

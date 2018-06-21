@@ -1,19 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import * as Actions from 'actions/index';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
+import { toggleSmallFiltersShown } from 'actions/index';
+
+import PropTypes from 'prop-types';
+
 class FilterClose extends React.PureComponent {
-    constructor(props) {
-        super(props);
-    }
+    static propTypes = {
+        onToggleSmallFiltersShown: PropTypes.func.isRequired,
+    };
 
     render() {
         return (
             <div className="filter-close">
                 <SVGInline
-                    onClick={this.props.toggleSmallFiltersShown}
+                    onClick={this.props.onToggleSmallFiltersShown}
                     className="filter-close__icon"
                     height="20px"
                     width="20px"
@@ -24,10 +27,19 @@ class FilterClose extends React.PureComponent {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = () => {
+    return {};
+};
+
+const mapDispatchToProps = dispatch => {
     return {
-        filterPage: state.filterPage,
+        onToggleSmallFiltersShown: () => {
+            return dispatch(toggleSmallFiltersShown);
+        },
     };
 };
 
-export default connect(mapStateToProps, Actions)(FilterClose);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(FilterClose);

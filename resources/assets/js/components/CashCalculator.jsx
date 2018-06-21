@@ -1,14 +1,11 @@
 import React from 'react';
-import util from 'src/util';
 import R from 'ramda';
 import Targets from 'components/Targets';
 import CustomerTypeSelect from 'components/CustomerTypeSelect';
 import { connect } from 'react-redux';
 import * as Actions from 'actions';
-import formulas from 'src/formulas';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
-import { makeDealBestOfferTotalValue, makeDealBestOfferLoading } from 'selectors/index';
 
 class CashCalculator extends React.PureComponent {
     componentWillMount() {
@@ -23,26 +20,37 @@ class CashCalculator extends React.PureComponent {
     showWhenPricingIsLoaded(fn) {
         return this.props.dealPricing.isPricingLoading() ? (
             <SVGInline svg={miscicons['loading']} />
-        ) : fn();
+        ) : (
+            fn()
+        );
     }
 
     render() {
         return (
             <div className="cash-finance-lease-calculator__calculator-content">
-                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                >
                     <div>
-                        <CustomerTypeSelect {...R.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props)} />
+                        <CustomerTypeSelect
+                            {...R.pick(
+                                ['deal', 'employeeBrand', 'setEmployeeBrand'],
+                                this.props
+                            )}
+                        />
                     </div>
-                    <div>
-                        Your Price{' '}{this.props.dealPricing.yourPrice()}*
-                    </div>
+                    <div>Your Price {this.props.dealPricing.yourPrice()}*</div>
                 </div>
                 <hr />
                 <Targets
                     deal={this.props.dealPricing.deal()}
                     targetsChanged={() => this.handleTargetsChange()}
                 />
-               {/* <hr />*/}
+                {/* <hr />*/}
                 <h4>Summary</h4>
                 <div>
                     <div>
@@ -68,7 +76,9 @@ class CashCalculator extends React.PureComponent {
                         <span className="cash-finance-lease-calculator__right-item">
                             {this.props.dealPricing.bestOfferIsLoading() ? (
                                 <SVGInline svg={miscicons['loading']} />
-                            ) : this.props.dealPricing.bestOffer()}
+                            ) : (
+                                this.props.dealPricing.bestOffer()
+                            )}
                         </span>
                     </div>
                     <div>
@@ -78,13 +88,18 @@ class CashCalculator extends React.PureComponent {
                         <span className="cash-finance-lease-calculator__right-item">
                             {this.props.dealPricing.bestOfferIsLoading() ? (
                                 <SVGInline svg={miscicons['loading']} />
-                            ) : this.props.dealPricing.yourPrice()}*
+                            ) : (
+                                this.props.dealPricing.yourPrice()
+                            )}*
                         </span>
                     </div>
                 </div>
                 <div className="accupricing-cta">
                     <a onClick={this.props.showAccuPricingModal}>
-                        <img src="/images/accupricing-logo.png" className="accupricing-cta__logo" />
+                        <img
+                            src="/images/accupricing-logo.png"
+                            className="accupricing-cta__logo"
+                        />
                     </a>
                     <p className="accupricing-cta__disclaimer">
                         * Includes taxes, dealer fees and rebates.
@@ -99,10 +114,13 @@ const makeMapStateToProps = () => {
     const mapStateToProps = (state, props) => {
         return {
             deal: props.dealPricing.deal(),
-            employeeBrand: props.dealPricing.employeeBrand()
-        }
+            employeeBrand: props.dealPricing.employeeBrand(),
+        };
     };
     return mapStateToProps;
 };
 
-export default connect(makeMapStateToProps, Actions)(CashCalculator);
+export default connect(
+    makeMapStateToProps,
+    Actions
+)(CashCalculator);

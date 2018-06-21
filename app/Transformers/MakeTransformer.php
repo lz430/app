@@ -8,30 +8,17 @@ use League\Fractal\TransformerAbstract;
 
 class MakeTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = [
-        'models',
-    ];
-    
+
     /**
      * @param Make $make
      * @return array
      */
-    public function transform(Make $make)
+    public function transform($make)
     {
         return [
-            'id' => $make->id,
-            'name'=> $make->name,
-            'logo' => Make::LOGOS[$make->url_name] ?? '',
+            'name'=> $make,
+            'logo' => Make::LOGOS[$make] ?? '',
         ];
     }
-    
-    public function includeModels(Make $make)
-    {
-        $models = $make->models;
-        
-        return $this->collection(
-            $models,
-            new VehicleModelTransformer
-        )->setResourceKey('models');
-    }
+
 }

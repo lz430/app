@@ -14,6 +14,11 @@ import {
 } from 'selectors/index';
 
 class Targets extends React.PureComponent {
+    static propTypes = {
+        deal: PropTypes.object.isRequired,
+        targetsChanged: PropTypes.func.isRequired,
+    };
+
     componentWillMount() {
         this.props.requestTargets(this.props.deal);
     }
@@ -93,7 +98,7 @@ const makeMapStateToProps = () => {
     const getDealTargetKey = makeDealTargetKey();
     const getDealTargetsAvailable = makeDealTargetsAvailable();
     const getDealTargetsAvailableLoading = makeDealTargetsAvailableLoading();
-    const mapStateToProps = (state, props) => {
+    return (state, props) => {
         return {
             zipcode: state.zipcode,
             targetsAvailable: state.targetsAvailable,
@@ -106,12 +111,9 @@ const makeMapStateToProps = () => {
             ),
         };
     };
-    return mapStateToProps;
 };
 
-Targets.propTypes = {
-    deal: PropTypes.object.isRequired,
-    targetsChanged: PropTypes.func.isRequired,
-};
-
-export default connect(makeMapStateToProps, Actions)(Targets);
+export default connect(
+    makeMapStateToProps,
+    Actions
+)(Targets);

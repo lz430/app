@@ -6,41 +6,50 @@ import * as Actions from 'actions/index';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import InfoModal from 'components/InfoModal';
-import {
-    makeDealPricing,
-} from 'selectors/index';
+import { makeDealPricing } from 'selectors/index';
 import DealPricing from 'src/DealPricing';
+import DealPriceWrapper from 'components/Hoc/DealPriceWrapper';
 
-class DealPrice extends React.PureComponent {
+class DealPrice extends React.Component {
+    static propTypes = {
+        deal: PropTypes.object.isRequired,
+        selectedTab: PropTypes.string.isRequired,
+    };
+
     renderPriceExplanationModal() {
-        return <InfoModal
-            {...R.pick(['deal', 'selectedTab', 'compareList', 'dealPricing'], this.props)}
-            {...R.pick([
-                'selectDeal',
-                'selectTab',
-                'requestTargets',
-                'requestBestOffer',
-                'getBestOffersForLoadedDeals',
-                'toggleCompare',
-                'showInfoModal',
-                'hideInfoModal',
-                'infoModalIsShowingFor',
-                'showAccuPricingModal'
-            ], this.props)}
-        />;
+        return (
+            <InfoModal
+                key={this.props.deal.id}
+                {...R.pick(
+                    ['deal', 'selectedTab', 'compareList', 'dealPricing'],
+                    this.props
+                )}
+                {...R.pick(
+                    [
+                        'selectDeal',
+                        'selectTab',
+                        'requestTargets',
+                        'requestBestOffer',
+                        'getBestOffersForLoadedDeals',
+                        'toggleCompare',
+                        'showInfoModal',
+                        'hideInfoModal',
+                        'infoModalIsShowingFor',
+                        'showAccuPricingModal',
+                    ],
+                    this.props
+                )}
+            />
+        );
     }
 
     showWhenPricingIsLoaded() {
         if (this.props.dealPricing.isPricingLoading()) {
-            return (
-                <SVGInline svg={miscicons['loading']} />
-            )
+            return <SVGInline svg={miscicons['loading']} />;
         }
 
         if (this.props.dealPricing.cannotPurchase()) {
-            return (
-                <span>N/A</span>
-            )
+            return <span>N/A</span>;
         }
 
         return this.props.dealPricing.finalPrice();
@@ -72,7 +81,9 @@ class DealPrice extends React.PureComponent {
                         <div className="deal-price__hr" />
                         <div className="deal-price__cash-msrp">
                             {this.props.dealPricing.msrp()}{' '}
-                            <span className="deal-price__cash-msrp-label">MSRP</span>
+                            <span className="deal-price__cash-msrp-label">
+                                MSRP
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -94,8 +105,7 @@ const makeMapStateToProps = () => {
     return mapStateToProps;
 };
 
-DealPrice.PropTypes = {
-    deal: PropTypes.object.isRequired,
-};
-
-export default connect(makeMapStateToProps, Actions)(DealPrice);
+export default connect(
+    makeMapStateToProps,
+    Actions
+)(DealPriceWrapper(DealPrice));
