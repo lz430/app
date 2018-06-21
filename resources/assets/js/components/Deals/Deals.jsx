@@ -39,15 +39,13 @@ class Deals extends React.PureComponent {
             return <SVGInline svg={miscicons['loading']} />;
         }
 
-        // No matches at all for initial search
         if (
-            (!this.props.deals && !this.props.modelYears) ||
-            (!this.props.deals && this.props.modelYears.length === 0)
+            this.props.searchQuery.entity === 'model' &&
+            (!this.props.modelYears || this.props.modelYears.length === 0)
         ) {
             return <NoDealsInRange />;
         }
 
-        // There were model card results for our initial search but we've modified it to an empty list
         if (
             this.props.searchQuery.entity === 'deal' &&
             (!this.props.deals || this.props.deals.length === 0)
