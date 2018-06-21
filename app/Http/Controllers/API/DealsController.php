@@ -12,7 +12,7 @@ use League\Fractal\Serializer\DataArraySerializer;
 class DealsController extends BaseAPIController
 {
     private const RESOURCE_NAME = 'deals';
-]
+
     public function getDeals(Request $request)
     {
         $this->validate($request, [
