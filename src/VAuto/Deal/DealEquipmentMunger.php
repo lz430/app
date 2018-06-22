@@ -468,6 +468,7 @@ class DealEquipmentMunger
         $parentSchemasIds = [
             59801,  // mobile (android etc)
             1301, // audio system 1301
+            17801, // Front seat
         ];
 
         $features = $this->equipment
@@ -701,6 +702,7 @@ class DealEquipmentMunger
             })
             ->pluck('value')
             ->map(function ($value) {
+                print_r($value);
                 if (str_contains(strtolower($value), ['cloth', 'synthetic suede'])) {
                     return 'seat_main_upholstery_cloth';
                 } elseif (str_contains(strtolower($value), ['synthetic leather', 'vinyl'])) {
