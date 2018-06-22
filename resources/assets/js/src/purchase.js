@@ -49,7 +49,10 @@ const purchase = {
 
             let down_payment = document.createElement('input');
             down_payment.setAttribute('name', 'down_payment');
-            down_payment.setAttribute('value', dealPricing.monthlyPaymentsValue());
+            down_payment.setAttribute(
+                'value',
+                dealPricing.monthlyPaymentsValue()
+            );
             form.appendChild(down_payment);
         }
 

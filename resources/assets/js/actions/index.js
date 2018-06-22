@@ -246,13 +246,6 @@ export function receiveBodyStyles(deals) {
     };
 }
 
-export function setEmployeeBrand(employeeBrand) {
-    return {
-        type: ActionTypes.SET_IS_EMPLOYEE,
-        employeeBrand,
-    };
-}
-
 export function checkZipInRange(code) {
     return dispatch => {
         api.checkZipInRange(code).then(data => {

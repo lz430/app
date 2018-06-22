@@ -4,6 +4,7 @@ import createSagaMiddleware from 'redux-saga';
 import rootSaga from './sagas';
 import { persistStore, persistReducer } from 'redux-persist';
 import reducer from 'reducers/index';
+
 import {
     requestMakes,
     requestBodyStyles,
@@ -28,12 +29,7 @@ const initialState = {
     employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
     featureCategories: [],
-    financeDownPayment: null,
-    financeTerm: null,
     infoModalIsShowingFor: null,
-    leaseAnnualMileage: {},
-    leaseTerm: {},
-    leaseCashDue: {},
     residualPercent: null,
     selectedDeal: null,
     selectedTab: 'cash',
@@ -62,6 +58,24 @@ const initialState = {
     leaseRates: null,
     leasePaymentsLoaded: {},
     leasePayments: null,
+    containers: {
+        dealDetails: {
+            finance: {
+                downPayment: null,
+                term: null,
+            },
+            lease: {
+                cashDue: {},
+                term: {},
+                annualMileage: {},
+            },
+            selectDiscount: {
+                discountType: 'dmr',
+                employeeBrand: false,
+                supplierBrand: false,
+            },
+        },
+    },
 
     //
     // Browse / Search
