@@ -20,8 +20,13 @@ export default class DealPricing {
         return this.data.paymentType;
     }
 
+    make() {
+        return this.data.deal.make;
+    }
+
     allLeaseCashDueOptions() {
-        return [500, 1000, 2500];
+        return 0;
+        //return [500, 1000, 2500];
     }
 
     bestOfferIsLoading() {
@@ -82,7 +87,9 @@ export default class DealPricing {
     }
 
     leaseCashDueValue() {
-        return this.data.leaseCashDue === null ? 500 : this.data.leaseCashDue;
+        //return this.data.leaseCashDue;
+        //return this.data.leaseCashDue !== null ? this.data.leaseCashDue : null;
+        return this.data.leaseCashDue === null ? 487 : this.data.leaseCashDue;
     }
 
     leaseCashDue() {
@@ -116,11 +123,35 @@ export default class DealPricing {
     }
 
     msrpValue() {
-        return this.data.deal.msrp;
+        return this.data.deal.pricing.msrp;
     }
 
     msrp() {
-        return util.moneyFormat(this.data.deal.msrp);
+        return util.moneyFormat(this.msrpValue());
+    }
+
+    defaultPriceValue() {
+        return this.data.deal.pricing.default;
+    }
+
+    defaultPrice() {
+        return util.moneyFormat(this.defaultPriceValue());
+    }
+
+    employeePriceValue() {
+        return this.data.deal.pricing.employee;
+    }
+
+    employeePrice() {
+        return util.moneyFormat(this.employeePriceValue());
+    }
+
+    supplierPriceValue() {
+        return this.data.deal.pricing.supplier;
+    }
+
+    supplierPrice() {
+        return util.moneyFormat(this.supplierPriceValue());
     }
 
     docFeeValue() {
@@ -163,14 +194,88 @@ export default class DealPricing {
         return this.data.employeeBrand;
     }
 
+    supplierBrand() {
+        return this.data.supplierBrand;
+    }
+
     baseSellingPriceValue() {
-        return this.data.employeeBrand === this.data.deal.make
-            ? this.data.deal.employee_price
-            : this.data.deal.supplier_price;
+        if (this.isEffectiveDiscountEmployee()) {
+            return this.employeePriceValue();
+        }
+
+        if (this.isEffectiveDiscountSupplier()) {
+            return this.supplierPriceValue();
+        }
+
+        if (this.isEffectiveDiscountDmr()) {
+            return this.defaultPriceValue();
+        }
+
+        return this.msrpValue();
     }
 
     baseSellingPrice() {
         return util.moneyFormat(this.baseSellingPriceValue());
+    }
+
+    dmrDiscountValue() {
+        return this.msrpValue() - this.defaultPriceValue();
+    }
+
+    dmrDiscount() {
+        return util.moneyFormat(this.dmrDiscountValue());
+    }
+
+    employeeDiscountValue() {
+        return this.msrpValue() - this.employeePriceValue();
+    }
+
+    employeeDiscount() {
+        return util.moneyFormat(this.employeeDiscountValue());
+    }
+
+    supplierDiscountValue() {
+        return this.msrpValue() - this.supplierPriceValue();
+    }
+
+    supplierDiscount() {
+        return util.moneyFormat(this.supplierDiscountValue());
+    }
+
+    isEffectiveDiscountEmployee() {
+        return (
+            this.data.discountType === 'employee' &&
+            this.data.employeeBrand === this.data.deal.make
+        );
+    }
+
+    isEffectiveDiscountSupplier() {
+        return (
+            this.data.discountType === 'supplier' &&
+            this.data.supplierBrand === this.data.deal.make
+        );
+    }
+
+    isEffectiveDiscountDmr() {
+        if (!this.data.discountType) {
+            return true;
+        }
+
+        if (
+            this.data.discountType === 'employee' &&
+            this.data.employeeBrand !== this.data.deal.make
+        ) {
+            return true;
+        }
+
+        if (
+            this.data.discountType === 'supplier' &&
+            this.data.supplierBrand !== this.data.deal.make
+        ) {
+            return true;
+        }
+
+        return this.data.discountType === 'dmr';
     }
 
     isFinance() {
@@ -205,7 +310,8 @@ export default class DealPricing {
                     totalWithSalesTax.plus(this.licenseAndRegistrationValue())
                 );
             case 'lease':
-                return new Decimal(this.baseSellingPriceValue())
+                return new Decimal(this.baseSellingPriceValue()).toFixed(2);
+            /*return new Decimal(this.baseSellingPriceValue())
                     .plus(this.docFeeValue())
                     .plus(new Decimal(this.docFeeValue()).times(this.taxRate()))
                     .plus(this.effCvrFeeValue())
@@ -214,7 +320,7 @@ export default class DealPricing {
                     )
                     .plus(this.licenseAndRegistrationValue())
                     .plus(this.acquisitionFeeValue())
-                    .toFixed(2);
+                    .toFixed(2);*/
         }
     }
 
@@ -275,30 +381,21 @@ export default class DealPricing {
         if (!this.data.dealLeasePayments) {
             return null;
         }
-
         if (!this.data.dealLeasePayments[this.leaseTerm()]) {
             return null;
         }
 
         if (
-            !this.data.dealLeasePayments[this.leaseTerm()][
-                this.leaseCashDueValue()
+            !this.data.dealLeasePayments[this.leaseTerm()][0][
+                this.leaseAnnualMileageValue()
             ]
         ) {
             return null;
         }
 
-        if (
-            !this.data.dealLeasePayments[this.leaseTerm()][
-                this.leaseCashDueValue()
-            ][this.leaseAnnualMileageValue()]
-        ) {
-            return null;
-        }
-
-        return this.data.dealLeasePayments[this.leaseTerm()][
-            this.leaseCashDueValue()
-        ][this.leaseAnnualMileageValue()].monthlyPayment;
+        return this.data.dealLeasePayments[this.leaseTerm()][0][
+            this.leaseAnnualMileageValue()
+        ].monthlyPayment;
     }
 
     leaseTermsAvailable() {

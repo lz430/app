@@ -12,6 +12,9 @@ import {
     makeDealTargetsAvailableLoading,
     makeDealTargetKey,
 } from 'selectors/index';
+import Line from '../containers/dealDetails/components/pricing/Line';
+import Label from '../containers/dealDetails/components/pricing/Label';
+import Value from '../containers/dealDetails/components/pricing/Value';
 
 class Targets extends React.PureComponent {
     static propTypes = {
@@ -41,6 +44,26 @@ class Targets extends React.PureComponent {
         }`;
 
         return (
+            <Line key={index}>
+                <Label>
+                    <div onClick={this.toggle.bind(this, target)}>
+                        {isSelected ? (
+                            <SVGInline
+                                width="15px"
+                                height="15px"
+                                className={checkboxClass}
+                                svg={zondicons['checkmark']}
+                            />
+                        ) : (
+                            <div className="rebates__checkbox" />
+                        )}
+                        <div>{strings.toTitleCase(target.targetName)}</div>
+                    </div>
+                </Label>
+            </Line>
+        );
+
+        return (
             <div
                 key={index}
                 onClick={this.toggle.bind(this, target)}
@@ -64,21 +87,39 @@ class Targets extends React.PureComponent {
     }
 
     renderAvailableTargets() {
-        /*return (
+        return (
             <div className="rebates">
                 {this.props.dealTargetsAvailable.length == 0 ? (
-                    <h4>No Incentives Available</h4>
+                    <div />
                 ) : (
                     <div>
-                        <h4>Available Incentives</h4>
-                        <p>Select all that apply. Proof of eligibility required.</p>
+                        <Line>
+                            <Label>Additional Rebates</Label>
+                            <div
+                                style={{
+                                    fontSize: '.75em',
+                                    marginLeft: '.25em',
+                                }}
+                            >
+                                Select all that apply
+                            </div>
+                            <div
+                                style={{
+                                    fontStyle: 'italic',
+                                    fontSize: '.75em',
+                                    marginLeft: '.25em',
+                                }}
+                            >
+                                Proof of eligibility required.
+                            </div>
+                        </Line>
                         {this.props.dealTargetsAvailable.map((target, index) =>
                             this.renderTarget(target, index)
                         )}
                     </div>
                 )}
             </div>
-        );*/
+        );
     }
 
     render() {

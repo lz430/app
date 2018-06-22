@@ -169,6 +169,7 @@ class InfoModalData extends React.PureComponent {
                             )}
                         </div>
                     </div>
+                    {/*
                     <div className="info-modal-data__costs">
                         <div className="info-modal-data__label">Cash Due:</div>
                         <div className="info-modal-data__amount">
@@ -177,6 +178,7 @@ class InfoModalData extends React.PureComponent {
                             )}
                         </div>
                     </div>
+                    */}
 
                     <div className="info-modal-data__costs">
                         <div className="info-modal-data__label">
