@@ -21,7 +21,8 @@ export default class DealPricing {
     }
 
     allLeaseCashDueOptions() {
-        return [500, 1000, 2500];
+        return 0;
+        //return [500, 1000, 2500];
     }
 
     bestOfferIsLoading() {
@@ -82,7 +83,9 @@ export default class DealPricing {
     }
 
     leaseCashDueValue() {
-        return this.data.leaseCashDue === null ? 500 : this.data.leaseCashDue;
+        //return this.data.leaseCashDue;
+        //return this.data.leaseCashDue !== null ? this.data.leaseCashDue : null;
+        return this.data.leaseCashDue === null ? 487 : this.data.leaseCashDue;
     }
 
     leaseCashDue() {
@@ -206,6 +209,8 @@ export default class DealPricing {
                 );
             case 'lease':
                 return new Decimal(this.baseSellingPriceValue())
+                    .toFixed(2);
+                /*return new Decimal(this.baseSellingPriceValue())
                     .plus(this.docFeeValue())
                     .plus(new Decimal(this.docFeeValue()).times(this.taxRate()))
                     .plus(this.effCvrFeeValue())
@@ -214,7 +219,7 @@ export default class DealPricing {
                     )
                     .plus(this.licenseAndRegistrationValue())
                     .plus(this.acquisitionFeeValue())
-                    .toFixed(2);
+                    .toFixed(2);*/
         }
     }
 
@@ -275,30 +280,15 @@ export default class DealPricing {
         if (!this.data.dealLeasePayments) {
             return null;
         }
-
-        if (!this.data.dealLeasePayments[this.leaseTerm()]) {
+        if (! this.data.dealLeasePayments[this.leaseTerm()]) {
             return null;
         }
 
-        if (
-            !this.data.dealLeasePayments[this.leaseTerm()][
-                this.leaseCashDueValue()
-            ]
-        ) {
+        if (! this.data.dealLeasePayments[this.leaseTerm()][0][this.leaseAnnualMileageValue()]) {
             return null;
         }
 
-        if (
-            !this.data.dealLeasePayments[this.leaseTerm()][
-                this.leaseCashDueValue()
-            ][this.leaseAnnualMileageValue()]
-        ) {
-            return null;
-        }
-
-        return this.data.dealLeasePayments[this.leaseTerm()][
-            this.leaseCashDueValue()
-        ][this.leaseAnnualMileageValue()].monthlyPayment;
+        return this.data.dealLeasePayments[this.leaseTerm()][0][this.leaseAnnualMileageValue()].monthlyPayment;
     }
 
     leaseTermsAvailable() {
