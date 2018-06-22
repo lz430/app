@@ -1,16 +1,23 @@
 import React from 'react';
 
 class CustomizeQuoteOrBuyNowButton extends React.PureComponent {
+    static defaultProps = {
+        onBuyNow: deal => (window.location = `/confirm/${deal.id}`),
+        disabled: true,
+    };
+
     renderBuyNow() {
         return (
             <button
-                onClick={() => ! this.props.disabled && this.props.onBuyNow(this.props.deal)}
+                onClick={() =>
+                    !this.props.disabled && this.props.onBuyNow(this.props.deal)
+                }
                 className="deal__button deal__button--x-small deal__button--pink deal__button"
                 disabled={this.props.disabled}
             >
                 Buy Now
             </button>
-        )
+        );
     }
 
     renderCustomizeQuote() {
@@ -21,17 +28,14 @@ class CustomizeQuoteOrBuyNowButton extends React.PureComponent {
             >
                 Customize Quote
             </button>
-        )
+        );
     }
 
     render() {
-        return this.props.hasCustomizedQuote ? this.renderBuyNow() : this.renderCustomizeQuote();
+        return this.props.hasCustomizedQuote
+            ? this.renderBuyNow()
+            : this.renderCustomizeQuote();
     }
 }
-
-CustomizeQuoteOrBuyNowButton.defaultProps = {
-    onBuyNow: (deal) => (window.location = `/confirm/${deal.id}`),
-    disabled: true
-};
 
 export default CustomizeQuoteOrBuyNowButton;

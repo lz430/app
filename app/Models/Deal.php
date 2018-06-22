@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use App\Models\JATO\Version;
+use App\DealIndexConfigurator;
 use App\Models\JATO\Make;
+use Backpack\CRUD\CrudTrait;
 
 use Carbon\Carbon;
+use ScoutElastic\Searchable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $body
  * @property string $transmission
  * @property string $series
- * @property string $series_Detail
+ * @property string $series_detail
  * @property string $door_count
  * @property string $odometer
  * @property string $engine
@@ -41,6 +44,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property boolean|null $certified
  * @property string|null $description
  * @property array|null $option_codes
+ * @property array|null $package_codes
  * @property \stdClass|null $source_price
  * @property int|null $fuel_econ_city
  * @property int|null $fuel_econ_hwy
@@ -50,10 +54,59 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \DateTime $updated_at
  * @property int $version_id
  * @property Version $version
+ * @property Purchase[] $purchases
+ * @property DealOption[] $options
+ * @property DealPhoto[] $photos
+ * @property jatoFeature[] $jatoFeatures
+ * @property Feature[] $features
  */
 class Deal extends Model
 {
+    use Searchable;
+    use CrudTrait;
+
+    protected $indexConfigurator = DealIndexConfigurator::class;
+
+
     const HOLD_HOURS = 48;
+
+    /**
+     * @var array
+     */
+    protected $mapping = [
+        'properties' => [
+            'created_at' => [
+                'type' => 'date',
+            ],
+            'updated_at' => [
+                'type' => 'date',
+            ],
+            'inventory_date' => [
+                'type' => 'date',
+            ],
+            'location' => [
+                'type' => 'geo_point',
+            ],
+            'max_delivery_distance' => [
+                'type' => 'double',
+            ],
+            'category' => [
+                'type' => 'nested',
+            ],
+            'msrp' => [
+                'type' => 'double',
+            ],
+            'supplier_price' => [
+                'type' => 'double',
+            ],
+            'employee_price' => [
+                'type' => 'double',
+            ],
+            'default_price' => [
+                'type' => 'double',
+            ],
+        ]
+    ];
 
     /**
      * @var array
@@ -213,6 +266,7 @@ class Deal extends Model
     public function prices(): \stdClass
     {
 
+
         $source = $this->source_price;
 
         //
@@ -293,12 +347,6 @@ class Deal extends Model
         return (object)array_map('floatval', $prices);
     }
 
-
-    public static function allFuelTypes()
-    {
-        return self::select('fuel')->where('fuel', '!=', '')->groupBy('fuel')->get()->pluck('fuel');
-    }
-
     /**
      * Mysql spatial function use to find spherical (earth) distance between 2 coordinate pairs
      * Mysql point : longitude, latitude.
@@ -323,16 +371,6 @@ class Deal extends Model
         });
     }
 
-    public function scopeFilterByYear(Builder $query, $year): Builder
-    {
-        return $query->where('year', $year);
-    }
-
-    public function scopeFilterByFuelType(Builder $query, $fuelType): Builder
-    {
-        return $query->where('fuel', $fuelType);
-    }
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -349,44 +387,142 @@ class Deal extends Model
      * @param Builder $query
      * @return Builder
      */
-    public function scopeFilterByAutomaticTransmission(Builder $query): Builder
-    {
-        return $query->where(
-            'transmission',
-            'like',
-            '%auto%'
-        )->orWhere(
-            'transmission',
-            'like',
-            '%cvt%'
-        );
-    }
-
-    /**
-     * @param Builder $query
-     * @return Builder
-     */
-    public function scopeFilterByManualTransmission(Builder $query): Builder
-    {
-        return $query->where(
-            'transmission',
-            'not like',
-            '%auto%'
-        )->where(
-            'transmission',
-            'not like',
-            '%cvt%'
-        );
-    }
-
-    /**
-     * @param Builder $query
-     * @return Builder
-     */
     public function scopeForSale(Builder $query): Builder
     {
         return $query->whereDoesntHave('purchases', function (Builder $q) {
             $q->where('completed_at', '>=', Carbon::now()->subHours(self::HOLD_HOURS));
         });
+    }
+
+    /**
+     * @return mixed
+     */
+    public function shouldBeSearchable()
+    {
+        if (!$this->dealer) {
+            return FALSE;
+        }
+
+        if (!$this->features->count()) {
+            return FALSE;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $record = [];
+
+        //
+        // Basic record information
+        $record['id'] = $this->id;
+        $record['created_at'] = $this->created_at->format('c');
+        $record['updated_at'] = $this->updated_at->format('c');
+        $record['inventory_date'] = $this->inventory_date->format('c');
+
+        //
+        // Vehicle identification information
+        $record['vin'] = $this->vin;
+        $record['stock'] = $this->stock_number;
+        $record['title'] = $this->title();
+
+        //
+        // Vehicle type
+        $record['year'] = $this->year;
+        $record['make'] = $this->version->model->make->name;
+        $record['model'] = $this->version->model->name;
+        $record['model_code'] = $this->model_code;
+        $record['series'] = $this->series;
+        $record['style'] = $this->version->style();
+
+        //
+        // Required vehicle attributes
+        $record['body'] = $this->body; // Deprecated
+        $record['engine'] = $this->engine;
+        $record['doors'] = $this->door_count;
+        $record['color'] = $this->color;
+        $record['interior_color'] = $this->interior_color;
+
+        $record['fuel_econ_city'] = $this->fuel_econ_city;
+        $record['fuel_econ_hwy'] = $this->fuel_econ_hwy;
+
+        //
+        // Photos
+        $record['photos'] = [];
+        foreach ($this->marketingPhotos() as $photo) {
+            $record['photos'][] = $photo;
+        }
+
+        $thumbnail = $this->featuredPhoto();
+        $record['thumbnail'] = $thumbnail;
+
+        $record['category'] = (object)[
+            'id' => $this->version->model->id,
+            'title' => implode(" ", [
+                $record['year'],
+                $record['make'],
+                $record['model'],
+            ]),
+            'thumbnail' => ($this->version->thumbnail() ? $this->version->thumbnail()->url : null),
+        ];
+
+        //
+        // Delivery Info
+        $record['location'] = (object)[
+            'lat' => $this->dealer->latitude,
+            'lon' => $this->dealer->longitude,
+        ];
+
+        $record['max_delivery_distance'] = (double)$this->dealer->max_delivery_miles;
+
+        //
+        // Features
+        foreach ($this->features as $feature) {
+            if (!isset($record[$feature->category->slug]) || !is_array($record[$feature->category->slug])) {
+                $record[$feature->category->slug] = [];
+            }
+
+            $record[$feature->category->slug][] = $feature->title;
+        }
+
+        //
+        // Catchall
+        if ($this->vauto_features) {
+            $record['misc'] = [];
+            $misc = explode("|", $this->vauto_features);
+            $misc = array_map('trim', $misc);
+            $record['misc'] = $misc;
+        }
+
+        $pricing = $this->prices();
+        $record['pricing'] = $pricing;
+
+        //
+        // Backwards compatibility with existing frontend stuff
+        $version = $this->version;
+        unset($version['model']);
+        $record['version'] = $this->version;
+
+        $dealer = $this->dealer->toArray();
+        unset($dealer['price_rules']);
+        unset($dealer['max_delivery_miles']);
+        unset($dealer['longitude']);
+        unset($dealer['latitude']);
+        $record['dealer'] = $dealer;
+
+        //
+        // All the features in the current UI are just jammed together.
+        $record['legacy_features'] = [];
+        foreach ($this->features as $feature) {
+            $record['legacy_features'][] = $feature->title;
+        }
+
+        return $record;
     }
 }

@@ -3,20 +3,22 @@ import util from 'src/util';
 import R from 'ramda';
 import Targets from 'components/Targets';
 import CustomerTypeSelect from 'components/CustomerTypeSelect';
-import formulas from 'src/formulas';
 import { connect } from 'react-redux';
-import api from 'src/api';
 import * as Actions from 'actions';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
-import { makeDealBestOfferTotalValue, makeDealBestOfferLoading } from 'selectors/index';
-import CustomizeQuoteOrBuyNowButton from "./CustomizeQuoteOrBuyNowButton";
+import {
+    makeDealBestOfferTotalValue,
+    makeDealBestOfferLoading,
+} from 'selectors/index';
 
 class LeaseCalculator extends React.PureComponent {
     showWhenPricingIsLoaded(fn) {
         return this.props.dealPricing.isPricingLoading() ? (
             <SVGInline svg={miscicons['loading']} />
-        ) : fn();
+        ) : (
+            fn()
+        );
     }
 
     renderYourTargets() {
@@ -26,7 +28,9 @@ class LeaseCalculator extends React.PureComponent {
                     Rebates Applied
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.showWhenPricingIsLoaded(() => this.props.dealPricing.bestOffer())}
+                    {this.showWhenPricingIsLoaded(() =>
+                        this.props.dealPricing.bestOffer()
+                    )}
                 </span>
             </div>
         );
@@ -39,7 +43,9 @@ class LeaseCalculator extends React.PureComponent {
                     Your Price
                 </span>
                 <span className="cash-finance-lease-calculator__right-item">
-                    {this.showWhenPricingIsLoaded(() => this.props.dealPricing.yourPrice())}
+                    {this.showWhenPricingIsLoaded(() =>
+                        this.props.dealPricing.yourPrice()
+                    )}
                 </span>
             </div>
         );
@@ -50,27 +56,49 @@ class LeaseCalculator extends React.PureComponent {
     }
 
     render() {
-        if (this.props.dealPricing.isPricingAvailable() && this.props.dealPricing.cannotPurchase()) {
+        if (
+            this.props.dealPricing.isPricingAvailable() &&
+            this.props.dealPricing.cannotPurchase()
+        ) {
             // Pricing is completely and we do not have any lease terms. This means that we cannot
             // calculate lease pricing at all.
             return (
                 <div className="cash-finance-lease-calculator__calculator-content">
-                    <h4>Currently there are no competitive lease rates available on this vehicle.</h4>
+                    <h4>
+                        Currently there are no competitive lease rates available
+                        on this vehicle.
+                    </h4>
                 </div>
-            )
+            );
         }
 
         return (
             <div className="cash-finance-lease-calculator__calculator-content">
-                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                >
                     <div>
                         <CustomerTypeSelect
-                            {...R.pick(['deal', 'employeeBrand', 'setEmployeeBrand'], this.props)}
-                            onChange={(deal) => this.props.requestBestOffer(this.props.dealPricing.deal())}
+                            {...R.pick(
+                                ['deal', 'employeeBrand', 'setEmployeeBrand'],
+                                this.props
+                            )}
+                            onChange={deal =>
+                                this.props.requestBestOffer(
+                                    this.props.dealPricing.deal()
+                                )
+                            }
                         />
                     </div>
                     <div>
-                        Your Monthly Payment{' '}{this.showWhenPricingIsLoaded(() => this.props.dealPricing.monthlyPayments())}*
+                        Your Monthly Payment{' '}
+                        {this.showWhenPricingIsLoaded(() =>
+                            this.props.dealPricing.monthlyPayments()
+                        )}*
                     </div>
                 </div>
                 <hr />
@@ -85,52 +113,93 @@ class LeaseCalculator extends React.PureComponent {
                         <table className="cash-finance-lease-calculator__lease-table">
                             <thead>
                                 <tr>
-                                    <td className="cash-finance-lease-calculator__lease-table-cell--darker">
+                                    {/*<td className="cash-finance-lease-calculator__lease-table-cell--darker">
                                         Cash Due
-                                    </td>
-                                    {this.props.dealPricing.leaseTermsAvailable() && this.props.dealPricing.leaseTermsAvailable().filter(term => {
-                                        return this.props.dealPricing.hasLeasePaymentsForTerm(term);
-                                    }).map((term, index) => {
-                                            return (
-                                                <td
-                                                    className="cash-finance-lease-calculator__lease-table-cell--dark"
-                                                    key={index}
-                                                >
-                                                    {term}{' '}
-                                                    Months
-                                                </td>
-                                            )
-                                        })
-                                    }
+                                    </td>*/}
+                                    {this.props.dealPricing.leaseTermsAvailable() &&
+                                        this.props.dealPricing
+                                            .leaseTermsAvailable()
+                                            .filter(term => {
+                                                return this.props.dealPricing.hasLeasePaymentsForTerm(
+                                                    term
+                                                );
+                                            })
+                                            .map((term, index) => {
+                                                return (
+                                                    <td
+                                                        className="cash-finance-lease-calculator__lease-table-cell--dark"
+                                                        key={index}
+                                                    >
+                                                        {term} Months
+                                                    </td>
+                                                );
+                                            })}
                                 </tr>
                             </thead>
                             <tbody>
-                            {this.props.dealPricing.leaseTermsAvailable() && this.props.dealPricing.leaseCashDueAvailable() && this.props.dealPricing.leaseCashDueAvailable().map((cashDue, indexCashDue) => {
-                                return (
-                                    <tr key={indexCashDue}>
-                                        <td className="cash-finance-lease-calculator__lease-table-cell--darker">
-                                            {util.moneyFormat(cashDue)}
-                                        </td>
-                                        {this.props.dealPricing.leaseTermsAvailable().filter(term => {
-                                            return this.props.dealPricing.hasLeasePaymentsForTerm(term);
-                                        }).map((term, termIndex) => {
-                                            let className = this.props.dealPricing.isSelectedLeasePaymentForTermAndCashDue(term, cashDue) ?
-                                                'cash-finance-lease-calculator__lease-table-cell--selected' :
-                                                'cash-finance-lease-calculator__lease-table-cell--selectable';
-
+                                {this.props.dealPricing.leaseTermsAvailable() &&
+                                    this.props.dealPricing.leaseCashDueAvailable() &&
+                                    this.props.dealPricing
+                                        .leaseCashDueAvailable()
+                                        .map((cashDue, indexCashDue) => {
                                             return (
-                                                <td className={className} key={termIndex} onClick={e => {
-                                                    this.props.updateLeaseTerm(this.props.deal, term);
-                                                    this.props.updateLeaseCashDue(this.props.deal, cashDue);
-                                                }}>
-                                                    {this.props.dealPricing.leasePaymentsForTermAndCashDue(term, cashDue)}
-                                                </td>
+                                                <tr key={indexCashDue}>
+                                                    {/*<td className="cash-finance-lease-calculator__lease-table-cell--darker">
+                                            {util.moneyFormat(cashDue
+                                        )}</td>*/}
+                                                    {this.props.dealPricing
+                                                        .leaseTermsAvailable()
+                                                        .filter(term => {
+                                                            return this.props.dealPricing.hasLeasePaymentsForTerm(
+                                                                term
+                                                            );
+                                                        })
+                                                        .map(
+                                                            (
+                                                                term,
+                                                                termIndex
+                                                            ) => {
+                                                                let className = this.props.dealPricing.isSelectedLeasePaymentForTermAndCashDue(
+                                                                    term,
+                                                                    cashDue
+                                                                )
+                                                                    ? 'cash-finance-lease-calculator__lease-table-cell--selected'
+                                                                    : 'cash-finance-lease-calculator__lease-table-cell--selectable';
 
-                                            )
+                                                                return (
+                                                                    <td
+                                                                        className={
+                                                                            className
+                                                                        }
+                                                                        key={
+                                                                            termIndex
+                                                                        }
+                                                                        onClick={e => {
+                                                                            this.props.updateLeaseTerm(
+                                                                                this
+                                                                                    .props
+                                                                                    .deal,
+                                                                                term
+                                                                            );
+                                                                            this.props.updateLeaseCashDue(
+                                                                                this
+                                                                                    .props
+                                                                                    .deal,
+                                                                                cashDue
+                                                                            );
+                                                                        }}
+                                                                    >
+                                                                        {this.props.dealPricing.leasePaymentsForTermAndCashDue(
+                                                                            term,
+                                                                            cashDue
+                                                                        )}
+                                                                    </td>
+                                                                );
+                                                            }
+                                                        )}
+                                                </tr>
+                                            );
                                         })}
-                                    </tr>
-                                )
-                            })}
                             </tbody>
                         </table>
                     </div>
@@ -140,31 +209,48 @@ class LeaseCalculator extends React.PureComponent {
                     <h4>Lease Summary</h4>
                 </div>
                 <div>
-                    <div style={{clear: 'both'}}>
+                    <div style={{ clear: 'both' }}>
                         <span>Annual Mileage</span>
                         <span style={{ float: 'right' }}>
-                            <select value={this.props.dealPricing.leaseAnnualMileageValue()} onChange={e => this.props.updateLeaseAnnualMileage(this.props.deal, e.target.value)} >
-                                {this.props.dealPricing.leaseAnnualMileageAvailable().map((annualMileage, annualMileageIndex) => {
-                                    return (
-                                        <option key={annualMileageIndex} value={annualMileage}>{annualMileage}</option>
+                            <select
+                                value={this.props.dealPricing.leaseAnnualMileageValue()}
+                                onChange={e =>
+                                    this.props.updateLeaseAnnualMileage(
+                                        this.props.deal,
+                                        e.target.value
                                     )
-                                })}
+                                }
+                            >
+                                {this.props.dealPricing
+                                    .leaseAnnualMileageAvailable()
+                                    .map(
+                                        (annualMileage, annualMileageIndex) => {
+                                            return (
+                                                <option
+                                                    key={annualMileageIndex}
+                                                    value={annualMileage}
+                                                >
+                                                    {annualMileage}
+                                                </option>
+                                            );
+                                        }
+                                    )}
                             </select>
                         </span>
                     </div>
-                    <div style={{clear: 'both'}}>
+                    <div style={{ clear: 'both' }}>
                         <span>Term</span>
                         <span style={{ float: 'right' }}>
                             {this.props.dealPricing.leaseTerm()}
                         </span>
                     </div>
-                    <div style={{clear: 'both'}}>
+                    <div style={{ clear: 'both' }}>
                         <span>Cash Due</span>
                         <span style={{ float: 'right' }}>
                             {this.props.dealPricing.leaseCashDue()}
                         </span>
                     </div>
-                    <div style={{clear: 'both'}}>
+                    <div style={{ clear: 'both' }}>
                         <span>Monthly Payment</span>
                         <span style={{ float: 'right' }}>
                             {this.props.dealPricing.monthlyPayments()}*
@@ -179,7 +265,9 @@ class LeaseCalculator extends React.PureComponent {
                             MSRP
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.msrp())}
+                            {this.showWhenPricingIsLoaded(() =>
+                                this.props.dealPricing.msrp()
+                            )}
                         </span>
                     </div>
                     <div>
@@ -187,7 +275,9 @@ class LeaseCalculator extends React.PureComponent {
                             Selling Price
                         </span>
                         <span className="cash-finance-lease-calculator__right-item">
-                            {this.showWhenPricingIsLoaded(() => this.props.dealPricing.sellingPrice())}
+                            {this.showWhenPricingIsLoaded(() =>
+                                this.props.dealPricing.sellingPrice()
+                            )}
                         </span>
                     </div>
                     {this.renderYourTargets()}
@@ -195,14 +285,17 @@ class LeaseCalculator extends React.PureComponent {
                 </div>
                 <div className="accupricing-cta">
                     <a onClick={this.props.showAccuPricingModal}>
-                        <img src="/images/accupricing-logo.png" className="accupricing-cta__logo" />
+                        <img
+                            src="/images/accupricing-logo.png"
+                            className="accupricing-cta__logo"
+                        />
                     </a>
                     <p className="accupricing-cta__disclaimer">
                         * Includes taxes, dealer fees and rebates.
                     </p>
                 </div>
             </div>
-        )
+        );
     }
 }
 
@@ -223,4 +316,7 @@ const makeMapStateToProps = () => {
     return mapStateToProps;
 };
 
-export default connect(makeMapStateToProps, Actions)(LeaseCalculator);
+export default connect(
+    makeMapStateToProps,
+    Actions
+)(LeaseCalculator);

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use DeliverMyRide\Fuel\FuelClient;
-use DeliverMyRide\Fuel\VersionToFuel;
+use DeliverMyRide\Fuel\Manager\VersionToFuel;
 
 use App\Models\JATO\Version;
 

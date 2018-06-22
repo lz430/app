@@ -7,7 +7,7 @@ use App\Models\JATO\Manufacturer;
 use App\Models\JATO\VehicleModel;
 use App\Models\JATO\Version;
 use DeliverMyRide\Fuel\FuelClient;
-use DeliverMyRide\Fuel\VersionToFuel;
+use DeliverMyRide\Fuel\Manager\VersionToFuel;
 use DeliverMyRide\JATO\JatoClient;
 use GuzzleHttp\Exception\ClientException;
 
@@ -276,7 +276,7 @@ class VersionMunger
     private function photos(Version $version)
     {
         $assets = (new VersionToFuel($version, $this->fuelClient))->assets('default');
-        $version->photos()->delete();
+        $version->photos()->where('color', 'default')->delete();
 
         foreach ($assets as $asset) {
             $version->photos()->create([
