@@ -1,16 +1,17 @@
 import 'bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import FilterPage from 'containers/FilterPage';
-import BrowsePage from 'containers/BrowsePage';
-import Financing from 'containers/Financing';
 import { Provider } from 'react-redux';
-import configureStore from 'configureStore';
+import { PersistGate } from 'redux-persist/integration/react';
+import configureStore from 'store';
+
+import Filter from 'pages/filter/Container';
+import FilterBeta from 'pages/filter-beta/Container';
+import Financing from 'containers/Financing';
 import DealDetails from 'containers/DealDetails';
 import ComparePage from 'containers/ComparePage';
 import ConfirmDetails from 'containers/ConfirmDetails';
 import ThankYouPage from 'containers/ThankYouPage';
-import { PersistGate } from 'redux-persist/integration/react';
 
 const { store, persistor } = configureStore();
 
@@ -21,7 +22,7 @@ Array.from(document.getElementsByTagName('FilterPage')).map(element => {
     ReactDOM.render(
         <Provider store={store}>
             <PersistGate persistor={persistor}>
-                <FilterPage />
+                <Filter />
             </PersistGate>
         </Provider>,
         element
@@ -35,7 +36,7 @@ Array.from(document.getElementsByTagName('BrowsePage')).map(element => {
     ReactDOM.render(
         <Provider store={store}>
             <PersistGate persistor={persistor}>
-                <BrowsePage />
+                <FilterBeta />
             </PersistGate>
         </Provider>,
         element

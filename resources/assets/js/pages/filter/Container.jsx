@@ -1,21 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Modal from 'components/Modal';
-import MakeSelector from 'components/MakeSelector';
 import PropTypes from 'prop-types';
-import Deals from 'components/Deals/Deals';
-import ToolbarSelectedFilters from 'components/Filter/ToolbarSelectedFilters';
-import ToolbarPrice from 'components/Filter/ToolbarPrice';
-import CompareBar from 'components/Filter/CompareBar';
-import FilterPanel from 'components/Filter/FilterPanel';
-import * as Actions from 'actions/index';
-import util from 'src/util';
-import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
-import AccuPricingModal from 'components/AccuPricingModal';
 import { StickyContainer } from 'react-sticky';
 
-class FilterPage extends React.PureComponent {
+import * as Actions from 'actions/index';
+import util from 'src/util';
+
+import Modal from 'components/Modal';
+import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
+import AccuPricingModal from 'components/AccuPricingModal';
+import Deals from 'components/Deals/Deals';
+
+import MakeSelector from './components/MakeSelector';
+import ToolbarSelectedFilters from './components/ToolbarSelectedFilters';
+import ToolbarPrice from './components/ToolbarPrice';
+import CompareBar from './components/CompareBar';
+import FilterPanel from './components/FilterPanel';
+
+class Container extends React.PureComponent {
     static propTypes = {
         searchQuery: PropTypes.object.isRequired,
     };
@@ -124,4 +127,4 @@ const mapStateToProps = state => {
 export default connect(
     mapStateToProps,
     Actions
-)(FilterPage);
+)(Container);

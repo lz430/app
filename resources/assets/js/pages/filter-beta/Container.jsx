@@ -2,10 +2,10 @@ import React from 'react';
 
 import { ReactiveBase } from '@appbaseio/reactivesearch';
 
-import FilterSidebar from 'components/Browse/FilterSidebar';
-import ResultsContainer from 'components/Browse/ResultsContainer';
+import FilterSidebar from 'pages/filter-beta/components/FilterSidebar';
+import ResultsContainer from 'pages/filter-beta/components/ResultsContainer';
 
-class BrowsePage extends React.Component {
+class FilterBeta extends React.Component {
     render() {
         return (
             <ReactiveBase app="deal" url="http://dmr.local.test:9200/">
@@ -16,4 +16,4 @@ class BrowsePage extends React.Component {
     }
 }
 
-export default BrowsePage;
+export default FilterBeta;

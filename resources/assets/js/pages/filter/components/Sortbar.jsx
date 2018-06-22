@@ -175,7 +175,7 @@ class Sortbar extends React.PureComponent {
                         this.props.toggleSmallFiltersShown();
                     }}
                 >
-                    asdfasdfasd Clear Options
+                    Clear Options
                 </button>
             </div>
         );

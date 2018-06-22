@@ -1,7 +1,7 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
-import rootSaga from './sagas';
+import rootSaga from 'sagas';
 import { persistStore, persistReducer } from 'redux-persist';
 import reducer from 'reducers/index';
 import {

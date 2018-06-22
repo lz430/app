@@ -1,5 +1,5 @@
 import React from 'react';
-import Sortbar from 'components/Filter/Sortbar';
+import Sortbar from 'pages/filter/components/Sortbar';
 import { connect } from 'react-redux';
 import { showAccuPricingModal, toggleSearchFinancing } from 'actions/index';
 

@@ -1,7 +1,7 @@
 import * as Actions from 'actions/index';
 import api from 'src/api';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
-import CompareBar from 'components/Filter/CompareBar';
+import CompareBar from 'pages/filter/components/CompareBar';
 import { connect } from 'react-redux';
 import Modal from 'components/Modal';
 import miscicons from 'miscicons';
