@@ -86,26 +86,6 @@ $factory->define(App\Models\JATO\Version::class, function (Faker\Generator $fake
     ];
 });
 
-$factory->define(App\Models\JATO\VersionTaxAndDiscount::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->unique()->word,
-        'amount' => $faker->randomFloat(2, -5000, 5000),
-    ];
-});
-
-$factory->define(App\Models\JATO\Option::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->colorName,
-        'state' => $faker->randomElement(['Required', 'Available']),
-        'description' => $faker->text(),
-        'jato_option_id' => $faker->unique()->randomNumber(),
-        'option_code' => $faker->text(5),
-        'option_type' => $faker->randomElement(['O', 'C', 'I', 'P', 'B', 'A']),
-        'msrp' => $faker->randomFloat(2, 4000, 6000),
-        'invoice' => $faker->randomFloat(2, 2000, 3900),
-    ];
-});
-
 $factory->define(App\Models\Deal::class, function (Faker\Generator $faker) {
     return [
         'file_hash' => $faker->md5,

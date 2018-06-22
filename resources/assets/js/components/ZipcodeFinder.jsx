@@ -4,6 +4,13 @@ import { connect } from 'react-redux';
 import * as Actions from 'actions/index';
 
 class ZipcodeFinder extends React.PureComponent {
+    static propTypes = {
+        deals: PropTypes.array,
+        zipcode: PropTypes.string,
+        city: PropTypes.string,
+        zipInRange: PropTypes.bool,
+    };
+
     constructor(props) {
         super(props);
 
@@ -20,10 +27,12 @@ class ZipcodeFinder extends React.PureComponent {
 
     isValid() {
         if (this.state.zipcode && this.state.zipcode.length === 5) {
-            return parseInt(this.state.zipcode).toString() === this.state.zipcode;
+            return (
+                parseInt(this.state.zipcode).toString() === this.state.zipcode
+            );
         }
 
-        this.setState({zipError: true});
+        this.setState({ zipError: true });
     }
 
     saveZip(event) {
@@ -38,7 +47,7 @@ class ZipcodeFinder extends React.PureComponent {
         this.setState({
             zipcode: event.target.value,
             zipError: false,
-        })
+        });
     }
 
     render() {
@@ -47,11 +56,9 @@ class ZipcodeFinder extends React.PureComponent {
                 <div className="zipcode-finder">
                     <div className="zipcode-finder__info">
                         <div className="zipcode-finder___count">
-                            {this.props.deals ? (
-                                `${this.props.deals.length} results for:`
-                            ) : (
-                                ''
-                            )}
+                            {this.props.deals && this.props.deals.length
+                                ? `${this.props.deals.length} results for:`
+                                : ''}
                         </div>
                         <div>{this.props.city ? '' : 'Zip Code'}</div>
                         <div className="zipcode-finder__zipcode">
@@ -76,21 +83,17 @@ class ZipcodeFinder extends React.PureComponent {
                         </div>
                     </div>
                 </div>
-                { this.state.zipError ?
+                {this.state.zipError ? (
                     <div className="zipcode-finder__errors">
                         <span>Please enter your 5-digit zip code.</span>
-                    </div> : ''
-                }
+                    </div>
+                ) : (
+                    ''
+                )}
             </div>
         );
     }
 }
-
-ZipcodeFinder.propTypes = {
-    zipcode: PropTypes.string,
-    city: PropTypes.string,
-    zipInRange: PropTypes.bool,
-};
 
 const mapStateToProps = state => {
     return {
@@ -101,4 +104,7 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, Actions)(ZipcodeFinder);
+export default connect(
+    mapStateToProps,
+    Actions
+)(ZipcodeFinder);

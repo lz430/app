@@ -12,11 +12,16 @@ import {
     makeDealTargetsAvailableLoading,
     makeDealTargetKey,
 } from 'selectors/index';
-import Line from "../containers/dealDetails/components/pricing/Line";
-import Label from "../containers/dealDetails/components/pricing/Label";
-import Value from "../containers/dealDetails/components/pricing/Value";
+import Line from '../containers/dealDetails/components/pricing/Line';
+import Label from '../containers/dealDetails/components/pricing/Label';
+import Value from '../containers/dealDetails/components/pricing/Value';
 
 class Targets extends React.PureComponent {
+    static propTypes = {
+        deal: PropTypes.object.isRequired,
+        targetsChanged: PropTypes.func.isRequired,
+    };
+
     componentWillMount() {
         this.props.requestTargets(this.props.deal);
     }
@@ -52,9 +57,7 @@ class Targets extends React.PureComponent {
                         ) : (
                             <div className="rebates__checkbox" />
                         )}
-                        <div>
-                            {strings.toTitleCase(target.targetName)}
-                        </div>
+                        <div>{strings.toTitleCase(target.targetName)}</div>
                     </div>
                 </Label>
             </Line>
@@ -92,8 +95,23 @@ class Targets extends React.PureComponent {
                     <div>
                         <Line>
                             <Label>Additional Rebates</Label>
-                            <div style={{fontSize: '.75em', marginLeft: '.25em'}}>Select all that apply</div>
-                            <div style={{fontStyle: 'italic', fontSize: '.75em', marginLeft: '.25em'}}>Proof of eligibility required.</div>
+                            <div
+                                style={{
+                                    fontSize: '.75em',
+                                    marginLeft: '.25em',
+                                }}
+                            >
+                                Select all that apply
+                            </div>
+                            <div
+                                style={{
+                                    fontStyle: 'italic',
+                                    fontSize: '.75em',
+                                    marginLeft: '.25em',
+                                }}
+                            >
+                                Proof of eligibility required.
+                            </div>
                         </Line>
                         {this.props.dealTargetsAvailable.map((target, index) =>
                             this.renderTarget(target, index)
@@ -121,7 +139,7 @@ const makeMapStateToProps = () => {
     const getDealTargetKey = makeDealTargetKey();
     const getDealTargetsAvailable = makeDealTargetsAvailable();
     const getDealTargetsAvailableLoading = makeDealTargetsAvailableLoading();
-    const mapStateToProps = (state, props) => {
+    return (state, props) => {
         return {
             zipcode: state.zipcode,
             targetsAvailable: state.targetsAvailable,
@@ -134,12 +152,9 @@ const makeMapStateToProps = () => {
             ),
         };
     };
-    return mapStateToProps;
 };
 
-Targets.propTypes = {
-    deal: PropTypes.object.isRequired,
-    targetsChanged: PropTypes.func.isRequired,
-};
-
-export default connect(makeMapStateToProps, Actions)(Targets);
+export default connect(
+    makeMapStateToProps,
+    Actions
+)(Targets);

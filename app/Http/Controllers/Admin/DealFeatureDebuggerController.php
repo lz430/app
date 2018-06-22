@@ -6,13 +6,13 @@ use App\Models\Deal;
 use App\Models\Feature;
 use App\Http\Controllers\Controller;
 use DeliverMyRide\JATO\JatoClient;
-use DeliverMyRide\VAuto\DealEquipmentMunger;
+use DeliverMyRide\VAuto\Deal\DealEquipmentMunger;
 
 class DealFeatureDebuggerController extends Controller
 {
     public function show(Deal $deal, JatoClient $client)
     {
-        $importer = new DealEquipmentMunger($deal, Feature::with('category')->get(), $client);
+        $importer = new DealEquipmentMunger($deal, $client);
         $equipment = collect($client->equipment->get($deal->version->jato_vehicle_id)->results);
 
         return view('admin.deal-feature-debugger')

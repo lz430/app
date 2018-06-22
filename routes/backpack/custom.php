@@ -17,10 +17,17 @@ Route::group([
 
     //
     // Models
+    CRUD::resource('deal', 'DealCrudController');
     CRUD::resource('dealer', 'DealerCrudController');
     CRUD::resource('user', 'UserCrudController');
     CRUD::resource('feature', 'FeatureCrudController');
     CRUD::resource('category', 'CategoryCrudController');
+
+    //
+    // Deal tools
+    Route::get('deal/{deal}/debugger', 'DealDebuggerController@show');
+    Route::get('deal/{deal}', 'DealAdminController@show');
+
 
     //
     // Reports
@@ -33,7 +40,6 @@ Route::group([
     Route::get('jato-logs', 'JatoLogController@index');
     Route::get('vauto-dump', 'VAutoDumpController');
     Route::get('statistics/deals', 'StatisticsController@deals');
-    Route::get('deal-debugger/{deal}', 'DealDebuggerController@show');
     Route::get('deal-feature-debugger/{deal}', 'DealFeatureDebuggerController@show');
     Route::post('deal-by-vin', 'DealDebuggerController@vinLookup');
 });

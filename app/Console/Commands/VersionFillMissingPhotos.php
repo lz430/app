@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use DeliverMyRide\Fuel\FuelClient;
-use DeliverMyRide\Fuel\VersionToFuel;
+use DeliverMyRide\Fuel\Manager\VersionToFuel;
 use App\Models\JATO\Version;
 
 use Illuminate\Console\Command;

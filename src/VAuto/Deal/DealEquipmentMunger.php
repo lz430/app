@@ -75,8 +75,8 @@ class DealEquipmentMunger
         $this->processVautoFeature();
 
         //
-        // Do some additional transformation
-        $this->extractAdditionalOptionCodes();
+        // Option codes & package codes
+        $this->buildOptionsAndPackages();
         $this->initializeOptionCodes();
 
         //
@@ -96,13 +96,6 @@ class DealEquipmentMunger
         //
         // Save discovered features to deal.
         $this->updateDealWithDiscoveredFeatures();
-
-        // Performs option/package code transformations
-        $this->findingAdditionalPackageCodesFromFeatures();
-        $this->extractAdditionalOptionCodes();
-        $this->stripPackageCodesFromOptions();
-
-        $this->reduceOptionCodesFromPackages();
 
         return $this->debug;
     }
@@ -171,7 +164,7 @@ class DealEquipmentMunger
         if (count($override)) {
             $this->option_codes = $override;
         } else {
-            $this->option_codes = $this->deal->option_codes;
+            $this->option_codes = array_merge($this->deal->option_codes, $this->deal->package_codes);
         }
     }
 
@@ -202,20 +195,52 @@ class DealEquipmentMunger
         return collect($this->client->option->get($this->version->jato_vehicle_id, 'O')->options);
     }
 
+    public function buildOptionsAndPackages()
+    {
+        $packages = $this->deal->package_codes ? $this->deal->package_codes : [];
+        $options = $this->deal->option_codes ? $this->deal->option_codes : [];
+
+        $packagesAndOptions = array_merge($packages, $options);
+        $packagesAndOptions = array_merge($packagesAndOptions, $this->extractPackageCodesFromVautoFeatures());
+        $packagesAndOptions = array_merge($packagesAndOptions, $this->extractAdditionalOptionCodes());
+        $packagesAndOptions = array_merge($packagesAndOptions, $this->extractPackagesOrOptionsFromTransmission());
+        $packagesAndOptions = array_filter($packagesAndOptions);
+        $packagesAndOptions = array_unique($packagesAndOptions);
+
+        $packages = $this->packages
+            ->reject(function($package) use ($packagesAndOptions) {
+              return !in_array($package->optionCode, $packagesAndOptions);
+            })
+            ->pluck('optionCode')
+            ->all();
+
+        $options = $this->options
+            ->reject(function($option) use ($packagesAndOptions) {
+                return !in_array($option->optionCode, $packagesAndOptions);
+            })
+            ->pluck('optionCode')
+            ->all();
+
+        $this->deal->package_codes = $packages;
+        $this->deal->option_codes = $options;
+        $this->deal->save();
+    }
+
     /**
      * Attempts to extract additional option codes for a given deal by checking how similar
      * a vauto feature is to a known jato optional equipment. if a feature is pretty close we assume
      * it's an option code the deal has and attach it to the vehicle.
      *
-     * TODO errors:
+     * TODO:
      *  - Alloy Seats vs Black Seats returns "4"
      */
     public function extractAdditionalOptionCodes()
     {
-        $option_codes = $original_options = $this->deal->option_codes;
 
         // TODO: Probably some smarter way to do this.
-        $options = $this->options
+        $allOptional = $this->packages->merge($this->options);
+
+        $options = $allOptional
             ->map(function ($option) {
                 return [$option->optionName, $option->optionCode];
             })->toArray();
@@ -244,66 +269,15 @@ class DealEquipmentMunger
                 }
             }
         }
-        $found_option_codes = $additional_option_codes;
-
-        $additional_option_codes = array_diff($additional_option_codes, $original_options);
-        $option_codes = array_merge($additional_option_codes, $option_codes);
-        //$this->debug['equipment_extracted_codes'] = array_merge($this->debug['equipment_extracted_codes'], $additional_option_codes);
-
-
-        if ($option_codes != $original_options) {
-            $this->deal->option_codes = $option_codes;
-            $this->deal->save();
-        }
-        return $found_option_codes;
+        return $additional_option_codes;
     }
 
     /**
-     * Grabs all available package codes from jato for a vehicle
+     * @return array
      */
-    private function getAllAvailablePackageCodes()
+    private function extractPackageCodesFromVautoFeatures()
     {
-        $findPackages = $this->packages;
-        $packagesOnThisVehicle = $findPackages;
-
-        $foundPackages = [];
-        foreach($packagesOnThisVehicle as $package) {
-            $foundPackages[] = $package->optionCode;
-        }
-
-        return $foundPackages;
-    }
-
-    /**
-     * Compares the options codes that are in the deals.option_codes column and removes the found package
-     * codes from the list to place into the deals.package_codes column
-     */
-    private function stripPackageCodesFromOptions()
-    {
-        $optionCodesFromCsv = $this->deal->option_codes;
-        $jatoPackagesOnVehicle = $this->getAllAvailablePackageCodes();
-        $compareOptionsWithPackages = array_intersect($optionCodesFromCsv, $jatoPackagesOnVehicle);
-        $pullPackagesOutOfList = array_diff($optionCodesFromCsv, $compareOptionsWithPackages);
-
-        $this->deal->package_codes = array_values($pullPackagesOutOfList);
-        $this->deal->save();
-    }
-
-    /**
-     * Reduces the deals.option_codes table column data by comparing the package codes and only leaving the options codes
-     * in the deals.option_codes column instead of before leaving both package and option codes together
-     */
-    private function reduceOptionCodesFromPackages()
-    {
-        $filter_options = array_diff($this->deal->option_codes, $this->deal->package_codes);
-        $this->deal->option_codes = array_values($filter_options);
-        $this->deal->save();
-    }
-
-    private function findingAdditionalPackageCodesFromFeatures()
-    {
-        // Option Codes
-        $optionCodes = array_filter($this->deal->option_codes);
+        $packageCodes = [];
 
         $rules = [
             "/(?<=(?i)Quick Order Package )(.*?)(?=\|| )/",
@@ -315,15 +289,48 @@ class DealEquipmentMunger
             $matches = [];
             preg_match($rule, $this->deal->vauto_features, $matches);
             if (count($matches)) {
-                $optionCodes += $matches;
+                $packageCodes += $matches;
             }
         }
-        $optionCodes = array_unique($optionCodes);
+        $packageCodes = array_unique($packageCodes);
+        return $packageCodes;
+    }
 
-        if ($optionCodes != $this->deal->option_codes) {
-            $this->deal->option_codes = $optionCodes;
-            $this->deal->save();
+    /**
+     * In many situations manual trans is standard and option codes / vauto features do not have any info
+     * regarding transmission, so we see if we've got any options or packages for transmissions that might match.
+     */
+    private function extractPackagesOrOptionsFromTransmission() {
+        $transmission = $this->deal->transmission;
+
+        // Most packages actually include the word transmission but vauto does not.
+        if (!str_contains($transmission, "Transmission")) {
+            $transmission .= " Transmission";
         }
+
+        $allOptional = $this->packages->merge($this->options);
+        $codes = $allOptional
+            ->reject(function($option) use ($transmission) {
+                $score = levenshtein($option->optionName, $transmission);
+                if ($score < 3) {
+                    $this->debug['equipment_extracted_codes'][] = [
+                        'Option Code' => $option->optionCode,
+                        'Option Title' => $option->optionName,
+                        'Feature' => "Transmission",
+                        'Score' => $score,
+                    ];
+
+                    return false;
+                }
+                return true;
+            })
+            ->map(function($option) {
+                return $option->optionCode;
+            })
+            ->unique()
+            ->all();
+
+        return $codes;
     }
 
     /**
@@ -347,34 +354,6 @@ class DealEquipmentMunger
     }
 
     /**
-     * This is not at all performant, but getting pretty desperate.
-     */
-    public function buildFeaturesFromGuessedVautoNames()
-    {
-
-        $vautoFeatures = explode("|", $this->deal->vauto_features);
-        $vautoFeatures = array_map('trim', $vautoFeatures);
-
-        $features = $this->features
-            ->reject(function ($feature) use ($vautoFeatures) {
-                foreach ($vautoFeatures as $name) {
-                    $score = levenshtein($name, $feature[0]);
-                    if ($score < 5) {
-                        return false;
-                    }
-                }
-                return true;
-            });
-
-        //print "SUP";
-        //print_r($features->toArray());
-
-        //$this->categorizeDiscoveredFeatures($features);
-
-        return null;
-    }
-
-    /**
      *
      */
     public function buildFeaturesForMappedVautoData()
@@ -390,7 +369,7 @@ class DealEquipmentMunger
                     'feature' => $feature,
                     'equipment' => (object)[
                         'optionId' => 0,
-                        'schemaId' => "VA|".$feature->title,
+                        'schemaId' => "VA|" . $feature->title,
                     ],
                 ];
             });
@@ -489,6 +468,7 @@ class DealEquipmentMunger
         $parentSchemasIds = [
             59801,  // mobile (android etc)
             1301, // audio system 1301
+            17801, // Front seat
         ];
 
         $features = $this->equipment
@@ -722,6 +702,7 @@ class DealEquipmentMunger
             })
             ->pluck('value')
             ->map(function ($value) {
+                print_r($value);
                 if (str_contains(strtolower($value), ['cloth', 'synthetic suede'])) {
                     return 'seat_main_upholstery_cloth';
                 } elseif (str_contains(strtolower($value), ['synthetic leather', 'vinyl'])) {

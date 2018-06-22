@@ -66,8 +66,16 @@ const util = {
         }
 
         return (
-            JSON.stringify(Object.keys(a).filter(k => k !== '_persist').sort()) ===
-            JSON.stringify(Object.keys(b).filter(k => k !== '_persist').sort())
+            JSON.stringify(
+                Object.keys(a)
+                    .filter(k => k !== '_persist')
+                    .sort()
+            ) ===
+            JSON.stringify(
+                Object.keys(b)
+                    .filter(k => k !== '_persist')
+                    .sort()
+            )
         );
     },
     getClosestNumberInRange(value, values) {
@@ -113,29 +121,11 @@ const util = {
         return targetKey;
     },
     getBestOfferKeyForDeal(deal, zipcode, paymentType, selectedTargets) {
-        const vehicleId = deal.version.jato_vehicle_id;
         const targetString = R.sort((a, b) => {
             return a - b;
         }, selectedTargets).join('-');
 
-        return `${vehicleId}-${zipcode}-${paymentType}-${targetString}`;
-    },
-    groupDealsByMakeModelYear(deals) {
-        return R.values(
-            R.mapObjIndexed(
-                (index, key, value) => {
-                    return {
-                        make: value[key][0].make,
-                        model: value[key][0].model,
-                        year: value[key][0].year,
-                        deals: value[key]
-                    };
-                },
-                R.groupBy(deal => {
-                    return `${deal.year} ${deal.make} ${deal.model}`;
-                }, deals)
-            )
-        );
+        return `${deal.id}-${zipcode}-${paymentType}-${targetString}`;
     },
 };
 

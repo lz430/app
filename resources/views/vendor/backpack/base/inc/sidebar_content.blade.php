@@ -19,8 +19,14 @@
     </a>
 </li>
 <li>
-    <a href="/admin/dealer">
+    <a href="/admin/deal">
         <i class="fa fa-car"></i>
+        <span>Deals</span>
+    </a>
+</li>
+<li>
+    <a href="/admin/dealer">
+        <i class="fa fa-map"></i>
         <span>Dealers</span>
     </a>
 </li>
