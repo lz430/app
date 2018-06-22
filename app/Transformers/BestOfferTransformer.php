@@ -21,19 +21,7 @@ class BestOfferTransformer extends TransformerAbstract
        return $data;
     }
 
-    public function getTermLengths($params)
-    {
-        $data = $this->getData($params);
-        $terms = $data['leaseTerms'];
-
-        $months = [];
-        foreach($terms as $term){
-            $months[] = $term->QualifyingTermEnd;
-        }
-        return $months;
-    }
-
-    public function getRatesForTerms($params)
+    public function getRatesForLeases($params)
     {
         $data = $this->getData($params);
         $terms = $data->leaseTerms;
@@ -62,11 +50,28 @@ class BestOfferTransformer extends TransformerAbstract
         return array_values(array_sort($residuals));
     }
 
+    /**
+     * @param $params
+     * @return mixed
+     * Gets the total cash rebates if any exist for the various payment scenarios
+     */
     public function getCashRebates($params)
     {
         $data = $this->getData($params);
         $cashRebates = $data->cashRebates;
         return $cashRebates->totalValue;
+    }
+
+    /**
+     * @param $params
+     * @return mixed
+     * Gets lease incentive cash from the leaseTerms array if a lease has any CCR applied for the leasing company
+     */
+    public function getLeaseCash($params)
+    {
+        $data = $this->getData($params);
+        $leaseCash = $data->leaseTerms[0];
+        return $leaseCash->CCR;
     }
 
     public function getInitialResidualPercent($params, $timeFrame)
@@ -86,8 +91,8 @@ class BestOfferTransformer extends TransformerAbstract
         }
 
         if($params['paymentType'] === 'lease'){
-            $leaseData = $this->getRatesForTerms($params);
-            $cashValue['totalValue'] = $this->getCashRebates($params);
+            $leaseData = $this->getRatesForLeases($params);
+            $cashValue['totalValue'] = $this->getCashRebates($params) + $this->getLeaseCash($params); // TODO : sloppy, fix
             $array = [
                 'rates' => $leaseData,
                 'cash' => $cashValue

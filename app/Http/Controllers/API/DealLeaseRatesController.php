@@ -14,6 +14,7 @@ class DealLeaseRatesController extends BaseAPIController
     {
         $this->client = $client;
     }
+
     public function getRatesForTerms($data)
     {
         $data = $data;
@@ -41,13 +42,6 @@ class DealLeaseRatesController extends BaseAPIController
             $residuals[] = array('annualMileage' => $mile, 'residualPercent' => $rates);
         }
         return array_values(array_sort($residuals));
-    }
-
-    public function getCashRebates($data)
-    {
-        $data = $data;
-        $cashRebates = $data->cashRebates;
-        return $cashRebates->totalValue;
     }
 
     public function getInitialResidualPercent($data, $timeFrame)

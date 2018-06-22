@@ -98,7 +98,7 @@ class Client
                 'Type' => 'Financed',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
-                'TaxIndex' => '1',
+                'TaxIndex' => '0',
                 'FinanceTaxes' => 'No',
                 'RoundToOption' => 'NearestPenny',
             ],
