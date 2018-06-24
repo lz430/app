@@ -18,11 +18,12 @@ class DealToVehicle
 
         ],
         'BY_TRIM' => [
-
+            'Momentum' => 'T6 Momentum'
         ],
     ];
     private const BODY_STYLE_MAP = [
         'Sport Utility Vehicle' => "Sport Utility",
+        'Pickup' => 'Regular Cab'
     ];
 
     private $client;
