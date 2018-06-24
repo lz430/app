@@ -16,8 +16,6 @@ Route::post('apply-or-purchase', 'ApplyOrPurchaseController@applyOrInitiatePurch
 Route::get('request-email', 'ApplyOrPurchaseController@requestEmail')->name('request-email');
 Route::post('receive-email', 'ApplyOrPurchaseController@receiveEmail')->name('receive-email');
 
-Route::post('zip-codes', 'ZipCodesController@store')->name('zipCodes.store');
-
 Route::group(['middleware' => 'auth'], function () {
     /** Purchase Flow */
     Route::post('purchase', 'ApplyOrPurchaseController@purchase')->name('purchase');

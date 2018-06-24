@@ -33,7 +33,6 @@
 
                 <div class="box-body">
                     <ul>
-                        <li><a href="/admin/zip-tester/48103">ZIP Tester</a></li>
                         <li><a href="/admin/jato-logs/">JATO Logs</a></li>
                         <li><a href="/admin/statistics/deals">Deals Statistics</a></li>
                         <li><a href="/admin/vauto-dump/" download>VAuto Dump</a></li>

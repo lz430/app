@@ -13,16 +13,15 @@ class DealsByModelYearController extends BaseAPIController
             'make_ids' => 'sometimes|required|array',
             'body_styles' => 'sometimes|required|array',
             'features' => 'sometimes|required|array',
-            'fuel_type' => 'sometimes|required|string',
-            'transmission_type' => 'sometimes|required|string|in:automatic,manual',
             'sort' => 'sometimes|required|string',
-            'zipcode' => 'sometimes|required|string',
+            'latitude' => 'sometimes|numeric',
+            'longitude' => 'sometimes|numeric',
         ]);
 
         $query = new ModelYearSearch();
 
-        if ($request->get('zipcode')) {
-            $query = $query->filterMustLocation($request->get('zipcode'), 'zipcode');
+        if ($request->get('latitude') && $request->get('longitude')) {
+            $query = $query->filterMustLocation(['lat' => $request->get('latitude'), 'lon' => $request->get('longitude')]);
         }
 
         if ($request->get('body_styles')) {

@@ -19,9 +19,7 @@ class DealsController extends BaseAPIController
             'make_ids' => 'sometimes|required|array',
             'model_ids' => 'sometimes|required|array',
             'body_styles' => 'sometimes|required|array',
-            'fuel_type' => 'sometimes|required|string',
             'year' => 'sometimes|required|digits:4',
-            'transmission_type' => 'sometimes|required|string|in:automatic,manual',
             'sort' => 'sometimes|required|string',
             'latitude' => 'sometimes|numeric',
             'longitude' => 'sometimes|numeric',
@@ -29,8 +27,8 @@ class DealsController extends BaseAPIController
 
         $query = new DealSearch();
 
-        if ($request->get('zipcode')) {
-            $query = $query->filterMustLocation(['lat' => $request->get('latitude'), 'lon' => $request->get('longitude')], 'latlon');
+        if ($request->get('latitude') && $request->get('longitude')) {
+            $query = $query->filterMustLocation(['lat' => $request->get('latitude'), 'lon' => $request->get('longitude')]);
         }
 
         if ($request->get('body_styles')) {

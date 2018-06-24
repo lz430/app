@@ -5,7 +5,6 @@ namespace App\Services\Search;
 use App\Models\Deal;
 use App\Models\JATO\Make;
 use App\Models\JATO\VehicleModel;
-use App\Models\Zipcode;
 
 
 abstract class BaseSearch
@@ -63,12 +62,6 @@ abstract class BaseSearch
         if ($format == 'latlon') {
             $lat = (float) $location['lat'];
             $lon = (float) $location['lon'];
-        } else if($format == 'zipcode') {
-            $zipcode = Zipcode::where('zipcode', $location)->first();
-            if ($zipcode) {
-                $lat = (float) $zipcode->latitude;
-                $lon = (float) $zipcode->longitude;
-            }
         }
 
         if (!isset($lat)) {
