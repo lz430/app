@@ -12,9 +12,9 @@ import {
     makeDealTargetsAvailableLoading,
     makeDealTargetKey,
 } from 'selectors/index';
-import Line from '../containers/dealDetails/components/pricing/Line';
-import Label from '../containers/dealDetails/components/pricing/Label';
-import Value from '../containers/dealDetails/components/pricing/Value';
+import Line from '../pages/deal-detail/components/pricing/Line';
+import Label from '../pages/deal-detail/components/pricing/Label';
+import Value from '../pages/deal-detail/components/pricing/Value';
 
 class Targets extends React.PureComponent {
     static propTypes = {

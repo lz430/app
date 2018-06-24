@@ -5,15 +5,15 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import configureStore from 'store';
 
-import Filter from 'pages/deal-list/Container';
-import FilterBeta from 'pages/deal-list-beta/Container';
+import DealList from 'pages/deal-list/Container';
+import DealListBeta from 'pages/deal-list-beta/Container';
+import DealDetail from 'pages/deal-detail/Container';
+
 import ComparePage from 'pages/compare/Container';
 
 import CheckoutConfirm from 'pages/checkout-confirm/Container';
 import CheckoutFinancing from 'pages/checkout-financing/Container';
 import CheckoutComplete from 'pages/checkout-complete/Container';
-
-import DealDetails from 'containers/DealDetails';
 
 const { store, persistor } = configureStore();
 
@@ -24,7 +24,7 @@ Array.from(document.getElementsByTagName('FilterPage')).map(element => {
     ReactDOM.render(
         <Provider store={store}>
             <PersistGate persistor={persistor}>
-                <Filter />
+                <DealList />
             </PersistGate>
         </Provider>,
         element
@@ -38,7 +38,7 @@ Array.from(document.getElementsByTagName('BrowsePage')).map(element => {
     ReactDOM.render(
         <Provider store={store}>
             <PersistGate persistor={persistor}>
-                <FilterBeta />
+                <DealListBeta />
             </PersistGate>
         </Provider>,
         element
@@ -80,7 +80,7 @@ Array.from(document.getElementsByTagName('DealDetails')).map(element => {
     ReactDOM.render(
         <Provider store={store}>
             <PersistGate persistor={persistor}>
-                <DealDetails
+                <DealDetail
                     deal={JSON.parse(element.getAttribute('deal')).data}
                     intendedRoute={window.location.pathname}
                 />

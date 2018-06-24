@@ -4,7 +4,7 @@ import commonReducers from 'reducers/index';
 import appUserReducer from 'apps/user/reducers';
 import appPageReducer from 'apps/page/reducers';
 
-import dealDetailsReducer from 'containers/dealDetails/reducer';
+import dealDetailsReducer from 'pages/deal-detail/reducer';
 import dealListReducer from 'pages/deal-list/reducers';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -17,7 +17,7 @@ const pagesReducer = combineReducers({
 const pagesPersistConfig = {
     key: 'pages',
     storage: storage,
-    blacklist: ['dealList'],
+    blacklist: ['dealList', 'dealDetail'],
 };
 
 export default combineReducers({

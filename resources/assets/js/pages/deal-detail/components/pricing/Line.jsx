@@ -2,7 +2,7 @@ import React from 'react';
 
 class Line extends React.PureComponent {
     render() {
-        const style = {margin: '.5em 0', ...this.props.style};
+        const style = { margin: '.5em 0', ...this.props.style };
 
         if (this.props.isSemiImportant) {
             style.fontWeight = 'bold';
@@ -13,16 +13,14 @@ class Line extends React.PureComponent {
             style.fontSize = '1.25em';
         }
 
-        return (
-            <div style={style}>{this.props.children}</div>
-        )
+        return <div style={style}>{this.props.children}</div>;
     }
 }
 
 Line.defaultProps = {
     isImportant: false,
     isSemiImportant: false,
-    style: {}
+    style: {},
 };
 
 export default Line;

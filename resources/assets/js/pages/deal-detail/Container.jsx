@@ -14,19 +14,19 @@ import zondicons from 'zondicons';
 import ImageGallery from 'react-image-gallery';
 import AccuPricingModal from 'components/AccuPricingModal';
 import DealPricing from 'src/DealPricing';
-import { makeDealPricing } from '../selectors';
+import { makeDealPricing } from 'selectors/index';
 import util from 'src/util';
-import CashPricingPane from './dealDetails/components/pricing/CashPane';
-import FinancePricingPane from './dealDetails/components/pricing/FinancePane';
-import LeasePricingPane from './dealDetails/components/pricing/LeasePane';
-import PaymentTypes from './dealDetails/components/pricing/PaymentTypes';
-import mapAndBindActionCreators from '../util/mapAndBindActionCreators';
+import CashPricingPane from './components/pricing/CashPane';
+import FinancePricingPane from './components/pricing/FinancePane';
+import LeasePricingPane from './components/pricing/LeasePane';
+import PaymentTypes from './components/pricing/PaymentTypes';
+import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
 
-import * as selectDiscountActions from './dealDetails/modules/selectDiscount';
-import * as financeActions from './dealDetails/modules/finance';
-import * as leaseActions from './dealDetails/modules/lease';
+import * as selectDiscountActions from './modules/selectDiscount';
+import * as financeActions from './modules/finance';
+import * as leaseActions from './modules/lease';
 
-class DealDetails extends React.PureComponent {
+class Container extends React.PureComponent {
     static propTypes = {
         deal: PropTypes.shape({
             year: PropTypes.string.isRequired,
@@ -528,4 +528,4 @@ const mapDispatchToProps = mapAndBindActionCreators({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(DealDetails);
+)(Container);

@@ -17,7 +17,7 @@ class PaymentTypes extends React.PureComponent {
                             this.props.selectedTab === 'cash'
                                 ? 'tabs__tab--selected'
                                 : ''
-                            }`}
+                        }`}
                     >
                         Cash
                     </div>
@@ -29,7 +29,7 @@ class PaymentTypes extends React.PureComponent {
                             this.props.selectedTab === 'finance'
                                 ? 'tabs__tab--selected'
                                 : ''
-                            }`}
+                        }`}
                     >
                         Finance
                     </div>
@@ -41,18 +41,18 @@ class PaymentTypes extends React.PureComponent {
                             this.props.selectedTab === 'lease'
                                 ? 'tabs__tab--selected'
                                 : ''
-                            }`}
+                        }`}
                     >
                         Lease
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }
 
 PaymentTypes.defaultProps = {
-    onChange: (tabName) => {}
+    onChange: tabName => {},
 };
 
 export default PaymentTypes;

@@ -1,11 +1,9 @@
 import React from 'react';
-import Targets from "../../../../../components/Targets";
+import Targets from '../../../../../components/Targets';
 
 class Rebates extends React.PureComponent {
     render() {
-        return (
-            <div />
-        );
+        return <div />;
 
         // First pass might be to pass-thru to <Targets /> but we may
         // end up just completely rewriting Rebates entirely now
@@ -17,12 +15,12 @@ class Rebates extends React.PureComponent {
                 deal={this.props.dealPricing.deal()}
                 targetsChanged={this.props.onChange}
             />
-        )
+        );
     }
 }
 
 Rebates.defaultProps = {
-    onChange: () => {}
+    onChange: () => {},
 };
 
 export default Rebates;
