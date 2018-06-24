@@ -38,7 +38,7 @@ const initialState = {
 const config = {
     key: 'root',
     storage,
-    blacklist: ['pages'],
+    blacklist: ['pages', 'page'],
 };
 
 export default () => {

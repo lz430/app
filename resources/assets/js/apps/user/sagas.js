@@ -16,6 +16,8 @@ import api from 'store/api';
 
 import { REQUEST_IP_LOCATION_INFO, REQUEST_LOCATION } from './consts';
 import { receiveLocation } from './actions';
+import { getCurrentPage } from 'apps/page/selectors';
+import { requestSearch } from 'pages/deal-list/actions';
 
 /*******************************************************************
  * Request IP Location
@@ -82,6 +84,14 @@ export function* requestLocation(data) {
     }
 
     yield put(receiveLocation(location));
+
+    //
+    // TODO: This is going to get sketchy long term.
+    const currentPage = yield select(getCurrentPage);
+
+    if (currentPage === 'deal-list') {
+        yield put(requestSearch());
+    }
 }
 
 /*******************************************************************

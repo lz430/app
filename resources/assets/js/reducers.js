@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import commonReducers from 'reducers/index';
 
 import appUserReducer from 'apps/user/reducers';
+import appPageReducer from 'apps/page/reducers';
 
 import dealDetailsReducer from 'containers/dealDetails/reducer';
 import dealListReducer from 'pages/deal-list/reducers';
@@ -22,5 +23,6 @@ const pagesPersistConfig = {
 export default combineReducers({
     common: commonReducers,
     user: appUserReducer,
+    page: appPageReducer,
     pages: persistReducer(pagesPersistConfig, pagesReducer),
 });

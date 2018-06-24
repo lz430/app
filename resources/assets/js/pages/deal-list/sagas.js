@@ -29,6 +29,7 @@ import * as DealListActions from './actions';
 
 import getDealList, { getSearchQuery } from './selectors';
 import { requestIpLocation } from 'apps/user/sagas';
+import { setCurrentPage } from 'apps/page/actions';
 
 /*******************************************************************
  * Request Search
@@ -94,7 +95,8 @@ function* requestSearch() {
 /*******************************************************************
  * Init
  ********************************************************************/
-function* initDealList() {
+function* init() {
+    yield put(setCurrentPage('deal-list'));
     yield fork(requestIpLocation);
 
     try {
@@ -126,5 +128,5 @@ export function* watchRequestSearch() {
 }
 
 export function* watchInit() {
-    yield takeEvery(INIT, initDealList);
+    yield takeEvery(INIT, init);
 }

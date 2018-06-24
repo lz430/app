@@ -1,6 +1,11 @@
 import * as ActionTypes from './consts';
-import api from '../../src/api';
-import util from '../../src/util';
+import util from 'src/util';
+
+export function requestSearch() {
+    return {
+        type: ActionTypes.SEARCH_REQUEST,
+    };
+}
 
 export function initDealListData() {
     return {
