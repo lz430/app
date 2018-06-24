@@ -24,9 +24,12 @@ export default class DealPricing {
         return this.data.deal.make;
     }
 
+    zipcode() {
+        return this.data.zipcode;
+    }
+
     allLeaseCashDueOptions() {
-        return 0;
-        //return [500, 1000, 2500];
+        return [0];
     }
 
     bestOfferIsLoading() {
@@ -87,9 +90,7 @@ export default class DealPricing {
     }
 
     leaseCashDueValue() {
-        //return this.data.leaseCashDue;
-        //return this.data.leaseCashDue !== null ? this.data.leaseCashDue : null;
-        return this.data.leaseCashDue === null ? 487 : this.data.leaseCashDue;
+        return 0;
     }
 
     leaseCashDue() {
