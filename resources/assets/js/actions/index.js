@@ -3,14 +3,6 @@ import util from 'src/util';
 import R from 'ramda';
 import * as ActionTypes from 'actiontypes/index';
 
-export function requestDealQuote(deal) {
-    console.log('requestDealQuote');
-    return {
-        type: ActionTypes.REQUEST_DEAL_QUOTE,
-        deal: deal,
-    };
-}
-
 export function toggleSearchFinancing(financing) {
     return dispatch => {
         dispatch({

@@ -1,20 +1,36 @@
+import React from 'react';
+import { connect } from 'react-redux';
+
 import * as Actions from 'actions/index';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
-import ConfirmDeal from 'components/ConfirmDeal';
-import { connect } from 'react-redux';
+import ConfirmDeal from './components/ConfirmDeal';
 import Modal from 'components/Modal';
 import PropTypes from 'prop-types';
 import purchase from 'src/purchase';
-import React from 'react';
 import DealImage from 'components/Deals/DealImage';
+
 import {
     makeDealBestOfferTotalValue,
     makeDealBestOffer,
     makeDealPricing,
 } from 'selectors/index';
+
 import DealPricing from 'src/DealPricing';
 
-class ConfirmDetails extends React.PureComponent {
+class Container extends React.PureComponent {
+    static propTypes = {
+        deal: PropTypes.shape({
+            year: PropTypes.string.isRequired,
+            msrp: PropTypes.number.isRequired,
+            employee_price: PropTypes.number.isRequired,
+            supplier_price: PropTypes.number.isRequired,
+            make: PropTypes.string.isRequired,
+            model: PropTypes.string.isRequired,
+            id: PropTypes.number.isRequired,
+            vin: PropTypes.string.isRequired,
+        }),
+    };
+
     renderCalculatorModal() {
         return (
             <Modal
@@ -74,19 +90,6 @@ class ConfirmDetails extends React.PureComponent {
     }
 }
 
-ConfirmDetails.propTypes = {
-    deal: PropTypes.shape({
-        year: PropTypes.string.isRequired,
-        msrp: PropTypes.number.isRequired,
-        employee_price: PropTypes.number.isRequired,
-        supplier_price: PropTypes.number.isRequired,
-        make: PropTypes.string.isRequired,
-        model: PropTypes.string.isRequired,
-        id: PropTypes.number.isRequired,
-        vin: PropTypes.string.isRequired,
-    }),
-};
-
 const makeMapStateToProps = () => {
     const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
     const getDealBestOffer = makeDealBestOffer();
@@ -111,4 +114,4 @@ const makeMapStateToProps = () => {
 export default connect(
     makeMapStateToProps,
     Actions
-)(ConfirmDetails);
+)(Container);

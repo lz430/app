@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import api from 'src/api';
 
-class Financing extends Component {
+class Container extends Component {
     static propTypes = {
         featuredPhoto: PropTypes.object.isRequired,
         purchase: PropTypes.object.isRequired,
@@ -106,4 +106,4 @@ class Financing extends Component {
     }
 }
 
-export default Financing;
+export default Container;

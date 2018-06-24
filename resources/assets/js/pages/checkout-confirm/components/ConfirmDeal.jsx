@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import * as Actions from 'actions/index';
 import { connect } from 'react-redux';
 import { makeDealBestOfferTotalValue, makeDealPricing } from 'selectors/index';
-import InfoModalData from './InfoModalData';
+import InfoModalData from '../../../components/InfoModalData';
 import DealPricing from 'src/DealPricing';
 import R from 'ramda';
 

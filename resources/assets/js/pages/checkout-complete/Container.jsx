@@ -10,7 +10,7 @@ import util from 'src/util';
 import miscicons from 'miscicons';
 import { makeDealBestOfferTotalValue } from 'selectors/index';
 
-class ThankYouPage extends React.PureComponent {
+class Container extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -324,4 +324,4 @@ const makeMapStateToProps = () => {
 export default connect(
     makeMapStateToProps,
     Actions
-)(ThankYouPage);
+)(Container);

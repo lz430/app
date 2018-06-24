@@ -3,8 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import R from 'ramda';
 
-import ZipcodeFinder from 'components/ZipcodeFinder';
-
+import ZipcodeFinder from './ZipcodeFinder';
 import SidebarFilter from './SidebarFilter';
 import FilterClose from './FilterClose';
 import FilterStyleSelector from './FilterStyleSelector';
@@ -14,6 +13,7 @@ import FilterFeatureSelector from './FilterFeatureSelector';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import util from 'src/util';
+
 import {
     toggleStyle,
     toggleFeature,

@@ -9,10 +9,11 @@ import Filter from 'pages/deal-list/Container';
 import FilterBeta from 'pages/deal-list-beta/Container';
 import ComparePage from 'pages/compare/Container';
 
-import Financing from 'containers/Financing';
+import CheckoutConfirm from 'pages/checkout-confirm/Container';
+import CheckoutFinancing from 'pages/checkout-financing/Container';
+import CheckoutComplete from 'pages/checkout-complete/Container';
+
 import DealDetails from 'containers/DealDetails';
-import ConfirmDetails from 'containers/ConfirmDetails';
-import ThankYouPage from 'containers/ThankYouPage';
 
 const { store, persistor } = configureStore();
 
@@ -49,7 +50,7 @@ Array.from(document.getElementsByTagName('BrowsePage')).map(element => {
  */
 Array.from(document.getElementsByTagName('Financing')).map(element => {
     ReactDOM.render(
-        <Financing
+        <CheckoutFinancing
             featuredPhoto={DeliverMyRide.featuredPhoto}
             purchase={DeliverMyRide.purchase}
             user={DeliverMyRide.user}
@@ -96,7 +97,7 @@ Array.from(document.getElementsByTagName('ConfirmDetails')).map(element => {
     ReactDOM.render(
         <Provider store={store}>
             <PersistGate persistor={persistor}>
-                <ConfirmDetails
+                <CheckoutConfirm
                     deal={JSON.parse(element.getAttribute('deal')).data}
                     intendedRoute={window.location.pathname}
                 />
@@ -113,7 +114,7 @@ Array.from(document.getElementsByTagName('ThankYouPage')).map(element => {
     ReactDOM.render(
         <Provider store={store}>
             <PersistGate persistor={persistor}>
-                <ThankYouPage
+                <CheckoutComplete
                     purchase={JSON.parse(element.getAttribute('purchase'))}
                     deal={JSON.parse(element.getAttribute('deal'))}
                     features={JSON.parse(element.getAttribute('features'))}

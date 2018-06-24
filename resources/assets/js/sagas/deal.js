@@ -1,7 +1,7 @@
 import { makeDealPricing } from 'selectors/index';
 import DealPricing from 'src/DealPricing';
 import { cancelRequest } from 'store/httpclient';
-import getCommon from 'common/selectors';
+import getCommon from 'apps/common/selectors';
 
 import {
     all,
