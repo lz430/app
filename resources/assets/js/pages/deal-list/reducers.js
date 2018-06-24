@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import * as ActionTypes from './consts';
 
 import util from 'src/util';
+import R from 'ramda';
 const urlStyle = util.getInitialBodyStyleFromUrl();
 const urlSize = util.getInitialSizeFromUrl();
 
@@ -219,6 +220,21 @@ const reducer = function(state = initialState, action = {}) {
                 },
             };
 
+        case ActionTypes.CLEAR_ALL_FILTERS:
+            return {
+                ...state,
+                deals: [],
+                page: 1,
+                searchQuery: {
+                    ...state.searchQuery,
+                    features: [],
+                },
+            };
+
+        case ActionTypes.CHOOSE_YEAR:
+            return Object.assign({}, state, {
+                selectedYear: action.selectedYear,
+            });
         default:
             return state;
     }

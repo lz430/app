@@ -140,20 +140,6 @@ const reducer = (state = initialState, action) => {
                 selectedTab: action.data,
             };
 
-        case ActionTypes.RECEIVE_MORE_DEALS:
-            return Object.assign({}, state, {
-                deals: R.concat(state.deals || [], action.data.data.data),
-                dealPage: R.min(
-                    action.data.data.meta.pagination.current_page,
-                    action.data.data.meta.pagination.total_pages
-                ),
-                requestingMoreDeals: false,
-            });
-
-        case ActionTypes.CHOOSE_YEAR:
-            return Object.assign({}, state, {
-                selectedYear: action.selectedYear,
-            });
         case ActionTypes.UPDATE_RESIDUAL_PERCENT:
             return Object.assign({}, state, {
                 residualPercent: action.residualPercent,
@@ -176,16 +162,6 @@ const reducer = (state = initialState, action) => {
         case ActionTypes.CLEAR_SELECTED_DEAL:
             return Object.assign({}, state, { selectedDeal: null });
 
-        case ActionTypes.CLEAR_ALL_FILTERS:
-            return {
-                ...state,
-                deals: [],
-                searchQuery: {
-                    ...state.searchQuery,
-                    page: 1,
-                    features: [],
-                },
-            };
         case ActionTypes.TOGGLE_COMPARE:
             return {
                 ...state,

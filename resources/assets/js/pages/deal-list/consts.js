@@ -21,7 +21,6 @@ export const CLEAR_MODEL_YEAR = `${namespace}_CLEAR_MODEL_YEAR`;
 export const RECEIVE_DEALS = `${namespace}_RECEIVE_DEALS`;
 export const TOGGLE_MAKE = `${namespace}_TOGGLE_MAKE`;
 export const TOGGLE_MODEL = `${namespace}_TOGGLE_MODEL`;
-export const RECEIVE_MORE_DEALS = `${namespace}_RECEIVE_MORE_DEALS`;
 
 export const TOGGLE_FEATURE = `${namespace}_TOGGLE_FEATURE`;
 export const TOGGLE_STYLE = `${namespace}_TOGGLE_STYLE`;

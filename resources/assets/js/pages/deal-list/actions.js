@@ -41,15 +41,6 @@ export function receiveFeatureCategories(data) {
     };
 }
 
-export function receiveMoreDeals(data) {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.RECEIVE_MORE_DEALS,
-            data: data,
-        });
-    };
-}
-
 export function toggleStyle(style) {
     return (dispatch, getState) => {
         const selectedStyles = util.toggleItem(
