@@ -1,6 +1,7 @@
 import { makeDealPricing } from 'selectors/index';
 import DealPricing from 'src/DealPricing';
-import axios from 'axios';
+import { cancelRequest } from 'store/httpclient';
+import getCommon from 'common/selectors';
 
 import {
     all,
@@ -39,9 +40,7 @@ function* requestDealBestOffer(deal, zipcode, paymentType, targets) {
         targets
     );
 
-    const CancelToken = axios.CancelToken;
-    const source = CancelToken.source();
-
+    const source = cancelRequest();
     let results = null;
 
     try {
@@ -79,8 +78,7 @@ function* requestDealBestOffer(deal, zipcode, paymentType, targets) {
  * @returns {IterableIterator<*|CallEffect>}
  */
 function* requestDealLeaseRates(deal, zipcode) {
-    const CancelToken = axios.CancelToken;
-    const source = CancelToken.source();
+    const source = cancelRequest();
 
     let results = null;
 
@@ -114,13 +112,12 @@ function* requestDealLeaseRates(deal, zipcode) {
  */
 
 function* requestDealLeasePayments(deal, zipcode) {
-    const state = yield select();
+    const state = yield select(getCommon);
     const getDealPricing = makeDealPricing();
     let data = getDealPricing(state, { deal, zipcode });
     const dealPricing = new DealPricing(data);
 
-    const CancelToken = axios.CancelToken;
-    const source = CancelToken.source();
+    const source = cancelRequest();
 
     if (dealPricing.isNotLease()) {
         return;
@@ -154,7 +151,7 @@ function* requestDealLeasePayments(deal, zipcode) {
  */
 function* requestDealQuote(action) {
     const deal = action.deal;
-    const state = yield select();
+    const state = yield select(getCommon);
     const zipcode = state.zipcode;
 
     // TODO: Add lazy lookup
@@ -189,7 +186,7 @@ export function* batchRequestDealQuotes(deals) {
 }
 
 function* requestQuoteRefresh() {
-    const state = yield select();
+    const state = yield select(getCommon);
     if (state.deals && state.deals.length) {
         yield fork(batchRequestDealQuotes, state.deals);
     }

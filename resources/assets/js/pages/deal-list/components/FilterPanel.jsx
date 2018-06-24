@@ -1,16 +1,25 @@
 import React from 'react';
-import SidebarFilter from 'pages/filter/components/SidebarFilter';
-import ZipcodeFinder from 'components/ZipcodeFinder';
-import FilterClose from 'pages/filter/components/FilterClose';
-import FilterStyleSelector from 'pages/filter/components/FilterStyleSelector';
-import FilterMakeSelector from 'pages/filter/components/FilterMakeSelector';
-import FilterFeatureSelector from 'pages/filter/components/FilterFeatureSelector';
+
 import { connect } from 'react-redux';
-import * as Actions from 'actions/index';
 import R from 'ramda';
+
+import ZipcodeFinder from 'components/ZipcodeFinder';
+
+import SidebarFilter from './SidebarFilter';
+import FilterClose from './FilterClose';
+import FilterStyleSelector from './FilterStyleSelector';
+import FilterMakeSelector from './FilterMakeSelector';
+import FilterFeatureSelector from './FilterFeatureSelector';
+
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import util from 'src/util';
+import {
+    toggleStyle,
+    toggleFeature,
+    toggleMake,
+    clearModelYear,
+} from 'pages/deal-list/actions';
 
 class FilterPanel extends React.PureComponent {
     constructor(props) {
@@ -107,7 +116,7 @@ class FilterPanel extends React.PureComponent {
                     <FilterFeatureSelector
                         selectedFeatures={this.props.searchQuery.features}
                         features={features}
-                        onSelectFeature={this.props.toggleFeature}
+                        onSelectFeature={this.props.onToggleFeature}
                     />
                 </SidebarFilter>
             );
@@ -143,7 +152,7 @@ class FilterPanel extends React.PureComponent {
                             <div className="sidebar-filters__overlay">
                                 <a
                                     onClick={() => {
-                                        this.props.clearModelYear();
+                                        this.props.onClearModelYear();
                                     }}
                                 >
                                     <SVGInline
@@ -175,7 +184,7 @@ class FilterPanel extends React.PureComponent {
                             <FilterStyleSelector
                                 styles={this.props.bodyStyles}
                                 selectedStyles={this.props.searchQuery.styles}
-                                onSelectStyle={this.props.toggleStyle}
+                                onSelectStyle={this.props.onToggleStyle}
                             />
                         </SidebarFilter>
 
@@ -219,7 +228,7 @@ class FilterPanel extends React.PureComponent {
                             <FilterMakeSelector
                                 makes={this.props.makes}
                                 selectedMakes={this.props.searchQuery.makes}
-                                onSelectMake={this.props.toggleMake}
+                                onSelectMake={this.props.onToggleMake}
                             />
                         </SidebarFilter>
                     </div>
@@ -245,22 +254,39 @@ class FilterPanel extends React.PureComponent {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = state => {
     return {
-        dealsByMakeModelYear: state.dealsByMakeModelYear,
-        makes: state.makes,
-        models: state.models,
-        bodyStyles: state.bodyStyles,
-        fallbackLogoImage: state.fallbackLogoImage,
-        features: state.features,
-        featureCategories: state.featureCategories,
-        searchFeatures: state.searchFeatures,
-        window: state.window,
-        searchQuery: state.searchQuery,
+        dealsByMakeModelYear: state.pages.dealList.dealsByMakeModelYear,
+        makes: state.pages.dealList.makes,
+        models: state.pages.dealList.models,
+        bodyStyles: state.pages.dealList.bodyStyles,
+        fallbackLogoImage: state.common.fallbackLogoImage,
+        features: state.pages.dealList.features,
+        featureCategories: state.pages.dealList.featureCategories,
+        searchFeatures: state.pages.dealList.searchFeatures,
+        window: state.common.window,
+        searchQuery: state.pages.dealList.searchQuery,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onToggleStyle: data => {
+            return dispatch(toggleStyle(data));
+        },
+        onToggleFeature: data => {
+            return dispatch(toggleFeature(data));
+        },
+        onToggleMake: data => {
+            return dispatch(toggleMake(data));
+        },
+        onClearModelYear: () => {
+            return dispatch(clearModelYear());
+        },
     };
 };
 
 export default connect(
     mapStateToProps,
-    Actions
+    mapDispatchToProps
 )(FilterPanel);

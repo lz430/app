@@ -1,5 +1,5 @@
 import React from 'react';
-import Sortbar from 'pages/filter/components/Sortbar';
+import Sortbar from './Sortbar';
 import { connect } from 'react-redux';
 import { showAccuPricingModal, toggleSearchFinancing } from 'actions/index';
 
@@ -93,9 +93,9 @@ class ToolbarPrice extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        window: state.window,
-        selectedTab: state.selectedTab,
-        searchQuery: state.searchQuery,
+        window: state.common.window,
+        selectedTab: state.common.selectedTab,
+        searchQuery: state.pages.dealList.searchQuery,
     };
 };
 

@@ -1,36 +1,37 @@
 import { createSelector } from 'reselect';
 import R from 'ramda';
 
-const selectedDeal = state => state.selectedDeal;
-const zipcode = state => state.zipcode;
+export const common = state => state.common;
+
+const selectedDeal = state => state.common.selectedDeal;
+const zipcode = state => state.common.zipcode;
 const deal = (state, props) => props.deal;
-const targetsAvailable = state => state.targetsAvailable;
-const targetsSelected = state => state.targetsSelected;
-const bestOffers = state => state.bestOffers;
-const paymentType = state => state.selectedTab;
-const targetDefaults = state => state.targetDefaults;
-const employeeBrand = state =>
-    state.containers.dealDetails.selectDiscount.employeeBrand === false
+const targetsAvailable = state => state.common.targetsAvailable;
+const targetsSelected = state => state.common.targetsSelected;
+const bestOffers = state => state.common.bestOffers;
+const paymentType = state => state.common.selectedTab;
+const targetDefaults = state => state.common.targetDefaults;
+const employeeBrand = state => {
+    return state.pages.dealDetails.selectDiscount.employeeBrand === false
         ? null
-        : state.containers.dealDetails.selectDiscount.employeeBrand;
+        : state.pages.dealDetails.selectDiscount.employeeBrand;
+};
 const supplierBrand = state =>
-    state.containers.dealDetails.selectDiscount.supplierBrand === false
+    state.pages.dealDetails.selectDiscount.supplierBrand === false
         ? null
-        : state.containers.dealDetails.selectDiscount.supplierBrand;
+        : state.pages.dealDetails.selectDiscount.supplierBrand;
 const discountType = state =>
-    state.containers.dealDetails.selectDiscount.discountType;
+    state.pages.dealDetails.selectDiscount.discountType;
 
-const financeDownPayment = state =>
-    state.containers.dealDetails.finance.downPayment;
-const financeTerm = state => state.containers.dealDetails.finance.term;
+const financeDownPayment = state => state.pages.dealDetails.finance.downPayment;
+const financeTerm = state => state.pages.dealDetails.finance.term;
 
-const leaseAnnualMileage = state =>
-    state.containers.dealDetails.lease.annualMileage;
-const leaseTerm = state => state.containers.dealDetails.lease.term;
-const leaseCashDue = state => state.containers.dealDetails.lease.cashDue;
+const leaseAnnualMileage = state => state.pages.dealDetails.lease.annualMileage;
+const leaseTerm = state => state.pages.dealDetails.lease.term;
+const leaseCashDue = state => state.pages.dealDetails.lease.cashDue;
 
 const dealsIdsWithCustomizedQuotes = state =>
-    state.dealsIdsWithCustomizedQuotes;
+    state.common.dealsIdsWithCustomizedQuotes;
 
 export const makeSelectedDeal = () => {
     return selectedDeal;
@@ -41,7 +42,7 @@ const dealTargetKey = createSelector([deal, zipcode], (deal, zipcode) => {
     if (!deal) {
         return null;
     }
-    const vehicleId = deal.version.jato_vehicle_id;
+    const vehicleId = deal.id;
     return `${vehicleId}-${zipcode}`;
 });
 
@@ -182,10 +183,10 @@ export const makeDealLeasePaymentsKey = () => {
     return dealLeasePaymentsKey;
 };
 
-const leaseRatesLoaded = state => state.leaseRatesLoaded;
-const leaseRates = state => state.leaseRates;
-const leasePaymentsLoaded = state => state.leasePaymentsLoaded;
-const leasePayments = state => state.leasePayments;
+const leaseRatesLoaded = state => state.common.leaseRatesLoaded;
+const leaseRates = state => state.common.leaseRates;
+const leasePaymentsLoaded = state => state.common.leasePaymentsLoaded;
+const leasePayments = state => state.common.leasePayments;
 
 const dealLeaseRatesLoading = createSelector(
     leaseRatesLoaded,

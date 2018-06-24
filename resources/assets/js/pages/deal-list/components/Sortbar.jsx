@@ -4,7 +4,7 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import { connect } from 'react-redux';
 import util from 'src/util';
-import { toggleSearchSort } from 'actions/index';
+import { toggleSearchSort } from 'pages/deal-list/actions';
 
 class Sortbar extends React.PureComponent {
     static propTypes = {
@@ -202,10 +202,10 @@ class Sortbar extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
-        compareList: state.compareList,
-        window: state.window,
-        zipcode: state.zipcode,
-        searchQuery: state.searchQuery,
+        compareList: state.common.compareList,
+        window: state.common.window,
+        zipcode: state.common.zipcode,
+        searchQuery: state.pages.dealList.searchQuery,
     };
 };
 

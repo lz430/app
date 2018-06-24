@@ -40,7 +40,6 @@ class MakeSelector extends React.PureComponent {
     }
 
     renderMake(make) {
-        console.log(this.props.searchQuery.makes);
         const selected =
             this.props.searchQuery.makes &&
             R.contains(make.name, this.props.searchQuery.makes);
@@ -77,9 +76,9 @@ class MakeSelector extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
-        makes: state.makes,
-        searchQuery: state.searchQuery,
-        fallbackLogoImage: state.fallbackLogoImage,
+        makes: state.pages.dealList.makes,
+        searchQuery: state.common.searchQuery,
+        fallbackLogoImage: state.common.fallbackLogoImage,
     };
 };
 

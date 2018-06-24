@@ -1,12 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as Actions from 'actions';
-import ModelYear from './ModelYear';
+import * as Actions from 'actions/index';
+import ModelYear from '../../../components/Deals/ModelYear';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import { connect } from 'react-redux';
 
 class ViewModels extends React.PureComponent {
+    static propTypes = {
+        deals: PropTypes.arrayOf(
+            PropTypes.shape({
+                employee_price: PropTypes.number.isRequired,
+                id: PropTypes.number.isRequired,
+                make: PropTypes.string.isRequired,
+                model: PropTypes.string.isRequired,
+                msrp: PropTypes.number.isRequired,
+                supplier_price: PropTypes.number.isRequired,
+                year: PropTypes.string.isRequired,
+            })
+        ),
+        dealPage: PropTypes.number,
+        dealPageTotal: PropTypes.number,
+        dealsByMakeModelYear: PropTypes.array,
+        selectedDealGrouping: PropTypes.object,
+    };
+
     /**
      * @param model
      * @returns {string}
@@ -42,28 +60,10 @@ class ViewModels extends React.PureComponent {
     }
 }
 
-ViewModels.propTypes = {
-    deals: PropTypes.arrayOf(
-        PropTypes.shape({
-            employee_price: PropTypes.number.isRequired,
-            id: PropTypes.number.isRequired,
-            make: PropTypes.string.isRequired,
-            model: PropTypes.string.isRequired,
-            msrp: PropTypes.number.isRequired,
-            supplier_price: PropTypes.number.isRequired,
-            year: PropTypes.string.isRequired,
-        })
-    ),
-    dealPage: PropTypes.number,
-    dealPageTotal: PropTypes.number,
-    dealsByMakeModelYear: PropTypes.array,
-    selectedDealGrouping: PropTypes.object,
-};
-
 function mapStateToProps(state) {
     return {
-        compareList: state.compareList,
-        modelYears: state.modelYears,
+        compareList: state.common.compareList,
+        modelYears: state.pages.dealList.modelYears,
     };
 }
 

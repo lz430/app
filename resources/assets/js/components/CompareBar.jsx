@@ -169,10 +169,10 @@ class CompareBar extends React.PureComponent {
 
 function mapStateToProps(state) {
     return {
-        employeeBrand: state.employeeBrand,
-        window: state.window,
-        compareList: state.compareList,
-        zipcode: state.zipcode,
+        employeeBrand: state.common.employeeBrand,
+        window: state.common.window,
+        compareList: state.common.compareList,
+        zipcode: state.common.zipcode,
     };
 }
 

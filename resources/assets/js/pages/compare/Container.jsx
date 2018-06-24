@@ -9,7 +9,7 @@ import Deal from 'components/Deals/Deal';
 import Modal from 'components/Modal';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import string from 'src/strings';
-import AccordionTable from 'components/ComparePage/AccordionTable';
+import AccordionTable from './components/AccordionTable';
 import util from 'src/util';
 import api from 'src/api';
 import toTitleCase from 'titlecase';
@@ -17,7 +17,7 @@ import AccuPricingModal from 'components/AccuPricingModal';
 import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
 import { StickyContainer, Sticky } from 'react-sticky';
 
-class ComparePage extends React.PureComponent {
+class Container extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -771,18 +771,18 @@ class ComparePage extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
-        deals: R.map(R.prop('deal'), state.compareList),
-        compareList: state.compareList,
-        selectedDeal: state.selectedDeal,
-        selectedTab: state.selectedTab,
-        termDuration: state.termDuration,
-        employeeBrand: state.employeeBrand,
-        dealsIdsWithCustomizedQuotes: state.dealsIdsWithCustomizedQuotes,
-        window: state.window,
+        deals: R.map(R.prop('deal'), state.common.compareList),
+        compareList: state.common.compareList,
+        selectedDeal: state.common.selectedDeal,
+        selectedTab: state.common.selectedTab,
+        termDuration: state.common.termDuration,
+        employeeBrand: state.common.employeeBrand,
+        dealsIdsWithCustomizedQuotes: state.common.dealsIdsWithCustomizedQuotes,
+        window: state.common.window,
     };
 };
 
 export default connect(
     mapStateToProps,
     Actions
-)(ComparePage);
+)(Container);

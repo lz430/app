@@ -64,15 +64,15 @@ const makeMapStateToProps = () => {
     const getDealPricing = makeDealPricing();
     const mapStateToProps = (state, props) => {
         return {
-            compareList: state.compareList,
-            selectedTab: state.selectedTab,
-            downPayment: state.downPayment,
-            termDuration: state.termDuration,
-            selectedDeal: state.selectedDeal,
-            employeeBrand: state.employeeBrand,
-            residualPercent: state.residualPercent,
-            dealTargets: state.dealTargets,
-            selectedTargets: state.selectedTargets,
+            compareList: state.common.compareList,
+            selectedTab: state.common.selectedTab,
+            downPayment: state.common.downPayment,
+            termDuration: state.common.termDuration,
+            selectedDeal: state.common.selectedDeal,
+            employeeBrand: state.common.employeeBrand,
+            residualPercent: state.common.residualPercent,
+            dealTargets: state.common.dealTargets,
+            selectedTargets: state.common.selectedTargets,
             dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
             dealPricing: new DealPricing(getDealPricing(state, props)),
         };

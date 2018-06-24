@@ -1,27 +1,32 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
 import PropTypes from 'prop-types';
 import { StickyContainer } from 'react-sticky';
 
-import * as Actions from 'actions/index';
 import util from 'src/util';
 
 import Modal from 'components/Modal';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import AccuPricingModal from 'components/AccuPricingModal';
-import Deals from 'components/Deals/Deals';
+import CompareBar from 'components/CompareBar';
 
+import Deals from './components/Deals';
 import MakeSelector from './components/MakeSelector';
 import ToolbarSelectedFilters from './components/ToolbarSelectedFilters';
 import ToolbarPrice from './components/ToolbarPrice';
-import CompareBar from './components/CompareBar';
 import FilterPanel from './components/FilterPanel';
+
+import { initDealListData } from './actions';
 
 class Container extends React.PureComponent {
     static propTypes = {
         searchQuery: PropTypes.object.isRequired,
+        onInit: PropTypes.func.isRequired,
     };
+
+    componentDidMount() {
+        this.props.onInit();
+    }
 
     renderMakeSelectionModal() {
         return (
@@ -113,18 +118,26 @@ class Container extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
-        window: state.window,
-        closeMakeSelectorModal: state.closeMakeSelectorModal,
-        clearSelectedDeal: state.clearSelectedDeal,
-        smallFiltersShown: state.smallFiltersShown,
-        showMakeSelectorModal: state.showMakeSelectorModal,
-        selectedDeal: state.selectedDeal,
-        selectedTab: state.selectedTab,
-        searchQuery: state.searchQuery,
+        window: state.common.window,
+        closeMakeSelectorModal: state.common.closeMakeSelectorModal,
+        clearSelectedDeal: state.common.clearSelectedDeal,
+        smallFiltersShown: state.common.smallFiltersShown,
+        showMakeSelectorModal: false,
+        selectedDeal: state.common.selectedDeal,
+        selectedTab: state.common.selectedTab,
+        searchQuery: state.pages.dealList.searchQuery,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onInit: () => {
+            return dispatch(initDealListData());
+        },
     };
 };
 
 export default connect(
     mapStateToProps,
-    Actions
+    mapDispatchToProps
 )(Container);

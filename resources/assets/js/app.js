@@ -5,11 +5,12 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import configureStore from 'store';
 
-import Filter from 'pages/filter/Container';
-import FilterBeta from 'pages/filter-beta/Container';
+import Filter from 'pages/deal-list/Container';
+import FilterBeta from 'pages/deal-list-beta/Container';
+import ComparePage from 'pages/compare/Container';
+
 import Financing from 'containers/Financing';
 import DealDetails from 'containers/DealDetails';
-import ComparePage from 'containers/ComparePage';
 import ConfirmDetails from 'containers/ConfirmDetails';
 import ThankYouPage from 'containers/ThankYouPage';
 

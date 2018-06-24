@@ -4,6 +4,19 @@ import zondicons from 'zondicons';
 import PropTypes from 'prop-types';
 
 class SidebarFilter extends React.PureComponent {
+    static propTypes = {
+        open: PropTypes.bool.isRequired,
+        toggle: PropTypes.func.isRequired,
+        title: PropTypes.string.isRequired,
+        children: PropTypes.object.isRequired,
+        count: PropTypes.number,
+        canToggle: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        canToggle: true,
+    };
+
     render() {
         return (
             <div className="sidebar-filters__filter">
@@ -44,18 +57,5 @@ class SidebarFilter extends React.PureComponent {
         );
     }
 }
-
-SidebarFilter.propTypes = {
-    open: PropTypes.bool.isRequired,
-    toggle: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired,
-    children: PropTypes.object.isRequired,
-    count: PropTypes.number,
-    canToggle: PropTypes.bool,
-};
-
-SidebarFilter.defaultProps = {
-    canToggle: true,
-};
 
 export default SidebarFilter;

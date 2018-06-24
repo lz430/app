@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import R from 'ramda';
-import * as Actions from 'actions';
-import Deal from './Deal';
+import Deal from '../../../components/Deals/Deal';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import { connect } from 'react-redux';
+
+import { toggleCompare } from 'actions';
+import { requestMoreDeals } from '../actions';
 
 class ViewDeals extends React.PureComponent {
     static propTypes = {
@@ -24,7 +26,8 @@ class ViewDeals extends React.PureComponent {
         dealsByMakeModelYear: PropTypes.array,
         dealPage: PropTypes.number,
         dealPageTotal: PropTypes.number,
-        selectedDealGrouping: PropTypes.object,
+        onRequestMoreDeals: PropTypes.func.isRequired,
+        onToggleCompare: PropTypes.func.isRequired,
     };
 
     compareButtonClass(deal) {
@@ -50,7 +53,7 @@ class ViewDeals extends React.PureComponent {
             return (
                 <div className="deals__show-more">
                     <button
-                        onClick={this.props.requestMoreDeals}
+                        onClick={this.props.onRequestMoreDeals}
                         className="deals__button deals__button--blue"
                     >
                         Show More
@@ -78,7 +81,7 @@ class ViewDeals extends React.PureComponent {
                                             className={this.compareButtonClass(
                                                 deal
                                             )}
-                                            onClick={this.props.toggleCompare.bind(
+                                            onClick={this.props.onToggleCompare.bind(
                                                 null,
                                                 deal
                                             )}
@@ -108,17 +111,27 @@ class ViewDeals extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
-        compareList: state.compareList,
-        dealPage: state.dealPage,
-        dealPageTotal: state.dealPageTotal,
-        deals: state.deals,
-        dealsByMakeModelYear: state.dealsByMakeModelYear,
-        requestingMoreDeals: state.requestingMoreDeals,
-        selectedDealGrouping: state.selectedDealGrouping,
+        compareList: state.common.compareList,
+        dealPage: state.pages.dealList.dealPage,
+        dealPageTotal: state.pages.dealList.dealPageTotal,
+        deals: state.pages.dealList.deals,
+        dealsByMakeModelYear: state.pages.dealList.dealsByMakeModelYear,
+        requestingMoreDeals: state.pages.dealList.requestingMoreDeals,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onRequestMoreDeals: () => {
+            return dispatch(requestMoreDeals());
+        },
+        onToggleCompare: data => {
+            return dispatch(toggleCompare(data));
+        },
     };
 };
 
 export default connect(
     mapStateToProps,
-    Actions
+    mapDispatchToProps
 )(ViewDeals);

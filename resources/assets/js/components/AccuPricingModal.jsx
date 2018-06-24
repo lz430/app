@@ -45,7 +45,7 @@ class AccuPricingModal extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
-        accuPricingModalIsShowing: state.accuPricingModalIsShowing,
+        accuPricingModalIsShowing: state.common.accuPricingModalIsShowing,
     };
 };
 

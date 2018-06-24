@@ -2,8 +2,8 @@ import React from 'react';
 
 import { ReactiveBase } from '@appbaseio/reactivesearch';
 
-import FilterSidebar from 'pages/filter-beta/components/FilterSidebar';
-import ResultsContainer from 'pages/filter-beta/components/ResultsContainer';
+import FilterSidebar from 'pages/deal-list-beta/components/FilterSidebar';
+import ResultsContainer from 'pages/deal-list-beta/components/ResultsContainer';
 
 class FilterBeta extends React.Component {
     render() {

@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import NoDealsInRange from '../../pages/filter/components/NoDealsInRange';
-import NoDealsOutOfRange from '../../pages/filter/components/NoDealsOutOfRange';
-import ViewDeals from './ViewDeals';
-import SVGInline from 'react-svg-inline';
-import miscicons from 'miscicons';
 import { connect } from 'react-redux';
-import * as Actions from 'actions/index';
+import SVGInline from 'react-svg-inline';
+
+import miscicons from 'miscicons';
+
+import NoDealsInRange from './NoDealsInRange';
+import NoDealsOutOfRange from './NoDealsOutOfRange';
+import ViewDeals from './ViewDeals';
 import ViewModels from './ViewModels';
 
 class Deals extends React.PureComponent {
@@ -64,11 +65,11 @@ class Deals extends React.PureComponent {
 
 function mapStateToProps(state) {
     return {
-        deals: state.deals,
-        loadingSearchResults: state.loadingSearchResults,
-        zipInRange: state.zipInRange,
-        modelYears: state.modelYears,
-        searchQuery: state.searchQuery,
+        deals: state.pages.dealList.deals,
+        loadingSearchResults: state.pages.dealList.loadingSearchResults,
+        zipInRange: state.common.zipInRange,
+        modelYears: state.pages.dealList.modelYears,
+        searchQuery: state.pages.dealList.searchQuery,
     };
 }
 

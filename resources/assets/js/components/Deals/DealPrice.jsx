@@ -96,10 +96,10 @@ const makeMapStateToProps = () => {
     const getDealPricing = makeDealPricing();
     const mapStateToProps = (state, props) => {
         return {
-            selectedTab: state.selectedTab,
-            compareList: state.compareList, // should be selected
+            selectedTab: state.common.selectedTab,
+            compareList: state.common.compareList, // should be selected
             dealPricing: new DealPricing(getDealPricing(state, props)),
-            infoModalIsShowingFor: state.infoModalIsShowingFor,
+            infoModalIsShowingFor: state.common.infoModalIsShowingFor,
         };
     };
     return mapStateToProps;

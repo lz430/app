@@ -4,7 +4,7 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import R from 'ramda';
 import { connect } from 'react-redux';
-import * as Actions from 'actions/index';
+import { clearAllFilters } from 'pages/deal-list/actions';
 
 /**
  *
@@ -124,7 +124,7 @@ class ToolbarSelectedFilters extends React.PureComponent {
                 </div>
 
                 <div className="filterbar__clear">
-                    <a onClick={this.props.clearAllFilters}>Clear Options</a>
+                    <a onClick={this.props.onClearAllFilters}>Clear Options</a>
                 </div>
             </div>
         );
@@ -133,12 +133,20 @@ class ToolbarSelectedFilters extends React.PureComponent {
 
 function mapStateToProps(state) {
     return {
-        makes: state.makes,
-        searchQuery: state.searchQuery,
+        makes: state.pages.dealList.makes,
+        searchQuery: state.pages.dealList.searchQuery,
     };
 }
 
+const mapDispatchToProps = dispatch => {
+    return {
+        onClearAllFilters: () => {
+            return dispatch(clearAllFilters());
+        },
+    };
+};
+
 export default connect(
     mapStateToProps,
-    Actions
+    mapDispatchToProps
 )(ToolbarSelectedFilters);

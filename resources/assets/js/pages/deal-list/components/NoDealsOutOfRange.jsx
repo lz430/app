@@ -77,7 +77,7 @@ class NoDealsOutOfRange extends Component {
 
 const mapStateToProps = state => {
     return {
-        window: state.window,
+        window: state.common.window,
     };
 };
 export default connect(

@@ -2,9 +2,9 @@ import React from 'react';
 
 import { ReactiveList } from '@appbaseio/reactivesearch';
 
-import Result from 'pages/filter-beta/components/Result';
-import PriceBar from 'pages/filter-beta/components/PriceBar';
-import CurrentFiltersBar from 'pages/filter-beta/components/CurrentFiltersBar';
+import Result from 'pages/deal-list-beta/components/Result';
+import PriceBar from 'pages/deal-list-beta/components/PriceBar';
+import CurrentFiltersBar from 'pages/deal-list-beta/components/CurrentFiltersBar';
 
 /**
  *
