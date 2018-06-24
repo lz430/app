@@ -12,16 +12,6 @@ const initialState = {
 
 export default function(state = initialState, action = {}) {
     switch (action.type) {
-        case ActionTypes.SET_ZIP_CODE:
-            return {
-                ...state,
-                location: {
-                    ...state.location,
-                    zipcode: action.zipcode,
-                    city: null,
-                },
-            };
-
         case ActionTypes.RECEIVE_LOCATION:
             if (!action.data) {
                 return {
@@ -44,15 +34,6 @@ export default function(state = initialState, action = {}) {
                     },
                 };
             }
-
-        case ActionTypes.SET_ZIP_IN_RANGE:
-            return {
-                ...state,
-                location: {
-                    ...state.location,
-                    in_range: action.supported,
-                },
-            };
 
         default:
             return state;

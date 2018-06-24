@@ -15,7 +15,6 @@ class UserLocationController extends Controller
             'longitude' => 'sometimes|numeric',
         ]);
 
-
         $location = null;
 
         /* @var $lookup \Geocoder\Provider\GoogleMaps\Model\GoogleAddress */
@@ -33,7 +32,6 @@ class UserLocationController extends Controller
             }
             $lookup = $geocoder->geocode($ip)->get()->first();
         }
-
         if ($lookup && $lookup->getProvidedBy() == 'google_maps' && $lookup->getCoordinates()->getLongitude()) {
             $location = [
                 'city' => $lookup->getLocality(),

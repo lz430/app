@@ -23,13 +23,14 @@ class DealsController extends BaseAPIController
             'year' => 'sometimes|required|digits:4',
             'transmission_type' => 'sometimes|required|string|in:automatic,manual',
             'sort' => 'sometimes|required|string',
-            'zipcode' => 'sometimes|required|string',
+            'latitude' => 'sometimes|numeric',
+            'longitude' => 'sometimes|numeric',
         ]);
 
         $query = new DealSearch();
 
         if ($request->get('zipcode')) {
-            $query = $query->filterMustLocation($request->get('zipcode'), 'zipcode');
+            $query = $query->filterMustLocation(['lat' => $request->get('latitude'), 'lon' => $request->get('longitude')], 'latlon');
         }
 
         if ($request->get('body_styles')) {

@@ -15,7 +15,7 @@ import jsonp from 'jsonp';
 import api from 'store/api';
 
 import { REQUEST_IP_LOCATION_INFO, REQUEST_LOCATION } from './consts';
-import { receiveIpLocationInfo, receiveLocation } from './actions';
+import { receiveLocation } from './actions';
 
 /*******************************************************************
  * Request IP Location
@@ -75,7 +75,7 @@ export function* requestLocation(data) {
     let location = null;
 
     try {
-        location = yield call(api.user.getLocation, data);
+        location = yield call(api.user.getLocation, data.data);
         location = location.data;
     } catch (e) {
         console.log(e);
