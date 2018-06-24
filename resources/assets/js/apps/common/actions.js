@@ -3,23 +3,10 @@ import util from 'src/util';
 import R from 'ramda';
 import * as ActionTypes from './consts';
 
-export function toggleSearchFinancing(financing) {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.SEARCH_CHANGE_FINANCING,
-            data: financing,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
-    };
-}
-
 export function requestTargets(deal) {
     return (dispatch, getState) => {
         // If no zipcode has been set, do not request targets
-        const zipcode = getState().common.zipcode;
+        const zipcode = getState().user.purchasePreferences.strategy;
         if (!zipcode) return;
 
         // If we already have the target data, do not re-request it
@@ -160,7 +147,7 @@ export function updateFinanceDownPayment(downPayment) {
 
 export function updateLeaseAnnualMileage(deal, annualMileage) {
     return (dispatch, getState) => {
-        const zipcode = getState().common.zipcode;
+        const zipcode = getState().user.purchasePreferences.strategy;
 
         if (!zipcode) return;
 
@@ -175,7 +162,7 @@ export function updateLeaseAnnualMileage(deal, annualMileage) {
 
 export function updateLeaseTerm(deal, term) {
     return (dispatch, getState) => {
-        const zipcode = getState().common.zipcode;
+        const zipcode = getState().user.purchasePreferences.strategy;
 
         if (!zipcode) return;
 
@@ -190,7 +177,7 @@ export function updateLeaseTerm(deal, term) {
 
 export function updateLeaseCashDue(deal, cashDue) {
     return (dispatch, getState) => {
-        const zipcode = getState().common.zipcode;
+        const zipcode = getState().user.purchasePreferences.strategy;
 
         if (!zipcode) return;
 

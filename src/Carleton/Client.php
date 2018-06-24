@@ -122,7 +122,7 @@ class Client
                     ];
 
                     $quote['fees']['cashDown'] = [
-                        'Amount' => $cashDueOptions, //$cashDueValue
+                        'Amount' => $cashDueOptions[0], //$cashDueValue
                         'Type' => 'Financed',
                         'Base' => 'Fixed',
                         'DescriptionType' => 'CashDown',

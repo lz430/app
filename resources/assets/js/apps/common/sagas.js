@@ -25,6 +25,8 @@ import {
     receiveLeasePayments,
 } from './actions';
 
+import { getUserPurchaseStrategy, getUserLocation } from 'apps/user/selectors';
+
 /**
  *
  * @param deal
@@ -113,9 +115,11 @@ function* requestDealLeaseRates(deal, zipcode) {
  */
 
 function* requestDealLeasePayments(deal, zipcode) {
-    const state = yield select(getCommon);
+    const state = yield select();
     const getDealPricing = makeDealPricing();
+
     let data = getDealPricing(state, { deal, zipcode });
+
     const dealPricing = new DealPricing(data);
 
     const source = cancelRequest();
@@ -153,14 +157,13 @@ function* requestDealLeasePayments(deal, zipcode) {
 function* requestDealQuote(action) {
     const deal = action.deal;
     const state = yield select(getCommon);
-    const zipcode = state.zipcode;
-
-    // TODO: Add lazy lookup
+    const location = yield select(getUserLocation);
+    const purchaseStrategy = yield select(getUserPurchaseStrategy);
 
     //
     // Build Targets (Which are a jato specific term used to describe
     // optional rebates (college, etc)
-    const targetKey = util.getTargetKeyForDealAndZip(deal, zipcode);
+    const targetKey = util.getTargetKeyForDealAndZip(deal, location.zipcode);
 
     const selectedTargetIds = state.targetsSelected[targetKey]
         ? R.map(R.prop('targetId'), state.targetsSelected[targetKey])
@@ -168,10 +171,16 @@ function* requestDealQuote(action) {
 
     const targets = R.uniq(state.targetDefaults.concat(selectedTargetIds));
 
-    yield fork(requestDealBestOffer, deal, zipcode, state.selectedTab, targets);
+    yield fork(
+        requestDealBestOffer,
+        deal,
+        location.zipcode,
+        purchaseStrategy,
+        targets
+    );
 
-    if (state.selectedTab === 'lease') {
-        yield fork(requestDealLeaseRates, deal, zipcode);
+    if (purchaseStrategy === 'lease') {
+        yield fork(requestDealLeaseRates, deal, location.zipcode);
     }
 }
 
@@ -201,7 +210,7 @@ export function* watchDealQuote() {
 }
 
 /**
- * When the user changes payment tab.
+ * When the user changes their payment preferences
  * @returns {IterableIterator<*>}
  */
 export function* watchRequestQuoteRefresh() {

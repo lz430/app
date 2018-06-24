@@ -8,10 +8,23 @@ const initialState = {
         city: null,
         has_results: false,
     },
+
+    purchasePreferences: {
+        strategy: 'cash', // cash | finance | lease
+    },
 };
 
 export default function(state = initialState, action = {}) {
     switch (action.type) {
+        case ActionTypes.SET_PURCHASE_STRATEGY:
+            return {
+                ...state,
+                purchasePreferences: {
+                    ...state.purchasePreferences,
+                    strategy: action.data,
+                },
+            };
+
         case ActionTypes.RECEIVE_LOCATION:
             if (!action.data) {
                 return {

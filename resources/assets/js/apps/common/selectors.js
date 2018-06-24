@@ -5,12 +5,18 @@ export default state => state.common;
 export const common = state => state.common;
 
 const selectedDeal = state => state.common.selectedDeal;
-const zipcode = state => state.common.zipcode;
+const zipcode = state => state.user.location.zipcode;
 const deal = (state, props) => props.deal;
 const targetsAvailable = state => state.common.targetsAvailable;
 const targetsSelected = state => state.common.targetsSelected;
-const bestOffers = state => state.common.bestOffers;
-const paymentType = state => state.common.selectedTab;
+const bestOffers = state => {
+    if (state.common) {
+        return state.common.bestOffers;
+    } else {
+        return state.bestOffers;
+    }
+};
+const paymentType = state => state.user.purchasePreferences.strategy;
 const targetDefaults = state => state.common.targetDefaults;
 const employeeBrand = state => {
     return state.pages.dealDetails.selectDiscount.employeeBrand === false

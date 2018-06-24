@@ -55,14 +55,7 @@ class Deal extends React.Component {
 }
 
 const mapStateToProps = state => {
-    return {
-        compareList: state.common.compareList,
-        zipcode: state.common.zipcode,
-        bestOffers: state.common.bestOffers,
-        selectedTab: state.common.selectedTab,
-        targets: state.common.targets,
-        targetDefaults: state.common.targetDefaults,
-    };
+    return {};
 };
 
 export default connect(mapStateToProps)(Deal);

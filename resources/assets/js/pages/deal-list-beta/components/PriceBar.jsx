@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import * as Actions from 'apps/common/actions';
+import { showAccuPricingModal } from 'apps/common/actions';
+import { setPurchaseStrategy } from 'apps/user/actions';
 
 /**
  *
@@ -10,7 +11,7 @@ class PriceBar extends React.Component {
         return (
             <div>
                 <div className="accupricing-cta accupricing-cta--horizontal">
-                    <a onClick={this.props.showAccuPricingModal}>
+                    <a onClick={this.props.onShowAccuPricingModal}>
                         <img
                             src="/images/accupricing-logo.png"
                             className="accupricing-cta__logo"
@@ -24,15 +25,15 @@ class PriceBar extends React.Component {
         );
     }
 
-    renderSelectedTabButtons() {
+    renderPurchaseStrategyButtons() {
         return (
             <div className="button-group">
                 <div
                     onClick={() => {
-                        this.handleTabChange('cash');
+                        this.handlePurchaseStrategyChange('cash');
                     }}
                     className={`button-group__button ${
-                        this.props.selectedTab === 'cash'
+                        this.props.purchaseStrategy === 'cash'
                             ? 'button-group__button--selected'
                             : ''
                     }`}
@@ -41,10 +42,10 @@ class PriceBar extends React.Component {
                 </div>
                 <div
                     onClick={() => {
-                        this.handleTabChange('finance');
+                        this.handlePurchaseStrategyChange('finance');
                     }}
                     className={`button-group__button ${
-                        this.props.selectedTab === 'finance'
+                        this.props.purchaseStrategy === 'finance'
                             ? 'button-group__button--selected'
                             : ''
                     }`}
@@ -53,10 +54,10 @@ class PriceBar extends React.Component {
                 </div>
                 <div
                     onClick={() => {
-                        this.handleTabChange('lease');
+                        this.handlePurchaseStrategyChange('lease');
                     }}
                     className={`button-group__button ${
-                        this.props.selectedTab === 'lease'
+                        this.props.purchaseStrategy === 'lease'
                             ? 'button-group__button--selected'
                             : ''
                     }`}
@@ -80,24 +81,34 @@ class PriceBar extends React.Component {
     }
 
     /**
-     *
-     * @param tabName
+     * @param strategy
      */
-    handleTabChange(tabName) {
-        this.props.selectTab(tabName);
-        this.props.getBestOffersForLoadedDeals();
+    handlePurchaseStrategyChange(strategy) {
+        this.props.onSetPurchaseStrategy(strategy);
+        //this.props.getBestOffersForLoadedDeals();
     }
 }
 
 const mapStateToProps = state => {
     return {
-        window: state.window,
-        closeMakeSelectorModal: state.closeMakeSelectorModal,
-        selectedTab: state.selectedTab,
+        window: state.common.window,
+        closeMakeSelectorModal: state.common.closeMakeSelectorModal,
+        purchaseStrategy: state.user.purchasePreferences.strategy,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onShowAccuPricingModal: () => {
+            return dispatch(showAccuPricingModal());
+        },
+        onSetPurchaseStrategy: data => {
+            return dispatch(setPurchaseStrategy(data));
+        },
     };
 };
 
 export default connect(
     mapStateToProps,
-    Actions
+    mapDispatchToProps
 )(PriceBar);

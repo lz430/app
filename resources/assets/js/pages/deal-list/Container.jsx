@@ -124,7 +124,6 @@ const mapStateToProps = state => {
         smallFiltersShown: state.common.smallFiltersShown,
         showMakeSelectorModal: false,
         selectedDeal: state.common.selectedDeal,
-        selectedTab: state.common.selectedTab,
         searchQuery: state.pages.dealList.searchQuery,
     };
 };

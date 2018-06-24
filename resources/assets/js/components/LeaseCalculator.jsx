@@ -304,7 +304,7 @@ const makeMapStateToProps = () => {
     const getDealBestOfferLoading = makeDealBestOfferLoading();
     const mapStateToProps = (state, props) => {
         return {
-            zipcode: state.common.zipcode,
+            zipcode: state.user.purchasePreferences.strategy,
             termDuration: state.common.termDuration,
             annualMileage: state.common.annualMileage,
             residualPercent: state.common.residualPercent,

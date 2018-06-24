@@ -13,7 +13,7 @@ import DealPriceWrapper from 'components/Hoc/DealPriceWrapper';
 class DealPrice extends React.Component {
     static propTypes = {
         deal: PropTypes.object.isRequired,
-        selectedTab: PropTypes.string.isRequired,
+        purchaseStrategy: PropTypes.string.isRequired,
     };
 
     renderPriceExplanationModal() {
@@ -21,7 +21,7 @@ class DealPrice extends React.Component {
             <InfoModal
                 key={this.props.deal.id}
                 {...R.pick(
-                    ['deal', 'selectedTab', 'compareList', 'dealPricing'],
+                    ['deal', 'purchaseStrategy', 'compareList', 'dealPricing'],
                     this.props
                 )}
                 {...R.pick(
@@ -56,7 +56,7 @@ class DealPrice extends React.Component {
     }
 
     getLabel() {
-        switch (this.props.selectedTab) {
+        switch (this.props.purchaseStrategy) {
             case 'cash':
                 return 'Your cash price';
             case 'finance':
@@ -96,7 +96,7 @@ const makeMapStateToProps = () => {
     const getDealPricing = makeDealPricing();
     const mapStateToProps = (state, props) => {
         return {
-            selectedTab: state.common.selectedTab,
+            purchaseStrategy: state.user.purchasePreferences.strategy,
             compareList: state.common.compareList, // should be selected
             dealPricing: new DealPricing(getDealPricing(state, props)),
             infoModalIsShowingFor: state.common.infoModalIsShowingFor,
@@ -105,7 +105,4 @@ const makeMapStateToProps = () => {
     return mapStateToProps;
 };
 
-export default connect(
-    makeMapStateToProps,
-    Actions
-)(DealPriceWrapper(DealPrice));
+export default connect(makeMapStateToProps)(DealPriceWrapper(DealPrice));

@@ -98,17 +98,6 @@ const reducer = (state = initialState, action) => {
                 showMakeSelectorModal: false,
             });
 
-        case ActionTypes.SEARCH_CHANGE_FINANCING:
-            return {
-                ...state,
-                deals: [],
-                searchQuery: {
-                    ...state.searchQuery,
-                    page: 1,
-                },
-                selectedTab: action.data,
-            };
-
         case ActionTypes.SELECT_REBATE:
             if (!R.contains(action.rebate, state.selectedRebates)) {
                 return Object.assign({}, state, {

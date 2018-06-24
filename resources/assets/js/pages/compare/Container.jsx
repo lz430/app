@@ -646,7 +646,7 @@ class Container extends React.PureComponent {
         );
     }
 
-    renderSelectedTabButtons() {
+    renderPurchaseStrategyButtons() {
         return (
             <div className="button-group">
                 <div
@@ -714,7 +714,7 @@ class Container extends React.PureComponent {
                             {this.renderAccuPricingCta()}
                         </div>
                         <div className="compare-page__top-row__section compare-page__top-row__section--tabButtons">
-                            {this.renderSelectedTabButtons()}
+                            {this.renderPurchaseStrategyButtons()}
                         </div>
                     </div>
 

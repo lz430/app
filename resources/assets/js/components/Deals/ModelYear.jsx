@@ -79,14 +79,7 @@ class ModelYear extends React.PureComponent {
 }
 
 const mapStateToProps = state => {
-    return {
-        compareList: state.common.compareList,
-        zipcode: state.common.zipcode,
-        bestOffers: state.common.bestOffers,
-        selectedTab: state.common.selectedTab,
-        targets: state.common.targets,
-        targetDefaults: state.common.targetDefaults,
-    };
+    return {};
 };
 
 const mapDispatchToProps = dispatch => {

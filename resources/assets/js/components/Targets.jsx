@@ -141,7 +141,7 @@ const makeMapStateToProps = () => {
     const getDealTargetsAvailableLoading = makeDealTargetsAvailableLoading();
     return (state, props) => {
         return {
-            zipcode: state.common.zipcode,
+            zipcode: state.user.purchasePreferences.strategy,
             targetsAvailable: state.common.targetsAvailable,
             targetsSelected: state.common.targetsSelected,
             dealTargetKey: getDealTargetKey(state, props),

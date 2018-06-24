@@ -172,7 +172,7 @@ function mapStateToProps(state) {
         employeeBrand: state.common.employeeBrand,
         window: state.common.window,
         compareList: state.common.compareList,
-        zipcode: state.common.zipcode,
+        zipcode: state.user.purchasePreferences.strategy,
     };
 }
 

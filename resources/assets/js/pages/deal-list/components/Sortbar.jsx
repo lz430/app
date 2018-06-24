@@ -204,7 +204,7 @@ const mapStateToProps = state => {
     return {
         compareList: state.common.compareList,
         window: state.common.window,
-        zipcode: state.common.zipcode,
+        zipcode: state.user.purchasePreferences.strategy,
         searchQuery: state.pages.dealList.searchQuery,
     };
 };

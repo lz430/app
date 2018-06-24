@@ -13,3 +13,10 @@ export function requestLocation(data) {
         data: data,
     };
 }
+
+export function setPurchaseStrategy(data) {
+    return {
+        type: ActionTypes.SET_PURCHASE_STRATEGY,
+        data: data,
+    };
+}
