@@ -27,8 +27,8 @@ import {
 import * as DealSagas from 'sagas/deal';
 import * as DealListActions from './actions';
 
-import getDealList from './selectors';
-import { requestLocationInfo } from 'apps/user/sagas';
+import getDealList, { getSearchQuery } from './selectors';
+import { requestIpLocation } from 'apps/user/sagas';
 
 /*******************************************************************
  * Request Search
@@ -46,7 +46,7 @@ const takeSearch = (patternOrChannel, saga, ...args) =>
         while (true) {
             const action = yield take(patternOrChannel);
             const state = yield select(getDealList);
-            if (lastTask && state.searchQuery.page === 1) {
+            if (lastTask && state.page === 1) {
                 yield cancel(lastTask); // cancel is no-op if the task has already terminated
             }
             lastTask = yield fork(saga, ...args.concat(action));
@@ -58,15 +58,17 @@ const takeSearch = (patternOrChannel, saga, ...args) =>
  */
 function* requestSearch() {
     const source = cancelRequest();
-    const state = yield select(getDealList);
+    const state = yield select();
+    const searchQuery = getSearchQuery(state);
+
     let results = null;
 
-    if (state.searchQuery.page === 1) {
+    if (searchQuery.page === 1) {
         yield put({ type: SEARCH_LOADING_START });
     }
 
     try {
-        results = yield call(ApiClient.browse.search, state.searchQuery);
+        results = yield call(ApiClient.browse.search, searchQuery);
     } catch (e) {
         console.log(e);
     } finally {
@@ -76,7 +78,7 @@ function* requestSearch() {
     }
 
     if (results) {
-        if (state.searchQuery.entity === 'deal') {
+        if (searchQuery.entity === 'deal') {
             yield put(DealListActions.receiveDeals(results));
             yield fork(DealSagas.batchRequestDealQuotes, results.data.data);
         } else {
@@ -84,7 +86,7 @@ function* requestSearch() {
         }
     }
 
-    if (state.searchQuery.page === 1) {
+    if (searchQuery.page === 1) {
         yield put({ type: SEARCH_LOADING_FINISHED });
     }
 }
@@ -93,7 +95,7 @@ function* requestSearch() {
  * Init
  ********************************************************************/
 function* initDealList() {
-    yield fork(requestLocationInfo);
+    yield fork(requestIpLocation);
 
     try {
         const [styles, makes, features, categories] = yield all([
@@ -112,6 +114,8 @@ function* initDealList() {
     } catch (e) {
         console.log(e);
     }
+
+    yield put({ type: SEARCH_REQUEST });
 }
 
 /*******************************************************************

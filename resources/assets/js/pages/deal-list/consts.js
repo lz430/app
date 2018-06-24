@@ -13,7 +13,6 @@ export const SEARCH_LOADING_START = `${namespace}_SEARCH_LOADING_START`;
 export const SEARCH_LOADING_FINISHED = `${namespace}_SEARCH_LOADING_FINISHED`;
 export const SEARCH_CHANGE_SORT = `${namespace}_SEARCH_CHANGE_SORT`;
 
-export const REQUEST_MODEL_YEARS = `${namespace}_REQUEST_MODEL_YEARS`;
 export const RECEIVE_MODEL_YEARS = `${namespace}_RECEIVE_MODEL_YEARS`;
 
 export const SELECT_MODEL_YEAR = `${namespace}_SELECT_MODEL_YEAR`;

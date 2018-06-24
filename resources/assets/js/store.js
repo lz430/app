@@ -5,11 +5,7 @@ import rootSaga from 'sagas';
 import { persistStore, persistReducer } from 'redux-persist';
 import rootReducer from 'reducers';
 
-import {
-    checkZipInRange,
-    requestLocationInfo,
-    windowResize,
-} from 'actions/index';
+import { windowResize } from 'actions/index';
 import util from 'src/util';
 import storage from 'redux-persist/lib/storage';
 
@@ -42,7 +38,7 @@ const initialState = {
 const config = {
     key: 'root',
     storage,
-    blacklist: ['deals', 'dealPage', 'dealPageTotal', 'modelYears'],
+    blacklist: ['pages'],
 };
 
 export default () => {
@@ -60,15 +56,6 @@ export default () => {
     sagaMiddleware.run(rootSaga);
 
     const persistor = persistStore(store, null, () => {
-        /*
-        store.dispatch(requestLocationInfo()).then(() => {
-
-            if (store.getState().zipcode) {
-                store.dispatch(checkZipInRange(store.getState().zipcode));
-            }
-        });
-        */
-
         window.addEventListener('resize', () => {
             store.dispatch(windowResize(window.innerWidth));
         });

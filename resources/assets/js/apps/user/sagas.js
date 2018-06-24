@@ -12,8 +12,14 @@ import {
 } from 'redux-saga/effects';
 import jsonp from 'jsonp';
 
-import { REQUEST_LOCATION_INFO } from './consts';
-import { receiveLocationInfo } from './actions';
+import api from 'store/api';
+
+import { REQUEST_IP_LOCATION_INFO, REQUEST_LOCATION } from './consts';
+import { receiveIpLocationInfo, receiveLocation } from './actions';
+
+/*******************************************************************
+ * Request IP Location
+ ********************************************************************/
 
 /**
  * Axois doesn't support JSONP.
@@ -34,22 +40,57 @@ function getIpLocation() {
     });
 }
 
-export function* requestLocationInfo() {
-    let results = null;
+export function* requestIpLocation() {
+    let ipLocationResults = null;
 
     try {
-        results = yield call(getIpLocation);
+        ipLocationResults = yield call(getIpLocation);
     } catch (e) {
-        console.log('ERROR');
         console.log(e);
     }
 
-    yield put(receiveLocationInfo(results));
+    let location = null;
+    if (ipLocationResults) {
+        try {
+            location = yield call(
+                api.user.getLocation,
+                null,
+                ipLocationResults.latitude,
+                ipLocationResults.longitude
+            );
+            location = location.data;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    yield put(receiveLocation(location));
+}
+
+/*******************************************************************
+ * Request Location
+ ********************************************************************/
+
+export function* requestLocation(data) {
+    let location = null;
+
+    try {
+        location = yield call(api.user.getLocation, data);
+        location = location.data;
+    } catch (e) {
+        console.log(e);
+    }
+
+    yield put(receiveLocation(location));
 }
 
 /*******************************************************************
  * Watchers
  ********************************************************************/
-export function* watchRequestLocationInfo() {
-    yield takeEvery(REQUEST_LOCATION_INFO, requestLocationInfo);
+export function* watchIPRequestLocationInfo() {
+    yield takeEvery(REQUEST_IP_LOCATION_INFO, requestIpLocation);
+}
+
+export function* watchRequestLocation() {
+    yield takeEvery(REQUEST_LOCATION, requestLocation);
 }

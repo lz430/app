@@ -6,7 +6,7 @@ const initialState = {
         longitude: null,
         zipcode: null,
         city: null,
-        in_range: false,
+        has_results: false,
     },
 };
 
@@ -22,23 +22,25 @@ export default function(state = initialState, action = {}) {
                 },
             };
 
-        case ActionTypes.RECEIVE_LOCATION_INFO:
-            if (!action.data || !action.data.zip) {
+        case ActionTypes.RECEIVE_LOCATION:
+            if (!action.data) {
                 return {
                     ...state,
                     location: {
                         ...state.location,
-                        in_range: false,
+                        has_results: false,
                     },
                 };
             } else {
                 return {
                     ...state,
                     location: {
-                        latitude: action.data.latitude,
-                        longitude: action.data.longitude,
-                        zipcode: action.data.zip,
-                        city: action.data.city,
+                        ...state.location,
+                        latitude: action.data.location.latitude,
+                        longitude: action.data.location.longitude,
+                        zipcode: action.data.location.zip,
+                        city: action.data.location.city,
+                        has_results: action.data.has_results,
                     },
                 };
             }

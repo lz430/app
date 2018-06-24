@@ -2,7 +2,6 @@ import api from 'src/api';
 import util from 'src/util';
 import R from 'ramda';
 import * as ActionTypes from 'actiontypes/index';
-import jsonp from 'jsonp';
 
 export function requestDealQuote(deal) {
     console.log('requestDealQuote');

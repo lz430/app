@@ -10,6 +10,7 @@ export default function* root() {
         fork(DealListSagas.watchRequestSearch),
         fork(DealSagas.watchDealQuote),
         fork(DealSagas.watchRequestQuoteRefresh),
-        fork(AppUserSagas.watchRequestLocationInfo),
+        fork(AppUserSagas.watchIPRequestLocationInfo),
+        fork(AppUserSagas.watchRequestLocation),
     ]);
 }

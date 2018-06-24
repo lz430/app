@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as Actions from 'actions/index';
+import { requestLocation } from 'apps/user/actions';
 
 class ZipcodeFinder extends React.PureComponent {
     static propTypes = {
@@ -39,7 +39,7 @@ class ZipcodeFinder extends React.PureComponent {
         if (event) event.preventDefault();
 
         if (this.isValid()) {
-            this.props.setZipCode(this.state.zipcode);
+            this.props.onSearchForLocation(this.state.zipcode);
         }
     }
 
@@ -104,7 +104,15 @@ const mapStateToProps = state => {
     };
 };
 
+const mapDispatchToProps = dispatch => {
+    return {
+        onSearchForLocation: search => {
+            return dispatch(requestLocation(search));
+        },
+    };
+};
+
 export default connect(
     mapStateToProps,
-    Actions
+    mapDispatchToProps
 )(ZipcodeFinder);

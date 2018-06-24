@@ -46,7 +46,8 @@ class BrowseService {
             body_styles: query.styles,
             features: query.features,
             year: query.years[0],
-            zipcode: query.location.zipcode,
+            latitude: query.location.latitude,
+            longitude: query.location.longitude,
             sort: sort,
             page: query.page,
         };

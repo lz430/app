@@ -67,7 +67,7 @@ function mapStateToProps(state) {
     return {
         deals: state.pages.dealList.deals,
         loadingSearchResults: state.pages.dealList.loadingSearchResults,
-        zipInRange: state.common.zipInRange,
+        zipInRange: state.user.location.has_results,
         modelYears: state.pages.dealList.modelYears,
         searchQuery: state.pages.dealList.searchQuery,
     };

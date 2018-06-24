@@ -1,4 +1,8 @@
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+
 import * as ActionTypes from './consts';
+
 import util from 'src/util';
 const urlStyle = util.getInitialBodyStyleFromUrl();
 const urlSize = util.getInitialSizeFromUrl();
@@ -11,15 +15,13 @@ const initialState = {
     features: null,
     searchFeatures: [],
 
-    //
-    // Browse / Search
+    page: 1,
     searchQuery: {
         entity: 'model', // deal or model depending on the page we're on.
         sort: {
             attribute: 'price',
             direction: 'asc',
         },
-        page: 1,
         years: [],
         makes: [],
         models: [],
@@ -31,10 +33,23 @@ const initialState = {
     dealPageTotal: 1,
     deals: [],
     requestingMoreDeals: false,
-    loadingSearchResults: false,
+    loadingSearchResults: true,
 };
 
-export default function(state = initialState, action = {}) {
+const persistConfig = {
+    key: 'dealList',
+    storage: storage,
+    blacklist: [
+        'deals',
+        'dealPage',
+        'dealPageTotal',
+        'modelYears',
+        'loadingSearchResults',
+        'page',
+    ],
+};
+
+const reducer = function(state = initialState, action = {}) {
     switch (action.type) {
         case ActionTypes.INIT:
             return state;
@@ -67,9 +82,9 @@ export default function(state = initialState, action = {}) {
         case ActionTypes.SEARCH_INCREMENT_PAGE:
             return {
                 ...state,
+                page: state.page + 1,
                 searchQuery: {
                     ...state.searchQuery,
-                    page: state.searchQuery.page + 1,
                 },
             };
         case ActionTypes.SEARCH_REQUEST:
@@ -97,7 +112,7 @@ export default function(state = initialState, action = {}) {
         case ActionTypes.RECEIVE_DEALS:
             let deals = [];
 
-            if (state.searchQuery.page !== 1) {
+            if (state.page !== 1) {
                 deals.push(...state.deals);
             }
 
@@ -111,14 +126,7 @@ export default function(state = initialState, action = {}) {
                 requestingMoreDeals: false,
             };
 
-        case ActionTypes.REQUEST_MODEL_YEARS:
-            return {
-                ...state,
-                modelYears: null,
-                deals: null,
-            };
         case ActionTypes.RECEIVE_MODEL_YEARS:
-            console.log(action);
             return {
                 ...state,
                 requestingMoreDeals: false,
@@ -128,9 +136,9 @@ export default function(state = initialState, action = {}) {
         case ActionTypes.CLEAR_MODEL_YEAR:
             return {
                 ...state,
+                page: 1,
                 searchQuery: {
                     ...state.searchQuery,
-                    page: 1,
                     entity: 'model',
                     models: [],
                     years: [],
@@ -141,9 +149,9 @@ export default function(state = initialState, action = {}) {
         case ActionTypes.SELECT_MODEL_YEAR:
             return {
                 ...state,
+                page: 1,
                 searchQuery: {
                     ...state.searchQuery,
-                    page: 1,
                     entity: 'deal',
                     models: [action.data.id],
                     years: [action.data.year],
@@ -161,9 +169,9 @@ export default function(state = initialState, action = {}) {
             return {
                 ...state,
                 deals: [],
+                page: 1,
                 searchQuery: {
                     ...state.searchQuery,
-                    page: 1,
                     sort: {
                         attribute: action.sort,
                         direction: direction,
@@ -174,9 +182,9 @@ export default function(state = initialState, action = {}) {
         case ActionTypes.TOGGLE_MAKE:
             return {
                 ...state,
+                page: 1,
                 searchQuery: {
                     ...state.searchQuery,
-                    page: 1,
                     makes: action.selectedMakes,
                 },
             };
@@ -184,9 +192,9 @@ export default function(state = initialState, action = {}) {
         case ActionTypes.TOGGLE_MODEL:
             return {
                 ...state,
+                page: 1,
                 searchQuery: {
                     ...state.searchQuery,
-                    page: 1,
                     models: action.selectedModels,
                 },
             };
@@ -194,9 +202,9 @@ export default function(state = initialState, action = {}) {
         case ActionTypes.TOGGLE_STYLE:
             return {
                 ...state,
+                page: 1,
                 searchQuery: {
                     ...state.searchQuery,
-                    page: 1,
                     styles: action.selectedStyles,
                 },
             };
@@ -204,9 +212,9 @@ export default function(state = initialState, action = {}) {
         case ActionTypes.TOGGLE_FEATURE:
             return {
                 ...state,
+                page: 1,
                 searchQuery: {
                     ...state.searchQuery,
-                    page: 1,
                     features: action.selectedFeatures,
                 },
             };
@@ -214,4 +222,6 @@ export default function(state = initialState, action = {}) {
         default:
             return state;
     }
-}
+};
+
+export default persistReducer(persistConfig, reducer);
