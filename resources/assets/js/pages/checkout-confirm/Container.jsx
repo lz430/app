@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import * as Actions from 'actions/index';
+import * as Actions from 'apps/common/actions';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import ConfirmDeal from './components/ConfirmDeal';
 import Modal from 'components/Modal';
@@ -13,7 +13,7 @@ import {
     makeDealBestOfferTotalValue,
     makeDealBestOffer,
     makeDealPricing,
-} from 'selectors/index';
+} from 'apps/common/selectors';
 
 import DealPricing from 'src/DealPricing';
 

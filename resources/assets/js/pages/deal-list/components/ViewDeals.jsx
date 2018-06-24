@@ -6,7 +6,7 @@ import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import { connect } from 'react-redux';
 
-import { toggleCompare } from 'actions';
+import { toggleCompare } from 'apps/common/actions';
 import { requestMoreDeals } from '../actions';
 
 class ViewDeals extends React.PureComponent {

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import commonReducers from 'reducers/index';
 
+import commonReducers from 'apps/common/reducers';
 import appUserReducer from 'apps/user/reducers';
 import appPageReducer from 'apps/page/reducers';
 

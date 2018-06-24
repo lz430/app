@@ -2,11 +2,11 @@ import React from 'react';
 import R from 'ramda';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as Actions from 'actions/index';
+import * as Actions from 'apps/common/actions';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import InfoModal from 'components/InfoModal';
-import { makeDealPricing } from 'selectors/index';
+import { makeDealPricing } from 'apps/common/selectors';
 import DealPricing from 'src/DealPricing';
 import DealPriceWrapper from 'components/Hoc/DealPriceWrapper';
 

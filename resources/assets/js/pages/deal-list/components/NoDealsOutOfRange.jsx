@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import api from 'src/api';
 import util from 'src/util';
 import { connect } from 'react-redux';
-import * as Actions from 'actions/index';
+import * as Actions from 'apps/common/actions';
 
 class NoDealsOutOfRange extends Component {
     constructor() {

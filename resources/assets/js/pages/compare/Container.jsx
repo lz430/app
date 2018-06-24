@@ -4,7 +4,7 @@ import zondicons from 'zondicons';
 import R from 'ramda';
 import qs from 'qs';
 import { connect } from 'react-redux';
-import * as Actions from 'actions/index';
+import * as Actions from 'apps/common/actions';
 import Deal from 'components/Deals/Deal';
 import Modal from 'components/Modal';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';

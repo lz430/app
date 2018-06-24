@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import R from 'ramda';
-import * as Actions from 'actions/index';
+import * as Actions from 'apps/common/actions';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 

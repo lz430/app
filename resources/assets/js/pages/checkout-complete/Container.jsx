@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import * as Actions from 'actions/index';
+import * as Actions from 'apps/common/actions';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import Modal from 'components/Modal';
@@ -8,7 +8,7 @@ import strings from 'src/strings';
 import api from 'src/api';
 import util from 'src/util';
 import miscicons from 'miscicons';
-import { makeDealBestOfferTotalValue } from 'selectors/index';
+import { makeDealBestOfferTotalValue } from 'apps/common/selectors';
 
 class Container extends React.PureComponent {
     constructor(props) {

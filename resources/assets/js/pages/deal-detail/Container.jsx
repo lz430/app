@@ -1,4 +1,4 @@
-import * as legacyActions from 'actions/index';
+import * as legacyActions from 'apps/common/actions';
 import api from 'src/api';
 import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import CompareBar from 'components/CompareBar';
@@ -14,7 +14,7 @@ import zondicons from 'zondicons';
 import ImageGallery from 'react-image-gallery';
 import AccuPricingModal from 'components/AccuPricingModal';
 import DealPricing from 'src/DealPricing';
-import { makeDealPricing } from 'selectors/index';
+import { makeDealPricing } from 'apps/common/selectors';
 import util from 'src/util';
 import CashPricingPane from './components/pricing/CashPane';
 import FinancePricingPane from './components/pricing/FinancePane';
@@ -503,15 +503,15 @@ function mapStateToProps(state) {
     const getDealPricing = makeDealPricing();
     const mapStateToProps = (state, props) => {
         return {
-            compareList: state.compareList,
-            selectedTab: state.selectedTab,
-            downPayment: state.downPayment,
-            termDuration: state.termDuration,
-            fallbackDealImage: state.fallbackDealImage,
-            selectedDeal: state.selectedDeal,
-            employeeBrand: state.employeeBrand,
+            compareList: state.common.compareList,
+            selectedTab: state.common.selectedTab,
+            downPayment: state.common.downPayment,
+            termDuration: state.common.termDuration,
+            fallbackDealImage: state.common.fallbackDealImage,
+            selectedDeal: state.common.selectedDeal,
+            employeeBrand: state.common.employeeBrand,
             dealPricing: new DealPricing(getDealPricing(state, props)),
-            window: state.window,
+            window: state.common.window,
         };
     };
     return mapStateToProps;
@@ -521,7 +521,6 @@ const mapDispatchToProps = mapAndBindActionCreators({
     financeActions,
     leaseActions,
     selectDiscountActions,
-
     legacyActions,
 });
 

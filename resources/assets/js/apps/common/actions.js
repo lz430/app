@@ -1,7 +1,7 @@
 import api from 'src/api';
 import util from 'src/util';
 import R from 'ramda';
-import * as ActionTypes from 'actiontypes/index';
+import * as ActionTypes from './consts';
 
 export function toggleSearchFinancing(financing) {
     return dispatch => {

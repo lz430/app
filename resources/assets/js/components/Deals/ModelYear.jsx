@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import util from 'src/util';
 import ModelYearImage from 'components/Deals/ModelYearImage';
-import { selectModelYear } from 'actions/index';
+import { selectModelYear } from 'pages/deal-list/actions';
 
 class ModelYear extends React.PureComponent {
     static propTypes = {

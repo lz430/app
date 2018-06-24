@@ -1,8 +1,4 @@
-import { makeDealPricing } from 'selectors/index';
-import DealPricing from 'src/DealPricing';
-import { cancelRequest } from 'store/httpclient';
-import getCommon from 'apps/common/selectors';
-
+import R from 'ramda';
 import {
     all,
     put,
@@ -13,16 +9,21 @@ import {
     fork,
     cancelled,
 } from 'redux-saga/effects';
-import util from 'src/util';
-import ApiClient from 'store/api';
 
-import * as ActionTypes from 'actiontypes/index';
-import R from 'ramda';
+import { makeDealPricing } from 'apps/common/selectors';
+import DealPricing from 'src/DealPricing';
+import { cancelRequest } from 'store/httpclient';
+import util from 'src/util';
+
+import ApiClient from 'store/api';
+import getCommon from './selectors';
+import * as ActionTypes from './consts';
+
 import {
     receiveBestOffer,
     receiveLeaseRates,
     receiveLeasePayments,
-} from 'actions/index';
+} from './actions';
 
 /**
  *

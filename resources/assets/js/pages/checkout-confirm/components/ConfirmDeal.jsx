@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as Actions from 'actions/index';
+import * as Actions from 'apps/common/actions';
 import { connect } from 'react-redux';
-import { makeDealBestOfferTotalValue, makeDealPricing } from 'selectors/index';
+import {
+    makeDealBestOfferTotalValue,
+    makeDealPricing,
+} from 'apps/common/selectors';
 import InfoModalData from '../../../components/InfoModalData';
 import DealPricing from 'src/DealPricing';
 import R from 'ramda';

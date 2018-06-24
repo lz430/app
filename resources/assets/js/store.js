@@ -1,16 +1,13 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
-import rootSaga from 'sagas';
+import storage from 'redux-persist/lib/storage';
 import { persistStore, persistReducer } from 'redux-persist';
+
+import rootSaga from 'sagas';
 import rootReducer from 'reducers';
 
-import { windowResize } from 'actions/index';
-import util from 'src/util';
-import storage from 'redux-persist/lib/storage';
-
-const urlStyle = util.getInitialBodyStyleFromUrl();
-const urlSize = util.getInitialSizeFromUrl();
+import { windowResize } from 'apps/common/actions';
 
 const initialState = {
     /*

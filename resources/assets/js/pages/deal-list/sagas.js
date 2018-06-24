@@ -24,7 +24,7 @@ import {
     SEARCH_REQUEST,
 } from './consts';
 
-import * as DealSagas from 'sagas/deal';
+import * as DealSagas from 'apps/common/sagas';
 import * as DealListActions from './actions';
 
 import getDealList, { getSearchQuery } from './selectors';

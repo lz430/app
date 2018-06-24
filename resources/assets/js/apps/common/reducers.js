@@ -1,4 +1,4 @@
-import * as ActionTypes from 'actiontypes/index';
+import * as ActionTypes from 'apps/common/consts';
 import R from 'ramda';
 import { REHYDRATE } from 'redux-persist';
 import util from 'src/util';
@@ -9,7 +9,6 @@ const urlSize = util.getInitialSizeFromUrl();
 const initialState = {
     accuPricingModalIsShowing: false,
     bestOffers: [],
-    city: null,
     compareList: [],
     dealBestOffer: null,
     employeeBrand: false,
@@ -37,8 +36,6 @@ const initialState = {
     vehicleModel: null,
     vehicleYear: null,
     window: { width: window.innerWidth },
-    zipInRange: null,
-    zipcode: null,
     dealsIdsWithCustomizedQuotes: [],
     leaseRatesLoaded: {},
     leaseRates: null,

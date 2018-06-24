@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import R from 'ramda';
 import { connect } from 'react-redux';
-import * as Actions from 'actions';
+import * as Actions from 'apps/common/actions';
 import SVGInline from 'react-svg-inline';
 import strings from 'src/strings';
 import miscicons from 'miscicons';
@@ -11,7 +11,7 @@ import {
     makeDealTargetsAvailable,
     makeDealTargetsAvailableLoading,
     makeDealTargetKey,
-} from 'selectors/index';
+} from 'apps/common/selectors';
 import Line from '../pages/deal-detail/components/pricing/Line';
 import Label from '../pages/deal-detail/components/pricing/Label';
 import Value from '../pages/deal-detail/components/pricing/Value';
