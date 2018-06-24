@@ -1,43 +1,91 @@
 const UPDATE_ANNUAL_MILEAGE = 'dmr/dealDetails.lease.UPDATE_ANNUAL_MILEAGE';
 const UPDATE_CASH_DUE = 'dmr/dealDetails.lease.UPDATE_CASH_DUE';
 const UPDATE_TERM = 'dmr/dealDetails.lease.UPDATE_TERM';
+const UPDATE = 'dmr/dealDetails.lease.UPDATE';
 
 const initialState = {
     cashDue: {},
     term: {},
-    annualMileage: {}
+    annualMileage: {},
 };
 
-export default function (state = initialState, action = {}) {
+function indexFor(action) {
+    return `${action.dealId}.${action.zipcode}`;
+}
+
+function replaceStateForKey(state, action, key) {
+    const index = indexFor(action);
+
+    return {
+        ...state,
+        [key]: {
+            ...state[key],
+            [index]: action[key],
+        },
+    };
+}
+
+function replaceStateForKeys(state, action, ...keys) {
+    return keys.reduce((newState, key) => {
+        return replaceStateForKey(newState, action, key);
+    }, state);
+}
+
+export default function(state = initialState, action = {}) {
     switch (action.type) {
         case UPDATE_ANNUAL_MILEAGE:
-            return {...state, annualMileage: action.annualMileage};
+            return replaceStateForKey(state, action, 'annualMileage');
         case UPDATE_CASH_DUE:
-            return {...state, cashDue: action.cashDue};
+            return replaceStateForKey(state, action, 'cashDue');
         case UPDATE_TERM:
-            return {...state, term: action.term};
+            return replaceStateForKey(state, action, 'term');
+        case UPDATE:
+            return replaceStateForKeys(
+                state,
+                action,
+                'annualMileage',
+                'cashDue',
+                'term'
+            );
         default:
             return state;
     }
 }
 
-export function updateAnnualMileage(annualMileage) {
+export function updateAnnualMileage(dealId, zipcode, annualMileage) {
     return {
         type: UPDATE_ANNUAL_MILEAGE,
-        annualMileage
-    }
+        dealId,
+        zipcode,
+        annualMileage,
+    };
 }
 
-export function updateCashDue(cashDue) {
+export function updateCashDue(dealId, zipcode, cashDue) {
     return {
         type: UPDATE_CASH_DUE,
-        cashDue
-    }
+        dealId,
+        zipcode,
+        cashDue,
+    };
 }
 
-export function updateTerm(term) {
+export function updateTerm(dealId, zipcode, term) {
     return {
         type: UPDATE_TERM,
-        term
-    }
+        dealId,
+        zipcode,
+        term,
+    };
+}
+
+export function update(dealId, zipcode, annualMileage, term, cashDue) {
+    return {
+        type: UPDATE,
+        dealId,
+        zipcode,
+        annualMileage,
+        term,
+        cashDue,
+    };
 }

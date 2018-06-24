@@ -296,6 +296,14 @@ class DealDetails extends React.PureComponent {
                                     {...{ dealPricing }}
                                     onDiscountChange={this.handleDiscountChange}
                                     onRebatesChange={this.handleRebatesChange}
+                                    onTermChange={this.handleLeaseTermChange}
+                                    onAnnualMileageChange={
+                                        this.handleLeaseAnnualMileageChange
+                                    }
+                                    onCashDueChange={
+                                        this.handleLeaseCashDueChange
+                                    }
+                                    onChange={this.handleLeaseChange}
                                 />
                             )}
                         </div>
@@ -336,6 +344,48 @@ class DealDetails extends React.PureComponent {
 
     handleFinanceTermChange = term => {
         this.props.financeActions.updateTerm(term);
+    };
+
+    handleLeaseTermChange = term => {
+        const { dealPricing } = this.props;
+
+        this.props.leaseActions.updateTerm(
+            dealPricing.id(),
+            dealPricing.zipcode(),
+            term
+        );
+    };
+
+    handleLeaseAnnualMileageChange = annualMileage => {
+        const { dealPricing } = this.props;
+
+        this.props.leaseActions.updateAnnualMileage(
+            dealPricing.id(),
+            dealPricing.zipcode(),
+            annualMileage
+        );
+    };
+
+    handleLeaseCashDueChange = cashDue => {
+        const { dealPricing } = this.props;
+
+        this.props.leaseActions.updateCashDue(
+            dealPricing.id(),
+            dealPricing.zipcode(),
+            cashDue
+        );
+    };
+
+    handleLeaseChange = (annualMileage, term, cashDue) => {
+        const { dealPricing } = this.props;
+
+        this.props.leaseActions.update(
+            dealPricing.id(),
+            dealPricing.zipcode(),
+            annualMileage,
+            term,
+            cashDue
+        );
     };
 
     renderFeaturesAndOptions(deal, index) {
