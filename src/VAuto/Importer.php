@@ -307,6 +307,7 @@ class Importer
 
         //
         // Delete all the hashes
+        Deal::whereNotIn('file_hash', $hashes)->unsearchable();
         Deal::whereNotIn('file_hash', $hashes)->whereDoesntHave('purchases')->delete();
 
         $this->debug['stop'] = microtime(true);
