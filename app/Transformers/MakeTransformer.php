@@ -3,7 +3,6 @@
 namespace App\Transformers;
 
 use App\Models\JATO\Make;
-use App\Models\JATO\VehicleModel;
 use League\Fractal\TransformerAbstract;
 
 class MakeTransformer extends TransformerAbstract
