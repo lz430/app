@@ -16,9 +16,9 @@ class BestOfferTransformer extends TransformerAbstract
 
     public function getData($params)
     {
-       $data = collect($params);
-       $data = $data['results'];
-       return $data;
+        $data = collect($params);
+        $data = $data['results'];
+        return $data;
     }
 
     public function getRatesForLeases($params)
@@ -26,8 +26,12 @@ class BestOfferTransformer extends TransformerAbstract
         $data = $this->getData($params);
         $terms = $data->leaseTerms;
         $months = [];
-        foreach($terms as $term){
-            $months[] = array('moneyFactor' => isset($term->Factor) ? $term->Factor : $term->Rate / 2400, 'residualPercent' => $this->getInitialResidualPercent($params, $term->QualifyingTermEnd),'termLength' => $term->QualifyingTermEnd, 'residuals' => $this->getResiduals($params, $term->QualifyingTermEnd));
+        foreach ($terms as $term) {
+            $months[] = [
+                'moneyFactor' => isset($term->Factor) ? $term->Factor : $term->Rate / 2400,
+                'residualPercent' => $this->getInitialResidualPercent($params, $term->QualifyingTermEnd),
+                'termLength' => $term->QualifyingTermEnd,
+                'residuals' => $this->getResiduals($params, $term->QualifyingTermEnd)];
         }
         return $months;
     }
@@ -38,14 +42,20 @@ class BestOfferTransformer extends TransformerAbstract
         $residuals = [];
 
         $programs = $results;
-        foreach($programs->leaseMiles as $mile => $terms) {
+        foreach ($programs->leaseMiles as $mile => $terms) {
             $rates = null;
-            foreach($terms as $time => $percent){
-                if($time == $timeFrame){
+
+            foreach ($terms as $time => $percent) {
+                if ($time == $timeFrame) {
                     $rates = $percent;
                 }
             }
-            $residuals[] = array('annualMileage' => $mile, 'residualPercent' => $rates);
+
+            $residuals[] = [
+                'annualMileage' => $mile,
+                'residualPercent' => $rates
+            ];
+
         }
         return array_values(array_sort($residuals));
     }
@@ -90,11 +100,11 @@ class BestOfferTransformer extends TransformerAbstract
             return false;
         }
 
-        if(in_array($params['paymentType'], ['cash', 'finance'])){
+        if (in_array($params['paymentType'], ['cash', 'finance'])) {
             return $this->getCashRebates($params);
         }
 
-        if($params['paymentType'] === 'lease'){
+        if ($params['paymentType'] === 'lease') {
             $leaseData = $this->getRatesForLeases($params);
             $cashValue['totalValue'] = $this->getCashRebates($params) + $this->getLeaseCash($params); // TODO : sloppy, fix
             $array = [
@@ -115,7 +125,7 @@ class BestOfferTransformer extends TransformerAbstract
             ];
         }
 
-        if(in_array($params['paymentType'], ['cash', 'finance'])){
+        if (in_array($params['paymentType'], ['cash', 'finance'])) {
             return [
                 'totalValue' => $this->getCashRebates($params)
 

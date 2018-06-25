@@ -80,7 +80,7 @@ class Client
                 'Base' => 'Fixed',
                 'DescriptionType' => 'Rebate',
                 'TaxIndex' => '1',
-                'FinanceTaxes' => 'No',
+                'FinanceTaxes' => 'Yes',
                 'CCRPortionFeeTaxed' => 'Yes',
                 'RoundToOption' => 'NearestPenny',
             ],
