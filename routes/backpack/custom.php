@@ -39,5 +39,4 @@ Route::group([
     Route::get('vauto-dump', 'VAutoDumpController');
     Route::get('statistics/deals', 'StatisticsController@deals');
     Route::get('deal-feature-debugger/{deal}', 'DealFeatureDebuggerController@show');
-    Route::post('deal-by-vin', 'DealDebuggerController@vinLookup');
 });
