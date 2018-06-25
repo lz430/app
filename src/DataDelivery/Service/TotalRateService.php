@@ -37,9 +37,13 @@ class TotalRateService extends BaseService
         }
 
         $response->standardRates = [];
-        $this->client->mungeAttributesIntoArray($response->standardRates, $element->StandardRates);
-        $this->client->mungeChildrenIntoArray($response->standardRates, $element->StandardRates);
 
+        foreach ($element->StandardRates->FinanceCompany as $companyData) {
+            $data = [];
+            $this->client->mungeAttributesIntoArray($data, $companyData);
+            $this->client->mungeChildrenIntoArray($data, $companyData);
+            $response->standardRates[] = (object) $data;
+        }
         return $response;
     }
 

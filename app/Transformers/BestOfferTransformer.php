@@ -70,8 +70,12 @@ class BestOfferTransformer extends TransformerAbstract
     public function getLeaseCash($params)
     {
         $data = $this->getData($params);
-        $leaseCash = $data->leaseTerms[0];
-        return $leaseCash->CCR;
+        if (isset($data->leaseTerms[0])) {
+            $leaseCash = $data->leaseTerms[0];
+            return $leaseCash->CCR;
+        }
+
+        return 0;
     }
 
     public function getInitialResidualPercent($params, $timeFrame)

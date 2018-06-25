@@ -19,7 +19,6 @@ Route::group([
     // Models
     CRUD::resource('deal', 'DealCrudController');
     CRUD::resource('dealer', 'DealerCrudController');
-    //CRUD::resource('user', 'UserCrudController');
     CRUD::resource('feature', 'FeatureCrudController');
     CRUD::resource('category', 'CategoryCrudController');
 
