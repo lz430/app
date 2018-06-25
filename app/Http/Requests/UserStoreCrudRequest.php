@@ -1,20 +1,10 @@
 <?php
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Backpack\PermissionManager\app\Http\Requests\UserStoreCrudRequest as ParentRequest;
 
-class UserStoreCrudRequest extends FormRequest
+class UserStoreCrudRequest extends ParentRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        // only allow updates if the user is logged in
-        return \Auth::check();
-    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -24,7 +14,7 @@ class UserStoreCrudRequest extends FormRequest
     public function rules()
     {
         return [
-            'email'    => 'required|unique:users,email',
+            'email'    => 'required|unique:'.config('permission.table_names.users', 'users').',email',
             'first_name'     => 'required',
             'last_name'     => 'required',
             'password' => 'required|confirmed',
