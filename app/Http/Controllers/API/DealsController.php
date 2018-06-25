@@ -5,9 +5,10 @@ namespace App\Http\Controllers\API;
 use App\Services\Search\DealSearch;
 use App\Services\Search\ESPaginatorAdapter;
 use App\Transformers\DealSearchTransformer;
+use App\Transformers\ESResponseTransformer;
 use Illuminate\Http\Request;
 
-use League\Fractal\Serializer\DataArraySerializer;
+use League\Fractal\Serializer\ArraySerializer;
 
 class DealsController extends BaseAPIController
 {
@@ -36,7 +37,7 @@ class DealsController extends BaseAPIController
         }
 
         if ($request->get('make_ids')) {
-            $query = $query->filterMustMakes($request->get('make_ids'), 'name');
+            $query = $query->filterMustMakes($request->get('make_ids'));
         }
 
         if ($request->get('model_ids')) {
@@ -58,21 +59,20 @@ class DealsController extends BaseAPIController
             ->size($per_page)
             ->from($page * $per_page);
 
+        $query = $query
+            ->addMakeAgg()
+            ->addStyleAgg();
 
         $results = $query->get();
-        if (isset($results['hits']['hits'])) {
-            $documents = $results['hits']['hits'];
-        } else {
-            $documents = [];
-        }
-
 
         return fractal()
-            ->collection($documents)
-            ->withResourceName(self::RESOURCE_NAME)
-            ->transformWith(DealSearchTransformer::class)
-            ->serializeWith(new DataArraySerializer)
-            ->paginateWith(new ESPaginatorAdapter($results, $page, $per_page))
+            ->item(['response' => $results, 'meta' => [
+                'current_page' => $page,
+                'per_page' => $per_page,
+            ]])
+            ->transformWith(ESResponseTransformer::class)
+            ->serializeWith(new ArraySerializer)
             ->respond();
+
     }
 }

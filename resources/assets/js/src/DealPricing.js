@@ -5,7 +5,6 @@ import Decimal from 'decimal.js';
 
 export default class DealPricing {
     constructor(data) {
-        console.log(data);
         this.data = data;
     }
 

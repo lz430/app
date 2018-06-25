@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Deal;
-use App\Models\JATO\Make;
 use App\Transformers\MakeTransformer;
 use League\Fractal\Serializer\DataArraySerializer;
 

@@ -29,7 +29,7 @@ class DealsByModelYearController extends BaseAPIController
         }
 
         if ($request->get('make_ids')) {
-            $query = $query->filterMustMakes($request->get('make_ids'), 'name');
+            $query = $query->filterMustMakes($request->get('make_ids'));
         }
 
         if ($request->get('features')) {

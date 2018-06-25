@@ -58,11 +58,9 @@ abstract class BaseSearch
         return $this;
     }
 
-    public function filterMustLocation($location, $format = 'latlon') {
-        if ($format == 'latlon') {
-            $lat = (float) $location['lat'];
-            $lon = (float) $location['lon'];
-        }
+    public function filterMustLocation($location) {
+        $lat = (float) $location['lat'];
+        $lon = (float) $location['lon'];
 
         if (!isset($lat)) {
             return $this;
@@ -98,11 +96,7 @@ abstract class BaseSearch
         return $this;
     }
 
-    public function filterMustMakes(array $makes, $format = 'name') {
-        if ($format == 'id') {
-            $makes = Make::whereIn('id', $makes)->pluck('name')->toArray();
-        }
-
+    public function filterMustMakes(array $makes) {
         $this->query['query']['bool']['must'][] = [
             [
                 'terms' => [
@@ -143,6 +137,34 @@ abstract class BaseSearch
 
         return $this;
     }
+
+    public function addStyleAgg() {
+        $this->query['aggs']['bodystyle'] = [
+            "terms" => [
+                "size" => 50000,
+                "field" => "style.keyword"
+            ],
+        ];
+        return $this;
+    }
+
+    public function addMakeAgg() {
+        $this->query['aggs']['make'] = [
+            "global" => (object) [],
+            "aggs" => [
+                "sub" => [
+                    "terms" => [
+                        "size" => 50000,
+                        "field" => "make.keyword"
+                    ],
+                ],
+            ]
+
+        ];
+        return $this;
+    }
+
+
 
     public function get() {
         return Deal::searchRaw($this->query);
