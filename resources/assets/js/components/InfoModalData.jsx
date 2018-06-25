@@ -1,12 +1,14 @@
 import R from 'ramda';
 import React from 'react';
 import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
-import strings from 'src/strings';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
-import Line from '../containers/dealDetails/components/pricing/Line';
-import Label from '../containers/dealDetails/components/pricing/Label';
-import Value from '../containers/dealDetails/components/pricing/Value';
+
+// TODO: These components should be moved to a common area if they are used by other
+// common components.
+import Line from 'pages/deal-detail/components/pricing/Line';
+import Label from 'pages/deal-detail/components/pricing/Label';
+import Value from 'pages/deal-detail/components/pricing/Value';
 
 class InfoModalData extends React.PureComponent {
     static defaultProps = {
