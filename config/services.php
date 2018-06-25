@@ -65,5 +65,10 @@ return [
     'datadelivery' => [
         'id' => env('DATADELIVERY_ID'),
         'api_key' => env('DATADELIVERY_API_KEY'),
+    ],
+    'ipstack' => [
+        'api_key' => env('IPSTACK_API_KEY'),
     ]
+
+
 ];
