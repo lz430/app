@@ -98,6 +98,18 @@ abstract class BaseSearch
         return $this;
     }
 
+    public function FilterMustYears(array $years) {
+        $this->query['query']['bool']['must'][] = [
+            [
+                'terms' => [
+                    'year.keyword' => $years,
+                ],
+            ]
+        ];
+
+        return $this;
+    }
+
     public function filterMustMakes(array $makes, $format = 'name') {
         if ($format == 'id') {
             $makes = Make::whereIn('id', $makes)->pluck('name')->toArray();

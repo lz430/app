@@ -43,6 +43,10 @@ class DealsController extends BaseAPIController
             $query = $query->FilterMustModels($request->get('model_ids'), 'id');
         }
 
+        if ($request->get('year')) {
+            $query = $query->FilterMustYears([$request->get('year')]);
+        }
+
         if ($request->get('features')) {
             $query = $query->filterMustLegacyFeatures($request->get('features'));
         }
