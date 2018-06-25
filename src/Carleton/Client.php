@@ -106,7 +106,7 @@ class Client
 
         $terms = json_decode($terms, true);
 
-        //foreach ($cashDueOptions as $cashDueValue) {
+        foreach ($cashDueOptions as $cashDueValue) {
             foreach($terms as $term => $termData) {
                 foreach ($termData['annualMileage'] as $annualMileage => $annualMileageData) {
                     $quote = [
@@ -122,7 +122,7 @@ class Client
                     ];
 
                     $quote['fees']['cashDown'] = [
-                        'Amount' => $cashDueOptions[0], //$cashDueValue
+                        'Amount' => $cashDueValue,
                         'Type' => 'Financed',
                         'Base' => 'Fixed',
                         'DescriptionType' => 'CashDown',
@@ -135,7 +135,7 @@ class Client
                     $data['quotes'][] = $quote;
                 }
             }
-        //}
+        }
         return $data;
     }
 

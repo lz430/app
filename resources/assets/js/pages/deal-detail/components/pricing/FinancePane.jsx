@@ -4,6 +4,7 @@ import Rebates from '../../containers/pricing/rebates/Rebates';
 import Line from './Line';
 import Label from './Label';
 import Value from './Value';
+import TaxesAndFees from './TaxesAndFees';
 
 class FinancePane extends React.PureComponent {
     render() {
@@ -29,6 +30,7 @@ class FinancePane extends React.PureComponent {
                     </Line>
                 )}
                 <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
+                <TaxesAndFees items={dealPricing.taxesAndFees()} />
                 <Line>
                     <Label>Total Price</Label>
                     <Value>{dealPricing.yourPrice()}*</Value>

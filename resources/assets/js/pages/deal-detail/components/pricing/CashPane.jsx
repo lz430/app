@@ -4,6 +4,7 @@ import Rebates from '../../containers/pricing/rebates/Rebates';
 import Line from './Line';
 import Label from './Label';
 import Value from './Value';
+import TaxesAndFees from './TaxesAndFees';
 
 class CashPane extends React.PureComponent {
     render() {
@@ -29,6 +30,8 @@ class CashPane extends React.PureComponent {
                     </Line>
                 )}
                 <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
+                <TaxesAndFees items={dealPricing.taxesAndFees()} />
+
                 <Line isImportant={true}>
                     <Label>Total Price</Label>
                     <Value>{dealPricing.yourPrice()}*</Value>
