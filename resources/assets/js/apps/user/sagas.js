@@ -1,16 +1,4 @@
-import {
-    fork,
-    all,
-    put,
-    call,
-    select,
-    take,
-    takeLatest,
-    takeEvery,
-    cancel,
-    cancelled,
-} from 'redux-saga/effects';
-import jsonp from 'jsonp';
+import { put, call, select, takeEvery } from 'redux-saga/effects';
 
 import api from 'store/api';
 
@@ -24,25 +12,6 @@ import { getUserLocation } from './selectors';
  * Request IP Location
  ********************************************************************/
 
-/**
- * Axois doesn't support JSONP.
- * @returns {Promise<any>}
- */
-function getIpLocation() {
-    const url =
-        'http://api.ipstack.com/check?access_key=af71ee691359c9ccdacefb9137a3ff5b&format=1';
-
-    return new Promise(resolve => {
-        jsonp(url, null, function(err, data) {
-            if (err) {
-                resolve(null);
-            } else {
-                resolve(data);
-            }
-        });
-    });
-}
-
 export function* requestIpLocation() {
     // Don't get ip location if location is already set.
     const userCurrentLocation = yield select(getUserLocation);
@@ -50,27 +19,13 @@ export function* requestIpLocation() {
         return;
     }
 
-    let ipLocationResults = null;
+    let location = null;
 
     try {
-        ipLocationResults = yield call(getIpLocation);
+        location = yield call(api.user.getLocation);
+        location = location.data;
     } catch (e) {
         console.log(e);
-    }
-
-    let location = null;
-    if (ipLocationResults) {
-        try {
-            location = yield call(
-                api.user.getLocation,
-                null,
-                ipLocationResults.latitude,
-                ipLocationResults.longitude
-            );
-            location = location.data;
-        } catch (e) {
-            console.log(e);
-        }
     }
 
     yield put(receiveLocation(location));

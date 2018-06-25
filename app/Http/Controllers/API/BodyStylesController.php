@@ -41,7 +41,6 @@ class BodyStylesController extends BaseAPIController
 
     public function index()
     {
-
         $data = $this->getData();
         $data = array_flip($data);
         $styles = array_intersect_key(Maps::BODY_STYLES, $data);
