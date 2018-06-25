@@ -45,12 +45,12 @@ export default class DealPricing {
     }
 
     financeDownPaymentValue() {
-        let value = null;
-        if (this.data.financeDownPayment === null) {
+        let value = this.data.financeDownPayment;
+
+        if (value === null || value === undefined) {
             value = new Decimal(this.yourPriceValue() * 0.1).toFixed(2);
-        } else {
-            value = this.data.financeDownPayment;
         }
+
         return value;
     }
 
@@ -59,7 +59,11 @@ export default class DealPricing {
     }
 
     financeTermValue() {
-        return this.data.financeTerm === null ? 60 : this.data.financeTerm;
+        let value = this.data.financeTerm;
+        if (value === null || value === undefined) {
+            value = 60;
+        }
+        return value;
     }
 
     financeTerm() {
@@ -303,10 +307,6 @@ export default class DealPricing {
         return this.data.paymentType === 'finance';
     }
 
-    isNotFinance() {
-        return this.data.paymentType !== 'finance';
-    }
-
     isLease() {
         return this.data.paymentType === 'lease';
     }
@@ -350,17 +350,9 @@ export default class DealPricing {
     }
 
     yourPriceValue() {
-        switch (this.data.paymentType) {
-            case 'cash':
-            case 'finance':
-                return new Decimal(this.sellingPriceValue()).minus(
-                    this.bestOfferValue()
-                );
-            case 'lease':
-                return new Decimal(this.sellingPriceValue()).minus(
-                    this.bestOfferValue()
-                );
-        }
+        return new Decimal(this.sellingPriceValue()).minus(
+            this.bestOfferValue()
+        );
     }
 
     yourPrice() {
@@ -591,11 +583,6 @@ export default class DealPricing {
     }
 
     apiTerms() {
-        if (this.id() == '5514') {
-            console.log('APITERMS');
-            console.log(this.data.dealLeaseRates.data);
-        }
-
         const terms = {};
 
         for (let termRaw of this.data.dealLeaseRates.data) {

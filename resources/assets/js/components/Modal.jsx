@@ -3,7 +3,7 @@ import R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import { connect } from 'react-redux';
-import * as Actions from 'actions';
+import * as Actions from 'apps/common/actions';
 import util from 'src/util';
 
 class Modal extends React.Component {
@@ -178,8 +178,8 @@ class Modal extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        selectedMakes: state.selectedMakes,
-        window: state.window,
+        selectedMakes: state.common.searchQuery.makes,
+        window: state.common.window,
     };
 };
 

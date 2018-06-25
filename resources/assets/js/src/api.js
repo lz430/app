@@ -4,31 +4,6 @@
  * @see store/api
  */
 const api = {
-    getBodyStyles: () => {
-        return window.axios.get('/api/body-styles');
-    },
-    getMakes: () => {
-        return window.axios.get('/api/makes');
-    },
-    getFeatures: () => {
-        return window.axios.get('/api/features');
-    },
-    getFeatureCategories: () => {
-        return window.axios.get('/api/categories', {
-            params: {
-                include: 'features',
-            },
-        });
-    },
-
-    checkZipInRange: code => {
-        return window.axios.get(`/api/zip-codes/${code}`);
-    },
-
-    setZip: code => {
-        return window.axios.post('/zip-codes/', { code });
-    },
-
     getDimensions: jato_vehicle_id => {
         return window.axios.get('/api/dimensions', {
             params: {

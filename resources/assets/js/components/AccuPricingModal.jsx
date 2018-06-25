@@ -1,5 +1,5 @@
 import React from 'react';
-import { hideAccuPricingModal } from 'actions/index';
+import { hideAccuPricingModal } from 'apps/common/actions';
 import { connect } from 'react-redux';
 import Modal from 'components/Modal';
 import PropTypes from 'prop-types';
@@ -9,7 +9,6 @@ class AccuPricingModal extends React.PureComponent {
         accuPricingModalIsShowing: PropTypes.bool,
         onHideAccuPricingModal: PropTypes.func.isRequired,
     };
-
     render() {
         return (
             <div>
@@ -45,7 +44,7 @@ class AccuPricingModal extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
-        accuPricingModalIsShowing: state.accuPricingModalIsShowing,
+        accuPricingModalIsShowing: state.common.accuPricingModalIsShowing,
     };
 };
 

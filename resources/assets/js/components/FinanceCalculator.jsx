@@ -3,7 +3,7 @@ import R from 'ramda';
 import Targets from 'components/Targets';
 import CustomerTypeSelect from 'components/CustomerTypeSelect';
 import { connect } from 'react-redux';
-import * as Actions from 'actions';
+import * as Actions from 'apps/common/actions';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 

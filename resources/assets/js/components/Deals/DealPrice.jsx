@@ -2,18 +2,18 @@ import React from 'react';
 import R from 'ramda';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as Actions from 'actions/index';
+import * as Actions from 'apps/common/actions';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import InfoModal from 'components/InfoModal';
-import { makeDealPricing } from 'selectors/index';
+import { makeDealPricing } from 'apps/common/selectors';
 import DealPricing from 'src/DealPricing';
 import DealPriceWrapper from 'components/Hoc/DealPriceWrapper';
 
 class DealPrice extends React.Component {
     static propTypes = {
         deal: PropTypes.object.isRequired,
-        selectedTab: PropTypes.string.isRequired,
+        purchaseStrategy: PropTypes.string.isRequired,
     };
 
     renderPriceExplanationModal() {
@@ -21,7 +21,7 @@ class DealPrice extends React.Component {
             <InfoModal
                 key={this.props.deal.id}
                 {...R.pick(
-                    ['deal', 'selectedTab', 'compareList', 'dealPricing'],
+                    ['deal', 'purchaseStrategy', 'compareList', 'dealPricing'],
                     this.props
                 )}
                 {...R.pick(
@@ -56,7 +56,7 @@ class DealPrice extends React.Component {
     }
 
     getLabel() {
-        switch (this.props.selectedTab) {
+        switch (this.props.purchaseStrategy) {
             case 'cash':
                 return 'Your cash price';
             case 'finance':
@@ -96,16 +96,13 @@ const makeMapStateToProps = () => {
     const getDealPricing = makeDealPricing();
     const mapStateToProps = (state, props) => {
         return {
-            selectedTab: state.selectedTab,
-            compareList: state.compareList, // should be selected
+            purchaseStrategy: state.user.purchasePreferences.strategy,
+            compareList: state.common.compareList, // should be selected
             dealPricing: new DealPricing(getDealPricing(state, props)),
-            infoModalIsShowingFor: state.infoModalIsShowingFor,
+            infoModalIsShowingFor: state.common.infoModalIsShowingFor,
         };
     };
     return mapStateToProps;
 };
 
-export default connect(
-    makeMapStateToProps,
-    Actions
-)(DealPriceWrapper(DealPrice));
+export default connect(makeMapStateToProps)(DealPriceWrapper(DealPrice));

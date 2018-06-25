@@ -4,13 +4,13 @@ import R from 'ramda';
 import Targets from 'components/Targets';
 import CustomerTypeSelect from 'components/CustomerTypeSelect';
 import { connect } from 'react-redux';
-import * as Actions from 'actions';
+import * as Actions from 'apps/common/actions';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import {
     makeDealBestOfferTotalValue,
     makeDealBestOfferLoading,
-} from 'selectors/index';
+} from 'apps/common/selectors';
 
 class LeaseCalculator extends React.PureComponent {
     showWhenPricingIsLoaded(fn) {
@@ -304,11 +304,11 @@ const makeMapStateToProps = () => {
     const getDealBestOfferLoading = makeDealBestOfferLoading();
     const mapStateToProps = (state, props) => {
         return {
-            zipcode: state.zipcode,
-            termDuration: state.termDuration,
-            annualMileage: state.annualMileage,
-            residualPercent: state.residualPercent,
-            employeeBrand: state.employeeBrand,
+            zipcode: state.user.purchasePreferences.strategy,
+            termDuration: state.common.termDuration,
+            annualMileage: state.common.annualMileage,
+            residualPercent: state.common.residualPercent,
+            employeeBrand: state.common.employeeBrand,
             dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
             dealBestOfferLoading: getDealBestOfferLoading(state, props),
         };

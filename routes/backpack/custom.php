@@ -35,7 +35,6 @@ Route::group([
 
     //
     // Custom Debug tools
-    Route::get('zip-tester/{zip}', 'ZipCodeTesterController');
     Route::get('jato-logs/{date}', 'JatoLogController@showDay');
     Route::get('jato-logs', 'JatoLogController@index');
     Route::get('vauto-dump', 'VAutoDumpController');

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import util from 'src/util';
 import ModelYearImage from 'components/Deals/ModelYearImage';
-import { selectModelYear } from 'actions/index';
+import { selectModelYear } from 'pages/deal-list/actions';
 
 class ModelYear extends React.PureComponent {
     static propTypes = {
@@ -79,14 +79,7 @@ class ModelYear extends React.PureComponent {
 }
 
 const mapStateToProps = state => {
-    return {
-        compareList: state.compareList,
-        zipcode: state.zipcode,
-        bestOffers: state.bestOffers,
-        selectedTab: state.selectedTab,
-        targets: state.targets,
-        targetDefaults: state.targetDefaults,
-    };
+    return {};
 };
 
 const mapDispatchToProps = dispatch => {

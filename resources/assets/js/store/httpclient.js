@@ -8,3 +8,8 @@ export default axios.create({
         'X-Requested-With': 'XMLHttpRequest',
     },
 });
+
+export const cancelRequest = () => {
+    const CancelToken = axios.CancelToken;
+    return CancelToken.source();
+};

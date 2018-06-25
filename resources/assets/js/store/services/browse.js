@@ -4,6 +4,26 @@ import httpclient from 'store/httpclient';
  * Browse specific API calls.
  */
 class BrowseService {
+    getBodyStyles() {
+        return httpclient.get('/api/body-styles');
+    }
+
+    getMakes() {
+        return httpclient.get('/api/makes');
+    }
+
+    getFeatures() {
+        return httpclient.get('/api/features');
+    }
+
+    getFeatureCategories() {
+        return httpclient.get('/api/categories', {
+            params: {
+                include: 'features',
+            },
+        });
+    }
+
     /**
      * Searches for deals and model years.
      *
@@ -26,7 +46,8 @@ class BrowseService {
             body_styles: query.styles,
             features: query.features,
             year: query.years[0],
-            zipcode: query.location.zipcode,
+            latitude: query.location.latitude,
+            longitude: query.location.longitude,
             sort: sort,
             page: query.page,
         };

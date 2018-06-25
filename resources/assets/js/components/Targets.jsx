@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import R from 'ramda';
 import { connect } from 'react-redux';
-import * as Actions from 'actions';
+import * as Actions from 'apps/common/actions';
 import SVGInline from 'react-svg-inline';
 import strings from 'src/strings';
 import miscicons from 'miscicons';
@@ -11,10 +11,10 @@ import {
     makeDealTargetsAvailable,
     makeDealTargetsAvailableLoading,
     makeDealTargetKey,
-} from 'selectors/index';
-import Line from '../containers/dealDetails/components/pricing/Line';
-import Label from '../containers/dealDetails/components/pricing/Label';
-import Value from '../containers/dealDetails/components/pricing/Value';
+} from 'apps/common/selectors';
+import Line from '../pages/deal-detail/components/pricing/Line';
+import Label from '../pages/deal-detail/components/pricing/Label';
+import Value from '../pages/deal-detail/components/pricing/Value';
 
 class Targets extends React.PureComponent {
     static propTypes = {
@@ -141,9 +141,9 @@ const makeMapStateToProps = () => {
     const getDealTargetsAvailableLoading = makeDealTargetsAvailableLoading();
     return (state, props) => {
         return {
-            zipcode: state.zipcode,
-            targetsAvailable: state.targetsAvailable,
-            targetsSelected: state.targetsSelected,
+            zipcode: state.user.purchasePreferences.strategy,
+            targetsAvailable: state.common.targetsAvailable,
+            targetsSelected: state.common.targetsSelected,
             dealTargetKey: getDealTargetKey(state, props),
             dealTargetsAvailable: getDealTargetsAvailable(state, props),
             dealTargetsAvailableLoading: getDealTargetsAvailableLoading(
