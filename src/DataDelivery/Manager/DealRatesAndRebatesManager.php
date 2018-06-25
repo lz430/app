@@ -163,6 +163,10 @@ class DealRatesAndRebatesManager
             })
             ->first();
 
+        if (!isset($scenario->tiers)) {
+            return 0;
+        }
+
         return collect($scenario->tiers[0]->aprprograms[0]->programs)
             ->reject(function ($program) {
                 return !isset($program->Cash);
@@ -186,13 +190,19 @@ class DealRatesAndRebatesManager
             })
             ->first();
 
-        $ids = collect($scenario->tiers[0]->aprprograms[0]->programs)
-            ->reject(function ($program) {
-                return !isset($program->Cash);
-            })
-            ->map(function ($program) {
-                return $program->ProgramID;
-            })->all();
+
+        if (isset($scenario->tiers)) {
+            $ids = collect($scenario->tiers[0]->aprprograms[0]->programs)
+                ->reject(function ($program) {
+                    return !isset($program->Cash);
+                })
+                ->map(function ($program) {
+                    return $program->ProgramID;
+                })->all();
+        } else {
+            $ids = [];
+        }
+
 
         return $this->programs
             ->reject(function ($program) use ($ids) {
@@ -232,6 +242,7 @@ class DealRatesAndRebatesManager
             $programIds[] = $this->leaseProgram->ProgramID;
         }
 
+
         return $programIds;
     }
 
@@ -254,7 +265,13 @@ class DealRatesAndRebatesManager
 
         //
         // TODO: improve selection logic
-        $this->financeCompany = $companies->first();
+        $company = $companies->first();
+
+        if (!$company && $this->standardRates->count()) {
+            $company = $this->standardRates->first();
+        }
+
+        $this->financeCompany = $company;
     }
 
     private function getMileage()
@@ -291,13 +308,19 @@ class DealRatesAndRebatesManager
 
         //
         //
+
+        if (count($programIds)) {
+            $data = ['ProgramIDs' => implode(",", $programIds)];
+        } else {
+            $data = ['ResidualsOnly' => 'yes'];
+        }
+
         $totalRateResponse = $this->client->totalrate->get(
             $this->vehicleId,
             $this->zipcode,
             $this->deal->dealer->zip,
-            ['ProgramIDs' => implode(",", $programIds)]
+            $data
         );
-
 
         $this->scenarios = collect($totalRateResponse->scenarios);
         $this->residuals = collect($totalRateResponse->residuals);
@@ -322,27 +345,35 @@ class DealRatesAndRebatesManager
             //
             // Build Miles
             $response->leaseMiles = [];
-            foreach ($this->miles as $group) {
-                $mileGroup = [];
-                foreach ($group->terms as $term) {
-                    $mileGroup[$term->TermLength] = $term->Residual;
+            if ($this->miles) {
+                foreach ($this->miles as $group) {
+                    $mileGroup = [];
+                    foreach ($group->terms as $term) {
+                        $mileGroup[$term->TermLength] = $term->Residual;
+                    }
+                    $response->leaseMiles[$group->Miles] = $mileGroup;
                 }
-                $response->leaseMiles[$group->Miles] = $mileGroup;
             }
 
             //
             // Build Lease Program
             $program = $this->leaseProgram;
-            $terms = $program->dealscenarios[$this->scenario]->terms;
-            unset($program->dealscenarios);
-            $response->leaseProgram = $program;
+            if ($program) {
+                $terms = $program->dealscenarios[$this->scenario]->terms;
+                unset($program->dealscenarios);
+                $response->leaseProgram = $program;
 
-            $terms = collect($terms)
-                ->reject(function ($term) {
-                    return isset($term->Factor) && $term->Factor == "STD";
-                })->all();
+                $terms = collect($terms)
+                    ->reject(function ($term) {
+                        return isset($term->Factor) && $term->Factor == "STD";
+                    })->all();
 
-            $response->leaseTerms = $terms;
+                $response->leaseTerms = $terms;
+            } else {
+                $response->leaseProgram = null;
+                $response->leaseTerms = [];
+            }
+
         }
 
         return $response;
@@ -376,7 +407,8 @@ class DealRatesAndRebatesManager
      * @param null $scenario
      * TODO: Support Lease + passed in scenario.
      */
-    public function setScenario($scenario = null) {
+    public function setScenario($scenario = null)
+    {
         if (!$scenario) {
             if ($this->isLease) {
                 $this->bestLeaseProgram();
@@ -400,7 +432,6 @@ class DealRatesAndRebatesManager
         if (!$results || !isset($results->vehicles[0]->DescVehicleID)) {
             return false;
         }
-
         $this->extractProgramData($results);
         $this->vehicleId = $results->vehicles[0]->DescVehicleID;
 

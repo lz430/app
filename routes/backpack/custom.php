@@ -19,7 +19,6 @@ Route::group([
     // Models
     CRUD::resource('deal', 'DealCrudController');
     CRUD::resource('dealer', 'DealerCrudController');
-    //CRUD::resource('user', 'UserCrudController');
     CRUD::resource('feature', 'FeatureCrudController');
     CRUD::resource('category', 'CategoryCrudController');
 
@@ -39,5 +38,4 @@ Route::group([
     Route::get('vauto-dump', 'VAutoDumpController');
     Route::get('statistics/deals', 'StatisticsController@deals');
     Route::get('deal-feature-debugger/{deal}', 'DealFeatureDebuggerController@show');
-    Route::post('deal-by-vin', 'DealDebuggerController@vinLookup');
 });
