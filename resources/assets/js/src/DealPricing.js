@@ -231,6 +231,14 @@ export default class DealPricing {
         return util.moneyFormat(this.baseSellingPriceValue());
     }
 
+    discountValue() {
+        return this.msrpValue() - this.baseSellingPriceValue();
+    }
+
+    discount() {
+        return util.moneyFormat(this.discountValue());
+    }
+
     dmrDiscountValue() {
         return this.msrpValue() - this.defaultPriceValue();
     }
@@ -701,6 +709,17 @@ export default class DealPricing {
         }
 
         return true;
+    }
+
+    taxesAndFeesTotalValue(taxesAndFees) {
+        return (taxesAndFees || this.taxesAndFees()).reduce(
+            (total, item) => total + item.rawValue,
+            0
+        );
+    }
+
+    taxesAndFeesTotal(taxesAndFees) {
+        return util.moneyFormat(this.taxesAndFeesTotalValue(taxesAndFees));
     }
 
     taxesAndFees() {
