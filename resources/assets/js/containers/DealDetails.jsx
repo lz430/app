@@ -25,6 +25,7 @@ import mapAndBindActionCreators from '../util/mapAndBindActionCreators';
 import * as selectDiscountActions from './dealDetails/modules/selectDiscount';
 import * as financeActions from './dealDetails/modules/finance';
 import * as leaseActions from './dealDetails/modules/lease';
+import Line from './dealDetails/components/pricing/Line';
 
 class DealDetails extends React.PureComponent {
     static propTypes = {
@@ -306,12 +307,52 @@ class DealDetails extends React.PureComponent {
                                     onChange={this.handleLeaseChange}
                                 />
                             )}
+                            <div className="deal__buttons">
+                                <button
+                                    className={this.compareButtonClass()}
+                                    onClick={this.props.legacyActions.toggleCompare.bind(
+                                        null,
+                                        this.props.dealPricing.deal()
+                                    )}
+                                >
+                                    {this.isAlreadyInCompareList()
+                                        ? 'Remove from compare'
+                                        : 'Compare'}
+                                </button>
+
+                                <button
+                                    className="deal__button deal__button--small deal__button--pink deal__button"
+                                    onClick={() =>
+                                        (window.location = `/confirm/${dealPricing.id()}`)
+                                    }
+                                    disabled={
+                                        !this.props.dealPricing.canPurchase()
+                                    }
+                                >
+                                    Buy Now
+                                </button>
+                            </div>
+                            <Line>
+                                <div
+                                    style={{
+                                        fontStyle: 'italic',
+                                        fontSize: '.75em',
+                                        marginLeft: '.25em',
+                                    }}
+                                >
+                                    * includes all taxes and dealer fees
+                                </div>
+                            </Line>
                         </div>
                     </div>
                 </div>
             </div>
         );
     }
+
+    handleBuyNow = () => {
+        window.location = '/deal/';
+    };
 
     handlePaymentTypeChange = tabName => {
         this.props.legacyActions.selectTab(tabName);
@@ -495,6 +536,20 @@ class DealDetails extends React.PureComponent {
                     : ''}
                 <AccuPricingModal />
             </div>
+        );
+    }
+
+    isAlreadyInCompareList() {
+        return R.contains(
+            this.props.dealPricing.deal(),
+            R.map(R.prop('deal'), this.props.compareList)
+        );
+    }
+
+    compareButtonClass() {
+        return (
+            'deal__button deal__button--small deal__button--blue' +
+            (this.isAlreadyInCompareList() ? 'deal__button--blue' : '')
         );
     }
 }

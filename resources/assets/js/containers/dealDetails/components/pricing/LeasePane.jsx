@@ -4,6 +4,7 @@ import Rebates from '../../containers/pricing/rebates/Rebates';
 import Line from './Line';
 import Label from './Label';
 import Value from './Value';
+import TaxesAndFees from './TaxesAndFees';
 
 export default class LeasePane extends React.PureComponent {
     static defaultProps = {
@@ -38,6 +39,7 @@ export default class LeasePane extends React.PureComponent {
                     </Line>
                 )}
                 <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
+                <TaxesAndFees items={dealPricing.taxesAndFees()} />
                 <Line>
                     <Label>Total Price</Label>
                     <Value>{dealPricing.yourPrice()}*</Value>
