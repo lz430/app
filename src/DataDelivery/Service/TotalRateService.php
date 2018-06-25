@@ -69,7 +69,6 @@ class TotalRateService extends BaseService
         $data = array_merge($data, $searchData);
 
         $response = $this->client->post("", $data);
-
         if ($response) {
             return $this->parseResponse($response);
         }
