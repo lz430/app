@@ -116,9 +116,7 @@ const util = {
         );
     },
     getTargetKeyForDealAndZip(deal, zipcode) {
-        const vehicleId = deal.version.jato_vehicle_id;
-        const targetKey = `${vehicleId}-${zipcode}`;
-        return targetKey;
+        return `${deal.id}-${zipcode}`;
     },
     getBestOfferKeyForDeal(deal, zipcode, paymentType, selectedTargets) {
         const targetString = R.sort((a, b) => {

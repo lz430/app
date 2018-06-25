@@ -28,7 +28,7 @@ Route::get('targets', 'TargetsController@getTargets')->name('targets.getTargets'
 Route::get('warranties', 'WarrantiesController@getWarranties')->name('warranties.getWarranties');
 Route::get('dimensions', 'DimensionsController@getDimensions')->name('dimensions.getDimensions');
 Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');
-Route::get('location', 'userLocationController@show')->name('location.show');
+Route::get('location', 'UserLocationController@show')->name('location.show');
 
 /**
  * Third-party
