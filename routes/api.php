@@ -12,21 +12,25 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+Route::get('features', 'FeaturesController@index')->name('features.index');
+Route::get('categories', 'CategoriesController@index')->name('categories.index');
 Route::get('makes', 'MakesController@index')->name('makes.index');
 Route::get('models', 'VehicleModelsController@index')->name('vehicleModels.index');
 Route::get('body-styles', 'BodyStylesController@index')->name('bodyStyles.index');
-Route::get('deals', 'DealsController@getDeals')->name('deals.index');
+
 Route::get('dealsByModelYear', 'DealsByModelYearController@getDealsByModelYear')->name('dealsByModelYear.index');
-Route::post('deals/{deal}/quote', 'DealQuoteController@quote')->name('deals.quote');
-Route::get('deals/{deal}/best-offer', 'DealBestOfferController@getBestOffer')->name('deals.best-offer');
-Route::get('deals/{deal}/lease-payments', 'DealLeasePaymentsController@getLeasePayments')->name('lease-payments.getLeasePayments');
-Route::get('deals/{deal}/lease-rates', 'DealLeaseRatesController@getLeaseRates')->name('lease-rates.getLeaseRates');
-Route::get('features', 'FeaturesController@index')->name('features.index');
-Route::get('categories', 'CategoriesController@index')->name('categories.index');
-Route::get('targets', 'TargetsController@getTargets')->name('targets.getTargets');
+
+Route::get('deals', 'DealsController@getDeals')->name('deals.index');
+Route::get('deals/compare', 'DealsCompareController@compare')->name('deals.compare');
 Route::get('warranties', 'WarrantiesController@getWarranties')->name('warranties.getWarranties');
 Route::get('dimensions', 'DimensionsController@getDimensions')->name('dimensions.getDimensions');
+Route::get('deals/{deal}/best-offer', 'DealBestOfferController@getBestOffer')->name('deals.best-offer');
+Route::get('deals/{deal}/quote', 'DealQuoteController@quote')->name('deals.quote');
+Route::get('deals/{deal}/lease-payments', 'DealLeasePaymentsController@getLeasePayments')->name('lease-payments.getLeasePayments');
+Route::get('deals/{deal}/lease-rates', 'DealLeaseRatesController@getLeaseRates')->name('lease-rates.getLeaseRates');
+
+Route::get('targets', 'TargetsController@getTargets')->name('targets.getTargets');
+
 Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');
 Route::get('location', 'UserLocationController@show')->name('location.show');
 

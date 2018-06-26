@@ -68,7 +68,7 @@ const makeMapStateToProps = () => {
     const mapStateToProps = (state, props) => {
         return {
             compareList: state.common.compareList,
-            selectedTab: state.common.selectedTab,
+            selectedTab: state.user.purchasePreferences.strategy,
             downPayment: state.common.downPayment,
             termDuration: state.common.termDuration,
             selectedDeal: state.common.selectedDeal,

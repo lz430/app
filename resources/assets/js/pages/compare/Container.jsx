@@ -12,6 +12,7 @@ import string from 'src/strings';
 import AccordionTable from './components/AccordionTable';
 import util from 'src/util';
 import api from 'src/api';
+import ApiClient from 'store/api';
 import toTitleCase from 'titlecase';
 import AccuPricingModal from 'components/AccuPricingModal';
 import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
@@ -36,7 +37,7 @@ class Container extends React.PureComponent {
 
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
-        api.getFeatureCategories().then(data => {
+        ApiClient.browse.getFeatureCategories().then(data => {
             this.setState({
                 featureCategories: data.data.data,
             });
@@ -470,6 +471,7 @@ class Container extends React.PureComponent {
                     return feature.group;
                 },
                 R.uniqBy(feature => {
+                    console.log(feature);
                     return feature.group + '||' + feature.feature;
                 }, Object.values(R.mergeAll(featureSets)))
             )
@@ -774,7 +776,7 @@ const mapStateToProps = state => {
         deals: R.map(R.prop('deal'), state.common.compareList),
         compareList: state.common.compareList,
         selectedDeal: state.common.selectedDeal,
-        selectedTab: state.common.selectedTab,
+        selectedTab: state.user.purchasePreferences.strategy,
         termDuration: state.common.termDuration,
         employeeBrand: state.common.employeeBrand,
         dealsIdsWithCustomizedQuotes: state.common.dealsIdsWithCustomizedQuotes,
@@ -782,7 +784,11 @@ const mapStateToProps = state => {
     };
 };
 
+const mapDispatchToProps = dispatch => {
+    return {};
+};
+
 export default connect(
     mapStateToProps,
-    Actions
+    mapDispatchToProps
 )(Container);

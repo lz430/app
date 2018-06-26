@@ -22,6 +22,7 @@ class Client
         $this->username = $username;
         $this->password = $password;
     }
+
     /**
      * @param $cashDueOptions
      * @param $terms
@@ -75,7 +76,7 @@ class Client
                 'RoundToOption' => 'NearestPenny',
             ],
             'rebate' => [
-                'Amount' => $rebate,
+                'Amount' => -1 * abs($rebate),
                 'Type' => 'Financed',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'Rebate',
@@ -104,10 +105,11 @@ class Client
             ],
         ];
 
-        $terms = json_decode($terms, true);
-
+        if (is_string($terms)) {
+            $terms = json_decode($terms, true);
+        }
         foreach ($cashDueOptions as $cashDueValue) {
-            foreach($terms as $term => $termData) {
+            foreach ($terms as $term => $termData) {
                 foreach ($termData['annualMileage'] as $annualMileage => $annualMileageData) {
                     $quote = [
                         'taxRate' => $taxRate,
@@ -144,7 +146,8 @@ class Client
      * @return string
      * @throws \Throwable
      */
-    public function buildRequest($data) {
+    public function buildRequest($data)
+    {
         $contents = view('carleton.request', $data)->render();
         $contents = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" . $contents;
         $contents = trim(preg_replace('/\s+/', ' ', $contents));
