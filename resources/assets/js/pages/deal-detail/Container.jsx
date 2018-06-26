@@ -1,6 +1,5 @@
 import * as legacyActions from 'apps/common/actions';
 import api from 'src/api';
-import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import CompareBar from 'components/CompareBar';
 import { connect } from 'react-redux';
 import Modal from 'components/Modal';
@@ -28,6 +27,9 @@ import * as selectDiscountActions from './modules/selectDiscount';
 import * as financeActions from './modules/finance';
 import * as leaseActions from './modules/lease';
 
+import { initPage } from './actions';
+import { setPurchaseStrategy } from 'apps/user/actions';
+
 class Container extends React.PureComponent {
     static propTypes = {
         deal: PropTypes.shape({
@@ -40,6 +42,8 @@ class Container extends React.PureComponent {
             id: PropTypes.number.isRequired,
             vin: PropTypes.string.isRequired,
         }),
+        initPage: PropTypes.func.isRequired,
+        setPurchaseStrategy: PropTypes.func.isRequired,
     };
     constructor(props) {
         super(props);
@@ -61,6 +65,7 @@ class Container extends React.PureComponent {
 
     componentDidMount() {
         this._isMounted = true;
+        this.props.initPage();
 
         this.props.legacyActions.requestBestOffer(this.props.deal);
 
@@ -98,12 +103,6 @@ class Container extends React.PureComponent {
     showFeatures() {
         this.setState({
             showFeatures: true,
-        });
-    }
-
-    selectFeaturedImage(index) {
-        this.setState({
-            featuredImage: this.allImages()[index],
         });
     }
 
@@ -259,7 +258,7 @@ class Container extends React.PureComponent {
     }
 
     renderDeal(deal, { shouldRenderStockNumber } = {}) {
-        const { selectedTab, dealPricing } = this.props;
+        const { purchaseStrategy, dealPricing } = this.props;
 
         return (
             <div className="deal-details__pricing">
@@ -272,17 +271,17 @@ class Container extends React.PureComponent {
                     <div className="info-modal-data">
                         <div className="info-modal-data__price">
                             <PaymentTypes
-                                {...{ selectedTab }}
+                                {...{ purchaseStrategy }}
                                 onChange={this.handlePaymentTypeChange}
                             />
-                            {this.props.selectedTab === 'cash' && (
+                            {this.props.purchaseStrategy === 'cash' && (
                                 <CashPricingPane
                                     {...{ dealPricing }}
                                     onDiscountChange={this.handleDiscountChange}
                                     onRebatesChange={this.handleRebatesChange}
                                 />
                             )}
-                            {this.props.selectedTab === 'finance' && (
+                            {this.props.purchaseStrategy === 'finance' && (
                                 <FinancePricingPane
                                     {...{ dealPricing }}
                                     onDiscountChange={this.handleDiscountChange}
@@ -293,7 +292,7 @@ class Container extends React.PureComponent {
                                     onTermChange={this.handleFinanceTermChange}
                                 />
                             )}
-                            {this.props.selectedTab === 'lease' && (
+                            {this.props.purchaseStrategy === 'lease' && (
                                 <LeasePricingPane
                                     {...{ dealPricing }}
                                     onDiscountChange={this.handleDiscountChange}
@@ -356,7 +355,7 @@ class Container extends React.PureComponent {
     };
 
     handlePaymentTypeChange = tabName => {
-        this.props.legacyActions.selectTab(tabName);
+        this.props.setPurchaseStrategy(tabName);
         this.props.legacyActions.requestBestOffer(this.props.deal);
     };
 
@@ -557,10 +556,10 @@ class Container extends React.PureComponent {
 
 function mapStateToProps(state) {
     const getDealPricing = makeDealPricing();
-    const mapStateToProps = (state, props) => {
+    return (state, props) => {
         return {
             compareList: state.common.compareList,
-            selectedTab: state.common.selectedTab,
+            purchaseStrategy: state.user.purchasePreferences.strategy,
             downPayment: state.common.downPayment,
             termDuration: state.common.termDuration,
             fallbackDealImage: state.common.fallbackDealImage,
@@ -570,7 +569,6 @@ function mapStateToProps(state) {
             window: state.common.window,
         };
     };
-    return mapStateToProps;
 }
 
 const mapDispatchToProps = mapAndBindActionCreators({
@@ -578,6 +576,8 @@ const mapDispatchToProps = mapAndBindActionCreators({
     leaseActions,
     selectDiscountActions,
     legacyActions,
+    initPage,
+    setPurchaseStrategy,
 });
 
 export default connect(

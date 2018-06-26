@@ -1,6 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class PaymentTypes extends React.PureComponent {
+    static propTypes = {
+        onChange: PropTypes.func.isRequired,
+        purchaseStrategy: PropTypes.string.isRequired,
+    };
+
+    static defaultProps = {
+        onChange: tabName => {},
+    };
+
     handleTabChange(tabName) {
         this.props.onChange(tabName);
     }
@@ -14,7 +24,7 @@ class PaymentTypes extends React.PureComponent {
                             this.handleTabChange('cash');
                         }}
                         className={`tabs__tab ${
-                            this.props.selectedTab === 'cash'
+                            this.props.purchaseStrategy === 'cash'
                                 ? 'tabs__tab--selected'
                                 : ''
                         }`}
@@ -26,7 +36,7 @@ class PaymentTypes extends React.PureComponent {
                             this.handleTabChange('finance');
                         }}
                         className={`tabs__tab ${
-                            this.props.selectedTab === 'finance'
+                            this.props.purchaseStrategy === 'finance'
                                 ? 'tabs__tab--selected'
                                 : ''
                         }`}
@@ -38,7 +48,7 @@ class PaymentTypes extends React.PureComponent {
                             this.handleTabChange('lease');
                         }}
                         className={`tabs__tab ${
-                            this.props.selectedTab === 'lease'
+                            this.props.purchaseStrategy === 'lease'
                                 ? 'tabs__tab--selected'
                                 : ''
                         }`}
@@ -50,9 +60,5 @@ class PaymentTypes extends React.PureComponent {
         );
     }
 }
-
-PaymentTypes.defaultProps = {
-    onChange: tabName => {},
-};
 
 export default PaymentTypes;

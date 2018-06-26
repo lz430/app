@@ -47,9 +47,11 @@ export function toggleCompare(deal) {
                 deal: d,
                 selectedFilters: R.propOr(
                     {
-                        selectedStyles: getState().common.searchQuery.styles,
-                        selectedMakes: getState().common.searchQuery.makes,
-                        selectedFeatures: getState().common.searchQuery
+                        selectedStyles: getState().pages.dealList.searchQuery
+                            .styles,
+                        selectedMakes: getState().pages.dealList.searchQuery
+                            .makes,
+                        selectedFeatures: getState().pages.dealList.searchQuery
                             .features,
                     },
                     'selectedFilters',
@@ -241,8 +243,8 @@ export function receiveBestOffer(data, bestOfferKey, paymentType) {
 }
 
 export function getBestOffersForLoadedDeals() {
-    return (dispatch, getState) => {
-        dispatch({ type: ActionTypes.REQUEST_ALL_BEST_OFFERS });
+    return {
+        type: ActionTypes.REQUEST_ALL_BEST_OFFERS,
     };
 }
 
