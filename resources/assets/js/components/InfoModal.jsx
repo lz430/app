@@ -5,8 +5,25 @@ import InfoModalData from 'components/InfoModalData';
 import R from 'ramda';
 import zondicons from '../zondicons';
 import SVGInline from 'react-svg-inline';
+import PropTypes from 'prop-types';
 
 class InfoModal extends React.PureComponent {
+    static propTypes = {
+        deal: PropTypes.shape({
+            year: PropTypes.string.isRequired,
+            msrp: PropTypes.number.isRequired,
+            employee_price: PropTypes.number.isRequired,
+            supplier_price: PropTypes.number.isRequired,
+            make: PropTypes.string.isRequired,
+            model: PropTypes.string.isRequired,
+            id: PropTypes.number.isRequired,
+            vin: PropTypes.string.isRequired,
+        }),
+        infoModalIsShowingFor: PropTypes.number,
+        showInfoModal: PropTypes.func.isRequired,
+        hideInfoModal: PropTypes.func.isRequired,
+    };
+
     renderModal() {
         return (
             <div className="modal" onClick={e => this.closeIfOverlayClick(e)}>
@@ -24,27 +41,21 @@ class InfoModal extends React.PureComponent {
                         </div>
                         <InfoModalData
                             closeModal={() => this.props.hideInfoModal()}
-                            {...R.pick(
-                                [
-                                    'deal',
-                                    'selectedTab',
-                                    'compareList',
-                                    'dealPricing',
-                                ],
-                                this.props
-                            )}
-                            {...R.pick(
-                                [
-                                    'selectDeal',
-                                    'selectTab',
-                                    'requestTargets',
-                                    'requestBestOffer',
-                                    'getBestOffersForLoadedDeals',
-                                    'toggleCompare',
-                                    'showAccuPricingModal',
-                                ],
-                                this.props
-                            )}
+                            deal={this.props.deal}
+                            selectedTab={this.props.selectedTab}
+                            compareList={this.props.compareList}
+                            dealPricing={this.props.dealPricing}
+                            selectDeal={this.props.selectDeal}
+                            selectTab={this.props.selectTab}
+                            requestTargets={this.props.requestTargets}
+                            requestBestOffer={this.props.requestBestOffer}
+                            getBestOffersForLoadedDeals={
+                                this.props.getBestOffersForLoadedDeals
+                            }
+                            toggleCompare={this.props.toggleCompare}
+                            showAccuPricingModal={
+                                this.props.showAccuPricingModal
+                            }
                         />
                     </div>
                 </div>
