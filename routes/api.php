@@ -24,10 +24,7 @@ Route::get('deals', 'DealsController@getDeals')->name('deals.index');
 Route::get('deals/compare', 'DealsCompareController@compare')->name('deals.compare');
 Route::get('warranties', 'WarrantiesController@getWarranties')->name('warranties.getWarranties');
 Route::get('dimensions', 'DimensionsController@getDimensions')->name('dimensions.getDimensions');
-Route::get('deals/{deal}/best-offer', 'DealBestOfferController@getBestOffer')->name('deals.best-offer');
 Route::get('deals/{deal}/quote', 'DealQuoteController@quote')->name('deals.quote');
-Route::get('deals/{deal}/lease-payments', 'DealLeasePaymentsController@getLeasePayments')->name('lease-payments.getLeasePayments');
-Route::get('deals/{deal}/lease-rates', 'DealLeaseRatesController@getLeaseRates')->name('lease-rates.getLeaseRates');
 
 Route::get('targets', 'TargetsController@getTargets')->name('targets.getTargets');
 
