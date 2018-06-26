@@ -1,12 +1,14 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import * as legacyActions from 'apps/common/actions';
 import api from 'src/api';
 import CompareBar from 'components/CompareBar';
-import { connect } from 'react-redux';
 import Modal from 'components/Modal';
 import miscicons from 'miscicons';
-import PropTypes from 'prop-types';
 import R from 'ramda';
-import React from 'react';
+
 import strings from 'src/strings';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
@@ -22,13 +24,16 @@ import PaymentTypes from './components/pricing/PaymentTypes';
 import Line from './components/pricing/Line';
 
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
-
+import { setPurchaseStrategy } from 'apps/user/actions';
+import { requestDealQuote } from 'apps/pricing/actions';
 import * as selectDiscountActions from './modules/selectDiscount';
 import * as financeActions from './modules/finance';
 import * as leaseActions from './modules/lease';
 
-import { initPage } from './actions';
-import { setPurchaseStrategy } from 'apps/user/actions';
+import { initPage, receiveDeal } from './actions';
+
+import { getActiveQuote } from './selectors';
+import { getUserLocation } from 'apps/user/selectors';
 
 class Container extends React.PureComponent {
     static propTypes = {
@@ -43,7 +48,9 @@ class Container extends React.PureComponent {
             vin: PropTypes.string.isRequired,
         }),
         initPage: PropTypes.func.isRequired,
+        receiveDeal: PropTypes.func.isRequired,
         setPurchaseStrategy: PropTypes.func.isRequired,
+        requestDealQuote: PropTypes.func.isRequired,
     };
     constructor(props) {
         super(props);
@@ -65,9 +72,8 @@ class Container extends React.PureComponent {
 
     componentDidMount() {
         this._isMounted = true;
+        this.props.receiveDeal(this.props.deal);
         this.props.initPage();
-
-        this.props.legacyActions.requestBestOffer(this.props.deal);
 
         if (this.props.deal.photos.length) {
             this.setState({ featuredImage: this.props.deal.photos[0] });
@@ -354,9 +360,13 @@ class Container extends React.PureComponent {
         window.location = '/deal/';
     };
 
-    handlePaymentTypeChange = tabName => {
-        this.props.setPurchaseStrategy(tabName);
-        this.props.legacyActions.requestBestOffer(this.props.deal);
+    handlePaymentTypeChange = strategy => {
+        this.props.setPurchaseStrategy(strategy);
+        this.props.requestDealQuote(
+            this.props.deal,
+            this.props.userLocation.zipcode,
+            strategy
+        );
     };
 
     handleDiscountChange = (discountType, make) => {
@@ -375,9 +385,7 @@ class Container extends React.PureComponent {
         }
     };
 
-    handleRebatesChange = () => {
-        this.props.legacyActions.requestBestOffer(this.props.deal);
-    };
+    handleRebatesChange = () => {};
 
     handleFinanceDownPaymentChange = downPayment => {
         this.props.financeActions.updateDownPayment(downPayment);
@@ -558,8 +566,9 @@ function mapStateToProps(state) {
     const getDealPricing = makeDealPricing();
     return (state, props) => {
         return {
-            compareList: state.common.compareList,
             purchaseStrategy: state.user.purchasePreferences.strategy,
+            quote: getActiveQuote(state),
+            compareList: state.common.compareList,
             downPayment: state.common.downPayment,
             termDuration: state.common.termDuration,
             fallbackDealImage: state.common.fallbackDealImage,
@@ -567,6 +576,7 @@ function mapStateToProps(state) {
             employeeBrand: state.common.employeeBrand,
             dealPricing: new DealPricing(getDealPricing(state, props)),
             window: state.common.window,
+            userLocation: getUserLocation(state),
         };
     };
 }
@@ -578,6 +588,8 @@ const mapDispatchToProps = mapAndBindActionCreators({
     legacyActions,
     initPage,
     setPurchaseStrategy,
+    receiveDeal,
+    requestDealQuote,
 });
 
 export default connect(

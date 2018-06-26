@@ -163,18 +163,29 @@ class DealRatesAndRebatesManager
             })
             ->first();
 
-        if (!isset($scenario->tiers)) {
-            return 0;
+        $value = 0;
+
+        if (isset($scenario->tiers[0]->aprprograms)) {
+            $value += collect($scenario->tiers[0]->aprprograms[0]->programs)
+                ->reject(function ($program) {
+                    return !isset($program->Cash);
+                })
+                ->map(function ($program) {
+                    return $program->Cash;
+                })
+                ->sum();
+        } elseif (isset($scenario->tiers[0]->programs)) {
+            $value += collect($scenario->tiers[0]->programs)
+                ->reject(function ($program) {
+                    return !isset($program->Cash);
+                })
+                ->map(function ($program) {
+                    return $program->Cash;
+                })
+                ->sum();
         }
 
-        return collect($scenario->tiers[0]->aprprograms[0]->programs)
-            ->reject(function ($program) {
-                return !isset($program->Cash);
-            })
-            ->map(function ($program) {
-                return $program->Cash;
-            })
-            ->sum();
+        return $value;
     }
 
     /**
@@ -190,8 +201,7 @@ class DealRatesAndRebatesManager
             })
             ->first();
 
-
-        if (isset($scenario->tiers)) {
+        if (isset($scenario->tiers[0]->aprprograms)) {
             $ids = collect($scenario->tiers[0]->aprprograms[0]->programs)
                 ->reject(function ($program) {
                     return !isset($program->Cash);
@@ -199,10 +209,18 @@ class DealRatesAndRebatesManager
                 ->map(function ($program) {
                     return $program->ProgramID;
                 })->all();
-        } else {
+        } elseif (isset($scenario->tiers[0]->programs)) {
+            $ids = collect($scenario->tiers[0]->programs)
+                ->reject(function ($program) {
+                    return !isset($program->Cash);
+                })
+                ->map(function ($program) {
+                    return $program->ProgramID;
+                })->all();
+        }
+        else {
             $ids = [];
         }
-
 
         return $this->programs
             ->reject(function ($program) use ($ids) {

@@ -8,7 +8,7 @@ import strings from 'src/strings';
 import api from 'src/api';
 import util from 'src/util';
 import miscicons from 'miscicons';
-import { makeDealBestOfferTotalValue } from 'apps/common/selectors';
+import { dealQuoteRebatesTotal } from 'apps/common/selectors';
 
 class Container extends React.PureComponent {
     constructor(props) {
@@ -311,17 +311,13 @@ class Container extends React.PureComponent {
     }
 }
 
-const makeMapStateToProps = () => {
-    const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
-    const mapStateToProps = (state, props) => {
-        return {
-            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
-        };
+const mapStateToProps = (state, props) => {
+    return {
+        dealBestOfferTotalValue: dealQuoteRebatesTotal(state, props),
     };
-    return mapStateToProps;
 };
 
 export default connect(
-    makeMapStateToProps,
+    mapStateToProps,
     Actions
 )(Container);

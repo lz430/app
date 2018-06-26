@@ -5,7 +5,6 @@ import {
     call,
     select,
     take,
-    takeLatest,
     takeEvery,
     cancel,
     cancelled,
@@ -15,16 +14,12 @@ import { cancelRequest } from 'store/httpclient';
 
 import {
     INIT,
-    RECEIVE_MAKES,
-    RECEIVE_BODY_STYLES,
-    RECEIVE_FEATURES,
-    RECEIVE_FEATURE_CATEGORIES,
     SEARCH_LOADING_START,
     SEARCH_LOADING_FINISHED,
     SEARCH_REQUEST,
 } from './consts';
 
-import * as DealSagas from 'apps/common/sagas';
+import { batchRequestDealQuotes } from 'apps/pricing/sagas';
 import * as DealListActions from './actions';
 
 import getDealList, { getSearchQuery } from './selectors';
@@ -81,7 +76,7 @@ function* requestSearch() {
     if (results) {
         if (searchQuery.entity === 'deal') {
             yield put(DealListActions.receiveDeals(results));
-            yield fork(DealSagas.batchRequestDealQuotes, results.data.data);
+            yield fork(batchRequestDealQuotes, results.data.data);
         } else {
             yield put(DealListActions.receiveModelYears(results));
         }
@@ -97,7 +92,8 @@ function* requestSearch() {
  ********************************************************************/
 function* init() {
     yield put(setCurrentPage('deal-list'));
-    yield fork(requestIpLocation);
+
+    yield* requestIpLocation();
 
     try {
         const [styles, makes, features, categories] = yield all([

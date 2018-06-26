@@ -4,7 +4,6 @@ import storage from 'redux-persist/lib/storage';
 import * as ActionTypes from './consts';
 
 import util from 'src/util';
-import R from 'ramda';
 const urlStyle = util.getInitialBodyStyleFromUrl();
 const urlSize = util.getInitialSizeFromUrl();
 

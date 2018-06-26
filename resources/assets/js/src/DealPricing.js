@@ -196,7 +196,11 @@ export default class DealPricing {
     }
 
     bestOfferValue() {
-        return this.data.bestOffer.totalValue || 0;
+        if (this.data.bestOffer) {
+            return this.data.bestOffer.total;
+        }
+
+        return 0;
     }
 
     bestOffer() {
@@ -332,16 +336,6 @@ export default class DealPricing {
                 );
             case 'lease':
                 return new Decimal(this.baseSellingPriceValue()).toFixed(2);
-            /*return new Decimal(this.baseSellingPriceValue())
-                    .plus(this.docFeeValue())
-                    .plus(new Decimal(this.docFeeValue()).times(this.taxRate()))
-                    .plus(this.effCvrFeeValue())
-                    .plus(
-                        new Decimal(this.effCvrFeeValue()).times(this.taxRate())
-                    )
-                    .plus(this.licenseAndRegistrationValue())
-                    .plus(this.acquisitionFeeValue())
-                    .toFixed(2);*/
         }
     }
 
@@ -445,7 +439,7 @@ export default class DealPricing {
 
     leaseAnnualMileageAvailable() {
         if (!this.data.dealLeasePayments) {
-            return null;
+            return [];
         }
 
         const annualMileageOptions = [];

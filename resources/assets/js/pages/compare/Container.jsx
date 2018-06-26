@@ -4,14 +4,12 @@ import zondicons from 'zondicons';
 import R from 'ramda';
 import qs from 'qs';
 import { connect } from 'react-redux';
-import * as Actions from 'apps/common/actions';
 import Deal from 'components/Deals/Deal';
-import Modal from 'components/Modal';
-import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import string from 'src/strings';
 import AccordionTable from './components/AccordionTable';
 import util from 'src/util';
 import api from 'src/api';
+import ApiClient from 'store/api';
 import toTitleCase from 'titlecase';
 import AccuPricingModal from 'components/AccuPricingModal';
 import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
@@ -36,7 +34,7 @@ class Container extends React.PureComponent {
 
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
-        api.getFeatureCategories().then(data => {
+        ApiClient.browse.getFeatureCategories().then(data => {
             this.setState({
                 featureCategories: data.data.data,
             });
@@ -116,18 +114,6 @@ class Container extends React.PureComponent {
                     />
                 </div>
             </Deal>
-        );
-    }
-
-    renderCalculatorModal() {
-        return (
-            <Modal
-                onClose={this.props.clearSelectedDeal}
-                closeText="Back to compare"
-                deal={this.props.selectedDeal}
-            >
-                <CashFinanceLeaseCalculator deal={this.props.selectedDeal} />
-            </Modal>
         );
     }
 
@@ -470,6 +456,7 @@ class Container extends React.PureComponent {
                     return feature.group;
                 },
                 R.uniqBy(feature => {
+                    console.log(feature);
                     return feature.group + '||' + feature.feature;
                 }, Object.values(R.mergeAll(featureSets)))
             )
@@ -753,7 +740,6 @@ class Container extends React.PureComponent {
                     </AccordionTable>
                 </div>
 
-                {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
                 <AccuPricingModal />
             </StickyContainer>
         );
@@ -761,7 +747,6 @@ class Container extends React.PureComponent {
 
     handleTabChange(tabName) {
         this.props.selectTab(tabName);
-        this.props.getBestOffersForLoadedDeals();
     }
 
     selectDeal(deal) {
@@ -773,8 +758,7 @@ const mapStateToProps = state => {
     return {
         deals: R.map(R.prop('deal'), state.common.compareList),
         compareList: state.common.compareList,
-        selectedDeal: state.common.selectedDeal,
-        selectedTab: state.common.selectedTab,
+        selectedTab: state.user.purchasePreferences.strategy,
         termDuration: state.common.termDuration,
         employeeBrand: state.common.employeeBrand,
         dealsIdsWithCustomizedQuotes: state.common.dealsIdsWithCustomizedQuotes,
@@ -782,7 +766,11 @@ const mapStateToProps = state => {
     };
 };
 
+const mapDispatchToProps = dispatch => {
+    return {};
+};
+
 export default connect(
     mapStateToProps,
-    Actions
+    mapDispatchToProps
 )(Container);

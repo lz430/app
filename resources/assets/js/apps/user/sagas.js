@@ -14,6 +14,7 @@ import { getUserLocation } from './selectors';
 
 export function* requestIpLocation() {
     // Don't get ip location if location is already set.
+
     const userCurrentLocation = yield select(getUserLocation);
     if (userCurrentLocation.latitude && userCurrentLocation.longitude) {
         return;

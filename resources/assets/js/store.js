@@ -9,33 +9,12 @@ import rootReducer from 'reducers';
 
 import { windowResize } from 'apps/common/actions';
 
-const initialState = {
-    /*
-    pages: {
-        dealDetails: {
-            finance: {
-                downPayment: null,
-                term: null,
-            },
-            lease: {
-                cashDue: {},
-                term: {},
-                annualMileage: {},
-            },
-            selectDiscount: {
-                discountType: 'dmr',
-                employeeBrand: false,
-                supplierBrand: false,
-            },
-        },
-    },
-    */
-};
+const initialState = {};
 
 const config = {
     key: 'root',
     storage,
-    blacklist: ['pages', 'page'],
+    blacklist: ['pages', 'page', 'pricing'],
 };
 
 export default () => {

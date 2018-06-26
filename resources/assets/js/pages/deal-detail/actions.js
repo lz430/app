@@ -5,3 +5,10 @@ export function initPage() {
         type: ActionTypes.INIT,
     };
 }
+
+export function receiveDeal(deal) {
+    return {
+        type: ActionTypes.RECEIVE_DEAL,
+        data: deal,
+    };
+}

@@ -6,13 +6,9 @@ import miscicons from 'miscicons';
 import InfoModal from 'components/InfoModal';
 import { makeDealPricing } from 'apps/common/selectors';
 import DealPricing from 'src/DealPricing';
-import DealPriceWrapper from 'components/Hoc/DealPriceWrapper';
 
 import {
     selectDeal,
-    requestTargets,
-    requestBestOffer,
-    getBestOffersForLoadedDeals,
     toggleCompare,
     showInfoModal,
     hideInfoModal,
@@ -20,23 +16,23 @@ import {
 } from 'apps/common/actions';
 
 import { setPurchaseStrategy } from 'apps/user/actions';
+import { requestDealQuote } from 'apps/pricing/actions';
+import { getUserLocation } from 'apps/user/selectors';
 
 class DealPrice extends React.Component {
     static propTypes = {
         deal: PropTypes.object.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
+        userLocation: PropTypes.object.isRequired,
         compareList: PropTypes.array.isRequired,
-        dealPricing: PropTypes.objectOf(DealPricing),
         infoModalIsShowingFor: PropTypes.number,
         onSelectDeal: PropTypes.func.isRequired,
         onSetPurchaseStrategy: PropTypes.func.isRequired,
-        onRequestTargets: PropTypes.func.isRequired,
-        onRequestBestOffer: PropTypes.func.isRequired,
-        onGetBestOffersForLoadedDeals: PropTypes.func.isRequired,
         onToggleCompare: PropTypes.func.isRequired,
         onShowInfoModal: PropTypes.func.isRequired,
         onHideInfoModal: PropTypes.func.isRequired,
         onShowAccuPricingModal: PropTypes.func.isRequired,
+        onRequestDealQuote: PropTypes.func.isRequired,
     };
 
     renderPriceExplanationModal() {
@@ -44,17 +40,13 @@ class DealPrice extends React.Component {
             <InfoModal
                 key={this.props.deal.id}
                 deal={this.props.deal}
+                userLocation={this.props.userLocation}
                 purchaseStrategy={this.props.purchaseStrategy}
-                compareList={this.props.compareList}
+                onSetPurchaseStrategy={this.props.onSetPurchaseStrategy}
+                onRequestDealQuote={this.props.onRequestDealQuote}
                 dealPricing={this.props.dealPricing}
+                compareList={this.props.compareList}
                 selectDeal={this.props.onSelectDeal}
-                selectedTab={this.props.purchaseStrategy}
-                selectTab={this.props.onSetPurchaseStrategy}
-                requestTargets={this.props.onRequestTargets}
-                requestBestOffer={this.props.onRequestBestOffer}
-                getBestOffersForLoadedDeals={
-                    this.props.onGetBestOffersForLoadedDeals
-                }
                 toggleCompare={this.props.onToggleCompare}
                 showInfoModal={this.props.onShowInfoModal}
                 hideInfoModal={this.props.onHideInfoModal}
@@ -117,9 +109,11 @@ const makeMapStateToProps = () => {
     const getDealPricing = makeDealPricing();
     const mapStateToProps = (state, props) => {
         return {
+            userLocation: getUserLocation(state),
             purchaseStrategy: state.user.purchasePreferences.strategy,
-            compareList: state.common.compareList,
             dealPricing: new DealPricing(getDealPricing(state, props)),
+
+            compareList: state.common.compareList,
             infoModalIsShowingFor: state.common.infoModalIsShowingFor,
         };
     };
@@ -134,15 +128,6 @@ const mapDispatchToProps = dispatch => {
         onSetPurchaseStrategy: strategy => {
             return dispatch(setPurchaseStrategy(strategy));
         },
-        onRequestTargets: deal => {
-            return dispatch(requestTargets(deal));
-        },
-        onRequestBestOffer: deal => {
-            return dispatch(requestBestOffer(deal));
-        },
-        onGetBestOffersForLoadedDeals: () => {
-            return dispatch(getBestOffersForLoadedDeals());
-        },
         onToggleCompare: deal => {
             return dispatch(toggleCompare(deal));
         },
@@ -155,10 +140,13 @@ const mapDispatchToProps = dispatch => {
         onShowAccuPricingModal: () => {
             return dispatch(showAccuPricingModal());
         },
+        onRequestDealQuote: (deal, zipcode, paymentType) => {
+            return dispatch(requestDealQuote(deal, zipcode, paymentType));
+        },
     };
 };
 
 export default connect(
     makeMapStateToProps,
     mapDispatchToProps
-)(DealPriceWrapper(DealPrice));
+)(DealPrice);

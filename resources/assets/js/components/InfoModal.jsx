@@ -20,8 +20,12 @@ class InfoModal extends React.PureComponent {
             vin: PropTypes.string.isRequired,
         }),
         infoModalIsShowingFor: PropTypes.number,
+        userLocation: PropTypes.object.isRequired,
+        purchaseStrategy: PropTypes.string.isRequired,
         showInfoModal: PropTypes.func.isRequired,
         hideInfoModal: PropTypes.func.isRequired,
+        onRequestDealQuote: PropTypes.func.isRequired,
+        onSetPurchaseStrategy: PropTypes.func.isRequired,
     };
 
     renderModal() {
@@ -42,16 +46,15 @@ class InfoModal extends React.PureComponent {
                         <InfoModalData
                             closeModal={() => this.props.hideInfoModal()}
                             deal={this.props.deal}
-                            selectedTab={this.props.selectedTab}
-                            compareList={this.props.compareList}
+                            userLocation={this.props.userLocation}
+                            purchaseStrategy={this.props.purchaseStrategy}
                             dealPricing={this.props.dealPricing}
-                            selectDeal={this.props.selectDeal}
-                            selectTab={this.props.selectTab}
-                            requestTargets={this.props.requestTargets}
-                            requestBestOffer={this.props.requestBestOffer}
-                            getBestOffersForLoadedDeals={
-                                this.props.getBestOffersForLoadedDeals
+                            onRequestDealQuote={this.props.onRequestDealQuote}
+                            onSetPurchaseStrategy={
+                                this.props.onSetPurchaseStrategy
                             }
+                            compareList={this.props.compareList}
+                            selectDeal={this.props.selectDeal}
                             toggleCompare={this.props.toggleCompare}
                             showAccuPricingModal={
                                 this.props.showAccuPricingModal
