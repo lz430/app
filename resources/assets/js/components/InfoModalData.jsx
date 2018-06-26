@@ -3,6 +3,7 @@ import React from 'react';
 import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
+import PropTypes from 'prop-types';
 
 // TODO: These components should be moved to a common area if they are used by other
 // common components.
@@ -11,6 +12,24 @@ import Label from 'pages/deal-detail/components/pricing/Label';
 import Value from 'pages/deal-detail/components/pricing/Value';
 
 class InfoModalData extends React.PureComponent {
+    static propTypes = {
+        deal: PropTypes.shape({
+            year: PropTypes.string.isRequired,
+            msrp: PropTypes.number.isRequired,
+            employee_price: PropTypes.number.isRequired,
+            supplier_price: PropTypes.number.isRequired,
+            make: PropTypes.string.isRequired,
+            model: PropTypes.string.isRequired,
+            id: PropTypes.number.isRequired,
+            vin: PropTypes.string.isRequired,
+        }),
+        infoModalIsShowingFor: PropTypes.number,
+        userLocation: PropTypes.object.isRequired,
+        purchaseStrategy: PropTypes.string.isRequired,
+        onRequestDealQuote: PropTypes.func.isRequired,
+        onSetPurchaseStrategy: PropTypes.func.isRequired,
+    };
+
     static defaultProps = {
         withPricingHeader: true,
         withPricingTabs: true,
@@ -20,14 +39,13 @@ class InfoModalData extends React.PureComponent {
         withConfirmPurchase: false,
     };
 
-    componentDidMount() {
-        this.props.requestTargets(this.props.dealPricing.deal());
-        this.props.requestBestOffer(this.props.dealPricing.deal());
-    }
-
-    handleTabChange(tabName) {
-        this.props.selectTab(tabName);
-        this.props.requestBestOffer(this.props.dealPricing.deal());
+    handleTabChange(strategy) {
+        this.props.onSetPurchaseStrategy(strategy);
+        this.props.onRequestDealQuote(
+            this.props.deal,
+            this.props.userLocation.zipcode,
+            strategy
+        );
     }
 
     showWhenPricingIsLoaded(fn) {
@@ -51,7 +69,7 @@ class InfoModalData extends React.PureComponent {
                             this.handleTabChange('cash');
                         }}
                         className={`tabs__tab ${
-                            this.props.selectedTab === 'cash'
+                            this.props.purchaseStrategy === 'cash'
                                 ? 'tabs__tab--selected'
                                 : ''
                         }`}
@@ -63,7 +81,7 @@ class InfoModalData extends React.PureComponent {
                             this.handleTabChange('finance');
                         }}
                         className={`tabs__tab ${
-                            this.props.selectedTab === 'finance'
+                            this.props.purchaseStrategy === 'finance'
                                 ? 'tabs__tab--selected'
                                 : ''
                         }`}
@@ -75,7 +93,7 @@ class InfoModalData extends React.PureComponent {
                             this.handleTabChange('lease');
                         }}
                         className={`tabs__tab ${
-                            this.props.selectedTab === 'lease'
+                            this.props.purchaseStrategy === 'lease'
                                 ? 'tabs__tab--selected'
                                 : ''
                         }`}
@@ -85,129 +103,6 @@ class InfoModalData extends React.PureComponent {
                 </div>
             </div>
         );
-    }
-
-    handleGetRebatesLink() {
-        this.props.selectDeal(this.props.dealPricing.deal());
-        if (this.props.closeModal) {
-            this.props.closeModal();
-        }
-    }
-
-    renderAppliedRebatesLink() {
-        return (
-            <div>
-                <div className="info-modal-data__rebate-info info-modal-data__costs">
-                    <div className="info-modal-data__rebate-info__title">
-                        Rebates Applied:
-                    </div>
-                    <div>
-                        {this.showWhenPricingIsLoaded(() =>
-                            this.props.dealPricing.bestOffer()
-                        )}
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    renderPaymentDefaults() {
-        if (this.props.selectedTab === 'finance') {
-            return (
-                <div>
-                    <div className="info-modal-data__costs">
-                        <div className="info-modal-data__label">
-                            Down Payment:
-                        </div>
-                        <div className="info-modal-data__amount">
-                            {this.showWhenPricingIsLoaded(() =>
-                                this.props.dealPricing.financeDownPayment()
-                            )}
-                        </div>
-                    </div>
-                    <div className="info-modal-data__costs">
-                        <div className="info-modal-data__label">
-                            Total Months:
-                        </div>
-                        <div className="info-modal-data__amount">
-                            {this.showWhenPricingIsLoaded(() =>
-                                this.props.dealPricing.financeTerm()
-                            )}
-                        </div>
-                    </div>
-                    <div className="info-modal-data__costs info-modal-data__costs--final-payments">
-                        <div className="info-modal-data__label">
-                            Monthly Payments:
-                        </div>
-                        <div className="info-modal-data__amount">
-                            {this.showWhenPricingIsLoaded(() =>
-                                this.props.dealPricing.finalPrice()
-                            )}*
-                        </div>
-                    </div>
-                </div>
-            );
-        } else {
-            if (
-                this.props.dealPricing.isPricingAvailable() &&
-                this.props.dealPricing.hasNoLeaseTerms()
-            ) {
-                return (
-                    <div className="cash-finance-lease-calculator__calculator-content">
-                        <h4>
-                            Currently there are no competitive lease rates
-                            available on this vehicle.
-                        </h4>
-                    </div>
-                );
-            }
-
-            return (
-                <div>
-                    <div className="info-modal-data__costs">
-                        <div className="info-modal-data__label">
-                            Total Months:
-                        </div>
-                        <div className="info-modal-data__amount">
-                            {this.showWhenPricingIsLoaded(() =>
-                                this.props.dealPricing.leaseTerm()
-                            )}
-                        </div>
-                    </div>
-                    {/*
-                    <div className="info-modal-data__costs">
-                        <div className="info-modal-data__label">Cash Due:</div>
-                        <div className="info-modal-data__amount">
-                            {this.showWhenPricingIsLoaded(() =>
-                                this.props.dealPricing.leaseCashDue()
-                            )}
-                        </div>
-                    </div>
-                    */}
-
-                    <div className="info-modal-data__costs">
-                        <div className="info-modal-data__label">
-                            Annual Miles:
-                        </div>
-                        <div className="info-modal-data__amount">
-                            {this.showWhenPricingIsLoaded(() =>
-                                this.props.dealPricing.leaseAnnualMileage()
-                            )}
-                        </div>
-                    </div>
-                    <div className="info-modal-data__costs info-modal-data__costs--final-payments">
-                        <div className="info-modal-data__label">
-                            Monthly Payments:
-                        </div>
-                        <div className="info-modal-data__amount">
-                            {this.showWhenPricingIsLoaded(() =>
-                                this.props.dealPricing.finalPrice()
-                            )}*
-                        </div>
-                    </div>
-                </div>
-            );
-        }
     }
 
     render() {
@@ -251,7 +146,7 @@ class InfoModalData extends React.PureComponent {
                         {this.props.withPricingTabs && this.renderTabs()}
 
                         <div style={{ textAlign: 'left' }}>
-                            {this.props.selectedTab === 'cash' && (
+                            {this.props.purchaseStrategy === 'cash' && (
                                 <div>
                                     <Line>
                                         <Label>MSRP</Label>
@@ -282,7 +177,7 @@ class InfoModalData extends React.PureComponent {
                                 </div>
                             )}
 
-                            {this.props.selectedTab === 'finance' && (
+                            {this.props.purchaseStrategy === 'finance' && (
                                 <div>
                                     <Line>
                                         <Label>Total Price</Label>
@@ -317,7 +212,7 @@ class InfoModalData extends React.PureComponent {
                                 </div>
                             )}
 
-                            {this.props.selectedTab === 'lease' && (
+                            {this.props.purchaseStrategy === 'lease' && (
                                 <div>
                                     <Line>
                                         <Label>Annual Miles</Label>
@@ -360,7 +255,7 @@ class InfoModalData extends React.PureComponent {
                             )}
                         </div>
 
-                        {this.props.selectedTab !== 'cash' && (
+                        {this.props.purchaseStrategy !== 'cash' && (
                             <Line>
                                 <div
                                     style={{

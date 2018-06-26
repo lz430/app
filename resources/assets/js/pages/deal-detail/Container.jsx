@@ -75,8 +75,6 @@ class Container extends React.PureComponent {
         this.props.receiveDeal(this.props.deal);
         this.props.initPage();
 
-        //this.props.legacyActions.requestBestOffer(this.props.deal);
-
         if (this.props.deal.photos.length) {
             this.setState({ featuredImage: this.props.deal.photos[0] });
         }
@@ -369,7 +367,6 @@ class Container extends React.PureComponent {
             this.props.userLocation.zipcode,
             strategy
         );
-        //this.props.legacyActions.requestBestOffer(this.props.deal);
     };
 
     handleDiscountChange = (discountType, make) => {
@@ -388,9 +385,7 @@ class Container extends React.PureComponent {
         }
     };
 
-    handleRebatesChange = () => {
-        //this.props.legacyActions.requestBestOffer(this.props.deal);
-    };
+    handleRebatesChange = () => {};
 
     handleFinanceDownPaymentChange = downPayment => {
         this.props.financeActions.updateDownPayment(downPayment);
