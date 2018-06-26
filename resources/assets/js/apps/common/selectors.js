@@ -170,13 +170,6 @@ const dealHasCustomizedQuote = createSelector(
     }
 );
 
-const dealLeaseRatesKey = createSelector([deal, zipcode], (deal, zipcode) => {
-    if (!deal) {
-        return null;
-    }
-    return `${deal.id}.${zipcode}`;
-});
-
 const dealLeasePaymentsKey = createSelector(
     [deal, zipcode],
     (deal, zipcode) => {
@@ -190,43 +183,6 @@ const dealLeasePaymentsKey = createSelector(
 export const makeDealLeasePaymentsKey = () => {
     return dealLeasePaymentsKey;
 };
-
-const leaseRatesLoaded = state => state.common.leaseRatesLoaded;
-const leaseRates = state => state.common.leaseRates;
-const leasePaymentsLoaded = state => state.common.leasePaymentsLoaded;
-const leasePayments = state => state.common.leasePayments;
-
-const dealLeaseRatesLoading = createSelector(
-    leaseRatesLoaded,
-    dealLeaseRatesKey,
-    (leaseRatesLoaded, dealLeaseRatesKey) =>
-        R.isNil(R.prop(dealLeaseRatesKey, leaseRatesLoaded))
-);
-
-const dealLeaseRates = createSelector(
-    leaseRates,
-    dealLeaseRatesKey,
-    (leaseRates, dealLeaseRatesKey) =>
-        leaseRates && leaseRates[dealLeaseRatesKey]
-            ? leaseRates[dealLeaseRatesKey]
-            : []
-);
-
-const dealLeasePaymentsLoading = createSelector(
-    leasePaymentsLoaded,
-    dealLeasePaymentsKey,
-    (leasePaymentsLoaded, dealLeasePaymentsKey) =>
-        R.isNil(R.prop(dealLeasePaymentsKey, leasePaymentsLoaded))
-);
-
-const dealLeasePayments = createSelector(
-    leasePayments,
-    dealLeasePaymentsKey,
-    (leasePayments, dealLeasePaymentsKey) =>
-        leasePayments && leasePayments[dealLeasePaymentsKey]
-            ? leasePayments[dealLeasePaymentsKey]
-            : {}
-);
 
 const dealLeaseAnnualMileage = createSelector(
     deal,
