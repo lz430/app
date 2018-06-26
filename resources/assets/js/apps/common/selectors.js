@@ -9,6 +9,7 @@ const zipcode = state => state.user.location.zipcode;
 const deal = (state, props) => props.deal;
 const targetsAvailable = state => state.common.targetsAvailable;
 const targetsSelected = state => state.common.targetsSelected;
+
 const bestOffers = state => {
     if (state.common) {
         return state.common.bestOffers;
@@ -260,9 +261,52 @@ const dealLeaseCashDue = createSelector(
     }
 );
 
+const quotes = state => {
+    return state.pricing.quotes;
+};
+
+const dealQuoteKey = createSelector(
+    [deal, zipcode, paymentType],
+    (deal, zipcode, paymentType) => {
+        if (!deal || !zipcode || !paymentType) {
+            return null;
+        }
+
+        return `${deal.id}-${paymentType}-${zipcode}`;
+    }
+);
+
+const dealQuote = createSelector(
+    [quotes, dealQuoteKey],
+    (quotes, dealQuoteKey) => {
+        return R.prop(dealQuoteKey, quotes) || null;
+    }
+);
+
+const dealQuoteRebates = createSelector([dealQuote], quote => {
+    if (quote && quote.rebates) {
+        return quote.rebates;
+    }
+    return null;
+});
+
+const dealQuoteLeaseRates = createSelector([dealQuote], quote => {
+    if (quote && quote.rates) {
+        return quote.rates;
+    }
+    return [];
+});
+
+const dealQuoteLeasePayments = createSelector([dealQuote], quote => {
+    if (quote && quote.payments) {
+        return quote.payments;
+    }
+    return [];
+});
+
 const dealPricing = createSelector(
     deal,
-    dealBestOffer,
+    dealQuoteRebates,
     dealBestOfferLoading,
     zipcode,
     paymentType,
@@ -275,13 +319,13 @@ const dealPricing = createSelector(
     dealLeaseCashDue,
     dealHasCustomizedQuote,
     dealLeaseRatesLoading,
-    dealLeaseRates,
+    dealQuoteLeaseRates,
     dealLeasePaymentsLoading,
-    dealLeasePayments,
+    dealQuoteLeasePayments,
     discountType,
     (
         deal,
-        dealBestOffer,
+        dealRebates,
         dealBestOfferLoading,
         zipcode,
         paymentType,
@@ -299,9 +343,9 @@ const dealPricing = createSelector(
         dealLeasePayments,
         discountType
     ) => {
-        return {
+        const data = {
             deal,
-            bestOffer: dealBestOffer,
+            bestOffer: dealRebates,
             bestOfferIsLoading: dealBestOfferLoading,
             zipcode,
             paymentType,
@@ -319,6 +363,7 @@ const dealPricing = createSelector(
             dealLeasePayments,
             discountType,
         };
+        return data;
     }
 );
 

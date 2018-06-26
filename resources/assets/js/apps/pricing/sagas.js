@@ -20,8 +20,6 @@ export function* requestDealQuote(action) {
     const key = `${deal.id}-${paymentType}-${zipcode}`;
 
     const state = yield select();
-    console.log(state);
-    console.log(key);
     if (state.pricing.quotes[key]) {
         return;
     }
