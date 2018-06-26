@@ -4,10 +4,7 @@ import zondicons from 'zondicons';
 import R from 'ramda';
 import qs from 'qs';
 import { connect } from 'react-redux';
-import * as Actions from 'apps/common/actions';
 import Deal from 'components/Deals/Deal';
-import Modal from 'components/Modal';
-import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
 import string from 'src/strings';
 import AccordionTable from './components/AccordionTable';
 import util from 'src/util';
@@ -117,18 +114,6 @@ class Container extends React.PureComponent {
                     />
                 </div>
             </Deal>
-        );
-    }
-
-    renderCalculatorModal() {
-        return (
-            <Modal
-                onClose={this.props.clearSelectedDeal}
-                closeText="Back to compare"
-                deal={this.props.selectedDeal}
-            >
-                <CashFinanceLeaseCalculator deal={this.props.selectedDeal} />
-            </Modal>
         );
     }
 
@@ -755,7 +740,6 @@ class Container extends React.PureComponent {
                     </AccordionTable>
                 </div>
 
-                {this.props.selectedDeal ? this.renderCalculatorModal() : ''}
                 <AccuPricingModal />
             </StickyContainer>
         );
@@ -763,7 +747,6 @@ class Container extends React.PureComponent {
 
     handleTabChange(tabName) {
         this.props.selectTab(tabName);
-        this.props.getBestOffersForLoadedDeals();
     }
 
     selectDeal(deal) {
@@ -775,7 +758,6 @@ const mapStateToProps = state => {
     return {
         deals: R.map(R.prop('deal'), state.common.compareList),
         compareList: state.common.compareList,
-        selectedDeal: state.common.selectedDeal,
         selectedTab: state.user.purchasePreferences.strategy,
         termDuration: state.common.termDuration,
         employeeBrand: state.common.employeeBrand,

@@ -1,14 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as Actions from 'apps/common/actions';
 import { connect } from 'react-redux';
-import {
-    makeDealBestOfferTotalValue,
-    makeDealPricing,
-} from 'apps/common/selectors';
-import InfoModalData from '../../../components/InfoModalData';
+import { makeDealPricing } from 'apps/common/selectors';
+import InfoModalData from 'components/InfoModalData';
 import DealPricing from 'src/DealPricing';
-import R from 'ramda';
+import { setPurchaseStrategy } from 'apps/user/actions';
+import {
+    hideInfoModal,
+    selectDeal,
+    showAccuPricingModal,
+    showInfoModal,
+    toggleCompare,
+} from 'apps/common/actions';
+
+import { requestDealQuote } from 'apps/pricing/actions';
+import { getUserLocation } from 'apps/user/selectors';
+import { dealQuoteRebatesTotal } from 'apps/common/selectors';
 
 class ConfirmDeal extends React.PureComponent {
     static propTypes = {
@@ -22,6 +29,13 @@ class ConfirmDeal extends React.PureComponent {
             id: PropTypes.number.isRequired,
             vin: PropTypes.string.isRequired,
         }),
+        infoModalIsShowingFor: PropTypes.number,
+        userLocation: PropTypes.object.isRequired,
+        purchaseStrategy: PropTypes.string.isRequired,
+        showInfoModal: PropTypes.func.isRequired,
+        hideInfoModal: PropTypes.func.isRequired,
+        onRequestDealQuote: PropTypes.func.isRequired,
+        onSetPurchaseStrategy: PropTypes.func.isRequired,
     };
 
     render() {
@@ -34,28 +48,16 @@ class ConfirmDeal extends React.PureComponent {
                     withFinalSelectionHeader={true}
                     withCustomizeQuoteOrBuyNow={false}
                     withConfirmPurchase={true}
-                    {...R.pick(
-                        [
-                            'deal',
-                            'selectedTab',
-                            'compareList',
-                            'dealPricing',
-                            'onConfirmPurchase',
-                        ],
-                        this.props
-                    )}
-                    {...R.pick(
-                        [
-                            'selectDeal',
-                            'selectTab',
-                            'requestTargets',
-                            'requestBestOffer',
-                            'getBestOffersForLoadedDeals',
-                            'toggleCompare',
-                            'showAccuPricingModal',
-                        ],
-                        this.props
-                    )}
+                    deal={this.props.deal}
+                    userLocation={this.props.userLocation}
+                    purchaseStrategy={this.props.purchaseStrategy}
+                    dealPricing={this.props.dealPricing}
+                    onRequestDealQuote={this.props.onRequestDealQuote}
+                    onSetPurchaseStrategy={this.props.onSetPurchaseStrategy}
+                    compareList={this.props.compareList}
+                    selectDeal={this.props.selectDeal}
+                    toggleCompare={this.props.toggleCompare}
+                    showAccuPricingModal={this.props.showAccuPricingModal}
                 />
             </div>
         );
@@ -63,27 +65,51 @@ class ConfirmDeal extends React.PureComponent {
 }
 
 const makeMapStateToProps = () => {
-    const getDealBestOfferTotalValue = makeDealBestOfferTotalValue();
     const getDealPricing = makeDealPricing();
     const mapStateToProps = (state, props) => {
         return {
+            userLocation: getUserLocation(state),
+            purchaseStrategy: state.user.purchasePreferences.strategy,
             compareList: state.common.compareList,
-            selectedTab: state.user.purchasePreferences.strategy,
             downPayment: state.common.downPayment,
             termDuration: state.common.termDuration,
             selectedDeal: state.common.selectedDeal,
             employeeBrand: state.common.employeeBrand,
             residualPercent: state.common.residualPercent,
-            dealTargets: state.common.dealTargets,
-            selectedTargets: state.common.selectedTargets,
-            dealBestOfferTotalValue: getDealBestOfferTotalValue(state, props),
+            dealBestOfferTotalValue: dealQuoteRebatesTotal(state, props),
             dealPricing: new DealPricing(getDealPricing(state, props)),
         };
     };
     return mapStateToProps;
 };
 
+const mapDispatchToProps = dispatch => {
+    return {
+        onSelectDeal: deal => {
+            return dispatch(selectDeal(deal));
+        },
+        onSetPurchaseStrategy: strategy => {
+            return dispatch(setPurchaseStrategy(strategy));
+        },
+        onToggleCompare: deal => {
+            return dispatch(toggleCompare(deal));
+        },
+        onShowInfoModal: id => {
+            return dispatch(showInfoModal(id));
+        },
+        onHideInfoModal: () => {
+            return dispatch(hideInfoModal());
+        },
+        onShowAccuPricingModal: () => {
+            return dispatch(showAccuPricingModal());
+        },
+        onRequestDealQuote: (deal, zipcode, paymentType) => {
+            return dispatch(requestDealQuote(deal, zipcode, paymentType));
+        },
+    };
+};
+
 export default connect(
     makeMapStateToProps,
-    Actions
+    mapDispatchToProps
 )(ConfirmDeal);

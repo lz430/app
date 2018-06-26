@@ -85,7 +85,6 @@ class PriceBar extends React.Component {
      */
     handlePurchaseStrategyChange(strategy) {
         this.props.onSetPurchaseStrategy(strategy);
-        //this.props.getBestOffersForLoadedDeals();
     }
 }
 

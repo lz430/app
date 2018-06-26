@@ -9,9 +9,6 @@ import DealPricing from 'src/DealPricing';
 
 import {
     selectDeal,
-    requestTargets,
-    requestBestOffer,
-    getBestOffersForLoadedDeals,
     toggleCompare,
     showInfoModal,
     hideInfoModal,
