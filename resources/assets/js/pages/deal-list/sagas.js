@@ -5,7 +5,6 @@ import {
     call,
     select,
     take,
-    takeLatest,
     takeEvery,
     cancel,
     cancelled,
@@ -15,10 +14,6 @@ import { cancelRequest } from 'store/httpclient';
 
 import {
     INIT,
-    RECEIVE_MAKES,
-    RECEIVE_BODY_STYLES,
-    RECEIVE_FEATURES,
-    RECEIVE_FEATURE_CATEGORIES,
     SEARCH_LOADING_START,
     SEARCH_LOADING_FINISHED,
     SEARCH_REQUEST,

@@ -170,11 +170,11 @@ class DealQuoteTransformer extends TransformerAbstract
         $data['meta'] = [
             'paymentType' => $meta->paymentType,
             'zipcode' => $meta->zipcode,
+            'dealId' => $meta->dealId,
         ];
 
         $data['rebates'] = $this->rebates();
         $data['rates'] = $this->rates();
-
 
         return $data;
 

@@ -5,6 +5,7 @@ import * as DealDetailSagas from 'pages/deal-detail/sagas';
 import * as CompareSagas from 'pages/compare/sagas';
 import * as DealSagas from 'apps/common/sagas';
 import * as AppUserSagas from 'apps/user/sagas';
+import * as AppPricingSagas from 'apps/pricing/sagas';
 
 export default function* root() {
     yield all([
@@ -16,5 +17,6 @@ export default function* root() {
         fork(DealSagas.watchRequestQuoteRefresh),
         fork(AppUserSagas.watchIPRequestLocationInfo),
         fork(AppUserSagas.watchRequestLocation),
+        fork(AppPricingSagas.watchRequestDealQuote),
     ]);
 }

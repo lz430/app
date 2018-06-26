@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage';
 import commonReducers from 'apps/common/reducers';
 import appUserReducer from 'apps/user/reducers';
 import appPageReducer from 'apps/page/reducers';
+import appPricingReducer from 'apps/pricing/reducers';
 
 import dealDetailsReducer from 'pages/deal-detail/reducer';
 import dealListReducer from 'pages/deal-list/reducers';
@@ -25,6 +26,7 @@ const pagesPersistConfig = {
 export default combineReducers({
     common: commonReducers,
     user: appUserReducer,
+    pricing: appPricingReducer,
     page: appPageReducer,
     pages: persistReducer(pagesPersistConfig, pagesReducer),
 });

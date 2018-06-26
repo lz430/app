@@ -48,7 +48,7 @@ function* requestDealBestOffer(deal, zipcode, paymentType, targets) {
 
     try {
         results = yield call(
-            ApiClient.deal.dealGetQuote,
+            ApiClient.deal.dealGetBestOffer,
             deal.id,
             paymentType,
             zipcode,
@@ -171,7 +171,6 @@ function* requestDealQuote(action) {
 
     const targets = R.uniq(state.targetDefaults.concat(selectedTargetIds));
 
-    console.log('A');
     yield fork(
         requestDealBestOffer,
         deal,
@@ -180,12 +179,9 @@ function* requestDealQuote(action) {
         targets
     );
 
-    console.log('B');
-
     if (purchaseStrategy === 'lease') {
         yield fork(requestDealLeaseRates, deal, location.zipcode);
     }
-    console.log('C');
 }
 
 export function* batchRequestDealQuotes(deals) {
