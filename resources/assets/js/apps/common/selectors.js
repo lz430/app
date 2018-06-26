@@ -290,6 +290,10 @@ const dealQuoteRebates = createSelector([dealQuote], quote => {
     return null;
 });
 
+const dealQuoteIsLoading = createSelector([dealQuote], quote => {
+    return quote === null;
+});
+
 const dealQuoteLeaseRates = createSelector([dealQuote], quote => {
     if (quote && quote.rates) {
         return quote.rates;
@@ -307,7 +311,7 @@ const dealQuoteLeasePayments = createSelector([dealQuote], quote => {
 const dealPricing = createSelector(
     deal,
     dealQuoteRebates,
-    dealBestOfferLoading,
+    dealQuoteIsLoading,
     zipcode,
     paymentType,
     employeeBrand,
@@ -318,9 +322,9 @@ const dealPricing = createSelector(
     dealLeaseTerm,
     dealLeaseCashDue,
     dealHasCustomizedQuote,
-    dealLeaseRatesLoading,
+    dealQuoteIsLoading,
     dealQuoteLeaseRates,
-    dealLeasePaymentsLoading,
+    dealQuoteIsLoading,
     dealQuoteLeasePayments,
     discountType,
     (

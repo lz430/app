@@ -4,15 +4,41 @@ const initialState = {
     quotes: {},
 };
 
+const dealQuoteKey = (deal, zipcode, paymentType) => {
+    return `${deal.id}-${paymentType}-${zipcode}`;
+};
+
 export default function(state = initialState, action = {}) {
     switch (action.type) {
+        case ActionTypes.REQUEST_DEAL_QUOTE_IS_LOADING:
+            return {
+                ...state,
+                quotes: {
+                    ...state.quotes,
+                    [dealQuoteKey(
+                        action.deal,
+                        action.zipcode,
+                        action.paymentType
+                    )]: null,
+                },
+            };
+
         case ActionTypes.RECEIVE_DEAL_QUOTE:
-            if (!action.data) {
-                return state;
+            const key = dealQuoteKey(
+                action.deal,
+                action.zipcode,
+                action.paymentType
+            );
+
+            if (action.data === false) {
+                return {
+                    ...state,
+                    quotes: {
+                        ...state.quotes,
+                        [key]: action.data,
+                    },
+                };
             }
-            const key = `${action.data.meta.dealId}-${
-                action.data.meta.paymentType
-            }-${action.data.meta.zipcode}`;
 
             if (action.data.payments) {
                 const leasePaymentsMatrix = {};

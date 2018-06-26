@@ -1,15 +1,23 @@
-import { put, call, select, takeEvery, cancelled } from 'redux-saga/effects';
+import {
+    all,
+    fork,
+    put,
+    call,
+    select,
+    takeEvery,
+    cancelled,
+} from 'redux-saga/effects';
 
 import ApiClient from 'store/api';
 import { cancelRequest } from 'store/httpclient';
 
 import { REQUEST_DEAL_QUOTE } from './consts';
-import { receiveDealQuote } from './actions';
+import { receiveDealQuote, requestDealQuoteIsLoading } from './actions';
+import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
 
 /*******************************************************************
  * Request Deal Quote
  ********************************************************************/
-
 export function* requestDealQuote(action) {
     const source = cancelRequest();
 
@@ -24,6 +32,8 @@ export function* requestDealQuote(action) {
         return;
     }
 
+    yield put(requestDealQuoteIsLoading(deal, zipcode, paymentType));
+
     let results = null;
 
     try {
@@ -36,6 +46,7 @@ export function* requestDealQuote(action) {
         );
         results = results.data;
     } catch (e) {
+        results = false;
         console.log(e);
     } finally {
         if (yield cancelled()) {
@@ -43,7 +54,27 @@ export function* requestDealQuote(action) {
         }
     }
 
-    yield put(receiveDealQuote(results));
+    yield put(receiveDealQuote(deal, zipcode, paymentType, results));
+}
+
+export function* batchRequestDealQuotes(deals) {
+    const location = yield select(getUserLocation);
+    const strategy = yield select(getUserPurchaseStrategy);
+
+    if (!location.zipcode || !strategy) {
+        return;
+    }
+
+    yield all(
+        deals.map(deal =>
+            fork(requestDealQuote, {
+                type: REQUEST_DEAL_QUOTE,
+                deal: deal,
+                zipcode: location.zipcode,
+                paymentType: strategy,
+            })
+        )
+    );
 }
 
 /*******************************************************************

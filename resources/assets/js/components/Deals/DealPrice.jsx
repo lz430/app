@@ -26,7 +26,6 @@ class DealPrice extends React.Component {
         deal: PropTypes.object.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
         compareList: PropTypes.array.isRequired,
-        dealPricing: PropTypes.objectOf(DealPricing),
         infoModalIsShowingFor: PropTypes.number,
         onSelectDeal: PropTypes.func.isRequired,
         onSetPurchaseStrategy: PropTypes.func.isRequired,

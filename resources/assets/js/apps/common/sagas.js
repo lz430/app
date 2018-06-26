@@ -25,6 +25,8 @@ import {
     receiveLeasePayments,
 } from './actions';
 
+import { batchRequestDealQuotes } from 'apps/pricing/sagas';
+
 import { getUserPurchaseStrategy, getUserLocation } from 'apps/user/selectors';
 
 /**
@@ -182,17 +184,6 @@ function* requestDealQuote(action) {
     if (purchaseStrategy === 'lease') {
         yield fork(requestDealLeaseRates, deal, location.zipcode);
     }
-}
-
-export function* batchRequestDealQuotes(deals) {
-    yield all(
-        deals.map(deal =>
-            fork(requestDealQuote, {
-                type: ActionTypes.REQUEST_DEAL_QUOTE,
-                deal: deal,
-            })
-        )
-    );
 }
 
 function* requestQuoteRefresh() {
