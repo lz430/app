@@ -28,7 +28,8 @@ export function* requestDealQuote(action) {
     const role = action.role;
     const key = dealQuoteKey(deal, zipcode, paymentType, role);
     const state = yield select();
-    if (state.pricing.quotes[key]) {
+
+    if (state.pricing.quotes[key] && state.pricing.quotes[key] !== null) {
         return;
     }
 

@@ -131,8 +131,7 @@ const dealQuoteKey = createSelector(
             role = discountType;
         }
 
-        const key = generateDealQuoteKey(deal, zipcode, paymentType, role);
-        return key;
+        return generateDealQuoteKey(deal, zipcode, paymentType, role);
     }
 );
 

@@ -2,7 +2,6 @@
 
 namespace DeliverMyRide\Carleton;
 
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class Client
@@ -117,7 +116,7 @@ class Client
                 foreach ($termData['annualMileage'] as $annualMileage => $annualMileageData) {
                     $quote = [
                         'taxRate' => $taxRate,
-                        'moneyFactor' =>$termData['moneyFactor'],
+                        'moneyFactor' => $termData['moneyFactor'],
                         'residualPercent' => $annualMileageData['residualPercent'],
                         'term' => $term,
                         'annualMileage' => $annualMileage,
@@ -207,18 +206,7 @@ class Client
 
         $request = $this->buildRequest($params);
 
-        $hash = md5($request);
-        $cacheKey = "lease-rates-" . $hash;
-
-        if (false && Cache::has($cacheKey)) {
-            Log::debug("Cache HIT ($cacheKey)");
-            return Cache::get($cacheKey);
-        }
-
-        Log::debug("Cache MISS ($cacheKey)");
-        $leasePayments = $this->getLeasePaymentsForQuoteParameters($params, $request);
-        Cache::put($cacheKey, $leasePayments, count($leasePayments) > 0 ? 360 : 15);
-        return $leasePayments;
+        return $this->getLeasePaymentsForQuoteParameters($params, $request);
     }
 
     /**

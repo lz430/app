@@ -49,6 +49,7 @@ class Container extends React.PureComponent {
             vin: PropTypes.string.isRequired,
         }),
         purchaseStrategy: PropTypes.string.isRequired,
+        discountType: PropTypes.string.isRequired,
 
         initPage: PropTypes.func.isRequired,
         receiveDeal: PropTypes.func.isRequired,
@@ -368,7 +369,8 @@ class Container extends React.PureComponent {
         this.props.requestDealQuote(
             this.props.deal,
             this.props.userLocation.zipcode,
-            strategy
+            strategy,
+            this.props.discountType
         );
     };
 
@@ -583,6 +585,7 @@ function mapStateToProps(state) {
             fallbackDealImage: state.common.fallbackDealImage,
             selectedDeal: state.common.selectedDeal,
             employeeBrand: state.common.employeeBrand,
+            discountType: state.pages.dealDetails.selectDiscount.discountType,
             dealPricing: new DealPricing(getDealPricing(state, props)),
             window: state.common.window,
             userLocation: getUserLocation(state),
