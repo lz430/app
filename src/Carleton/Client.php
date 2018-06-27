@@ -30,7 +30,7 @@ class Client
      * @param $acquisitionFee
      * @param $docFee
      * @param $rebate
-     * @param $licenseFee
+     * @pacram $licenseFee
      * @param $cvrFee
      * @param $msrp
      * @param $cashAdvance
@@ -117,7 +117,7 @@ class Client
                 foreach ($termData['annualMileage'] as $annualMileage => $annualMileageData) {
                     $quote = [
                         'taxRate' => $taxRate,
-                        'moneyFactor' =>$termData['moneyFactor'],
+                        'moneyFactor' => $termData['moneyFactor'],
                         'residualPercent' => $annualMileageData['residualPercent'],
                         'term' => $term,
                         'annualMileage' => $annualMileage,

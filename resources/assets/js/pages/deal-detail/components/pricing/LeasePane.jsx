@@ -1,6 +1,9 @@
 import React from 'react';
-import Discount from './Discount';
+import SVGInline from 'react-svg-inline';
+import miscicons from 'miscicons';
+
 import Rebates from '../../containers/pricing/rebates/Rebates';
+import Discount from './Discount';
 import Line from './Line';
 import Label from './Label';
 import Value from './Value';
@@ -16,21 +19,21 @@ export default class LeasePane extends React.PureComponent {
         onChange: () => {},
     };
 
-    render() {
+    constructor() {
+        super();
+
+        this.renderTotalAndMiles = this.renderTotalAndMiles.bind(this);
+    }
+
+    renderLoading() {
+        return <SVGInline svg={miscicons['loading']} />;
+    }
+
+    renderTotalAndMiles() {
         const { dealPricing, onDiscountChange, onRebatesChange } = this.props;
 
         return (
             <div>
-                <Line>
-                    <Label>MSRP</Label>
-                    <Value>{dealPricing.msrp()}</Value>
-                </Line>
-                <Discount {...{ dealPricing }} onChange={onDiscountChange} />
-                <Line>
-                    <Label>Selling Price</Label>
-                    <Value>{dealPricing.baseSellingPrice()}</Value>
-                </Line>
-                <TaxesAndFees items={dealPricing.taxesAndFees()} />
                 {dealPricing.bestOfferValue() > 0 && (
                     <Line>
                         <Label>Rebates Applied</Label>
@@ -164,6 +167,29 @@ export default class LeasePane extends React.PureComponent {
                     <Label>Monthly Payment</Label>
                     <Value>{dealPricing.monthlyPayments()}*</Value>
                 </Line>
+            </div>
+        );
+    }
+
+    render() {
+        const { dealPricing, onDiscountChange, onRebatesChange } = this.props;
+
+        return (
+            <div>
+                <Line>
+                    <Label>MSRP</Label>
+                    <Value>{dealPricing.msrp()}</Value>
+                </Line>
+                <Discount {...{ dealPricing }} onChange={onDiscountChange} />
+                <Line>
+                    <Label>Selling Price</Label>
+                    <Value>{dealPricing.baseSellingPrice()}</Value>
+                </Line>
+                <TaxesAndFees items={dealPricing.taxesAndFees()} />
+                {this.props.dealPricing.bestOfferIsLoading() &&
+                    this.renderLoading()}
+                {!this.props.dealPricing.bestOfferIsLoading() &&
+                    this.renderTotalAndMiles()}
             </div>
         );
     }
