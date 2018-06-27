@@ -21,6 +21,7 @@ class FinancePane extends React.PureComponent {
                     <Label>Selling Price</Label>
                     <Value>{dealPricing.baseSellingPrice()}</Value>
                 </Line>
+                <TaxesAndFees items={dealPricing.taxesAndFees()} />
                 {dealPricing.bestOfferValue() > 0 && (
                     <Line>
                         <Label>Rebates Applied</Label>
@@ -30,7 +31,6 @@ class FinancePane extends React.PureComponent {
                     </Line>
                 )}
                 <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
-                <TaxesAndFees items={dealPricing.taxesAndFees()} />
                 <Line>
                     <Label>Total Price</Label>
                     <Value>{dealPricing.yourPrice()}*</Value>

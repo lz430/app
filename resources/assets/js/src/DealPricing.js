@@ -320,6 +320,14 @@ export default class DealPricing {
     }
 
     sellingPriceValue() {
+        return this.baseSellingPriceValue();
+    }
+
+    sellingPrice() {
+        return this.baseSellingPrice();
+    }
+
+    totalPriceValue() {
         switch (this.data.paymentType) {
             case 'cash':
             case 'finance':
@@ -331,16 +339,14 @@ export default class DealPricing {
                     total.times(this.taxRate())
                 );
 
-                return Number(
-                    totalWithSalesTax.plus(this.licenseAndRegistrationValue())
-                );
+                return totalWithSalesTax;
             case 'lease':
                 return new Decimal(this.baseSellingPriceValue()).toFixed(2);
         }
     }
 
-    sellingPrice() {
-        return util.moneyFormat(this.sellingPriceValue());
+    totalPrice() {
+        return util.moneyFormat(this.totalPriceValue());
     }
 
     yourPriceValue() {
@@ -725,7 +731,7 @@ export default class DealPricing {
                         rawValue: this.docFeeValue(),
                     },
                     {
-                        label: 'CVR Fee',
+                        label: 'Electronic Filing Fee',
                         value: this.effCvrFee(),
                         rawValue: this.effCvrFeeValue(),
                     },
@@ -739,7 +745,7 @@ export default class DealPricing {
                         rawValue: this.docFeeValue(),
                     },
                     {
-                        label: 'CVR Fee',
+                        label: 'Electronic Filing Fee',
                         value: this.effCvrFee(),
                         rawValue: this.effCvrFeeValue(),
                     },
@@ -748,11 +754,13 @@ export default class DealPricing {
                         value: this.acquisitionFee(),
                         rawValue: this.acquisitionFeeValue(),
                     },
+                    /*
                     {
                         label: 'Registration Fee',
                         value: this.licenseAndRegistration(),
                         rawValue: this.licenseAndRegistrationValue(),
                     },
+                    */
                 ];
         }
     }
