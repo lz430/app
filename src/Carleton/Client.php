@@ -85,8 +85,9 @@ class Client
                 'CCRPortionFeeTaxed' => 'Yes',
                 'RoundToOption' => 'NearestPenny',
             ],
+            /*
             'license' => [
-                'Amount' => 23,
+                'Amount' => $licenseFee,
                 'Type' => 'Financed', // Upfront
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
@@ -94,6 +95,7 @@ class Client
                 'FinanceTaxes' => 'Yes',
                 'RoundToOption' => 'NearestPenny',
             ],
+            */
             'cvr' => [
                 'Amount' => $cvrFee,
                 'Type' => 'Financed',

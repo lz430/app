@@ -11,6 +11,10 @@ export default class TaxesAndFees extends React.PureComponent {
     }
 
     render() {
+        const total = util.moneyFormat(
+            this.props.items.reduce((total, item) => total + item.rawValue, 0)
+        );
+
         return (
             <div>
                 <Line>
@@ -30,13 +34,14 @@ export default class TaxesAndFees extends React.PureComponent {
                             Taxes &amp; Fees
                         </a>
                     </Label>
+                    <Value>{total}</Value>
                 </Line>
                 {this.state.opened && (
-                    <div>
+                    <div style={{ marginBottom: '.75em' }}>
                         {this.props.items.map(item => (
                             <Line
                                 key={item.label}
-                                style={{ margin: '.125em 0 .125em .25em' }}
+                                style={{ margin: '.125em .5em .125em .5em' }}
                             >
                                 <Label style={{ fontSize: '.9em' }}>
                                     {item.label}
@@ -46,17 +51,6 @@ export default class TaxesAndFees extends React.PureComponent {
                                 </Value>
                             </Line>
                         ))}
-                        <Line style={{ margin: '.125em 0 .125em .25em' }}>
-                            <Label style={{ fontSize: '.9em' }}>TOTAL</Label>
-                            <Value style={{ fontSize: '.9em' }}>
-                                {util.moneyFormat(
-                                    this.props.items.reduce(
-                                        (total, item) => total + item.rawValue,
-                                        0
-                                    )
-                                )}
-                            </Value>
-                        </Line>
                     </div>
                 )}
             </div>
