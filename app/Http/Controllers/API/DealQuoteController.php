@@ -27,13 +27,14 @@ class DealQuoteController extends BaseAPIController
     /**
      * @param $paymentType
      * @param $zip
+     * @param $role
      * @return \stdClass
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function getRatesAndRebates($paymentType, $zip) {
+    private function getRatesAndRebates($paymentType, $zip, $role) {
         $manager = new DealRatesAndRebatesManager($this->deal, $zip, $this->dataDeliveryClient);
         $manager->setFinanceStrategy($paymentType);
-        $manager->setConsumerRole('default');
+        $manager->setConsumerRole($role);
         $manager->searchForVehicleAndPrograms();
         $manager->setScenario();
         return $manager->getData();
@@ -45,8 +46,7 @@ class DealQuoteController extends BaseAPIController
      */
     private function getLeasePayments($data) {
         $manager = new DealLeasePaymentsManager($this->deal, $this->carletonClient);
-
-        return $manager->get($data['rates'], $data['rebates']['total']);
+        return $manager->get($data['rates'], $data['rebates']['total'], [0], $data['meta']['role']);
     }
 
     public function quote(Deal $deal)
@@ -55,17 +55,20 @@ class DealQuoteController extends BaseAPIController
         $this->validate(request(), [
             'payment_type' => 'required|string|in:cash,finance,lease',
             'zipcode' => 'required|string',
+            'role' => 'required|string',
         ]);
 
         $paymentType = request('payment_type');
         $zip = request('zipcode');
+        $role = request('role');
 
-        $ratesAndRebates = $this->getRatesAndRebates($paymentType, $zip);
+        $ratesAndRebates = $this->getRatesAndRebates($paymentType, $zip, $role);
 
         $meta = (object) [
             'paymentType' => $paymentType,
             'zipcode' => $zip,
             'dealId' => $this->deal->id,
+            'role' => $role,
         ];
 
         //

@@ -1,22 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import R from 'ramda';
 
 import * as legacyActions from 'apps/common/actions';
+
 import api from 'src/api';
+import strings from 'src/strings';
+import util from 'src/util';
+
 import CompareBar from 'components/CompareBar';
 import Modal from 'components/Modal';
 import miscicons from 'miscicons';
-import R from 'ramda';
-
-import strings from 'src/strings';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
+
 import ImageGallery from 'react-image-gallery';
 import AccuPricingModal from 'components/AccuPricingModal';
 import DealPricing from 'src/DealPricing';
 import { makeDealPricing } from 'apps/common/selectors';
-import util from 'src/util';
 import CashPricingPane from './components/pricing/CashPane';
 import FinancePricingPane from './components/pricing/FinancePane';
 import LeasePricingPane from './components/pricing/LeasePane';
@@ -32,7 +34,6 @@ import * as leaseActions from './modules/lease';
 
 import { initPage, receiveDeal } from './actions';
 
-import { getActiveQuote } from './selectors';
 import { getUserLocation } from 'apps/user/selectors';
 
 class Container extends React.PureComponent {
@@ -47,6 +48,8 @@ class Container extends React.PureComponent {
             id: PropTypes.number.isRequired,
             vin: PropTypes.string.isRequired,
         }),
+        purchaseStrategy: PropTypes.string.isRequired,
+
         initPage: PropTypes.func.isRequired,
         receiveDeal: PropTypes.func.isRequired,
         setPurchaseStrategy: PropTypes.func.isRequired,
@@ -383,6 +386,13 @@ class Container extends React.PureComponent {
                 this.props.selectDiscountActions.selectSupplierDiscount(make);
                 break;
         }
+
+        this.props.requestDealQuote(
+            this.props.deal,
+            this.props.userLocation.zipcode,
+            this.props.purchaseStrategy,
+            discountType
+        );
     };
 
     handleRebatesChange = () => {};
@@ -567,7 +577,6 @@ function mapStateToProps(state) {
     return (state, props) => {
         return {
             purchaseStrategy: state.user.purchasePreferences.strategy,
-            quote: getActiveQuote(state),
             compareList: state.common.compareList,
             downPayment: state.common.downPayment,
             termDuration: state.common.termDuration,

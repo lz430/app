@@ -1,11 +1,8 @@
 import * as ActionTypes from './consts';
+import { dealQuoteKey } from './helpers';
 
 const initialState = {
     quotes: {},
-};
-
-const dealQuoteKey = (deal, zipcode, paymentType) => {
-    return `${deal.id}-${paymentType}-${zipcode}`;
 };
 
 export default function(state = initialState, action = {}) {
@@ -18,7 +15,8 @@ export default function(state = initialState, action = {}) {
                     [dealQuoteKey(
                         action.deal,
                         action.zipcode,
-                        action.paymentType
+                        action.paymentType,
+                        action.role
                     )]: null,
                 },
             };
@@ -27,7 +25,8 @@ export default function(state = initialState, action = {}) {
             const key = dealQuoteKey(
                 action.deal,
                 action.zipcode,
-                action.paymentType
+                action.paymentType,
+                action.role
             );
 
             if (action.data === false) {

@@ -10,15 +10,17 @@ class DealService {
      * @param dealId
      * @param paymentType
      * @param zipcode
+     * @param role
      * @param cancelToken
      * @returns {*}
      */
-    dealGetQuote(dealId, paymentType, zipcode, cancelToken) {
+    dealGetQuote(dealId, paymentType, zipcode, role, cancelToken) {
         return httpclient.get(`/api/deals/${dealId}/quote`, {
             cancelToken: cancelToken,
             params: {
                 payment_type: paymentType,
                 zipcode: zipcode,
+                role: role,
             },
         });
     }

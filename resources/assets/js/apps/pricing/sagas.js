@@ -14,6 +14,7 @@ import { cancelRequest } from 'store/httpclient';
 import { REQUEST_DEAL_QUOTE } from './consts';
 import { receiveDealQuote, requestDealQuoteIsLoading } from './actions';
 import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
+import { dealQuoteKey } from './helpers';
 
 /*******************************************************************
  * Request Deal Quote
@@ -24,15 +25,14 @@ export function* requestDealQuote(action) {
     const deal = action.deal;
     const zipcode = action.zipcode;
     const paymentType = action.paymentType;
-
-    const key = `${deal.id}-${paymentType}-${zipcode}`;
-
+    const role = action.role;
+    const key = dealQuoteKey(deal, zipcode, paymentType, role);
     const state = yield select();
     if (state.pricing.quotes[key]) {
         return;
     }
 
-    yield put(requestDealQuoteIsLoading(deal, zipcode, paymentType));
+    yield put(requestDealQuoteIsLoading(deal, zipcode, paymentType, role));
 
     let results = null;
 
@@ -42,6 +42,7 @@ export function* requestDealQuote(action) {
             deal.id,
             paymentType,
             zipcode,
+            role,
             source.token
         );
         results = results.data;
@@ -54,9 +55,14 @@ export function* requestDealQuote(action) {
         }
     }
 
-    yield put(receiveDealQuote(deal, zipcode, paymentType, results));
+    yield put(receiveDealQuote(deal, zipcode, paymentType, results, role));
 }
 
+/**
+ * Called from the search page, we always want default pricing.
+ * @param deals
+ * @returns {IterableIterator<*>}
+ */
 export function* batchRequestDealQuotes(deals) {
     const location = yield select(getUserLocation);
     const strategy = yield select(getUserPurchaseStrategy);
@@ -72,6 +78,7 @@ export function* batchRequestDealQuotes(deals) {
                 deal: deal,
                 zipcode: location.zipcode,
                 paymentType: strategy,
+                role: 'default',
             })
         )
     );

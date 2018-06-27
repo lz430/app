@@ -94,27 +94,6 @@ class DealQuoteTransformer extends TransformerAbstract
         return ($initialPercent[0]['residualPercent']) ? $initialPercent[0]['residualPercent'] : null;
     }
 
-    public function incentives($params)
-    {
-        if (!isset($params['results'])) {
-            return false;
-        }
-
-        if (in_array($params['paymentType'], ['cash', 'finance'])) {
-            return $this->getCashRebates($params);
-        }
-
-        if ($params['paymentType'] === 'lease') {
-            $leaseData = $this->getRatesForLeases($params);
-            $cashValue['totalValue'] = $this->getCashRebates($params) + $this->getLeaseCash($params); // TODO : sloppy, fix
-            $array = [
-                'rates' => $leaseData,
-                'cash' => $cashValue
-            ];
-            return $array;
-        }
-    }
-
     /**
      * Build Rebates
      * @return array
@@ -167,33 +146,11 @@ class DealQuoteTransformer extends TransformerAbstract
         $this->meta = $meta;
 
         $data = [];
-        $data['meta'] = [
-            'paymentType' => $meta->paymentType,
-            'zipcode' => $meta->zipcode,
-            'dealId' => $meta->dealId,
-        ];
-
+        $data['meta'] = (array) $this->meta;
         $data['rebates'] = $this->rebates();
         $data['rates'] = $this->rates();
 
         return $data;
-
-        $incentives = $this->incentives($params);
-
-        if (!$incentives) {
-            return [
-                'totalValue' => 0
-            ];
-        }
-
-        if (in_array($params['paymentType'], ['cash', 'finance'])) {
-            return [
-                'totalValue' => $this->getCashRebates($params)
-
-            ];
-        } else {
-            return $this->incentives($params);
-        }
     }
 }
 

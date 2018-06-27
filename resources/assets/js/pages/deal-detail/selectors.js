@@ -1,3 +1,5 @@
+import { dealQuoteKey } from 'apps/pricing/helpers';
+
 export const getDeal = state => {
     return state.pages.dealDetails.deal;
 };
@@ -11,9 +13,14 @@ export const getActiveQuote = state => {
         return null;
     }
 
-    const key = `${state.pages.dealDetails.deal.id}-${
-        state.user.purchasePreferences.strategy
-    }-${state.user.location.zipcode}`;
+    const discountType = state.pages.dealDetails.selectDiscount.discountType;
+
+    const key = dealQuoteKey(
+        state.pages.dealDetails.deal,
+        state.user.location.zipcode,
+        state.user.purchasePreferences.strategy,
+        discountType
+    );
 
     if (state.pricing.quotes[key]) {
         return state.pricing.quotes[key];

@@ -85,6 +85,7 @@ class Client
                 'CCRPortionFeeTaxed' => 'Yes',
                 'RoundToOption' => 'NearestPenny',
             ],
+
             /*
             'license' => [
                 'Amount' => $licenseFee,
@@ -110,12 +111,13 @@ class Client
         if (is_string($terms)) {
             $terms = json_decode($terms, true);
         }
+
         foreach ($cashDueOptions as $cashDueValue) {
             foreach ($terms as $term => $termData) {
                 foreach ($termData['annualMileage'] as $annualMileage => $annualMileageData) {
                     $quote = [
                         'taxRate' => $taxRate,
-                        'moneyFactor' => $termData['moneyFactor'],
+                        'moneyFactor' =>$termData['moneyFactor'],
                         'residualPercent' => $annualMileageData['residualPercent'],
                         'term' => $term,
                         'annualMileage' => $annualMileage,
