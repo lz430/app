@@ -1,24 +1,16 @@
 import { createSelector } from 'reselect';
 import R from 'ramda';
+import { dealQuoteKey as generateDealQuoteKey } from 'apps/pricing/helpers';
 
 export default state => state.common;
 export const common = state => state.common;
 
-const selectedDeal = state => state.common.selectedDeal;
 const zipcode = state => state.user.location.zipcode;
 const deal = (state, props) => props.deal;
 const targetsAvailable = state => state.common.targetsAvailable;
-const targetsSelected = state => state.common.targetsSelected;
 
-const bestOffers = state => {
-    if (state.common) {
-        return state.common.bestOffers;
-    } else {
-        return state.bestOffers;
-    }
-};
 const paymentType = state => state.user.purchasePreferences.strategy;
-const targetDefaults = state => state.common.targetDefaults;
+
 const employeeBrand = state => {
     return state.pages.dealDetails.selectDiscount.employeeBrand === false
         ? null
@@ -28,7 +20,8 @@ const supplierBrand = state =>
     state.pages.dealDetails.selectDiscount.supplierBrand === false
         ? null
         : state.pages.dealDetails.selectDiscount.supplierBrand;
-const discountType = state =>
+
+export const discountType = state =>
     state.pages.dealDetails.selectDiscount.discountType;
 
 const financeDownPayment = state => state.pages.dealDetails.finance.downPayment;
@@ -40,10 +33,6 @@ const leaseCashDue = state => state.pages.dealDetails.lease.cashDue;
 
 const dealsIdsWithCustomizedQuotes = state =>
     state.common.dealsIdsWithCustomizedQuotes;
-
-export const makeSelectedDeal = () => {
-    return selectedDeal;
-};
 
 // Generate the target key for a specific deal
 const dealTargetKey = createSelector([deal, zipcode], (deal, zipcode) => {
@@ -128,13 +117,22 @@ const quotes = state => {
 };
 
 const dealQuoteKey = createSelector(
-    [deal, zipcode, paymentType],
-    (deal, zipcode, paymentType) => {
+    [deal, zipcode, paymentType, discountType],
+    (deal, zipcode, paymentType, discountType) => {
         if (!deal || !zipcode || !paymentType) {
             return null;
         }
 
-        return `${deal.id}-${paymentType}-${zipcode}`;
+        let role = 'default';
+
+        if (discountType === 'dmr' || !discountType) {
+            role = 'default';
+        } else {
+            role = discountType;
+        }
+
+        const key = generateDealQuoteKey(deal, zipcode, paymentType, role);
+        return key;
     }
 );
 

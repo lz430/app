@@ -8,6 +8,7 @@ import { setCurrentPage } from 'apps/page/actions';
 import { getDeal } from './selectors';
 import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
 import { requestDealQuote } from 'apps/pricing/actions';
+import { discountType as getDiscountType } from 'apps/common/selectors';
 
 /*******************************************************************
  * Init
@@ -19,8 +20,11 @@ function* init() {
 
     const location = yield select(getUserLocation);
     const purchaseStrategy = yield select(getUserPurchaseStrategy);
+    const discountType = yield select(getDiscountType);
 
-    yield put(requestDealQuote(deal, location.zipcode, purchaseStrategy));
+    yield put(
+        requestDealQuote(deal, location.zipcode, purchaseStrategy, discountType)
+    );
 }
 
 /*******************************************************************
