@@ -203,7 +203,6 @@ class Client
             $cashAdvance,
             $contractDate
         );
-
         $request = $this->buildRequest($params);
 
         return $this->getLeasePaymentsForQuoteParameters($params, $request);

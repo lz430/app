@@ -24,13 +24,18 @@ class DealQuoteTransformer extends TransformerAbstract
         $terms = $data->leaseTerms;
         $months = [];
         foreach ($terms as $term) {
-            $months[] = [
+
+            $data  = [
                 'moneyFactor' => isset($term->Factor) ? $term->Factor : $term->Rate / 2400,
                 'rate' => isset($term->Rate) ? $term->Rate : null,
                 'residualPercent' => $this->getInitialResidualPercent($term->QualifyingTermEnd),
                 'termLength' => $term->QualifyingTermEnd,
                 'residuals' => $this->getResiduals($term->QualifyingTermEnd)
             ];
+
+            if ($data['residualPercent']) {
+                $months[] = $data;
+            }
         }
         return $months;
     }
@@ -57,6 +62,7 @@ class DealQuoteTransformer extends TransformerAbstract
             ];
 
         }
+
         return array_values(array_sort($residuals));
     }
 
@@ -91,6 +97,7 @@ class DealQuoteTransformer extends TransformerAbstract
     public function getInitialResidualPercent($timeFrame)
     {
         $initialPercent = $this->getResiduals($timeFrame);
+
         return ($initialPercent[0]['residualPercent']) ? $initialPercent[0]['residualPercent'] : null;
     }
 

@@ -63,7 +63,6 @@ class DealQuoteController extends BaseAPIController
         $role = request('role');
 
         $ratesAndRebates = $this->getRatesAndRebates($paymentType, $zip, $role);
-
         $meta = (object) [
             'paymentType' => $paymentType,
             'zipcode' => $zip,
@@ -75,7 +74,6 @@ class DealQuoteController extends BaseAPIController
         // This is a little iffy... We should come up with a better way to organize this.
         // We need the data from the transformation to correctly get lease payments =(
         $data = (new DealQuoteTransformer())->transform($ratesAndRebates, $meta);
-
         if ($paymentType === "lease" && isset($data['rates'][0])) {
             $payments = $this->getLeasePayments($data);
             $data['payments'] = $payments;
