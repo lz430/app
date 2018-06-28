@@ -21,7 +21,7 @@ const { store, persistor } = configureStore();
 Array.from(document.getElementsByTagName('FilterPage')).map(element => {
     ReactDOM.render(
         <Provider store={store}>
-            <PersistGate persistor={persistor}>
+            <PersistGate loading={null} persistor={persistor}>
                 <DealList />
             </PersistGate>
         </Provider>,

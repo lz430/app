@@ -1,18 +1,12 @@
 import * as ActionTypes from 'apps/common/consts';
 import R from 'ramda';
-import { REHYDRATE } from 'redux-persist';
 import util from 'src/util';
-const urlStyle = util.getInitialBodyStyleFromUrl();
-const urlSize = util.getInitialSizeFromUrl();
 
 const initialState = {
     accuPricingModalIsShowing: false,
-    bestOffers: [],
     compareList: [],
-    dealBestOffer: null,
     employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
-
     infoModalIsShowingFor: null,
     residualPercent: null,
     selectedDeal: null,
@@ -36,49 +30,10 @@ const initialState = {
     vehicleYear: null,
     window: { width: window.innerWidth },
     dealsIdsWithCustomizedQuotes: [],
-    leaseRatesLoaded: {},
-    leaseRates: null,
-    leasePaymentsLoaded: {},
-    leasePayments: null,
 };
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case REHYDRATE:
-            /**
-             * If the state is a different "shape"/schema we need to let them restart
-             */
-            if (!util.sameStateSchema(state, action.payload)) {
-                localStorage.clear();
-
-                return state;
-            }
-
-            /**
-             * If the referrer is the home page, we should not rehydrate but let them "restart".
-             */
-            if (util.wasReferredFromHomePage()) {
-                localStorage.clear();
-
-                return state;
-            }
-
-            /**
-             * If we have a new url style / url size
-             */
-            if (urlSize || urlStyle) {
-                if (urlStyle) {
-                    state.common.selectedStyles = [urlStyle];
-                }
-
-                state.common.searchQuery.features = [];
-                state.common.searchQuery.makes = [];
-
-                window.history.replaceState({}, document.title, '/filter');
-                return state;
-            }
-
-            return Object.assign({}, state, action.payload);
         case ActionTypes.WINDOW_RESIZE:
             return Object.assign({}, state, {
                 window: action.window,

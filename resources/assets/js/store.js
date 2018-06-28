@@ -1,20 +1,21 @@
 import { createStore, compose, applyMiddleware } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
 import reduxThunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
-import storage from 'redux-persist/lib/storage';
-import { persistStore, persistReducer } from 'redux-persist';
 
 import rootSaga from 'sagas';
 import rootReducer from 'reducers';
+
+import { basePersistConfig } from 'persist';
 
 import { windowResize } from 'apps/common/actions';
 
 const initialState = {};
 
 const config = {
+    ...basePersistConfig,
     key: 'root',
-    storage,
-    blacklist: ['pages', 'page', 'pricing'],
+    blacklist: ['pages', 'page', 'pricing', 'user'],
 };
 
 export default () => {
@@ -29,12 +30,12 @@ export default () => {
         composeEnhancers(applyMiddleware(sagaMiddleware, reduxThunk))
     );
 
-    sagaMiddleware.run(rootSaga);
-
     const persistor = persistStore(store, null, () => {
         window.addEventListener('resize', () => {
             store.dispatch(windowResize(window.innerWidth));
         });
     });
+
+    sagaMiddleware.run(rootSaga);
     return { store, persistor };
 };
