@@ -702,7 +702,6 @@ class DealEquipmentMunger
             })
             ->pluck('value')
             ->map(function ($value) {
-                print_r($value);
                 if (str_contains(strtolower($value), ['cloth', 'synthetic suede'])) {
                     return 'seat_main_upholstery_cloth';
                 } elseif (str_contains(strtolower($value), ['synthetic leather', 'vinyl'])) {
