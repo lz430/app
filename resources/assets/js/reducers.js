@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+
+import { basePersistConfig } from 'persist';
 
 import commonReducers from 'apps/common/reducers';
 import appUserReducer from 'apps/user/reducers';
@@ -18,8 +19,8 @@ const pagesReducer = combineReducers({
 });
 
 const pagesPersistConfig = {
+    ...basePersistConfig,
     key: 'pages',
-    storage: storage,
     blacklist: ['dealList', 'dealDetail', 'compare'],
 };
 

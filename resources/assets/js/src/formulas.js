@@ -1,8 +1,3 @@
-import Decimal from 'decimal.js';
-
-const defaultEffCvrFee = 24;
-const defaultLicenseAndRegistration = 23;
-
 const formulas = {
     /**
      * Formula: EMI = ( P × r × (1+r)n ) / ((1+r)n − 1)

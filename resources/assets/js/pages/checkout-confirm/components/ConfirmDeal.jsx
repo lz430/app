@@ -32,8 +32,8 @@ class ConfirmDeal extends React.PureComponent {
         infoModalIsShowingFor: PropTypes.number,
         userLocation: PropTypes.object.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
-        showInfoModal: PropTypes.func.isRequired,
-        hideInfoModal: PropTypes.func.isRequired,
+        onShowInfoModal: PropTypes.func.isRequired,
+        onHideInfoModal: PropTypes.func.isRequired,
         onRequestDealQuote: PropTypes.func.isRequired,
         onSetPurchaseStrategy: PropTypes.func.isRequired,
     };

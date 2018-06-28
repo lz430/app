@@ -1,5 +1,6 @@
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { basePersistConfig } from 'persist';
 
 import * as ActionTypes from './consts';
 
@@ -8,8 +9,8 @@ const initialState = {
 };
 
 const persistConfig = {
+    ...basePersistConfig,
     key: 'page',
-    storage: storage,
     blacklist: ['current'],
 };
 

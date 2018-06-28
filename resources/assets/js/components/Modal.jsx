@@ -1,8 +1,9 @@
 import React from 'react';
 import R from 'ramda';
+import { connect } from 'react-redux';
+
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
-import { connect } from 'react-redux';
 import * as Actions from 'apps/common/actions';
 import util from 'src/util';
 
