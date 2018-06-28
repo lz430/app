@@ -38,9 +38,7 @@ class DealLeasePaymentsManager
         $prices = $this->deal->prices();
         $msrp = $prices->msrp;
         $price = $prices->{$role};
-
         $terms = $this->mungeTerms($terms);
-
         return $this->client->getLeasePaymentsFor(
             $cash_down,
             $terms,
