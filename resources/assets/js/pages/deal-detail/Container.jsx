@@ -449,6 +449,14 @@ class Container extends React.PureComponent {
         );
     };
 
+    renderStockNumber() {
+        return (
+            <div className="deal-details__stock-number">
+                Stock# {this.props.deal.stock_number}
+            </div>
+        );
+    }
+
     renderFeaturesAndOptions(deal, index) {
         const inCompareList = R.contains(
             deal,
