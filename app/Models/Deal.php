@@ -396,8 +396,9 @@ class Deal extends Model
 
     /**
      * @return mixed
+     * @see https://github.com/babenkoivan/scout-elasticsearch-driver/issues/88
      */
-    public function shouldBeSearchable()
+    public function shouldIndex()
     {
         if (!$this->dealer) {
             return FALSE;
@@ -417,6 +418,10 @@ class Deal extends Model
      */
     public function toSearchableArray()
     {
+        if (!$this->shouldIndex()) {
+            return [];
+        }
+
         $record = [];
 
         //
