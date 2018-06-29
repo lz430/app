@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Deal;
+use App\Models\Feature;
 use DeliverMyRide\JATO\JatoClient;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,20 @@ class DealsCompareController extends BaseAPIController
     private $compData;
 
     private const EQUIPMENT_TO_SKIP = [
-        'Internal dimensions'
+        'Internal dimensions',
+        'Crash test results',
+        'Front seat belts',
+        'Rear seat belts',
+        'Axle ratio :1',
+        'Powertrain type',
+        'Bumpers',
+        'Exterior door handles',
+        'Paint',
+        'Rear door',
+        'Rear axle',
+        'Cargo capacity',
+        'Emission control level',
+        'Additional fuel types',
     ];
 
     private function buildPotentialDealEquipment($deal)
@@ -115,34 +129,56 @@ class DealsCompareController extends BaseAPIController
     {
         $labels = [];
         $attributes = [];
-        foreach($equipment->attributes as $attribute) {
+        foreach ($equipment->attributes as $attribute) {
             $attributes[$attribute->name] = $attribute;
         }
+        switch ($equipment->name) {
+            case 'External dimensions':
+                $labels[$attributes['overall length (in)']->schemaId] = "External: L: {$attributes['overall length (in)']->value}\" - W: {$attributes['overall width (in)']->value}\" - H: {$attributes['overall height (in)']->value}\"";
+                break;
+            case 'Fuel economy':
+                $labels[$attributes['urban (mpg)']->schemaId] = "{$attributes['urban (mpg)']->value} / {$attributes['country/highway (mpg)']->value}";
+                break;
+            case 'Wheels':
+                $labels[$attributes['rim diameter (in)']->schemaId] = $attributes['rim diameter (in)']->value . "\" rims";
+                break;
+            case 'Drive':
+                $labels[$attributes['Driven wheels']->schemaId] = $attributes['Driven wheels']->value;
+                break;
+            case 'Transmission':
+                $labels[$attributes['Transmission type']->schemaId] = "{$attributes['number of speeds']->value} speed {$attributes['Transmission type']->value}";
+                break;
+            case 'Weights':
+                $val = number_format($attributes['gross vehicle weight (lbs)']->value);
+                $labels[$attributes['gross vehicle weight (lbs)']->schemaId] = "Weight: {$val} (lbs)";
+                break;
+            case 'Tires':
+                $labels[$attributes['type']->schemaId] = "tires: {$attributes['type']->value}";
+                break;
+            case 'Engine';
+                $labels[$equipment->schemaId] = "{$attributes['Liters']->value} v{$attributes['number of cylinders']->value} {$attributes['configuration']->value}";
+                break;
+            case 'Fuel';
+                $labels[$equipment->schemaId] = "Fuel Type: {$attributes['Fuel type']->value}";
+                break;
 
-        //
-        // Not awesome.
-        if ($equipment->name == "External dimensions") {
-            $labels[$attributes['overall length (in)']->schemaId] = "External: L: {$attributes['overall length (in)']->value}\" - W: {$attributes['overall width (in)']->value}\" - H: {$attributes['overall height (in)']->value}\"";
-        }
+            default:
+                $feature = Feature::withJatoSchemaId($equipment->schemaId)->get()->first();
+                if ($feature) {
+                    $labels[$equipment->schemaId] = $feature->title;
+                }  else {
+                    $labels[$equipment->schemaId] = $equipment->name;
+                }
+                break;
 
-        if ($equipment->name == 'Fuel economy') {
-            $labels[$attributes['urban (mpg)']->schemaId] = "{$attributes['urban (mpg)']->value} / {$attributes['country/highway (mpg)']->value}";
-        }
-
-        if ($equipment->name == 'Connection to ext.entertainment devices') {
-
-        }
-
-        if (!count($labels)){
-            $labels[$equipment->schemaId] = $equipment->name;
         }
 
         return $labels;
     }
 
 
-
-    private function processAndCompareEquipment() {
+    private function processAndCompareEquipment()
+    {
         $compData = [];
         $dealCount = count($this->deals);
         $equipmentOnDeals = array_values($this->equipmentOnDeals);
@@ -156,7 +192,7 @@ class DealsCompareController extends BaseAPIController
                 foreach ($equipments as $equipment) {
                     $labels = $this->getLabelsForJatoEquipment($equipment);
 
-                    foreach($labels as $schemaId => $label) {
+                    foreach ($labels as $schemaId => $label) {
                         if (!isset($compData[$category][$schemaId])) {
                             $compData[$category][$schemaId] = array_fill(0, $dealCount, '--');
                         }
@@ -172,8 +208,9 @@ class DealsCompareController extends BaseAPIController
         $this->compData = $compData;
     }
 
-    private function valueInEquipmentArray($row) {
-        foreach($row as $item){
+    private function valueInEquipmentArray($row)
+    {
+        foreach ($row as $item) {
             if ($item != '--') {
                 return $item;
             }
@@ -182,9 +219,10 @@ class DealsCompareController extends BaseAPIController
         return 0;
     }
 
-    private function sortCompData() {
-        foreach($this->compData as $key => &$data) {
-            uasort($data, function($a, $b) {
+    private function sortCompData()
+    {
+        foreach ($this->compData as $key => &$data) {
+            uasort($data, function ($a, $b) {
                 $aValue = $this->valueInEquipmentArray($a);
                 $bValue = $this->valueInEquipmentArray($b);
 
@@ -238,7 +276,7 @@ class DealsCompareController extends BaseAPIController
                     $col['equipment'][$category] = [];
                 }
 
-                foreach($equipments as $equipment) {
+                foreach ($equipments as $equipment) {
                     $col['equipment'][$category][] = $equipment[$key];
                 }
             }
