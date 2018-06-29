@@ -33,7 +33,6 @@ function* init() {
     yield put(receiveCompareData(results));
 
     const deals = yield select(getComparedDeals);
-    console.log(deals);
     yield put(batchRequestDealQuotes(deals));
 }
 
