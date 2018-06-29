@@ -1,12 +1,15 @@
+import R from 'ramda';
+
 import { fork, put, takeEvery, call, select } from 'redux-saga/effects';
 
 import { INIT } from './consts';
 import { requestIpLocation } from 'apps/user/sagas';
 import { setCurrentPage } from 'apps/page/actions';
 import ApiClient from 'store/api';
-import R from 'ramda';
 
 import { receiveCompareData } from './actions';
+import { batchRequestDealQuotes } from 'apps/pricing/actions';
+import { getComparedDeals } from './selectors';
 
 /*******************************************************************
  * Init
@@ -28,6 +31,10 @@ function* init() {
         console.log(e);
     }
     yield put(receiveCompareData(results));
+
+    const deals = yield select(getComparedDeals);
+    console.log(deals);
+    yield put(batchRequestDealQuotes(deals));
 }
 
 /*******************************************************************

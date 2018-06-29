@@ -11,7 +11,7 @@ import {
 import ApiClient from 'store/api';
 import { cancelRequest } from 'store/httpclient';
 
-import { REQUEST_DEAL_QUOTE } from './consts';
+import { REQUEST_BATCH_DEAL_QUOTES, REQUEST_DEAL_QUOTE } from './consts';
 import { receiveDealQuote, requestDealQuoteIsLoading } from './actions';
 import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
 import { dealQuoteKey } from './helpers';
@@ -26,6 +26,11 @@ export function* requestDealQuote(action) {
     const zipcode = action.zipcode;
     const paymentType = action.paymentType;
     const role = action.role;
+
+    if (!action.deal || !action.zipcode || !action.paymentType) {
+        return;
+    }
+
     const key = dealQuoteKey(deal, zipcode, paymentType, role);
     const state = yield select();
 
@@ -72,6 +77,10 @@ export function* batchRequestDealQuotes(deals) {
         return;
     }
 
+    if (deals.deals) {
+        deals = deals.deals;
+    }
+
     yield all(
         deals.map(deal =>
             fork(requestDealQuote, {
@@ -90,4 +99,8 @@ export function* batchRequestDealQuotes(deals) {
  ********************************************************************/
 export function* watchRequestDealQuote() {
     yield takeEvery(REQUEST_DEAL_QUOTE, requestDealQuote);
+}
+
+export function* watchBatchRequestDealQuote() {
+    yield takeEvery(REQUEST_BATCH_DEAL_QUOTES, batchRequestDealQuotes);
 }

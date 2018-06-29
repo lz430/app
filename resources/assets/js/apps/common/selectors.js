@@ -122,7 +122,6 @@ const dealQuoteKey = createSelector(
         if (!deal || !zipcode || !paymentType) {
             return null;
         }
-
         let role = 'default';
 
         if (discountType === 'dmr' || !discountType) {

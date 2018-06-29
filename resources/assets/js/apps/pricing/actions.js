@@ -30,6 +30,13 @@ export function requestDealQuote(deal, zipcode, paymentType, role = 'default') {
     };
 }
 
+export function batchRequestDealQuotes(deals) {
+    return {
+        type: ActionTypes.REQUEST_BATCH_DEAL_QUOTES,
+        deals: deals,
+    };
+}
+
 export function receiveDealQuote(
     deal,
     zipcode,

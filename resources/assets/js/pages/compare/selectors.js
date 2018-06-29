@@ -1,3 +1,5 @@
+import R from 'ramda';
+
 export const getPageState = state => state.pages.compare;
 
 export const getEquipmentCategories = state => {
@@ -9,4 +11,9 @@ export const getEquipmentCategories = state => {
     }
 
     return categories;
+};
+
+export const getComparedDeals = state => {
+    const page = getPageState(state);
+    return R.pluck('deal', page.cols);
 };
