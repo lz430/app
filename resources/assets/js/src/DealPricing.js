@@ -754,13 +754,6 @@ export default class DealPricing {
                         value: this.acquisitionFee(),
                         rawValue: this.acquisitionFeeValue(),
                     },
-                    /*
-                    {
-                        label: 'Registration Fee',
-                        value: this.licenseAndRegistration(),
-                        rawValue: this.licenseAndRegistrationValue(),
-                    },
-                    */
                 ];
         }
     }
