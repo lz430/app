@@ -15,7 +15,6 @@ class AccordionTable extends React.PureComponent {
     };
 
     toggleOpen() {
-        console.log('TOGGLE OPEN');
         this.setState({ isOpen: !this.state.isOpen });
     }
 

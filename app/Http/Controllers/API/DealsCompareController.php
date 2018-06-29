@@ -149,8 +149,14 @@ class DealsCompareController extends BaseAPIController
                 $labels[$attributes['Transmission type']->schemaId] = "{$attributes['number of speeds']->value} speed {$attributes['Transmission type']->value}";
                 break;
             case 'Weights':
-                $val = number_format($attributes['gross vehicle weight (lbs)']->value);
-                $labels[$attributes['gross vehicle weight (lbs)']->schemaId] = "Weight: {$val} (lbs)";
+                if (isset($attributes['gross vehicle weight (lbs)'])) {
+                    $val = $attributes['gross vehicle weight (lbs)'];
+                } elseif (isset($attributes['published curb weight (lbs)'])) {
+                    $val = $attributes['published curb weight (lbs)'];
+                }
+
+                $formatted = number_format($val->value);
+                $labels[$equipment->schemaId] = "Weight: {$formatted} (lbs)";
                 break;
             case 'Tires':
                 $labels[$attributes['type']->schemaId] = "tires: {$attributes['type']->value}";

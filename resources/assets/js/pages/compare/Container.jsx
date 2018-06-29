@@ -37,7 +37,7 @@ class Container extends React.PureComponent {
     renderColDeal(col, index) {
         const deal = col.deal;
         return (
-            <Deal deal={deal} key={index}>
+            <Deal deal={deal} key={deal.id}>
                 <div className="deal__buttons">
                     <button
                         className="deal__button deal__button--x-small deal__button--blue"
