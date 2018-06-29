@@ -1,10 +1,10 @@
 import React from 'react';
 import { hideAccuPricingModal } from 'apps/common/actions';
 import { connect } from 'react-redux';
-import Modal from 'components/Modal';
+import ModalWrapper from 'components/Modal';
 import PropTypes from 'prop-types';
 
-class AccuPricingModal extends React.PureComponent {
+class Modal extends React.PureComponent {
     static propTypes = {
         accuPricingModalIsShowing: PropTypes.bool,
         onHideAccuPricingModal: PropTypes.func.isRequired,
@@ -14,7 +14,10 @@ class AccuPricingModal extends React.PureComponent {
             <div>
                 {this.props.accuPricingModalIsShowing && (
                     <div className="accupricing-modal-wrapper">
-                        <Modal onClose={this.props.onHideAccuPricingModal}>
+                        <ModalWrapper
+                            closeText="Close"
+                            onClose={this.props.onHideAccuPricingModal}
+                        >
                             <div className="accupricing-modal">
                                 <img
                                     src="/images/accupricing-logo.png"
@@ -34,7 +37,7 @@ class AccuPricingModal extends React.PureComponent {
                                     excellent credit.
                                 </p>
                             </div>
-                        </Modal>
+                        </ModalWrapper>
                     </div>
                 )}
             </div>
@@ -59,4 +62,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(AccuPricingModal);
+)(Modal);

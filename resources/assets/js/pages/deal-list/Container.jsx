@@ -6,7 +6,7 @@ import { StickyContainer } from 'react-sticky';
 import util from 'src/util';
 
 import Modal from 'components/Modal';
-import AccuPricingModal from 'components/AccuPricingModal';
+import AccuPricingModal from 'components/AccuPricing/Modal';
 import CompareBar from 'components/CompareBar';
 
 import Deals from './components/Deals';

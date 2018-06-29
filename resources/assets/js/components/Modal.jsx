@@ -179,7 +179,6 @@ class Modal extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        selectedMakes: state.common.searchQuery.makes,
         window: state.common.window,
     };
 };

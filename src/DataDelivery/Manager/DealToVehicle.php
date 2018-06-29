@@ -27,6 +27,7 @@ class DealToVehicle
             '340i' => 'i xDrive',
         ],
     ];
+
     private const BODY_STYLE_MAP = [
         'Sport Utility Vehicle' => "Sport Utility",
         'Pickup' => 'Regular Cab'
@@ -41,7 +42,7 @@ class DealToVehicle
      * @param string $zipcode
      * @param DataDeliveryClient|null $client
      */
-    public function __construct(Deal $deal, string $zipcode,DataDeliveryClient $client = null)
+    public function __construct(Deal $deal, string $zipcode, DataDeliveryClient $client = null)
     {
         $this->deal = $deal;
         $this->zipcode = $zipcode;
@@ -155,7 +156,6 @@ class DealToVehicle
         return $results;
     }
 
-
     /**
      * @param array $vehicles
      * @param $params
@@ -179,17 +179,19 @@ class DealToVehicle
      * @return mixed|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function get() {
+    public function get()
+    {
         $results = null;
 
         // Try easy search first
         $params = $this->getSearchParams();
         $search = [
-             //'Trim' => $params['trim'],
+            //'Trim' => $params['trim'],
             'ManufactModelCode' => $params['model_code'],
             'Year' => $params['year'],
             'Body' => $params['body'],
         ];
+
         $results = $this->fetchProgramData($search);
         // We have to narrow down the results.
         if (count($results->vehicles) > 1) {

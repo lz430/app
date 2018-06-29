@@ -1,8 +1,12 @@
-import { fork, put, takeEvery } from 'redux-saga/effects';
+import { fork, put, takeEvery, call, select } from 'redux-saga/effects';
 
 import { INIT } from './consts';
-import { requestIpLocation } from '../../apps/user/sagas';
-import { setCurrentPage } from '../../apps/page/actions';
+import { requestIpLocation } from 'apps/user/sagas';
+import { setCurrentPage } from 'apps/page/actions';
+import ApiClient from 'store/api';
+import R from 'ramda';
+
+import { receiveCompareData } from './actions';
 
 /*******************************************************************
  * Init
@@ -10,6 +14,20 @@ import { setCurrentPage } from '../../apps/page/actions';
 function* init() {
     yield put(setCurrentPage('compare'));
     yield fork(requestIpLocation);
+    const state = yield select();
+
+    let dealIds = R.pluck('deal', state.common.compareList);
+    dealIds = R.pluck('id', dealIds);
+    let results = null;
+
+    try {
+        results = yield call(ApiClient.deal.compare, dealIds);
+        results = results.data;
+    } catch (e) {
+        results = false;
+        console.log(e);
+    }
+    yield put(receiveCompareData(results));
 }
 
 /*******************************************************************

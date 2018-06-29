@@ -24,6 +24,19 @@ class DealService {
             },
         });
     }
+
+    /**
+     *
+     * @param dealIds
+     * @returns {*}
+     */
+    compare(dealIds) {
+        return httpclient.get(`/api/deals/compare`, {
+            params: {
+                deals: dealIds,
+            },
+        });
+    }
 }
 
 export default DealService;

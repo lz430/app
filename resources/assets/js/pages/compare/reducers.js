@@ -3,12 +3,14 @@ import storage from 'redux-persist/lib/storage';
 
 import * as ActionTypes from './consts';
 
-const initialState = {};
-
 const persistConfig = {
     key: 'compare',
     storage: storage,
-    blacklist: [],
+    blacklist: ['cols'],
+};
+
+const initialState = {
+    cols: [],
 };
 
 const reducer = function(state = initialState, action = {}) {
@@ -16,6 +18,15 @@ const reducer = function(state = initialState, action = {}) {
         case ActionTypes.INIT:
             return state;
 
+        case ActionTypes.RECEIVE_COMPARE_DATA:
+            if (!action.data) {
+                return state;
+            }
+
+            return {
+                ...state,
+                cols: action.data,
+            };
         default:
             return state;
     }
