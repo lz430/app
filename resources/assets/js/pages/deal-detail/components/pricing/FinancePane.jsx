@@ -6,7 +6,14 @@ import Label from './Label';
 import Value from './Value';
 import TaxesAndFees from './TaxesAndFees';
 
-class FinancePane extends React.PureComponent {
+export default class FinancePane extends React.PureComponent {
+    static defaultProps = {
+        onDiscountChange: (discountType, make = null) => {},
+        onRebatesChange: () => {},
+        onDownPaymentChange: downPayment => {},
+        onTermChange: term => {},
+    };
+
     render() {
         const { dealPricing, onDiscountChange, onRebatesChange } = this.props;
 
@@ -85,12 +92,3 @@ class FinancePane extends React.PureComponent {
         this.props.onTermChange(Number(e.target.value));
     };
 }
-
-FinancePane.defaultProps = {
-    onDiscountChange: (discountType, make = null) => {},
-    onRebatesChange: () => {},
-    onDownPaymentChange: downPayment => {},
-    onTermChange: term => {},
-};
-
-export default FinancePane;

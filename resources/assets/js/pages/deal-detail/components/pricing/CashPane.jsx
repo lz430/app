@@ -6,7 +6,7 @@ import Label from './Label';
 import Value from './Value';
 import TaxesAndFees from './TaxesAndFees';
 
-class CashPane extends React.PureComponent {
+export default class CashPane extends React.PureComponent {
     static defaultProps = {
         onDiscountChange: (discountType, make = null) => {},
         onRebatesChange: () => {},
@@ -44,5 +44,3 @@ class CashPane extends React.PureComponent {
         );
     }
 }
-
-export default CashPane;
