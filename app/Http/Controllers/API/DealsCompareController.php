@@ -18,6 +18,10 @@ class DealsCompareController extends BaseAPIController
     private $equipmentOnDeals;
     private $compData;
 
+    private const EQUIPMENT_TO_SKIP = [
+        'Internal dimensions'
+    ];
+
     private function buildPotentialDealEquipment($deal)
     {
         try {
@@ -87,6 +91,10 @@ class DealsCompareController extends BaseAPIController
             $equipmentCategories = [];
 
             foreach ($dealEquipment as $equipment) {
+                if (in_array($equipment->name, self::EQUIPMENT_TO_SKIP)) {
+                    continue;
+                }
+
                 if (!isset($equipmentCategories[$equipment->category])) {
                     $equipmentCategories[$equipment->category] = [];
                 }
@@ -103,10 +111,36 @@ class DealsCompareController extends BaseAPIController
      * @param $equipment
      * @return mixed
      */
-    private function getLabelForJatoEquipment($equipment)
+    private function getLabelsForJatoEquipment($equipment)
     {
-        return $equipment->name;
+        $labels = [];
+        $attributes = [];
+        foreach($equipment->attributes as $attribute) {
+            $attributes[$attribute->name] = $attribute;
+        }
+
+        //
+        // Not awesome.
+        if ($equipment->name == "External dimensions") {
+            $labels[$attributes['overall length (in)']->schemaId] = "External: L: {$attributes['overall length (in)']->value}\" - W: {$attributes['overall width (in)']->value}\" - H: {$attributes['overall height (in)']->value}\"";
+        }
+
+        if ($equipment->name == 'Fuel economy') {
+            $labels[$attributes['urban (mpg)']->schemaId] = "{$attributes['urban (mpg)']->value} / {$attributes['country/highway (mpg)']->value}";
+        }
+
+        if ($equipment->name == 'Connection to ext.entertainment devices') {
+
+        }
+
+        if (!count($labels)){
+            $labels[$equipment->schemaId] = $equipment->name;
+        }
+
+        return $labels;
     }
+
+
 
     private function processAndCompareEquipment() {
         $compData = [];
@@ -120,11 +154,14 @@ class DealsCompareController extends BaseAPIController
                 }
 
                 foreach ($equipments as $equipment) {
-                    if (!isset($compData[$category][$equipment->schemaId])) {
-                        $compData[$category][$equipment->schemaId] = array_fill(0, $dealCount, '--');
-                    }
+                    $labels = $this->getLabelsForJatoEquipment($equipment);
 
-                    $compData[$category][$equipment->schemaId][$key] = $this->getLabelForJatoEquipment($equipment);
+                    foreach($labels as $schemaId => $label) {
+                        if (!isset($compData[$category][$schemaId])) {
+                            $compData[$category][$schemaId] = array_fill(0, $dealCount, '--');
+                        }
+                        $compData[$category][$schemaId][$key] = $label;
+                    }
                 }
             }
         }
