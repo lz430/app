@@ -12,8 +12,6 @@ use DeliverMyRide\Carleton\Manager\DealLeasePaymentsManager;
 
 class DealQuoteController extends BaseAPIController
 {
-    const CACHE_LENGTH = 1440;
-
     private $dataDeliveryClient;
     private $carletonClient;
     private $deal;

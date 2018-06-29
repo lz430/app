@@ -1,9 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import R from 'ramda';
 import qs from 'qs';
-import { connect } from 'react-redux';
 import Deal from 'components/Deals/Deal';
 import string from 'src/strings';
 import AccordionTable from './components/AccordionTable';
@@ -11,11 +12,24 @@ import util from 'src/util';
 import api from 'src/api';
 import ApiClient from 'store/api';
 import toTitleCase from 'titlecase';
-import AccuPricingModal from 'components/AccuPricingModal';
+import AccuPricingModal from 'components/AccuPricing/Modal';
 import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
 import { StickyContainer, Sticky } from 'react-sticky';
+import { initPage } from './actions';
+import GlobalSelectPurchaseStrategy from 'apps/user/components/GlobalSelectPurchaseStrategy';
+import ToolbarPrice from './components/ToolbarPrice';
+import EquipmentCategory from './components/EquipmentCategory';
+
+import { getEquipmentCategories } from './selectors';
 
 class Container extends React.PureComponent {
+    static propTypes = {
+        cols: PropTypes.array.isRequired,
+        equipmentCategories: PropTypes.array.isRequired,
+        onPageInit: PropTypes.func.isRequired,
+    };
+
+    /*
     constructor(props) {
         super(props);
         this.state = {
@@ -31,16 +45,22 @@ class Container extends React.PureComponent {
         this.renderDeal = this.renderDeal.bind(this);
         this.intendedRoute = this.intendedRoute.bind(this);
     }
-
+    */
     componentDidMount() {
+        this.props.onPageInit();
+
+        /*
         this.componentWillReceiveProps(this.props);
         ApiClient.browse.getFeatureCategories().then(data => {
             this.setState({
                 featureCategories: data.data.data,
             });
         });
+
+        */
     }
 
+    /*
     componentWillReceiveProps(props) {
         props.compareList.map(dealAndSelectedFilters => {
             if (
@@ -73,6 +93,7 @@ class Container extends React.PureComponent {
                 });
         });
     }
+    */
 
     toggleAccordion(openAccordion) {
         this.setState({
@@ -94,7 +115,8 @@ class Container extends React.PureComponent {
         );
     }
 
-    renderDeal(deal, index) {
+    renderColDeal(col, index) {
+        const deal = col.deal;
         return (
             <Deal deal={deal} key={index}>
                 <div className="deal__buttons">
@@ -104,14 +126,6 @@ class Container extends React.PureComponent {
                     >
                         View Details
                     </button>
-                    <CustomizeQuoteOrBuyNowButton
-                        onCustomizeQuote={() => this.selectDeal(deal)}
-                        deal={deal}
-                        hasCustomizedQuote={R.contains(
-                            deal.id,
-                            this.props.dealsIdsWithCustomizedQuotes
-                        )}
-                    />
                 </div>
             </Deal>
         );
@@ -235,75 +249,6 @@ class Container extends React.PureComponent {
         );
     }
 
-    renderTargetsTable(compareList) {
-        const maxNumberCells = R.reduce(
-            (carry, dealAndSelectedFilters) => {
-                return R.max(
-                    R.propOr(
-                        [],
-                        dealAndSelectedFilters.deal.id,
-                        this.props.dealTargets
-                    ).length,
-                    carry
-                );
-            },
-            0,
-            compareList
-        );
-
-        return (
-            <div className="compare-page-table">
-                {this.renderAccordionTabHeader('Targets')}
-                <div className={this.columnClass('Targets')}>
-                    {compareList.map((dealAndSelectedFilters, index) => {
-                        return (
-                            <div
-                                key={index}
-                                className="compare-page-table__column"
-                            >
-                                @TODO update this thing to be filtering by type
-                                correctly
-                                {this.props.dealTargets[
-                                    dealAndSelectedFilters.deal.id
-                                ].map((rebate, index) => {
-                                    return R.contains(
-                                        this.props.selectedTab,
-                                        rebate.types
-                                    ) ? (
-                                        <div
-                                            key={index}
-                                            className="compare-page-table__cell"
-                                        >
-                                            {rebate.rebate}&nbsp;
-                                        </div>
-                                    ) : (
-                                        ''
-                                    );
-                                })}
-                                {R.range(
-                                    0,
-                                    maxNumberCells -
-                                        this.props.dealTargets[
-                                            dealAndSelectedFilters.deal.id
-                                        ].length
-                                ).map((_, index) => {
-                                    return (
-                                        <div
-                                            key={index}
-                                            className="compare-page-table__cell"
-                                        >
-                                            &nbsp;
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-        );
-    }
-
     renderWarrantyTable(compareList) {
         return (
             <div className="compare-page-table">
@@ -356,69 +301,6 @@ class Container extends React.PureComponent {
         return !R.contains(pickupCategory.id, allCategoryIds);
     }
 
-    renderDMRFeaturesTable(compareList) {
-        return this.state.featureCategories.map(featureCategory => {
-            if (
-                featureCategory.attributes.slug === 'pickup' &&
-                this.compareListDoesNotHavePickupCategory(compareList)
-            ) {
-                return;
-            }
-
-            return (
-                <AccordionTable key={featureCategory.id}>
-                    {() => {
-                        return (
-                            <div className="compare-page-table">
-                                {this.renderAccordionTabHeader(
-                                    toTitleCase(
-                                        featureCategory.attributes.title
-                                    )
-                                )}
-                                <div
-                                    className={this.columnClass(
-                                        toTitleCase(
-                                            featureCategory.attributes.title
-                                        )
-                                    )}
-                                >
-                                    {compareList.map(({ deal }, index) => {
-                                        let features = deal.dmr_features.filter(
-                                            dmr_feature => {
-                                                return (
-                                                    dmr_feature.category_id ==
-                                                    featureCategory.id
-                                                );
-                                            }
-                                        );
-
-                                        return (
-                                            <div
-                                                className="compare-page-table__column"
-                                                key={index}
-                                            >
-                                                {features.map(feature => {
-                                                    return (
-                                                        <div
-                                                            className="compare-page-table__cell"
-                                                            key={feature.slug}
-                                                        >
-                                                            {feature.title}
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        );
-                    }}
-                </AccordionTable>
-            );
-        });
-    }
-
     renderFeaturesTable(compareList) {
         let featureSets = compareList.map(({ deal }, index) => {
             return deal.dmr_features
@@ -456,7 +338,6 @@ class Container extends React.PureComponent {
                     return feature.group;
                 },
                 R.uniqBy(feature => {
-                    console.log(feature);
                     return feature.group + '||' + feature.feature;
                 }, Object.values(R.mergeAll(featureSets)))
             )
@@ -615,71 +496,10 @@ class Container extends React.PureComponent {
         return anyHaveFuelType || anyHaveTransmissionType || anyHaveFeatures;
     }
 
-    renderAccuPricingCta() {
-        return (
-            <div>
-                <div className="accupricing-cta accupricing-cta--horizontal">
-                    <a onClick={this.props.showAccuPricingModal}>
-                        <img
-                            src="/images/accupricing-logo.png"
-                            className="accupricing-cta__logo"
-                        />
-                    </a>
-                    <p className="accupricing-cta__disclaimer">
-                        * Includes taxes, dealer fees and rebates.
-                    </p>
-                </div>
-            </div>
-        );
-    }
-
-    renderPurchaseStrategyButtons() {
-        return (
-            <div className="button-group">
-                <div
-                    onClick={() => {
-                        this.handleTabChange('cash');
-                    }}
-                    className={`button-group__button ${
-                        this.props.selectedTab === 'cash'
-                            ? 'button-group__button--selected'
-                            : ''
-                    }`}
-                >
-                    Cash
-                </div>
-                <div
-                    onClick={() => {
-                        this.handleTabChange('finance');
-                    }}
-                    className={`button-group__button ${
-                        this.props.selectedTab === 'finance'
-                            ? 'button-group__button--selected'
-                            : ''
-                    }`}
-                >
-                    Finance
-                </div>
-                <div
-                    onClick={() => {
-                        this.handleTabChange('lease');
-                    }}
-                    className={`button-group__button ${
-                        this.props.selectedTab === 'lease'
-                            ? 'button-group__button--selected'
-                            : ''
-                    }`}
-                >
-                    Lease
-                </div>
-            </div>
-        );
-    }
-
     renderDeals(style) {
         return (
             <div className="compare-page-deals" style={style}>
-                {this.props.deals.map(this.renderDeal)}
+                {this.props.cols.map(this.renderColDeal)}
             </div>
         );
     }
@@ -695,58 +515,30 @@ class Container extends React.PureComponent {
     render() {
         return (
             <StickyContainer className="compare-page">
-                <div className="compare-page__body">
-                    <div className="compare-page__top-row">
-                        <div className="compare-page__top-row__section compare-page__top-row__section--accuPricing">
-                            {this.renderAccuPricingCta()}
-                        </div>
-                        <div className="compare-page__top-row__section compare-page__top-row__section--tabButtons">
-                            {this.renderPurchaseStrategyButtons()}
-                        </div>
-                    </div>
-
-                    {this.renderDealsContainer()}
-
-                    {this.props.compareList &&
-                    this.hasSelections(this.props.compareList) ? (
-                        <AccordionTable>
-                            {() => {
-                                return this.renderSelectionsTable(
-                                    this.props.compareList
-                                );
-                            }}
-                        </AccordionTable>
-                    ) : (
-                        ''
-                    )}
-                    <AccordionTable>
-                        {() => {
-                            return this.renderWarrantyTable(
-                                this.props.compareList
-                            );
-                        }}
-                    </AccordionTable>
-
-                    {this.props.compareList.length
-                        ? this.renderFeaturesTable(this.props.compareList)
-                        : ''}
-
-                    <AccordionTable>
-                        {() => {
-                            return this.renderOptionalFeaturesTable(
-                                this.props.compareList
-                            );
-                        }}
-                    </AccordionTable>
+                <div className="compare-page__toolbars">
+                    <ToolbarPrice />
                 </div>
 
-                <AccuPricingModal />
+                <div className="compare-page__body-wrapper">
+                    <div className="compare-page__body">
+                        {this.renderDealsContainer()}
+                        <div className="compare-page-features">
+                            {this.props.equipmentCategories.map(
+                                (category, index) => {
+                                    return (
+                                        <EquipmentCategory
+                                            key={index}
+                                            cols={this.props.cols}
+                                            category={category}
+                                        />
+                                    );
+                                }
+                            )}
+                        </div>
+                    </div>
+                </div>
             </StickyContainer>
         );
-    }
-
-    handleTabChange(tabName) {
-        this.props.selectTab(tabName);
     }
 
     selectDeal(deal) {
@@ -756,18 +548,20 @@ class Container extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
-        deals: R.map(R.prop('deal'), state.common.compareList),
+        cols: state.pages.compare.cols,
+        equipmentCategories: getEquipmentCategories(state),
         compareList: state.common.compareList,
-        selectedTab: state.user.purchasePreferences.strategy,
-        termDuration: state.common.termDuration,
-        employeeBrand: state.common.employeeBrand,
         dealsIdsWithCustomizedQuotes: state.common.dealsIdsWithCustomizedQuotes,
         window: state.common.window,
     };
 };
 
 const mapDispatchToProps = dispatch => {
-    return {};
+    return {
+        onPageInit: () => {
+            return dispatch(initPage());
+        },
+    };
 };
 
 export default connect(

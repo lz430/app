@@ -1,20 +1,24 @@
 import React from 'react';
-import Sortbar from './Sortbar';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
+import Sortbar from './Sortbar';
 import { showAccuPricingModal } from 'apps/common/actions';
 import { requestSearch } from 'pages/deal-list/actions';
 
-import { setPurchaseStrategy } from 'apps/user/actions';
+import GlobalSelectPurchaseStrategy from 'apps/user/components/GlobalSelectPurchaseStrategy';
 
 /**
  *
  */
 class ToolbarPrice extends React.Component {
-    /**
-     * @param strategy
-     */
-    handlePurchaseStrategyChange(strategy) {
-        this.props.onSetPurchaseStrategy(strategy);
+    static propTypes = {
+        onRequestSearch: PropTypes.func.isRequired,
+        onShowAccuPricingModal: PropTypes.func.isRequired,
+        searchQuery: PropTypes.object.isRequired,
+    };
+
+    afterSetPurchaseStrategy() {
         this.props.onRequestSearch();
     }
 
@@ -36,49 +40,6 @@ class ToolbarPrice extends React.Component {
         );
     }
 
-    renderPurchaseStrategyButtons() {
-        return (
-            <div className="button-group">
-                <div
-                    onClick={() => {
-                        this.handlePurchaseStrategyChange('cash');
-                    }}
-                    className={`button-group__button ${
-                        this.props.purchaseStrategy === 'cash'
-                            ? 'button-group__button--selected'
-                            : ''
-                    }`}
-                >
-                    Cash
-                </div>
-                <div
-                    onClick={() => {
-                        this.handlePurchaseStrategyChange('finance');
-                    }}
-                    className={`button-group__button ${
-                        this.props.purchaseStrategy === 'finance'
-                            ? 'button-group__button--selected'
-                            : ''
-                    }`}
-                >
-                    Finance
-                </div>
-                <div
-                    onClick={() => {
-                        this.handlePurchaseStrategyChange('lease');
-                    }}
-                    className={`button-group__button ${
-                        this.props.purchaseStrategy === 'lease'
-                            ? 'button-group__button--selected'
-                            : ''
-                    }`}
-                >
-                    Lease
-                </div>
-            </div>
-        );
-    }
-
     render() {
         return (
             <div className="filter-page__top-row">
@@ -87,7 +48,11 @@ class ToolbarPrice extends React.Component {
                 </div>
                 {this.props.searchQuery.entity === 'deal' && (
                     <div className="filter-page__top-row__section filter-page__top-row__section--tabButtons">
-                        {this.renderPurchaseStrategyButtons()}
+                        <GlobalSelectPurchaseStrategy
+                            afterSetPurchaseStrategy={this.afterSetPurchaseStrategy.bind(
+                                this
+                            )}
+                        />
                     </div>
                 )}
                 <div className="filter-page__top-row__section filter-page__top-row__section--sortbar">
@@ -101,7 +66,6 @@ class ToolbarPrice extends React.Component {
 const mapStateToProps = state => {
     return {
         window: state.common.window,
-        purchaseStrategy: state.user.purchasePreferences.strategy,
         searchQuery: state.pages.dealList.searchQuery,
     };
 };
@@ -110,10 +74,6 @@ const mapDispatchToProps = dispatch => {
     return {
         onShowAccuPricingModal: () => {
             return dispatch(showAccuPricingModal);
-        },
-
-        onSetPurchaseStrategy: strategy => {
-            return dispatch(setPurchaseStrategy(strategy));
         },
 
         onRequestSearch: () => {

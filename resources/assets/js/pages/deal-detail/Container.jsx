@@ -16,7 +16,7 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
 import ImageGallery from 'react-image-gallery';
-import AccuPricingModal from 'components/AccuPricingModal';
+import AccuPricingModal from 'components/AccuPricing/Modal';
 import DealPricing from 'src/DealPricing';
 import { makeDealPricing } from 'apps/common/selectors';
 import CashPricingPane from './components/pricing/CashPane';
