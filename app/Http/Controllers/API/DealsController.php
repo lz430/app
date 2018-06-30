@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use App\Services\Search\DealSearch;
-use App\Services\Search\ESPaginatorAdapter;
-use App\Transformers\DealSearchTransformer;
 use App\Transformers\ESResponseTransformer;
 use Illuminate\Http\Request;
 
@@ -27,6 +25,9 @@ class DealsController extends BaseAPIController
         ]);
 
         $query = new DealSearch();
+
+        $query = $query
+            ->addMakeAndStyleAgg();
 
         if ($request->get('latitude') && $request->get('longitude')) {
             $query = $query->filterMustLocation(['lat' => $request->get('latitude'), 'lon' => $request->get('longitude')]);
@@ -63,14 +64,15 @@ class DealsController extends BaseAPIController
             ->size($per_page)
             ->from($page * $per_page);
 
-        $query = $query
-            ->addMakeAgg()
-            ->addStyleAgg();
+
 
         $results = $query->get();
 
+        //return $results;
+
         return fractal()
             ->item(['response' => $results, 'meta' => [
+                'entity' => 'deal',
                 'current_page' => $page,
                 'per_page' => $per_page,
             ]])

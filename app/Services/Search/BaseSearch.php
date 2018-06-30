@@ -24,20 +24,23 @@ abstract class BaseSearch
         ];
     }
 
-    public function size(int $size) {
+    public function size(int $size)
+    {
         $this->query['size'] = $size;
         return $this;
     }
 
-    public function from(int $from) {
+    public function from(int $from)
+    {
         $this->query['from'] = $from;
         return $this;
     }
 
-    public function sort(string $sort) {
+    public function sort(string $sort)
+    {
 
         $direction = 'asc';
-        if (substr( $sort, 0, 1 ) === "-") {
+        if (substr($sort, 0, 1) === "-") {
             $direction = 'desc';
         }
 
@@ -50,17 +53,18 @@ abstract class BaseSearch
         }
 
         $this->query['sort'] = [
-          [
-            $sort => $direction,
-          ],
+            [
+                $sort => $direction,
+            ],
         ];
 
         return $this;
     }
 
-    public function filterMustLocation($location) {
-        $lat = (float) $location['lat'];
-        $lon = (float) $location['lon'];
+    public function filterMustLocation($location)
+    {
+        $lat = (float)$location['lat'];
+        $lon = (float)$location['lon'];
 
         if (!isset($lat)) {
             return $this;
@@ -70,7 +74,7 @@ abstract class BaseSearch
             return $this;
         }
 
-        $this->query['query']['bool']['must'][] = [['script' => [
+        $filterQuery = [['script' => [
             "script" => [
                 "lang" => "painless",
                 "source" => "(doc['location'].arcDistance(params.lat,params.lon) * 0.000621371) <  doc['max_delivery_distance'].value",
@@ -81,11 +85,20 @@ abstract class BaseSearch
             ]
         ]]];
 
+        $this->query['query']['bool']['must'][] = $filterQuery;
+
+        if (isset($this->query['aggs']['makeandstyle'])) {
+            $this->query['aggs']['makeandstyle']['aggs']['style']['filter']['bool']['must'][] = $filterQuery;
+            $this->query['aggs']['makeandstyle']['aggs']['make']['filter']['bool']['must'][] = $filterQuery;
+        }
+
         return $this;
     }
 
-    public function filterMustStyles(array $styles) {
-        $this->query['query']['bool']['must'][] = [
+    public function filterMustStyles(array $styles)
+    {
+
+        $filterQuery = [
             [
                 'terms' => [
                     'style.keyword' => $styles,
@@ -93,10 +106,18 @@ abstract class BaseSearch
             ]
         ];
 
+
+        $this->query['query']['bool']['must'][] = $filterQuery;
+
+        if (isset($this->query['aggs']['makeandstyle'])) {
+            $this->query['aggs']['makeandstyle']['aggs']['make']['filter']['bool']['must'][] = $filterQuery;
+        }
+
         return $this;
     }
 
-    public function FilterMustYears(array $years) {
+    public function FilterMustYears(array $years)
+    {
         $this->query['query']['bool']['must'][] = [
             [
                 'terms' => [
@@ -108,8 +129,10 @@ abstract class BaseSearch
         return $this;
     }
 
-    public function filterMustMakes(array $makes) {
-        $this->query['query']['bool']['must'][] = [
+    public function filterMustMakes(array $makes)
+    {
+
+        $filterQuery = [
             [
                 'terms' => [
                     'make.keyword' => $makes,
@@ -117,10 +140,18 @@ abstract class BaseSearch
             ]
         ];
 
+        $this->query['query']['bool']['must'][] = $filterQuery;
+
+
+        if (isset($this->query['aggs']['makeandstyle'])) {
+            $this->query['aggs']['makeandstyle']['aggs']['style']['filter']['bool']['must'][] = $filterQuery;
+        }
+
         return $this;
     }
 
-    public function filterMustModels(array $models, $format = 'name') {
+    public function filterMustModels(array $models, $format = 'name')
+    {
         if ($format == 'id') {
             $models = VehicleModel::whereIn('id', $models)->pluck('name')->toArray();
         }
@@ -136,8 +167,9 @@ abstract class BaseSearch
         return $this;
     }
 
-    public function filterMustLegacyFeatures(array $features) {
-        foreach($features as $feature) {
+    public function filterMustLegacyFeatures(array $features)
+    {
+        foreach ($features as $feature) {
             $this->query['query']['bool']['must'][] = [
                 [
                     'term' => [
@@ -150,7 +182,9 @@ abstract class BaseSearch
         return $this;
     }
 
-    public function addStyleAgg() {
+
+    public function addStyleAgg()
+    {
         $this->query['aggs']['bodystyle'] = [
             "terms" => [
                 "size" => 50000,
@@ -160,25 +194,40 @@ abstract class BaseSearch
         return $this;
     }
 
-    public function addMakeAgg() {
-        $this->query['aggs']['make'] = [
-            "global" => (object) [],
+    public function addMakeAndStyleAgg()
+    {
+        $this->query['aggs']['makeandstyle'] = [
+            "global" => (object)[],
             "aggs" => [
-                "sub" => [
-                    "terms" => [
-                        "size" => 50000,
-                        "field" => "make.keyword"
+                "make" => [
+                    'aggs' => [
+                        'value' => [
+                            "terms" => [
+                                "size" => 50000,
+                                "field" => "make.keyword"
+                            ],
+                        ],
+                    ]
+                ],
+                "style" => [
+                    'aggs' => [
+                        'value' => [
+                            "terms" => [
+                                "size" => 50000,
+                                "field" => "style.keyword"
+                            ],
+                        ]
+
                     ],
                 ],
             ]
-
         ];
         return $this;
     }
 
 
-
-    public function get() {
+    public function get()
+    {
         return Deal::searchRaw($this->query);
     }
 }

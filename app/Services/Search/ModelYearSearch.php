@@ -85,6 +85,7 @@ class ModelYearSearch extends BaseSearch {
 
     private function transform($response) {
         $return = [];
+
         foreach ($response['aggregations']['category']['model']['buckets'] as $data) {
 
             $element = [
@@ -104,9 +105,10 @@ class ModelYearSearch extends BaseSearch {
         }
         return $return;
     }
-
+    /*
     public function get() {
         $response = parent::get();
         return $this->transform($response);
     }
+    */
 }
