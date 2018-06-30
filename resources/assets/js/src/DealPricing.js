@@ -171,8 +171,16 @@ export default class DealPricing {
         return this.data.deal.cvr_fee;
     }
 
+    effCvrFee() {
+        return util.moneyFormat(this.effCvrFeeValue());
+    }
+
     licenseAndRegistrationValue() {
         return this.data.deal.registration_fee;
+    }
+
+    licenseAndRegistration() {
+        return util.moneyFormat(this.licenseAndRegistrationValue());
     }
 
     taxRate() {
@@ -183,8 +191,16 @@ export default class DealPricing {
         return this.data.deal.acquisition_fee;
     }
 
+    acquisitionFee() {
+        return util.moneyFormat(this.acquisitionFeeValue());
+    }
+
     bestOfferValue() {
-        return this.data.bestOffer.totalValue || 0;
+        if (this.data.bestOffer) {
+            return this.data.bestOffer.total;
+        }
+
+        return 0;
     }
 
     bestOffer() {
@@ -221,6 +237,14 @@ export default class DealPricing {
 
     baseSellingPrice() {
         return util.moneyFormat(this.baseSellingPriceValue());
+    }
+
+    discountValue() {
+        return this.msrpValue() - this.baseSellingPriceValue();
+    }
+
+    discount() {
+        return util.moneyFormat(this.discountValue());
     }
 
     dmrDiscountValue() {
@@ -296,6 +320,14 @@ export default class DealPricing {
     }
 
     sellingPriceValue() {
+        return this.baseSellingPriceValue();
+    }
+
+    sellingPrice() {
+        return this.baseSellingPrice();
+    }
+
+    totalPriceValue() {
         switch (this.data.paymentType) {
             case 'cash':
             case 'finance':
@@ -307,26 +339,14 @@ export default class DealPricing {
                     total.times(this.taxRate())
                 );
 
-                return Number(
-                    totalWithSalesTax.plus(this.licenseAndRegistrationValue())
-                );
+                return totalWithSalesTax;
             case 'lease':
                 return new Decimal(this.baseSellingPriceValue()).toFixed(2);
-            /*return new Decimal(this.baseSellingPriceValue())
-                    .plus(this.docFeeValue())
-                    .plus(new Decimal(this.docFeeValue()).times(this.taxRate()))
-                    .plus(this.effCvrFeeValue())
-                    .plus(
-                        new Decimal(this.effCvrFeeValue()).times(this.taxRate())
-                    )
-                    .plus(this.licenseAndRegistrationValue())
-                    .plus(this.acquisitionFeeValue())
-                    .toFixed(2);*/
         }
     }
 
-    sellingPrice() {
-        return util.moneyFormat(this.sellingPriceValue());
+    totalPrice() {
+        return util.moneyFormat(this.totalPriceValue());
     }
 
     yourPriceValue() {
@@ -425,7 +445,7 @@ export default class DealPricing {
 
     leaseAnnualMileageAvailable() {
         if (!this.data.dealLeasePayments) {
-            return null;
+            return [];
         }
 
         const annualMileageOptions = [];
@@ -676,5 +696,72 @@ export default class DealPricing {
         }
 
         return true;
+    }
+
+    taxesAndFeesTotalValue(taxesAndFees) {
+        return (taxesAndFees || this.taxesAndFees()).reduce(
+            (total, item) => total + item.rawValue,
+            0
+        );
+    }
+
+    taxesAndFeesTotal(taxesAndFees) {
+        return util.moneyFormat(this.taxesAndFeesTotalValue(taxesAndFees));
+    }
+
+    taxesAndFees() {
+        switch (this.data.paymentType) {
+            case 'cash':
+            case 'finance':
+                const total = new Decimal(this.baseSellingPriceValue())
+                    .plus(this.docFeeValue())
+                    .plus(this.effCvrFeeValue());
+
+                const salesTax = total.times(this.taxRate());
+
+                return [
+                    {
+                        label: 'Sales Tax',
+                        value: util.moneyFormat(salesTax),
+                        rawValue: salesTax,
+                    },
+                    {
+                        label: 'Doc Fee',
+                        value: this.docFee(),
+                        rawValue: this.docFeeValue(),
+                    },
+                    {
+                        label: 'Electronic Filing Fee',
+                        value: this.effCvrFee(),
+                        rawValue: this.effCvrFeeValue(),
+                    },
+                ];
+
+            case 'lease':
+                return [
+                    {
+                        label: 'Doc Fee',
+                        value: this.docFee(),
+                        rawValue: this.docFeeValue(),
+                    },
+                    {
+                        label: 'Electronic Filing Fee',
+                        value: this.effCvrFee(),
+                        rawValue: this.effCvrFeeValue(),
+                    },
+                    {
+                        label: 'Acquisition Fee',
+                        value: this.acquisitionFee(),
+                        rawValue: this.acquisitionFeeValue(),
+                    },
+                    /*
+                    {
+                        label: 'Registration Fee',
+                        value: this.licenseAndRegistration(),
+                        rawValue: this.licenseAndRegistrationValue(),
+                    },
+                    */
+                ];
+        }
     }
 }

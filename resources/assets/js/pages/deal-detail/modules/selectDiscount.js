@@ -5,7 +5,13 @@ const SELECT_EMPLOYEE_DISCOUNT =
 const SELECT_SUPPLIER_DISCOUNT =
     'dmr/dealDetails.selectDiscount.SELECT_SUPPLIER_DISCOUNT';
 
-export default function(state = {}, action = {}) {
+const initialState = {
+    discountType: 'dmr',
+    employeeBrand: null,
+    supplierBrand: null,
+};
+
+export default function(state = initialState, action = {}) {
     switch (action.type) {
         case SELECT_DMR_DISCOUNT:
             return { ...state, discountType: 'dmr' };

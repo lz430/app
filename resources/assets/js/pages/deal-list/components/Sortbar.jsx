@@ -4,14 +4,25 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import { connect } from 'react-redux';
 import util from 'src/util';
-import { toggleSearchSort } from 'pages/deal-list/actions';
+import {
+    toggleSearchSort,
+    clearAllFilters,
+    clearModelYear,
+} from 'pages/deal-list/actions';
+
+import { toggleSmallFiltersShown } from 'apps/common/actions';
 
 class Sortbar extends React.PureComponent {
     static propTypes = {
         window: PropTypes.shape({
             width: PropTypes.number.isRequired,
         }).isRequired,
+
         searchQuery: PropTypes.object.isRequired,
+        onClearAllFilters: PropTypes.func.isRequired,
+        onClearModelYear: PropTypes.func.isRequired,
+        onToggleSearchSort: PropTypes.func.isRequired,
+        onToggleSmallFiltersShown: PropTypes.func.isRequired,
     };
 
     shouldComponentUpdate(nextProps) {
@@ -39,7 +50,7 @@ class Sortbar extends React.PureComponent {
         ) : (
             <button
                 className="sortbar__button sortbar__button--pink sortbar__button--with-icon"
-                onClick={this.props.toggleSmallFiltersShown}
+                onClick={this.props.onToggleSmallFiltersShown}
             >
                 <div>
                     <SVGInline
@@ -93,7 +104,7 @@ class Sortbar extends React.PureComponent {
 
     renderBackButton() {
         const nativeBack = () => window.history.back();
-        const clearFilters = () => this.props.clearModelYear();
+        const clearFilters = () => this.props.onClearModelYear();
         const onDealsPage = this.props.searchQuery.entity === 'deal';
 
         return util.windowIsLargerThanSmall(this.props.window.width) ? (
@@ -171,8 +182,8 @@ class Sortbar extends React.PureComponent {
                 <button
                     className="sortbar__button sortbar__button--blue sortbar__button--clear-filters"
                     onClick={() => {
-                        this.props.clearAllFilters();
-                        this.props.toggleSmallFiltersShown();
+                        this.props.onClearAllFilters();
+                        this.props.onToggleSmallFiltersShown();
                     }}
                 >
                     Clear Options
@@ -213,6 +224,18 @@ const mapDispatchToProps = dispatch => {
     return {
         onToggleSearchSort: sort => {
             return dispatch(toggleSearchSort(sort));
+        },
+
+        onClearAllFilters: () => {
+            return dispatch(clearAllFilters());
+        },
+
+        onClearModelYear: () => {
+            return dispatch(clearModelYear());
+        },
+
+        onToggleSmallFiltersShown: () => {
+            return dispatch(toggleSmallFiltersShown());
         },
     };
 };

@@ -4,8 +4,14 @@ import Rebates from '../../containers/pricing/rebates/Rebates';
 import Line from './Line';
 import Label from './Label';
 import Value from './Value';
+import TaxesAndFees from './TaxesAndFees';
 
 class CashPane extends React.PureComponent {
+    static defaultProps = {
+        onDiscountChange: (discountType, make = null) => {},
+        onRebatesChange: () => {},
+    };
+
     render() {
         const { dealPricing, onDiscountChange, onRebatesChange } = this.props;
 
@@ -20,6 +26,7 @@ class CashPane extends React.PureComponent {
                     <Label>Selling Price</Label>
                     <Value>{dealPricing.baseSellingPrice()}</Value>
                 </Line>
+                <TaxesAndFees items={dealPricing.taxesAndFees()} />
                 {dealPricing.bestOfferValue() > 0 && (
                     <Line>
                         <Label>Rebates Applied</Label>
@@ -37,10 +44,5 @@ class CashPane extends React.PureComponent {
         );
     }
 }
-
-CashPane.defaultProps = {
-    onDiscountChange: (discountType, make = null) => {},
-    onRebatesChange: () => {},
-};
 
 export default CashPane;

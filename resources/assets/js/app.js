@@ -8,9 +8,7 @@ import configureStore from 'store';
 import DealList from 'pages/deal-list/Container';
 import DealListBeta from 'pages/deal-list-beta/Container';
 import DealDetail from 'pages/deal-detail/Container';
-
 import ComparePage from 'pages/compare/Container';
-
 import CheckoutConfirm from 'pages/checkout-confirm/Container';
 import CheckoutFinancing from 'pages/checkout-financing/Container';
 import CheckoutComplete from 'pages/checkout-complete/Container';
@@ -23,7 +21,7 @@ const { store, persistor } = configureStore();
 Array.from(document.getElementsByTagName('FilterPage')).map(element => {
     ReactDOM.render(
         <Provider store={store}>
-            <PersistGate persistor={persistor}>
+            <PersistGate loading={null} persistor={persistor}>
                 <DealList />
             </PersistGate>
         </Provider>,

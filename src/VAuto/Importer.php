@@ -240,11 +240,6 @@ class Importer
                     $this->info("    -- Equipment: Extracted Option Codes: {$msg}");
                 }
 
-                //$this->info("    -- Equipment: Known: {$debug['equipment_known_feature_count']}");
-                //$this->info("    -- Equipment: Vauto Guessed: {$debug['equipment_vauto_feature_count']}");
-                //$this->info("    -- Equipment: Vauto New: {$debug['equipment_vauto_extra_feature_count']}");
-                //$this->info("    -- Equipment: Total: {$debug['equipment_feature_count']}");
-
                 // Features
                 $this->info("    -- Features: New Jato Features: {$debug['feature_count']}");
 
@@ -307,6 +302,7 @@ class Importer
 
         //
         // Delete all the hashes
+        Deal::whereNotIn('file_hash', $hashes)->unsearchable();
         Deal::whereNotIn('file_hash', $hashes)->whereDoesntHave('purchases')->delete();
 
         $this->debug['stop'] = microtime(true);

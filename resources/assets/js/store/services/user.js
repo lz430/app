@@ -5,7 +5,6 @@ import httpclient from 'store/httpclient';
  */
 class UserService {
     /**
-     *
      * @param search
      * @param lat
      * @param lon

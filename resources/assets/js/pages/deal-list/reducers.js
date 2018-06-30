@@ -1,10 +1,11 @@
 import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import { basePersistConfig } from 'persist';
 
 import * as ActionTypes from './consts';
 
 import util from 'src/util';
-import R from 'ramda';
+import { REHYDRATE } from 'redux-persist';
+
 const urlStyle = util.getInitialBodyStyleFromUrl();
 const urlSize = util.getInitialSizeFromUrl();
 
@@ -38,8 +39,8 @@ const initialState = {
 };
 
 const persistConfig = {
+    ...basePersistConfig,
     key: 'dealList',
-    storage: storage,
     blacklist: [
         'deals',
         'dealPage',
@@ -52,6 +53,23 @@ const persistConfig = {
 
 const reducer = function(state = initialState, action = {}) {
     switch (action.type) {
+        case REHYDRATE:
+            /**
+             * If we have a new url style / url size
+             */
+            if (urlSize || urlStyle) {
+                if (urlStyle) {
+                    state.selectedStyles = [urlStyle];
+                }
+
+                state.searchQuery.features = [];
+                state.searchQuery.makes = [];
+
+                window.history.replaceState({}, document.title, '/filter');
+                return state;
+            }
+            return state;
+
         case ActionTypes.INIT:
             return state;
 

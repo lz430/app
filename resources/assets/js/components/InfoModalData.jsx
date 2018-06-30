@@ -1,11 +1,35 @@
 import R from 'ramda';
 import React from 'react';
 import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
-import strings from 'src/strings';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
+import PropTypes from 'prop-types';
+
+// TODO: These components should be moved to a common area if they are used by other
+// common components.
+import Line from 'pages/deal-detail/components/pricing/Line';
+import Label from 'pages/deal-detail/components/pricing/Label';
+import Value from 'pages/deal-detail/components/pricing/Value';
 
 class InfoModalData extends React.PureComponent {
+    static propTypes = {
+        deal: PropTypes.shape({
+            year: PropTypes.string.isRequired,
+            msrp: PropTypes.number.isRequired,
+            employee_price: PropTypes.number.isRequired,
+            supplier_price: PropTypes.number.isRequired,
+            make: PropTypes.string.isRequired,
+            model: PropTypes.string.isRequired,
+            id: PropTypes.number.isRequired,
+            vin: PropTypes.string.isRequired,
+        }),
+        infoModalIsShowingFor: PropTypes.number,
+        userLocation: PropTypes.object.isRequired,
+        purchaseStrategy: PropTypes.string.isRequired,
+        onRequestDealQuote: PropTypes.func.isRequired,
+        onSetPurchaseStrategy: PropTypes.func.isRequired,
+    };
+
     static defaultProps = {
         withPricingHeader: true,
         withPricingTabs: true,
@@ -15,14 +39,13 @@ class InfoModalData extends React.PureComponent {
         withConfirmPurchase: false,
     };
 
-    componentDidMount() {
-        this.props.requestTargets(this.props.dealPricing.deal());
-        this.props.requestBestOffer(this.props.dealPricing.deal());
-    }
-
-    handleTabChange(tabName) {
-        this.props.selectTab(tabName);
-        this.props.requestBestOffer(this.props.dealPricing.deal());
+    handleTabChange(strategy) {
+        this.props.onSetPurchaseStrategy(strategy);
+        this.props.onRequestDealQuote(
+            this.props.deal,
+            this.props.userLocation.zipcode,
+            strategy
+        );
     }
 
     showWhenPricingIsLoaded(fn) {
@@ -46,7 +69,7 @@ class InfoModalData extends React.PureComponent {
                             this.handleTabChange('cash');
                         }}
                         className={`tabs__tab ${
-                            this.props.selectedTab === 'cash'
+                            this.props.purchaseStrategy === 'cash'
                                 ? 'tabs__tab--selected'
                                 : ''
                         }`}
@@ -58,7 +81,7 @@ class InfoModalData extends React.PureComponent {
                             this.handleTabChange('finance');
                         }}
                         className={`tabs__tab ${
-                            this.props.selectedTab === 'finance'
+                            this.props.purchaseStrategy === 'finance'
                                 ? 'tabs__tab--selected'
                                 : ''
                         }`}
@@ -70,7 +93,7 @@ class InfoModalData extends React.PureComponent {
                             this.handleTabChange('lease');
                         }}
                         className={`tabs__tab ${
-                            this.props.selectedTab === 'lease'
+                            this.props.purchaseStrategy === 'lease'
                                 ? 'tabs__tab--selected'
                                 : ''
                         }`}
@@ -80,129 +103,6 @@ class InfoModalData extends React.PureComponent {
                 </div>
             </div>
         );
-    }
-
-    handleGetRebatesLink() {
-        this.props.selectDeal(this.props.dealPricing.deal());
-        if (this.props.closeModal) {
-            this.props.closeModal();
-        }
-    }
-
-    renderAppliedRebatesLink() {
-        return (
-            <div>
-                <div className="info-modal-data__rebate-info info-modal-data__costs">
-                    <div className="info-modal-data__rebate-info__title">
-                        Rebates Applied:
-                    </div>
-                    <div>
-                        {this.showWhenPricingIsLoaded(() =>
-                            this.props.dealPricing.bestOffer()
-                        )}
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    renderPaymentDefaults() {
-        if (this.props.selectedTab === 'finance') {
-            return (
-                <div>
-                    <div className="info-modal-data__costs">
-                        <div className="info-modal-data__label">
-                            Down Payment:
-                        </div>
-                        <div className="info-modal-data__amount">
-                            {this.showWhenPricingIsLoaded(() =>
-                                this.props.dealPricing.financeDownPayment()
-                            )}
-                        </div>
-                    </div>
-                    <div className="info-modal-data__costs">
-                        <div className="info-modal-data__label">
-                            Total Months:
-                        </div>
-                        <div className="info-modal-data__amount">
-                            {this.showWhenPricingIsLoaded(() =>
-                                this.props.dealPricing.financeTerm()
-                            )}
-                        </div>
-                    </div>
-                    <div className="info-modal-data__costs info-modal-data__costs--final-payments">
-                        <div className="info-modal-data__label">
-                            Monthly Payments:
-                        </div>
-                        <div className="info-modal-data__amount">
-                            {this.showWhenPricingIsLoaded(() =>
-                                this.props.dealPricing.finalPrice()
-                            )}*
-                        </div>
-                    </div>
-                </div>
-            );
-        } else {
-            if (
-                this.props.dealPricing.isPricingAvailable() &&
-                this.props.dealPricing.hasNoLeaseTerms()
-            ) {
-                return (
-                    <div className="cash-finance-lease-calculator__calculator-content">
-                        <h4>
-                            Currently there are no competitive lease rates
-                            available on this vehicle.
-                        </h4>
-                    </div>
-                );
-            }
-
-            return (
-                <div>
-                    <div className="info-modal-data__costs">
-                        <div className="info-modal-data__label">
-                            Total Months:
-                        </div>
-                        <div className="info-modal-data__amount">
-                            {this.showWhenPricingIsLoaded(() =>
-                                this.props.dealPricing.leaseTerm()
-                            )}
-                        </div>
-                    </div>
-                    {/*
-                    <div className="info-modal-data__costs">
-                        <div className="info-modal-data__label">Cash Due:</div>
-                        <div className="info-modal-data__amount">
-                            {this.showWhenPricingIsLoaded(() =>
-                                this.props.dealPricing.leaseCashDue()
-                            )}
-                        </div>
-                    </div>
-                    */}
-
-                    <div className="info-modal-data__costs">
-                        <div className="info-modal-data__label">
-                            Annual Miles:
-                        </div>
-                        <div className="info-modal-data__amount">
-                            {this.showWhenPricingIsLoaded(() =>
-                                this.props.dealPricing.leaseAnnualMileage()
-                            )}
-                        </div>
-                    </div>
-                    <div className="info-modal-data__costs info-modal-data__costs--final-payments">
-                        <div className="info-modal-data__label">
-                            Monthly Payments:
-                        </div>
-                        <div className="info-modal-data__amount">
-                            {this.showWhenPricingIsLoaded(() =>
-                                this.props.dealPricing.finalPrice()
-                            )}*
-                        </div>
-                    </div>
-                </div>
-            );
-        }
     }
 
     render() {
@@ -237,147 +137,112 @@ class InfoModalData extends React.PureComponent {
             );
         }
 
+        const { dealPricing } = this.props;
+
         return (
             <div>
                 <div className="info-modal-data">
                     <div className="info-modal-data__price">
-                        {this.props.withPricingHeader && (
-                            <p className="info-modal-data__pricing-details">
-                                Pricing
-                            </p>
-                        )}
-
                         {this.props.withPricingTabs && this.renderTabs()}
 
-                        {this.props.withFinalSelectionHeader && (
-                            <div className="info-modal-data__final-selection-header">
-                                <div className="info-modal-data__final-selection-header__you-selected">
-                                    You selected
-                                </div>
-                                <div className="info-modal-data__final-selection-header__year-make-model-trim">
-                                    {strings.dealYearMake(
-                                        this.props.dealPricing.deal()
-                                    )}{' '}
-                                    {strings.dealModelTrim(
-                                        this.props.dealPricing.deal()
-                                    )}
-                                </div>
-                                <div className="info-modal-data__final-selection-header__stock-number">
-                                    Stock #{
-                                        this.props.dealPricing.deal()
-                                            .stock_number
-                                    }
-                                </div>
-                                <hr />
-                                <div className="info-modal-data__final-selection-header__payment-option">
-                                    {strings.toTitleCase(
-                                        this.props.selectedTab
-                                    )}{' '}
-                                    Option
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="info-modal-data__prices">
-                            <div className="info-modal-data__costs">
-                                <div className="info-modal-data__label">
-                                    MSRP:{' '}
-                                </div>
-                                <div className="info-modal-data__amount">
-                                    {this.props.dealPricing.msrp()}
-                                </div>
-                            </div>
-                            <div className="info-modal-data__costs">
-                                <div className="info-modal-data__label">
-                                    Selling Price:
-                                </div>
-                                <div className="info-modal-data__amount">
-                                    {this.showWhenPricingIsLoaded(() =>
-                                        this.props.dealPricing.sellingPrice()
-                                    )}
-                                </div>
-                            </div>
-
-                            {this.renderAppliedRebatesLink()}
-
-                            <div className="info-modal-data__costs info-modal-data__costs--final">
-                                <div className="info-modal-data__label">
-                                    Your Price:
-                                </div>
-                                {this.props.selectedTab === 'cash' && (
-                                    <div className="info-modal-data__amount info-modal-data__amount--cash">
-                                        {this.showWhenPricingIsLoaded(() =>
-                                            this.props.dealPricing.yourPrice()
-                                        )}*
-                                    </div>
-                                )}
-                                {this.props.selectedTab === 'finance' && (
-                                    <div className="info-modal-data__amount info-modal-data__amount--finance">
-                                        {this.showWhenPricingIsLoaded(() =>
-                                            this.props.dealPricing.yourPrice()
-                                        )}*
-                                    </div>
-                                )}
-                                {this.props.selectedTab === 'lease' && (
-                                    <div className="info-modal-data__amount info-modal-data__amount--lease">
-                                        {this.showWhenPricingIsLoaded(() =>
-                                            this.props.dealPricing.yourPrice()
-                                        )}*
-                                    </div>
-                                )}
-                            </div>
-
-                            {this.props.selectedTab !== 'cash' && (
+                        <div style={{ textAlign: 'left' }}>
+                            {this.props.purchaseStrategy === 'cash' && (
                                 <div>
-                                    <hr />
-                                    <div>{this.renderPaymentDefaults()}</div>
+                                    <Line>
+                                        <Label>MSRP</Label>
+                                        <Value>{dealPricing.msrp()}</Value>
+                                    </Line>
+                                    <Line>
+                                        <Label>Discount</Label>
+                                        <Value isNegative={true}>
+                                            {dealPricing.discount()}
+                                        </Value>
+                                    </Line>
+                                    <Line>
+                                        <Label>Selling Price</Label>
+                                        <Value>
+                                            {dealPricing.baseSellingPrice()}
+                                        </Value>
+                                    </Line>
+                                    <Line isImportant={true}>
+                                        <Label>Cash Price</Label>
+                                        <Value>{dealPricing.yourPrice()}</Value>
+                                    </Line>
+                                    <Line>
+                                        <Label>Taxes &amp; Fees</Label>
+                                        <Value>
+                                            {dealPricing.taxesAndFeesTotal()}
+                                        </Value>
+                                    </Line>
+                                </div>
+                            )}
+
+                            {this.props.purchaseStrategy === 'finance' && (
+                                <div>
+                                    <Line>
+                                        <Label>Total Price</Label>
+                                        <Value>
+                                            {dealPricing.yourPrice()}*
+                                        </Value>
+                                    </Line>
+                                    <Line isSemiImportant={true}>
+                                        <Label>Down Payment</Label>
+                                        <Value>
+                                            {dealPricing.financeDownPayment()}
+                                        </Value>
+                                    </Line>
+                                    <Line>
+                                        <Label>Amount Financed</Label>
+                                        <Value>
+                                            {dealPricing.amountFinanced()}
+                                        </Value>
+                                    </Line>
+                                    <Line>
+                                        <Label>Term Length</Label>
+                                        <Value>
+                                            {dealPricing.financeTerm()} months
+                                        </Value>
+                                    </Line>
+                                    <Line isImportant={true}>
+                                        <Label>Monthly Payment</Label>
+                                        <Value>
+                                            {dealPricing.monthlyPayments()}*
+                                        </Value>
+                                    </Line>
+                                </div>
+                            )}
+
+                            {this.props.purchaseStrategy === 'lease' && (
+                                <div>
+                                    <Line>
+                                        <Label>Annual Miles</Label>
+                                        <Value>
+                                            {dealPricing.leaseAnnualMileage()}
+                                        </Value>
+                                    </Line>
+                                    <Line isSemiImportant={true}>
+                                        <Label>Cash Due</Label>
+                                        <Value>
+                                            {dealPricing.leaseCashDue()}
+                                        </Value>
+                                    </Line>
+                                    <Line>
+                                        <Label>Term Length</Label>
+                                        <Value>
+                                            {dealPricing.leaseTerm()} months
+                                        </Value>
+                                    </Line>
+                                    <Line isImportant={true}>
+                                        <Label>Monthly Payment</Label>
+                                        <Value>
+                                            {dealPricing.monthlyPayments()}*
+                                        </Value>
+                                    </Line>
                                 </div>
                             )}
                         </div>
-                        <hr />
-
-                        {!this.props.withConfirmPurchase && (
-                            <div className="info-modal-data__more-rebates info-modal-data__costs">
-                                <div>
-                                    Additional rebates may apply.{' '}
-                                    <a
-                                        onClick={this.handleGetRebatesLink.bind(
-                                            this
-                                        )}
-                                        className="link"
-                                    >
-                                        See more
-                                    </a>
-                                </div>
-                            </div>
-                        )}
 
                         <div className="deal__buttons">
-                            {this.props.withCompareInsteadOfBack && (
-                                <button
-                                    className={this.compareButtonClass()}
-                                    onClick={this.props.toggleCompare.bind(
-                                        null,
-                                        this.props.dealPricing.deal()
-                                    )}
-                                >
-                                    {this.isAlreadyInCompareList()
-                                        ? 'Remove from compare'
-                                        : 'Compare'}
-                                </button>
-                            )}
-                            {!this.props.withCompareInsteadOfBack && (
-                                <button
-                                    className={this.backToDetailsButtonClass()}
-                                    onClick={() =>
-                                        (window.location = `/deals/${
-                                            this.props.dealPricing.deal().id
-                                        }`)
-                                    }
-                                >
-                                    Back to details
-                                </button>
-                            )}
                             {this.props.withCustomizeQuoteOrBuyNow && (
                                 <CustomizeQuoteOrBuyNowButton
                                     onCustomizeQuote={() => this.selectDeal()}
@@ -388,29 +253,21 @@ class InfoModalData extends React.PureComponent {
                                     }
                                 />
                             )}
-                            {this.props.withConfirmPurchase && (
-                                <button
-                                    className="deal__button deal__button--small deal__button--pink deal__button"
-                                    onClick={this.props.onConfirmPurchase}
-                                    disabled={
-                                        !this.props.dealPricing.canPurchase()
-                                    }
+                        </div>
+
+                        {this.props.purchaseStrategy !== 'cash' && (
+                            <Line>
+                                <div
+                                    style={{
+                                        fontStyle: 'italic',
+                                        fontSize: '.75em',
+                                        marginLeft: '.25em',
+                                    }}
                                 >
-                                    Confirm purchase
-                                </button>
-                            )}
-                        </div>
-                        <div className="accupricing-cta">
-                            <a onClick={this.props.showAccuPricingModal}>
-                                <img
-                                    src="/images/accupricing-logo.png"
-                                    className="accupricing-cta__logo"
-                                />
-                            </a>
-                            <p className="accupricing-cta__disclaimer">
-                                * Includes taxes, dealer fees and rebates.
-                            </p>
-                        </div>
+                                    * includes rebates and all taxes and fees
+                                </div>
+                            </Line>
+                        )}
                     </div>
 
                     {this.props.children}
@@ -442,7 +299,7 @@ class InfoModalData extends React.PureComponent {
             this.props.closeModal();
         }
 
-        this.props.selectDeal(this.props.dealPricing.deal());
+        window.location = '/deals/' + this.props.dealPricing.id();
     }
 }
 

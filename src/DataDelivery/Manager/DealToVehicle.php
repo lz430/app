@@ -18,9 +18,16 @@ class DealToVehicle
 
         ],
         'BY_TRIM' => [
-            'Momentum' => 'T6 Momentum'
+            'Momentum' => 'T6 Momentum',
+            '230i' => 'i xDrive',
+            '330i' => 'i xDrive',
+            '430i' => 'i xDrive',
+            '530i' => 'i xDrive',
+            'M550i' => 'i xDrive',
+            '340i' => 'i xDrive',
         ],
     ];
+
     private const BODY_STYLE_MAP = [
         'Sport Utility Vehicle' => "Sport Utility",
         'Pickup' => 'Regular Cab'
@@ -35,7 +42,7 @@ class DealToVehicle
      * @param string $zipcode
      * @param DataDeliveryClient|null $client
      */
-    public function __construct(Deal $deal, string $zipcode,DataDeliveryClient $client = null)
+    public function __construct(Deal $deal, string $zipcode, DataDeliveryClient $client = null)
     {
         $this->deal = $deal;
         $this->zipcode = $zipcode;
@@ -114,6 +121,7 @@ class DealToVehicle
     {
         $params = [
             'year' => $this->deal->version->year,
+            'model' => $this->deal->version->model->name,
             'model_code' => $this->deal->model_code,
             'option_codes' => $this->deal->option_codes,
             'package_codes' => $this->deal->package_codes,
@@ -148,7 +156,6 @@ class DealToVehicle
         return $results;
     }
 
-
     /**
      * @param array $vehicles
      * @param $params
@@ -156,6 +163,7 @@ class DealToVehicle
      */
     private function narrowDownVehicles(array $vehicles, $params): ?string
     {
+        $vehicles = $this->filterUnlessNone($vehicles, 'Trim', $params['trim']);
         $vehicles = $this->filterUnlessNone($vehicles, 'OptionGroup', $params['option_codes']);
         $vehicles = $this->filterUnlessNone($vehicles, 'OptionGroup', "Base");
         $vehicles = $this->filterUnlessNone($vehicles, 'Package', $params['package_codes']);
@@ -171,21 +179,20 @@ class DealToVehicle
      * @return mixed|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function get() {
+    public function get()
+    {
         $results = null;
 
         // Try easy search first
         $params = $this->getSearchParams();
-
         $search = [
-            'Trim' => $params['trim'],
+            //'Trim' => $params['trim'],
             'ManufactModelCode' => $params['model_code'],
             'Year' => $params['year'],
             'Body' => $params['body'],
         ];
 
         $results = $this->fetchProgramData($search);
-
         // We have to narrow down the results.
         if (count($results->vehicles) > 1) {
             $vehicleId = $this->narrowDownVehicles($results->vehicles, $params);

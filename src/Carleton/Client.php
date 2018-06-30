@@ -2,7 +2,6 @@
 
 namespace DeliverMyRide\Carleton;
 
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class Client
@@ -22,6 +21,7 @@ class Client
         $this->username = $username;
         $this->password = $password;
     }
+
     /**
      * @param $cashDueOptions
      * @param $terms
@@ -75,17 +75,19 @@ class Client
                 'RoundToOption' => 'NearestPenny',
             ],
             'rebate' => [
-                'Amount' => $rebate,
+                'Amount' => -1 * abs($rebate),
                 'Type' => 'Financed',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'Rebate',
                 'TaxIndex' => '1',
-                'FinanceTaxes' => 'No',
+                'FinanceTaxes' => 'Yes',
                 'CCRPortionFeeTaxed' => 'Yes',
                 'RoundToOption' => 'NearestPenny',
             ],
+
+            /*
             'license' => [
-                'Amount' => 23,
+                'Amount' => $licenseFee,
                 'Type' => 'Financed', // Upfront
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
@@ -93,6 +95,7 @@ class Client
                 'FinanceTaxes' => 'Yes',
                 'RoundToOption' => 'NearestPenny',
             ],
+            */
             'cvr' => [
                 'Amount' => $cvrFee,
                 'Type' => 'Financed',
@@ -104,10 +107,12 @@ class Client
             ],
         ];
 
-        $terms = json_decode($terms, true);
+        if (is_string($terms)) {
+            $terms = json_decode($terms, true);
+        }
 
-        //foreach ($cashDueOptions as $cashDueValue) {
-            foreach($terms as $term => $termData) {
+        foreach ($cashDueOptions as $cashDueValue) {
+            foreach ($terms as $term => $termData) {
                 foreach ($termData['annualMileage'] as $annualMileage => $annualMileageData) {
                     $quote = [
                         'taxRate' => $taxRate,
@@ -122,7 +127,7 @@ class Client
                     ];
 
                     $quote['fees']['cashDown'] = [
-                        'Amount' => $cashDueOptions[0], //$cashDueValue
+                        'Amount' => $cashDueValue,
                         'Type' => 'Financed',
                         'Base' => 'Fixed',
                         'DescriptionType' => 'CashDown',
@@ -135,7 +140,7 @@ class Client
                     $data['quotes'][] = $quote;
                 }
             }
-        //}
+        }
         return $data;
     }
 
@@ -144,7 +149,8 @@ class Client
      * @return string
      * @throws \Throwable
      */
-    public function buildRequest($data) {
+    public function buildRequest($data)
+    {
         $contents = view('carleton.request', $data)->render();
         $contents = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" . $contents;
         $contents = trim(preg_replace('/\s+/', ' ', $contents));
@@ -197,21 +203,9 @@ class Client
             $cashAdvance,
             $contractDate
         );
-
         $request = $this->buildRequest($params);
 
-        $hash = md5($request);
-        $cacheKey = "lease-rates-" . $hash;
-
-        if (false && Cache::has($cacheKey)) {
-            Log::debug("Cache HIT ($cacheKey)");
-            return Cache::get($cacheKey);
-        }
-
-        Log::debug("Cache MISS ($cacheKey)");
-        $leasePayments = $this->getLeasePaymentsForQuoteParameters($params, $request);
-        Cache::put($cacheKey, $leasePayments, count($leasePayments) > 0 ? 360 : 15);
-        return $leasePayments;
+        return $this->getLeasePaymentsForQuoteParameters($params, $request);
     }
 
     /**

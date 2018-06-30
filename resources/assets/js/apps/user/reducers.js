@@ -1,3 +1,6 @@
+import { persistReducer } from 'redux-persist';
+import { basePersistConfig } from 'persist';
+
 import * as ActionTypes from './consts';
 
 const initialState = {
@@ -14,7 +17,13 @@ const initialState = {
     },
 };
 
-export default function(state = initialState, action = {}) {
+const persistConfig = {
+    ...basePersistConfig,
+    key: 'user',
+    blacklist: [],
+};
+
+const reducer = function(state = initialState, action = {}) {
     switch (action.type) {
         case ActionTypes.SET_PURCHASE_STRATEGY:
             return {
@@ -51,4 +60,6 @@ export default function(state = initialState, action = {}) {
         default:
             return state;
     }
-}
+};
+
+export default persistReducer(persistConfig, reducer);

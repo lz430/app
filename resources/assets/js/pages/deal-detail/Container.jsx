@@ -1,30 +1,40 @@
-import * as legacyActions from 'apps/common/actions';
-import api from 'src/api';
-import CashFinanceLeaseCalculator from 'components/CashFinanceLeaseCalculator';
-import CompareBar from 'components/CompareBar';
+import React from 'react';
 import { connect } from 'react-redux';
-import Modal from 'components/Modal';
-import miscicons from 'miscicons';
 import PropTypes from 'prop-types';
 import R from 'ramda';
-import React from 'react';
+
+import * as legacyActions from 'apps/common/actions';
+
+import api from 'src/api';
 import strings from 'src/strings';
+import util from 'src/util';
+
+import CompareBar from 'components/CompareBar';
+import Modal from 'components/Modal';
+import miscicons from 'miscicons';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
+
 import ImageGallery from 'react-image-gallery';
-import AccuPricingModal from 'components/AccuPricingModal';
+import AccuPricingModal from 'components/AccuPricing/Modal';
 import DealPricing from 'src/DealPricing';
 import { makeDealPricing } from 'apps/common/selectors';
-import util from 'src/util';
 import CashPricingPane from './components/pricing/CashPane';
 import FinancePricingPane from './components/pricing/FinancePane';
 import LeasePricingPane from './components/pricing/LeasePane';
 import PaymentTypes from './components/pricing/PaymentTypes';
-import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
+import Line from './components/pricing/Line';
 
+import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
+import { setPurchaseStrategy } from 'apps/user/actions';
+import { requestDealQuote } from 'apps/pricing/actions';
 import * as selectDiscountActions from './modules/selectDiscount';
 import * as financeActions from './modules/finance';
 import * as leaseActions from './modules/lease';
+
+import { initPage, receiveDeal } from './actions';
+
+import { getUserLocation } from 'apps/user/selectors';
 
 class Container extends React.PureComponent {
     static propTypes = {
@@ -38,6 +48,13 @@ class Container extends React.PureComponent {
             id: PropTypes.number.isRequired,
             vin: PropTypes.string.isRequired,
         }),
+        purchaseStrategy: PropTypes.string.isRequired,
+        discountType: PropTypes.string.isRequired,
+
+        initPage: PropTypes.func.isRequired,
+        receiveDeal: PropTypes.func.isRequired,
+        setPurchaseStrategy: PropTypes.func.isRequired,
+        requestDealQuote: PropTypes.func.isRequired,
     };
     constructor(props) {
         super(props);
@@ -59,8 +76,8 @@ class Container extends React.PureComponent {
 
     componentDidMount() {
         this._isMounted = true;
-
-        this.props.legacyActions.requestBestOffer(this.props.deal);
+        this.props.receiveDeal(this.props.deal);
+        this.props.initPage();
 
         if (this.props.deal.photos.length) {
             this.setState({ featuredImage: this.props.deal.photos[0] });
@@ -96,12 +113,6 @@ class Container extends React.PureComponent {
     showFeatures() {
         this.setState({
             showFeatures: true,
-        });
-    }
-
-    selectFeaturedImage(index) {
-        this.setState({
-            featuredImage: this.allImages()[index],
         });
     }
 
@@ -257,7 +268,7 @@ class Container extends React.PureComponent {
     }
 
     renderDeal(deal, { shouldRenderStockNumber } = {}) {
-        const { selectedTab, dealPricing } = this.props;
+        const { purchaseStrategy, dealPricing } = this.props;
 
         return (
             <div className="deal-details__pricing">
@@ -270,17 +281,17 @@ class Container extends React.PureComponent {
                     <div className="info-modal-data">
                         <div className="info-modal-data__price">
                             <PaymentTypes
-                                {...{ selectedTab }}
+                                {...{ purchaseStrategy }}
                                 onChange={this.handlePaymentTypeChange}
                             />
-                            {this.props.selectedTab === 'cash' && (
+                            {this.props.purchaseStrategy === 'cash' && (
                                 <CashPricingPane
                                     {...{ dealPricing }}
                                     onDiscountChange={this.handleDiscountChange}
                                     onRebatesChange={this.handleRebatesChange}
                                 />
                             )}
-                            {this.props.selectedTab === 'finance' && (
+                            {this.props.purchaseStrategy === 'finance' && (
                                 <FinancePricingPane
                                     {...{ dealPricing }}
                                     onDiscountChange={this.handleDiscountChange}
@@ -291,7 +302,7 @@ class Container extends React.PureComponent {
                                     onTermChange={this.handleFinanceTermChange}
                                 />
                             )}
-                            {this.props.selectedTab === 'lease' && (
+                            {this.props.purchaseStrategy === 'lease' && (
                                 <LeasePricingPane
                                     {...{ dealPricing }}
                                     onDiscountChange={this.handleDiscountChange}
@@ -306,6 +317,42 @@ class Container extends React.PureComponent {
                                     onChange={this.handleLeaseChange}
                                 />
                             )}
+                            <div className="deal__buttons">
+                                <button
+                                    className={this.compareButtonClass()}
+                                    onClick={this.props.legacyActions.toggleCompare.bind(
+                                        null,
+                                        this.props.dealPricing.deal()
+                                    )}
+                                >
+                                    {this.isAlreadyInCompareList()
+                                        ? 'Remove from compare'
+                                        : 'Compare'}
+                                </button>
+
+                                <button
+                                    className="deal__button deal__button--small deal__button--pink deal__button"
+                                    onClick={() =>
+                                        (window.location = `/confirm/${dealPricing.id()}`)
+                                    }
+                                    disabled={
+                                        !this.props.dealPricing.canPurchase()
+                                    }
+                                >
+                                    Buy Now
+                                </button>
+                            </div>
+                            <Line>
+                                <div
+                                    style={{
+                                        fontStyle: 'italic',
+                                        fontSize: '.75em',
+                                        marginLeft: '.25em',
+                                    }}
+                                >
+                                    * includes all taxes and dealer fees
+                                </div>
+                            </Line>
                         </div>
                     </div>
                 </div>
@@ -313,9 +360,18 @@ class Container extends React.PureComponent {
         );
     }
 
-    handlePaymentTypeChange = tabName => {
-        this.props.legacyActions.selectTab(tabName);
-        this.props.legacyActions.requestBestOffer(this.props.deal);
+    handleBuyNow = () => {
+        window.location = '/deal/';
+    };
+
+    handlePaymentTypeChange = strategy => {
+        this.props.setPurchaseStrategy(strategy);
+        this.props.requestDealQuote(
+            this.props.deal,
+            this.props.userLocation.zipcode,
+            strategy,
+            this.props.discountType
+        );
     };
 
     handleDiscountChange = (discountType, make) => {
@@ -332,11 +388,16 @@ class Container extends React.PureComponent {
                 this.props.selectDiscountActions.selectSupplierDiscount(make);
                 break;
         }
+
+        this.props.requestDealQuote(
+            this.props.deal,
+            this.props.userLocation.zipcode,
+            this.props.purchaseStrategy,
+            discountType
+        );
     };
 
-    handleRebatesChange = () => {
-        this.props.legacyActions.requestBestOffer(this.props.deal);
-    };
+    handleRebatesChange = () => {};
 
     handleFinanceDownPaymentChange = downPayment => {
         this.props.financeActions.updateDownPayment(downPayment);
@@ -387,6 +448,14 @@ class Container extends React.PureComponent {
             cashDue
         );
     };
+
+    renderStockNumber() {
+        return (
+            <div className="deal-details__stock-number">
+                Stock# {this.props.deal.stock_number}
+            </div>
+        );
+    }
 
     renderFeaturesAndOptions(deal, index) {
         const inCompareList = R.contains(
@@ -497,24 +566,39 @@ class Container extends React.PureComponent {
             </div>
         );
     }
+
+    isAlreadyInCompareList() {
+        return R.contains(
+            this.props.dealPricing.deal(),
+            R.map(R.prop('deal'), this.props.compareList)
+        );
+    }
+
+    compareButtonClass() {
+        return (
+            'deal__button deal__button--small deal__button--blue' +
+            (this.isAlreadyInCompareList() ? 'deal__button--blue' : '')
+        );
+    }
 }
 
 function mapStateToProps(state) {
     const getDealPricing = makeDealPricing();
-    const mapStateToProps = (state, props) => {
+    return (state, props) => {
         return {
+            purchaseStrategy: state.user.purchasePreferences.strategy,
             compareList: state.common.compareList,
-            selectedTab: state.common.selectedTab,
             downPayment: state.common.downPayment,
             termDuration: state.common.termDuration,
             fallbackDealImage: state.common.fallbackDealImage,
             selectedDeal: state.common.selectedDeal,
             employeeBrand: state.common.employeeBrand,
+            discountType: state.pages.dealDetails.selectDiscount.discountType,
             dealPricing: new DealPricing(getDealPricing(state, props)),
             window: state.common.window,
+            userLocation: getUserLocation(state),
         };
     };
-    return mapStateToProps;
 }
 
 const mapDispatchToProps = mapAndBindActionCreators({
@@ -522,6 +606,10 @@ const mapDispatchToProps = mapAndBindActionCreators({
     leaseActions,
     selectDiscountActions,
     legacyActions,
+    initPage,
+    setPurchaseStrategy,
+    receiveDeal,
+    requestDealQuote,
 });
 
 export default connect(

@@ -96,6 +96,18 @@ abstract class BaseSearch
         return $this;
     }
 
+    public function FilterMustYears(array $years) {
+        $this->query['query']['bool']['must'][] = [
+            [
+                'terms' => [
+                    'year.keyword' => $years,
+                ],
+            ]
+        ];
+
+        return $this;
+    }
+
     public function filterMustMakes(array $makes) {
         $this->query['query']['bool']['must'][] = [
             [
