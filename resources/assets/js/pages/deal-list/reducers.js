@@ -36,6 +36,7 @@ const initialState = {
     deals: [],
     requestingMoreDeals: false,
     loadingSearchResults: true,
+    meta: {},
 };
 
 const persistConfig = {
@@ -48,6 +49,9 @@ const persistConfig = {
         'modelYears',
         'loadingSearchResults',
         'page',
+        'bodyStyles',
+        'makes',
+        'meta',
     ],
 };
 
@@ -112,8 +116,15 @@ const reducer = function(state = initialState, action = {}) {
             };
 
         case ActionTypes.SEARCH_RECEIVE:
+            if (!action.data) {
+                return state;
+            }
+
             return {
                 ...state,
+                meta: action.data.meta,
+                makes: action.data.filters.make,
+                bodyStyles: action.data.filters.style,
             };
 
         case ActionTypes.SEARCH_LOADING_START:
@@ -135,13 +146,13 @@ const reducer = function(state = initialState, action = {}) {
                 deals.push(...state.deals);
             }
 
-            deals.push(...action.data.data.data);
+            deals.push(...action.data.results);
 
             return {
                 ...state,
                 deals: deals,
-                dealPageTotal: action.data.data.meta.pagination.total_pages,
-                dealPage: action.data.data.meta.pagination.current_page,
+                //dealPageTotal: action.data.data.meta.pagination.total_pages,
+                //dealPage: action.data.data.meta.pagination.current_page,
                 requestingMoreDeals: false,
             };
 
@@ -149,7 +160,7 @@ const reducer = function(state = initialState, action = {}) {
             return {
                 ...state,
                 requestingMoreDeals: false,
-                modelYears: action.data.data,
+                modelYears: action.data.results,
             };
 
         case ActionTypes.CLEAR_MODEL_YEAR:

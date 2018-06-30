@@ -7,6 +7,13 @@ export function requestSearch() {
     };
 }
 
+export function receiveSearch(results) {
+    return {
+        type: ActionTypes.SEARCH_RECEIVE,
+        data: results,
+    };
+}
+
 export function initDealListData() {
     return {
         type: ActionTypes.INIT,

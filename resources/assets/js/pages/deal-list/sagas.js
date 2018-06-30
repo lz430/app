@@ -57,7 +57,7 @@ function* requestSearch() {
     const state = yield select();
     const searchQuery = getSearchQuery(state);
 
-    let results = null;
+    let results = [];
 
     if (searchQuery.page === 1) {
         yield put({ type: SEARCH_LOADING_START });
@@ -65,6 +65,7 @@ function* requestSearch() {
 
     try {
         results = yield call(ApiClient.browse.search, searchQuery);
+        results = results.data;
     } catch (e) {
         console.log(e);
     } finally {
@@ -72,11 +73,14 @@ function* requestSearch() {
             source.cancel();
         }
     }
+    console.log('WTF');
+    console.log(results);
+    yield put(DealListActions.receiveSearch(results));
 
     if (results) {
         if (searchQuery.entity === 'deal') {
             yield put(DealListActions.receiveDeals(results));
-            yield fork(batchRequestDealQuotes, results.data.data);
+            yield fork(batchRequestDealQuotes, results);
         } else {
             yield put(DealListActions.receiveModelYears(results));
         }
@@ -96,16 +100,16 @@ function* init() {
     yield* requestIpLocation();
 
     try {
-        const [styles, makes, features, categories] = yield all([
-            call(ApiClient.browse.getBodyStyles),
-            call(ApiClient.browse.getMakes),
+        const [features, categories] = yield all([
+            //call(ApiClient.browse.getBodyStyles),
+            //call(ApiClient.browse.getMakes),
             call(ApiClient.browse.getFeatures),
             call(ApiClient.browse.getFeatureCategories),
         ]);
 
         yield all([
-            put(DealListActions.receiveBodyStyles(styles)),
-            put(DealListActions.receiveMakes(makes)),
+            //put(DealListActions.receiveBodyStyles(styles)),
+            //put(DealListActions.receiveMakes(makes)),
             put(DealListActions.receiveFeatures(features)),
             put(DealListActions.receiveFeatureCategories(categories)),
         ]);

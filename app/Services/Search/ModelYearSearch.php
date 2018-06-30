@@ -83,32 +83,4 @@ class ModelYearSearch extends BaseSearch {
         return $this;
     }
 
-    private function transform($response) {
-        $return = [];
-
-        foreach ($response['aggregations']['category']['model']['buckets'] as $data) {
-
-            $element = [
-                'id' => $data['id']['buckets'][0]['key'],
-                'make' => $data['make']['make']['buckets'][0]['key'],
-                'model' => $data['model']['model']['buckets'][0]['key'],
-                'year' => $data['year']['year']['buckets'][0]['key'],
-                'thumbnail' => (object)[
-                    'url' => (isset($data['thumbnail']['buckets'][0]['key']) ? $data['thumbnail']['buckets'][0]['key'] : null)
-                ],
-                'deals' => (object)[
-                    'count' => $data['doc_count'],
-                ],
-                'lowest_msrp' => $data['msrp']['min_msrp']['value'],
-            ];
-            $return[] = $element;
-        }
-        return $return;
-    }
-    /*
-    public function get() {
-        $response = parent::get();
-        return $this->transform($response);
-    }
-    */
 }

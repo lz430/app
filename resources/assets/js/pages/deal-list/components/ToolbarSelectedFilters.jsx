@@ -117,7 +117,7 @@ class ToolbarSelectedFilters extends React.PureComponent {
                     {this.props.searchQuery.years[0]
                         ? this.renderFilterYear(this.props.searchQuery.years[0])
                         : ''}
-                    {this.props.searchQuery.makes.map(this.renderFilterMakes)}
+                    {/*this.props.searchQuery.makes.map(this.renderFilterMakes) */}
                     {this.props.searchQuery.features.map(
                         this.renderFilterFeatures
                     )}

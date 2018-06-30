@@ -8,7 +8,9 @@ class FilterMakeSelector extends React.PureComponent {
     static propTypes = {
         makes: PropTypes.arrayOf(
             PropTypes.shape({
-                name: PropTypes.string,
+                value: PropTypes.string,
+                label: PropTypes.string,
+                count: PropTypes.number,
                 logo: PropTypes.string,
             })
         ),
@@ -23,7 +25,7 @@ class FilterMakeSelector extends React.PureComponent {
     }
 
     renderMake(make) {
-        let className = R.contains(make.name, this.props.selectedMakes)
+        let className = R.contains(make.value, this.props.selectedMakes)
             ? 'filter-make-selector__make filter-make-selector__make--selected'
             : 'filter-make-selector__make';
 
@@ -31,9 +33,9 @@ class FilterMakeSelector extends React.PureComponent {
             <div
                 className={className}
                 key={make.name}
-                onClick={this.props.onSelectMake.bind(null, make.name)}
+                onClick={this.props.onSelectMake.bind(null, make.value)}
             >
-                <div className="filter-make-selector__name">{make.name}</div>
+                <div className="filter-make-selector__name">{make.label}</div>
             </div>
         );
     }

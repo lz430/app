@@ -256,11 +256,9 @@ class FilterPanel extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
-        dealsByMakeModelYear: state.pages.dealList.dealsByMakeModelYear,
         makes: state.pages.dealList.makes,
         models: state.pages.dealList.models,
         bodyStyles: state.pages.dealList.bodyStyles,
-        fallbackLogoImage: state.common.fallbackLogoImage,
         features: state.pages.dealList.features,
         featureCategories: state.pages.dealList.featureCategories,
         searchFeatures: state.pages.dealList.searchFeatures,

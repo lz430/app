@@ -16,7 +16,7 @@ class ESResponseTransformer extends TransformerAbstract
     private function transformBuckets($buckets) {
         $terms = [];
         foreach ($buckets as $bucket) {
-            $terms[$bucket['key']] = [
+            $terms[] = [
                 'label' => $bucket['key'],
                 'value' => $bucket['key'],
                 'count' => $bucket['doc_count'],
@@ -53,14 +53,14 @@ class ESResponseTransformer extends TransformerAbstract
                         $value = $item['label'];
                         $data = array_merge($item, Maps::BODY_STYLES[$item['label']], ['value' => $value]);
                         unset($data['style']);
-                        $transformed[$data['value']] = $data;
+                        $transformed[] = $data;
                     }
                     break;
                 case 'make':
                     foreach ($items as $item) {
                         $data = $item;
                         $data['icon'] = Make::LOGOS[$item['value']];
-                        $transformed[$data['value']] = $data;
+                        $transformed[] = $data;
                     }
                     break;
 
