@@ -1,17 +1,15 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import R from 'ramda';
 
-import ZipcodeFinder from './ZipcodeFinder';
-import SidebarFilter from './SidebarFilter';
-import FilterClose from './FilterClose';
-import FilterStyleSelector from './FilterStyleSelector';
-import FilterMakeSelector from './FilterMakeSelector';
-import FilterFeatureSelector from './FilterFeatureSelector';
+import ZipcodeFinder from './Sidebar/ZipcodeFinder';
+import PrimaryFilters from './Sidebar/PrimaryFilters';
+import SidebarFilter from './Sidebar/SidebarFilter';
+import MobileFilterClose from './Sidebar/MobileFilterClose';
 
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
+import FilterFeatureSelector from './Sidebar/FilterFeatureSelector';
+
 import util from 'src/util';
 
 import {
@@ -22,15 +20,19 @@ import {
 } from 'pages/deal-list/actions';
 
 class FilterPanel extends React.PureComponent {
-    constructor(props) {
-        super(props);
+    static propTypes = {
+        filters: PropTypes.object.isRequired,
+        searchQuery: PropTypes.object.isRequired,
+        onClearModelYear: PropTypes.func.isRequired,
+        onToggleStyle: PropTypes.func.isRequired,
+        onToggleMake: PropTypes.func.isRequired,
+    };
 
-        this.state = {
-            openFilter: null,
-            sizeCategory: null,
-            sizeFeatures: [],
-        };
-    }
+    state = {
+        openFilter: null,
+        sizeCategory: null,
+        sizeFeatures: [],
+    };
 
     componentWillReceiveProps() {
         this.props.featureCategories.map((category, index) => {
@@ -62,22 +64,6 @@ class FilterPanel extends React.PureComponent {
                     ? null
                     : openFilter,
         });
-    }
-
-    getFeaturesByGroup(group) {
-        return R.filter(feature => {
-            return R.path(['attributes', 'group'], feature) === group;
-        }, this.props.features || []);
-    }
-
-    getCountOfSelectedFeatureByGroup(group) {
-        return R.intersection(
-            R.map(
-                R.path(['attributes', 'feature']),
-                this.getFeaturesByGroup(group)
-            ),
-            this.props.searchQuery.features
-        ).length;
     }
 
     renderSidebarFilters() {
@@ -135,103 +121,26 @@ class FilterPanel extends React.PureComponent {
                 {util.windowIsLargerThanSmall(
                     this.props.window.width
                 ) ? null : (
-                    <FilterClose />
+                    <MobileFilterClose />
                 )}
 
+                {/*
+                Location
+                */}
                 <ZipcodeFinder />
 
                 <div className="sidebar-filters">
-                    <div
-                        className={`sidebar-filters__broad sidebar-filters__broad--${
-                            this.props.searchQuery.entity === 'deal'
-                                ? 'narrow'
-                                : 'broad'
-                        }`}
-                    >
-                        {this.props.searchQuery.entity === 'deal' ? (
-                            <div className="sidebar-filters__overlay">
-                                <a
-                                    onClick={() => {
-                                        this.props.onClearModelYear();
-                                    }}
-                                >
-                                    <SVGInline
-                                        height="20px"
-                                        width="20px"
-                                        className="sidebar-filters__clear-icon"
-                                        svg={zondicons['arrow-outline-left']}
-                                    />
-                                    Return to original search
-                                </a>
-                            </div>
-                        ) : (
-                            <div className="sidebar-filters__instructive-heading">
-                                Refine this search
-                            </div>
-                        )}
+                    {/*
+                    Primary Filters
+                    */}
+                    <PrimaryFilters
+                        searchQuery={this.props.searchQuery}
+                        filters={this.props.filters}
+                        onClearModelYear={this.props.onClearModelYear}
+                        onToggleMake={this.props.onToggleMake}
+                        onToggleStyle={this.props.onToggleStyle}
+                    />
 
-                        <SidebarFilter
-                            toggle={() =>
-                                this.toggleOpenFilter('Vehicle Style')
-                            }
-                            open={
-                                this.state.openFilter === 'Vehicle Style' &&
-                                this.props.searchQuery.entity !== 'deal'
-                            }
-                            title="Vehicle Style"
-                            count={this.props.searchQuery.styles.length}
-                        >
-                            <FilterStyleSelector
-                                styles={this.props.bodyStyles}
-                                selectedStyles={this.props.searchQuery.styles}
-                                onSelectStyle={this.props.onToggleStyle}
-                            />
-                        </SidebarFilter>
-
-                        {/*this.state.sizeCategory */ false ? (
-                            <SidebarFilter
-                                toggle={() =>
-                                    this.toggleOpenFilter(
-                                        this.state.sizeCategory.attributes.title
-                                    )
-                                }
-                                open={
-                                    this.state.openFilter ===
-                                        this.state.sizeCategory.attributes
-                                            .title &&
-                                    this.props.searchQuery.entity !== 'deal'
-                                }
-                                title={this.state.sizeCategory.attributes.title}
-                                count={selectedSizeFeatures.length}
-                            >
-                                <FilterFeatureSelector
-                                    selectedFeatures={
-                                        this.props.searchQuery.features
-                                    }
-                                    features={this.state.sizeFeatures}
-                                    onSelectFeature={this.props.toggleFeature}
-                                />
-                            </SidebarFilter>
-                        ) : (
-                            <div />
-                        )}
-
-                        <SidebarFilter
-                            toggle={() => this.toggleOpenFilter('Make')}
-                            open={
-                                this.state.openFilter === 'Make' &&
-                                this.props.searchQuery.entity !== 'deal'
-                            }
-                            title="Vehicle Brand"
-                            count={this.props.searchQuery.makes.length}
-                        >
-                            <FilterMakeSelector
-                                makes={this.props.makes}
-                                selectedMakes={this.props.searchQuery.makes}
-                                onSelectMake={this.props.onToggleMake}
-                            />
-                        </SidebarFilter>
-                    </div>
                     <div
                         className={`sidebar-filters__narrow sidebar-filters__narrow--${status}`}
                     >
@@ -256,9 +165,10 @@ class FilterPanel extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
-        makes: state.pages.dealList.makes,
+        filters: state.pages.dealList.filters,
+        makes: state.pages.dealList.filters.make,
         models: state.pages.dealList.models,
-        bodyStyles: state.pages.dealList.bodyStyles,
+        bodyStyles: state.pages.dealList.filters.style,
         features: state.pages.dealList.features,
         featureCategories: state.pages.dealList.featureCategories,
         searchFeatures: state.pages.dealList.searchFeatures,

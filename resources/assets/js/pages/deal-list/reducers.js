@@ -11,8 +11,6 @@ const urlSize = util.getInitialSizeFromUrl();
 
 const initialState = {
     featureCategories: [],
-    bodyStyles: null,
-    makes: null,
     models: null,
     features: null,
     searchFeatures: [],
@@ -37,6 +35,7 @@ const initialState = {
     requestingMoreDeals: false,
     loadingSearchResults: true,
     meta: {},
+    filters: {},
 };
 
 const persistConfig = {
@@ -49,9 +48,8 @@ const persistConfig = {
         'modelYears',
         'loadingSearchResults',
         'page',
-        'bodyStyles',
-        'makes',
         'meta',
+        'filters',
     ],
 };
 
@@ -123,8 +121,7 @@ const reducer = function(state = initialState, action = {}) {
             return {
                 ...state,
                 meta: action.data.meta,
-                makes: action.data.filters.make,
-                bodyStyles: action.data.filters.style,
+                filters: action.data.filters,
             };
 
         case ActionTypes.SEARCH_LOADING_START:

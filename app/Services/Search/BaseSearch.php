@@ -9,6 +9,18 @@ use App\Models\JATO\VehicleModel;
 
 abstract class BaseSearch
 {
+    private const FEATURE_TERMS = [
+        'transmission' => 'transmission.keyword',
+        'comfort_and_convenience' => 'comfort_and_convenience.keyword',
+        'infotainment' => 'infotainment.keyword',
+        'safety_and_driver_assist' => 'safety_and_driver_assist.keyword',
+        'seating_configuration' => 'seating_configuration.keyword',
+        'seating' => 'seating.keyword',
+        'fuel_type' => 'fuel_type.keyword',
+        'drive_train' => 'drive_train.keyword',
+        'pickup' => 'pickup.keyword',
+    ];
+
     public $query;
     public $searchers_location;
 
@@ -183,14 +195,17 @@ abstract class BaseSearch
     }
 
 
-    public function addStyleAgg()
+    public function addFeatureAggs()
     {
-        $this->query['aggs']['bodystyle'] = [
-            "terms" => [
-                "size" => 50000,
-                "field" => "style.keyword"
-            ],
-        ];
+        foreach(self::FEATURE_TERMS as $key => $field) {
+            $this->query['aggs'][$key] = [
+                "terms" => [
+                    "size" => 50000,
+                    "field" => $field
+                ],
+            ];
+        }
+
         return $this;
     }
 

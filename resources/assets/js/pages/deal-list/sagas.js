@@ -73,8 +73,7 @@ function* requestSearch() {
             source.cancel();
         }
     }
-    console.log('WTF');
-    console.log(results);
+
     yield put(DealListActions.receiveSearch(results));
 
     if (results) {

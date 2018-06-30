@@ -23,6 +23,7 @@ class DealsByModelYearController extends BaseAPIController
         $query = new ModelYearSearch();
 
         $query = $query
+            ->addFeatureAggs()
             ->addMakeAndStyleAgg();
 
         if ($request->get('latitude') && $request->get('longitude')) {
