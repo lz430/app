@@ -1,6 +1,5 @@
 import {
     fork,
-    all,
     put,
     call,
     select,
@@ -79,7 +78,7 @@ function* requestSearch() {
     if (results) {
         if (searchQuery.entity === 'deal') {
             yield put(DealListActions.receiveDeals(results));
-            yield fork(batchRequestDealQuotes, results);
+            yield fork(batchRequestDealQuotes, results.results);
         } else {
             yield put(DealListActions.receiveModelYears(results));
         }
@@ -95,27 +94,7 @@ function* requestSearch() {
  ********************************************************************/
 function* init() {
     yield put(setCurrentPage('deal-list'));
-
     yield* requestIpLocation();
-
-    try {
-        const [features, categories] = yield all([
-            //call(ApiClient.browse.getBodyStyles),
-            //call(ApiClient.browse.getMakes),
-            call(ApiClient.browse.getFeatures),
-            call(ApiClient.browse.getFeatureCategories),
-        ]);
-
-        yield all([
-            //put(DealListActions.receiveBodyStyles(styles)),
-            //put(DealListActions.receiveMakes(makes)),
-            put(DealListActions.receiveFeatures(features)),
-            put(DealListActions.receiveFeatureCategories(categories)),
-        ]);
-    } catch (e) {
-        console.log(e);
-    }
-
     yield put({ type: SEARCH_REQUEST });
 }
 

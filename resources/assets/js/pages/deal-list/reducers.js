@@ -136,8 +136,6 @@ const reducer = function(state = initialState, action = {}) {
             return {
                 ...state,
                 deals: deals,
-                //dealPageTotal: action.data.data.meta.pagination.total_pages,
-                //dealPage: action.data.data.meta.pagination.current_page,
                 requestingMoreDeals: false,
             };
 

@@ -195,14 +195,16 @@ abstract class BaseSearch
         return $this;
     }
 
-
     public function addFeatureAggs()
     {
         foreach(self::FEATURE_TERMS as $key => $field) {
             $this->query['aggs'][$key] = [
                 "terms" => [
                     "size" => 50000,
-                    "field" => $field
+                    "field" => $field,
+                    "order" => [
+                        "_key" => "asc",
+                    ]
                 ],
             ];
         }

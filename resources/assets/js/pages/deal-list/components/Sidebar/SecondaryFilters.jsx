@@ -14,10 +14,6 @@ class SecondaryFilters extends React.PureComponent {
         openFilter: null,
     };
 
-    componentDidMount() {
-        console.log(this.props.filters);
-    }
-
     toggleOpenFilter(openFilter) {
         this.setState({
             openFilter:
@@ -39,8 +35,6 @@ class SecondaryFilters extends React.PureComponent {
          Pickup
      */
     render() {
-        console.log(this.props.filters);
-
         return (
             <div>
                 <FilterFeature

@@ -12,14 +12,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('features', 'FeaturesController@index')->name('features.index');
-Route::get('categories', 'CategoriesController@index')->name('categories.index');
-Route::get('makes', 'MakesController@index')->name('makes.index');
-Route::get('models', 'VehicleModelsController@index')->name('vehicleModels.index');
-Route::get('body-styles', 'BodyStylesController@index')->name('bodyStyles.index');
-
 Route::get('dealsByModelYear', 'DealsByModelYearController@getDealsByModelYear')->name('dealsByModelYear.index');
-
 Route::get('deals', 'DealsController@getDeals')->name('deals.index');
 Route::get('deals/compare', 'DealsCompareController@compare')->name('deals.compare');
 Route::get('warranties', 'WarrantiesController@getWarranties')->name('warranties.getWarranties');

@@ -16,14 +16,14 @@ class FilterFeature extends React.PureComponent {
     };
 
     render() {
-        if (!this.props.items) {
-            return <div />;
+        if (!this.props.items || !this.props.items.length) {
+            return false;
         }
 
         return (
             <SidebarFilter
                 title={this.props.title}
-                key={this.props.key}
+                key={this.props.title}
                 open={true}
                 canToggle={false}
                 toggle={() => this.props.onToggleOpenFilter(this.props.title)}
