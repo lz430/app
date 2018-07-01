@@ -2,5 +2,5 @@
 @import '../mixins/link';
 
 .view-apply {
-  @include vertical-form;
+    @include vertical-form;
 }

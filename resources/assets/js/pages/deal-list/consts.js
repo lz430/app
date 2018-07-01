@@ -1,8 +1,6 @@
 const namespace = 'DEAL_LIST';
 
 export const INIT = `${namespace}_INIT`;
-export const RECEIVE_MAKES = `${namespace}_RECEIVE_MAKES`;
-export const RECEIVE_BODY_STYLES = `${namespace}_RECEIVE_BODY_STYLES`;
 export const RECEIVE_FEATURES = `${namespace}_RECEIVE_FEATURES`;
 export const RECEIVE_FEATURE_CATEGORIES = `${namespace}_RECEIVE_FEATURE_CATEGORIES`;
 

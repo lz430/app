@@ -1,105 +1,110 @@
 @import '../variables';
 
 .page-footer {
-  background-color: $color-footer-background;
-  color: #fff;
-  height: $footer-height-mobile;
-  max-height: $footer-height-mobile;
-  padding-top: .5rem;
-  text-align: center;
-
-  a {
+    background-color: $color-footer-background;
     color: #fff;
-    text-decoration: none;
+    height: $footer-height-mobile;
+    max-height: $footer-height-mobile;
+    padding-top: 0.5rem;
+    text-align: center;
 
-    &:hover {
-      text-decoration: underline;
+    a {
+        color: #fff;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
-  }
 
-  @media (min-width: $break-small) {
-    padding-top: 1.5rem;
-  }
+    @media (min-width: $break-small) {
+        padding-top: 1.5rem;
+    }
 
-  @media (min-width: $break-large) {
-    height: $footer-height;
-    max-height: $footer-height;
-  }
+    @media (min-width: $break-large) {
+        height: $footer-height;
+        max-height: $footer-height;
+    }
 }
 
-.footer-icons, .footer-links, .footer-signup {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-
-  div, a, input {
+.footer-icons,
+.footer-links,
+.footer-signup {
     align-items: center;
     display: flex;
-    margin: 0 1.5em;
-  }
+    justify-content: center;
+
+    div,
+    a,
+    input {
+        align-items: center;
+        display: flex;
+        margin: 0 1.5em;
+    }
 }
 
 .footer-icons {
-  margin-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
 
-  div {
-    fill: $color-text-white;
-    height: 34px;
-    margin: 0 3px 5px 0;
+    div {
+        fill: $color-text-white;
+        height: 34px;
+        margin: 0 3px 5px 0;
 
-    &:hover {
-      opacity: 0.75;
+        &:hover {
+            opacity: 0.75;
+        }
     }
-  }
 }
 
 .footer-links {
-  margin-bottom: 2.5rem;
+    margin-bottom: 2.5rem;
 }
 
 .footer-signup {
-  margin-bottom: 2.5rem;
+    margin-bottom: 2.5rem;
 
-  div, input {
-    height: 2.25rem;
-    margin: 0 1px;
-  }
-
-  &__title {
-    border: 1px solid #fff;
-    border-radius: 0.3em 0 0 0.3em;
-    padding: 0 1em;
-
-  }
-
-  &__email {
-    font-size: 1em;
-    min-width: 20em;
-    padding: 0 0.5em;
-
-    &::placeholder {
-      color: $color-darkergrey;
+    div,
+    input {
+        height: 2.25rem;
+        margin: 0 1px;
     }
-  }
 
-  &__submit {
-    background: $color-blue;
-    border: 0;
-    border-radius: 0 0.3em 0.3em 0;
-    color: #fff;
-    font-size: 1em;
-    padding: 0 1em;
-  }
+    &__title {
+        border: 1px solid #fff;
+        border-radius: 0.3em 0 0 0.3em;
+        padding: 0 1em;
+    }
+
+    &__email {
+        font-size: 1em;
+        min-width: 20em;
+        padding: 0 0.5em;
+
+        &::placeholder {
+            color: $color-darkergrey;
+        }
+    }
+
+    &__submit {
+        background: $color-blue;
+        border: 0;
+        border-radius: 0 0.3em 0.3em 0;
+        color: #fff;
+        font-size: 1em;
+        padding: 0 1em;
+    }
 }
 
-.footer-meta, .footer-meta a {
-  color: $color-grey;
-  font-size: 0.9em;
+.footer-meta,
+.footer-meta a {
+    color: $color-grey;
+    font-size: 0.9em;
 }
 
 .footer-meta--desktop {
-  display: none;
-  @media (min-width: $break-small) {
-    display: inline;
-  }
+    display: none;
+    @media (min-width: $break-small) {
+        display: inline;
+    }
 }

@@ -1,11 +1,11 @@
 @import '../variables';
 
 .loading {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 
-  svg path,
-  svg rect {
-    fill: $color-blue;
-  }
+    svg path,
+    svg rect {
+        fill: $color-blue;
+    }
 }

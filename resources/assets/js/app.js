@@ -6,7 +6,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 import configureStore from 'store';
 
 import DealList from 'pages/deal-list/Container';
-import DealListBeta from 'pages/deal-list-beta/Container';
 import DealDetail from 'pages/deal-detail/Container';
 import ComparePage from 'pages/compare/Container';
 import CheckoutConfirm from 'pages/checkout-confirm/Container';
@@ -23,20 +22,6 @@ Array.from(document.getElementsByTagName('FilterPage')).map(element => {
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
                 <DealList />
-            </PersistGate>
-        </Provider>,
-        element
-    );
-});
-
-/**
- * Browse
- */
-Array.from(document.getElementsByTagName('BrowsePage')).map(element => {
-    ReactDOM.render(
-        <Provider store={store}>
-            <PersistGate persistor={persistor}>
-                <DealListBeta />
             </PersistGate>
         </Provider>,
         element

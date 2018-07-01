@@ -1,55 +1,55 @@
 @import '../variables';
 
 .deal-details .tabs__title {
-  border-width: 0 0 1px 0;
+    border-width: 0 0 1px 0;
 }
 
 .tabs {
-  border-bottom: 4px solid $color-blue;
-  display: flex;
-  justify-content: center;
-
-  &--no-bottom-border {
-    border-bottom: 0;
-  }
-
-  &__title {
-    border: 1px solid $color-grey;
-    font-weight: bold;
-    padding: 0.25em;
-    text-align: center;
-  }
-
-  &__tab {
-    border: 1px solid #fff;
-    border-width: 0 1px;
-    background: $color-lighter-blue;
-    color: $color-darkergrey;
-    cursor: pointer;
-    flex: 1;
-    font-size: small;
-    padding: 0.35em 0.25em 0.25em 0.25em;
-    text-align: center;
-    text-transform: uppercase;
-
-    &--selected {
-      background: $color-blue;
-      color: #fff;
-    }
-
-    &:first-child {
-      border-left-width: 0;
-    }
-
-    &:last-child {
-      border-right-width: 0;
-    }
-  }
-
-  &__content {
+    border-bottom: 4px solid $color-blue;
     display: flex;
-    flex-wrap: wrap;
-    padding: 10px 0;
-    width: 100%;
-  }
+    justify-content: center;
+
+    &--no-bottom-border {
+        border-bottom: 0;
+    }
+
+    &__title {
+        border: 1px solid $color-grey;
+        font-weight: bold;
+        padding: 0.25em;
+        text-align: center;
+    }
+
+    &__tab {
+        border: 1px solid #fff;
+        border-width: 0 1px;
+        background: $color-lighter-blue;
+        color: $color-darkergrey;
+        cursor: pointer;
+        flex: 1;
+        font-size: small;
+        padding: 0.35em 0.25em 0.25em 0.25em;
+        text-align: center;
+        text-transform: uppercase;
+
+        &--selected {
+            background: $color-blue;
+            color: #fff;
+        }
+
+        &:first-child {
+            border-left-width: 0;
+        }
+
+        &:last-child {
+            border-right-width: 0;
+        }
+    }
+
+    &__content {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 10px 0;
+        width: 100%;
+    }
 }

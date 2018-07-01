@@ -2,42 +2,41 @@
 @import '../mixins/selector-icon';
 
 .filter-selector {
-  &__selector {
-    cursor: pointer;
-    display: flex;
-    padding: 5px;
+    &__selector {
+        cursor: pointer;
+        display: flex;
+        padding: 5px;
 
-    &:first-child {
-      margin-top: 0.5em;
+        &:first-child {
+            margin-top: 0.5em;
+        }
+
+        &:last-child {
+            border-bottom: 0;
+        }
+
+        &--selected {
+            background: $color-left-filter-selected;
+        }
     }
 
-    &:last-child {
-      border-bottom: 0;
+    &__checkbox {
+        @include selector-icon;
+        background-color: $color-text-white;
+        margin-left: 0.5em;
+        fill: black;
     }
 
-    &--selected {
-      background: $color-left-filter-selected;
+    &__radio {
+        @include selector-icon;
+        margin-left: 0.5em;
+
+        &--selected::before {
+            background: $color-text-white;
+            border-radius: 1px;
+            content: '';
+            height: 100%;
+            width: 100%;
+        }
     }
-  }
-
-  &__checkbox {
-    @include selector-icon;
-    background-color: $color-text-white;
-    margin-left: 0.5em;
-    fill: black;
-
-  }
-
-  &__radio {
-    @include selector-icon;
-    margin-left: 0.5em;
-
-    &--selected::before {
-      background: $color-text-white;
-      border-radius: 1px;
-      content: '';
-      height: 100%;
-      width: 100%;
-    }
-  }
 }

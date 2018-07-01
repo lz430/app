@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'WelcomeController@index')->name('home');
 Route::get('filter', 'FilterController@index')->name('filter');
-Route::get('browse', 'BrowseController@index')->name('browse');
 Route::get('compare', 'CompareController@index')->name('compare');
 
 Route::get('deals/{id}', 'DealsController@show')->name('deals.show');

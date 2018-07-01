@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Services\Search\ModelYearSearch;
 use Illuminate\Http\Request;
+use App\Transformers\ESResponseTransformer;
+use League\Fractal\Serializer\ArraySerializer;
 
 class DealsByModelYearController extends BaseAPIController
 {
@@ -20,6 +22,10 @@ class DealsByModelYearController extends BaseAPIController
 
         $query = new ModelYearSearch();
 
+        $query = $query
+            ->addFeatureAggs()
+            ->addMakeAndStyleAgg();
+
         if ($request->get('latitude') && $request->get('longitude')) {
             $query = $query->filterMustLocation(['lat' => $request->get('latitude'), 'lon' => $request->get('longitude')]);
         }
@@ -29,7 +35,7 @@ class DealsByModelYearController extends BaseAPIController
         }
 
         if ($request->get('make_ids')) {
-            $query = $query->filterMustMakes($request->get('make_ids'), 'name');
+            $query = $query->filterMustMakes($request->get('make_ids'));
         }
 
         if ($request->get('features')) {
@@ -37,6 +43,14 @@ class DealsByModelYearController extends BaseAPIController
         }
 
         $results = $query->get();
-        return $results;
+
+        return fractal()
+            ->item(['response' => $results,
+                'meta' => [
+                    'entity' => 'model',
+                ]])
+            ->transformWith(ESResponseTransformer::class)
+            ->serializeWith(new ArraySerializer)
+            ->respond();
     }
 }

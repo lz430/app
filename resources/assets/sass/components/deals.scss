@@ -3,68 +3,72 @@
 @import '../mixins/input';
 
 .deals {
-  background: $color-background-primary;
-  display: flex ;
-  flex-flow: row wrap;
-  height: calc(100vh - #{$footer-height});
-  justify-content: center;
-  overflow-y: scroll;
-  padding: 2px;
-  padding-bottom: 15px;
-
-  @media (min-width: $break-small) {
-    height: calc(100vh - #{$nav-height + $sortbar-height});
-    padding: 10px 40px 20px;
-  }
-
-  @media (min-width: $break-medium) {
-    height: calc(100vh - #{$header-height + $sortbar-height + $filterbar-height + $compare-bar-height});
-
-    &.no-compare {
-      height: calc(100vh - #{$header-height + $sortbar-height + $filterbar-height});
-    }
-  }
-
-  &__no-matches {
+    background: $color-background-primary;
     display: flex;
-    font-size: 1.5em;
+    flex-flow: row wrap;
+    height: calc(100vh - #{$footer-height});
     justify-content: center;
-    flex-flow: column;
-    margin: .5rem auto;
-    text-align: center;
-    width: 85%;
+    overflow-y: scroll;
+    padding: 2px;
+    padding-bottom: 15px;
 
     @media (min-width: $break-small) {
-      margin: 1rem auto;
-      width: 70%;
+        height: calc(100vh - #{$nav-height + $sortbar-height});
+        padding: 10px 40px 20px;
     }
-  }
 
-  &__show-more {
-    padding-top: 15px;
-    text-align: center;
-    width: 100%;
-  }
+    @media (min-width: $break-medium) {
+        height: calc(
+            100vh - #{$header-height + $sortbar-height + $filterbar-height +
+                $compare-bar-height}
+        );
 
-  &__button {
-    @include button;
-
-    &--zip {
-      margin: 1em auto;
-      width: 50%;
+        &.no-compare {
+            height: calc(
+                100vh - #{$header-height + $sortbar-height + $filterbar-height}
+            );
+        }
     }
-  }
 
-  &__input {
-    @include input;
-    font-size: 0.6em;
-    margin-right: 1rem;
-    width: 70%;
-  }
+    &__no-matches {
+        display: flex;
+        font-size: 1.5em;
+        justify-content: center;
+        flex-flow: column;
+        margin: 0.5rem auto;
+        text-align: center;
+        width: 85%;
 
-  &__title {
-    text-align: center;
-    width: 100%;
-  }
+        @media (min-width: $break-small) {
+            margin: 1rem auto;
+            width: 70%;
+        }
+    }
 
+    &__show-more {
+        padding-top: 15px;
+        text-align: center;
+        width: 100%;
+    }
+
+    &__button {
+        @include button;
+
+        &--zip {
+            margin: 1em auto;
+            width: 50%;
+        }
+    }
+
+    &__input {
+        @include input;
+        font-size: 0.6em;
+        margin-right: 1rem;
+        width: 70%;
+    }
+
+    &__title {
+        text-align: center;
+        width: 100%;
+    }
 }

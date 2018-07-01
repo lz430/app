@@ -4,20 +4,25 @@ import R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
-class FilterFeatureSelector extends React.PureComponent {
+class FilterFeatureList extends React.PureComponent {
     static propTypes = {
         features: PropTypes.arrayOf(
             PropTypes.shape({
-                attributes: PropTypes.shape({
-                    title: PropTypes.string.isRequired,
-                }),
+                label: PropTypes.string.isRequired,
+                value: PropTypes.string.isRequired,
+                count: PropTypes.number.isRequired,
             }).isRequired
-        ).isRequired,
+        ),
+
         selectedFeatures: PropTypes.arrayOf(PropTypes.string).isRequired,
-        onSelectFeature: PropTypes.func.isRequired,
+        onToggleFeature: PropTypes.func.isRequired,
     };
 
     render() {
+        if (!this.props.features) {
+            return <div />;
+        }
+
         return (
             <div className="filter-selector">
                 {this.props.features.map((feature, index) => {
@@ -25,13 +30,13 @@ class FilterFeatureSelector extends React.PureComponent {
                         <div
                             key={index}
                             className="filter-selector__selector"
-                            onClick={this.props.onSelectFeature.bind(
+                            onClick={this.props.onToggleFeature.bind(
                                 null,
-                                feature.attributes.title
+                                feature.label
                             )}
                         >
                             {R.contains(
-                                feature.attributes.title,
+                                feature.value,
                                 this.props.selectedFeatures
                             ) ? (
                                 <SVGInline
@@ -43,7 +48,7 @@ class FilterFeatureSelector extends React.PureComponent {
                             ) : (
                                 <div className="filter-selector__checkbox" />
                             )}
-                            {feature.attributes.title}
+                            {feature.label}
                         </div>
                     );
                 })}
@@ -52,4 +57,4 @@ class FilterFeatureSelector extends React.PureComponent {
     }
 }
 
-export default FilterFeatureSelector;
+export default FilterFeatureList;

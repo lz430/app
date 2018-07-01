@@ -7,23 +7,16 @@ export function requestSearch() {
     };
 }
 
+export function receiveSearch(results) {
+    return {
+        type: ActionTypes.SEARCH_RECEIVE,
+        data: results,
+    };
+}
+
 export function initDealListData() {
     return {
         type: ActionTypes.INIT,
-    };
-}
-
-export function receiveBodyStyles(deals) {
-    return {
-        type: ActionTypes.RECEIVE_BODY_STYLES,
-        data: deals,
-    };
-}
-
-export function receiveMakes(data) {
-    return {
-        type: ActionTypes.RECEIVE_MAKES,
-        data: data,
     };
 }
 

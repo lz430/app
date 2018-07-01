@@ -11,8 +11,6 @@ const urlSize = util.getInitialSizeFromUrl();
 
 const initialState = {
     featureCategories: [],
-    bodyStyles: null,
-    makes: null,
     models: null,
     features: null,
     searchFeatures: [],
@@ -36,6 +34,8 @@ const initialState = {
     deals: [],
     requestingMoreDeals: false,
     loadingSearchResults: true,
+    meta: {},
+    filters: {},
 };
 
 const persistConfig = {
@@ -48,6 +48,8 @@ const persistConfig = {
         'modelYears',
         'loadingSearchResults',
         'page',
+        'meta',
+        'filters',
     ],
 };
 
@@ -72,18 +74,6 @@ const reducer = function(state = initialState, action = {}) {
 
         case ActionTypes.INIT:
             return state;
-
-        case ActionTypes.RECEIVE_MAKES:
-            return {
-                ...state,
-                makes: action.data.data.data,
-            };
-
-        case ActionTypes.RECEIVE_BODY_STYLES:
-            return {
-                ...state,
-                bodyStyles: action.data.data.data,
-            };
 
         case ActionTypes.RECEIVE_FEATURES:
             return {
@@ -112,8 +102,14 @@ const reducer = function(state = initialState, action = {}) {
             };
 
         case ActionTypes.SEARCH_RECEIVE:
+            if (!action.data) {
+                return state;
+            }
+
             return {
                 ...state,
+                meta: action.data.meta,
+                filters: action.data.filters,
             };
 
         case ActionTypes.SEARCH_LOADING_START:
@@ -135,13 +131,11 @@ const reducer = function(state = initialState, action = {}) {
                 deals.push(...state.deals);
             }
 
-            deals.push(...action.data.data.data);
+            deals.push(...action.data.results);
 
             return {
                 ...state,
                 deals: deals,
-                dealPageTotal: action.data.data.meta.pagination.total_pages,
-                dealPage: action.data.data.meta.pagination.current_page,
                 requestingMoreDeals: false,
             };
 
@@ -149,7 +143,7 @@ const reducer = function(state = initialState, action = {}) {
             return {
                 ...state,
                 requestingMoreDeals: false,
-                modelYears: action.data.data,
+                modelYears: action.data.results,
             };
 
         case ActionTypes.CLEAR_MODEL_YEAR:

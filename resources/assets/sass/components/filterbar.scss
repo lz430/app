@@ -2,54 +2,54 @@
 @import '../variables';
 
 .filterbar {
-  align-items: center;
-  border-bottom: 1px solid $color-section-bottom-border;
-  display: none;
-  height: $filterbar-height;
-  max-height: $filterbar-height;
-  padding: 15px;
-  padding-right: 40px;
-  padding-left: 40px;
-
-  @media (min-width: $break-medium) {
-    display: flex;
-  }
-
-  &__filter-icon {
-    fill: $color-sidebar-background-primary;
-    height: 20px;
-    margin-right: 5px;
-    width: 20px;
-  }
-
-  &__filters {
     align-items: center;
-    display: flex;
-    margin-right: 5px;
-    overflow-x: auto;
-  }
+    border-bottom: 1px solid $color-section-bottom-border;
+    display: none;
+    height: $filterbar-height;
+    max-height: $filterbar-height;
+    padding: 15px;
+    padding-right: 40px;
+    padding-left: 40px;
 
-  &__filter {
-    background: $color-background-primary;
-    // cursor: pointer; // temporarily removed because functionality broken
-    margin: 5px;
-    padding: 3px 8px;
-    white-space: nowrap;
-  }
+    @media (min-width: $break-medium) {
+        display: flex;
+    }
 
-  &__filter-x {
-    fill: $text-color;
-    padding: 3px;
-    stroke: darken($text-color, 10%);
-    stroke-width: 2;
-  }
+    &__filter-icon {
+        fill: $color-sidebar-background-primary;
+        height: 20px;
+        margin-right: 5px;
+        width: 20px;
+    }
 
-  &__clear {
-    color: $color-blue;
-    cursor: pointer;
-    font-size: small;
-    margin-left: auto;
-    text-align: right;
-    white-space: nowrap;
-  }
+    &__filters {
+        align-items: center;
+        display: flex;
+        margin-right: 5px;
+        overflow-x: auto;
+    }
+
+    &__filter {
+        background: $color-background-primary;
+        // cursor: pointer; // temporarily removed because functionality broken
+        margin: 5px;
+        padding: 3px 8px;
+        white-space: nowrap;
+    }
+
+    &__filter-x {
+        fill: $text-color;
+        padding: 3px;
+        stroke: darken($text-color, 10%);
+        stroke-width: 2;
+    }
+
+    &__clear {
+        color: $color-blue;
+        cursor: pointer;
+        font-size: small;
+        margin-left: auto;
+        text-align: right;
+        white-space: nowrap;
+    }
 }

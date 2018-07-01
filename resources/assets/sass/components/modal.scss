@@ -7,152 +7,153 @@ $modal-header-height: 100px;
 $modal-footer-height: 60px;
 
 .modal {
-  &__sticker-container {
-    background-color: $color-text-white;
-  }
-
-  &__sticker {
-    background-color: $color-darkestgrey;
-    color: $color-text-white;
-    margin: 0 auto;
-    text-align: center;
-    width: 150px;
-  }
-
-  &__overlay {
-    background: $color-black;
-    height: 100vh;
-    left: 0;
-    opacity: 0.5;
-    position: fixed;
-    top: 0;
-    width: 100vw;
-    z-index: 20;
-  }
-
-  &__wrapper {
-    display: flex;
-    justify-content: center;
-    position: fixed;
-    right: 0;
-    top: $modal-footer-height;
-    width: 100vw;
-    z-index: 25;
-
-    @media (min-width: $break-small) {
-      max-height: calc(100vh - #{$offset-top});
-    }
-  }
-
-  &__content {
-    background-color: $color-background-primary;
-    max-height: 100%;
-    opacity: 1;
-    width: 100%;
-    max-width: calc(100vw - #{$offset-horizontal / 2});
-
-    @media (min-width: $break-small) {
-      width: auto;
-      max-width: calc(100vw - #{$offset-horizontal * 2});
-    }
-  }
-
-  &__header {
-    background-color: $color-background-secondary;
-    display: flex;
-    height: $modal-header-height;
-    padding: 20px;
-    position: relative;
-  }
-
-  &__body {
-    max-height: calc(100vh - #{$offset-top + $modal-header-height + $modal-footer-height});
-    overflow-x: hidden;
-
-    &::-webkit-scrollbar {
-      -webkit-appearance: none;
-      margin-right: 10px;
-      width: 9px;
+    &__sticker-container {
+        background-color: $color-text-white;
     }
 
-    &::-webkit-scrollbar-thumb {
-      background-clip: padding-box;
-      background-color: rgba(0,0,0,0.5);
-      border: 1px solid rgba(0, 0, 0, 0);
-      border-radius: 4px;
-      margin-right: 10px;
+    &__sticker {
+        background-color: $color-darkestgrey;
+        color: $color-text-white;
+        margin: 0 auto;
+        text-align: center;
+        width: 150px;
     }
 
-    &::-webkit-scrollbar-corner {
-      background-color: transparent;
+    &__overlay {
+        background: $color-black;
+        height: 100vh;
+        left: 0;
+        opacity: 0.5;
+        position: fixed;
+        top: 0;
+        width: 100vw;
+        z-index: 20;
     }
 
-    &--no-header {
-      max-height: calc(100vh - #{$offset-top + $modal-footer-height});
+    &__wrapper {
+        display: flex;
+        justify-content: center;
+        position: fixed;
+        right: 0;
+        top: $modal-footer-height;
+        width: 100vw;
+        z-index: 25;
+
+        @media (min-width: $break-small) {
+            max-height: calc(100vh - #{$offset-top});
+        }
     }
 
-    &--no-footer {
-      max-height: calc(100vh - #{$offset-top + $modal-header-height});
+    &__content {
+        background-color: $color-background-primary;
+        max-height: 100%;
+        opacity: 1;
+        width: 100%;
+        max-width: calc(100vw - #{$offset-horizontal / 2});
+
+        @media (min-width: $break-small) {
+            width: auto;
+            max-width: calc(100vw - #{$offset-horizontal * 2});
+        }
     }
-  }
 
-  &__footer {
-    background-color: $color-background-secondary;
-    border-top: 1px solid $color-section-bottom-border;
-    display: flex;
-    height: $modal-footer-height;
-    justify-content: center;
-    padding: 10px;
-  }
-
-  &__titles {
-
-    &--center {
-      margin: 0 auto;
-    }
-  }
-
-  &__title {
-    color: $color-blue;
-    font-size: 1.4rem;
-
-    &--center {
-      text-align: center;
-    }
-  }
-
-  &__subtitle {
-    &--center {
-      text-align: center;
-    }
-  }
-
-  &__close {
-    position: absolute;
-    right: 15px;
-    top: 15px;
-
-    &--info {
-      display: flex;
-      justify-content: flex-end;
-
-      &--color-secondary {
+    &__header {
         background-color: $color-background-secondary;
-      }
+        display: flex;
+        height: $modal-header-height;
+        padding: 20px;
+        position: relative;
     }
-  }
 
-  &__close-x {
-    cursor: pointer;
-    fill: $text-color;
+    &__body {
+        max-height: calc(
+            100vh - #{$offset-top + $modal-header-height + $modal-footer-height}
+        );
+        overflow-x: hidden;
 
-    &--info {
-      margin-top: .5em;
-      margin-right: .5em;
+        &::-webkit-scrollbar {
+            -webkit-appearance: none;
+            margin-right: 10px;
+            width: 9px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-clip: padding-box;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0);
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        &::-webkit-scrollbar-corner {
+            background-color: transparent;
+        }
+
+        &--no-header {
+            max-height: calc(100vh - #{$offset-top + $modal-footer-height});
+        }
+
+        &--no-footer {
+            max-height: calc(100vh - #{$offset-top + $modal-header-height});
+        }
     }
-  }
 
-  &__close-button {
-    @include button;
-  }
+    &__footer {
+        background-color: $color-background-secondary;
+        border-top: 1px solid $color-section-bottom-border;
+        display: flex;
+        height: $modal-footer-height;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    &__titles {
+        &--center {
+            margin: 0 auto;
+        }
+    }
+
+    &__title {
+        color: $color-blue;
+        font-size: 1.4rem;
+
+        &--center {
+            text-align: center;
+        }
+    }
+
+    &__subtitle {
+        &--center {
+            text-align: center;
+        }
+    }
+
+    &__close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+
+        &--info {
+            display: flex;
+            justify-content: flex-end;
+
+            &--color-secondary {
+                background-color: $color-background-secondary;
+            }
+        }
+    }
+
+    &__close-x {
+        cursor: pointer;
+        fill: $text-color;
+
+        &--info {
+            margin-top: 0.5em;
+            margin-right: 0.5em;
+        }
+    }
+
+    &__close-button {
+        @include button;
+    }
 }

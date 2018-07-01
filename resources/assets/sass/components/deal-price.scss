@@ -1,98 +1,98 @@
 @import '../variables';
 
 .deal-price {
-  &__price {
-    margin-top: 3px;
-    text-align: center;
-    width: 100%;
-  }
-
-  &__cash-label {
-    font-size: x-small;
-    text-transform: uppercase;
-
-    @media (min-width: $break-small) {
-      font-size: small;
-    }
-  }
-
-  &__finance-lease-label {
-    font-size: x-small;
-
-    @media (min-width: $break-small) {
-      font-size: small;
-    }
-  }
-
-  &__cash-price {
-    display: flex;
-    font-size: x-large;
-    justify-content: center;
-    margin-bottom: -1.5rem;
-    margin-top: -10px;
-
-    @media (min-width: $break-small) {
-      font-size: xx-large;
-    }
-  }
-
-  &__finance-lease-price {
-    display: flex;
-    font-size: x-large;
-    justify-content: center;
-    margin-bottom: -1.5rem;
-    margin-top: -5px;
-
-    @media (min-width: $break-small) {
-      font-size: xx-large;
-      margin-top: -10px;
-    }
-  }
-
-  &__hr {
-    border-top: 1px solid $color-section-bottom-border;
-    display: inline-block;
-    height: 1px;
-    margin-bottom: -3px;
-    width: 7rem;
-  }
-
-  &__cash-msrp {
-    color: $color-darkgrey;
-    font-size: medium;
-
-    @media (min-width: $break-small) {
-      font-size: large;
-    }
-  }
-
-  &__cash-msrp-label {
-    font-size: xx-small;
-
-    @media (min-width: $break-small) {
-      font-size: x-small;
-    }
-  }
-
-  &__rebates-applied {
-    color: $color-darkgrey;
-    font-size: x-small;
-    margin-bottom: 10px;
-    margin-top: -5px;
-    text-align: center;
-    width: 100%;
-
-    @media (min-width: $break-small) {
-      font-size: small;
-      margin-top: -10px;
+    &__price {
+        margin-top: 3px;
+        text-align: center;
+        width: 100%;
     }
 
-    a {
-      color: $color-blue;
-    }
-  }
+    &__cash-label {
+        font-size: x-small;
+        text-transform: uppercase;
 
-  &__tag-icon {
-    margin-right: 5px;
-  }
+        @media (min-width: $break-small) {
+            font-size: small;
+        }
+    }
+
+    &__finance-lease-label {
+        font-size: x-small;
+
+        @media (min-width: $break-small) {
+            font-size: small;
+        }
+    }
+
+    &__cash-price {
+        display: flex;
+        font-size: x-large;
+        justify-content: center;
+        margin-bottom: -1.5rem;
+        margin-top: -10px;
+
+        @media (min-width: $break-small) {
+            font-size: xx-large;
+        }
+    }
+
+    &__finance-lease-price {
+        display: flex;
+        font-size: x-large;
+        justify-content: center;
+        margin-bottom: -1.5rem;
+        margin-top: -5px;
+
+        @media (min-width: $break-small) {
+            font-size: xx-large;
+            margin-top: -10px;
+        }
+    }
+
+    &__hr {
+        border-top: 1px solid $color-section-bottom-border;
+        display: inline-block;
+        height: 1px;
+        margin-bottom: -3px;
+        width: 7rem;
+    }
+
+    &__cash-msrp {
+        color: $color-darkgrey;
+        font-size: medium;
+
+        @media (min-width: $break-small) {
+            font-size: large;
+        }
+    }
+
+    &__cash-msrp-label {
+        font-size: xx-small;
+
+        @media (min-width: $break-small) {
+            font-size: x-small;
+        }
+    }
+
+    &__rebates-applied {
+        color: $color-darkgrey;
+        font-size: x-small;
+        margin-bottom: 10px;
+        margin-top: -5px;
+        text-align: center;
+        width: 100%;
+
+        @media (min-width: $break-small) {
+            font-size: small;
+            margin-top: -10px;
+        }
+
+        a {
+            color: $color-blue;
+        }
+    }
+
+    &__tag-icon {
+        margin-right: 5px;
+    }
 }

@@ -7,7 +7,7 @@ import { toggleSmallFiltersShown } from 'apps/common/actions';
 
 import PropTypes from 'prop-types';
 
-class FilterClose extends React.PureComponent {
+class MobileFilterClose extends React.PureComponent {
     static propTypes = {
         onToggleSmallFiltersShown: PropTypes.func.isRequired,
     };
@@ -42,4 +42,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(FilterClose);
+)(MobileFilterClose);

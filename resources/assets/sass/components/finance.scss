@@ -2,14 +2,14 @@
 @import '../mixins/input';
 
 .finance {
-  display: flex;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 
-  &__label {
-    //
-  }
+    &__label {
+        //
+    }
 
-  &__down-payment {
-    @include input;
-  }
+    &__down-payment {
+        @include input;
+    }
 }

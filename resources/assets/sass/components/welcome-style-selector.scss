@@ -2,60 +2,60 @@
 @import '../mixins/constrained';
 
 .welcome-style-selector {
-  $style-margin: 10px;
-  $style-width: 220px;
-  $style-height: 120px;
-  margin-top: 15px;
+    $style-margin: 10px;
+    $style-width: 220px;
+    $style-height: 120px;
+    margin-top: 15px;
 
-  @include constrained {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    text-align: center;
-  };
-
-  &__selectors {
-    display: flex;
-  }
-
-  &__style {
-    align-items: center;
-    border: 1px solid transparentize($color-text-white, .8);
-    border-radius: 4px;
-    color: $color-text-white;
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    height: $style-height;
-    margin: $style-margin;
-    max-height: $style-height;
-    max-width: $style-width;
-    min-width: $style-width;
-    stroke: $color-light-blue;
-    text-align: center;
-    text-decoration: none;
-    width: $style-width;
-
-    svg {
-      height: 49px;
-      margin-top: 20px;
-      width: 140px;
+    @include constrained {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
     }
 
-    svg path {
-      fill: $color-light-blue;
+    &__selectors {
+        display: flex;
     }
 
-    &:hover {
-      background: $color-blue;
+    &__style {
+        align-items: center;
+        border: 1px solid transparentize($color-text-white, 0.8);
+        border-radius: 4px;
+        color: $color-text-white;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        height: $style-height;
+        margin: $style-margin;
+        max-height: $style-height;
+        max-width: $style-width;
+        min-width: $style-width;
+        stroke: $color-light-blue;
+        text-align: center;
+        text-decoration: none;
+        width: $style-width;
 
-      svg path {
-        fill: $color-text-white;
-      }
+        svg {
+            height: 49px;
+            margin-top: 20px;
+            width: 140px;
+        }
+
+        svg path {
+            fill: $color-light-blue;
+        }
+
+        &:hover {
+            background: $color-blue;
+
+            svg path {
+                fill: $color-text-white;
+            }
+        }
     }
-  }
 
-  &__name {
-    margin-top: 14px;
-  }
+    &__name {
+        margin-top: 14px;
+    }
 }
