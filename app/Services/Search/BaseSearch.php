@@ -16,6 +16,7 @@ abstract class BaseSearch
         'safety_and_driver_assist' => 'safety_and_driver_assist.keyword',
         'seating_configuration' => 'seating_configuration.keyword',
         'seating' => 'seating.keyword',
+        'seat_materials' => 'seat_materials.keyword',
         'fuel_type' => 'fuel_type.keyword',
         'drive_train' => 'drive_train.keyword',
         'pickup' => 'pickup.keyword',

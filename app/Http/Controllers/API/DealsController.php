@@ -10,8 +10,6 @@ use League\Fractal\Serializer\ArraySerializer;
 
 class DealsController extends BaseAPIController
 {
-    private const RESOURCE_NAME = 'deals';
-
     public function getDeals(Request $request)
     {
         $this->validate($request, [
@@ -27,6 +25,7 @@ class DealsController extends BaseAPIController
         $query = new DealSearch();
 
         $query = $query
+            ->addFeatureAggs()
             ->addMakeAndStyleAgg();
 
         if ($request->get('latitude') && $request->get('longitude')) {

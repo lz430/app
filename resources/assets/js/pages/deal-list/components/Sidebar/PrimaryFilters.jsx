@@ -4,8 +4,8 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
 import SidebarFilter from './SidebarFilter';
-import FilterStyleSelector from './FilterStyleSelector';
-import FilterMakeSelector from './FilterMakeSelector';
+import FilterStyleList from './FilterStyleList';
+import FilterMakeList from './FilterMakeList';
 
 class PrimaryFilters extends React.PureComponent {
     static propTypes = {
@@ -69,7 +69,7 @@ class PrimaryFilters extends React.PureComponent {
                     title="Vehicle Style"
                     count={this.props.searchQuery.styles.length}
                 >
-                    <FilterStyleSelector
+                    <FilterStyleList
                         styles={this.props.filters.style}
                         selectedStyles={this.props.searchQuery.styles}
                         onSelectStyle={this.props.onToggleStyle}
@@ -85,7 +85,7 @@ class PrimaryFilters extends React.PureComponent {
                     title="Vehicle Brand"
                     count={this.props.searchQuery.makes.length}
                 >
-                    <FilterMakeSelector
+                    <FilterMakeList
                         makes={this.props.filters.make}
                         selectedMakes={this.props.searchQuery.makes}
                         onSelectMake={this.props.onToggleMake}

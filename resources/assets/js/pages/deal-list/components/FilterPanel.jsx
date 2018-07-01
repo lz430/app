@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import R from 'ramda';
 
 import ZipcodeFinder from './Sidebar/ZipcodeFinder';
 import PrimaryFilters from './Sidebar/PrimaryFilters';
-import SidebarFilter from './Sidebar/SidebarFilter';
+import SecondaryFilters from './Sidebar/SecondaryFilters';
 import MobileFilterClose from './Sidebar/MobileFilterClose';
-
-import FilterFeatureSelector from './Sidebar/FilterFeatureSelector';
 
 import util from 'src/util';
 
@@ -26,6 +23,7 @@ class FilterPanel extends React.PureComponent {
         onClearModelYear: PropTypes.func.isRequired,
         onToggleStyle: PropTypes.func.isRequired,
         onToggleMake: PropTypes.func.isRequired,
+        onToggleFeature: PropTypes.func.isRequired,
     };
 
     state = {
@@ -34,88 +32,7 @@ class FilterPanel extends React.PureComponent {
         sizeFeatures: [],
     };
 
-    componentWillReceiveProps() {
-        this.props.featureCategories.map((category, index) => {
-            let features = this.props.searchFeatures.filter(feature => {
-                let categoryFeatures = category.relationships.features.data.map(
-                    categoryFeature => {
-                        return categoryFeature.id;
-                    }
-                );
-
-                return categoryFeatures.includes(feature.id);
-            });
-
-            if (category.attributes.slug === 'vehicle_size') {
-                this.setState({
-                    sizeCategory: category,
-                    sizeFeatures: features,
-                });
-
-                return;
-            }
-        });
-    }
-
-    toggleOpenFilter(openFilter) {
-        this.setState({
-            openFilter:
-                this.state.openFilter && this.state.openFilter === openFilter
-                    ? null
-                    : openFilter,
-        });
-    }
-
-    renderSidebarFilters() {
-        return this.props.featureCategories.map((category, index) => {
-            if (category.attributes.slug === 'vehicle_size') {
-                return;
-            }
-
-            let features = this.props.searchFeatures.filter(feature => {
-                let categoryFeatures = category.relationships.features.data.map(
-                    categoryFeature => {
-                        return categoryFeature.id;
-                    }
-                );
-
-                return categoryFeatures.includes(feature.id);
-            });
-
-            let localSelectedFeatures = features.filter(feature => {
-                return R.contains(
-                    feature.attributes.title,
-                    this.props.searchQuery.features
-                );
-            });
-            return (
-                <SidebarFilter
-                    key={index}
-                    toggle={() =>
-                        this.toggleOpenFilter(category.attributes.title)
-                    }
-                    open={true}
-                    canToggle={false}
-                    title={category.attributes.title}
-                    count={localSelectedFeatures.length}
-                >
-                    <FilterFeatureSelector
-                        selectedFeatures={this.props.searchQuery.features}
-                        features={features}
-                        onSelectFeature={this.props.onToggleFeature}
-                    />
-                </SidebarFilter>
-            );
-        });
-    }
-
     render() {
-        let selectedSizeFeatures = this.state.sizeFeatures.filter(feature => {
-            return R.contains(
-                feature.attributes.title,
-                this.props.searchQuery.features
-            );
-        });
         return (
             <div>
                 {util.windowIsLargerThanSmall(
@@ -127,6 +44,7 @@ class FilterPanel extends React.PureComponent {
                 {/*
                 Location
                 */}
+
                 <ZipcodeFinder />
 
                 <div className="sidebar-filters">
@@ -155,7 +73,11 @@ class FilterPanel extends React.PureComponent {
                         <div className="sidebar-filters__section-header sidebar-filters__filter-title">
                             <p>Features & Options</p>
                         </div>
-                        {this.renderSidebarFilters()}
+                        <SecondaryFilters
+                            searchQuery={this.props.searchQuery}
+                            filters={this.props.filters}
+                            onToggleFeature={this.props.onToggleFeature}
+                        />
                     </div>
                 </div>
             </div>
@@ -166,12 +88,6 @@ class FilterPanel extends React.PureComponent {
 const mapStateToProps = state => {
     return {
         filters: state.pages.dealList.filters,
-        makes: state.pages.dealList.filters.make,
-        models: state.pages.dealList.models,
-        bodyStyles: state.pages.dealList.filters.style,
-        features: state.pages.dealList.features,
-        featureCategories: state.pages.dealList.featureCategories,
-        searchFeatures: state.pages.dealList.searchFeatures,
         window: state.common.window,
         searchQuery: state.pages.dealList.searchQuery,
     };

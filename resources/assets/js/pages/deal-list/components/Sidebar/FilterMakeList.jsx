@@ -4,7 +4,7 @@ import R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 
-class FilterMakeSelector extends React.PureComponent {
+class FilterMakeList extends React.PureComponent {
     static propTypes = {
         makes: PropTypes.arrayOf(
             PropTypes.shape({
@@ -32,7 +32,7 @@ class FilterMakeSelector extends React.PureComponent {
         return (
             <div
                 className={className}
-                key={make.name}
+                key={make.value}
                 onClick={this.props.onSelectMake.bind(null, make.value)}
             >
                 <div className="filter-make-selector__name">{make.label}</div>
@@ -55,4 +55,4 @@ class FilterMakeSelector extends React.PureComponent {
     }
 }
 
-export default FilterMakeSelector;
+export default FilterMakeList;

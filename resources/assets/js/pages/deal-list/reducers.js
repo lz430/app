@@ -75,18 +75,6 @@ const reducer = function(state = initialState, action = {}) {
         case ActionTypes.INIT:
             return state;
 
-        case ActionTypes.RECEIVE_MAKES:
-            return {
-                ...state,
-                makes: action.data.data.data,
-            };
-
-        case ActionTypes.RECEIVE_BODY_STYLES:
-            return {
-                ...state,
-                bodyStyles: action.data.data.data,
-            };
-
         case ActionTypes.RECEIVE_FEATURES:
             return {
                 ...state,

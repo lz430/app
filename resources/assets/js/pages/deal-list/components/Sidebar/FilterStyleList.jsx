@@ -5,7 +5,7 @@ import SVGInline from 'react-svg-inline';
 import bodyStyleIcons from 'body-styles';
 import miscicons from 'miscicons';
 
-class FilterStyleSelector extends React.PureComponent {
+class FilterStyleList extends React.PureComponent {
     static propTypes = {
         styles: PropTypes.arrayOf(
             PropTypes.shape({
@@ -35,7 +35,7 @@ class FilterStyleSelector extends React.PureComponent {
             <div
                 className={className}
                 onClick={this.props.onSelectStyle.bind(null, style.value)}
-                key={style.style}
+                key={style.value}
             >
                 {bodyStyleIcons[style.icon] ? (
                     <SVGInline
@@ -67,4 +67,4 @@ class FilterStyleSelector extends React.PureComponent {
     }
 }
 
-export default FilterStyleSelector;
+export default FilterStyleList;

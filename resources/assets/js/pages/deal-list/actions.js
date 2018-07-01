@@ -20,20 +20,6 @@ export function initDealListData() {
     };
 }
 
-export function receiveBodyStyles(deals) {
-    return {
-        type: ActionTypes.RECEIVE_BODY_STYLES,
-        data: deals,
-    };
-}
-
-export function receiveMakes(data) {
-    return {
-        type: ActionTypes.RECEIVE_MAKES,
-        data: data,
-    };
-}
-
 export function receiveFeatures(data) {
     return {
         type: ActionTypes.RECEIVE_FEATURES,
