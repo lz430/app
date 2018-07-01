@@ -1,21 +1,21 @@
 @import '../variables';
 
 .range-slider {
-  display: flex;
-  width: 100%;
+    display: flex;
+    width: 100%;
 
-  &__slider {
-    flex: 1;
-  }
+    &__slider {
+        flex: 1;
+    }
 
-  &__badge {
-    background-color: $color-grey;
-    border-radius: 20px;
-    color: $text-color-dark;
-    font-size: smaller;
-    height: 20px;
-    margin-left: 5px;
-    padding: 0 10px 0 25px;
-    text-align: right;
-  }
+    &__badge {
+        background-color: $color-grey;
+        border-radius: 20px;
+        color: $text-color-dark;
+        font-size: smaller;
+        height: 20px;
+        margin-left: 5px;
+        padding: 0 10px 0 25px;
+        text-align: right;
+    }
 }

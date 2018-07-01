@@ -2,126 +2,124 @@
 @import '../mixins/button';
 
 .deals .deal {
-  border-radius: 0.25rem;
-  padding: 0.5rem;
-  border: 1px solid #ced4d9;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    border: 1px solid #ced4d9;
 }
 
 .deal {
-  background-color: $color-background-secondary;
-  height: fit-content;
-  margin: 3px;
-  width: calc(50% - 6px);
-
-  @media (min-width: $break-small) {
-    max-width: $deal-card-width;
-    min-width: $deal-card-width;
-    margin: $deal-card-margin;
-  }
-
-  &__basic-info {
-    margin-bottom : 0.5rem;
-
-  }
-
-  &__basic-info-year-and-model {
-    color: $color-blue;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 1.1rem;
-    line-height: 1.3rem;
-    text-decoration: none;
-  }
-
-  &__basic-info-year-and-make {
-    color: $color-darkergrey;
-    font-size: x-small;
-    margin-bottom: 2px;
+    background-color: $color-background-secondary;
+    height: fit-content;
+    margin: 3px;
+    width: calc(50% - 6px);
 
     @media (min-width: $break-small) {
-      font-size: small;
-    }
-  }
-
-  &__basic-info-model-and-series {
-    color: $color-darkestgrey;
-    font-size: large;
-    @media (min-width: $break-small) {
-      font-size: x-large;
-    }
-  }
-
-  &__basic-info-color {
-    color: $color-darkergrey;
-    font-size: x-small;
-    margin-top: 2px;
-    @media (min-width: $break-small) {
-      font-size: small;
-    }
-  }
-
-  &__basic-info-msrp {
-    color: $text-color-dark;
-    display: block;
-    font-size: 1.15rem;
-  }
-
-  &__image {
-    border-bottom: 0;
-    display: block;
-    width: 100%;
-
-    @media (min-width: $break-small) {
-      height: 225px;
-      min-height: 225px;
+        max-width: $deal-card-width;
+        min-width: $deal-card-width;
+        margin: $deal-card-margin;
     }
 
-    &--fallback {
-      padding: 25px;
+    &__basic-info {
+        margin-bottom: 0.5rem;
     }
 
-  }
-
-  &__buttons {
-    display: flex;
-    justify-content: space-around;
-    margin: 5px 0 0.5rem;
-  }
-
-  &__button {
-    @include button;
-    flex: 1;
-    justify-content: center;
-    margin: 0 5px;
-
-    &--x-small {
-      font-size: 0.8rem;
-      padding: 4px 0px;
-
-      @media (min-width: $break-small) {
-        padding: 10px 15px;
-      }
-
-      &--as-link {
-        padding: 0;
-        text-decoration: underline;
-      }
+    &__basic-info-year-and-model {
+        color: $color-blue;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 1.1rem;
+        line-height: 1.3rem;
+        text-decoration: none;
     }
 
-    &--small {
-      font-size: 0.8rem;
-      padding: 10px 15px;
+    &__basic-info-year-and-make {
+        color: $color-darkergrey;
+        font-size: x-small;
+        margin-bottom: 2px;
 
-      &--as-link {
-        padding: 0;
-        text-decoration: underline;
-      }
+        @media (min-width: $break-small) {
+            font-size: small;
+        }
     }
-  }
 
-  &__button[disabled],
-  &__button:disabled {
-    cursor: default;
-    opacity: .25;
-  }
+    &__basic-info-model-and-series {
+        color: $color-darkestgrey;
+        font-size: large;
+        @media (min-width: $break-small) {
+            font-size: x-large;
+        }
+    }
+
+    &__basic-info-color {
+        color: $color-darkergrey;
+        font-size: x-small;
+        margin-top: 2px;
+        @media (min-width: $break-small) {
+            font-size: small;
+        }
+    }
+
+    &__basic-info-msrp {
+        color: $text-color-dark;
+        display: block;
+        font-size: 1.15rem;
+    }
+
+    &__image {
+        border-bottom: 0;
+        display: block;
+        width: 100%;
+
+        @media (min-width: $break-small) {
+            height: 225px;
+            min-height: 225px;
+        }
+
+        &--fallback {
+            padding: 25px;
+        }
+    }
+
+    &__buttons {
+        display: flex;
+        justify-content: space-around;
+        margin: 5px 0 0.5rem;
+    }
+
+    &__button {
+        @include button;
+        flex: 1;
+        justify-content: center;
+        margin: 0 5px;
+
+        &--x-small {
+            font-size: 0.8rem;
+            padding: 4px 0px;
+
+            @media (min-width: $break-small) {
+                padding: 10px 15px;
+            }
+
+            &--as-link {
+                padding: 0;
+                text-decoration: underline;
+            }
+        }
+
+        &--small {
+            font-size: 0.8rem;
+            padding: 10px 15px;
+
+            &--as-link {
+                padding: 0;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    &__button[disabled],
+    &__button:disabled {
+        cursor: default;
+        opacity: 0.25;
+    }
 }

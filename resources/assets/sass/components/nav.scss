@@ -3,90 +3,88 @@
 @import '../mixins/button';
 
 .nav {
-  background-color: $color-background-secondary;
-  border-top: 4px solid $color-blue;
+    background-color: $color-background-secondary;
+    border-top: 4px solid $color-blue;
 
-  @media (min-width: $break-small) {
-    min-height: $nav-height;
-  }
-
-  @include constrained {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-  };
-
-  &__logo {
-    align-items: center;
-    display: flex;
-
-    img {
-      max-width: 175px;
-      @media (min-width: $break-small) {
-        max-width: unset;
-        height: 70px;
-      }
-    }
-  }
-
-  &__links {
-    display: none;
-
-    @media (min-width: $break-medium) {
-      display: flex;
+    @media (min-width: $break-small) {
+        min-height: $nav-height;
     }
 
-    a {
-      color: $color-darkergrey;
-      padding: 0 1em;
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
+    @include constrained {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
     }
 
-    &-mobile {
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      transition: height 0.35s ease-out;
-      height: auto;
-      a {
-        color: $color-darkergrey;
-        padding: 1em;
-        text-decoration: none;
-        border-top: 1px solid $color-grey;
+    &__logo {
+        align-items: center;
+        display: flex;
 
-        &:hover {
-          text-decoration: underline;
+        img {
+            max-width: 175px;
+            @media (min-width: $break-small) {
+                max-width: unset;
+                height: 70px;
+            }
         }
-      }
-    }
-  }
-
-  &__icon{
-    margin: 0.75rem;
-    display: block;
-    background: none;
-    border: none;
-
-    @media (min-width: $break-medium) {
-      display: none;
     }
 
-    svg {
-      width: 18px;
+    &__links {
+        display: none;
+
+        @media (min-width: $break-medium) {
+            display: flex;
+        }
+
+        a {
+            color: $color-darkergrey;
+            padding: 0 1em;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        &-mobile {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: height 0.35s ease-out;
+            height: auto;
+            a {
+                color: $color-darkergrey;
+                padding: 1em;
+                text-decoration: none;
+                border-top: 1px solid $color-grey;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
     }
 
-    &:focus {
-      outline:0;
+    &__icon {
+        margin: 0.75rem;
+        display: block;
+        background: none;
+        border: none;
+
+        @media (min-width: $break-medium) {
+            display: none;
+        }
+
+        svg {
+            width: 18px;
+        }
+
+        &:focus {
+            outline: 0;
+        }
     }
 
-  }
-
-  .hidden {
-    display: none;
-  }
-
+    .hidden {
+        display: none;
+    }
 }

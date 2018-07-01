@@ -2,114 +2,113 @@
 @import '../mixins/button';
 
 .modelyears {
-  @extend .deals;
+    @extend .deals;
 }
 .modelyears .modelyear {
-  border-radius: 0.25rem;
-  padding: 0.5rem;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
 }
 
 .compare-page .modelyear {
-  border: none;
+    border: none;
 }
 
 .modelyear {
-  background-color: $color-background-secondary;
-  border: 1px solid $color-grey;
-  height: fit-content;
-  margin: 3px;
-  width: calc(50% - 6px);
-
-  @media (min-width: $break-small) {
-    max-width: $modelyear-card-width;
-    min-width: $modelyear-card-width;
-    margin: $modelyear-card-margin;
-  }
-
-  &__basic-info {
-    margin-bottom : 0.5rem;
-  }
-
-  &__basic-info-year-and-make {
-    color: $color-darkergrey;
-    font-size: x-small;
-    margin-bottom: 2px;
+    background-color: $color-background-secondary;
+    border: 1px solid $color-grey;
+    height: fit-content;
+    margin: 3px;
+    width: calc(50% - 6px);
 
     @media (min-width: $break-small) {
-      font-size: small;
-    }
-  }
-
-  &__basic-info-model-and-series {
-    color: $color-darkestgrey;
-    font-size: large;
-    @media (min-width: $break-small) {
-      font-size: x-large;
-    }
-  }
-
-  &__count {
-    color: $color-blue;
-    font-size: large;
-    flex-shrink: true;
-    @media (min-width: $break-small) {
-      font-size: x-large;
-    }
-  }
-
-  &__image {
-    border-bottom: 0;
-    display: block;
-    width: 100%;
-
-    @media (min-width: $break-small) {
-      height: 225px;
-      min-height: 225px;
+        max-width: $modelyear-card-width;
+        min-width: $modelyear-card-width;
+        margin: $modelyear-card-margin;
     }
 
-    &--fallback {
-      padding: 25px;
+    &__basic-info {
+        margin-bottom: 0.5rem;
     }
 
-  }
+    &__basic-info-year-and-make {
+        color: $color-darkergrey;
+        font-size: x-small;
+        margin-bottom: 2px;
 
-  &__buttons {
-    display: flex;
-    justify-content: space-around;
-    margin: 5px 0;
-  }
-
-  &__button {
-    @include button;
-    flex: 1;
-    justify-content: center;
-    width: 100%;
-
-    &--small {
-      font-size: 0.8rem;
-      padding: 10px 15px;
-    }
-  }
-
-  &__details {
-    align-items: flex-end;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-  }
-
-  &__price {
-    font-size: large;
-    text-align: right;
-
-    @media (min-width: $break-small) {
-      font-size: x-large;
+        @media (min-width: $break-small) {
+            font-size: small;
+        }
     }
 
-    &-label {
-      display: block;
-      font-size: x-small;
+    &__basic-info-model-and-series {
+        color: $color-darkestgrey;
+        font-size: large;
+        @media (min-width: $break-small) {
+            font-size: x-large;
+        }
     }
-  }
+
+    &__count {
+        color: $color-blue;
+        font-size: large;
+        flex-shrink: true;
+        @media (min-width: $break-small) {
+            font-size: x-large;
+        }
+    }
+
+    &__image {
+        border-bottom: 0;
+        display: block;
+        width: 100%;
+
+        @media (min-width: $break-small) {
+            height: 225px;
+            min-height: 225px;
+        }
+
+        &--fallback {
+            padding: 25px;
+        }
+    }
+
+    &__buttons {
+        display: flex;
+        justify-content: space-around;
+        margin: 5px 0;
+    }
+
+    &__button {
+        @include button;
+        flex: 1;
+        justify-content: center;
+        width: 100%;
+
+        &--small {
+            font-size: 0.8rem;
+            padding: 10px 15px;
+        }
+    }
+
+    &__details {
+        align-items: flex-end;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+
+    &__price {
+        font-size: large;
+        text-align: right;
+
+        @media (min-width: $break-small) {
+            font-size: x-large;
+        }
+
+        &-label {
+            display: block;
+            font-size: x-small;
+        }
+    }
 }
