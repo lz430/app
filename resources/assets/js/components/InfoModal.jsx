@@ -56,9 +56,6 @@ class InfoModal extends React.PureComponent {
                             compareList={this.props.compareList}
                             selectDeal={this.props.selectDeal}
                             toggleCompare={this.props.toggleCompare}
-                            showAccuPricingModal={
-                                this.props.showAccuPricingModal
-                            }
                         />
                     </div>
                 </div>
