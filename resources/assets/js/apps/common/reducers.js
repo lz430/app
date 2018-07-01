@@ -3,7 +3,6 @@ import R from 'ramda';
 import util from 'src/util';
 
 const initialState = {
-    accuPricingModalIsShowing: false,
     compareList: [],
     employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
@@ -113,16 +112,6 @@ const reducer = (state = initialState, action) => {
                 compareList: action.compareList,
             };
 
-        case ActionTypes.SHOW_ACCUPRICING_MODAL:
-            return {
-                ...state,
-                accuPricingModalIsShowing: true,
-            };
-        case ActionTypes.HIDE_ACCUPRICING_MODAL:
-            return {
-                ...state,
-                accuPricingModalIsShowing: false,
-            };
         case ActionTypes.SHOW_INFO_MODAL:
             return {
                 ...state,

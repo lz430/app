@@ -120,18 +120,6 @@ export function toggleTarget(target, targetKey) {
     };
 }
 
-export function showAccuPricingModal() {
-    return {
-        type: ActionTypes.SHOW_ACCUPRICING_MODAL,
-    };
-}
-
-export function hideAccuPricingModal() {
-    return {
-        type: ActionTypes.HIDE_ACCUPRICING_MODAL,
-    };
-}
-
 export function showInfoModal(dealId) {
     return {
         type: ActionTypes.SHOW_INFO_MODAL,

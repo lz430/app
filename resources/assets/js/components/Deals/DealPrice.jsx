@@ -12,7 +12,6 @@ import {
     toggleCompare,
     showInfoModal,
     hideInfoModal,
-    showAccuPricingModal,
 } from 'apps/common/actions';
 
 import { setPurchaseStrategy } from 'apps/user/actions';
@@ -31,7 +30,6 @@ class DealPrice extends React.Component {
         onToggleCompare: PropTypes.func.isRequired,
         onShowInfoModal: PropTypes.func.isRequired,
         onHideInfoModal: PropTypes.func.isRequired,
-        onShowAccuPricingModal: PropTypes.func.isRequired,
         onRequestDealQuote: PropTypes.func.isRequired,
     };
 
@@ -51,7 +49,6 @@ class DealPrice extends React.Component {
                 showInfoModal={this.props.onShowInfoModal}
                 hideInfoModal={this.props.onHideInfoModal}
                 infoModalIsShowingFor={this.props.infoModalIsShowingFor}
-                showAccuPricingModal={this.props.onShowAccuPricingModal}
             />
         );
     }
@@ -136,9 +133,6 @@ const mapDispatchToProps = dispatch => {
         },
         onHideInfoModal: () => {
             return dispatch(hideInfoModal());
-        },
-        onShowAccuPricingModal: () => {
-            return dispatch(showAccuPricingModal());
         },
         onRequestDealQuote: (deal, zipcode, paymentType) => {
             return dispatch(requestDealQuote(deal, zipcode, paymentType));
