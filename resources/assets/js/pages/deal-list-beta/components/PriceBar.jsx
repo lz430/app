@@ -1,30 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { showAccuPricingModal } from 'apps/common/actions';
 import { setPurchaseStrategy } from 'apps/user/actions';
 
 /**
  *
  */
 class PriceBar extends React.Component {
-    renderAccuPricingCta() {
-        return (
-            <div>
-                <div className="accupricing-cta accupricing-cta--horizontal">
-                    <a onClick={this.props.onShowAccuPricingModal}>
-                        <img
-                            src="/images/accupricing-logo.png"
-                            className="accupricing-cta__logo"
-                        />
-                    </a>
-                    <p className="accupricing-cta__disclaimer">
-                        * Includes taxes, dealer fees and rebates.
-                    </p>
-                </div>
-            </div>
-        );
-    }
-
     renderPurchaseStrategyButtons() {
         return (
             <div className="button-group">
@@ -71,10 +52,6 @@ class PriceBar extends React.Component {
     render() {
         return (
             <div className="filter-page__top-row">
-                <div className="filter-page__top-row__section filter-page__top-row__section--accuPricing">
-                    {this.renderAccuPricingCta()}
-                </div>
-
                 <div className="filter-page__top-row__section filter-page__top-row__section--tabButtons" />
             </div>
         );
@@ -98,9 +75,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onShowAccuPricingModal: () => {
-            return dispatch(showAccuPricingModal());
-        },
         onSetPurchaseStrategy: data => {
             return dispatch(setPurchaseStrategy(data));
         },

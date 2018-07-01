@@ -1,49 +1,40 @@
 @import '../variables';
 
-
 .filter-page {
-  &__top-row {
-    border-bottom: 1px solid $color-section-bottom-border;
-    padding: .5em 20px 0;
-    background-color: $color-background-secondary;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    &__top-row {
+        border-bottom: 1px solid $color-section-bottom-border;
+        padding: 0.5em 20px 0;
+        background-color: $color-background-secondary;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
 
-    @media (min-width: $break-medium) {
-      flex-direction: row;
-      padding: 0 40px .5em 40px;
-    }
-
-    &__section {
-      margin-bottom: 0.5em;
-      width: 100%;
-
-      @media (min-width: $break-small) {
-        margin-bottom: 1em;
-      }
-
-      @media (min-width: $break-medium) {
-        margin-bottom: 0;
-        width: auto;
-      }
-
-      &--accuPricing {
-        display: none;
         @media (min-width: $break-medium) {
-          display: block;
-          margin-right: auto;
+            flex-direction: row;
+            padding: 0 40px 0.5em 40px;
         }
-      }
-      &--sortbar {
-      }
-      &--tabButtons {
-        display: none;
-        @media (min-width:$break-small) {
-          display: block;
+
+        &__section {
+            margin-bottom: 0.5em;
+            width: 100%;
+
+            @media (min-width: $break-small) {
+                margin-bottom: 1em;
+            }
+
+            @media (min-width: $break-medium) {
+                margin-bottom: 0;
+                width: auto;
+            }
+
+            &--tabButtons {
+                display: none;
+                @media (min-width: $break-small) {
+                    display: block;
+                }
+            }
         }
-      }
     }
-  }
 }

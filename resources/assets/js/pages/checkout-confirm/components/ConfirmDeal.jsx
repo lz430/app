@@ -8,7 +8,6 @@ import { setPurchaseStrategy } from 'apps/user/actions';
 import {
     hideInfoModal,
     selectDeal,
-    showAccuPricingModal,
     showInfoModal,
     toggleCompare,
 } from 'apps/common/actions';
@@ -57,7 +56,6 @@ class ConfirmDeal extends React.PureComponent {
                     compareList={this.props.compareList}
                     selectDeal={this.props.selectDeal}
                     toggleCompare={this.props.toggleCompare}
-                    showAccuPricingModal={this.props.showAccuPricingModal}
                 />
             </div>
         );
@@ -99,9 +97,6 @@ const mapDispatchToProps = dispatch => {
         },
         onHideInfoModal: () => {
             return dispatch(hideInfoModal());
-        },
-        onShowAccuPricingModal: () => {
-            return dispatch(showAccuPricingModal());
         },
         onRequestDealQuote: (deal, zipcode, paymentType) => {
             return dispatch(requestDealQuote(deal, zipcode, paymentType));

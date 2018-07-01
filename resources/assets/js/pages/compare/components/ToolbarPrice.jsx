@@ -1,7 +1,6 @@
 import React from 'react';
 
 import GlobalSelectPurchaseStrategy from 'apps/user/components/GlobalSelectPurchaseStrategy';
-import AccuPricingCta from 'components/AccuPricing/Cta';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { batchRequestDealQuotes } from 'apps/pricing/actions';
@@ -20,9 +19,6 @@ class ToolbarPrice extends React.PureComponent {
     render() {
         return (
             <div className="compare-page__top-row">
-                <div className="compare-page__top-row__section compare-page__top-row__section--accuPricing">
-                    <AccuPricingCta />
-                </div>
                 <div className="compare-page__top-row__section compare-page__top-row__section--tabButtons">
                     <GlobalSelectPurchaseStrategy
                         afterSetPurchaseStrategy={this.afterSetPurchaseStrategy.bind(
