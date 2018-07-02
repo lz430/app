@@ -22,30 +22,9 @@ class ToolbarPrice extends React.Component {
         this.props.onRequestSearch();
     }
 
-    renderAccuPricingCta() {
-        return (
-            <div>
-                <div className="accupricing-cta accupricing-cta--horizontal">
-                    <a onClick={this.props.onShowAccuPricingModal}>
-                        <img
-                            src="/images/accupricing-logo.png"
-                            className="accupricing-cta__logo"
-                        />
-                    </a>
-                    <p className="accupricing-cta__disclaimer">
-                        * Includes taxes, dealer fees and rebates.
-                    </p>
-                </div>
-            </div>
-        );
-    }
-
     render() {
         return (
             <div className="filter-page__top-row">
-                <div className="filter-page__top-row__section filter-page__top-row__section--accuPricing">
-                    {this.renderAccuPricingCta()}
-                </div>
                 {this.props.searchQuery.entity === 'deal' && (
                     <div className="filter-page__top-row__section filter-page__top-row__section--tabButtons">
                         <GlobalSelectPurchaseStrategy
