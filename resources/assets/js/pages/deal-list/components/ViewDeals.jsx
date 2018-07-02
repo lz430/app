@@ -24,8 +24,8 @@ class ViewDeals extends React.PureComponent {
         ),
         compareList: PropTypes.array,
         dealsByMakeModelYear: PropTypes.array,
-        dealPage: PropTypes.number,
-        dealPageTotal: PropTypes.number,
+        meta: PropTypes.object.isRequired,
+        loadingSearchResults: PropTypes.bool,
         onRequestMoreDeals: PropTypes.func.isRequired,
         onToggleCompare: PropTypes.func.isRequired,
     };
@@ -40,14 +40,15 @@ class ViewDeals extends React.PureComponent {
     }
 
     renderShowMoreButton() {
-        if (this.props.deals && this.props.requestingMoreDeals) {
+        if (this.props.deals && this.props.loadingSearchResults) {
             // Deals are already loaded and we have already requested more deals
             return <SVGInline svg={miscicons['loading']} />;
         }
 
         if (
             this.props.deals &&
-            this.props.dealPage !== this.props.dealPageTotal
+            this.props.meta &&
+            this.props.meta.current_page !== this.props.meta.last_page
         ) {
             // Deals are already loaded, and there are more pages.
             return (
@@ -112,12 +113,10 @@ class ViewDeals extends React.PureComponent {
 const mapStateToProps = state => {
     return {
         compareList: state.common.compareList,
-        meta: state.pages.dealList.dealPage.meta,
-        dealPage: state.pages.dealList.dealPage,
-        dealPageTotal: state.pages.dealList.dealPageTotal,
+        meta: state.pages.dealList.meta,
+        loadingSearchResults: state.pages.dealList.loadingSearchResults,
         deals: state.pages.dealList.deals,
         dealsByMakeModelYear: state.pages.dealList.dealsByMakeModelYear,
-        requestingMoreDeals: state.pages.dealList.requestingMoreDeals,
     };
 };
 

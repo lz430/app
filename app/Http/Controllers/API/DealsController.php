@@ -72,7 +72,7 @@ class DealsController extends BaseAPIController
         return fractal()
             ->item(['response' => $results, 'meta' => [
                 'entity' => 'deal',
-                'current_page' => $page,
+                'current_page' => $page + 1,
                 'per_page' => $per_page,
             ]])
             ->transformWith(ESResponseTransformer::class)
