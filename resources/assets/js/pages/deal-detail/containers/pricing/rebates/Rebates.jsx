@@ -1,7 +1,10 @@
 import React from 'react';
-import Targets from '../../../../../components/Targets';
 
 class Rebates extends React.PureComponent {
+    static defaultProps = {
+        onChange: () => {},
+    };
+
     render() {
         return <div />;
 
@@ -9,18 +12,7 @@ class Rebates extends React.PureComponent {
         // end up just completely rewriting Rebates entirely now
         // that we need to account for new UI and new data
         // via Cox vs what we had for Jato.
-
-        return (
-            <Targets
-                deal={this.props.dealPricing.deal()}
-                targetsChanged={this.props.onChange}
-            />
-        );
     }
 }
-
-Rebates.defaultProps = {
-    onChange: () => {},
-};
 
 export default Rebates;

@@ -63,41 +63,6 @@ const reducer = (state = initialState, action) => {
 
             return state;
 
-        case ActionTypes.RECEIVE_TARGETS:
-            const targetKey = util.getTargetKeyForDealAndZip(
-                action.data.deal,
-                action.data.zipcode
-            );
-
-            return {
-                ...state,
-                targetsAvailable: {
-                    ...state.targetsAvailable,
-                    [targetKey]: action.data.data.data.targets,
-                },
-            };
-        case ActionTypes.TOGGLE_TARGET:
-            return {
-                ...state,
-                targetsSelected: {
-                    ...state.targetsSelected,
-                    [action.targetKey]: util.toggleItem(
-                        state.targetsSelected[action.targetKey] || [],
-                        action.target
-                    ),
-                },
-            };
-        case ActionTypes.SELECT_TAB:
-            return {
-                ...state,
-                selectedTab: action.data,
-            };
-
-        case ActionTypes.UPDATE_RESIDUAL_PERCENT:
-            return Object.assign({}, state, {
-                residualPercent: action.residualPercent,
-            });
-
         case ActionTypes.SELECT_DEAL:
             return Object.assign({}, state, {
                 selectedDeal: action.selectedDeal,
