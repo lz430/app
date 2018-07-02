@@ -3,41 +3,6 @@ import util from 'src/util';
 import R from 'ramda';
 import * as ActionTypes from './consts';
 
-export function requestTargets(deal) {
-    return (dispatch, getState) => {
-        // If no zipcode has been set, do not request targets
-        const zipcode = getState().user.purchasePreferences.strategy;
-        if (!zipcode) return;
-
-        // If we already have the target data, do not re-request it
-        const targetKey = util.getTargetKeyForDealAndZip(deal, zipcode);
-        if (!R.isNil(getState().common.targetsAvailable[targetKey])) return;
-
-        dispatch({
-            type: ActionTypes.REQUEST_TARGETS,
-        });
-
-        api.getTargets(zipcode, deal.vin).then(data => {
-            dispatch(
-                receiveTargets({
-                    data,
-                    deal,
-                    zipcode,
-                })
-            );
-        });
-    };
-}
-
-export function receiveTargets(data) {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.RECEIVE_TARGETS,
-            data: data,
-        });
-    };
-}
-
 export function toggleCompare(deal) {
     return (dispatch, getState) => {
         const deals = getState().common.compareList.map(R.prop('deal'));
@@ -70,14 +35,8 @@ export function toggleCompare(deal) {
 }
 
 export function closeMakeSelectorModal() {
-    return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.CLOSE_MAKE_SELECTOR_MODAL,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
+    return {
+        type: ActionTypes.CLOSE_MAKE_SELECTOR_MODAL,
     };
 }
 
@@ -96,27 +55,10 @@ export function toggleSmallFiltersShown() {
     };
 }
 
-export function selectTab(tab) {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.SELECT_TAB,
-            data: tab,
-        });
-    };
-}
-
 export function selectDeal(deal) {
     return {
         type: ActionTypes.SELECT_DEAL,
         selectedDeal: deal,
-    };
-}
-
-export function toggleTarget(target, targetKey) {
-    return {
-        type: ActionTypes.TOGGLE_TARGET,
-        target,
-        targetKey,
     };
 }
 

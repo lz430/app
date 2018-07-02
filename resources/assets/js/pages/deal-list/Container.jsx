@@ -14,12 +14,16 @@ import ToolbarSelectedFilters from './components/ToolbarSelectedFilters';
 import ToolbarPrice from './components/ToolbarPrice';
 import FilterPanel from './components/FilterPanel';
 
+import { closeMakeSelectorModal } from 'apps/common/actions';
+
 import { initDealListData } from './actions';
 
 class Container extends React.PureComponent {
     static propTypes = {
         searchQuery: PropTypes.object.isRequired,
         onInit: PropTypes.func.isRequired,
+        onCloseMakeSelectorModal: PropTypes.func.isRequired,
+        makeSelectorModalisOpen: PropTypes.bool.isRequired,
     };
 
     componentDidMount() {
@@ -29,7 +33,7 @@ class Container extends React.PureComponent {
     renderMakeSelectionModal() {
         return (
             <Modal
-                onClose={this.props.closeMakeSelectorModal}
+                onClose={this.props.onCloseMakeSelectorModal}
                 title="Select brand preference"
                 subtitle="Select one or more brands to compare"
                 closeText="Show available vehicles"
@@ -89,7 +93,7 @@ class Container extends React.PureComponent {
     render() {
         return (
             <StickyContainer>
-                {this.props.showMakeSelectorModal
+                {this.props.makeSelectorModalisOpen
                     ? this.renderMakeSelectionModal()
                     : ''}
 
@@ -102,9 +106,8 @@ class Container extends React.PureComponent {
 const mapStateToProps = state => {
     return {
         window: state.common.window,
-        closeMakeSelectorModal: state.common.closeMakeSelectorModal,
         smallFiltersShown: state.common.smallFiltersShown,
-        showMakeSelectorModal: false,
+        makeSelectorModalisOpen: state.common.showMakeSelectorModal,
         searchQuery: state.pages.dealList.searchQuery,
     };
 };
@@ -113,6 +116,9 @@ const mapDispatchToProps = dispatch => {
     return {
         onInit: () => {
             return dispatch(initDealListData());
+        },
+        onCloseMakeSelectorModal: () => {
+            return dispatch(closeMakeSelectorModal());
         },
     };
 };
