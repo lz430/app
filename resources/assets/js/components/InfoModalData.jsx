@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import Line from 'pages/deal-detail/components/pricing/Line';
 import Label from 'pages/deal-detail/components/pricing/Label';
 import Value from 'pages/deal-detail/components/pricing/Value';
+import Group from '../pages/deal-detail/components/pricing/Group';
 
 class InfoModalData extends React.PureComponent {
     static propTypes = {
@@ -148,110 +149,132 @@ class InfoModalData extends React.PureComponent {
                         <div style={{ textAlign: 'left' }}>
                             {this.props.purchaseStrategy === 'cash' && (
                                 <div>
-                                    <Line>
-                                        <Label>MSRP</Label>
-                                        <Value>{dealPricing.msrp()}</Value>
-                                    </Line>
-                                    <Line>
-                                        <Label>Discount</Label>
-                                        <Value isNegative={true}>
-                                            {dealPricing.discount()}
-                                        </Value>
-                                    </Line>
-                                    <Line>
-                                        <Label>Selling Price</Label>
-                                        <Value>
-                                            {dealPricing.baseSellingPrice()}
-                                        </Value>
-                                    </Line>
-                                    <Line isImportant={true}>
-                                        <Label>Cash Price</Label>
-                                        <Value>{dealPricing.yourPrice()}</Value>
-                                    </Line>
-                                    <Line>
-                                        <Label>Taxes &amp; Fees</Label>
-                                        <Value>
-                                            {dealPricing.taxesAndFeesTotal()}
-                                        </Value>
-                                    </Line>
+                                    <Group>
+                                        <Line>
+                                            <Label>MSRP</Label>
+                                            <Value>{dealPricing.msrp()}</Value>
+                                        </Line>
+                                        <Line>
+                                            <Label>Discount</Label>
+                                            <Value isNegative={true}>
+                                                {dealPricing.discount()}
+                                            </Value>
+                                        </Line>
+                                        <Line isSectionTotal={true}>
+                                            <Label>Discounted Price</Label>
+                                            <Value is>
+                                                {dealPricing.discountedPrice()}
+                                            </Value>
+                                        </Line>
+                                    </Group>
+                                    <Group>
+                                        <Line>
+                                            <Label>Rebates Applied</Label>
+                                            <Value
+                                                isNegative={true}
+                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                            >
+                                                {dealPricing.bestOffer()}
+                                            </Value>
+                                        </Line>
+                                        <Line
+                                            isImportant={true}
+                                            isSectionTotal={true}
+                                        >
+                                            <Label>Cash Price</Label>
+                                            <Value
+                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                            >
+                                                {dealPricing.yourPrice()}
+                                            </Value>
+                                        </Line>
+                                        <Line>
+                                            <Label>Taxes &amp; Fees</Label>
+                                            <Value
+                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                            >
+                                                {dealPricing.taxesAndFeesTotal()}
+                                            </Value>
+                                        </Line>
+                                    </Group>
                                 </div>
                             )}
 
                             {this.props.purchaseStrategy === 'finance' && (
                                 <div>
-                                    <Line>
-                                        <Label>Total Price</Label>
-                                        <Value>
-                                            {dealPricing.yourPrice()}*
-                                        </Value>
-                                    </Line>
-                                    <Line isSemiImportant={true}>
-                                        <Label>Down Payment</Label>
-                                        <Value>
-                                            {dealPricing.financeDownPayment()}
-                                        </Value>
-                                    </Line>
-                                    <Line>
-                                        <Label>Amount Financed</Label>
-                                        <Value>
-                                            {dealPricing.amountFinanced()}
-                                        </Value>
-                                    </Line>
-                                    <Line>
-                                        <Label>Term Length</Label>
-                                        <Value>
-                                            {dealPricing.financeTerm()} months
-                                        </Value>
-                                    </Line>
-                                    <Line isImportant={true}>
-                                        <Label>Monthly Payment</Label>
-                                        <Value>
-                                            {dealPricing.monthlyPayments()}*
-                                        </Value>
-                                    </Line>
+                                    <Group>
+                                        <Line>
+                                            <Label>Total Selling Price</Label>
+                                            <Value
+                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                            >
+                                                {dealPricing.yourPrice()}*
+                                            </Value>
+                                        </Line>
+                                        <Line isSemiImportant={true}>
+                                            <Label>Down Payment</Label>
+                                            <Value
+                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                            >
+                                                {dealPricing.financeDownPayment()}
+                                            </Value>
+                                        </Line>
+                                        <Line>
+                                            <Label>Amount Financed</Label>
+                                            <Value
+                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                            >
+                                                {dealPricing.amountFinanced()}
+                                            </Value>
+                                        </Line>
+                                        <Line>
+                                            <Label>Term</Label>
+                                            <Value>
+                                                {dealPricing.financeTerm()}{' '}
+                                                months
+                                            </Value>
+                                        </Line>
+                                        <Line isImportant={true}>
+                                            <Label>Monthly Payment</Label>
+                                            <Value
+                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                            >
+                                                {dealPricing.monthlyPayments()}*
+                                            </Value>
+                                        </Line>
+                                    </Group>
                                 </div>
                             )}
 
                             {this.props.purchaseStrategy === 'lease' && (
                                 <div>
-                                    <Line>
-                                        <Label>Annual Miles</Label>
-                                        <Value>
-                                            {dealPricing.leaseAnnualMileage()}
-                                        </Value>
-                                    </Line>
-                                    <Line isSemiImportant={true}>
-                                        <Label>Cash Due</Label>
-                                        <Value>
-                                            {dealPricing.leaseCashDue()}
-                                        </Value>
-                                    </Line>
-                                    <Line>
-                                        <Label>Term Length</Label>
-                                        <Value>
-                                            {dealPricing.leaseTerm()} months
-                                        </Value>
-                                    </Line>
-                                    <Line isImportant={true}>
-                                        <Label>Monthly Payment</Label>
-                                        <Value>
-                                            {dealPricing.monthlyPayments()}*
-                                        </Value>
-                                    </Line>
+                                    <Group>
+                                        <Line>
+                                            <Label>Annual Miles</Label>
+                                            <Value
+                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                            >
+                                                {dealPricing.leaseAnnualMileage()}
+                                            </Value>
+                                        </Line>
+                                        <Line>
+                                            <Label>Term</Label>
+                                            <Value
+                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                            >
+                                                {dealPricing.leaseTerm()} months
+                                            </Value>
+                                        </Line>
+                                        <Line isImportant={true}>
+                                            <Label>Monthly Payment</Label>
+                                            <Value
+                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                            >
+                                                {dealPricing.monthlyPayments()}*
+                                            </Value>
+                                        </Line>
+                                    </Group>
                                 </div>
-                            )}
-                        </div>
-
-                        <div className="deal__buttons">
-                            {this.props.withCustomizeQuoteOrBuyNow && (
-                                <CustomizeQuoteOrBuyNowButton
-                                    onCustomizeQuote={() => this.selectDeal()}
-                                    deal={this.props.dealPricing.deal()}
-                                    hasCustomizedQuote={this.props.dealPricing.hasCustomizedQuote()}
-                                    disabled={
-                                        !this.props.dealPricing.canPurchase()
-                                    }
-                                />
                             )}
                         </div>
 
@@ -268,6 +291,19 @@ class InfoModalData extends React.PureComponent {
                                 </div>
                             </Line>
                         )}
+
+                        <div className="deal__buttons">
+                            {this.props.withCustomizeQuoteOrBuyNow && (
+                                <CustomizeQuoteOrBuyNowButton
+                                    onCustomizeQuote={() => this.selectDeal()}
+                                    deal={this.props.dealPricing.deal()}
+                                    hasCustomizedQuote={this.props.dealPricing.hasCustomizedQuote()}
+                                    disabled={
+                                        !this.props.dealPricing.canPurchase()
+                                    }
+                                />
+                            )}
+                        </div>
                     </div>
 
                     {this.props.children}
