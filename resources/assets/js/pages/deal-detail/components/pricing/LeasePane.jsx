@@ -8,201 +8,172 @@ import Line from './Line';
 import Label from './Label';
 import Value from './Value';
 import TaxesAndFees from './TaxesAndFees';
+import Group from './Group';
+import Header from './Header';
+import LeaseTermsSelect from './LeaseTermsSelect';
 
 export default class LeasePane extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            leaseTermsSelectOpened: false,
+        };
+    }
+
     static defaultProps = {
         onDiscountChange: (discountType, make = null) => {},
         onRebatesChange: () => {},
-        onTermChange: term => {},
-        onAnnualMileageChange: annualMileage => {},
-        onCashDueChange: () => {},
         onChange: () => {},
     };
-
-    constructor() {
-        super();
-
-        this.renderTotalAndMiles = this.renderTotalAndMiles.bind(this);
-    }
-
-    renderLoading() {
-        return <SVGInline svg={miscicons['loading']} />;
-    }
-
-    renderTotalAndMiles() {
-        const { dealPricing, onDiscountChange, onRebatesChange } = this.props;
-
-        return (
-            <div>
-                {dealPricing.bestOfferValue() > 0 && (
-                    <Line>
-                        <Label>Rebates Applied</Label>
-                        <Value isNegative={true}>
-                            {dealPricing.bestOffer()}
-                        </Value>
-                    </Line>
-                )}
-                <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
-                <Line>
-                    <Label>Total Price</Label>
-                    <Value>{dealPricing.yourPrice()}*</Value>
-                </Line>
-                <hr />
-                <Line>
-                    <Label>Annual Miles</Label>
-                    <Value>
-                        <select
-                            value={this.props.dealPricing.leaseAnnualMileageValue()}
-                            onChange={this.handleAnnualMileageChange}
-                        >
-                            {this.props.dealPricing
-                                .leaseAnnualMileageAvailable()
-                                .map((annualMileage, annualMileageIndex) => {
-                                    return (
-                                        <option
-                                            key={annualMileageIndex}
-                                            value={annualMileage}
-                                        >
-                                            {annualMileage}
-                                        </option>
-                                    );
-                                })}
-                        </select>
-                    </Value>
-                </Line>
-                <Line>
-                    <div className="cash-finance-lease-calculator__lease-table-container">
-                        <table className="cash-finance-lease-calculator__lease-table">
-                            <thead>
-                                <tr>
-                                    {/*<td className="cash-finance-lease-calculator__lease-table-cell--darker">
-                                        Cash Due
-                                    </td>*/}
-                                    {this.props.dealPricing.leaseTermsAvailable() &&
-                                        this.props.dealPricing
-                                            .leaseTermsAvailable()
-                                            .filter(term => {
-                                                return this.props.dealPricing.hasLeasePaymentsForTerm(
-                                                    term
-                                                );
-                                            })
-                                            .map((term, index) => {
-                                                return (
-                                                    <td
-                                                        className="cash-finance-lease-calculator__lease-table-cell--dark"
-                                                        key={index}
-                                                    >
-                                                        {term} Months
-                                                    </td>
-                                                );
-                                            })}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.props.dealPricing.leaseTermsAvailable() &&
-                                    this.props.dealPricing.leaseCashDueAvailable() &&
-                                    this.props.dealPricing
-                                        .leaseCashDueAvailable()
-                                        .map((cashDue, indexCashDue) => {
-                                            return (
-                                                <tr key={indexCashDue}>
-                                                    {/*<td className="cash-finance-lease-calculator__lease-table-cell--darker">
-                                            {util.moneyFormat(cashDue
-                                        )}</td>*/}
-                                                    {this.props.dealPricing
-                                                        .leaseTermsAvailable()
-                                                        .filter(term => {
-                                                            return this.props.dealPricing.hasLeasePaymentsForTerm(
-                                                                term
-                                                            );
-                                                        })
-                                                        .map(
-                                                            (
-                                                                term,
-                                                                termIndex
-                                                            ) => {
-                                                                let className = this.props.dealPricing.isSelectedLeasePaymentForTermAndCashDue(
-                                                                    term,
-                                                                    cashDue
-                                                                )
-                                                                    ? 'cash-finance-lease-calculator__lease-table-cell--selected'
-                                                                    : 'cash-finance-lease-calculator__lease-table-cell--selectable';
-
-                                                                return (
-                                                                    <td
-                                                                        className={
-                                                                            className
-                                                                        }
-                                                                        key={
-                                                                            termIndex
-                                                                        }
-                                                                        onClick={() =>
-                                                                            this.props.onChange(
-                                                                                this.props.dealPricing.leaseAnnualMileageValue(),
-                                                                                term,
-                                                                                cashDue
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        {this.props.dealPricing.leasePaymentsForTermAndCashDue(
-                                                                            term,
-                                                                            cashDue
-                                                                        )}
-                                                                    </td>
-                                                                );
-                                                            }
-                                                        )}
-                                                </tr>
-                                            );
-                                        })}
-                            </tbody>
-                        </table>
-                    </div>
-                </Line>
-                <Line>
-                    <Label>Term Length</Label>
-                    <Value>{dealPricing.leaseTerm()}</Value>
-                </Line>
-                <Line isImportant={true}>
-                    <Label>Monthly Payment</Label>
-                    <Value>{dealPricing.monthlyPayments()}*</Value>
-                </Line>
-            </div>
-        );
-    }
 
     render() {
         const { dealPricing, onDiscountChange, onRebatesChange } = this.props;
 
         return (
             <div>
-                <Line>
-                    <Label>MSRP</Label>
-                    <Value>{dealPricing.msrp()}</Value>
-                </Line>
-                <Discount {...{ dealPricing }} onChange={onDiscountChange} />
-                <Line>
-                    <Label>Selling Price</Label>
-                    <Value>{dealPricing.baseSellingPrice()}</Value>
-                </Line>
-                <TaxesAndFees items={dealPricing.taxesAndFees()} />
-                {this.props.dealPricing.bestOfferIsLoading() &&
-                    this.renderLoading()}
-                {!this.props.dealPricing.bestOfferIsLoading() &&
-                    this.renderTotalAndMiles()}
+                <Group>
+                    <Header>Price</Header>
+                    <Line>
+                        <Label>MSRP</Label>
+                        <Value>{dealPricing.msrp()}</Value>
+                    </Line>
+                    <Discount
+                        {...{ dealPricing }}
+                        onChange={onDiscountChange}
+                    />
+                    <Line isSectionTotal={true}>
+                        <Label>Discounted Price</Label>
+                        <Value>{dealPricing.discountedPrice()}</Value>
+                    </Line>
+                </Group>
+                <hr />
+                <Group>
+                    <Header>Taxes &amp; Fees</Header>
+                    {dealPricing.bestOfferIsLoading() && (
+                        <SVGInline svg={miscicons['loading']} />
+                    )}
+                    {dealPricing.bestOfferIsLoading() || (
+                        <div>
+                            <TaxesAndFees items={dealPricing.taxesAndFees()} />
+                        </div>
+                    )}
+                    <Line isSectionTotal={true}>
+                        <Label>Selling Price</Label>
+                        <Value isLoading={dealPricing.bestOfferIsLoading()}>
+                            {dealPricing.sellingPrice()}
+                        </Value>
+                    </Line>
+                </Group>
+                <hr />
+                <Group>
+                    <Header>Discounts</Header>
+                    <Line>
+                        <Label>Rebates Applied</Label>
+                        <Value
+                            isNegative={true}
+                            isLoading={dealPricing.bestOfferIsLoading()}
+                        >
+                            {dealPricing.bestOffer()}
+                        </Value>
+                    </Line>
+                    <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
+                    <Line isSectionTotal={true}>
+                        <Label>Total Selling Price</Label>
+                        <Value isLoading={dealPricing.bestOfferIsLoading()}>
+                            {dealPricing.yourPrice()}*
+                        </Value>
+                    </Line>
+                </Group>
+                <hr />
+                <Group>
+                    <Header>Lease Terms</Header>
+                    {dealPricing.bestOfferIsLoading() && (
+                        <SVGInline svg={miscicons['loading']} />
+                    )}
+                    {dealPricing.bestOfferIsLoading() || (
+                        <div>
+                            <Line>
+                                <Label>Annual Miles</Label>
+                                <Value>
+                                    <select
+                                        onClick={
+                                            this.handleUpdateLeaseTermsClick
+                                        }
+                                    >
+                                        <option
+                                            value={dealPricing.leaseAnnualMileageValue()}
+                                        >
+                                            {dealPricing.leaseAnnualMileageValue()}
+                                        </option>
+                                    </select>
+                                </Value>
+                            </Line>
+                            <Line>
+                                <Label>Term</Label>
+                                <Value>
+                                    <select
+                                        onClick={
+                                            this.handleUpdateLeaseTermsClick
+                                        }
+                                    >
+                                        <option
+                                            value={dealPricing.leaseTermValue()}
+                                        >
+                                            {dealPricing.leaseTermValue()}{' '}
+                                            months
+                                        </option>
+                                    </select>
+                                </Value>
+                            </Line>
+                            <Line>
+                                <a
+                                    style={{
+                                        cursor: 'pointer',
+                                        color: '#41b1ac',
+                                        fontSize: '.75em',
+                                        fontWeight: 'bold',
+                                    }}
+                                    onClick={this.handleUpdateLeaseTermsClick}
+                                >
+                                    See all available lease options
+                                </a>
+                            </Line>
+                            <Line isImportant={true}>
+                                <Label>Monthly Payment</Label>
+                                <Value>{dealPricing.monthlyPayments()}*</Value>
+                            </Line>
+                        </div>
+                    )}
+                </Group>
+                {this.state.leaseTermsSelectOpened && (
+                    <LeaseTermsSelect
+                        {...{ dealPricing }}
+                        onClose={this.handleLeaseTermsSelectClose}
+                        onChange={this.handleLeaseTermsChange}
+                    />
+                )}
             </div>
         );
     }
 
-    handleTermChange = e => {
-        this.props.onTermChange(Number(e.target.value));
+    handleLeaseTermsChange = (annualMileage, term, cashDue) => {
+        this.props.onChange(annualMileage, term, cashDue);
+
+        this.handleLeaseTermsSelectClose();
     };
 
-    handleAnnualMileageChange = e => {
-        this.props.onAnnualMileageChange(Number(e.target.value));
+    handleLeaseTermsSelectClose = () => {
+        this.setState({ leaseTermsSelectOpened: false });
     };
 
-    handleCashDueChange = e => {
-        this.props.onCashDueChange(Number(e.target.value));
+    handleUpdateLeaseTermsClick = e => {
+        e.preventDefault();
+        e.target.blur();
+
+        this.openLeaseTermsSelect();
+    };
+
+    openLeaseTermsSelect = () => {
+        this.setState({ leaseTermsSelectOpened: true });
     };
 }
