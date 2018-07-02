@@ -1,10 +1,14 @@
 import React from 'react';
+import miscicons from 'miscicons';
+import SVGInline from 'react-svg-inline';
 import Discount from './Discount';
 import Rebates from '../../containers/pricing/rebates/Rebates';
 import Line from './Line';
 import Label from './Label';
 import Value from './Value';
 import TaxesAndFees from './TaxesAndFees';
+import Group from './Group';
+import Header from './Header';
 
 export default class FinancePane extends React.PureComponent {
     static defaultProps = {
@@ -19,67 +23,98 @@ export default class FinancePane extends React.PureComponent {
 
         return (
             <div>
-                <Line>
-                    <Label>MSRP</Label>
-                    <Value>{dealPricing.msrp()}</Value>
-                </Line>
-                <Discount {...{ dealPricing }} onChange={onDiscountChange} />
-                <Line>
-                    <Label>Selling Price</Label>
-                    <Value>{dealPricing.baseSellingPrice()}</Value>
-                </Line>
-                <TaxesAndFees items={dealPricing.taxesAndFees()} />
-                {dealPricing.bestOfferValue() > 0 && (
+                <Group>
+                    <Header>Price</Header>
+                    <Line>
+                        <Label>MSRP</Label>
+                        <Value>{dealPricing.msrp()}</Value>
+                    </Line>
+                    <Discount
+                        {...{ dealPricing }}
+                        onChange={onDiscountChange}
+                    />
+                    <Line isSectionTotal={true}>
+                        <Label>Discounted Price</Label>
+                        <Value>{dealPricing.discountedPrice()}</Value>
+                    </Line>
+                </Group>
+                <hr />
+                <Group>
+                    <Header>Taxes &amp; Fees</Header>
+                    <TaxesAndFees items={dealPricing.taxesAndFees()} />
+                    <Line isSectionTotal={true}>
+                        <Label>Selling Price</Label>
+                        <Value>{dealPricing.sellingPrice()}*</Value>
+                    </Line>
+                </Group>
+                <hr />
+                <Group>
+                    <Header>Discounts</Header>
                     <Line>
                         <Label>Rebates Applied</Label>
-                        <Value isNegative={true}>
+                        <Value
+                            isNegative={true}
+                            isLoading={dealPricing.bestOfferIsLoading()}
+                        >
                             {dealPricing.bestOffer()}
                         </Value>
                     </Line>
-                )}
-                <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
-                <Line>
-                    <Label>Total Price</Label>
-                    <Value>{dealPricing.yourPrice()}*</Value>
-                </Line>
+                    <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
+                    <Line isSectionTotal={true}>
+                        <Label>Total Selling Price</Label>
+                        <Value isLoading={dealPricing.bestOfferIsLoading()}>
+                            {dealPricing.yourPrice()}*
+                        </Value>
+                    </Line>
+                </Group>
                 <hr />
-                <Line isSemiImportant={true}>
-                    <Label>Down Payment</Label>
-                    <Value>
-                        <input
-                            className="fancyNumberEntry"
-                            type="number"
-                            min="0"
-                            name="down-payment"
-                            value={dealPricing.financeDownPaymentValue()}
-                            onChange={this.handleDownPaymentChange}
-                        />
-                    </Value>
-                </Line>
-                <Line>
-                    <Label>Amount Financed</Label>
-                    <Value>{dealPricing.amountFinanced()}*</Value>
-                </Line>
-                <Line>
-                    <Label>Term Duration</Label>
-                    <Value>
-                        <select
-                            value={dealPricing.financeTermValue()}
-                            onChange={this.handleTermChange}
-                        >
-                            <option value="84">84</option>
-                            <option value="72">72</option>
-                            <option value="60">60</option>
-                            <option value="48">48</option>
-                            <option value="36">36</option>
-                            <option value="24">24</option>
-                        </select>
-                    </Value>
-                </Line>
-                <Line isImportant={true}>
-                    <Label>Monthly Payment</Label>
-                    <Value>{dealPricing.monthlyPayments()}</Value>
-                </Line>
+                <Group isLoading={dealPricing.bestOfferIsLoading()}>
+                    <Header>Finance Terms</Header>
+                    {dealPricing.bestOfferIsLoading() && (
+                        <SVGInline svg={miscicons['loading']} />
+                    )}
+                    {dealPricing.bestOfferIsLoading() || (
+                        <div>
+                            <Line isSemiImportant={true}>
+                                <Label>Down Payment</Label>
+                                <Value>
+                                    <input
+                                        className="fancyNumberEntry"
+                                        type="number"
+                                        min="0"
+                                        name="down-payment"
+                                        value={dealPricing.financeDownPaymentValue()}
+                                        onChange={this.handleDownPaymentChange}
+                                    />
+                                </Value>
+                            </Line>
+                            <Line>
+                                <Label>Amount Financed</Label>
+                                <Value>{dealPricing.amountFinanced()}*</Value>
+                            </Line>
+                            <Line>
+                                <Label>Term Duration</Label>
+                                <Value>
+                                    <select
+                                        value={dealPricing.financeTermValue()}
+                                        onChange={this.handleTermChange}
+                                    >
+                                        <option value="84">84</option>
+                                        <option value="72">72</option>
+                                        <option value="60">60</option>
+                                        <option value="48">48</option>
+                                        <option value="36">36</option>
+                                        <option value="24">24</option>
+                                    </select>
+                                </Value>
+                            </Line>
+                            <Line isImportant={true}>
+                                <Label>Monthly Payment</Label>
+                                <Value>{dealPricing.monthlyPayments()}</Value>
+                            </Line>
+                        </div>
+                    )}
+                </Group>
             </div>
         );
     }

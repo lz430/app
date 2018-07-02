@@ -1,8 +1,15 @@
 import React from 'react';
 
-class Line extends React.PureComponent {
+export default class Line extends React.PureComponent {
+    static defaultProps = {
+        isImportant: false,
+        isSemiImportant: false,
+        isSectionTotal: false,
+        style: {},
+    };
+
     render() {
-        const style = { margin: '.5em 0', ...this.props.style };
+        const style = { margin: '.25em 0', ...this.props.style };
 
         if (this.props.isSemiImportant) {
             style.fontWeight = 'bold';
@@ -13,14 +20,21 @@ class Line extends React.PureComponent {
             style.fontSize = '1.25em';
         }
 
-        return <div style={style}>{this.props.children}</div>;
+        return (
+            <div style={style}>
+                {this.props.isSectionTotal && (
+                    <div
+                        style={{
+                            float: 'right',
+                            width: '5rem',
+                            height: '.0625em',
+                            backgroundColor: '#ccc',
+                            margin: '.5em 0',
+                        }}
+                    />
+                )}
+                <div style={{ clear: 'both' }}>{this.props.children}</div>
+            </div>
+        );
     }
 }
-
-Line.defaultProps = {
-    isImportant: false,
-    isSemiImportant: false,
-    style: {},
-};
-
-export default Line;
