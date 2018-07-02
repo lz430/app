@@ -11,6 +11,7 @@ export default function* root() {
         fork(DealListSagas.watchInit),
         fork(DealListSagas.watchRequestSearch),
         fork(DealDetailSagas.watchInit),
+        fork(DealDetailSagas.watchRequestDealQuote),
         fork(CompareSagas.watchInit),
         fork(AppUserSagas.watchIPRequestLocationInfo),
         fork(AppUserSagas.watchRequestLocation),

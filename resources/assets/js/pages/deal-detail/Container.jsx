@@ -16,8 +16,8 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
 import ImageGallery from 'react-image-gallery';
-import DealPricing from 'src/DealPricing';
-import { makeDealPricing } from 'apps/common/selectors';
+import { dealPricingFactory } from 'src/DealPricing';
+
 import CashPricingPane from './components/pricing/CashPane';
 import FinancePricingPane from './components/pricing/FinancePane';
 import LeasePricingPane from './components/pricing/LeasePane';
@@ -26,14 +26,15 @@ import Line from './components/pricing/Line';
 
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
 import { setPurchaseStrategy } from 'apps/user/actions';
-import { requestDealQuote } from 'apps/pricing/actions';
+import { setCheckoutData } from 'apps/checkout/actions';
 import * as selectDiscountActions from './modules/selectDiscount';
 import * as financeActions from './modules/finance';
 import * as leaseActions from './modules/lease';
-
+import { dealDetailRequestDealQuote } from './actions';
 import { initPage, receiveDeal } from './actions';
 
 import { getUserLocation } from 'apps/user/selectors';
+import { getLeaseAnnualMileage, getLeaseTerm } from './selectors';
 
 class Container extends React.PureComponent {
     static propTypes = {
@@ -48,26 +49,25 @@ class Container extends React.PureComponent {
             vin: PropTypes.string.isRequired,
         }),
         purchaseStrategy: PropTypes.string.isRequired,
+        userLocation: PropTypes.object.isRequired,
         discountType: PropTypes.string.isRequired,
 
         initPage: PropTypes.func.isRequired,
         receiveDeal: PropTypes.func.isRequired,
         setPurchaseStrategy: PropTypes.func.isRequired,
-        requestDealQuote: PropTypes.func.isRequired,
+        dealDetailRequestDealQuote: PropTypes.func.isRequired,
+        setCheckoutData: PropTypes.func.isRequired,
     };
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            featuredImage: [],
-            fuelExternalImages: [],
-            fuelInternalImages: [],
-            warranties: null,
-            dimensions: null,
-            showStandardFeatures: false,
-            showFeatures: false,
-        };
-    }
+    state = {
+        featuredImage: [],
+        fuelExternalImages: [],
+        fuelInternalImages: [],
+        warranties: null,
+        dimensions: null,
+        showStandardFeatures: false,
+        showFeatures: false,
+    };
 
     componentWillUnmount() {
         this._isMounted = false;
@@ -331,9 +331,7 @@ class Container extends React.PureComponent {
 
                                 <button
                                     className="deal__button deal__button--small deal__button--pink deal__button"
-                                    onClick={() =>
-                                        (window.location = `/confirm/${dealPricing.id()}`)
-                                    }
+                                    onClick={() => this.handleBuyNow()}
                                     disabled={
                                         !this.props.dealPricing.canPurchase()
                                     }
@@ -360,12 +358,24 @@ class Container extends React.PureComponent {
     }
 
     handleBuyNow = () => {
-        window.location = '/deal/';
+        this.props.setCheckoutData(
+            this.props.deal,
+            this.props.dealPricing.data.dealQuote,
+            this.props.purchaseStrategy,
+            this.props.discountType,
+            this.props.purchaseStrategy === 'lease'
+                ? this.props.leaseTerm
+                : this.props.financeTerm,
+            this.props.financeDownPayment,
+            this.props.leaseAnnualMileage
+        );
+
+        window.location = `/confirm/${this.props.dealPricing.id()}`;
     };
 
     handlePaymentTypeChange = strategy => {
         this.props.setPurchaseStrategy(strategy);
-        this.props.requestDealQuote(
+        this.props.dealDetailRequestDealQuote(
             this.props.deal,
             this.props.userLocation.zipcode,
             strategy,
@@ -388,7 +398,7 @@ class Container extends React.PureComponent {
                 break;
         }
 
-        this.props.requestDealQuote(
+        this.props.dealDetailRequestDealQuote(
             this.props.deal,
             this.props.userLocation.zipcode,
             this.props.purchaseStrategy,
@@ -411,7 +421,7 @@ class Container extends React.PureComponent {
 
         this.props.leaseActions.updateTerm(
             dealPricing.id(),
-            dealPricing.zipcode(),
+            this.props.userLocation.zipcode,
             term
         );
     };
@@ -421,7 +431,7 @@ class Container extends React.PureComponent {
 
         this.props.leaseActions.updateAnnualMileage(
             dealPricing.id(),
-            dealPricing.zipcode(),
+            this.props.userLocation.zipcode,
             annualMileage
         );
     };
@@ -431,7 +441,7 @@ class Container extends React.PureComponent {
 
         this.props.leaseActions.updateCashDue(
             dealPricing.id(),
-            dealPricing.zipcode(),
+            this.props.userLocation.zipcode,
             cashDue
         );
     };
@@ -441,7 +451,7 @@ class Container extends React.PureComponent {
 
         this.props.leaseActions.update(
             dealPricing.id(),
-            dealPricing.zipcode(),
+            this.props.userLocation.zipcode,
             annualMileage,
             term,
             cashDue
@@ -580,24 +590,22 @@ class Container extends React.PureComponent {
     }
 }
 
-function mapStateToProps(state) {
-    const getDealPricing = makeDealPricing();
-    return (state, props) => {
-        return {
-            purchaseStrategy: state.user.purchasePreferences.strategy,
-            compareList: state.common.compareList,
-            downPayment: state.common.downPayment,
-            termDuration: state.common.termDuration,
-            fallbackDealImage: state.common.fallbackDealImage,
-            selectedDeal: state.common.selectedDeal,
-            employeeBrand: state.common.employeeBrand,
-            discountType: state.pages.dealDetails.selectDiscount.discountType,
-            dealPricing: new DealPricing(getDealPricing(state, props)),
-            window: state.common.window,
-            userLocation: getUserLocation(state),
-        };
+const mapStateToProps = (state, props) => {
+    return {
+        purchaseStrategy: state.user.purchasePreferences.strategy,
+        compareList: state.common.compareList,
+        financeDownPayment: state.pages.dealDetails.finance.downPayment,
+        financeTerm: state.pages.dealDetails.finance.term,
+        leaseAnnualMileage: getLeaseAnnualMileage(state, props),
+        leaseTerm: getLeaseTerm(state, props),
+        fallbackDealImage: state.common.fallbackDealImage,
+        selectedDeal: state.common.selectedDeal,
+        discountType: state.pages.dealDetails.selectDiscount.discountType,
+        dealPricing: dealPricingFactory(state, props),
+        window: state.common.window,
+        userLocation: getUserLocation(state),
     };
-}
+};
 
 const mapDispatchToProps = mapAndBindActionCreators({
     financeActions,
@@ -607,7 +615,8 @@ const mapDispatchToProps = mapAndBindActionCreators({
     initPage,
     setPurchaseStrategy,
     receiveDeal,
-    requestDealQuote,
+    dealDetailRequestDealQuote,
+    setCheckoutData,
 });
 
 export default connect(

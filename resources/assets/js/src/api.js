@@ -20,15 +20,6 @@ const api = {
         });
     },
 
-    getTargets: (zipcode, vin) => {
-        return window.axios.get('/api/targets', {
-            params: {
-                zipcode,
-                vin,
-            },
-        });
-    },
-
     getApplicationStatus: purchaseId => {
         return window.axios.get('/api/application-status', {
             params: {

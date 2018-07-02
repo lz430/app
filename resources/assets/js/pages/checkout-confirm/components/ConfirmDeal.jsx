@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { makeDealPricing } from 'apps/common/selectors';
+import { dealPricingFromCheckoutFactory } from 'src/DealPricing';
 import InfoModalData from 'components/InfoModalData';
-import DealPricing from 'src/DealPricing';
 import { setPurchaseStrategy } from 'apps/user/actions';
+
 import {
     hideInfoModal,
     selectDeal,
@@ -28,6 +28,7 @@ class ConfirmDeal extends React.PureComponent {
             id: PropTypes.number.isRequired,
             vin: PropTypes.string.isRequired,
         }),
+        compareList: PropTypes.array,
         infoModalIsShowingFor: PropTypes.number,
         userLocation: PropTypes.object.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
@@ -35,6 +36,8 @@ class ConfirmDeal extends React.PureComponent {
         onHideInfoModal: PropTypes.func.isRequired,
         onRequestDealQuote: PropTypes.func.isRequired,
         onSetPurchaseStrategy: PropTypes.func.isRequired,
+        onToggleCompare: PropTypes.func.isRequired,
+        onSelectDeal: PropTypes.func.isRequired,
     };
 
     render() {
@@ -51,34 +54,25 @@ class ConfirmDeal extends React.PureComponent {
                     userLocation={this.props.userLocation}
                     purchaseStrategy={this.props.purchaseStrategy}
                     dealPricing={this.props.dealPricing}
+                    compareList={this.props.compareList}
                     onRequestDealQuote={this.props.onRequestDealQuote}
                     onSetPurchaseStrategy={this.props.onSetPurchaseStrategy}
-                    compareList={this.props.compareList}
-                    selectDeal={this.props.selectDeal}
-                    toggleCompare={this.props.toggleCompare}
+                    selectDeal={this.props.onSelectDeal}
+                    toggleCompare={this.props.onToggleCompare}
                 />
             </div>
         );
     }
 }
 
-const makeMapStateToProps = () => {
-    const getDealPricing = makeDealPricing();
-    const mapStateToProps = (state, props) => {
-        return {
-            userLocation: getUserLocation(state),
-            purchaseStrategy: state.user.purchasePreferences.strategy,
-            compareList: state.common.compareList,
-            downPayment: state.common.downPayment,
-            termDuration: state.common.termDuration,
-            selectedDeal: state.common.selectedDeal,
-            employeeBrand: state.common.employeeBrand,
-            residualPercent: state.common.residualPercent,
-            dealBestOfferTotalValue: dealQuoteRebatesTotal(state, props),
-            dealPricing: new DealPricing(getDealPricing(state, props)),
-        };
+const mapStateToProps = (state, props) => {
+    return {
+        userLocation: getUserLocation(state),
+        purchaseStrategy: state.user.purchasePreferences.strategy,
+        compareList: state.common.compareList,
+        dealBestOfferTotalValue: dealQuoteRebatesTotal(state, props),
+        dealPricing: dealPricingFromCheckoutFactory(state, props),
     };
-    return mapStateToProps;
 };
 
 const mapDispatchToProps = dispatch => {
@@ -105,6 +99,6 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(
-    makeMapStateToProps,
+    mapStateToProps,
     mapDispatchToProps
 )(ConfirmDeal);

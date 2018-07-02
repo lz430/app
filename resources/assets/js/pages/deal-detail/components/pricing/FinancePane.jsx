@@ -9,13 +9,15 @@ import Value from './Value';
 import TaxesAndFees from './TaxesAndFees';
 import Group from './Group';
 import Header from './Header';
+import PropTypes from 'prop-types';
 
 export default class FinancePane extends React.PureComponent {
-    static defaultProps = {
-        onDiscountChange: (discountType, make = null) => {},
-        onRebatesChange: () => {},
-        onDownPaymentChange: downPayment => {},
-        onTermChange: term => {},
+    static propTypes = {
+        onDiscountChange: PropTypes.func.isRequired,
+        onRebatesChange: PropTypes.func.isRequired,
+        onDownPaymentChange: PropTypes.func.isRequired,
+        onTermChange: PropTypes.func.isRequired,
+        dealPricing: PropTypes.object.isRequired,
     };
 
     render() {

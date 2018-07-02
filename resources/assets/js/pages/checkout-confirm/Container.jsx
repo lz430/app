@@ -1,15 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
-import * as Actions from 'apps/common/actions';
 import ConfirmDeal from './components/ConfirmDeal';
 import PropTypes from 'prop-types';
 import purchase from 'src/purchase';
 import DealImage from 'components/Deals/DealImage';
 
-import { makeDealPricing } from 'apps/common/selectors';
-
-import DealPricing from 'src/DealPricing';
+import { dealPricingFromCheckoutFactory } from 'src/DealPricing';
+import { getUserLocation } from 'apps/user/selectors';
 
 class Container extends React.PureComponent {
     static propTypes = {
@@ -25,11 +22,10 @@ class Container extends React.PureComponent {
         }),
     };
 
-    renderDeal(deal, index) {
+    renderDeal(deal) {
         return (
             <ConfirmDeal
                 deal={deal}
-                key={index}
                 hideImageAndTitle={true}
                 onConfirmPurchase={() => purchase.start(this.props.dealPricing)}
             />
@@ -70,17 +66,14 @@ class Container extends React.PureComponent {
     }
 }
 
-const makeMapStateToProps = () => {
-    const getDealPricing = makeDealPricing();
-    const mapStateToProps = (state, props) => {
-        return {
-            dealPricing: new DealPricing(getDealPricing(state, props)),
-        };
+const mapStateToProps = (state, props) => {
+    return {
+        deal: state.checkout.deal,
+        quote: state.checkout.quote,
+        purchaseStrategy: state.checkout.strategy,
+        userLocation: getUserLocation(state),
+        dealPricing: dealPricingFromCheckoutFactory(state, props),
     };
-    return mapStateToProps;
 };
 
-export default connect(
-    makeMapStateToProps,
-    Actions
-)(Container);
+export default connect(mapStateToProps)(Container);

@@ -1,7 +1,12 @@
 const UPDATE_DOWN_PAYMENT = 'dmr/dealDetails.finance.UPDATE_DOWN_PAYMENT';
 const UPDATE_TERM = 'dmr/dealDetails.finance.UPDATE_TERM';
 
-export default function(state = {}, action = {}) {
+const initialState = {
+    downPayment: 0,
+    term: 0,
+};
+
+export default function(state = initialState, action = {}) {
     switch (action.type) {
         case UPDATE_DOWN_PAYMENT:
             return { ...state, downPayment: action.downPayment };
