@@ -26,11 +26,14 @@
         text-align: center;
         width: calc(33% - 10px);
 
+        .filter-style-selector__icon {
+            cursor: pointer;
+        }
+
         &--selected {
             background: $color-left-filter-selected;
 
             .filter-style-selector__icon {
-                cursor: pointer;
                 svg path {
                     fill: $color-text-white;
                 }

@@ -5,7 +5,7 @@ import { requestLocation } from 'apps/user/actions';
 
 class ZipcodeFinder extends React.PureComponent {
     static propTypes = {
-        deals: PropTypes.array,
+        meta: PropTypes.object,
         zipcode: PropTypes.string,
         city: PropTypes.string,
         zipInRange: PropTypes.bool,
@@ -56,8 +56,9 @@ class ZipcodeFinder extends React.PureComponent {
                 <div className="zipcode-finder">
                     <div className="zipcode-finder__info">
                         <div className="zipcode-finder___count">
-                            {this.props.deals && this.props.deals.length
-                                ? `${this.props.deals.length} results for:`
+                            {this.props.meta &&
+                            this.props.meta.entity === 'deal'
+                                ? `${this.props.meta.total} results for:`
                                 : ''}
                         </div>
                         <div>{this.props.city ? '' : 'Zip Code'}</div>
@@ -96,9 +97,10 @@ class ZipcodeFinder extends React.PureComponent {
 }
 
 const mapStateToProps = state => {
+    console.log(state.pages.dealList.meta);
     return {
+        meta: state.pages.dealList.meta,
         city: state.user.location.city,
-        deals: state.pages.dealList.deals,
         zipcode: state.user.location.zipcode,
         zipInRange: state.user.location.zipInRange,
     };
