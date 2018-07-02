@@ -70,14 +70,8 @@ export function toggleCompare(deal) {
 }
 
 export function closeMakeSelectorModal() {
-    return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.CLOSE_MAKE_SELECTOR_MODAL,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
+    return {
+        type: ActionTypes.CLOSE_MAKE_SELECTOR_MODAL,
     };
 }
 

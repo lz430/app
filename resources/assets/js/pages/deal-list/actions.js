@@ -20,20 +20,6 @@ export function initDealListData() {
     };
 }
 
-export function receiveFeatures(data) {
-    return {
-        type: ActionTypes.RECEIVE_FEATURES,
-        data: data,
-    };
-}
-
-export function receiveFeatureCategories(data) {
-    return {
-        type: ActionTypes.RECEIVE_FEATURE_CATEGORIES,
-        data: data,
-    };
-}
-
 export function toggleStyle(style) {
     return (dispatch, getState) => {
         const selectedStyles = util.toggleItem(

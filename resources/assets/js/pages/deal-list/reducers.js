@@ -10,11 +10,6 @@ const urlStyle = util.getInitialBodyStyleFromUrl();
 const urlSize = util.getInitialSizeFromUrl();
 
 const initialState = {
-    featureCategories: [],
-    models: null,
-    features: null,
-    searchFeatures: [],
-
     page: 1,
     searchQuery: {
         entity: 'model', // deal or model depending on the page we're on.
@@ -29,10 +24,7 @@ const initialState = {
         features: urlSize ? [urlSize] : [],
     },
     modelYears: [],
-    dealPage: 1,
-    dealPageTotal: 1,
     deals: [],
-    requestingMoreDeals: false,
     loadingSearchResults: true,
     meta: {},
     filters: {},
@@ -70,23 +62,11 @@ const reducer = function(state = initialState, action = {}) {
                 window.history.replaceState({}, document.title, '/filter');
                 return state;
             }
+
             return state;
 
         case ActionTypes.INIT:
             return state;
-
-        case ActionTypes.RECEIVE_FEATURES:
-            return {
-                ...state,
-                features: action.data.data.data,
-            };
-
-        case ActionTypes.RECEIVE_FEATURE_CATEGORIES:
-            return {
-                ...state,
-                featureCategories: action.data.data.data,
-                searchFeatures: action.data.data.included,
-            };
 
         case ActionTypes.SEARCH_INCREMENT_PAGE:
             return {
@@ -136,13 +116,11 @@ const reducer = function(state = initialState, action = {}) {
             return {
                 ...state,
                 deals: deals,
-                requestingMoreDeals: false,
             };
 
         case ActionTypes.RECEIVE_MODEL_YEARS:
             return {
                 ...state,
-                requestingMoreDeals: false,
                 modelYears: action.data.results,
             };
 

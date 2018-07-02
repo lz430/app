@@ -97,7 +97,6 @@ class ZipcodeFinder extends React.PureComponent {
 }
 
 const mapStateToProps = state => {
-    console.log(state.pages.dealList.meta);
     return {
         meta: state.pages.dealList.meta,
         city: state.user.location.city,
