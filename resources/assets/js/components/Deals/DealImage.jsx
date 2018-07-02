@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import LazyLoad from 'react-lazyload';
 
 class DealImage extends React.PureComponent {
     static propTypes = {
@@ -28,10 +29,12 @@ class DealImage extends React.PureComponent {
 
     render() {
         return (
-            <img
-                className={this.props.featureImageClass}
-                src={this.featuredImageUrl()}
-            />
+            <LazyLoad height={200} overflow={true}>
+                <img
+                    className={this.props.featureImageClass}
+                    src={this.featuredImageUrl()}
+                />
+            </LazyLoad>
         );
     }
 }

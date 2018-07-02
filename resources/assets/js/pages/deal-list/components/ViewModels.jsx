@@ -1,28 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as Actions from 'apps/common/actions';
-import ModelYear from '../../../components/Deals/ModelYear';
+import ModelYear from 'components/Deals/ModelYear';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import { connect } from 'react-redux';
 
 class ViewModels extends React.PureComponent {
     static propTypes = {
-        deals: PropTypes.arrayOf(
-            PropTypes.shape({
-                employee_price: PropTypes.number.isRequired,
-                id: PropTypes.number.isRequired,
-                make: PropTypes.string.isRequired,
-                model: PropTypes.string.isRequired,
-                msrp: PropTypes.number.isRequired,
-                supplier_price: PropTypes.number.isRequired,
-                year: PropTypes.string.isRequired,
-            })
-        ),
-        dealPage: PropTypes.number,
-        dealPageTotal: PropTypes.number,
-        dealsByMakeModelYear: PropTypes.array,
-        selectedDealGrouping: PropTypes.object,
+        modelYears: PropTypes.array,
     };
 
     /**
@@ -67,7 +52,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(
-    mapStateToProps,
-    Actions
-)(ViewModels);
+export default connect(mapStateToProps)(ViewModels);

@@ -8,7 +8,8 @@
     flex-flow: row wrap;
     height: calc(100vh - #{$footer-height});
     justify-content: center;
-    overflow-y: scroll;
+    overflow: scroll;
+    position: relative;
     padding: 2px;
     padding-bottom: 15px;
 

@@ -222,7 +222,10 @@ abstract class BaseSearch
                         'value' => [
                             "terms" => [
                                 "size" => 50000,
-                                "field" => "make.keyword"
+                                "field" => "make.keyword",
+                                "order" => [
+                                    "_key" => "asc",
+                                ]
                             ],
                         ],
                     ]
