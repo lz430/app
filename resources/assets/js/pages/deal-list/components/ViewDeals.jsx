@@ -112,6 +112,7 @@ class ViewDeals extends React.PureComponent {
 const mapStateToProps = state => {
     return {
         compareList: state.common.compareList,
+        meta: state.pages.dealList.dealPage.meta,
         dealPage: state.pages.dealList.dealPage,
         dealPageTotal: state.pages.dealList.dealPageTotal,
         deals: state.pages.dealList.deals,
