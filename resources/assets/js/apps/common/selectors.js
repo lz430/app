@@ -42,37 +42,19 @@ const dealHasCustomizedQuote = createSelector(
 );
 
 const dealLeaseAnnualMileage = createSelector(
-    deal,
-    zipcode,
     leaseAnnualMileage,
-    (deal, zipcode, leaseAnnualMileage) => {
-        const key = `${deal.id}.${zipcode}`;
-
-        return leaseAnnualMileage[key] ? leaseAnnualMileage[key] : null;
+    leaseAnnualMileage => {
+        return leaseAnnualMileage;
     }
 );
 
-const dealLeaseTerm = createSelector(
-    deal,
-    zipcode,
-    leaseTerm,
-    (deal, zipcode, leaseTerm) => {
-        const key = `${deal.id}.${zipcode}`;
+const dealLeaseTerm = createSelector(leaseTerm, leaseTerm => {
+    return leaseTerm;
+});
 
-        return leaseTerm[key] ? leaseTerm[key] : null;
-    }
-);
-
-const dealLeaseCashDue = createSelector(
-    deal,
-    zipcode,
-    leaseCashDue,
-    (deal, zipcode, leaseCashDue) => {
-        const key = `${deal.id}.${zipcode}`;
-
-        return leaseCashDue[key] ? leaseCashDue[key] : null;
-    }
-);
+const dealLeaseCashDue = createSelector(leaseCashDue, leaseCashDue => {
+    return leaseCashDue;
+});
 
 const quotes = state => {
     return state.pricing.quotes;

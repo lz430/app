@@ -37,22 +37,10 @@ export const getLeaseSettings = state => {
     return state.pages.dealDetails.lease;
 };
 
-export const getLeaseTerm = (state, props) => {
-    const dealId = props.deal.id;
-    const zipcode = state.user.location.zipcode;
-    const key = `${dealId}.${zipcode}`;
-    if (state.pages.dealDetails.lease.term[key]) {
-        return state.pages.dealDetails.lease.term[key];
-    }
-    return null;
+export const getLeaseTerm = state => {
+    return state.pages.dealDetails.lease.term;
 };
 
-export const getLeaseAnnualMileage = (state, props) => {
-    const dealId = props.deal.id;
-    const zipcode = state.user.location.zipcode;
-    const key = `${dealId}.${zipcode}`;
-    if (state.pages.dealDetails.lease.annualMileage[key]) {
-        return state.pages.dealDetails.lease.annualMileage[key];
-    }
-    return null;
+export const getLeaseAnnualMileage = state => {
+    return state.pages.dealDetails.lease.annualMileage;
 };
