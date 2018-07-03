@@ -123,10 +123,6 @@ export default class DealPricing {
         return 0;
     }
 
-    leaseCashDue() {
-        return util.moneyFormat(this.leaseCashDueValue());
-    }
-
     leaseAnnualMileageValue() {
         if (!this.data.leaseAnnualMileage) {
             const leaseAnnualMileageAvailable = this.leaseAnnualMileageAvailable();

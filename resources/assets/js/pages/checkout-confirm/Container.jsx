@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ConfirmDeal from './components/ConfirmDeal';
 import PropTypes from 'prop-types';
-import purchase from 'src/purchase';
 import DealImage from 'components/Deals/DealImage';
 
 import { dealPricingFromCheckoutFactory } from 'src/DealPricing';
 import { getUserLocation } from 'apps/user/selectors';
+import { checkoutStart } from 'apps/checkout/actions';
 
 class Container extends React.PureComponent {
     static propTypes = {
@@ -20,10 +20,15 @@ class Container extends React.PureComponent {
             id: PropTypes.number.isRequired,
             vin: PropTypes.string.isRequired,
         }),
+        onCheckoutStart: PropTypes.func.isRequired,
     };
 
     handleConfirmPurchase() {
-        purchase.start(this.props.dealPricing);
+        console.log('handleConfirmPurchase');
+        console.log(this.props.dealPricing);
+        this.props.onCheckoutStart(this.props.dealPricing);
+
+        //purchase.start(this.props.dealPricing);
     }
 
     renderDeal(deal) {
@@ -75,9 +80,21 @@ const mapStateToProps = (state, props) => {
         deal: state.checkout.deal,
         quote: state.checkout.quote,
         purchaseStrategy: state.checkout.strategy,
+        isLoading: state.checkout.isLoading,
         userLocation: getUserLocation(state),
         dealPricing: dealPricingFromCheckoutFactory(state, props),
     };
 };
 
-export default connect(mapStateToProps)(Container);
+const mapDispatchToProps = dispatch => {
+    return {
+        onCheckoutStart: dealPricing => {
+            return dispatch(checkoutStart(dealPricing));
+        },
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Container);

@@ -12,15 +12,17 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::get('dealsByModelYear', 'DealsByModelYearController@getDealsByModelYear')->name('dealsByModelYear.index');
 Route::get('deals', 'DealsController@getDeals')->name('deals.index');
 Route::get('deals/compare', 'DealsCompareController@compare')->name('deals.compare');
-
 Route::get('deals/{deal}/quote', 'DealQuoteController@quote')->name('deals.quote');
 Route::get('deals/{deal}/warranties', 'DealWarrantiesController@getWarranties')->name('warranties.getWarranties');
 Route::get('deals/{deal}/dimensions', 'DealDimensionsController@getDimensions')->name('dimensions.getDimensions');
-Route::get('targets', 'TargetsController@getTargets')->name('targets.getTargets');
 
+Route::post('checkout/start', 'CheckoutController@start')->name('checkout.start');
+
+Route::get('targets', 'TargetsController@getTargets')->name('targets.getTargets');
 Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');
 Route::get('location', 'UserLocationController@show')->name('location.show');
 
@@ -29,7 +31,6 @@ Route::get('location', 'UserLocationController@show')->name('location.show');
  */
 
 Route::post('hubspot/not-in-area', 'HubspotController@notInServiceArea')->name('hubspot.notInArea');
-
 
 Route::group(['prefix' => 'webhook'], function () {
     Route::post('route-one', 'RouteOneWebhookController@handleWebhook')->name('route-one-webhook');
