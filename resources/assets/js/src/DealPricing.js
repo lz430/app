@@ -69,7 +69,7 @@ export default class DealPricing {
 
     financeTermValue() {
         let value = this.data.financeTerm;
-        if (value === null || value === undefined) {
+        if (value === null || value === undefined || value === 0) {
             value = 60;
         }
         return value;
@@ -407,10 +407,6 @@ export default class DealPricing {
                         this.financeTermValue()
                     )
                 );
-
-                console.log(this.discountedPriceValue());
-                console.log(this.bestOfferValue());
-                console.log(this.financeDownPaymentValue());
                 console.log(this.financeTermValue());
 
                 return value;
