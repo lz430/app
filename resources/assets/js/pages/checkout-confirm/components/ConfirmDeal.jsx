@@ -38,6 +38,7 @@ class ConfirmDeal extends React.PureComponent {
         onSetPurchaseStrategy: PropTypes.func.isRequired,
         onToggleCompare: PropTypes.func.isRequired,
         onSelectDeal: PropTypes.func.isRequired,
+        onConfirmPurchase: PropTypes.func.isRequired,
     };
 
     render() {
@@ -57,6 +58,7 @@ class ConfirmDeal extends React.PureComponent {
                     compareList={this.props.compareList}
                     onRequestDealQuote={this.props.onRequestDealQuote}
                     onSetPurchaseStrategy={this.props.onSetPurchaseStrategy}
+                    onConfirmPurchase={this.props.onConfirmPurchase}
                     selectDeal={this.props.onSelectDeal}
                     toggleCompare={this.props.onToggleCompare}
                 />

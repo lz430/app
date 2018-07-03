@@ -234,7 +234,7 @@ export default class DealPricing {
     }
 
     bestOfferPrograms() {
-        return this.data.bestOffer.programs;
+        return this.data.dealQuote.rebates;
     }
 
     employeeBrand() {

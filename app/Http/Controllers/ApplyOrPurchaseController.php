@@ -99,7 +99,6 @@ class ApplyOrPurchaseController extends Controller
             ]
         );
 
-
         //
         // User
         $user = DB::transaction(function () use ($request) {

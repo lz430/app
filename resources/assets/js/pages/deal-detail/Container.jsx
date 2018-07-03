@@ -35,6 +35,7 @@ import { initPage, receiveDeal } from './actions';
 
 import { getUserLocation } from 'apps/user/selectors';
 import { getLeaseAnnualMileage, getLeaseTerm } from './selectors';
+import ApiClient from '../../store/api';
 
 class Container extends React.PureComponent {
     static propTypes = {
@@ -82,25 +83,17 @@ class Container extends React.PureComponent {
             this.setState({ featuredImage: this.props.deal.photos[0] });
         }
 
-        api.getDimensions(this.props.deal.version.jato_vehicle_id).then(
-            response => {
-                if (!this._isMounted) return;
+        ApiClient.deal.dealGetDimensions(this.props.deal.id).then(response => {
+            this.setState({
+                dimensions: response.data,
+            });
+        });
 
-                this.setState({
-                    dimensions: response.data,
-                });
-            }
-        );
-
-        api.getWarranties(this.props.deal.version.jato_vehicle_id).then(
-            response => {
-                if (!this._isMounted) return;
-
-                this.setState({
-                    warranties: response.data,
-                });
-            }
-        );
+        ApiClient.deal.dealGetWarranties(this.props.deal.id).then(response => {
+            this.setState({
+                warranties: response.data,
+            });
+        });
     }
 
     showStandardFeatures() {

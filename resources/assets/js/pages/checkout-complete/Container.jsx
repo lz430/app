@@ -5,39 +5,31 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import Modal from 'components/Modal';
 import strings from 'src/strings';
-import api from 'src/api';
+import ApiClient from 'store/api';
 import util from 'src/util';
 import miscicons from 'miscicons';
 import { dealQuoteRebatesTotal } from 'apps/common/selectors';
 
 class Container extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            warranties: null,
-            dimensions: null,
-            showStandardFeatures: false,
-            showFeatures: false,
-        };
-    }
+    state = {
+        warranties: null,
+        dimensions: null,
+        showStandardFeatures: false,
+        showFeatures: false,
+    };
 
     componentDidMount() {
-        api.getDimensions(this.props.deal.version.jato_vehicle_id).then(
-            response => {
-                this.setState({
-                    dimensions: response.data,
-                });
-            }
-        );
+        ApiClient.deal.dealGetDimensions(this.props.deal.id).then(response => {
+            this.setState({
+                dimensions: response.data,
+            });
+        });
 
-        api.getWarranties(this.props.deal.version.jato_vehicle_id).then(
-            response => {
-                this.setState({
-                    warranties: response.data,
-                });
-            }
-        );
+        ApiClient.deal.dealGetWarranties(this.props.deal.id).then(response => {
+            this.setState({
+                warranties: response.data,
+            });
+        });
     }
 
     showStandardFeatures() {

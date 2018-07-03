@@ -22,12 +22,16 @@ class Container extends React.PureComponent {
         }),
     };
 
+    handleConfirmPurchase() {
+        purchase.start(this.props.dealPricing);
+    }
+
     renderDeal(deal) {
         return (
             <ConfirmDeal
                 deal={deal}
                 hideImageAndTitle={true}
-                onConfirmPurchase={() => purchase.start(this.props.dealPricing)}
+                onConfirmPurchase={this.handleConfirmPurchase.bind(this)}
             />
         );
     }

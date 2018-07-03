@@ -15,10 +15,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('dealsByModelYear', 'DealsByModelYearController@getDealsByModelYear')->name('dealsByModelYear.index');
 Route::get('deals', 'DealsController@getDeals')->name('deals.index');
 Route::get('deals/compare', 'DealsCompareController@compare')->name('deals.compare');
-Route::get('warranties', 'WarrantiesController@getWarranties')->name('warranties.getWarranties');
-Route::get('dimensions', 'DimensionsController@getDimensions')->name('dimensions.getDimensions');
-Route::get('deals/{deal}/quote', 'DealQuoteController@quote')->name('deals.quote');
 
+Route::get('deals/{deal}/quote', 'DealQuoteController@quote')->name('deals.quote');
+Route::get('deals/{deal}/warranties', 'DealWarrantiesController@getWarranties')->name('warranties.getWarranties');
+Route::get('deals/{deal}/dimensions', 'DealDimensionsController@getDimensions')->name('dimensions.getDimensions');
 Route::get('targets', 'TargetsController@getTargets')->name('targets.getTargets');
 
 Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');
