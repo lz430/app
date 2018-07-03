@@ -96,15 +96,32 @@ export default class LeasePane extends React.PureComponent {
                                 <Label>Annual Miles</Label>
                                 <Value>
                                     <select
-                                        onClick={
-                                            this.handleUpdateLeaseTermsClick
+                                        value={dealPricing.leaseAnnualMileageValue()}
+                                        onChange={
+                                            this.handleAnnualMileageChange
                                         }
                                     >
-                                        <option
-                                            value={dealPricing.leaseAnnualMileageValue()}
-                                        >
-                                            {dealPricing.leaseAnnualMileageValue()}
-                                        </option>
+                                        {dealPricing
+                                            .leaseAnnualMileageAvailable()
+                                            .map(
+                                                (
+                                                    annualMileage,
+                                                    annualMileageIndex
+                                                ) => {
+                                                    return (
+                                                        <option
+                                                            key={
+                                                                annualMileageIndex
+                                                            }
+                                                            value={
+                                                                annualMileage
+                                                            }
+                                                        >
+                                                            {annualMileage}
+                                                        </option>
+                                                    );
+                                                }
+                                            )}
                                     </select>
                                 </Value>
                             </Line>
@@ -112,31 +129,37 @@ export default class LeasePane extends React.PureComponent {
                                 <Label>Term</Label>
                                 <Value>
                                     <select
-                                        onClick={
-                                            this.handleUpdateLeaseTermsClick
-                                        }
+                                        value={dealPricing.leaseTermValue()}
+                                        onChange={this.handleTermChange}
                                     >
-                                        <option
-                                            value={dealPricing.leaseTermValue()}
-                                        >
-                                            {dealPricing.leaseTermValue()}{' '}
-                                            months
-                                        </option>
+                                        {dealPricing
+                                            .leaseTermsAvailable()
+                                            .map((term, termIndex) => {
+                                                return (
+                                                    <option
+                                                        key={termIndex}
+                                                        value={term}
+                                                    >
+                                                        {`${term} months`}
+                                                    </option>
+                                                );
+                                            })}
                                     </select>
                                 </Value>
                             </Line>
                             <Line>
-                                <a
+                                <span
                                     style={{
                                         cursor: 'pointer',
                                         color: '#41b1ac',
-                                        fontSize: '.75em',
                                         fontWeight: 'bold',
                                     }}
-                                    onClick={this.handleUpdateLeaseTermsClick}
+                                    onClick={
+                                        this.handleShowLeaseTermsSelectClick
+                                    }
                                 >
                                     See all available lease options
-                                </a>
+                                </span>
                             </Line>
                             <Line isImportant={true}>
                                 <Label>Monthly Payment</Label>
@@ -162,13 +185,34 @@ export default class LeasePane extends React.PureComponent {
         this.handleLeaseTermsSelectClose();
     };
 
+    handleTermChange = e => {
+        const { dealPricing } = this.props;
+        const term = e.target.value;
+
+        this.props.onChange(
+            dealPricing.leaseAnnualMileageValue(),
+            term,
+            dealPricing.leaseCashDueValue()
+        );
+    };
+
+    handleAnnualMileageChange = e => {
+        const { dealPricing } = this.props;
+        const annualMileage = e.target.value;
+
+        this.props.onChange(
+            annualMileage,
+            dealPricing.leaseTermValue(),
+            dealPricing.leaseCashDueValue()
+        );
+    };
+
     handleLeaseTermsSelectClose = () => {
         this.setState({ leaseTermsSelectOpened: false });
     };
 
-    handleUpdateLeaseTermsClick = e => {
+    handleShowLeaseTermsSelectClick = e => {
         e.preventDefault();
-        e.target.blur();
 
         this.openLeaseTermsSelect();
     };
