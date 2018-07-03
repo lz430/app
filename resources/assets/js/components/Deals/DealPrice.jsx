@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import InfoModal from 'components/InfoModal';
-import { makeDealPricing } from 'apps/common/selectors';
-import DealPricing from 'src/DealPricing';
+import { dealPricingFactory } from 'src/DealPricing';
 
 import {
     selectDeal,
@@ -102,19 +101,14 @@ class DealPrice extends React.Component {
     }
 }
 
-const makeMapStateToProps = () => {
-    const getDealPricing = makeDealPricing();
-    const mapStateToProps = (state, props) => {
-        return {
-            userLocation: getUserLocation(state),
-            purchaseStrategy: state.user.purchasePreferences.strategy,
-            dealPricing: new DealPricing(getDealPricing(state, props)),
-
-            compareList: state.common.compareList,
-            infoModalIsShowingFor: state.common.infoModalIsShowingFor,
-        };
+const mapStateToProps = (state, props) => {
+    return {
+        userLocation: getUserLocation(state),
+        purchaseStrategy: state.user.purchasePreferences.strategy,
+        dealPricing: dealPricingFactory(state, props),
+        compareList: state.common.compareList,
+        infoModalIsShowingFor: state.common.infoModalIsShowingFor,
     };
-    return mapStateToProps;
 };
 
 const mapDispatchToProps = dispatch => {
@@ -141,6 +135,6 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(
-    makeMapStateToProps,
+    mapStateToProps,
     mapDispatchToProps
 )(DealPrice);

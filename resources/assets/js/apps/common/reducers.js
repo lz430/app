@@ -6,25 +6,10 @@ const initialState = {
     compareList: [],
     employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
-    infoModalIsShowingFor: null,
-    residualPercent: null,
     selectedDeal: null,
-    selectedTab: 'cash',
-    selectedTargets: [],
+    infoModalIsShowingFor: null,
     showMakeSelectorModal: true,
     smallFiltersShown: false,
-    targets: [],
-    targetsAvailable: {},
-    targetsSelected: {},
-    /** Need to duplicate these in App\Http\Controllers\API\TargetsController::TARGET_OPEN_OFFERS **/
-    targetDefaults: [
-        25, // Open Offer
-        36, // Finance & Lease Customer
-        39, // Finance Customer
-        26, // Lease Customer
-        45, // Captive Finance Customer
-        52, // Auto Show Cash Recipient
-    ],
     vehicleModel: null,
     vehicleYear: null,
     window: { width: window.innerWidth },

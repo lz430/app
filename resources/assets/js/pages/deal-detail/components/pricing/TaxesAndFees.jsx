@@ -1,12 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import Line from './Line';
 import Label from './Label';
 import Value from './Value';
-import util from '../../../../src/util';
-import Group from './Group';
-import Header from './Header';
 
 export default class TaxesAndFees extends React.PureComponent {
+    static propTypes = {
+        items: PropTypes.array,
+    };
+
     render() {
         return (
             <div style={{ marginBottom: '.75em' }}>

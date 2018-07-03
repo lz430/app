@@ -28,3 +28,19 @@ export const getActiveQuote = state => {
         return null;
     }
 };
+
+export const getFinanceSettings = state => {
+    return state.pages.dealDetails.finance;
+};
+
+export const getLeaseSettings = state => {
+    return state.pages.dealDetails.lease;
+};
+
+export const getLeaseTerm = state => {
+    return state.pages.dealDetails.lease.term;
+};
+
+export const getLeaseAnnualMileage = state => {
+    return state.pages.dealDetails.lease.annualMileage;
+};

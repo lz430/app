@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 
@@ -13,17 +15,15 @@ import Header from './Header';
 import LeaseTermsSelect from './LeaseTermsSelect';
 
 export default class LeasePane extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            leaseTermsSelectOpened: false,
-        };
-    }
+    static propTypes = {
+        onDiscountChange: PropTypes.func.isRequired,
+        onRebatesChange: PropTypes.func.isRequired,
+        onChange: PropTypes.func.isRequired,
+        dealPricing: PropTypes.object.isRequired,
+    };
 
-    static defaultProps = {
-        onDiscountChange: (discountType, make = null) => {},
-        onRebatesChange: () => {},
-        onChange: () => {},
+    state = {
+        leaseTermsSelectOpened: false,
     };
 
     render() {

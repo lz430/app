@@ -6,7 +6,6 @@ import httpclient from 'store/httpclient';
  */
 class DealService {
     /**
-     *
      * @param dealId
      * @param paymentType
      * @param zipcode
@@ -36,6 +35,22 @@ class DealService {
                 deals: dealIds,
             },
         });
+    }
+
+    /**
+     * @param dealId
+     * @returns {*}
+     */
+    dealGetDimensions(dealId) {
+        return httpclient.get(`/api/deals/${dealId}/dimensions`);
+    }
+
+    /**
+     * @param dealId
+     * @returns {*}
+     */
+    dealGetWarranties(dealId) {
+        return httpclient.get(`/api/deals/${dealId}/warranties`);
     }
 }
 

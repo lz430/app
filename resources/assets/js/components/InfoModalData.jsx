@@ -24,11 +24,16 @@ class InfoModalData extends React.PureComponent {
             id: PropTypes.number.isRequired,
             vin: PropTypes.string.isRequired,
         }),
+        withCustomizeQuoteOrBuyNow: PropTypes.bool,
+        withConfirmPurchase: PropTypes.bool,
         infoModalIsShowingFor: PropTypes.number,
         userLocation: PropTypes.object.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
         onRequestDealQuote: PropTypes.func.isRequired,
+        onConfirmPurchase: PropTypes.func,
         onSetPurchaseStrategy: PropTypes.func.isRequired,
+        closeModal: PropTypes.func,
+        children: PropTypes.node,
     };
 
     static defaultProps = {
@@ -302,6 +307,17 @@ class InfoModalData extends React.PureComponent {
                                         !this.props.dealPricing.canPurchase()
                                     }
                                 />
+                            )}
+                            {this.props.withConfirmPurchase && (
+                                <button
+                                    className="deal__button deal__button--small deal__button--pink deal__button"
+                                    onClick={this.props.onConfirmPurchase}
+                                    disabled={
+                                        !this.props.dealPricing.canPurchase()
+                                    }
+                                >
+                                    Confirm purchase
+                                </button>
                             )}
                         </div>
                     </div>

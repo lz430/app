@@ -3,6 +3,7 @@ import axios from 'axios';
 export default axios.create({
     baseURL: '',
     headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': window.Laravel.csrfToken,
         'X-Requested-With': 'XMLHttpRequest',

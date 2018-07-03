@@ -7,6 +7,7 @@ import commonReducers from 'apps/common/reducers';
 import appUserReducer from 'apps/user/reducers';
 import appPageReducer from 'apps/page/reducers';
 import appPricingReducer from 'apps/pricing/reducers';
+import appCheckoutReducer from 'apps/checkout/reducers';
 
 import dealDetailsReducer from 'pages/deal-detail/reducer';
 import dealListReducer from 'pages/deal-list/reducers';
@@ -28,6 +29,7 @@ export default combineReducers({
     common: commonReducers,
     user: appUserReducer,
     pricing: appPricingReducer,
+    checkout: appCheckoutReducer,
     page: appPageReducer,
     pages: persistReducer(pagesPersistConfig, pagesReducer),
 });

@@ -15,7 +15,7 @@ const initialState = {};
 const config = {
     ...basePersistConfig,
     key: 'root',
-    blacklist: ['pages', 'page', 'pricing', 'user'],
+    blacklist: ['pages', 'page', 'pricing', 'user', 'checkout'],
 };
 
 export default () => {

@@ -5,9 +5,8 @@ import { dealQuoteKey as generateDealQuoteKey } from 'apps/pricing/helpers';
 export default state => state.common;
 export const common = state => state.common;
 
-const zipcode = state => state.user.location.zipcode;
-const deal = (state, props) => props.deal;
-const targetsAvailable = state => state.common.targetsAvailable;
+export const zipcode = state => state.user.location.zipcode;
+export const deal = (state, props) => props.deal;
 
 const paymentType = state => state.user.purchasePreferences.strategy;
 
@@ -34,43 +33,6 @@ const leaseCashDue = state => state.pages.dealDetails.lease.cashDue;
 const dealsIdsWithCustomizedQuotes = state =>
     state.common.dealsIdsWithCustomizedQuotes;
 
-// Generate the target key for a specific deal
-const dealTargetKey = createSelector([deal, zipcode], (deal, zipcode) => {
-    if (!deal) {
-        return null;
-    }
-    const vehicleId = deal.id;
-    return `${vehicleId}-${zipcode}`;
-});
-
-export const makeDealTargetKey = () => {
-    return dealTargetKey;
-};
-
-// Check if we already have the targets for this target id.
-const dealTargetsAvailableLoading = createSelector(
-    [dealTargetKey, targetsAvailable],
-    (dealTargetKey, targetsAvailable) => {
-        return R.isNil(R.prop(dealTargetKey, targetsAvailable));
-    }
-);
-
-export const makeDealTargetsAvailableLoading = () => {
-    return dealTargetsAvailableLoading;
-};
-
-// Show me all available targets for a specific deal
-const dealTargetsAvailable = createSelector(
-    [dealTargetKey, targetsAvailable],
-    (dealTargetKey, targetsAvailable) => {
-        return R.prop(dealTargetKey, targetsAvailable) || [];
-    }
-);
-
-export const makeDealTargetsAvailable = () => {
-    return dealTargetsAvailable;
-};
-
 const dealHasCustomizedQuote = createSelector(
     deal,
     dealsIdsWithCustomizedQuotes,
@@ -80,37 +42,19 @@ const dealHasCustomizedQuote = createSelector(
 );
 
 const dealLeaseAnnualMileage = createSelector(
-    deal,
-    zipcode,
     leaseAnnualMileage,
-    (deal, zipcode, leaseAnnualMileage) => {
-        const key = `${deal.id}.${zipcode}`;
-
-        return leaseAnnualMileage[key] ? leaseAnnualMileage[key] : null;
+    leaseAnnualMileage => {
+        return leaseAnnualMileage;
     }
 );
 
-const dealLeaseTerm = createSelector(
-    deal,
-    zipcode,
-    leaseTerm,
-    (deal, zipcode, leaseTerm) => {
-        const key = `${deal.id}.${zipcode}`;
+const dealLeaseTerm = createSelector(leaseTerm, leaseTerm => {
+    return leaseTerm;
+});
 
-        return leaseTerm[key] ? leaseTerm[key] : null;
-    }
-);
-
-const dealLeaseCashDue = createSelector(
-    deal,
-    zipcode,
-    leaseCashDue,
-    (deal, zipcode, leaseCashDue) => {
-        const key = `${deal.id}.${zipcode}`;
-
-        return leaseCashDue[key] ? leaseCashDue[key] : null;
-    }
-);
+const dealLeaseCashDue = createSelector(leaseCashDue, leaseCashDue => {
+    return leaseCashDue;
+});
 
 const quotes = state => {
     return state.pricing.quotes;
@@ -141,13 +85,6 @@ const dealQuote = createSelector(
     }
 );
 
-const dealQuoteRebates = createSelector([dealQuote], quote => {
-    if (quote && quote.rebates) {
-        return quote.rebates;
-    }
-    return null;
-});
-
 export const dealQuoteRebatesTotal = createSelector([dealQuote], quote => {
     if (quote && quote.rebates) {
         return quote.rebates.total || 0;
@@ -159,25 +96,8 @@ export const dealQuoteIsLoading = createSelector([dealQuote], quote => {
     return quote === null;
 });
 
-const dealQuoteLeaseRates = createSelector([dealQuote], quote => {
-    if (quote && quote.rates) {
-        return quote.rates;
-    }
-    return [];
-});
-
-const dealQuoteLeasePayments = createSelector([dealQuote], quote => {
-    if (quote && quote.payments) {
-        return quote.payments;
-    }
-    return [];
-});
-
-const dealPricing = createSelector(
+export const dealPricingData = createSelector(
     deal,
-    dealQuoteRebates,
-    dealQuoteIsLoading,
-    zipcode,
     paymentType,
     employeeBrand,
     supplierBrand,
@@ -187,16 +107,11 @@ const dealPricing = createSelector(
     dealLeaseTerm,
     dealLeaseCashDue,
     dealHasCustomizedQuote,
-    dealQuoteIsLoading,
-    dealQuoteLeaseRates,
-    dealQuoteIsLoading,
-    dealQuoteLeasePayments,
     discountType,
+    dealQuoteIsLoading,
+    dealQuote,
     (
         deal,
-        dealRebates,
-        dealBestOfferLoading,
-        zipcode,
         paymentType,
         employeeBrand,
         supplierBrand,
@@ -206,17 +121,12 @@ const dealPricing = createSelector(
         dealLeaseTerm,
         dealLeaseCashDue,
         dealHasCustomizedQuote,
-        dealLeaseRatesLoading,
-        dealLeaseRates,
-        dealLeasePaymentsLoading,
-        dealLeasePayments,
-        discountType
+        discountType,
+        dealQuoteIsLoading,
+        dealQuote
     ) => {
         return {
             deal,
-            bestOffer: dealRebates,
-            bestOfferIsLoading: dealBestOfferLoading,
-            zipcode,
             paymentType,
             employeeBrand,
             supplierBrand,
@@ -224,17 +134,10 @@ const dealPricing = createSelector(
             financeTerm,
             leaseAnnualMileage: dealLeaseAnnualMileage,
             leaseTerm: dealLeaseTerm,
-            leaseCashDue: dealLeaseCashDue,
             dealHasCustomizedQuote,
-            dealLeaseRatesLoading,
-            dealLeaseRates,
-            dealLeasePaymentsLoading,
-            dealLeasePayments,
             discountType,
+            dealQuoteIsLoading,
+            dealQuote,
         };
     }
 );
-
-export const makeDealPricing = () => {
-    return dealPricing;
-};

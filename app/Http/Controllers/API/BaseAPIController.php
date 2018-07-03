@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class BaseAPIController extends Controller
+use Illuminate\Routing\Controller as BaseController;
+
+class BaseAPIController extends BaseController
 {
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
     protected $status_code = Response::HTTP_OK;
     
     public function setStatusCode($code)

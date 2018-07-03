@@ -9,13 +9,9 @@ class Container extends Component {
         user: PropTypes.object.isRequired,
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            method: 'cash',
-        };
-    }
+    state = {
+        method: 'cash',
+    };
 
     componentWillMount() {
         this.setState({
