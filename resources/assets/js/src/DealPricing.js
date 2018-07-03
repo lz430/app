@@ -6,11 +6,24 @@ import Decimal from 'decimal.js';
 import { dealPricingData } from 'apps/common/selectors';
 import { dealPricingFromCheckoutData } from 'apps/checkout/selectors';
 
+/**
+ * Generate a deal pricing class using data pulled
+ * from a mixture of user profile / deal detail / deal list data.
+ * @param state
+ * @param props
+ * @returns {DealPricing}
+ */
 export const dealPricingFactory = (state, props) => {
     const data = dealPricingData(state, props);
     return new DealPricing(data);
 };
 
+/**
+ * Generate a deal pricing class using mostly checkout data.
+ * @param state
+ * @param props
+ * @returns {DealPricing}
+ */
 export const dealPricingFromCheckoutFactory = (state, props) => {
     const data = dealPricingFromCheckoutData(state, props);
     return new DealPricing(data);
@@ -41,6 +54,10 @@ export default class DealPricing {
         return [0];
     }
 
+    /**
+     * @deprecated
+     * @returns {boolean}
+     */
     bestOfferIsLoading() {
         return this.data.dealQuoteIsLoading;
     }
@@ -400,16 +417,13 @@ export default class DealPricing {
     monthlyPaymentsValue() {
         switch (this.data.paymentType) {
             case 'finance':
-                const value = Math.round(
+                return Math.round(
                     formulas.calculateFinancedMonthlyPayments(
                         this.discountedPriceValue() - this.bestOfferValue(),
                         this.financeDownPaymentValue(),
                         this.financeTermValue()
                     )
                 );
-                console.log(this.financeTermValue());
-
-                return value;
             case 'lease':
                 return this.leaseMonthlyPaymentsValue();
         }
