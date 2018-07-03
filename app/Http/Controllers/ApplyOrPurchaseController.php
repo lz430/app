@@ -20,63 +20,11 @@ use Laracasts\Utilities\JavaScript\JavaScriptFacade;
 
 class ApplyOrPurchaseController extends Controller
 {
-    /**
-     * Create "Purchase" from deal and rebates
-     */
-    public function applyOrInitiatePurchase(Request $request)
-    {
-        try {
-            $this->validate($request, [
-                'type' => 'required|in:cash,finance,lease',
-                'deal_id' => 'required|exists:deals,id',
-                'dmr_price' => 'required|numeric',
-                'msrp' => 'required|numeric',
-                // Rebates.
-                'rebates' => 'array',
-                'rebates.*.title' => 'required_with:rebates|string',
-                'rebates.*.value' => 'required_with:rebates|numeric',
-                // Finance and lease values.
-                'term' => 'required_if:type,finance,lease|integer',
-                'down_payment' => 'required_if:type,finance,lease|numeric',
-                'monthly_payment' => 'required_if:type,finance,lease|numeric',
-                'amount_financed' => 'required_if:type,finance|numeric',
-            ]);
-
-            /**
-             * We don't want to save the purchase to the DB until we collect the user's email and query the user, so store
-             * in session for now
-             */
-            $purchase = new Purchase([
-                'deal_id' => request('deal_id'),
-                'completed_at' => null,
-                'type' => request('type'),
-                'rebates' => request('rebates', []),
-                'dmr_price' => request('dmr_price'),
-                'msrp' => request('msrp'),
-                'term' => request('term') ?: 60,
-                'down_payment' => request('down_payment') ?: 0,
-                'monthly_payment' => request('monthly_payment') ?: 0,
-                'amount_financed' => request('amount_financed') ?: 0,
-            ]);
-            session(['purchase' => $purchase]);
-
-            /**
-             * If email saved to session, put in request and send to receiveEmail.
-             */
-            if (session()->has('email')) {
-                $request->merge(['email' => session()->get('email')]);
-            }
-
-            return redirect('/request-email?payment=' . request('type'));
-        } catch (ValidationException $e) {
-            Log::notice('Invalid applyOrPurchase submission: ' . json_encode(['request' => request()->all(), 'errors' => $e->errors()]));
-
-            return abort(500);
-        }
-    }
-
     public function requestEmail(Request $request)
     {
+        if (! session()->has('purchase') || ! is_object(session('purchase'))) {
+            return "Invalid request";
+        }
         return view('request-email')->with('email', $request->session()->get('email'));
     }
 
@@ -189,7 +137,7 @@ class ApplyOrPurchaseController extends Controller
         $purchase->completed_at = Carbon::now();
         $purchase->save();
 
-        Mail::to(config('mail.dmr.address'))->send(new DealPurchasedDMR);
+        //Mail::to(config('mail.dmr.address'))->send(new DealPurchasedDMR);
 
         return redirect()->route('thank-you', ['method' => $purchase->type]);
     }
@@ -236,8 +184,8 @@ class ApplyOrPurchaseController extends Controller
             $purchase->completed_at = Carbon::now();
             $purchase->save();
 
-            Mail::to(config('mail.dmr.address'))->send(new ApplicationSubmittedDMR);
-            Mail::to(request('email'))->send(new ApplicationSubmittedUser);
+            //Mail::to(config('mail.dmr.address'))->send(new ApplicationSubmittedDMR);
+            //Mail::to(request('email'))->send(new ApplicationSubmittedUser);
 
             return view('apply')
                 ->with('purchase', $purchase);

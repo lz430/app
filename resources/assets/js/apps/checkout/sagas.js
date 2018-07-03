@@ -9,7 +9,7 @@ import { checkout as getCheckout } from './selectors';
 
 /*******************************************************************
  * Checkout Start
- ********************************************************************/
+ *******************************************************************/
 export function* checkoutStart(action) {
     yield put(checkoutIsLoading());
 
@@ -38,9 +38,9 @@ export function* checkoutStart(action) {
         amounts['term'] = dealPricing.leaseTermValue();
         amounts['monthly_payment'] = dealPricing.monthlyPaymentsValue();
     }
-
+    let results = null;
     try {
-        yield call(
+        results = yield call(
             ApiClient.checkout.start,
             checkout.deal.id,
             checkout.strategy,
@@ -52,12 +52,15 @@ export function* checkoutStart(action) {
     }
 
     yield put(checkoutFinishedLoading());
+
+    if (results.status) {
+        window.location = `/request-email?payment=${checkout.strategy}`;
+    }
 }
 
 /*******************************************************************
  * Watchers
- ********************************************************************/
-
+ *******************************************************************/
 export function* watchCheckoutStart() {
     yield takeEvery(CHECKOUT_START, checkoutStart);
 }
