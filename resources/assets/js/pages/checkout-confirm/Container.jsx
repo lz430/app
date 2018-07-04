@@ -24,11 +24,7 @@ class Container extends React.PureComponent {
     };
 
     handleConfirmPurchase() {
-        console.log('handleConfirmPurchase');
-        console.log(this.props.dealPricing);
         this.props.onCheckoutStart(this.props.dealPricing);
-
-        //purchase.start(this.props.dealPricing);
     }
 
     renderDeal(deal) {
