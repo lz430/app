@@ -70,6 +70,10 @@
         &--fallback {
             padding: 25px;
         }
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 
     &__buttons {
