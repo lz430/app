@@ -54,7 +54,7 @@ class CheckoutController extends BaseAPIController
             'rebates' => $request->get('quote')['rebates'],
             'dmr_price' => $request->get('amounts')['price'],
             'msrp' => $deal->prices()->msrp,
-            'term' =>$request->get('amounts')['term'],
+            'term' => isset($amounts['term']) ? $amounts['term'] : 0,
             'down_payment' => isset($amounts['financed_down_payment']) ? $amounts['financed_down_payment'] : 0,
             'monthly_payment' => isset($amounts['monthly_payment']) ? $amounts['monthly_payment'] : 0,
             'amount_financed' => isset($amounts['financed_amount']) ? $amounts['financed_amount'] : 0,
