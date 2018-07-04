@@ -16,6 +16,7 @@ import {
     SEARCH_LOADING_START,
     SEARCH_LOADING_FINISHED,
     SEARCH_REQUEST,
+    SEARCH_TOGGLE_FILTER,
 } from './consts';
 
 import { batchRequestDealQuotes } from 'apps/pricing/sagas';
@@ -89,12 +90,40 @@ function* requestSearch() {
     }
 }
 
+/**
+ * @returns {IterableIterator<*>}
+ */
+function* searchToggleFilter(action) {
+    const state = yield select();
+    const searchQuery = getSearchQuery(state);
+    let currentFilters = searchQuery.filters;
+    const category = action.category;
+    const item = action.item;
+
+    if (!item) {
+        return null;
+    }
+
+    const key = `${category}:${item.value}`;
+
+    let index = currentFilters.indexOf(key);
+    if (index !== -1) {
+        currentFilters.splice(index, 1);
+    } else {
+        currentFilters.push(key);
+    }
+
+    yield put(DealListActions.setSearchFilters(currentFilters));
+    yield put({ type: SEARCH_REQUEST });
+}
+
 /*******************************************************************
  * Init
  ********************************************************************/
 function* init() {
     yield put(setCurrentPage('deal-list'));
     yield* requestIpLocation();
+
     yield put({ type: SEARCH_REQUEST });
 }
 
@@ -103,6 +132,10 @@ function* init() {
  ********************************************************************/
 export function* watchRequestSearch() {
     yield takeSearch(SEARCH_REQUEST, requestSearch);
+}
+
+export function* watchToggleSearchFilter() {
+    yield takeSearch(SEARCH_TOGGLE_FILTER, searchToggleFilter);
 }
 
 export function* watchInit() {

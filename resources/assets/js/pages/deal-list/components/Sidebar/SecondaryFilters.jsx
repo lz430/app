@@ -6,8 +6,9 @@ import FilterFeature from './FilterFeature';
 class SecondaryFilters extends React.PureComponent {
     static propTypes = {
         filters: PropTypes.object.isRequired,
+        selectedFiltersByCategory: PropTypes.object.isRequired,
         searchQuery: PropTypes.object.isRequired,
-        onToggleFeature: PropTypes.func.isRequired,
+        onToggleSearchFilter: PropTypes.func.isRequired,
     };
 
     state = {
@@ -43,10 +44,12 @@ class SecondaryFilters extends React.PureComponent {
                     open={true}
                     canToggle={false}
                     onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
-                    count={0}
-                    selectedFeatures={this.props.searchQuery.features}
-                    items={this.props.filters.fuel_type}
-                    onToggleFeature={this.props.onToggleFeature}
+                    category="fuel_type"
+                    items={this.props.filters['fuel_type']}
+                    selectedItems={
+                        this.props.selectedFiltersByCategory['fuel_type']
+                    }
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
 
                 <FilterFeature
@@ -55,10 +58,12 @@ class SecondaryFilters extends React.PureComponent {
                     open={true}
                     canToggle={false}
                     onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
-                    count={0}
-                    selectedFeatures={this.props.searchQuery.features}
-                    items={this.props.filters.drive_train}
-                    onToggleFeature={this.props.onToggleFeature}
+                    category="drive_train"
+                    items={this.props.filters['drive_train']}
+                    selectedItems={
+                        this.props.selectedFiltersByCategory['drive_train']
+                    }
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
 
                 <FilterFeature
@@ -67,10 +72,14 @@ class SecondaryFilters extends React.PureComponent {
                     open={true}
                     canToggle={false}
                     onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
-                    count={0}
-                    selectedFeatures={this.props.searchQuery.features}
-                    items={this.props.filters.comfort_and_convenience}
-                    onToggleFeature={this.props.onToggleFeature}
+                    category="comfort_and_convenience"
+                    items={this.props.filters['comfort_and_convenience']}
+                    selectedItems={
+                        this.props.selectedFiltersByCategory[
+                            'comfort_and_convenience'
+                        ]
+                    }
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
 
                 <FilterFeature
@@ -79,10 +88,12 @@ class SecondaryFilters extends React.PureComponent {
                     open={true}
                     canToggle={false}
                     onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
-                    count={0}
-                    selectedFeatures={this.props.searchQuery.features}
-                    items={this.props.filters.seating}
-                    onToggleFeature={this.props.onToggleFeature}
+                    category="seating"
+                    items={this.props.filters['seating']}
+                    selectedItems={
+                        this.props.selectedFiltersByCategory['seating']
+                    }
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
 
                 <FilterFeature
@@ -91,10 +102,12 @@ class SecondaryFilters extends React.PureComponent {
                     open={true}
                     canToggle={false}
                     onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
-                    count={0}
-                    selectedFeatures={this.props.searchQuery.features}
-                    items={this.props.filters.seat_materials}
-                    onToggleFeature={this.props.onToggleFeature}
+                    category="seat_materials"
+                    items={this.props.filters['seat_materials']}
+                    selectedItems={
+                        this.props.selectedFiltersByCategory['seat_materials']
+                    }
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
 
                 <FilterFeature
@@ -103,10 +116,12 @@ class SecondaryFilters extends React.PureComponent {
                     open={true}
                     canToggle={false}
                     onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
-                    count={0}
-                    selectedFeatures={this.props.searchQuery.features}
-                    items={this.props.filters.infotainment}
-                    onToggleFeature={this.props.onToggleFeature}
+                    category="infotainment"
+                    items={this.props.filters['infotainment']}
+                    selectedItems={
+                        this.props.selectedFiltersByCategory['infotainment']
+                    }
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
 
                 <FilterFeature
@@ -115,10 +130,12 @@ class SecondaryFilters extends React.PureComponent {
                     open={true}
                     canToggle={false}
                     onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
-                    count={0}
-                    selectedFeatures={this.props.searchQuery.features}
-                    items={this.props.filters.pickup}
-                    onToggleFeature={this.props.onToggleFeature}
+                    category="pickup"
+                    items={this.props.filters['pickup']}
+                    selectedItems={
+                        this.props.selectedFiltersByCategory['pickup']
+                    }
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
             </div>
         );

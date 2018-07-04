@@ -1,3 +1,6 @@
+import { createSelector } from 'reselect';
+import R from 'ramda';
+
 export default state => state.pages.dealList;
 
 export const getSearchQuery = state => {
@@ -7,3 +10,22 @@ export const getSearchQuery = state => {
         page: state.pages.dealList.page,
     };
 };
+
+export const getSelectedFiltersByCategory = createSelector(
+    [getSearchQuery],
+    searchQuery => {
+        const filters = searchQuery.filters;
+
+        let byCategory = {};
+
+        filters.forEach(item => {
+            item = item.split(':');
+
+            if (!byCategory[item[0]]) {
+                byCategory[item[0]] = [];
+            }
+            byCategory[item[0]].push(item[1]);
+        });
+        return byCategory;
+    }
+);

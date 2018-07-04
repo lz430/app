@@ -13,9 +13,7 @@ class DealsController extends BaseAPIController
     public function getDeals(Request $request)
     {
         $this->validate($request, [
-            'make_ids' => 'sometimes|required|array',
-            'model_ids' => 'sometimes|required|array',
-            'body_styles' => 'sometimes|required|array',
+            'filters' => 'sometimes|required|array',
             'year' => 'sometimes|required|digits:4',
             'sort' => 'sometimes|required|string',
             'latitude' => 'sometimes|numeric',
@@ -32,25 +30,7 @@ class DealsController extends BaseAPIController
             $query = $query->filterMustLocation(['lat' => $request->get('latitude'), 'lon' => $request->get('longitude')]);
         }
 
-        if ($request->get('body_styles')) {
-            $query = $query->filterMustStyles($request->get('body_styles'));
-        }
-
-        if ($request->get('make_ids')) {
-            $query = $query->filterMustMakes($request->get('make_ids'));
-        }
-
-        if ($request->get('model_ids')) {
-            $query = $query->FilterMustModels($request->get('model_ids'), 'id');
-        }
-
-        if ($request->get('year')) {
-            $query = $query->FilterMustYears([$request->get('year')]);
-        }
-
-        if ($request->get('features')) {
-            $query = $query->filterMustLegacyFeatures($request->get('features'));
-        }
+        $query = $query->genericFilters($request->get('filters', []));
 
         if ($request->get('sort')) {
             $query = $query->sort($request->get('sort'));
@@ -66,8 +46,6 @@ class DealsController extends BaseAPIController
 
 
         $results = $query->get();
-
-        //return $results;
 
         return fractal()
             ->item(['response' => $results, 'meta' => [

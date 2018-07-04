@@ -9,21 +9,16 @@ import MobileFilterClose from './Sidebar/MobileFilterClose';
 
 import util from 'src/util';
 
-import {
-    toggleStyle,
-    toggleFeature,
-    toggleMake,
-    clearModelYear,
-} from 'pages/deal-list/actions';
+import { toggleSearchFilter, clearModelYear } from 'pages/deal-list/actions';
+import { getSelectedFiltersByCategory } from '../selectors';
 
 class FilterPanel extends React.PureComponent {
     static propTypes = {
         filters: PropTypes.object.isRequired,
+        selectedFiltersByCategory: PropTypes.object.isRequired,
         searchQuery: PropTypes.object.isRequired,
         onClearModelYear: PropTypes.func.isRequired,
-        onToggleStyle: PropTypes.func.isRequired,
-        onToggleMake: PropTypes.func.isRequired,
-        onToggleFeature: PropTypes.func.isRequired,
+        onToggleSearchFilter: PropTypes.func.isRequired,
     };
 
     state = {
@@ -54,9 +49,11 @@ class FilterPanel extends React.PureComponent {
                     <PrimaryFilters
                         searchQuery={this.props.searchQuery}
                         filters={this.props.filters}
+                        selectedFiltersByCategory={
+                            this.props.selectedFiltersByCategory
+                        }
                         onClearModelYear={this.props.onClearModelYear}
-                        onToggleMake={this.props.onToggleMake}
-                        onToggleStyle={this.props.onToggleStyle}
+                        onToggleSearchFilter={this.props.onToggleSearchFilter}
                     />
 
                     <div
@@ -76,7 +73,12 @@ class FilterPanel extends React.PureComponent {
                         <SecondaryFilters
                             searchQuery={this.props.searchQuery}
                             filters={this.props.filters}
-                            onToggleFeature={this.props.onToggleFeature}
+                            selectedFiltersByCategory={
+                                this.props.selectedFiltersByCategory
+                            }
+                            onToggleSearchFilter={
+                                this.props.onToggleSearchFilter
+                            }
                         />
                     </div>
                 </div>
@@ -90,19 +92,14 @@ const mapStateToProps = state => {
         filters: state.pages.dealList.filters,
         window: state.common.window,
         searchQuery: state.pages.dealList.searchQuery,
+        selectedFiltersByCategory: getSelectedFiltersByCategory(state),
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onToggleStyle: data => {
-            return dispatch(toggleStyle(data));
-        },
-        onToggleFeature: data => {
-            return dispatch(toggleFeature(data));
-        },
-        onToggleMake: data => {
-            return dispatch(toggleMake(data));
+        onToggleSearchFilter: (category, item) => {
+            return dispatch(toggleSearchFilter(category, item));
         },
         onClearModelYear: () => {
             return dispatch(clearModelYear());

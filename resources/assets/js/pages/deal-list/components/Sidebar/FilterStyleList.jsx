@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import bodyStyleIcons from 'body-styles';
 import miscicons from 'miscicons';
 
 class FilterStyleList extends React.PureComponent {
     static propTypes = {
-        styles: PropTypes.arrayOf(
+        category: PropTypes.string.isRequired,
+        items: PropTypes.arrayOf(
             PropTypes.shape({
                 value: PropTypes.string,
                 label: PropTypes.string,
@@ -15,39 +15,48 @@ class FilterStyleList extends React.PureComponent {
                 icon: PropTypes.string,
             })
         ),
-        selectedStyles: PropTypes.arrayOf(PropTypes.string).isRequired,
-        onSelectStyle: PropTypes.func.isRequired,
+        selectedItems: PropTypes.arrayOf(PropTypes.string),
+        onToggleSearchFilter: PropTypes.func.isRequired,
     };
 
     constructor() {
         super();
-
-        this.renderStyle = this.renderStyle.bind(this);
+        this.renderItem = this.renderItem.bind(this);
     }
 
-    renderStyle(style) {
-        let selected = R.contains(style.value, this.props.selectedStyles);
+    isItemSelected(item) {
+        return (
+            this.props.selectedItems &&
+            this.props.selectedItems.includes(item.value)
+        );
+    }
+
+    renderItem(item) {
+        let selected = this.isItemSelected(item);
+
         let className = `filter-style-selector__style ${
             selected ? 'filter-style-selector__style--selected' : ''
         }`;
 
         return (
             <div
+                key={item.value}
                 className={className}
-                onClick={this.props.onSelectStyle.bind(null, style.value)}
-                key={style.value}
+                onClick={() =>
+                    this.props.onToggleSearchFilter(this.props.category, item)
+                }
             >
-                {bodyStyleIcons[style.icon] ? (
+                {bodyStyleIcons[item.icon] ? (
                     <SVGInline
                         width="70px"
                         className="filter-style-selector__icon"
-                        svg={bodyStyleIcons[style.icon]}
+                        svg={bodyStyleIcons[item.icon]}
                     />
                 ) : (
                     ''
                 )}
 
-                <div className="filter-style-selector__name">{style.label}</div>
+                <div className="filter-style-selector__name">{item.label}</div>
             </div>
         );
     }
@@ -56,8 +65,8 @@ class FilterStyleList extends React.PureComponent {
         return (
             <div className="filter-style-selector">
                 <div className="filter-style-selector__styles">
-                    {this.props.styles ? (
-                        this.props.styles.map(this.renderStyle)
+                    {this.props.items ? (
+                        this.props.items.map(this.renderItem)
                     ) : (
                         <SVGInline svg={miscicons['loading']} />
                     )}

@@ -20,37 +20,18 @@ export function initDealListData() {
     };
 }
 
-export function toggleStyle(style) {
-    return (dispatch, getState) => {
-        const selectedStyles = util.toggleItem(
-            getState().pages.dealList.searchQuery.styles,
-            style
-        );
-
-        dispatch({
-            type: ActionTypes.TOGGLE_STYLE,
-            selectedStyles: selectedStyles,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
+export function toggleSearchFilter(category, item) {
+    return {
+        type: ActionTypes.SEARCH_TOGGLE_FILTER,
+        category: category,
+        item: item,
     };
 }
 
-export function chooseYear(year) {
-    return (dispatch, getState) => {
-        const selectedYear =
-            getState().pages.dealList.selectedYear === year ? null : year;
-
-        dispatch({
-            type: ActionTypes.CHOOSE_YEAR,
-            selectedYear,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
+export function setSearchFilters(filters) {
+    return {
+        type: ActionTypes.SEARCH_SET_FILTERS,
+        filters: filters,
     };
 }
 
@@ -111,60 +92,6 @@ export function selectModelYear(vehicleModel) {
         dispatch({
             type: ActionTypes.SELECT_MODEL_YEAR,
             data: vehicleModel,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
-    };
-}
-
-export function toggleFeature(feature) {
-    return (dispatch, getState) => {
-        const selectedFeatures = util.toggleItem(
-            getState().pages.dealList.searchQuery.features,
-            feature
-        );
-
-        dispatch({
-            type: ActionTypes.TOGGLE_FEATURE,
-            selectedFeatures,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
-    };
-}
-
-export function toggleMake(name) {
-    return (dispatch, getState) => {
-        const selectedMakes = util.toggleItem(
-            getState().pages.dealList.searchQuery.makes,
-            name
-        );
-
-        dispatch({
-            type: ActionTypes.TOGGLE_MAKE,
-            selectedMakes,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
-    };
-}
-
-export function toggleModel(model) {
-    return (dispatch, getState) => {
-        const selectedModels = util.toggleItem(
-            getState().pages.dealList.searchQuery.models,
-            model
-        );
-
-        dispatch({
-            type: ActionTypes.TOGGLE_MODEL,
-            selectedModels,
         });
 
         dispatch({

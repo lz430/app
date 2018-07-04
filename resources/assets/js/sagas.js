@@ -11,6 +11,7 @@ export default function* root() {
     yield all([
         fork(DealListSagas.watchInit),
         fork(DealListSagas.watchRequestSearch),
+        fork(DealListSagas.watchToggleSearchFilter),
         fork(DealDetailSagas.watchInit),
         fork(DealDetailSagas.watchRequestDealQuote),
         fork(CompareSagas.watchInit),

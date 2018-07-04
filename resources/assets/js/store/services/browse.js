@@ -21,11 +21,7 @@ class BrowseService {
         }
 
         let params = {
-            make_ids: query.makes,
-            model_ids: query.models,
-            body_styles: query.styles,
-            features: query.features,
-            year: query.years[0],
+            filters: query.filters,
             latitude: query.location.latitude,
             longitude: query.location.longitude,
             sort: sort,

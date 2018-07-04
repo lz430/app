@@ -9,7 +9,7 @@ class SidebarFilter extends React.PureComponent {
         toggle: PropTypes.func.isRequired,
         title: PropTypes.string.isRequired,
         children: PropTypes.object.isRequired,
-        count: PropTypes.number,
+        selectedItems: PropTypes.array,
         canToggle: PropTypes.bool,
     };
 
@@ -42,7 +42,9 @@ class SidebarFilter extends React.PureComponent {
                     )}
                     {this.props.title}
                     <span className="sidebar-filters__count">
-                        {this.props.count}
+                        {this.props.selectedItems
+                            ? this.props.selectedItems.length
+                            : 0}
                     </span>
                 </div>
 

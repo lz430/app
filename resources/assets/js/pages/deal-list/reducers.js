@@ -17,6 +17,7 @@ const initialState = {
             attribute: 'price',
             direction: 'asc',
         },
+        filters: [],
         years: [],
         makes: [],
         models: [],
@@ -47,10 +48,18 @@ const persistConfig = {
 
 const reducer = function(state = initialState, action = {}) {
     switch (action.type) {
+        case ActionTypes.SEARCH_SET_FILTERS:
+            return {
+                ...state,
+                searchQuery: {
+                    ...state.searchQuery,
+                    filters: action.filters,
+                },
+            };
+
+        /*
         case REHYDRATE:
-            /**
-             * If we have a new url style / url size
-             */
+
             if (urlSize || urlStyle) {
                 if (urlStyle) {
                     state.selectedStyles = [urlStyle];
@@ -64,7 +73,7 @@ const reducer = function(state = initialState, action = {}) {
             }
 
             return state;
-
+       */
         case ActionTypes.INIT:
             return state;
 
@@ -167,46 +176,6 @@ const reducer = function(state = initialState, action = {}) {
                         attribute: action.sort,
                         direction: direction,
                     },
-                },
-            };
-
-        case ActionTypes.TOGGLE_MAKE:
-            return {
-                ...state,
-                page: 1,
-                searchQuery: {
-                    ...state.searchQuery,
-                    makes: action.selectedMakes,
-                },
-            };
-
-        case ActionTypes.TOGGLE_MODEL:
-            return {
-                ...state,
-                page: 1,
-                searchQuery: {
-                    ...state.searchQuery,
-                    models: action.selectedModels,
-                },
-            };
-
-        case ActionTypes.TOGGLE_STYLE:
-            return {
-                ...state,
-                page: 1,
-                searchQuery: {
-                    ...state.searchQuery,
-                    styles: action.selectedStyles,
-                },
-            };
-
-        case ActionTypes.TOGGLE_FEATURE:
-            return {
-                ...state,
-                page: 1,
-                searchQuery: {
-                    ...state.searchQuery,
-                    features: action.selectedFeatures,
                 },
             };
 
