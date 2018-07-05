@@ -5,16 +5,16 @@ namespace Tests\External\Cox;
 use GuzzleHttp\Exception\ClientException;
 use Tests\TestCase;
 
-use DeliverMyRide\Cox\CoxClient;
+use DeliverMyRide\RIS\RISClient;
 
 class VehicleServiceTest extends TestCase
 {
     /**
      * Client factory
-     * @return CoxClient
+     * @return RISClient
      */
-    public function getClient() : CoxClient {
-        return new CoxClient(
+    public function getClient() : RISClient {
+        return new RISClient(
             config('services.cox.api_key')
         );
     }
