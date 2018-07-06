@@ -28,6 +28,9 @@ class ModelYearImage extends React.PureComponent {
                 <img
                     className="modelyear__image"
                     src={this.featuredImageUrl()}
+                    onClick={() => {
+                        this.props.selectModelYear();
+                    }}
                 />
             </LazyLoad>
         );

@@ -46,6 +46,9 @@ class ModelYear extends React.PureComponent {
                     <ModelYearImage
                         modelYear={modelYear}
                         key={this.buildModelKey()}
+                        selectModelYear={() => {
+                            this.selectModelYear(modelYear);
+                        }}
                     />
 
                     <div className="modelyear__details">
