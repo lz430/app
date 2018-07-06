@@ -1,6 +1,6 @@
 <?php
 
-namespace DeliverMyRide\Cox;
+namespace DeliverMyRide\RIS;
 
 use DeliverMyRide\Common\ApiClient;
 
