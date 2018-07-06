@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\External\Cox;
+namespace Tests\External\RIS;
 
 use GuzzleHttp\Exception\ClientException;
 use Tests\TestCase;

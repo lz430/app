@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use DeliverMyRide\Cox\CoxClient;
+use DeliverMyRide\RIS\RISClient;
 
 use Illuminate\Support\ServiceProvider;
 
-class CoxServiceProvider extends ServiceProvider
+class RISServiceProvider extends ServiceProvider
 {
     protected $defer = true;
 
@@ -17,8 +17,8 @@ class CoxServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(CoxClient::class, function ($app) {
-            return new CoxClient(config('services.cox.api_key'));
+        $this->app->bind(RISClient::class, function ($app) {
+            return new RISClient(config('services.cox.api_key'));
         });
     }
 
@@ -27,6 +27,6 @@ class CoxServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return [CoxClient::class];
+        return [RISClient::class];
     }
 }

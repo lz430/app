@@ -1,6 +1,6 @@
 <?php
 
-namespace DeliverMyRide\Cox\Service;
+namespace DeliverMyRide\RIS\Service;
 
 
 class VinService extends BaseService {
