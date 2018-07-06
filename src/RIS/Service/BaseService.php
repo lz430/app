@@ -1,21 +1,21 @@
 <?php
 
-namespace DeliverMyRide\Cox\Service;
+namespace DeliverMyRide\RIS\Service;
 
-use DeliverMyRide\Cox\CoxClient;
+use DeliverMyRide\RIS\RISClient;
 
 abstract class BaseService {
 
 
-    /** @var \DeliverMyRide\Cox\CoxClient */
+    /** @var \DeliverMyRide\RIS\RISClient */
     protected $client;
 
 
     /**
      * TestService constructor.
-     * @param \DeliverMyRide\Cox\CoxClient $client
+     * @param \DeliverMyRide\RIS\RISClient $client
      */
-    public function __construct(CoxClient $client)
+    public function __construct(RISClient $client)
     {
         $this->client = $client;
     }

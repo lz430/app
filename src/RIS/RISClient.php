@@ -5,13 +5,13 @@ namespace DeliverMyRide\RIS;
 use DeliverMyRide\Common\ApiClient;
 
 /**
- * Class CoxClient
+ * Class RISClient
  * @package DeliverMyRide\Cox
 
  * @see https://incentives.homenetiol.com/v2.4/metadata
  *  For information about endpoints
  */
-class CoxClient extends ApiClient
+class RISClient extends ApiClient
 {
     /** @var string api key */
     protected $apiKey;
@@ -25,7 +25,7 @@ class CoxClient extends ApiClient
     public $vehicle;
 
     /**
-     * CoxClient constructor.
+     * RISClient constructor.
      * @param $apiKey
      */
     public function __construct(string $apiKey)

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use DeliverMyRide\Cox\CoxClient;
+use DeliverMyRide\RIS\RISClient;
 use Illuminate\Console\Command;
 
 class TestCoxAPI extends Command
@@ -21,16 +21,15 @@ class TestCoxAPI extends Command
      */
     protected $description = 'Quick and dirty cox api test';
 
-    /* @var CoxClient */
+    /* @var RISClient */
     private $client;
 
     /**
      * Create a new command instance.
-
-     * @param CoxClient $client
+ * @param RISClient $client
      * @return void
      */
-    public function __construct(CoxClient $client)
+    public function __construct(RISClient $client)
     {
         parent::__construct();
 

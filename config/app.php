@@ -162,7 +162,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\CarletonServiceProvider::class,
-        App\Providers\CoxServiceProvider::class,
+        App\Providers\RISServiceProvider::class,
         App\Providers\DataDeliveryServiceProvider::class,
         App\Providers\FuelServiceProvider::class,
         App\Providers\EventServiceProvider::class,
