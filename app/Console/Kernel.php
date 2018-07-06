@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
         Commands\DealFeatureDebugger::class,
         Commands\ImportVautoMapData::class,
         Commands\DealProgramDebugger::class,
+        Commands\DealLeaseRatesDebugger::class,
     ];
 
     /**
