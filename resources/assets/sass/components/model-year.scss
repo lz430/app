@@ -57,15 +57,17 @@
         }
     }
 
+    &__image-container {
+        height: 225px;
+        display: flex;
+        align-items: center;
+    }
+
     &__image {
         border-bottom: 0;
         display: block;
         width: 100%;
         object-fit: cover;
-
-        @media (min-width: $break-small) {
-            height: 225px;
-        }
 
         &--fallback {
             padding: 25px;
