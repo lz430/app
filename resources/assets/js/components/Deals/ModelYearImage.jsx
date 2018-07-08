@@ -25,13 +25,15 @@ class ModelYearImage extends React.PureComponent {
     render() {
         return (
             <LazyLoad height={200} overflow={true} offset={400}>
-                <img
-                    className="modelyear__image"
-                    src={this.featuredImageUrl()}
-                    onClick={() => {
-                        this.props.selectModelYear();
-                    }}
-                />
+                <div className="modelyear__image-container">
+                    <img
+                        className="modelyear__image"
+                        src={this.featuredImageUrl()}
+                        onClick={() => {
+                            this.props.selectModelYear();
+                        }}
+                    />
+                </div>
             </LazyLoad>
         );
     }
