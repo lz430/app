@@ -1,31 +1,7 @@
 @import '../variables';
 
-.back-bar {
-    background: #fff;
-    border-top: 1px solid #ddd;
-    box-shadow: inset 0px 4px 8px 0 rgba(0, 0, 0, 0.05);
-    display: none;
-
-    @media (min-width: $break-small) {
-        display: block;
-    }
-
-    a {
-        color: $color-blue;
-        display: block;
-        font-size: 0.75em;
-        max-width: 75%;
-        margin: 0 auto;
-        padding: 0.25em;
-        text-decoration: none;
-
-        @media (min-width: $break-large) {
-            max-width: $break-large;
-        }
-    }
-}
-
 .steps-bar {
+    height: 3.5rem;
     background-color: $color-sidebar-background-primary;
     color: #fff;
     margin-bottom: 0.5em;
@@ -38,15 +14,25 @@
 
     .inner {
         display: flex;
+        align-items: center;
     }
 
     &__page-title {
         color: $color-blue;
         font-size: 0.75rem;
         flex: 1;
-        padding-top: 0.5rem;
+
         @media (min-width: $break-small) {
-            font-size: 1.75rem;
+            font-size: 1rem;
+        }
+        a:link {
+            color: $color-blue;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: $color-light-blue;
+            text-decoration: underline;
         }
     }
 }
