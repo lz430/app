@@ -38,10 +38,8 @@
         }
     }
 
-    &__deal-content-at-a-glance {
-    }
-
     &__deal-content-color {
+        font-size: 0.9rem;
         @media (min-width: $break-small) {
             margin-left: auto;
         }
