@@ -64,6 +64,7 @@ class Container extends React.PureComponent {
         featuredImage: [],
         fuelExternalImages: [],
         fuelInternalImages: [],
+        upholsteryType: null,
         warranties: null,
         dimensions: null,
         showStandardFeatures: false,
@@ -81,6 +82,16 @@ class Container extends React.PureComponent {
 
         if (this.props.deal.photos.length) {
             this.setState({ featuredImage: this.props.deal.photos[0] });
+        }
+
+        if (this.props.deal.dmr_features.length) {
+            const upholsteryType = this.props.deal.dmr_features.find(
+                feature => {
+                    return feature.slug.includes('seat_main_upholstery_');
+                }
+            ).title;
+
+            this.setState({ upholsteryType });
         }
 
         ApiClient.deal.dealGetDimensions(this.props.deal.id).then(response => {
@@ -464,6 +475,7 @@ class Container extends React.PureComponent {
             deal,
             R.map(R.prop('deal'), this.props.compareList)
         );
+
         return (
             <div className="deal-details__deal-content">
                 <div className="deal-details__deal-content-header">
@@ -471,7 +483,8 @@ class Container extends React.PureComponent {
                         This Vehicle At-A-Glance
                     </div>
                     <div className="deal-details__deal-content-color">
-                        {deal.color}, {deal.interior_color}
+                        {deal.color} Exterior, {deal.interior_color}{' '}
+                        {this.state.upholsteryType} Interior
                     </div>
                 </div>
                 <div className="deal-details__deal-content-body">
