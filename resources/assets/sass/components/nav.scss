@@ -1,5 +1,4 @@
 @import '../variables';
-@import '../mixins/constrained';
 @import '../mixins/button';
 
 .nav {
@@ -10,7 +9,8 @@
         min-height: $nav-height;
     }
 
-    @include constrained {
+    &__constrained {
+        width: 100%;
         align-items: center;
         display: flex;
         justify-content: space-between;
