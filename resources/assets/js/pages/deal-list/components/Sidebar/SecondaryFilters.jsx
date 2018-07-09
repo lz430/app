@@ -39,6 +39,19 @@ class SecondaryFilters extends React.PureComponent {
         return (
             <div>
                 <FilterFeature
+                    title="Transmission"
+                    key="filterTransmission"
+                    open={true}
+                    canToggle={false}
+                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    category="transmission"
+                    items={this.props.filters['transmission']}
+                    selectedItems={
+                        this.props.selectedFiltersByCategory['transmission']
+                    }
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
+                />
+                <FilterFeature
                     title="Fuel Type"
                     key="filterFuelType"
                     open={true}
