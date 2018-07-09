@@ -15,6 +15,10 @@ export const getSelectedFiltersByCategory = createSelector(
     searchQuery => {
         const filters = searchQuery.filters;
 
+        if (!filters) {
+            return {};
+        }
+
         let byCategory = {};
 
         filters.forEach(item => {
