@@ -9,12 +9,22 @@ class ModelYear extends React.PureComponent {
     static propTypes = {
         modelYear: PropTypes.object.isRequired,
         onSelectModelYear: PropTypes.func.isRequired,
+        children: PropTypes.node,
     };
 
     shouldComponentUpdate(nextProps) {
         return nextProps.modelYear !== this.props.modelYear;
     }
 
+    /**
+     * When selecting model year we have to:
+     *
+     * 1) Set the year
+     * 2) Set the model
+     * 3) Set the entity to 'deal'
+     * 4) Perform search
+     * @param modelYear
+     */
     selectModelYear(modelYear) {
         this.props.onSelectModelYear(modelYear);
     }
@@ -57,7 +67,7 @@ class ModelYear extends React.PureComponent {
                             <span className="modelyear__price-label">
                                 MSRP starts at
                             </span>{' '}
-                            {util.moneyFormat(modelYear.lowest_msrp)}
+                            {util.moneyFormat(modelYear['lowest_msrp'])}
                         </div>
                     </div>
 

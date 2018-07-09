@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import R from 'ramda';
 
 export default state => state.pages.dealList;
 

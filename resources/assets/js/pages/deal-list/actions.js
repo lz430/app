@@ -1,5 +1,4 @@
 import * as ActionTypes from './consts';
-import util from 'src/util';
 
 export function requestSearch() {
     return {
@@ -23,8 +22,34 @@ export function initDealListData() {
 export function toggleSearchFilter(category, item) {
     return {
         type: ActionTypes.SEARCH_TOGGLE_FILTER,
+        operation: 'TOGGLE',
         category: category,
         item: item,
+    };
+}
+
+export function clearAllSecondaryFilters() {
+    return {
+        type: ActionTypes.SEARCH_TOGGLE_FILTER,
+        operation: 'KEEP_CATEGORY',
+        category: ['year', 'make', 'model', 'style'],
+        item: false,
+    };
+}
+
+export function clearModelYear() {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.SEARCH_SET_ENTITY,
+            entity: 'model',
+        });
+
+        dispatch({
+            type: ActionTypes.SEARCH_TOGGLE_FILTER,
+            operation: 'REMOVE_CATEGORY',
+            category: ['model', 'year'],
+            item: false,
+        });
     };
 }
 
@@ -32,18 +57,6 @@ export function setSearchFilters(filters) {
     return {
         type: ActionTypes.SEARCH_SET_FILTERS,
         filters: filters,
-    };
-}
-
-export function clearAllFilters() {
-    return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.CLEAR_ALL_FILTERS,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
     };
 }
 
@@ -72,18 +85,6 @@ export function receiveModelYears(data) {
     return {
         type: ActionTypes.RECEIVE_MODEL_YEARS,
         data: data,
-    };
-}
-
-export function clearModelYear() {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.CLEAR_MODEL_YEAR,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
     };
 }
 

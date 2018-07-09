@@ -10,6 +10,7 @@ import {
 } from 'redux-saga/effects';
 import ApiClient from 'store/api';
 import { cancelRequest } from 'store/httpclient';
+import R from 'ramda';
 
 import {
     INIT,
@@ -97,20 +98,47 @@ function* searchToggleFilter(action) {
     const state = yield select();
     const searchQuery = getSearchQuery(state);
     let currentFilters = searchQuery.filters;
+    const operation = action.operation;
     const category = action.category;
     const item = action.item;
 
-    if (!item) {
-        return null;
-    }
+    if (operation === 'TOGGLE') {
+        const key = `${category}:${item.value}`;
 
-    const key = `${category}:${item.value}`;
+        let index = currentFilters.indexOf(key);
+        if (index !== -1) {
+            currentFilters.splice(index, 1);
+        } else {
+            currentFilters.push(key);
+        }
+    } else if (operation === 'KEEP_CATEGORY') {
+        const categories_to_keep = !Array.isArray(category)
+            ? [category]
+            : category;
 
-    let index = currentFilters.indexOf(key);
-    if (index !== -1) {
-        currentFilters.splice(index, 1);
-    } else {
-        currentFilters.push(key);
+        currentFilters = R.filter(function(filter) {
+            let keep = false;
+            categories_to_keep.forEach(function(category_name) {
+                if (filter.includes(category_name + ':')) {
+                    keep = true;
+                }
+            });
+            return keep;
+        }, currentFilters);
+    } else if (operation === 'REMOVE_CATEGORY') {
+        const categories_to_remove = !Array.isArray(category)
+            ? [category]
+            : category;
+
+        currentFilters = R.filter(function(filter) {
+            let keep = true;
+            categories_to_remove.forEach(function(category_name) {
+                if (filter.includes(category_name + ':')) {
+                    keep = false;
+                }
+            });
+            return keep;
+        }, currentFilters);
     }
 
     yield put(DealListActions.setSearchFilters(currentFilters));
@@ -135,7 +163,7 @@ export function* watchRequestSearch() {
 }
 
 export function* watchToggleSearchFilter() {
-    yield takeSearch(SEARCH_TOGGLE_FILTER, searchToggleFilter);
+    yield takeEvery(SEARCH_TOGGLE_FILTER, searchToggleFilter);
 }
 
 export function* watchInit() {

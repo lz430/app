@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import util from 'src/util';
 import {
     toggleSearchSort,
-    clearAllFilters,
+    clearAllSecondaryFilters,
     clearModelYear,
 } from 'pages/deal-list/actions';
 
@@ -19,7 +19,7 @@ class Sortbar extends React.PureComponent {
         }).isRequired,
 
         searchQuery: PropTypes.object.isRequired,
-        onClearAllFilters: PropTypes.func.isRequired,
+        onClearAllSecondaryFilters: PropTypes.func.isRequired,
         onClearModelYear: PropTypes.func.isRequired,
         onToggleSearchSort: PropTypes.func.isRequired,
         onToggleSmallFiltersShown: PropTypes.func.isRequired,
@@ -182,7 +182,7 @@ class Sortbar extends React.PureComponent {
                 <button
                     className="sortbar__button sortbar__button--blue sortbar__button--clear-filters"
                     onClick={() => {
-                        this.props.onClearAllFilters();
+                        this.props.onClearAllSecondaryFilters();
                         this.props.onToggleSmallFiltersShown();
                     }}
                 >
@@ -226,8 +226,8 @@ const mapDispatchToProps = dispatch => {
             return dispatch(toggleSearchSort(sort));
         },
 
-        onClearAllFilters: () => {
-            return dispatch(clearAllFilters());
+        onClearAllSecondaryFilters: () => {
+            return dispatch(clearAllSecondaryFilters());
         },
 
         onClearModelYear: () => {

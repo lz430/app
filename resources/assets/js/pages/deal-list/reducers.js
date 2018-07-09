@@ -56,24 +56,6 @@ const reducer = function(state = initialState, action = {}) {
                     filters: action.filters,
                 },
             };
-
-        /*
-        case REHYDRATE:
-
-            if (urlSize || urlStyle) {
-                if (urlStyle) {
-                    state.selectedStyles = [urlStyle];
-                }
-
-                state.searchQuery.features = [];
-                state.searchQuery.makes = [];
-
-                window.history.replaceState({}, document.title, '/filter');
-                return state;
-            }
-
-            return state;
-       */
         case ActionTypes.INIT:
             return state;
 
@@ -153,8 +135,11 @@ const reducer = function(state = initialState, action = {}) {
                 searchQuery: {
                     ...state.searchQuery,
                     entity: 'deal',
-                    models: [action.data.id],
-                    years: [action.data.year],
+                    filters: [
+                        ...state.searchQuery.filters,
+                        'model:' + action.data.model,
+                        'year:' + action.data.year,
+                    ],
                 },
             };
 
@@ -179,21 +164,18 @@ const reducer = function(state = initialState, action = {}) {
                 },
             };
 
-        case ActionTypes.CLEAR_ALL_FILTERS:
+        case ActionTypes.SEARCH_SET_ENTITY:
             return {
                 ...state,
                 deals: [],
+                modelYears: [],
                 page: 1,
                 searchQuery: {
                     ...state.searchQuery,
-                    features: [],
+                    entity: action.entity,
                 },
             };
 
-        case ActionTypes.CHOOSE_YEAR:
-            return Object.assign({}, state, {
-                selectedYear: action.selectedYear,
-            });
         default:
             return state;
     }
