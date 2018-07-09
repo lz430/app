@@ -34,6 +34,7 @@ const persistConfig = {
         'page',
         'meta',
         'filters',
+        'smallFiltersShown',
     ],
 };
 
@@ -104,7 +105,6 @@ const reducer = function(state = initialState, action = {}) {
             };
 
         case ActionTypes.SEARCH_RESET:
-            console.log('SUP');
             return {
                 ...state,
                 page: 1,
