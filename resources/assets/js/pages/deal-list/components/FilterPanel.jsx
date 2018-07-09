@@ -93,6 +93,7 @@ const mapStateToProps = state => {
         window: state.common.window,
         searchQuery: state.pages.dealList.searchQuery,
         selectedFiltersByCategory: getSelectedFiltersByCategory(state),
+        smallFiltersShown: state.common.smallFiltersShown,
     };
 };
 

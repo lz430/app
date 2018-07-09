@@ -28,9 +28,11 @@ const reducer = (state = initialState, action) => {
                     : state.smallFiltersShown,
             });
         case ActionTypes.TOGGLE_SMALL_FILTERS_SHOWN:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 smallFiltersShown: !state.smallFiltersShown,
-            });
+            };
+
         case ActionTypes.CLOSE_MAKE_SELECTOR_MODAL:
             return Object.assign({}, state, {
                 showMakeSelectorModal: false,

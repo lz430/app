@@ -34,7 +34,7 @@ const mapStateToProps = () => {
 const mapDispatchToProps = dispatch => {
     return {
         onToggleSmallFiltersShown: () => {
-            return dispatch(toggleSmallFiltersShown);
+            return dispatch(toggleSmallFiltersShown());
         },
     };
 };
