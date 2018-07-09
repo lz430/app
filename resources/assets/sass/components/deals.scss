@@ -9,6 +9,8 @@
     height: calc(100vh - #{$footer-height});
     justify-content: center;
     position: relative;
+    /* keep this overflow there is a bug somewhere in react-lazyloading that doesn't respect overflow-y ! */
+    overflow: scroll;
     overflow-y: scroll;
     padding: 2px;
     padding-bottom: 15px;

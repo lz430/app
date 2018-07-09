@@ -18,7 +18,6 @@ class MakeSelector extends React.PureComponent {
             })
         ),
         selectedFiltersByCategory: PropTypes.object.isRequired,
-        searchQuery: PropTypes.object.isRequired,
         fallbackLogoImage: PropTypes.string.isRequired,
         onToggleSearchFilter: PropTypes.func.isRequired,
     };
@@ -85,7 +84,6 @@ const mapStateToProps = state => {
     return {
         makes: state.pages.dealList.filters.make,
         selectedFiltersByCategory: getSelectedFiltersByCategory(state),
-        searchQuery: state.pages.dealList.searchQuery,
         fallbackLogoImage: state.common.fallbackLogoImage,
     };
 };
