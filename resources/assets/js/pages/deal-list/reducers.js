@@ -3,12 +3,6 @@ import { basePersistConfig } from 'persist';
 
 import * as ActionTypes from './consts';
 
-import util from 'src/util';
-import { REHYDRATE } from 'redux-persist';
-
-const urlStyle = util.getInitialBodyStyleFromUrl();
-const urlSize = util.getInitialSizeFromUrl();
-
 const initialState = {
     page: 1,
     searchQuery: {
@@ -18,11 +12,6 @@ const initialState = {
             direction: 'asc',
         },
         filters: [],
-        years: [],
-        makes: [],
-        models: [],
-        styles: urlStyle ? [urlStyle] : [],
-        features: urlSize ? [urlSize] : [],
     },
     modelYears: [],
     deals: [],
@@ -56,9 +45,6 @@ const reducer = function(state = initialState, action = {}) {
                     filters: action.filters,
                 },
             };
-        case ActionTypes.INIT:
-            return state;
-
         case ActionTypes.SEARCH_INCREMENT_PAGE:
             return {
                 ...state,

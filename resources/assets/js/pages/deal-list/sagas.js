@@ -27,6 +27,8 @@ import getDealList, { getSearchQuery } from './selectors';
 import { requestIpLocation } from 'apps/user/sagas';
 import { setCurrentPage } from 'apps/page/actions';
 
+import util from 'src/util';
+
 /*******************************************************************
  * Request Search
  ********************************************************************/
@@ -151,6 +153,23 @@ function* searchToggleFilter(action) {
 function* init() {
     yield put(setCurrentPage('deal-list'));
     yield* requestIpLocation();
+
+    const urlStyle = util.getInitialBodyStyleFromUrl();
+    const urlSize = util.getInitialSizeFromUrl();
+
+    if (urlStyle || urlSize) {
+        let filters = [];
+        /*
+        if (urlSize) {
+            filters.push('size:' + urlSize);
+        }
+        */
+        if (urlStyle) {
+            filters.push('style:' + urlStyle);
+        }
+        yield put(DealListActions.setSearchFilters(filters));
+        window.history.replaceState({}, document.title, '/filter');
+    }
 
     yield put({ type: SEARCH_REQUEST });
 }
