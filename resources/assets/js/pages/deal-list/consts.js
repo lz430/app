@@ -8,6 +8,9 @@ export const SEARCH_INCREMENT_PAGE = `${namespace}_SEARCH_INCREMENT_PAGE`;
 export const SEARCH_LOADING_START = `${namespace}_SEARCH_LOADING_START`;
 export const SEARCH_LOADING_FINISHED = `${namespace}_SEARCH_LOADING_FINISHED`;
 export const SEARCH_CHANGE_SORT = `${namespace}_SEARCH_CHANGE_SORT`;
+export const SEARCH_TOGGLE_FILTER = `${namespace}_SEARCH_TOGGLE_FILTER`;
+export const SEARCH_SET_FILTERS = `${namespace}_SEARCH_SET_FILTERS`;
+export const SEARCH_SET_ENTITY = `${namespace}_SEARCH_SET_ENTITY`;
 
 export const RECEIVE_MODEL_YEARS = `${namespace}_RECEIVE_MODEL_YEARS`;
 
@@ -15,12 +18,5 @@ export const SELECT_MODEL_YEAR = `${namespace}_SELECT_MODEL_YEAR`;
 export const CLEAR_MODEL_YEAR = `${namespace}_CLEAR_MODEL_YEAR`;
 
 export const RECEIVE_DEALS = `${namespace}_RECEIVE_DEALS`;
-export const TOGGLE_MAKE = `${namespace}_TOGGLE_MAKE`;
-export const TOGGLE_MODEL = `${namespace}_TOGGLE_MODEL`;
-
-export const TOGGLE_FEATURE = `${namespace}_TOGGLE_FEATURE`;
-export const TOGGLE_STYLE = `${namespace}_TOGGLE_STYLE`;
 
 export const CLEAR_ALL_FILTERS = `${namespace}_CLEAR_ALL_FILTERS`;
-
-export const CHOOSE_YEAR = 'CHOOSE_YEAR';

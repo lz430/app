@@ -53,7 +53,7 @@ class DealRatesAndRebatesManager
 
         foreach ($response->vehicles[0]->programs as $program) {
 
-            if (in_array($program->ProgramType, ["Text Only", 'IVC/DVC'])) {
+            if (!isset($program->ProgramType) || in_array($program->ProgramType, ["Text Only", 'IVC/DVC'])) {
                 continue;
             }
 

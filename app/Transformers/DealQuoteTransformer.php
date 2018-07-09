@@ -98,7 +98,7 @@ class DealQuoteTransformer extends TransformerAbstract
     {
         $initialPercent = $this->getResiduals($timeFrame);
 
-        return ($initialPercent[0]['residualPercent']) ? $initialPercent[0]['residualPercent'] : null;
+        return (isset($initialPercent[0]) && $initialPercent[0]['residualPercent']) ? $initialPercent[0]['residualPercent'] : null;
     }
 
     /**

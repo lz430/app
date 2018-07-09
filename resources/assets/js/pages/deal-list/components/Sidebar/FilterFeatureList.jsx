@@ -6,39 +6,40 @@ import zondicons from 'zondicons';
 
 class FilterFeatureList extends React.PureComponent {
     static propTypes = {
-        features: PropTypes.arrayOf(
+        category: PropTypes.string.isRequired,
+        items: PropTypes.arrayOf(
             PropTypes.shape({
-                label: PropTypes.string.isRequired,
-                value: PropTypes.string.isRequired,
-                count: PropTypes.number.isRequired,
-            }).isRequired
+                value: PropTypes.string,
+                label: PropTypes.string,
+                count: PropTypes.number,
+                icon: PropTypes.string,
+            })
         ),
-
-        selectedFeatures: PropTypes.arrayOf(PropTypes.string).isRequired,
-        onToggleFeature: PropTypes.func.isRequired,
+        selectedItems: PropTypes.arrayOf(PropTypes.string),
+        onToggleSearchFilter: PropTypes.func.isRequired,
     };
 
     render() {
-        if (!this.props.features) {
+        if (!this.props.items) {
             return <div />;
         }
 
         return (
             <div className="filter-selector">
-                {this.props.features.map((feature, index) => {
+                {this.props.items.map((item, index) => {
                     return (
                         <div
                             key={index}
                             className="filter-selector__selector"
-                            onClick={this.props.onToggleFeature.bind(
-                                null,
-                                feature.label
-                            )}
+                            onClick={() =>
+                                this.props.onToggleSearchFilter(
+                                    this.props.category,
+                                    item
+                                )
+                            }
                         >
-                            {R.contains(
-                                feature.value,
-                                this.props.selectedFeatures
-                            ) ? (
+                            {this.props.selectedItems &&
+                            R.contains(item.value, this.props.selectedItems) ? (
                                 <SVGInline
                                     width="15px"
                                     height="15px"
@@ -48,7 +49,7 @@ class FilterFeatureList extends React.PureComponent {
                             ) : (
                                 <div className="filter-selector__checkbox" />
                             )}
-                            {feature.label}
+                            {item.label}
                         </div>
                     );
                 })}

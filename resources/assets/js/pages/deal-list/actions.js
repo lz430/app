@@ -1,5 +1,4 @@
 import * as ActionTypes from './consts';
-import util from 'src/util';
 
 export function requestSearch() {
     return {
@@ -20,49 +19,44 @@ export function initDealListData() {
     };
 }
 
-export function toggleStyle(style) {
-    return (dispatch, getState) => {
-        const selectedStyles = util.toggleItem(
-            getState().pages.dealList.searchQuery.styles,
-            style
-        );
+export function toggleSearchFilter(category, item) {
+    return {
+        type: ActionTypes.SEARCH_TOGGLE_FILTER,
+        operation: 'TOGGLE',
+        category: category,
+        item: item,
+    };
+}
 
+export function clearAllSecondaryFilters() {
+    return {
+        type: ActionTypes.SEARCH_TOGGLE_FILTER,
+        operation: 'KEEP_CATEGORY',
+        category: ['year', 'make', 'model', 'style'],
+        item: false,
+    };
+}
+
+export function clearModelYear() {
+    return dispatch => {
         dispatch({
-            type: ActionTypes.TOGGLE_STYLE,
-            selectedStyles: selectedStyles,
+            type: ActionTypes.SEARCH_SET_ENTITY,
+            entity: 'model',
         });
 
         dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
+            type: ActionTypes.SEARCH_TOGGLE_FILTER,
+            operation: 'REMOVE_CATEGORY',
+            category: ['model', 'year'],
+            item: false,
         });
     };
 }
 
-export function chooseYear(year) {
-    return (dispatch, getState) => {
-        const selectedYear =
-            getState().pages.dealList.selectedYear === year ? null : year;
-
-        dispatch({
-            type: ActionTypes.CHOOSE_YEAR,
-            selectedYear,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
-    };
-}
-
-export function clearAllFilters() {
-    return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.CLEAR_ALL_FILTERS,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
+export function setSearchFilters(filters) {
+    return {
+        type: ActionTypes.SEARCH_SET_FILTERS,
+        filters: filters,
     };
 }
 
@@ -94,77 +88,11 @@ export function receiveModelYears(data) {
     };
 }
 
-export function clearModelYear() {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.CLEAR_MODEL_YEAR,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
-    };
-}
-
 export function selectModelYear(vehicleModel) {
     return dispatch => {
         dispatch({
             type: ActionTypes.SELECT_MODEL_YEAR,
             data: vehicleModel,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
-    };
-}
-
-export function toggleFeature(feature) {
-    return (dispatch, getState) => {
-        const selectedFeatures = util.toggleItem(
-            getState().pages.dealList.searchQuery.features,
-            feature
-        );
-
-        dispatch({
-            type: ActionTypes.TOGGLE_FEATURE,
-            selectedFeatures,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
-    };
-}
-
-export function toggleMake(name) {
-    return (dispatch, getState) => {
-        const selectedMakes = util.toggleItem(
-            getState().pages.dealList.searchQuery.makes,
-            name
-        );
-
-        dispatch({
-            type: ActionTypes.TOGGLE_MAKE,
-            selectedMakes,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
-    };
-}
-
-export function toggleModel(model) {
-    return (dispatch, getState) => {
-        const selectedModels = util.toggleItem(
-            getState().pages.dealList.searchQuery.models,
-            model
-        );
-
-        dispatch({
-            type: ActionTypes.TOGGLE_MODEL,
-            selectedModels,
         });
 
         dispatch({

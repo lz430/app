@@ -129,7 +129,7 @@ abstract class BaseSearch
         return $this;
     }
 
-    public function FilterMustYears(array $years)
+    public function filterMustYears(array $years)
     {
         $this->query['query']['bool']['must'][] = [
             [
@@ -195,9 +195,77 @@ abstract class BaseSearch
         return $this;
     }
 
+    public function filterMustCategoryFeature($category, array $features)
+    {
+        foreach ($features as $feature) {
+            $this->query['query']['bool']['must'][] = [
+                [
+                    'term' => [
+                        self::FEATURE_TERMS[$category] => $feature,
+                    ],
+                ]
+            ];
+        }
+
+        return $this;
+    }
+
+
+
+    public function genericFilters(array $filters)
+    {
+        $byCategory = [];
+
+        foreach ($filters as $filter) {
+            $filter = explode(":", $filter);
+            if (!count($filter) == 2) {
+                continue;
+            }
+
+            if (!isset($byCategory[$filter[0]])) {
+                $byCategory[$filter[0]] = [];
+            }
+
+            $byCategory[$filter[0]][] = $filter[1];
+        }
+
+        if (isset($byCategory['style'])) {
+            $this->filterMustStyles($byCategory['style']);
+            unset($byCategory['style']);
+        }
+
+        if (isset($byCategory['make'])) {
+            $this->filterMustMakes($byCategory['make']);
+            unset($byCategory['make']);
+        }
+
+        if (isset($byCategory['model'])) {
+            $this->filterMustModels($byCategory['model']);
+            unset($byCategory['model']);
+        }
+
+        if (isset($byCategory['year'])) {
+            $this->filterMustYears($byCategory['year']);
+            unset($byCategory['year']);
+        }
+
+        foreach ($byCategory as $category => $values) {
+            if (!isset(self::FEATURE_TERMS[$category])) {
+                continue;
+            }
+
+            $this->filterMustCategoryFeature($category, $values);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
     public function addFeatureAggs()
     {
-        foreach(self::FEATURE_TERMS as $key => $field) {
+        foreach (self::FEATURE_TERMS as $key => $field) {
             $this->query['aggs'][$key] = [
                 "terms" => [
                     "size" => 50000,
@@ -212,6 +280,11 @@ abstract class BaseSearch
         return $this;
     }
 
+    /**
+     * Make and model are a little more complicated, so we handle
+     * them differently.
+     * @return $this
+     */
     public function addMakeAndStyleAgg()
     {
         $this->query['aggs']['makeandstyle'] = [

@@ -10,10 +10,10 @@ import FilterMakeList from './FilterMakeList';
 class PrimaryFilters extends React.PureComponent {
     static propTypes = {
         filters: PropTypes.object.isRequired,
+        selectedFiltersByCategory: PropTypes.object.isRequired,
         searchQuery: PropTypes.object.isRequired,
         onClearModelYear: PropTypes.func.isRequired,
-        onToggleStyle: PropTypes.func.isRequired,
-        onToggleMake: PropTypes.func.isRequired,
+        onToggleSearchFilter: PropTypes.func.isRequired,
     };
 
     state = {
@@ -67,12 +67,15 @@ class PrimaryFilters extends React.PureComponent {
                         this.props.searchQuery.entity !== 'deal'
                     }
                     title="Vehicle Style"
-                    count={this.props.searchQuery.styles.length}
+                    selectedItems={this.props.selectedFiltersByCategory.style}
                 >
                     <FilterStyleList
-                        styles={this.props.filters.style}
-                        selectedStyles={this.props.searchQuery.styles}
-                        onSelectStyle={this.props.onToggleStyle}
+                        category="style"
+                        items={this.props.filters.style}
+                        selectedItems={
+                            this.props.selectedFiltersByCategory.style
+                        }
+                        onToggleSearchFilter={this.props.onToggleSearchFilter}
                     />
                 </SidebarFilter>
 
@@ -83,12 +86,15 @@ class PrimaryFilters extends React.PureComponent {
                         this.props.searchQuery.entity !== 'deal'
                     }
                     title="Vehicle Brand"
-                    count={this.props.searchQuery.makes.length}
+                    selectedItems={this.props.selectedFiltersByCategory.make}
                 >
                     <FilterMakeList
-                        makes={this.props.filters.make}
-                        selectedMakes={this.props.searchQuery.makes}
-                        onSelectMake={this.props.onToggleMake}
+                        category="make"
+                        items={this.props.filters.make}
+                        selectedItems={
+                            this.props.selectedFiltersByCategory.make
+                        }
+                        onToggleSearchFilter={this.props.onToggleSearchFilter}
                     />
                 </SidebarFilter>
             </div>

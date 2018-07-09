@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
-import { toggleMake } from '../actions';
+import { toggleSearchFilter } from '../actions';
+import { getSelectedFiltersByCategory } from '../selectors';
 
 class MakeSelector extends React.PureComponent {
     static propTypes = {
@@ -16,9 +17,10 @@ class MakeSelector extends React.PureComponent {
                 icon: PropTypes.string.isRequired,
             })
         ),
+        selectedFiltersByCategory: PropTypes.object.isRequired,
         searchQuery: PropTypes.object.isRequired,
         fallbackLogoImage: PropTypes.string.isRequired,
-        onToggleMake: PropTypes.func.isRequired,
+        onToggleSearchFilter: PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -44,8 +46,10 @@ class MakeSelector extends React.PureComponent {
 
     renderMake(make) {
         const selected =
-            this.props.searchQuery.makes &&
+            this.props.selectedFiltersByCategory &&
+            this.props.selectedFiltersByCategory.make &&
             R.contains(make.value, this.props.searchQuery.makes);
+
         const className = `make-selector__make ${
             selected ? 'make-selector__make--selected' : ''
         }`;
@@ -53,7 +57,7 @@ class MakeSelector extends React.PureComponent {
         return (
             <div
                 className={className}
-                onClick={() => this.props.onToggleMake(make.value)}
+                onClick={() => this.props.onToggleSearchFilter(make)}
                 key={make.value}
             >
                 <img src={this.getLogoFor(make)} />
@@ -80,6 +84,7 @@ class MakeSelector extends React.PureComponent {
 const mapStateToProps = state => {
     return {
         makes: state.pages.dealList.filters.make,
+        selectedFiltersByCategory: getSelectedFiltersByCategory(state),
         searchQuery: state.pages.dealList.searchQuery,
         fallbackLogoImage: state.common.fallbackLogoImage,
     };
@@ -87,8 +92,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onToggleMake: make => {
-            return dispatch(toggleMake(make));
+        onToggleSearchFilter: item => {
+            return dispatch(toggleSearchFilter('make', item));
         },
     };
 };

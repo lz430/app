@@ -7,9 +7,16 @@ import SidebarFilter from './SidebarFilter';
 class FilterFeature extends React.PureComponent {
     static propTypes = {
         title: PropTypes.string.isRequired,
-        items: PropTypes.array,
-        selectedFeatures: PropTypes.array,
-        onToggleFeature: PropTypes.func.isRequired,
+        category: PropTypes.string.isRequired,
+        items: PropTypes.arrayOf(
+            PropTypes.shape({
+                value: PropTypes.string,
+                label: PropTypes.string,
+                count: PropTypes.number,
+            })
+        ),
+        selectedItems: PropTypes.arrayOf(PropTypes.string),
+        onToggleSearchFilter: PropTypes.func.isRequired,
         onToggleOpenFilter: PropTypes.func.isRequired,
         open: PropTypes.bool.isRequired,
         canToggle: PropTypes.bool.isRequired,
@@ -27,12 +34,13 @@ class FilterFeature extends React.PureComponent {
                 open={true}
                 canToggle={false}
                 toggle={() => this.props.onToggleOpenFilter(this.props.title)}
-                count={0}
+                selectedItems={this.props.selectedItems}
             >
                 <FilterFeatureList
-                    selectedFeatures={this.props.selectedFeatures}
-                    features={this.props.items}
-                    onToggleFeature={this.props.onToggleFeature}
+                    category={this.props.category}
+                    items={this.props.items}
+                    selectedItems={this.props.selectedItems}
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
             </SidebarFilter>
         );

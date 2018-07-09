@@ -2,9 +2,8 @@
 
 .filter-page {
     &__top-row {
-        height: 47px;
         border-bottom: 1px solid $color-section-bottom-border;
-        padding: 0.5em 20px 0;
+        padding: 0 20px 0;
         background-color: $color-background-secondary;
         width: 100%;
         display: flex;
@@ -14,7 +13,7 @@
 
         @media (min-width: $break-medium) {
             flex-direction: row;
-            padding: 0 40px 0.5em 40px;
+            padding: 0 40px 0 40px;
         }
 
         &__section {
@@ -34,7 +33,12 @@
                 display: none;
                 @media (min-width: $break-small) {
                     display: block;
+                    padding: 0 0 9px 0;
                 }
+            }
+
+            &--sortbar {
+                padding: 0 0 9px 0;
             }
         }
     }
