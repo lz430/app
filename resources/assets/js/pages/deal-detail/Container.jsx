@@ -420,45 +420,19 @@ class Container extends React.PureComponent {
     };
 
     handleLeaseTermChange = term => {
-        const { dealPricing } = this.props;
-
-        this.props.leaseActions.updateTerm(
-            dealPricing.id(),
-            this.props.userLocation.zipcode,
-            term
-        );
+        this.props.leaseActions.updateTerm(term);
     };
 
     handleLeaseAnnualMileageChange = annualMileage => {
-        const { dealPricing } = this.props;
-
-        this.props.leaseActions.updateAnnualMileage(
-            dealPricing.id(),
-            this.props.userLocation.zipcode,
-            annualMileage
-        );
+        this.props.leaseActions.updateAnnualMileage(annualMileage);
     };
 
     handleLeaseCashDueChange = cashDue => {
-        const { dealPricing } = this.props;
-
-        this.props.leaseActions.updateCashDue(
-            dealPricing.id(),
-            this.props.userLocation.zipcode,
-            cashDue
-        );
+        this.props.leaseActions.updateCashDue(cashDue);
     };
 
     handleLeaseChange = (annualMileage, term, cashDue) => {
-        const { dealPricing } = this.props;
-
-        this.props.leaseActions.update(
-            dealPricing.id(),
-            this.props.userLocation.zipcode,
-            annualMileage,
-            term,
-            cashDue
-        );
+        this.props.leaseActions.update(annualMileage, term, cashDue);
     };
 
     renderStockNumber() {
