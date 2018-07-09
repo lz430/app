@@ -82,7 +82,6 @@ class Feature extends Model
      */
     public function scopeWithVautoFeature(Builder $query, string $feature): Builder
     {
-        return $query->whereRaw("JSON_CONTAINS(map_vauto_features, JSON_ARRAY(?))", [$feature]);
+        return $query->whereRaw("JSON_CONTAINS(LOWER(map_vauto_features), JSON_ARRAY(LOWER(?)))", [$feature]);
     }
-
 }
