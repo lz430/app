@@ -159,15 +159,20 @@ function* init() {
 
     if (urlStyle || urlSize) {
         let filters = [];
+
         /*
         if (urlSize) {
             filters.push('size:' + urlSize);
         }
         */
+
         if (urlStyle) {
             filters.push('style:' + urlStyle);
         }
+
+        yield put(DealListActions.searchReset());
         yield put(DealListActions.setSearchFilters(filters));
+
         window.history.replaceState({}, document.title, '/filter');
     }
 

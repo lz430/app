@@ -44,33 +44,6 @@ function* dealDetailRequestDealQuote() {
             discountType
         )
     );
-
-    // Get the quote that we just got & update with reasonable defaults.
-    const quote = yield select(getActiveQuote);
-
-    if (purchaseStrategy === 'finance') {
-        const financeSettings = yield select(getFinanceSettings);
-        if (!financeSettings.term) {
-            yield put(updateDownPayment(500));
-            yield put(updateTerm(36));
-        }
-    } else if (purchaseStrategy === 'lease') {
-        const leaseSettings = yield select(getLeaseSettings);
-
-        if (leaseSettings.term && quote.rates) {
-            const rate = quote.rates[0];
-            yield put(
-                updateAnnualMileage(
-                    deal.id,
-                    location.zipcode,
-                    rate.residuals[0].annualMileage
-                )
-            );
-            yield put(
-                leaseUpdateTerm(deal.id, location.zipcode, rate.termLength)
-            );
-        }
-    }
 }
 
 /*******************************************************************

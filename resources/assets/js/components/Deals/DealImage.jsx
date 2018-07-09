@@ -8,13 +8,9 @@ class DealImage extends React.PureComponent {
         featureImageClass: PropTypes.string.isRequired,
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            fallbackDealImage: '/images/dmr-placeholder.jpg',
-        };
-    }
+    state = {
+        fallbackDealImage: '/images/dmr-placeholder.jpg',
+    };
 
     featuredImageUrl() {
         if (this.props.deal.thumbnail && this.props.deal.thumbnail.url) {

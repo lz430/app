@@ -18,6 +18,8 @@ const initialState = {
     loadingSearchResults: true,
     meta: {},
     filters: {},
+    showMakeSelectorModal: true,
+    smallFiltersShown: false,
 };
 
 const persistConfig = {
@@ -32,6 +34,7 @@ const persistConfig = {
         'page',
         'meta',
         'filters',
+        'smallFiltersShown',
     ],
 };
 
@@ -101,6 +104,19 @@ const reducer = function(state = initialState, action = {}) {
                 modelYears: action.data.results,
             };
 
+        case ActionTypes.SEARCH_RESET:
+            return {
+                ...state,
+                page: 1,
+                showMakeSelectorModal: true,
+                searchQuery: {
+                    ...state.searchQuery,
+                    entity: 'model',
+                },
+                deals: [],
+                modelYears: [],
+            };
+
         case ActionTypes.CLEAR_MODEL_YEAR:
             return {
                 ...state,
@@ -160,6 +176,18 @@ const reducer = function(state = initialState, action = {}) {
                     ...state.searchQuery,
                     entity: action.entity,
                 },
+            };
+
+        case ActionTypes.TOGGLE_SMALL_FILTERS_SHOWN:
+            return {
+                ...state,
+                smallFiltersShown: !state.smallFiltersShown,
+            };
+
+        case ActionTypes.CLOSE_MAKE_SELECTOR_MODAL:
+            return {
+                ...state,
+                showMakeSelectorModal: false,
             };
 
         default:

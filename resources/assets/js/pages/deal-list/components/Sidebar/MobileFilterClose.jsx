@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
-import { toggleSmallFiltersShown } from 'apps/common/actions';
+import { toggleSmallFiltersShown } from 'pages/deal-list/actions';
 
 import PropTypes from 'prop-types';
 

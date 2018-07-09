@@ -8,8 +8,6 @@ const initialState = {
     fallbackLogoImage: '/images/dmr-logo-small.svg',
     selectedDeal: null,
     infoModalIsShowingFor: null,
-    showMakeSelectorModal: true,
-    smallFiltersShown: false,
     vehicleModel: null,
     vehicleYear: null,
     window: { width: window.innerWidth },
@@ -26,16 +24,6 @@ const reducer = (state = initialState, action) => {
                 )
                     ? false
                     : state.smallFiltersShown,
-            });
-        case ActionTypes.TOGGLE_SMALL_FILTERS_SHOWN:
-            return {
-                ...state,
-                smallFiltersShown: !state.smallFiltersShown,
-            };
-
-        case ActionTypes.CLOSE_MAKE_SELECTOR_MODAL:
-            return Object.assign({}, state, {
-                showMakeSelectorModal: false,
             });
 
         case ActionTypes.SELECT_REBATE:

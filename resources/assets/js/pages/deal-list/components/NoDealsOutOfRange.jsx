@@ -2,17 +2,21 @@ import React, { Component } from 'react';
 import api from 'src/api';
 import util from 'src/util';
 import { connect } from 'react-redux';
-import * as Actions from 'apps/common/actions';
+import { toggleSmallFiltersShown } from 'pages/deal-list/actions';
+import PropTypes from 'prop-types';
 
 class NoDealsOutOfRange extends Component {
-    constructor() {
-        super();
+    static propTypes = {
+        window: PropTypes.shape({
+            width: PropTypes.number.isRequired,
+        }).isRequired,
+        onToggleSmallFiltersShown: PropTypes.func.isRequired,
+    };
 
-        this.state = {
-            email: '',
-            formSubmitted: false,
-        };
-    }
+    state = {
+        email: '',
+        formSubmitted: false,
+    };
 
     handleSubmit(e) {
         e.preventDefault();
@@ -41,7 +45,7 @@ class NoDealsOutOfRange extends Component {
                 {isMobile ? (
                     <button
                         className="deals__button deals__button--pink deals__button--zip"
-                        onClick={this.props.toggleSmallFiltersShown}
+                        onClick={this.props.onToggleSmallFiltersShown}
                     >
                         Change Zip
                     </button>
@@ -80,7 +84,16 @@ const mapStateToProps = state => {
         window: state.common.window,
     };
 };
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onToggleSmallFiltersShown: () => {
+            return dispatch(toggleSmallFiltersShown());
+        },
+    };
+};
+
 export default connect(
     mapStateToProps,
-    Actions
+    mapDispatchToProps
 )(NoDealsOutOfRange);

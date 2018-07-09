@@ -5,7 +5,6 @@ import R from 'ramda';
 
 import * as legacyActions from 'apps/common/actions';
 
-import api from 'src/api';
 import strings from 'src/strings';
 import util from 'src/util';
 
@@ -363,15 +362,15 @@ class Container extends React.PureComponent {
 
     handleBuyNow = () => {
         this.props.setCheckoutData(
-            this.props.deal,
+            this.props.dealPricing.data.deal,
             this.props.dealPricing.data.dealQuote,
-            this.props.purchaseStrategy,
-            this.props.discountType,
-            this.props.purchaseStrategy === 'lease'
-                ? this.props.leaseTerm
-                : this.props.financeTerm,
-            this.props.financeDownPayment,
-            this.props.leaseAnnualMileage
+            this.props.dealPricing.data.paymentType,
+            this.props.dealPricing.data.discountType,
+            this.props.dealPricing.data.paymentType === 'lease'
+                ? this.props.dealPricing.leaseTermValue()
+                : this.props.dealPricing.financeTermValue(),
+            this.props.dealPricing.financeDownPaymentValue(),
+            this.props.dealPricing.leaseAnnualMileageValue()
         );
 
         window.location = `/confirm/${this.props.dealPricing.id()}`;
@@ -421,45 +420,19 @@ class Container extends React.PureComponent {
     };
 
     handleLeaseTermChange = term => {
-        const { dealPricing } = this.props;
-
-        this.props.leaseActions.updateTerm(
-            dealPricing.id(),
-            this.props.userLocation.zipcode,
-            term
-        );
+        this.props.leaseActions.updateTerm(term);
     };
 
     handleLeaseAnnualMileageChange = annualMileage => {
-        const { dealPricing } = this.props;
-
-        this.props.leaseActions.updateAnnualMileage(
-            dealPricing.id(),
-            this.props.userLocation.zipcode,
-            annualMileage
-        );
+        this.props.leaseActions.updateAnnualMileage(annualMileage);
     };
 
     handleLeaseCashDueChange = cashDue => {
-        const { dealPricing } = this.props;
-
-        this.props.leaseActions.updateCashDue(
-            dealPricing.id(),
-            this.props.userLocation.zipcode,
-            cashDue
-        );
+        this.props.leaseActions.updateCashDue(cashDue);
     };
 
     handleLeaseChange = (annualMileage, term, cashDue) => {
-        const { dealPricing } = this.props;
-
-        this.props.leaseActions.update(
-            dealPricing.id(),
-            this.props.userLocation.zipcode,
-            annualMileage,
-            term,
-            cashDue
-        );
+        this.props.leaseActions.update(annualMileage, term, cashDue);
     };
 
     renderStockNumber() {
