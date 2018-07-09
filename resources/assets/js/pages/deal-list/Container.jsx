@@ -17,13 +17,16 @@ import FilterPanel from './components/FilterPanel';
 import { closeMakeSelectorModal } from 'apps/common/actions';
 
 import { initDealListData } from './actions';
+import { getSelectedFiltersByCategory } from './selectors';
 
 class Container extends React.PureComponent {
     static propTypes = {
         searchQuery: PropTypes.object.isRequired,
         onInit: PropTypes.func.isRequired,
         onCloseMakeSelectorModal: PropTypes.func.isRequired,
-        makeSelectorModalisOpen: PropTypes.bool.isRequired,
+        makeSelectorModalIsOpen: PropTypes.bool.isRequired,
+        smallFiltersShown: PropTypes.bool,
+        selectedFiltersByCategory: PropTypes.object,
     };
 
     componentDidMount() {
@@ -37,7 +40,10 @@ class Container extends React.PureComponent {
                 title="Select brand preference"
                 subtitle="Select one or more brands to compare"
                 closeText="Show available vehicles"
-                buttonCloseDisabled={this.props.searchQuery.makes.length === 0}
+                buttonCloseDisabled={
+                    !this.props.selectedFiltersByCategory['make'] ||
+                    this.props.selectedFiltersByCategory['make'].length === 0
+                }
             >
                 <MakeSelector />
             </Modal>
@@ -93,7 +99,7 @@ class Container extends React.PureComponent {
     render() {
         return (
             <StickyContainer>
-                {this.props.makeSelectorModalisOpen
+                {this.props.makeSelectorModalIsOpen
                     ? this.renderMakeSelectionModal()
                     : ''}
 
@@ -107,8 +113,9 @@ const mapStateToProps = state => {
     return {
         window: state.common.window,
         smallFiltersShown: state.common.smallFiltersShown,
-        makeSelectorModalisOpen: state.common.showMakeSelectorModal,
+        makeSelectorModalIsOpen: state.common.showMakeSelectorModal,
         searchQuery: state.pages.dealList.searchQuery,
+        selectedFiltersByCategory: getSelectedFiltersByCategory(state),
     };
 };
 

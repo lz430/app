@@ -48,7 +48,7 @@ class MakeSelector extends React.PureComponent {
         const selected =
             this.props.selectedFiltersByCategory &&
             this.props.selectedFiltersByCategory.make &&
-            R.contains(make.value, this.props.searchQuery.makes);
+            R.contains(make.value, this.props.selectedFiltersByCategory.make);
 
         const className = `make-selector__make ${
             selected ? 'make-selector__make--selected' : ''
