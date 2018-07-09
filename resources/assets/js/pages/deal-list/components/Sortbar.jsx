@@ -8,9 +8,8 @@ import {
     toggleSearchSort,
     clearAllSecondaryFilters,
     clearModelYear,
+    toggleSmallFiltersShown,
 } from 'pages/deal-list/actions';
-
-import { toggleSmallFiltersShown } from 'apps/common/actions';
 
 class Sortbar extends React.PureComponent {
     static propTypes = {

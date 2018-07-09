@@ -14,9 +14,7 @@ import ToolbarSelectedFilters from './components/ToolbarSelectedFilters';
 import ToolbarPrice from './components/ToolbarPrice';
 import FilterPanel from './components/FilterPanel';
 
-import { closeMakeSelectorModal } from 'apps/common/actions';
-
-import { initDealListData } from './actions';
+import { initDealListData, closeMakeSelectorModal } from './actions';
 import { getSelectedFiltersByCategory } from './selectors';
 
 class Container extends React.PureComponent {
@@ -112,8 +110,8 @@ class Container extends React.PureComponent {
 const mapStateToProps = state => {
     return {
         window: state.common.window,
-        smallFiltersShown: state.common.smallFiltersShown,
-        makeSelectorModalIsOpen: state.common.showMakeSelectorModal,
+        smallFiltersShown: state.pages.dealList.smallFiltersShown,
+        makeSelectorModalIsOpen: state.pages.dealList.showMakeSelectorModal,
         searchQuery: state.pages.dealList.searchQuery,
         selectedFiltersByCategory: getSelectedFiltersByCategory(state),
     };

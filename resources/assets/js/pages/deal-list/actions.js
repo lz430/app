@@ -53,6 +53,12 @@ export function clearModelYear() {
     };
 }
 
+export function searchReset() {
+    return {
+        type: ActionTypes.SEARCH_RESET,
+    };
+}
+
 export function setSearchFilters(filters) {
     return {
         type: ActionTypes.SEARCH_SET_FILTERS,
@@ -111,5 +117,17 @@ export function toggleSearchSort(sort) {
         dispatch({
             type: ActionTypes.SEARCH_REQUEST,
         });
+    };
+}
+
+export function closeMakeSelectorModal() {
+    return {
+        type: ActionTypes.CLOSE_MAKE_SELECTOR_MODAL,
+    };
+}
+
+export function toggleSmallFiltersShown() {
+    return {
+        type: ActionTypes.TOGGLE_SMALL_FILTERS_SHOWN,
     };
 }
