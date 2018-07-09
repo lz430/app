@@ -1,9 +1,10 @@
 import React from 'react';
 import R from 'ramda';
+import { connect } from 'react-redux';
+
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
-import { connect } from 'react-redux';
-import * as Actions from 'actions';
+import * as Actions from 'apps/common/actions';
 import util from 'src/util';
 
 class Modal extends React.Component {
@@ -114,24 +115,27 @@ class Modal extends React.Component {
                             } ${
                                 this.props.closeText
                                     ? this.props.title
-                                      ? ''
-                                      : 'modal__body--no-header'
+                                        ? ''
+                                        : 'modal__body--no-header'
                                     : 'modal__body--no-footer'
                             }`}
                         >
-                            {!this.props.title && !util.windowIsLargerThanSmall(this.props.window.width)
-                                ? (
-                                    <div className="modal__close--info modal__close--info--color-secondary">
-                                        <SVGInline
-                                            onClick={this.props.onClose}
-                                            height="20px"
-                                            width="20px"
-                                            className="modal__close-x--info"
-                                            svg={zondicons['close']}
-                                        />
-                                    </div>
-                                ) : ''
-                            }
+                            {!this.props.title &&
+                            !util.windowIsLargerThanSmall(
+                                this.props.window.width
+                            ) ? (
+                                <div className="modal__close--info modal__close--info--color-secondary">
+                                    <SVGInline
+                                        onClick={this.props.onClose}
+                                        height="20px"
+                                        width="20px"
+                                        className="modal__close-x--info"
+                                        svg={zondicons['close']}
+                                    />
+                                </div>
+                            ) : (
+                                ''
+                            )}
                             {childrenWithProps}
                         </div>
                         {this.props.closeText || this.props.deal ? (
@@ -143,19 +147,25 @@ class Modal extends React.Component {
                                     >
                                         {this.props.closeText}
                                     </button>
-                                ) : ''}
+                                ) : (
+                                    ''
+                                )}
                                 {this.props.deal ? (
                                     <button
                                         onClick={() => {
                                             this.props.onClose();
 
-                                            window.location = `/confirm/${this.props.deal.id}`;
+                                            window.location = `/confirm/${
+                                                this.props.deal.id
+                                            }`;
                                         }}
                                         className="deal__button deal__button--small deal__button--pink deal__button"
                                     >
                                         Buy Now
                                     </button>
-                                ) : ''}
+                                ) : (
+                                    ''
+                                )}
                             </div>
                         ) : (
                             ''
@@ -169,9 +179,11 @@ class Modal extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        selectedMakes: state.selectedMakes,
-        window: state.window,
+        window: state.common.window,
     };
 };
 
-export default connect(mapStateToProps, Actions)(Modal);
+export default connect(
+    mapStateToProps,
+    Actions
+)(Modal);

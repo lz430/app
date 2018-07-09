@@ -6,6 +6,10 @@ const path = require('path');
 require('./loadIcons');
 
 mix.webpackConfig({
+    devtool: mix.config.inProduction
+        ? 'source-map'
+        : 'eval-cheap-module-source-map',
+
     resolve: {
         modules: [
             path.resolve('./resources/assets/js'),
@@ -14,8 +18,10 @@ mix.webpackConfig({
     },
 });
 
-mix.react('resources/assets/js/app.js', 'public/js')
-    .sass('resources/assets/sass/app.scss', 'public/css');
+mix.react('resources/assets/js/app.js', 'public/js').sass(
+    'resources/assets/sass/app.scss',
+    'public/css'
+);
 
 if (mix.config.inProduction) {
     mix.version();

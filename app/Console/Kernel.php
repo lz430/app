@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         Commands\TestCoxAPI::class,
         Commands\JatoVersionReport::class,
         Commands\VersionFillMissingPhotos::class,
+        Commands\JatoDealDecode::class,
         Commands\DealFeatureDebugger::class,
         Commands\ImportVautoMapData::class,
         Commands\DealProgramDebugger::class,

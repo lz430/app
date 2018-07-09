@@ -468,6 +468,7 @@ class DealEquipmentMunger
         $parentSchemasIds = [
             59801,  // mobile (android etc)
             1301, // audio system 1301
+            17801, // Front seat
         ];
 
         $features = $this->equipment

@@ -6,6 +6,7 @@
 /public/hot
 /public/css/
 /public/js/
+/public/mix-manifest.json
 /storage/*.key
 /storage/vauto
 /vendor
@@ -23,4 +24,4 @@ Homestead.yaml
 _ide_helper.php
 
 !.gitkeep
-
+public/mix-manifest.json

@@ -11,11 +11,8 @@ Route::get('confirm/{id}', 'ConfirmDetailsController@show')->name('confirm');
 
 Route::get('testing', 'WelcomeController@testing');
 
-Route::post('apply-or-purchase', 'ApplyOrPurchaseController@applyOrInitiatePurchase')->name('applyOrPurchase');
 Route::get('request-email', 'ApplyOrPurchaseController@requestEmail')->name('request-email');
 Route::post('receive-email', 'ApplyOrPurchaseController@receiveEmail')->name('receive-email');
-
-Route::post('zip-codes', 'ZipCodesController@store')->name('zipCodes.store');
 
 Route::group(['middleware' => 'auth'], function () {
     /** Purchase Flow */

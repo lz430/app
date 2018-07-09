@@ -85,6 +85,7 @@ return [
     // Can be a single class or an array of clases
     'middleware_class' => [
         \Backpack\Base\app\Http\Middleware\CheckIfAdmin::class,
+        \App\Http\Middleware\Admin\CheckIfAdminRole::class,
     ],
 
     // Alias for that middleware

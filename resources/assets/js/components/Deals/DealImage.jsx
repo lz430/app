@@ -1,13 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import LazyLoad from 'react-lazyload';
 
 class DealImage extends React.PureComponent {
-    constructor(props) {
-        super(props);
+    static propTypes = {
+        deal: PropTypes.object.isRequired,
+        featureImageClass: PropTypes.string.isRequired,
+    };
 
-        this.state = {
-            fallbackDealImage: '/images/dmr-placeholder.jpg',
-        };
-    }
+    state = {
+        fallbackDealImage: '/images/dmr-placeholder.jpg',
+    };
 
     featuredImageUrl() {
         if (this.props.deal.thumbnail && this.props.deal.thumbnail.url) {
@@ -22,10 +25,14 @@ class DealImage extends React.PureComponent {
 
     render() {
         return (
-            <img
-                className={this.props.featureImageClass}
-                src={this.featuredImageUrl()}
-            />
+            <LazyLoad height={200} overflow={true}>
+                <div className="deal__image-container">
+                    <img
+                        className={this.props.featureImageClass}
+                        src={this.featuredImageUrl()}
+                    />
+                </div>
+            </LazyLoad>
         );
     }
 }

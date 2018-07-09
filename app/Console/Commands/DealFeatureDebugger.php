@@ -49,6 +49,11 @@ class DealFeatureDebugger extends Command
 
         $deal = Deal::find($dealId);
 
+        if (!$deal) {
+            $this->info("NO DEAL!");
+            return;
+        }
+
 
         $munger = new DealEquipmentMunger($deal, $this->client);
         $debug = $munger->import(true);

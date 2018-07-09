@@ -32,6 +32,10 @@ class DealerRequest extends FormRequest
             'latitude' => 'required',
             'longitude' => 'required',
             'max_delivery_miles' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'zip' => 'required',
         ];
     }
 

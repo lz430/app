@@ -2,129 +2,129 @@
 @import '../mixins/button';
 
 .compare-deal {
-  background-color: $color-background-secondary;
-  border: 1px solid $color-grey;
-  border-radius: 6px;
-  margin: 5px;
-  max-width: $deal-card-width;
-  min-width: $deal-card-width;
+    background-color: $color-background-secondary;
+    border: 1px solid $color-grey;
+    border-radius: 6px;
+    margin: 5px;
+    max-width: $deal-card-width;
+    min-width: $deal-card-width;
 
-  &__image {
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    min-height: 188px;
-    width: 100%;
-  }
-
-  &__basic-info {
-    color: $text-color-dark;
-    font-size: 1.6em;
-    height: 110px;
-    padding-bottom: 10px;
-    padding-left: 18px;
-
-    &__content {
-      display: flex;
+    &__image {
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        min-height: 188px;
+        width: 100%;
     }
 
-    &__title {
-      color: $color-blue;
-      font-size: large;
-      font-weight: bold;
-      height: 50px;
+    &__basic-info {
+        color: $text-color-dark;
+        font-size: 1.6em;
+        height: 110px;
+        padding-bottom: 10px;
+        padding-left: 18px;
+
+        &__content {
+            display: flex;
+        }
+
+        &__title {
+            color: $color-blue;
+            font-size: large;
+            font-weight: bold;
+            height: 50px;
+        }
+
+        &__subtitle {
+            font-size: 1.2rem;
+            margin-right: auto;
+        }
+
+        &__price {
+            color: $text-color-dark;
+            font-size: xx-large;
+            margin-top: -12px;
+            padding-right: 10px;
+        }
     }
 
-    &__subtitle {
-      font-size: 1.2rem;
-      margin-right: auto;
-    }
-
-    &__price {
-      color: $text-color-dark;
-      font-size: xx-large;
-      margin-top: -12px;
-      padding-right: 10px;
-    }
-  }
-
-  &__buttons {
-    display: flex;
-    justify-content: space-around;
-    margin: 5px 0 25px;
-    padding: 0 10px;
-  }
-
-  &__button {
-    @include button;
-    color: $text-color-dark;
-    flex: 1;
-    font-weight: bold;
-    justify-content: center;
-    margin: 0 5px;
-  }
-
-  &__incentives {
-    background-color: $color-darkergrey;
-    border-top: 1px solid $color-grey;
-    color: $color-text-white;
-    height: 200px;
-    overflow-y: scroll;
-    padding: 15px 0;
-    width: 100%;
-  }
-
-  &__incentive {
-    align-items: center;
-    display: flex;
-
-    &__checkbox {
-      margin: 20px;
-    }
-
-    &__name {
-      flex: 2;
-      margin-right: auto;
-    }
-
-    &__value {
-      flex: 1;
-      margin-right: 20px;
-      text-align: right;
-    }
-  }
-
-  &__cta {
-    background-color: $color-darkestgrey;
-    color: $color-lightgrey;
-    display: flex;
-    flex-direction: column;
-    height: 120px;
-    padding: 20px;
-
-    &__info {
-      align-items: center;
-      display: flex;
-    }
-
-    &__title {
-      font-size: 0.9rem;
-      margin-right: auto;
-    }
-
-    &__price {
-      color: $color-text-white;
-      font-size: xx-large;
-      margin-top: -12px;
+    &__buttons {
+        display: flex;
+        justify-content: space-around;
+        margin: 5px 0 25px;
+        padding: 0 10px;
     }
 
     &__button {
-      @include button;
-      border-style: none;
-      color: $text-color-dark;
-      flex: 1;
-      font-weight: bold;
-      justify-content: center;
-      margin: 0 5px;
+        @include button;
+        color: $text-color-dark;
+        flex: 1;
+        font-weight: bold;
+        justify-content: center;
+        margin: 0 5px;
     }
-  }
+
+    &__incentives {
+        background-color: $color-darkergrey;
+        border-top: 1px solid $color-grey;
+        color: $color-text-white;
+        height: 200px;
+        overflow-y: scroll;
+        padding: 15px 0;
+        width: 100%;
+    }
+
+    &__incentive {
+        align-items: center;
+        display: flex;
+
+        &__checkbox {
+            margin: 20px;
+        }
+
+        &__name {
+            flex: 2;
+            margin-right: auto;
+        }
+
+        &__value {
+            flex: 1;
+            margin-right: 20px;
+            text-align: right;
+        }
+    }
+
+    &__cta {
+        background-color: $color-darkestgrey;
+        color: $color-lightgrey;
+        display: flex;
+        flex-direction: column;
+        height: 120px;
+        padding: 20px;
+
+        &__info {
+            align-items: center;
+            display: flex;
+        }
+
+        &__title {
+            font-size: 0.9rem;
+            margin-right: auto;
+        }
+
+        &__price {
+            color: $color-text-white;
+            font-size: xx-large;
+            margin-top: -12px;
+        }
+
+        &__button {
+            @include button;
+            border-style: none;
+            color: $text-color-dark;
+            flex: 1;
+            font-weight: bold;
+            justify-content: center;
+            margin: 0 5px;
+        }
+    }
 }

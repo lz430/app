@@ -24,11 +24,7 @@ const util = {
             ? R.reject(R.equals(item), items)
             : R.append(item, items);
     },
-    getEmployeeOrSupplierPrice: (deal, employeeBrand) => {
-        return employeeBrand === deal.make
-            ? deal.employee_price
-            : deal.supplier_price;
-    },
+
     getInitialBodyStyleFromUrl: () => {
         return R.prop('style', qs.parse(window.location.search.slice(1)));
     },
@@ -41,35 +37,7 @@ const util = {
     fromBackForward: () => {
         return window.performance.navigation.type === 2;
     },
-    wasReferredFromHomePage: () => {
-        if (util.fromRefreshed() || util.fromBackForward()) {
-            return false;
-        }
 
-        let temp = document.createElement('a');
-
-        temp.href = document.referrer;
-
-        return window.document.origin === temp.origin && temp.pathname === '/';
-    },
-    numbersWithCommas: num => {
-        const formatter = new Intl.NumberFormat('en-US', {
-            style: 'decimal',
-            minimumFractionDigits: 0,
-        });
-
-        return formatter.format(num);
-    },
-    sameStateSchema(a, b) {
-        if (!a || !b) {
-            return false;
-        }
-
-        return (
-            JSON.stringify(Object.keys(a).filter(k => k !== '_persist').sort()) ===
-            JSON.stringify(Object.keys(b).filter(k => k !== '_persist').sort())
-        );
-    },
     getClosestNumberInRange(value, values) {
         // Ensure order of values is ascending
         values.sort();
@@ -108,17 +76,7 @@ const util = {
         );
     },
     getTargetKeyForDealAndZip(deal, zipcode) {
-        const vehicleId = deal.version.jato_vehicle_id;
-        const targetKey = `${vehicleId}-${zipcode}`;
-        return targetKey;
-    },
-    getBestOfferKeyForDeal(deal, zipcode, paymentType, selectedTargets) {
-        const vehicleId = deal.version.jato_vehicle_id;
-        const targetString = R.sort((a, b) => {
-            return a - b;
-        }, selectedTargets).join('-');
-
-        return `${vehicleId}-${zipcode}-${paymentType}-${targetString}`;
+        return `${deal.id}-${zipcode}`;
     },
 };
 

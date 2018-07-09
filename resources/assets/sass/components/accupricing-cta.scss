@@ -2,46 +2,46 @@
 @import '../mixins/button';
 
 .accupricing-cta {
-  margin-top: 1rem;
-  text-align: left;
+    margin-top: 1rem;
+    text-align: left;
 
-  &__logo {
-    max-width: 10rem;
-    height: auto;
-    display: block;
-    cursor: pointer;
-  }
+    &__logo {
+        max-width: 10rem;
+        height: auto;
+        display: block;
+        cursor: pointer;
+    }
 
-  &__disclaimer {
-    margin: 0;
-    font-size: $font-size-base * .75;
-    color: $color-darkgrey;
-  }
+    &__disclaimer {
+        margin: 0;
+        font-size: $font-size-base * 0.75;
+        color: $color-darkgrey;
+    }
 }
 
 .accupricing-cta--horizontal {
-  margin-top: 0;
-  text-align: center;
+    margin-top: 0;
+    text-align: center;
 
-  @media (min-width: $break-medium) {
-    text-align: unset;
-  }
-
-  .accupricing-cta {
-    &__logo {
-      display: inline-block;
-      line-height: 38px;
-      vertical-align: middle;
-    }
-    &__disclaimer {
-      display: inline;
-      line-height: 38px;
-      vertical-align: middle;
-      text-align: center;
-
-      @media (min-width: $break-medium) {
+    @media (min-width: $break-medium) {
         text-align: unset;
-      }
     }
-  }
+
+    .accupricing-cta {
+        &__logo {
+            display: inline-block;
+            line-height: 38px;
+            vertical-align: middle;
+        }
+        &__disclaimer {
+            display: inline;
+            line-height: 38px;
+            vertical-align: middle;
+            text-align: center;
+
+            @media (min-width: $break-medium) {
+                text-align: unset;
+            }
+        }
+    }
 }

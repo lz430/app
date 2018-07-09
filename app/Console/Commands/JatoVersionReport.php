@@ -2,7 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Deal;
 use DeliverMyRide\JATO\JatoClient;
+use League\Csv\Writer;
+
 use Illuminate\Console\Command;
 
 class JatoVersionReport extends Command
@@ -12,7 +15,7 @@ class JatoVersionReport extends Command
      *
      * @var string
      */
-    protected $signature = 'dmr:jatoversionreport';
+    protected $signature = 'dmr:jatoversionreport {path}';
 
     /**
      * The console command description.
@@ -26,7 +29,6 @@ class JatoVersionReport extends Command
 
     /**
      * Create a new command instance.
-
      * @param JatoClient $client
      * @return void
      */
@@ -42,12 +44,45 @@ class JatoVersionReport extends Command
      */
     public function handle()
     {
-        $vin = $this->argument('vin');
-        $decodedVin = $this->client->vin->decode($vin);
-        print_r($decodedVin);
+        $path = $this->argument('path');
+        $csv = Writer::createFromPath("$path", "w");
 
-        $version = '769729120180301';
-        print_r($this->client->version->get($version));
+        $header = [
+            'Deal Id',
+            'Vin',
+            'Jato UID',
+            'Jato Vehicle Id',
+            'Jato Version Name',
+            'Jato Model Name',
+            'Jato Model Code',
+            'Jato Trim Name',
+            'Jato Is Current',
+        ];
+
+        $csv->insertOne($header);
+
+        $deals = Deal::all();
+
+        foreach ($deals as $deal) {
+            $this->info("Deal: {$deal->id}");
+            $decoded = $this->client->vin->decode($deal->vin);
+            foreach ($decoded->versions as $version) {
+                $data = [
+                    $deal->id,
+                    $deal->vin,
+                    $version->uid,
+                    $version->vehicle_ID,
+                    $version->versionName,
+                    $version->modelName,
+                    $version->modelCode,
+                    $version->trimName,
+                    $version->isCurrent,
+                ];
+
+                $csv->insertOne($data);
+            }
+
+        }
 
     }
 }

@@ -1,53 +1,71 @@
 import React from 'react';
-import R from 'ramda';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as Actions from 'actions/index';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import InfoModal from 'components/InfoModal';
-import {
-    makeDealPricing,
-} from 'selectors/index';
-import DealPricing from 'src/DealPricing';
+import { dealPricingFactory } from 'src/DealPricing';
 
-class DealPrice extends React.PureComponent {
+import {
+    selectDeal,
+    toggleCompare,
+    showInfoModal,
+    hideInfoModal,
+} from 'apps/common/actions';
+
+import { setPurchaseStrategy } from 'apps/user/actions';
+import { requestDealQuote } from 'apps/pricing/actions';
+import { getUserLocation } from 'apps/user/selectors';
+
+class DealPrice extends React.Component {
+    static propTypes = {
+        deal: PropTypes.object.isRequired,
+        purchaseStrategy: PropTypes.string.isRequired,
+        userLocation: PropTypes.object.isRequired,
+        compareList: PropTypes.array.isRequired,
+        infoModalIsShowingFor: PropTypes.number,
+        onSelectDeal: PropTypes.func.isRequired,
+        onSetPurchaseStrategy: PropTypes.func.isRequired,
+        onToggleCompare: PropTypes.func.isRequired,
+        onShowInfoModal: PropTypes.func.isRequired,
+        onHideInfoModal: PropTypes.func.isRequired,
+        onRequestDealQuote: PropTypes.func.isRequired,
+    };
+
     renderPriceExplanationModal() {
-        return <InfoModal
-            {...R.pick(['deal', 'selectedTab', 'compareList', 'dealPricing'], this.props)}
-            {...R.pick([
-                'selectDeal',
-                'selectTab',
-                'requestTargets',
-                'requestBestOffer',
-                'getBestOffersForLoadedDeals',
-                'toggleCompare',
-                'showInfoModal',
-                'hideInfoModal',
-                'infoModalIsShowingFor',
-                'showAccuPricingModal'
-            ], this.props)}
-        />;
+        return (
+            <InfoModal
+                key={this.props.deal.id}
+                deal={this.props.deal}
+                userLocation={this.props.userLocation}
+                purchaseStrategy={this.props.purchaseStrategy}
+                onSetPurchaseStrategy={this.props.onSetPurchaseStrategy}
+                onRequestDealQuote={this.props.onRequestDealQuote}
+                dealPricing={this.props.dealPricing}
+                compareList={this.props.compareList}
+                selectDeal={this.props.onSelectDeal}
+                toggleCompare={this.props.onToggleCompare}
+                showInfoModal={this.props.onShowInfoModal}
+                hideInfoModal={this.props.onHideInfoModal}
+                infoModalIsShowingFor={this.props.infoModalIsShowingFor}
+            />
+        );
     }
 
     showWhenPricingIsLoaded() {
         if (this.props.dealPricing.isPricingLoading()) {
-            return (
-                <SVGInline svg={miscicons['loading']} />
-            )
+            return <SVGInline svg={miscicons['loading']} />;
         }
 
         if (this.props.dealPricing.cannotPurchase()) {
-            return (
-                <span>N/A</span>
-            )
+            return <span>N/A</span>;
         }
 
         return this.props.dealPricing.finalPrice();
     }
 
     getLabel() {
-        switch (this.props.selectedTab) {
+        switch (this.props.purchaseStrategy) {
             case 'cash':
                 return 'Your cash price';
             case 'finance':
@@ -72,7 +90,9 @@ class DealPrice extends React.PureComponent {
                         <div className="deal-price__hr" />
                         <div className="deal-price__cash-msrp">
                             {this.props.dealPricing.msrp()}{' '}
-                            <span className="deal-price__cash-msrp-label">MSRP</span>
+                            <span className="deal-price__cash-msrp-label">
+                                MSRP
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -81,21 +101,40 @@ class DealPrice extends React.PureComponent {
     }
 }
 
-const makeMapStateToProps = () => {
-    const getDealPricing = makeDealPricing();
-    const mapStateToProps = (state, props) => {
-        return {
-            selectedTab: state.selectedTab,
-            compareList: state.compareList, // should be selected
-            dealPricing: new DealPricing(getDealPricing(state, props)),
-            infoModalIsShowingFor: state.infoModalIsShowingFor,
-        };
+const mapStateToProps = (state, props) => {
+    return {
+        userLocation: getUserLocation(state),
+        purchaseStrategy: state.user.purchasePreferences.strategy,
+        dealPricing: dealPricingFactory(state, props),
+        compareList: state.common.compareList,
+        infoModalIsShowingFor: state.common.infoModalIsShowingFor,
     };
-    return mapStateToProps;
 };
 
-DealPrice.PropTypes = {
-    deal: PropTypes.object.isRequired,
+const mapDispatchToProps = dispatch => {
+    return {
+        onSelectDeal: deal => {
+            return dispatch(selectDeal(deal));
+        },
+        onSetPurchaseStrategy: strategy => {
+            return dispatch(setPurchaseStrategy(strategy));
+        },
+        onToggleCompare: deal => {
+            return dispatch(toggleCompare(deal));
+        },
+        onShowInfoModal: id => {
+            return dispatch(showInfoModal(id));
+        },
+        onHideInfoModal: () => {
+            return dispatch(hideInfoModal());
+        },
+        onRequestDealQuote: (deal, zipcode, paymentType) => {
+            return dispatch(requestDealQuote(deal, zipcode, paymentType));
+        },
+    };
 };
 
-export default connect(makeMapStateToProps, Actions)(DealPrice);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(DealPrice);

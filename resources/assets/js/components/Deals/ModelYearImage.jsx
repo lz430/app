@@ -1,4 +1,5 @@
 import React from 'react';
+import LazyLoad from 'react-lazyload';
 
 class ModelYearImage extends React.PureComponent {
     constructor(props) {
@@ -11,7 +12,10 @@ class ModelYearImage extends React.PureComponent {
     }
 
     featuredImageUrl() {
-        if (this.props.modelYear.thumbnail && this.props.modelYear.thumbnail.url) {
+        if (
+            this.props.modelYear.thumbnail &&
+            this.props.modelYear.thumbnail.url
+        ) {
             return this.props.modelYear.thumbnail.url;
         }
 
@@ -20,10 +24,17 @@ class ModelYearImage extends React.PureComponent {
 
     render() {
         return (
-            <img
-                className='modelyear__image'
-                src={this.featuredImageUrl()}
-            />
+            <LazyLoad height={200} overflow={true} offset={400}>
+                <div className="modelyear__image-container">
+                    <img
+                        className="modelyear__image"
+                        src={this.featuredImageUrl()}
+                        onClick={() => {
+                            this.props.selectModelYear();
+                        }}
+                    />
+                </div>
+            </LazyLoad>
         );
     }
 }

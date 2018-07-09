@@ -2,7 +2,6 @@
 
 namespace DeliverMyRide\Carleton;
 
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class Client
@@ -22,8 +21,9 @@ class Client
         $this->username = $username;
         $this->password = $password;
     }
+
     /**
-     * @param array $cashDueOptions
+     * @param $cashDueOptions
      * @param $terms
      * @param $taxRate
      * @param $acquisitionFee
@@ -37,7 +37,7 @@ class Client
      * @return array
      */
     public function buildRequestParams(
-        array $cashDueOptions,
+        $cashDueOptions,
         $terms,
         $taxRate,
         $acquisitionFee,
@@ -75,40 +75,44 @@ class Client
                 'RoundToOption' => 'NearestPenny',
             ],
             'rebate' => [
-                'Amount' => $rebate,
+                'Amount' => -1 * abs($rebate),
                 'Type' => 'Financed',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'Rebate',
                 'TaxIndex' => '1',
-                'FinanceTaxes' => 'No',
+                'FinanceTaxes' => 'Yes',
                 'CCRPortionFeeTaxed' => 'Yes',
                 'RoundToOption' => 'NearestPenny',
             ],
 
+            /*
             'license' => [
                 'Amount' => $licenseFee,
-                'Type' => 'Upfront',
+                'Type' => 'Financed', // Upfront
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
                 'TaxIndex' => '0',
                 'FinanceTaxes' => 'Yes',
                 'RoundToOption' => 'NearestPenny',
             ],
+            */
             'cvr' => [
                 'Amount' => $cvrFee,
-                'Type' => 'Upfront',
+                'Type' => 'Financed',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
-                'TaxIndex' => '1',
+                'TaxIndex' => '0',
                 'FinanceTaxes' => 'No',
                 'RoundToOption' => 'NearestPenny',
             ],
         ];
 
-        $terms = json_decode($terms, true);
+        if (is_string($terms)) {
+            $terms = json_decode($terms, true);
+        }
 
         foreach ($cashDueOptions as $cashDueValue) {
-            foreach($terms as $term => $termData) {
+            foreach ($terms as $term => $termData) {
                 foreach ($termData['annualMileage'] as $annualMileage => $annualMileageData) {
                     $quote = [
                         'taxRate' => $taxRate,
@@ -145,7 +149,8 @@ class Client
      * @return string
      * @throws \Throwable
      */
-    public function buildRequest($data) {
+    public function buildRequest($data)
+    {
         $contents = view('carleton.request', $data)->render();
         $contents = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" . $contents;
         $contents = trim(preg_replace('/\s+/', ' ', $contents));
@@ -153,7 +158,7 @@ class Client
     }
 
     /**
-     * @param array $cashDueOptions
+     * @param $cashDueOptions
      * @param $terms
      * @param $taxRate
      * @param $acquisitionFee
@@ -168,7 +173,7 @@ class Client
      * @throws \Throwable
      */
     public function getLeasePaymentsFor(
-        array $cashDueOptions,
+        $cashDueOptions,
         $terms,
         $taxRate,
         $acquisitionFee,
@@ -198,21 +203,9 @@ class Client
             $cashAdvance,
             $contractDate
         );
-
         $request = $this->buildRequest($params);
 
-        $hash = md5($request);
-        $cacheKey = "lease-rates-" . $hash;
-
-        if (false && Cache::has($cacheKey)) {
-            Log::debug("Cache HIT ($cacheKey)");
-            return Cache::get($cacheKey);
-        }
-
-        Log::debug("Cache MISS ($cacheKey)");
-        $leasePayments = $this->getLeasePaymentsForQuoteParameters($params, $request);
-        Cache::put($cacheKey, $leasePayments, count($leasePayments) > 0 ? 360 : 15);
-        return $leasePayments;
+        return $this->getLeasePaymentsForQuoteParameters($params, $request);
     }
 
     /**

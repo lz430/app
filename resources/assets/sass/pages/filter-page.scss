@@ -2,66 +2,66 @@
 @import '../mixins/button';
 
 .filter-page {
-  background: $color-background-secondary;
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
+    background: $color-background-secondary;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
 
-  @media (min-width: $break-medium) {
-    height: calc(100vh - #{$header-height});
-  }
-
-  &__deals {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    width: 100%;
-
-    &--small-filters-shown {
-      left: $sidebar-filters-width;
+    @media (min-width: $break-medium) {
+        height: calc(100vh - #{$header-height});
     }
 
-    &--small-filters-hidden {
-      left: 0;
+    &__deals {
+        height: 100%;
+        left: 0;
+        position: absolute;
+        width: 100%;
+
+        &--small-filters-shown {
+            left: $sidebar-filters-width;
+        }
+
+        &--small-filters-hidden {
+            left: 0;
+        }
+
+        &--small {
+            transition: left 1s;
+        }
+
+        @media (min-width: $break-small) {
+            left: $sidebar-filters-width;
+            width: calc(100vw - #{$sidebar-filters-width});
+        }
     }
 
-    &--small {
-      transition: left 1s;
+    &__filter-panel {
+        background-color: $color-sidebar-background-primary;
+        height: 100%;
+        position: absolute;
+        width: $sidebar-filters-width;
+
+        @media (min-width: $break-small) {
+            left: 0;
+        }
+
+        &--small-filters-shown {
+            left: 0;
+        }
+
+        &--small-filters-hidden {
+            left: -$sidebar-filters-width;
+        }
+
+        &--small {
+            transition: 1s;
+        }
     }
 
-    @media (min-width: $break-small) {
-      left: $sidebar-filters-width;
-      width: calc(100vw - #{$sidebar-filters-width});
+    &__no-results {
+        margin: 0 auto;
+        padding: 20px;
+        width: 115px;
     }
-  }
-
-  &__filter-panel {
-    background-color: $color-sidebar-background-primary;
-    height: 100%;
-    position: absolute;
-    width: $sidebar-filters-width;
-
-    @media (min-width: $break-small) {
-      left: 0;
-    }
-
-    &--small-filters-shown {
-      left: 0;
-    }
-
-    &--small-filters-hidden {
-      left: -$sidebar-filters-width;
-    }
-
-    &--small {
-      transition: 1s;
-    }
-  }
-
-  &__no-results {
-    margin: 0 auto;
-    padding: 20px;
-    width: 115px;
-  }
 }

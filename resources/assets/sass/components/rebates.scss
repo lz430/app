@@ -3,30 +3,30 @@
 @import '../mixins/selector-icon';
 
 .rebates {
-  &__rebate {
-    align-items: center;
-    border-top: 1px solid $color-section-bottom-border;
-    cursor: pointer;
-    display: flex;
-    padding: 5px 15px;
-    width: 100%;
+    &__rebate {
+        align-items: center;
+        border-top: 1px solid $color-section-bottom-border;
+        cursor: pointer;
+        display: flex;
+        padding: 5px 15px;
+        width: 100%;
 
-    &--disabled {
-      color: lighten($text-color-dark, 60%);
+        &--disabled {
+            color: lighten($text-color-dark, 60%);
+        }
     }
-  }
 
-  &__checkbox {
-    @include selector-icon;
-    background: $color-text-white;
-  }
+    &__checkbox {
+        @include selector-icon;
+        background: $color-text-white;
+    }
 
-  &__title {
-    flex: 1;
-    margin-right: 15px;
-  }
+    &__title {
+        flex: 1;
+        margin-right: 15px;
+    }
 
-  &__value {
-    justify-self: flex-end;
-  }
+    &__value {
+        justify-self: flex-end;
+    }
 }

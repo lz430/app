@@ -1,34 +1,27 @@
 @import '../variables';
 
 .compare-page {
-  &__top-row {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    &__top-row {
+        padding: 0 10px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
 
-    @media (min-width: $break-small) {
-      flex-direction: row;
-      padding-bottom: .5em;
-      border-bottom: 1px solid $color-section-bottom-border;
-    }
+        @media (min-width: $break-small) {
+            flex-direction: row;
+            padding-bottom: 0.5em;
+            border-bottom: 1px solid $color-section-bottom-border;
+        }
 
-    &__section {
-      &--accuPricing {
-        display: none;
-        @media (min-width: $break-medium) {
-          display: block;
-          margin-right: auto;
+        &__section {
+            &--tabButtons {
+                display: none;
+                @media (min-width: $break-small) {
+                    display: block;
+                }
+            }
         }
-      }
-      &--sortbar {
-      }
-      &--tabButtons {
-        display: none;
-        @media (min-width:$break-small) {
-          display: block;
-        }
-      }
     }
-  }
 }

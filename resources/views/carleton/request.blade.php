@@ -38,8 +38,8 @@
                     <ContractDate>{{$quote['contractDate']}}</ContractDate>
                     <UpfrontPayments>1</UpfrontPayments>
                     <TaxMethod>MonthlyUse</TaxMethod>
-                    <ApplyCashDownToUpfront>WhenGreaterThanUpfrontCosts</ApplyCashDownToUpfront>
-                    <ApplyRebateToUpfront>WhenGreaterThanUpfrontCosts</ApplyRebateToUpfront>
+                    <ApplyCashDownToUpfront>No</ApplyCashDownToUpfront>
+                    <ApplyRebateToUpfront>No</ApplyRebateToUpfront>
                     <ApplyNetTradeToUpfront>No</ApplyNetTradeToUpfront>
                     <TaxIndex>1</TaxIndex>
                     <RoundDepreciation>Near</RoundDepreciation>

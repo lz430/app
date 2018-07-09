@@ -1,56 +1,60 @@
 @import '../variables';
 
 .filter-style-selector {
-  text-align: center;
-
-  &__styles {
-    align-content: flex-start;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-right: 2px;
-  }
-
-  &__style {
-    align-items: center;
-    border-radius: 0.5em;
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    height: 85px;
-    justify-content: flex-end;
-    margin: 5px 5px;
-    min-height: 85px;
-    min-width: calc(33% - 10px);
-    padding: 5px 5px;
     text-align: center;
-    width: calc(33% - 10px);
 
-    &--selected {
-      background: $color-left-filter-selected;
+    &__styles {
+        align-content: flex-start;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-right: 2px;
+    }
 
-      .filter-style-selector__icon {
-        svg path {
-          fill: $color-text-white;
+    &__style {
+        align-items: center;
+        border-radius: 0.5em;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        height: 85px;
+        justify-content: flex-end;
+        margin: 5px 5px;
+        min-height: 85px;
+        min-width: calc(33% - 10px);
+        padding: 5px 5px;
+        text-align: center;
+        width: calc(33% - 10px);
+
+        .filter-style-selector__icon {
+            cursor: pointer;
         }
-      }
 
-      .filter-style-selector__name {
-        color: $color-text-white;
-      }
+        &--selected {
+            background: $color-left-filter-selected;
+
+            .filter-style-selector__icon {
+                svg path {
+                    fill: $color-text-white;
+                }
+            }
+
+            .filter-style-selector__name {
+                color: $color-text-white;
+            }
+        }
     }
-  }
 
-  &__icon {
-    svg path {
-      fill: $color-grey;
+    &__icon {
+        svg path {
+            fill: $color-grey;
+        }
     }
-  }
 
-  &__name {
-    color: $color-grey;
-    font-size: 0.7rem;
-    margin-top: -1.5rem;
-    width: 100%;
-  }
+    &__name {
+        color: $color-grey;
+        font-size: 0.7rem;
+        margin-top: -1.5rem;
+        width: 100%;
+    }
 }

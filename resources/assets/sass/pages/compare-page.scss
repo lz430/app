@@ -1,27 +1,45 @@
 @import '../variables';
 
-comparepage {
-  width: 100%;
+.compare-page {
+    display: block;
+    margin-bottom: 40px;
+    /*max-width: $break-large;*/
+    overflow: hidden;
+    padding: 0;
+
+    a {
+        color: $color-blue;
+    }
+
+    &__body {
+        overflow-x: scroll;
+    }
 }
 
-.compare-page {
-  display: block;
-  margin: 0 auto;
-  max-width: $break-large;
-  overflow: hidden;
-  padding: 0;
+.compare-page-deals {
+    display: flex;
+    margin-top: 12px;
 
-  a {
-    color: $color-blue;
-  }
+    // compare-page only mobile deal card adjustments
+    @media (max-width: $break-small) {
+        background: $color-background-secondary;
+        margin-top: 0;
+        .deal {
+            min-width: 50vw;
+            margin: 0;
+            padding: 3px;
+            border-top: 1px solid $color-section-bottom-border;
+        }
+    }
+}
 
-  &__body {
-    overflow-x: scroll;
-  }
+.compare-page-features {
+    display: flex;
+    flex-direction: column;
 }
 
 .compare-page-table {
-  &__header {
-    cursor: pointer;
-  }
+    &__header {
+        cursor: pointer;
+    }
 }

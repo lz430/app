@@ -1,13 +1,18 @@
 {
     "name": "laravel/laravel",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "type": "project",
     "require": {
         "php": ">=7.1",
         "adambullmer/usdl-regex": "^1.0",
+        "babenkoivan/scout-elasticsearch-driver": "^3.8",
         "backpack/crud": "^3.4",
+        "backpack/permissionmanager": "^3.12",
         "doctrine/dbal": "^2.5",
         "greggilbert/recaptcha": "^2.2",
         "guzzlehttp/guzzle": "^6.2",
@@ -18,7 +23,8 @@
         "pda/pheanstalk": "^3.1",
         "predis/predis": "^1.1",
         "sentry/sentry-laravel": "^0.9.0",
-        "spatie/laravel-fractal": "^5.0"
+        "spatie/laravel-fractal": "^5.0",
+        "toin0u/geocoder-laravel": "^4.0"
     },
     "require-dev": {
         "backpack/generators": "^1.1",

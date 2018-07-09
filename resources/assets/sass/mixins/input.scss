@@ -1,15 +1,15 @@
 @import '../variables';
 
 @mixin input {
-  border: 1px solid $color-section-bottom-border;
-  border-radius: 3px;
-  margin-top: 2px;
-  padding: 8px;
-  width: 100%;
+    border: 1px solid $color-section-bottom-border;
+    border-radius: 3px;
+    margin-top: 2px;
+    padding: 8px;
+    width: 100%;
 
-  &[type=number]::-webkit-inner-spin-button,
-  &[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+    &[type='number']::-webkit-inner-spin-button,
+    &[type='number']::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 }

@@ -30,9 +30,6 @@
                     <strong>Packages: </strong> {{$deal->package_codes ? implode(", ", $deal->package_codes) : "None"}}<br />
                     <strong>Options: </strong> {{$deal->option_codes ? implode(", ", $deal->option_codes) : "None"}}<br />
                 </div>
-                <div class="box-footer">
-                    <a href="/admin/dealer/{{$deal->dealer->id}}/edit">Edit Dealer</a>
-                </div>
             </div>
             <div class="box box-default">
                 <div class="box-header with-border">

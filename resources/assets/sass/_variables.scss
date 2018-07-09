@@ -8,7 +8,10 @@ $color-sidebar-background-primary-mid: rgba(113, 113, 113, 1);
 $color-sidebar-background-primary-light: rgba(133, 133, 133, 1);
 $color-sidebar-background-secondary: rgba(215, 215, 215, 1);
 $color-sidebar-background-secondary-dark: #343b3e;
-$color-sidebar-background-secondary-light: lighten($color-sidebar-background-secondary, 46%);
+$color-sidebar-background-secondary-light: lighten(
+    $color-sidebar-background-secondary,
+    46%
+);
 
 $color-footer-background: #454d52;
 
@@ -46,10 +49,10 @@ $text-color-dark: darken($text-color, 25);
 
 // Nav
 $nav-height: 76px;
+$steps-bar-height: 56px;
+$header-height: $nav-height + $steps-bar-height;
 $footer-height: 70px;
 $footer-height-mobile: 40px;
-$subnav-height: 100px;
-$header-height: $nav-height + $subnav-height;
 
 // Breakpoints
 $break-extra-small: 350px;
@@ -60,7 +63,7 @@ $break-extra-large: 1200px;
 
 // Filter Page
 $sidebar-filters-width: 300px;
-$sortbar-height: 60px;
+$sortbar-height: 47px;
 $filterbar-height: 45px;
 $filterbar-vertical-padding: 20px;
 $compare-bar-height: 70px;
@@ -73,7 +76,6 @@ $section-padding: 66px;
 // Deal Card
 $deal-card-width: 300px;
 $deal-card-margin: 5px;
-
 
 // Deal Card
 $modelyear-card-width: $deal-card-width;

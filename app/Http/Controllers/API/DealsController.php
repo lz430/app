@@ -2,47 +2,60 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\API\Traits\SearchesDeals;
-use App\Transformers\DealTransformer;
-use App\Models\Deal;
-use App\Models\Zipcode;
-use DeliverMyRide\JATO\JatoClient;
-use DeliverMyRide\JsonApi\Sort;
-use Illuminate\Database\Eloquent\Builder;
+use App\Services\Search\DealSearch;
+use App\Transformers\ESResponseTransformer;
 use Illuminate\Http\Request;
-use League\Fractal\Pagination\IlluminatePaginatorAdapter;
-use League\Fractal\Serializer\DataArraySerializer;
+
+use League\Fractal\Serializer\ArraySerializer;
 
 class DealsController extends BaseAPIController
 {
-    use SearchesDeals;
-
-    private const TRANSFORMER = DealTransformer::class;
-    private const RESOURCE_NAME = 'deals';
-
-    public function getDeals(Request $request, JatoClient $client)
+    public function getDeals(Request $request)
     {
         $this->validate($request, [
-            'make_ids' => 'sometimes|required|array',
-            'body_styles' => 'sometimes|required|array',
-            'fuel_type' => 'sometimes|required|string',
+            'filters' => 'sometimes|required|array',
             'year' => 'sometimes|required|digits:4',
-            'transmission_type' => 'sometimes|required|string|in:automatic,manual',
             'sort' => 'sometimes|required|string',
-            'zipcode' => 'sometimes|required|string',
+            'latitude' => 'sometimes|numeric',
+            'longitude' => 'sometimes|numeric',
         ]);
 
-        $dealsQuery = $this->buildSearchQuery($request);
-        $dealsQuery = Sort::sortQuery($dealsQuery, $request->get('sort', 'price'));
+        $query = new DealSearch();
 
-        $deals = $dealsQuery->paginate(24);
+        $query = $query
+            ->addFeatureAggs()
+            ->addMakeAndStyleAgg();
+
+        if ($request->get('latitude') && $request->get('longitude')) {
+            $query = $query->filterMustLocation(['lat' => $request->get('latitude'), 'lon' => $request->get('longitude')]);
+        }
+
+        $query = $query->genericFilters($request->get('filters', []));
+
+        if ($request->get('sort')) {
+            $query = $query->sort($request->get('sort'));
+        }
+
+        $page = ($request->get('page') ? $request->get('page') - 1 : 0);
+
+        $per_page = 24;
+        $query = $query
+            ->size($per_page)
+            ->from($page * $per_page);
+
+
+
+        $results = $query->get();
 
         return fractal()
-            ->collection($deals)
-            ->withResourceName(self::RESOURCE_NAME)
-            ->transformWith(self::TRANSFORMER)
-            ->serializeWith(new DataArraySerializer)
-            ->paginateWith(new IlluminatePaginatorAdapter($deals))
+            ->item(['response' => $results, 'meta' => [
+                'entity' => 'deal',
+                'current_page' => $page + 1,
+                'per_page' => $per_page,
+            ]])
+            ->transformWith(ESResponseTransformer::class)
+            ->serializeWith(new ArraySerializer)
             ->respond();
+
     }
 }

@@ -1,77 +1,77 @@
 @import '../variables';
 
 @mixin button {
-  background: transparent;
-  border: 1px solid $color-section-bottom-border;
-  color: $text-color;
-  cursor: pointer;
-  font-size: 1.1rem;
-  padding: 5px 10px;
-  border-radius: 4px;
-  text-decoration: none;
-  text-align: center;
+    background: transparent;
+    border: 1px solid $color-section-bottom-border;
+    color: $text-color;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    text-align: center;
 
-  &--invert {
-    border: 2px solid $color-background-secondary;
-  }
+    &--invert {
+        border: 2px solid $color-background-secondary;
+    }
 
-  &--blue {
-     background-color: $color-blue;
-     color: $color-text-white;
-   }
+    &--blue {
+        background-color: $color-blue;
+        color: $color-text-white;
+    }
 
-  &--pink {
-    background-color: $color-pink;
-    color: $color-text-white;
-  }
+    &--pink {
+        background-color: $color-pink;
+        color: $color-text-white;
+    }
 
-  &--purple {
-    background-color: $color-purple;
-    color: $color-text-white;
-  }
+    &--purple {
+        background-color: $color-purple;
+        color: $color-text-white;
+    }
 
-  &--white {
-    background-color: $color-text-white;
-    color: $color-blue;
-  }
+    &--white {
+        background-color: $color-text-white;
+        color: $color-blue;
+    }
 
-  &--small {
-    font-size: 0.9rem;
-    padding: 4px 15px;
-  }
+    &--small {
+        font-size: 0.9rem;
+        padding: 4px 15px;
+    }
 
-  &--no-border {
-    border: 2px solid transparent;
-  }
+    &--no-border {
+        border: 2px solid transparent;
+    }
 
-  &--dark-bg {
-    color: $color-text-white;
-  }
+    &--dark-bg {
+        color: $color-text-white;
+    }
 
-  &--capitalize {
-    text-transform: capitalize;
-  }
+    &--capitalize {
+        text-transform: capitalize;
+    }
 
-  &--facebook-blue {
-    background: $color-facebook-blue;
-    color: $color-text-white;
-  }
+    &--facebook-blue {
+        background: $color-facebook-blue;
+        color: $color-text-white;
+    }
 
-  &--twitter-blue {
-    background: $color-twitter-blue;
-    color: $color-text-white;
-  }
+    &--twitter-blue {
+        background: $color-twitter-blue;
+        color: $color-text-white;
+    }
 
-  svg {
-    fill: $color-text-white;
-    height: 12px;
-    margin-bottom: -1.5px;
-    margin-right: 5px;
-    width: 12px;
-  }
+    svg {
+        fill: $color-text-white;
+        height: 12px;
+        margin-bottom: -1.5px;
+        margin-right: 5px;
+        width: 12px;
+    }
 
-  &.disabled {
-    background: #aaa;
-    pointer-events: none;
-  }
+    &.disabled {
+        background: #aaa;
+        pointer-events: none;
+    }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import util from 'src/util';
 import { connect } from 'react-redux';
-import * as Actions from 'actions';
+import * as Actions from 'apps/common/actions';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
@@ -72,15 +72,17 @@ class CompareBar extends React.PureComponent {
     }
 
     compareButtonClass() {
-        return `compare-bar__compare-button ${this.compareReady()
-            ? ''
-            : 'compare-bar__compare-button--not-ready'}`;
+        return `compare-bar__compare-button ${
+            this.compareReady() ? '' : 'compare-bar__compare-button--not-ready'
+        }`;
     }
 
     renderCompareBar() {
         return (
             <div
-                className={`${this.props.class ? this.props.class : 'compare-bar'}
+                className={`${
+                    this.props.class ? this.props.class : 'compare-bar'
+                }
                     ${this.state.count == 0 ? 'hidden' : ''}`}
             >
                 <div className="compare-bar__deals">
@@ -137,9 +139,9 @@ class CompareBar extends React.PureComponent {
     }
 
     renderCompareBubble() {
-        const className = `compare-bubble ${this.state.shaking
-            ? 'compare-bubble--shake'
-            : ''}`;
+        const className = `compare-bubble ${
+            this.state.shaking ? 'compare-bubble--shake' : ''
+        }`;
 
         return (
             <div>
@@ -161,17 +163,20 @@ class CompareBar extends React.PureComponent {
     render() {
         return util.windowIsLargerThanMedium(this.props.window.width)
             ? this.renderCompareBar()
-            : null
+            : null;
     }
 }
 
 function mapStateToProps(state) {
     return {
-        employeeBrand: state.employeeBrand,
-        window: state.window,
-        compareList: state.compareList,
-        zipcode: state.zipcode,
+        employeeBrand: state.common.employeeBrand,
+        window: state.common.window,
+        compareList: state.common.compareList,
+        zipcode: state.user.purchasePreferences.strategy,
     };
 }
 
-export default connect(mapStateToProps, Actions)(CompareBar);
+export default connect(
+    mapStateToProps,
+    Actions
+)(CompareBar);
