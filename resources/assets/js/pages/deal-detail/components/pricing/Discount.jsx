@@ -13,6 +13,7 @@ const domesticBrands = [
     'Cadillac',
     'Buick',
     'GMC',
+    'Ram',
 ];
 
 export default class Discount extends React.PureComponent {
