@@ -9,12 +9,19 @@ use DeliverMyRide\DataDelivery\Manager\DealRatesAndRebatesManager;
 
 use DeliverMyRide\Carleton\Client;
 use DeliverMyRide\Carleton\Manager\DealLeasePaymentsManager;
+use Illuminate\Support\Facades\Cache;
 
 class DealQuoteController extends BaseAPIController
 {
     private $dataDeliveryClient;
     private $carletonClient;
     private $deal;
+
+    /**
+     * Amount of time in minutes to store items in the cache
+     * @var integer
+     */
+    private $cacheLifetime = (24 * 60);
 
     public function __construct(DataDeliveryClient $dataDeliveryClient, Client $client)
     {
@@ -71,10 +78,14 @@ class DealQuoteController extends BaseAPIController
         //
         // This is a little iffy... We should come up with a better way to organize this.
         // We need the data from the transformation to correctly get lease payments =(
-        $data = (new DealQuoteTransformer())->transform($ratesAndRebates, $meta);
-        if ($paymentType === "lease" && isset($data['rates'][0])) {
-            $payments = $this->getLeasePayments($data);
-            $data['payments'] = $payments;
+        $tags = ['quote', md5('quote.' . $paymentType . '.' . $zip . '.' . $this->deal->id . '.' . $role)];
+        if(!$data = Cache::tags($tags)->get(md5('quote.' . $paymentType . '.' . $zip . '.' . $this->deal->id . '.' . $role)) {
+            $data = (new DealQuoteTransformer())->transform($ratesAndRebates, $meta);
+            if ($paymentType === "lease" && isset($data['rates'][0])) {
+                $payments = $this->getLeasePayments($data);
+                $data['payments'] = $payments;
+            }
+            Cache::tags($tags)->put(md5('quote.' . $paymentType . '.' . $zip . '.' . $this->deal->id . '.' . $role), $data, $this->cacheLifetime);
         }
 
         return $data;
