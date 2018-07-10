@@ -8,6 +8,8 @@ use App\Models\Deal;
 
 use GuzzleHttp\Exception\ClientException;
 
+use DeliverMyRide\DataDelivery\FetchProgramDataException;
+
 /**
  *
  */
@@ -30,7 +32,8 @@ class DealToVehicle
 
     private const BODY_STYLE_MAP = [
         'Sport Utility Vehicle' => "Sport Utility",
-        'Pickup' => 'Regular Cab'
+        'Pickup' => 'Regular Cab',
+        'Minivan' => 'Passenger Van',
     ];
 
     private $client;
@@ -193,6 +196,11 @@ class DealToVehicle
         ];
 
         $results = $this->fetchProgramData($search);
+
+        if ($results->status === "2") {
+            throw new FetchProgramDataException("Data Delivery API: " . $results->error . " ::: " . json_encode($params));
+        }
+
         // We have to narrow down the results.
         if (count($results->vehicles) > 1) {
             $vehicleId = $this->narrowDownVehicles($results->vehicles, $params);
