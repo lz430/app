@@ -5,6 +5,7 @@ namespace DeliverMyRide\VAuto\Deal;
 use App\Models\Feature;
 use App\Models\Deal;
 use DeliverMyRide\JATO\JatoClient;
+use DeliverMyRide\VAuto\Map;
 
 /**
  *
@@ -301,11 +302,21 @@ class DealEquipmentMunger
      * regarding transmission, so we see if we've got any options or packages for transmissions that might match.
      */
     private function extractPackagesOrOptionsFromTransmission() {
+
         $transmission = $this->deal->transmission;
+        if (isset(Map::VAUTO_TRANSMISSION_TO_JATO_PACKAGE[$transmission])) {
+            $transmission = Map::VAUTO_TRANSMISSION_TO_JATO_PACKAGE[$transmission];
+        }
 
         // Most packages actually include the word transmission but vauto does not.
         if (!str_contains($transmission, "Transmission")) {
             $transmission .= " Transmission";
+        }
+
+        // Some transmissions don't fully label automatic
+        // TODO: This might be too specific? review spreadsheet and see how often this actually comes up.
+        if (str_contains($transmission, "Auto ")) {
+            $transmission = str_replace("Auto ", "Automatic ", $transmission);
         }
 
         $allOptional = $this->packages->merge($this->options);
@@ -467,7 +478,7 @@ class DealEquipmentMunger
     {
         $parentSchemasIds = [
             59801,  // mobile (android etc)
-            1301, // audio system 1301
+            1301, // audio system
             17801, // Front seat
         ];
 
@@ -656,14 +667,17 @@ class DealEquipmentMunger
             return null;
         }
 
-        return collect($equipment->attributes)
-            ->filter(function ($attribute) {
-                return $attribute->name == "Transmission type";
-            })
-            ->pluck('value')
-            ->map(function ($slugKey) {
-                return Feature::where('slug', 'transmission_' . $slugKey)->first();
-            })->first();
+        $attributes = collect($equipment->attributes)->keyBy('name')->all();
+
+        if (isset($attributes['automatic mode - manual']) && $attributes['automatic mode - manual']->value == 'yes') {
+            $transmission = "automatic";
+        } else if (isset($attributes['Transmission type'])) {
+            $transmission = $attributes['Transmission type']->value;
+        } else {
+            return null;
+        }
+
+        return Feature::where('slug', 'transmission_' . $transmission)->first();
     }
 
     /**

@@ -24,11 +24,13 @@
                     <div class="box-title">General</div>
                 </div>
                 <div class="box-body">
-                    <strong>ID: </strong> {{$deal->id}}<br />
-                    <strong>Stock #: </strong> {{$deal->stock_number}}<br />
-                    <strong>VIN: </strong> {{$deal->vin}}<br />
-                    <strong>Packages: </strong> {{$deal->package_codes ? implode(", ", $deal->package_codes) : "None"}}<br />
-                    <strong>Options: </strong> {{$deal->option_codes ? implode(", ", $deal->option_codes) : "None"}}<br />
+                    <strong>ID: </strong> {{$deal->id}}<br/>
+                    <strong>Stock #: </strong> {{$deal->stock_number}}<br/>
+                    <strong>VIN: </strong> {{$deal->vin}}<br/>
+                    <strong>Packages: </strong> {{$deal->package_codes ? implode(", ", $deal->package_codes) : "None"}}
+                    <br/>
+                    <strong>Options: </strong> {{$deal->option_codes ? implode(", ", $deal->option_codes) : "None"}}
+                    <br/>
                 </div>
             </div>
             <div class="box box-default">
@@ -36,8 +38,8 @@
                     <div class="box-title">Dealer</div>
                 </div>
                 <div class="box-body">
-                    <strong>{{$deal->dealer->name}}</strong> <br />
-                    {{$deal->dealer->dealer_id}} <br />
+                    <strong>{{$deal->dealer->name}}</strong> <br/>
+                    {{$deal->dealer->dealer_id}} <br/>
                 </div>
                 <div class="box-footer">
                     <a href="/admin/dealer/{{$deal->dealer->id}}/edit">Edit Dealer</a>
@@ -289,6 +291,45 @@
                             </div>
                         @endforeach
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default">
+
+                <div class="box-header with-border">
+                    <div class="box-title">Vehicle Versions</div>
+                </div>
+
+                <div class="box-body">
+                    @if (isset($versions['decode']))
+                        <pre>{{ json_encode($versions['decode'], JSON_PRETTY_PRINT) }}</pre>
+                    @endif
+                    @if (isset($versions['versions']))
+                        <div class="box-group" id="accordion-option">
+                            @foreach ($versions['versions'] as $key => $version)
+                                <div class="panel box box-primary">
+                                    <div class="box-header with-border">
+                                        <h4 class="box-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#version-{{$key}}"
+                                               aria-expanded="false" class="collapsed">
+                                                {{$version->vehicle_ID == $deal->version->jato_vehicle_id ? "YES" : "NO"}}
+                                                [{{$version->vehicle_ID}}] - {{$version->versionName}}
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="version-{{$key}}" class="panel-collapse collapse" aria-expanded="false"
+                                         style="height: 0px;">
+                                        <div class="box-body">
+                                            <pre>{{ json_encode($version, JSON_PRETTY_PRINT) }}</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
