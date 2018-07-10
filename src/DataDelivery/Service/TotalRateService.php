@@ -64,6 +64,7 @@ class TotalRateService extends BaseService
             'DescribedVehicleID' => $vehicleId,
             'CustomerZip' => $customerZip,
             'DealerZip' => $dealerZip,
+            //'AffinityIDs' => 66, // for land rover employee affinity
         ];
 
         $data = array_merge($data, $searchData);

@@ -39,6 +39,32 @@ class DealRatesAndRebatesManager
         $this->client = $client;
     }
 
+    private function findMakeForAffinity()
+    {
+        switch ($this->deal->make) {
+            case 'Buick':
+            case 'Chevrolet':
+            case 'GMC':
+            case 'Cadillac':
+                return 4;
+                break;
+            case 'Chrysler':
+            case 'Dodge':
+            case 'Jeep':
+            case 'Ram':
+            case 'Fiat':
+                return 17;
+                break;
+            case 'Ford':
+            case 'Lincoln':
+                return 22;
+                break;
+            case 'Land Rover':
+                return 66;
+                break;
+        }
+    }
+
     /**
      * @param $response
      * @return array
@@ -81,6 +107,7 @@ class DealRatesAndRebatesManager
         }
 
         $this->programs = collect($programs);
+
     }
 
     private function cashPrograms()
@@ -88,6 +115,14 @@ class DealRatesAndRebatesManager
         return $this->programs
             ->reject(function ($program) {
                 return $program->TotalCashFlag != "yes";
+            });
+    }
+
+    private function cashPrivatePrograms()
+    {
+        return $this->programs
+            ->reject(function ($program) {
+               return $program->TotalCashFlag == "no";
             });
     }
 
@@ -254,13 +289,18 @@ class DealRatesAndRebatesManager
             })
             ->pluck('ProgramID')->all();
 
-        $programIds = array_merge($cashProgramIds, $programIds);
+        $privatePrograms = $this->cashPrivatePrograms()
+            ->reject(function ($program) {
+                return !isset($program->dealscenarios[$this->scenario]);
+            })
+            ->pluck('ProgramID')->all();
 
+        $programIds = array_merge($cashProgramIds, $privatePrograms, $programIds);
+        //dd($programIds);
         if ($this->leaseProgram) {
             $programIds[] = $this->leaseProgram->ProgramID;
         }
-
-
+        //dd($programIds);
         return $programIds;
     }
 
@@ -332,6 +372,8 @@ class DealRatesAndRebatesManager
         } else {
             $data = ['ResidualsOnly' => 'yes'];
         }
+
+        // Pass in affinity data here
 
         $totalRateResponse = $this->client->totalrate->get(
             $this->vehicleId,
@@ -418,7 +460,10 @@ class DealRatesAndRebatesManager
      */
     public function setConsumerRole($role)
     {
-
+        if ($role === 'employee') {
+            $this->findMakeForAffinity();
+            //dd($this->findMakeForAffinity());
+        }
     }
 
     /**
