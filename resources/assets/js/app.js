@@ -29,20 +29,6 @@ Array.from(document.getElementsByTagName('FilterPage')).map(element => {
 });
 
 /**
- * Financing
- */
-Array.from(document.getElementsByTagName('Financing')).map(element => {
-    ReactDOM.render(
-        <CheckoutFinancing
-            featuredPhoto={DeliverMyRide.featuredPhoto}
-            purchase={DeliverMyRide.purchase}
-            user={DeliverMyRide.user}
-        />,
-        element
-    );
-});
-
-/**
  * ComparePage
  */
 Array.from(document.getElementsByTagName('ComparePage')).map(element => {
@@ -74,7 +60,7 @@ Array.from(document.getElementsByTagName('DealDetails')).map(element => {
 });
 
 /**
- * ConfirmDetails
+ * Checkout - Confirm
  */
 Array.from(document.getElementsByTagName('ConfirmDetails')).map(element => {
     ReactDOM.render(
@@ -91,7 +77,21 @@ Array.from(document.getElementsByTagName('ConfirmDetails')).map(element => {
 });
 
 /**
- * Thank You
+ * Checkout - Financing
+ */
+Array.from(document.getElementsByTagName('Financing')).map(element => {
+    ReactDOM.render(
+        <CheckoutFinancing
+            featuredPhoto={DeliverMyRide.featuredPhoto}
+            purchase={DeliverMyRide.purchase}
+            user={DeliverMyRide.user}
+        />,
+        element
+    );
+});
+
+/**
+ * Checkout - Thank you
  */
 Array.from(document.getElementsByTagName('ThankYouPage')).map(element => {
     ReactDOM.render(

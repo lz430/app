@@ -1,3 +1,7 @@
+import { basePersistConfig } from 'persist';
+import { persistReducer } from 'redux-persist';
+import storageSession from 'redux-persist/lib/storage/session';
+
 import * as ActionTypes from './consts';
 import { dealQuoteKey } from './helpers';
 
@@ -5,7 +9,13 @@ const initialState = {
     quotes: {},
 };
 
-export default function(state = initialState, action = {}) {
+const persistConfig = {
+    ...basePersistConfig,
+    key: 'pricing',
+    storage: storageSession,
+};
+
+const reducer = function(state = initialState, action = {}) {
     switch (action.type) {
         case ActionTypes.REQUEST_DEAL_QUOTE_IS_LOADING:
             return {
@@ -77,4 +87,6 @@ export default function(state = initialState, action = {}) {
         default:
             return state;
     }
-}
+};
+
+export default persistReducer(persistConfig, reducer);
