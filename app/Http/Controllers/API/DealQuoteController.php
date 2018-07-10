@@ -79,7 +79,7 @@ class DealQuoteController extends BaseAPIController
         // This is a little iffy... We should come up with a better way to organize this.
         // We need the data from the transformation to correctly get lease payments =(
         $tags = ['quote', md5('quote.' . $paymentType . '.' . $zip . '.' . $this->deal->id . '.' . $role)];
-        if(!$data = Cache::tags($tags)->get(md5('quote.' . $paymentType . '.' . $zip . '.' . $this->deal->id . '.' . $role)) {
+        if(!$data = Cache::tags($tags)->get(md5('quote.' . $paymentType . '.' . $zip . '.' . $this->deal->id . '.' . $role))) {
             $data = (new DealQuoteTransformer())->transform($ratesAndRebates, $meta);
             if ($paymentType === "lease" && isset($data['rates'][0])) {
                 $payments = $this->getLeasePayments($data);
