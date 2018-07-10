@@ -27,6 +27,36 @@ class DealRatesAndRebatesManager
     private $financeCompany;
     private $miles;
 
+    private const AFFINITY_MAP = [
+        'EMPLOYEE' => [
+            'Buick' => 4,
+            'Chevrolet' => 4,
+            'GMC' => 4,
+            'Cadillac' => 4,
+            'Ford' => 22,
+            'Lincoln' => 22,
+            'Dodge' => 17,
+            'Chrysler' => 17,
+            'Jeep' => 17,
+            'Ram' => 17,
+            'Fiat' => 17,
+            'Land Rover' => 66
+        ],
+        'SUPPLIER' => [
+            'Buick' => 65,
+            'Chevrolet' => 65,
+            'GMC' => 65,
+            'Cadillac' => 65,
+            'Ford' => 19,
+            'Lincoln' => 19,
+            'Dodge' => 16,
+            'Chrysler' => 16,
+            'Jeep' => 16,
+            'Ram' => 16,
+            'Fiat' => 16,
+        ],
+    ];
+
     /**
      * @param Deal $deal
      * @param string $zipcode
@@ -37,32 +67,6 @@ class DealRatesAndRebatesManager
         $this->deal = $deal;
         $this->zipcode = $zipcode;
         $this->client = $client;
-    }
-
-    private function findMakeForAffinity()
-    {
-        switch ($this->deal->make) {
-            case 'Buick':
-            case 'Chevrolet':
-            case 'GMC':
-            case 'Cadillac':
-                return 4;
-                break;
-            case 'Chrysler':
-            case 'Dodge':
-            case 'Jeep':
-            case 'Ram':
-            case 'Fiat':
-                return 17;
-                break;
-            case 'Ford':
-            case 'Lincoln':
-                return 22;
-                break;
-            case 'Land Rover':
-                return 66;
-                break;
-        }
     }
 
     /**
@@ -368,10 +372,12 @@ class DealRatesAndRebatesManager
         //
 
         if (count($programIds)) {
-            $data = ['ProgramIDs' => implode(",", $programIds)];
+            $data = ['ProgramIDs' => implode(",", $programIds), 'AffinityIDs' => 66]; //TODO: update
         } else {
             $data = ['ResidualsOnly' => 'yes'];
         }
+
+
 
         // Pass in affinity data here
 
@@ -461,8 +467,15 @@ class DealRatesAndRebatesManager
     public function setConsumerRole($role)
     {
         if ($role === 'employee') {
-            $this->findMakeForAffinity();
-            //dd($this->findMakeForAffinity());
+            if(isset(self::AFFINITY_MAP['EMPLOYEE'][$this->deal->make])){
+                 return self::AFFINITY_MAP['EMPLOYEE'][$this->deal->make];
+            }
+        }
+
+        if ($role === 'supplier') {
+            if(isset(self::AFFINITY_MAP['SUPPLIER'][$this->deal->make])){
+                 return self::AFFINITY_MAP['SUPPLIER'][$this->deal->make];
+            }
         }
     }
 
