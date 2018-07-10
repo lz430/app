@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import { connect } from 'react-redux';
-import { clearAllSecondaryFilters } from 'pages/deal-list/actions';
+import {
+    clearAllSecondaryFilters,
+    toggleSearchFilter,
+} from 'pages/deal-list/actions';
 import { getSelectedFiltersByCategory } from '../selectors';
 
 /**
@@ -12,7 +16,9 @@ import { getSelectedFiltersByCategory } from '../selectors';
 class ToolbarSelectedFilters extends React.PureComponent {
     static propTypes = {
         onClearAllSecondaryFilters: PropTypes.func.isRequired,
+        onToggleSearchFilter: PropTypes.func.isRequired,
         selectedFiltersByCategory: PropTypes.object.isRequired,
+        filters: PropTypes.object.isRequired,
     };
 
     constructor(props) {
@@ -38,19 +44,51 @@ class ToolbarSelectedFilters extends React.PureComponent {
      * @param items
      */
     renderFilterCategory(category, items) {
-        if (category === 'make') {
+        if (
+            category === 'make' ||
+            category === 'model' ||
+            category === 'year'
+        ) {
             return;
         }
 
-        return items.map(this.renderFilterItem);
+        let allItems = this.props.filters[category];
+
+        if (!allItems) {
+            return null;
+        }
+
+        allItems = R.reject(item => {
+            return !R.contains(item.value, items);
+        }, allItems);
+
+        const _this = this;
+        return allItems.map(function(item) {
+            return _this.renderFilterItem(category, item);
+        });
     }
 
     /**
+     *
+     * @param category
      * @param item
      * @returns {*}
      */
-    renderFilterItem(item) {
-        return <div className="filterbar__filter">{item}</div>;
+    renderFilterItem(category, item) {
+        return (
+            <div className="filterbar__filter">
+                {item.label}
+                <SVGInline
+                    height="10px"
+                    width="10px"
+                    className="filterbar__filter-x"
+                    svg={zondicons['close']}
+                    onClick={() =>
+                        this.props.onToggleSearchFilter(category, item)
+                    }
+                />
+            </div>
+        );
     }
 
     render() {
@@ -85,12 +123,16 @@ class ToolbarSelectedFilters extends React.PureComponent {
 
 function mapStateToProps(state) {
     return {
+        filters: state.pages.dealList.filters,
         selectedFiltersByCategory: getSelectedFiltersByCategory(state),
     };
 }
 
 const mapDispatchToProps = dispatch => {
     return {
+        onToggleSearchFilter: (category, item) => {
+            return dispatch(toggleSearchFilter(category, item));
+        },
         onClearAllSecondaryFilters: () => {
             return dispatch(clearAllSecondaryFilters());
         },
