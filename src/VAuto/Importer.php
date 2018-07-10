@@ -302,6 +302,9 @@ class Importer
 
         //
         // Delete all the hashes
+        $this->info("Records to remove from es: " . Deal::whereNotIn('file_hash', $hashes)->count());
+        $this->info("Records to delete from db: " . Deal::whereNotIn('file_hash', $hashes)->whereDoesntHave('purchases')->count());
+
         Deal::whereNotIn('file_hash', $hashes)->unsearchable();
         Deal::whereNotIn('file_hash', $hashes)->whereDoesntHave('purchases')->delete();
 
