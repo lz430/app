@@ -6,9 +6,11 @@ use App\Models\Deal;
 use App\Http\Controllers\Controller;
 use DeliverMyRide\JATO\JatoClient;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 
 class DealAdminController extends Controller
 {
+    /* @var JatoClient */
     private $client;
     private $version;
     private $deal;
@@ -19,7 +21,7 @@ class DealAdminController extends Controller
     {
         try {
             return $this->client->option->get($this->version->jato_vehicle_id, 'O')->options;
-        } catch (ClientException $e) {
+        } catch (ServerException | ClientException $e) {
             return [];
         }
     }
@@ -28,7 +30,7 @@ class DealAdminController extends Controller
     {
         try {
             return $this->client->option->get($this->version->jato_vehicle_id, 'P')->options;
-        } catch (ClientException $e) {
+        } catch (ServerException | ClientException $e) {
             return [];
         }
     }
@@ -37,9 +39,34 @@ class DealAdminController extends Controller
 
         try {
             return $this->client->equipment->get($this->version->jato_vehicle_id)->results;
-        } catch (ClientException $e) {
+        } catch (ServerException | ClientException $e) {
             return [];
         }
+    }
+
+    private function potentialJatoVersionsForVin() {
+        try {
+            return $this->client->vin->decode($this->deal->vin);
+        } catch (ServerException | ClientException $e) {
+            return null;
+        }
+    }
+
+    private function buildJatoVersionOptions() {
+        $versions = $this->potentialJatoVersionsForVin();
+
+        if (!$versions) {
+            return [];
+        }
+
+        $data = [];
+        $data['versions'] = $versions->versions;
+
+        unset($versions->links);
+        unset($versions->versions);
+
+        $data['decode'] = $versions;
+        return $data;
     }
 
     private function buildStandardEquipment() {
@@ -87,7 +114,6 @@ class DealAdminController extends Controller
             if (!isset($features[$feature->category->title])) {
                 $features[$feature->category->title] = [];
             }
-
             $features[$feature->category->title][] = $feature;
         }
 
@@ -129,6 +155,7 @@ class DealAdminController extends Controller
             'title' => 'Deal',
             'model' => $debug_deal,
         ];
+
         $debug_models[] = [
             'title' => 'Version',
             'model' => $this->version->toArray(),
@@ -138,6 +165,7 @@ class DealAdminController extends Controller
             'deal' => $deal,
             'standardEquipment' => $this->buildStandardEquipment(),
             'options' => $this->buildOptions(),
+            'versions' => $this->buildJatoVersionOptions(),
             'packages' => $this->buildPackages(),
             'features' => $this->buildFeatures(),
             'models' => $debug_models,

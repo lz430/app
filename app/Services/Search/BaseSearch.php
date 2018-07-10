@@ -180,31 +180,23 @@ abstract class BaseSearch
         return $this;
     }
 
-    public function filterMustLegacyFeatures(array $features)
-    {
-        foreach ($features as $feature) {
-            $this->query['query']['bool']['must'][] = [
-                [
-                    'term' => [
-                        'legacy_features.keyword' => $feature,
-                    ],
-                ]
-            ];
-        }
-
-        return $this;
-    }
-
     public function filterMustCategoryFeature($category, array $features)
     {
         foreach ($features as $feature) {
-            $this->query['query']['bool']['must'][] = [
+            $filterQuery = [
                 [
                     'term' => [
                         self::FEATURE_TERMS[$category] => $feature,
                     ],
                 ]
             ];
+
+            $this->query['query']['bool']['must'][] = $filterQuery;
+
+            if (isset($this->query['aggs']['makeandstyle'])) {
+                $this->query['aggs']['makeandstyle']['aggs']['style']['filter']['bool']['must'][] = $filterQuery;
+                $this->query['aggs']['makeandstyle']['aggs']['make']['filter']['bool']['must'][] = $filterQuery;
+            }
         }
 
         return $this;

@@ -125,6 +125,22 @@ class SecondaryFilters extends React.PureComponent {
                 />
 
                 <FilterFeature
+                    title="Safety & Driver Assist"
+                    key="filterSafety"
+                    open={true}
+                    canToggle={false}
+                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    category="safety_and_driver_assist"
+                    items={this.props.filters['safety_and_driver_assist']}
+                    selectedItems={
+                        this.props.selectedFiltersByCategory[
+                            'safety_and_driver_assist'
+                        ]
+                    }
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
+                />
+
+                <FilterFeature
                     title="Pickup"
                     key="filterPickup"
                     open={true}
