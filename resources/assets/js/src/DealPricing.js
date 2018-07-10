@@ -385,6 +385,18 @@ export default class DealPricing {
         return util.moneyFormat(this.totalPriceValue());
     }
 
+    cashPriceValue() {
+        console.log({
+            discountedPrice: this.discountedPriceValue(),
+            bestOffer: this.bestOfferValue(),
+        });
+        return this.discountedPriceValue() - this.bestOfferValue();
+    }
+
+    cashPrice() {
+        return util.moneyFormat(this.cashPriceValue());
+    }
+
     yourPriceValue() {
         return new Decimal(this.sellingPriceValue()).minus(
             this.bestOfferValue()
@@ -398,7 +410,7 @@ export default class DealPricing {
     finalPriceValue() {
         switch (this.data.paymentType) {
             case 'cash':
-                return this.yourPriceValue();
+                return this.cashPriceValue();
             case 'finance':
             case 'lease':
                 return this.monthlyPaymentsValue();
@@ -407,6 +419,7 @@ export default class DealPricing {
 
     finalPrice() {
         const price = this.finalPriceValue();
+
         return price ? util.moneyFormat(price) : null;
     }
 
