@@ -28,7 +28,6 @@ class Feature extends Model
 {
     use CrudTrait;
 
-
     /**
      * @var array
      */
