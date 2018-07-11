@@ -380,6 +380,10 @@ class Deal extends Model
             return FALSE;
         }
 
+        if (!$this->dealer->is_active) {
+            return FALSE;
+        }
+
         if (!$this->features->count()) {
             return FALSE;
         }
