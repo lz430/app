@@ -306,7 +306,6 @@ class DealRatesAndRebatesManager
         } else {
             $programIds = array_merge($cashProgramIds, $programIds);
         }
-        //$programIds = array_merge($cashProgramIds, $privatePrograms, $programIds);
 
         if ($this->leaseProgram) {
             $programIds[] = $this->leaseProgram->ProgramID;
@@ -379,7 +378,7 @@ class DealRatesAndRebatesManager
         //
 
         if (count($programIds)) {
-            $data = ['ProgramIDs' => implode(",", $programIds), 'AffinityIDs' => $this->setConsumerRole($this->role)]; //TODO: update
+            $data = ['ProgramIDs' => implode(",", $programIds), 'AffinityIDs' => ($this->role === 'default') ? null : $this->setConsumerRole($this->role)];
         } else {
             $data = ['ResidualsOnly' => 'yes'];
         }
