@@ -15,6 +15,7 @@ class DealRatesAndRebatesManager
     private $deal;
     private $zipcode;
     private $isLease;
+    private $role;
 
     private $vehicleId;
     private $programs;
@@ -62,11 +63,12 @@ class DealRatesAndRebatesManager
      * @param string $zipcode
      * @param DataDeliveryClient|null $client
      */
-    public function __construct(Deal $deal, string $zipcode, DataDeliveryClient $client = null)
+    public function __construct(Deal $deal, string $zipcode, string $role, DataDeliveryClient $client = null)
     {
         $this->deal = $deal;
         $this->zipcode = $zipcode;
         $this->client = $client;
+        $this->role = $role;
     }
 
     /**
@@ -126,7 +128,7 @@ class DealRatesAndRebatesManager
     {
         return $this->programs
             ->reject(function ($program) {
-               return $program->TotalCashFlag == "no";
+               return $program->TotalCashFlag != "no";
             });
     }
 
@@ -299,12 +301,17 @@ class DealRatesAndRebatesManager
             })
             ->pluck('ProgramID')->all();
 
-        $programIds = array_merge($cashProgramIds, $privatePrograms, $programIds);
-        //dd($programIds);
+        if(in_array($this->role, ['employee', 'supplier'])) {
+            $programIds = array_merge($cashProgramIds, $privatePrograms, $programIds);
+        } else {
+            $programIds = array_merge($cashProgramIds, $programIds);
+        }
+        //$programIds = array_merge($cashProgramIds, $privatePrograms, $programIds);
+
         if ($this->leaseProgram) {
             $programIds[] = $this->leaseProgram->ProgramID;
         }
-        //dd($programIds);
+
         return $programIds;
     }
 
@@ -372,7 +379,7 @@ class DealRatesAndRebatesManager
         //
 
         if (count($programIds)) {
-            $data = ['ProgramIDs' => implode(",", $programIds), 'AffinityIDs' => 66]; //TODO: update
+            $data = ['ProgramIDs' => implode(",", $programIds), 'AffinityIDs' => $this->setConsumerRole($this->role)]; //TODO: update
         } else {
             $data = ['ResidualsOnly' => 'yes'];
         }
@@ -476,6 +483,10 @@ class DealRatesAndRebatesManager
             if(isset(self::AFFINITY_MAP['SUPPLIER'][$this->deal->make])){
                  return self::AFFINITY_MAP['SUPPLIER'][$this->deal->make];
             }
+        }
+
+        if ($role === 'default') {
+
         }
     }
 
