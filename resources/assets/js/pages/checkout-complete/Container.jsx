@@ -201,13 +201,14 @@ class Container extends React.PureComponent {
                                 this.props.deal.vin
                             }`} */}
                         </div>
-                        <div className="thank-you__primary-image">
-                            <img src={this.props.deal.photos[1].url} />
+                        <div className="thank-you__title">
+                            Congratulations on your purchase!
                         </div>
+                        <img
+                            className="thank-you__primary-image"
+                            src={this.props.deal.photos[1].url}
+                        />
                         <div className="thank-you__congrats-text">
-                            <div className="thank-you__congrats-headline">
-                                Congratulations on your purchase!
-                            </div>
                             <div className="thank-you__congrats-body">
                                 A Deliver My Ride representative will contact
                                 you shortly to schedule your delivery. If past
