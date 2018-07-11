@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers\API;
 
+use Illuminate\Http\Request;
+
 use App\Models\Purchase;
 use App\Models\Deal;
+use App\Models\User;
 
-use Illuminate\Http\Request;
+use App\Events\NewPurchaseInitiated;
+
+
 
 
 /**
@@ -46,7 +51,6 @@ class CheckoutController extends BaseAPIController
          * We don't want to save the purchase to the DB until we collect
          * the user's email and query the user, so store in session for now
          */
-
         $purchase = new Purchase([
             'deal_id' => $deal->id,
             'completed_at' => null,
@@ -70,5 +74,90 @@ class CheckoutController extends BaseAPIController
         }
 
         return response()->json(['status' => 'okay']);
+    }
+
+    /**
+     * We submit contact information of the user and create a purchase / user.
+     * @param Request $request
+     * @return array|bool
+     */
+    public function contact(Request $request) {
+        $this->validate(
+            $request,
+            [
+                'email' => 'required|email',
+                'drivers_license_state' => 'required|string', // This is out of alphabetical order but is required to exist for the driversLicense validator
+                'drivers_license_number' => 'required|drivers_license_number',
+                'first_name' => 'required|string',
+                'last_name' => 'required|string',
+                'phone_number' => 'required|digits:10',
+                'g-recaptcha-response' => 'required|recaptcha',
+            ],
+            [
+                'drivers_license_number' => 'Please provide a valid License Number.',
+                'g-recaptcha-response' => 'The recaptcha is required.',
+            ]
+        );
+
+        //
+        // User
+        $user = DB::transaction(function () use ($request) {
+            /**
+             * If we already have a user with this email, let's use that account
+             * instead of the newly created one.
+             */
+            $user = User::updateOrCreate(
+                [
+                    'email' => $request->email
+                ],
+                [
+                    'drivers_license_number' => $request->drivers_license_number,
+                    'drivers_license_state' => $request->drivers_license_state,
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'phone_number' => $request->phone_number,
+                    'zip' => session()->get('zip'),
+                ]
+            );
+
+            auth()->login($user);
+
+            return $user;
+        });
+
+        //
+        // If we don't have a purchase stored in session give up
+        // TODO: Return an actual error message / http response.
+        if (! session()->has('purchase') || ! is_object(session('purchase'))) {
+            return false;
+        }
+
+        //
+        // Retrieve and store purchase
+        $purchase = session('purchase');
+        $purchase->user_id = $user->id;
+
+        $existing_purchase = Purchase::where('user_id', $user->id)
+            ->where('deal_id', $purchase->deal_id)
+            ->whereNull('completed_at')
+            ->first();
+
+        if ($existing_purchase) {
+            $purchase = $existing_purchase;
+        }
+
+        $purchase->save();
+
+        event(new NewPurchaseInitiated($user, $purchase));
+
+        if (request('method') == 'cash') {
+            return [
+                'destination' => '/thank-you?method=cash',
+            ];
+        }
+
+        return [
+            'destination' => "/apply/{$purchase->id}",
+        ];
     }
 }
