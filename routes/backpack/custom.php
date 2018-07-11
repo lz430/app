@@ -25,7 +25,8 @@ Route::group([
     //
     // Deal tools
     Route::get('deal/{deal}/debugger', 'DealDebuggerController@show');
-    Route::get('deal/{deal}', 'DealAdminController@show');
+    Route::get('deal/{deal}', 'DealDataController@show');
+    Route::get('deal/{deal}/financing', 'DealFinancingController@show');
 
     //
     // Reports
