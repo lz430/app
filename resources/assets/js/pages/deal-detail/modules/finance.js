@@ -2,8 +2,8 @@ const UPDATE_DOWN_PAYMENT = 'dmr/dealDetails.finance.UPDATE_DOWN_PAYMENT';
 const UPDATE_TERM = 'dmr/dealDetails.finance.UPDATE_TERM';
 
 const initialState = {
-    downPayment: 0,
-    term: 0,
+    downPayment: null,
+    term: null,
 };
 
 export default function(state = initialState, action = {}) {
