@@ -8,7 +8,7 @@ use DeliverMyRide\JATO\JatoClient;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 
-class DealAdminController extends Controller
+class DealDataController extends Controller
 {
     /* @var JatoClient */
     private $client;
@@ -171,7 +171,7 @@ class DealAdminController extends Controller
             'models' => $debug_models,
         ];
 
-        return view('admin.deal-view',
+        return view('admin.deal-data',
             $data
         );
     }

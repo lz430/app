@@ -180,6 +180,7 @@ class DealToVehicle
 
     /**
      * @return mixed|null
+     * @throws FetchProgramDataException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function get()

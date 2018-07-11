@@ -123,12 +123,6 @@ class InfoModalData extends React.PureComponent {
                 <div>
                     <div className="info-modal-data">
                         <div className="info-modal-data__price">
-                            {this.props.withPricingHeader && (
-                                <p className="info-modal-data__pricing-details">
-                                    Pricing
-                                </p>
-                            )}
-
                             {this.props.withPricingTabs && this.renderTabs()}
 
                             <div className="cash-finance-lease-calculator__calculator-content">
@@ -190,7 +184,7 @@ class InfoModalData extends React.PureComponent {
                                             <Value
                                                 isLoading={dealPricing.bestOfferIsLoading()}
                                             >
-                                                {dealPricing.yourPrice()}
+                                                {dealPricing.cashPrice()}
                                             </Value>
                                         </Line>
                                         <Line>

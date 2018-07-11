@@ -15,6 +15,7 @@ class DealRatesAndRebatesManager
     private $deal;
     private $zipcode;
     private $isLease;
+    private $role;
 
     private $vehicleId;
     private $programs;
@@ -27,16 +28,47 @@ class DealRatesAndRebatesManager
     private $financeCompany;
     private $miles;
 
+    private const AFFINITY_MAP = [
+        'EMPLOYEE' => [
+            'Buick' => 4,
+            'Chevrolet' => 4,
+            'GMC' => 4,
+            'Cadillac' => 4,
+            'Ford' => 22,
+            'Lincoln' => 22,
+            'Dodge' => 17,
+            'Chrysler' => 17,
+            'Jeep' => 17,
+            'Ram' => 17,
+            'Fiat' => 17,
+            'Land Rover' => 66
+        ],
+        'SUPPLIER' => [
+            'Buick' => 65,
+            'Chevrolet' => 65,
+            'GMC' => 65,
+            'Cadillac' => 65,
+            'Ford' => 19,
+            'Lincoln' => 19,
+            'Dodge' => 16,
+            'Chrysler' => 16,
+            'Jeep' => 16,
+            'Ram' => 16,
+            'Fiat' => 16,
+        ],
+    ];
+
     /**
      * @param Deal $deal
      * @param string $zipcode
      * @param DataDeliveryClient|null $client
      */
-    public function __construct(Deal $deal, string $zipcode, DataDeliveryClient $client = null)
+    public function __construct(Deal $deal, string $zipcode, string $role, DataDeliveryClient $client = null)
     {
         $this->deal = $deal;
         $this->zipcode = $zipcode;
         $this->client = $client;
+        $this->role = $role;
     }
 
     /**
@@ -81,6 +113,7 @@ class DealRatesAndRebatesManager
         }
 
         $this->programs = collect($programs);
+
     }
 
     private function cashPrograms()
@@ -88,6 +121,14 @@ class DealRatesAndRebatesManager
         return $this->programs
             ->reject(function ($program) {
                 return $program->TotalCashFlag != "yes";
+            });
+    }
+
+    private function cashPrivatePrograms()
+    {
+        return $this->programs
+            ->reject(function ($program) {
+               return $program->TotalCashFlag != "no";
             });
     }
 
@@ -254,12 +295,21 @@ class DealRatesAndRebatesManager
             })
             ->pluck('ProgramID')->all();
 
-        $programIds = array_merge($cashProgramIds, $programIds);
+        $privatePrograms = $this->cashPrivatePrograms()
+            ->reject(function ($program) {
+                return !isset($program->dealscenarios[$this->scenario]);
+            })
+            ->pluck('ProgramID')->all();
+
+        if(in_array($this->role, ['employee', 'supplier'])) {
+            $programIds = array_merge($cashProgramIds, $privatePrograms, $programIds);
+        } else {
+            $programIds = array_merge($cashProgramIds, $programIds);
+        }
 
         if ($this->leaseProgram) {
             $programIds[] = $this->leaseProgram->ProgramID;
         }
-
 
         return $programIds;
     }
@@ -328,10 +378,14 @@ class DealRatesAndRebatesManager
         //
 
         if (count($programIds)) {
-            $data = ['ProgramIDs' => implode(",", $programIds)];
+            $data = ['ProgramIDs' => implode(",", $programIds), 'AffinityIDs' => ($this->role === 'default') ? null : $this->setConsumerRole($this->role)];
         } else {
             $data = ['ResidualsOnly' => 'yes'];
         }
+
+
+
+        // Pass in affinity data here
 
         $totalRateResponse = $this->client->totalrate->get(
             $this->vehicleId,
@@ -418,7 +472,21 @@ class DealRatesAndRebatesManager
      */
     public function setConsumerRole($role)
     {
+        if ($role === 'employee') {
+            if(isset(self::AFFINITY_MAP['EMPLOYEE'][$this->deal->make])){
+                 return self::AFFINITY_MAP['EMPLOYEE'][$this->deal->make];
+            }
+        }
 
+        if ($role === 'supplier') {
+            if(isset(self::AFFINITY_MAP['SUPPLIER'][$this->deal->make])){
+                 return self::AFFINITY_MAP['SUPPLIER'][$this->deal->make];
+            }
+        }
+
+        if ($role === 'default') {
+
+        }
     }
 
     /**
