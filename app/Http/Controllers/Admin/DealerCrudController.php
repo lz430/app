@@ -34,6 +34,13 @@ class DealerCrudController extends CrudController
         //
         // FORM
         $this->crud->addField([
+            'name'  => 'is_active',
+            'label' => 'Is Active',
+            'type'  => 'checkbox',
+            'tab'   => 'General',
+        ]);
+
+        $this->crud->addField([
             'name'  => 'dealer_id',
             'label' => 'Dealer ID',
             'type'  => 'text',
@@ -62,6 +69,13 @@ class DealerCrudController extends CrudController
         ]);
 
         $this->crud->addField([
+            'name'  => 'contact_email',
+            'label' => 'Contact Email',
+            'type'  => 'email',
+            'tab'   => 'General',
+        ]);
+
+        $this->crud->addField([
             'name'  => 'contact_title',
             'label' => 'Contact Title',
             'type'  => 'text',
@@ -78,8 +92,37 @@ class DealerCrudController extends CrudController
         $this->crud->addField([
             'name'  => 'acquisition_fee',
             'label' => 'Acquisition Fee',
-            'type'  => 'number',
-            'tab'   => 'General',
+            'type' => 'number',
+            'attributes' => ["step" => "any"],
+            'prefix' => "$",
+            'tab'   => 'Fees',
+        ]);
+
+        $this->crud->addField([
+            'name'  => 'cvr_fee',
+            'label' => 'CVR Fee',
+            'type' => 'number',
+            'attributes' => ["step" => "any"],
+            'prefix' => "$",
+            'tab'   => 'Fees',
+        ]);
+
+        $this->crud->addField([
+            'name'  => 'registration_fee',
+            'label' => 'Registration Fee',
+            'type' => 'number',
+            'attributes' => ["step" => "any"],
+            'prefix' => "$",
+            'tab'   => 'Fees',
+        ]);
+
+        $this->crud->addField([
+            'name'  => 'doc_fee',
+            'label' => 'Doc Fee',
+            'type' => 'number',
+            'attributes' => ["step" => "any"],
+            'prefix' => "$",
+            'tab'   => 'Fees',
         ]);
 
         $this->crud->addField([

@@ -10,6 +10,7 @@ use Backpack\CRUD\CrudTrait;
 
 /**
  * @property int $id
+ * @property boolean $is_active
  * @property  \stdClass $price_rules
  * @property $acquisition_fee
  * @property $doc_fee
@@ -37,11 +38,15 @@ class Dealer extends Model
      * @var array
      */
     protected $fillable = [
+        'is_active',
         'dealer_id',
         'latitude',
         'longitude',
         'name',
         'acquisition_fee',
+        'registration_fee',
+        'doc_fee',
+        'cvr_fee',
         'max_delivery_miles',
         'route_one_id',
         'address',
@@ -49,6 +54,7 @@ class Dealer extends Model
         'state',
         'zip',
         'phone',
+        'contact_email',
         'contact_name',
         'contact_title',
         'price_rules',
