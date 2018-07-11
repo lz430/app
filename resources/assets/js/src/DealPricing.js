@@ -386,10 +386,6 @@ export default class DealPricing {
     }
 
     cashPriceValue() {
-        console.log({
-            discountedPrice: this.discountedPriceValue(),
-            bestOffer: this.bestOfferValue(),
-        });
         return this.discountedPriceValue() - this.bestOfferValue();
     }
 
