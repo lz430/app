@@ -297,7 +297,7 @@ class Deal extends Model
         $dealer = $this->dealer;
 
         // Dealer has some special rules
-        if ($dealer->price_rules) {
+        if ($dealer && $dealer->price_rules) {
             foreach ($dealer->price_rules as $attr => $field) {
 
                 // If for whatever reason the selected base price for the field doesn't exist or it's false, we fall out
