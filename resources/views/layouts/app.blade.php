@@ -84,7 +84,7 @@
 
         <script src="{{ asset('js/app.js') }}"></script>
         @stack('scripts')
-        @if (App::environment(['staging', 'production']))
+        @if (config('services.googleanalytics.ua'))
             <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/3388780.js"></script>
             <script>
                 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -92,7 +92,7 @@
                     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
                 })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-                ga('create', 'UA-76262472-1', 'auto');
+                ga('create', '{{config('services.googleanalytics.ua')}}', 'auto');
                 ga('send', 'pageview');
             </script>
 

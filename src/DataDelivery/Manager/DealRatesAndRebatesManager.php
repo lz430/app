@@ -529,14 +529,10 @@ class DealRatesAndRebatesManager
      */
     public function getData()
     {
-
-        //
-        // Get totals
         $this->getTotals();
         $this->bestFinanceCompany();
         $this->getMileage();
-        $res = $this->pack();
-        return $res;
+        return $this->pack();
     }
 
 }
