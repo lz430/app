@@ -232,9 +232,14 @@ class VersionMunger
      * @return Version
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function create(): Version
+    private function create(): ?Version
     {
-        $data = $this->jatoClient->version->get($this->jatoVersion->vehicle_ID);
+        try {
+            $data = $this->jatoClient->version->get($this->jatoVersion->vehicle_ID);
+            print $this->jatoVersion->vehicle_ID . "\n";
+        } catch (ClientException $e) {
+            return null;
+        }
 
         $manufacturer = $this->manufacturer();
         $make = $this->make($manufacturer);

@@ -98,6 +98,9 @@ class Importer
 
         $this->debug = [
             'start' => microtime(true),
+            'created' => 0,
+            'updated' => 0,
+            'skipped' => 0,
         ];
     }
 
@@ -220,6 +223,12 @@ class Importer
 
             $deal = $this->saveOrUpdateDeal($version, $row['file_hash'], $row);
 
+            if ($deal->wasRecentlyCreated) {
+                $this->debug['created']++;
+            } else {
+                $this->debug['updated']++;
+            }
+
             $this->info("    -- Version Options: {$versionDebugData['possible_versions']}");
 
             if (isset($versionDebugData['name_search_term'])) {
@@ -249,6 +258,7 @@ class Importer
                 $this->info("    -- Photos: Stock Photos: {$debug['stock_photos']}");
 
             });
+
         } catch (ClientException | ServerException $e) {
             Log::channel('jato')->error('Importer error for vin [' . $row['VIN'] . ']: ' . $e->getMessage());
             $this->error('Error: ' . $e->getMessage());
@@ -270,25 +280,30 @@ class Importer
      */
     private function skipSourceRecord(array $row): bool
     {
+        $skip = false;
         if ($row['New/Used'] !== 'N') {
-            return false;
+            $skip = true;
         }
 
         if (in_array($row['Make'], self::MAKE_BLACKLIST)) {
-            return false;
+            $skip = true;
         }
 
         if (strlen($row['Price']) > 6) {
-            return false;
+            $skip = true;
         }
 
         if (is_null($row['Price'])) {
-            return false;
+            $skip = true;
         }
 
         $dealer = Dealer::where('dealer_id', $row['DealerId'])->get()->first();
         if (!$dealer) {
-            return false;
+            $skip = true;
+        }
+
+        if ($skip) {
+            $this->debug['skipped']++;
         }
 
         return true;
@@ -306,10 +321,16 @@ class Importer
             $hashes[] = $source['hash'];
         }
 
+        $this->info("RESULTS ::::");
+
+        $this->info(" -- Created Deals: " . $this->debug['created']);
+        $this->info(" -- Updated Deals: " . $this->debug['updated']);
+        $this->info(" -- Skipped Deals: " . $this->debug['skipped']);
+
         //
         // Delete all the hashes
-        $this->info("Records to remove from es: " . Deal::whereNotIn('file_hash', $hashes)->count());
-        $this->info("Records to delete from db: " . Deal::whereNotIn('file_hash', $hashes)->whereDoesntHave('purchases')->count());
+        $this->info(" -- Records to remove from es: " . Deal::whereNotIn('file_hash', $hashes)->count());
+        $this->info(" -- Records to delete from db: " . Deal::whereNotIn('file_hash', $hashes)->whereDoesntHave('purchases')->count());
 
         Deal::whereNotIn('file_hash', $hashes)->unsearchable();
         Deal::whereNotIn('file_hash', $hashes)->whereDoesntHave('purchases')->delete();
