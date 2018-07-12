@@ -361,6 +361,14 @@ class DealRatesAndRebatesManager
             $miles = $scenario->mileages;
         }
 
+        if ($miles) {
+            $miles = collect($miles)
+                ->reject(function ($mile) {
+                    return $mile->Miles < 7500;
+                })
+                ->all();
+        }
+
         $this->miles = $miles;
     }
 
