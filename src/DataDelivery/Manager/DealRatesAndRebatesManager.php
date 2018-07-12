@@ -61,6 +61,7 @@ class DealRatesAndRebatesManager
     /**
      * @param Deal $deal
      * @param string $zipcode
+     * @param string $role
      * @param DataDeliveryClient|null $client
      */
     public function __construct(Deal $deal, string $zipcode, string $role, DataDeliveryClient $client = null)
@@ -344,7 +345,6 @@ class DealRatesAndRebatesManager
 
     private function getMileage()
     {
-
         $scenario = collect($this->financeCompany->dealscenarios)
             ->reject(function ($scenario) {
                 return $scenario->DealScenarioType != $this->scenario;
