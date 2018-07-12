@@ -184,6 +184,10 @@ class DealToVehicle
     {
         $results = null;
 
+        if (!$this->deal->dealer) {
+            return $results;
+        }
+
         // Try easy search first
         $params = $this->getSearchParams();
         $search = [
