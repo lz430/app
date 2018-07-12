@@ -3,11 +3,8 @@
 namespace DeliverMyRide\DataDelivery\Manager;
 
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
-
 use App\Models\Deal;
-
 use GuzzleHttp\Exception\ClientException;
-
 use DeliverMyRide\DataDelivery\FetchProgramDataException;
 
 /**

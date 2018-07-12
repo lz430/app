@@ -607,14 +607,7 @@ class DealEquipmentMunger
             return null;
         }
 
-        $segment = collect([
-            'subcompact' => ['budget'],
-            'compact' => ['compact pickup', 'lower mid', 'small'],
-            'full-size' => ['full size', 'upper mid', 'luxury'],
-            'mid-size' => ['compact suv', 'mid'],
-            'minivan' => ['mini van'],
-            'sports' => ['sports'],
-        ])
+        $segment = collect(Map::SIZE_TO_JATO_SIZES)
             ->filter(function ($value) use ($equipment) {
                 // Pull from value instead of availability--per Derek at JATO 2018-02-12
                 return str_contains(strtolower($equipment->value), $value);

@@ -2,6 +2,7 @@
 
 namespace DeliverMyRide\VAuto;
 
+use App\Models\Dealer;
 use App\Models\Feature;
 use App\Models\JATO\Version;
 use App\Models\Deal;
@@ -282,6 +283,11 @@ class Importer
         }
 
         if (is_null($row['Price'])) {
+            return false;
+        }
+
+        $dealer = Dealer::where('dealer_id', $row['DealerId'])->get()->first();
+        if (!$dealer) {
             return false;
         }
 
