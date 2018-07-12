@@ -59,9 +59,7 @@ class Sortbar extends React.PureComponent {
                         svg={zondicons['tuning']}
                     />
                 </div>
-                Filter{this.props.searchQuery.entity === 'model'
-                    ? ' Results'
-                    : ''}
+                Filter Results
             </button>
         );
     }
@@ -202,9 +200,9 @@ class Sortbar extends React.PureComponent {
                 {this.props.searchQuery.entity === 'deal'
                     ? this.renderCompareButton()
                     : ''}
-                {this.props.searchQuery.entity === 'deal'
+                {/*this.props.searchQuery.entity === 'deal'
                     ? this.renderSortButton()
-                    : ''}
+                    : '' */}
             </div>
         );
     }

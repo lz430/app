@@ -34,6 +34,7 @@ class ToolbarPrice extends React.Component {
                         />
                     </div>
                 )}
+
                 <div className="filter-page__top-row__section filter-page__top-row__section--sortbar">
                     <Sortbar />
                 </div>

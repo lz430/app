@@ -10,9 +10,6 @@ use App\Models\User;
 
 use App\Events\NewPurchaseInitiated;
 
-
-
-
 /**
  * Checkout is 4 steps
  *  1) Start (user clicks "Buy now" on deal detail page)
