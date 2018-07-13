@@ -160,10 +160,9 @@ class Importer
     {
 
         $reader = Reader::createFromPath($source['path'], 'r');
-
         $stmt = (new Statement())
             ->where(function ($row) {
-                return $this->skipSourceRecord($row);
+                return !$this->skipSourceRecord($row);
             });
 
         $records = $stmt->process($reader, self::HEADERS);
@@ -281,6 +280,7 @@ class Importer
     private function skipSourceRecord(array $row): bool
     {
         $skip = false;
+
         if ($row['New/Used'] !== 'N') {
             $skip = true;
         }
@@ -306,7 +306,7 @@ class Importer
             $this->debug['skipped']++;
         }
 
-        return true;
+        return $skip;
     }
 
     /**

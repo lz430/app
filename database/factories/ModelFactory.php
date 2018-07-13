@@ -73,11 +73,6 @@ $factory->define(App\Models\JATO\Version::class, function (Faker\Generator $fake
         'msrp' => $faker->randomFloat(2, 10000, 100000),
         'invoice' => $faker->randomFloat(2, 9000, 90000),
         'body_style' => $faker->randomElement(['Pickup', 'Convertible', 'Cargo Van']),
-        'photo_path' => $faker->randomElement([
-            '/SSCUSA/RAM/PROMASTER/2017/4BU.JPG',
-            '/SSCUSA/RAM/PROMASTER/2014/2BT.JPG',
-            '/SSCUSA/DODGE/RAM PICKUP/2004/2PU.JPG',
-        ]),
         'fuel_econ_city' => $faker->numberBetween(10, 29),
         'fuel_econ_hwy' => $faker->numberBetween(30, 50),
         'manufacturer_code' => $faker->randomElement(['DR1H61', 'DR1S61', 'VF3L27']),
