@@ -111,7 +111,8 @@ class UserLocationController extends Controller
 
         if ($location) {
             $query = new DealSearch();
-            $query = $query->filterMustLocation(['lat' => $location['latitude'], 'lon' =>  $location['longitude']], 'latlon');
+            $query = $query->filterMustLocation(['lat' => $location['latitude'], 'lon' =>  $location['longitude']]);
+            $query = $query->filterMustGenericRules();
             $query = $query->size(0);
             $results = $query->get();
 
