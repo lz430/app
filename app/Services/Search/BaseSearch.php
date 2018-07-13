@@ -74,6 +74,33 @@ abstract class BaseSearch
         return $this;
     }
 
+    public function filterMustGenericRules() {
+        $rules = [
+            [['script' => [
+                "script" => [
+                    "lang" => "painless",
+                    "source" => "doc['pricing.msrp'].value >= doc['pricing.default'].value",
+                ]
+            ]]],
+            ['range' => [
+                'pricing.default' => [
+                    'lte' => '200000',
+                ]
+            ]],
+        ];
+
+        foreach($rules as $rule) {
+            $this->query['query']['bool']['must'][] = $rule;
+
+            if (isset($this->query['aggs']['makeandstyle'])) {
+                $this->query['aggs']['makeandstyle']['aggs']['style']['filter']['bool']['must'][] = $rule;
+                $this->query['aggs']['makeandstyle']['aggs']['make']['filter']['bool']['must'][] = $rule;
+            }
+        }
+
+        return $this;
+    }
+
     public function filterMustLocation($location)
     {
         $lat = (float)$location['lat'];
