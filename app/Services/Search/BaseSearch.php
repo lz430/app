@@ -84,7 +84,7 @@ abstract class BaseSearch
             ]]],
             ['range' => [
                 'pricing.default' => [
-                    'lte' => '150000',
+                    'lte' => '200000',
                 ]
             ]],
         ];
