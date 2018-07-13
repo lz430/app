@@ -26,7 +26,7 @@ class DealFinancingController extends Controller
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function getRatesAndRebates($paymentType, $role) {
-        $manager = new DealRatesAndRebatesManager($this->deal, self::ZIPCODE, $this->dataDeliveryClient);
+        $manager = new DealRatesAndRebatesManager($this->deal, self::ZIPCODE, $role, $this->dataDeliveryClient);
         $manager->setFinanceStrategy($paymentType);
         $manager->setConsumerRole($role);
         $manager->searchForVehicleAndPrograms();

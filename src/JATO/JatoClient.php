@@ -90,10 +90,12 @@ class JatoClient extends ApiClient
             $this->refreshAuthorizationToken();
         }
 
-        return [
+        $headers = [
             'Authorization' => $this->token->token_type . ' ' . $this->token->access_token,
             'Subscription-Key' => config('services.jato.subscription_key'),
         ];
+
+        return $headers;
     }
 
     /**

@@ -61,6 +61,7 @@ class DealRatesAndRebatesManager
     /**
      * @param Deal $deal
      * @param string $zipcode
+     * @param string $role
      * @param DataDeliveryClient|null $client
      */
     public function __construct(Deal $deal, string $zipcode, string $role, DataDeliveryClient $client = null)
@@ -344,7 +345,6 @@ class DealRatesAndRebatesManager
 
     private function getMileage()
     {
-
         $scenario = collect($this->financeCompany->dealscenarios)
             ->reject(function ($scenario) {
                 return $scenario->DealScenarioType != $this->scenario;
@@ -359,6 +359,14 @@ class DealRatesAndRebatesManager
             $miles = $scenario->programs[0]->mileages;
         } else if (isset($scenario->mileages)) {
             $miles = $scenario->mileages;
+        }
+
+        if ($miles) {
+            $miles = collect($miles)
+                ->reject(function ($mile) {
+                    return $mile->Miles < 7500;
+                })
+                ->all();
         }
 
         $this->miles = $miles;
@@ -529,14 +537,10 @@ class DealRatesAndRebatesManager
      */
     public function getData()
     {
-
-        //
-        // Get totals
         $this->getTotals();
         $this->bestFinanceCompany();
         $this->getMileage();
-        $res = $this->pack();
-        return $res;
+        return $this->pack();
     }
 
 }

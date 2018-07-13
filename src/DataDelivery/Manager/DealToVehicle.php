@@ -3,11 +3,8 @@
 namespace DeliverMyRide\DataDelivery\Manager;
 
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
-
 use App\Models\Deal;
-
 use GuzzleHttp\Exception\ClientException;
-
 use DeliverMyRide\DataDelivery\FetchProgramDataException;
 
 /**
@@ -186,6 +183,10 @@ class DealToVehicle
     public function get()
     {
         $results = null;
+
+        if (!$this->deal->dealer) {
+            return $results;
+        }
 
         // Try easy search first
         $params = $this->getSearchParams();
