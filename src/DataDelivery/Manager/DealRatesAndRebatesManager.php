@@ -345,6 +345,11 @@ class DealRatesAndRebatesManager
 
     private function getMileage()
     {
+
+        if (!isset($this->financeCompany->dealscenarios)) {
+            return null;
+        }
+
         $scenario = collect($this->financeCompany->dealscenarios)
             ->reject(function ($scenario) {
                 return $scenario->DealScenarioType != $this->scenario;
