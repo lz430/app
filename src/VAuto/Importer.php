@@ -76,10 +76,6 @@ class Importer
 
     ];
 
-    private const MAKE_BLACKLIST = [
-        'smart',
-    ];
-
     private const PROCESS_BATCH_SIZE = 100;
 
     private $jatoClient;
@@ -285,7 +281,7 @@ class Importer
             $skip = true;
         }
 
-        if (in_array($row['Make'], self::MAKE_BLACKLIST)) {
+        if (in_array($row['Make'], Map::IMPORT_MAKE_BLACKLIST)) {
             $skip = true;
         }
 

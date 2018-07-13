@@ -77,12 +77,12 @@
 
                     <div class="request-dl__group {{ $errors->has('drivers_license') ? 'login__group-has-error' : '' }}">
                         <div class="request-dl__labels">
-                            <label for="drivers_license" class="request-dl__number-label">Driver's License Number</label>
+                            <label for="drivers_license" type="text" class="request-dl__number-label">Driver's License Number</label>
                             <label for="drivers_license_state" class="request-dl__state-label">State</label>
                         </div>
 
                         <div class="request-dl__inline-input-and-error">
-                            <input id="drivers_license" type="tel" class="request-dl__number" name="drivers_license_number" placeholder="Enter Driver's License Number" value="{{ old('drivers_license') }}" required>
+                            <input id="drivers_license" class="request-dl__number" name="drivers_license_number" placeholder="Enter Driver's License Number" value="{{ old('drivers_license') }}" required>
 
                             <select class="request-dl__state" id="drivers_license_state" name="drivers_license_state">
                                 <option value="AL">AL</option>
