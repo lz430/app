@@ -29,6 +29,23 @@ export default class LeasePane extends React.PureComponent {
     render() {
         const { dealPricing, onDiscountChange, onRebatesChange } = this.props;
 
+        if (dealPricing.bestOfferIsLoading()) {
+            return <SVGInline svg={miscicons['loading']} />;
+        }
+
+        if (
+            !dealPricing.bestOfferIsLoading() &&
+            (!dealPricing.leaseAnnualMileageAvailable() ||
+                !dealPricing.leaseAnnualMileageAvailable().length)
+        ) {
+            return (
+                <p>
+                    Currently there are no competitive lease rates available on
+                    this vehicle.
+                </p>
+            );
+        }
+
         return (
             <div>
                 <Group>
