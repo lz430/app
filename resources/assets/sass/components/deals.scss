@@ -38,13 +38,17 @@
         font-size: 1.5em;
         justify-content: center;
         flex-flow: column;
-        margin: 0.5rem auto;
         text-align: center;
-        width: 85%;
+        max-width: 800px;
+        margin: 0.5rem auto;
 
         @media (min-width: $break-small) {
             margin: 1rem auto;
-            width: 70%;
+        }
+
+        @media (max-width: $break-medium) {
+            font-size: 1rem;
+            padding: 1rem;
         }
     }
 

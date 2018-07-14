@@ -4,6 +4,7 @@ import util from 'src/util';
 import { connect } from 'react-redux';
 import { toggleSmallFiltersShown } from 'pages/deal-list/actions';
 import PropTypes from 'prop-types';
+import ZipcodeFinder from 'pages/deal-list/components/Sidebar/ZipcodeFinder';
 
 class NoDealsOutOfRange extends Component {
     static propTypes = {
@@ -26,54 +27,65 @@ class NoDealsOutOfRange extends Component {
         });
     }
 
+    renderEmailCollectionForm() {
+        if (this.state.formSubmitted) {
+            return (
+                <p>
+                    Thank you! We will notify you when we arrive in your area.
+                </p>
+            );
+        }
+
+        return (
+            <form onSubmit={e => this.handleSubmit(e)}>
+                <div>
+                    <input
+                        className="deals__input"
+                        placeholder="Enter your email address"
+                        onChange={e => {
+                            this.setState({ email: e.target.value });
+                        }}
+                        value={this.state.email}
+                        type="email"
+                        required
+                    />
+                    <button
+                        className="deals__button deals__button--blue"
+                        type="submit"
+                    >
+                        Submit Email
+                    </button>
+                </div>
+            </form>
+        );
+    }
+
     render() {
         const isMobile = !util.windowIsLargerThanSmall(this.props.window.width);
-        const formNotSubmittedMessage = `Our service is not currently available in your area. Please${
+        const formNotSubmittedMessage = ` Please${
             isMobile ? ' change your zip code or' : ''
-        } provide your email so that we can notify you when we arrive. We apologize for the inconvenience.`;
-        const formSubmittedMessage =
-            'Thank you! We will notify you when we arrive in your area.';
+        } `;
+
         return (
             <div className="deals__no-matches">
                 <div>
                     <p>
-                        {this.state.formSubmitted
-                            ? formSubmittedMessage
-                            : formNotSubmittedMessage}
+                        Our service is not currently available in your selected
+                        area. Please update your location
                     </p>
                 </div>
-                {isMobile ? (
-                    <button
-                        className="deals__button deals__button--pink deals__button--zip"
-                        onClick={this.props.onToggleSmallFiltersShown}
-                    >
-                        Change Zip
-                    </button>
-                ) : null}
-                {!this.state.formSubmitted ? (
-                    <form onSubmit={e => this.handleSubmit(e)}>
-                        <div>
-                            <input
-                                className="deals__input"
-                                placeholder="Enter your email address"
-                                onChange={e => {
-                                    this.setState({ email: e.target.value });
-                                }}
-                                value={this.state.email}
-                                type="email"
-                                required
-                            />
-                            <button
-                                className="deals__button deals__button--blue"
-                                type="submit"
-                            >
-                                Submit Email
-                            </button>
-                        </div>
-                    </form>
-                ) : (
-                    ''
-                )}
+                <div className="full-page-user-location">
+                    <ZipcodeFinder />
+                </div>
+                <div>
+                    <p>
+                        or provide your email so that we can notify you when we
+                        arrive. We apologize for the inconvenience.
+                    </p>
+                </div>
+                {!this.state.formSubmitted
+                    ? this.renderEmailCollectionForm()
+                    : ''}
             </div>
         );
     }

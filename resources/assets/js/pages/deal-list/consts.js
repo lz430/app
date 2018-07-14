@@ -1,6 +1,8 @@
 const namespace = 'DEAL_LIST';
 
 export const INIT = `${namespace}_INIT`;
+export const PAGE_LOADING_START = `${namespace}_PAGE_LOADING_START`;
+export const PAGE_LOADING_FINISHED = `${namespace}_PAGE_LOADING_FINISHED`;
 
 export const SEARCH_REQUEST = `${namespace}_SEARCH_REQUEST`;
 export const SEARCH_RECEIVE = `${namespace}_SEARCH_RECEIVE`;
@@ -23,4 +25,5 @@ export const RECEIVE_DEALS = `${namespace}_RECEIVE_DEALS`;
 export const CLEAR_ALL_FILTERS = `${namespace}_CLEAR_ALL_FILTERS`;
 
 export const TOGGLE_SMALL_FILTERS_SHOWN = `${namespace}_TOGGLE_SMALL_FILTERS_SHOWN`;
-export const CLOSE_MAKE_SELECTOR_MODAL = `${namespace}_CLOSE_MAKE_SELECTOR_MODAL`;
+export const MAKE_SELECTOR_MODAL_OPEN = `${namespace}_MAKE_SELECTOR_MODAL_OPEN`;
+export const MAKE_SELECTOR_MODAL_CLOSE = `${namespace}_MAKE_SELECTOR_MODAL_CLOSE`;

@@ -26,7 +26,7 @@ import * as DealListActions from './actions';
 import getDealList, { getSearchQuery } from './selectors';
 import { requestIpLocation } from 'apps/user/sagas';
 import { setCurrentPage } from 'apps/page/actions';
-
+import { getUserLocation } from 'apps/user/selectors';
 import util from 'src/util';
 
 /*******************************************************************
@@ -152,11 +152,26 @@ function* searchToggleFilter(action) {
  ********************************************************************/
 function* init() {
     yield put(setCurrentPage('deal-list'));
+
+    let userCurrentLocation = yield select(getUserLocation);
+    if (!userCurrentLocation.latitude || !userCurrentLocation.longitude) {
+        yield put(DealListActions.dealListPageLoadingStart());
+    }
+
     yield* requestIpLocation();
+
+    yield put(DealListActions.dealListPageLoadingFinished());
+    userCurrentLocation = yield select(getUserLocation);
+    const dealListPage = yield select(getDealList);
+    if (
+        dealListPage.showMakeSelectorModal === null &&
+        userCurrentLocation.latitude
+    ) {
+        yield put(DealListActions.openMakeSelectorModal());
+    }
 
     const urlStyle = util.getInitialBodyStyleFromUrl();
     const urlSize = util.getInitialSizeFromUrl();
-
     if (urlStyle || urlSize) {
         let filters = [];
 
