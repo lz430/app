@@ -41,7 +41,12 @@ class ModelYear extends React.PureComponent {
         return (
             <div className="modelyear">
                 <div>
-                    <div className="modelyear__basic-info">
+                    <div
+                        className="modelyear__basic-info"
+                        onClick={() => {
+                            this.selectModelYear(modelYear);
+                        }}
+                    >
                         <div className="modelyear__basic-info-year-and-model">
                             <div className="modelyear__basic-info-year-and-make">
                                 {`${modelYear.year} ${modelYear.make}`}
