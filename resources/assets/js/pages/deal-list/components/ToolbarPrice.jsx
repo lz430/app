@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Sortbar from './Sortbar';
-import { showAccuPricingModal } from 'apps/common/actions';
 import { requestSearch } from 'pages/deal-list/actions';
 
 import GlobalSelectPurchaseStrategy from 'apps/user/components/GlobalSelectPurchaseStrategy';
@@ -14,7 +13,6 @@ import GlobalSelectPurchaseStrategy from 'apps/user/components/GlobalSelectPurch
 class ToolbarPrice extends React.Component {
     static propTypes = {
         onRequestSearch: PropTypes.func.isRequired,
-        onShowAccuPricingModal: PropTypes.func.isRequired,
         searchQuery: PropTypes.object.isRequired,
     };
 
@@ -52,10 +50,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onShowAccuPricingModal: () => {
-            return dispatch(showAccuPricingModal);
-        },
-
         onRequestSearch: () => {
             return dispatch(requestSearch());
         },
