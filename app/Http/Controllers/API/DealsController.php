@@ -24,7 +24,8 @@ class DealsController extends BaseAPIController
 
         $query = $query
             ->addFeatureAggs()
-            ->addMakeAndStyleAgg();
+            ->addMakeAndStyleAgg()
+            ->filterMustGenericRules();
 
         if ($request->get('latitude') && $request->get('longitude')) {
             $query = $query->filterMustLocation(['lat' => $request->get('latitude'), 'lon' => $request->get('longitude')]);

@@ -76,10 +76,6 @@ class Importer
 
     ];
 
-    private const MAKE_BLACKLIST = [
-        'smart',
-    ];
-
     private const PROCESS_BATCH_SIZE = 100;
 
     private $jatoClient;
@@ -160,10 +156,9 @@ class Importer
     {
 
         $reader = Reader::createFromPath($source['path'], 'r');
-
         $stmt = (new Statement())
             ->where(function ($row) {
-                return $this->skipSourceRecord($row);
+                return !$this->skipSourceRecord($row);
             });
 
         $records = $stmt->process($reader, self::HEADERS);
@@ -281,11 +276,12 @@ class Importer
     private function skipSourceRecord(array $row): bool
     {
         $skip = false;
+
         if ($row['New/Used'] !== 'N') {
             $skip = true;
         }
 
-        if (in_array($row['Make'], self::MAKE_BLACKLIST)) {
+        if (in_array($row['Make'], Map::IMPORT_MAKE_BLACKLIST)) {
             $skip = true;
         }
 
@@ -306,7 +302,7 @@ class Importer
             $this->debug['skipped']++;
         }
 
-        return true;
+        return $skip;
     }
 
     /**

@@ -37,7 +37,7 @@ return [
     'jato' => [
         'username' => env('JATO_USERNAME'),
         'password' => env('JATO_PASSWORD'),
-        'subscription_key' => 'e37102e58e4f42bf927743e6e92c41c3',
+        'subscription_key' => env('JATO_KEY', 'e37102e58e4f42bf927743e6e92c41c3'),
     ],
 
     'vauto' => [

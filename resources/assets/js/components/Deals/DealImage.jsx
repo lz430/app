@@ -27,10 +27,12 @@ class DealImage extends React.PureComponent {
         return (
             <LazyLoad height={200} overflow={true}>
                 <div className="deal__image-container">
-                    <img
-                        className={this.props.featureImageClass}
-                        src={this.featuredImageUrl()}
-                    />
+                    <a href={`/deals/${this.props.deal.id}`}>
+                        <img
+                            className={this.props.featureImageClass}
+                            src={this.featuredImageUrl()}
+                        />
+                    </a>
                 </div>
             </LazyLoad>
         );

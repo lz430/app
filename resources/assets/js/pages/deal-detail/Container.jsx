@@ -63,6 +63,8 @@ class Container extends React.PureComponent {
         featuredImage: [],
         fuelExternalImages: [],
         fuelInternalImages: [],
+        basicFeatures: [],
+        fuelEconomy: {},
         upholsteryType: null,
         warranties: null,
         dimensions: null,
@@ -91,6 +93,31 @@ class Container extends React.PureComponent {
             ).title;
 
             this.setState({ upholsteryType });
+        }
+
+        if (this.props.deal.version) {
+            const {
+                body_style,
+                driven_wheels,
+                fuel_econ_city,
+                fuel_econ_hwy,
+            } = this.props.deal.version;
+
+            const { engine, transmission } = this.props.deal;
+
+            const basicFeatures = [
+                { name: 'Body', content: body_style },
+                { name: 'Drive Train', content: driven_wheels },
+                { name: 'Engine', content: engine },
+                { name: 'Transmission', content: transmission },
+            ];
+
+            const fuelEconomy = {
+                city: fuel_econ_city,
+                highway: fuel_econ_hwy,
+            };
+
+            this.setState({ basicFeatures, fuelEconomy });
         }
 
         ApiClient.deal.dealGetDimensions(this.props.deal.id).then(response => {
@@ -175,6 +202,33 @@ class Container extends React.PureComponent {
                     <div className="modal__body deal-details__modal-body">
                         <h3>Specifications</h3>
                         <hr />
+
+                        <ul>
+                            {this.state.basicFeatures ? (
+                                this.state.basicFeatures.map(
+                                    (feature, index) => {
+                                        return (
+                                            <li key={index}>
+                                                {feature.name}:{' '}
+                                                {feature.content}
+                                            </li>
+                                        );
+                                    }
+                                )
+                            ) : (
+                                <SVGInline svg={miscicons['loading']} />
+                            )}
+
+                            {this.state.fuelEconomy ? (
+                                <li>
+                                    Fuel Economy - City:{' '}
+                                    {this.state.fuelEconomy.city} Highway:{' '}
+                                    {this.state.fuelEconomy.highway}
+                                </li>
+                            ) : (
+                                <SVGInline svg={miscicons['loading']} />
+                            )}
+                        </ul>
 
                         <h4>Dimensions</h4>
                         <ul>
@@ -465,6 +519,31 @@ class Container extends React.PureComponent {
                         <div className="deal-details__deal-content-subtitle">
                             Standard Features
                         </div>
+                        <ul className="deal-details__deal-content-features">
+                            {this.state.basicFeatures
+                                ? this.state.basicFeatures.map(
+                                      (feature, index) => {
+                                          return (
+                                              <li key={index}>
+                                                  {feature.name}:{' '}
+                                                  {feature.content}
+                                              </li>
+                                          );
+                                      }
+                                  )
+                                : ''}
+
+                            {this.state.fuelEconomy ? (
+                                <li>
+                                    Fuel Economy - City:{' '}
+                                    {this.state.fuelEconomy.city} Highway:{' '}
+                                    {this.state.fuelEconomy.highway}
+                                </li>
+                            ) : (
+                                ''
+                            )}
+                        </ul>
+
                         <ul className="deal-details__deal-content-features">
                             {deal.features.slice(0, 5).map((feature, index) => {
                                 return <li key={index}>{feature.feature}</li>;

@@ -260,7 +260,6 @@ class VersionMunger
             'invoice' => $data->invoice !== '' ? $data->invoice : null,
             'body_style' => $data->bodyStyleName,
             'cab' => $data->cabType !== '' ? $data->cabType : null,
-            'photo_path' => $data->photoPath,
             'fuel_econ_city' => $data->fuelEconCity !== '' ? $data->fuelEconCity : null,
             'fuel_econ_hwy' => $data->fuelEconHwy !== '' ? $data->fuelEconHwy : null,
             'manufacturer_code' => !in_array($data->manufacturerCode, ['-', '']) ? $data->manufacturerCode : null,
@@ -341,6 +340,10 @@ class VersionMunger
         $version = Version::where('jato_uid', $jatoVersion->uid)->where('year', $this->row['Year'])->first();
         if (!$version) {
             $version = $this->create();
+        }
+
+        if (!$version) {
+            return [FALSE, FALSE, FALSE];
         }
 
         //
