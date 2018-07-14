@@ -50,11 +50,15 @@
                 @slot('title')
                     Dealer
                 @endslot
-                <strong>{{$deal->dealer->name}}</strong> <br/>
-                {{$deal->dealer->dealer_id}} <br/>
-                @slot('footer')
-                    <a href="/admin/dealer/{{$deal->dealer->id}}/edit">Edit Dealer</a>
-                @endslot
+                @if ($deal->dealer)
+                    <strong>{{$deal->dealer->name}}</strong> <br/>
+                    {{$deal->dealer->dealer_id}} <br/>
+                    @slot('footer')
+                        <a href="/admin/dealer/{{$deal->dealer->id}}/edit">Edit Dealer</a>
+                    @endslot
+                @else
+                    No Dealer!
+                @endif
             @endcomponent
         </div>
         <div class="col-md-4">
