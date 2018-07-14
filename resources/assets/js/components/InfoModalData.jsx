@@ -34,6 +34,7 @@ class InfoModalData extends React.PureComponent {
         onSetPurchaseStrategy: PropTypes.func.isRequired,
         closeModal: PropTypes.func,
         children: PropTypes.node,
+        withPricingTabs: PropTypes.bool,
     };
 
     static defaultProps = {

@@ -20,12 +20,17 @@ class InfoModal extends React.PureComponent {
             vin: PropTypes.string.isRequired,
         }),
         infoModalIsShowingFor: PropTypes.number,
+        withPricingTabs: PropTypes.bool,
         userLocation: PropTypes.object.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
         showInfoModal: PropTypes.func.isRequired,
         hideInfoModal: PropTypes.func.isRequired,
         onRequestDealQuote: PropTypes.func.isRequired,
         onSetPurchaseStrategy: PropTypes.func.isRequired,
+    };
+
+    static defaultProps = {
+        withPricingTabs: true,
     };
 
     renderModal() {
@@ -56,6 +61,7 @@ class InfoModal extends React.PureComponent {
                             compareList={this.props.compareList}
                             selectDeal={this.props.selectDeal}
                             toggleCompare={this.props.toggleCompare}
+                            withPricingTabs={this.props.withPricingTabs}
                         />
                     </div>
                 </div>

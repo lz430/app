@@ -48,6 +48,7 @@ class DealPrice extends React.Component {
                 showInfoModal={this.props.onShowInfoModal}
                 hideInfoModal={this.props.onHideInfoModal}
                 infoModalIsShowingFor={this.props.infoModalIsShowingFor}
+                withPricingTabs={false}
             />
         );
     }
