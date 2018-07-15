@@ -128,7 +128,11 @@ export default class LeasePane extends React.PureComponent {
                                         borderSpacing: 0,
                                         padding: '.5em 0',
                                         margin: '1em auto',
+                                        cursor: 'pointer',
                                     }}
+                                    onClick={
+                                        this.handleShowLeaseTermsSelectClick
+                                    }
                                 >
                                     <thead>
                                         <tr>
