@@ -74,14 +74,13 @@ class DealRatesAndRebatesManager
 
     /**
      * @param $response
-     * @return array
      */
     private function extractProgramData($response)
     {
         $programs = [];
 
         if (!isset($response->vehicles[0]->programs)) {
-            return $programs;
+            $this->programs = collect($programs);
         }
 
         foreach ($response->vehicles[0]->programs as $program) {
@@ -114,7 +113,6 @@ class DealRatesAndRebatesManager
         }
 
         $this->programs = collect($programs);
-
     }
 
     private function cashPrograms()
