@@ -76,6 +76,16 @@ class DealPrice extends React.Component {
         }
     }
 
+    getDisclaimer() {
+        switch (this.props.purchaseStrategy) {
+            case 'cash':
+                return 'Additional Taxes and Fees Apply';
+            case 'finance':
+            case 'lease':
+                return 'Includes All Taxes and Fees';
+        }
+    }
+
     render() {
         return (
             <div className="deal-price">
@@ -87,6 +97,9 @@ class DealPrice extends React.Component {
                         <div className="deal-price__finance-lease-price">
                             {this.showWhenPricingIsLoaded()}
                             {this.renderPriceExplanationModal()}
+                        </div>
+                        <div className="deal-price__finance-lease-disclaimer">
+                            {this.getDisclaimer()}
                         </div>
                         <div className="deal-price__hr" />
                         <div className="deal-price__cash-msrp">
