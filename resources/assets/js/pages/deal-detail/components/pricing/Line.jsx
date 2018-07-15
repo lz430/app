@@ -27,7 +27,7 @@ export default class Line extends React.PureComponent {
                         style={{
                             float: 'right',
                             width: '5rem',
-                            height: '.0625em',
+                            height: '1px',
                             backgroundColor: '#ccc',
                             margin: '.5em 0',
                         }}
