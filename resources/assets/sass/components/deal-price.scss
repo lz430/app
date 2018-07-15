@@ -24,6 +24,16 @@
         }
     }
 
+    &__finance-lease-disclaimer {
+        font-size: xx-small;
+        text-transform: uppercase;
+        margin-bottom: -1em;
+
+        @media (min-width: $break-small) {
+            font-size: x-small;
+        }
+    }
+
     &__cash-price {
         display: flex;
         font-size: x-large;
@@ -40,12 +50,13 @@
         display: flex;
         font-size: x-large;
         justify-content: center;
-        margin-bottom: -1.5rem;
-        margin-top: -5px;
+        margin-bottom: 0;
+        margin-top: 0;
+        line-height: 1.125em;
 
         @media (min-width: $break-small) {
             font-size: xx-large;
-            margin-top: -10px;
+            margin-top: 0;
         }
     }
 

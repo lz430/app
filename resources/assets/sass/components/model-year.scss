@@ -28,6 +28,10 @@
 
     &__basic-info {
         margin-bottom: 0.5rem;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 
     &__basic-info-year-and-make {

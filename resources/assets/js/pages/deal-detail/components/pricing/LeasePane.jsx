@@ -3,16 +3,17 @@ import PropTypes from 'prop-types';
 
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
+import zondicons from 'zondicons';
 
 import Rebates from '../../containers/pricing/rebates/Rebates';
 import Discount from './Discount';
 import Line from './Line';
 import Label from './Label';
 import Value from './Value';
-import TaxesAndFees from './TaxesAndFees';
 import Group from './Group';
 import Header from './Header';
 import LeaseTermsSelect from './LeaseTermsSelect';
+import Separator from './Separator';
 
 export default class LeasePane extends React.PureComponent {
     static propTypes = {
@@ -29,12 +30,8 @@ export default class LeasePane extends React.PureComponent {
     render() {
         const { dealPricing, onDiscountChange, onRebatesChange } = this.props;
 
-        if (dealPricing.bestOfferIsLoading()) {
-            return <SVGInline svg={miscicons['loading']} />;
-        }
-
         if (
-            !dealPricing.bestOfferIsLoading() &&
+            dealPricing.dealQuoteIsLoaded() &&
             (!dealPricing.leaseAnnualMileageAvailable() ||
                 !dealPricing.leaseAnnualMileageAvailable().length)
         ) {
@@ -63,120 +60,129 @@ export default class LeasePane extends React.PureComponent {
                         <Value>{dealPricing.discountedPrice()}</Value>
                     </Line>
                 </Group>
-                <hr />
+                <Separator />
                 <Group>
                     <Header>Taxes &amp; Fees</Header>
-                    {dealPricing.bestOfferIsLoading() && (
-                        <SVGInline svg={miscicons['loading']} />
-                    )}
-                    {dealPricing.bestOfferIsLoading() || (
-                        <div>
-                            <TaxesAndFees items={dealPricing.taxesAndFees()} />
-                        </div>
-                    )}
+                    <Line>
+                        <Label>Total Taxes &amp; Fees</Label>
+                        <Value>{dealPricing.taxesAndFeesTotal()}</Value>
+                    </Line>
                     <Line isSectionTotal={true}>
-                        <Label>Selling Price</Label>
-                        <Value isLoading={dealPricing.bestOfferIsLoading()}>
-                            {dealPricing.sellingPrice()}
+                        <Label>Gross Capitalized Cost</Label>
+                        <Value isLoading={dealPricing.dealQuoteIsLoading()}>
+                            {dealPricing.grossCapitalizedCost()}
                         </Value>
                     </Line>
                 </Group>
-                <hr />
+                <Separator />
                 <Group>
-                    <Header>Discounts</Header>
-                    <Line>
-                        <Label>Rebates Applied</Label>
-                        <Value
-                            isNegative={true}
-                            isLoading={dealPricing.bestOfferIsLoading()}
-                        >
-                            {dealPricing.bestOffer()}
-                        </Value>
-                    </Line>
+                    <Header>Rebates</Header>
+                    {dealPricing.hasRebatesApplied() || (
+                        <Line>
+                            <Label>No rebates available</Label>
+                        </Line>
+                    )}
+                    {dealPricing.hasRebatesApplied() && (
+                        <Line>
+                            <Label>Applied</Label>
+                            <Value
+                                isNegative={true}
+                                isLoading={dealPricing.dealQuoteIsLoading()}
+                            >
+                                {dealPricing.bestOffer()}
+                            </Value>
+                        </Line>
+                    )}
                     <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
                     <Line isSectionTotal={true}>
-                        <Label>Total Selling Price</Label>
-                        <Value isLoading={dealPricing.bestOfferIsLoading()}>
-                            {dealPricing.yourPrice()}*
+                        <Label>Net Capitalized Cost</Label>
+                        <Value isLoading={dealPricing.dealQuoteIsLoading()}>
+                            {dealPricing.netCapitalizedCost()}*
                         </Value>
                     </Line>
                 </Group>
-                <hr />
+                <Separator />
                 <Group>
-                    <Header>Lease Terms</Header>
-                    {dealPricing.bestOfferIsLoading() && (
+                    <Header>
+                        Lease Terms
+                        <SVGInline
+                            style={{
+                                float: 'right',
+                                cursor: 'pointer',
+                                fill: '#41b1ac',
+                            }}
+                            height="1em"
+                            svg={zondicons['compose']}
+                            onClick={this.handleShowLeaseTermsSelectClick}
+                        />
+                    </Header>
+                    {dealPricing.dealQuoteIsLoading() && (
                         <SVGInline svg={miscicons['loading']} />
                     )}
-                    {dealPricing.bestOfferIsLoading() || (
+                    {dealPricing.dealQuoteIsLoading() || (
                         <div>
                             <Line>
-                                <Label>Annual Miles</Label>
-                                <Value>
-                                    <select
-                                        value={dealPricing.leaseAnnualMileageValue()}
-                                        onChange={
-                                            this.handleAnnualMileageChange
-                                        }
-                                    >
-                                        {dealPricing
-                                            .leaseAnnualMileageAvailable()
-                                            .map(
-                                                (
-                                                    annualMileage,
-                                                    annualMileageIndex
-                                                ) => {
-                                                    return (
-                                                        <option
-                                                            key={
-                                                                annualMileageIndex
-                                                            }
-                                                            value={
-                                                                annualMileage
-                                                            }
-                                                        >
-                                                            {annualMileage}
-                                                        </option>
-                                                    );
-                                                }
-                                            )}
-                                    </select>
-                                </Value>
-                            </Line>
-                            <Line>
-                                <Label>Term</Label>
-                                <Value>
-                                    <select
-                                        value={dealPricing.leaseTermValue()}
-                                        onChange={this.handleTermChange}
-                                    >
-                                        {dealPricing
-                                            .leaseTermsAvailable()
-                                            .map((term, termIndex) => {
-                                                return (
-                                                    <option
-                                                        key={termIndex}
-                                                        value={term}
-                                                    >
-                                                        {`${term} months`}
-                                                    </option>
-                                                );
-                                            })}
-                                    </select>
-                                </Value>
-                            </Line>
-                            <Line>
-                                <span
+                                <table
                                     style={{
+                                        border: '1px solid black',
+                                        borderSpacing: 0,
+                                        padding: '.5em 0',
+                                        margin: '1em auto',
                                         cursor: 'pointer',
-                                        color: '#41b1ac',
-                                        fontWeight: 'bold',
                                     }}
                                     onClick={
                                         this.handleShowLeaseTermsSelectClick
                                     }
                                 >
-                                    See all available lease options
-                                </span>
+                                    <thead>
+                                        <tr>
+                                            <th
+                                                style={{
+                                                    fontWeight: 100,
+                                                    fontSize: '.75em',
+                                                    padding: '.25em 1em 0',
+                                                    borderRight:
+                                                        '1px solid black',
+                                                }}
+                                            >
+                                                Annual Miles
+                                            </th>
+                                            <th
+                                                style={{
+                                                    fontWeight: 100,
+                                                    fontSize: '.75em',
+                                                    padding: '.25em 1em 0',
+                                                }}
+                                            >
+                                                Months
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td
+                                                style={{
+                                                    textAlign: 'center',
+                                                    fontWeight: 'bold',
+                                                    padding: '0 1em .25em',
+                                                    borderRight:
+                                                        '1px solid black',
+                                                }}
+                                            >
+                                                {dealPricing.leaseAnnualMileage()}
+                                            </td>
+                                            <td
+                                                style={{
+                                                    textAlign: 'center',
+                                                    fontWeight: 'bold',
+                                                    padding: '0 1em .25em',
+                                                }}
+                                            >
+                                                {dealPricing.leaseTerm()}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </Line>
                             <Line isImportant={true}>
                                 <Label>Monthly Payment</Label>
