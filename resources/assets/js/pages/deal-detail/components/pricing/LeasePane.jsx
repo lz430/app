@@ -74,18 +74,25 @@ export default class LeasePane extends React.PureComponent {
                         </Value>
                     </Line>
                 </Group>
-                <Separator showIf={dealPricing.hasRebatesApplied()} />
-                <Group showIf={dealPricing.hasRebatesApplied()}>
+                <Separator />
+                <Group>
                     <Header>Rebates</Header>
-                    <Line>
-                        <Label>Applied</Label>
-                        <Value
-                            isNegative={true}
-                            isLoading={dealPricing.dealQuoteIsLoading()}
-                        >
-                            {dealPricing.bestOffer()}
-                        </Value>
-                    </Line>
+                    {dealPricing.hasRebatesApplied() || (
+                        <Line>
+                            <Label>No rebates available</Label>
+                        </Line>
+                    )}
+                    {dealPricing.hasRebatesApplied() && (
+                        <Line>
+                            <Label>Applied</Label>
+                            <Value
+                                isNegative={true}
+                                isLoading={dealPricing.dealQuoteIsLoading()}
+                            >
+                                {dealPricing.bestOffer()}
+                            </Value>
+                        </Line>
+                    )}
                     <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
                     <Line isSectionTotal={true}>
                         <Label>Net Capitalized Cost</Label>
