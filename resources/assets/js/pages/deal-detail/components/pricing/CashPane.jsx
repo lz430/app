@@ -7,6 +7,7 @@ import Value from './Value';
 import TaxesAndFees from './TaxesAndFees';
 import Group from './Group';
 import Header from './Header';
+import Separator from './Separator';
 
 export default class CashPane extends React.PureComponent {
     static defaultProps = {
@@ -34,7 +35,7 @@ export default class CashPane extends React.PureComponent {
                         <Value>{dealPricing.discountedPrice()}</Value>
                     </Line>
                 </Group>
-                <hr />
+                <Separator />
                 <Group>
                     <Header>Taxes &amp; Fees</Header>
                     <TaxesAndFees items={dealPricing.taxesAndFees()} />
@@ -43,14 +44,14 @@ export default class CashPane extends React.PureComponent {
                         <Value>{dealPricing.sellingPrice()}*</Value>
                     </Line>
                 </Group>
-                <hr />
+                <Separator showIf={dealPricing.hasRebatesApplied()} />
                 <Group>
-                    <Header>Discounts</Header>
+                    <Header>Rebates</Header>
                     <Line>
-                        <Label>Rebates Applied</Label>
+                        <Label>Applied</Label>
                         <Value
                             isNegative={true}
-                            isLoading={dealPricing.bestOfferIsLoading()}
+                            isLoading={dealPricing.dealQuoteIsLoading()}
                         >
                             {dealPricing.bestOffer()}
                         </Value>
@@ -58,7 +59,7 @@ export default class CashPane extends React.PureComponent {
                     <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
                     <Line isImportant={true} isSectionTotal={true}>
                         <Label>Total Selling Price</Label>
-                        <Value isLoading={dealPricing.bestOfferIsLoading()}>
+                        <Value isLoading={dealPricing.dealQuoteIsLoading()}>
                             {dealPricing.yourPrice()}*
                         </Value>
                     </Line>

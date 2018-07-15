@@ -48,19 +48,11 @@ export default class LeaseTermsSelect extends React.PureComponent {
                                                 <tr key={indexAnnualMileage}>
                                                     {
                                                         <td className="cash-finance-lease-calculator__lease-table-cell--darker">
-                                                            {annualMileage}
+                                                            {annualMileage.toLocaleString()}
                                                         </td>
                                                     }
                                                     {dealPricing
                                                         .leaseTermsAvailable()
-                                                        /*
-                                            .filter(term => {
-                                                return dealPricing.hasLeasePaymentsForTerm(
-                                                    term,
-                                                    annualMileage
-                                                );
-                                            })
-                                            */
                                                         .map(
                                                             (
                                                                 term,
