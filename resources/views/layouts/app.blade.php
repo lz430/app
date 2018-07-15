@@ -97,7 +97,7 @@
             </script>
         @endif
 
-        @if (App::environment(['local', 'staging', 'production']))
+        @if (App::environment(['staging', 'production']))
 
             <!-- This site is converting visitors into subscribers and customers with OptinMonster - https://optinmonster.com -->
             <script type="text/javascript" src="https://a.optmnstr.com/app/js/api.min.js" data-account="27845" data-user="36449" async></script>
