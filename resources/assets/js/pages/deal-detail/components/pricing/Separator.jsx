@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class Group extends React.PureComponent {
+export default class Separator extends React.PureComponent {
     static defaultProps = {
         showIf: true,
     };
@@ -10,6 +10,6 @@ export default class Group extends React.PureComponent {
             return <div />;
         }
 
-        return <div style={{ margin: '1em 0' }}>{this.props.children}</div>;
+        return <hr />;
     }
 }

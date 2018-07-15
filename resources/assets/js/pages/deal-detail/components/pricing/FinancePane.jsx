@@ -10,6 +10,7 @@ import TaxesAndFees from './TaxesAndFees';
 import Group from './Group';
 import Header from './Header';
 import PropTypes from 'prop-types';
+import Separator from './Separator';
 
 export default class FinancePane extends React.PureComponent {
     static propTypes = {
@@ -40,7 +41,7 @@ export default class FinancePane extends React.PureComponent {
                         <Value>{dealPricing.discountedPrice()}</Value>
                     </Line>
                 </Group>
-                <hr />
+                <Separator />
                 <Group>
                     <Header>Taxes &amp; Fees</Header>
                     <TaxesAndFees items={dealPricing.taxesAndFees()} />
@@ -49,14 +50,14 @@ export default class FinancePane extends React.PureComponent {
                         <Value>{dealPricing.sellingPrice()}*</Value>
                     </Line>
                 </Group>
-                <hr />
+                <Separator showIf={dealPricing.hasRebatesApplied()} />
                 <Group>
-                    <Header>Discounts</Header>
+                    <Header>Rebates</Header>
                     <Line>
-                        <Label>Rebates Applied</Label>
+                        <Label>Applied</Label>
                         <Value
                             isNegative={true}
-                            isLoading={dealPricing.bestOfferIsLoading()}
+                            isLoading={dealPricing.dealQuoteIsLoading()}
                         >
                             {dealPricing.bestOffer()}
                         </Value>
@@ -64,18 +65,18 @@ export default class FinancePane extends React.PureComponent {
                     <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
                     <Line isSectionTotal={true}>
                         <Label>Total Selling Price</Label>
-                        <Value isLoading={dealPricing.bestOfferIsLoading()}>
+                        <Value isLoading={dealPricing.dealQuoteIsLoading()}>
                             {dealPricing.yourPrice()}*
                         </Value>
                     </Line>
                 </Group>
-                <hr />
-                <Group isLoading={dealPricing.bestOfferIsLoading()}>
+                <Separator />
+                <Group isLoading={dealPricing.dealQuoteIsLoading()}>
                     <Header>Finance Terms</Header>
-                    {dealPricing.bestOfferIsLoading() && (
+                    {dealPricing.dealQuoteIsLoading() && (
                         <SVGInline svg={miscicons['loading']} />
                     )}
-                    {dealPricing.bestOfferIsLoading() || (
+                    {dealPricing.dealQuoteIsLoading() || (
                         <div>
                             <Line isSemiImportant={true}>
                                 <Label>Down Payment</Label>

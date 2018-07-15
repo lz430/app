@@ -62,6 +62,14 @@ export default class DealPricing {
         return this.data.dealQuoteIsLoading;
     }
 
+    dealQuoteIsLoading() {
+        return this.data.dealQuoteIsLoading;
+    }
+
+    dealQuoteIsLoaded() {
+        return !this.data.dealQuoteIsLoading;
+    }
+
     deal() {
         return this.data.deal;
     }
@@ -146,7 +154,7 @@ export default class DealPricing {
     }
 
     leaseAnnualMileage() {
-        return this.leaseAnnualMileageValue();
+        return this.leaseAnnualMileageValue().toLocaleString();
     }
 
     msrpValue() {
@@ -490,6 +498,7 @@ export default class DealPricing {
         return annualMileageOptions
             .map(item => parseInt(item, 10))
             .sort((a, b) => a - b)
+            .filter(term => term > 7500)
             .filter((term, termIndex) => termIndex < 4);
     }
 
@@ -638,6 +647,20 @@ export default class DealPricing {
         return util.moneyFormat(this.taxOnRebatesValue());
     }
 
+    taxOnRebatesAndFeesValue() {
+        return Math.round(
+            (this.bestOfferValue() +
+                this.docFeeValue() +
+                this.effCvrFeeValue() +
+                this.acquisitionFeeValue()) *
+                this.taxRate()
+        );
+    }
+
+    taxOnRebatesAndFees() {
+        return util.moneyFormat(this.taxOnRebatesAndFeesValue());
+    }
+
     taxesAndFeesTotalValue(taxesAndFees) {
         return (taxesAndFees || this.taxesAndFees()).reduce(
             (total, item) => total + item.rawValue,
@@ -647,6 +670,34 @@ export default class DealPricing {
 
     taxesAndFeesTotal(taxesAndFees) {
         return util.moneyFormat(this.taxesAndFeesTotalValue(taxesAndFees));
+    }
+
+    grossCapitalizedCostValue() {
+        return (
+            this.discountedPriceValue() +
+            this.docFeeValue() +
+            this.effCvrFeeValue() +
+            this.acquisitionFeeValue() +
+            this.taxOnRebatesAndFeesValue()
+        );
+    }
+
+    grossCapitalizedCost() {
+        return util.moneyFormat(this.grossCapitalizedCostValue());
+    }
+
+    netCapitalizedCostValue() {
+        return new Decimal(this.grossCapitalizedCostValue()).minus(
+            this.bestOfferValue()
+        );
+    }
+
+    netCapitalizedCost() {
+        return util.moneyFormat(this.netCapitalizedCostValue());
+    }
+
+    hasRebatesApplied() {
+        return this.bestOfferValue() > 0;
     }
 
     taxesAndFees() {
@@ -695,9 +746,9 @@ export default class DealPricing {
                         rawValue: this.acquisitionFeeValue(),
                     },
                     {
-                        label: 'Tax on Rebates',
+                        label: 'Tax on Rebates and Fees',
                         value: this.taxOnRebates(),
-                        rawValue: this.taxOnRebatesValue(),
+                        rawValue: this.taxOnRebatesAndFeesValue(),
                     },
                 ];
         }
