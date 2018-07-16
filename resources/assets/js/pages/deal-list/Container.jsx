@@ -80,7 +80,7 @@ class Container extends React.PureComponent {
                 <ToolbarPrice />
                 <ToolbarSelectedFilters />
                 <Deals />
-                <CompareBar />
+                {/* <CompareBar /> */}
             </div>
         );
     }
