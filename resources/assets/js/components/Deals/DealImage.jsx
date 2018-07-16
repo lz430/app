@@ -5,7 +5,12 @@ import LazyLoad from 'react-lazyload';
 class DealImage extends React.PureComponent {
     static propTypes = {
         deal: PropTypes.object.isRequired,
+        size: PropTypes.string,
         featureImageClass: PropTypes.string.isRequired,
+    };
+
+    static defaultProps = {
+        size: 'thumbnail',
     };
 
     state = {
@@ -13,7 +18,11 @@ class DealImage extends React.PureComponent {
     };
 
     featuredImageUrl() {
-        if (this.props.deal.thumbnail && this.props.deal.thumbnail.url) {
+        if (
+            this.props.size === 'thumbnail' &&
+            this.props.deal.thumbnail &&
+            this.props.deal.thumbnail.url
+        ) {
             return this.props.deal.thumbnail.url;
         }
 
