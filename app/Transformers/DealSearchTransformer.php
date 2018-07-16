@@ -46,7 +46,6 @@ class DealSearchTransformer extends TransformerAbstract
             'acquisition_fee' => (float) $dealer->acquisition_fee,
             'vauto_features' => (isset($deal->misc) ? $deal->misc : []),
             'dealer' => $dealer,
-            'dmr_features' => $deal->legacy_features,
             'pricing' => $deal->pricing,
         ];
     }

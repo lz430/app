@@ -72,7 +72,6 @@ class DealTransformer extends TransformerAbstract
                 return $feature->feature;
             })->toArray())),
             'dealer' => $deal->dealer,
-            'dmr_features' => $deal->features,
             'pricing' => $prices,
         ];
     }
