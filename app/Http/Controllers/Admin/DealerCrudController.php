@@ -190,6 +190,11 @@ class DealerCrudController extends CrudController
         ]);
 
         $this->crud->addColumn([
+            'label' => 'Route One ID',
+            'name' => 'route_one_id',
+        ]);
+
+        $this->crud->addColumn([
             'label' => 'Name',
             'name' => 'name',
         ]);
