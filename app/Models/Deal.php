@@ -92,6 +92,29 @@ class Deal extends Model
             ],
             'category' => [
                 'type' => 'nested',
+                'properties' => [
+                    'id' => [
+                        'type' => 'long'
+                    ],
+                    'thumbnail' => [
+                        'type' => 'text',
+                        'fields' => [
+                            'keyword' => [
+                                'type' => 'keyword',
+                                'ignore_above' => 512
+                            ]
+                        ]
+                    ],
+                    'title' => [
+                        'type' => 'text',
+                        'fields' => [
+                            'keyword' => [
+                                'type' => 'keyword',
+                                'ignore_above' => 256
+                            ]
+                        ]
+                    ]
+                ]
             ],
             'msrp' => [
                 'type' => 'double',
@@ -209,7 +232,7 @@ class Deal extends Model
             }
         }
 
-        foreach($photos as &$photo) {
+        foreach ($photos as &$photo) {
             $photo->url = generate_asset_url($photo->url, $size);
         }
 
@@ -449,11 +472,11 @@ class Deal extends Model
         // Photos
         $record['photos'] = [];
         foreach ($this->marketingPhotos('full') as $photo) {
-            $record['photos'][] = $photo;
+            $record['photos'][] = $photo->toArray();
         }
 
         $thumbnail = $this->featuredPhoto();
-        $record['thumbnail'] = $thumbnail;
+        $record['thumbnail'] = ($thumbnail ? $thumbnail->toArray() : null);
         $record['category'] = (object)[
             'id' => $this->version->model->id,
             'title' => implode(" ", [
@@ -498,8 +521,13 @@ class Deal extends Model
         //
         // Backwards compatibility with existing frontend stuff
         $version = $this->version;
-        unset($version['model']);
-        $record['version'] = $this->version;
+        if ($version) {
+            $version = $version->toArray();
+            unset($version['model']);
+            $record['version'] = $version;
+        } else {
+            $record['version'] = null;
+        }
 
         $dealer = $this->dealer->toArray();
         unset($dealer['price_rules']);
@@ -507,14 +535,6 @@ class Deal extends Model
         unset($dealer['longitude']);
         unset($dealer['latitude']);
         $record['dealer'] = $dealer;
-
-        //
-        // All the features in the current UI are just jammed together.
-        $record['legacy_features'] = [];
-        foreach ($this->features as $feature) {
-            $record['legacy_features'][] = $feature->title;
-        }
-
         return $record;
     }
 }
