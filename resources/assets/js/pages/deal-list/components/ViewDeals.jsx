@@ -30,12 +30,14 @@ class ViewDeals extends React.PureComponent {
         onToggleCompare: PropTypes.func.isRequired,
     };
 
+    compareListContainsDeal(deal) {
+        return R.contains(deal, R.map(R.prop('deal'), this.props.compareList));
+    }
+
     compareButtonClass(deal) {
         return (
             'deal__button deal__button--x-small deal__button--blue' +
-            (R.contains(deal, R.map(R.prop('deal'), this.props.compareList))
-                ? 'deal__button--blue'
-                : '')
+            (this.compareListContainsDeal(deal) ? 'deal__button--blue' : '')
         );
     }
 
@@ -87,7 +89,10 @@ class ViewDeals extends React.PureComponent {
                                                 deal
                                             )}
                                         >
-                                            Add to Compare
+                                            {this.compareListContainsDeal(deal)
+                                                ? 'Remove from'
+                                                : 'Add to'}{' '}
+                                            Compare
                                         </button>
                                         <a
                                             className="deal__button deal__button--x-small deal__button--pink deal__button"

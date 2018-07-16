@@ -23,6 +23,10 @@ class ToolbarPrice extends React.Component {
     render() {
         return (
             <div className="filter-page__top-row">
+                <div className="filter-page__top-row__section filter-page__top-row__section--sortbar">
+                    <Sortbar />
+                </div>
+
                 {this.props.searchQuery.entity === 'deal' && (
                     <div className="filter-page__top-row__section filter-page__top-row__section--tabButtons">
                         <GlobalSelectPurchaseStrategy
@@ -32,10 +36,6 @@ class ToolbarPrice extends React.Component {
                         />
                     </div>
                 )}
-
-                <div className="filter-page__top-row__section filter-page__top-row__section--sortbar">
-                    <Sortbar />
-                </div>
             </div>
         );
     }

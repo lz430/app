@@ -27,20 +27,26 @@ class Sortbar extends React.PureComponent {
     shouldComponentUpdate(nextProps) {
         return (
             this.props.searchQuery.sort !== nextProps.searchQuery.sort ||
-            this.props.searchQuery.entity !== nextProps.searchQuery.entity
+            this.props.searchQuery.entity !== nextProps.searchQuery.entity ||
+            this.props.compareList.length !== nextProps.compareList.length
         );
     }
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
+            count: props.compareList.length,
             dropdownShown: false,
         };
 
         this.compareReady = this.compareReady.bind(this);
         this.redirectToCompare = this.redirectToCompare.bind(this);
         this.renderBackButton = this.renderBackButton.bind(this);
+    }
+
+    componentDidMount() {
+        this.setState({ count: this.props.compareList.length });
     }
 
     renderFilterToggle() {
@@ -122,9 +128,7 @@ class Sortbar extends React.PureComponent {
     }
 
     renderCompareButton() {
-        return util.windowIsLargerThanSmall(this.props.window.width) ? (
-            ''
-        ) : (
+        return (
             <div>
                 <button
                     className={`sortbar__button sortbar__button--blue ${
