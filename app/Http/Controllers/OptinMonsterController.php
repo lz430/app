@@ -12,7 +12,6 @@ class OptinMonsterController extends Controller
     {
         if ($request->has('email')) {
             $request->session()->put('email', request('email'));
-
             event(UserDataChanged::class, ['email' => request('email')]);
         }
         

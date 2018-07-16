@@ -174,7 +174,6 @@ class DealerCrudController extends CrudController
             'tab'   => 'Address',
         ]);
 
-
         $this->crud->addField([
             'name'  => 'price_rules',
             'label' => 'Price Rules',
@@ -190,9 +189,17 @@ class DealerCrudController extends CrudController
         ]);
 
         $this->crud->addColumn([
+            'label' => 'Route One ID',
+            'name' => 'route_one_id',
+        ]);
+
+        $this->crud->addColumn([
             'label' => 'Name',
             'name' => 'name',
         ]);
+
+        $this->crud->addButtonFromView('line', 'dealer_routeone_test', 'dealer-routeone-test', null);
+
 
         // ------ CRUD FIELDS
         // $this->crud->addField($options, 'update/create/both');
