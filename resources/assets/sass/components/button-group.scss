@@ -21,11 +21,11 @@
         }
 
         &:first-child {
-            border-radius: 1em 0 0 1em;
+            border-radius: 4px 0 0 4px;
         }
 
         &:last-child {
-            border-radius: 0 1em 1em 0;
+            border-radius: 0 4px 4px 0;
             border-right-width: 1px;
         }
     }
