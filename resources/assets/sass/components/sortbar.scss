@@ -117,7 +117,7 @@
         padding-top: 5px;
 
         &--ready {
-            background: $color-dark-blue;
+            background: darken($color-blue, 20%);
         }
     }
 
