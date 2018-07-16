@@ -90,9 +90,8 @@ class ViewDeals extends React.PureComponent {
                                             )}
                                         >
                                             {this.compareListContainsDeal(deal)
-                                                ? 'Remove from'
-                                                : 'Add to'}{' '}
-                                            Compare
+                                                ? 'Remove'
+                                                : 'Add to Compare'}{' '}
                                         </button>
                                         <a
                                             className="deal__button deal__button--x-small deal__button--pink deal__button"
