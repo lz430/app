@@ -9,7 +9,7 @@
 
         <title>@yield('title')</title>
 
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
         <script>
             window.Laravel = {!! json_encode([
@@ -82,7 +82,7 @@
             </script>
         @endif
 
-        <script src="{{ asset('js/app.js') }}"></script>
+        <script src="{{ mix('js/app.js') }}"></script>
         @stack('scripts')
         @if (config('services.googleanalytics.ua'))
             <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/3388780.js"></script>
