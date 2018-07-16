@@ -535,6 +535,14 @@ class Deal extends Model
         unset($dealer['longitude']);
         unset($dealer['latitude']);
         $record['dealer'] = $dealer;
+
+        //
+        // All the features in the current UI are just jammed together.
+        $record['legacy_features'] = [];
+        foreach ($this->features as $feature) {
+            $record['legacy_features'][] = $feature->title;
+        }
+
         return $record;
     }
 }

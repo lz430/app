@@ -37,6 +37,7 @@ class CategoryCrudController extends CrudController
             'label' => 'Title',
             'type'  => 'text',
         ]);
+
         //
         // LIST
         $this->crud->addColumn([
