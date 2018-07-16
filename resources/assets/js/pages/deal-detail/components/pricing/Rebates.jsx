@@ -2,12 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
-
-import Line from './Line';
-import Label from './Label';
-import Group from './Group';
-import Header from './Header';
-import Value from './Value';
+import Line from '../../../../components/pricing/Line';
+import Label from '../../../../components/pricing/Label';
+import Value from '../../../../components/pricing/Value';
 
 class Rebates extends React.Component {
     static propTypes = {

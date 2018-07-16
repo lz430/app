@@ -7,13 +7,13 @@ import zondicons from 'zondicons';
 
 import Rebates from './Rebates';
 import Discount from './Discount';
-import Line from './Line';
-import Label from './Label';
-import Value from './Value';
-import Group from './Group';
-import Header from './Header';
+import Line from '../../../../components/pricing/Line';
+import Label from '../../../../components/pricing/Label';
+import Value from '../../../../components/pricing/Value';
+import Group from '../../../../components/pricing/Group';
+import Header from '../../../../components/pricing/Header';
 import LeaseTermsSelect from './LeaseTermsSelect';
-import Separator from './Separator';
+import Separator from '../../../../components/pricing/Separator';
 
 export default class LeasePane extends React.PureComponent {
     static propTypes = {

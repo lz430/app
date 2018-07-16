@@ -1,0 +1,76 @@
+@import '../variables';
+@import '../mixins/button';
+
+.checkout-confirm {
+    margin: 0 auto;
+    max-width: 90%;
+    padding-bottom: 80px;
+
+    @media (min-width: $break-small) {
+        max-width: 75%;
+    }
+
+    @media (min-width: $break-large) {
+        flex-direction: row;
+        max-width: $break-large;
+    }
+
+    .container {
+        border: 1px solid $color-grey;
+    }
+
+    .row:first-of-type {
+        border-bottom: 1px solid $color-grey;
+    }
+
+    .row {
+        display: flex;
+
+        > div:not(.image) {
+            padding: 1em;
+        }
+
+        > div:not(:last-of-type) {
+            border-right: 1px solid $color-grey;
+        }
+
+        .image {
+            img {
+                margin: 0;
+                padding: 0;
+                width: 300px;
+                display: block;
+            }
+        }
+        .title {
+            flex: 1;
+
+            .year-and-make {
+            }
+
+            .model-and-trim {
+                line-height: 1.2em;
+                font-size: xx-large;
+                font-weight: bold;
+            }
+
+            .colors {
+            }
+
+            .stock-number {
+                font-weight: bold;
+            }
+        }
+        .summary {
+            flex: 1;
+        }
+
+        .details {
+            flex: 1;
+        }
+
+        .confirm {
+            flex: 2;
+        }
+    }
+}

@@ -45,6 +45,8 @@ const reducer = function(state = initialState, action = {}) {
                 term: action.term,
                 financeDownPayment: action.financeDownPayment,
                 leaseAnnualMileage: action.leaseAnnualMileage,
+                employeeBrand: action.employeeBrand,
+                supplierBrand: action.supplierBrand,
             };
 
         default:

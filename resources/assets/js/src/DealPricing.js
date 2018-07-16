@@ -329,6 +329,10 @@ export default class DealPricing {
         return this.data.discountType === 'dmr';
     }
 
+    isCash() {
+        return this.data.paymentType === 'cash';
+    }
+
     isFinance() {
         return this.data.paymentType === 'finance';
     }

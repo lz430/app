@@ -4,13 +4,10 @@ import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButto
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import PropTypes from 'prop-types';
-
-// TODO: These components should be moved to a common area if they are used by other
-// common components.
-import Line from 'pages/deal-detail/components/pricing/Line';
-import Label from 'pages/deal-detail/components/pricing/Label';
-import Value from 'pages/deal-detail/components/pricing/Value';
-import Group from '../pages/deal-detail/components/pricing/Group';
+import Group from './pricing/Group';
+import Line from './pricing/Line';
+import Label from './pricing/Label';
+import Value from './pricing/Value';
 
 class InfoModalData extends React.PureComponent {
     static propTypes = {

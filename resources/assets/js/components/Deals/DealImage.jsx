@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import LazyLoad from 'react-lazyload';
 
-class DealImage extends React.PureComponent {
+export default class DealImage extends React.PureComponent {
     static propTypes = {
         deal: PropTypes.object.isRequired,
         size: PropTypes.string,
-        featureImageClass: PropTypes.string.isRequired,
+        featureImageClass: PropTypes.string,
     };
 
     static defaultProps = {
@@ -33,19 +33,19 @@ class DealImage extends React.PureComponent {
     }
 
     render() {
+        const imageProps = {};
+        if (this.props.featureImageClass) {
+            imageProps.className = this.props.featureImageClass;
+        }
+
         return (
             <LazyLoad height={200} overflow={true}>
                 <div className="deal__image-container">
                     <a href={`/deals/${this.props.deal.id}`}>
-                        <img
-                            className={this.props.featureImageClass}
-                            src={this.featuredImageUrl()}
-                        />
+                        <img {...imageProps} src={this.featuredImageUrl()} />
                     </a>
                 </div>
             </LazyLoad>
         );
     }
 }
-
-export default DealImage;

@@ -21,7 +21,7 @@ import CashPricingPane from './components/pricing/CashPane';
 import FinancePricingPane from './components/pricing/FinancePane';
 import LeasePricingPane from './components/pricing/LeasePane';
 import PaymentTypes from './components/pricing/PaymentTypes';
-import Line from './components/pricing/Line';
+import Line from '../../components/pricing/Line';
 
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
 import { setPurchaseStrategy } from 'apps/user/actions';
@@ -384,7 +384,7 @@ class Container extends React.PureComponent {
 
                                 <button
                                     className="deal__button deal__button--small deal__button--pink deal__button"
-                                    onClick={() => this.handleBuyNow()}
+                                    onClick={this.handleBuyNow}
                                     disabled={
                                         !this.props.dealPricing.canPurchase()
                                     }
@@ -420,7 +420,9 @@ class Container extends React.PureComponent {
                 ? this.props.dealPricing.leaseTermValue()
                 : this.props.dealPricing.financeTermValue(),
             this.props.dealPricing.financeDownPaymentValue(),
-            this.props.dealPricing.leaseAnnualMileageValue()
+            this.props.dealPricing.leaseAnnualMileageValue(),
+            this.props.dealPricing.data.employeeBrand,
+            this.props.dealPricing.data.supplierBrand
         );
 
         window.location = `/confirm/${this.props.dealPricing.id()}`;

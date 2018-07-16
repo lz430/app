@@ -7,7 +7,9 @@ export function setCheckoutData(
     role,
     term,
     financeDownPayment,
-    leaseAnnualMileage
+    leaseAnnualMileage,
+    employeeBrand,
+    supplierBrand
 ) {
     return {
         type: ActionTypes.SET_CHECKOUT_DATA,
@@ -16,8 +18,10 @@ export function setCheckoutData(
         strategy: strategy,
         role: role,
         term: term,
-        financeDownPayment: financeDownPayment,
-        leaseAnnualMileage: leaseAnnualMileage,
+        financeDownPayment,
+        leaseAnnualMileage,
+        employeeBrand,
+        supplierBrand,
     };
 }
 
@@ -34,7 +38,6 @@ export function checkoutFinishedLoading() {
 }
 
 export function checkoutStart(dealPricing) {
-    console.log(dealPricing);
     return {
         type: ActionTypes.CHECKOUT_START,
         dealPricing: dealPricing,
