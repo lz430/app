@@ -20,6 +20,7 @@
         background-color: $color-lightgrey;
         font-size: 1rem;
         padding: 0.5em;
+        border: none;
 
         @media (min-width: $break-small) {
             padding: 0.35em;
