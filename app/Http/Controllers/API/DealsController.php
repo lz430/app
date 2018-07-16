@@ -10,7 +10,8 @@ use League\Fractal\Serializer\ArraySerializer;
 
 class DealsController extends BaseAPIController
 {
-    public function getDeals(Request $request)
+
+    public function list(Request $request)
     {
         $this->validate($request, [
             'filters' => 'sometimes|required|array',
@@ -44,8 +45,6 @@ class DealsController extends BaseAPIController
             ->size($per_page)
             ->from($page * $per_page);
 
-
-
         $results = $query->get();
 
         return fractal()
@@ -57,6 +56,5 @@ class DealsController extends BaseAPIController
             ->transformWith(ESResponseTransformer::class)
             ->serializeWith(new ArraySerializer)
             ->respond();
-
     }
 }

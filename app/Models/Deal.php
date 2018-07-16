@@ -92,6 +92,29 @@ class Deal extends Model
             ],
             'category' => [
                 'type' => 'nested',
+                'properties' => [
+                    'id' => [
+                        'type' => 'long'
+                    ],
+                    'thumbnail' => [
+                        'type' => 'text',
+                        'fields' => [
+                            'keyword' => [
+                                'type' => 'keyword',
+                                'ignore_above' => 512
+                            ]
+                        ]
+                    ],
+                    'title' => [
+                        'type' => 'text',
+                        'fields' => [
+                            'keyword' => [
+                                'type' => 'keyword',
+                                'ignore_above' => 256
+                            ]
+                        ]
+                    ]
+                ]
             ],
             'msrp' => [
                 'type' => 'double',
@@ -178,47 +201,51 @@ class Deal extends Model
     /**
      * In some situations we don't have photos for the specific vehicle,
      * so we use stock photos in some situations, which are stored on the version.
-     *
-     * @return array
+     * @param string $size
+     * @return array|\Illuminate\Database\Eloquent\Collection
      */
-    public function marketingPhotos()
+    public function marketingPhotos($size = 'full')
     {
+        $photos = [];
 
         //
         // Try real photos
-        $photos = $this->photos()->get();
-        if (count($photos) > 1) {
-            $photos->shift();
-            return $photos;
+        $dealPhotos = $this->photos()->get();
+        if (count($dealPhotos) > 1) {
+            $dealPhotos->shift();
+            $photos = $dealPhotos;
         }
 
-        if (!$this->version) {
-            return [];
+        if (!count($photos) && $this->version) {
+            //
+            // Try stock photos in the exact color
+            $colorPhotos = $this->version->photos()->where('color', '=', $this->color)->orderBy('shot_code')->get();
+            if (count($colorPhotos)) {
+                $photos = $colorPhotos;
+            }
+
+            //
+            // Try stock photos in the wrong color
+            $versionPhotos = $this->version->photos()->where('color', '=', 'default')->orderBy('shot_code')->get();
+            if (count($versionPhotos)) {
+                $photos = $versionPhotos;
+            }
         }
 
-        //
-        // Try stock photos in the exact color
-        $photos = $this->version->photos()->where('color', '=', $this->color)->get();
-        if (count($photos)) {
-            return $photos;
+        foreach ($photos as &$photo) {
+            $photo->url = generate_asset_url($photo->url, $size);
         }
 
-        //
-        // Try stock photos in the wrong color
-        $photos = $this->version->photos()->where('color', '=', 'default')->get();
-        if (count($photos)) {
-            return $photos;
-        }
-
-        return [];
+        return $photos;
     }
 
     /**
-     * @return string|null
+     * @param string $size
+     * @return mixed|null
      */
-    public function featuredPhoto()
+    public function featuredPhoto($size = 'thumbnail')
     {
-        $photos = $this->marketingPhotos();
+        $photos = $this->marketingPhotos($size);
 
         $collection = collect($photos);
 
@@ -239,6 +266,10 @@ class Deal extends Model
         // We probably have real photos. use the first one
         if (!$photo && isset($photos[0])) {
             $photo = $photos[0];
+        }
+
+        if ($photo) {
+            $photo->url = generate_asset_url($photo->url, $size);
         }
 
         return $photo;
@@ -288,7 +319,7 @@ class Deal extends Model
 
         // The defaults when no rules exist.
         $prices = [
-            'msrp' =>  $source->msrp,
+            'msrp' => $source->msrp,
             'default' => $source->price !== '' ? $source->price : null,
             'employee' => $source->price !== '' ? $source->price : null,
             'supplier' => (in_array(strtolower($this->make), Make::DOMESTIC) ? $source->price * 1.04 : $source->price)
@@ -440,13 +471,12 @@ class Deal extends Model
         //
         // Photos
         $record['photos'] = [];
-        foreach ($this->marketingPhotos() as $photo) {
-            $record['photos'][] = $photo;
+        foreach ($this->marketingPhotos('full') as $photo) {
+            $record['photos'][] = $photo->toArray();
         }
 
         $thumbnail = $this->featuredPhoto();
-        $record['thumbnail'] = $thumbnail;
-
+        $record['thumbnail'] = ($thumbnail ? $thumbnail->toArray() : null);
         $record['category'] = (object)[
             'id' => $this->version->model->id,
             'title' => implode(" ", [
@@ -454,7 +484,7 @@ class Deal extends Model
                 $record['make'],
                 $record['model'],
             ]),
-            'thumbnail' => ($this->version->thumbnail() ? $this->version->thumbnail()->url : null),
+            'thumbnail' => ($this->version->thumbnail() ? generate_asset_url($this->version->thumbnail()->url) : null),
         ];
 
         //
@@ -491,8 +521,13 @@ class Deal extends Model
         //
         // Backwards compatibility with existing frontend stuff
         $version = $this->version;
-        unset($version['model']);
-        $record['version'] = $this->version;
+        if ($version) {
+            $version = $version->toArray();
+            unset($version['model']);
+            $record['version'] = $version;
+        } else {
+            $record['version'] = null;
+        }
 
         $dealer = $this->dealer->toArray();
         unset($dealer['price_rules']);
