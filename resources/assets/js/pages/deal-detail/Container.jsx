@@ -51,6 +51,7 @@ class Container extends React.PureComponent {
         purchaseStrategy: PropTypes.string.isRequired,
         userLocation: PropTypes.object.isRequired,
         discountType: PropTypes.string.isRequired,
+        selectedConditionalRoles: PropTypes.array,
 
         initPage: PropTypes.func.isRequired,
         receiveDeal: PropTypes.func.isRequired,
@@ -72,12 +73,7 @@ class Container extends React.PureComponent {
         showFeatures: false,
     };
 
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
-
     componentDidMount() {
-        this._isMounted = true;
         this.props.receiveDeal(this.props.deal);
         this.props.initPage();
 
@@ -463,7 +459,25 @@ class Container extends React.PureComponent {
         );
     };
 
-    handleRebatesChange = () => {};
+    handleRebatesChange = role => {
+        let selectedRoles = this.props.selectedConditionalRoles;
+        let index = selectedRoles.indexOf(role);
+        if (index !== -1) {
+            selectedRoles.splice(index, 1);
+        } else {
+            selectedRoles.push(role);
+        }
+
+        this.props.selectDiscountActions.selectConditionalRoles(selectedRoles);
+
+        this.props.dealDetailRequestDealQuote(
+            this.props.deal,
+            this.props.userLocation.zipcode,
+            this.props.purchaseStrategy,
+            this.props.discountType,
+            selectedRoles
+        );
+    };
 
     handleFinanceDownPaymentChange = downPayment => {
         this.props.financeActions.updateDownPayment(downPayment);
@@ -650,6 +664,8 @@ class Container extends React.PureComponent {
 
 const mapStateToProps = (state, props) => {
     return {
+        selectedConditionalRoles:
+            state.pages.dealDetails.selectDiscount.conditionalRoles,
         purchaseStrategy: state.user.purchasePreferences.strategy,
         compareList: state.common.compareList,
         financeDownPayment: state.pages.dealDetails.finance.downPayment,

@@ -104,7 +104,7 @@ class DealQuoteController extends BaseAPIController
         $key = "{$deal->id}-{$paymentType}-{$zip}--{$roleKey}";
 
         $cacheKey = md5('quote.' . $key);
-        if (false && $data = Cache::tags('quote')->get($cacheKey)) {
+        if ($data = Cache::tags('quote')->get($cacheKey)) {
             return $data;
         }
 

@@ -26,21 +26,39 @@ export function* requestDealQuote(action) {
     const zipcode = action.zipcode;
     const paymentType = action.paymentType;
     const role = action.role;
+    const conditionalRoles = action.conditionalRoles || [];
 
     if (!action.deal || !action.zipcode || !action.paymentType) {
         return;
     }
 
-    const key = dealQuoteKey(deal, zipcode, paymentType, role);
+    const key = dealQuoteKey(
+        deal,
+        zipcode,
+        paymentType,
+        role,
+        conditionalRoles
+    );
+
     const state = yield select();
 
     if (state.pricing.quotes[key] && state.pricing.quotes[key] !== null) {
         return;
     }
 
-    yield put(requestDealQuoteIsLoading(deal, zipcode, paymentType, role));
+    yield put(
+        requestDealQuoteIsLoading(
+            deal,
+            zipcode,
+            paymentType,
+            role,
+            conditionalRoles
+        )
+    );
 
     let results = null;
+
+    let roles = [role, ...conditionalRoles];
 
     try {
         results = yield call(
@@ -48,7 +66,7 @@ export function* requestDealQuote(action) {
             deal.id,
             paymentType,
             zipcode,
-            role,
+            roles,
             source.token
         );
         results = results.data;
@@ -61,7 +79,7 @@ export function* requestDealQuote(action) {
         }
     }
 
-    yield put(receiveDealQuote(deal, zipcode, paymentType, results, role));
+    yield put(receiveDealQuote(results));
 }
 
 /**

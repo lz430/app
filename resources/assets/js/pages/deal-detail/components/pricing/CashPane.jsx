@@ -1,6 +1,6 @@
 import React from 'react';
 import Discount from './Discount';
-import Rebates from '../../containers/pricing/rebates/Rebates';
+import Rebates from './Rebates';
 import Line from './Line';
 import Label from './Label';
 import Value from './Value';

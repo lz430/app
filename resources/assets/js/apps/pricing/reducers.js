@@ -13,7 +13,6 @@ const persistConfig = {
     ...basePersistConfig,
     key: 'pricing',
     storage: storageSession,
-    blacklist: ['quotes'],
 };
 
 const reducer = function(state = initialState, action = {}) {
@@ -27,25 +26,19 @@ const reducer = function(state = initialState, action = {}) {
                         action.deal,
                         action.zipcode,
                         action.paymentType,
-                        action.role
+                        action.role,
+                        action.conditionalRoles
                     )]: null,
                 },
             };
 
         case ActionTypes.RECEIVE_DEAL_QUOTE:
-            const key = dealQuoteKey(
-                action.deal,
-                action.zipcode,
-                action.paymentType,
-                action.role
-            );
-
             if (action.data === false) {
                 return {
                     ...state,
                     quotes: {
                         ...state.quotes,
-                        [key]: action.data,
+                        [action.data.meta.key]: action.data,
                     },
                 };
             }
@@ -82,7 +75,7 @@ const reducer = function(state = initialState, action = {}) {
                 ...state,
                 quotes: {
                     ...state.quotes,
-                    [key]: action.data,
+                    [action.data.meta.key]: action.data,
                 },
             };
         default:

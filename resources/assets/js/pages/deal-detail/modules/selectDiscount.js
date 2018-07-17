@@ -1,12 +1,14 @@
-const SELECT_DMR_DISCOUNT =
-    'dmr/dealDetails.selectDiscount.SELECT_DMR_DISCOUNT';
-const SELECT_EMPLOYEE_DISCOUNT =
-    'dmr/dealDetails.selectDiscount.SELECT_EMPLOYEE_DISCOUNT';
-const SELECT_SUPPLIER_DISCOUNT =
-    'dmr/dealDetails.selectDiscount.SELECT_SUPPLIER_DISCOUNT';
+const namespace = 'DEAL_DETAILS_ROLES';
+
+const SELECT_DMR_DISCOUNT = `${namespace}_SELECT_DMR_DISCOUNT`;
+const SELECT_EMPLOYEE_DISCOUNT = `${namespace}_SELECT_EMPLOYEE_DISCOUNT`;
+const SELECT_SUPPLIER_DISCOUNT = `${namespace}_SELECT_SUPPLIER_DISCOUNT`;
+const SELECT_CONDITIONAL_ROLES = `${namespace}_SELECT_CONDITIONAL_ROLES`;
 
 const initialState = {
+    // TODO rename to primary role
     discountType: 'dmr',
+    conditionalRoles: [],
     employeeBrand: null,
     supplierBrand: null,
 };
@@ -14,7 +16,10 @@ const initialState = {
 export default function(state = initialState, action = {}) {
     switch (action.type) {
         case SELECT_DMR_DISCOUNT:
-            return { ...state, discountType: 'dmr' };
+            return {
+                ...state,
+                discountType: 'dmr',
+            };
         case SELECT_EMPLOYEE_DISCOUNT:
             return {
                 ...state,
@@ -27,6 +32,12 @@ export default function(state = initialState, action = {}) {
                 discountType: 'supplier',
                 supplierBrand: action.make,
             };
+        case SELECT_CONDITIONAL_ROLES:
+            return {
+                ...state,
+                conditionalRoles: action.data,
+            };
+
         default:
             return state;
     }
@@ -47,5 +58,12 @@ export function selectSupplierDiscount(make) {
     return {
         type: SELECT_SUPPLIER_DISCOUNT,
         make,
+    };
+}
+
+export function selectConditionalRoles(roles) {
+    return {
+        type: SELECT_CONDITIONAL_ROLES,
+        data: roles,
     };
 }
