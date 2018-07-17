@@ -21,11 +21,11 @@ class Rebates extends React.Component {
     };
 
     handleChange(role) {
-        this.props.onChange(role);
+        this.props.onChange(role['role']);
     }
 
     isRoleChecked(role) {
-        return this.props.selectedConditionalRoles.includes(role);
+        return this.props.selectedConditionalRoles.includes(role['role']);
     }
 
     shouldRenderConditionalSelection() {
@@ -37,20 +37,63 @@ class Rebates extends React.Component {
         return true;
     }
 
-    renderConditionRoleSelection(role) {
+    roleLabels(role) {
+        const map = {
+            college: {
+                title: 'College Student/Recent Grad',
+                description: 'Proof of eligibility required.',
+            },
+            military: {
+                title: 'Active Military/Veteran',
+                description:
+                    'Thank you for your service. Proof of eligibility required.',
+            },
+            conquest: {
+                title: 'Conquest',
+                description: 'Proof of eligibility required.',
+            },
+            loyal: {
+                title: 'Loyalty',
+                description: 'Proof of eligibility required.',
+            },
+        };
+
+        return map[role];
+    }
+    renderConditionRoleSelection(programId, role) {
+        const labels = this.roleLabels(role['role']);
+
         return (
-            <Line key={role} style={{ margin: '.125em 0 .125em .25em' }}>
-                <Label key={role} style={{ fontSize: '.9em' }}>
+            <Line
+                key={role['role']}
+                style={{ margin: '.125em 0 .125em .25em' }}
+            >
+                <Label key={role['role']} style={{ fontSize: '.9em' }}>
                     <input
-                        key={role}
+                        key={role['role']}
                         name="discountType"
-                        value={role}
+                        value={role['role']}
                         type="checkbox"
                         checked={this.isRoleChecked(role)}
                         onChange={e => this.handleChange(role)}
                     />
-                    {role}
+                    {labels.title}
                 </Label>
+                <Value isNegative={false} showIf={this.isRoleChecked(role)}>
+                    ${role.value}
+                </Value>
+                {this.isRoleChecked(role) &&
+                    labels.description && (
+                        <div
+                            style={{
+                                fontStyle: 'italic',
+                                fontSize: '.75em',
+                                marginLeft: '.25em',
+                            }}
+                        >
+                            {labels.description}
+                        </div>
+                    )}
             </Line>
         );
     }
@@ -65,9 +108,12 @@ class Rebates extends React.Component {
                 Conditional Rebates Selection
                 */}
                 {this.shouldRenderConditionalSelection() &&
-                    quote.selections.conditionalRoles.map(role => {
-                        return this.renderConditionRoleSelection(role);
-                    })}
+                    Object.keys(quote.selections.conditionalRoles).map(key =>
+                        this.renderConditionRoleSelection(
+                            key,
+                            quote.selections.conditionalRoles[key]
+                        )
+                    )}
 
                 {/*
                 Total Rebates

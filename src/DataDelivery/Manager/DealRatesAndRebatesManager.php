@@ -537,12 +537,21 @@ class DealRatesAndRebatesManager
                 return !isset($program->dealscenarios[$this->scenario]);
             })
             ->map(function ($program) {
+                $data = null;
                 foreach (Map::CONDITIONALS_TO_PROGRAM_NAME as $role => $strings) {
                     if (str_contains(strtolower($program->ProgramDescription), $strings)) {
-                        return $role;
+                        $value = $program->dealscenarios[$this->scenario]->Cash;
+                        $data = [
+                            'id' =>  $program->ProgramID,
+                            'role' =>  $role,
+                            'description' => $program->ProgramContent,
+                            'startDate' =>  $program->ProgramStartDate,
+                            'stopDate' =>  $program->ProgramStopDate,
+                            'value' => (float) $value,
+                        ];
                     }
                 }
-                return null;
+                return $data;
             })
             ->unique()
             ->filter()
