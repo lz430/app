@@ -5,7 +5,7 @@ import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import zondicons from 'zondicons';
 
-import Rebates from '../../containers/pricing/rebates/Rebates';
+import Rebates from './Rebates';
 import Discount from './Discount';
 import Line from './Line';
 import Label from './Label';
@@ -77,22 +77,6 @@ export default class LeasePane extends React.PureComponent {
                 <Separator />
                 <Group>
                     <Header>Rebates</Header>
-                    {dealPricing.hasRebatesApplied() || (
-                        <Line>
-                            <Label>No rebates available</Label>
-                        </Line>
-                    )}
-                    {dealPricing.hasRebatesApplied() && (
-                        <Line>
-                            <Label>Applied</Label>
-                            <Value
-                                isNegative={true}
-                                isLoading={dealPricing.dealQuoteIsLoading()}
-                            >
-                                {dealPricing.bestOffer()}
-                            </Value>
-                        </Line>
-                    )}
                     <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
                     <Line isSectionTotal={true}>
                         <Label>Net Capitalized Cost</Label>

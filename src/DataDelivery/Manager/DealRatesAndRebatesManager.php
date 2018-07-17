@@ -4,7 +4,7 @@ namespace DeliverMyRide\DataDelivery\Manager;
 
 use App\Models\Deal;
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
-use GuzzleHttp\Exception\ClientException;
+use DeliverMyRide\DataDelivery\Map;
 
 /**
  *
@@ -16,6 +16,7 @@ class DealRatesAndRebatesManager
     private $zipcode;
     private $isLease;
     private $role;
+    private $conditionalRoles;
 
     private $vehicleId;
     private $programs;
@@ -27,36 +28,7 @@ class DealRatesAndRebatesManager
     private $standardRates;
     private $financeCompany;
     private $miles;
-
-    private const AFFINITY_MAP = [
-        'EMPLOYEE' => [
-            'Buick' => 4,
-            'Chevrolet' => 4,
-            'GMC' => 4,
-            'Cadillac' => 4,
-            'Ford' => 22,
-            'Lincoln' => 22,
-            'Dodge' => 17,
-            'Chrysler' => 17,
-            'Jeep' => 17,
-            'Ram' => 17,
-            'Fiat' => 17,
-            'Land Rover' => 66
-        ],
-        'SUPPLIER' => [
-            'Buick' => 65,
-            'Chevrolet' => 65,
-            'GMC' => 65,
-            'Cadillac' => 65,
-            'Ford' => 19,
-            'Lincoln' => 19,
-            'Dodge' => 16,
-            'Chrysler' => 16,
-            'Jeep' => 16,
-            'Ram' => 16,
-            'Fiat' => 16,
-        ],
-    ];
+    private $selectedPrograms;
 
     /**
      * @param Deal $deal
@@ -123,11 +95,14 @@ class DealRatesAndRebatesManager
             });
     }
 
+    /**
+     * @return mixed
+     */
     private function cashPrivatePrograms()
     {
         return $this->programs
             ->reject(function ($program) {
-               return $program->TotalCashFlag != "no";
+                return $program->TotalCashFlag != "no";
             });
     }
 
@@ -192,121 +167,154 @@ class DealRatesAndRebatesManager
     }
 
     /**
-     * Cash value for applied programs
-     * @return mixed
+     * Programs are categorized into three groups, everyone, conditional and lease.
      */
-    private function totalCashValue()
+    private function findSelectedPrograms()
     {
-        $scenario = $this->scenarios
-            ->reject(function ($scenario) {
-                return $scenario->DealScenarioType != $this->scenario;
+        $programs = [];
+
+        //
+        // Everyone Programs
+        $programs['everyone'] = $this->cashPrograms()
+            ->reject(function ($program) {
+                return !isset($program->dealscenarios[$this->scenario]);
             })
-            ->first();
+            ->all();
 
-        $value = 0;
-
-        if (isset($scenario->tiers[0]->aprprograms)) {
-            $value += collect($scenario->tiers[0]->aprprograms[0]->programs)
-                ->reject(function ($program) {
-                    return !isset($program->Cash);
-                })
-                ->map(function ($program) {
-                    return $program->Cash;
-                })
-                ->sum();
-        } elseif (isset($scenario->tiers[0]->programs)) {
-            $value += collect($scenario->tiers[0]->programs)
-                ->reject(function ($program) {
-                    return !isset($program->Cash);
-                })
-                ->map(function ($program) {
-                    return $program->Cash;
-                })
-                ->sum();
+        //
+        // Lease programs (sometimes they have CCR values)
+        if ($this->leaseProgram) {
+            $programs['lease'] = [
+                $this->leaseProgram->ProgramID => $this->leaseProgram
+            ];
         }
 
-        return $value;
+        //
+        // Conditional programs based on roles.
+        if ($this->conditionalRoles && count($this->conditionalRoles)) {
+            $programs['conditional'] = $this->cashPrivatePrograms()
+                ->reject(function ($program) {
+                    return !isset($program->dealscenarios[$this->scenario]);
+                })
+                // Decorate with roles.
+                ->map(function ($program) {
+                    $program->role = null;
+                    foreach ($this->conditionalRoles as $role) {
+                        $strings = Map::CONDITIONALS_TO_PROGRAM_NAME[$role];
+                        if (str_contains(strtolower($program->ProgramDescription), $strings)) {
+                            $program->role = $role;
+                        }
+                    }
+
+                    return $program;
+                })
+                ->reject(function ($program) {
+                    return $program->role === null;
+                })
+                ->all();
+        }
+
+        $this->selectedPrograms = $programs;
     }
 
     /**
-     * Cash value for applied programs
-     * @return mixed
+     * Validate selected programs, removing ones that aren't valid.
      */
-    private function appliedCashPrograms()
+    private function validateSelectedPrograms()
     {
-
+        //
+        // Find our specific scenario
         $scenario = $this->scenarios
             ->reject(function ($scenario) {
                 return $scenario->DealScenarioType != $this->scenario;
             })
             ->first();
 
+        //
+        // Using the total endpoint, we can determine which programs we should actually apply.
         if (isset($scenario->tiers[0]->aprprograms)) {
+
             $ids = collect($scenario->tiers[0]->aprprograms[0]->programs)
                 ->reject(function ($program) {
                     return !isset($program->Cash);
                 })
                 ->map(function ($program) {
                     return $program->ProgramID;
-                })->all();
+                })
+                ->all();
+
         } elseif (isset($scenario->tiers[0]->programs)) {
+
             $ids = collect($scenario->tiers[0]->programs)
                 ->reject(function ($program) {
                     return !isset($program->Cash);
                 })
                 ->map(function ($program) {
                     return $program->ProgramID;
-                })->all();
-        }
-        else {
+                })
+                ->all();
+
+        } else {
             $ids = [];
         }
 
-        return $this->programs
-            ->reject(function ($program) use ($ids) {
-                return !in_array($program->ProgramID, $ids);
-            })
-            ->map(function ($program) {
-                $scenario = $program->dealscenarios[$this->scenario];
+        $applied = $this->selectedPrograms;
+        foreach ($applied as $category => $programs) {
+            $applied[$category] = collect($programs)
+                ->reject(function ($program) use ($ids, $category) {
+                    return $category != 'lease' && !in_array($program->ProgramID, $ids);
+                })
+                ->all();
+        }
 
-                $program = clone $program;
-                unset($program->dealscenarios);
+        $this->selectedPrograms = $applied;
+    }
 
-                $data = [
-                    'value' => $scenario->Cash,
-                    'scenario' => $scenario,
-                    'program' => $program,
-                ];
+    /**
+     * Transform the selected programs
+     */
+    private function transformSelectedPrograms() {
+        $applied = $this->selectedPrograms;
+        foreach ($applied as $category => $programs) {
+            $applied[$category] = collect($programs)
+                ->map(function ($program) {
+                    $scenario = $program->dealscenarios[$this->scenario];
 
-                return (object)$data;
+                    $program = clone $program;
+                    unset($program->dealscenarios);
+                    $value = 0;
 
-            })
-            ->all();
+                    if (isset($scenario->Cash)) {
+                        $value = $scenario->Cash;
+                    } elseif (isset($scenario->terms->CCR)) {
+                        $value = $scenario->terms->CCR;
+                    }
+
+                    $data = [
+                        'value' => (float) $value,
+                        'scenario' => $scenario,
+                        'program' => $program,
+                    ];
+
+                    if (isset($program->role)) {
+                        $data['role'] = $program->role;
+                    }
+
+                    return (object)$data;
+
+                })
+                ->all();
+        }
+        $this->selectedPrograms = $applied;
     }
 
     private function programIds()
     {
-        $programIds = [];
-
-        $cashProgramIds = $this->cashPrograms()
-            ->reject(function ($program) {
-                return !isset($program->dealscenarios[$this->scenario]);
-            })
-            ->pluck('ProgramID')->all();
-
-        $privatePrograms = $this->cashPrivatePrograms()
-            ->reject(function ($program) {
-                return !isset($program->dealscenarios[$this->scenario]);
-            })
-            ->pluck('ProgramID')->all();
-
-        $programIds = array_merge($cashProgramIds, $programIds);
-
-        if ($this->leaseProgram) {
-            $programIds[] = $this->leaseProgram->ProgramID;
+        $ids = [];
+        foreach ($this->selectedPrograms as $category => $programs) {
+            $ids = array_merge($ids, array_keys($programs));
         }
-
-        return $programIds;
+        return $ids;
     }
 
     private function bestFinanceCompany()
@@ -372,28 +380,41 @@ class DealRatesAndRebatesManager
     }
 
     /**
+     * using a map of roles to affinity ids, get the affinity ids for this request.
+     *
+     * TODO: Validate ids exist in the response of the first call.
+     * @return null
+     */
+    private function getAffinityID()
+    {
+        if (isset(Map::AFFINITY_MAP[$this->role][$this->deal->version->model->make->name])) {
+            return Map::AFFINITY_MAP[$this->role][$this->deal->version->model->make->name];
+        }
+        return null;
+    }
+
+    /**
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function getTotals()
     {
-
-        //
-        // Then we pick the program ids.
         $programIds = $this->programIds();
 
-        //
-        //
-
         if (count($programIds)) {
-            $data = ['ProgramIDs' => implode(",", $programIds)];
+            $data = [
+                'ProgramIDs' => implode(",", $programIds),
+            ];
+
+            $affinityId = $this->getAffinityID();
+            if ($affinityId) {
+                $data['AffinityIDs'] = $affinityId;
+            }
+
         } else {
             $data = ['ResidualsOnly' => 'yes'];
         }
 
-
-
         // Pass in affinity data here
-
         $totalRateResponse = $this->client->totalrate->get(
             $this->vehicleId,
             $this->zipcode,
@@ -414,15 +435,26 @@ class DealRatesAndRebatesManager
         $response = new \stdClass();
         $response->isLease = $this->isLease;
 
-        // Everybody Rebates
-        $response->cashRebates = (object)[
-            'totalValue' => $this->totalCashValue(),
-            'programs' => $this->appliedCashPrograms()
-        ];
+        //
+        // Rebates
+        $selected = $this->selectedPrograms;
+        $total = 0;
+        foreach($selected as $category => $programs) {
+            $categoryTotal = 0;
+            foreach($programs as $program){
+                $categoryTotal += $program->value;
+            }
+            $selected[$category] = [
+                'total' => $categoryTotal,
+                'programs' => $programs,
+            ];
+
+            $total += $categoryTotal;
+        }
+        $response->rebates = $selected;
+        $response->rebates['total'] = $total;
 
         if ($response->isLease) {
-            //
-            // Build Miles
             $response->leaseMiles = [];
             if ($this->miles) {
                 foreach ($this->miles as $group) {
@@ -452,9 +484,7 @@ class DealRatesAndRebatesManager
                 $response->leaseProgram = null;
                 $response->leaseTerms = [];
             }
-
         }
-
         return $response;
     }
 
@@ -474,26 +504,12 @@ class DealRatesAndRebatesManager
 
     /**
      * @param $role
-     *
-     * role should be either default/employee/supplier
+     * @param array $conditionalRoles
      */
-    public function setConsumerRole($role)
+    public function setConsumerRole($role, $conditionalRoles = [])
     {
-        if ($role === 'employee') {
-            if(isset(self::AFFINITY_MAP['EMPLOYEE'][$this->deal->make])){
-                 return self::AFFINITY_MAP['EMPLOYEE'][$this->deal->make];
-            }
-        }
-
-        if ($role === 'supplier') {
-            if(isset(self::AFFINITY_MAP['SUPPLIER'][$this->deal->make])){
-                 return self::AFFINITY_MAP['SUPPLIER'][$this->deal->make];
-            }
-        }
-
-        if ($role === 'default') {
-
-        }
+        $this->role = $role;
+        $this->conditionalRoles = $conditionalRoles;
     }
 
     /**
@@ -509,6 +525,37 @@ class DealRatesAndRebatesManager
                 $this->scenario = 'Cash - Bank APR';
             }
         }
+    }
+
+    /**
+     * Search for potential conditional roles we can expose to the user.
+     */
+    public function getPotentialConditionals()
+    {
+        return $this->cashPrivatePrograms()
+            ->reject(function ($program) {
+                return !isset($program->dealscenarios[$this->scenario]);
+            })
+            ->map(function ($program) {
+                $data = null;
+                foreach (Map::CONDITIONALS_TO_PROGRAM_NAME as $role => $strings) {
+                    if (str_contains(strtolower($program->ProgramDescription), $strings)) {
+                        $value = $program->dealscenarios[$this->scenario]->Cash;
+                        $data = [
+                            'id' =>  $program->ProgramID,
+                            'role' =>  $role,
+                            'description' => $program->ProgramContent,
+                            'startDate' =>  $program->ProgramStartDate,
+                            'stopDate' =>  $program->ProgramStopDate,
+                            'value' => (float) $value,
+                        ];
+                    }
+                }
+                return $data;
+            })
+            ->unique()
+            ->filter()
+            ->all();
     }
 
     /**
@@ -536,9 +583,14 @@ class DealRatesAndRebatesManager
      */
     public function getData()
     {
+        $this->findSelectedPrograms();
         $this->getTotals();
+        $this->validateSelectedPrograms();
+        $this->transformSelectedPrograms();
+
         $this->bestFinanceCompany();
         $this->getMileage();
+
         return $this->pack();
     }
 

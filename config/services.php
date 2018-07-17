@@ -74,4 +74,10 @@ return [
     'googleanalytics' => [
         'ua' =>     env('GOOGLE_ANALYTICS_UA')
     ],
+
+    'imgix' => [
+      'url' =>  env('IMGIX_SOURCE_URL'),
+      'token' =>  env('IMGIX_TOKEN'),
+    ],
+
 ];

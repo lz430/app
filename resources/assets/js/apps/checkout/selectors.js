@@ -16,7 +16,6 @@ export const dealPricingFromCheckoutData = createSelector(
             financeTerm: checkout.term,
             leaseAnnualMileage: checkout.leaseAnnualMileage,
             leaseTerm: checkout.term,
-            dealHasCustomizedQuote: false,
             discountType: checkout.role,
             dealQuoteIsLoading: false,
             dealQuote: checkout.quote,

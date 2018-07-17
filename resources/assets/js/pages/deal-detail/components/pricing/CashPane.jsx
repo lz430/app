@@ -1,6 +1,6 @@
 import React from 'react';
 import Discount from './Discount';
-import Rebates from '../../containers/pricing/rebates/Rebates';
+import Rebates from './Rebates';
 import Line from './Line';
 import Label from './Label';
 import Value from './Value';
@@ -47,22 +47,6 @@ export default class CashPane extends React.PureComponent {
                 <Separator />
                 <Group>
                     <Header>Rebates</Header>
-                    {dealPricing.hasRebatesApplied() || (
-                        <Line>
-                            <Label>No rebates available</Label>
-                        </Line>
-                    )}
-                    {dealPricing.hasRebatesApplied() && (
-                        <Line>
-                            <Label>Applied</Label>
-                            <Value
-                                isNegative={true}
-                                isLoading={dealPricing.dealQuoteIsLoading()}
-                            >
-                                {dealPricing.bestOffer()}
-                            </Value>
-                        </Line>
-                    )}
                     <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
                     <Line isImportant={true} isSectionTotal={true}>
                         <Label>Total Selling Price</Label>

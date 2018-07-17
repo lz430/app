@@ -51,6 +51,7 @@ class Container extends React.PureComponent {
                         </div>
                         <div className="deal-details__images">
                             <DealImage
+                                size="full"
                                 featureImageClass="deal-details__primary-image"
                                 deal={this.props.deal}
                             />
