@@ -79,7 +79,7 @@ class Rebates extends React.Component {
                     />
                     {labels.title}
                 </Label>
-                <Value isNegative={false} showIf={this.isRoleChecked(role)}>
+                <Value isNegative={true} showIf={this.isRoleChecked(role)}>
                     ${role.value}
                 </Value>
                 {this.isRoleChecked(role) &&
