@@ -19,7 +19,7 @@ class DealService {
             params: {
                 payment_type: paymentType,
                 zipcode: zipcode,
-                role: role,
+                roles: [role],
             },
         });
     }

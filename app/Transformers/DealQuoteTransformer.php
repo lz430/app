@@ -24,7 +24,7 @@ class DealQuoteTransformer extends TransformerAbstract
         $terms = $data->leaseTerms;
         $months = [];
         foreach ($terms as $term) {
-            $data  = [
+            $data = [
                 'moneyFactor' => isset($term->Factor) ? $term->Factor : $term->Rate / 2400,
                 'rate' => isset($term->Rate) ? $term->Rate : null,
                 'residualPercent' => $this->getInitialResidualPercent($term->QualifyingTermEnd),
@@ -96,47 +96,21 @@ class DealQuoteTransformer extends TransformerAbstract
     public function getInitialResidualPercent($timeFrame)
     {
         $initialPercent = $this->getResiduals($timeFrame);
-
         return (isset($initialPercent[0]) && $initialPercent[0]['residualPercent']) ? $initialPercent[0]['residualPercent'] : null;
-    }
-
-    /**
-     * Build Rebates
-     * @return array
-     */
-    private function rebates()
-    {
-        $data = [
-            'total' => 0,
-            'everyone' => [],
-            'conditional' => [],
-            'lease' => [],
-        ];
-
-        if (isset($this->ratesAndRebates->cashRebates) && $this->ratesAndRebates->cashRebates->totalValue) {
-            $data['total'] = $this->ratesAndRebates->cashRebates->totalValue;
-            $data['everyone'] = $this->ratesAndRebates->cashRebates;
-        }
-
-        if (isset($this->ratesAndRebates->leaseTerms[0]) && $this->ratesAndRebates->leaseTerms[0]->CCR) {
-            $data['lease'] = $this->ratesAndRebates->leaseTerms[0];
-            $data['total'] += $this->ratesAndRebates->leaseTerms[0]->CCR;
-        }
-
-        return $data;
     }
 
     /**
      *
      */
-    private function rates() {
-       $data = null;
+    private function rates()
+    {
+        $data = null;
 
-       if ($this->meta->paymentType === 'lease') {
-           $data = $this->getRatesForLeases();
-       }
+        if ($this->meta->paymentType === 'lease') {
+            $data = $this->getRatesForLeases();
+        }
 
-       return $data;
+        return $data;
     }
 
     /**
@@ -151,10 +125,12 @@ class DealQuoteTransformer extends TransformerAbstract
         $this->meta = $meta;
 
         $data = [];
-        $data['meta'] = (array) $this->meta;
+        $data['meta'] = (array)$this->meta;
         $data['rebates'] = $ratesAndRebates->rebates;
         $data['rates'] = $this->rates();
-        $data['conditionalRoles'] = $potentialConditionalRoles;
+        $data['selections'] = [
+            'conditionalRoles' => $potentialConditionalRoles
+        ];
 
         return $data;
     }

@@ -13,6 +13,7 @@ const persistConfig = {
     ...basePersistConfig,
     key: 'pricing',
     storage: storageSession,
+    blacklist: ['quotes'],
 };
 
 const reducer = function(state = initialState, action = {}) {

@@ -101,7 +101,7 @@ class DealQuoteController extends BaseAPIController
         list($primaryRole, $conditionalRoles) = $this->extractRoles($roleKey);
 
         //30-cash-48220-default
-        $key = "{$deal->id}-{$paymentType}-{$zip}-{$roleKey}";
+        $key = "{$deal->id}-{$paymentType}-{$zip}--{$roleKey}";
 
         $cacheKey = md5('quote.' . $key);
         if (false && $data = Cache::tags('quote')->get($cacheKey)) {
