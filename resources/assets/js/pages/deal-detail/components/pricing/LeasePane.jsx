@@ -5,7 +5,7 @@ import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import zondicons from 'zondicons';
 
-import Rebates from '../../containers/pricing/rebates/Rebates';
+import Rebates from './Rebates';
 import Discount from './Discount';
 import Line from './Line';
 import Label from './Label';

@@ -1,6 +1,8 @@
 import * as ActionTypes from 'apps/common/consts';
 import R from 'ramda';
 import util from 'src/util';
+import { basePersistConfig } from 'persist';
+import { persistReducer } from 'redux-persist';
 
 const initialState = {
     compareList: [],
@@ -12,6 +14,12 @@ const initialState = {
     vehicleYear: null,
     window: { width: window.innerWidth },
     dealsIdsWithCustomizedQuotes: [],
+};
+
+const persistConfig = {
+    ...basePersistConfig,
+    key: 'common',
+    blacklist: ['window'],
 };
 
 const reducer = (state = initialState, action) => {
@@ -67,4 +75,4 @@ const reducer = (state = initialState, action) => {
     return state;
 };
 
-export default reducer;
+export default persistReducer(persistConfig, reducer);

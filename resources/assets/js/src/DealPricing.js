@@ -34,6 +34,10 @@ export default class DealPricing {
         this.data = data;
     }
 
+    quote() {
+        return this.data.dealQuote;
+    }
+
     id() {
         return this.data.deal.id;
     }
@@ -54,14 +58,6 @@ export default class DealPricing {
         return [0];
     }
 
-    /**
-     * @deprecated
-     * @returns {boolean}
-     */
-    bestOfferIsLoading() {
-        return this.data.dealQuoteIsLoading;
-    }
-
     dealQuoteIsLoading() {
         return this.data.dealQuoteIsLoading;
     }
@@ -72,10 +68,6 @@ export default class DealPricing {
 
     deal() {
         return this.data.deal;
-    }
-
-    hasCustomizedQuote() {
-        return this.data.dealHasCustomizedQuote;
     }
 
     financeDownPaymentValue() {
@@ -582,7 +574,7 @@ export default class DealPricing {
     }
 
     isPricingAvailable() {
-        if (this.bestOfferIsLoading()) {
+        if (this.dealQuoteIsLoading()) {
             return false;
         }
 

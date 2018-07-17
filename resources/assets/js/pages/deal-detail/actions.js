@@ -18,18 +18,20 @@ export function receiveDeal(deal) {
  * @param deal
  * @param zipcode
  * @param paymentType
- * @param role
+ * @param primaryRole
+ * @param conditionalRoles
  * @returns {{type: string, deal: *, zipcode: *, paymentType: *, role: string}}
  */
 export function dealDetailRequestDealQuote(
     deal,
     zipcode,
     paymentType,
-    role = 'default'
+    primaryRole = 'default',
+    conditionalRoles = []
 ) {
     // TODO: actually rename this.
-    if (role === 'dmr') {
-        role = 'default';
+    if (primaryRole === 'dmr') {
+        primaryRole = 'default';
     }
 
     return {
@@ -37,6 +39,7 @@ export function dealDetailRequestDealQuote(
         deal: deal,
         zipcode: zipcode,
         paymentType: paymentType,
-        role: role,
+        role: primaryRole,
+        conditionalRoles: conditionalRoles,
     };
 }

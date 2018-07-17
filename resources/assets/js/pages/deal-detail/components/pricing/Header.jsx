@@ -1,6 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class Header extends React.PureComponent {
+    static propTypes = {
+        style: PropTypes.object,
+        children: PropTypes.node.isRequired,
+    };
+
     render() {
         const style = {
             margin: '.5em 0 0',

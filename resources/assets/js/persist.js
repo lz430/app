@@ -1,6 +1,6 @@
 import storage from 'redux-persist/lib/storage';
 
-const APPLICATION_VERSION = 24;
+const APPLICATION_VERSION = 25;
 
 export const basePersistConfig = {
     storage,
