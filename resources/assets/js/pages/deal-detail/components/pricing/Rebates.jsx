@@ -41,25 +41,25 @@ class Rebates extends React.Component {
         const map = {
             college: {
                 title: 'College Student/Recent Grad',
-                description: 'Proof of eligibility required.',
+                description: null,
             },
             military: {
                 title: 'Active Military/Veteran',
-                description:
-                    'Thank you for your service. Proof of eligibility required.',
+                description: 'Thank you for your service.',
             },
             conquest: {
                 title: 'Conquest',
-                description: 'Proof of eligibility required.',
+                description: null,
             },
             loyal: {
                 title: 'Loyalty',
-                description: 'Proof of eligibility required.',
+                description: null,
             },
         };
 
         return map[role];
     }
+
     renderConditionRoleSelection(programId, role) {
         const labels = this.roleLabels(role['role']);
 
@@ -98,22 +98,42 @@ class Rebates extends React.Component {
         );
     }
 
+    renderConditionalRebates() {
+        const quote = this.props.dealPricing.quote();
+
+        return (
+            <div>
+                <div
+                    style={{
+                        fontStyle: 'italic',
+                        fontSize: '.75em',
+                        marginLeft: '.25em',
+                    }}
+                >
+                    Proof of eligibility required.
+                </div>
+
+                {Object.keys(quote.selections.conditionalRoles).map(key =>
+                    this.renderConditionRoleSelection(
+                        key,
+                        quote.selections.conditionalRoles[key]
+                    )
+                )}
+            </div>
+        );
+    }
+
     render() {
         const dealPricing = this.props.dealPricing;
-        const quote = this.props.dealPricing.quote();
 
         return (
             <div>
                 {/*
                 Conditional Rebates Selection
                 */}
+
                 {this.shouldRenderConditionalSelection() &&
-                    Object.keys(quote.selections.conditionalRoles).map(key =>
-                        this.renderConditionRoleSelection(
-                            key,
-                            quote.selections.conditionalRoles[key]
-                        )
-                    )}
+                    this.renderConditionalRebates()}
 
                 {/*
                 Total Rebates
