@@ -5,6 +5,9 @@ import PropTypes from 'prop-types';
 
 import Line from './Line';
 import Label from './Label';
+import Group from './Group';
+import Header from './Header';
+import Value from './Value';
 
 class Rebates extends React.Component {
     static propTypes = {
@@ -23,6 +26,15 @@ class Rebates extends React.Component {
 
     isRoleChecked(role) {
         return this.props.selectedConditionalRoles.includes(role);
+    }
+
+    shouldRenderConditionalSelection() {
+        const quote = this.props.dealPricing.quote();
+        if (!quote || !quote.selections || !quote.selections.conditionalRoles) {
+            return false;
+        }
+
+        return true;
     }
 
     renderConditionRoleSelection(role) {
@@ -44,16 +56,39 @@ class Rebates extends React.Component {
     }
 
     render() {
+        const dealPricing = this.props.dealPricing;
         const quote = this.props.dealPricing.quote();
-        if (!quote || !quote.selections || !quote.selections.conditionalRoles) {
-            return false;
-        }
 
         return (
             <div>
-                {quote.selections.conditionalRoles.map(role => {
-                    return this.renderConditionRoleSelection(role);
-                })}
+                {/*
+                Conditional Rebates Selection
+                */}
+                {this.shouldRenderConditionalSelection() &&
+                    quote.selections.conditionalRoles.map(role => {
+                        return this.renderConditionRoleSelection(role);
+                    })}
+
+                {/*
+                Total Rebates
+                */}
+                {dealPricing.hasRebatesApplied() || (
+                    <Line>
+                        <Label>No rebates applied</Label>
+                    </Line>
+                )}
+
+                {dealPricing.hasRebatesApplied() && (
+                    <Line>
+                        <Label>Applied</Label>
+                        <Value
+                            isNegative={true}
+                            isLoading={dealPricing.dealQuoteIsLoading()}
+                        >
+                            {dealPricing.bestOffer()}
+                        </Value>
+                    </Line>
+                )}
             </div>
         );
     }
