@@ -533,6 +533,9 @@ class DealRatesAndRebatesManager
     public function getPotentialConditionals()
     {
         return $this->cashPrivatePrograms()
+            ->reject(function ($program) {
+                return !isset($program->dealscenarios[$this->scenario]);
+            })
             ->map(function ($program) {
                 foreach (Map::CONDITIONALS_TO_PROGRAM_NAME as $role => $strings) {
                     if (str_contains(strtolower($program->ProgramDescription), $strings)) {
