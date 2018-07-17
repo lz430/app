@@ -53,22 +53,6 @@ export default class FinancePane extends React.PureComponent {
                 <Separator />
                 <Group>
                     <Header>Rebates</Header>
-                    {dealPricing.hasRebatesApplied() || (
-                        <Line>
-                            <Label>No rebates available</Label>
-                        </Line>
-                    )}
-                    {dealPricing.hasRebatesApplied() && (
-                        <Line>
-                            <Label>Applied</Label>
-                            <Value
-                                isNegative={true}
-                                isLoading={dealPricing.dealQuoteIsLoading()}
-                            >
-                                {dealPricing.bestOffer()}
-                            </Value>
-                        </Line>
-                    )}
                     <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
                     <Line isSectionTotal={true}>
                         <Label>Total Selling Price</Label>

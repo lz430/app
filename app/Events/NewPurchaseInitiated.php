@@ -52,7 +52,7 @@ class NewPurchaseInitiated
             'final_sale_price' => $purchase->dmr_price,
             'downpayment' => $purchase->down_payment,
             'cash_at_delivery' => $purchase->down_payment,
-
+            'annual_lease_mileage' => $purchase->lease_mileage,
             'length_of_lease' => $purchase->term,
             'monthly_payment' => $purchase->monthly_payment,
 
