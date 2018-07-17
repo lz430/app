@@ -24,7 +24,6 @@ class DealQuoteTransformer extends TransformerAbstract
         $terms = $data->leaseTerms;
         $months = [];
         foreach ($terms as $term) {
-
             $data  = [
                 'moneyFactor' => isset($term->Factor) ? $term->Factor : $term->Rate / 2400,
                 'rate' => isset($term->Rate) ? $term->Rate : null,
@@ -137,7 +136,6 @@ class DealQuoteTransformer extends TransformerAbstract
            $data = $this->getRatesForLeases();
        }
 
-
        return $data;
     }
 
@@ -146,7 +144,7 @@ class DealQuoteTransformer extends TransformerAbstract
      * @param $meta
      * @return array|bool|mixed
      */
-    public function transform($ratesAndRebates, $meta)
+    public function transform($ratesAndRebates, $meta, $potentialConditionalRoles = [])
     {
         $this->ratesAndRebates = $ratesAndRebates;
 
@@ -154,8 +152,9 @@ class DealQuoteTransformer extends TransformerAbstract
 
         $data = [];
         $data['meta'] = (array) $this->meta;
-        $data['rebates'] = $this->rebates();
+        $data['rebates'] = $ratesAndRebates->rebates;
         $data['rates'] = $this->rates();
+        $data['conditionalRoles'] = $potentialConditionalRoles;
 
         return $data;
     }
