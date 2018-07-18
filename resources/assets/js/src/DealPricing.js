@@ -344,7 +344,7 @@ export default class DealPricing {
     }
 
     isEffectiveDiscountDmr() {
-        if (!this.data.discountType) {
+        if (!this.data.discountType || this.data.discountType === 'dmr') {
             return true;
         }
 
@@ -362,7 +362,7 @@ export default class DealPricing {
             return true;
         }
 
-        return true;
+        return false;
     }
 
     isCash() {
