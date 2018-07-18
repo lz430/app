@@ -7,6 +7,7 @@ use App\Mail\ApplicationSubmittedDMR;
 use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
 use App\Models\Purchase;
+use App\Transformers\DealTransformer;
 use App\Transformers\PurchaseTransformer;
 use App\Models\User;
 use Carbon\Carbon;
@@ -117,6 +118,8 @@ class ApplyOrPurchaseController extends Controller
         $lastPurchase->load('deal.photos');
         $lastPurchase = fractal()->item($lastPurchase)->transformWith(PurchaseTransformer::class)->toJson();
         $deal = auth()->user()->purchases->last()->deal;
+        $dealData = json_encode((new DealTransformer())->transform($deal));
+
         $vautoFeatures = collect(
             array_values(
                 array_diff(
@@ -127,7 +130,6 @@ class ApplyOrPurchaseController extends Controller
                 )
             )
         );
-
-        return view('thank-you')->with('purchase', $lastPurchase)->with('deal', $deal)->with('features', $vautoFeatures);
+        return view('thank-you')->with('purchase', $lastPurchase)->with('deal', $dealData)->with('features', $vautoFeatures);
     }
 }
