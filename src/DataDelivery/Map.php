@@ -53,7 +53,7 @@ class Map
         'col' => 'college',
         'mil' => 'military',
         'con' => 'conquest',
-        'loyal' => 'loy',
+        'loy' => 'loyal',
     ];
 
     public const CONDITIONALS_TO_PROGRAM_NAME = [
