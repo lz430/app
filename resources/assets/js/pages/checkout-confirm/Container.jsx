@@ -2,11 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ReCaptcha, loadReCaptcha } from 'react-recaptcha-google';
 import config from 'config';
-
 import strings from 'src/strings';
 import DealImage from 'components/Deals/DealImage';
 import { dealPricingFromCheckoutFactory } from 'src/DealPricing';
-import { getUserLocation } from 'apps/user/selectors';
 import {
     checkoutContact,
     clearCheckoutContactFormErrors,
