@@ -1,11 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { ReCaptcha, loadReCaptcha } from 'react-recaptcha-google';
+import config from 'config';
 
 import strings from 'src/strings';
 import DealImage from 'components/Deals/DealImage';
 import { dealPricingFromCheckoutFactory } from 'src/DealPricing';
 import { getUserLocation } from 'apps/user/selectors';
-import { checkoutStart } from 'apps/checkout/actions';
+import {
+    checkoutContact,
+    clearCheckoutContactFormErrors,
+} from 'apps/checkout/actions';
 import mapAndBindActionCreators from '../../util/mapAndBindActionCreators';
 import Header from '../../components/pricing/Header';
 import Group from '../../components/pricing/Group';
@@ -14,15 +19,50 @@ import Value from '../../components/pricing/Value';
 import Line from '../../components/pricing/Line';
 import Separator from '../../components/pricing/Separator';
 import TaxesAndFees from '../../components/pricing/TaxesAndFees';
+import { checkout } from 'apps/checkout/selectors';
 
 class Container extends React.PureComponent {
+    componentDidMount() {
+        loadReCaptcha();
+        this.props.clearCheckoutContactFormErrors();
+    }
+
+    state = {
+        recaptchaToken: null,
+    };
+
+    recaptcha = null;
+
     handleConfirmPurchase = e => {
-        this.props.checkoutStart(this.props.dealPricing);
+        e.preventDefault();
+
+        const elements = e.target.elements;
+
+        const extractFieldValue = fieldName => {
+            const field = elements.namedItem(fieldName);
+
+            return field ? field.value : null;
+        };
+
+        const fields = {
+            email: extractFieldValue('email'),
+            drivers_license_state: extractFieldValue('drivers_license_state'),
+            drivers_license_number: extractFieldValue('drivers_license_number'),
+            first_name: extractFieldValue('first_name'),
+            last_name: extractFieldValue('last_name'),
+            phone_number: extractFieldValue('phone_number'),
+            g_recaptcha_response: this.state.recaptchaToken,
+        };
+
+        this.recaptcha.reset();
+
+        this.props.checkoutContact(fields);
     };
 
     render() {
         const { dealPricing } = this.props;
         const deal = dealPricing.deal();
+        const errors = this.props.checkout.contactFormErrors || {};
 
         return (
             <div className="checkout-confirm">
@@ -415,6 +455,14 @@ class Container extends React.PureComponent {
                                                 required
                                                 autoFocus
                                             />
+
+                                            {errors.email && (
+                                                <span className="request-email__error">
+                                                    <strong>
+                                                        {errors.email[0]}
+                                                    </strong>
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
 
@@ -435,6 +483,14 @@ class Container extends React.PureComponent {
                                                 name="first_name"
                                                 required
                                             />
+
+                                            {errors.first_name && (
+                                                <span className="request-email__error">
+                                                    <strong>
+                                                        {errors.first_name[0]}
+                                                    </strong>
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
 
@@ -455,6 +511,14 @@ class Container extends React.PureComponent {
                                                 placeholder="Enter Your Last Name"
                                                 required
                                             />
+
+                                            {errors.last_name && (
+                                                <span className="request-email__error">
+                                                    <strong>
+                                                        {errors.last_name[0]}
+                                                    </strong>
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
 
@@ -475,6 +539,14 @@ class Container extends React.PureComponent {
                                                 placeholder="Enter Your Phone Number"
                                                 required
                                             />
+
+                                            {errors.phone_number && (
+                                                <span className="request-email__error">
+                                                    <strong>
+                                                        {errors.phone_number[0]}
+                                                    </strong>
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
 
@@ -569,12 +641,52 @@ class Container extends React.PureComponent {
                                                 <option value="WI">WI</option>
                                                 <option value="WY">WY</option>
                                             </select>
+
+                                            {errors.drivers_license_number && (
+                                                <span className="request-email__error">
+                                                    <strong>
+                                                        {
+                                                            errors
+                                                                .drivers_license_number[0]
+                                                        }
+                                                    </strong>
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
 
-                                    <div className="request-email__captcha" />
+                                    <div className="request-email__captcha">
+                                        <ReCaptcha
+                                            ref={el => {
+                                                this.recaptcha = el;
+                                            }}
+                                            size="normal"
+                                            data-theme="dark"
+                                            render="explicit"
+                                            sitekey={
+                                                config.RECAPTCHA_PUBLIC_KEY
+                                            }
+                                            onloadCallback={
+                                                this.handleResetRecaptchaToken
+                                            }
+                                            verifyCallback={
+                                                this.handleVerifyRecaptchaToken
+                                            }
+                                        />
 
-                                    <input type="hidden" name="method" />
+                                        {errors['g-recaptcha-response'] && (
+                                            <span className="request-email__error">
+                                                <strong>
+                                                    {
+                                                        errors[
+                                                            'g-recaptcha-response'
+                                                        ][0]
+                                                    }
+                                                </strong>
+                                            </span>
+                                        )}
+                                    </div>
+
                                     <div className="request-email__buttons">
                                         <button className="request-email__button request-email__button--purple request-email__button--small">
                                             Confirm and Submit
@@ -594,16 +706,26 @@ class Container extends React.PureComponent {
             </div>
         );
     }
+
+    handleResetRecaptchaToken = () => {
+        this.setState({ recaptchaToken: null });
+    };
+
+    handleVerifyRecaptchaToken = recaptchaToken => {
+        this.setState({ recaptchaToken });
+    };
 }
 
 const mapStateToProps = (state, props) => {
     return {
         dealPricing: dealPricingFromCheckoutFactory(state, props),
+        checkout: checkout(state, props),
     };
 };
 
 const mapDispatchToProps = mapAndBindActionCreators({
-    checkoutStart,
+    checkoutContact,
+    clearCheckoutContactFormErrors,
 });
 
 export default connect(

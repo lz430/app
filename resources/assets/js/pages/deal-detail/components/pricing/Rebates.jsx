@@ -58,13 +58,10 @@ class Rebates extends React.Component {
     }
 
     renderConditionRoleSelection(programId, role) {
-        const labels = this.roleLabels(role['role']);
+        const labels = this.roleLabels(role);
 
         return (
-            <Line
-                key={role['role']}
-                style={{ margin: '.125em 0 .125em .25em' }}
-            >
+            <Line style={{ margin: '.125em 0 .125em .25em' }}>
                 <Label key={role['role']} style={{ fontSize: '.9em' }}>
                     <input
                         key={role['role']}
@@ -110,12 +107,14 @@ class Rebates extends React.Component {
                     Proof of eligibility required.
                 </div>
 
-                {Object.keys(quote.selections.conditionalRoles).map(key =>
-                    this.renderConditionRoleSelection(
-                        key,
-                        quote.selections.conditionalRoles[key]
-                    )
-                )}
+                {Object.keys(quote.selections.conditionalRoles).map(key => (
+                    <div key={key}>
+                        {this.renderConditionRoleSelection(
+                            key,
+                            quote.selections.conditionalRoles[key]
+                        )}
+                    </div>
+                ))}
             </div>
         );
     }

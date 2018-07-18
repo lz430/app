@@ -25,7 +25,7 @@ import Line from '../../components/pricing/Line';
 
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
 import { setPurchaseStrategy } from 'apps/user/actions';
-import { setCheckoutData } from 'apps/checkout/actions';
+import { setCheckoutData, checkoutStart } from 'apps/checkout/actions';
 import * as selectDiscountActions from './modules/selectDiscount';
 import * as financeActions from './modules/finance';
 import * as leaseActions from './modules/lease';
@@ -58,6 +58,7 @@ class Container extends React.PureComponent {
         setPurchaseStrategy: PropTypes.func.isRequired,
         dealDetailRequestDealQuote: PropTypes.func.isRequired,
         setCheckoutData: PropTypes.func.isRequired,
+        checkoutStart: PropTypes.func.isRequired,
     };
 
     state = {
@@ -410,22 +411,22 @@ class Container extends React.PureComponent {
         );
     }
 
-    handleBuyNow = () => {
+    handleBuyNow = e => {
+        const dealPricing = this.props.dealPricing;
+
         this.props.setCheckoutData(
-            this.props.dealPricing.data.deal,
-            this.props.dealPricing.data.dealQuote,
-            this.props.dealPricing.data.paymentType,
-            this.props.dealPricing.data.discountType,
-            this.props.dealPricing.data.paymentType === 'lease'
-                ? this.props.dealPricing.leaseTermValue()
-                : this.props.dealPricing.financeTermValue(),
-            this.props.dealPricing.financeDownPaymentValue(),
-            this.props.dealPricing.leaseAnnualMileageValue(),
-            this.props.dealPricing.data.employeeBrand,
-            this.props.dealPricing.data.supplierBrand
+            dealPricing.deal(),
+            dealPricing.quote(),
+            dealPricing.paymentStrategy(),
+            dealPricing.discountType(),
+            dealPricing.effectiveTermValue(),
+            dealPricing.financeDownPaymentValue(),
+            dealPricing.leaseAnnualMileageValue(),
+            dealPricing.data.employeeBrand,
+            dealPricing.data.supplierBrand
         );
 
-        window.location = `/confirm/${this.props.dealPricing.id()}`;
+        this.props.checkoutStart(dealPricing);
     };
 
     handlePaymentTypeChange = strategy => {
@@ -693,6 +694,7 @@ const mapDispatchToProps = mapAndBindActionCreators({
     receiveDeal,
     dealDetailRequestDealQuote,
     setCheckoutData,
+    checkoutStart,
 });
 
 export default connect(

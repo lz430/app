@@ -46,7 +46,12 @@ export default class DealPricing {
         return this.data.deal.vin;
     }
 
+    /** @deprecated */
     paymentType() {
+        return this.data.paymentType;
+    }
+
+    paymentStrategy() {
         return this.data.paymentType;
     }
 
@@ -82,6 +87,21 @@ export default class DealPricing {
 
     financeDownPayment() {
         return util.moneyFormat(this.financeDownPaymentValue());
+    }
+
+    effectiveTermValue() {
+        switch (this.data.paymentType) {
+            case 'cash':
+                return null;
+            case 'finance':
+                return this.financeTermValue();
+            case 'lease':
+                return this.leaseTermValue();
+        }
+    }
+
+    effectiveTerm() {
+        return this.effectiveTermValue();
     }
 
     financeTermValue() {
@@ -293,6 +313,22 @@ export default class DealPricing {
         return util.moneyFormat(this.supplierDiscountValue());
     }
 
+    discountType() {
+        if (this.isEffectiveDiscountDmr()) {
+            return 'dmr';
+        }
+
+        if (this.isEffectiveDiscountEmployee()) {
+            return 'employee';
+        }
+
+        if (this.isEffectiveDiscountSupplier()) {
+            return 'supplier';
+        }
+
+        return 'dmr';
+    }
+
     isEffectiveDiscountEmployee() {
         return (
             this.data.discountType === 'employee' &&
@@ -326,7 +362,7 @@ export default class DealPricing {
             return true;
         }
 
-        return this.data.discountType === 'dmr';
+        return true;
     }
 
     isCash() {

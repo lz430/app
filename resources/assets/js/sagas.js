@@ -20,5 +20,6 @@ export default function* root() {
         fork(AppPricingSagas.watchRequestDealQuote),
         fork(AppPricingSagas.watchBatchRequestDealQuote),
         fork(AppCheckoutSagas.watchCheckoutStart),
+        fork(AppCheckoutSagas.watchCheckoutContact),
     ]);
 }

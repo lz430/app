@@ -98,4 +98,19 @@ class Purchase extends Model
 
         return '';
     }
+
+    public function isCash() : bool
+    {
+        return $this->type === self::CASH;
+    }
+
+    public function isFinance() : bool
+    {
+        return $this->type === self::FINANCE;
+    }
+
+    public function isLease() : bool
+    {
+        return $this->type === self::LEASE;
+    }
 }

@@ -22,6 +22,7 @@ Route::get('deals/{deal}/warranties', 'DealWarrantiesController@getWarranties')-
 Route::get('deals/{deal}/dimensions', 'DealDimensionsController@getDimensions')->name('dimensions.getDimensions');
 
 Route::post('checkout/start', 'CheckoutController@start')->name('checkout.start');
+Route::post('checkout/contact', 'CheckoutController@contact')->name('checkout.contact');
 
 Route::get('targets', 'TargetsController@getTargets')->name('targets.getTargets');
 Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');

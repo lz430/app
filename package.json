@@ -60,6 +60,7 @@
         "lodash.isequal": "^4.5.0",
         "react-image-gallery": "^0.8.6",
         "react-lazyload": "^2.3.0",
+        "react-recaptcha-google": "^1.1.1",
         "react-redux": "^5.0.5",
         "react-sticky": "^6.0.2",
         "react-svg-inline": "^2.0.0",

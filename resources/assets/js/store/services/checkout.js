@@ -3,7 +3,7 @@ import httpclient from 'store/httpclient';
 /**
  * checkout specific API calls.
  */
-class CheckoutService {
+export default class CheckoutService {
     /**
      * @param dealId
      * @param strategy
@@ -21,6 +21,26 @@ class CheckoutService {
 
         return httpclient.post('/api/checkout/start', payload);
     }
-}
 
-export default CheckoutService;
+    contact(
+        email,
+        drivers_license_state,
+        drivers_license_number,
+        first_name,
+        last_name,
+        phone_number,
+        g_recaptcha_response
+    ) {
+        let payload = {
+            email,
+            drivers_license_state,
+            drivers_license_number,
+            first_name,
+            last_name,
+            phone_number,
+            'g-recaptcha-response': g_recaptcha_response,
+        };
+
+        return httpclient.post('/api/checkout/contact', payload);
+    }
+}
