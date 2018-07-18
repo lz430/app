@@ -5,7 +5,6 @@ import config from 'config';
 import strings from 'src/strings';
 import DealImage from 'components/Deals/DealImage';
 import { dealPricingFromCheckoutFactory } from 'src/DealPricing';
-import { getUserLocation } from 'apps/user/selectors';
 import {
     checkoutContact,
     clearCheckoutContactFormErrors,
@@ -22,8 +21,6 @@ import { checkout } from 'apps/checkout/selectors';
 
 class Container extends React.PureComponent {
     componentDidMount() {
-        console.log(process.env.MIX_RECAPTCHA_PUBLIC_KEY);
-        console.log(config);
         loadReCaptcha();
         this.props.clearCheckoutContactFormErrors();
     }
