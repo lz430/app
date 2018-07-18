@@ -53,7 +53,6 @@ class Map
         'col' => 'college',
         'mil' => 'military',
         'con' => 'conquest',
-        'resp' => 'responder',
         'loy' => 'loyal',
     ];
 
@@ -66,9 +65,6 @@ class Map
         ],
         'conquest' => [
             'conquest',
-        ],
-        'responder' => [
-            'responder',
         ],
         'loyal' => [
             'returning Lessee',
