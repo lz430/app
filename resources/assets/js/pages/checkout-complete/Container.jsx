@@ -20,7 +20,6 @@ class Container extends React.PureComponent {
     };
 
     componentDidMount() {
-        console.log(this.props);
         ApiClient.deal.dealGetDimensions(this.props.deal.id).then(response => {
             this.setState({
                 dimensions: response.data,
