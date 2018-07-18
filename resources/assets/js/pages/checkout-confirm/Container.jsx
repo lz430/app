@@ -68,7 +68,7 @@ class Container extends React.PureComponent {
                 <div className="container">
                     <div className="row">
                         <div className="image">
-                            <DealImage deal={deal} />
+                            <DealImage deal={deal} link={false} />
                         </div>
                         <div className="title">
                             <Group>
