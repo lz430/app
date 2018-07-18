@@ -6,11 +6,13 @@ export default class DealImage extends React.PureComponent {
     static propTypes = {
         deal: PropTypes.object.isRequired,
         size: PropTypes.string,
+        link: PropTypes.bool,
         featureImageClass: PropTypes.string,
     };
 
     static defaultProps = {
         size: 'thumbnail',
+        link: true,
     };
 
     state = {
@@ -41,9 +43,17 @@ export default class DealImage extends React.PureComponent {
         return (
             <LazyLoad height={200} overflow={true}>
                 <div className="deal__image-container">
-                    <a href={`/deals/${this.props.deal.id}`}>
+                    {this.props.link && (
+                        <a href={`/deals/${this.props.deal.id}`}>
+                            <img
+                                {...imageProps}
+                                src={this.featuredImageUrl()}
+                            />
+                        </a>
+                    )}
+                    {!this.props.link && (
                         <img {...imageProps} src={this.featuredImageUrl()} />
-                    </a>
+                    )}
                 </div>
             </LazyLoad>
         );
