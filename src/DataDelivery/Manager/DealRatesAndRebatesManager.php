@@ -83,7 +83,6 @@ class DealRatesAndRebatesManager
             $data->dealscenarios = $mungedScenarios;
             $programs[$data->ProgramID] = $data;
         }
-
         $this->programs = collect($programs);
     }
 
@@ -189,6 +188,7 @@ class DealRatesAndRebatesManager
             ];
         }
 
+        
         //
         // Conditional programs based on roles.
         if ($this->conditionalRoles && count($this->conditionalRoles)) {
@@ -286,8 +286,8 @@ class DealRatesAndRebatesManager
 
                     if (isset($scenario->Cash)) {
                         $value = $scenario->Cash;
-                    } elseif (isset($scenario->terms->CCR)) {
-                        $value = $scenario->terms->CCR;
+                    } elseif (isset($scenario->terms[0]->CCR)) {
+                        $value = $scenario->terms[0]->CCR;
                     }
 
                     $data = [
@@ -347,7 +347,6 @@ class DealRatesAndRebatesManager
 
     private function getMileage()
     {
-
         if (!isset($this->financeCompany->dealscenarios)) {
             return null;
         }
