@@ -9,6 +9,7 @@ import ApiClient from 'store/api';
 import util from 'src/util';
 import miscicons from 'miscicons';
 import { dealQuoteRebatesTotal } from 'apps/common/selectors';
+import DealImage from '../../components/Deals/DealImage';
 
 class Container extends React.PureComponent {
     state = {
@@ -204,10 +205,13 @@ class Container extends React.PureComponent {
                         <div className="thank-you__title">
                             Congratulations on your purchase!
                         </div>
-                        <img
-                            className="thank-you__primary-image"
-                            src={this.props.deal.photos[1].url}
+
+                        <DealImage
+                            deal={this.props.deal}
+                            size="full"
+                            link={false}
                         />
+
                         <div className="thank-you__congrats-text">
                             <div className="thank-you__congrats-body">
                                 A Deliver My Ride representative will contact

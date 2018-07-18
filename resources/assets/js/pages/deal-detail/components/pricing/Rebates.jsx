@@ -2,12 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
-
-import Line from './Line';
-import Label from './Label';
-import Group from './Group';
-import Header from './Header';
-import Value from './Value';
+import Line from '../../../../components/pricing/Line';
+import Label from '../../../../components/pricing/Label';
+import Value from '../../../../components/pricing/Value';
 
 class Rebates extends React.Component {
     static propTypes = {
@@ -26,6 +23,10 @@ class Rebates extends React.Component {
 
     isRoleChecked(role) {
         return this.props.selectedConditionalRoles.includes(role['role']);
+    }
+
+    isAnyRoleChecked() {
+        return this.props.selectedConditionalRoles.length || false;
     }
 
     shouldRenderConditionalSelection() {
@@ -62,12 +63,8 @@ class Rebates extends React.Component {
 
     renderConditionRoleSelection(programId, role) {
         const labels = this.roleLabels(role['role']);
-
         return (
-            <Line
-                key={role['role']}
-                style={{ margin: '.125em 0 .125em .25em' }}
-            >
+            <Line style={{ margin: '.125em 0 .125em .25em' }}>
                 <Label key={role['role']} style={{ fontSize: '.9em' }}>
                     <input
                         key={role['role']}
@@ -79,9 +76,6 @@ class Rebates extends React.Component {
                     />
                     {labels.title}
                 </Label>
-                <Value isNegative={true} showIf={this.isRoleChecked(role)}>
-                    ${role.value}
-                </Value>
                 {this.isRoleChecked(role) &&
                     labels.description && (
                         <div
@@ -103,22 +97,26 @@ class Rebates extends React.Component {
 
         return (
             <div>
-                <div
-                    style={{
-                        fontStyle: 'italic',
-                        fontSize: '.75em',
-                        marginLeft: '.25em',
-                    }}
-                >
-                    Proof of eligibility required.
-                </div>
-
-                {Object.keys(quote.selections.conditionalRoles).map(key =>
-                    this.renderConditionRoleSelection(
-                        key,
-                        quote.selections.conditionalRoles[key]
-                    )
+                {this.isAnyRoleChecked() && (
+                    <div
+                        style={{
+                            fontStyle: 'italic',
+                            fontSize: '.75em',
+                            marginLeft: '.25em',
+                        }}
+                    >
+                        Proof of eligibility required.
+                    </div>
                 )}
+
+                {Object.keys(quote.selections.conditionalRoles).map(key => (
+                    <div key={key}>
+                        {this.renderConditionRoleSelection(
+                            key,
+                            quote.selections.conditionalRoles[key]
+                        )}
+                    </div>
+                ))}
             </div>
         );
     }
