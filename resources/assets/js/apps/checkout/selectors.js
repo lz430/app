@@ -10,8 +10,8 @@ export const dealPricingFromCheckoutData = createSelector(
         return {
             deal,
             paymentType: checkout.strategy,
-            employeeBrand: false,
-            supplierBrand: false,
+            employeeBrand: checkout.employeeBrand,
+            supplierBrand: checkout.supplierBrand,
             financeDownPayment: checkout.financeDownPayment,
             financeTerm: checkout.term,
             leaseAnnualMileage: checkout.leaseAnnualMileage,

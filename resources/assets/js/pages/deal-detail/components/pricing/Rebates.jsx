@@ -2,12 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
-
-import Line from './Line';
-import Label from './Label';
-import Group from './Group';
-import Header from './Header';
-import Value from './Value';
+import Line from '../../../../components/pricing/Line';
+import Label from '../../../../components/pricing/Label';
+import Value from '../../../../components/pricing/Value';
 
 class Rebates extends React.Component {
     static propTypes = {
@@ -68,10 +65,7 @@ class Rebates extends React.Component {
         const labels = this.roleLabels(role['role']);
 
         return (
-            <Line
-                key={role['role']}
-                style={{ margin: '.125em 0 .125em .25em' }}
-            >
+            <Line style={{ margin: '.125em 0 .125em .25em' }}>
                 <Label key={role['role']} style={{ fontSize: '.9em' }}>
                     <input
                         key={role['role']}
@@ -116,12 +110,14 @@ class Rebates extends React.Component {
                     </div>
                 )}
 
-                {Object.keys(quote.selections.conditionalRoles).map(key =>
-                    this.renderConditionRoleSelection(
-                        key,
-                        quote.selections.conditionalRoles[key]
-                    )
-                )}
+                {Object.keys(quote.selections.conditionalRoles).map(key => (
+                    <div key={key}>
+                        {this.renderConditionRoleSelection(
+                            key,
+                            quote.selections.conditionalRoles[key]
+                        )}
+                    </div>
+                ))}
             </div>
         );
     }

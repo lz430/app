@@ -2,9 +2,13 @@ import { put, call, select, takeEvery } from 'redux-saga/effects';
 
 import ApiClient from 'store/api';
 
-import { CHECKOUT_START } from './consts';
+import { CHECKOUT_START, CHECKOUT_CONTACT } from './consts';
 
-import { checkoutIsLoading, checkoutFinishedLoading } from './actions';
+import {
+    checkoutIsLoading,
+    checkoutFinishedLoading,
+    setCheckoutContactFormErrors,
+} from './actions';
 import { checkout as getCheckout } from './selectors';
 
 /*******************************************************************
@@ -51,10 +55,36 @@ export function* checkoutStart(action) {
         console.log(e);
     }
 
+    console.log(results);
+
     yield put(checkoutFinishedLoading());
 
-    if (results.status) {
-        window.location = `/request-email?payment=${checkout.strategy}`;
+    window.location = `/confirm/${dealPricing.id()}`;
+}
+
+/*******************************************************************
+ * Checkout Contact
+ *******************************************************************/
+export function* checkoutContact(action) {
+    const fields = action.fields;
+    let results = null;
+    try {
+        results = yield call(
+            ApiClient.checkout.contact,
+            fields.email,
+            fields.drivers_license_state,
+            fields.drivers_license_number,
+            fields.first_name,
+            fields.last_name,
+            fields.phone_number,
+            fields.g_recaptcha_response
+        );
+    } catch (e) {
+        yield put(setCheckoutContactFormErrors(e.response.data.errors));
+    }
+
+    if (results) {
+        window.location = results.data.destination;
     }
 }
 
@@ -63,4 +93,8 @@ export function* checkoutStart(action) {
  *******************************************************************/
 export function* watchCheckoutStart() {
     yield takeEvery(CHECKOUT_START, checkoutStart);
+}
+
+export function* watchCheckoutContact() {
+    yield takeEvery(CHECKOUT_CONTACT, checkoutContact);
 }

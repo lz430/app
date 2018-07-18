@@ -1,13 +1,13 @@
 import React from 'react';
 import Discount from './Discount';
 import Rebates from './Rebates';
-import Line from './Line';
-import Label from './Label';
-import Value from './Value';
-import TaxesAndFees from './TaxesAndFees';
-import Group from './Group';
-import Header from './Header';
-import Separator from './Separator';
+import Line from '../../../../components/pricing/Line';
+import Label from '../../../../components/pricing/Label';
+import Value from '../../../../components/pricing/Value';
+import TaxesAndFees from '../../../../components/pricing/TaxesAndFees';
+import Group from '../../../../components/pricing/Group';
+import Header from '../../../../components/pricing/Header';
+import Separator from '../../../../components/pricing/Separator';
 
 export default class CashPane extends React.PureComponent {
     static defaultProps = {

@@ -13,6 +13,7 @@ const initialState = {
     term: 0, // number of months for fiance or lease
     financeDownPayment: 0,
     leaseAnnualMileage: 0,
+    contactFormErrors: {},
 };
 
 const persistConfig = {
@@ -45,6 +46,20 @@ const reducer = function(state = initialState, action = {}) {
                 term: action.term,
                 financeDownPayment: action.financeDownPayment,
                 leaseAnnualMileage: action.leaseAnnualMileage,
+                employeeBrand: action.employeeBrand,
+                supplierBrand: action.supplierBrand,
+            };
+
+        case ActionTypes.SET_CHECKOUT_CONTACT_FORM_ERRORS:
+            return {
+                ...state,
+                contactFormErrors: action.errors,
+            };
+
+        case ActionTypes.CLEAR_CHECKOUT_CONTACT_FORM_ERRORS:
+            return {
+                ...state,
+                contactFormErrors: {},
             };
 
         default:
