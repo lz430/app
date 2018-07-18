@@ -25,6 +25,11 @@
 
     .row {
         display: flex;
+        flex-direction: column;
+
+        @media (min-width: $break-small) {
+            flex-direction: row;
+        }
 
         > div:not(.image) {
             padding: 1em;
