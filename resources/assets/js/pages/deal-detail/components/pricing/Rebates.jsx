@@ -28,6 +28,10 @@ class Rebates extends React.Component {
         return this.props.selectedConditionalRoles.includes(role['role']);
     }
 
+    isAnyRoleChecked() {
+        return this.props.selectedConditionalRoles.length || false;
+    }
+
     shouldRenderConditionalSelection() {
         const quote = this.props.dealPricing.quote();
         if (!quote || !quote.selections || !quote.selections.conditionalRoles) {
@@ -79,9 +83,6 @@ class Rebates extends React.Component {
                     />
                     {labels.title}
                 </Label>
-                <Value isNegative={true} showIf={this.isRoleChecked(role)}>
-                    ${role.value}
-                </Value>
                 {this.isRoleChecked(role) &&
                     labels.description && (
                         <div
@@ -103,15 +104,17 @@ class Rebates extends React.Component {
 
         return (
             <div>
-                <div
-                    style={{
-                        fontStyle: 'italic',
-                        fontSize: '.75em',
-                        marginLeft: '.25em',
-                    }}
-                >
-                    Proof of eligibility required.
-                </div>
+                {this.isAnyRoleChecked() && (
+                    <div
+                        style={{
+                            fontStyle: 'italic',
+                            fontSize: '.75em',
+                            marginLeft: '.25em',
+                        }}
+                    >
+                        Proof of eligibility required.
+                    </div>
+                )}
 
                 {Object.keys(quote.selections.conditionalRoles).map(key =>
                     this.renderConditionRoleSelection(
