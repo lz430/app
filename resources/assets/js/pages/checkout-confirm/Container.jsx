@@ -115,7 +115,7 @@ class Container extends React.PureComponent {
                                             {dealPricing.financeTerm()} months
                                         </Value>
                                     </Line>
-                                    <Line isSemiImportant={true}>
+                                    <Line isImportant={true}>
                                         <Label>Down Payment</Label>
                                         <Value>
                                             {dealPricing.financeDownPayment()}
