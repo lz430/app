@@ -450,6 +450,7 @@ class Container extends React.PureComponent {
                                                 placeholder="Enter Your Email"
                                                 className="request-email__input"
                                                 name="email"
+                                                autoComplete="email"
                                                 required
                                                 autoFocus
                                             />
@@ -479,6 +480,7 @@ class Container extends React.PureComponent {
                                                 className="request-email__input"
                                                 placeholder="Enter Your First Name"
                                                 name="first_name"
+                                                autoComplete="given-name"
                                                 required
                                             />
 
@@ -507,6 +509,7 @@ class Container extends React.PureComponent {
                                                 className="request-email__input"
                                                 name="last_name"
                                                 placeholder="Enter Your Last Name"
+                                                autoComplete="family-name"
                                                 required
                                             />
 
@@ -535,6 +538,7 @@ class Container extends React.PureComponent {
                                                 className="request-email__input"
                                                 name="phone_number"
                                                 placeholder="Enter Your Phone Number"
+                                                autoComplete="tel-national"
                                                 required
                                             />
 
