@@ -62,7 +62,7 @@ class Rebates extends React.Component {
     }
 
     renderConditionRoleSelection(programId, role) {
-        const labels = this.roleLabels(role);
+        const labels = this.roleLabels(role['role']);
 
         return (
             <Line style={{ margin: '.125em 0 .125em .25em' }}>
