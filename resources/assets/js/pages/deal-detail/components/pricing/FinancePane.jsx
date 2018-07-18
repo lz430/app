@@ -3,12 +3,13 @@ import miscicons from 'miscicons';
 import SVGInline from 'react-svg-inline';
 import Discount from './Discount';
 import Rebates from './Rebates';
-import Line from '../../../../components/pricing/Line';
-import Label from '../../../../components/pricing/Label';
-import Value from '../../../../components/pricing/Value';
-import TaxesAndFees from '../../../../components/pricing/TaxesAndFees';
-import Group from '../../../../components/pricing/Group';
-import Header from '../../../../components/pricing/Header';
+import Line from 'components/pricing/Line';
+import Label from 'components/pricing/Label';
+import Value from 'components/pricing/Value';
+import TaxesAndFees from 'components/pricing/TaxesAndFees';
+import Group from 'components/pricing/Group';
+import Header from 'components/pricing/Header';
+import Separator from 'components/pricing/Separator';
 import PropTypes from 'prop-types';
 
 export default class FinancePane extends React.PureComponent {
