@@ -159,7 +159,9 @@ class DealsCompareController extends BaseAPIController
                 $labels[$equipment->schemaId] = "Weight: {$formatted} (lbs)";
                 break;
             case 'Tires':
-                $labels[$attributes['type']->schemaId] = "tires: {$attributes['type']->value}";
+                if (isset($attributes['type'])) {
+                    $labels[$attributes['type']->schemaId] = "tires: {$attributes['type']->value}";
+                }
                 break;
             case 'Engine';
                 $labels[$equipment->schemaId] = "{$attributes['Liters']->value} v{$attributes['number of cylinders']->value} {$attributes['configuration']->value}";

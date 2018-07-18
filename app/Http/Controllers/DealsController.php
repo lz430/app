@@ -8,10 +8,8 @@ use League\Fractal\Serializer\DataArraySerializer;
 
 class DealsController extends Controller
 {
-    public function show(int $id)
+    public function show(Deal $deal)
     {
-        $deal = Deal::with('jatoFeatures')->has('version')->with('photos')->findOrFail($id);
-
         $title = "$deal->year $deal->make $deal->model $deal->series";
 
         $dealTransformed = fractal($deal)
