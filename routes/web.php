@@ -6,7 +6,7 @@ Route::get('/', 'WelcomeController@index')->name('home');
 Route::get('filter', 'FilterController@index')->name('filter');
 Route::get('compare', 'CompareController@index')->name('compare');
 
-Route::get('deals/{id}', 'DealsController@show')->name('deals.show');
+Route::get('deals/{deal}', 'DealsController@show')->name('deals.show');
 Route::get('confirm/{id}', 'ConfirmDetailsController@show')->name('confirm');
 
 Route::get('testing', 'WelcomeController@testing');
