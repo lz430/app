@@ -54,7 +54,7 @@ class ImportVautoMapData extends Command
 
         foreach ($csv as $record) {
             // Remove counts at the end of the string
-            $vauto_feature = preg_replace("/( *\d+(, *\d+)*|s\..*)$/", "", $record['vAuto Feature']);
+            $vauto_feature = preg_replace("/( *\d+(, *\d+)*|s\..*)$/", "", $record['vAuto Feature Stipped']);
 
             // Remove utf8 chars.
             $vauto_feature = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $vauto_feature);
