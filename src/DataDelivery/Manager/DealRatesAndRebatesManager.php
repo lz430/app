@@ -406,7 +406,7 @@ class DealRatesAndRebatesManager
 
             $affinityId = $this->getAffinityID();
             if ($affinityId) {
-                $data['AffinityIDs'] = $affinityId;
+               $data['AffinityIDs'] = $affinityId;
             }
 
         } else {
@@ -421,9 +421,23 @@ class DealRatesAndRebatesManager
             $data
         );
 
-        $this->scenarios = collect($totalRateResponse->scenarios);
-        $this->residuals = collect($totalRateResponse->residuals);
-        $this->standardRates = collect($totalRateResponse->standardRates);
+        if (isset($totalRateResponse->scenarios)) {
+            $this->scenarios = collect($totalRateResponse->scenarios);
+        } else {
+            $this->scenarios = collect([]);
+        }
+
+        if (isset($totalRateResponse->residuals)) {
+            $this->residuals = collect($totalRateResponse->residuals);
+        } else {
+            $this->residuals = collect([]);
+        }
+
+        if (isset($totalRateResponse->standardRates)) {
+            $this->standardRates = collect($totalRateResponse->standardRates);
+        } else {
+            $this->standardRates = collect([]);
+        }
     }
 
     /**
