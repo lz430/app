@@ -211,7 +211,6 @@ class DealRatesAndRebatesManager
 
                     //
                     // Employee & Supplier
-                    /*
                     if (!isset($program->role) && $this->role != "default") {
                         $strings = Map::ROLE_TO_PROGRAM_NAME[$this->role];
 
@@ -219,7 +218,6 @@ class DealRatesAndRebatesManager
                             $program->role = $this->role;
                         }
                     }
-                    */
 
                     return $program;
                 })
@@ -299,7 +297,7 @@ class DealRatesAndRebatesManager
 
                     if (isset($scenario->Cash)) {
                         $value = $scenario->Cash;
-                    } elseif (isset($scenario->terms[0]->CCR)) {
+                    } else if (isset($scenario->terms[0]->CCR)) {
                         $value = $scenario->terms[0]->CCR;
                     }
 
