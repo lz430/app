@@ -42,7 +42,6 @@ $color-left-filter-selected: #279c99;
 
 // Typography
 $font-family-sans-serif: 'Open Sans', sans-serif;
-$font-size-base: 16px;
 $line-height-base: 1.6;
 $text-color: #586368;
 $text-color-dark: darken($text-color, 25);
@@ -80,3 +79,8 @@ $deal-card-margin: 5px;
 // Deal Card
 $modelyear-card-width: $deal-card-width;
 $modelyear-card-margin: $deal-card-margin;
+
+//
+//
+// Fonts
+$font-family-sans-serif: 'Gotham Narrow Book', serif;

@@ -6,13 +6,13 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
 class CompareBar extends React.PureComponent {
+    state = {
+        count: this.props.compareList.length,
+        shaking: true,
+    };
+
     constructor(props) {
         super(props);
-
-        this.state = {
-            count: props.compareList.length,
-            shaking: true,
-        };
 
         window.setTimeout(() => {
             if (!this._isMounted) return;

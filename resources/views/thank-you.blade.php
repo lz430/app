@@ -15,7 +15,4 @@
 
 @section('content')
     <ThankYouPage purchase="{{$purchase}}"  deal="{{$deal}}" features="{{$features}}"></ThankYouPage>
-
-    @section('footer')
-    @endsection
 @endsection

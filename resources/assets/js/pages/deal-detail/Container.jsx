@@ -379,7 +379,7 @@ class Container extends React.PureComponent {
                                     )}
                                 >
                                     {this.isAlreadyInCompareList()
-                                        ? 'Remove from compare'
+                                        ? 'Remove'
                                         : 'Compare'}
                                 </button>
 

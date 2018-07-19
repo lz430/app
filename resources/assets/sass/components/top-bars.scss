@@ -18,7 +18,6 @@
     }
 
     &__page-title {
-        color: $color-blue;
         font-size: 0.75rem;
         flex: 1;
 
@@ -26,12 +25,12 @@
             font-size: 1rem;
         }
         a:link {
-            color: $color-blue;
+            color: #fff;
             text-decoration: none;
         }
 
         a:hover {
-            color: $color-light-blue;
+            color: #999;
             text-decoration: underline;
         }
     }
