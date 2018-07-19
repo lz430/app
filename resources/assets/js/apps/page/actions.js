@@ -6,3 +6,15 @@ export function setCurrentPage(data) {
         data: data,
     };
 }
+
+export function pageLoadingStart() {
+    return {
+        type: ActionTypes.PAGE_LOADING_START,
+    };
+}
+
+export function pageLoadingFinished() {
+    return {
+        type: ActionTypes.PAGE_LOADING_FINISHED,
+    };
+}

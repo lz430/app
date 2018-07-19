@@ -1,9 +1,6 @@
 const namespace = 'DEAL_LIST';
 
 export const INIT = `${namespace}_INIT`;
-export const PAGE_LOADING_START = `${namespace}_PAGE_LOADING_START`;
-export const PAGE_LOADING_FINISHED = `${namespace}_PAGE_LOADING_FINISHED`;
-
 export const SEARCH_REQUEST = `${namespace}_SEARCH_REQUEST`;
 export const SEARCH_RECEIVE = `${namespace}_SEARCH_RECEIVE`;
 export const SEARCH_INCREMENT_PAGE = `${namespace}_SEARCH_INCREMENT_PAGE`;

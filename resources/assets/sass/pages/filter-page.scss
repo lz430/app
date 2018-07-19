@@ -65,3 +65,26 @@
         width: 115px;
     }
 }
+
+.full-page-user-location {
+    .zipcode-finder {
+        background-color: #efefef;
+        border-radius: 4px;
+        color: #586368;
+        height: auto;
+    }
+    .zipcode-finder__form {
+        color: #586368;
+    }
+    .zipcode-finder__info {
+        justify-content: center;
+    }
+    .zipcode-finder__zipcode {
+        margin: 0;
+    }
+
+    .zipcode-finder__button {
+        color: #fff;
+        background: #41b1ac;
+    }
+}

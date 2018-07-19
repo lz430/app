@@ -42,18 +42,6 @@ const persistConfig = {
 
 const reducer = function(state = initialState, action = {}) {
     switch (action.type) {
-        case ActionTypes.PAGE_LOADING_START:
-            return {
-                ...state,
-                isLoading: true,
-            };
-
-        case ActionTypes.PAGE_LOADING_FINISHED:
-            return {
-                ...state,
-                isLoading: false,
-            };
-
         case ActionTypes.SEARCH_SET_FILTERS:
             return {
                 ...state,

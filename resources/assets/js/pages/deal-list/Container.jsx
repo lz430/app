@@ -2,26 +2,24 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { StickyContainer } from 'react-sticky';
-
+import miscicons from 'miscicons';
+import SVGInline from 'react-svg-inline';
 import util from 'src/util';
 
 import Modal from 'components/Modal';
-import CompareBar from 'components/CompareBar';
+
+import { getUserLocation } from 'apps/user/selectors';
+import { getIsPageLoading } from 'apps/page/selectors';
 
 import Deals from './components/Deals';
 import MakeSelector from './components/MakeSelector';
 import ToolbarSelectedFilters from './components/ToolbarSelectedFilters';
 import ToolbarPrice from './components/ToolbarPrice';
 import FilterPanel from './components/FilterPanel';
-
 import NoDealsOutOfRange from './components/NoDealsOutOfRange';
 
 import { initDealListData, closeMakeSelectorModal } from './actions';
 import { getSelectedFiltersByCategory } from './selectors';
-
-import miscicons from '../../miscicons';
-import SVGInline from 'react-svg-inline';
-import { getUserLocation } from 'apps/user/selectors';
 
 class Container extends React.PureComponent {
     static propTypes = {
@@ -138,7 +136,7 @@ const mapStateToProps = state => {
         searchQuery: state.pages.dealList.searchQuery,
         userLocation: getUserLocation(state),
         selectedFiltersByCategory: getSelectedFiltersByCategory(state),
-        isLoading: state.pages.dealList.isLoading,
+        isLoading: getIsPageLoading(state),
     };
 };
 

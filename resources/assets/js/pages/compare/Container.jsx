@@ -4,20 +4,26 @@ import PropTypes from 'prop-types';
 import { StickyContainer, Sticky } from 'react-sticky';
 
 import util from 'src/util';
-import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
 import Deal from 'components/Deals/Deal';
 
 import { initPage } from './actions';
 import ToolbarPrice from './components/ToolbarPrice';
 import EquipmentCategory from './components/EquipmentCategory';
+import ErrorNoDealsToCompare from './components/ErrorNoDealsToCompare';
 
 import { getEquipmentCategories } from './selectors';
+import { getIsPageLoading } from 'apps/page/selectors';
+
+import SVGInline from 'react-svg-inline';
+import miscicons from 'miscicons';
 
 class Container extends React.PureComponent {
     static propTypes = {
         cols: PropTypes.array.isRequired,
+        compareList: PropTypes.array.isRequired,
         equipmentCategories: PropTypes.array.isRequired,
         onPageInit: PropTypes.func.isRequired,
+        isLoading: PropTypes.bool,
     };
 
     componentDidMount() {
@@ -66,7 +72,18 @@ class Container extends React.PureComponent {
         }
     }
 
+    renderPageLoadingIcon() {
+        return <SVGInline svg={miscicons['loading']} />;
+    }
+
     render() {
+        if (!this.props.compareList || !this.props.compareList.length) {
+            return <ErrorNoDealsToCompare />;
+        }
+        if (this.props.isLoading) {
+            return this.renderPageLoadingIcon();
+        }
+
         return (
             <StickyContainer className="compare-page">
                 <div className="compare-page__toolbars">
@@ -101,12 +118,14 @@ class Container extends React.PureComponent {
 }
 
 const mapStateToProps = state => {
+    console.log(state.page.isLoading);
     return {
         cols: state.pages.compare.cols,
         equipmentCategories: getEquipmentCategories(state),
         compareList: state.common.compareList,
         dealsIdsWithCustomizedQuotes: state.common.dealsIdsWithCustomizedQuotes,
         window: state.common.window,
+        isLoading: getIsPageLoading(state),
     };
 };
 

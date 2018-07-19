@@ -6,18 +6,6 @@ export function initDealListData() {
     };
 }
 
-export function dealListPageLoadingStart() {
-    return {
-        type: ActionTypes.PAGE_LOADING_START,
-    };
-}
-
-export function dealListPageLoadingFinished() {
-    return {
-        type: ActionTypes.PAGE_LOADING_FINISHED,
-    };
-}
-
 export function requestSearch() {
     return {
         type: ActionTypes.SEARCH_REQUEST,
