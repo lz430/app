@@ -1,15 +1,13 @@
-import { put, takeEvery, select } from 'redux-saga/effects';
+import { takeEvery, select } from 'redux-saga/effects';
 
 import { INIT, REQUEST_DEAL_QUOTE } from './consts';
-
-import { requestIpLocation } from 'apps/user/sagas';
-import { setCurrentPage } from 'apps/page/actions';
 
 import { getConditionalRoles, getDeal } from './selectors';
 import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
 import { requestDealQuote as requestDealQuoteAction } from 'apps/pricing/actions';
 import { requestDealQuote } from 'apps/pricing/sagas';
 import { discountType as getDiscountType } from 'apps/common/selectors';
+import { initPage } from 'apps/page/sagas';
 
 /*******************************************************************
  * Request Deal Quote
@@ -41,8 +39,7 @@ function* dealDetailRequestDealQuote() {
  * Init
  ********************************************************************/
 function* init() {
-    yield put(setCurrentPage('deal-detail'));
-    yield* requestIpLocation();
+    yield* initPage('deal-detail');
     yield* dealDetailRequestDealQuote();
 }
 

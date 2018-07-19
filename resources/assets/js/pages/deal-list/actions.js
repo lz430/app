@@ -1,5 +1,11 @@
 import * as ActionTypes from './consts';
 
+export function initDealListData() {
+    return {
+        type: ActionTypes.INIT,
+    };
+}
+
 export function requestSearch() {
     return {
         type: ActionTypes.SEARCH_REQUEST,
@@ -10,12 +16,6 @@ export function receiveSearch(results) {
     return {
         type: ActionTypes.SEARCH_RECEIVE,
         data: results,
-    };
-}
-
-export function initDealListData() {
-    return {
-        type: ActionTypes.INIT,
     };
 }
 
@@ -120,9 +120,15 @@ export function toggleSearchSort(sort) {
     };
 }
 
+export function openMakeSelectorModal() {
+    return {
+        type: ActionTypes.MAKE_SELECTOR_MODAL_OPEN,
+    };
+}
+
 export function closeMakeSelectorModal() {
     return {
-        type: ActionTypes.CLOSE_MAKE_SELECTOR_MODAL,
+        type: ActionTypes.MAKE_SELECTOR_MODAL_CLOSE,
     };
 }
 

@@ -2,17 +2,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { StickyContainer } from 'react-sticky';
-
+import miscicons from 'miscicons';
+import SVGInline from 'react-svg-inline';
 import util from 'src/util';
 
 import Modal from 'components/Modal';
-import CompareBar from 'components/CompareBar';
+
+import { getUserLocation } from 'apps/user/selectors';
+import { getIsPageLoading } from 'apps/page/selectors';
 
 import Deals from './components/Deals';
 import MakeSelector from './components/MakeSelector';
 import ToolbarSelectedFilters from './components/ToolbarSelectedFilters';
 import ToolbarPrice from './components/ToolbarPrice';
 import FilterPanel from './components/FilterPanel';
+import NoDealsOutOfRange from './components/NoDealsOutOfRange';
 
 import { initDealListData, closeMakeSelectorModal } from './actions';
 import { getSelectedFiltersByCategory } from './selectors';
@@ -22,13 +26,19 @@ class Container extends React.PureComponent {
         searchQuery: PropTypes.object.isRequired,
         onInit: PropTypes.func.isRequired,
         onCloseMakeSelectorModal: PropTypes.func.isRequired,
-        makeSelectorModalIsOpen: PropTypes.bool.isRequired,
+        makeSelectorModalIsOpen: PropTypes.bool,
         smallFiltersShown: PropTypes.bool,
         selectedFiltersByCategory: PropTypes.object,
+        userLocation: PropTypes.object.isRequired,
+        isLoading: PropTypes.bool,
     };
 
     componentDidMount() {
         this.props.onInit();
+    }
+
+    renderPageLoadingIcon() {
+        return <SVGInline svg={miscicons['loading']} />;
     }
 
     renderMakeSelectionModal() {
@@ -95,6 +105,17 @@ class Container extends React.PureComponent {
     }
 
     render() {
+        if (this.props.isLoading) {
+            return this.renderPageLoadingIcon();
+        }
+
+        if (
+            this.props.userLocation.latitude &&
+            !this.props.userLocation.has_results
+        ) {
+            return <NoDealsOutOfRange />;
+        }
+
         return (
             <StickyContainer>
                 {this.props.makeSelectorModalIsOpen
@@ -113,7 +134,9 @@ const mapStateToProps = state => {
         smallFiltersShown: state.pages.dealList.smallFiltersShown,
         makeSelectorModalIsOpen: state.pages.dealList.showMakeSelectorModal,
         searchQuery: state.pages.dealList.searchQuery,
+        userLocation: getUserLocation(state),
         selectedFiltersByCategory: getSelectedFiltersByCategory(state),
+        isLoading: getIsPageLoading(state),
     };
 };
 

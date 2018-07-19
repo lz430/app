@@ -191,7 +191,7 @@ class DealRatesAndRebatesManager
         
         //
         // Conditional programs based on roles.
-        if ($this->conditionalRoles && count($this->conditionalRoles)) {
+        if (($this->conditionalRoles && count($this->conditionalRoles)) || $this->role != "default") {
             $programs['conditional'] = $this->cashPrivatePrograms()
                 ->reject(function ($program) {
                     return !isset($program->dealscenarios[$this->scenario]);
@@ -199,10 +199,23 @@ class DealRatesAndRebatesManager
                 // Decorate with roles.
                 ->map(function ($program) {
                     $program->role = null;
+
+                    //
+                    // Conquest / College / Etc
                     foreach ($this->conditionalRoles as $role) {
                         $strings = Map::CONDITIONALS_TO_PROGRAM_NAME[$role];
                         if (str_contains(strtolower($program->ProgramDescription), $strings)) {
                             $program->role = $role;
+                        }
+                    }
+
+                    //
+                    // Employee & Supplier
+                    if (!isset($program->role) && $this->role != "default") {
+                        $strings = Map::ROLE_TO_PROGRAM_NAME[$this->role];
+
+                        if (str_contains(strtolower($program->ProgramDescription), $strings)) {
+                            $program->role = $this->role;
                         }
                     }
 
@@ -213,7 +226,6 @@ class DealRatesAndRebatesManager
                 })
                 ->all();
         }
-
         $this->selectedPrograms = $programs;
     }
 
@@ -229,7 +241,6 @@ class DealRatesAndRebatesManager
                 return $scenario->DealScenarioType != $this->scenario;
             })
             ->first();
-
         //
         // Using the total endpoint, we can determine which programs we should actually apply.
         if (isset($scenario->tiers[0]->aprprograms)) {
@@ -406,7 +417,7 @@ class DealRatesAndRebatesManager
 
             $affinityId = $this->getAffinityID();
             if ($affinityId) {
-                $data['AffinityIDs'] = $affinityId;
+               $data['AffinityIDs'] = $affinityId;
             }
 
         } else {
@@ -421,9 +432,23 @@ class DealRatesAndRebatesManager
             $data
         );
 
-        $this->scenarios = collect($totalRateResponse->scenarios);
-        $this->residuals = collect($totalRateResponse->residuals);
-        $this->standardRates = collect($totalRateResponse->standardRates);
+        if (isset($totalRateResponse->scenarios)) {
+            $this->scenarios = collect($totalRateResponse->scenarios);
+        } else {
+            $this->scenarios = collect([]);
+        }
+
+        if (isset($totalRateResponse->residuals)) {
+            $this->residuals = collect($totalRateResponse->residuals);
+        } else {
+            $this->residuals = collect([]);
+        }
+
+        if (isset($totalRateResponse->standardRates)) {
+            $this->standardRates = collect($totalRateResponse->standardRates);
+        } else {
+            $this->standardRates = collect([]);
+        }
     }
 
     /**

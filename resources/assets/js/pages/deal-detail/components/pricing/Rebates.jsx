@@ -56,6 +56,22 @@ class Rebates extends React.Component {
                 title: 'Loyalty',
                 description: null,
             },
+            responder: {
+                title: 'First Responder',
+                description: null,
+            },
+            gmcompetitive: {
+                title: 'GM Competitive Lease',
+                description: null,
+            },
+            gmlease: {
+                title: 'GM Lease Loyalty',
+                description: null,
+            },
+            cadillaclease: {
+                title: 'Cadillac Lease Loyalty',
+                description: null,
+            },
         };
 
         return map[role];
@@ -63,6 +79,9 @@ class Rebates extends React.Component {
 
     renderConditionRoleSelection(programId, role) {
         const labels = this.roleLabels(role['role']);
+        if (!labels) {
+            return false;
+        }
         return (
             <Line style={{ margin: '.125em 0 .125em .25em' }}>
                 <Label key={role['role']} style={{ fontSize: '.9em' }}>

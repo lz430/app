@@ -25,9 +25,10 @@ class UserLocationController extends Controller
         ]);
 
         $response = json_decode($response->getBody());
-
         $location = [
             'city' =>  $response->city,
+            'state' => $response->region_code,
+            'country' => $response->country_code,
             'zip' => $response->zip,
             'latitude' => $response->latitude,
             'longitude' => $response->longitude,
@@ -66,8 +67,11 @@ class UserLocationController extends Controller
     private function formatGeocoderAddress($lookup): ?array
     {
         if ($lookup && $lookup->getCoordinates()->getLongitude()) {
+
             $location = [
                 'city' => $lookup->getLocality(),
+                'state' => $lookup->getAdminLevels()->first()->getCode(),
+                'country' => $lookup->getCountry()->getCode(),
                 'zip' => $lookup->getPostalCode(),
                 'latitude' => $lookup->getCoordinates()->getLatitude(),
                 'longitude' => $lookup->getCoordinates()->getLongitude(),
@@ -108,8 +112,9 @@ class UserLocationController extends Controller
 
             $location = $this->getLocationForIp($ip);
         }
-
-        if ($location) {
+        if ($location && $location['country'] != "US") {
+            $has_results = false;
+        } elseif ($location) {
             $query = new DealSearch();
             $query = $query->filterMustLocation(['lat' => $location['latitude'], 'lon' =>  $location['longitude']]);
             $query = $query->filterMustGenericRules();
@@ -121,7 +126,6 @@ class UserLocationController extends Controller
             } else {
                 $has_results = false;
             }
-
         } else {
             $has_results = false;
         }
