@@ -93,7 +93,6 @@ class DealQuoteController extends BaseAPIController
             'zipcode' => 'required|string',
             'roles' => 'required|array|in:default,employee,supplier,college,military,conquest,loyal,responder,gmcompetitive,gmlease',
         ]);
-
         $paymentType = request('payment_type');
         $zip = request('zipcode');
 
@@ -104,7 +103,7 @@ class DealQuoteController extends BaseAPIController
         $key = "{$deal->id}-{$paymentType}-{$zip}--{$roleKey}";
 
         $cacheKey = md5('quote.' . $key);
-        if ($data = Cache::tags('quote')->get($cacheKey)) {
+        if (!request('force') && $data = Cache::tags('quote')->get($cacheKey)) {
             return $data;
         }
 

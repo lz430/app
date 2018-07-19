@@ -6,10 +6,10 @@ class Map
 {
     public const AFFINITY_MAP = [
         'employee' => [
-            'Buick' => 4,
-            'Chevrolet' => 4,
-            'GMC' => 4,
-            'Cadillac' => 4,
+            'Buick' => 1,
+            'Chevrolet' => 1,
+            'GMC' => 1,
+            'Cadillac' => 1,
             'Ford' => 22,
             'Lincoln' => 22,
             'Dodge' => 17,
@@ -57,6 +57,15 @@ class Map
         'resp' => 'responder',
         'gmcomp' => 'gmcompetitive',
         'gmlease' => 'gmlease'
+    ];
+
+    public const ROLE_TO_PROGRAM_NAME = [
+        'employee' => [
+            'employee'
+        ],
+        'supplier' => [
+            'supplier'
+        ],
     ];
 
     public const CONDITIONALS_TO_PROGRAM_NAME = [
