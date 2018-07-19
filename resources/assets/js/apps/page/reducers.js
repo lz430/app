@@ -1,17 +1,17 @@
 import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
 import { basePersistConfig } from 'persist';
 
 import * as ActionTypes from './consts';
 
 const initialState = {
     current: null,
+    isLoading: false,
 };
 
 const persistConfig = {
     ...basePersistConfig,
     key: 'page',
-    blacklist: ['current'],
+    blacklist: ['current', 'isLoading'],
 };
 
 const reducer = function(state = initialState, action = {}) {
@@ -20,6 +20,16 @@ const reducer = function(state = initialState, action = {}) {
             return {
                 ...state,
                 current: action.data,
+            };
+        case ActionTypes.PAGE_LOADING_START:
+            return {
+                ...state,
+                isLoading: true,
+            };
+        case ActionTypes.PAGE_LOADING_FINISHED:
+            return {
+                ...state,
+                isLoading: false,
             };
         default:
             return state;

@@ -4,6 +4,7 @@ import { basePersistConfig } from 'persist';
 import * as ActionTypes from './consts';
 
 const initialState = {
+    isLoading: false,
     page: 1,
     searchQuery: {
         entity: 'model', // deal or model depending on the page we're on.
@@ -18,7 +19,7 @@ const initialState = {
     loadingSearchResults: true,
     meta: {},
     filters: {},
-    showMakeSelectorModal: true,
+    showMakeSelectorModal: null, // null = never shown | true = showing | false = has shown
     smallFiltersShown: false,
 };
 
@@ -26,6 +27,7 @@ const persistConfig = {
     ...basePersistConfig,
     key: 'dealList',
     blacklist: [
+        'isLoading',
         'deals',
         'dealPage',
         'dealPageTotal',
@@ -183,8 +185,12 @@ const reducer = function(state = initialState, action = {}) {
                 ...state,
                 smallFiltersShown: !state.smallFiltersShown,
             };
-
-        case ActionTypes.CLOSE_MAKE_SELECTOR_MODAL:
+        case ActionTypes.MAKE_SELECTOR_MODAL_OPEN:
+            return {
+                ...state,
+                showMakeSelectorModal: true,
+            };
+        case ActionTypes.MAKE_SELECTOR_MODAL_CLOSE:
             return {
                 ...state,
                 showMakeSelectorModal: false,

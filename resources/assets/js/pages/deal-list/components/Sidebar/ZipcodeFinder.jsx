@@ -9,16 +9,17 @@ class ZipcodeFinder extends React.PureComponent {
         zipcode: PropTypes.string,
         city: PropTypes.string,
         zipInRange: PropTypes.bool,
+        onSearchForLocation: PropTypes.func.isRequired,
+    };
+
+    state = {
+        editing: false,
+        zipError: false,
+        zipcode: this.props.zipcode,
     };
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            editing: false,
-            zipError: false,
-            zipcode: props.zipcode,
-        };
 
         this.saveZip = this.saveZip.bind(this);
         this.isValid = this.isValid.bind(this);
@@ -38,7 +39,7 @@ class ZipcodeFinder extends React.PureComponent {
     saveZip(event) {
         if (event) event.preventDefault();
 
-        if (this.isValid()) {
+        if (this.isValid() && this.state.zipcode !== this.props.zipcode) {
             this.props.onSearchForLocation(this.state.zipcode);
         }
     }
