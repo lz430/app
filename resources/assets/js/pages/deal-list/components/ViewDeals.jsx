@@ -36,8 +36,10 @@ class ViewDeals extends React.PureComponent {
 
     compareButtonClass(deal) {
         return (
-            'deal__button deal__button--x-small deal__button--blue' +
-            (this.compareListContainsDeal(deal) ? 'deal__button--blue' : '')
+            'btn ' +
+            (this.compareListContainsDeal(deal)
+                ? 'btn-outline-primary'
+                : 'btn-primary')
         );
     }
 
@@ -57,7 +59,7 @@ class ViewDeals extends React.PureComponent {
                 <div className="deals__show-more">
                     <button
                         onClick={this.props.onRequestMoreDeals}
-                        className="deals__button deals__button--blue"
+                        className="btn btn-primary"
                     >
                         Show More
                     </button>
@@ -94,7 +96,7 @@ class ViewDeals extends React.PureComponent {
                                                 : 'Compare'}{' '}
                                         </button>
                                         <a
-                                            className="deal__button deal__button--x-small deal__button--pink deal__button"
+                                            className="btn btn-success"
                                             href={`/deals/${deal.id}`}
                                         >
                                             View Details

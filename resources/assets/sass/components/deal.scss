@@ -85,7 +85,16 @@
     &__buttons {
         display: flex;
         justify-content: space-around;
-        margin: 5px 0 0.5rem;
+        margin: 5px 0 0 0;
+        > .btn {
+            flex: 1;
+            &:first-child {
+                margin-right: 5px;
+            }
+            &:last-child {
+                margin-left: 5px;
+            }
+        }
     }
 
     &__button {

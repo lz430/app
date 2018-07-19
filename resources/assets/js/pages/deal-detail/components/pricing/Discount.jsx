@@ -50,16 +50,22 @@ export default class Discount extends React.PureComponent {
                     <Label>Discount</Label>
                 </Line>
                 <Line style={{ margin: '.125em 0 .125em .25em' }}>
-                    <Label style={{ fontSize: '.9em' }}>
-                        <input
-                            name="discountType"
-                            value="dmr"
-                            type="radio"
-                            checked={dealPricing.isEffectiveDiscountDmr()}
-                            onChange={e => this.handleChange(e)}
-                        />
-                        DMR Customer
-                    </Label>
+                    <div className="form-check">
+                        <Label
+                            className="form-check-input"
+                            style={{ fontSize: '.9em' }}
+                        >
+                            <input
+                                name="discountType"
+                                value="dmr"
+                                type="radio"
+                                className="form-check-input"
+                                checked={dealPricing.isEffectiveDiscountDmr()}
+                                onChange={e => this.handleChange(e)}
+                            />
+                            DMR Customer
+                        </Label>
+                    </div>
                     <Value
                         isNegative={true}
                         showIf={dealPricing.isEffectiveDiscountDmr()}
@@ -79,16 +85,22 @@ export default class Discount extends React.PureComponent {
                         </div>
 
                         <Line style={{ margin: '.125em 0 .125em .25em' }}>
-                            <Label style={{ fontSize: '.9em' }}>
-                                <input
-                                    name="discountType"
-                                    value="employee"
-                                    type="radio"
-                                    checked={dealPricing.isEffectiveDiscountEmployee()}
-                                    onChange={e => this.handleChange(e)}
-                                />
-                                Employee / Retiree
-                            </Label>
+                            <div className="form-check">
+                                <Label
+                                    className="form-check-input"
+                                    style={{ fontSize: '.9em' }}
+                                >
+                                    <input
+                                        name="discountType"
+                                        value="employee"
+                                        type="radio"
+                                        className="form-check-input"
+                                        checked={dealPricing.isEffectiveDiscountEmployee()}
+                                        onChange={e => this.handleChange(e)}
+                                    />
+                                    Employee / Retiree
+                                </Label>
+                            </div>
                             <Value
                                 isNegative={true}
                                 showIf={dealPricing.isEffectiveDiscountEmployee()}
@@ -99,16 +111,22 @@ export default class Discount extends React.PureComponent {
                                 this.renderProofOfEligibility()}
                         </Line>
                         <Line style={{ margin: '.125em 0 .125em .25em' }}>
-                            <Label style={{ fontSize: '.9em' }}>
-                                <input
-                                    name="discountType"
-                                    value="supplier"
-                                    type="radio"
-                                    checked={dealPricing.isEffectiveDiscountSupplier()}
-                                    onChange={e => this.handleChange(e)}
-                                />
-                                Supplier / Friends &amp; Family
-                            </Label>
+                            <div className="form-check">
+                                <Label
+                                    className="form-check-input"
+                                    style={{ fontSize: '.9em' }}
+                                >
+                                    <input
+                                        name="discountType"
+                                        value="supplier"
+                                        type="radio"
+                                        className="form-check-input"
+                                        checked={dealPricing.isEffectiveDiscountSupplier()}
+                                        onChange={e => this.handleChange(e)}
+                                    />
+                                    Supplier / Friends &amp; Family
+                                </Label>
+                            </div>
                             <Value
                                 isNegative={true}
                                 showIf={dealPricing.isEffectiveDiscountSupplier()}
