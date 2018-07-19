@@ -29,6 +29,7 @@ export const getSelectedFiltersByCategory = createSelector(
             }
             byCategory[item[0]].push(item[1]);
         });
+
         return byCategory;
     }
 );

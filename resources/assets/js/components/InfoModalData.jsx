@@ -4,13 +4,10 @@ import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButto
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import PropTypes from 'prop-types';
-
-// TODO: These components should be moved to a common area if they are used by other
-// common components.
-import Line from 'pages/deal-detail/components/pricing/Line';
-import Label from 'pages/deal-detail/components/pricing/Label';
-import Value from 'pages/deal-detail/components/pricing/Value';
-import Group from '../pages/deal-detail/components/pricing/Group';
+import Group from './pricing/Group';
+import Line from './pricing/Line';
+import Label from './pricing/Label';
+import Value from './pricing/Value';
 
 class InfoModalData extends React.PureComponent {
     static propTypes = {
@@ -34,6 +31,7 @@ class InfoModalData extends React.PureComponent {
         onSetPurchaseStrategy: PropTypes.func.isRequired,
         closeModal: PropTypes.func,
         children: PropTypes.node,
+        withPricingTabs: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -171,7 +169,7 @@ class InfoModalData extends React.PureComponent {
                                             <Label>Rebates Applied</Label>
                                             <Value
                                                 isNegative={true}
-                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                                isLoading={dealPricing.dealQuoteIsLoading()}
                                             >
                                                 {dealPricing.bestOffer()}
                                             </Value>
@@ -182,7 +180,7 @@ class InfoModalData extends React.PureComponent {
                                         >
                                             <Label>Cash Price</Label>
                                             <Value
-                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                                isLoading={dealPricing.dealQuoteIsLoading()}
                                             >
                                                 {dealPricing.cashPrice()}
                                             </Value>
@@ -190,7 +188,7 @@ class InfoModalData extends React.PureComponent {
                                         <Line>
                                             <Label>Taxes &amp; Fees</Label>
                                             <Value
-                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                                isLoading={dealPricing.dealQuoteIsLoading()}
                                             >
                                                 {dealPricing.taxesAndFeesTotal()}
                                             </Value>
@@ -205,7 +203,7 @@ class InfoModalData extends React.PureComponent {
                                         <Line>
                                             <Label>Total Selling Price</Label>
                                             <Value
-                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                                isLoading={dealPricing.dealQuoteIsLoading()}
                                             >
                                                 {dealPricing.yourPrice()}*
                                             </Value>
@@ -213,7 +211,7 @@ class InfoModalData extends React.PureComponent {
                                         <Line isSemiImportant={true}>
                                             <Label>Down Payment</Label>
                                             <Value
-                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                                isLoading={dealPricing.dealQuoteIsLoading()}
                                             >
                                                 {dealPricing.financeDownPayment()}
                                             </Value>
@@ -221,7 +219,7 @@ class InfoModalData extends React.PureComponent {
                                         <Line>
                                             <Label>Amount Financed</Label>
                                             <Value
-                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                                isLoading={dealPricing.dealQuoteIsLoading()}
                                             >
                                                 {dealPricing.amountFinanced()}
                                             </Value>
@@ -236,7 +234,7 @@ class InfoModalData extends React.PureComponent {
                                         <Line isImportant={true}>
                                             <Label>Monthly Payment</Label>
                                             <Value
-                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                                isLoading={dealPricing.dealQuoteIsLoading()}
                                             >
                                                 {dealPricing.monthlyPayments()}*
                                             </Value>
@@ -251,7 +249,7 @@ class InfoModalData extends React.PureComponent {
                                         <Line>
                                             <Label>Annual Miles</Label>
                                             <Value
-                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                                isLoading={dealPricing.dealQuoteIsLoading()}
                                             >
                                                 {dealPricing.leaseAnnualMileage()}
                                             </Value>
@@ -259,7 +257,7 @@ class InfoModalData extends React.PureComponent {
                                         <Line>
                                             <Label>Term</Label>
                                             <Value
-                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                                isLoading={dealPricing.dealQuoteIsLoading()}
                                             >
                                                 {dealPricing.leaseTerm()} months
                                             </Value>
@@ -267,7 +265,7 @@ class InfoModalData extends React.PureComponent {
                                         <Line isImportant={true}>
                                             <Label>Monthly Payment</Label>
                                             <Value
-                                                isLoading={dealPricing.bestOfferIsLoading()}
+                                                isLoading={dealPricing.dealQuoteIsLoading()}
                                             >
                                                 {dealPricing.monthlyPayments()}*
                                             </Value>
@@ -296,7 +294,7 @@ class InfoModalData extends React.PureComponent {
                                 <CustomizeQuoteOrBuyNowButton
                                     onCustomizeQuote={() => this.selectDeal()}
                                     deal={this.props.dealPricing.deal()}
-                                    hasCustomizedQuote={this.props.dealPricing.hasCustomizedQuote()}
+                                    hasCustomizedQuote={false}
                                     disabled={
                                         !this.props.dealPricing.canPurchase()
                                     }

@@ -7,6 +7,7 @@ use App\Mail\ApplicationSubmittedDMR;
 use App\Mail\ApplicationSubmittedUser;
 use App\Mail\DealPurchasedDMR;
 use App\Models\Purchase;
+use App\Transformers\DealTransformer;
 use App\Transformers\PurchaseTransformer;
 use App\Models\User;
 use Carbon\Carbon;
@@ -20,92 +21,6 @@ use Laracasts\Utilities\JavaScript\JavaScriptFacade;
 
 class ApplyOrPurchaseController extends Controller
 {
-    public function requestEmail(Request $request)
-    {
-        if (! session()->has('purchase') || ! is_object(session('purchase'))) {
-            return "Invalid request";
-        }
-        return view('request-email')->with('email', $request->session()->get('email'));
-    }
-
-    public function receiveEmail(Request $request)
-    {
-        $this->validate(
-            $request,
-            [
-                'email' => 'required|email',
-                'drivers_license_state' => 'required|string', // This is out of alphabetical order but is required to exist for the driversLicense validator
-                'drivers_license_number' => 'required|drivers_license_number',
-                'first_name' => 'required|string',
-                'last_name' => 'required|string',
-                'phone_number' => 'required|digits:10',
-                'g-recaptcha-response' => 'required|recaptcha',
-            ],
-            [
-                'drivers_license_number' => 'Please provide a valid License Number.',
-                'g-recaptcha-response' => 'The recaptcha is required.',
-            ]
-        );
-
-        //
-        // User
-        $user = DB::transaction(function () use ($request) {
-            /**
-             * If we already have a user with this email, let's use that account
-             * instead of the newly created one.
-             */
-            $user = User::updateOrCreate(
-                [
-                    'email' => $request->email
-                ],
-                [
-                    'drivers_license_number' => $request->drivers_license_number,
-                    'drivers_license_state' => $request->drivers_license_state,
-                    'first_name' => $request->first_name,
-                    'last_name' => $request->last_name,
-                    'phone_number' => $request->phone_number,
-                    'zip' => session()->get('zip'),
-                ]
-            );
-
-            auth()->login($user);
-
-            return $user;
-        });
-
-
-        //
-        // If we don't have a purchase stored in session give up
-        if (! session()->has('purchase') || ! is_object(session('purchase'))) {
-            return redirect()->back();
-        }
-
-        //
-        // Retrieve and store purchase
-        $purchase = session('purchase');
-        $purchase->user_id = $user->id;
-
-        $existing_purchase = Purchase::where('user_id', $user->id)
-            ->where('deal_id', $purchase->deal_id)
-            ->whereNull('completed_at')
-            ->first();
-
-        if ($existing_purchase) {
-            $purchase = $existing_purchase;
-        }
-
-        $purchase->save();
-
-        event(new NewPurchaseInitiated($user, $purchase));
-
-        if (request('method') == 'cash') {
-            return redirect()->route('thank-you', ['method' => 'cash']);
-        }
-        
-        return redirect()->route('view-apply', ['purchaseId' => $purchase->id])
-            ->with('purchase', $purchase);
-    }
-
     public function purchase()
     {
         try {
@@ -203,6 +118,8 @@ class ApplyOrPurchaseController extends Controller
         $lastPurchase->load('deal.photos');
         $lastPurchase = fractal()->item($lastPurchase)->transformWith(PurchaseTransformer::class)->toJson();
         $deal = auth()->user()->purchases->last()->deal;
+        $dealData = json_encode((new DealTransformer())->transform($deal));
+
         $vautoFeatures = collect(
             array_values(
                 array_diff(
@@ -213,7 +130,6 @@ class ApplyOrPurchaseController extends Controller
                 )
             )
         );
-
-        return view('thank-you')->with('purchase', $lastPurchase)->with('deal', $deal)->with('features', $vautoFeatures);
+        return view('thank-you')->with('purchase', $lastPurchase)->with('deal', $dealData)->with('features', $vautoFeatures);
     }
 }

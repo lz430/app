@@ -34,6 +34,10 @@ export default class DealPricing {
         this.data = data;
     }
 
+    quote() {
+        return this.data.dealQuote;
+    }
+
     id() {
         return this.data.deal.id;
     }
@@ -42,7 +46,12 @@ export default class DealPricing {
         return this.data.deal.vin;
     }
 
+    /** @deprecated */
     paymentType() {
+        return this.data.paymentType;
+    }
+
+    paymentStrategy() {
         return this.data.paymentType;
     }
 
@@ -54,20 +63,16 @@ export default class DealPricing {
         return [0];
     }
 
-    /**
-     * @deprecated
-     * @returns {boolean}
-     */
-    bestOfferIsLoading() {
+    dealQuoteIsLoading() {
         return this.data.dealQuoteIsLoading;
+    }
+
+    dealQuoteIsLoaded() {
+        return !this.data.dealQuoteIsLoading;
     }
 
     deal() {
         return this.data.deal;
-    }
-
-    hasCustomizedQuote() {
-        return this.data.dealHasCustomizedQuote;
     }
 
     financeDownPaymentValue() {
@@ -82,6 +87,21 @@ export default class DealPricing {
 
     financeDownPayment() {
         return util.moneyFormat(this.financeDownPaymentValue());
+    }
+
+    effectiveTermValue() {
+        switch (this.data.paymentType) {
+            case 'cash':
+                return null;
+            case 'finance':
+                return this.financeTermValue();
+            case 'lease':
+                return this.leaseTermValue();
+        }
+    }
+
+    effectiveTerm() {
+        return this.effectiveTermValue();
     }
 
     financeTermValue() {
@@ -146,7 +166,7 @@ export default class DealPricing {
     }
 
     leaseAnnualMileage() {
-        return this.leaseAnnualMileageValue();
+        return this.leaseAnnualMileageValue().toLocaleString();
     }
 
     msrpValue() {
@@ -293,6 +313,22 @@ export default class DealPricing {
         return util.moneyFormat(this.supplierDiscountValue());
     }
 
+    discountType() {
+        if (this.isEffectiveDiscountDmr()) {
+            return 'dmr';
+        }
+
+        if (this.isEffectiveDiscountEmployee()) {
+            return 'employee';
+        }
+
+        if (this.isEffectiveDiscountSupplier()) {
+            return 'supplier';
+        }
+
+        return 'dmr';
+    }
+
     isEffectiveDiscountEmployee() {
         return (
             this.data.discountType === 'employee' &&
@@ -308,7 +344,7 @@ export default class DealPricing {
     }
 
     isEffectiveDiscountDmr() {
-        if (!this.data.discountType) {
+        if (!this.data.discountType || this.data.discountType === 'dmr') {
             return true;
         }
 
@@ -326,7 +362,11 @@ export default class DealPricing {
             return true;
         }
 
-        return this.data.discountType === 'dmr';
+        return false;
+    }
+
+    isCash() {
+        return this.data.paymentType === 'cash';
     }
 
     isFinance() {
@@ -490,6 +530,7 @@ export default class DealPricing {
         return annualMileageOptions
             .map(item => parseInt(item, 10))
             .sort((a, b) => a - b)
+            .filter(term => term > 7500)
             .filter((term, termIndex) => termIndex < 4);
     }
 
@@ -573,7 +614,7 @@ export default class DealPricing {
     }
 
     isPricingAvailable() {
-        if (this.bestOfferIsLoading()) {
+        if (this.dealQuoteIsLoading()) {
             return false;
         }
 
@@ -638,6 +679,20 @@ export default class DealPricing {
         return util.moneyFormat(this.taxOnRebatesValue());
     }
 
+    taxOnRebatesAndFeesValue() {
+        return Math.round(
+            (this.bestOfferValue() +
+                this.docFeeValue() +
+                this.effCvrFeeValue() +
+                this.acquisitionFeeValue()) *
+                this.taxRate()
+        );
+    }
+
+    taxOnRebatesAndFees() {
+        return util.moneyFormat(this.taxOnRebatesAndFeesValue());
+    }
+
     taxesAndFeesTotalValue(taxesAndFees) {
         return (taxesAndFees || this.taxesAndFees()).reduce(
             (total, item) => total + item.rawValue,
@@ -647,6 +702,34 @@ export default class DealPricing {
 
     taxesAndFeesTotal(taxesAndFees) {
         return util.moneyFormat(this.taxesAndFeesTotalValue(taxesAndFees));
+    }
+
+    grossCapitalizedCostValue() {
+        return (
+            this.discountedPriceValue() +
+            this.docFeeValue() +
+            this.effCvrFeeValue() +
+            this.acquisitionFeeValue() +
+            this.taxOnRebatesAndFeesValue()
+        );
+    }
+
+    grossCapitalizedCost() {
+        return util.moneyFormat(this.grossCapitalizedCostValue());
+    }
+
+    netCapitalizedCostValue() {
+        return new Decimal(this.grossCapitalizedCostValue()).minus(
+            this.bestOfferValue()
+        );
+    }
+
+    netCapitalizedCost() {
+        return util.moneyFormat(this.netCapitalizedCostValue());
+    }
+
+    hasRebatesApplied() {
+        return this.bestOfferValue() > 0;
     }
 
     taxesAndFees() {
@@ -695,9 +778,9 @@ export default class DealPricing {
                         rawValue: this.acquisitionFeeValue(),
                     },
                     {
-                        label: 'Tax on Rebates',
+                        label: 'Tax on Rebates and Fees',
                         value: this.taxOnRebates(),
-                        rawValue: this.taxOnRebatesValue(),
+                        rawValue: this.taxOnRebatesAndFeesValue(),
                     },
                 ];
         }

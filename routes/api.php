@@ -14,13 +14,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('dealsByModelYear', 'DealsByModelYearController@getDealsByModelYear')->name('dealsByModelYear.index');
-Route::get('deals', 'DealsController@getDeals')->name('deals.index');
+Route::get('deals', 'DealsController@list')->name('deals.index');
+Route::get('deals/{deal}/image/{index}', 'DealsController@image')->name('deals.image');
 Route::get('deals/compare', 'DealsCompareController@compare')->name('deals.compare');
 Route::get('deals/{deal}/quote', 'DealQuoteController@quote')->name('deals.quote');
 Route::get('deals/{deal}/warranties', 'DealWarrantiesController@getWarranties')->name('warranties.getWarranties');
 Route::get('deals/{deal}/dimensions', 'DealDimensionsController@getDimensions')->name('dimensions.getDimensions');
 
 Route::post('checkout/start', 'CheckoutController@start')->name('checkout.start');
+Route::post('checkout/contact', 'CheckoutController@contact')->name('checkout.contact');
 
 Route::get('targets', 'TargetsController@getTargets')->name('targets.getTargets');
 Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');

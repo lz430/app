@@ -5,22 +5,11 @@ import { INIT, REQUEST_DEAL_QUOTE } from './consts';
 import { requestIpLocation } from 'apps/user/sagas';
 import { setCurrentPage } from 'apps/page/actions';
 
-import {
-    getDeal,
-    getActiveQuote,
-    getFinanceSettings,
-    getLeaseSettings,
-} from './selectors';
+import { getConditionalRoles, getDeal } from './selectors';
 import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
 import { requestDealQuote as requestDealQuoteAction } from 'apps/pricing/actions';
 import { requestDealQuote } from 'apps/pricing/sagas';
 import { discountType as getDiscountType } from 'apps/common/selectors';
-
-import { updateDownPayment, updateTerm } from './modules/finance';
-import {
-    updateAnnualMileage,
-    updateTerm as leaseUpdateTerm,
-} from './modules/lease';
 
 /*******************************************************************
  * Request Deal Quote
@@ -34,6 +23,7 @@ function* dealDetailRequestDealQuote() {
     const location = yield select(getUserLocation);
     const purchaseStrategy = yield select(getUserPurchaseStrategy);
     const discountType = yield select(getDiscountType);
+    const conditionalRoles = yield select(getConditionalRoles);
 
     // Do the regular.
     yield* requestDealQuote(
@@ -41,7 +31,8 @@ function* dealDetailRequestDealQuote() {
             deal,
             location.zipcode,
             purchaseStrategy,
-            discountType
+            discountType,
+            conditionalRoles
         )
     );
 }

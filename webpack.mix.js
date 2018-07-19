@@ -23,7 +23,7 @@ mix.react('resources/assets/js/app.js', 'public/js').sass(
     'public/css'
 );
 
-if (mix.config.inProduction) {
+if (mix.inProduction()) {
     mix.version();
 } else {
     mix.browserSync({

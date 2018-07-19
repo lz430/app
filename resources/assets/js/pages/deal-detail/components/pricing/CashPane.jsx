@@ -1,12 +1,13 @@
 import React from 'react';
 import Discount from './Discount';
-import Rebates from '../../containers/pricing/rebates/Rebates';
-import Line from './Line';
-import Label from './Label';
-import Value from './Value';
-import TaxesAndFees from './TaxesAndFees';
-import Group from './Group';
-import Header from './Header';
+import Rebates from './Rebates';
+import Line from '../../../../components/pricing/Line';
+import Label from '../../../../components/pricing/Label';
+import Value from '../../../../components/pricing/Value';
+import TaxesAndFees from '../../../../components/pricing/TaxesAndFees';
+import Group from '../../../../components/pricing/Group';
+import Header from '../../../../components/pricing/Header';
+import Separator from '../../../../components/pricing/Separator';
 
 export default class CashPane extends React.PureComponent {
     static defaultProps = {
@@ -34,7 +35,7 @@ export default class CashPane extends React.PureComponent {
                         <Value>{dealPricing.discountedPrice()}</Value>
                     </Line>
                 </Group>
-                <hr />
+                <Separator />
                 <Group>
                     <Header>Taxes &amp; Fees</Header>
                     <TaxesAndFees items={dealPricing.taxesAndFees()} />
@@ -43,22 +44,13 @@ export default class CashPane extends React.PureComponent {
                         <Value>{dealPricing.sellingPrice()}*</Value>
                     </Line>
                 </Group>
-                <hr />
+                <Separator />
                 <Group>
-                    <Header>Discounts</Header>
-                    <Line>
-                        <Label>Rebates Applied</Label>
-                        <Value
-                            isNegative={true}
-                            isLoading={dealPricing.bestOfferIsLoading()}
-                        >
-                            {dealPricing.bestOffer()}
-                        </Value>
-                    </Line>
+                    <Header>Rebates</Header>
                     <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
                     <Line isImportant={true} isSectionTotal={true}>
                         <Label>Total Selling Price</Label>
-                        <Value isLoading={dealPricing.bestOfferIsLoading()}>
+                        <Value isLoading={dealPricing.dealQuoteIsLoading()}>
                             {dealPricing.yourPrice()}*
                         </Value>
                     </Line>

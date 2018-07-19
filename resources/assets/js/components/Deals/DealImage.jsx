@@ -2,10 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import LazyLoad from 'react-lazyload';
 
-class DealImage extends React.PureComponent {
+export default class DealImage extends React.PureComponent {
     static propTypes = {
         deal: PropTypes.object.isRequired,
-        featureImageClass: PropTypes.string.isRequired,
+        size: PropTypes.string,
+        link: PropTypes.bool,
+        featureImageClass: PropTypes.string,
+    };
+
+    static defaultProps = {
+        size: 'thumbnail',
+        link: true,
     };
 
     state = {
@@ -13,7 +20,11 @@ class DealImage extends React.PureComponent {
     };
 
     featuredImageUrl() {
-        if (this.props.deal.thumbnail && this.props.deal.thumbnail.url) {
+        if (
+            this.props.size === 'thumbnail' &&
+            this.props.deal.thumbnail &&
+            this.props.deal.thumbnail.url
+        ) {
             return this.props.deal.thumbnail.url;
         }
 
@@ -24,17 +35,27 @@ class DealImage extends React.PureComponent {
     }
 
     render() {
+        const imageProps = {};
+        if (this.props.featureImageClass) {
+            imageProps.className = this.props.featureImageClass;
+        }
+
         return (
             <LazyLoad height={200} overflow={true}>
                 <div className="deal__image-container">
-                    <img
-                        className={this.props.featureImageClass}
-                        src={this.featuredImageUrl()}
-                    />
+                    {this.props.link && (
+                        <a href={`/deals/${this.props.deal.id}`}>
+                            <img
+                                {...imageProps}
+                                src={this.featuredImageUrl()}
+                            />
+                        </a>
+                    )}
+                    {!this.props.link && (
+                        <img {...imageProps} src={this.featuredImageUrl()} />
+                    )}
                 </div>
             </LazyLoad>
         );
     }
 }
-
-export default DealImage;

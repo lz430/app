@@ -97,7 +97,6 @@ class ESResponseTransformer extends TransformerAbstract
         $results = [];
 
         foreach ($this->response['aggregations']['category']['model']['buckets'] as $data) {
-
             $element = [
                 'id' => $data['id']['buckets'][0]['key'],
                 'make' => $data['make']['make']['buckets'][0]['key'],
@@ -141,7 +140,6 @@ class ESResponseTransformer extends TransformerAbstract
     public function transform(array $response)
     {
         $this->response = $response['response'];
-
         $this->meta = $response['meta'];
 
         $response = [

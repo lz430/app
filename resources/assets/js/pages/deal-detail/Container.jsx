@@ -21,11 +21,11 @@ import CashPricingPane from './components/pricing/CashPane';
 import FinancePricingPane from './components/pricing/FinancePane';
 import LeasePricingPane from './components/pricing/LeasePane';
 import PaymentTypes from './components/pricing/PaymentTypes';
-import Line from './components/pricing/Line';
+import Line from '../../components/pricing/Line';
 
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
 import { setPurchaseStrategy } from 'apps/user/actions';
-import { setCheckoutData } from 'apps/checkout/actions';
+import { setCheckoutData, checkoutStart } from 'apps/checkout/actions';
 import * as selectDiscountActions from './modules/selectDiscount';
 import * as financeActions from './modules/finance';
 import * as leaseActions from './modules/lease';
@@ -51,18 +51,22 @@ class Container extends React.PureComponent {
         purchaseStrategy: PropTypes.string.isRequired,
         userLocation: PropTypes.object.isRequired,
         discountType: PropTypes.string.isRequired,
+        selectedConditionalRoles: PropTypes.array,
 
         initPage: PropTypes.func.isRequired,
         receiveDeal: PropTypes.func.isRequired,
         setPurchaseStrategy: PropTypes.func.isRequired,
         dealDetailRequestDealQuote: PropTypes.func.isRequired,
         setCheckoutData: PropTypes.func.isRequired,
+        checkoutStart: PropTypes.func.isRequired,
     };
 
     state = {
         featuredImage: [],
         fuelExternalImages: [],
         fuelInternalImages: [],
+        basicFeatures: [],
+        fuelEconomy: {},
         upholsteryType: null,
         warranties: null,
         dimensions: null,
@@ -70,12 +74,7 @@ class Container extends React.PureComponent {
         showFeatures: false,
     };
 
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
-
     componentDidMount() {
-        this._isMounted = true;
         this.props.receiveDeal(this.props.deal);
         this.props.initPage();
 
@@ -91,6 +90,31 @@ class Container extends React.PureComponent {
             ).title;
 
             this.setState({ upholsteryType });
+        }
+
+        if (this.props.deal.version) {
+            const {
+                body_style,
+                driven_wheels,
+                fuel_econ_city,
+                fuel_econ_hwy,
+            } = this.props.deal.version;
+
+            const { engine, transmission } = this.props.deal;
+
+            const basicFeatures = [
+                { name: 'Body', content: body_style },
+                { name: 'Drive Train', content: driven_wheels },
+                { name: 'Engine', content: engine },
+                { name: 'Transmission', content: transmission },
+            ];
+
+            const fuelEconomy = {
+                city: fuel_econ_city,
+                highway: fuel_econ_hwy,
+            };
+
+            this.setState({ basicFeatures, fuelEconomy });
         }
 
         ApiClient.deal.dealGetDimensions(this.props.deal.id).then(response => {
@@ -175,6 +199,33 @@ class Container extends React.PureComponent {
                     <div className="modal__body deal-details__modal-body">
                         <h3>Specifications</h3>
                         <hr />
+
+                        <ul>
+                            {this.state.basicFeatures ? (
+                                this.state.basicFeatures.map(
+                                    (feature, index) => {
+                                        return (
+                                            <li key={index}>
+                                                {feature.name}:{' '}
+                                                {feature.content}
+                                            </li>
+                                        );
+                                    }
+                                )
+                            ) : (
+                                <SVGInline svg={miscicons['loading']} />
+                            )}
+
+                            {this.state.fuelEconomy ? (
+                                <li>
+                                    Fuel Economy - City:{' '}
+                                    {this.state.fuelEconomy.city} Highway:{' '}
+                                    {this.state.fuelEconomy.highway}
+                                </li>
+                            ) : (
+                                <SVGInline svg={miscicons['loading']} />
+                            )}
+                        </ul>
 
                         <h4>Dimensions</h4>
                         <ul>
@@ -334,7 +385,7 @@ class Container extends React.PureComponent {
 
                                 <button
                                     className="deal__button deal__button--small deal__button--pink deal__button"
-                                    onClick={() => this.handleBuyNow()}
+                                    onClick={this.handleBuyNow}
                                     disabled={
                                         !this.props.dealPricing.canPurchase()
                                     }
@@ -360,20 +411,22 @@ class Container extends React.PureComponent {
         );
     }
 
-    handleBuyNow = () => {
+    handleBuyNow = e => {
+        const dealPricing = this.props.dealPricing;
+
         this.props.setCheckoutData(
-            this.props.dealPricing.data.deal,
-            this.props.dealPricing.data.dealQuote,
-            this.props.dealPricing.data.paymentType,
-            this.props.dealPricing.data.discountType,
-            this.props.dealPricing.data.paymentType === 'lease'
-                ? this.props.dealPricing.leaseTermValue()
-                : this.props.dealPricing.financeTermValue(),
-            this.props.dealPricing.financeDownPaymentValue(),
-            this.props.dealPricing.leaseAnnualMileageValue()
+            dealPricing.deal(),
+            dealPricing.quote(),
+            dealPricing.paymentStrategy(),
+            dealPricing.discountType(),
+            dealPricing.effectiveTermValue(),
+            dealPricing.financeDownPaymentValue(),
+            dealPricing.leaseAnnualMileageValue(),
+            dealPricing.data.employeeBrand,
+            dealPricing.data.supplierBrand
         );
 
-        window.location = `/confirm/${this.props.dealPricing.id()}`;
+        this.props.checkoutStart(dealPricing);
     };
 
     handlePaymentTypeChange = strategy => {
@@ -409,7 +462,25 @@ class Container extends React.PureComponent {
         );
     };
 
-    handleRebatesChange = () => {};
+    handleRebatesChange = role => {
+        let selectedRoles = this.props.selectedConditionalRoles;
+        let index = selectedRoles.indexOf(role);
+        if (index !== -1) {
+            selectedRoles.splice(index, 1);
+        } else {
+            selectedRoles.push(role);
+        }
+
+        this.props.selectDiscountActions.selectConditionalRoles(selectedRoles);
+
+        this.props.dealDetailRequestDealQuote(
+            this.props.deal,
+            this.props.userLocation.zipcode,
+            this.props.purchaseStrategy,
+            this.props.discountType,
+            selectedRoles
+        );
+    };
 
     handleFinanceDownPaymentChange = downPayment => {
         this.props.financeActions.updateDownPayment(downPayment);
@@ -465,6 +536,31 @@ class Container extends React.PureComponent {
                         <div className="deal-details__deal-content-subtitle">
                             Standard Features
                         </div>
+                        <ul className="deal-details__deal-content-features">
+                            {this.state.basicFeatures
+                                ? this.state.basicFeatures.map(
+                                      (feature, index) => {
+                                          return (
+                                              <li key={index}>
+                                                  {feature.name}:{' '}
+                                                  {feature.content}
+                                              </li>
+                                          );
+                                      }
+                                  )
+                                : ''}
+
+                            {this.state.fuelEconomy ? (
+                                <li>
+                                    Fuel Economy - City:{' '}
+                                    {this.state.fuelEconomy.city} Highway:{' '}
+                                    {this.state.fuelEconomy.highway}
+                                </li>
+                            ) : (
+                                ''
+                            )}
+                        </ul>
+
                         <ul className="deal-details__deal-content-features">
                             {deal.features.slice(0, 5).map((feature, index) => {
                                 return <li key={index}>{feature.feature}</li>;
@@ -571,6 +667,8 @@ class Container extends React.PureComponent {
 
 const mapStateToProps = (state, props) => {
     return {
+        selectedConditionalRoles:
+            state.pages.dealDetails.selectDiscount.conditionalRoles,
         purchaseStrategy: state.user.purchasePreferences.strategy,
         compareList: state.common.compareList,
         financeDownPayment: state.pages.dealDetails.finance.downPayment,
@@ -596,6 +694,7 @@ const mapDispatchToProps = mapAndBindActionCreators({
     receiveDeal,
     dealDetailRequestDealQuote,
     setCheckoutData,
+    checkoutStart,
 });
 
 export default connect(

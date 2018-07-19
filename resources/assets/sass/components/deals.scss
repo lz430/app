@@ -22,15 +22,8 @@
 
     @media (min-width: $break-medium) {
         height: calc(
-            100vh - #{$header-height + $sortbar-height + $filterbar-height +
-                $compare-bar-height}
+            100vh - #{$header-height + $sortbar-height + $filterbar-height}
         );
-
-        &.no-compare {
-            height: calc(
-                100vh - #{$header-height + $sortbar-height + $filterbar-height}
-            );
-        }
     }
 
     &__no-matches {

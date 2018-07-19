@@ -29,6 +29,10 @@ Route::group([
     Route::get('deal/{deal}/financing', 'DealFinancingController@show');
 
     //
+    // Dealer tools
+    Route::get('dealer/{dealer}/routeone', 'DealerRouteoneController@show');
+
+    //
     // Reports
     Route::get('reports/versions-missing-images', 'ReportVersionsMissingPhotosController@index');
 

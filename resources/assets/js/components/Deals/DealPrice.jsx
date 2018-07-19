@@ -48,6 +48,7 @@ class DealPrice extends React.Component {
                 showInfoModal={this.props.onShowInfoModal}
                 hideInfoModal={this.props.onHideInfoModal}
                 infoModalIsShowingFor={this.props.infoModalIsShowingFor}
+                withPricingTabs={false}
             />
         );
     }
@@ -69,9 +70,19 @@ class DealPrice extends React.Component {
             case 'cash':
                 return 'Your cash price';
             case 'finance':
-                return 'Estimated Monthly Finance Payment';
+                return 'Monthly Finance Payment';
             case 'lease':
                 return 'Estimated Monthly Lease Payment';
+        }
+    }
+
+    getDisclaimer() {
+        switch (this.props.purchaseStrategy) {
+            case 'cash':
+                return 'Additional Taxes and Fees Apply';
+            case 'finance':
+            case 'lease':
+                return 'Includes All Taxes and Fees';
         }
     }
 
@@ -86,6 +97,9 @@ class DealPrice extends React.Component {
                         <div className="deal-price__finance-lease-price">
                             {this.showWhenPricingIsLoaded()}
                             {this.renderPriceExplanationModal()}
+                        </div>
+                        <div className="deal-price__finance-lease-disclaimer">
+                            {this.getDisclaimer()}
                         </div>
                         <div className="deal-price__hr" />
                         <div className="deal-price__cash-msrp">

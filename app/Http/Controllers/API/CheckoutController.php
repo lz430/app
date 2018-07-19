@@ -9,6 +9,7 @@ use App\Models\Deal;
 use App\Models\User;
 
 use App\Events\NewPurchaseInitiated;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Checkout is 4 steps
@@ -59,6 +60,7 @@ class CheckoutController extends BaseAPIController
             'down_payment' => isset($amounts['financed_down_payment']) ? $amounts['financed_down_payment'] : 0,
             'monthly_payment' => isset($amounts['monthly_payment']) ? $amounts['monthly_payment'] : 0,
             'amount_financed' => isset($amounts['financed_amount']) ? $amounts['financed_amount'] : 0,
+            'lease_mileage' => isset($amounts['leased_annual_mileage']) ? $amounts['leased_annual_mileage'] : null,
         ]);
 
         $request->session()->put('purchase', $purchase);
@@ -70,7 +72,7 @@ class CheckoutController extends BaseAPIController
             $request->merge(['email' => session()->get('email')]);
         }
 
-        return response()->json(['status' => 'okay']);
+        return response()->json(['status' => 'okay', 'purchase' => $purchase->toJson()]);
     }
 
     /**
@@ -147,14 +149,14 @@ class CheckoutController extends BaseAPIController
 
         event(new NewPurchaseInitiated($user, $purchase));
 
-        if (request('method') == 'cash') {
-            return [
+        if ($purchase->isCash()) {
+            return response()->json([
                 'destination' => '/thank-you?method=cash',
-            ];
+            ]);
         }
 
-        return [
+        return response()->json([
             'destination' => "/apply/{$purchase->id}",
-        ];
+        ]);
     }
 }

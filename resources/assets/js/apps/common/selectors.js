@@ -1,20 +1,26 @@
 import { createSelector } from 'reselect';
+import { createSelectorCreator, defaultMemoize } from 'reselect';
+
 import R from 'ramda';
 import { dealQuoteKey as generateDealQuoteKey } from 'apps/pricing/helpers';
+
+import { getUserZipcode, getUserPurchaseStrategy } from 'apps/user/selectors';
+
+import { getQuotes } from 'apps/pricing/selectors';
+
+const neverEqualSelector = createSelectorCreator(defaultMemoize, () => false);
 
 export default state => state.common;
 export const common = state => state.common;
 
-export const zipcode = state => state.user.location.zipcode;
 export const deal = (state, props) => props.deal;
-
-const paymentType = state => state.user.purchasePreferences.strategy;
 
 const employeeBrand = state => {
     return state.pages.dealDetails.selectDiscount.employeeBrand === false
         ? null
         : state.pages.dealDetails.selectDiscount.employeeBrand;
 };
+
 const supplierBrand = state =>
     state.pages.dealDetails.selectDiscount.supplierBrand === false
         ? null
@@ -30,23 +36,16 @@ const leaseAnnualMileage = state => state.pages.dealDetails.lease.annualMileage;
 const leaseTerm = state => state.pages.dealDetails.lease.term;
 const leaseCashDue = state => state.pages.dealDetails.lease.cashDue;
 
-const dealsIdsWithCustomizedQuotes = state =>
-    state.common.dealsIdsWithCustomizedQuotes;
-
-const dealHasCustomizedQuote = createSelector(
-    deal,
-    dealsIdsWithCustomizedQuotes,
-    (deal, dealsIdsWithCustomizedQuotes) => {
-        return R.contains(deal.id, dealsIdsWithCustomizedQuotes);
-    }
-);
-
 const dealLeaseAnnualMileage = createSelector(
     leaseAnnualMileage,
     leaseAnnualMileage => {
         return leaseAnnualMileage;
     }
 );
+
+const getConditionalRoles = state => {
+    return state.pages.dealDetails.selectDiscount.conditionalRoles;
+};
 
 const dealLeaseTerm = createSelector(leaseTerm, leaseTerm => {
     return leaseTerm;
@@ -56,14 +55,16 @@ const dealLeaseCashDue = createSelector(leaseCashDue, leaseCashDue => {
     return leaseCashDue;
 });
 
-const quotes = state => {
-    return state.pricing.quotes;
-};
-
-const dealQuoteKey = createSelector(
-    [deal, zipcode, paymentType, discountType],
-    (deal, zipcode, paymentType, discountType) => {
-        if (!deal || !zipcode || !paymentType) {
+const dealQuoteKey = neverEqualSelector(
+    [
+        deal,
+        getUserZipcode,
+        getUserPurchaseStrategy,
+        discountType,
+        getConditionalRoles,
+    ],
+    (deal, zipcode, purchaseStrategy, discountType, conditionalRoles) => {
+        if (!deal || !zipcode || !purchaseStrategy) {
             return null;
         }
         let role = 'default';
@@ -73,21 +74,26 @@ const dealQuoteKey = createSelector(
         } else {
             role = discountType;
         }
-
-        return generateDealQuoteKey(deal, zipcode, paymentType, role);
+        return generateDealQuoteKey(
+            deal,
+            zipcode,
+            purchaseStrategy,
+            role,
+            conditionalRoles
+        );
     }
 );
 
 const dealQuote = createSelector(
-    [quotes, dealQuoteKey],
+    [getQuotes, dealQuoteKey],
     (quotes, dealQuoteKey) => {
         return R.prop(dealQuoteKey, quotes) || null;
     }
 );
 
 export const dealQuoteRebatesTotal = createSelector([dealQuote], quote => {
-    if (quote && quote.rebates) {
-        return quote.rebates.total || 0;
+    if (quote && quote['rebates']) {
+        return quote['rebates']['total'] || 0;
     }
     return 0;
 });
@@ -98,7 +104,7 @@ export const dealQuoteIsLoading = createSelector([dealQuote], quote => {
 
 export const dealPricingData = createSelector(
     deal,
-    paymentType,
+    getUserPurchaseStrategy,
     employeeBrand,
     supplierBrand,
     financeDownPayment,
@@ -106,7 +112,6 @@ export const dealPricingData = createSelector(
     dealLeaseAnnualMileage,
     dealLeaseTerm,
     dealLeaseCashDue,
-    dealHasCustomizedQuote,
     discountType,
     dealQuoteIsLoading,
     dealQuote,
@@ -120,7 +125,6 @@ export const dealPricingData = createSelector(
         dealLeaseAnnualMileage,
         dealLeaseTerm,
         dealLeaseCashDue,
-        dealHasCustomizedQuote,
         discountType,
         dealQuoteIsLoading,
         dealQuote
@@ -134,7 +138,6 @@ export const dealPricingData = createSelector(
             financeTerm,
             leaseAnnualMileage: dealLeaseAnnualMileage,
             leaseTerm: dealLeaseTerm,
-            dealHasCustomizedQuote,
             discountType,
             dealQuoteIsLoading,
             dealQuote,

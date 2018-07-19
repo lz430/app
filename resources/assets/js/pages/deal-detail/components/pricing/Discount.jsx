@@ -1,7 +1,7 @@
 import React from 'react';
-import Line from './Line';
-import Label from './Label';
-import Value from './Value';
+import Line from 'components/pricing/Line';
+import Label from 'components/pricing/Label';
+import Value from 'components/pricing/Value';
 
 const domesticBrands = [
     'Chrysler',
@@ -14,7 +14,8 @@ const domesticBrands = [
     'Buick',
     'GMC',
     'Ram',
-    'Fiat',
+    // TODO: Fiat has employee pricing but no supplier, fix this logic so that we can support this usecase.
+    // 'Fiat'
 ];
 
 export default class Discount extends React.PureComponent {

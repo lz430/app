@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float $down_payment
  * @property float $monthly_payment
  * @property int $term
+ * @property int $lease_mileage
  * @property float $amount_financed
  * @property float $dmr_price
  * @property string $application_status
@@ -70,13 +71,9 @@ class Purchase extends Model
     public function rebatesTotalValue() : float
     {
         $total = 0;
-
-        if (is_array($this->rebates)) {
-            foreach ($this->rebates as $rebate) {
-                $total += $rebate->value;
-            }
+        if ($this->rebates && $this->rebates->total) {
+            $total = $this->rebates->total;
         }
-
         return $total;
     }
 
@@ -100,5 +97,20 @@ class Purchase extends Model
         }
 
         return '';
+    }
+
+    public function isCash() : bool
+    {
+        return $this->type === self::CASH;
+    }
+
+    public function isFinance() : bool
+    {
+        return $this->type === self::FINANCE;
+    }
+
+    public function isLease() : bool
+    {
+        return $this->type === self::LEASE;
     }
 }
