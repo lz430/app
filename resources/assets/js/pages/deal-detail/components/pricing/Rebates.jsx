@@ -56,6 +56,18 @@ class Rebates extends React.Component {
                 title: 'Loyalty',
                 description: null,
             },
+            responder: {
+                title: 'First Responder',
+                description: null,
+            },
+            gmcompetitive: {
+                title: 'GM Competitive Lease',
+                description: null,
+            },
+            gmlease: {
+                title: 'GM Lease Loyalty',
+                description: null,
+            },
         };
 
         return map[role];

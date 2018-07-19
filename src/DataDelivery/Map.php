@@ -54,6 +54,9 @@ class Map
         'mil' => 'military',
         'con' => 'conquest',
         'loy' => 'loyal',
+        'resp' => 'responder',
+        'gmcomp' => 'gmcompetitive',
+        'gmlease' => 'gmlease'
     ];
 
     public const CONDITIONALS_TO_PROGRAM_NAME = [
@@ -69,6 +72,15 @@ class Map
         'loyal' => [
             'returning Lessee',
         ],
+        'responder' => [
+            'first responder',
+        ],
+        'gmcompetitive' => [
+            'gm competitive lease private offer',
+        ],
+        'gmlease' => [
+            'gm lease loyalty private offer',
+        ]
     ];
 
 }
