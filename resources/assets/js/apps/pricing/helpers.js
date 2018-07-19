@@ -24,6 +24,9 @@ export const dealQuoteKey = (
         military: 'mil',
         conquest: 'con',
         loyal: 'loy',
+        responder: 'resp',
+        gmcompetitive: 'gmcomp',
+        gmlease: 'gmlease',
     };
 
     if (primaryRole === 'dmr' || !primaryRole) {
