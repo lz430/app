@@ -297,7 +297,7 @@ class DealRatesAndRebatesManager
 
                     if (isset($scenario->Cash)) {
                         $value = $scenario->Cash;
-                    } else if (isset($scenario->terms[0]->CCR)) {
+                    } elseif (isset($scenario->terms[0]->CCR)) {
                         $value = $scenario->terms[0]->CCR;
                     }
 
