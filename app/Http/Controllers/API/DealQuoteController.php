@@ -91,7 +91,7 @@ class DealQuoteController extends BaseAPIController
         $this->validate(request(), [
             'payment_type' => 'required|string|in:cash,finance,lease',
             'zipcode' => 'required|string',
-            'roles' => 'required|array|in:default,employee,supplier,college,military,conquest,loyal,responder,gmcompetitive,gmlease',
+            'roles' => 'required|array|in:default,employee,supplier,college,military,conquest,loyal,responder,gmcompetitive,gmlease,cadillaclease',
         ]);
         $paymentType = request('payment_type');
         $zip = request('zipcode');

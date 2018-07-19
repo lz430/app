@@ -27,6 +27,7 @@ export const dealQuoteKey = (
         responder: 'resp',
         gmcompetitive: 'gmcomp',
         gmlease: 'gmlease',
+        cadillaclease: 'cadlease',
     };
 
     if (primaryRole === 'dmr' || !primaryRole) {
