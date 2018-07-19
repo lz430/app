@@ -118,7 +118,6 @@ class Container extends React.PureComponent {
 }
 
 const mapStateToProps = state => {
-    console.log(state.page.isLoading);
     return {
         cols: state.pages.compare.cols,
         equipmentCategories: getEquipmentCategories(state),
