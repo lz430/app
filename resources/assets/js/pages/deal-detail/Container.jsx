@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import R from 'ramda';
+import { Container, Row, Col } from 'reactstrap';
 
 import * as legacyActions from 'apps/common/actions';
 
@@ -17,11 +18,15 @@ import zondicons from 'zondicons';
 import ImageGallery from 'react-image-gallery';
 import { dealPricingFactory } from 'src/DealPricing';
 
+import ApiClient from 'store/api';
+import DealStockNumber from 'components/Deals/DealStockNumber';
+
 import CashPricingPane from './components/pricing/CashPane';
 import FinancePricingPane from './components/pricing/FinancePane';
 import LeasePricingPane from './components/pricing/LeasePane';
 import PaymentTypes from './components/pricing/PaymentTypes';
 import Line from '../../components/pricing/Line';
+import Header from './components/Header';
 
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
 import { setPurchaseStrategy } from 'apps/user/actions';
@@ -34,9 +39,8 @@ import { initPage, receiveDeal } from './actions';
 
 import { getUserLocation } from 'apps/user/selectors';
 import { getLeaseAnnualMileage, getLeaseTerm } from './selectors';
-import ApiClient from '../../store/api';
 
-class Container extends React.PureComponent {
+class DealDetailContainer extends React.PureComponent {
     static propTypes = {
         deal: PropTypes.shape({
             year: PropTypes.string.isRequired,
@@ -328,7 +332,7 @@ class Container extends React.PureComponent {
                 <div>
                     {shouldRenderStockNumber && (
                         <div className="deal-details__stock-number">
-                            Stock# {this.props.deal.stock_number}
+                            <DealStockNumber deal={this.props.deal} />
                         </div>
                     )}
                     <div className="info-modal-data">
@@ -599,61 +603,39 @@ class Container extends React.PureComponent {
     render() {
         return (
             <div>
-                <div className="deal-details">
-                    <div className="deal-details__images-and-title">
-                        <div className="deal-details__title">
-                            <div className="deal-details__title-year-make">
-                                {strings.dealYearMake(this.props.deal)}
+                <Container className="mb-5">
+                    <Header deal={this.props.deal} />
+                    <Row>
+                        <Col md="6" lg="8">
+                            <div className="deal-details__images">
+                                <ImageGallery
+                                    items={this.galleryImages()}
+                                    showBullets={true}
+                                    showIndex={true}
+                                    showThumbnails={false}
+                                    showPlayButton={false}
+                                    showFullscreenButton={false}
+                                />
                             </div>
-                            <div className="deal-details__title-model-trim">
-                                {strings.dealModelTrim(this.props.deal)}
-                            </div>
-                            {util.windowIsLargerThanSmall(
-                                this.props.window.width
-                            )
-                                ? null
-                                : this.renderStockNumber()}
-                        </div>
-                        <div className="deal-details__images">
-                            <ImageGallery
-                                items={this.galleryImages()}
-                                showBullets={true}
-                                showIndex={true}
-                                showThumbnails={false}
-                                showPlayButton={false}
-                                showFullscreenButton={false}
-                            />
-                        </div>
-                        {util.windowIsLargerThanSmall(this.props.window.width)
-                            ? null
-                            : this.renderDeal(this.props.deal, {
-                                  shouldRenderStockNumber: false,
-                              })}
-                        {this.renderFeaturesAndOptions(this.props.deal)}
-                    </div>
-                    {util.windowIsLargerThanSmall(this.props.window.width)
-                        ? this.renderDeal(this.props.deal, {
-                              shouldRenderStockNumber: true,
-                          })
-                        : null}
-                </div>
 
+                            {this.renderFeaturesAndOptions(this.props.deal)}
+                        </Col>
+                        <Col md="6" lg="4">
+                            {this.renderDeal(this.props.deal, {
+                                shouldRenderStockNumber: false,
+                            })}
+                        </Col>
+                    </Row>
+
+                    {this.state.showStandardFeatures
+                        ? this.renderStandardFeaturesModal(this.props.deal)
+                        : ''}
+                    {this.state.showFeatures
+                        ? this.renderFeaturesModal(this.props.deal)
+                        : ''}
+                </Container>
                 <CompareBar class="compare-bar compare-bar--static" />
-
-                {this.state.showStandardFeatures
-                    ? this.renderStandardFeaturesModal(this.props.deal)
-                    : ''}
-                {this.state.showFeatures
-                    ? this.renderFeaturesModal(this.props.deal)
-                    : ''}
             </div>
-        );
-    }
-
-    isAlreadyInCompareList() {
-        return R.contains(
-            this.props.dealPricing.deal(),
-            R.map(R.prop('deal'), this.props.compareList)
         );
     }
 
@@ -706,4 +688,4 @@ const mapDispatchToProps = mapAndBindActionCreators({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Container);
+)(DealDetailContainer);

@@ -13,8 +13,10 @@ export default class App extends React.PureComponent {
     render() {
         return (
             <div className="app">
-                <Header />
-                <HeaderToolbar />
+                <div className="app-header-wrapper">
+                    <Header />
+                    <HeaderToolbar />
+                </div>
                 <div className="app-content">{this.props.children}</div>
                 <Footer />
             </div>

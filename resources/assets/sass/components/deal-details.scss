@@ -113,20 +113,22 @@
         display: flex;
         flex-direction: row;
         justify-content: center;
-
         margin-top: 1rem;
+        > div {
+            width: 100%;
+        }
         @media (min-width: $break-small) {
             margin-top: 0;
         }
 
         @media (min-width: $break-large) {
             flex-direction: row;
-            width: $break-large * 0.4;
         }
 
         .info-modal-data {
-            width: 90vw;
-
+            margin: 0;
+            max-width: none;
+            min-width: 0;
             @media (min-width: $break-small) {
                 width: auto;
             }

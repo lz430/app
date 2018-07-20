@@ -151,5 +151,8 @@ $icon-size: 20px;
         background-color: $color-sidebar-background-primary;
         color: $color-text-white;
         height: 2.75em;
+        p {
+            margin: 0;
+        }
     }
 }
