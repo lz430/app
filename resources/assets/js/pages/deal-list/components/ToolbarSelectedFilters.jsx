@@ -21,21 +21,12 @@ class ToolbarSelectedFilters extends React.PureComponent {
         filters: PropTypes.object.isRequired,
     };
 
-    constructor(props) {
-        super(props);
-        this.renderX = this.renderX.bind(this);
-    }
+    selectedFilters() {
+        const blackListCategories = ['make', 'model', 'year'];
 
-    renderX() {
-        return <span />;
-
-        return (
-            <SVGInline
-                height="10px"
-                width="10px"
-                className="filterbar__filter-x"
-                svg={zondicons['close']}
-            />
+        return R.omit(
+            blackListCategories,
+            this.props.selectedFiltersByCategory
         );
     }
 
@@ -44,14 +35,6 @@ class ToolbarSelectedFilters extends React.PureComponent {
      * @param items
      */
     renderFilterCategory(category, items) {
-        if (
-            category === 'make' ||
-            category === 'model' ||
-            category === 'year'
-        ) {
-            return;
-        }
-
         let allItems = this.props.filters[category];
 
         if (!allItems) {
@@ -92,6 +75,14 @@ class ToolbarSelectedFilters extends React.PureComponent {
     }
 
     render() {
+        const selectedFilters = this.selectedFilters();
+
+        /*
+        if (!Object.keys(selectedFilters).length) {
+            return false;
+        }
+        */
+
         return (
             <div className="filterbar">
                 <SVGInline
@@ -102,12 +93,8 @@ class ToolbarSelectedFilters extends React.PureComponent {
                 />
 
                 <div className="filterbar__filters">
-                    {Object.keys(this.props.selectedFiltersByCategory).map(
-                        key =>
-                            this.renderFilterCategory(
-                                key,
-                                this.props.selectedFiltersByCategory[key]
-                            )
+                    {Object.keys(selectedFilters).map(key =>
+                        this.renderFilterCategory(key, selectedFilters[key])
                     )}
                 </div>
 

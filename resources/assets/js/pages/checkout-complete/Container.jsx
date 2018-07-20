@@ -9,7 +9,7 @@ import ApiClient from 'store/api';
 import util from 'src/util';
 import miscicons from 'miscicons';
 import { dealQuoteRebatesTotal } from 'apps/common/selectors';
-import DealImage from '../../components/Deals/DealImage';
+import DealImage from 'components/Deals/DealImage';
 
 class Container extends React.PureComponent {
     state = {
