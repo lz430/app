@@ -84,12 +84,17 @@ class Rebates extends React.Component {
         }
         return (
             <Line style={{ margin: '.125em 0 .125em .25em' }}>
-                <Label key={role['role']} style={{ fontSize: '.9em' }}>
+                <Label
+                    className="form-check-label"
+                    key={role['role']}
+                    style={{ fontSize: '.9em' }}
+                >
                     <input
                         key={role['role']}
                         name="discountType"
                         value={role['role']}
                         type="checkbox"
+                        className="form-check-input"
                         checked={this.isRoleChecked(role)}
                         onChange={e => this.handleChange(role)}
                     />
@@ -127,15 +132,16 @@ class Rebates extends React.Component {
                         Proof of eligibility required.
                     </div>
                 )}
-
-                {Object.keys(quote.selections.conditionalRoles).map(key => (
-                    <div key={key}>
-                        {this.renderConditionRoleSelection(
-                            key,
-                            quote.selections.conditionalRoles[key]
-                        )}
-                    </div>
-                ))}
+                <div className="form-group form-check">
+                    {Object.keys(quote.selections.conditionalRoles).map(key => (
+                        <div key={key}>
+                            {this.renderConditionRoleSelection(
+                                key,
+                                quote.selections.conditionalRoles[key]
+                            )}
+                        </div>
+                    ))}
+                </div>
             </div>
         );
     }

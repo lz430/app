@@ -372,19 +372,19 @@ class Container extends React.PureComponent {
                             )}
                             <div className="deal__buttons">
                                 <button
-                                    className={this.compareButtonClass()}
+                                    className={this.compareButtonClass(deal)}
                                     onClick={this.props.legacyActions.toggleCompare.bind(
                                         null,
                                         this.props.dealPricing.deal()
                                     )}
                                 >
-                                    {this.isAlreadyInCompareList()
-                                        ? 'Remove from compare'
+                                    {this.compareListContainsDeal(deal)
+                                        ? 'Remove'
                                         : 'Compare'}
                                 </button>
 
                                 <button
-                                    className="deal__button deal__button--small deal__button--pink deal__button"
+                                    className="btn btn-success"
                                     onClick={this.handleBuyNow}
                                     disabled={
                                         !this.props.dealPricing.canPurchase()
@@ -657,10 +657,16 @@ class Container extends React.PureComponent {
         );
     }
 
-    compareButtonClass() {
+    compareListContainsDeal(deal) {
+        return R.contains(deal, R.map(R.prop('deal'), this.props.compareList));
+    }
+
+    compareButtonClass(deal) {
         return (
-            'deal__button deal__button--small deal__button--blue' +
-            (this.isAlreadyInCompareList() ? 'deal__button--blue' : '')
+            'btn ' +
+            (this.compareListContainsDeal(deal)
+                ? 'btn-outline-primary'
+                : 'btn-primary')
         );
     }
 }

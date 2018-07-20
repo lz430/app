@@ -3,17 +3,27 @@ import { connect } from 'react-redux';
 import strings from 'src/strings';
 import DealImage from 'components/Deals/DealImage';
 import { dealPricingFromCheckoutFactory } from 'src/DealPricing';
-import mapAndBindActionCreators from '../../util/mapAndBindActionCreators';
-import Header from '../../components/pricing/Header';
-import Group from '../../components/pricing/Group';
-import Label from '../../components/pricing/Label';
-import Value from '../../components/pricing/Value';
-import Line from '../../components/pricing/Line';
-import Separator from '../../components/pricing/Separator';
-import TaxesAndFees from '../../components/pricing/TaxesAndFees';
+import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
+import Header from 'components/pricing/Header';
+import Group from 'components/pricing/Group';
+import Label from 'components/pricing/Label';
+import Value from 'components/pricing/Value';
+import Line from 'components/pricing/Line';
+import Separator from 'components/pricing/Separator';
+import TaxesAndFees from 'components/pricing/TaxesAndFees';
 import { checkout } from 'apps/checkout/selectors';
+import { init } from './actions';
+import PropTypes from 'prop-types';
 
 class Container extends React.PureComponent {
+    static propTypes = {
+        init: PropTypes.func.isRequired,
+    };
+
+    componentDidMount() {
+        this.props.init();
+    }
+
     render() {
         const { dealPricing } = this.props;
         const deal = dealPricing.deal();
@@ -431,7 +441,9 @@ const mapStateToProps = (state, props) => {
     };
 };
 
-const mapDispatchToProps = mapAndBindActionCreators({});
+const mapDispatchToProps = mapAndBindActionCreators({
+    init,
+});
 
 export default connect(
     mapStateToProps,

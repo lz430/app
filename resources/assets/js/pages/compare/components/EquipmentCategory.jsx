@@ -10,7 +10,7 @@ class EquipmentCategory extends React.PureComponent {
 
     render() {
         return (
-            <div className="row">
+            <div>
                 <AccordionTable header={this.props.category}>
                     {this.props.cols.map((col, index) => {
                         return (

@@ -1,5 +1,3 @@
-@import '../variables';
-
 .steps-bar {
     height: 3.5rem;
     background-color: $color-sidebar-background-primary;
@@ -9,7 +7,7 @@
     display: none;
 
     @media (min-width: $break-small) {
-        display: flex;
+        display: block;
     }
 
     .inner {
@@ -18,20 +16,20 @@
     }
 
     &__page-title {
-        color: $color-blue;
         font-size: 0.75rem;
         flex: 1;
 
         @media (min-width: $break-small) {
             font-size: 1rem;
         }
+        cursor: pointer;
         a:link {
-            color: $color-blue;
+            color: #fff;
             text-decoration: none;
         }
 
         a:hover {
-            color: $color-light-blue;
+            color: #999;
             text-decoration: underline;
         }
     }

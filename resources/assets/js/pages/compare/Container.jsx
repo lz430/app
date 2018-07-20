@@ -40,13 +40,14 @@ class Container extends React.PureComponent {
         );
     }
 
-    renderColDeal(col, index) {
+    renderColDeal(col) {
         const deal = col.deal;
+
         return (
             <Deal deal={deal} key={deal.id}>
                 <div className="deal__buttons">
                     <button
-                        className="deal__button deal__button--x-small deal__button--blue"
+                        className="btn btn-success"
                         onClick={() => (window.location = `/deals/${deal.id}`)}
                     >
                         View Details

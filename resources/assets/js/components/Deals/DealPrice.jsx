@@ -72,7 +72,7 @@ class DealPrice extends React.Component {
             case 'finance':
                 return 'Monthly Finance Payment';
             case 'lease':
-                return 'Estimated Monthly Lease Payment';
+                return 'Monthly Lease Payment';
         }
     }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ReCaptcha, loadReCaptcha } from 'react-recaptcha-google';
 import config from 'config';
@@ -9,18 +10,24 @@ import {
     checkoutContact,
     clearCheckoutContactFormErrors,
 } from 'apps/checkout/actions';
-import mapAndBindActionCreators from '../../util/mapAndBindActionCreators';
-import Header from '../../components/pricing/Header';
-import Group from '../../components/pricing/Group';
-import Label from '../../components/pricing/Label';
-import Value from '../../components/pricing/Value';
-import Line from '../../components/pricing/Line';
-import Separator from '../../components/pricing/Separator';
-import TaxesAndFees from '../../components/pricing/TaxesAndFees';
+import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
+import Header from 'components/pricing/Header';
+import Group from 'components/pricing/Group';
+import Label from 'components/pricing/Label';
+import Value from 'components/pricing/Value';
+import Line from 'components/pricing/Line';
+import Separator from 'components/pricing/Separator';
+import TaxesAndFees from 'components/pricing/TaxesAndFees';
 import { checkout } from 'apps/checkout/selectors';
+import { init } from './actions';
 
 class Container extends React.PureComponent {
+    static propTypes = {
+        init: PropTypes.func.isRequired,
+    };
+
     componentDidMount() {
+        this.props.init();
         loadReCaptcha();
         this.props.clearCheckoutContactFormErrors();
     }
@@ -727,6 +734,7 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = mapAndBindActionCreators({
     checkoutContact,
+    init,
     clearCheckoutContactFormErrors,
 });
 
