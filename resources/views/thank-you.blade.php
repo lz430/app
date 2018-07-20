@@ -13,9 +13,21 @@
     @endif
 @endpush
 
-@section('content')
-    <ThankYouPage purchase="{{$purchase}}"  deal="{{$deal}}" features="{{$features}}"></ThankYouPage>
+@section('precontent')
+    <div class="steps-bar">
+        <div class="inner">
+            <div class="steps-bar__page-title">
+                <a href="javascript:window.history.back();">&lt; Back</a>
+            </div>
+            @include('partials.steps', ['current' => 6])
+        </div>
+    </div>
+@endsection
 
+@section('content')
+    <div class="content--grey">
+        <ThankYouPage purchase="{{$purchase}}"  deal="{{$deal}}" features="{{$features}}"></ThankYouPage>
+    </div>
     @section('footer')
     @endsection
 @endsection

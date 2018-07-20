@@ -6,7 +6,7 @@
         'Details',
         'Compare',
         'Confirm',
-        'Purchase'
+        'Summary'
     ]
     @endphp
     @php
