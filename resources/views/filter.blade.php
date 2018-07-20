@@ -1,4 +1,4 @@
 @extends('layouts.app', ['bodyClass' => 'filter-page-body'])
 @section('content')
-    <FilterPage></FilterPage>
+    <FilterPage id="react-app"></FilterPage>
 @endsection

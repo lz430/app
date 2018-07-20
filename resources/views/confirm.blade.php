@@ -3,9 +3,5 @@
 @section('title', $title)
 
 @section('content')
-    <div class="content--grey">
-        <ConfirmDetails
-                deal="{{$deal}}"
-        ></ConfirmDetails>
-    </div>
+    <ConfirmDetails id="react-app" deal="{{$deal}}"></ConfirmDetails>
 @endsection

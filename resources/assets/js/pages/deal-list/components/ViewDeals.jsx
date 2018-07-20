@@ -70,13 +70,8 @@ class ViewDeals extends React.PureComponent {
 
     render() {
         return (
-            <div>
-                <div
-                    className={
-                        'deals ' +
-                        (this.props.compareList.length > 0 ? '' : 'no-compare')
-                    }
-                >
+            <div className="deals-wrapper">
+                <div className="deals">
                     {this.props.deals && this.props.deals.length ? (
                         this.props.deals.map((deal, index) => {
                             return (

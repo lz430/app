@@ -7,6 +7,7 @@ import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 
 import { getCurrentPage } from 'apps/page/selectors';
+import BackButton from './BackButton';
 
 class HeaderToolbar extends React.PureComponent {
     static propTypes = {
@@ -51,6 +52,7 @@ class HeaderToolbar extends React.PureComponent {
                 canNav: false,
             },
         };
+
         if (this.props.currentPage && steps[this.props.currentPage]) {
             steps[this.props.currentPage].active = true;
         }
@@ -80,9 +82,7 @@ class HeaderToolbar extends React.PureComponent {
             <div className="steps-bar">
                 <div className="inner">
                     <div className="steps-bar__page-title">
-                        <a href="javascript:window.history.back();">
-                            &lt; BACK
-                        </a>
+                        <BackButton />
                     </div>
                     <div className="steps">
                         {Object.keys(this.steps()).map(key => (

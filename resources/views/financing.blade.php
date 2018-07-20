@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-    <Financing></Financing>
+    <Financing id="react-app"></Financing>
 @endsection

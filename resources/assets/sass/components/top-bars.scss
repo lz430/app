@@ -7,7 +7,7 @@
     display: none;
 
     @media (min-width: $break-small) {
-        display: flex;
+        display: block;
     }
 
     .inner {
@@ -22,6 +22,7 @@
         @media (min-width: $break-small) {
             font-size: 1rem;
         }
+        cursor: pointer;
         a:link {
             color: #fff;
             text-decoration: none;

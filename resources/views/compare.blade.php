@@ -3,5 +3,5 @@
 @section('title', 'Deliver My Ride')
 
 @section('content')
-    <ComparePage></ComparePage>
+    <ComparePage id="react-app"></ComparePage>
 @endsection

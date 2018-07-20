@@ -1,4 +1,24 @@
+body {
+    height: 100%;
+    display: flex;
+}
+
+.app {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    .app-content {
+        flex: 1;
+    }
+}
+
+#react-app {
+    display: flex;
+    flex: 1;
+}
+
 .content {
+    display: flex;
     flex: 1;
 }
 
@@ -8,4 +28,10 @@
 
 .nav__icon {
     cursor: pointer;
+}
+
+.deals-wrapper {
+    flex: 1;
+    display: flex;
+    overflow: auto;
 }

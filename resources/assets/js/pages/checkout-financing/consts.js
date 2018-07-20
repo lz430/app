@@ -1,3 +1,3 @@
-const namespace = 'CHECKOUT_CONFIRM';
+const namespace = 'CHECKOUT_FINANCING';
 
 export const INIT = `${namespace}_INIT`;

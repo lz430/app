@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="section section--stretch section--darker section--no-padding">
-        <Financing></Financing>
-    </div>
+    <Financing id="react-app"></Financing>
 @endsection
