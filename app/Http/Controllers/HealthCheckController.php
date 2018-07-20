@@ -17,14 +17,6 @@ class HealthCheckController extends Controller
     {
         $tests = $this->health->checks();
 
-        $hello = [];
-        foreach($tests as $title => $result) {
-            $hello[] = $result;
-            if(in_array($hello, [0])) {
-                return response()->view('errors.500', [], 500);
-            } else {
-                return view('health-checks', ['healthcheck' => $this->health->checks()]);
-            }
-        }
+        return view('health-checks', ['healthcheck' => $tests]);
     }
 }

@@ -8,6 +8,6 @@ class TestCheck extends HealthCheck
 {
     public function run()
     {
-        return 0;
+        return false;
     }
 }

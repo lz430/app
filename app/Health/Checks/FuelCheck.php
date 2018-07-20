@@ -30,6 +30,6 @@ class FuelCheck extends HealthCheck
             print_r($e->getMessage());
         }
 
-        return 0;
+        return false;
     }
 }

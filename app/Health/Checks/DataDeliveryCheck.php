@@ -38,6 +38,6 @@ class DataDeliveryCheck extends HealthCheck
             print_r($e->getMessage());
         }
         //new \Symfony\Component\HttpKernel\Exception\HttpException(500);
-        return 0;
+        return false;
     }
 }
