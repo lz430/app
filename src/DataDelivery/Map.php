@@ -62,10 +62,10 @@ class Map
 
     public const ROLE_TO_PROGRAM_NAME = [
         'employee' => [
-            'employee'
+            'ccr for gm employee'
         ],
         'supplier' => [
-            'supplier'
+            'ccr for gm employee'
         ],
     ];
 
