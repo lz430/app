@@ -1,5 +1,5 @@
 import R from 'ramda';
-
+import config from 'config';
 /**
  * Generates a key for a specific quote.
  * @param deal
@@ -16,19 +16,7 @@ export const dealQuoteKey = (
     primaryRole,
     conditionalRoles = []
 ) => {
-    const map = {
-        default: 'd',
-        employee: 'e',
-        supplier: 's',
-        college: 'col',
-        military: 'mil',
-        conquest: 'con',
-        loyal: 'loy',
-        responder: 'resp',
-        gmcompetitive: 'gmcomp',
-        gmlease: 'gmlease',
-        cadillaclease: 'cadlease',
-    };
+    const map = config.PRICING_ROLE_MAP;
 
     if (primaryRole === 'dmr' || !primaryRole) {
         primaryRole = 'default';

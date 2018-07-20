@@ -23,6 +23,8 @@ class HeaderToolbar extends React.PureComponent {
      * If we're on the deal list && showing models we just clear the filters,
      * similar to the return to original search button.
      *
+     * If we're on the deal detail page, we go back to the search results.
+     *
      * If we're on the compare page, since users can come to the compare page from
      * the deal search as well as the deal detail, and it could be any random deal page,
      * we just attempt to let the browser handle this.
