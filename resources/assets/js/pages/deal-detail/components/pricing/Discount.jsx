@@ -1,22 +1,10 @@
 import React from 'react';
+
+import config from 'config';
+
 import Line from 'components/pricing/Line';
 import Label from 'components/pricing/Label';
 import Value from 'components/pricing/Value';
-
-const domesticBrands = [
-    'Chrysler',
-    'Dodge',
-    'Jeep',
-    'Ford',
-    'Lincoln',
-    'Chevrolet',
-    'Cadillac',
-    'Buick',
-    'GMC',
-    'Ram',
-    // TODO: Fiat has employee pricing but no supplier, fix this logic so that we can support this usecase.
-    // 'Fiat'
-];
 
 export default class Discount extends React.PureComponent {
     static defaultProps = {
@@ -73,7 +61,12 @@ export default class Discount extends React.PureComponent {
                         {dealPricing.dmrDiscount()}
                     </Value>
                 </Line>
-                {domesticBrands.includes(dealPricing.deal().make) && (
+                {(config.EMPLOYEE_PRICING_WHITELIST_BRANDS.includes(
+                    dealPricing.deal().make
+                ) ||
+                    config.SUPPLIER_PRICING_WHITELIST_BRANDS.includes(
+                        dealPricing.deal().make
+                    )) && (
                     <div>
                         <div
                             style={{
@@ -83,59 +76,66 @@ export default class Discount extends React.PureComponent {
                         >
                             Or select from the following:
                         </div>
-
-                        <Line style={{ margin: '.125em 0 .125em .25em' }}>
-                            <div className="form-check">
-                                <Label
-                                    className="form-check-input"
-                                    style={{ fontSize: '.9em' }}
-                                >
-                                    <input
-                                        name="discountType"
-                                        value="employee"
-                                        type="radio"
+                        {config.EMPLOYEE_PRICING_WHITELIST_BRANDS.includes(
+                            dealPricing.deal().make
+                        ) && (
+                            <Line style={{ margin: '.125em 0 .125em .25em' }}>
+                                <div className="form-check">
+                                    <Label
                                         className="form-check-input"
-                                        checked={dealPricing.isEffectiveDiscountEmployee()}
-                                        onChange={e => this.handleChange(e)}
-                                    />
-                                    Employee / Retiree
-                                </Label>
-                            </div>
-                            <Value
-                                isNegative={true}
-                                showIf={dealPricing.isEffectiveDiscountEmployee()}
-                            >
-                                {dealPricing.employeeDiscount()}
-                            </Value>
-                            {dealPricing.isEffectiveDiscountEmployee() &&
-                                this.renderProofOfEligibility()}
-                        </Line>
-                        <Line style={{ margin: '.125em 0 .125em .25em' }}>
-                            <div className="form-check">
-                                <Label
-                                    className="form-check-input"
-                                    style={{ fontSize: '.9em' }}
+                                        style={{ fontSize: '.9em' }}
+                                    >
+                                        <input
+                                            name="discountType"
+                                            value="employee"
+                                            type="radio"
+                                            className="form-check-input"
+                                            checked={dealPricing.isEffectiveDiscountEmployee()}
+                                            onChange={e => this.handleChange(e)}
+                                        />
+                                        Employee / Retiree
+                                    </Label>
+                                </div>
+                                <Value
+                                    isNegative={true}
+                                    showIf={dealPricing.isEffectiveDiscountEmployee()}
                                 >
-                                    <input
-                                        name="discountType"
-                                        value="supplier"
-                                        type="radio"
+                                    {dealPricing.employeeDiscount()}
+                                </Value>
+                                {dealPricing.isEffectiveDiscountEmployee() &&
+                                    this.renderProofOfEligibility()}
+                            </Line>
+                        )}
+                        {config.SUPPLIER_PRICING_WHITELIST_BRANDS.includes(
+                            dealPricing.deal().make
+                        ) && (
+                            <Line style={{ margin: '.125em 0 .125em .25em' }}>
+                                <div className="form-check">
+                                    <Label
                                         className="form-check-input"
-                                        checked={dealPricing.isEffectiveDiscountSupplier()}
-                                        onChange={e => this.handleChange(e)}
-                                    />
-                                    Supplier / Friends &amp; Family
-                                </Label>
-                            </div>
-                            <Value
-                                isNegative={true}
-                                showIf={dealPricing.isEffectiveDiscountSupplier()}
-                            >
-                                {dealPricing.supplierDiscount()}
-                            </Value>
-                            {dealPricing.isEffectiveDiscountSupplier() &&
-                                this.renderProofOfEligibility()}
-                        </Line>
+                                        style={{ fontSize: '.9em' }}
+                                    >
+                                        <input
+                                            name="discountType"
+                                            value="supplier"
+                                            type="radio"
+                                            className="form-check-input"
+                                            checked={dealPricing.isEffectiveDiscountSupplier()}
+                                            onChange={e => this.handleChange(e)}
+                                        />
+                                        Supplier / Friends &amp; Family
+                                    </Label>
+                                </div>
+                                <Value
+                                    isNegative={true}
+                                    showIf={dealPricing.isEffectiveDiscountSupplier()}
+                                >
+                                    {dealPricing.supplierDiscount()}
+                                </Value>
+                                {dealPricing.isEffectiveDiscountSupplier() &&
+                                    this.renderProofOfEligibility()}
+                            </Line>
+                        )}
                     </div>
                 )}
             </div>
