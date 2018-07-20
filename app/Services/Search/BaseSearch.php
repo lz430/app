@@ -9,6 +9,20 @@ use App\Models\JATO\VehicleModel;
 
 abstract class BaseSearch
 {
+    private const MODEL_BLACKLIST = [
+        'RDX',
+        'Fit',
+        'Ridgeline'
+    ];
+
+    /* TODO: Are these unique? */
+    private const VERSION_DESCRIPTION_BLACKLIST = [
+        'Honda Civic Si Coupe',
+        'Honda Civic Si Sedan',
+        'Honda Civic Hatchback Type-R Touring',
+        'Honda Pilot 4WD Touring Sport Utility Vehicle'
+    ];
+
     private const FEATURE_TERMS = [
         'transmission' => 'transmission.keyword',
         'comfort_and_convenience' => 'comfort_and_convenience.keyword',
@@ -74,27 +88,46 @@ abstract class BaseSearch
         return $this;
     }
 
-    public function filterMustGenericRules() {
-        $rules = [
-            [['script' => [
-                "script" => [
-                    "lang" => "painless",
-                    "source" => "doc['pricing.msrp'].value >= doc['pricing.default'].value",
-                ]
-            ]]],
-            ['range' => [
-                'pricing.default' => [
-                    'lte' => '200000',
-                ]
-            ]],
+    public function filterMustGenericRules()
+    {
+        $groups = [
+            'must' => [
+                [['script' => [
+                    "script" => [
+                        "lang" => "painless",
+                        "source" => "doc['pricing.msrp'].value >= doc['pricing.default'].value",
+                    ]
+                ]]],
+                ['range' => [
+                    'pricing.default' => [
+                        'lte' => '200000',
+                    ]
+                ]],
+                ['term' => [
+                    'dealer.is_active' => 1,
+                ]],
+                ['term' => [
+                    'is_active' => true,
+                ]],
+            ],
+            'must_not' => [
+                ['terms' => [
+                    'model.keyword' => self::MODEL_BLACKLIST,
+                ]],
+                ['terms' => [
+                    'version.description' => self::VERSION_DESCRIPTION_BLACKLIST,
+                ]],
+            ],
         ];
 
-        foreach($rules as $rule) {
-            $this->query['query']['bool']['must'][] = $rule;
+        foreach ($groups as $group => $rules) {
+            foreach ($rules as $rule) {
+                $this->query['query']['bool'][$group][] = $rule;
 
-            if (isset($this->query['aggs']['makeandstyle'])) {
-                $this->query['aggs']['makeandstyle']['aggs']['style']['filter']['bool']['must'][] = $rule;
-                $this->query['aggs']['makeandstyle']['aggs']['make']['filter']['bool']['must'][] = $rule;
+                if (isset($this->query['aggs']['makeandstyle'])) {
+                    $this->query['aggs']['makeandstyle']['aggs']['style']['filter']['bool'][$group][] = $rule;
+                    $this->query['aggs']['makeandstyle']['aggs']['make']['filter']['bool'][$group][] = $rule;
+                }
             }
         }
 
@@ -228,7 +261,6 @@ abstract class BaseSearch
 
         return $this;
     }
-
 
 
     public function genericFilters(array $filters)

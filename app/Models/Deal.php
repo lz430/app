@@ -67,7 +67,6 @@ class Deal extends Model
 
     protected $indexConfigurator = DealIndexConfigurator::class;
 
-
     const HOLD_HOURS = 48;
 
     /**
@@ -411,15 +410,16 @@ class Deal extends Model
             return FALSE;
         }
 
-        if (!$this->dealer->is_active) {
-            return FALSE;
-        }
-
         if (!$this->features->count()) {
             return FALSE;
         }
 
-        return true;
+        return TRUE;
+    }
+
+    public function shouldBeSearchable()
+    {
+        return $this->shouldIndex();
     }
 
     /**
@@ -429,10 +429,6 @@ class Deal extends Model
      */
     public function toSearchableArray()
     {
-        if (!$this->shouldIndex()) {
-            return [];
-        }
-
         $record = [];
 
         //
@@ -441,6 +437,14 @@ class Deal extends Model
         $record['created_at'] = $this->created_at->format('c');
         $record['updated_at'] = $this->updated_at->format('c');
         $record['inventory_date'] = $this->inventory_date->format('c');
+        $record['is_active'] = true;
+
+        // Deal should not be active if it has been purchased
+        $purchase = Purchase::where('deal_id', $this->id)->get()->first();
+
+        if ($purchase) {
+            $record['is_active'] = false;
+        }
 
         //
         // Vehicle identification information

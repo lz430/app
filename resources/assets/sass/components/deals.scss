@@ -7,6 +7,7 @@
     display: flex;
     flex-flow: row wrap;
     height: calc(100vh - #{$footer-height});
+    width: 100%;
     justify-content: center;
     position: relative;
     /* keep this overflow there is a bug somewhere in react-lazyloading that doesn't respect overflow-y ! */
