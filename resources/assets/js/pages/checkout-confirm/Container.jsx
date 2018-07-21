@@ -22,6 +22,7 @@ import Separator from 'components/pricing/Separator';
 import TaxesAndFees from 'components/pricing/TaxesAndFees';
 import { checkout } from 'apps/checkout/selectors';
 import { init } from './actions';
+import DealStockNumber from '../../components/Deals/DealStockNumber';
 
 class CheckoutConfirmContainer extends React.PureComponent {
     static propTypes = {
@@ -94,7 +95,7 @@ class CheckoutConfirmContainer extends React.PureComponent {
                                 {strings.dealColors(deal)}
                             </div>
                             <div className="stock-number">
-                                Stock# {deal.stock_number}
+                                <DealStockNumber deal={deal} />
                             </div>
                         </Group>
                     </Col>

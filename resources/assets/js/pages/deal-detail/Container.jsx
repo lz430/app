@@ -510,20 +510,7 @@ class DealDetailContainer extends React.PureComponent {
         this.props.leaseActions.update(annualMileage, term, cashDue);
     };
 
-    renderStockNumber() {
-        return (
-            <div className="deal-details__stock-number">
-                Stock# {this.props.deal.stock_number}
-            </div>
-        );
-    }
-
     renderFeaturesAndOptions(deal, index) {
-        const inCompareList = R.contains(
-            deal,
-            R.map(R.prop('deal'), this.props.compareList)
-        );
-
         return (
             <div className="deal-details__deal-content">
                 <div className="deal-details__deal-content-header">
