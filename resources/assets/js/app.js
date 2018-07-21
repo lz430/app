@@ -90,13 +90,19 @@ Array.from(document.getElementsByTagName('ConfirmDetails')).map(element => {
  */
 Array.from(document.getElementsByTagName('Financing')).map(element => {
     ReactDOM.render(
-        <App>
-            <CheckoutFinancing
-                featuredPhoto={DeliverMyRide.featuredPhoto}
-                purchase={DeliverMyRide.purchase}
-                user={DeliverMyRide.user}
-            />
-        </App>,
+        <Provider store={store}>
+            <PersistGate persistor={persistor}>
+                <App>
+                    <CheckoutFinancing
+                        featuredPhoto={JSON.parse(
+                            element.getAttribute('featuredPhoto')
+                        )}
+                        purchase={JSON.parse(element.getAttribute('purchase'))}
+                        user={JSON.parse(element.getAttribute('user'))}
+                    />
+                </App>
+            </PersistGate>
+        </Provider>,
         element
     );
 });

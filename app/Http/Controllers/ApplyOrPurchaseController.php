@@ -61,14 +61,13 @@ class ApplyOrPurchaseController extends Controller
     {
         try {
             $purchase = Purchase::with('deal', 'deal.dealer', 'buyer')->findOrFail($purchaseId);
-
-            JavaScriptFacade::put([
+            $data = [
                 'featuredPhoto' => $purchase->deal->featuredPhoto(),
                 'purchase' => $purchase,
-                'user' => $purchase->buyer,
-            ]);
+                'user' => $purchase->buyer
+            ];
 
-            return view('view-apply');
+            return view('view-apply', $data);
         } catch (ModelNotFoundException $e) {
             return abort(500);
         }

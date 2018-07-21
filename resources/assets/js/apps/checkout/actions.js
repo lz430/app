@@ -51,7 +51,7 @@ export function checkoutContact(fields) {
     };
 }
 
-export function clearCheckoutContactFormErrors(errors) {
+export function clearCheckoutContactFormErrors() {
     return {
         type: ActionTypes.CLEAR_CHECKOUT_CONTACT_FORM_ERRORS,
     };
