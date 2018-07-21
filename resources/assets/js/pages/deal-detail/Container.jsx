@@ -7,10 +7,7 @@ import { Container, Row, Col } from 'reactstrap';
 import * as legacyActions from 'apps/common/actions';
 
 import strings from 'src/strings';
-import util from 'src/util';
 
-import CompareBar from 'components/CompareBar';
-import Modal from 'components/Modal';
 import miscicons from 'miscicons';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
@@ -19,13 +16,16 @@ import ImageGallery from 'react-image-gallery';
 import { dealPricingFactory } from 'src/DealPricing';
 
 import ApiClient from 'store/api';
+
 import DealStockNumber from 'components/Deals/DealStockNumber';
+import Line from 'components/pricing/Line';
+import CompareBar from 'components/CompareBar';
+import Modal from 'components/Modal';
 
 import CashPricingPane from './components/pricing/CashPane';
 import FinancePricingPane from './components/pricing/FinancePane';
 import LeasePricingPane from './components/pricing/LeasePane';
 import PaymentTypes from './components/pricing/PaymentTypes';
-import Line from '../../components/pricing/Line';
 import Header from './components/Header';
 
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
@@ -34,8 +34,8 @@ import { setCheckoutData, checkoutStart } from 'apps/checkout/actions';
 import * as selectDiscountActions from './modules/selectDiscount';
 import * as financeActions from './modules/finance';
 import * as leaseActions from './modules/lease';
-import { dealDetailRequestDealQuote } from './actions';
-import { initPage, receiveDeal } from './actions';
+
+import { initPage, receiveDeal, dealDetailRequestDealQuote } from './actions';
 
 import { getUserLocation } from 'apps/user/selectors';
 import { getLeaseAnnualMileage, getLeaseTerm } from './selectors';
