@@ -511,6 +511,7 @@ class DealDetailContainer extends React.PureComponent {
     };
 
     renderFeaturesAndOptions(deal, index) {
+        console.log(deal);
         return (
             <div className="deal-details__deal-content">
                 <div className="deal-details__deal-content-header">
@@ -564,24 +565,26 @@ class DealDetailContainer extends React.PureComponent {
                             See all standard features &gt;
                         </span>
                     </div>
-                    <div>
-                        <div className="deal-details__deal-content-subtitle">
-                            Additional Options
+                    {deal.vauto_features.length > 1 && (
+                        <div>
+                            <div className="deal-details__deal-content-subtitle">
+                                Additional Options
+                            </div>
+                            <ul className="deal-details__deal-content-features">
+                                {deal.vauto_features
+                                    .slice(0, 5)
+                                    .map((feature, index) => {
+                                        return <li key={index}>{feature}</li>;
+                                    })}
+                            </ul>
+                            <a
+                                className="link deal-details__deal-content-see-all"
+                                onClick={e => this.showFeatures(e)}
+                            >
+                                See all additional options &gt;
+                            </a>
                         </div>
-                        <ul className="deal-details__deal-content-features">
-                            {deal.vauto_features
-                                .slice(0, 5)
-                                .map((feature, index) => {
-                                    return <li key={index}>{feature}</li>;
-                                })}
-                        </ul>
-                        <a
-                            className="link deal-details__deal-content-see-all"
-                            onClick={e => this.showFeatures(e)}
-                        >
-                            See all additional options &gt;
-                        </a>
-                    </div>
+                    )}
                 </div>
             </div>
         );
