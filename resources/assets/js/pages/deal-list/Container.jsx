@@ -45,13 +45,9 @@ class Container extends React.PureComponent {
         return (
             <Modal
                 onClose={this.props.onCloseMakeSelectorModal}
-                title="Select brand preference"
-                subtitle="Select one or more brands to compare"
+                title="SELECT ONE OR MORE BRANDS TO COMPARE"
                 closeText="Show available vehicles"
-                buttonCloseDisabled={
-                    !this.props.selectedFiltersByCategory['make'] ||
-                    this.props.selectedFiltersByCategory['make'].length === 0
-                }
+                buttonCloseDisabled={false}
             >
                 <MakeSelector />
             </Modal>

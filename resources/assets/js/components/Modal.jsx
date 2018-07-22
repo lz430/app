@@ -92,9 +92,11 @@ class Modal extends React.Component {
                                     <div className="modal__title">
                                         {this.props.title}
                                     </div>
-                                    <div className="modal__subtitle">
-                                        {this.props.subtitle}
-                                    </div>
+                                    {this.props.subtitle && (
+                                        <div className="modal__subtitle">
+                                            {this.props.subtitle}
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="modal__close">
                                     <SVGInline
