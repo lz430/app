@@ -1,8 +1,8 @@
 <?php
 
-namespace DeliverMyRide\JATO\Manager;
+namespace DeliverMyRide\JATO;
 
-class Maps
+class Map
 {
     public const BODY_STYLE_MAP = [
         'Coupe' => 'Coupe',

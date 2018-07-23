@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Deal;
 use App\Http\Controllers\Controller;
 use DeliverMyRide\JATO\JatoClient;
+use DeliverMyRide\JATO\Manager\DealCompareData;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 
@@ -163,6 +164,7 @@ class DealDataController extends Controller
 
         $data = [
             'deal' => $deal,
+            'compare' => (new DealCompareData($client, $deal))->build(),
             'standardEquipment' => $this->buildStandardEquipment(),
             'options' => $this->buildOptions(),
             'versions' => $this->buildJatoVersionOptions(),
