@@ -21,7 +21,7 @@ class ConfirmDetailsController extends Controller
             ->serializeWith(new DataArraySerializer)
             ->toJson();
 
-        return view('confirm', ['id' => $id])
+        return view('checkout-confirm', ['id' => $id])
             ->with('deal', $dealTransformed)
             ->with('title', $title);
     }
