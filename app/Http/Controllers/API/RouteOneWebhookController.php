@@ -48,7 +48,7 @@ class RouteOneWebhookController extends BaseAPIController
                 'application_status' => $applicationStatus,
             ]);
 
-            event(UserDataChanged::class, ['email' => $email, 'creditapproval' => $applicationStatus]);
+            event(new UserDataChanged(['email' => $email, 'creditapproval' => $applicationStatus]));
         } catch (ValidationException | ModelNotFoundException $e) {
             if (app()->bound('sentry')) {
                 app('sentry')->captureException($e);

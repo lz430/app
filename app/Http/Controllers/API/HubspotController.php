@@ -10,7 +10,7 @@ class HubspotController extends Controller
 {
     public function notInServiceArea(Request $request)
     {
-        event(UserWantsNotificationWhenInRange::class, $request->email);
+        event(new UserWantsNotificationWhenInRange($request->email));
 
         return response('ok');
     }
