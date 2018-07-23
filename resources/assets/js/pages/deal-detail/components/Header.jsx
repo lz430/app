@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'reactstrap';
 import strings from 'src/strings';
 import DealStockNumber from 'components/Deals/DealStockNumber';
+import { dealType } from 'types';
 
 export default class Header extends React.PureComponent {
     static propTypes = {
-        deal: PropTypes.object.isRequired,
+        deal: dealType.isRequired,
     };
 
     render() {

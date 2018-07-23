@@ -6,19 +6,11 @@ import R from 'ramda';
 import zondicons from '../zondicons';
 import SVGInline from 'react-svg-inline';
 import PropTypes from 'prop-types';
+import { dealType } from '../types';
 
 class InfoModal extends React.PureComponent {
     static propTypes = {
-        deal: PropTypes.shape({
-            year: PropTypes.string.isRequired,
-            msrp: PropTypes.number.isRequired,
-            employee_price: PropTypes.number.isRequired,
-            supplier_price: PropTypes.number.isRequired,
-            make: PropTypes.string.isRequired,
-            model: PropTypes.string.isRequired,
-            id: PropTypes.number.isRequired,
-            vin: PropTypes.string.isRequired,
-        }),
+        deal: dealType.isRequired,
         infoModalIsShowingFor: PropTypes.number,
         withPricingTabs: PropTypes.bool,
         userLocation: PropTypes.object.isRequired,

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { dealType } from 'types';
 
 export default class DealStockNumber extends React.PureComponent {
     static propTypes = {
-        deal: PropTypes.object.isRequired,
+        deal: dealType.isRequired,
     };
 
     render() {
