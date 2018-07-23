@@ -472,12 +472,12 @@ class DealDetailContainer extends React.PureComponent {
                                         return <li key={index}>{feature}</li>;
                                     })}
                             </ul>
-                            <a
+                            <span
                                 className="link deal-details__deal-content-see-all"
                                 onClick={e => this.showFeatures(e)}
                             >
                                 See all additional options &gt;
-                            </a>
+                            </span>
                         </div>
                     )}
                 </div>
