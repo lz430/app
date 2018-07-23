@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Health;
+namespace App\Services\Health;
 
-use App\Health\Checks\DataDeliveryCheck;
-use App\Health\Checks\FuelCheck;
-use App\Health\Checks\JatoCheck;
-use App\Health\Checks\TestCheck;
-use App\Health\Checks\DatabaseCheck;
+use App\Services\Health\Checks\DataDeliveryCheck;
+use App\Services\Health\Checks\FuelCheck;
+use App\Services\Health\Checks\JatoCheck;
+use App\Services\Health\Checks\TestCheck;
+use App\Services\Health\Checks\DatabaseCheck;
 
 class HealthCheck
 {
@@ -16,15 +16,12 @@ class HealthCheck
        $jato = new JatoCheck();
        $fuel = new FuelCheck();
        $database = new DatabaseCheck();
-       $test = new TestCheck();
-
 
        $checks = [
            'DataDeliveryApi' => $datadelivery->run(),
            'JatoApi' => $jato->run(),
            'FuelApi' => $fuel->run(),
            'Database' => $database->run(),
-           'TestCheck' => $test->run(),
        ];
 
        return $checks;

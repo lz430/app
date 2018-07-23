@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Health\HealthCheck;
+use App\Services\Health\HealthCheck;
 use GuzzleHttp\Exception\ClientException;
 
 class HealthCheckController extends Controller
@@ -17,6 +17,20 @@ class HealthCheckController extends Controller
     {
         $tests = $this->health->checks();
 
-        return view('health-checks', ['healthcheck' => $tests]);
+        $failedTests = [];
+        foreach($tests as $name => $result) {
+            if($result === 0) {
+                $failedTests[] = $name;
+            }
+        }
+
+        if(in_array(0, $tests, TRUE)) {
+            return \Response::json(array(
+                'code'      =>  500,
+                'message'   =>  implode(", ",$failedTests) . " failed!"
+            ), 500);
+        } else {
+            return response()->json($tests);
+        }
     }
 }
