@@ -15,12 +15,19 @@ class UpdateHubspotContact
     {
         $this->client = $client;
     }
-    
+
+    /**
+     * This is used by both the set-email end point (which is not a purchase) as well as the purchase form.
+     * @param $event
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function handle($event)
     {
         try {
             $this->client->createOrUpdateContact($event->payload);
-            $this->client->submitBuyNowContactInfoForm($event->payload);
+            if (isset($event->payload['phone'])) {
+                $this->client->submitBuyNowContactInfoForm($event->payload);
+            }
             return;
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
