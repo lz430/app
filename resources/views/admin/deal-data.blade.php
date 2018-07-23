@@ -28,7 +28,6 @@
         </ul>
     @endcomponent
 
-
     <h1>
         Deal
     </h1>
@@ -147,7 +146,26 @@
             @endcomponent
         </div>
     </div>
+    <h3>Compare Data</h3>
+    <div class="row">
 
+        @foreach($compare as $category => $labels)
+            <div class="col-md-2">
+                @component('components.box')
+                    @slot('title')
+                        {{$category}}
+                    @endslot
+                    <ul class="list-group no-padding no-margin">
+                        @foreach ($labels as $label)
+                            <li class="list-group-item" style="padding:2px;">
+                                {{$label}}
+                            </li>
+                        @endforeach
+                    </ul>
+                @endcomponent
+            </div>
+        @endforeach
+    </div>
     <h1>
         Jato Data
     </h1>

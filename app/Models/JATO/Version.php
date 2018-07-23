@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models\JATO;
-use DeliverMyRide\JATO\Manager\Maps;
+use DeliverMyRide\JATO\Map;
 use App\Models\Deal;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -51,8 +51,8 @@ class Version extends Model
     }
 
     public function style() {
-        if (isset(Maps::BODY_STYLE_MAP[$this->body_style])) {
-            return Maps::BODY_STYLE_MAP[$this->body_style];
+        if (isset(Map::BODY_STYLE_MAP[$this->body_style])) {
+            return Map::BODY_STYLE_MAP[$this->body_style];
         }
         return null;
     }
