@@ -700,10 +700,10 @@ class CheckoutConfirmContainer extends React.PureComponent {
                 <Row>
                     <Col>
                         <div style={{ margin: '1em 0' }}>
-                            * This is not a binding contract. The figures
-                            presented are based upon estimates. Rates subject to
-                            credit approval. After confirming this purchase, we
-                            will finalize financing and delivery details.
+                            * This is not a binding contract. Delivering dealer
+                            will verify vehicle availability, pricing details
+                            and incentive eligibility. Rates are subject to
+                            credit approval.
                         </div>
                     </Col>
                 </Row>
