@@ -17,17 +17,17 @@ class HealthCheckController extends Controller
     {
         $tests = $this->health->checks();
 
-        $values = [];
-        foreach($tests as $key => $value) {
-            if($value === 0) {
-                $values[] = $key;
+        $failedTests = [];
+        foreach($tests as $name => $result) {
+            if($result === 0) {
+                $failedTests[] = $name;
             }
         }
 
         if(in_array(0, $tests, TRUE)) {
             return \Response::json(array(
                 'code'      =>  500,
-                'message'   =>  implode(", ",$values) . " failed!"
+                'message'   =>  implode(", ",$failedTests) . " failed!"
             ), 500);
         } else {
             return response()->json($tests);
