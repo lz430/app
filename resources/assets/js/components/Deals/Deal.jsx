@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 
 import DealImage from 'components/Deals/DealImage';
 import DealPrice from 'components/Deals/DealPrice';
+import { dealType } from 'types';
 
 class Deal extends React.Component {
     static propTypes = {
-        deal: PropTypes.object.isRequired,
+        deal: dealType.isRequired,
     };
 
     render() {

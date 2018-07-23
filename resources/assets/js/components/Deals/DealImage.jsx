@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import LazyLoad from 'react-lazyload';
+import { dealType } from '../../types';
 
 export default class DealImage extends React.PureComponent {
     static propTypes = {
-        deal: PropTypes.object.isRequired,
+        deal: dealType.isRequired,
         size: PropTypes.string,
         link: PropTypes.bool,
         featureImageClass: PropTypes.string,

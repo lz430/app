@@ -17,15 +17,9 @@ import { dealPricingFactory } from 'src/DealPricing';
 
 import ApiClient from 'store/api';
 
-import DealStockNumber from 'components/Deals/DealStockNumber';
-import Line from 'components/pricing/Line';
 import CompareBar from 'components/CompareBar';
 import Modal from 'components/Modal';
 
-import CashPricingPane from './components/pricing/CashPane';
-import FinancePricingPane from './components/pricing/FinancePane';
-import LeasePricingPane from './components/pricing/LeasePane';
-import PaymentTypes from './components/pricing/PaymentTypes';
 import Header from './components/Header';
 
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
@@ -39,24 +33,19 @@ import { initPage, receiveDeal, dealDetailRequestDealQuote } from './actions';
 
 import { getUserLocation } from 'apps/user/selectors';
 import { getLeaseAnnualMileage, getLeaseTerm } from './selectors';
+import AddToCart from './components/AddToCart';
+
+import { dealType } from 'types';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
-        deal: PropTypes.shape({
-            year: PropTypes.string.isRequired,
-            msrp: PropTypes.number.isRequired,
-            employee_price: PropTypes.number.isRequired,
-            supplier_price: PropTypes.number.isRequired,
-            make: PropTypes.string.isRequired,
-            model: PropTypes.string.isRequired,
-            id: PropTypes.number.isRequired,
-            vin: PropTypes.string.isRequired,
-        }),
+        deal: dealType,
         purchaseStrategy: PropTypes.string.isRequired,
         userLocation: PropTypes.object.isRequired,
+        dealPricing: PropTypes.object,
         discountType: PropTypes.string.isRequired,
         selectedConditionalRoles: PropTypes.array,
-
+        compareList: PropTypes.array,
         initPage: PropTypes.func.isRequired,
         receiveDeal: PropTypes.func.isRequired,
         setPurchaseStrategy: PropTypes.func.isRequired,
@@ -96,30 +85,28 @@ class DealDetailContainer extends React.PureComponent {
             this.setState({ upholsteryType });
         }
 
-        if (this.props.deal.version) {
-            const {
-                body_style,
-                driven_wheels,
-                fuel_econ_city,
-                fuel_econ_hwy,
-            } = this.props.deal.version;
+        const {
+            body_style,
+            driven_wheels,
+            fuel_econ_city,
+            fuel_econ_hwy,
+        } = this.props.deal.version;
 
-            const { engine, transmission } = this.props.deal;
+        const { engine, transmission } = this.props.deal;
 
-            const basicFeatures = [
-                { name: 'Body', content: body_style },
-                { name: 'Drive Train', content: driven_wheels },
-                { name: 'Engine', content: engine },
-                { name: 'Transmission', content: transmission },
-            ];
+        const basicFeatures = [
+            { name: 'Body', content: body_style },
+            { name: 'Drive Train', content: driven_wheels },
+            { name: 'Engine', content: engine },
+            { name: 'Transmission', content: transmission },
+        ];
 
-            const fuelEconomy = {
-                city: fuel_econ_city,
-                highway: fuel_econ_hwy,
-            };
+        const fuelEconomy = {
+            city: fuel_econ_city,
+            highway: fuel_econ_hwy,
+        };
 
-            this.setState({ basicFeatures, fuelEconomy });
-        }
+        this.setState({ basicFeatures, fuelEconomy });
 
         ApiClient.deal.dealGetDimensions(this.props.deal.id).then(response => {
             this.setState({
@@ -324,97 +311,6 @@ class DealDetailContainer extends React.PureComponent {
         );
     }
 
-    renderDeal(deal, { shouldRenderStockNumber } = {}) {
-        const { purchaseStrategy, dealPricing } = this.props;
-
-        return (
-            <div className="deal-details__pricing">
-                <div>
-                    {shouldRenderStockNumber && (
-                        <div className="deal-details__stock-number">
-                            <DealStockNumber deal={this.props.deal} />
-                        </div>
-                    )}
-                    <div className="info-modal-data">
-                        <div className="info-modal-data__price">
-                            <PaymentTypes
-                                {...{ purchaseStrategy }}
-                                onChange={this.handlePaymentTypeChange}
-                            />
-                            {this.props.purchaseStrategy === 'cash' && (
-                                <CashPricingPane
-                                    {...{ dealPricing }}
-                                    onDiscountChange={this.handleDiscountChange}
-                                    onRebatesChange={this.handleRebatesChange}
-                                />
-                            )}
-                            {this.props.purchaseStrategy === 'finance' && (
-                                <FinancePricingPane
-                                    {...{ dealPricing }}
-                                    onDiscountChange={this.handleDiscountChange}
-                                    onRebatesChange={this.handleRebatesChange}
-                                    onDownPaymentChange={
-                                        this.handleFinanceDownPaymentChange
-                                    }
-                                    onTermChange={this.handleFinanceTermChange}
-                                />
-                            )}
-                            {this.props.purchaseStrategy === 'lease' && (
-                                <LeasePricingPane
-                                    {...{ dealPricing }}
-                                    onDiscountChange={this.handleDiscountChange}
-                                    onRebatesChange={this.handleRebatesChange}
-                                    onTermChange={this.handleLeaseTermChange}
-                                    onAnnualMileageChange={
-                                        this.handleLeaseAnnualMileageChange
-                                    }
-                                    onCashDueChange={
-                                        this.handleLeaseCashDueChange
-                                    }
-                                    onChange={this.handleLeaseChange}
-                                />
-                            )}
-                            <div className="deal__buttons">
-                                <button
-                                    className={this.compareButtonClass(deal)}
-                                    onClick={this.props.legacyActions.toggleCompare.bind(
-                                        null,
-                                        this.props.dealPricing.deal()
-                                    )}
-                                >
-                                    {this.compareListContainsDeal(deal)
-                                        ? 'Remove'
-                                        : 'Compare'}
-                                </button>
-
-                                <button
-                                    className="btn btn-success"
-                                    onClick={this.handleBuyNow}
-                                    disabled={
-                                        !this.props.dealPricing.canPurchase()
-                                    }
-                                >
-                                    Buy Now
-                                </button>
-                            </div>
-                            <Line>
-                                <div
-                                    style={{
-                                        fontStyle: 'italic',
-                                        fontSize: '.75em',
-                                        marginLeft: '.25em',
-                                    }}
-                                >
-                                    * includes all taxes and dealer fees
-                                </div>
-                            </Line>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
     handleBuyNow = e => {
         const dealPricing = this.props.dealPricing;
 
@@ -510,8 +406,7 @@ class DealDetailContainer extends React.PureComponent {
         this.props.leaseActions.update(annualMileage, term, cashDue);
     };
 
-    renderFeaturesAndOptions(deal, index) {
-        console.log(deal);
+    renderFeaturesAndOptions(deal) {
         return (
             <div className="deal-details__deal-content">
                 <div className="deal-details__deal-content-header">
@@ -607,13 +502,46 @@ class DealDetailContainer extends React.PureComponent {
                                     showFullscreenButton={false}
                                 />
                             </div>
-
                             {this.renderFeaturesAndOptions(this.props.deal)}
                         </Col>
                         <Col md="6" lg="4">
-                            {this.renderDeal(this.props.deal, {
-                                shouldRenderStockNumber: false,
-                            })}
+                            <AddToCart
+                                deal={this.props.deal}
+                                purchaseStrategy={this.props.purchaseStrategy}
+                                handlePaymentTypeChange={this.handlePaymentTypeChange.bind(
+                                    this
+                                )}
+                                dealPricing={this.props.dealPricing}
+                                handleDiscountChange={this.handleDiscountChange.bind(
+                                    this
+                                )}
+                                handleRebatesChange={this.handleRebatesChange.bind(
+                                    this
+                                )}
+                                handleFinanceDownPaymentChange={this.handleFinanceDownPaymentChange.bind(
+                                    this
+                                )}
+                                handleFinanceTermChange={this.handleFinanceTermChange.bind(
+                                    this
+                                )}
+                                handleLeaseTermChange={this.handleLeaseTermChange.bind(
+                                    this
+                                )}
+                                handleLeaseCashDueChange={this.handleLeaseCashDueChange.bind(
+                                    this
+                                )}
+                                handleLeaseAnnualMileageChange={this.handleLeaseAnnualMileageChange.bind(
+                                    this
+                                )}
+                                handleLeaseChange={this.handleLeaseChange.bind(
+                                    this
+                                )}
+                                handleBuyNow={this.handleBuyNow.bind(this)}
+                                onToggleCompare={
+                                    this.props.legacyActions.toggleCompare
+                                }
+                                compareList={this.props.compareList}
+                            />
                         </Col>
                     </Row>
 
@@ -626,19 +554,6 @@ class DealDetailContainer extends React.PureComponent {
                 </Container>
                 <CompareBar class="compare-bar compare-bar--static" />
             </div>
-        );
-    }
-
-    compareListContainsDeal(deal) {
-        return R.contains(deal, R.map(R.prop('deal'), this.props.compareList));
-    }
-
-    compareButtonClass(deal) {
-        return (
-            'btn ' +
-            (this.compareListContainsDeal(deal)
-                ? 'btn-outline-primary'
-                : 'btn-primary')
         );
     }
 }

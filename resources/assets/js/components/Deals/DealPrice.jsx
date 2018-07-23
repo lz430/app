@@ -16,10 +16,11 @@ import {
 import { setPurchaseStrategy } from 'apps/user/actions';
 import { requestDealQuote } from 'apps/pricing/actions';
 import { getUserLocation } from 'apps/user/selectors';
+import { dealType } from '../../types';
 
 class DealPrice extends React.Component {
     static propTypes = {
-        deal: PropTypes.object.isRequired,
+        deal: dealType.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
         userLocation: PropTypes.object.isRequired,
         compareList: PropTypes.array.isRequired,
