@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Health\Checks;
-use App\Health\HealthCheck;
+namespace App\Services\Health\Checks;
+use App\Services\Health\HealthCheck;
 use DeliverMyRide\Fuel\FuelClient;
 use GuzzleHttp\Exception\ClientException;
 
@@ -30,6 +30,6 @@ class FuelCheck extends HealthCheck
             print_r($e->getMessage());
         }
 
-        return false;
+        return 0;
     }
 }

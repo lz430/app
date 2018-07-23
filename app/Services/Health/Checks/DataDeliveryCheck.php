@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Health\Checks;
-use App\Health\HealthCheck;
+namespace App\Services\Health\Checks;
+use App\Services\Health\HealthCheck;
 use GuzzleHttp\Exception\ClientException;
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
 
@@ -37,7 +37,6 @@ class DataDeliveryCheck extends HealthCheck
         } catch (ClientException $e) {
             print_r($e->getMessage());
         }
-        //new \Symfony\Component\HttpKernel\Exception\HttpException(500);
-        return false;
+        return 0;
     }
 }

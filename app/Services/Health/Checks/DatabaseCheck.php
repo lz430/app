@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Health\Checks;
-use App\Health\HealthCheck;
+namespace App\Services\Health\Checks;
+use App\Services\Health\HealthCheck;
 use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Exception\ClientException;
 
@@ -17,7 +17,7 @@ class DatabaseCheck extends HealthCheck {
             print_r($e->getMessage());
         }
 
-        return false;
+        return 0;
     }
 }
 
