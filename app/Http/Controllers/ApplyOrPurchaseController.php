@@ -67,7 +67,7 @@ class ApplyOrPurchaseController extends Controller
                 'user' => $purchase->buyer
             ];
 
-            return view('view-apply', $data);
+            return view('checkout-financing', $data);
         } catch (ModelNotFoundException $e) {
             return abort(500);
         }
@@ -101,7 +101,7 @@ class ApplyOrPurchaseController extends Controller
             //Mail::to(config('mail.dmr.address'))->send(new ApplicationSubmittedDMR);
             //Mail::to(request('email'))->send(new ApplicationSubmittedUser);
 
-            return view('apply')
+            return view('checkout-financing-complete')
                 ->with('purchase', $purchase);
         } catch (ValidationException | ModelNotFoundException $e) {
             return abort(404);
@@ -129,6 +129,6 @@ class ApplyOrPurchaseController extends Controller
                 )
             )
         );
-        return view('thank-you')->with('purchase', $lastPurchase)->with('deal', $dealData)->with('features', $vautoFeatures);
+        return view('checkout-complete')->with('purchase', $lastPurchase)->with('deal', $dealData)->with('features', $vautoFeatures);
     }
 }
