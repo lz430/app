@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import util from 'src/util';
 import ModelYearImage from 'components/Deals/ModelYearImage';
 import { selectModelYear } from 'pages/deal-list/actions';
+import { Card, CardBody, CardHeader, CardFooter } from 'reactstrap';
 
 class ModelYear extends React.PureComponent {
     static propTypes = {
@@ -39,8 +40,8 @@ class ModelYear extends React.PureComponent {
     render() {
         const modelYear = this.props.modelYear;
         return (
-            <div className="modelyear">
-                <div>
+            <Card className="inventory-summary">
+                <CardHeader>
                     <div
                         className="modelyear__basic-info"
                         onClick={() => {
@@ -57,7 +58,8 @@ class ModelYear extends React.PureComponent {
                             </div>
                         </div>
                     </div>
-
+                </CardHeader>
+                <CardBody>
                     <ModelYearImage
                         modelYear={modelYear}
                         key={this.buildModelKey()}
@@ -65,7 +67,6 @@ class ModelYear extends React.PureComponent {
                             this.selectModelYear(modelYear);
                         }}
                     />
-
                     <div className="modelyear__details">
                         <div className="modelyear__count">
                             {modelYear.deals.count} in stock.
@@ -78,20 +79,18 @@ class ModelYear extends React.PureComponent {
                             {util.moneyFormat(modelYear['lowest_msrp'])}
                         </div>
                     </div>
-
-                    <div className="modelyear__buttons">
-                        <button
-                            className="modelyear__button modelyear__button--small modelyear__button--pink modelyear__button"
-                            onClick={() => {
-                                this.selectModelYear(modelYear);
-                            }}
-                        >
-                            View Inventory
-                        </button>
-                    </div>
-                </div>
-                {this.props.children}
-            </div>
+                </CardBody>
+                <CardFooter>
+                    <button
+                        className="btn btn-success btn-block"
+                        onClick={() => {
+                            this.selectModelYear(modelYear);
+                        }}
+                    >
+                        View Inventory
+                    </button>
+                </CardFooter>
+            </Card>
         );
     }
 }

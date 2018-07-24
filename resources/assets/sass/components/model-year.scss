@@ -1,31 +1,8 @@
-@import '../variables';
-@import '../mixins/button';
-
-.modelyears {
-    @extend .deals;
-}
-.modelyears .modelyear {
-    border-radius: 0.25rem;
-    padding: 0.5rem;
-}
-
 .compare-page .modelyear {
     border: none;
 }
 
 .modelyear {
-    background-color: $color-background-secondary;
-    border: 1px solid $color-grey;
-    height: fit-content;
-    margin: 3px;
-    width: calc(50% - 6px);
-
-    @media (min-width: $break-small) {
-        max-width: $modelyear-card-width;
-        min-width: $modelyear-card-width;
-        margin: $modelyear-card-margin;
-    }
-
     &__basic-info {
         margin-bottom: 0.5rem;
 
@@ -61,43 +38,10 @@
         }
     }
 
-    &__image-container {
-        height: 225px;
-        display: flex;
-        align-items: center;
-    }
-
-    &__image {
-        border-bottom: 0;
-        display: block;
-        width: 100%;
-        object-fit: cover;
-
-        &--fallback {
-            padding: 25px;
-        }
-
-        &:hover {
-            cursor: pointer;
-        }
-    }
-
     &__buttons {
         display: flex;
         justify-content: space-around;
         margin: 5px 0;
-    }
-
-    &__button {
-        @include button;
-        flex: 1;
-        justify-content: center;
-        width: 100%;
-
-        &--small {
-            font-size: 0.8rem;
-            padding: 10px 15px;
-        }
     }
 
     &__details {
