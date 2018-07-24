@@ -15,7 +15,6 @@ export const dealType = shape({
     photos: arrayOf(
         shape({
             id: number.isRequired,
-            deal_id: number.isRequired,
             url: string.isRequired,
             created_at: string,
             updated_at: string,
@@ -24,7 +23,6 @@ export const dealType = shape({
 
     thumbnail: shape({
         id: number.isRequired,
-        deal_id: number.isRequired,
         url: string.isRequired,
         created_at: string,
         updated_at: string,

@@ -68,42 +68,39 @@ class ViewDeals extends React.PureComponent {
         }
     }
 
+    renderDeal(deal, index) {
+        return (
+            <Deal deal={deal} key={index}>
+                <div className="deal__buttons">
+                    <button
+                        className={this.compareButtonClass(deal)}
+                        onClick={this.props.onToggleCompare.bind(null, deal)}
+                    >
+                        {this.compareListContainsDeal(deal)
+                            ? 'Remove'
+                            : 'Compare'}{' '}
+                    </button>
+                    <a className="btn btn-success" href={`/deals/${deal.id}`}>
+                        View Details
+                    </a>
+                </div>
+            </Deal>
+        );
+    }
+
     render() {
         return (
             <div className="deals-wrapper">
-                <div className="deals">
-                    {this.props.deals && this.props.deals.length ? (
-                        this.props.deals.map((deal, index) => {
-                            return (
-                                <Deal deal={deal} key={index}>
-                                    <div className="deal__buttons">
-                                        <button
-                                            className={this.compareButtonClass(
-                                                deal
-                                            )}
-                                            onClick={this.props.onToggleCompare.bind(
-                                                null,
-                                                deal
-                                            )}
-                                        >
-                                            {this.compareListContainsDeal(deal)
-                                                ? 'Remove'
-                                                : 'Compare'}{' '}
-                                        </button>
-                                        <a
-                                            className="btn btn-success"
-                                            href={`/deals/${deal.id}`}
-                                        >
-                                            View Details
-                                        </a>
-                                    </div>
-                                </Deal>
-                            );
-                        })
-                    ) : (
-                        <SVGInline svg={miscicons['loading']} />
-                    )}
-
+                <div className="inventory-summary-deck">
+                    <div className="card-deck  m-0">
+                        {this.props.deals && this.props.deals.length ? (
+                            this.props.deals.map((deal, index) => {
+                                return this.renderDeal(deal, index);
+                            })
+                        ) : (
+                            <SVGInline svg={miscicons['loading']} />
+                        )}
+                    </div>
                     {this.renderShowMoreButton()}
                 </div>
             </div>

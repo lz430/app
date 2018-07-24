@@ -1,8 +1,4 @@
-@import '../variables';
-@import '../mixins/button';
-@import '../mixins/input';
-
-.deals {
+.inventory-summary-deck {
     background: $color-background-primary;
     display: flex;
     flex-flow: row wrap;
@@ -15,6 +11,10 @@
     overflow-y: scroll;
     padding: 2px;
     padding-bottom: 15px;
+
+    > div {
+        justify-content: center;
+    }
 
     @media (min-width: $break-small) {
         height: calc(100vh - #{$nav-height + $sortbar-height});
