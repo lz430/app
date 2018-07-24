@@ -36,6 +36,8 @@
 
 .card-deck > .card {
     margin: 0;
+    max-height: fit-content;
+    min-height: fit-content;
     @include media-breakpoint-up(sm) {
         margin-bottom: 10px;
         margin-left: 5px;
