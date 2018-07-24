@@ -49,10 +49,7 @@ class NoDealsOutOfRange extends Component {
                         type="email"
                         required
                     />
-                    <button
-                        className="deals__button deals__button--blue"
-                        type="submit"
-                    >
+                    <button className="btn btn-success" type="submit">
                         Submit Email
                     </button>
                 </div>
