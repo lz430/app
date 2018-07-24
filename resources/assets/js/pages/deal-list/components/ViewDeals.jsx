@@ -36,8 +36,10 @@ class ViewDeals extends React.PureComponent {
 
     compareButtonClass(deal) {
         return (
-            'deal__button deal__button--x-small deal__button--blue' +
-            (this.compareListContainsDeal(deal) ? 'deal__button--blue' : '')
+            'btn ' +
+            (this.compareListContainsDeal(deal)
+                ? 'btn-outline-primary'
+                : 'btn-primary')
         );
     }
 
@@ -57,7 +59,7 @@ class ViewDeals extends React.PureComponent {
                 <div className="deals__show-more">
                     <button
                         onClick={this.props.onRequestMoreDeals}
-                        className="deals__button deals__button--blue"
+                        className="btn btn-primary"
                     >
                         Show More
                     </button>
@@ -68,13 +70,8 @@ class ViewDeals extends React.PureComponent {
 
     render() {
         return (
-            <div>
-                <div
-                    className={
-                        'deals ' +
-                        (this.props.compareList.length > 0 ? '' : 'no-compare')
-                    }
-                >
+            <div className="deals-wrapper">
+                <div className="deals">
                     {this.props.deals && this.props.deals.length ? (
                         this.props.deals.map((deal, index) => {
                             return (
@@ -91,10 +88,10 @@ class ViewDeals extends React.PureComponent {
                                         >
                                             {this.compareListContainsDeal(deal)
                                                 ? 'Remove'
-                                                : 'Add to Compare'}{' '}
+                                                : 'Compare'}{' '}
                                         </button>
                                         <a
-                                            className="deal__button deal__button--x-small deal__button--pink deal__button"
+                                            className="btn btn-success"
                                             href={`/deals/${deal.id}`}
                                         >
                                             View Details

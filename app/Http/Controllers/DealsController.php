@@ -16,7 +16,7 @@ class DealsController extends Controller
             ->transformWith(DealTransformer::class)
             ->serializeWith(new DataArraySerializer);
 
-        return view('deals.show')
+        return view('deal-detail')
             ->with('deal', $dealTransformed->toJson())
             ->with('title', $title);
     }

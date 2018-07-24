@@ -61,19 +61,9 @@
 
     </head>
     <body class="{{ $bodyClass ?? '' }}">
-        @section('nav')
-            @include('nav')
-        @show
-
-        @yield('precontent')
-
         <div class="content {{ $contentClass ?? '' }}">
             @yield('content')
         </div>
-
-        @section('footer')
-            @include('footer')
-        @show
 
         @if (App::environment(['staging', 'production']))
             <script src="https://cdn.ravenjs.com/3.24.2/raven.min.js" crossorigin="anonymous"></script>

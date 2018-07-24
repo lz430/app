@@ -12,9 +12,12 @@ class OptinMonsterController extends Controller
     {
         if ($request->has('email')) {
             $request->session()->put('email', request('email'));
-            event(UserDataChanged::class, ['email' => request('email')]);
+            event(new UserDataChanged([
+                'email' => request('email'),
+                'from' => 'optin',
+            ]));
+            return response(['status' => 'ok'], Response::HTTP_OK);
         }
-        
-        return response(['status' => 'ok'], Response::HTTP_OK);
+        return response(['status' => 'invalid'], Response::HTTP_BAD_REQUEST);
     }
 }

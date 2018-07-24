@@ -1,84 +1,46 @@
-@import '../variables';
-@import '../mixins/button';
-
 .checkout-confirm {
-    margin: 0 auto;
-    max-width: 90%;
-    padding-bottom: 80px;
-    > h1 {
-        margin: 0;
+    &__header {
+        margin-top: 1rem;
     }
 
-    @media (min-width: $break-small) {
-        max-width: 75%;
-    }
-
-    @media (min-width: $break-large) {
-        flex-direction: row;
-        max-width: $break-large;
-    }
-
-    .container {
-        border: 1px solid $color-grey;
-    }
-
-    .row:first-of-type {
-        border-bottom: 1px solid $color-grey;
-    }
-
-    .row {
+    .image {
+        border: 1px solid #ccc;
+        align-items: center;
+        justify-content: center;
         display: flex;
-        flex-direction: column;
-
-        @media (min-width: $break-small) {
-            flex-direction: row;
+        padding: 10px;
+        flex-grow: 0;
+        img {
+            margin: 0;
+            padding: 0;
         }
+    }
+    .title {
+        border: 1px solid #ccc;
+        border-left: 0;
 
-        > div:not(.image) {
-            padding: 1em;
+        .model-and-trim {
+            line-height: 1.2em;
+            font-size: xx-large;
+            font-weight: bold;
         }
-
-        > div:not(:last-of-type) {
-            border-right: 1px solid $color-grey;
+        .stock-number {
+            font-weight: bold;
         }
+    }
+    .summary {
+        border: 1px solid #ccc;
+        border-left: 0;
+    }
 
-        .image {
-            img {
-                margin: 0;
-                padding: 0;
-                width: 300px;
-                display: block;
-            }
-        }
-        .title {
-            flex: 1;
+    .details {
+        border: 1px solid #ccc;
+        border-top: 0;
+    }
 
-            .year-and-make {
-            }
-
-            .model-and-trim {
-                line-height: 1.2em;
-                font-size: xx-large;
-                font-weight: bold;
-            }
-
-            .colors {
-            }
-
-            .stock-number {
-                font-weight: bold;
-            }
-        }
-        .summary {
-            flex: 1;
-        }
-
-        .details {
-            flex: 1;
-        }
-
-        .confirm {
-            flex: 2;
-        }
+    .confirm {
+        border: 1px solid #ccc;
+        border-left: 0;
+        border-top: 0;
     }
 }

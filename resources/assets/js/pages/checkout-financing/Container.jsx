@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import api from 'src/api';
+
+import { init } from './actions';
+import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
+import { checkout } from 'apps/checkout/selectors';
 
 class Container extends Component {
     static propTypes = {
         featuredPhoto: PropTypes.object.isRequired,
         purchase: PropTypes.object.isRequired,
         user: PropTypes.object.isRequired,
+        init: PropTypes.func.isRequired,
     };
 
     state = {
@@ -41,6 +47,8 @@ class Container extends Component {
     }
 
     componentDidMount() {
+        this.props.init();
+
         document.getElementById('routeOne').XrdNavigationUtils = {
             beforeUnloadIsDisabled: true,
         };
@@ -102,4 +110,17 @@ class Container extends Component {
     }
 }
 
-export default Container;
+const mapStateToProps = (state, props) => {
+    return {
+        checkout: checkout(state, props),
+    };
+};
+
+const mapDispatchToProps = mapAndBindActionCreators({
+    init,
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Container);

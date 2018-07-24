@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { StickyContainer, Sticky } from 'react-sticky';
+import { Container } from 'reactstrap';
 
 import util from 'src/util';
 import Deal from 'components/Deals/Deal';
@@ -17,7 +18,7 @@ import { getIsPageLoading } from 'apps/page/selectors';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 
-class Container extends React.PureComponent {
+class ComparePageContainer extends React.PureComponent {
     static propTypes = {
         cols: PropTypes.array.isRequired,
         compareList: PropTypes.array.isRequired,
@@ -30,23 +31,14 @@ class Container extends React.PureComponent {
         this.props.onPageInit();
     }
 
-    intendedRoute() {
-        return encodeURIComponent(
-            `compare?${this.props.deals
-                .map(deal => {
-                    return `deals[]=${deal.id}`;
-                })
-                .join('&')}`
-        );
-    }
-
-    renderColDeal(col, index) {
+    renderColDeal(col) {
         const deal = col.deal;
+
         return (
             <Deal deal={deal} key={deal.id}>
                 <div className="deal__buttons">
                     <button
-                        className="deal__button deal__button--x-small deal__button--blue"
+                        className="btn btn-success"
                         onClick={() => (window.location = `/deals/${deal.id}`)}
                     >
                         View Details
@@ -84,31 +76,36 @@ class Container extends React.PureComponent {
             return this.renderPageLoadingIcon();
         }
 
+        let style = {
+            'max-width': this.props.compareList.length * 310 + 'px',
+        };
         return (
-            <StickyContainer className="compare-page">
+            <div className="compare-page">
                 <div className="compare-page__toolbars">
                     <ToolbarPrice />
                 </div>
 
                 <div className="compare-page__body-wrapper">
                     <div className="compare-page__body">
-                        {this.renderDealsContainer()}
-                        <div className="compare-page-features">
-                            {this.props.equipmentCategories.map(
-                                (category, index) => {
-                                    return (
-                                        <EquipmentCategory
-                                            key={index}
-                                            cols={this.props.cols}
-                                            category={category}
-                                        />
-                                    );
-                                }
-                            )}
+                        <div style={style}>
+                            {this.renderDealsContainer()}
+                            <div className="compare-page-features">
+                                {this.props.equipmentCategories.map(
+                                    (category, index) => {
+                                        return (
+                                            <EquipmentCategory
+                                                key={index}
+                                                cols={this.props.cols}
+                                                category={category}
+                                            />
+                                        );
+                                    }
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </StickyContainer>
+            </div>
         );
     }
 
@@ -139,4 +136,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Container);
+)(ComparePageContainer);

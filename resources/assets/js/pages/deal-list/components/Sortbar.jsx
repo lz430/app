@@ -11,6 +11,8 @@ import {
     toggleSmallFiltersShown,
 } from 'pages/deal-list/actions';
 
+import BackButton from 'components/App/BackButton';
+
 class Sortbar extends React.PureComponent {
     static propTypes = {
         window: PropTypes.shape({
@@ -106,24 +108,10 @@ class Sortbar extends React.PureComponent {
     }
 
     renderBackButton() {
-        const nativeBack = () => window.history.back();
-        const clearFilters = () => this.props.onClearModelYear();
-        const onDealsPage = this.props.searchQuery.entity === 'deal';
-
         return util.windowIsLargerThanSmall(this.props.window.width) ? (
             ''
         ) : (
-            <button
-                className="sortbar__button sortbar__button--with-icon"
-                onClick={() => (onDealsPage ? clearFilters() : nativeBack())}
-            >
-                <SVGInline
-                    height="20px"
-                    width="20px"
-                    className="sortbar__back-icon"
-                    svg={zondicons['cheveron-left']}
-                />
-            </button>
+            <BackButton style="button" />
         );
     }
 

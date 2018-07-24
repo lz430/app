@@ -8,19 +8,11 @@ import Group from './pricing/Group';
 import Line from './pricing/Line';
 import Label from './pricing/Label';
 import Value from './pricing/Value';
+import { dealType } from '../types';
 
 class InfoModalData extends React.PureComponent {
     static propTypes = {
-        deal: PropTypes.shape({
-            year: PropTypes.string.isRequired,
-            msrp: PropTypes.number.isRequired,
-            employee_price: PropTypes.number.isRequired,
-            supplier_price: PropTypes.number.isRequired,
-            make: PropTypes.string.isRequired,
-            model: PropTypes.string.isRequired,
-            id: PropTypes.number.isRequired,
-            vin: PropTypes.string.isRequired,
-        }),
+        deal: dealType.isRequired,
         withCustomizeQuoteOrBuyNow: PropTypes.bool,
         withConfirmPurchase: PropTypes.bool,
         infoModalIsShowingFor: PropTypes.number,

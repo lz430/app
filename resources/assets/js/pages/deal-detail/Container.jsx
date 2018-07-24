@@ -2,14 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import R from 'ramda';
+import { Container, Row, Col } from 'reactstrap';
 
 import * as legacyActions from 'apps/common/actions';
 
 import strings from 'src/strings';
-import util from 'src/util';
 
-import CompareBar from 'components/CompareBar';
-import Modal from 'components/Modal';
 import miscicons from 'miscicons';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
@@ -17,11 +15,12 @@ import zondicons from 'zondicons';
 import ImageGallery from 'react-image-gallery';
 import { dealPricingFactory } from 'src/DealPricing';
 
-import CashPricingPane from './components/pricing/CashPane';
-import FinancePricingPane from './components/pricing/FinancePane';
-import LeasePricingPane from './components/pricing/LeasePane';
-import PaymentTypes from './components/pricing/PaymentTypes';
-import Line from '../../components/pricing/Line';
+import ApiClient from 'store/api';
+
+import CompareBar from 'components/CompareBar';
+import Modal from 'components/Modal';
+
+import Header from './components/Header';
 
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
 import { setPurchaseStrategy } from 'apps/user/actions';
@@ -29,30 +28,24 @@ import { setCheckoutData, checkoutStart } from 'apps/checkout/actions';
 import * as selectDiscountActions from './modules/selectDiscount';
 import * as financeActions from './modules/finance';
 import * as leaseActions from './modules/lease';
-import { dealDetailRequestDealQuote } from './actions';
-import { initPage, receiveDeal } from './actions';
+
+import { initPage, receiveDeal, dealDetailRequestDealQuote } from './actions';
 
 import { getUserLocation } from 'apps/user/selectors';
 import { getLeaseAnnualMileage, getLeaseTerm } from './selectors';
-import ApiClient from '../../store/api';
+import AddToCart from './components/AddToCart';
 
-class Container extends React.PureComponent {
+import { dealType } from 'types';
+
+class DealDetailContainer extends React.PureComponent {
     static propTypes = {
-        deal: PropTypes.shape({
-            year: PropTypes.string.isRequired,
-            msrp: PropTypes.number.isRequired,
-            employee_price: PropTypes.number.isRequired,
-            supplier_price: PropTypes.number.isRequired,
-            make: PropTypes.string.isRequired,
-            model: PropTypes.string.isRequired,
-            id: PropTypes.number.isRequired,
-            vin: PropTypes.string.isRequired,
-        }),
+        deal: dealType,
         purchaseStrategy: PropTypes.string.isRequired,
         userLocation: PropTypes.object.isRequired,
+        dealPricing: PropTypes.object,
         discountType: PropTypes.string.isRequired,
         selectedConditionalRoles: PropTypes.array,
-
+        compareList: PropTypes.array,
         initPage: PropTypes.func.isRequired,
         receiveDeal: PropTypes.func.isRequired,
         setPurchaseStrategy: PropTypes.func.isRequired,
@@ -92,30 +85,28 @@ class Container extends React.PureComponent {
             this.setState({ upholsteryType });
         }
 
-        if (this.props.deal.version) {
-            const {
-                body_style,
-                driven_wheels,
-                fuel_econ_city,
-                fuel_econ_hwy,
-            } = this.props.deal.version;
+        const {
+            body_style,
+            driven_wheels,
+            fuel_econ_city,
+            fuel_econ_hwy,
+        } = this.props.deal.version;
 
-            const { engine, transmission } = this.props.deal;
+        const { engine, transmission } = this.props.deal;
 
-            const basicFeatures = [
-                { name: 'Body', content: body_style },
-                { name: 'Drive Train', content: driven_wheels },
-                { name: 'Engine', content: engine },
-                { name: 'Transmission', content: transmission },
-            ];
+        const basicFeatures = [
+            { name: 'Body', content: body_style },
+            { name: 'Drive Train', content: driven_wheels },
+            { name: 'Engine', content: engine },
+            { name: 'Transmission', content: transmission },
+        ];
 
-            const fuelEconomy = {
-                city: fuel_econ_city,
-                highway: fuel_econ_hwy,
-            };
+        const fuelEconomy = {
+            city: fuel_econ_city,
+            highway: fuel_econ_hwy,
+        };
 
-            this.setState({ basicFeatures, fuelEconomy });
-        }
+        this.setState({ basicFeatures, fuelEconomy });
 
         ApiClient.deal.dealGetDimensions(this.props.deal.id).then(response => {
             this.setState({
@@ -320,97 +311,6 @@ class Container extends React.PureComponent {
         );
     }
 
-    renderDeal(deal, { shouldRenderStockNumber } = {}) {
-        const { purchaseStrategy, dealPricing } = this.props;
-
-        return (
-            <div className="deal-details__pricing">
-                <div>
-                    {shouldRenderStockNumber && (
-                        <div className="deal-details__stock-number">
-                            Stock# {this.props.deal.stock_number}
-                        </div>
-                    )}
-                    <div className="info-modal-data">
-                        <div className="info-modal-data__price">
-                            <PaymentTypes
-                                {...{ purchaseStrategy }}
-                                onChange={this.handlePaymentTypeChange}
-                            />
-                            {this.props.purchaseStrategy === 'cash' && (
-                                <CashPricingPane
-                                    {...{ dealPricing }}
-                                    onDiscountChange={this.handleDiscountChange}
-                                    onRebatesChange={this.handleRebatesChange}
-                                />
-                            )}
-                            {this.props.purchaseStrategy === 'finance' && (
-                                <FinancePricingPane
-                                    {...{ dealPricing }}
-                                    onDiscountChange={this.handleDiscountChange}
-                                    onRebatesChange={this.handleRebatesChange}
-                                    onDownPaymentChange={
-                                        this.handleFinanceDownPaymentChange
-                                    }
-                                    onTermChange={this.handleFinanceTermChange}
-                                />
-                            )}
-                            {this.props.purchaseStrategy === 'lease' && (
-                                <LeasePricingPane
-                                    {...{ dealPricing }}
-                                    onDiscountChange={this.handleDiscountChange}
-                                    onRebatesChange={this.handleRebatesChange}
-                                    onTermChange={this.handleLeaseTermChange}
-                                    onAnnualMileageChange={
-                                        this.handleLeaseAnnualMileageChange
-                                    }
-                                    onCashDueChange={
-                                        this.handleLeaseCashDueChange
-                                    }
-                                    onChange={this.handleLeaseChange}
-                                />
-                            )}
-                            <div className="deal__buttons">
-                                <button
-                                    className={this.compareButtonClass()}
-                                    onClick={this.props.legacyActions.toggleCompare.bind(
-                                        null,
-                                        this.props.dealPricing.deal()
-                                    )}
-                                >
-                                    {this.isAlreadyInCompareList()
-                                        ? 'Remove from compare'
-                                        : 'Compare'}
-                                </button>
-
-                                <button
-                                    className="deal__button deal__button--small deal__button--pink deal__button"
-                                    onClick={this.handleBuyNow}
-                                    disabled={
-                                        !this.props.dealPricing.canPurchase()
-                                    }
-                                >
-                                    Buy Now
-                                </button>
-                            </div>
-                            <Line>
-                                <div
-                                    style={{
-                                        fontStyle: 'italic',
-                                        fontSize: '.75em',
-                                        marginLeft: '.25em',
-                                    }}
-                                >
-                                    * includes all taxes and dealer fees
-                                </div>
-                            </Line>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
     handleBuyNow = e => {
         const dealPricing = this.props.dealPricing;
 
@@ -506,20 +406,7 @@ class Container extends React.PureComponent {
         this.props.leaseActions.update(annualMileage, term, cashDue);
     };
 
-    renderStockNumber() {
-        return (
-            <div className="deal-details__stock-number">
-                Stock# {this.props.deal.stock_number}
-            </div>
-        );
-    }
-
-    renderFeaturesAndOptions(deal, index) {
-        const inCompareList = R.contains(
-            deal,
-            R.map(R.prop('deal'), this.props.compareList)
-        );
-
+    renderFeaturesAndOptions(deal) {
         return (
             <div className="deal-details__deal-content">
                 <div className="deal-details__deal-content-header">
@@ -573,24 +460,26 @@ class Container extends React.PureComponent {
                             See all standard features &gt;
                         </span>
                     </div>
-                    <div>
-                        <div className="deal-details__deal-content-subtitle">
-                            Additional Options
+                    {deal.vauto_features.length > 1 && (
+                        <div>
+                            <div className="deal-details__deal-content-subtitle">
+                                Additional Options
+                            </div>
+                            <ul className="deal-details__deal-content-features">
+                                {deal.vauto_features
+                                    .slice(0, 5)
+                                    .map((feature, index) => {
+                                        return <li key={index}>{feature}</li>;
+                                    })}
+                            </ul>
+                            <span
+                                className="link deal-details__deal-content-see-all"
+                                onClick={e => this.showFeatures(e)}
+                            >
+                                See all additional options &gt;
+                            </span>
                         </div>
-                        <ul className="deal-details__deal-content-features">
-                            {deal.vauto_features
-                                .slice(0, 5)
-                                .map((feature, index) => {
-                                    return <li key={index}>{feature}</li>;
-                                })}
-                        </ul>
-                        <a
-                            className="link deal-details__deal-content-see-all"
-                            onClick={e => this.showFeatures(e)}
-                        >
-                            See all additional options &gt;
-                        </a>
-                    </div>
+                    )}
                 </div>
             </div>
         );
@@ -599,68 +488,72 @@ class Container extends React.PureComponent {
     render() {
         return (
             <div>
-                <div className="deal-details">
-                    <div className="deal-details__images-and-title">
-                        <div className="deal-details__title">
-                            <div className="deal-details__title-year-make">
-                                {strings.dealYearMake(this.props.deal)}
+                <Container className="mb-5">
+                    <Header deal={this.props.deal} />
+                    <Row>
+                        <Col md="6" lg="8">
+                            <div className="deal-details__images">
+                                <ImageGallery
+                                    items={this.galleryImages()}
+                                    showBullets={true}
+                                    showIndex={true}
+                                    showThumbnails={false}
+                                    showPlayButton={false}
+                                    showFullscreenButton={false}
+                                />
                             </div>
-                            <div className="deal-details__title-model-trim">
-                                {strings.dealModelTrim(this.props.deal)}
-                            </div>
-                            {util.windowIsLargerThanSmall(
-                                this.props.window.width
-                            )
-                                ? null
-                                : this.renderStockNumber()}
-                        </div>
-                        <div className="deal-details__images">
-                            <ImageGallery
-                                items={this.galleryImages()}
-                                showBullets={true}
-                                showIndex={true}
-                                showThumbnails={false}
-                                showPlayButton={false}
-                                showFullscreenButton={false}
+                            {this.renderFeaturesAndOptions(this.props.deal)}
+                        </Col>
+                        <Col md="6" lg="4">
+                            <AddToCart
+                                deal={this.props.deal}
+                                purchaseStrategy={this.props.purchaseStrategy}
+                                handlePaymentTypeChange={this.handlePaymentTypeChange.bind(
+                                    this
+                                )}
+                                dealPricing={this.props.dealPricing}
+                                handleDiscountChange={this.handleDiscountChange.bind(
+                                    this
+                                )}
+                                handleRebatesChange={this.handleRebatesChange.bind(
+                                    this
+                                )}
+                                handleFinanceDownPaymentChange={this.handleFinanceDownPaymentChange.bind(
+                                    this
+                                )}
+                                handleFinanceTermChange={this.handleFinanceTermChange.bind(
+                                    this
+                                )}
+                                handleLeaseTermChange={this.handleLeaseTermChange.bind(
+                                    this
+                                )}
+                                handleLeaseCashDueChange={this.handleLeaseCashDueChange.bind(
+                                    this
+                                )}
+                                handleLeaseAnnualMileageChange={this.handleLeaseAnnualMileageChange.bind(
+                                    this
+                                )}
+                                handleLeaseChange={this.handleLeaseChange.bind(
+                                    this
+                                )}
+                                handleBuyNow={this.handleBuyNow.bind(this)}
+                                onToggleCompare={
+                                    this.props.legacyActions.toggleCompare
+                                }
+                                compareList={this.props.compareList}
                             />
-                        </div>
-                        {util.windowIsLargerThanSmall(this.props.window.width)
-                            ? null
-                            : this.renderDeal(this.props.deal, {
-                                  shouldRenderStockNumber: false,
-                              })}
-                        {this.renderFeaturesAndOptions(this.props.deal)}
-                    </div>
-                    {util.windowIsLargerThanSmall(this.props.window.width)
-                        ? this.renderDeal(this.props.deal, {
-                              shouldRenderStockNumber: true,
-                          })
-                        : null}
-                </div>
+                        </Col>
+                    </Row>
 
+                    {this.state.showStandardFeatures
+                        ? this.renderStandardFeaturesModal(this.props.deal)
+                        : ''}
+                    {this.state.showFeatures
+                        ? this.renderFeaturesModal(this.props.deal)
+                        : ''}
+                </Container>
                 <CompareBar class="compare-bar compare-bar--static" />
-
-                {this.state.showStandardFeatures
-                    ? this.renderStandardFeaturesModal(this.props.deal)
-                    : ''}
-                {this.state.showFeatures
-                    ? this.renderFeaturesModal(this.props.deal)
-                    : ''}
             </div>
-        );
-    }
-
-    isAlreadyInCompareList() {
-        return R.contains(
-            this.props.dealPricing.deal(),
-            R.map(R.prop('deal'), this.props.compareList)
-        );
-    }
-
-    compareButtonClass() {
-        return (
-            'deal__button deal__button--small deal__button--blue' +
-            (this.isAlreadyInCompareList() ? 'deal__button--blue' : '')
         );
     }
 }
@@ -700,4 +593,4 @@ const mapDispatchToProps = mapAndBindActionCreators({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Container);
+)(DealDetailContainer);

@@ -63,6 +63,9 @@ $modal-footer-height: 60px;
         height: $modal-header-height;
         padding: 20px;
         position: relative;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
     }
 
     &__body {

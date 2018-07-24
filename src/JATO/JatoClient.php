@@ -43,6 +43,7 @@ class JatoClient extends ApiClient
     public $option;
     public $feature;
     public $incentive;
+    public $standard;
 
 
     /**
@@ -65,6 +66,7 @@ class JatoClient extends ApiClient
         $this->option = new Service\OptionService($this);
         $this->feature = new Service\FeatureService($this);
         $this->incentive = new Service\IncentiveService($this);
+        $this->standard = new Service\StandardService($this);
 
         // Auth & Whatnot
         $this->username = $username;

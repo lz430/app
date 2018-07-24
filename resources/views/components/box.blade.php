@@ -6,9 +6,13 @@ if (!isset($collapsible)) {
 if (!isset($bodyclasses)) {
     $bodyclasses = '';
 }
+
+if (!isset($boxstyles)) {
+    $boxstyles = '';
+}
 ?>
 
-<div class="{{$collapsible ? 'panel box box-default' : 'box box-default'}} ">
+<div style="{{$boxstyles}}" class="{{$collapsible ? 'panel box box-default' : 'box box-default'}} ">
     @if (isset($title))
         <div class="box-header with-border">
             <h4 class="box-title">

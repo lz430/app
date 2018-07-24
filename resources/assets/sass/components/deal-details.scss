@@ -1,25 +1,7 @@
-@import '../variables';
-@import '../mixins/button';
-@import '../mixins/selector-icon';
-@import 'node_modules/react-image-gallery/styles/scss/image-gallery.scss';
-
 .deal-details {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin: 0 auto;
-    max-width: 90%;
-    padding-bottom: 80px;
-
-    @media (min-width: $break-small) {
-        max-width: 75%;
+    &__header {
+        margin-top: 1rem;
     }
-
-    @media (min-width: $break-large) {
-        flex-direction: row;
-        max-width: $break-large;
-    }
-
     &__deal-content {
         border-top: 1px solid $color-grey;
         padding: 15px;
@@ -96,16 +78,16 @@
     }
 
     &__stock-number {
-        font-size: 0.8rem;
-        margin-top: -10px;
-
+        display: flex;
+        font-size: 1.2rem;
+        font-weight: bold;
         @media (min-width: $break-small) {
-            font-weight: bold;
             font-size: 1.8rem;
-            text-align: right;
-            margin-top: 11px;
-            padding-top: 1.2rem;
-            margin-bottom: -5px;
+        }
+
+        span {
+            margin-top: auto;
+            margin-left: auto;
         }
     }
 
@@ -113,20 +95,22 @@
         display: flex;
         flex-direction: row;
         justify-content: center;
-
         margin-top: 1rem;
+        > div {
+            width: 100%;
+        }
         @media (min-width: $break-small) {
             margin-top: 0;
         }
 
         @media (min-width: $break-large) {
             flex-direction: row;
-            width: $break-large * 0.4;
         }
 
         .info-modal-data {
-            width: 90vw;
-
+            margin: 0;
+            max-width: none;
+            min-width: 0;
             @media (min-width: $break-small) {
                 width: auto;
             }

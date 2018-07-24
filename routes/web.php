@@ -20,5 +20,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('thank-you', 'ApplyOrPurchaseController@thankYou')->name('thank-you');
 });
 
+Route::get('health-check', 'HealthCheckController@index');
 /** External: Opt-in Monster and Hubspot */
 Route::post('set-email', 'OptinMonsterController@setEmailSession')->name('set-email');
+

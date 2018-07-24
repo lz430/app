@@ -6,7 +6,7 @@ use League\Fractal\TransformerAbstract;
 use App\Models\JATO\Make;
 
 
-use DeliverMyRide\JATO\Manager\Maps;
+use DeliverMyRide\JATO\Map;
 
 class ESResponseTransformer extends TransformerAbstract
 {
@@ -51,7 +51,7 @@ class ESResponseTransformer extends TransformerAbstract
                 case 'style':
                     foreach ($items as $item) {
                         $value = $item['label'];
-                        $data = array_merge($item, Maps::BODY_STYLES[$item['label']], ['value' => $value]);
+                        $data = array_merge($item, Map::BODY_STYLES[$item['label']], ['value' => $value]);
                         unset($data['style']);
                         $transformed[] = $data;
                     }
