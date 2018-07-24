@@ -16,6 +16,10 @@ class GlobalSelectPurchaseStrategy extends React.Component {
      * @param strategy
      */
     handlePurchaseStrategyChange(strategy) {
+        if (strategy === this.props.purchaseStrategy) {
+            return;
+        }
+
         this.props.onSetPurchaseStrategy(strategy);
 
         if (typeof this.props.afterSetPurchaseStrategy === 'function') {

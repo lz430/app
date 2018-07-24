@@ -7,7 +7,7 @@ const initialState = {
     location: {
         latitude: null,
         longitude: null,
-        zipcode: null,
+        zipcode: '',
         city: null,
         has_results: false,
     },

@@ -75,6 +75,10 @@ return [
         'ua' =>     env('GOOGLE_ANALYTICS_UA')
     ],
 
+    'mixpanel' => [
+        'token' =>  env('MIXPANEL_TOKEN'),
+    ],
+
     'imgix' => [
       'url' =>  env('IMGIX_SOURCE_URL'),
       'token' =>  env('IMGIX_TOKEN'),
