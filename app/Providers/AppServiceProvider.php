@@ -8,6 +8,14 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use Psr\Log\LoggerInterface;
 use USDLRegex\Validator as LicenseValidator;
+use App\Models\Dealer;
+use App\Models\Feature;
+use App\Models\JATO\Version;
+use App\Models\Purchase;
+use App\Observers\DealerObserver;
+use App\Observers\FeatureObserver;
+use App\Observers\VersionObserver;
+use App\Observers\PurchaseObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,6 +26,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        //Observers for model event listeners
+        Dealer::observe(DealerObserver::class);
+        Feature::observe(FeatureObserver::class);
+        Version::observe(VersionObserver::class);
+        Purchase::observe(PurchaseObserver::class);
+
         Validator::extend('drivers_license_number', function ($attribute, $value, $parameters, $validator) {
             $licenseValidator = new LicenseValidator([
                 'verbose' => false,
