@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const { shape, number, string, array, arrayOf } = PropTypes;
+const { shape, number, string, array, arrayOf, object } = PropTypes;
 
 export const dealType = shape({
     id: number.isRequired,
@@ -27,4 +27,9 @@ export const dealType = shape({
         created_at: string,
         updated_at: string,
     }),
+});
+
+export const dealPricingType = shape({
+    // TODO: Maybe be more specific here?
+    data: object,
 });
