@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { StickyContainer, Sticky } from 'react-sticky';
+import { Container } from 'reactstrap';
 
 import util from 'src/util';
 import Deal from 'components/Deals/Deal';
@@ -17,7 +18,7 @@ import { getIsPageLoading } from 'apps/page/selectors';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 
-class Container extends React.PureComponent {
+class ComparePageContainer extends React.PureComponent {
     static propTypes = {
         cols: PropTypes.array.isRequired,
         compareList: PropTypes.array.isRequired,
@@ -28,16 +29,6 @@ class Container extends React.PureComponent {
 
     componentDidMount() {
         this.props.onPageInit();
-    }
-
-    intendedRoute() {
-        return encodeURIComponent(
-            `compare?${this.props.deals
-                .map(deal => {
-                    return `deals[]=${deal.id}`;
-                })
-                .join('&')}`
-        );
     }
 
     renderColDeal(col) {
@@ -86,7 +77,7 @@ class Container extends React.PureComponent {
         }
 
         return (
-            <StickyContainer className="compare-page">
+            <div className="compare-page">
                 <div className="compare-page__toolbars">
                     <ToolbarPrice />
                 </div>
@@ -109,7 +100,7 @@ class Container extends React.PureComponent {
                         </div>
                     </div>
                 </div>
-            </StickyContainer>
+            </div>
         );
     }
 
@@ -140,4 +131,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Container);
+)(ComparePageContainer);

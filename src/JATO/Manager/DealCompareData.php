@@ -7,6 +7,8 @@ use App\Models\Deal;
 use App\Models\Feature;
 use DeliverMyRide\JATO\JatoClient;
 
+use GuzzleHttp\Exception\ClientException;
+
 class DealCompareData
 {
 
@@ -39,6 +41,7 @@ class DealCompareData
     private $deal;
 
     private $potentialEquipment;
+    private $standardEquipmentText;
     private $equipmentOnDeal;
 
     public function __construct(JatoClient $client, Deal $deal)
@@ -48,10 +51,18 @@ class DealCompareData
     }
 
 
-    private function buildPotentialDealEquipment($deal)
+    private function buildPotentialDealEquipment()
     {
         try {
-            return $this->client->equipment->get($deal->version->jato_vehicle_id)->results;
+            return $this->client->equipment->get($this->deal->version->jato_vehicle_id)->results;
+        } catch (ClientException $e) {
+            return [];
+        }
+    }
+
+    private function buildStandardEquipmentText() {
+        try {
+            return $this->client->standard->get($this->deal->version->jato_vehicle_id, '', '', '1', '50000')->results;
         } catch (ClientException $e) {
             return [];
         }
@@ -78,15 +89,24 @@ class DealCompareData
             })->all();
     }
 
-    private function dealEquipment()
-    {
-        $deal = $this->deal;
-
+    private function compileEquipmentData() {
         //
         // Build Equipment
-        $equipment = $this->buildPotentialDealEquipment($deal);
+        $equipment = $this->buildPotentialDealEquipment();
         $this->potentialEquipment = collect($equipment);
 
+        //
+        // Build standard text
+        $text = [];
+        foreach($this->buildStandardEquipmentText() as $item) {
+            $text[$item->schemaId] = $item;
+        }
+
+        $this->standardEquipmentText = $text;
+
+        }
+    private function dealEquipment()
+    {
         //
         // Find standard equipment.
         $data = [];
@@ -181,7 +201,15 @@ class DealCompareData
                 if ($feature) {
                     $labels[$equipment->schemaId] = $feature->title;
                 } else {
-                    $labels[$equipment->schemaId] = $equipment->name;
+                    if (isset($this->standardEquipmentText[$equipment->schemaId]) && !$equipment->optionId) {
+                        if ($this->standardEquipmentText[$equipment->schemaId]->itemName == $this->standardEquipmentText[$equipment->schemaId]->content) {
+                            $labels[$equipment->schemaId] = $this->standardEquipmentText[$equipment->schemaId]->content;
+                        } else {
+                            $labels[$equipment->schemaId] = "{$this->standardEquipmentText[$equipment->schemaId]->itemName}: {$this->standardEquipmentText[$equipment->schemaId]->content}";
+                        }
+                    } else {
+                        $labels[$equipment->schemaId] = $equipment->name;
+                    }
                 }
                 break;
 
@@ -212,6 +240,7 @@ class DealCompareData
 
     public function build()
     {
+        $this->compileEquipmentData();
         $this->dealEquipment();
         $this->organizeEquipmentOnDeal();
         $this->labelEquipmentOnDeal();
