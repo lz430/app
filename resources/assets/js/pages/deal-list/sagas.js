@@ -28,6 +28,7 @@ import { getUserLocation } from 'apps/user/selectors';
 import { initPage } from 'apps/page/sagas';
 
 import util from 'src/util';
+import { track } from 'services';
 
 /*******************************************************************
  * Request Search
@@ -108,11 +109,19 @@ function* searchToggleFilter(action) {
         const key = `${category}:${item.value}`;
 
         let index = currentFilters.indexOf(key);
+        let action = 'ADD';
         if (index !== -1) {
             currentFilters.splice(index, 1);
+            action = 'REMOVE';
         } else {
             currentFilters.push(key);
         }
+
+        track('search:filter:toggle', {
+            'Filter Category': category,
+            'Filter Item': item.value,
+            'Filter Action': action,
+        });
     } else if (operation === 'KEEP_CATEGORY') {
         const categories_to_keep = !Array.isArray(category)
             ? [category]
