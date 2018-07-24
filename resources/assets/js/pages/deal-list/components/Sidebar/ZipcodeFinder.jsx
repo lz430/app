@@ -75,7 +75,7 @@ class ZipcodeFinder extends React.PureComponent {
                                     type="number"
                                     min="0"
                                     className="zipcode-finder__input"
-                                    placeholder={this.props.zipcode}
+                                    value={this.state.zipcode}
                                     onChange={this.handleChange}
                                 />
                                 <button className="zipcode-finder__button zipcode-finder__button--dark-bg">
