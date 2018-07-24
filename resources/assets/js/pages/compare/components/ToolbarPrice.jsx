@@ -15,7 +15,6 @@ class ToolbarPrice extends React.PureComponent {
     afterSetPurchaseStrategy() {
         this.props.onBatchRequestDealQuotes(this.props.deals);
     }
-
     render() {
         return (
             <div className="compare-page__top-row">

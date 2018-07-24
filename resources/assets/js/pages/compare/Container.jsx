@@ -76,6 +76,9 @@ class ComparePageContainer extends React.PureComponent {
             return this.renderPageLoadingIcon();
         }
 
+        let style = {
+            'max-width': this.props.compareList.length * 310 + 'px',
+        };
         return (
             <div className="compare-page">
                 <div className="compare-page__toolbars">
@@ -84,19 +87,21 @@ class ComparePageContainer extends React.PureComponent {
 
                 <div className="compare-page__body-wrapper">
                     <div className="compare-page__body">
-                        {this.renderDealsContainer()}
-                        <div className="compare-page-features">
-                            {this.props.equipmentCategories.map(
-                                (category, index) => {
-                                    return (
-                                        <EquipmentCategory
-                                            key={index}
-                                            cols={this.props.cols}
-                                            category={category}
-                                        />
-                                    );
-                                }
-                            )}
+                        <div style={style}>
+                            {this.renderDealsContainer()}
+                            <div className="compare-page-features">
+                                {this.props.equipmentCategories.map(
+                                    (category, index) => {
+                                        return (
+                                            <EquipmentCategory
+                                                key={index}
+                                                cols={this.props.cols}
+                                                category={category}
+                                            />
+                                        );
+                                    }
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
