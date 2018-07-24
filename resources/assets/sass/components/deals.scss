@@ -1,8 +1,4 @@
-@import '../variables';
-@import '../mixins/button';
-@import '../mixins/input';
-
-.deals {
+.inventory-summary-deck {
     background: $color-background-primary;
     display: flex;
     flex-flow: row wrap;
@@ -16,6 +12,10 @@
     padding: 2px;
     padding-bottom: 15px;
 
+    > div {
+        justify-content: center;
+    }
+
     @media (min-width: $break-small) {
         height: calc(100vh - #{$nav-height + $sortbar-height});
         padding: 10px 40px 20px;
@@ -25,25 +25,6 @@
         height: calc(
             100vh - #{$header-height + $sortbar-height + $filterbar-height}
         );
-    }
-
-    &__no-matches {
-        display: flex;
-        font-size: 1.5em;
-        justify-content: center;
-        flex-flow: column;
-        text-align: center;
-        max-width: 800px;
-        margin: 0.5rem auto;
-
-        @media (min-width: $break-small) {
-            margin: 1rem auto;
-        }
-
-        @media (max-width: $break-medium) {
-            font-size: 1rem;
-            padding: 1rem;
-        }
     }
 
     &__show-more {
@@ -71,5 +52,24 @@
     &__title {
         text-align: center;
         width: 100%;
+    }
+}
+
+.deals__no-matches {
+    display: flex;
+    font-size: 1.5em;
+    justify-content: center;
+    flex-flow: column;
+    text-align: center;
+    max-width: 800px;
+    margin: 0.5rem auto;
+
+    @media (min-width: $break-small) {
+        margin: 1rem auto;
+    }
+
+    @media (max-width: $break-medium) {
+        font-size: 1rem;
+        padding: 1rem;
     }
 }

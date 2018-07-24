@@ -13,6 +13,13 @@
     src: url('/fonts/GothamNarrow-Bold.otf') format('opentype');
 }
 
+@import 'mixins/button';
+@import 'mixins/constrained';
+@import 'mixins/input';
+@import 'mixins/link';
+@import 'mixins/selector-icon';
+@import 'mixins/vertical-form';
+
 //
 // Libraries
 @import '~bootstrap/scss/functions';
@@ -96,10 +103,11 @@
 @import 'components/loading';
 @import 'components/disclaimer';
 @import 'components/customer-type';
-@import 'components/confirm-deal.scss';
-@import 'components/button-group.scss';
-@import 'components/filter-page.scss';
-@import 'components/filter-close.scss';
+@import 'components/confirm-deal';
+@import 'components/button-group';
+@import 'components/filter-page';
+@import 'components/filter-close';
+@import 'components/cards';
 
 // Pages
 @import 'pages/filter-page';

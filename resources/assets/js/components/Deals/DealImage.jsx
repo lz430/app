@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import LazyLoad from 'react-lazyload';
-import { dealType } from '../../types';
+import { dealType } from 'types';
 
 export default class DealImage extends React.PureComponent {
     static propTypes = {
@@ -42,8 +42,8 @@ export default class DealImage extends React.PureComponent {
         }
 
         return (
-            <LazyLoad height={200} overflow={true}>
-                <div className="deal__image-container">
+            <LazyLoad height={200} offset={100} overflow={true}>
+                <div className="thumbnail-container">
                     {this.props.link && (
                         <a href={`/deals/${this.props.deal.id}`}>
                             <img

@@ -6,51 +6,50 @@ import DealImage from 'components/Deals/DealImage';
 import DealPrice from 'components/Deals/DealPrice';
 import { dealType } from 'types';
 
+import { Card, CardBody, CardHeader, CardFooter } from 'reactstrap';
+
 class Deal extends React.Component {
     static propTypes = {
         deal: dealType.isRequired,
+        children: PropTypes.node,
     };
 
     render() {
         const deal = this.props.deal;
         return (
-            <div className="deal">
-                <div className="deal__content">
-                    <div className="deal__basic-info">
-                        <div
-                            onClick={() =>
-                                (window.location = `/deals/${deal.id}`)
-                            }
-                            className="deal__basic-info-year-and-model"
-                        >
-                            <div className="deal__basic-info-year-and-make">
-                                {`${deal.year} ${deal.make}`}
-                            </div>
+            <Card className="inventory-summary">
+                <CardHeader className="deal__basic-info">
+                    <div
+                        onClick={() => (window.location = `/deals/${deal.id}`)}
+                        className="deal__basic-info-year-and-model"
+                    >
+                        <div className="deal__basic-info-year-and-make">
+                            {`${deal.year} ${deal.make}`}
+                        </div>
 
-                            <div className="deal__basic-info-model-and-series">
-                                {`${deal.model} ${deal.series}`}
-                            </div>
-                            <div className="deal__basic-info-color">
-                                {deal.color}, {deal.interior_color}
-                            </div>
+                        <div className="deal__basic-info-model-and-series">
+                            {`${deal.model} ${deal.series}`}
+                        </div>
+                        <div className="deal__basic-info-color">
+                            {deal.color}, {deal.interior_color}
                         </div>
                     </div>
-
+                </CardHeader>
+                <CardBody className="deal__content">
                     <DealImage
                         featureImageClass="deal__image"
                         deal={this.props.deal}
                         key={this.props.deal.id}
                     />
-                </div>
-                <div className="deal__price">
-                    <DealPrice
-                        deal={this.props.deal}
-                        key={this.props.deal.id}
-                    />
-                </div>
-
-                {this.props.children}
-            </div>
+                    <div className="deal__price">
+                        <DealPrice
+                            deal={this.props.deal}
+                            key={this.props.deal.id}
+                        />
+                    </div>
+                </CardBody>
+                <CardFooter>{this.props.children}</CardFooter>
+            </Card>
         );
     }
 }
