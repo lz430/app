@@ -4,16 +4,39 @@ $icon-margin: 10px;
 $icon-size: 20px;
 
 .compare-page__body-wrapper {
+    overflow-y: scroll;
+    width: 100vw;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.compare-feature-row {
+    display: flex;
+    .compare-feature {
+        border: 1px solid #ccc;
+        padding: 4px;
+        display: flex;
+        flex: 1;
+    }
+}
+.compare-page__body {
+    padding: 15px;
+    min-width: min-content;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
+.compare-page-features {
+    width: 100%;
+}
 .compare-page-table {
     border: 1px solid $color-grey;
 
     &__content {
         display: none;
+        flex-direction: column;
     }
 
     &__header {
@@ -35,6 +58,7 @@ $icon-size: 20px;
     }
 
     &__content {
+        font-size: 0.8rem;
         ul {
             display: flex;
             flex-direction: column;

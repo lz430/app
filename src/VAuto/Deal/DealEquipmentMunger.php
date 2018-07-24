@@ -98,6 +98,8 @@ class DealEquipmentMunger
         // Save discovered features to deal.
         $this->updateDealWithDiscoveredFeatures();
 
+        $this->equipmentDebugger();
+
         return $this->debug;
     }
 
@@ -463,6 +465,7 @@ class DealEquipmentMunger
                 return $equipment->availability !== 'standard';
             })
             ->map(function ($equipment) {
+
                 return $this->getFeatureFromEquipment($equipment);
             })
             ->filter()
@@ -522,7 +525,8 @@ class DealEquipmentMunger
     {
         $this->equipment
             ->map(function ($equipment) {
-                if ($equipment->category == "Safety & Driver Assist") {
+                if ($equipment->schemaId == '1101') {
+                    dd($equipment);
                 }
             });
     }
