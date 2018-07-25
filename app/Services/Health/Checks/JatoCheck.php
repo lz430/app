@@ -26,12 +26,12 @@ class JatoCheck extends HealthCheck
         try {
             $response = $client->vin->decode($vin);
             if($response){
-                return true;
+                return 'OKAY!';
             }
         } catch (ClientException $e) {
             print_r($e->getMessage());
         }
-        return 0;
+        return 'FAIL';
 
     }
 
