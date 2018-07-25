@@ -1,4 +1,4 @@
-import R from 'ramda';
+import * as R from 'ramda';
 
 import { put, takeEvery, call, select } from 'redux-saga/effects';
 

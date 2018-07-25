@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import R from 'ramda';
+import * as R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';
 import { toggleSearchFilter } from '../actions';

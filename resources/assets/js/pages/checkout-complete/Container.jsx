@@ -11,10 +11,13 @@ import Header from 'components/pricing/Header';
 import Group from 'components/pricing/Group';
 import { checkout } from 'apps/checkout/selectors';
 import { init } from './actions';
-import DealStockNumber from '../../components/Deals/DealStockNumber';
-import FinanceSummary from '../../components/checkout/FinanceSummary';
-import LeaseSummary from '../../components/checkout/LeaseSummary';
-import CashSummary from '../../components/checkout/CashSummary';
+import DealStockNumber from 'components/Deals/DealStockNumber';
+import FinanceSummary from 'components/checkout/FinanceSummary';
+import LeaseSummary from 'components/checkout/LeaseSummary';
+import CashSummary from 'components/checkout/CashSummary';
+import FinanceDetails from 'components/checkout/FinanceDetails';
+import LeaseDetails from 'components/checkout/LeaseDetails';
+import CashDetails from 'components/checkout/CashDetails';
 
 class CheckoutCompleteContainer extends React.PureComponent {
     static propTypes = {

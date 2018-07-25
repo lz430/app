@@ -1,5 +1,5 @@
 import util from 'src/util';
-import R from 'ramda';
+import * as R from 'ramda';
 import * as ActionTypes from './consts';
 
 export function toggleCompare(deal) {

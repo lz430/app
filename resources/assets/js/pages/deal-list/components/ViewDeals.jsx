@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import R from 'ramda';
+import * as R from 'ramda';
 import Deal from 'components/Deals/Deal';
 import SVGInline from 'react-svg-inline';
 import miscicons from 'miscicons';

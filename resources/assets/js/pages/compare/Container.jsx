@@ -77,7 +77,7 @@ class ComparePageContainer extends React.PureComponent {
         }
 
         let style = {
-            'max-width': this.props.compareList.length * 310 + 'px',
+            maxWidth: this.props.compareList.length * 310 + 'px',
         };
         return (
             <div className="compare-page">
