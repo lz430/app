@@ -13,7 +13,7 @@ import {
 
 import BackButton from 'components/App/BackButton';
 
-class Sortbar extends React.PureComponent {
+class Sortbar extends React.Component {
     static propTypes = {
         window: PropTypes.shape({
             width: PropTypes.number.isRequired,

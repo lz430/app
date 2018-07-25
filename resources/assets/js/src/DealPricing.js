@@ -1,6 +1,6 @@
 import formulas from 'src/formulas';
 import util from 'src/util';
-import R from 'ramda';
+import * as R from 'ramda';
 import Decimal from 'decimal.js';
 
 import { dealPricingData } from 'apps/common/selectors';

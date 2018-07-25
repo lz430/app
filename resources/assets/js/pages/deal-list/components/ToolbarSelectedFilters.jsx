@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import R from 'ramda';
+import * as R from 'ramda';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import { connect } from 'react-redux';
@@ -23,7 +23,6 @@ class ToolbarSelectedFilters extends React.PureComponent {
 
     selectedFilters() {
         const blackListCategories = ['make', 'model', 'year'];
-
         return R.omit(
             blackListCategories,
             this.props.selectedFiltersByCategory

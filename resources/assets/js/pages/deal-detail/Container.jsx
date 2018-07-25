@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import R from 'ramda';
+import * as R from 'ramda';
 import { Container, Row, Col } from 'reactstrap';
 
 import * as legacyActions from 'apps/common/actions';

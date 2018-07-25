@@ -10,7 +10,7 @@ import {
 } from 'redux-saga/effects';
 import ApiClient from 'store/api';
 import { cancelRequest } from 'store/httpclient';
-import R from 'ramda';
+import * as R from 'ramda';
 
 import {
     INIT,

@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { createSelectorCreator, defaultMemoize } from 'reselect';
 
-import R from 'ramda';
+import * as R from 'ramda';
 import { dealQuoteKey as generateDealQuoteKey } from 'apps/pricing/helpers';
 
 import { getUserZipcode, getUserPurchaseStrategy } from 'apps/user/selectors';

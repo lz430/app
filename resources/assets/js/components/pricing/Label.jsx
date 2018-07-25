@@ -8,7 +8,7 @@ class Label extends React.PureComponent {
         children: PropTypes.node,
     };
 
-    defaultProps = {
+    static defaultProps = {
         style: {},
         for: '',
     };
