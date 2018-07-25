@@ -15,7 +15,7 @@ class PurchaseObserver
      */
     public function created(Purchase $purchase)
     {
-        Deal::where('id', $purchase->deal_id)->unsearchable();
+        Deal::where('id', $purchase->deal_id)->searchable();
     }
 
     /**
