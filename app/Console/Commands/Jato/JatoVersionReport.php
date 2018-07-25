@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Jato;
 
 use App\Models\Deal;
 use DeliverMyRide\JATO\JatoClient;

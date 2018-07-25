@@ -406,6 +406,7 @@ class Deal extends Model
      */
     public function shouldIndex()
     {
+
         if (!$this->dealer) {
             return FALSE;
         }
@@ -419,7 +420,12 @@ class Deal extends Model
 
     public function shouldBeSearchable()
     {
-        return $this->shouldIndex();
+        $shouldIndex = $this->shouldIndex();
+        if (!$shouldIndex) {
+            $this->unsearchable();
+        }
+
+        return $shouldIndex;
     }
 
     /**
