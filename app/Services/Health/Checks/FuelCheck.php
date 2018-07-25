@@ -24,12 +24,12 @@ class FuelCheck extends HealthCheck
         try {
             $response = $client->product->list();
             if($response){
-                return true;
+                return 'OKAY!';
             }
         } catch (ClientException $e) {
             print_r($e->getMessage());
         }
 
-        return 0;
+        return 'FAIL';
     }
 }

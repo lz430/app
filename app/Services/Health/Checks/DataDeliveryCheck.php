@@ -32,11 +32,11 @@ class DataDeliveryCheck extends HealthCheck
         try {
             $response = $client->totalrate->get($vehicleId, $zipcode, $zipcode, $search);
             if($response){
-                return true;
+                return 'OKAY!';
             }
         } catch (ClientException $e) {
             print_r($e->getMessage());
         }
-        return 0;
+        return 'FAIL';
     }
 }
