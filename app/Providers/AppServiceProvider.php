@@ -26,12 +26,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //Observers for model event listeners
-        Dealer::observe(DealerObserver::class);
-        Feature::observe(FeatureObserver::class);
-        Version::observe(VersionObserver::class);
-        Purchase::observe(PurchaseObserver::class);
-
+        if(in_array(config('app.env'), ['staging', 'production'])) {
+            //Observers for model event listeners
+            Dealer::observe(DealerObserver::class);
+            Feature::observe(FeatureObserver::class);
+            Version::observe(VersionObserver::class);
+            Purchase::observe(PurchaseObserver::class);
+        }
+        
         Validator::extend('drivers_license_number', function ($attribute, $value, $parameters, $validator) {
             $licenseValidator = new LicenseValidator([
                 'verbose' => false,
