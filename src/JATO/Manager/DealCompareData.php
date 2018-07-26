@@ -60,7 +60,8 @@ class DealCompareData
         }
     }
 
-    private function buildStandardEquipmentText() {
+    private function buildStandardEquipmentText()
+    {
         try {
             return $this->client->standard->get($this->deal->version->jato_vehicle_id, '', '', '1', '50000')->results;
         } catch (ClientException $e) {
@@ -78,7 +79,11 @@ class DealCompareData
 
     private function findOptionalDealEquipment()
     {
-        $codes = array_merge($this->deal->package_codes, $this->deal->option_codes);
+
+        $codes = array_merge(
+            $this->deal->package_codes ? $this->deal->package_codes : [],
+            $this->deal->option_codes ? $this->deal->option_codes : []
+        );
 
         return $this->potentialEquipment
             ->reject(function ($equipment) {
@@ -89,7 +94,8 @@ class DealCompareData
             })->all();
     }
 
-    private function compileEquipmentData() {
+    private function compileEquipmentData()
+    {
         //
         // Build Equipment
         $equipment = $this->buildPotentialDealEquipment();
@@ -98,13 +104,14 @@ class DealCompareData
         //
         // Build standard text
         $text = [];
-        foreach($this->buildStandardEquipmentText() as $item) {
+        foreach ($this->buildStandardEquipmentText() as $item) {
             $text[$item->schemaId] = $item;
         }
 
         $this->standardEquipmentText = $text;
 
-        }
+    }
+
     private function dealEquipment()
     {
         //
