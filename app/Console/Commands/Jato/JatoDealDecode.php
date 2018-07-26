@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Jato;
 
 use DeliverMyRide\JATO\JatoClient;
 
@@ -15,7 +15,7 @@ class JatoDealDecode extends Command
      *
      * @var string
      */
-    protected $signature = 'dmr:jatovindecode {deal}';
+    protected $signature = 'jato:vindecode {deal}';
 
     /**
      * The console command description.

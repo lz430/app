@@ -88,8 +88,6 @@ class DealEquipmentMunger
         $this->buildFeaturesForKnownAttributes();
         $this->buildFeaturesForMappedVautoData();
 
-        //$this->equipmentDebugger();
-
         //
         // Remove conflicting features
         $this->removeConflictingFeatures();
@@ -97,8 +95,6 @@ class DealEquipmentMunger
         //
         // Save discovered features to deal.
         $this->updateDealWithDiscoveredFeatures();
-
-        $this->equipmentDebugger();
 
         return $this->debug;
     }
@@ -526,7 +522,6 @@ class DealEquipmentMunger
         $this->equipment
             ->map(function ($equipment) {
                 if ($equipment->schemaId == '1101') {
-                    dd($equipment);
                 }
             });
     }

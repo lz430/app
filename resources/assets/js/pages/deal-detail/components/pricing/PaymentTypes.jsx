@@ -7,12 +7,11 @@ class PaymentTypes extends React.PureComponent {
         purchaseStrategy: PropTypes.string.isRequired,
     };
 
-    static defaultProps = {
-        onChange: tabName => {},
-    };
-
-    handleTabChange(tabName) {
-        this.props.onChange(tabName);
+    handleTabChange(purchaseStrategy) {
+        if (purchaseStrategy === this.props.purchaseStrategy) {
+            return;
+        }
+        this.props.onChange(purchaseStrategy);
     }
 
     render() {

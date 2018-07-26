@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AccordionTable from './AccordionTable';
-import EquipmentList from './EquipmentList';
 class EquipmentCategory extends React.PureComponent {
     static propTypes = {
         cols: PropTypes.array.isRequired,
@@ -10,7 +9,10 @@ class EquipmentCategory extends React.PureComponent {
 
     renderFeature(colIndex, equipmentIndex, category) {
         return (
-            <div className="compare-feature">
+            <div
+                className="compare-feature"
+                key={colIndex + '-' + equipmentIndex}
+            >
                 {
                     this.props.cols[colIndex]['equipment'][category][
                         equipmentIndex
@@ -21,7 +23,10 @@ class EquipmentCategory extends React.PureComponent {
     }
     renderFeatureRow(category, equipmentIndex) {
         return (
-            <div className="compare-feature-row">
+            <div
+                key={category + '-' + equipmentIndex}
+                className="compare-feature-row"
+            >
                 {this.props.cols.map((col, colIndex) => {
                     return this.renderFeature(
                         colIndex,
@@ -41,6 +46,7 @@ class EquipmentCategory extends React.PureComponent {
         return (
             <div>
                 <AccordionTable header={this.props.category}>
+                    <span />
                     {this.props.cols[0].equipment[this.props.category].map(
                         (equipment, index) => {
                             return this.renderFeatureRow(
@@ -49,15 +55,6 @@ class EquipmentCategory extends React.PureComponent {
                             );
                         }
                     )}
-                    {/*this.props.cols.map((col, index) => {
-                        return (
-                            <EquipmentList
-                                key={index}
-                                col={col}
-                                category={this.props.category}
-                            />
-                        );
-                    } ) */}
                 </AccordionTable>
             </div>
         );

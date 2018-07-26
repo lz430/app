@@ -1,4 +1,4 @@
-import R from 'ramda';
+import * as R from 'ramda';
 import config from 'config';
 /**
  * Generates a key for a specific quote.

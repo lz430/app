@@ -6,7 +6,7 @@ import ModelYearImage from 'components/Deals/ModelYearImage';
 import { selectModelYear } from 'pages/deal-list/actions';
 import { Card, CardBody, CardHeader, CardFooter } from 'reactstrap';
 
-class ModelYear extends React.PureComponent {
+class ModelYear extends React.Component {
     static propTypes = {
         modelYear: PropTypes.object.isRequired,
         onSelectModelYear: PropTypes.func.isRequired,

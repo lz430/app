@@ -6,7 +6,7 @@ import CashPricingPane from './pricing/CashPane';
 import FinancePricingPane from './pricing/FinancePane';
 import LeasePricingPane from './pricing/LeasePane';
 import PaymentTypes from './pricing/PaymentTypes';
-import R from 'ramda';
+import * as R from 'ramda';
 import { dealType } from 'types';
 
 export default class AddToCart extends React.PureComponent {

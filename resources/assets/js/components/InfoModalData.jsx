@@ -1,4 +1,4 @@
-import R from 'ramda';
+import * as R from 'ramda';
 import React from 'react';
 import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
 import SVGInline from 'react-svg-inline';

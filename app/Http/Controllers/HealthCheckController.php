@@ -19,18 +19,29 @@ class HealthCheckController extends Controller
 
         $failedTests = [];
         foreach($tests as $name => $result) {
-            if($result === 0) {
-                $failedTests[] = $name;
+            if($result === 'FAIL') {
+                $failedTests[] = $result;
             }
         }
 
-        if(in_array(0, $tests, TRUE)) {
+        $response = [
+            'system-status' => ($failedTests) ? $failedTests : 'OKAY!',
+            'services' => [
+                $tests
+            ]
+        ];
+
+        if(in_array('FAIL', $tests, TRUE)) {
             return \Response::json(array(
-                'code'      =>  500,
-                'message'   =>  implode(", ",$failedTests) . " failed!"
+                $response,
+                'code' => 500,
             ), 500);
         } else {
-            return response()->json($tests);
+            return \Response::json(array(
+                $response,
+                'code' => 200,
+            ), 200);
         }
+
     }
 }

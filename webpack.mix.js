@@ -6,10 +6,7 @@ const path = require('path');
 require('./loadIcons');
 
 mix.webpackConfig({
-    devtool: mix.config.inProduction
-        ? 'source-map'
-        : 'eval-cheap-module-source-map',
-
+    devtool: process.env.MIX_ENABLE_SOURCEMAPS ? 'source-map' : false,
     resolve: {
         modules: [
             path.resolve('./resources/assets/js'),

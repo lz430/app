@@ -1,5 +1,5 @@
 import * as ActionTypes from 'apps/common/consts';
-import R from 'ramda';
+import * as R from 'ramda';
 import util from 'src/util';
 import { basePersistConfig } from 'persist';
 import { persistReducer } from 'redux-persist';

@@ -2,15 +2,15 @@
 
 namespace App\Services\Health\Checks;
 use App\Services\Health\HealthCheck;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use GuzzleHttp\Exception\ClientException;
 
-class DatabaseCheck extends HealthCheck {
+class RedisCheck extends HealthCheck {
 
     public function run()
     {
         try {
-            if (DB::connection()->getPdo()) {
+            if (Redis::connection()->ping()) {
                 return 'OKAY!';
             }
         } catch (ClientException $e) {
