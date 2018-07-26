@@ -23,14 +23,12 @@ class Client
      */
     public function createOrUpdateContact($payload)
     {
-
         $response = $this->guzzleClient->post(
             "/contacts/v1/contact/createOrUpdate/email/{$payload['email']}?hapikey=" . config('services.hubspot.api_key'),
             [
                 'json' => ['properties' => $this->generateHubspotPayloadFrom($payload)],
             ]
         );
-
         return json_decode((string) $response->getBody(), true);
     }
 
