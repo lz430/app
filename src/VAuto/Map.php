@@ -17,6 +17,7 @@ class Map {
         'minivan' => ['mini van'],
         'sports' => ['sports'],
     ];
+
     public const IMPORT_MAKE_BLACKLIST = [
         'smart',
     ];
