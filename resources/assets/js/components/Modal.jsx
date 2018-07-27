@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import * as R from 'ramda';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
+
 import * as Actions from 'apps/common/actions';
 import util from 'src/util';
+import Close from 'icons/zondicons/Close';
 
 class Modal extends React.Component {
     static propTypes = {
@@ -100,12 +100,11 @@ class Modal extends React.Component {
                                     )}
                                 </div>
                                 <div className="modal__close">
-                                    <SVGInline
+                                    <Close
                                         onClick={this.props.onClose}
                                         height="20px"
                                         width="20px"
                                         className="modal__close-x"
-                                        svg={zondicons['close']}
                                     />
                                 </div>
                             </div>
@@ -128,12 +127,11 @@ class Modal extends React.Component {
                                 this.props.window.width
                             ) ? (
                                 <div className="modal__close--info modal__close--info--color-secondary">
-                                    <SVGInline
+                                    <Close
                                         onClick={this.props.onClose}
                                         height="20px"
                                         width="20px"
                                         className="modal__close-x--info"
-                                        svg={zondicons['close']}
                                     />
                                 </div>
                             ) : (

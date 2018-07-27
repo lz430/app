@@ -1,8 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SVGInline from 'react-svg-inline';
-import bodyStyleIcons from 'body-styles';
-import miscicons from 'miscicons';
+
+import Convertible from 'icons/body-styles/Convertible';
+import Coupe from 'icons/body-styles/Coupe';
+import Hatchback from 'icons/body-styles/Hatchback';
+import Minivan from 'icons/body-styles/Minivan';
+import Pickup from 'icons/body-styles/Pickup';
+import Sedan from 'icons/body-styles/Sedan';
+import Suv from 'icons/body-styles/Suv';
+import Wagon from 'icons/body-styles/Wagon';
+import Loading from 'icons/miscicons/Loading';
 
 class FilterStyleList extends React.PureComponent {
     static propTypes = {
@@ -31,6 +38,66 @@ class FilterStyleList extends React.PureComponent {
         );
     }
 
+    renderIcon(icon) {
+        switch (icon) {
+            case 'convertible':
+                return (
+                    <Convertible
+                        width="70px"
+                        className="filter-style-selector__icon"
+                    />
+                );
+            case 'coupe':
+                return (
+                    <Coupe
+                        width="70px"
+                        className="filter-style-selector__icon"
+                    />
+                );
+            case 'hatchback':
+                return (
+                    <Hatchback
+                        width="70px"
+                        className="filter-style-selector__icon"
+                    />
+                );
+            case 'minivan':
+                return (
+                    <Minivan
+                        width="70px"
+                        className="filter-style-selector__icon"
+                    />
+                );
+            case 'pickup':
+                return (
+                    <Pickup
+                        width="70px"
+                        className="filter-style-selector__icon"
+                    />
+                );
+            case 'sedan':
+                return (
+                    <Sedan
+                        width="70px"
+                        className="filter-style-selector__icon"
+                    />
+                );
+            case 'suv':
+                return (
+                    <Suv width="70px" className="filter-style-selector__icon" />
+                );
+            case 'wagon':
+                return (
+                    <Wagon
+                        width="70px"
+                        className="filter-style-selector__icon"
+                    />
+                );
+        }
+
+        return false;
+    }
+
     renderItem(item) {
         let selected = this.isItemSelected(item);
 
@@ -46,16 +113,7 @@ class FilterStyleList extends React.PureComponent {
                     this.props.onToggleSearchFilter(this.props.category, item)
                 }
             >
-                {bodyStyleIcons[item.icon] ? (
-                    <SVGInline
-                        width="70px"
-                        className="filter-style-selector__icon"
-                        svg={bodyStyleIcons[item.icon]}
-                    />
-                ) : (
-                    ''
-                )}
-
+                {this.renderIcon(item.icon)}
                 <div className="filter-style-selector__name">{item.label}</div>
             </div>
         );
@@ -68,7 +126,7 @@ class FilterStyleList extends React.PureComponent {
                     {this.props.items ? (
                         this.props.items.map(this.renderItem)
                     ) : (
-                        <SVGInline svg={miscicons['loading']} />
+                        <Loading />
                     )}
                 </div>
             </div>

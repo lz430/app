@@ -5,8 +5,7 @@ import Line from 'components/pricing/Line';
 import Label from 'components/pricing/Label';
 import Modal from 'components/Modal';
 
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
+import InformationOutline from 'icons/zondicons/InformationOutline';
 
 class RebatesRole extends React.Component {
     static propTypes = {
@@ -94,11 +93,7 @@ class RebatesRole extends React.Component {
                     className="link infomodal__button"
                     style={{ paddingLeft: '5px' }}
                 >
-                    <SVGInline
-                        width="15px"
-                        fill="grey"
-                        svg={zondicons['information-outline']}
-                    />
+                    <InformationOutline width="15px" fill="grey" />
                 </a>
                 {this.state.conditionalProgramsOpened && (
                     <Modal

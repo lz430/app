@@ -1,7 +1,8 @@
 import React from 'react';
 import config from 'config';
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
+
+import Menu from 'icons/zondicons/Menu';
+import Close from 'icons/zondicons/Close';
 
 export default class Header extends React.PureComponent {
     state = {
@@ -42,13 +43,13 @@ export default class Header extends React.PureComponent {
                             className="nav__icon-menu"
                             onClick={() => this.toggleMobileOpen()}
                         >
-                            <SVGInline svg={zondicons['menu']} />
+                            <Menu />
                         </div>
                         <div
                             className="nav__icon-close hidden"
                             onClick={() => this.toggleMobileOpen()}
                         >
-                            <SVGInline svg={zondicons['close']} />
+                            <Close />
                         </div>
                     </button>
                 </div>

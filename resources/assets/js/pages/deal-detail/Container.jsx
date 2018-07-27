@@ -2,15 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
+
+import { dealType } from 'types';
+import Close from 'icons/zondicons/Close';
+import Loading from 'icons/miscicons/Loading';
+
 import { Container, Row, Col } from 'reactstrap';
 
 import * as legacyActions from 'apps/common/actions';
 
 import strings from 'src/strings';
-
-import miscicons from 'miscicons';
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
 
 import ImageGallery from 'react-image-gallery';
 import { dealPricingFactory } from 'src/DealPricing';
@@ -34,8 +35,6 @@ import { initPage, receiveDeal, dealDetailRequestDealQuote } from './actions';
 import { getUserLocation } from 'apps/user/selectors';
 import { getLeaseAnnualMileage, getLeaseTerm } from './selectors';
 import AddToCart from './components/AddToCart';
-
-import { dealType } from 'types';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -178,12 +177,11 @@ class DealDetailContainer extends React.PureComponent {
                             </div>
                         </div>
                         <div className="modal__close">
-                            <SVGInline
+                            <Close
                                 onClick={() => this.hideModals()}
                                 height="20px"
                                 width="20px"
                                 className="modal__close-x"
-                                svg={zondicons['close']}
                             />
                         </div>
                     </div>
@@ -204,7 +202,7 @@ class DealDetailContainer extends React.PureComponent {
                                     }
                                 )
                             ) : (
-                                <SVGInline svg={miscicons['loading']} />
+                                <Loading />
                             )}
 
                             {this.state.fuelEconomy ? (
@@ -214,7 +212,7 @@ class DealDetailContainer extends React.PureComponent {
                                     {this.state.fuelEconomy.highway}
                                 </li>
                             ) : (
-                                <SVGInline svg={miscicons['loading']} />
+                                <Loading />
                             )}
                         </ul>
 
@@ -232,7 +230,7 @@ class DealDetailContainer extends React.PureComponent {
                                     }
                                 )
                             ) : (
-                                <SVGInline svg={miscicons['loading']} />
+                                <Loading />
                             )}
                         </ul>
 
@@ -250,7 +248,7 @@ class DealDetailContainer extends React.PureComponent {
                                     }
                                 )
                             ) : (
-                                <SVGInline svg={miscicons['loading']} />
+                                <Loading />
                             )}
                         </ul>
                         <h3>Features</h3>
@@ -288,12 +286,11 @@ class DealDetailContainer extends React.PureComponent {
                             </div>
                         </div>
                         <div className="modal__close">
-                            <SVGInline
+                            <Close
                                 onClick={() => this.hideModals()}
                                 height="20px"
                                 width="20px"
                                 className="modal__close-x"
-                                svg={zondicons['close']}
                             />
                         </div>
                     </div>

@@ -3,8 +3,6 @@ require('dotenv').config();
 const { mix } = require('laravel-mix');
 const path = require('path');
 
-require('./loadIcons');
-
 mix.webpackConfig({
     devtool: process.env.MIX_ENABLE_SOURCEMAPS ? 'source-map' : false,
     resolve: {

@@ -1,8 +1,7 @@
 import React from 'react';
-import miscicons from 'miscicons';
-import SVGInline from 'react-svg-inline';
-import Discount from './Discount';
-import Rebates from './Rebates';
+import PropTypes from 'prop-types';
+import Loading from 'icons/miscicons/Loading';
+
 import Line from 'components/pricing/Line';
 import Label from 'components/pricing/Label';
 import Value from 'components/pricing/Value';
@@ -10,7 +9,9 @@ import TaxesAndFees from 'components/pricing/TaxesAndFees';
 import Group from 'components/pricing/Group';
 import Header from 'components/pricing/Header';
 import Separator from 'components/pricing/Separator';
-import PropTypes from 'prop-types';
+
+import Discount from './Discount';
+import Rebates from './Rebates';
 
 export default class FinancePane extends React.PureComponent {
     static propTypes = {
@@ -64,9 +65,7 @@ export default class FinancePane extends React.PureComponent {
                 <Separator />
                 <Group isLoading={dealPricing.dealQuoteIsLoading()}>
                     <Header>Finance Terms</Header>
-                    {dealPricing.dealQuoteIsLoading() && (
-                        <SVGInline svg={miscicons['loading']} />
-                    )}
+                    {dealPricing.dealQuoteIsLoading() && <Loading />}
                     {dealPricing.dealQuoteIsLoading() || (
                         <div>
                             <Line isSemiImportant={true}>
