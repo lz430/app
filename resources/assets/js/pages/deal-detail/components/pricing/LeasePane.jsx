@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SVGInline from 'react-svg-inline';
-import miscicons from 'miscicons';
-import zondicons from 'zondicons';
+import Compose from 'icons/zondicons/Compose';
+import Loading from 'icons/miscicons/Loading';
 
+import Line from 'components/pricing/Line';
+import Label from 'components/pricing/Label';
+import Value from 'components/pricing/Value';
+import Group from 'components/pricing/Group';
+import Header from 'components/pricing/Header';
+import Separator from 'components/pricing/Separator';
+
+import LeaseTermsSelect from './LeaseTermsSelect';
 import Rebates from './Rebates';
 import Discount from './Discount';
-import Line from '../../../../components/pricing/Line';
-import Label from '../../../../components/pricing/Label';
-import Value from '../../../../components/pricing/Value';
-import Group from '../../../../components/pricing/Group';
-import Header from '../../../../components/pricing/Header';
-import LeaseTermsSelect from './LeaseTermsSelect';
-import Separator from '../../../../components/pricing/Separator';
 
 export default class LeasePane extends React.PureComponent {
     static propTypes = {
@@ -89,20 +89,17 @@ export default class LeasePane extends React.PureComponent {
                 <Group>
                     <Header>
                         Lease Terms
-                        <SVGInline
+                        <Compose
                             style={{
                                 float: 'right',
                                 cursor: 'pointer',
                                 fill: '#41b1ac',
                             }}
                             height="1em"
-                            svg={zondicons['compose']}
                             onClick={this.handleShowLeaseTermsSelectClick}
                         />
                     </Header>
-                    {dealPricing.dealQuoteIsLoading() && (
-                        <SVGInline svg={miscicons['loading']} />
-                    )}
+                    {dealPricing.dealQuoteIsLoading() && <Loading />}
                     {dealPricing.dealQuoteIsLoading() || (
                         <div>
                             <Line>

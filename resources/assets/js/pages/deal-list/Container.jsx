@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Loading from 'icons/miscicons/Loading';
+
 import { StickyContainer } from 'react-sticky';
-import miscicons from 'miscicons';
-import SVGInline from 'react-svg-inline';
 import util from 'src/util';
 
 import Modal from 'components/Modal';
@@ -38,7 +38,7 @@ class Container extends React.PureComponent {
     }
 
     renderPageLoadingIcon() {
-        return <SVGInline svg={miscicons['loading']} />;
+        return <Loading />;
     }
 
     renderMakeSelectionModal() {

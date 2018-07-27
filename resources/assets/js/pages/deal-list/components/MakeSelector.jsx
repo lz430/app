@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Loading from 'icons/miscicons/Loading';
+
 import * as R from 'ramda';
-import SVGInline from 'react-svg-inline';
-import miscicons from 'miscicons';
 import { toggleSearchFilter } from '../actions';
 import { getSelectedFiltersByCategory } from '../selectors';
 
@@ -72,7 +72,7 @@ class MakeSelector extends React.PureComponent {
                     {this.props.makes ? (
                         this.props.makes.map(this.renderMake)
                     ) : (
-                        <SVGInline svg={miscicons['loading']} />
+                        <Loading />
                     )}
                 </div>
             </div>

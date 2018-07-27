@@ -1,9 +1,11 @@
 import React from 'react';
-import util from 'src/util';
 import { connect } from 'react-redux';
+
+import util from 'src/util';
 import * as Actions from 'apps/common/actions';
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
+import CloseSolid from 'icons/zondicons/CloseSolid';
+import ArrowRight from 'icons/zondicons/ArrowRight';
+import TravelCar from 'icons/zondicons/TravelCar';
 
 class CompareBar extends React.PureComponent {
     state = {
@@ -106,7 +108,7 @@ class CompareBar extends React.PureComponent {
                                             {util.moneyFormat(deal.msrp)} MSRP
                                         </div>
                                     </div>
-                                    <SVGInline
+                                    <CloseSolid
                                         onClick={this.props.toggleCompare.bind(
                                             null,
                                             dealAndSelectedFilters.deal
@@ -114,7 +116,6 @@ class CompareBar extends React.PureComponent {
                                         width="15px"
                                         height="15px"
                                         className="compare-bar__deal__remove"
-                                        svg={zondicons['close-solid']}
                                     />
                                 </div>
                             );
@@ -125,11 +126,10 @@ class CompareBar extends React.PureComponent {
                     onClick={this.redirectToCompare}
                     className={this.compareButtonClass()}
                 >
-                    <SVGInline
+                    <ArrowRight
                         width="15px"
                         height="15px"
                         className="compare-bar__compare-button__arrow"
-                        svg={zondicons['arrow-right']}
                     />
                     <br />
                     COMPARE
@@ -146,11 +146,10 @@ class CompareBar extends React.PureComponent {
         return (
             <div>
                 <div className={className} onClick={this.redirectToCompare}>
-                    <SVGInline
+                    <TravelCar
                         width="20px"
                         height="20px"
                         className="compare-bubble__icon"
-                        svg={zondicons['travel-car']}
                     />
                     <div className="compare-bubble__count">
                         {this.props.compareList.length}

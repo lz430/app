@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
+import ArrowOutlineLeft from 'icons/zondicons/ArrowOutlineLeft';
 
 import SidebarFilter from './SidebarFilter';
 import FilterStyleList from './FilterStyleList';
@@ -45,11 +44,10 @@ class PrimaryFilters extends React.PureComponent {
                                 this.props.onClearModelYear();
                             }}
                         >
-                            <SVGInline
+                            <ArrowOutlineLeft
                                 height="20px"
                                 width="20px"
                                 className="sidebar-filters__clear-icon"
-                                svg={zondicons['arrow-outline-left']}
                             />
                             Return to original search
                         </a>

@@ -1,12 +1,11 @@
 import React from 'react';
-
-import InfoModalData from 'components/InfoModalData';
+import PropTypes from 'prop-types';
 
 import * as R from 'ramda';
-import zondicons from '../zondicons';
-import SVGInline from 'react-svg-inline';
-import PropTypes from 'prop-types';
-import { dealType } from '../types';
+import { dealType } from 'types';
+import Close from 'icons/zondicons/Close';
+import InformationOutline from 'icons/zondicons/InformationOutline';
+import InfoModalData from 'components/InfoModalData';
 
 class InfoModal extends React.PureComponent {
     static propTypes = {
@@ -32,12 +31,11 @@ class InfoModal extends React.PureComponent {
                 <div className="modal__wrapper">
                     <div className="modal__content">
                         <div className="modal__close--info">
-                            <SVGInline
+                            <Close
                                 onClick={this.props.hideInfoModal}
                                 height="20px"
                                 width="20px"
                                 className="modal__close-x--info"
-                                svg={zondicons['close']}
                             />
                         </div>
                         <InfoModalData
@@ -79,11 +77,7 @@ class InfoModal extends React.PureComponent {
                     onClick={() => this.props.showInfoModal(this.props.deal.id)}
                     className="link infomodal__button"
                 >
-                    <SVGInline
-                        width="15px"
-                        fill="grey"
-                        svg={zondicons['information-outline']}
-                    />
+                    <InformationOutline width="15px" fill="grey" />
                 </a>
                 {this.props.deal &&
                 this.props.infoModalIsShowingFor === this.props.deal.id

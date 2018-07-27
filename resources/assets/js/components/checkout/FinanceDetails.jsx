@@ -1,13 +1,12 @@
 import React from 'react';
-import { dealPricingType } from '../../types';
+import Loading from 'icons/miscicons/Loading';
+import { dealPricingType } from 'types';
 import Group from '../pricing/Group';
 import Header from '../pricing/Header';
 import Line from '../pricing/Line';
 import Label from '../pricing/Label';
 import Value from '../pricing/Value';
 import Separator from '../pricing/Separator';
-import miscicons from 'miscicons';
-import SVGInline from 'react-svg-inline';
 import TaxesAndFees from '../pricing/TaxesAndFees';
 import DiscountLabel from '../strings/DiscountLabel';
 
@@ -81,9 +80,7 @@ export default class FinanceDetails extends React.PureComponent {
                 <Separator />
                 <Group isLoading={dealPricing.dealQuoteIsLoading()}>
                     <Header>Finance Terms</Header>
-                    {dealPricing.dealQuoteIsLoading() && (
-                        <SVGInline svg={miscicons['loading']} />
-                    )}
+                    {dealPricing.dealQuoteIsLoading() && <Loading />}
                     {dealPricing.dealQuoteIsLoading() || (
                         <div>
                             <Line isSemiImportant={true}>

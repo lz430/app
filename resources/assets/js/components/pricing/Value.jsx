@@ -1,8 +1,16 @@
 import React from 'react';
-import miscicons from 'miscicons';
-import SVGInline from 'react-svg-inline';
+import PropTypes from 'prop-types';
+
+import Loading from 'icons/miscicons/Loading';
 
 export default class Value extends React.PureComponent {
+    static propTypes = {
+        showIf: PropTypes.bool.isRequired,
+        isLoading: PropTypes.bool.isRequired,
+        isNegative: PropTypes.bool.isRequired,
+        children: PropTypes.node.isRequired,
+    };
+
     static defaultProps = {
         showIf: true,
         isNegative: false,
@@ -24,10 +32,7 @@ export default class Value extends React.PureComponent {
             <div style={style}>
                 {this.props.isLoading && (
                     <div data-loading-size="regular">
-                        <SVGInline
-                            style={{ height: '.5em' }}
-                            svg={miscicons['loading']}
-                        />
+                        <Loading style={{ height: '.5em' }} />
                     </div>
                 )}
                 {this.props.isLoading || (

@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { connect } from 'react-redux';
-
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
+import Checkmark from 'icons/zondicons/Checkmark';
 
 import { getCurrentPage } from 'apps/page/selectors';
 import BackButton from './BackButton';
@@ -64,11 +61,7 @@ class HeaderToolbar extends React.PureComponent {
         return (
             <div className={data.active ? 'step  step--active' : 'step'}>
                 <div className="step__icon">
-                    {data.active ? (
-                        <SVGInline svg={zondicons['checkmark']} />
-                    ) : (
-                        data.step
-                    )}
+                    {data.active ? <Checkmark /> : data.step}
                 </div>
                 <div className="step__label">{data.label}</div>
             </div>

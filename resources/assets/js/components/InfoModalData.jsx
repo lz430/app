@@ -1,14 +1,14 @@
 import * as R from 'ramda';
 import React from 'react';
 import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
-import SVGInline from 'react-svg-inline';
-import miscicons from 'miscicons';
+
 import PropTypes from 'prop-types';
 import Group from './pricing/Group';
 import Line from './pricing/Line';
 import Label from './pricing/Label';
 import Value from './pricing/Value';
-import { dealType } from '../types';
+import { dealType } from 'types';
+import Loading from 'icons/miscicons/Loading';
 
 class InfoModalData extends React.PureComponent {
     static propTypes = {
@@ -46,7 +46,7 @@ class InfoModalData extends React.PureComponent {
 
     showWhenPricingIsLoaded(fn) {
         if (this.props.dealPricing.isPricingLoading()) {
-            return <SVGInline svg={miscicons['loading']} />;
+            return <Loading />;
         }
 
         if (this.props.dealPricing.cannotPurchase()) {

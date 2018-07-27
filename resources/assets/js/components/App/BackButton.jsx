@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
+
 import { getCurrentPage } from 'apps/page/selectors';
 import { checkout } from 'apps/checkout/selectors';
 
 import { clearModelYear } from 'pages/deal-list/actions';
+import CheveronLeft from 'icons/zondicons/CheveronLeft';
 
 class HeaderToolbar extends React.PureComponent {
     static propTypes = {
@@ -72,11 +72,10 @@ class HeaderToolbar extends React.PureComponent {
                     className="sortbar__button sortbar__button--with-icon"
                     onClick={e => this.handleBackButton(e)}
                 >
-                    <SVGInline
+                    <CheveronLeft
                         height="20px"
                         width="20px"
                         className="sortbar__back-icon"
-                        svg={zondicons['cheveron-left']}
                     />
                 </button>
             );

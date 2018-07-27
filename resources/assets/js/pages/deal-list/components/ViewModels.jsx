@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ModelYear from 'components/Deals/ModelYear';
-import SVGInline from 'react-svg-inline';
-import miscicons from 'miscicons';
 import { connect } from 'react-redux';
+import Loading from 'icons/miscicons/Loading';
+
+import ModelYear from 'components/Deals/ModelYear';
 
 class ViewModels extends React.PureComponent {
     static propTypes = {
@@ -32,7 +32,7 @@ class ViewModels extends React.PureComponent {
                             );
                         })
                     ) : (
-                        <SVGInline svg={miscicons['loading']} />
+                        <Loading />
                     )}
                 </div>
             </div>

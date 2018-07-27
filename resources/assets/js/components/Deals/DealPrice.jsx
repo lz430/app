@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import SVGInline from 'react-svg-inline';
-import miscicons from 'miscicons';
+import { dealType } from 'types';
+import Loading from 'icons/miscicons/Loading';
+
 import InfoModal from 'components/InfoModal';
 import { dealPricingFactory } from 'src/DealPricing';
 
@@ -16,7 +17,6 @@ import {
 import { setPurchaseStrategy } from 'apps/user/actions';
 import { requestDealQuote } from 'apps/pricing/actions';
 import { getUserLocation } from 'apps/user/selectors';
-import { dealType } from '../../types';
 
 class DealPrice extends React.Component {
     static propTypes = {
@@ -56,7 +56,7 @@ class DealPrice extends React.Component {
 
     showWhenPricingIsLoaded() {
         if (this.props.dealPricing.isPricingLoading()) {
-            return <SVGInline svg={miscicons['loading']} />;
+            return <Loading />;
         }
 
         if (this.props.dealPricing.cannotPurchase()) {

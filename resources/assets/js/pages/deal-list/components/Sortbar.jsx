@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
 import { connect } from 'react-redux';
+
+import Tuning from 'icons/zondicons/Tuning';
+import CheveronUp from 'icons/zondicons/CheveronUp';
+import CheveronDown from 'icons/zondicons/CheveronDown';
+import Tag from 'icons/zondicons/Tag';
+
 import util from 'src/util';
 import {
     toggleSearchSort,
@@ -24,6 +28,12 @@ class Sortbar extends React.Component {
         onClearModelYear: PropTypes.func.isRequired,
         onToggleSearchSort: PropTypes.func.isRequired,
         onToggleSmallFiltersShown: PropTypes.func.isRequired,
+        compareList: PropTypes.array,
+    };
+
+    state = {
+        count: this.props.compareList.length,
+        dropdownShown: false,
     };
 
     shouldComponentUpdate(nextProps) {
@@ -36,11 +46,6 @@ class Sortbar extends React.Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            count: props.compareList.length,
-            dropdownShown: false,
-        };
 
         this.compareReady = this.compareReady.bind(this);
         this.redirectToCompare = this.redirectToCompare.bind(this);
@@ -60,11 +65,10 @@ class Sortbar extends React.Component {
                 onClick={this.props.onToggleSmallFiltersShown}
             >
                 <div>
-                    <SVGInline
+                    <Tuning
                         height="20px"
                         width="20px"
                         className="sortbar__filter-toggle-icon"
-                        svg={zondicons['tuning']}
                     />
                 </div>
                 Filter Results
@@ -73,20 +77,26 @@ class Sortbar extends React.Component {
     }
 
     renderIcon(column) {
-        const icon =
-            this.props.searchQuery.sort.direction === 'asc'
-                ? 'cheveron-up'
-                : 'cheveron-down';
-        return this.props.searchQuery.sort.attribute === column ? (
-            <SVGInline
-                height="18px"
-                width="18px"
-                className="sortbar__sort-icon"
-                svg={zondicons[icon]}
-            />
-        ) : (
-            ''
-        );
+        if (this.props.searchQuery.sort.attribute === column) {
+            if (this.props.searchQuery.sort.direction === 'asc') {
+                return (
+                    <CheveronDown
+                        height="18px"
+                        width="18px"
+                        className="sortbar__sort-icon"
+                    />
+                );
+            } else {
+                return (
+                    <CheveronUp
+                        height="18px"
+                        width="18px"
+                        className="sortbar__sort-icon"
+                    />
+                );
+            }
+        }
+        return false;
     }
 
     redirectToCompare() {
@@ -151,11 +161,10 @@ class Sortbar extends React.Component {
                 {util.windowIsLargerThanSmall(this.props.window.width) ? (
                     'Price '
                 ) : (
-                    <SVGInline
+                    <Tag
                         height="20px"
                         width="20px"
                         className="sortbar__back-icon"
-                        svg={zondicons['tag']}
                     />
                 )}
                 {this.renderIcon('price')}
