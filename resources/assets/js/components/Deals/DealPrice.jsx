@@ -89,12 +89,13 @@ class DealPrice extends React.Component {
                         </div>
                         <div className="deal-price__finance-lease-price">
                             {this.showWhenPricingIsLoaded()}{' '}
-                            <a
+                            <InformationOutline
+                                className="pricing-explanation-open"
                                 onClick={() => this.toggleExplanationModal()}
-                                className="link infomodal__button"
-                            >
-                                <InformationOutline width="15px" fill="grey" />
-                            </a>
+                                height="15px"
+                                width="15px"
+                                fill="grey"
+                            />
                             {this.renderPriceExplanationModal()}
                         </div>
                         <div className="deal-price__finance-lease-disclaimer">

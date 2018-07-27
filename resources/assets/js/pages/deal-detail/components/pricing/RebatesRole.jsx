@@ -1,9 +1,9 @@
 import React from 'react';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 import PropTypes from 'prop-types';
 import Line from 'components/pricing/Line';
 import Label from 'components/pricing/Label';
-import Modal from 'components/Modal';
 
 import InformationOutline from 'icons/zondicons/InformationOutline';
 
@@ -18,11 +18,45 @@ class RebatesRole extends React.Component {
         conditionalProgramsOpened: false,
     };
 
-    toggleProgramDescriptionModal = () => {
+    toggleProgramDescriptionModal() {
         this.setState({
             conditionalProgramsOpened: !this.state.conditionalProgramsOpened,
         });
-    };
+    }
+
+    renderProgramExplanationModal(labels) {
+        if (!this.state.conditionalProgramsOpened) {
+            return false;
+        }
+
+        return (
+            <Modal
+                className="rebate-description-modal"
+                size="lg"
+                isOpen={this.state.conditionalProgramsOpened || false}
+                toggle={this.toggleProgramDescriptionModal.bind(this)}
+            >
+                <ModalHeader
+                    toggle={this.toggleProgramDescriptionModal.bind(this)}
+                >
+                    Rebate Details
+                </ModalHeader>
+                <ModalBody>
+                    <div>
+                        <h4>{labels.title}</h4>
+                        <p style={{ color: 'red' }}>
+                            Rebate Expires: {this.props.role.stopDate}
+                        </p>
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: this.props.role.description,
+                            }}
+                        />
+                    </div>
+                </ModalBody>
+            </Modal>
+        );
+    }
 
     roleLabels() {
         const map = {
@@ -88,32 +122,15 @@ class RebatesRole extends React.Component {
                     />
                     {labels.title}
                 </Label>
-                <a
+
+                <InformationOutline
                     onClick={() => this.toggleProgramDescriptionModal()}
                     className="link infomodal__button"
                     style={{ paddingLeft: '5px' }}
-                >
-                    <InformationOutline width="15px" fill="grey" />
-                </a>
-                {this.state.conditionalProgramsOpened && (
-                    <Modal
-                        className="rebate-description-modal"
-                        title="Rebate Details"
-                        onClose={this.toggleProgramDescriptionModal}
-                    >
-                        <div>
-                            <h4>{labels.title}</h4>
-                            <p style={{ color: 'red' }}>
-                                Rebate Expires: {role.stopDate}
-                            </p>
-                            <div
-                                dangerouslySetInnerHTML={{
-                                    __html: role.description,
-                                }}
-                            />
-                        </div>
-                    </Modal>
-                )}
+                    width="15px"
+                    fill="grey"
+                />
+                {this.renderProgramExplanationModal(labels)}
                 {this.props.isRoleChecked &&
                     labels.description && (
                         <div
