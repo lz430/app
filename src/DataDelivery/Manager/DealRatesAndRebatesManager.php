@@ -565,10 +565,11 @@ class DealRatesAndRebatesManager
                 foreach (Map::CONDITIONALS_TO_PROGRAM_NAME as $role => $strings) {
                     if (str_contains(strtolower($program->ProgramDescription), $strings)) {
                         $value = $program->dealscenarios[$this->scenario]->Cash;
+                        $programDescription = preg_replace("/\.[^i.e.,]/", ".<br />", $program->ProgramContent);
                         $data = [
                             'id' =>  $program->ProgramID,
                             'role' =>  $role,
-                            'description' => $program->ProgramContent,
+                            'description' => $programDescription,
                             'startDate' =>  $program->ProgramStartDate,
                             'stopDate' =>  $program->ProgramStopDate,
                             'value' => (float) $value,

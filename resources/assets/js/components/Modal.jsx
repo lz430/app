@@ -1,20 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import * as R from 'ramda';
 import { connect } from 'react-redux';
-
+import classNames from 'classnames';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import * as Actions from 'apps/common/actions';
 import util from 'src/util';
 
 class Modal extends React.Component {
-    constructor(props) {
-        super(props);
+    static propTypes = {
+        onClose: PropTypes.func.isRequired,
+        className: PropTypes.string,
+    };
 
-        this.state = {
-            animating: false,
-        };
-    }
+    state = {
+        animating: false,
+    };
 
     componentDidMount() {
         this._isMounted = true;
@@ -60,7 +62,6 @@ class Modal extends React.Component {
         ) {
             // make sure we only close the outermost overlay
             e.stopPropagation();
-
             close();
         }
     }
@@ -80,7 +81,7 @@ class Modal extends React.Component {
 
         return (
             <div
-                className="modal"
+                className={classNames('modal', this.props.className)}
                 onClick={e => this.closeIfOverlayClick(e, this.props.onClose)}
             >
                 <div className="modal__overlay" />

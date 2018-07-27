@@ -1,0 +1,8 @@
+@import '../variables';
+@import '../mixins/button';
+
+.rebate-description-modal .modal__body {
+    max-width: 800px;
+    font-size: 0.9rem;
+    padding: 20px;
+}
