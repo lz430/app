@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import R from 'ramda';
+import * as R from 'ramda';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import SVGInline from 'react-svg-inline';

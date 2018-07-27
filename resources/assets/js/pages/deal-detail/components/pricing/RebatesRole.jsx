@@ -111,7 +111,11 @@ class RebatesRole extends React.Component {
                             <p style={{ color: 'red' }}>
                                 Rebate Expires: {role.stopDate}
                             </p>
-                            <p>{role.description}</p>
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: role.description,
+                                }}
+                            />
                         </div>
                     </Modal>
                 )}
