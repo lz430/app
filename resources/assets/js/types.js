@@ -29,6 +29,13 @@ export const dealType = shape({
     }),
 });
 
+export const filterItemType = shape({
+    label: string.isRequired,
+    value: string.isRequired,
+    count: number.isRequired,
+    icon: string.isRequired,
+});
+
 export const dealPricingType = shape({
     // TODO: Maybe be more specific here?
     data: object,

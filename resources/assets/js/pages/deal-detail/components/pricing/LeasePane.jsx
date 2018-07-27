@@ -96,7 +96,7 @@ export default class LeasePane extends React.PureComponent {
                                 fill: '#41b1ac',
                             }}
                             height="1em"
-                            onClick={this.handleShowLeaseTermsSelectClick}
+                            onClick={() => this.toggleTermsSelect()}
                         />
                     </Header>
                     {dealPricing.dealQuoteIsLoading() && <Loading />}
@@ -111,9 +111,7 @@ export default class LeasePane extends React.PureComponent {
                                         margin: '1em auto',
                                         cursor: 'pointer',
                                     }}
-                                    onClick={
-                                        this.handleShowLeaseTermsSelectClick
-                                    }
+                                    onClick={() => this.toggleTermsSelect()}
                                 >
                                     <thead>
                                         <tr>
@@ -174,9 +172,10 @@ export default class LeasePane extends React.PureComponent {
                 </Group>
                 {this.state.leaseTermsSelectOpened && (
                     <LeaseTermsSelect
-                        {...{ dealPricing }}
-                        onClose={this.handleLeaseTermsSelectClose}
-                        onChange={this.handleLeaseTermsChange}
+                        dealPricing={dealPricing}
+                        isOpen={this.state.leaseTermsSelectOpened}
+                        toggle={this.toggleTermsSelect.bind(this)}
+                        onChange={this.handleLeaseTermsChange.bind(this)}
                     />
                 )}
             </div>
@@ -185,43 +184,12 @@ export default class LeasePane extends React.PureComponent {
 
     handleLeaseTermsChange = (annualMileage, term, cashDue) => {
         this.props.onChange(annualMileage, term, cashDue);
-
-        this.handleLeaseTermsSelectClose();
+        this.toggleTermsSelect();
     };
 
-    handleTermChange = e => {
-        const { dealPricing } = this.props;
-        const term = e.target.value;
-
-        this.props.onChange(
-            dealPricing.leaseAnnualMileageValue(),
-            term,
-            dealPricing.leaseCashDueValue()
-        );
-    };
-
-    handleAnnualMileageChange = e => {
-        const { dealPricing } = this.props;
-        const annualMileage = e.target.value;
-
-        this.props.onChange(
-            annualMileage,
-            dealPricing.leaseTermValue(),
-            dealPricing.leaseCashDueValue()
-        );
-    };
-
-    handleLeaseTermsSelectClose = () => {
-        this.setState({ leaseTermsSelectOpened: false });
-    };
-
-    handleShowLeaseTermsSelectClick = e => {
-        e.preventDefault();
-
-        this.openLeaseTermsSelect();
-    };
-
-    openLeaseTermsSelect = () => {
-        this.setState({ leaseTermsSelectOpened: true });
-    };
+    toggleTermsSelect() {
+        this.setState({
+            leaseTermsSelectOpened: !this.state.leaseTermsSelectOpened,
+        });
+    }
 }

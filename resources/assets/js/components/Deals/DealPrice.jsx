@@ -4,52 +4,44 @@ import { connect } from 'react-redux';
 import { dealType } from 'types';
 import Loading from 'icons/miscicons/Loading';
 
-import InfoModal from 'components/InfoModal';
+import DealPriceExplanationModal from './DealPriceExplanationModal';
 import { dealPricingFactory } from 'src/DealPricing';
 
-import {
-    selectDeal,
-    toggleCompare,
-    showInfoModal,
-    hideInfoModal,
-} from 'apps/common/actions';
+import { selectDeal } from 'apps/common/actions';
 
-import { setPurchaseStrategy } from 'apps/user/actions';
-import { requestDealQuote } from 'apps/pricing/actions';
-import { getUserLocation } from 'apps/user/selectors';
+import InformationOutline from 'icons/zondicons/InformationOutline';
 
 class DealPrice extends React.Component {
     static propTypes = {
         deal: dealType.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
-        userLocation: PropTypes.object.isRequired,
-        compareList: PropTypes.array.isRequired,
         infoModalIsShowingFor: PropTypes.number,
         onSelectDeal: PropTypes.func.isRequired,
-        onSetPurchaseStrategy: PropTypes.func.isRequired,
-        onToggleCompare: PropTypes.func.isRequired,
-        onShowInfoModal: PropTypes.func.isRequired,
-        onHideInfoModal: PropTypes.func.isRequired,
-        onRequestDealQuote: PropTypes.func.isRequired,
     };
 
+    state = {
+        explanationModalOpen: false,
+    };
+
+    toggleExplanationModal() {
+        this.setState({
+            explanationModalOpen: !this.state.explanationModalOpen,
+        });
+    }
+
     renderPriceExplanationModal() {
+        if (!this.state.explanationModalOpen) {
+            return false;
+        }
         return (
-            <InfoModal
+            <DealPriceExplanationModal
+                isOpen={this.state.explanationModalOpen}
+                toggle={this.toggleExplanationModal.bind(this)}
                 key={this.props.deal.id}
                 deal={this.props.deal}
-                userLocation={this.props.userLocation}
                 purchaseStrategy={this.props.purchaseStrategy}
-                onSetPurchaseStrategy={this.props.onSetPurchaseStrategy}
-                onRequestDealQuote={this.props.onRequestDealQuote}
                 dealPricing={this.props.dealPricing}
-                compareList={this.props.compareList}
                 selectDeal={this.props.onSelectDeal}
-                toggleCompare={this.props.onToggleCompare}
-                showInfoModal={this.props.onShowInfoModal}
-                hideInfoModal={this.props.onHideInfoModal}
-                infoModalIsShowingFor={this.props.infoModalIsShowingFor}
-                withPricingTabs={false}
             />
         );
     }
@@ -96,7 +88,14 @@ class DealPrice extends React.Component {
                             {this.getLabel()}
                         </div>
                         <div className="deal-price__finance-lease-price">
-                            {this.showWhenPricingIsLoaded()}
+                            {this.showWhenPricingIsLoaded()}{' '}
+                            <InformationOutline
+                                className="pricing-explanation-open"
+                                onClick={() => this.toggleExplanationModal()}
+                                height="15px"
+                                width="15px"
+                                fill="grey"
+                            />
                             {this.renderPriceExplanationModal()}
                         </div>
                         <div className="deal-price__finance-lease-disclaimer">
@@ -118,11 +117,8 @@ class DealPrice extends React.Component {
 
 const mapStateToProps = (state, props) => {
     return {
-        userLocation: getUserLocation(state),
         purchaseStrategy: state.user.purchasePreferences.strategy,
         dealPricing: dealPricingFactory(state, props),
-        compareList: state.common.compareList,
-        infoModalIsShowingFor: state.common.infoModalIsShowingFor,
     };
 };
 
@@ -130,21 +126,6 @@ const mapDispatchToProps = dispatch => {
     return {
         onSelectDeal: deal => {
             return dispatch(selectDeal(deal));
-        },
-        onSetPurchaseStrategy: strategy => {
-            return dispatch(setPurchaseStrategy(strategy));
-        },
-        onToggleCompare: deal => {
-            return dispatch(toggleCompare(deal));
-        },
-        onShowInfoModal: id => {
-            return dispatch(showInfoModal(id));
-        },
-        onHideInfoModal: () => {
-            return dispatch(hideInfoModal());
-        },
-        onRequestDealQuote: (deal, zipcode, paymentType) => {
-            return dispatch(requestDealQuote(deal, zipcode, paymentType));
         },
     };
 };
