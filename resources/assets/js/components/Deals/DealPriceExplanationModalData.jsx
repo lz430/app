@@ -1,105 +1,24 @@
-import * as R from 'ramda';
 import React from 'react';
-import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
-
 import PropTypes from 'prop-types';
-import Group from './pricing/Group';
-import Line from './pricing/Line';
-import Label from './pricing/Label';
-import Value from './pricing/Value';
 import { dealType } from 'types';
-import Loading from 'icons/miscicons/Loading';
 
-class InfoModalData extends React.PureComponent {
+import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
+import Group from '../pricing/Group';
+import Line from '../pricing/Line';
+import Label from '../pricing/Label';
+import Value from '../pricing/Value';
+
+class DealPriceExplanationModalData extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,
-        withCustomizeQuoteOrBuyNow: PropTypes.bool,
-        withConfirmPurchase: PropTypes.bool,
-        infoModalIsShowingFor: PropTypes.number,
-        userLocation: PropTypes.object.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
-        onRequestDealQuote: PropTypes.func.isRequired,
-        onConfirmPurchase: PropTypes.func,
-        onSetPurchaseStrategy: PropTypes.func.isRequired,
         closeModal: PropTypes.func,
         children: PropTypes.node,
-        withPricingTabs: PropTypes.bool,
     };
 
     static defaultProps = {
         withPricingHeader: true,
-        withPricingTabs: true,
-        withCompareInsteadOfBack: true,
-        withFinalSelectionHeader: false,
-        withCustomizeQuoteOrBuyNow: true,
-        withConfirmPurchase: false,
     };
-
-    handleTabChange(strategy) {
-        this.props.onSetPurchaseStrategy(strategy);
-        this.props.onRequestDealQuote(
-            this.props.deal,
-            this.props.userLocation.zipcode,
-            strategy
-        );
-    }
-
-    showWhenPricingIsLoaded(fn) {
-        if (this.props.dealPricing.isPricingLoading()) {
-            return <Loading />;
-        }
-
-        if (this.props.dealPricing.cannotPurchase()) {
-            return <span>N/A</span>;
-        }
-
-        return fn();
-    }
-
-    renderTabs() {
-        return (
-            <div className="deal-price">
-                <div className="tabs">
-                    <div
-                        onClick={() => {
-                            this.handleTabChange('cash');
-                        }}
-                        className={`tabs__tab ${
-                            this.props.purchaseStrategy === 'cash'
-                                ? 'tabs__tab--selected'
-                                : ''
-                        }`}
-                    >
-                        Cash
-                    </div>
-                    <div
-                        onClick={() => {
-                            this.handleTabChange('finance');
-                        }}
-                        className={`tabs__tab ${
-                            this.props.purchaseStrategy === 'finance'
-                                ? 'tabs__tab--selected'
-                                : ''
-                        }`}
-                    >
-                        Finance
-                    </div>
-                    <div
-                        onClick={() => {
-                            this.handleTabChange('lease');
-                        }}
-                        className={`tabs__tab ${
-                            this.props.purchaseStrategy === 'lease'
-                                ? 'tabs__tab--selected'
-                                : ''
-                        }`}
-                    >
-                        Lease
-                    </div>
-                </div>
-            </div>
-        );
-    }
 
     render() {
         if (
@@ -113,8 +32,6 @@ class InfoModalData extends React.PureComponent {
                 <div>
                     <div className="info-modal-data">
                         <div className="info-modal-data__price">
-                            {this.props.withPricingTabs && this.renderTabs()}
-
                             <div className="cash-finance-lease-calculator__calculator-content">
                                 <h4>
                                     Currently there are no competitive lease
@@ -133,8 +50,6 @@ class InfoModalData extends React.PureComponent {
             <div>
                 <div className="info-modal-data">
                     <div className="info-modal-data__price">
-                        {this.props.withPricingTabs && this.renderTabs()}
-
                         <div style={{ textAlign: 'left' }}>
                             {this.props.purchaseStrategy === 'cash' && (
                                 <div>
@@ -282,52 +197,18 @@ class InfoModalData extends React.PureComponent {
                         )}
 
                         <div className="deal__buttons">
-                            {this.props.withCustomizeQuoteOrBuyNow && (
-                                <CustomizeQuoteOrBuyNowButton
-                                    onCustomizeQuote={() => this.selectDeal()}
-                                    deal={this.props.dealPricing.deal()}
-                                    hasCustomizedQuote={false}
-                                    disabled={
-                                        !this.props.dealPricing.canPurchase()
-                                    }
-                                />
-                            )}
-                            {this.props.withConfirmPurchase && (
-                                <button
-                                    className="deal__button deal__button--small deal__button--pink deal__button"
-                                    onClick={this.props.onConfirmPurchase}
-                                    disabled={
-                                        !this.props.dealPricing.canPurchase()
-                                    }
-                                >
-                                    Confirm purchase
-                                </button>
-                            )}
+                            <CustomizeQuoteOrBuyNowButton
+                                onCustomizeQuote={() => this.selectDeal()}
+                                deal={this.props.dealPricing.deal()}
+                                hasCustomizedQuote={false}
+                                disabled={!this.props.dealPricing.canPurchase()}
+                            />
                         </div>
                     </div>
-
                     {this.props.children}
                 </div>
             </div>
         );
-    }
-
-    isAlreadyInCompareList() {
-        return R.contains(
-            this.props.dealPricing.deal(),
-            R.map(R.prop('deal'), this.props.compareList)
-        );
-    }
-
-    compareButtonClass() {
-        return (
-            'deal__button deal__button--small deal__button--blue' +
-            (this.isAlreadyInCompareList() ? 'deal__button--blue' : '')
-        );
-    }
-
-    backToDetailsButtonClass() {
-        return 'deal__button deal__button--small deal__button--small--as-link deal__button--no-border';
     }
 
     selectDeal() {
@@ -339,4 +220,4 @@ class InfoModalData extends React.PureComponent {
     }
 }
 
-export default InfoModalData;
+export default DealPriceExplanationModalData;

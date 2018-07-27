@@ -24,7 +24,7 @@ class CustomizeQuoteOrBuyNowButton extends React.PureComponent {
         return (
             <button
                 onClick={() => this.props.onCustomizeQuote(this.props.deal)}
-                className="deal__button deal__button--x-small deal__button--pink deal__button"
+                className="btn btn-success"
             >
                 Customize This Deal
             </button>
