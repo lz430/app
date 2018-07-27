@@ -102,11 +102,15 @@ class RebatesRole extends React.Component {
                 </a>
                 {this.state.conditionalProgramsOpened && (
                     <Modal
+                        className="rebate-description-modal"
                         title="Rebate Details"
                         onClose={this.toggleProgramDescriptionModal}
                     >
-                        <div className="cash-finance-lease-calculator__lease-table-container">
+                        <div>
                             <h4>{labels.title}</h4>
+                            <p style={{ color: 'red' }}>
+                                Rebate Expires: {role.stopDate}
+                            </p>
                             <p>{role.description}</p>
                         </div>
                     </Modal>

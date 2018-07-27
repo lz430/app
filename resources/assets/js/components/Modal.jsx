@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import R from 'ramda';
 import { connect } from 'react-redux';
-
+import classNames from 'classnames';
 import SVGInline from 'react-svg-inline';
 import zondicons from 'zondicons';
 import * as Actions from 'apps/common/actions';
@@ -11,6 +11,7 @@ import util from 'src/util';
 class Modal extends React.Component {
     static propTypes = {
         onClose: PropTypes.func.isRequired,
+        className: PropTypes.string,
     };
 
     state = {
@@ -80,7 +81,7 @@ class Modal extends React.Component {
 
         return (
             <div
-                className="modal"
+                className={classNames('modal', this.props.className)}
                 onClick={e => this.closeIfOverlayClick(e, this.props.onClose)}
             >
                 <div className="modal__overlay" />
