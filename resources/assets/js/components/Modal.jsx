@@ -1,5 +1,6 @@
 import React from 'react';
-import * as R from 'ramda';
+import PropTypes from 'prop-types';
+import R from 'ramda';
 import { connect } from 'react-redux';
 
 import SVGInline from 'react-svg-inline';
@@ -8,13 +9,13 @@ import * as Actions from 'apps/common/actions';
 import util from 'src/util';
 
 class Modal extends React.Component {
-    constructor(props) {
-        super(props);
+    static propTypes = {
+        onClose: PropTypes.func.isRequired,
+    };
 
-        this.state = {
-            animating: false,
-        };
-    }
+    state = {
+        animating: false,
+    };
 
     componentDidMount() {
         this._isMounted = true;
@@ -60,7 +61,6 @@ class Modal extends React.Component {
         ) {
             // make sure we only close the outermost overlay
             e.stopPropagation();
-
             close();
         }
     }

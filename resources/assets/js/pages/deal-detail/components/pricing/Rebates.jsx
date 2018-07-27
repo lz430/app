@@ -2,9 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
-import Line from '../../../../components/pricing/Line';
-import Label from '../../../../components/pricing/Label';
-import Value from '../../../../components/pricing/Value';
+import Line from 'components/pricing/Line';
+import Label from 'components/pricing/Label';
+import Value from 'components/pricing/Value';
+import RebatesRole from './RebatesRole';
 
 class Rebates extends React.Component {
     static propTypes = {
@@ -15,6 +16,10 @@ class Rebates extends React.Component {
 
     static defaultProps = {
         onChange: () => {},
+    };
+
+    state = {
+        conditionalProgramsOpened: false,
     };
 
     handleChange(role) {
@@ -34,86 +39,7 @@ class Rebates extends React.Component {
         if (!quote || !quote.selections || !quote.selections.conditionalRoles) {
             return false;
         }
-
         return true;
-    }
-
-    roleLabels(role) {
-        const map = {
-            college: {
-                title: 'College Student/Recent Grad',
-                description: null,
-            },
-            military: {
-                title: 'Active Military/Veteran',
-                description: 'Thank you for your service.',
-            },
-            conquest: {
-                title: 'Conquest',
-                description: null,
-            },
-            loyal: {
-                title: 'Loyalty',
-                description: null,
-            },
-            responder: {
-                title: 'First Responder',
-                description: null,
-            },
-            gmcompetitive: {
-                title: 'GM Competitive Lease',
-                description: null,
-            },
-            gmlease: {
-                title: 'GM Lease Loyalty',
-                description: null,
-            },
-            cadillaclease: {
-                title: 'Cadillac Lease Loyalty',
-                description: null,
-            },
-        };
-
-        return map[role];
-    }
-
-    renderConditionRoleSelection(programId, role) {
-        const labels = this.roleLabels(role['role']);
-        if (!labels) {
-            return false;
-        }
-        return (
-            <Line style={{ margin: '.125em 0 .125em .25em' }}>
-                <Label
-                    className="form-check-label"
-                    key={role['role']}
-                    style={{ fontSize: '.9em' }}
-                >
-                    <input
-                        key={role['role']}
-                        name="discountType"
-                        value={role['role']}
-                        type="checkbox"
-                        className="form-check-input"
-                        checked={this.isRoleChecked(role)}
-                        onChange={e => this.handleChange(role)}
-                    />
-                    {labels.title}
-                </Label>
-                {this.isRoleChecked(role) &&
-                    labels.description && (
-                        <div
-                            style={{
-                                fontStyle: 'italic',
-                                fontSize: '.75em',
-                                marginLeft: '.25em',
-                            }}
-                        >
-                            {labels.description}
-                        </div>
-                    )}
-            </Line>
-        );
     }
 
     renderConditionalRebates() {
@@ -134,12 +60,14 @@ class Rebates extends React.Component {
                 )}
                 <div className="form-group form-check">
                     {Object.keys(quote.selections.conditionalRoles).map(key => (
-                        <div key={key}>
-                            {this.renderConditionRoleSelection(
-                                key,
+                        <RebatesRole
+                            key={key}
+                            isRoleChecked={this.isRoleChecked(
                                 quote.selections.conditionalRoles[key]
                             )}
-                        </div>
+                            role={quote.selections.conditionalRoles[key]}
+                            onChange={this.handleChange.bind(this)}
+                        />
                     ))}
                 </div>
             </div>
