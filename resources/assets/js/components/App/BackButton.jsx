@@ -43,7 +43,6 @@ class HeaderToolbar extends React.PureComponent {
         } else if (this.props.currentPage === 'compare') {
             window.history.back();
         } else if (this.props.currentPage === 'checkout-confirm') {
-            console.log(this.props.checkout);
             window.location = `/deals/${this.props.checkout.deal.id}`;
         }
     }

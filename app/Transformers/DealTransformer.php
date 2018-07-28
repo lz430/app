@@ -30,7 +30,7 @@ class DealTransformer extends TransformerAbstract
         $prices = $this->prices($deal);
         return [
             'id' => $deal->id,
-            'file_hash' => $deal->file_hash,
+            'title' => $deal->title(),
             'dealer_id' => $deal->dealer_id,
             'stock_number' => $deal->stock_number,
             'vin' => $deal->vin,
