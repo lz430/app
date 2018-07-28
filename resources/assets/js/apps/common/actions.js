@@ -48,16 +48,3 @@ export function selectDeal(deal) {
         selectedDeal: deal,
     };
 }
-
-export function showInfoModal(dealId) {
-    return {
-        type: ActionTypes.SHOW_INFO_MODAL,
-        dealId,
-    };
-}
-
-export function hideInfoModal() {
-    return {
-        type: ActionTypes.HIDE_INFO_MODAL,
-    };
-}

@@ -9,6 +9,8 @@ import { requestDealQuote } from 'apps/pricing/sagas';
 import { discountType as getDiscountType } from 'apps/common/selectors';
 import { initPage } from 'apps/page/sagas';
 
+import { track } from 'services';
+
 /*******************************************************************
  * Request Deal Quote
  ********************************************************************/
@@ -41,6 +43,14 @@ function* dealDetailRequestDealQuote() {
 function* init() {
     yield* initPage('deal-detail');
     yield* dealDetailRequestDealQuote();
+
+    const deal = yield select(getDeal);
+    track('page:deal-detail:view', {
+        'Deal Make': deal.make,
+        'Deal Model': deal.model,
+        'Deal Year': deal.year,
+        'Deal Version Name': deal.version.name,
+    });
 }
 
 /*******************************************************************

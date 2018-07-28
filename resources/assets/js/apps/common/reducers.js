@@ -34,18 +34,6 @@ const reducer = (state = initialState, action) => {
                     : state.smallFiltersShown,
             });
 
-        case ActionTypes.SELECT_REBATE:
-            if (!R.contains(action.rebate, state.selectedRebates)) {
-                return Object.assign({}, state, {
-                    selectedRebates: util.toggleItem(
-                        state.selectedRebates,
-                        action.rebate
-                    ),
-                });
-            }
-
-            return state;
-
         case ActionTypes.SELECT_DEAL:
             return Object.assign({}, state, {
                 selectedDeal: action.selectedDeal,
@@ -58,17 +46,6 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 compareList: action.compareList,
-            };
-
-        case ActionTypes.SHOW_INFO_MODAL:
-            return {
-                ...state,
-                infoModalIsShowingFor: action.dealId,
-            };
-        case ActionTypes.HIDE_INFO_MODAL:
-            return {
-                ...state,
-                infoModalIsShowingFor: null,
             };
     }
 
