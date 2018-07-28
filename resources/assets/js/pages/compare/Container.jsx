@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Sticky } from 'react-sticky';
 
 import util from 'src/util';
 import Deal from 'components/Deals/Deal';
@@ -55,11 +54,7 @@ class ComparePageContainer extends React.PureComponent {
     }
 
     renderDealsContainer() {
-        if (util.windowIsLargerThanSmall(this.props.window.width)) {
-            return this.renderDeals();
-        } else {
-            return <Sticky>{({ style }) => this.renderDeals(style)}</Sticky>;
-        }
+        return this.renderDeals();
     }
 
     renderPageLoadingIcon() {
