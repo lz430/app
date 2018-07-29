@@ -63,9 +63,7 @@ function* requestSearch() {
 
     let results = [];
 
-    if (searchQuery.page === 1) {
-        yield put({ type: SEARCH_LOADING_START });
-    }
+    yield put({ type: SEARCH_LOADING_START });
 
     try {
         results = yield call(ApiClient.browse.search, searchQuery);
@@ -89,15 +87,15 @@ function* requestSearch() {
         }
     }
 
-    if (searchQuery.page === 1) {
-        yield put({ type: SEARCH_LOADING_FINISHED });
-    }
+    yield put({ type: SEARCH_LOADING_FINISHED });
 }
 
 /**
  * @returns {IterableIterator<*>}
  */
 function* searchToggleFilter(action) {
+    yield put({ type: SEARCH_LOADING_START });
+
     const state = yield select();
     const searchQuery = getSearchQuery(state);
     let currentFilters = searchQuery.filters;
