@@ -119,19 +119,6 @@ const reducer = function(state = initialState, action = {}) {
                 modelYears: [],
             };
 
-        case ActionTypes.CLEAR_MODEL_YEAR:
-            return {
-                ...state,
-                page: 1,
-                searchQuery: {
-                    ...state.searchQuery,
-                    entity: 'model',
-                    models: [],
-                    years: [],
-                },
-                deals: [],
-            };
-
         case ActionTypes.SELECT_MODEL_YEAR:
             return {
                 ...state,
@@ -142,7 +129,6 @@ const reducer = function(state = initialState, action = {}) {
                     filters: [
                         ...state.searchQuery.filters,
                         'model:' + action.data.model,
-                        'year:' + action.data.year,
                     ],
                 },
             };

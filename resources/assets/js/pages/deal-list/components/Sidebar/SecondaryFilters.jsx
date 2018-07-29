@@ -25,6 +25,7 @@ class SecondaryFilters extends React.PureComponent {
     }
 
     /**
+         Year
          Fuel Type
          Drive Train
          Comfort & Convenience
@@ -38,6 +39,17 @@ class SecondaryFilters extends React.PureComponent {
     render() {
         return (
             <div>
+                <FilterFeature
+                    title="Year"
+                    key="filterYear"
+                    open={true}
+                    canToggle={false}
+                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    category="year"
+                    items={this.props.filters['year']}
+                    selectedItems={this.props.selectedFiltersByCategory['year']}
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
+                />
                 <FilterFeature
                     title="Fuel Type"
                     key="filterFuelType"

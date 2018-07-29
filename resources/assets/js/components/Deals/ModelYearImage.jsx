@@ -1,15 +1,11 @@
 import React from 'react';
 import LazyLoad from 'react-lazyload';
+import classNames from 'classnames';
 
 class ModelYearImage extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            fallbackDealImage: '/images/dmr-placeholder.jpg',
-            externalImages: null,
-        };
-    }
+    state = {
+        fallbackDealImage: '/images/deal-missing-thumbnail.jpg',
+    };
 
     featuredImageUrl() {
         if (
@@ -19,19 +15,32 @@ class ModelYearImage extends React.PureComponent {
             return this.props.modelYear.thumbnail.url;
         }
 
-        return this.state.fallbackDealImage;
+        return false;
     }
 
     render() {
+        const thumbnail = this.featuredImageUrl();
+
         return (
             <LazyLoad height={200} offset={100} overflow={true}>
-                <div className="thumbnail-container">
-                    <img
-                        src={this.featuredImageUrl()}
-                        onClick={() => {
-                            this.props.selectModelYear();
-                        }}
-                    />
+                <div className="thumbnail-container thumbnail">
+                    {thumbnail && (
+                        <img
+                            src={thumbnail}
+                            onClick={() => {
+                                this.props.selectModelYear();
+                            }}
+                        />
+                    )}
+                    {!thumbnail && (
+                        <img
+                            className="placeholder"
+                            src={this.state.fallbackDealImage}
+                            onClick={() => {
+                                this.props.selectModelYear();
+                            }}
+                        />
+                    )}
                 </div>
             </LazyLoad>
         );

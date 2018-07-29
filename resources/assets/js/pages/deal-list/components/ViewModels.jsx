@@ -15,7 +15,7 @@ class ViewModels extends React.PureComponent {
      * @returns {string}
      */
     buildModelKey(model) {
-        return model.year + '--' + model.id;
+        return model.year + '-' + model.make + '-' + model.model;
     }
 
     render() {

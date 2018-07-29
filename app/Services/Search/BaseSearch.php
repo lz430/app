@@ -34,6 +34,7 @@ abstract class BaseSearch
         'fuel_type' => 'fuel_type.keyword',
         'drive_train' => 'drive_train.keyword',
         'pickup' => 'pickup.keyword',
+        'year' => 'year.keyword',
     ];
 
     public $query;
@@ -322,7 +323,7 @@ abstract class BaseSearch
                     "size" => 50000,
                     "field" => $field,
                     "order" => [
-                        "_key" => "asc",
+                        "_key" => ($key === 'year' ? 'desc' : 'asc'),
                     ]
                 ],
             ];
