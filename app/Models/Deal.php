@@ -490,7 +490,6 @@ class Deal extends Model
         $record['category'] = (object)[
             'id' => $this->version->model->id,
             'title' => implode(" ", [
-                $record['year'],
                 $record['make'],
                 $record['model'],
             ]),

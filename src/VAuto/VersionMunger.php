@@ -276,6 +276,7 @@ class VersionMunger
      * Clear all photos attached to the version and get some basic defaults we can use.
      * All versions need photos for the intro page.
      * @param Version $version
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function photos(Version $version)
     {

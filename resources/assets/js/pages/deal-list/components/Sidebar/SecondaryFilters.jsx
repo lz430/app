@@ -6,6 +6,7 @@ import FilterFeature from './FilterFeature';
 class SecondaryFilters extends React.PureComponent {
     static propTypes = {
         filters: PropTypes.object.isRequired,
+        loadingSearchResults: PropTypes.bool.isRequired,
         selectedFiltersByCategory: PropTypes.object.isRequired,
         searchQuery: PropTypes.object.isRequired,
         onToggleSearchFilter: PropTypes.func.isRequired,
@@ -25,6 +26,7 @@ class SecondaryFilters extends React.PureComponent {
     }
 
     /**
+         Year
          Fuel Type
          Drive Train
          Comfort & Convenience
@@ -39,6 +41,18 @@ class SecondaryFilters extends React.PureComponent {
         return (
             <div>
                 <FilterFeature
+                    title="Year"
+                    key="filterYear"
+                    open={true}
+                    canToggle={false}
+                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    category="year"
+                    items={this.props.filters['year']}
+                    selectedItems={this.props.selectedFiltersByCategory['year']}
+                    loadingSearchResults={this.props.loadingSearchResults}
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
+                />
+                <FilterFeature
                     title="Fuel Type"
                     key="filterFuelType"
                     open={true}
@@ -49,6 +63,7 @@ class SecondaryFilters extends React.PureComponent {
                     selectedItems={
                         this.props.selectedFiltersByCategory['fuel_type']
                     }
+                    loadingSearchResults={this.props.loadingSearchResults}
                     onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
 
@@ -63,6 +78,7 @@ class SecondaryFilters extends React.PureComponent {
                     selectedItems={
                         this.props.selectedFiltersByCategory['drive_train']
                     }
+                    loadingSearchResults={this.props.loadingSearchResults}
                     onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
 
@@ -79,6 +95,7 @@ class SecondaryFilters extends React.PureComponent {
                             'comfort_and_convenience'
                         ]
                     }
+                    loadingSearchResults={this.props.loadingSearchResults}
                     onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
 
@@ -93,6 +110,7 @@ class SecondaryFilters extends React.PureComponent {
                     selectedItems={
                         this.props.selectedFiltersByCategory['seating']
                     }
+                    loadingSearchResults={this.props.loadingSearchResults}
                     onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
 
@@ -107,6 +125,7 @@ class SecondaryFilters extends React.PureComponent {
                     selectedItems={
                         this.props.selectedFiltersByCategory['seat_materials']
                     }
+                    loadingSearchResults={this.props.loadingSearchResults}
                     onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
 
@@ -121,6 +140,7 @@ class SecondaryFilters extends React.PureComponent {
                     selectedItems={
                         this.props.selectedFiltersByCategory['infotainment']
                     }
+                    loadingSearchResults={this.props.loadingSearchResults}
                     onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
 
@@ -137,6 +157,7 @@ class SecondaryFilters extends React.PureComponent {
                             'safety_and_driver_assist'
                         ]
                     }
+                    loadingSearchResults={this.props.loadingSearchResults}
                     onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
 
@@ -151,6 +172,7 @@ class SecondaryFilters extends React.PureComponent {
                     selectedItems={
                         this.props.selectedFiltersByCategory['pickup']
                     }
+                    loadingSearchResults={this.props.loadingSearchResults}
                     onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
             </div>

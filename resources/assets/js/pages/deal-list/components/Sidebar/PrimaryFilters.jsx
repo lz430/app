@@ -9,6 +9,7 @@ import FilterMakeList from './FilterMakeList';
 class PrimaryFilters extends React.PureComponent {
     static propTypes = {
         filters: PropTypes.object.isRequired,
+        loadingSearchResults: PropTypes.bool.isRequired,
         selectedFiltersByCategory: PropTypes.object.isRequired,
         searchQuery: PropTypes.object.isRequired,
         onClearModelYear: PropTypes.func.isRequired,

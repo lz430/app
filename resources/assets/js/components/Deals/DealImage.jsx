@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import LazyLoad from 'react-lazyload';
 import { dealType } from 'types';
+import classNames from 'classnames';
 
 export default class DealImage extends React.PureComponent {
     static propTypes = {
@@ -17,7 +18,7 @@ export default class DealImage extends React.PureComponent {
     };
 
     state = {
-        fallbackDealImage: '/images/dmr-placeholder.jpg',
+        fallbackDealImage: '/images/deal-missing-thumbnail.jpg',
     };
 
     featuredImageUrl() {
@@ -32,7 +33,8 @@ export default class DealImage extends React.PureComponent {
         if (this.props.deal.photos[0]) {
             return this.props.deal.photos[0].url;
         }
-        return this.state.fallbackDealImage;
+
+        return false;
     }
 
     render() {
@@ -41,15 +43,27 @@ export default class DealImage extends React.PureComponent {
             imageProps.className = this.props.featureImageClass;
         }
 
+        const thumbnail = this.featuredImageUrl();
+
         return (
             <LazyLoad height={200} offset={100} overflow={true}>
-                <div className="thumbnail-container">
+                <div
+                    className={classNames(
+                        'thumbnail-container',
+                        this.props.size
+                    )}
+                >
                     {this.props.link && (
                         <a href={`/deals/${this.props.deal.id}`}>
-                            <img
-                                {...imageProps}
-                                src={this.featuredImageUrl()}
-                            />
+                            {thumbnail && (
+                                <img {...imageProps} src={thumbnail} />
+                            )}
+                            {!thumbnail && (
+                                <img
+                                    className="placeholder"
+                                    src={this.state.fallbackDealImage}
+                                />
+                            )}
                         </a>
                     )}
                     {!this.props.link && (

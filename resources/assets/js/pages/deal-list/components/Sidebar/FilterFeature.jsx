@@ -15,6 +15,7 @@ class FilterFeature extends React.PureComponent {
                 count: PropTypes.number,
             })
         ),
+        loadingSearchResults: PropTypes.bool.isRequired,
         selectedItems: PropTypes.arrayOf(PropTypes.string),
         onToggleSearchFilter: PropTypes.func.isRequired,
         onToggleOpenFilter: PropTypes.func.isRequired,
@@ -23,7 +24,17 @@ class FilterFeature extends React.PureComponent {
     };
 
     render() {
+        // Hide if no items to select
         if (!this.props.items || !this.props.items.length) {
+            return false;
+        }
+
+        // Hide if only one selectable option.
+        if (
+            this.props.items.length === 1 &&
+            !this.props.selectedItems &&
+            !this.props.loadingSearchResults
+        ) {
             return false;
         }
 

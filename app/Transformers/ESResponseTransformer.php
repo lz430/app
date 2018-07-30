@@ -97,11 +97,17 @@ class ESResponseTransformer extends TransformerAbstract
         $results = [];
 
         foreach ($this->response['aggregations']['category']['model']['buckets'] as $data) {
+            if (count($data['year']['year']['buckets']) > 1) {
+                $year = $data['year']['year']['buckets'][0]['key'];
+                $last = end($data['year']['year']['buckets']);
+                $year .= '-' . $last['key'];
+            } else {
+                $year = $data['year']['year']['buckets'][0]['key'];
+            }
             $element = [
-                'id' => $data['id']['buckets'][0]['key'],
                 'make' => $data['make']['make']['buckets'][0]['key'],
                 'model' => $data['model']['model']['buckets'][0]['key'],
-                'year' => $data['year']['year']['buckets'][0]['key'],
+                'year' => $year,
                 'thumbnail' => (object)[
                     'url' => (isset($data['thumbnail']['buckets'][0]['key']) ? $data['thumbnail']['buckets'][0]['key'] : null)
                 ],

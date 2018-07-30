@@ -10,6 +10,7 @@ import Deal from 'components/Deals/Deal';
 
 import { toggleCompare } from 'apps/common/actions';
 import { requestMoreDeals } from '../actions';
+import { getShouldShowLoading } from '../selectors';
 
 class ViewDeals extends React.PureComponent {
     static propTypes = {
@@ -17,7 +18,7 @@ class ViewDeals extends React.PureComponent {
         compareList: PropTypes.array,
         dealsByMakeModelYear: PropTypes.array,
         meta: PropTypes.object.isRequired,
-        loadingSearchResults: PropTypes.bool,
+        shouldShowLoading: PropTypes.bool,
         onRequestMoreDeals: PropTypes.func.isRequired,
         onToggleCompare: PropTypes.func.isRequired,
     };
@@ -36,7 +37,7 @@ class ViewDeals extends React.PureComponent {
     }
 
     renderShowMoreButton() {
-        if (this.props.deals && this.props.loadingSearchResults) {
+        if (this.props.deals && this.props.shouldShowLoading) {
             // Deals are already loaded and we have already requested more deals
             return <Loading />;
         }
@@ -104,7 +105,7 @@ const mapStateToProps = state => {
     return {
         compareList: state.common.compareList,
         meta: state.pages.dealList.meta,
-        loadingSearchResults: state.pages.dealList.loadingSearchResults,
+        shouldShowLoading: getShouldShowLoading(state),
         deals: state.pages.dealList.deals,
         dealsByMakeModelYear: state.pages.dealList.dealsByMakeModelYear,
     };

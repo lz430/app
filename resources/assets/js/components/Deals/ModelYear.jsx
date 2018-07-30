@@ -34,7 +34,13 @@ class ModelYear extends React.Component {
      * @returns {string}
      */
     buildModelKey() {
-        return this.props.modelYear.year + '--' + this.props.modelYear.id;
+        return (
+            this.props.modelYear.year +
+            '-' +
+            this.props.modelYear.make +
+            '-' +
+            this.props.modelYear.model
+        );
     }
 
     render() {
