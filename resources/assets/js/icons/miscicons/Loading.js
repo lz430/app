@@ -1,14 +1,20 @@
 import React from 'react';
 
 const Loading = props => (
-    <div className="loading" title={5}>
+    <div className="loading" title="5">
         <svg
+            version="1.1"
+            id="Layer_1"
+            xmlns="http://www.w3.org/2000/svg"
             xmlnsXlink="http://www.w3.org/1999/xlink"
-            width={24}
-            height={30}
-            {...props}
+            x="0px"
+            y="0px"
+            width="24px"
+            height="30px"
+            viewBox="0 0 24 30"
+            xmlSpace="preserve"
         >
-            <path fill="#333" d="M0 13h4v5H0z">
+            <rect x="0" y="13" width="4" height="5" fill="#333">
                 <animate
                     attributeName="height"
                     attributeType="XML"
@@ -25,8 +31,8 @@ const Loading = props => (
                     dur="0.6s"
                     repeatCount="indefinite"
                 />
-            </path>
-            <path fill="#333" d="M10 13h4v5h-4z">
+            </rect>
+            <rect x="10" y="13" width="4" height="5" fill="#333">
                 <animate
                     attributeName="height"
                     attributeType="XML"
@@ -43,8 +49,8 @@ const Loading = props => (
                     dur="0.6s"
                     repeatCount="indefinite"
                 />
-            </path>
-            <path fill="#333" d="M20 13h4v5h-4z">
+            </rect>
+            <rect x="20" y="13" width="4" height="5" fill="#333">
                 <animate
                     attributeName="height"
                     attributeType="XML"
@@ -61,7 +67,7 @@ const Loading = props => (
                     dur="0.6s"
                     repeatCount="indefinite"
                 />
-            </path>
+            </rect>
         </svg>
     </div>
 );
