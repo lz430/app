@@ -53,13 +53,13 @@ export default class Discount extends React.PureComponent {
                             />
                             DMR Customer
                         </Label>
+                        <Value
+                            isNegative={true}
+                            showIf={dealPricing.isEffectiveDiscountDmr()}
+                        >
+                            {dealPricing.dmrDiscount()}
+                        </Value>
                     </div>
-                    <Value
-                        isNegative={true}
-                        showIf={dealPricing.isEffectiveDiscountDmr()}
-                    >
-                        {dealPricing.dmrDiscount()}
-                    </Value>
                 </Line>
                 {(config.EMPLOYEE_PRICING_WHITELIST_BRANDS.includes(
                     dealPricing.deal().make
@@ -95,13 +95,14 @@ export default class Discount extends React.PureComponent {
                                         />
                                         Employee / Retiree
                                     </Label>
+                                    <Value
+                                        isNegative={true}
+                                        showIf={dealPricing.isEffectiveDiscountEmployee()}
+                                    >
+                                        {dealPricing.employeeDiscount()}
+                                    </Value>
                                 </div>
-                                <Value
-                                    isNegative={true}
-                                    showIf={dealPricing.isEffectiveDiscountEmployee()}
-                                >
-                                    {dealPricing.employeeDiscount()}
-                                </Value>
+
                                 {dealPricing.isEffectiveDiscountEmployee() &&
                                     this.renderProofOfEligibility()}
                             </Line>
@@ -125,13 +126,14 @@ export default class Discount extends React.PureComponent {
                                         />
                                         Supplier / Friends &amp; Family
                                     </Label>
+                                    <Value
+                                        isNegative={true}
+                                        showIf={dealPricing.isEffectiveDiscountSupplier()}
+                                    >
+                                        {dealPricing.supplierDiscount()}
+                                    </Value>
                                 </div>
-                                <Value
-                                    isNegative={true}
-                                    showIf={dealPricing.isEffectiveDiscountSupplier()}
-                                >
-                                    {dealPricing.supplierDiscount()}
-                                </Value>
+
                                 {dealPricing.isEffectiveDiscountSupplier() &&
                                     this.renderProofOfEligibility()}
                             </Line>
