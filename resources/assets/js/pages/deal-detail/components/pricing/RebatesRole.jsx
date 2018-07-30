@@ -126,8 +126,11 @@ class RebatesRole extends React.Component {
                 <InformationOutline
                     onClick={() => this.toggleProgramDescriptionModal()}
                     className="link infomodal__button"
-                    style={{ paddingLeft: '5px' }}
-                    width="15px"
+                    style={{
+                        paddingLeft: '6px',
+                        marginTop: '-10px',
+                        width: '20px',
+                    }}
                     fill="grey"
                 />
                 {this.renderProgramExplanationModal(labels)}
