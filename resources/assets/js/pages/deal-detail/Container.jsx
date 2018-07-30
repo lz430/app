@@ -75,9 +75,11 @@ class DealDetailContainer extends React.PureComponent {
                 feature => {
                     return feature.slug.includes('seat_main_upholstery_');
                 }
-            ).title;
+            );
 
-            this.setState({ upholsteryType });
+            if (upholsteryType) {
+                this.setState({ upholsteryType: upholsteryType['title'] });
+            }
         }
 
         const {

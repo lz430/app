@@ -30,9 +30,12 @@ class Deal extends React.Component {
                         <div className="deal__basic-info-model-and-series">
                             {`${deal.model} ${deal.series}`}
                         </div>
-                        <div className="deal__basic-info-color">
-                            {deal.color}, {deal.interior_color}
-                        </div>
+                        {deal.color &&
+                            deal.interior_color && (
+                                <div className="deal__basic-info-color">
+                                    {deal.color}, {deal.interior_color}
+                                </div>
+                            )}
                     </div>
                 </CardHeader>
                 <CardBody className="deal__content">

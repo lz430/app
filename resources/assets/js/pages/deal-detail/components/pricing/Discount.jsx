@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import config from 'config';
 
@@ -7,6 +8,11 @@ import Label from 'components/pricing/Label';
 import Value from 'components/pricing/Value';
 
 export default class Discount extends React.PureComponent {
+    static propTypes = {
+        dealPricing: PropTypes.object,
+        onChange: PropTypes.func.isRequired,
+    };
+
     static defaultProps = {
         onChange: (deal, newValue) => {},
     };
@@ -30,7 +36,7 @@ export default class Discount extends React.PureComponent {
     };
 
     render() {
-        const { dealPricing, ...other } = this.props;
+        const { dealPricing } = this.props;
 
         return (
             <div>
