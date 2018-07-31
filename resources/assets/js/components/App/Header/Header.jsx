@@ -7,7 +7,7 @@ import { Navbar, NavbarBrand } from 'reactstrap';
 import UserLocationModal from './UserLocationModal';
 import { getUserLocation } from 'apps/user/selectors';
 import { requestLocation } from 'apps/user/actions';
-import CogCopy from 'icons/zondicons/CogCopy';
+import Location from 'icons/zondicons/Location';
 
 class Header extends React.PureComponent {
     static propTypes = {
@@ -26,7 +26,7 @@ class Header extends React.PureComponent {
     }
 
     handleSetNewLocation(search) {
-        this.props.onSearchForLocation(search);
+        const sup = this.props.onSearchForLocation(search);
     }
 
     render() {
@@ -41,15 +41,18 @@ class Header extends React.PureComponent {
                         className="header-widget"
                         onClick={() => this.toggleUserLocationModal()}
                     >
-                        <div className="header-widget-content">
+                        <div className="header-widget-content hidden d-sm-block">
                             <div className="label">Your Location:</div>
                             <div className="value">
-                                {this.props.userLocation.city},{' '}
-                                {this.props.userLocation.state}
+                                {this.props.userLocation.city
+                                    ? this.props.userLocation.city +
+                                      ', ' +
+                                      this.props.userLocation.state
+                                    : 'N/A'}
                             </div>
                         </div>
                         <div className="icon">
-                            <CogCopy />
+                            <Location />
                         </div>
                     </div>
                 </div>

@@ -1,8 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import {
+    Modal,
+    ModalHeader,
+    ModalBody,
+    Alert,
+    Button,
+    Form,
+    FormGroup,
+    Label,
+    Input,
+} from 'reactstrap';
+import Bolt from 'icons/zondicons/Bolt';
+import Location from 'icons/zondicons/Location';
 
 class UserLocationModal extends React.PureComponent {
     static propTypes = {
@@ -14,7 +25,7 @@ class UserLocationModal extends React.PureComponent {
 
     state = {
         location: this.props.userLocation.zipcode,
-        error: false,
+        isInvalidZipcodeError: false,
     };
 
     isValid() {
@@ -24,7 +35,7 @@ class UserLocationModal extends React.PureComponent {
             );
         }
 
-        this.setState({ error: true });
+        this.setState({ isInvalidZipcodeError: true });
     }
 
     onSubmit(event) {
@@ -39,7 +50,7 @@ class UserLocationModal extends React.PureComponent {
 
         this.setState({
             location: event.target.value,
-            error: false,
+            isInvalidZipcodeError: false,
         });
     }
 
@@ -50,30 +61,48 @@ class UserLocationModal extends React.PureComponent {
 
         return (
             <Modal
-                className="no-header"
+                className="user-location-modal no-header"
                 size="content-fit"
                 isOpen={this.props.isOpen}
                 toggle={this.props.toggle}
             >
                 <ModalHeader toggle={this.props.toggle} />
                 <ModalBody>
-                    <h3>Show Me Deals For:</h3>
+                    <h4>Show Me Deals For:</h4>
                     <Form onSubmit={this.onSubmit.bind(this)}>
-                        <FormGroup>
-                            <Label for="location" hidden>
-                                Location
-                            </Label>
-                            <Input
-                                type="number"
-                                min="0"
-                                name="location"
-                                id="location"
-                                placeholder="Location"
-                                value={this.state.location}
-                                onChange={this.onChange.bind(this)}
-                            />
-                        </FormGroup>
-                        <Button>Submit</Button>
+                        <div className="location-input">
+                            <div className="icon">
+                                <Location />
+                            </div>
+                            <div className="location-content">
+                                <FormGroup>
+                                    <Label for="location">Your Zipcode:</Label>
+                                    <Input
+                                        type="number"
+                                        min="0"
+                                        name="location"
+                                        id="location"
+                                        placeholder="Location"
+                                        value={this.state.location}
+                                        onChange={this.onChange.bind(this)}
+                                    />
+                                </FormGroup>
+                            </div>
+                        </div>
+
+                        {this.state.isInvalidZipcodeError && (
+                            <Alert color="danger">
+                                <Bolt /> This zipcode does not appear to be
+                                valid, please enter a valid zipcode.
+                            </Alert>
+                        )}
+
+                        {!this.props.userLocation.zipcode && (
+                            <Alert color="danger">
+                                <Bolt /> Unable to find zipcode.
+                            </Alert>
+                        )}
+                        <Button color="primary"> Update Location</Button>
                     </Form>
                 </ModalBody>
             </Modal>

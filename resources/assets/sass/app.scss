@@ -46,7 +46,7 @@
 //@import "~bootstrap/scss/pagination";
 //@import "~bootstrap/scss/badge";
 //@import "~bootstrap/scss/jumbotron";
-//@import "~bootstrap/scss/alert";
+@import '~bootstrap/scss/alert';
 //@import "~bootstrap/scss/progress";
 //@import "~bootstrap/scss/media";
 @import '~bootstrap/scss/list-group';
@@ -63,6 +63,9 @@
 @import 'components/footer';
 
 // Normal Components
+@import 'components/cards';
+@import 'components/alerts';
+
 @import 'components/section';
 @import 'components/top-bars';
 @import 'components/nav';
@@ -108,7 +111,6 @@
 @import 'components/button-group';
 @import 'components/filter-page';
 @import 'components/filter-close';
-@import 'components/cards';
 
 // Pages
 @import 'pages/filter-page';

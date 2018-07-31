@@ -51,7 +51,6 @@ export function* requestLocation(data) {
     //
     // TODO: This is going to get sketchy long term.
     const currentPage = yield select(getCurrentPage);
-
     if (currentPage === 'deal-list') {
         yield put(requestSearch());
     }

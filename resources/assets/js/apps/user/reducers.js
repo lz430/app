@@ -10,6 +10,7 @@ const initialState = {
         zipcode: '',
         city: null,
         has_results: false,
+        is_valid: false,
     },
 
     purchasePreferences: {
@@ -35,15 +36,7 @@ const reducer = function(state = initialState, action = {}) {
             };
 
         case ActionTypes.RECEIVE_LOCATION:
-            if (!action.data) {
-                return {
-                    ...state,
-                    location: {
-                        ...state.location,
-                        has_results: false,
-                    },
-                };
-            } else {
+            if (action.data.location) {
                 return {
                     ...state,
                     location: {
@@ -54,6 +47,15 @@ const reducer = function(state = initialState, action = {}) {
                         city: action.data.location.city,
                         state: action.data.location.state,
                         has_results: action.data.has_results,
+                        is_valid: true,
+                    },
+                };
+            } else {
+                return {
+                    ...state,
+                    location: {
+                        is_valid: false,
+                        has_results: false,
                     },
                 };
             }

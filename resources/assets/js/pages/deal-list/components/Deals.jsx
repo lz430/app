@@ -24,11 +24,6 @@ class Deals extends React.PureComponent {
             return <NoDealsOutOfRange />;
         }
 
-        // Requesting something
-        if (this.props.loadingSearchResults) {
-            return <Loading />;
-        }
-
         if (
             this.props.searchQuery.entity === 'model' &&
             (!this.props.modelYears || this.props.modelYears.length === 0)
@@ -41,6 +36,11 @@ class Deals extends React.PureComponent {
             (!this.props.deals || this.props.deals.length === 0)
         ) {
             return <NoDealsInRange />;
+        }
+
+        // Requesting something
+        if (this.props.loadingSearchResults) {
+            return <Loading />;
         }
 
         // We have some results; which should we prefer?

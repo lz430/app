@@ -34,3 +34,47 @@
         margin-left: 1rem;
     }
 }
+
+.user-location-modal {
+    .modal-body {
+        text-align: center;
+        padding: 3rem 3rem 1rem 3rem;
+        @include media-breakpoint-up(md) {
+            width: 600px;
+        }
+    }
+
+    .btn {
+        padding: 0.375rem 3rem;
+        @include media-breakpoint-down(sm) {
+            display: block;
+            width: 100%;
+        }
+    }
+}
+
+.location-input {
+    display: flex;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    background: #f7f7f7;
+    border-radius: 4px;
+    text-align: left;
+    align-items: center;
+    box-shadow: $box-shadow;
+
+    .icon {
+        margin-right: 0.5rem;
+        svg {
+            width: 60px;
+            color: $primary;
+        }
+    }
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .location-content {
+        flex: 1;
+    }
+}
