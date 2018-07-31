@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Checkmark from 'icons/zondicons/Checkmark';
 
 import { getCurrentPage } from 'apps/page/selectors';
-import BackButton from './BackButton';
+import BackButton from '../BackButton';
 
 class HeaderToolbar extends React.PureComponent {
     static propTypes = {

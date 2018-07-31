@@ -52,6 +52,7 @@ const reducer = function(state = initialState, action = {}) {
                         longitude: action.data.location.longitude,
                         zipcode: action.data.location.zip,
                         city: action.data.location.city,
+                        state: action.data.location.state,
                         has_results: action.data.has_results,
                     },
                 };
