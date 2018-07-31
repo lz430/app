@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
 import { connect } from 'react-redux';
+
+import Close from 'icons/zondicons/Close';
+import Filter from 'icons/zondicons/Filter';
+
 import {
     clearAllSecondaryFilters,
     toggleSearchFilter,
 } from 'pages/deal-list/actions';
+
 import { getSelectedFiltersByCategory } from '../selectors';
 
 /**
@@ -22,7 +25,7 @@ class ToolbarSelectedFilters extends React.PureComponent {
     };
 
     selectedFilters() {
-        const blackListCategories = ['make', 'model', 'year'];
+        const blackListCategories = ['make', 'model'];
         return R.omit(
             blackListCategories,
             this.props.selectedFiltersByCategory
@@ -58,13 +61,12 @@ class ToolbarSelectedFilters extends React.PureComponent {
      */
     renderFilterItem(category, item) {
         return (
-            <div className="filterbar__filter">
+            <div key={category + item.value} className="filterbar__filter">
                 {item.label}
-                <SVGInline
+                <Close
                     height="10px"
                     width="10px"
                     className="filterbar__filter-x"
-                    svg={zondicons['close']}
                     onClick={() =>
                         this.props.onToggleSearchFilter(category, item)
                     }
@@ -84,11 +86,10 @@ class ToolbarSelectedFilters extends React.PureComponent {
 
         return (
             <div className="filterbar">
-                <SVGInline
+                <Filter
                     height="20px"
                     width="20px"
                     className="filterbar__filter-icon"
-                    svg={zondicons['filter']}
                 />
 
                 <div className="filterbar__filters">

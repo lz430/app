@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { StickyContainer, Sticky } from 'react-sticky';
-import { Container } from 'reactstrap';
 
 import util from 'src/util';
 import Deal from 'components/Deals/Deal';
@@ -15,8 +13,7 @@ import ErrorNoDealsToCompare from './components/ErrorNoDealsToCompare';
 import { getEquipmentCategories } from './selectors';
 import { getIsPageLoading } from 'apps/page/selectors';
 
-import SVGInline from 'react-svg-inline';
-import miscicons from 'miscicons';
+import Loading from 'icons/miscicons/Loading';
 
 class ComparePageContainer extends React.PureComponent {
     static propTypes = {
@@ -57,15 +54,11 @@ class ComparePageContainer extends React.PureComponent {
     }
 
     renderDealsContainer() {
-        if (util.windowIsLargerThanSmall(this.props.window.width)) {
-            return this.renderDeals();
-        } else {
-            return <Sticky>{({ style }) => this.renderDeals(style)}</Sticky>;
-        }
+        return this.renderDeals();
     }
 
     renderPageLoadingIcon() {
-        return <SVGInline svg={miscicons['loading']} />;
+        return <Loading />;
     }
 
     render() {

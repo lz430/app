@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SVGInline from 'react-svg-inline';
-import miscicons from 'miscicons';
+import Loading from 'icons/miscicons/Loading';
 
 class FilterMakeList extends React.PureComponent {
     static propTypes = {
@@ -57,7 +56,7 @@ class FilterMakeList extends React.PureComponent {
                     {this.props.items ? (
                         this.props.items.map(this.renderItem)
                     ) : (
-                        <SVGInline svg={miscicons['loading']} />
+                        <Loading />
                     )}
                 </div>
             </div>

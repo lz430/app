@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
+import CheveronDown from 'icons/zondicons/CheveronDown';
+import CheveronUp from 'icons/zondicons/CheveronUp';
 
 class AccordionTable extends React.PureComponent {
     static propTypes = {
@@ -36,14 +36,11 @@ class AccordionTable extends React.PureComponent {
                 onClick={() => this.toggleOpen()}
                 className="compare-page-table__header"
             >
-                <SVGInline
-                    className="compare-page-table__header-cheveron"
-                    svg={
-                        this.state.isOpen
-                            ? zondicons['cheveron-down']
-                            : zondicons['cheveron-up']
-                    }
-                />
+                {this.state.isOpen ? (
+                    <CheveronDown className="compare-page-table__header-cheveron" />
+                ) : (
+                    <CheveronUp className="compare-page-table__header-cheveron" />
+                )}
                 {this.props.header}
             </div>
         );

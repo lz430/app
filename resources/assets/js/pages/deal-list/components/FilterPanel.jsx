@@ -10,11 +10,15 @@ import MobileFilterClose from './Sidebar/MobileFilterClose';
 import util from 'src/util';
 
 import { toggleSearchFilter, clearModelYear } from 'pages/deal-list/actions';
-import { getSelectedFiltersByCategory } from '../selectors';
+import {
+    getLoadingSearchResults,
+    getSelectedFiltersByCategory,
+} from '../selectors';
 
 class FilterPanel extends React.PureComponent {
     static propTypes = {
         filters: PropTypes.object.isRequired,
+        loadingSearchResults: PropTypes.bool.isRequired,
         selectedFiltersByCategory: PropTypes.object.isRequired,
         searchQuery: PropTypes.object.isRequired,
         onClearModelYear: PropTypes.func.isRequired,
@@ -49,6 +53,7 @@ class FilterPanel extends React.PureComponent {
                     <PrimaryFilters
                         searchQuery={this.props.searchQuery}
                         filters={this.props.filters}
+                        loadingSearchResults={this.props.loadingSearchResults}
                         selectedFiltersByCategory={
                             this.props.selectedFiltersByCategory
                         }
@@ -73,6 +78,9 @@ class FilterPanel extends React.PureComponent {
                         <SecondaryFilters
                             searchQuery={this.props.searchQuery}
                             filters={this.props.filters}
+                            loadingSearchResults={
+                                this.props.loadingSearchResults
+                            }
                             selectedFiltersByCategory={
                                 this.props.selectedFiltersByCategory
                             }
@@ -94,6 +102,7 @@ const mapStateToProps = state => {
         searchQuery: state.pages.dealList.searchQuery,
         selectedFiltersByCategory: getSelectedFiltersByCategory(state),
         smallFiltersShown: state.common.smallFiltersShown,
+        loadingSearchResults: getLoadingSearchResults(state),
     };
 };
 

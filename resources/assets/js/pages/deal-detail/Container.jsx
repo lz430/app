@@ -2,15 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
+
+import { dealType } from 'types';
+
 import { Container, Row, Col } from 'reactstrap';
 
 import * as legacyActions from 'apps/common/actions';
-
-import strings from 'src/strings';
-
-import miscicons from 'miscicons';
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
 
 import ImageGallery from 'react-image-gallery';
 import { dealPricingFactory } from 'src/DealPricing';
@@ -18,8 +15,6 @@ import { dealPricingFactory } from 'src/DealPricing';
 import ApiClient from 'store/api';
 
 import CompareBar from 'components/CompareBar';
-import Modal from 'components/Modal';
-
 import Header from './components/Header';
 
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
@@ -34,8 +29,8 @@ import { initPage, receiveDeal, dealDetailRequestDealQuote } from './actions';
 import { getUserLocation } from 'apps/user/selectors';
 import { getLeaseAnnualMileage, getLeaseTerm } from './selectors';
 import AddToCart from './components/AddToCart';
-
-import { dealType } from 'types';
+import StandardFeaturesModal from './components/StandardFeaturesModal';
+import AdditionalFeaturesModal from './components/AdditionalFeaturesModal';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -63,8 +58,8 @@ class DealDetailContainer extends React.PureComponent {
         upholsteryType: null,
         warranties: null,
         dimensions: null,
-        showStandardFeatures: false,
-        showFeatures: false,
+        standardFeaturesModalOpen: false,
+        additionalFeaturesModalOpen: false,
     };
 
     componentDidMount() {
@@ -80,9 +75,11 @@ class DealDetailContainer extends React.PureComponent {
                 feature => {
                     return feature.slug.includes('seat_main_upholstery_');
                 }
-            ).title;
+            );
 
-            this.setState({ upholsteryType });
+            if (upholsteryType) {
+                this.setState({ upholsteryType: upholsteryType['title'] });
+            }
         }
 
         const {
@@ -121,15 +118,16 @@ class DealDetailContainer extends React.PureComponent {
         });
     }
 
-    showStandardFeatures() {
+    toggleStandardFeaturesModal() {
         this.setState({
-            showStandardFeatures: true,
+            standardFeaturesModalOpen: !this.state.standardFeaturesModalOpen,
         });
     }
 
-    showFeatures() {
+    toggleAdditionalFeaturesModal() {
         this.setState({
-            showFeatures: true,
+            additionalFeaturesModalOpen: !this.state
+                .additionalFeaturesModalOpen,
         });
     }
 
@@ -151,164 +149,9 @@ class DealDetailContainer extends React.PureComponent {
 
     hideModals() {
         this.setState({
-            showStandardFeatures: false,
-            showFeatures: false,
+            toggleStandardFeaturesModal: false,
+            toggleAdditionalFeaturesModal: false,
         });
-    }
-
-    renderStandardFeaturesModal(deal) {
-        return (
-            <Modal
-                nowrapper={true}
-                onClose={() => {
-                    this.hideModals();
-                }}
-            >
-                <div className="modal__content">
-                    <div className="modal__sticker-container">
-                        <div className="modal__sticker">Standard Features</div>
-                    </div>
-                    <div className="modal__header">
-                        <div className="modal__titles modal__titles--center">
-                            <div className="modal__subtitle modal__subtitle--center">
-                                {strings.dealYearMake(deal)}
-                            </div>
-                            <div className="modal__title modal_title--center">
-                                {strings.dealModelTrim(deal)}
-                            </div>
-                        </div>
-                        <div className="modal__close">
-                            <SVGInline
-                                onClick={() => this.hideModals()}
-                                height="20px"
-                                width="20px"
-                                className="modal__close-x"
-                                svg={zondicons['close']}
-                            />
-                        </div>
-                    </div>
-                    <div className="modal__body deal-details__modal-body">
-                        <h3>Specifications</h3>
-                        <hr />
-
-                        <ul>
-                            {this.state.basicFeatures ? (
-                                this.state.basicFeatures.map(
-                                    (feature, index) => {
-                                        return (
-                                            <li key={index}>
-                                                {feature.name}:{' '}
-                                                {feature.content}
-                                            </li>
-                                        );
-                                    }
-                                )
-                            ) : (
-                                <SVGInline svg={miscicons['loading']} />
-                            )}
-
-                            {this.state.fuelEconomy ? (
-                                <li>
-                                    Fuel Economy - City:{' '}
-                                    {this.state.fuelEconomy.city} Highway:{' '}
-                                    {this.state.fuelEconomy.highway}
-                                </li>
-                            ) : (
-                                <SVGInline svg={miscicons['loading']} />
-                            )}
-                        </ul>
-
-                        <h4>Dimensions</h4>
-                        <ul>
-                            {this.state.dimensions ? (
-                                this.state.dimensions.map(
-                                    (dimension, index) => {
-                                        return (
-                                            <li key={index}>
-                                                {dimension.feature}:{' '}
-                                                {dimension.content}
-                                            </li>
-                                        );
-                                    }
-                                )
-                            ) : (
-                                <SVGInline svg={miscicons['loading']} />
-                            )}
-                        </ul>
-
-                        <h4>Warranties</h4>
-                        <ul>
-                            {this.state.warranties ? (
-                                this.state.warranties.map(
-                                    (dimension, index) => {
-                                        return (
-                                            <li key={index}>
-                                                {dimension.feature}:{' '}
-                                                {dimension.content}
-                                            </li>
-                                        );
-                                    }
-                                )
-                            ) : (
-                                <SVGInline svg={miscicons['loading']} />
-                            )}
-                        </ul>
-                        <h3>Features</h3>
-                        <hr />
-                        <ul>
-                            {deal.features.map((feature, index) => {
-                                return <li key={index}>{feature.feature}</li>;
-                            })}
-                        </ul>
-                    </div>
-                </div>
-            </Modal>
-        );
-    }
-
-    renderFeaturesModal() {
-        return (
-            <Modal
-                nowrapper={true}
-                onClose={() => {
-                    this.hideModals();
-                }}
-            >
-                <div className="modal__content">
-                    <div className="modal__sticker-container">
-                        <div className="modal__sticker">Additional Options</div>
-                    </div>
-                    <div className="modal__header">
-                        <div className="modal__titles modal__titles--center">
-                            <div className="modal__subtitle modal__subtitle--center">
-                                {strings.dealYearMake(this.props.deal)}
-                            </div>
-                            <div className="modal__title modal_title--center">
-                                {strings.dealModelTrim(this.props.deal)}
-                            </div>
-                        </div>
-                        <div className="modal__close">
-                            <SVGInline
-                                onClick={() => this.hideModals()}
-                                height="20px"
-                                width="20px"
-                                className="modal__close-x"
-                                svg={zondicons['close']}
-                            />
-                        </div>
-                    </div>
-                    <div className="modal__body deal-details__modal-body">
-                        <ul>
-                            {this.props.deal.vauto_features.map(
-                                (feature, index) => {
-                                    return <li key={index}>{feature}</li>;
-                                }
-                            )}
-                        </ul>
-                    </div>
-                </div>
-            </Modal>
-        );
     }
 
     handleBuyNow = e => {
@@ -455,7 +298,7 @@ class DealDetailContainer extends React.PureComponent {
                         </ul>
                         <span
                             className="link deal-details__deal-content-see-all"
-                            onClick={() => this.showStandardFeatures()}
+                            onClick={() => this.toggleStandardFeaturesModal()}
                         >
                             See all standard features &gt;
                         </span>
@@ -474,7 +317,9 @@ class DealDetailContainer extends React.PureComponent {
                             </ul>
                             <span
                                 className="link deal-details__deal-content-see-all"
-                                onClick={e => this.showFeatures(e)}
+                                onClick={() =>
+                                    this.toggleAdditionalFeaturesModal()
+                                }
                             >
                                 See all additional options &gt;
                             </span>
@@ -545,12 +390,21 @@ class DealDetailContainer extends React.PureComponent {
                         </Col>
                     </Row>
 
-                    {this.state.showStandardFeatures
-                        ? this.renderStandardFeaturesModal(this.props.deal)
-                        : ''}
-                    {this.state.showFeatures
-                        ? this.renderFeaturesModal(this.props.deal)
-                        : ''}
+                    <StandardFeaturesModal
+                        toggle={this.toggleStandardFeaturesModal.bind(this)}
+                        isOpen={this.state.standardFeaturesModalOpen}
+                        deal={this.props.deal}
+                        basicFeatures={this.state.basicFeatures}
+                        fuelEconomy={this.state.fuelEconomy}
+                        warranties={this.state.warranties}
+                        dimensions={this.state.dimensions}
+                    />
+
+                    <AdditionalFeaturesModal
+                        toggle={this.toggleAdditionalFeaturesModal.bind(this)}
+                        isOpen={this.state.additionalFeaturesModalOpen}
+                        deal={this.props.deal}
+                    />
                 </Container>
                 <CompareBar class="compare-bar compare-bar--static" />
             </div>

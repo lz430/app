@@ -68,9 +68,8 @@
             display: block;
             width: 100%;
             object-fit: cover;
-
-            &--fallback {
-                padding: 25px;
+            &.placeholder {
+                max-height: 210px;
             }
 
             &:hover {

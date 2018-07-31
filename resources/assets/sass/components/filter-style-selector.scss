@@ -1,5 +1,3 @@
-@import '../variables';
-
 .filter-style-selector {
     text-align: center;
 
@@ -25,16 +23,13 @@
         padding: 5px 5px;
         text-align: center;
         width: calc(33% - 10px);
-
-        .filter-style-selector__icon {
-            cursor: pointer;
-        }
+        cursor: pointer;
 
         &--selected {
             background: $color-left-filter-selected;
 
             .filter-style-selector__icon {
-                svg path {
+                path {
                     fill: $color-text-white;
                 }
             }
@@ -46,7 +41,7 @@
     }
 
     &__icon {
-        svg path {
+        path {
             fill: $color-grey;
         }
     }
@@ -54,7 +49,7 @@
     &__name {
         color: $color-grey;
         font-size: 0.7rem;
-        margin-top: -1.5rem;
+        margin-top: 0.75rem;
         width: 100%;
     }
 }

@@ -1,31 +1,24 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
+
+import { dealType } from 'types';
+import Loading from 'icons/miscicons/Loading';
+
 import Deal from 'components/Deals/Deal';
-import SVGInline from 'react-svg-inline';
-import miscicons from 'miscicons';
-import { connect } from 'react-redux';
 
 import { toggleCompare } from 'apps/common/actions';
 import { requestMoreDeals } from '../actions';
+import { getShouldShowLoading } from '../selectors';
 
 class ViewDeals extends React.PureComponent {
     static propTypes = {
-        deals: PropTypes.arrayOf(
-            PropTypes.shape({
-                year: PropTypes.string.isRequired,
-                msrp: PropTypes.number.isRequired,
-                employee_price: PropTypes.number.isRequired,
-                supplier_price: PropTypes.number.isRequired,
-                make: PropTypes.string.isRequired,
-                model: PropTypes.string.isRequired,
-                id: PropTypes.number.isRequired,
-            })
-        ),
+        deals: PropTypes.arrayOf(dealType),
         compareList: PropTypes.array,
         dealsByMakeModelYear: PropTypes.array,
         meta: PropTypes.object.isRequired,
-        loadingSearchResults: PropTypes.bool,
+        shouldShowLoading: PropTypes.bool,
         onRequestMoreDeals: PropTypes.func.isRequired,
         onToggleCompare: PropTypes.func.isRequired,
     };
@@ -44,9 +37,9 @@ class ViewDeals extends React.PureComponent {
     }
 
     renderShowMoreButton() {
-        if (this.props.deals && this.props.loadingSearchResults) {
+        if (this.props.deals && this.props.shouldShowLoading) {
             // Deals are already loaded and we have already requested more deals
-            return <SVGInline svg={miscicons['loading']} />;
+            return <Loading />;
         }
 
         if (
@@ -98,7 +91,7 @@ class ViewDeals extends React.PureComponent {
                                 return this.renderDeal(deal, index);
                             })
                         ) : (
-                            <SVGInline svg={miscicons['loading']} />
+                            <Loading />
                         )}
                     </div>
                     {this.renderShowMoreButton()}
@@ -112,7 +105,7 @@ const mapStateToProps = state => {
     return {
         compareList: state.common.compareList,
         meta: state.pages.dealList.meta,
-        loadingSearchResults: state.pages.dealList.loadingSearchResults,
+        shouldShowLoading: getShouldShowLoading(state),
         deals: state.pages.dealList.deals,
         dealsByMakeModelYear: state.pages.dealList.dealsByMakeModelYear,
     };

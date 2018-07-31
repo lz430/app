@@ -22,7 +22,10 @@ class ModelYearSearch extends BaseSearch {
                     "model" => [
                         "terms" => [
                             "size" => 50000,
-                            "field" => "category.title.keyword"
+                            "field" => "category.title.keyword",
+                            "order" => [
+                                "_key" => 'asc',
+                            ],
                         ],
                         "aggs" => [
                             "thumbnail" => [
@@ -50,8 +53,11 @@ class ModelYearSearch extends BaseSearch {
                                 "aggs" => [
                                     "year" => [
                                         "terms" => [
-                                            "field" => "year.keyword"
-                                        ]
+                                            "field" => "year.keyword",
+                                            "order" => [
+                                                "_key" => 'asc',
+                                            ],
+                                        ],
                                     ]
                                 ]
                             ],

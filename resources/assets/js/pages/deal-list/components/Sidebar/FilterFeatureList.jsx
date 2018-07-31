@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
+
+import Checkmark from 'icons/zondicons/Checkmark';
 
 class FilterFeatureList extends React.PureComponent {
     static propTypes = {
@@ -40,11 +40,10 @@ class FilterFeatureList extends React.PureComponent {
                         >
                             {this.props.selectedItems &&
                             R.contains(item.value, this.props.selectedItems) ? (
-                                <SVGInline
+                                <Checkmark
                                     width="15px"
                                     height="15px"
                                     className="filter-selector__checkbox filter-selector__checkbox--selected"
-                                    svg={zondicons['checkmark']}
                                 />
                             ) : (
                                 <div className="filter-selector__checkbox" />

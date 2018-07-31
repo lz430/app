@@ -1,11 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
+import Close from 'icons/zondicons/Close';
 
 import { toggleSmallFiltersShown } from 'pages/deal-list/actions';
-
-import PropTypes from 'prop-types';
 
 class MobileFilterClose extends React.PureComponent {
     static propTypes = {
@@ -15,12 +13,11 @@ class MobileFilterClose extends React.PureComponent {
     render() {
         return (
             <div className="filter-close">
-                <SVGInline
+                <Close
                     onClick={this.props.onToggleSmallFiltersShown}
                     className="filter-close__icon"
                     height="20px"
                     width="20px"
-                    svg={zondicons['close']}
                 />
             </div>
         );

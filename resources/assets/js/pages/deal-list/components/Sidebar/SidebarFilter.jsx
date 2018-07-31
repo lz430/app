@@ -1,7 +1,8 @@
 import React from 'react';
-import SVGInline from 'react-svg-inline';
-import zondicons from 'zondicons';
 import PropTypes from 'prop-types';
+
+import CheveronUp from 'icons/zondicons/CheveronUp';
+import CheveronDown from 'icons/zondicons/CheveronDown';
 
 class SidebarFilter extends React.PureComponent {
     static propTypes = {
@@ -16,7 +17,13 @@ class SidebarFilter extends React.PureComponent {
     static defaultProps = {
         canToggle: true,
     };
+    renderIcon() {
+        if (this.props.open) {
+            return <CheveronUp className="sidebar-filters__icon" />;
+        }
 
+        return <CheveronDown className="sidebar-filters__icon" />;
+    }
     render() {
         return (
             <div className="sidebar-filters__filter">
@@ -30,16 +37,7 @@ class SidebarFilter extends React.PureComponent {
                         this.props.canToggle ? this.props.toggle : () => {}
                     }
                 >
-                    {this.props.canToggle && (
-                        <SVGInline
-                            className="sidebar-filters__icon"
-                            svg={
-                                this.props.open
-                                    ? zondicons['cheveron-up']
-                                    : zondicons['cheveron-down']
-                            }
-                        />
-                    )}
+                    {this.props.canToggle && this.renderIcon()}
                     {this.props.title}
                     <span className="sidebar-filters__count">
                         {this.props.selectedItems

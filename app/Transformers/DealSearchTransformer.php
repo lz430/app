@@ -15,6 +15,7 @@ class DealSearchTransformer extends TransformerAbstract
         $version = (object) $deal->version;
         return [
             'id' => $deal->id,
+            'title' => $deal->title,
             'stock_number' => $deal->stock,
             'vin' => $deal->vin,
             'year' => $deal->year,

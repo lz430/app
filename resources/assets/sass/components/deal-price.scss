@@ -1,5 +1,3 @@
-@import '../variables';
-
 .deal-price {
     &__price {
         margin-top: 3px;
@@ -106,4 +104,9 @@
     &__tag-icon {
         margin-right: 5px;
     }
+}
+
+.pricing-explanation-open {
+    cursor: pointer;
+    margin: 8px;
 }

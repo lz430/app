@@ -10,6 +10,21 @@ export const getSearchQuery = state => {
     };
 };
 
+export const getSearchPage = state => {
+    return state.pages.dealList.page;
+};
+
+export const getLoadingSearchResults = state => {
+    return state.pages.dealList.loadingSearchResults;
+};
+
+export const getShouldShowLoading = createSelector(
+    [getSearchPage, getLoadingSearchResults],
+    (searchPage, loadingSearchResults) => {
+        return searchPage <= 1 && loadingSearchResults;
+    }
+);
+
 export const getSelectedFiltersByCategory = createSelector(
     [getSearchQuery],
     searchQuery => {

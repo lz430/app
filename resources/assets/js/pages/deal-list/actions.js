@@ -32,7 +32,7 @@ export function clearAllSecondaryFilters() {
     return {
         type: ActionTypes.SEARCH_TOGGLE_FILTER,
         operation: 'KEEP_CATEGORY',
-        category: ['year', 'make', 'model', 'style'],
+        category: ['make', 'model', 'style'],
         item: false,
     };
 }
@@ -47,7 +47,7 @@ export function clearModelYear() {
         dispatch({
             type: ActionTypes.SEARCH_TOGGLE_FILTER,
             operation: 'REMOVE_CATEGORY',
-            category: ['model', 'year'],
+            category: ['model'],
             item: false,
         });
     };

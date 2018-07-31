@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import FilterFeatureList from './FilterFeatureList';
 import SidebarFilter from './SidebarFilter';
 
-class FilterFeature extends React.PureComponent {
+class FilterFeature extends React.Component {
     static propTypes = {
         title: PropTypes.string.isRequired,
         category: PropTypes.string.isRequired,
@@ -15,6 +15,7 @@ class FilterFeature extends React.PureComponent {
                 count: PropTypes.number,
             })
         ),
+        loadingSearchResults: PropTypes.bool.isRequired,
         selectedItems: PropTypes.arrayOf(PropTypes.string),
         onToggleSearchFilter: PropTypes.func.isRequired,
         onToggleOpenFilter: PropTypes.func.isRequired,
@@ -22,8 +23,35 @@ class FilterFeature extends React.PureComponent {
         canToggle: PropTypes.bool.isRequired,
     };
 
+    shouldComponentUpdate(nextProps) {
+        if (
+            this.props.loadingSearchResults !== nextProps.loadingSearchResults
+        ) {
+            return true;
+        }
+
+        if (this.props.items !== nextProps.items) {
+            return true;
+        }
+
+        if (this.props.selectedItems !== nextProps.selectedItems) {
+            return true;
+        }
+
+        return false;
+    }
+
     render() {
+        // Hide if no items to select
         if (!this.props.items || !this.props.items.length) {
+            return false;
+        }
+        // Hide if only one selectable option.
+        if (
+            this.props.items.length === 1 &&
+            !this.props.selectedItems &&
+            !this.props.loadingSearchResults
+        ) {
             return false;
         }
 

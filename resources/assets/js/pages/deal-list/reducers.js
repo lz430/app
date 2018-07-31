@@ -5,6 +5,7 @@ import * as ActionTypes from './consts';
 
 const initialState = {
     isLoading: false,
+    loadingSearchResults: true,
     page: 1,
     searchQuery: {
         entity: 'model', // deal or model depending on the page we're on.
@@ -16,7 +17,6 @@ const initialState = {
     },
     modelYears: [],
     deals: [],
-    loadingSearchResults: true,
     meta: {},
     filters: {},
     showMakeSelectorModal: null, // null = never shown | true = showing | false = has shown
@@ -88,7 +88,6 @@ const reducer = function(state = initialState, action = {}) {
 
         case ActionTypes.RECEIVE_DEALS:
             let deals = [];
-
             if (state.page !== 1) {
                 deals.push(...state.deals);
             }
@@ -119,19 +118,6 @@ const reducer = function(state = initialState, action = {}) {
                 modelYears: [],
             };
 
-        case ActionTypes.CLEAR_MODEL_YEAR:
-            return {
-                ...state,
-                page: 1,
-                searchQuery: {
-                    ...state.searchQuery,
-                    entity: 'model',
-                    models: [],
-                    years: [],
-                },
-                deals: [],
-            };
-
         case ActionTypes.SELECT_MODEL_YEAR:
             return {
                 ...state,
@@ -142,7 +128,6 @@ const reducer = function(state = initialState, action = {}) {
                     filters: [
                         ...state.searchQuery.filters,
                         'model:' + action.data.model,
-                        'year:' + action.data.year,
                     ],
                 },
             };

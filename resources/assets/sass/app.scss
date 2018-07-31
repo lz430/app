@@ -51,7 +51,7 @@
 //@import "~bootstrap/scss/media";
 @import '~bootstrap/scss/list-group';
 @import '~bootstrap/scss/close';
-//@import '~bootstrap/scss/modal';
+@import '~bootstrap/scss/modal';
 //@import "~bootstrap/scss/tooltip";
 //@import "~bootstrap/scss/popover";
 //@import "~bootstrap/scss/carousel";
@@ -88,6 +88,7 @@
 @import 'components/filter-selector';
 @import 'components/deal-details';
 @import 'components/rebates';
+@import 'components/rebates-description-modal';
 @import 'components/compare-page';
 @import 'components/compare-deal';
 @import 'components/compare-bar';

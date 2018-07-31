@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import config from 'config';
 
@@ -7,6 +8,11 @@ import Label from 'components/pricing/Label';
 import Value from 'components/pricing/Value';
 
 export default class Discount extends React.PureComponent {
+    static propTypes = {
+        dealPricing: PropTypes.object,
+        onChange: PropTypes.func.isRequired,
+    };
+
     static defaultProps = {
         onChange: (deal, newValue) => {},
     };
@@ -30,7 +36,7 @@ export default class Discount extends React.PureComponent {
     };
 
     render() {
-        const { dealPricing, ...other } = this.props;
+        const { dealPricing } = this.props;
 
         return (
             <div>
@@ -53,13 +59,13 @@ export default class Discount extends React.PureComponent {
                             />
                             DMR Customer
                         </Label>
+                        <Value
+                            isNegative={true}
+                            showIf={dealPricing.isEffectiveDiscountDmr()}
+                        >
+                            {dealPricing.dmrDiscount()}
+                        </Value>
                     </div>
-                    <Value
-                        isNegative={true}
-                        showIf={dealPricing.isEffectiveDiscountDmr()}
-                    >
-                        {dealPricing.dmrDiscount()}
-                    </Value>
                 </Line>
                 {(config.EMPLOYEE_PRICING_WHITELIST_BRANDS.includes(
                     dealPricing.deal().make
@@ -95,13 +101,14 @@ export default class Discount extends React.PureComponent {
                                         />
                                         Employee / Retiree
                                     </Label>
+                                    <Value
+                                        isNegative={true}
+                                        showIf={dealPricing.isEffectiveDiscountEmployee()}
+                                    >
+                                        {dealPricing.employeeDiscount()}
+                                    </Value>
                                 </div>
-                                <Value
-                                    isNegative={true}
-                                    showIf={dealPricing.isEffectiveDiscountEmployee()}
-                                >
-                                    {dealPricing.employeeDiscount()}
-                                </Value>
+
                                 {dealPricing.isEffectiveDiscountEmployee() &&
                                     this.renderProofOfEligibility()}
                             </Line>
@@ -125,13 +132,14 @@ export default class Discount extends React.PureComponent {
                                         />
                                         Supplier / Friends &amp; Family
                                     </Label>
+                                    <Value
+                                        isNegative={true}
+                                        showIf={dealPricing.isEffectiveDiscountSupplier()}
+                                    >
+                                        {dealPricing.supplierDiscount()}
+                                    </Value>
                                 </div>
-                                <Value
-                                    isNegative={true}
-                                    showIf={dealPricing.isEffectiveDiscountSupplier()}
-                                >
-                                    {dealPricing.supplierDiscount()}
-                                </Value>
+
                                 {dealPricing.isEffectiveDiscountSupplier() &&
                                     this.renderProofOfEligibility()}
                             </Line>

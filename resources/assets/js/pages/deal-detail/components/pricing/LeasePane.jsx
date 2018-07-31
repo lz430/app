@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SVGInline from 'react-svg-inline';
-import miscicons from 'miscicons';
-import zondicons from 'zondicons';
+import Compose from 'icons/zondicons/Compose';
+import Loading from 'icons/miscicons/Loading';
 
+import Line from 'components/pricing/Line';
+import Label from 'components/pricing/Label';
+import Value from 'components/pricing/Value';
+import Group from 'components/pricing/Group';
+import Header from 'components/pricing/Header';
+import Separator from 'components/pricing/Separator';
+
+import LeaseTermsSelect from './LeaseTermsSelect';
 import Rebates from './Rebates';
 import Discount from './Discount';
-import Line from '../../../../components/pricing/Line';
-import Label from '../../../../components/pricing/Label';
-import Value from '../../../../components/pricing/Value';
-import Group from '../../../../components/pricing/Group';
-import Header from '../../../../components/pricing/Header';
-import LeaseTermsSelect from './LeaseTermsSelect';
-import Separator from '../../../../components/pricing/Separator';
 
 export default class LeasePane extends React.PureComponent {
     static propTypes = {
@@ -89,20 +89,17 @@ export default class LeasePane extends React.PureComponent {
                 <Group>
                     <Header>
                         Lease Terms
-                        <SVGInline
+                        <Compose
                             style={{
                                 float: 'right',
                                 cursor: 'pointer',
                                 fill: '#41b1ac',
                             }}
                             height="1em"
-                            svg={zondicons['compose']}
-                            onClick={this.handleShowLeaseTermsSelectClick}
+                            onClick={() => this.toggleTermsSelect()}
                         />
                     </Header>
-                    {dealPricing.dealQuoteIsLoading() && (
-                        <SVGInline svg={miscicons['loading']} />
-                    )}
+                    {dealPricing.dealQuoteIsLoading() && <Loading />}
                     {dealPricing.dealQuoteIsLoading() || (
                         <div>
                             <Line>
@@ -114,9 +111,7 @@ export default class LeasePane extends React.PureComponent {
                                         margin: '1em auto',
                                         cursor: 'pointer',
                                     }}
-                                    onClick={
-                                        this.handleShowLeaseTermsSelectClick
-                                    }
+                                    onClick={() => this.toggleTermsSelect()}
                                 >
                                     <thead>
                                         <tr>
@@ -177,9 +172,10 @@ export default class LeasePane extends React.PureComponent {
                 </Group>
                 {this.state.leaseTermsSelectOpened && (
                     <LeaseTermsSelect
-                        {...{ dealPricing }}
-                        onClose={this.handleLeaseTermsSelectClose}
-                        onChange={this.handleLeaseTermsChange}
+                        dealPricing={dealPricing}
+                        isOpen={this.state.leaseTermsSelectOpened}
+                        toggle={this.toggleTermsSelect.bind(this)}
+                        onChange={this.handleLeaseTermsChange.bind(this)}
                     />
                 )}
             </div>
@@ -188,43 +184,12 @@ export default class LeasePane extends React.PureComponent {
 
     handleLeaseTermsChange = (annualMileage, term, cashDue) => {
         this.props.onChange(annualMileage, term, cashDue);
-
-        this.handleLeaseTermsSelectClose();
+        this.toggleTermsSelect();
     };
 
-    handleTermChange = e => {
-        const { dealPricing } = this.props;
-        const term = e.target.value;
-
-        this.props.onChange(
-            dealPricing.leaseAnnualMileageValue(),
-            term,
-            dealPricing.leaseCashDueValue()
-        );
-    };
-
-    handleAnnualMileageChange = e => {
-        const { dealPricing } = this.props;
-        const annualMileage = e.target.value;
-
-        this.props.onChange(
-            annualMileage,
-            dealPricing.leaseTermValue(),
-            dealPricing.leaseCashDueValue()
-        );
-    };
-
-    handleLeaseTermsSelectClose = () => {
-        this.setState({ leaseTermsSelectOpened: false });
-    };
-
-    handleShowLeaseTermsSelectClick = e => {
-        e.preventDefault();
-
-        this.openLeaseTermsSelect();
-    };
-
-    openLeaseTermsSelect = () => {
-        this.setState({ leaseTermsSelectOpened: true });
-    };
+    toggleTermsSelect() {
+        this.setState({
+            leaseTermsSelectOpened: !this.state.leaseTermsSelectOpened,
+        });
+    }
 }

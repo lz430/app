@@ -2,7 +2,3 @@ export const TOGGLE_COMPARE = 'TOGGLE_COMPARE';
 
 export const WINDOW_RESIZE = 'WINDOW_RESIZE';
 export const SELECT_DEAL = 'SELECT_DEAL';
-export const SELECT_REBATE = 'SELECT_REBATE';
-
-export const SHOW_INFO_MODAL = 'SHOW_INFO_MODAL';
-export const HIDE_INFO_MODAL = 'HIDE_INFO_MODAL';
