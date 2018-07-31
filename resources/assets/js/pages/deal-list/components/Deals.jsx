@@ -19,6 +19,11 @@ class Deals extends React.PureComponent {
     };
 
     render() {
+        // Requesting something
+        if (this.props.loadingSearchResults) {
+            return <Loading />;
+        }
+
         // Zip out of range
         if (!this.props.zipInRange) {
             return <NoDealsOutOfRange />;
@@ -36,11 +41,6 @@ class Deals extends React.PureComponent {
             (!this.props.deals || this.props.deals.length === 0)
         ) {
             return <NoDealsInRange />;
-        }
-
-        // Requesting something
-        if (this.props.loadingSearchResults) {
-            return <Loading />;
         }
 
         // We have some results; which should we prefer?
