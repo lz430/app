@@ -41,17 +41,6 @@ export default class LeaseDetails extends React.PureComponent {
                 </Group>
                 <Separator />
                 <Group>
-                    <Header>Taxes &amp; Fees</Header>
-                    <TaxesAndFees items={dealPricing.taxesAndFees()} />
-                    <Line isSectionTotal={true}>
-                        <Label>Gross Capitalized Cost</Label>
-                        <Value isLoading={dealPricing.dealQuoteIsLoading()}>
-                            {dealPricing.grossCapitalizedCost()}
-                        </Value>
-                    </Line>
-                </Group>
-                <Separator />
-                <Group>
                     <Header>Rebates</Header>
                     {dealPricing.hasRebatesApplied() || (
                         <Line>
@@ -69,10 +58,15 @@ export default class LeaseDetails extends React.PureComponent {
                             </Value>
                         </Line>
                     )}
-                    <Line isSectionTotal={true}>
-                        <Label>Net Capitalized Cost</Label>
-                        <Value isLoading={dealPricing.dealQuoteIsLoading()}>
-                            {dealPricing.netCapitalizedCost()}*
+                </Group>
+                <Separator />
+                <Group>
+                    <Header>Due at Delivery</Header>
+                    <TaxesAndFees items={dealPricing.taxesAndFees()} />
+                    <Line isSectionTotal={true} isImportant={true}>
+                        <Label>Total Due</Label>
+                        <Value>
+                            ${dealPricing.leaseTotalAmountAtDriveOffValue()}
                         </Value>
                     </Line>
                 </Group>
