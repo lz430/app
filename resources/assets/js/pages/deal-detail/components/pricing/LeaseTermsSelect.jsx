@@ -94,15 +94,14 @@ export default class LeaseTermsSelect extends React.PureComponent {
 
         if (
             !dealPricing.leaseTermsAvailable() ||
-            dealPricing.leaseAnnualMileageAvailable()
+            !dealPricing.leaseAnnualMileageAvailable()
         ) {
             return false;
         }
 
         return (
             <Modal
-                className="rebate-description-modal"
-                size="lg"
+                size="content-fit"
                 isOpen={this.props.isOpen || false}
                 toggle={this.props.toggle}
             >
