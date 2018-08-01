@@ -32,9 +32,9 @@ $icon-size: 20px;
     &__instructive-heading {
         background-color: $color-blue;
         color: $color-text-white;
-        padding: 8px 15px;
+        padding: 9px 15px 9px 15px;
         position: relative;
-
+        border-bottom: 1px solid #ccc;
         &::after {
             content: '';
             width: 0;
@@ -149,9 +149,15 @@ $icon-size: 20px;
 }
 
 .sidebar-filters .purchase-strategy {
-    padding: 6px;
     .button-group__button {
+        padding: 0.5rem 0.5rem;
+        font-size: 1rem;
+        border: none;
         border-radius: 0;
         text-align: center;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
