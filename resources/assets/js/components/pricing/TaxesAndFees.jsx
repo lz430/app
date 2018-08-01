@@ -13,12 +13,14 @@ export default class TaxesAndFees extends React.PureComponent {
     render() {
         return (
             <div style={{ marginBottom: '.75em' }}>
-                {this.props.items.map(item => (
-                    <Line key={item.label}>
-                        <Label>{item.label}</Label>
-                        <Value>{item.value}</Value>
-                    </Line>
-                ))}
+                {this.props.items
+                    .filter(item => item.rawValue > 0)
+                    .map(item => (
+                        <Line key={item.label}>
+                            <Label>{item.label}</Label>
+                            <Value>{item.value}</Value>
+                        </Line>
+                    ))}
             </div>
         );
     }
