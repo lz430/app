@@ -6,7 +6,6 @@ import Tuning from 'icons/zondicons/Tuning';
 import CheveronUp from 'icons/zondicons/CheveronUp';
 import CheveronDown from 'icons/zondicons/CheveronDown';
 import Tag from 'icons/zondicons/Tag';
-import classNames from 'classnames';
 import util from 'src/util';
 import {
     toggleSearchSort,
@@ -28,32 +27,23 @@ class Sortbar extends React.Component {
         onClearModelYear: PropTypes.func.isRequired,
         onToggleSearchSort: PropTypes.func.isRequired,
         onToggleSmallFiltersShown: PropTypes.func.isRequired,
-        compareList: PropTypes.array,
     };
 
     state = {
-        count: this.props.compareList.length,
         dropdownShown: false,
     };
 
     shouldComponentUpdate(nextProps) {
         return (
             this.props.searchQuery.sort !== nextProps.searchQuery.sort ||
-            this.props.searchQuery.entity !== nextProps.searchQuery.entity ||
-            this.props.compareList.length !== nextProps.compareList.length
+            this.props.searchQuery.entity !== nextProps.searchQuery.entity
         );
     }
 
     constructor(props) {
         super(props);
 
-        this.compareReady = this.compareReady.bind(this);
-        this.redirectToCompare = this.redirectToCompare.bind(this);
         this.renderBackButton = this.renderBackButton.bind(this);
-    }
-
-    componentDidMount() {
-        this.setState({ count: this.props.compareList.length });
     }
 
     renderFilterToggle() {
@@ -98,53 +88,11 @@ class Sortbar extends React.Component {
         }
         return false;
     }
-
-    redirectToCompare() {
-        if (this.compareReady()) {
-            window.location.href =
-                '/compare?' +
-                this.props.compareList
-                    .map(
-                        dealAndSelectedFilters =>
-                            `deals[]=${dealAndSelectedFilters.deal.id}`
-                    )
-                    .join('&') +
-                `&zipcode=${this.props.zipcode}`;
-        }
-    }
-
-    compareReady() {
-        return this.props.compareList.length >= 2;
-    }
-
     renderBackButton() {
         return util.windowIsLargerThanSmall(this.props.window.width) ? (
             ''
         ) : (
             <BackButton style="button" />
-        );
-    }
-
-    renderCompareButton() {
-        return (
-            <div>
-                <button
-                    className={classNames(
-                        'sortbar__button sortbar__button--blue',
-                        { disabled: !this.compareReady() }
-                    )}
-                    onClick={this.redirectToCompare}
-                >
-                    Compare{' '}
-                    <div
-                        className={classNames('sortbar__compare-count', {
-                            'sortbar__compare-count--ready': this.compareReady(),
-                        })}
-                    >
-                        {this.props.compareList.length}
-                    </div>
-                </button>
-            </div>
         );
     }
 
@@ -192,17 +140,10 @@ class Sortbar extends React.Component {
     render() {
         return (
             <div className="sortbar">
-                {this.renderBackButton()}
                 {this.renderFilterToggle()}
                 {this.props.searchQuery.entity === 'model'
                     ? this.renderClearFiltersButton()
                     : ''}
-                {this.props.searchQuery.entity === 'deal'
-                    ? this.renderCompareButton()
-                    : ''}
-                {/*this.props.searchQuery.entity === 'deal'
-                    ? this.renderSortButton()
-                    : '' */}
             </div>
         );
     }
@@ -210,7 +151,6 @@ class Sortbar extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        compareList: state.common.compareList,
         window: state.common.window,
         zipcode: state.user.purchasePreferences.strategy,
         searchQuery: state.pages.dealList.searchQuery,
