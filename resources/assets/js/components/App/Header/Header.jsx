@@ -11,11 +11,13 @@ import Location from 'icons/zondicons/Location';
 import ChatBubbleDots from 'icons/zondicons/ChatBubbleDots';
 import config from 'config';
 import LiveChat from 'react-livechat';
+import classNames from 'classnames';
 
 class Header extends React.PureComponent {
     static propTypes = {
         userLocation: PropTypes.object,
         onSearchForLocation: PropTypes.func.isRequired,
+        compareList: PropTypes.array,
     };
 
     state = {
@@ -31,7 +33,8 @@ class Header extends React.PureComponent {
     }
 
     handleSetNewLocation(search) {
-        const sup = this.props.onSearchForLocation(search);
+        this.props.onSearchForLocation(search);
+        this.toggleUserLocationModal();
     }
 
     onOpenChat() {
@@ -51,6 +54,26 @@ class Header extends React.PureComponent {
         };
     }
 
+    redirectToCompare(e) {
+        e.preventDefault();
+        if (this.compareReady()) {
+            window.location =
+                '/compare?' +
+                this.props.compareList.map(
+                    dealAndSelectedFilters =>
+                        `deals[]=${dealAndSelectedFilters.deal.id}`
+                );
+        }
+    }
+
+    compareReady() {
+        return this.props.compareList.length >= 2;
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
     renderLocationWidget() {
         return (
             <div
@@ -74,6 +97,10 @@ class Header extends React.PureComponent {
         );
     }
 
+    /**
+     *
+     * @returns {*}
+     */
     renderChatWidget() {
         if (!this.state.chatShow) {
             return;
@@ -96,15 +123,50 @@ class Header extends React.PureComponent {
             </div>
         );
     }
+
+    /**
+     *
+     * @returns {*}
+     */
+    renderCompareWidget() {
+        if (!this.props.compareList.length) {
+            return false;
+        }
+
+        return (
+            <div
+                className={classNames('header-widget', 'compare-widget', {
+                    disabled: !this.compareReady(),
+                })}
+                onClick={e => this.redirectToCompare(e)}
+            >
+                <div className="header-widget-content hidden d-sm-block">
+                    <div className="label">Compare</div>
+                    <div className="value">Deals</div>
+                </div>
+                <div className="icon">
+                    <span className="compare-count">
+                        {this.props.compareList.length}
+                    </span>
+                </div>
+            </div>
+        );
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
     render() {
         return (
-            <Navbar color="light" light expand="md">
+            <Navbar expand="md">
                 <NavbarBrand href="/">
                     <img src="/images/dmr-logo.svg" />
                 </NavbarBrand>
                 <div className="mr-auto" />
                 <div className="navbar-text">
                     {this.renderChatWidget()}
+                    {this.renderCompareWidget()}
                     {this.renderLocationWidget()}
                 </div>
 
@@ -129,6 +191,7 @@ class Header extends React.PureComponent {
 const mapStateToProps = state => {
     return {
         userLocation: getUserLocation(state),
+        compareList: state.common.compareList,
     };
 };
 

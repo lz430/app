@@ -1,7 +1,22 @@
+.app-header-wrapper {
+}
+
+.breadcrumb {
+    background: transparent;
+    border-bottom: 1px solid $primary;
+    border-radius: 0;
+    padding: 0.25rem 0;
+    margin: 0;
+}
+
 .navbar {
-    background-color: $color-background-secondary;
-    border-top: 4px solid $color-blue;
+    background-color: #fff;
+    border-bottom: 4px solid $primary;
     padding: 0 1.5rem 0 1rem;
+    box-shadow: $box-shadow-sm;
+    position: relative;
+    z-index: 50;
+
     .navbar-brand {
         align-items: center;
         display: flex;
@@ -115,4 +130,25 @@
     .location-content {
         flex: 1;
     }
+}
+.icon {
+    .compare-count {
+        background: $primary;
+        border-radius: 15px;
+        padding: 7px 9px;
+        font-weight: bold;
+        color: #fff;
+    }
+}
+
+.compare-widget.disabled {
+    cursor: default;
+    .compare-count {
+        background: $gray-400;
+        color: $text-color;
+    }
+}
+
+.compare-widget .icon {
+    width: auto;
 }

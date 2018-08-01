@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import ZipcodeFinder from './Sidebar/ZipcodeFinder';
 import PrimaryFilters from './Sidebar/PrimaryFilters';
 import SecondaryFilters from './Sidebar/SecondaryFilters';
 import MobileFilterClose from './Sidebar/MobileFilterClose';
+import GlobalSelectPurchaseStrategy from 'apps/user/components/GlobalSelectPurchaseStrategy';
 
 import util from 'src/util';
 
@@ -14,6 +14,7 @@ import {
     getLoadingSearchResults,
     getSelectedFiltersByCategory,
 } from '../selectors';
+import { requestSearch } from '../actions';
 
 class FilterPanel extends React.PureComponent {
     static propTypes = {
@@ -23,6 +24,7 @@ class FilterPanel extends React.PureComponent {
         searchQuery: PropTypes.object.isRequired,
         onClearModelYear: PropTypes.func.isRequired,
         onToggleSearchFilter: PropTypes.func.isRequired,
+        onRequestSearch: PropTypes.func.isRequired,
     };
 
     state = {
@@ -30,6 +32,10 @@ class FilterPanel extends React.PureComponent {
         sizeCategory: null,
         sizeFeatures: [],
     };
+
+    afterSetPurchaseStrategy() {
+        this.props.onRequestSearch();
+    }
 
     render() {
         return (
@@ -41,6 +47,20 @@ class FilterPanel extends React.PureComponent {
                 )}
 
                 <div className="sidebar-filters">
+                    {/*
+                    Purchase Strategy
+                    */}
+                    {this.props.searchQuery.entity === 'deal' && (
+                        <div className="purchase-strategy">
+                            <GlobalSelectPurchaseStrategy
+                                afterSetPurchaseStrategy={this.afterSetPurchaseStrategy.bind(
+                                    this
+                                )}
+                                sortbar__button
+                            />
+                        </div>
+                    )}
+
                     {/*
                     Primary Filters
                     */}
@@ -66,9 +86,6 @@ class FilterPanel extends React.PureComponent {
                             ''
                         )}
 
-                        <div className="sidebar-filters__section-header sidebar-filters__filter-title">
-                            <p>Features & Options</p>
-                        </div>
                         <SecondaryFilters
                             searchQuery={this.props.searchQuery}
                             filters={this.props.filters}
@@ -107,6 +124,9 @@ const mapDispatchToProps = dispatch => {
         },
         onClearModelYear: () => {
             return dispatch(clearModelYear());
+        },
+        onRequestSearch: () => {
+            return dispatch(requestSearch());
         },
     };
 };

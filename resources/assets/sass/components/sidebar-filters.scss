@@ -1,20 +1,11 @@
-@import '../variables';
-
 $icon-margin: 10px;
 $icon-size: 20px;
 
 .sidebar-filters {
     background-color: $color-sidebar-background-secondary;
-    height: calc(100vh - #{$header-height});
     overflow-x: hidden;
     overflow-y: auto;
     width: 100%;
-
-    @media (min-width: $break-small) {
-        height: calc(
-            100vh - #{$header-height} - #{$sortbar-height + $filterbar-height}
-        );
-    }
 
     &__count {
         align-items: center;
@@ -154,5 +145,13 @@ $icon-size: 20px;
         p {
             margin: 0;
         }
+    }
+}
+
+.sidebar-filters .purchase-strategy {
+    padding: 6px;
+    .button-group__button {
+        border-radius: 0;
+        text-align: center;
     }
 }

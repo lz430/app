@@ -42,7 +42,7 @@
 @import '~bootstrap/scss/nav';
 @import '~bootstrap/scss/navbar';
 @import '~bootstrap/scss/card';
-//@import '~bootstrap/scss/breadcrumb';
+@import '~bootstrap/scss/breadcrumb';
 //@import "~bootstrap/scss/pagination";
 //@import "~bootstrap/scss/badge";
 //@import "~bootstrap/scss/jumbotron";
@@ -68,10 +68,8 @@
 
 @import 'components/section';
 @import 'components/top-bars';
-@import 'components/nav';
+@import 'components/header';
 @import 'components/triplets';
-@import 'components/welcome-style-selector';
-@import 'components/welcome-steps';
 @import 'components/make-selector';
 @import 'components/modal';
 @import 'components/infomodal';
@@ -83,7 +81,6 @@
 @import 'components/model-year';
 @import 'components/apply-or-purchase';
 @import 'components/cash-finance-lease-calculator';
-@import 'components/application-form';
 @import 'components/zipcode-finder';
 @import 'components/sidebar-filters';
 @import 'components/filter-style-selector';
@@ -102,7 +99,6 @@
 @import 'components/compare-page-deals';
 @import 'components/compare-page-table';
 @import 'components/tabs';
-@import 'components/range-slider';
 @import 'components/deal-price';
 @import 'components/loading';
 @import 'components/disclaimer';

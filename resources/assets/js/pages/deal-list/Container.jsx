@@ -98,7 +98,7 @@ class Container extends React.PureComponent {
 
         return (
             <div className={className}>
-                <ToolbarPrice />
+                {/* <ToolbarPrice /> */}
                 <ToolbarSelectedFilters />
                 <Deals />
                 {/* <CompareBar /> */}

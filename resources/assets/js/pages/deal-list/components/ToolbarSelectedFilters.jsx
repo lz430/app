@@ -77,12 +77,9 @@ class ToolbarSelectedFilters extends React.PureComponent {
 
     render() {
         const selectedFilters = this.selectedFilters();
-
-        /*
         if (!Object.keys(selectedFilters).length) {
             return false;
         }
-        */
 
         return (
             <div className="filterbar">

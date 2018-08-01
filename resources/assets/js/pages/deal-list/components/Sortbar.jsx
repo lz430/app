@@ -6,7 +6,7 @@ import Tuning from 'icons/zondicons/Tuning';
 import CheveronUp from 'icons/zondicons/CheveronUp';
 import CheveronDown from 'icons/zondicons/CheveronDown';
 import Tag from 'icons/zondicons/Tag';
-
+import classNames from 'classnames';
 import util from 'src/util';
 import {
     toggleSearchSort,
@@ -129,18 +129,17 @@ class Sortbar extends React.Component {
         return (
             <div>
                 <button
-                    className={`sortbar__button sortbar__button--blue ${
-                        this.compareReady() ? '' : 'disabled'
-                    }`}
+                    className={classNames(
+                        'sortbar__button sortbar__button--blue',
+                        { disabled: !this.compareReady() }
+                    )}
                     onClick={this.redirectToCompare}
                 >
                     Compare{' '}
                     <div
-                        className={`sortbar__compare-count ${
-                            this.compareReady()
-                                ? 'sortbar__compare-count--ready'
-                                : ''
-                        }`}
+                        className={classNames('sortbar__compare-count', {
+                            'sortbar__compare-count--ready': this.compareReady(),
+                        })}
                     >
                         {this.props.compareList.length}
                     </div>
