@@ -14,6 +14,7 @@ import Separator from 'components/pricing/Separator';
 import LeaseTermsSelect from './LeaseTermsSelect';
 import Rebates from './Rebates';
 import Discount from './Discount';
+import TaxesAndFees from '../../../../components/pricing/TaxesAndFees';
 
 export default class LeasePane extends React.PureComponent {
     static propTypes = {
@@ -62,28 +63,8 @@ export default class LeasePane extends React.PureComponent {
                 </Group>
                 <Separator />
                 <Group>
-                    <Header>Taxes &amp; Fees</Header>
-                    <Line>
-                        <Label>Total Taxes &amp; Fees</Label>
-                        <Value>{dealPricing.taxesAndFeesTotal()}</Value>
-                    </Line>
-                    <Line isSectionTotal={true}>
-                        <Label>Gross Capitalized Cost</Label>
-                        <Value isLoading={dealPricing.dealQuoteIsLoading()}>
-                            {dealPricing.grossCapitalizedCost()}
-                        </Value>
-                    </Line>
-                </Group>
-                <Separator />
-                <Group>
                     <Header>Rebates</Header>
                     <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
-                    <Line isSectionTotal={true}>
-                        <Label>Net Capitalized Cost</Label>
-                        <Value isLoading={dealPricing.dealQuoteIsLoading()}>
-                            {dealPricing.netCapitalizedCost()}*
-                        </Value>
-                    </Line>
                 </Group>
                 <Separator />
                 <Group>
@@ -163,12 +144,35 @@ export default class LeasePane extends React.PureComponent {
                                     </tbody>
                                 </table>
                             </Line>
+                            <Line>
+                                <Label>Pre-Tax Payment</Label>
+                                <Value>
+                                    {dealPricing.leaseMonthlyPreTaxPayment()}
+                                </Value>
+                            </Line>
+                            <Line>
+                                <Label>Use Tax</Label>
+                                <Value>
+                                    {dealPricing.leaseMonthlyUseTax()}
+                                </Value>
+                            </Line>
                             <Line isImportant={true}>
                                 <Label>Monthly Payment</Label>
-                                <Value>{dealPricing.monthlyPayments()}*</Value>
+                                <Value>{dealPricing.monthlyPayments()}</Value>
                             </Line>
                         </div>
                     )}
+                </Group>
+                <Separator />
+                <Group>
+                    <Header>Due at Delivery</Header>
+                    <TaxesAndFees items={dealPricing.taxesAndFees()} />
+                    <Line isSectionTotal={true} isImportant={true}>
+                        <Label>Total Due</Label>
+                        <Value>
+                            ${dealPricing.leaseTotalAmountAtDriveOffValue()}
+                        </Value>
+                    </Line>
                 </Group>
                 {this.state.leaseTermsSelectOpened && (
                     <LeaseTermsSelect
