@@ -825,7 +825,7 @@ export default class DealPricing {
                         rawValue: this.effCvrFeeWithTaxesValue(),
                     },
                     {
-                        label: 'Taxes',
+                        label: 'Tax on Rebates',
                         value: this.taxOnRebates(),
                         rawValue: this.taxOnRebatesValue(),
                     },
