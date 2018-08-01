@@ -14,18 +14,17 @@
     &__basic-info-year-and-make {
         color: $color-darkergrey;
         font-size: x-small;
-        margin-bottom: 2px;
 
-        @media (min-width: $break-small) {
+        @include media-breakpoint-up(sm) {
             font-size: small;
         }
     }
 
     &__basic-info-model-and-series {
         color: $color-darkestgrey;
-        font-size: large;
-        @media (min-width: $break-small) {
-            font-size: x-large;
+        font-size: 1rem;
+        @include media-breakpoint-up(sm) {
+            font-size: 1.25rem;
         }
     }
 

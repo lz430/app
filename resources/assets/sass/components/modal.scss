@@ -30,7 +30,9 @@
 }
 
 .modal-content-fit {
-    max-width: fit-content;
+    @include media-breakpoint-up(sm) {
+        max-width: fit-content;
+    }
 }
 
 //

@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 
 import Sortbar from './Sortbar';
 import { requestSearch } from 'pages/deal-list/actions';
-
-import GlobalSelectPurchaseStrategy from 'apps/user/components/GlobalSelectPurchaseStrategy';
+import util from 'src/util';
 
 /**
  *
@@ -16,26 +15,15 @@ class ToolbarPrice extends React.Component {
         searchQuery: PropTypes.object.isRequired,
     };
 
-    afterSetPurchaseStrategy() {
-        this.props.onRequestSearch();
-    }
-
     render() {
+        if (util.windowIsLargerThanSmall(this.props.window.width)) {
+            return false;
+        }
         return (
             <div className="filter-page__top-row">
                 <div className="filter-page__top-row__section filter-page__top-row__section--sortbar">
                     <Sortbar />
                 </div>
-
-                {this.props.searchQuery.entity === 'deal' && (
-                    <div className="filter-page__top-row__section filter-page__top-row__section--tabButtons">
-                        <GlobalSelectPurchaseStrategy
-                            afterSetPurchaseStrategy={this.afterSetPurchaseStrategy.bind(
-                                this
-                            )}
-                        />
-                    </div>
-                )}
             </div>
         );
     }

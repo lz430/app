@@ -67,7 +67,6 @@ class UserLocationController extends Controller
     private function formatGeocoderAddress($lookup): ?array
     {
         if ($lookup && $lookup->getCoordinates()->getLongitude()) {
-
             $location = [
                 'city' => $lookup->getLocality(),
                 'state' => $lookup->getAdminLevels()->first()->getCode(),

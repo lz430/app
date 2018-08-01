@@ -19,14 +19,14 @@ class Deals extends React.PureComponent {
     };
 
     render() {
-        // Zip out of range
-        if (!this.props.zipInRange) {
-            return <NoDealsOutOfRange />;
-        }
-
         // Requesting something
         if (this.props.loadingSearchResults) {
             return <Loading />;
+        }
+
+        // Zip out of range
+        if (!this.props.zipInRange) {
+            return <NoDealsOutOfRange />;
         }
 
         if (

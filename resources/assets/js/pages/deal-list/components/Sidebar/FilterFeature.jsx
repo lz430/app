@@ -24,6 +24,14 @@ class FilterFeature extends React.Component {
     };
 
     shouldComponentUpdate(nextProps) {
+        if (this.props.selectedItems !== nextProps.selectedItems) {
+            return true;
+        }
+
+        if (nextProps.loadingSearchResults) {
+            return false;
+        }
+
         if (
             this.props.loadingSearchResults !== nextProps.loadingSearchResults
         ) {
@@ -31,10 +39,6 @@ class FilterFeature extends React.Component {
         }
 
         if (this.props.items !== nextProps.items) {
-            return true;
-        }
-
-        if (this.props.selectedItems !== nextProps.selectedItems) {
             return true;
         }
 

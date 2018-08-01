@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Checkmark from 'icons/zondicons/Checkmark';
 
 import { getCurrentPage } from 'apps/page/selectors';
-import BackButton from './BackButton';
+import BackButton from '../BackButton';
 
 class HeaderToolbar extends React.PureComponent {
     static propTypes = {
@@ -19,6 +19,8 @@ class HeaderToolbar extends React.PureComponent {
                 active: false,
                 url: '',
                 canNav: false,
+                showBreadcrumb: false,
+                showBar: false,
             },
             'deal-detail': {
                 step: 2,
@@ -26,6 +28,8 @@ class HeaderToolbar extends React.PureComponent {
                 active: false,
                 url: '',
                 canNav: false,
+                showBreadcrumb: true,
+                showBar: false,
             },
             compare: {
                 step: 3,
@@ -33,6 +37,8 @@ class HeaderToolbar extends React.PureComponent {
                 active: false,
                 url: '',
                 canNav: false,
+                showBreadcrumb: true,
+                showBar: false,
             },
             'checkout-confirm': {
                 step: 4,
@@ -40,6 +46,8 @@ class HeaderToolbar extends React.PureComponent {
                 active: false,
                 url: '',
                 canNav: false,
+                showBreadcrumb: false,
+                showBar: true,
             },
             'checkout-complete': {
                 step: 5,
@@ -47,6 +55,8 @@ class HeaderToolbar extends React.PureComponent {
                 active: false,
                 url: '',
                 canNav: false,
+                showBreadcrumb: false,
+                showBar: true,
             },
         };
 
@@ -68,9 +78,7 @@ class HeaderToolbar extends React.PureComponent {
         );
     }
 
-    render() {
-        const steps = this.steps();
-
+    renderStepsBar(steps) {
         return (
             <div className="steps-bar">
                 <div className="inner">
@@ -87,6 +95,21 @@ class HeaderToolbar extends React.PureComponent {
                 </div>
             </div>
         );
+    }
+
+    render() {
+        const steps = this.steps();
+
+        // Render Steps Bar
+        if (
+            this.props.currentPage &&
+            steps[this.props.currentPage] &&
+            steps[this.props.currentPage]['showBar']
+        ) {
+            return this.renderStepsBar(steps);
+        }
+
+        return false;
     }
 }
 

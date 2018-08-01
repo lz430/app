@@ -1,20 +1,11 @@
-@import '../variables';
-
 $icon-margin: 10px;
 $icon-size: 20px;
 
 .sidebar-filters {
     background-color: $color-sidebar-background-secondary;
-    height: calc(100vh - #{$header-height});
     overflow-x: hidden;
     overflow-y: auto;
     width: 100%;
-
-    @media (min-width: $break-small) {
-        height: calc(
-            100vh - #{$header-height} - #{$sortbar-height + $filterbar-height}
-        );
-    }
 
     &__count {
         align-items: center;
@@ -41,9 +32,9 @@ $icon-size: 20px;
     &__instructive-heading {
         background-color: $color-blue;
         color: $color-text-white;
-        padding: 8px 15px;
+        padding: 9px 15px 9px 15px;
         position: relative;
-
+        border-bottom: 1px solid #ccc;
         &::after {
             content: '';
             width: 0;
@@ -154,5 +145,19 @@ $icon-size: 20px;
         p {
             margin: 0;
         }
+    }
+}
+
+.sidebar-filters .purchase-strategy {
+    .button-group__button {
+        padding: 0.5rem 0.5rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 0;
+        text-align: center;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }

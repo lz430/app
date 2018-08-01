@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import DealImage from 'components/Deals/DealImage';
@@ -57,8 +56,4 @@ class Deal extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {};
-};
-
-export default connect(mapStateToProps)(Deal);
+export default Deal;

@@ -58,6 +58,7 @@
         "ramda": "^0.25.0",
         "react-image-gallery": "^0.8.9",
         "react-lazyload": "^2.3.0",
+        "react-livechat": "^1.0.25",
         "react-recaptcha-google": "^1.1.1",
         "react-redux": "^5.0.7",
         "react-sticky": "^6.0.3",

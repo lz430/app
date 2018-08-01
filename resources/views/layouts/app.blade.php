@@ -108,20 +108,6 @@
             </script>
         @endif
 
-        @if (App::environment(['production']))
-            <!-- Start of LiveChat (www.livechatinc.com) code -->
-            <script type="text/javascript">
-            window.__lc = window.__lc || {};
-            window.__lc.license = 8165351;
-            (function() {
-              var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = true;
-              lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.livechatinc.com/tracking.js';
-              var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);
-            })();
-            </script>
-            <!-- End of LiveChat code -->
-        @endif
-
         @if (App::environment(['staging']))
             <script type="text/javascript">
                 (function() { var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = '//api.usersnap.com/load/f369972b-e7c1-4ad5-bb10-c83dc9c01240.js';
