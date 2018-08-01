@@ -1,16 +1,16 @@
 .navbar {
     background-color: $color-background-secondary;
     border-top: 4px solid $color-blue;
-    padding: 0 1rem;
+    padding: 0 1.5rem 0 1rem;
     .navbar-brand {
         align-items: center;
         display: flex;
 
         img {
             max-width: 175px;
-            @media (min-width: $break-small) {
+            @include media-breakpoint-up(md) {
                 max-width: unset;
-                height: 70px;
+                height: 60px;
             }
         }
     }

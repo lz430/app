@@ -40,12 +40,6 @@ class FilterPanel extends React.PureComponent {
                     <MobileFilterClose />
                 )}
 
-                {/*
-                Location
-                */}
-
-                <ZipcodeFinder />
-
                 <div className="sidebar-filters">
                     {/*
                     Primary Filters
