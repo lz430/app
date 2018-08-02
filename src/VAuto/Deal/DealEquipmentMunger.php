@@ -222,9 +222,10 @@ class DealEquipmentMunger
 
         $this->deal->package_codes = $packages;
         $this->deal->option_codes = $options;
-        $this->deal->save();
 
+        //fetches and saves seating capacity for vehicles
         $this->syncSeatingCapacity($this->equipment);
+        $this->deal->save();
 
     }
 
