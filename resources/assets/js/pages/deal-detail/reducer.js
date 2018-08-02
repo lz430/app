@@ -11,7 +11,7 @@ import { RECEIVE_DEAL } from './consts';
 const persistConfig = {
     ...basePersistConfig,
     key: 'dealDetail',
-    blacklist: ['fuck', 'deal', 'selectDiscount', 'lease', 'finance'],
+    blacklist: ['deal', 'selectDiscount', 'lease', 'finance'],
 };
 
 const dealReducer = function(state = null, action = {}) {
