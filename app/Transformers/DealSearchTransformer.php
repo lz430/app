@@ -60,7 +60,7 @@ class DealSearchTransformer extends TransformerAbstract
             'photos' => $deal->photos,
             'thumbnail' => $deal->thumbnail,
             'version' => $version,
-            'features' => $deal->legacy_features,
+            'features' => (isset($deal->jato_features) ? $deal->jato_features : []),
             'doc_fee' => (float) $dealer->doc_fee,
             'cvr_fee' => (float) $dealer->cvr_fee,
             'registration_fee' => (float) $dealer->registration_fee,
@@ -69,7 +69,6 @@ class DealSearchTransformer extends TransformerAbstract
             'dealer' => $dealer,
             'dmr_features' => (isset($deal->legacy_features) ? $deal->legacy_features : []),
             'pricing' => $deal->pricing,
-
         ];
     }
 }
