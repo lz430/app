@@ -39,7 +39,10 @@ class FilterFeatureList extends React.PureComponent {
                             }
                         >
                             {this.props.selectedItems &&
-                            R.contains(item.value, this.props.selectedItems) ? (
+                            R.contains(
+                                String(item.value),
+                                this.props.selectedItems
+                            ) ? (
                                 <Checkmark
                                     width="15px"
                                     height="15px"

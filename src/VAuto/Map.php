@@ -11,11 +11,18 @@ class Map {
 
     public const SIZE_TO_JATO_SIZES = [
         'subcompact' => ['budget'],
-        'compact' => ['compact pickup', 'lower mid', 'small'],
-        'full-size' => ['full size', 'upper mid', 'luxury'],
-        'mid-size' => ['compact suv', 'mid'],
+        'compact' => ['lower mid', 'small', 'sporty'],
+        'full-size' => ['full size'], // removed luxury
+        'mid-size' => ['compact suv', 'mid', 'compact pickup', 'upper mid'],
         'minivan' => ['mini van'],
         'sports' => ['sports'],
+    ];
+
+    public const LUXURY_SIZE_QUALIFIER = [
+        'coupe' => ['two-seat'],
+        'full-size' => ['large', 'unknown'],
+        'compact' => ['compact cars'],
+        'mid-size' => ['unknown', 'small wagons', 'mid-size wagons'],
     ];
 
     public const IMPORT_MAKE_BLACKLIST = [

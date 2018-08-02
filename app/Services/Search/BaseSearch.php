@@ -35,6 +35,8 @@ abstract class BaseSearch
         'drive_train' => 'drive_train.keyword',
         'pickup' => 'pickup.keyword',
         'year' => 'year.keyword',
+        'seating_capacity' => 'seating_capacity',
+        'vehicle_size' => 'vehicle_size.keyword'
     ];
 
     public $query;

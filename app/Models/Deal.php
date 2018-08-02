@@ -59,6 +59,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property DealPhoto[] $photos
  * @property jatoFeature[] $jatoFeatures
  * @property Feature[] $features
+ * @property int $seating_capacity
  */
 class Deal extends Model
 {
@@ -466,6 +467,7 @@ class Deal extends Model
         $record['model_code'] = $this->model_code;
         $record['series'] = $this->series;
         $record['style'] = $this->version->style();
+        $record['seating_capacity'] = $this->seating_capacity;
 
         //
         // Required vehicle attributes
