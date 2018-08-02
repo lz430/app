@@ -223,6 +223,9 @@ class DealEquipmentMunger
         $this->deal->package_codes = $packages;
         $this->deal->option_codes = $options;
         $this->deal->save();
+
+        $this->syncSeatingCapacity($this->equipment);
+
     }
 
     /**
@@ -606,13 +609,21 @@ class DealEquipmentMunger
             return null;
         }
 
-        $segment = collect(Map::SIZE_TO_JATO_SIZES)
-            ->filter(function ($value) use ($equipment) {
-                // Pull from value instead of availability--per Derek at JATO 2018-02-12
-                return str_contains(strtolower($equipment->value), $value);
-            })
-            ->keys()
-            ->first();
+        $jatoVehicleSize = $equipment->value;
+
+        if (str_contains(strtolower($jatoVehicleSize), ['luxury', 'near luxury'])) {
+            $segment = $this->syncEpaQualifierForSize($equipment);
+
+        } else {
+
+           $segment = collect(Map::SIZE_TO_JATO_SIZES)
+               ->filter(function ($value) use ($equipment) {
+                   // Pull from value instead of availability--per Derek at JATO 2018-02-12
+                   return str_contains(strtolower($equipment->value), $value);
+               })
+               ->keys()
+               ->first();
+       }
 
         return Feature::where('slug', $segment)->first();
     }
@@ -786,5 +797,54 @@ class DealEquipmentMunger
             ->map(function ($slugKey) {
                 return Feature::where('slug', strtolower($slugKey) . '_bed')->first();
             })->first();
+    }
+
+    /**
+     * @param $equipment
+     * gets the seating capacity from jato equipment for use in filtering actual number of seats in a given car
+     */
+    private function syncSeatingCapacity($equipment)
+    {
+        $seatingCategory = $this->equipment
+            ->filter(function ($equipment) {
+                return $equipment->schemaId == 701;
+            })
+            ->first();
+
+        $seatingCapacity = collect($seatingCategory->attributes);
+
+        $capacity = $seatingCapacity
+            ->filter(function($attribute){
+                return $attribute->name == "Seating capacity";
+            })
+            ->pluck('value')
+            ->first();
+
+       $this->deal->seating_capacity = $capacity;
+       $this->deal->save();
+    }
+
+    /**
+     * @param $equipment
+     * if vehicles sizes returned back from jato are of either luxury or near luxury, have to do a second
+     * lookup within the EPA qualifier equipment id to get the size of the car there and then compare to
+     * updated list of jato sizes to DMR sizes
+     */
+    private function syncEpaQualifierForSize($equipment)
+    {
+        $luxurySizes = $this->equipment
+            ->filter(function ($equipment) {
+                return $equipment->schemaId == 27601;
+            })
+            ->first();
+
+        $vehicleSize = collect(Map::LUXURY_SIZE_QUALIFIER)
+            ->filter(function ($value) use ($luxurySizes) {
+                return str_contains(strtolower($luxurySizes->availability), $value);
+            })
+            ->keys()
+            ->first();
+
+        return $vehicleSize;
     }
 }
