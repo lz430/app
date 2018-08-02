@@ -2,6 +2,4 @@
 
 namespace App\Services\Search;
 
-class DealSearch extends BaseSearch {
-
-}
+class DealSearch extends BaseSearch {}

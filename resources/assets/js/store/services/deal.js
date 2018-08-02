@@ -6,6 +6,22 @@ import httpclient from 'store/httpclient';
  */
 class DealService {
     /**
+     *
+     * @param dealId
+     * @param latitude
+     * @param longitude
+     * @returns {*}
+     */
+    get(dealId, latitude, longitude) {
+        return httpclient.get(`/api/deals/${dealId}`, {
+            params: {
+                latitude: latitude,
+                longitude: longitude,
+            },
+        });
+    }
+
+    /**
      * @param dealId
      * @param paymentType
      * @param zipcode

@@ -10,6 +10,8 @@ class DealsController extends Controller
 {
     public function show(Deal $deal)
     {
+
+
         $title = "$deal->year $deal->make $deal->model $deal->series";
 
         $dealTransformed = fractal($deal)

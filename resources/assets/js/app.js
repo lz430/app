@@ -55,10 +55,7 @@ Array.from(document.getElementsByTagName('DealDetails')).map(element => {
         <Provider store={store}>
             <PersistGate persistor={persistor}>
                 <App>
-                    <DealDetail
-                        deal={JSON.parse(element.getAttribute('deal')).data}
-                        intendedRoute={window.location.pathname}
-                    />
+                    <DealDetail />
                 </App>
             </PersistGate>
         </Provider>,

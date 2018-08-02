@@ -98,10 +98,6 @@ class ComparePageContainer extends React.PureComponent {
             </div>
         );
     }
-
-    selectDeal(deal) {
-        this.props.selectDeal(deal);
-    }
 }
 
 const mapStateToProps = state => {
