@@ -96,14 +96,14 @@ class Container extends Component {
                             </button>
                         </form>
                     </div>
-
-                    <iframe
-                        frameBorder="0"
-                        height="1000"
-                        id="routeOne"
-                        src={this.state.url}
-                        width="800"
-                    />
+                    <div className="embed-responsive embed-responsive-4by3">
+                        <iframe
+                            frameBorder="0"
+                            className="embed-responsive-item"
+                            id="routeOne"
+                            src={this.state.url}
+                        />
+                    </div>
                 </div>
             </div>
         );

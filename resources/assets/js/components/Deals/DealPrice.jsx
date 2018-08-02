@@ -7,16 +7,12 @@ import Loading from 'icons/miscicons/Loading';
 import DealPriceExplanationModal from './DealPriceExplanationModal';
 import { dealPricingFactory } from 'src/DealPricing';
 
-import { selectDeal } from 'apps/common/actions';
-
 import InformationOutline from 'icons/zondicons/InformationOutline';
 
 class DealPrice extends React.Component {
     static propTypes = {
         deal: dealType.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
-        infoModalIsShowingFor: PropTypes.number,
-        onSelectDeal: PropTypes.func.isRequired,
     };
 
     state = {
@@ -41,7 +37,6 @@ class DealPrice extends React.Component {
                 deal={this.props.deal}
                 purchaseStrategy={this.props.purchaseStrategy}
                 dealPricing={this.props.dealPricing}
-                selectDeal={this.props.onSelectDeal}
             />
         );
     }
@@ -122,15 +117,4 @@ const mapStateToProps = (state, props) => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onSelectDeal: deal => {
-            return dispatch(selectDeal(deal));
-        },
-    };
-};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(DealPrice);
+export default connect(mapStateToProps)(DealPrice);

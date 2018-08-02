@@ -8,10 +8,9 @@ const initialState = {
     compareList: [],
     employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
-    selectedDeal: null,
-    infoModalIsShowingFor: null,
     vehicleModel: null,
     vehicleYear: null,
+    smallFiltersShown: false,
     window: { width: window.innerWidth },
     dealsIdsWithCustomizedQuotes: [],
 };
@@ -19,29 +18,22 @@ const initialState = {
 const persistConfig = {
     ...basePersistConfig,
     key: 'common',
-    blacklist: ['window'],
+    blacklist: ['window', 'smallFiltersShown'],
 };
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case ActionTypes.WINDOW_RESIZE:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 window: action.window,
                 smallFiltersShown: util.windowIsLargerThanSmall(
                     action.window.width
                 )
                     ? false
                     : state.smallFiltersShown,
-            });
+            };
 
-        case ActionTypes.SELECT_DEAL:
-            return Object.assign({}, state, {
-                selectedDeal: action.selectedDeal,
-                dealsIdsWithCustomizedQuotes: R.union(
-                    state.dealsIdsWithCustomizedQuotes,
-                    [action.selectedDeal.version.jato_vehicle_id]
-                ),
-            });
         case ActionTypes.TOGGLE_COMPARE:
             return {
                 ...state,
