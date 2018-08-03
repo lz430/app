@@ -1,15 +1,13 @@
 import PropTypes from 'prop-types';
 
-const { shape, number, string, array, arrayOf, object } = PropTypes;
+const { shape, number, string, arrayOf, object } = PropTypes;
 
 export const dealType = shape({
     id: number.isRequired,
     vin: string.isRequired,
     year: string.isRequired,
-    msrp: number.isRequired,
     make: string.isRequired,
     model: string.isRequired,
-    dmr_features: array,
     photos: arrayOf(
         shape({
             id: number.isRequired,
