@@ -1,15 +1,17 @@
-import { takeEvery, select } from 'redux-saga/effects';
+import { takeEvery, select, put, call } from 'redux-saga/effects';
+import { track } from 'services';
+import ApiClient from 'store/api';
 
-import { INIT, REQUEST_DEAL_QUOTE } from './consts';
-
-import { getConditionalRoles, getDeal } from './selectors';
 import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
 import { requestDealQuote as requestDealQuoteAction } from 'apps/pricing/actions';
 import { requestDealQuote } from 'apps/pricing/sagas';
 import { discountType as getDiscountType } from 'apps/common/selectors';
 import { initPage } from 'apps/page/sagas';
+import { pageLoadingFinished, pageLoadingStart } from 'apps/page/actions';
 
-import { track } from 'services';
+import { INIT, REQUEST_DEAL_QUOTE } from './consts';
+import { getConditionalRoles, getDeal } from './selectors';
+import { receiveDeal } from './actions';
 
 /*******************************************************************
  * Request Deal Quote
@@ -41,16 +43,41 @@ function* dealDetailRequestDealQuote() {
  * Init
  ********************************************************************/
 function* init() {
-    yield* initPage('deal-detail');
-    yield* dealDetailRequestDealQuote();
+    yield put(pageLoadingStart());
+    yield* initPage('deal-detail', false);
 
-    const deal = yield select(getDeal);
-    track('page:deal-detail:view', {
-        'Deal Make': deal.make,
-        'Deal Model': deal.model,
-        'Deal Year': deal.year,
-        'Deal Version Name': deal.version.name,
-    });
+    let path = window.location.pathname.split('/');
+    const userLocation = select(getUserLocation);
+
+    let results = null;
+
+    try {
+        results = yield call(
+            ApiClient.deal.get,
+            path[2],
+            userLocation.latitude,
+            userLocation.longitude
+        );
+        results = results.data;
+    } catch (e) {
+        console.log(e);
+    }
+
+    yield put(receiveDeal(results));
+
+    if (results) {
+        yield* dealDetailRequestDealQuote();
+
+        const deal = yield select(getDeal);
+        track('page:deal-detail:view', {
+            'Deal Make': deal.make,
+            'Deal Model': deal.model,
+            'Deal Year': deal.year,
+            'Deal Version Name': deal.version.name,
+        });
+    }
+
+    yield put(pageLoadingFinished());
 }
 
 /*******************************************************************

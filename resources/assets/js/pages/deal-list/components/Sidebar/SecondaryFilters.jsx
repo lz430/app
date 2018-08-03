@@ -33,6 +33,7 @@ class SecondaryFilters extends React.PureComponent {
          Seating
          Seat Materials
          Seating Configuration
+         Seating Capacity
          Infotainment
          Safety & Driver Assist
          Pickup
@@ -52,6 +53,22 @@ class SecondaryFilters extends React.PureComponent {
                     loadingSearchResults={this.props.loadingSearchResults}
                     onToggleSearchFilter={this.props.onToggleSearchFilter}
                 />
+
+                <FilterFeature
+                    title="Vehicle Size"
+                    key="filterVehicleSize"
+                    open={true}
+                    canToggle={false}
+                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    category="vehicle_size"
+                    items={this.props.filters['vehicle_size']}
+                    selectedItems={
+                        this.props.selectedFiltersByCategory['vehicle_size']
+                    }
+                    loadingSearchResults={this.props.loadingSearchResults}
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
+                />
+
                 <FilterFeature
                     title="Fuel Type"
                     key="filterFuelType"
@@ -109,6 +126,21 @@ class SecondaryFilters extends React.PureComponent {
                     items={this.props.filters['seating']}
                     selectedItems={
                         this.props.selectedFiltersByCategory['seating']
+                    }
+                    loadingSearchResults={this.props.loadingSearchResults}
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
+                />
+
+                <FilterFeature
+                    title="Seating Capacity"
+                    key="filterSeatingCapacity"
+                    open={true}
+                    canToggle={false}
+                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    category="seating_capacity"
+                    items={this.props.filters['seating_capacity']}
+                    selectedItems={
+                        this.props.selectedFiltersByCategory['seating_capacity']
                     }
                     loadingSearchResults={this.props.loadingSearchResults}
                     onToggleSearchFilter={this.props.onToggleSearchFilter}

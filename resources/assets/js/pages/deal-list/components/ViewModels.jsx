@@ -20,7 +20,7 @@ class ViewModels extends React.PureComponent {
 
     render() {
         return (
-            <div>
+            <div className="search-results">
                 <div className="card-deck inventory-summary-deck m-0">
                     {this.props.modelYears ? (
                         this.props.modelYears.map(model => {

@@ -26,18 +26,8 @@ body {
 .content--grey {
     background: $color-background-primary;
 }
-
-.nav__icon {
-    cursor: pointer;
-}
-
 .deals-wrapper {
     flex: 1;
     display: flex;
     overflow: auto;
-}
-
-.app-header-wrapper {
-    padding-bottom: 0.5em;
-    background: #fff;
 }

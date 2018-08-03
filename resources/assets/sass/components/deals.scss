@@ -1,30 +1,27 @@
+.filter-page__deals {
+    overflow: scroll;
+    overflow-y: scroll;
+}
+
 .inventory-summary-deck {
     background: $color-background-primary;
     display: flex;
     flex-flow: row wrap;
-    height: calc(100vh - #{$footer-height});
     width: 100%;
     justify-content: center;
+    height: 95vh;
+
     position: relative;
     /* keep this overflow there is a bug somewhere in react-lazyloading that doesn't respect overflow-y ! */
     overflow: scroll;
     overflow-y: scroll;
-    padding: 2px;
-    padding-bottom: 15px;
+
+    @include media-breakpoint-up(sm) {
+        padding: 2rem 8rem;
+    }
 
     > div {
         justify-content: center;
-    }
-
-    @media (min-width: $break-small) {
-        height: calc(100vh - #{$nav-height + $sortbar-height});
-        padding: 10px 40px 20px;
-    }
-
-    @media (min-width: $break-medium) {
-        height: calc(
-            100vh - #{$header-height + $sortbar-height + $filterbar-height}
-        );
     }
 
     &__show-more {

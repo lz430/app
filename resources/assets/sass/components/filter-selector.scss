@@ -1,11 +1,8 @@
-@import '../variables';
-@import '../mixins/selector-icon';
-
 .filter-selector {
     &__selector {
         cursor: pointer;
         display: flex;
-        padding: 5px;
+        padding: 2px 5px;
 
         &:first-child {
             margin-top: 0.5em;

@@ -35,18 +35,18 @@
 @import '~bootstrap/scss/forms';
 @import '~bootstrap/scss/buttons';
 @import '~bootstrap/scss/transitions';
-@import '~bootstrap/scss/dropdown';
+//@import '~bootstrap/scss/dropdown';
 @import '~bootstrap/scss/button-group';
 @import '~bootstrap/scss/input-group';
 @import '~bootstrap/scss/custom-forms';
-//@import "~bootstrap/scss/nav";
-//@import "~bootstrap/scss/navbar";
+@import '~bootstrap/scss/nav';
+@import '~bootstrap/scss/navbar';
 @import '~bootstrap/scss/card';
 @import '~bootstrap/scss/breadcrumb';
 //@import "~bootstrap/scss/pagination";
 //@import "~bootstrap/scss/badge";
 //@import "~bootstrap/scss/jumbotron";
-//@import "~bootstrap/scss/alert";
+@import '~bootstrap/scss/alert';
 //@import "~bootstrap/scss/progress";
 //@import "~bootstrap/scss/media";
 @import '~bootstrap/scss/list-group';
@@ -63,12 +63,13 @@
 @import 'components/footer';
 
 // Normal Components
+@import 'components/cards';
+@import 'components/alerts';
+
 @import 'components/section';
 @import 'components/top-bars';
-@import 'components/nav';
+@import 'components/header';
 @import 'components/triplets';
-@import 'components/welcome-style-selector';
-@import 'components/welcome-steps';
 @import 'components/make-selector';
 @import 'components/modal';
 @import 'components/infomodal';
@@ -80,7 +81,6 @@
 @import 'components/model-year';
 @import 'components/apply-or-purchase';
 @import 'components/cash-finance-lease-calculator';
-@import 'components/application-form';
 @import 'components/zipcode-finder';
 @import 'components/sidebar-filters';
 @import 'components/filter-style-selector';
@@ -99,7 +99,6 @@
 @import 'components/compare-page-deals';
 @import 'components/compare-page-table';
 @import 'components/tabs';
-@import 'components/range-slider';
 @import 'components/deal-price';
 @import 'components/loading';
 @import 'components/disclaimer';
@@ -108,7 +107,6 @@
 @import 'components/button-group';
 @import 'components/filter-page';
 @import 'components/filter-close';
-@import 'components/cards';
 
 // Pages
 @import 'pages/filter-page';

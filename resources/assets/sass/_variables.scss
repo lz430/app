@@ -55,7 +55,7 @@ $text-color-dark: darken($text-color, 25);
 // Nav
 $nav-height: 76px;
 $steps-bar-height: 56px;
-$header-height: $nav-height + $steps-bar-height;
+$header-height: $nav-height;
 $footer-height: 70px;
 $footer-height-mobile: 40px;
 

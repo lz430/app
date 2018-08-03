@@ -74,7 +74,9 @@ class DealDataController extends Controller
         return $this->equipment
             ->reject(function ($equipment) {
                 return $equipment->availability !== 'standard';
-            })->all();
+            })
+            ->groupBy('category')
+            ->all();
     }
 
     private function buildEquipmentForOptionCode($code) {
@@ -161,7 +163,6 @@ class DealDataController extends Controller
             'title' => 'Version',
             'model' => $this->version->toArray(),
         ];
-
         $data = [
             'deal' => $deal,
             'compare' => (new DealCompareData($client, $deal))->build(),

@@ -64,6 +64,9 @@ const reducer = function(state = initialState, action = {}) {
                         leasePayment.cash_due
                     ][leasePayment.annual_mileage] = {
                         monthlyPayment: leasePayment.monthly_payment,
+                        monthlyUseTax: leasePayment.monthly_use_tax,
+                        monthlyPreTaxPayment:
+                            leasePayment.monthly_pre_tax_payment,
                         totalAmountAtDriveOff:
                             leasePayment.total_amount_at_drive_off,
                     };

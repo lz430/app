@@ -55,10 +55,7 @@ export function* checkoutStart(action) {
         console.log(e);
     }
 
-    console.log(results);
-
     yield put(checkoutFinishedLoading());
-
     window.location = `/confirm/${dealPricing.id()}`;
 }
 

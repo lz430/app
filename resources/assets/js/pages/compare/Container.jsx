@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import util from 'src/util';
 import Deal from 'components/Deals/Deal';
 
 import { initPage } from './actions';
@@ -74,9 +73,7 @@ class ComparePageContainer extends React.PureComponent {
         };
         return (
             <div className="compare-page">
-                <div className="compare-page__toolbars">
-                    <ToolbarPrice />
-                </div>
+                <ToolbarPrice />
 
                 <div className="compare-page__body-wrapper">
                     <div className="compare-page__body">
@@ -100,10 +97,6 @@ class ComparePageContainer extends React.PureComponent {
                 </div>
             </div>
         );
-    }
-
-    selectDeal(deal) {
-        this.props.selectDeal(deal);
     }
 }
 

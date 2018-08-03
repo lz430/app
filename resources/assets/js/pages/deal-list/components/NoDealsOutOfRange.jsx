@@ -58,17 +58,12 @@ class NoDealsOutOfRange extends Component {
     }
 
     render() {
-        const isMobile = !util.windowIsLargerThanSmall(this.props.window.width);
-        const formNotSubmittedMessage = ` Please${
-            isMobile ? ' change your zip code or' : ''
-        } `;
-
         return (
             <div className="deals__no-matches">
                 <div>
                     <p>
-                        Our service is not currently available in your selected
-                        area. Please update your location
+                        Our service is currently available in the Detroit
+                        market. Please update your search location.
                     </p>
                 </div>
                 <div className="full-page-user-location">

@@ -30,7 +30,6 @@ class DealPriceExplanationModal extends React.PureComponent {
                         deal={this.props.deal}
                         purchaseStrategy={this.props.purchaseStrategy}
                         dealPricing={this.props.dealPricing}
-                        selectDeal={this.props.selectDeal}
                     />
                 </ModalBody>
             </Modal>

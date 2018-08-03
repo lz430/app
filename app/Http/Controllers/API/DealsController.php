@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Deal;
+use App\Services\Search\DealDetailSearch;
 use App\Services\Search\DealSearch;
+use App\Transformers\DealSearchTransformer;
 use App\Transformers\ESResponseTransformer;
 use Illuminate\Http\Request;
 
@@ -15,7 +18,6 @@ class DealsController extends BaseAPIController
     {
         $this->validate($request, [
             'filters' => 'sometimes|required|array',
-            'year' => 'sometimes|required|digits:4',
             'sort' => 'sometimes|required|string',
             'latitude' => 'sometimes|numeric',
             'longitude' => 'sometimes|numeric',
@@ -57,4 +59,29 @@ class DealsController extends BaseAPIController
             ->serializeWith(new ArraySerializer)
             ->respond();
     }
+
+    public function detail(Request $request, Deal $deal)
+    {
+        $this->validate($request, [
+            'latitude' => 'sometimes|numeric',
+            'longitude' => 'sometimes|numeric',
+        ]);
+
+        $query = new DealDetailSearch();
+        $query = $query->filterMustDealId($deal->id);
+
+        if ($request->get('latitude') && $request->get('longitude')) {
+            $query = $query->addLocationField(['lat' => $request->get('latitude'), 'lon' => $request->get('longitude')]);
+        }
+
+        $results = $query->get();
+        if (isset($results['hits']['hits'][0])) {
+            $response = (new DealSearchTransformer())->transform($results['hits']['hits'][0]);
+            return $response;
+        }
+
+        return abort(404);
+    }
+
+
 }

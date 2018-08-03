@@ -13,7 +13,17 @@ class ESResponseTransformer extends TransformerAbstract
     public $response = null;
     public $meta = null;
 
-    private function transformBuckets($buckets) {
+    private const SORT_SIZE_ORDER = [
+        'Subcompact',
+        'Compact',
+        'Mid-size',
+        'Full-size',
+        'Mini Van',
+        'Sports',
+    ];
+
+    private function transformBuckets($buckets)
+    {
         $terms = [];
         foreach ($buckets as $bucket) {
             $terms[] = [
@@ -75,10 +85,30 @@ class ESResponseTransformer extends TransformerAbstract
         return $filters;
     }
 
+    private function sortFilters($filters)
+    {
+        if (isset($filters['vehicle_size'])) {
+            $order = array_flip(self::SORT_SIZE_ORDER);
+
+            usort($filters['vehicle_size'], function ($a, $b)  use ($order) {
+                $aValue = (isset($order[$a['value']]) ? $order[$a['value']] : 100);
+                $bValue = (isset($order[$b['value']]) ? $order[$b['value']] : 100);
+
+                if ($aValue == $bValue) {
+                    return 0;
+                }
+                return $aValue > $bValue ? 1 : -1;
+            });
+        }
+        return $filters;
+    }
+
     public function filters()
     {
         $filters = $this->extractFilters();
         $filters = $this->transformFilters($filters);
+        $filters = $this->sortFilters($filters);
+
         return $filters;
     }
 
@@ -93,7 +123,8 @@ class ESResponseTransformer extends TransformerAbstract
         return $results;
     }
 
-    public function modelRecords() {
+    public function modelRecords()
+    {
         $results = [];
 
         foreach ($this->response['aggregations']['category']['model']['buckets'] as $data) {
@@ -123,7 +154,8 @@ class ESResponseTransformer extends TransformerAbstract
         return $results;
     }
 
-    public function meta() {
+    public function meta()
+    {
         $meta = [
             'entity' => $this->meta['entity'],
             'took' => $this->response['took'],

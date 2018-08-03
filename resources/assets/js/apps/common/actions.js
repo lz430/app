@@ -41,10 +41,3 @@ export function windowResize(width) {
         },
     };
 }
-
-export function selectDeal(deal) {
-    return {
-        type: ActionTypes.SELECT_DEAL,
-        selectedDeal: deal,
-    };
-}

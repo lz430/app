@@ -61,48 +61,36 @@ class Client
                 'Type' => 'Financed',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
-                'TaxIndex' => '1',
+                'TaxIndex' => 1,
                 'FinanceTaxes' => 'Yes',
                 'RoundToOption' => 'NearestPenny',
             ],
             'doc' => [
                 'Amount' => $docFee,
-                'Type' => 'Financed',
+                'Type' => 'Upfront',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
-                'TaxIndex' => '1',
-                'FinanceTaxes' => 'Yes',
+                'TaxIndex' => 1,
+                'FinanceTaxes' => 'No',
                 'RoundToOption' => 'NearestPenny',
             ],
             'rebate' => [
                 'Amount' => -1 * abs($rebate),
-                'Type' => 'Financed',
+                'Type' => 'AlternateTaxBase',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'Rebate',
-                'TaxIndex' => '1',
-                'FinanceTaxes' => 'Yes',
+                'TaxIndex' => 1,
+                'FinanceTaxes' => 'No',
                 'CCRPortionFeeTaxed' => 'Yes',
                 'RoundToOption' => 'NearestPenny',
             ],
-
-            /*
-            'license' => [
-                'Amount' => $licenseFee,
-                'Type' => 'Financed', // Upfront
-                'Base' => 'Fixed',
-                'DescriptionType' => 'RegularFee',
-                'TaxIndex' => '0',
-                'FinanceTaxes' => 'Yes',
-                'RoundToOption' => 'NearestPenny',
-            ],
-            */
             'cvr' => [
                 'Amount' => $cvrFee,
-                'Type' => 'Financed',
+                'Type' => 'Upfront',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
-                'TaxIndex' => '1',
-                'FinanceTaxes' => 'Yes',
+                'TaxIndex' => 1,
+                'FinanceTaxes' => 'No',
                 'RoundToOption' => 'NearestPenny',
             ],
         ];
@@ -263,6 +251,8 @@ class Client
                 'annual_mileage' => $input['annualMileage'],
                 'monthly_payment' => (float)sprintf("%.02f", $quote->RegularPayment),
                 'total_amount_at_drive_off' => (float)sprintf("%.02f", $quote->TotalAmountAtDriveOff),
+                'monthly_use_tax' => (float)sprintf("%.02f", $quote->MonthlyUseTax),
+                'monthly_pre_tax_payment' => (float)sprintf("%.02f", $quote->TaxablePayment),
             ];
         }
         return $results;

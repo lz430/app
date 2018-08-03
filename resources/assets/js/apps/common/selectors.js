@@ -129,6 +129,9 @@ export const dealPricingData = createSelector(
         dealQuoteIsLoading,
         dealQuote
     ) => {
+        if (!deal) {
+            return false;
+        }
         return {
             deal,
             paymentType,

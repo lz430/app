@@ -75,6 +75,70 @@ export default class DealPricing {
         return this.data.deal;
     }
 
+    leasePaymentInfo() {
+        if (!this.leasePayments()) {
+            return null;
+        }
+
+        if (!this.leasePayments()[this.leaseTerm()]) {
+            return null;
+        }
+
+        if (
+            !this.leasePayments()[this.leaseTerm()][0][
+                this.leaseAnnualMileageValue()
+            ]
+        ) {
+            return null;
+        }
+
+        return this.leasePayments()[this.leaseTerm()][0][
+            this.leaseAnnualMileageValue()
+        ];
+    }
+
+    leaseMonthlyPreTaxPaymentValue() {
+        const info = this.leasePaymentInfo();
+
+        if (!info) {
+            return null;
+        }
+
+        return info.monthlyPreTaxPayment;
+    }
+
+    leaseMonthlyPreTaxPayment() {
+        return util.moneyFormat(this.leaseMonthlyPreTaxPaymentValue());
+    }
+
+    leaseMonthlyUseTaxValue() {
+        const info = this.leasePaymentInfo();
+
+        if (!info) {
+            return null;
+        }
+
+        return info.monthlyUseTax;
+    }
+
+    leaseMonthlyUseTax() {
+        return util.moneyFormat(this.leaseMonthlyUseTaxValue());
+    }
+
+    leaseTotalAmountAtDriveOffValue() {
+        const info = this.leasePaymentInfo();
+
+        if (!info) {
+            return null;
+        }
+
+        return Math.round(info.totalAmountAtDriveOff);
+    }
+
+    leaseTotalAmountAtDriveOff() {
+        return util.moneyFormat(this.totalAmountAtDriveOffValue());
+    }
+
     financeDownPaymentValue() {
         let value = this.data.financeDownPayment;
 
@@ -209,6 +273,14 @@ export default class DealPricing {
         return util.moneyFormat(this.docFeeValue());
     }
 
+    docFeeWithTaxesValue() {
+        return this.applyTax(this.docFeeValue());
+    }
+
+    docFeeWithTaxes() {
+        return util.moneyFormat(this.docFeeWithTaxesValue());
+    }
+
     effCvrFeeValue() {
         return this.data.deal.cvr_fee;
     }
@@ -217,12 +289,24 @@ export default class DealPricing {
         return util.moneyFormat(this.effCvrFeeValue());
     }
 
+    effCvrFeeWithTaxesValue() {
+        return this.applyTax(this.effCvrFeeValue());
+    }
+
+    effCvrFeeWithTaxes() {
+        return util.moneyFormat(this.effCvrFeeWithTaxesValue());
+    }
+
     licenseAndRegistrationValue() {
         return this.data.deal.registration_fee;
     }
 
     licenseAndRegistration() {
         return util.moneyFormat(this.licenseAndRegistrationValue());
+    }
+
+    applyTax(value) {
+        return value + value * this.taxRate();
     }
 
     taxRate() {
@@ -478,6 +562,7 @@ export default class DealPricing {
         if (!this.leasePayments()) {
             return null;
         }
+
         if (!this.leasePayments()[this.leaseTerm()]) {
             return null;
         }
@@ -679,20 +764,6 @@ export default class DealPricing {
         return util.moneyFormat(this.taxOnRebatesValue());
     }
 
-    taxOnRebatesAndFeesValue() {
-        return Math.round(
-            (this.bestOfferValue() +
-                this.docFeeValue() +
-                this.effCvrFeeValue() +
-                this.acquisitionFeeValue()) *
-                this.taxRate()
-        );
-    }
-
-    taxOnRebatesAndFees() {
-        return util.moneyFormat(this.taxOnRebatesAndFeesValue());
-    }
-
     taxesAndFeesTotalValue(taxesAndFees) {
         return (taxesAndFees || this.taxesAndFees()).reduce(
             (total, item) => total + item.rawValue,
@@ -702,30 +773,6 @@ export default class DealPricing {
 
     taxesAndFeesTotal(taxesAndFees) {
         return util.moneyFormat(this.taxesAndFeesTotalValue(taxesAndFees));
-    }
-
-    grossCapitalizedCostValue() {
-        return (
-            this.discountedPriceValue() +
-            this.docFeeValue() +
-            this.effCvrFeeValue() +
-            this.acquisitionFeeValue() +
-            this.taxOnRebatesAndFeesValue()
-        );
-    }
-
-    grossCapitalizedCost() {
-        return util.moneyFormat(this.grossCapitalizedCostValue());
-    }
-
-    netCapitalizedCostValue() {
-        return new Decimal(this.grossCapitalizedCostValue()).minus(
-            this.bestOfferValue()
-        );
-    }
-
-    netCapitalizedCost() {
-        return util.moneyFormat(this.netCapitalizedCostValue());
     }
 
     hasRebatesApplied() {
@@ -763,24 +810,24 @@ export default class DealPricing {
             case 'lease':
                 return [
                     {
+                        label: 'First Payment',
+                        value: this.monthlyPayments(),
+                        rawValue: this.monthlyPaymentsValue(),
+                    },
+                    {
                         label: 'Doc Fee',
-                        value: this.docFee(),
-                        rawValue: this.docFeeValue(),
+                        value: this.docFeeWithTaxes(),
+                        rawValue: this.docFeeWithTaxesValue(),
                     },
                     {
                         label: 'Electronic Filing Fee',
-                        value: this.effCvrFee(),
-                        rawValue: this.effCvrFeeValue(),
+                        value: this.effCvrFeeWithTaxes(),
+                        rawValue: this.effCvrFeeWithTaxesValue(),
                     },
                     {
-                        label: 'Acquisition Fee',
-                        value: this.acquisitionFee(),
-                        rawValue: this.acquisitionFeeValue(),
-                    },
-                    {
-                        label: 'Tax on Rebates and Fees',
+                        label: 'Tax on Rebates',
                         value: this.taxOnRebates(),
-                        rawValue: this.taxOnRebatesAndFeesValue(),
+                        rawValue: this.taxOnRebatesValue(),
                     },
                 ];
         }

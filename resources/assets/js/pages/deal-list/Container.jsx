@@ -121,8 +121,9 @@ class Container extends React.PureComponent {
         }
 
         if (
-            this.props.userLocation.latitude &&
-            !this.props.userLocation.has_results
+            !this.props.userLocation ||
+            (this.props.userLocation.latitude &&
+                !this.props.userLocation.has_results)
         ) {
             return <NoDealsOutOfRange />;
         }

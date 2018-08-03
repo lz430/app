@@ -59,6 +59,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property DealPhoto[] $photos
  * @property jatoFeature[] $jatoFeatures
  * @property Feature[] $features
+ * @property int $seating_capacity
  */
 class Deal extends Model
 {
@@ -466,6 +467,7 @@ class Deal extends Model
         $record['model_code'] = $this->model_code;
         $record['series'] = $this->series;
         $record['style'] = $this->version->style();
+        $record['seating_capacity'] = $this->seating_capacity;
 
         //
         // Required vehicle attributes
@@ -515,14 +517,6 @@ class Deal extends Model
             $record[$feature->category->slug][] = $feature->title;
         }
 
-        //
-        // Catchall
-        if ($this->vauto_features) {
-            $record['misc'] = [];
-            $misc = explode("|", $this->vauto_features);
-            $misc = array_map('trim', $misc);
-            $record['misc'] = $misc;
-        }
 
         $pricing = $this->prices();
         $record['pricing'] = $pricing;
@@ -546,10 +540,31 @@ class Deal extends Model
         $record['dealer'] = $dealer;
 
         //
+        // Catchall
+        if ($this->vauto_features) {
+            $record['misc'] = [];
+            $misc = explode("|", $this->vauto_features);
+            $misc = array_map('trim', $misc);
+            $record['misc'] = $misc;
+        }
+
+        //
         // All the features in the current UI are just jammed together.
         $record['legacy_features'] = [];
         foreach ($this->features as $feature) {
             $record['legacy_features'][] = $feature->title;
+        }
+
+        //
+        // Jato features
+        $record['jato_features'] = [];
+        foreach ($this->jatoFeatures as $feature) {
+            $data = $feature->toArray();
+            unset($data['pivot']);
+            unset($data['created_at']);
+            unset($data['created_at']);
+            unset($data['updated_at']);
+            $record['jato_features'][] = $data;
         }
 
         return $record;

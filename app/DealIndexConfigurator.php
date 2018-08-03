@@ -9,6 +9,8 @@ class DealIndexConfigurator extends IndexConfigurator
 {
     use Migratable;
 
+
+
     /**
      * @var array
      */
