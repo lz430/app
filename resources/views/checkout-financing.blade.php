@@ -5,5 +5,7 @@
             id="react-app"
             featuredPhoto="{{json_encode($featuredPhoto)}}"
             purchase="{{json_encode($purchase)}}"
-            user="{{json_encode($user)}}"></Financing>
+            user="{{json_encode($user)}}"
+            url={{json_encode($url)}}>
+    </Financing>
 @endsection

@@ -84,4 +84,9 @@ return [
       'token' =>  env('IMGIX_TOKEN'),
     ],
 
+    'routeone' => [
+        'url' =>  env('ROUTEONE_URL'),
+        'id' => 'F00DMR',
+    ],
+
 ];
