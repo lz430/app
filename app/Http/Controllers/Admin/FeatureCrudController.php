@@ -34,6 +34,13 @@ class FeatureCrudController extends CrudController
         //
         // FORM
         $this->crud->addField([
+            'name'  => 'is_active',
+            'label' => 'Is Active',
+            'type'  => 'checkbox',
+        ]);
+
+
+        $this->crud->addField([
             'name'  => 'title',
             'label' => 'Title',
             'type'  => 'text',
@@ -83,6 +90,13 @@ class FeatureCrudController extends CrudController
         $this->crud->addColumn([
             'label' => 'Updated',
             'name' => 'updated_at',
+        ]);
+
+        $this->crud->addColumn([
+            'label' => 'Is Active',
+            'name' => 'is_active',
+            'type' => 'boolean',
+            'options' => [0 => 'Inactive', 1 => 'Active']
         ]);
 
         $this->crud->addColumn([

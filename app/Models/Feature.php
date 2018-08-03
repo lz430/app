@@ -31,21 +31,22 @@ class Feature extends Model
     /**
      * @var array
      */
+    protected $casts = [
+        'jato_schema_ids' => 'array',
+        'map_vauto_features' => 'array',
+    ];
+
+    /**
+     * @var array
+     */
     protected $fillable = [
+        'is_active',
         'title',
         'slug',
         'category_id',
         'display_order',
         'jato_schema_ids',
         'map_vauto_features'
-    ];
-
-    /**
-     * @var array
-     */
-    protected $casts = [
-        'jato_schema_ids' => 'array',
-        'map_vauto_features' => 'array',
     ];
 
     /**

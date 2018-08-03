@@ -509,7 +509,7 @@ class Deal extends Model
 
         //
         // Features
-        foreach ($this->features as $feature) {
+        foreach ($this->features()->where('is_active', '=', 1)->get() as $feature) {
             if (!isset($record[$feature->category->slug]) || !is_array($record[$feature->category->slug])) {
                 $record[$feature->category->slug] = [];
             }

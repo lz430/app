@@ -44,7 +44,6 @@ class CheckoutFinancingContainer extends Component {
     }
 
     render() {
-        console.log(this.props.url);
         return (
             <Container className="checkout-financing mb-4">
                 <Row className="checkout-financing__header mt-4">
