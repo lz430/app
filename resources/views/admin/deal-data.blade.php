@@ -150,7 +150,7 @@
     <div class="row">
 
         @foreach($compare as $category => $labels)
-            <div class="col-md-2">
+            <div class="col-md-3">
                 @component('components.box')
                     @slot('title')
                         {{$category}}
@@ -171,27 +171,30 @@
     </h1>
     <div class="row">
         <div class="col-md-12">
-            <div class="box box-default">
-                <div class="box-header">
-                    <div class="box-title">
-                        Standard Equipment
-                    </div>
-                </div>
-                <div class="box-body">
-                    <div class="row">
-                        @foreach($standardEquipment as $key => $equipment)
-                            <div class="col-md-3">
-                                @component('components.box', ['collapsible' => true, 'key' => 'se-' . $key])
-                                    @slot('title')
-                                        {{$equipment->name}}
-                                    @endslot
-                                    <pre>{{ json_encode($equipment, JSON_PRETTY_PRINT) }}</pre>
-                                @endcomponent
+            @component('components.box')
+                @slot('title')
+                    Standard Equipment
+                @endslot
+                @foreach($standardEquipment as $category => $equipments)
+                    @component('components.box', ['collapsible' => true, 'key' => 'sec-' . strtolower(str_replace([' ', '&'], ['', ''], $category))])
+                        @slot('title')
+                            {{$category}}
+                        @endslot
+                            <div class="row">
+                                @foreach($equipments as $key => $equipment)
+                                    <div class="col-md-3">
+                                        @component('components.box', ['collapsible' => true, 'key' => 'se-' . $key . $equipment->schemaId])
+                                            @slot('title')
+                                                {{$equipment->name}}
+                                            @endslot
+                                            <pre>{{ json_encode($equipment, JSON_PRETTY_PRINT) }}</pre>
+                                        @endcomponent
+                                    </div>
+                                @endforeach
                             </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
+                    @endcomponent
+                @endforeach
+            @endcomponent
         </div>
     </div>
     <div class="row">
