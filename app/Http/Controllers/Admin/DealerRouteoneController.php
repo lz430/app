@@ -15,14 +15,14 @@ class DealerRouteoneController extends Controller
      */
     public function show(Dealer $dealer)
     {
+
         /* @var \App\Models\Deal */
         $deal = $dealer->deals()->get()->first();
-
 
         if ($deal && $dealer->route_one_id) {
             $pricing = $deal->prices();
             $query = [
-                'rteOneDmsId' => 'F00DMR',
+                'rteOneDmsId' => config('services.routeone.id'),
                 'dealerId' => $dealer->route_one_id,
                 'buyOrLease' => 1,
                 'email' => 'mattwisner1+fake@gmail.com',
@@ -39,7 +39,7 @@ class DealerRouteoneController extends Controller
                 'dealership_name' => $deal->dealer->name,
             ];
 
-            $url = 'https://www.routeone.net/XRD/turnKeyOcaStart.do?' . http_build_query($query);
+            $url = config('services.routeone.url') . '?' . http_build_query($query);
         } else {
             $url = null;
         }
