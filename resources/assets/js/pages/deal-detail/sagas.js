@@ -47,7 +47,7 @@ function* init() {
     yield* initPage('deal-detail', false);
 
     let path = window.location.pathname.split('/');
-    const userLocation = select(getUserLocation);
+    const userLocation = yield select(getUserLocation);
 
     let results = null;
 
@@ -73,6 +73,7 @@ function* init() {
             'Deal Make': deal.make,
             'Deal Model': deal.model,
             'Deal Year': deal.year,
+            'Deal Style': deal.style,
             'Deal Version Name': deal.version.name,
         });
     }

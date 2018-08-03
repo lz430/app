@@ -17,6 +17,7 @@ function* init() {
         'Deal Make': checkout.deal.make,
         'Deal Model': checkout.deal.model,
         'Deal Year': checkout.deal.year,
+        'Deal Style': checkout.deal.style,
         'Deal Version Name': checkout.deal.version.name,
         'Customer Role': checkout.role,
         'Customer Conditional Roles': checkout.quote.meta.conditionalRoles,
