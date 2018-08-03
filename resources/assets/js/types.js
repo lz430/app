@@ -7,8 +7,6 @@ export const dealType = shape({
     vin: string.isRequired,
     year: string.isRequired,
     msrp: number.isRequired,
-    employee_price: number.isRequired,
-    supplier_price: number.isRequired,
     make: string.isRequired,
     model: string.isRequired,
     dmr_features: array,

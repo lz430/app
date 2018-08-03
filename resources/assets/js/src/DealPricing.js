@@ -42,10 +42,6 @@ export default class DealPricing {
         return this.data.deal.id;
     }
 
-    vin() {
-        return this.data.deal.vin;
-    }
-
     /** @deprecated */
     paymentType() {
         return this.data.paymentType;
