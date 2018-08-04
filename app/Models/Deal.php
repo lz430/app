@@ -128,6 +128,9 @@ class Deal extends Model
             'default_price' => [
                 'type' => 'double',
             ],
+            'seating_capacity' => [
+                'type' => 'integer'
+            ]
         ]
     ];
 
@@ -467,7 +470,7 @@ class Deal extends Model
         $record['model_code'] = $this->model_code;
         $record['series'] = $this->series;
         $record['style'] = $this->version->style();
-        $record['seating_capacity'] = $this->seating_capacity;
+        $record['seating_capacity'] = (int) $this->seating_capacity;
 
         //
         // Required vehicle attributes
