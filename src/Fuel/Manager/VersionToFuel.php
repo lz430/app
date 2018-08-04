@@ -268,6 +268,7 @@ class VersionToFuel
         $vehicles = $this->filterUnlessNone($vehicles, 'num_doors', $params['doors']);
         $vehicles = $this->filterUnlessNone($vehicles, 'trim', $params['trim']);
         $vehicles = $this->filterUnlessNone($vehicles, 'bodytype', $params['body']);
+
         if (count($vehicles)) {
             return end($vehicles);
         }
