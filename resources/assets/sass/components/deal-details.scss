@@ -149,3 +149,16 @@
         padding: 20px;
     }
 }
+
+.no-lease-rates-error {
+    padding: 2rem 1rem;
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.deal-price__price {
+    .no-lease-rates-error {
+        padding: 0.125rem;
+    }
+}

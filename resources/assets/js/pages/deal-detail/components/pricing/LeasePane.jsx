@@ -37,9 +37,9 @@ export default class LeasePane extends React.PureComponent {
                 !dealPricing.leaseAnnualMileageAvailable().length)
         ) {
             return (
-                <p>
-                    Currently there are no competitive lease rates available on
-                    this vehicle.
+                <p className="no-lease-rates-error">
+                    Sorry, there are currently no lease rates available for this
+                    vehicle.
                 </p>
             );
         }
