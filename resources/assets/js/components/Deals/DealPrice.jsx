@@ -47,10 +47,35 @@ class DealPrice extends React.Component {
         }
 
         if (this.props.dealPricing.cannotPurchase()) {
-            return <span>N/A</span>;
+            return (
+                <p className="no-lease-rates-error">
+                    Sorry, there are currently no lease rates available for this
+                    vehicle.
+                </p>
+            );
         }
 
-        return this.props.dealPricing.finalPrice();
+        return (
+            <div>
+                <div className="deal-price__finance-lease-label">
+                    {this.getLabel()}
+                </div>
+                <div className="deal-price__finance-lease-price">
+                    {this.props.dealPricing.finalPrice()}{' '}
+                    <InformationOutline
+                        className="pricing-explanation-open"
+                        onClick={() => this.toggleExplanationModal()}
+                        height="15px"
+                        width="15px"
+                        fill="grey"
+                    />
+                    {this.renderPriceExplanationModal()}
+                </div>
+                <div className="deal-price__finance-lease-disclaimer">
+                    {this.getDisclaimer()}
+                </div>
+            </div>
+        );
     }
 
     getLabel() {
@@ -79,23 +104,7 @@ class DealPrice extends React.Component {
             <div className="deal-price">
                 <div className="tabs__content">
                     <div className="deal-price__price">
-                        <div className="deal-price__finance-lease-label">
-                            {this.getLabel()}
-                        </div>
-                        <div className="deal-price__finance-lease-price">
-                            {this.showWhenPricingIsLoaded()}{' '}
-                            <InformationOutline
-                                className="pricing-explanation-open"
-                                onClick={() => this.toggleExplanationModal()}
-                                height="15px"
-                                width="15px"
-                                fill="grey"
-                            />
-                            {this.renderPriceExplanationModal()}
-                        </div>
-                        <div className="deal-price__finance-lease-disclaimer">
-                            {this.getDisclaimer()}
-                        </div>
+                        {this.showWhenPricingIsLoaded()}
                         <div className="deal-price__hr" />
                         <div className="deal-price__cash-msrp">
                             {this.props.dealPricing.msrp()}{' '}
