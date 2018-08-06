@@ -31,12 +31,6 @@ const util = {
     getInitialSizeFromUrl: () => {
         return R.prop('size', qs.parse(window.location.search.slice(1)));
     },
-    fromRefreshed: () => {
-        return window.performance.navigation.type === 1;
-    },
-    fromBackForward: () => {
-        return window.performance.navigation.type === 2;
-    },
 
     getClosestNumberInRange(value, values) {
         // Ensure order of values is ascending
@@ -74,9 +68,6 @@ const util = {
             value,
             zipped
         );
-    },
-    getTargetKeyForDealAndZip(deal, zipcode) {
-        return `${deal.id}-${zipcode}`;
     },
 };
 

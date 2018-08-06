@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { filterItemType } from 'types';
+import classNames from 'classnames';
 import Loading from 'icons/miscicons/Loading';
 
 import { StickyContainer } from 'react-sticky';
@@ -12,18 +14,20 @@ import { getIsPageLoading } from 'apps/page/selectors';
 import Deals from './components/Deals';
 import ToolbarSelectedFilters from './components/ToolbarSelectedFilters';
 import ToolbarPrice from './components/ToolbarPrice';
+import ToolbarMobileBottom from './components/ToolbarMobileBottom';
 import FilterPanel from './components/FilterPanel';
 import NoDealsOutOfRange from './components/NoDealsOutOfRange';
 import ModalMakeSelector from './components/ModalMakeSelector';
+
+import { MediumAndDown } from 'components/Responsive';
 
 import {
     initDealListData,
     closeMakeSelectorModal,
     toggleSearchFilter,
 } from './actions';
+
 import { getSelectedFiltersByCategory } from './selectors';
-import { filterItemType } from 'types';
-import classNames from 'classnames';
 
 class Container extends React.PureComponent {
     static propTypes = {
@@ -98,7 +102,7 @@ class Container extends React.PureComponent {
 
         return (
             <div className={className}>
-                <ToolbarPrice />
+                {/* <ToolbarPrice/> */}
                 <ToolbarSelectedFilters />
                 <Deals />
                 {/* <CompareBar /> */}
@@ -111,6 +115,9 @@ class Container extends React.PureComponent {
             <div className="filter-page">
                 {this.renderFilterPanel()}
                 {this.renderDeals()}
+                <MediumAndDown>
+                    <ToolbarMobileBottom />
+                </MediumAndDown>
             </div>
         );
     }

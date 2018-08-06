@@ -74,7 +74,7 @@ class ViewDeals extends React.PureComponent {
                             : 'Compare'}{' '}
                     </button>
                     <a className="btn btn-success" href={`/deals/${deal.id}`}>
-                        View Details
+                        View
                     </a>
                 </div>
             </Deal>
