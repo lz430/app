@@ -18,10 +18,12 @@ import CashSummary from 'components/checkout/CashSummary';
 import FinanceDetails from 'components/checkout/FinanceDetails';
 import LeaseDetails from 'components/checkout/LeaseDetails';
 import CashDetails from 'components/checkout/CashDetails';
+import InvalidCheckoutPage from 'components/checkout/InvalidCheckoutPage';
 
 class CheckoutCompleteContainer extends React.PureComponent {
     static propTypes = {
         init: PropTypes.func.isRequired,
+        checkout: PropTypes.object.isRequired,
     };
 
     componentDidMount() {
@@ -29,6 +31,10 @@ class CheckoutCompleteContainer extends React.PureComponent {
     }
 
     render() {
+        if (!this.props.checkout.deal.id) {
+            return <InvalidCheckoutPage />;
+        }
+
         const { dealPricing } = this.props;
         const deal = dealPricing.deal();
 
