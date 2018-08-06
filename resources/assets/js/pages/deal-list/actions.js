@@ -76,6 +76,11 @@ export function receiveDeals(data) {
 }
 
 export function requestMoreDeals() {
+    return {
+        type: ActionTypes.SEARCH_REQUEST,
+        incrementPage: true,
+    };
+
     return dispatch => {
         dispatch({
             type: ActionTypes.SEARCH_INCREMENT_PAGE,
