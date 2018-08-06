@@ -37,7 +37,7 @@ class ComparePageContainer extends React.PureComponent {
                         className="btn btn-success"
                         onClick={() => (window.location = `/deals/${deal.id}`)}
                     >
-                        View Details
+                        View
                     </button>
                 </div>
             </Deal>

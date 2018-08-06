@@ -19,6 +19,7 @@ class ToolbarPrice extends React.Component {
         if (util.windowIsLargerThanSmall(this.props.window.width)) {
             return false;
         }
+
         return (
             <div className="filter-page__top-row">
                 <div className="filter-page__top-row__section filter-page__top-row__section--sortbar">

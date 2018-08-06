@@ -61,6 +61,7 @@
         "react-livechat": "^1.0.25",
         "react-recaptcha-google": "^1.1.1",
         "react-redux": "^5.0.7",
+        "react-responsive": "^5.0.0",
         "react-sticky": "^6.0.3",
         "reactstrap": "^6.3.0",
         "reduce-reducers": "^0.4.3",

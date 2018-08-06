@@ -74,3 +74,22 @@
         padding: 1rem;
     }
 }
+
+.toolbar-mobile-bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    background: #fff;
+    border-top: 3px solid $primary;
+    text-align: center;
+    box-shadow: 0 -0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    z-index: 50;
+    button {
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        svg {
+            margin-right: 0.25rem;
+        }
+    }
+}
