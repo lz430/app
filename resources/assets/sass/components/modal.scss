@@ -1,5 +1,21 @@
+.modal-content {
+    max-height: 95vh;
+}
+
 .modal-header {
-    justify-content: center;
+    display: block;
+
+    @include media-breakpoint-up(sm) {
+        justify-content: center;
+        display: flex;
+    }
+
+    .modal-title {
+        font-size: 1rem;
+        @include media-breakpoint-up(sm) {
+            font-size: 1.25rem;
+        }
+    }
     .close {
         position: absolute;
         right: 0;
@@ -12,6 +28,10 @@
     .modal-header {
         border-bottom: 0;
     }
+}
+
+.modal-body {
+    overflow-y: auto;
 }
 
 .modal-footer {
