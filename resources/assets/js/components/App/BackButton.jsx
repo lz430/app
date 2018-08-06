@@ -2,7 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { getCurrentPage } from 'apps/page/selectors';
+import {
+    getCurrentPage,
+    getCurrentPageIsInCheckout,
+} from 'apps/page/selectors';
 import { checkout } from 'apps/checkout/selectors';
 
 import { clearModelYear } from 'pages/deal-list/actions';
@@ -12,6 +15,7 @@ class HeaderToolbar extends React.PureComponent {
     static propTypes = {
         style: PropTypes.string.isRequired,
         currentPage: PropTypes.string,
+        isCurrentPageInCheckout: PropTypes.bool,
         onClearModelYear: PropTypes.func.isRequired,
     };
 
@@ -32,7 +36,7 @@ class HeaderToolbar extends React.PureComponent {
      * If we're on the confirmation page we allow the user to go back to the deal.
      *
      */
-    handleBackButton(e) {
+    handleBackButton() {
         if (
             this.props.currentPage === 'deal-list' &&
             this.props.searchQuery.entity === 'deal'
@@ -53,6 +57,15 @@ class HeaderToolbar extends React.PureComponent {
         if (
             this.props.currentPage === 'deal-list' &&
             this.props.searchQuery.entity === 'model'
+        ) {
+            return false;
+        }
+
+        //
+        // Don't show if in checkout and no checkout.
+        if (
+            this.props.isCurrentPageInCheckout &&
+            !this.props.checkout.deal.id
         ) {
             return false;
         }
@@ -87,6 +100,7 @@ class HeaderToolbar extends React.PureComponent {
 function mapStateToProps(state) {
     return {
         currentPage: getCurrentPage(state),
+        isCurrentPageInCheckout: getCurrentPageIsInCheckout(state),
         checkout: checkout(state),
         searchQuery: state.pages.dealList.searchQuery,
     };

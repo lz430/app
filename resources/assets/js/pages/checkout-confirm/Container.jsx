@@ -17,30 +17,33 @@ import Header from 'components/pricing/Header';
 import Group from 'components/pricing/Group';
 import { checkout } from 'apps/checkout/selectors';
 import { init } from './actions';
-import DealStockNumber from '../../components/Deals/DealStockNumber';
-import FinanceSummary from '../../components/checkout/FinanceSummary';
-import LeaseSummary from '../../components/checkout/LeaseSummary';
-import CashSummary from '../../components/checkout/CashSummary';
-import CashDetails from '../../components/checkout/CashDetails';
-import FinanceDetails from '../../components/checkout/FinanceDetails';
-import LeaseDetails from '../../components/checkout/LeaseDetails';
+import DealStockNumber from 'components/Deals/DealStockNumber';
+import FinanceSummary from 'components/checkout/FinanceSummary';
+import LeaseSummary from 'components/checkout/LeaseSummary';
+import CashSummary from 'components/checkout/CashSummary';
+import CashDetails from 'components/checkout/CashDetails';
+import FinanceDetails from 'components/checkout/FinanceDetails';
+import LeaseDetails from 'components/checkout/LeaseDetails';
+import InvalidCheckoutPage from 'components/checkout/InvalidCheckoutPage';
 
 class CheckoutConfirmContainer extends React.PureComponent {
     static propTypes = {
         init: PropTypes.func.isRequired,
+        checkout: PropTypes.object.isRequired,
     };
+
+    state = {
+        recaptchaToken: null,
+        isPageValid: true,
+    };
+
+    recaptcha = null;
 
     componentDidMount() {
         this.props.init();
         loadReCaptcha();
         this.props.clearCheckoutContactFormErrors();
     }
-
-    state = {
-        recaptchaToken: null,
-    };
-
-    recaptcha = null;
 
     handleConfirmPurchase = e => {
         e.preventDefault();
@@ -69,6 +72,10 @@ class CheckoutConfirmContainer extends React.PureComponent {
     };
 
     render() {
+        if (!this.props.checkout.deal.id) {
+            return <InvalidCheckoutPage />;
+        }
+
         const { dealPricing } = this.props;
         const deal = dealPricing.deal();
         const errors = this.props.checkout.contactFormErrors || {};
