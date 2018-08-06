@@ -159,6 +159,11 @@
 
 .deal-price__price {
     .no-lease-rates-error {
-        padding: 0.125rem;
+        padding: 0 0.325rem;
+        font-size: 0.85rem;
+
+        @include media-breakpoint-up(sm) {
+            font-size: 1rem;
+        }
     }
 }

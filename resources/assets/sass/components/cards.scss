@@ -1,4 +1,6 @@
 .card {
+    border-radius: 0;
+
     .card-header {
         border: none;
         background: none;
@@ -36,8 +38,8 @@
 
 .card-deck > .card {
     margin: 0;
-    max-height: fit-content;
-    min-height: fit-content;
+    //max-height: fit-content;
+    //min-height: fit-content;
     @include media-breakpoint-up(sm) {
         margin-bottom: 10px;
         margin-left: 5px;
@@ -48,8 +50,15 @@
 .inventory-summary {
     width: 50%;
     padding: 0.5rem;
+    border-radius: 0;
 
     @include media-breakpoint-up(sm) {
+        width: auto;
+        max-width: 300px;
+        min-width: 300px;
+    }
+
+    @include media-breakpoint-up(md) {
         width: auto;
         max-width: 300px;
         min-width: 300px;
