@@ -29,6 +29,7 @@ import { initPage } from 'apps/page/sagas';
 
 import util from 'src/util';
 import { track } from 'services';
+import * as ActionTypes from './consts';
 
 /*******************************************************************
  * Request Search
@@ -56,14 +57,20 @@ const takeSearch = (patternOrChannel, saga, ...args) =>
 /**
  * @returns {IterableIterator<*>}
  */
-function* requestSearch() {
+function* requestSearch(action) {
+    if (action.incrementPage) {
+        yield put({ type: ActionTypes.SEARCH_INCREMENT_PAGE });
+    }
+
     const source = cancelRequest();
     const state = yield select();
     const searchQuery = getSearchQuery(state);
 
     let results = [];
 
-    yield put({ type: SEARCH_LOADING_START });
+    if (!action.incrementPage) {
+        yield put({ type: SEARCH_LOADING_START });
+    }
 
     try {
         results = yield call(ApiClient.browse.search, searchQuery);
@@ -87,7 +94,9 @@ function* requestSearch() {
         }
     }
 
-    yield put({ type: SEARCH_LOADING_FINISHED });
+    if (!action.incrementPage) {
+        yield put({ type: SEARCH_LOADING_FINISHED });
+    }
 }
 
 /**

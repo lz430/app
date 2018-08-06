@@ -67,23 +67,16 @@ export function setSearchFilters(filters) {
 }
 
 export function receiveDeals(data) {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.RECEIVE_DEALS,
-            data: data,
-        });
+    return {
+        type: ActionTypes.RECEIVE_DEALS,
+        data: data,
     };
 }
 
 export function requestMoreDeals() {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.SEARCH_INCREMENT_PAGE,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
+    return {
+        type: ActionTypes.SEARCH_REQUEST,
+        incrementPage: true,
     };
 }
 
