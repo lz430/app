@@ -81,13 +81,12 @@
         display: flex;
         font-size: 1.2rem;
         font-weight: bold;
-        @media (min-width: $break-small) {
-            font-size: 1.8rem;
-        }
-
         span {
-            margin-top: auto;
-            margin-left: auto;
+            @include media-breakpoint-up(sm) {
+                font-size: 1.8rem;
+                margin-top: auto;
+                margin-left: auto;
+            }
         }
     }
 
@@ -159,6 +158,11 @@
 
 .deal-price__price {
     .no-lease-rates-error {
-        padding: 0.125rem;
+        padding: 0 0.325rem;
+        font-size: 0.85rem;
+
+        @include media-breakpoint-up(sm) {
+            font-size: 1rem;
+        }
     }
 }

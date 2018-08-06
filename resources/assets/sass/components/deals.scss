@@ -1,6 +1,7 @@
 .filter-page__deals {
     overflow: scroll;
     overflow-y: scroll;
+    background: #f2f2f2;
 }
 
 .inventory-summary-deck {
@@ -8,8 +9,8 @@
     display: flex;
     flex-flow: row wrap;
     width: 100%;
-    justify-content: center;
     height: 95vh;
+    max-height: min-content;
 
     position: relative;
     /* keep this overflow there is a bug somewhere in react-lazyloading that doesn't respect overflow-y ! */
@@ -18,6 +19,7 @@
 
     @include media-breakpoint-up(md) {
         padding: 2rem;
+        justify-content: center;
     }
 
     @include media-breakpoint-up(xl) {
@@ -25,7 +27,9 @@
     }
 
     > div {
-        justify-content: center;
+        @include media-breakpoint-up(md) {
+            justify-content: center;
+        }
     }
 
     &__show-more {
