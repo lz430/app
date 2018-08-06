@@ -16,14 +16,14 @@ class ToolbarMobileBottom extends React.Component {
     render() {
         return (
             <div className="toolbar-mobile-bottom">
-                <button onClick={this.props.onToggleSmallFiltersShown}>
+                <span onClick={this.props.onToggleSmallFiltersShown}>
                     <Tuning
                         height="20px"
                         width="20px"
                         className="sortbar__filter-toggle-icon"
                     />
                     Filter Results
-                </button>
+                </span>
             </div>
         );
     }
