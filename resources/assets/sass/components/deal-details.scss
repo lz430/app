@@ -81,13 +81,12 @@
         display: flex;
         font-size: 1.2rem;
         font-weight: bold;
-        @media (min-width: $break-small) {
-            font-size: 1.8rem;
-        }
-
         span {
-            margin-top: auto;
-            margin-left: auto;
+            @include media-breakpoint-up(sm) {
+                font-size: 1.8rem;
+                margin-top: auto;
+                margin-left: auto;
+            }
         }
     }
 

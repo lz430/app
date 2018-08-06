@@ -14,7 +14,7 @@ export default class Header extends React.PureComponent {
     render() {
         return (
             <Row className="deal-details__header">
-                <Col>
+                <Col sm="6">
                     <div className="deal-details__title-year-make">
                         {strings.dealYearMake(this.props.deal)}
                     </div>
@@ -22,7 +22,7 @@ export default class Header extends React.PureComponent {
                         {strings.dealModelTrim(this.props.deal)}
                     </div>
                 </Col>
-                <Col className="deal-details__stock-number">
+                <Col sm="6" className="deal-details__stock-number">
                     <DealStockNumber deal={this.props.deal} />
                 </Col>
             </Row>
