@@ -84,4 +84,9 @@ return [
       'token' =>  env('IMGIX_TOKEN'),
     ],
 
+    'routeone' => [
+        'url' =>  env('ROUTEONE_URL', 'https://www.routeone.net/XRD/turnKeyOcaStart.do'),
+        'id' => 'F00DMR',
+    ],
+
 ];

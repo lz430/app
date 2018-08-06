@@ -14,8 +14,6 @@ import {
     toggleSmallFiltersShown,
 } from 'pages/deal-list/actions';
 
-import BackButton from 'components/App/BackButton';
-
 class Sortbar extends React.Component {
     static propTypes = {
         window: PropTypes.shape({
@@ -38,12 +36,6 @@ class Sortbar extends React.Component {
             this.props.searchQuery.sort !== nextProps.searchQuery.sort ||
             this.props.searchQuery.entity !== nextProps.searchQuery.entity
         );
-    }
-
-    constructor(props) {
-        super(props);
-
-        this.renderBackButton = this.renderBackButton.bind(this);
     }
 
     renderFilterToggle() {
@@ -87,13 +79,6 @@ class Sortbar extends React.Component {
             }
         }
         return false;
-    }
-    renderBackButton() {
-        return util.windowIsLargerThanSmall(this.props.window.width) ? (
-            ''
-        ) : (
-            <BackButton style="button" />
-        );
     }
 
     /**
@@ -169,10 +154,6 @@ const mapDispatchToProps = dispatch => {
 
         onClearModelYear: () => {
             return dispatch(clearModelYear());
-        },
-
-        onToggleSmallFiltersShown: () => {
-            return dispatch(toggleSmallFiltersShown());
         },
     };
 };

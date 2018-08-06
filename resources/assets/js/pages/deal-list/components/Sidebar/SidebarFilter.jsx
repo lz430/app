@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import classNames from 'classnames';
 import CheveronUp from 'icons/zondicons/CheveronUp';
 import CheveronDown from 'icons/zondicons/CheveronDown';
 
@@ -28,11 +29,9 @@ class SidebarFilter extends React.PureComponent {
         return (
             <div className="sidebar-filters__filter">
                 <div
-                    className={`sidebar-filters__filter-title ${
-                        this.props.open
-                            ? 'sidebar-filters__filter-title--open'
-                            : ''
-                    }`}
+                    className={classNames('sidebar-filters__filter-title', {
+                        'sidebar-filters__filter-title--open': this.props.open,
+                    })}
                     onClick={
                         this.props.canToggle ? this.props.toggle : () => {}
                     }

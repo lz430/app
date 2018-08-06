@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('dealsByModelYear', 'DealsByModelYearController@getDealsByModelYear')->name('dealsByModelYear.index');
 Route::get('deals', 'DealsController@list')->name('deals.index');
-Route::get('deals/{deal}', 'DealsController@detail')->name('deals.detail');
 Route::get('deals/compare', 'DealsCompareController@compare')->name('deals.compare');
+Route::get('deals/{deal}', 'DealsController@detail')->name('deals.detail');
 Route::get('deals/{deal}/quote', 'DealQuoteController@quote')->name('deals.quote');
 Route::get('deals/{deal}/warranties', 'DealWarrantiesController@getWarranties')->name('warranties.getWarranties');
 Route::get('deals/{deal}/dimensions', 'DealDimensionsController@getDimensions')->name('dimensions.getDimensions');

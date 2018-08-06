@@ -96,6 +96,7 @@ Array.from(document.getElementsByTagName('Financing')).map(element => {
                         )}
                         purchase={JSON.parse(element.getAttribute('purchase'))}
                         user={JSON.parse(element.getAttribute('user'))}
+                        url={JSON.parse(element.getAttribute('url'))}
                     />
                 </App>
             </PersistGate>
