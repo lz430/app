@@ -84,7 +84,14 @@ class ApplyOrPurchaseController extends Controller
                 'dealership_name' => $deal->dealer->name,
             ];
 
-            $url = config('services.routeone.url') . '?' . http_build_query($query);
+            if (config('services.routeone.test_mode')) {
+               $query['dealerId'] = 'CJ7IW';
+                $url = config('services.routeone.test_url');
+            } else {
+                $url = config('services.routeone.production_url');
+            }
+
+            $url = $url . '?' . http_build_query($query);
 
             $data = [
                 'featuredPhoto' => $purchase->deal->featuredPhoto(),
