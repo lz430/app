@@ -83,7 +83,7 @@ class CheckoutFinancingContainer extends Component {
                         </form>
                     </Col>
                 </Row>
-                <div className="embed-responsive embed-responsive-4by3">
+                <div className="embed-responsive embed-responsive-financing">
                     <iframe
                         frameBorder="0"
                         className="embed-responsive-item"
