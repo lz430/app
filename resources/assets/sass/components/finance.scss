@@ -1,15 +1,17 @@
-@import '../variables';
-@import '../mixins/input';
-
 .finance {
     display: flex;
     flex-wrap: wrap;
 
-    &__label {
-        //
-    }
-
     &__down-payment {
         @include input;
+    }
+}
+
+.embed-responsive-financing {
+    &::before {
+        padding-top: 200%;
+        @include media-breakpoint-up(sm) {
+            padding-top: 100%;
+        }
     }
 }
