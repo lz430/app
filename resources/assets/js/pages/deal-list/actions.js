@@ -1,3 +1,5 @@
+import { track } from 'services';
+
 import * as ActionTypes from './consts';
 
 export function initDealListData() {
@@ -13,6 +15,12 @@ export function requestSearch() {
 }
 
 export function receiveSearch(results) {
+    track('search:results:receive', {
+        'Search Results Total': results.meta.total,
+        'Search Results Entity': results.meta.entity,
+        'Search Results Page': results.meta['current_page'],
+    });
+
     return {
         type: ActionTypes.SEARCH_RECEIVE,
         data: results,

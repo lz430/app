@@ -10,6 +10,7 @@ import {
     setCheckoutContactFormErrors,
 } from './actions';
 import { checkout as getCheckout } from './selectors';
+import { track } from 'services';
 
 /*******************************************************************
  * Checkout Start
@@ -55,6 +56,10 @@ export function* checkoutStart(action) {
         console.log(e);
     }
 
+    track('deal-detail:quote-form:submitted', {
+        'Form Submission Success': results ? 'success' : 'fail',
+    });
+
     yield put(checkoutFinishedLoading());
     window.location = `/confirm/${dealPricing.id()}`;
 }
@@ -79,6 +84,10 @@ export function* checkoutContact(action) {
     } catch (e) {
         yield put(setCheckoutContactFormErrors(e.response.data.errors));
     }
+
+    track('checkout-confirm:contact-form:submitted', {
+        'Form Submission Success': results ? 'success' : 'fail',
+    });
 
     if (results) {
         window.location = results.data.destination;

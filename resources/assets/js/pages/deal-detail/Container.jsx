@@ -1,31 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
 import { dealType } from 'types';
+import { track } from 'services';
 
 import { Alert, Container, Breadcrumb, BreadcrumbItem } from 'reactstrap';
-
-import { toggleCompare } from 'apps/common/actions';
-
-import CompareBar from 'components/CompareBar';
-
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
+import Loading from 'icons/miscicons/Loading';
+import { toggleCompare } from 'apps/common/actions';
+import { getIsPageLoading } from 'apps/page/selectors';
 import { setPurchaseStrategy } from 'apps/user/actions';
 import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
-
+import CompareBar from 'components/CompareBar';
 import { setCheckoutData, checkoutStart } from 'apps/checkout/actions';
 import * as selectDiscountActions from './modules/selectDiscount';
 import * as financeActions from './modules/finance';
 import * as leaseActions from './modules/lease';
-
 import { initPage, receiveDeal, dealDetailRequestDealQuote } from './actions';
-
 import { getDeal, getLeaseAnnualMileage, getLeaseTerm } from './selectors';
-
-import Loading from 'icons/miscicons/Loading';
-import { getIsPageLoading } from 'apps/page/selectors';
-
 import DealDetail from './components/DealDetail';
 
 class DealDetailContainer extends React.PureComponent {
@@ -58,6 +50,12 @@ class DealDetailContainer extends React.PureComponent {
             strategy,
             this.props.discountType
         );
+
+        // This is here because purchase strategy is a global thing
+        track('deal-detail:quote-form:changed', {
+            'Form Property': 'Purchase Strategy',
+            'Form Value': strategy,
+        });
     };
 
     handleDiscountChange = (discountType, make) => {
@@ -111,18 +109,6 @@ class DealDetailContainer extends React.PureComponent {
         this.props.financeActions.updateTerm(term);
     };
 
-    handleLeaseTermChange = term => {
-        this.props.leaseActions.updateTerm(term);
-    };
-
-    handleLeaseAnnualMileageChange = annualMileage => {
-        this.props.leaseActions.updateAnnualMileage(annualMileage);
-    };
-
-    handleLeaseCashDueChange = cashDue => {
-        this.props.leaseActions.updateCashDue(cashDue);
-    };
-
     handleLeaseChange = (annualMileage, term, cashDue) => {
         this.props.leaseActions.update(annualMileage, term, cashDue);
     };
@@ -166,15 +152,6 @@ class DealDetailContainer extends React.PureComponent {
                         this
                     )}
                     handleFinanceTermChange={this.handleFinanceTermChange.bind(
-                        this
-                    )}
-                    handleLeaseTermChange={this.handleLeaseTermChange.bind(
-                        this
-                    )}
-                    handleLeaseCashDueChange={this.handleLeaseCashDueChange.bind(
-                        this
-                    )}
-                    handleLeaseAnnualMileageChange={this.handleLeaseAnnualMileageChange.bind(
                         this
                     )}
                     handleLeaseChange={this.handleLeaseChange.bind(this)}

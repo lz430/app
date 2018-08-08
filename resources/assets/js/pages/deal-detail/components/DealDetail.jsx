@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import * as R from 'ramda';
 
 import { dealType } from 'types';
 
@@ -15,7 +14,7 @@ import Header from './Header';
 import AddToCart from './AddToCart';
 import StandardFeaturesModal from './StandardFeaturesModal';
 import AdditionalFeaturesModal from './AdditionalFeaturesModal';
-import DealColors from '../../../components/Deals/DealColors';
+import DealColors from 'components/Deals/DealColors';
 
 class DealDetail extends React.PureComponent {
     static propTypes = {
@@ -29,9 +28,6 @@ class DealDetail extends React.PureComponent {
         handleRebatesChange: PropTypes.func.isRequired,
         handleFinanceDownPaymentChange: PropTypes.func.isRequired,
         handleFinanceTermChange: PropTypes.func.isRequired,
-        handleLeaseTermChange: PropTypes.func.isRequired,
-        handleLeaseCashDueChange: PropTypes.func.isRequired,
-        handleLeaseAnnualMileageChange: PropTypes.func.isRequired,
         handleLeaseChange: PropTypes.func.isRequired,
         setCheckoutData: PropTypes.func.isRequired,
         checkoutStart: PropTypes.func.isRequired,
@@ -252,15 +248,6 @@ class DealDetail extends React.PureComponent {
                             }
                             handleFinanceTermChange={
                                 this.props.handleFinanceTermChange
-                            }
-                            handleLeaseTermChange={
-                                this.props.handleLeaseTermChange
-                            }
-                            handleLeaseCashDueChange={
-                                this.props.handleLeaseCashDueChange
-                            }
-                            handleLeaseAnnualMileageChange={
-                                this.props.handleLeaseAnnualMileageChange
                             }
                             handleLeaseChange={this.props.handleLeaseChange}
                             handleBuyNow={this.handleBuyNow.bind(this)}
