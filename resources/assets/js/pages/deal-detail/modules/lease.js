@@ -1,3 +1,5 @@
+import { track } from '../../../services';
+
 const UPDATE_ANNUAL_MILEAGE = 'dmr/dealDetails.lease.UPDATE_ANNUAL_MILEAGE';
 const UPDATE_CASH_DUE = 'dmr/dealDetails.lease.UPDATE_CASH_DUE';
 const UPDATE_TERM = 'dmr/dealDetails.lease.UPDATE_TERM';
@@ -38,28 +40,14 @@ export default function(state = initialState, action = {}) {
     }
 }
 
-export function updateAnnualMileage(annualMileage) {
-    return {
-        type: UPDATE_ANNUAL_MILEAGE,
-        annualMileage,
-    };
-}
-
-export function updateCashDue(cashDue) {
-    return {
-        type: UPDATE_CASH_DUE,
-        cashDue,
-    };
-}
-
-export function updateTerm(term) {
-    return {
-        type: UPDATE_TERM,
-        term,
-    };
-}
-
 export function update(annualMileage, term, cashDue) {
+    track('deal-detail:quote-form:changed', {
+        'Form Property': 'Lease Configuration',
+        'Form Lease Mileage': annualMileage,
+        'Form Lease Term': term,
+        'Form Lease Cash Due': cashDue,
+    });
+
     return {
         type: UPDATE,
         annualMileage,

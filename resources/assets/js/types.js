@@ -4,7 +4,6 @@ const { shape, number, string, arrayOf, object } = PropTypes;
 
 export const dealType = shape({
     id: number.isRequired,
-    vin: string.isRequired,
     year: string.isRequired,
     make: string.isRequired,
     model: string.isRequired,

@@ -19,9 +19,6 @@ export default class AddToCart extends React.PureComponent {
         handleRebatesChange: PropTypes.func.isRequired,
         handleFinanceDownPaymentChange: PropTypes.func.isRequired,
         handleFinanceTermChange: PropTypes.func.isRequired,
-        handleLeaseTermChange: PropTypes.func.isRequired,
-        handleLeaseCashDueChange: PropTypes.func.isRequired,
-        handleLeaseAnnualMileageChange: PropTypes.func.isRequired,
         handleLeaseChange: PropTypes.func.isRequired,
         handleBuyNow: PropTypes.func.isRequired,
         onToggleCompare: PropTypes.func.isRequired,
@@ -93,16 +90,6 @@ export default class AddToCart extends React.PureComponent {
                                     }
                                     onRebatesChange={
                                         this.props.handleRebatesChange
-                                    }
-                                    onTermChange={
-                                        this.props.handleLeaseTermChange
-                                    }
-                                    onAnnualMileageChange={
-                                        this.props
-                                            .handleLeaseAnnualMileageChange
-                                    }
-                                    onCashDueChange={
-                                        this.props.handleLeaseCashDueChange
                                     }
                                     onChange={this.props.handleLeaseChange}
                                 />
