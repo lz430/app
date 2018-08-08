@@ -9,13 +9,16 @@ import api from 'src/api';
 import { init } from './actions';
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
 import { checkout } from 'apps/checkout/selectors';
+import InvalidCheckoutPage from 'components/checkout/InvalidCheckoutPage';
 
 class CheckoutFinancingContainer extends Component {
     static propTypes = {
+        init: PropTypes.func.isRequired,
+        checkout: PropTypes.object.isRequired,
         featuredPhoto: PropTypes.object.isRequired,
         purchase: PropTypes.object.isRequired,
         user: PropTypes.object.isRequired,
-        init: PropTypes.func.isRequired,
+
         url: PropTypes.string.isRequired,
     };
 
@@ -44,6 +47,10 @@ class CheckoutFinancingContainer extends Component {
     }
 
     render() {
+        if (!this.props.checkout.deal.id) {
+            return <InvalidCheckoutPage />;
+        }
+
         return (
             <Container className="checkout-financing mb-4">
                 <Row className="checkout-financing__header mt-4">
@@ -76,7 +83,7 @@ class CheckoutFinancingContainer extends Component {
                         </form>
                     </Col>
                 </Row>
-                <div className="embed-responsive embed-responsive-4by3">
+                <div className="embed-responsive embed-responsive-financing">
                     <iframe
                         frameBorder="0"
                         className="embed-responsive-item"

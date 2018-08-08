@@ -12,10 +12,12 @@ import ChatBubbleDots from 'icons/zondicons/ChatBubbleDots';
 import config from 'config';
 import LiveChat from 'react-livechat';
 import classNames from 'classnames';
+import { getCurrentPageIsInCheckout } from 'apps/page/selectors';
 
 class Header extends React.PureComponent {
     static propTypes = {
         userLocation: PropTypes.object,
+        currentPageIsInCheckout: PropTypes.bool,
         onSearchForLocation: PropTypes.func.isRequired,
         compareList: PropTypes.array,
     };
@@ -75,6 +77,9 @@ class Header extends React.PureComponent {
      * @returns {*}
      */
     renderLocationWidget() {
+        if (this.props.currentPageIsInCheckout) {
+            return false;
+        }
         return (
             <div
                 className="header-widget"
@@ -133,6 +138,9 @@ class Header extends React.PureComponent {
             return false;
         }
 
+        if (this.props.currentPageIsInCheckout) {
+            return false;
+        }
         return (
             <div
                 className={classNames('header-widget', 'compare-widget', {
@@ -191,6 +199,7 @@ class Header extends React.PureComponent {
 const mapStateToProps = state => {
     return {
         userLocation: getUserLocation(state),
+        currentPageIsInCheckout: getCurrentPageIsInCheckout(state),
         compareList: state.common.compareList,
     };
 };

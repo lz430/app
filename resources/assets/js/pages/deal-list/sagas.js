@@ -199,6 +199,8 @@ function* init() {
         window.history.replaceState({}, document.title, '/filter');
     }
 
+    track('page:search:view');
+
     yield put({ type: SEARCH_REQUEST });
 }
 

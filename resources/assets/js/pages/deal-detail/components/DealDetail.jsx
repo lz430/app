@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import * as R from 'ramda';
 
 import { dealType } from 'types';
 
@@ -15,6 +14,7 @@ import Header from './Header';
 import AddToCart from './AddToCart';
 import StandardFeaturesModal from './StandardFeaturesModal';
 import AdditionalFeaturesModal from './AdditionalFeaturesModal';
+import DealColors from 'components/Deals/DealColors';
 
 class DealDetail extends React.PureComponent {
     static propTypes = {
@@ -28,9 +28,6 @@ class DealDetail extends React.PureComponent {
         handleRebatesChange: PropTypes.func.isRequired,
         handleFinanceDownPaymentChange: PropTypes.func.isRequired,
         handleFinanceTermChange: PropTypes.func.isRequired,
-        handleLeaseTermChange: PropTypes.func.isRequired,
-        handleLeaseCashDueChange: PropTypes.func.isRequired,
-        handleLeaseAnnualMileageChange: PropTypes.func.isRequired,
         handleLeaseChange: PropTypes.func.isRequired,
         setCheckoutData: PropTypes.func.isRequired,
         checkoutStart: PropTypes.func.isRequired,
@@ -52,21 +49,6 @@ class DealDetail extends React.PureComponent {
         if (this.props.deal) {
             if (this.props.deal.photos.length) {
                 this.setState({ featuredImage: this.props.deal.photos[0] });
-            }
-
-            if (this.props.deal.dmr_features.length) {
-                const upholsteryType = this.props.deal.dmr_features.find(
-                    feature => {
-                        return (
-                            feature.slug &&
-                            feature.slug.includes('seat_main_upholstery_')
-                        );
-                    }
-                );
-
-                if (upholsteryType) {
-                    this.setState({ upholsteryType: upholsteryType['title'] });
-                }
             }
 
             const {
@@ -159,8 +141,7 @@ class DealDetail extends React.PureComponent {
                         This Vehicle At-A-Glance
                     </div>
                     <div className="deal-details__deal-content-color">
-                        {deal.color} Exterior, {deal.interior_color}{' '}
-                        {this.state.upholsteryType} Interior
+                        <DealColors deal={deal} />
                     </div>
                 </div>
                 <div className="deal-details__deal-content-body">
@@ -267,15 +248,6 @@ class DealDetail extends React.PureComponent {
                             }
                             handleFinanceTermChange={
                                 this.props.handleFinanceTermChange
-                            }
-                            handleLeaseTermChange={
-                                this.props.handleLeaseTermChange
-                            }
-                            handleLeaseCashDueChange={
-                                this.props.handleLeaseCashDueChange
-                            }
-                            handleLeaseAnnualMileageChange={
-                                this.props.handleLeaseAnnualMileageChange
                             }
                             handleLeaseChange={this.props.handleLeaseChange}
                             handleBuyNow={this.handleBuyNow.bind(this)}

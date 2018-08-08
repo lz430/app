@@ -13,16 +13,19 @@ function* init() {
     yield* initPage('checkout-complete');
 
     const checkout = yield select(getCheckout);
-    track('checkout:complete:view', {
-        'Deal Make': checkout.deal.make,
-        'Deal Model': checkout.deal.model,
-        'Deal Year': checkout.deal.year,
-        'Deal Style': checkout.deal.style,
-        'Deal Version Name': checkout.deal.version.name,
-        'Customer Role': checkout.role,
-        'Customer Conditional Roles': checkout.quote.meta.conditionalRoles,
-        'Purchase Strategy': checkout.strategy,
-    });
+    if (checkout.deal.id) {
+        track('checkout:complete:view', {
+            'Deal Make': checkout.deal.make,
+            'Deal Model': checkout.deal.model,
+            'Deal Year': checkout.deal.year,
+            'Deal Style': checkout.deal.style,
+            'Deal Version Name': checkout.deal.version.name,
+            'Customer Role':
+                checkout.role === 'dmr' ? 'default' : checkout.role,
+            'Customer Conditional Roles': checkout.quote.meta.conditionalRoles,
+            'Purchase Strategy': checkout.strategy,
+        });
+    }
 }
 
 /*******************************************************************

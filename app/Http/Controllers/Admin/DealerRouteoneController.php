@@ -39,7 +39,7 @@ class DealerRouteoneController extends Controller
                 'dealership_name' => $deal->dealer->name,
             ];
 
-            $url = config('services.routeone.url') . '?' . http_build_query($query);
+            $url = config('services.routeone.production_url') . '?' . http_build_query($query);
         } else {
             $url = null;
         }

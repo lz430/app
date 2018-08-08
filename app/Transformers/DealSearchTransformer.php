@@ -42,7 +42,7 @@ class DealSearchTransformer extends TransformerAbstract
             'make' => $deal->make,
             'model' => $deal->model,
             'style' => $deal->style,
-            'transmission' => $deal->transmission,
+            'transmission' => (isset($deal->transmission) ? $deal->transmission : null),
             'series' => $deal->series,
             'engine' => $deal->engine,
             'color' => $deal->color,

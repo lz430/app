@@ -1,3 +1,5 @@
+import { track } from 'services';
+
 const namespace = 'DEAL_DETAILS_ROLES';
 
 const SELECT_DMR_DISCOUNT = `${namespace}_SELECT_DMR_DISCOUNT`;
@@ -44,17 +46,32 @@ export default function(state = initialState, action = {}) {
 }
 
 export function selectDmrDiscount() {
+    track('deal-detail:quote-form:changed', {
+        'Form Property': 'Customer Role',
+        'Form Value': 'default',
+    });
+
     return {
         type: SELECT_DMR_DISCOUNT,
     };
 }
 export function selectEmployeeDiscount(make) {
+    track('deal-detail:quote-form:changed', {
+        'Form Property': 'Customer Role',
+        'Form Value': 'employee',
+    });
+
     return {
         type: SELECT_EMPLOYEE_DISCOUNT,
         make,
     };
 }
 export function selectSupplierDiscount(make) {
+    track('deal-detail:quote-form:changed', {
+        'Form Property': 'Customer Role',
+        'Form Value': 'supplier',
+    });
+
     return {
         type: SELECT_SUPPLIER_DISCOUNT,
         make,
@@ -62,6 +79,11 @@ export function selectSupplierDiscount(make) {
 }
 
 export function selectConditionalRoles(roles) {
+    track('deal-detail:quote-form:changed', {
+        'Form Property': 'Customer Conditional Roles',
+        'Form Value': roles,
+    });
+
     return {
         type: SELECT_CONDITIONAL_ROLES,
         data: roles,

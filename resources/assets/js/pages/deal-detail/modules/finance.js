@@ -1,3 +1,5 @@
+import { track } from '../../../services';
+
 const UPDATE_DOWN_PAYMENT = 'dmr/dealDetails.finance.UPDATE_DOWN_PAYMENT';
 const UPDATE_TERM = 'dmr/dealDetails.finance.UPDATE_TERM';
 
@@ -18,6 +20,11 @@ export default function(state = initialState, action = {}) {
 }
 
 export function updateDownPayment(downPayment) {
+    track('deal-detail:quote-form:changed', {
+        'Form Property': 'Finance Down Payment',
+        'Form Value': downPayment,
+    });
+
     return {
         type: UPDATE_DOWN_PAYMENT,
         downPayment,
@@ -25,6 +32,11 @@ export function updateDownPayment(downPayment) {
 }
 
 export function updateTerm(term) {
+    track('deal-detail:quote-form:changed', {
+        'Form Property': 'Finance Term',
+        'Form Value': term,
+    });
+
     return {
         type: UPDATE_TERM,
         term,

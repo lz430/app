@@ -5,3 +5,8 @@ export const getCurrentPage = state => {
 export const getIsPageLoading = state => {
     return state.page.isLoading;
 };
+
+export const getCurrentPageIsInCheckout = state => {
+    const currentPage = state.page.current;
+    return currentPage && currentPage.includes('checkout-');
+};

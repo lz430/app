@@ -85,7 +85,9 @@ return [
     ],
 
     'routeone' => [
-        'url' =>  env('ROUTEONE_URL', 'https://www.routeone.net/XRD/turnKeyOcaStart.do'),
+        'production_url' => 'https://www.routeone.net/XRD/turnKeyOcaStart.do',
+        'test_url' => 'https://itl.routeone.net/XRD/turnKeyOcaStart.do',
+        'test_mode' => env('ROUTEONE_TEST_MODE', false),
         'id' => 'F00DMR',
     ],
 
