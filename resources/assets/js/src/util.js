@@ -11,13 +11,17 @@ const util = {
         return width > 768;
     },
     moneyFormat: num => {
-        const formatter = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-        });
-
-        return formatter.format(Math.round(num));
+        // Older browser don't support this.
+        if (typeof Intl.NumberFormat === 'function') {
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+            });
+            return formatter.format(Math.round(num));
+        } else {
+            return Math.round(num);
+        }
     },
     toggleItem: (items, item) => {
         return R.contains(item, items)
