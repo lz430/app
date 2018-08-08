@@ -25,6 +25,7 @@ import CashDetails from 'components/checkout/CashDetails';
 import FinanceDetails from 'components/checkout/FinanceDetails';
 import LeaseDetails from 'components/checkout/LeaseDetails';
 import InvalidCheckoutPage from 'components/checkout/InvalidCheckoutPage';
+import DealColors from '../../components/Deals/DealColors';
 
 class CheckoutConfirmContainer extends React.PureComponent {
     static propTypes = {
@@ -100,7 +101,7 @@ class CheckoutConfirmContainer extends React.PureComponent {
                                 {strings.dealModelTrim(deal)}
                             </div>
                             <div className="colors">
-                                {strings.dealColors(deal)}
+                                <DealColors deal={deal} />
                             </div>
                             <div className="stock-number">
                                 <DealStockNumber deal={deal} />

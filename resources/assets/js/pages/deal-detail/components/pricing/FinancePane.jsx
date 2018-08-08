@@ -73,10 +73,11 @@ export default class FinancePane extends React.PureComponent {
                                 <Value>
                                     <input
                                         className="fancyNumberEntry"
-                                        type="number"
-                                        min="0"
+                                        type="text"
                                         name="down-payment"
-                                        value={dealPricing.financeDownPaymentValue()}
+                                        value={dealPricing
+                                            .financeDownPaymentValue()
+                                            .toLocaleString()}
                                         onChange={this.handleDownPaymentChange}
                                     />
                                 </Value>
@@ -113,7 +114,28 @@ export default class FinancePane extends React.PureComponent {
     }
 
     handleDownPaymentChange = e => {
-        this.props.onDownPaymentChange(Number(Math.max(e.target.value, 0)));
+        const newDownPayment = Number(
+            Math.round(e.target.value.replace(/\D/g, ''), 0)
+        );
+
+        if (isNaN(newDownPayment)) {
+            return;
+        }
+
+        if (newDownPayment < 0) {
+            return;
+        }
+
+        const maxDownPayment = Math.round(
+            this.props.dealPricing.yourPriceValue() * 0.9
+        );
+
+        if (newDownPayment > maxDownPayment) {
+            this.props.onDownPaymentChange(maxDownPayment);
+            return;
+        }
+
+        this.props.onDownPaymentChange(newDownPayment);
     };
 
     handleTermChange = e => {
