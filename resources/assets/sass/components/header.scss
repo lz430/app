@@ -46,17 +46,21 @@
 
 .header-widget {
     display: inline-flex;
-
     border-left: 2px solid #ccc;
     flex-direction: row;
     align-items: center;
     font-size: 0.85rem;
     cursor: pointer;
-
     padding: 0 0.5rem;
 
     @include media-breakpoint-up(md) {
         padding: 0 1rem;
+    }
+
+    > a {
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
     }
 
     .label {
@@ -155,6 +159,64 @@
     }
 }
 
-.compare-widget .icon {
-    width: auto;
+.compare-widget {
+    .icon {
+        width: auto;
+    }
+    .dropdown-menu {
+        padding: 0;
+        margin: 0;
+        border: 1px solid $primary;
+        box-shadow: $box-shadow-sm;
+
+        &.show {
+            left: auto !important;
+            right: -113px !important;
+            @include media-breakpoint-up(sm) {
+                right: 0 !important;
+            }
+        }
+
+        .dropdown-footer-cta {
+            background: $primary;
+            border: 0;
+            color: #fff;
+            text-align: center;
+            cursor: pointer;
+        }
+    }
+    .compare-deal-summary {
+        position: relative;
+        padding: 0.25rem 0.25rem;
+        border-bottom: 1px solid #eee;
+        width: 260px;
+        cursor: default;
+        display: flex;
+        .thumbnail {
+            width: 60px;
+            img {
+                width: 60px;
+            }
+        }
+        .deal-title {
+            padding-left: 10px;
+            overflow: hidden;
+        }
+        .deal__basic-info-model-and-series {
+            font-size: 0.9rem;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .compare-deal-remove {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0.25rem;
+            fill: $text-color;
+            width: 16px;
+            cursor: pointer;
+        }
+    }
 }

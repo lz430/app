@@ -9,20 +9,6 @@ export function toggleCompare(deal) {
         const nextCompareList = util.toggleItem(deals, deal).map(d => {
             return {
                 deal: d,
-                selectedFilters: R.propOr(
-                    {
-                        selectedStyles: getState().pages.dealList.searchQuery
-                            .styles,
-                        selectedMakes: getState().pages.dealList.searchQuery
-                            .makes,
-                        selectedFeatures: getState().pages.dealList.searchQuery
-                            .features,
-                    },
-                    'selectedFilters',
-                    R.find(dealAndSelectedFilters => {
-                        return dealAndSelectedFilters.deal.id === d.id;
-                    }, getState().common.compareList)
-                ),
             };
         });
 
