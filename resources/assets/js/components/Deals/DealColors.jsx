@@ -1,6 +1,6 @@
 import React from 'react';
-import { dealType } from '../../types';
-import strings from '../../src/strings';
+import { dealType } from 'types';
+import strings from 'src/strings';
 
 export default class DealColors extends React.PureComponent {
     static propTypes = {
