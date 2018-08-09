@@ -1,4 +1,4 @@
-import { track } from '../../../services';
+import { track } from 'services';
 
 const UPDATE_DOWN_PAYMENT = 'dmr/dealDetails.finance.UPDATE_DOWN_PAYMENT';
 const UPDATE_TERM = 'dmr/dealDetails.finance.UPDATE_TERM';

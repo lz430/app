@@ -27,6 +27,12 @@ class ComparePageContainer extends React.PureComponent {
         this.props.onPageInit();
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.compareList.length !== prevProps.compareList.length) {
+            this.props.onPageInit();
+        }
+    }
+
     renderColDeal(col) {
         const deal = col.deal;
 
