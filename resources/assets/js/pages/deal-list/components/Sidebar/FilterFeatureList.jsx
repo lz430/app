@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { filterItemType } from 'types';
+
 import * as R from 'ramda';
 
 import Checkmark from 'icons/zondicons/Checkmark';
@@ -7,14 +9,7 @@ import Checkmark from 'icons/zondicons/Checkmark';
 class FilterFeatureList extends React.PureComponent {
     static propTypes = {
         category: PropTypes.string.isRequired,
-        items: PropTypes.arrayOf(
-            PropTypes.shape({
-                value: PropTypes.string,
-                label: PropTypes.string,
-                count: PropTypes.number,
-                icon: PropTypes.string,
-            })
-        ),
+        items: PropTypes.arrayOf(filterItemType),
         selectedItems: PropTypes.arrayOf(PropTypes.string),
         onToggleSearchFilter: PropTypes.func.isRequired,
     };

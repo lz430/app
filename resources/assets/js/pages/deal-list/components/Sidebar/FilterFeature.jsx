@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { filterItemType } from 'types';
 import FilterFeatureList from './FilterFeatureList';
 import SidebarFilter from './SidebarFilter';
 
@@ -8,13 +8,7 @@ class FilterFeature extends React.Component {
     static propTypes = {
         title: PropTypes.string.isRequired,
         category: PropTypes.string.isRequired,
-        items: PropTypes.arrayOf(
-            PropTypes.shape({
-                value: PropTypes.string,
-                label: PropTypes.string,
-                count: PropTypes.number,
-            })
-        ),
+        items: PropTypes.arrayOf(filterItemType),
         loadingSearchResults: PropTypes.bool.isRequired,
         selectedItems: PropTypes.arrayOf(PropTypes.string),
         onToggleSearchFilter: PropTypes.func.isRequired,

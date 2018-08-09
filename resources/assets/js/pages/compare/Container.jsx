@@ -80,7 +80,6 @@ class ComparePageContainer extends React.PureComponent {
         return (
             <div className="compare-page">
                 <ToolbarPrice />
-
                 <div className="compare-page__body-wrapper">
                     <div className="compare-page__body">
                         <div style={style}>
