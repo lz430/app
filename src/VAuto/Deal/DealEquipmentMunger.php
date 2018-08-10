@@ -6,6 +6,8 @@ use App\Models\Feature;
 use App\Models\Deal;
 use DeliverMyRide\JATO\JatoClient;
 use DeliverMyRide\VAuto\Map;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 
 /**
  *
@@ -173,7 +175,11 @@ class DealEquipmentMunger
      */
     private function fetchVersionEquipment(): \Illuminate\Support\Collection
     {
-        return collect($this->client->equipment->get($this->version->jato_vehicle_id)->results);
+        try {
+            return collect($this->client->equipment->get($this->version->jato_vehicle_id)->results);
+        } catch (ServerException | ClientException $e) {
+            return collect([]);
+        }
     }
 
     /**
@@ -182,7 +188,12 @@ class DealEquipmentMunger
      */
     private function fetchVersionPackages(): \Illuminate\Support\Collection
     {
-        return collect($this->client->option->get($this->version->jato_vehicle_id, 'P')->options);
+        try {
+            return collect($this->client->option->get($this->version->jato_vehicle_id, 'P')->options);
+        } catch (ServerException | ClientException $e) {
+            return collect([]);
+        }
+
     }
 
     /**
@@ -191,7 +202,11 @@ class DealEquipmentMunger
      */
     private function fetchVersionOptions(): \Illuminate\Support\Collection
     {
-        return collect($this->client->option->get($this->version->jato_vehicle_id, 'O')->options);
+        try {
+            return collect($this->client->option->get($this->version->jato_vehicle_id, 'O')->options);
+        } catch (ServerException | ClientException $e) {
+            return collect([]);
+        }
     }
 
     public function buildOptionsAndPackages()
