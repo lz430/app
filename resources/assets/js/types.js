@@ -25,10 +25,10 @@ export const dealType = shape({
 });
 
 export const filterItemType = shape({
-    label: string.isRequired,
-    value: string.isRequired,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     count: number.isRequired,
-    icon: string.isRequired,
+    icon: string,
 });
 
 export const dealPricingType = shape({

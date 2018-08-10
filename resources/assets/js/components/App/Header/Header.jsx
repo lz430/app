@@ -51,12 +51,14 @@ class Header extends React.PureComponent {
     onChatLoaded(ref) {
         this.livechat = ref;
         let _this = this;
-        ref.on_after_load = function() {
-            _this.setState({
-                chatShow: true,
-                chatAgents: ref.agents_are_available(),
-            });
-        };
+        if (typeof ref === 'object') {
+            ref.on_after_load = function() {
+                _this.setState({
+                    chatShow: true,
+                    chatAgents: ref.agents_are_available(),
+                });
+            };
+        }
     }
 
     /**

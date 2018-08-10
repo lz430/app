@@ -6,6 +6,8 @@ use App\Models\Feature;
 use App\Models\Deal;
 use DeliverMyRide\JATO\JatoClient;
 use DeliverMyRide\VAuto\Map;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 
 /**
  *
@@ -173,7 +175,11 @@ class DealEquipmentMunger
      */
     private function fetchVersionEquipment(): \Illuminate\Support\Collection
     {
-        return collect($this->client->equipment->get($this->version->jato_vehicle_id)->results);
+        try {
+            return collect($this->client->equipment->get($this->version->jato_vehicle_id)->results);
+        } catch (ServerException | ClientException $e) {
+            return collect([]);
+        }
     }
 
     /**
@@ -182,7 +188,12 @@ class DealEquipmentMunger
      */
     private function fetchVersionPackages(): \Illuminate\Support\Collection
     {
-        return collect($this->client->option->get($this->version->jato_vehicle_id, 'P')->options);
+        try {
+            return collect($this->client->option->get($this->version->jato_vehicle_id, 'P')->options);
+        } catch (ServerException | ClientException $e) {
+            return collect([]);
+        }
+
     }
 
     /**
@@ -191,7 +202,11 @@ class DealEquipmentMunger
      */
     private function fetchVersionOptions(): \Illuminate\Support\Collection
     {
-        return collect($this->client->option->get($this->version->jato_vehicle_id, 'O')->options);
+        try {
+            return collect($this->client->option->get($this->version->jato_vehicle_id, 'O')->options);
+        } catch (ServerException | ClientException $e) {
+            return collect([]);
+        }
     }
 
     public function buildOptionsAndPackages()
@@ -207,14 +222,14 @@ class DealEquipmentMunger
         $packagesAndOptions = array_unique($packagesAndOptions);
 
         $packages = $this->packages
-            ->reject(function($package) use ($packagesAndOptions) {
-              return !in_array($package->optionCode, $packagesAndOptions);
+            ->reject(function ($package) use ($packagesAndOptions) {
+                return !in_array($package->optionCode, $packagesAndOptions);
             })
             ->pluck('optionCode')
             ->all();
 
         $options = $this->options
-            ->reject(function($option) use ($packagesAndOptions) {
+            ->reject(function ($option) use ($packagesAndOptions) {
                 return !in_array($option->optionCode, $packagesAndOptions);
             })
             ->pluck('optionCode')
@@ -303,7 +318,8 @@ class DealEquipmentMunger
      * In many situations manual trans is standard and option codes / vauto features do not have any info
      * regarding transmission, so we see if we've got any options or packages for transmissions that might match.
      */
-    private function extractPackagesOrOptionsFromTransmission() {
+    private function extractPackagesOrOptionsFromTransmission()
+    {
 
         $transmission = $this->deal->transmission;
         if (isset(Map::VAUTO_TRANSMISSION_TO_JATO_PACKAGE[$transmission])) {
@@ -323,7 +339,7 @@ class DealEquipmentMunger
 
         $allOptional = $this->packages->merge($this->options);
         $codes = $allOptional
-            ->reject(function($option) use ($transmission) {
+            ->reject(function ($option) use ($transmission) {
                 $score = levenshtein($option->optionName, $transmission);
                 if ($score < 3) {
                     $this->debug['equipment_extracted_codes'][] = [
@@ -337,7 +353,7 @@ class DealEquipmentMunger
                 }
                 return true;
             })
-            ->map(function($option) {
+            ->map(function ($option) {
                 return $option->optionCode;
             })
             ->unique()
@@ -613,18 +629,19 @@ class DealEquipmentMunger
         $jatoVehicleSize = $equipment->value;
 
         if (str_contains(strtolower($jatoVehicleSize), ['luxury', 'near luxury'])) {
-            $segment = $this->syncEpaQualifierForSize($equipment);
-
+            $segment = $this->syncEpaQualifierForSize();
         } else {
-
-           $segment = collect(Map::SIZE_TO_JATO_SIZES)
-               ->filter(function ($value) use ($equipment) {
-                   // Pull from value instead of availability--per Derek at JATO 2018-02-12
-                   return str_contains(strtolower($equipment->value), $value);
-               })
-               ->keys()
-               ->first();
-       }
+            $segment = collect(Map::SIZE_TO_JATO_SIZES)
+                ->filter(function ($value) use ($equipment) {
+                    // Pull from value instead of availability--per Derek at JATO 2018-02-12
+                    return str_contains(strtolower($equipment->value), $value);
+                })
+                ->keys()
+                ->first();
+        }
+        if (!$segment) {
+            return null;
+        }
 
         return Feature::where('slug', $segment)->first();
     }
@@ -815,30 +832,34 @@ class DealEquipmentMunger
         $seatingCapacity = collect($seatingCategory->attributes);
 
         $capacity = $seatingCapacity
-            ->filter(function($attribute){
+            ->filter(function ($attribute) {
                 return $attribute->name == "Seating capacity";
             })
             ->pluck('value')
             ->first();
 
-       $this->deal->seating_capacity = $capacity;
-       $this->deal->save();
+        $this->deal->seating_capacity = $capacity;
+        $this->deal->save();
     }
 
     /**
+     * if vehicles sizes returned back from jato are of either luxury or near luxury,
+     * have to do a second lookup within the EPA qualifier equipment id to get the size
+     * of the car there and then compare to updated list of jato sizes to DMR sizes
+     *
      * @param $equipment
-     * if vehicles sizes returned back from jato are of either luxury or near luxury, have to do a second
-     * lookup within the EPA qualifier equipment id to get the size of the car there and then compare to
-     * updated list of jato sizes to DMR sizes
+     * @return string
      */
-    private function syncEpaQualifierForSize($equipment)
+    private function syncEpaQualifierForSize()
     {
         $luxurySizes = $this->equipment
             ->filter(function ($equipment) {
                 return $equipment->schemaId == 27601;
             })
             ->first();
-
+        if (!$luxurySizes) {
+            return null;
+        }
         $vehicleSize = collect(Map::LUXURY_SIZE_QUALIFIER)
             ->filter(function ($value) use ($luxurySizes) {
                 return str_contains(strtolower($luxurySizes->availability), $value);
