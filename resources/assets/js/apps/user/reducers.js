@@ -14,7 +14,7 @@ const initialState = {
     },
 
     purchasePreferences: {
-        strategy: 'cash', // cash | finance | lease
+        strategy: 'lease', // cash | finance | lease
     },
 };
 
