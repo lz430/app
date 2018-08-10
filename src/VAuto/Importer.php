@@ -257,7 +257,7 @@ class Importer
         } catch (ClientException | ServerException $e) {
             Log::channel('jato')->error('Importer error for vin [' . $row['VIN'] . ']: ' . $e->getMessage());
             $this->error('Error: ' . $e->getMessage());
-
+            app('sentry')->captureException($e);
             if ($e->getCode() === 401) {
                 $this->error('401 error connecting to JATO; cancelling the rest of the calls.');
                 throw $e;
@@ -265,6 +265,7 @@ class Importer
         } catch (QueryException | Exception $e) {
             Log::channel('jato')->error('Importer error for vin [' . $row['VIN'] . ']: ' . $e->getMessage());
             $this->error('Error: ' . $e->getMessage());
+            app('sentry')->captureException($e);
         }
     }
 
@@ -385,6 +386,13 @@ class Importer
             $pricing->msrp = $version->msrp;
         }
 
+        // Remove utf8 chars.
+        if ($row['Features']) {
+            $vauto_features = preg_replace('/[^\x01-\x7F]/', '', $row['Features']);
+        } else {
+            $vauto_features = null;
+        }
+
         $deal = Deal::updateOrCreate([
             'vin' => $row['VIN'],
         ], [
@@ -409,7 +417,7 @@ class Importer
             'interior_color' => $row['Interior Color'],
             'price' => isset($pricing->price) ? $pricing->price : null,
             'msrp' => isset($pricing->msrp) ? $pricing->msrp : null,
-            'vauto_features' => $row['Features'] !== '' ? $row['Features'] : null,
+            'vauto_features' => $vauto_features,
             'inventory_date' => Carbon::createFromFormat('m/d/Y', $row['Inventory Date']),
             'certified' => $row['Certified'] === 'Yes',
             'description' => $row['Description'],

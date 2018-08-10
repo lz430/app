@@ -7,14 +7,16 @@ import classNames from 'classnames';
 export default class DealImage extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,
-        size: PropTypes.string,
-        link: PropTypes.bool,
+        size: PropTypes.string.isRequired,
+        lazy: PropTypes.bool.isRequired,
+        link: PropTypes.bool.isRequired,
         featureImageClass: PropTypes.string,
     };
 
     static defaultProps = {
         size: 'thumbnail',
         link: true,
+        lazy: true,
     };
 
     state = {
@@ -37,40 +39,42 @@ export default class DealImage extends React.PureComponent {
         return false;
     }
 
-    render() {
+    renderImage() {
         const imageProps = {};
         if (this.props.featureImageClass) {
             imageProps.className = this.props.featureImageClass;
         }
 
         const thumbnail = this.featuredImageUrl();
-
         return (
-            <LazyLoad height={200} offset={100} overflow={true}>
-                <div
-                    className={classNames(
-                        'thumbnail-container',
-                        this.props.size
-                    )}
-                >
-                    {this.props.link && (
-                        <a href={`/deals/${this.props.deal.id}`}>
-                            {thumbnail && (
-                                <img {...imageProps} src={thumbnail} />
-                            )}
-                            {!thumbnail && (
-                                <img
-                                    className="placeholder"
-                                    src={this.state.fallbackDealImage}
-                                />
-                            )}
-                        </a>
-                    )}
-                    {!this.props.link && (
-                        <img {...imageProps} src={this.featuredImageUrl()} />
-                    )}
-                </div>
-            </LazyLoad>
+            <div className={classNames('thumbnail-container', this.props.size)}>
+                {this.props.link && (
+                    <a href={`/deals/${this.props.deal.id}`}>
+                        {thumbnail && <img {...imageProps} src={thumbnail} />}
+                        {!thumbnail && (
+                            <img
+                                className="placeholder"
+                                src={this.state.fallbackDealImage}
+                            />
+                        )}
+                    </a>
+                )}
+                {!this.props.link && (
+                    <img {...imageProps} src={this.featuredImageUrl()} />
+                )}
+            </div>
         );
+    }
+
+    render() {
+        if (this.props.lazy) {
+            return (
+                <LazyLoad height={200} offset={100} overflow={true}>
+                    {this.renderImage()}
+                </LazyLoad>
+            );
+        } else {
+            return this.renderImage();
+        }
     }
 }

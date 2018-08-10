@@ -5,27 +5,30 @@ import { connect } from 'react-redux';
 import { Navbar, NavbarBrand } from 'reactstrap';
 
 import UserLocationModal from './UserLocationModal';
+import CompareWidget from './CompareWidget';
 import { getUserLocation } from 'apps/user/selectors';
 import { requestLocation } from 'apps/user/actions';
 import Location from 'icons/zondicons/Location';
 import ChatBubbleDots from 'icons/zondicons/ChatBubbleDots';
 import config from 'config';
 import LiveChat from 'react-livechat';
-import classNames from 'classnames';
 import { getCurrentPageIsInCheckout } from 'apps/page/selectors';
+import { toggleCompare } from 'apps/common/actions';
 
 class Header extends React.PureComponent {
     static propTypes = {
         userLocation: PropTypes.object,
         currentPageIsInCheckout: PropTypes.bool,
-        onSearchForLocation: PropTypes.func.isRequired,
         compareList: PropTypes.array,
+        onSearchForLocation: PropTypes.func.isRequired,
+        onToggleCompare: PropTypes.func.isRequired,
     };
 
     state = {
         userLocationModalOpen: false,
         chatShow: false,
         chatAgents: false,
+        compareDropdown: false,
     };
 
     toggleUserLocationModal() {
@@ -48,28 +51,14 @@ class Header extends React.PureComponent {
     onChatLoaded(ref) {
         this.livechat = ref;
         let _this = this;
-        ref.on_after_load = function() {
-            _this.setState({
-                chatShow: true,
-                chatAgents: ref.agents_are_available(),
-            });
-        };
-    }
-
-    redirectToCompare(e) {
-        e.preventDefault();
-        if (this.compareReady()) {
-            window.location =
-                '/compare?' +
-                this.props.compareList.map(
-                    dealAndSelectedFilters =>
-                        `deals[]=${dealAndSelectedFilters.deal.id}`
-                );
+        if (typeof ref === 'object') {
+            ref.on_after_load = function() {
+                _this.setState({
+                    chatShow: true,
+                    chatAgents: ref.agents_are_available(),
+                });
+            };
         }
-    }
-
-    compareReady() {
-        return this.props.compareList.length >= 2;
     }
 
     /**
@@ -133,38 +122,6 @@ class Header extends React.PureComponent {
      *
      * @returns {*}
      */
-    renderCompareWidget() {
-        if (!this.props.compareList.length) {
-            return false;
-        }
-
-        if (this.props.currentPageIsInCheckout) {
-            return false;
-        }
-        return (
-            <div
-                className={classNames('header-widget', 'compare-widget', {
-                    disabled: !this.compareReady(),
-                })}
-                onClick={e => this.redirectToCompare(e)}
-            >
-                <div className="header-widget-content hidden d-sm-block">
-                    <div className="label">Compare</div>
-                    <div className="value">Deals</div>
-                </div>
-                <div className="icon">
-                    <span className="compare-count">
-                        {this.props.compareList.length}
-                    </span>
-                </div>
-            </div>
-        );
-    }
-
-    /**
-     *
-     * @returns {*}
-     */
     render() {
         return (
             <Navbar expand="md">
@@ -174,7 +131,13 @@ class Header extends React.PureComponent {
                 <div className="mr-auto" />
                 <div className="navbar-text">
                     {this.renderChatWidget()}
-                    {this.renderCompareWidget()}
+                    <CompareWidget
+                        currentPageIsInCheckout={
+                            this.props.currentPageIsInCheckout
+                        }
+                        onToggleCompare={this.props.onToggleCompare}
+                        compareList={this.props.compareList}
+                    />
                     {this.renderLocationWidget()}
                 </div>
 
@@ -208,6 +171,9 @@ const mapDispatchToProps = dispatch => {
     return {
         onSearchForLocation: search => {
             return dispatch(requestLocation(search));
+        },
+        onToggleCompare: deal => {
+            return dispatch(toggleCompare(deal));
         },
     };
 };

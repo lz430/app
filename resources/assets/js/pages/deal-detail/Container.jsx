@@ -11,7 +11,6 @@ import { toggleCompare } from 'apps/common/actions';
 import { getIsPageLoading } from 'apps/page/selectors';
 import { setPurchaseStrategy } from 'apps/user/actions';
 import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
-import CompareBar from 'components/CompareBar';
 import { setCheckoutData, checkoutStart } from 'apps/checkout/actions';
 import * as selectDiscountActions from './modules/selectDiscount';
 import * as financeActions from './modules/finance';
@@ -160,7 +159,6 @@ class DealDetailContainer extends React.PureComponent {
                     onToggleCompare={this.props.toggleCompare}
                     compareList={this.props.compareList}
                 />
-                <CompareBar class="compare-bar compare-bar--static" />
             </div>
         );
     }

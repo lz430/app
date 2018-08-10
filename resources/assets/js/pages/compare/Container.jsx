@@ -27,6 +27,12 @@ class ComparePageContainer extends React.PureComponent {
         this.props.onPageInit();
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.compareList.length !== prevProps.compareList.length) {
+            this.props.onPageInit();
+        }
+    }
+
     renderColDeal(col) {
         const deal = col.deal;
 
@@ -74,7 +80,6 @@ class ComparePageContainer extends React.PureComponent {
         return (
             <div className="compare-page">
                 <ToolbarPrice />
-
                 <div className="compare-page__body-wrapper">
                     <div className="compare-page__body">
                         <div style={style}>
