@@ -14,7 +14,7 @@ class VersionObserver
      */
     public function created(Version $version)
     {
-        $version->deals()->searchable();
+
     }
 
     /**
@@ -25,7 +25,7 @@ class VersionObserver
      */
     public function updated(Version $version)
     {
-        $version->deals()->searchable();
+
     }
 
     /**
