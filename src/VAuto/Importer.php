@@ -236,9 +236,11 @@ class Importer
             $this->info("    -- Is New: " . ($deal->wasRecentlyCreated ? "Yes" : "No"));
 
             DB::transaction(function () use ($deal, $row) {
-                $debug = (new DealMunger($deal, $this->jatoClient, $this->fuelClient, $row))->import(true);
+                $debug = (new DealMunger($deal, $this->jatoClient, $this->fuelClient, $row))->import();
 
                 // Equipment
+                $this->info("    -- Equipment: Skipped?: {$debug['equipment_skipped']}");
+
                 if (count($debug['equipment_extracted_codes'])) {
                     $codes = collect($debug['equipment_extracted_codes'])->pluck('Option Code')->all();
                     $msg = implode(", ", $codes);
@@ -246,9 +248,11 @@ class Importer
                 }
 
                 // Features
+                $this->info("    -- Features: Skipped?: {$debug['feature_skipped']}");
                 $this->info("    -- Features: New Jato Features: {$debug['feature_count']}");
 
                 // Photos
+                $this->info("    -- Photos: Skipped?: {$debug['deal_photos_skipped']}");
                 $this->info("    -- Photos: Deal Photos: {$debug['deal_photos']}");
                 $this->info("    -- Photos: Stock Photos: {$debug['stock_photos']}");
 

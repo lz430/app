@@ -35,6 +35,7 @@ class DealFeaturesMunger
 
         $this->debug = [
             'feature_count' => 0,
+            'feature_skipped' => 'Yes',
         ];
     }
 
@@ -52,6 +53,8 @@ class DealFeaturesMunger
         if ($this->deal->jatoFeatures()->count()){
             return $this->debug;
         }
+
+        $this->debug['feature_skipped'] = 'No';
 
         //
         // Get get data sources
