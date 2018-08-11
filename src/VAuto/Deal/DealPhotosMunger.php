@@ -30,6 +30,7 @@ class DealPhotosMunger
         $this->debug = [
             'deal_photos' => 0,
             'stock_photos' => 0,
+            'deal_photos_skipped' => 'Yes',
         ];
     }
 
@@ -41,12 +42,14 @@ class DealPhotosMunger
     {
         // When No photos.
         if (!$this->deal->photos()->count() || $force) {
+            $this->debug['deal_photos_skipped'] = 'No';
             $this->saveDealPhotos();
         }
 
         //
         // Usually we skip the first photo, so load some stock if have less than two deal photos.
         if ($this->deal->photos()->count() < 2) {
+            $this->debug['deal_photos_skipped'] = 'No';
             $this->saveDealStockPhotos();
         }
 
