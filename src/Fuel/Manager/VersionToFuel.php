@@ -21,6 +21,7 @@ class VersionToFuel
         'allroad' => 'A4 allroad',
         '6 Series Gran Turismo' => '6-series',
         'M2 Coupe' => '2-series',
+        'M3 Sedan' => '3-series',
         'AMG® GT Roadster' => 'AMG GT',
         'ATS Sedan' => 'ATS',
         'ATS-V Sedan' => 'ATS-V',
@@ -73,6 +74,7 @@ class VersionToFuel
         'BY_MODEL' => [
             'Sierra 1500 Denali' => 'Denali',
             'M2 Coupe' => 'M2',
+            'M3 Sedan' => 'M3',
         ],
         'BY_TRIM' => [
             'Sport S' => 'Sport',
