@@ -6,6 +6,7 @@ use App\Models\Feature;
 use App\Models\Deal;
 use DeliverMyRide\JATO\JatoClient;
 use DeliverMyRide\VAuto\Map;
+use Carbon\Carbon;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 
@@ -47,13 +48,13 @@ class DealEquipmentMunger
         $this->deal = $deal;
         $this->client = $client;
         $this->version = $this->deal->version;
-        $this->features = Feature::with('category')->get();
         $this->discovered_features = [];
         $this->vauto_features = [];
 
         $this->debug = [
             'equipment_extracted_codes' => [],
             'equipment_feature_count' => 0,
+            'equipment_skipped' => 'Yes',
         ];
     }
 
@@ -64,7 +65,11 @@ class DealEquipmentMunger
      */
     public function import(bool $force = FALSE)
     {
-        if ($force) {
+        // An iffy way to check if we have updated features. we don't
+        // do this often, so probably not that big of a deal right now.
+        $updatedFeatures = Feature::whereDate('updated_at', '>=', Carbon::now()->subDays(2))->count();
+
+        if ($force || $updatedFeatures) {
             $this->deal->features()->sync([]);
         }
 
@@ -72,15 +77,27 @@ class DealEquipmentMunger
             return $this->debug;
         }
 
+        $this->debug['equipment_skipped'] = 'No';
+
         //
         // Get get data sources
         $this->initializeData();
+
+        // If we don't have any equipment something is probably wrong
+        if (!$this->equipment->count()) {
+            return $this->debug;
+        }
+
         $this->processVautoFeature();
 
         //
         // Option codes & package codes
         $this->buildOptionsAndPackages();
         $this->initializeOptionCodes();
+
+        //
+        // Find information for the deal model
+        $this->syncSeatingCapacity();
 
         //
         // Finally get some features.
@@ -96,6 +113,7 @@ class DealEquipmentMunger
 
         //
         // Save discovered features to deal.
+        $this->deal->save();
         $this->updateDealWithDiscoveredFeatures();
 
         return $this->debug;
@@ -238,10 +256,6 @@ class DealEquipmentMunger
         $this->deal->package_codes = $packages;
         $this->deal->option_codes = $options;
 
-        //fetches and saves seating capacity for vehicles
-        $this->syncSeatingCapacity($this->equipment);
-        $this->deal->save();
-
     }
 
     /**
@@ -320,7 +334,6 @@ class DealEquipmentMunger
      */
     private function extractPackagesOrOptionsFromTransmission()
     {
-
         $transmission = $this->deal->transmission;
         if (isset(Map::VAUTO_TRANSMISSION_TO_JATO_PACKAGE[$transmission])) {
             $transmission = Map::VAUTO_TRANSMISSION_TO_JATO_PACKAGE[$transmission];
@@ -818,10 +831,10 @@ class DealEquipmentMunger
     }
 
     /**
-     * @param $equipment
-     * gets the seating capacity from jato equipment for use in filtering actual number of seats in a given car
+     * Gets the seating capacity from jato equipment for use
+     * in filtering actual number of seats in a given car
      */
-    private function syncSeatingCapacity($equipment)
+    private function syncSeatingCapacity()
     {
         $seatingCategory = $this->equipment
             ->filter(function ($equipment) {
@@ -829,17 +842,19 @@ class DealEquipmentMunger
             })
             ->first();
 
-        $seatingCapacity = collect($seatingCategory->attributes);
+        if ($seatingCategory && isset($seatingCategory->attributes)) {
+            $seatingCapacity = collect($seatingCategory->attributes);
 
-        $capacity = $seatingCapacity
-            ->filter(function ($attribute) {
-                return $attribute->name == "Seating capacity";
-            })
-            ->pluck('value')
-            ->first();
-
-        $this->deal->seating_capacity = $capacity;
-        $this->deal->save();
+            $capacity = $seatingCapacity
+                ->filter(function ($attribute) {
+                    return $attribute->name == "Seating capacity";
+                })
+                ->pluck('value')
+                ->first();
+            if ($capacity) {
+                $this->deal->seating_capacity = $capacity;
+            }
+        }
     }
 
     /**
@@ -847,7 +862,6 @@ class DealEquipmentMunger
      * have to do a second lookup within the EPA qualifier equipment id to get the size
      * of the car there and then compare to updated list of jato sizes to DMR sizes
      *
-     * @param $equipment
      * @return string
      */
     private function syncEpaQualifierForSize()

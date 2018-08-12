@@ -227,7 +227,6 @@ class VersionMunger
         return $model;
     }
 
-
     /**
      * @return Version
      * @throws \GuzzleHttp\Exception\GuzzleException

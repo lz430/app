@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
 use App\Models\Deal;
 use App\Http\Controllers\Controller;
 use DeliverMyRide\JATO\JatoClient;
