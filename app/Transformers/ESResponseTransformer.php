@@ -145,7 +145,10 @@ class ESResponseTransformer extends TransformerAbstract
                 'deals' => (object)[
                     'count' => $data['doc_count'],
                 ],
-                'lowest_msrp' => $data['msrp']['min_msrp']['value'],
+                'msrp' => round($data['msrp']['min_msrp']['value'], 2),
+                'cash' => round($data['cash']['min_cash']['value'], 2),
+                'lease' => round($data['lease']['min_lease']['value'], 2),
+                'finance' => round($data['finance']['min_finance']['value'], 2),
             ];
 
             $results[] = $element;

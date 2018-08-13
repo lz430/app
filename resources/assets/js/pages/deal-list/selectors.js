@@ -7,6 +7,7 @@ export const getSearchQuery = state => {
         ...state.pages.dealList.searchQuery,
         location: state.user.location,
         page: state.pages.dealList.page,
+        purchaseStrategy: state.user.purchasePreferences.strategy,
     };
 };
 

@@ -46,6 +46,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property array|null $option_codes
  * @property array|null $package_codes
  * @property \stdClass|null $source_price
+ * @property \stdClass|null $payments
  * @property int|null $fuel_econ_city
  * @property int|null $fuel_econ_hwy
  * @property string $dealer_name
@@ -150,7 +151,8 @@ class Deal extends Model
     protected $casts = [
         'option_codes' => 'array',
         'package_codes' => 'array',
-        'source_price' => 'object'
+        'source_price' => 'object',
+        'payments' => 'object'
     ];
 
     /**
@@ -299,8 +301,6 @@ class Deal extends Model
      */
     public function prices(): \stdClass
     {
-
-
         $source = $this->source_price;
 
         //
@@ -523,6 +523,7 @@ class Deal extends Model
 
         $pricing = $this->prices();
         $record['pricing'] = $pricing;
+        $record['payments'] = $this->payments;
 
         //
         // Backwards compatibility with existing frontend stuff

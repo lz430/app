@@ -109,15 +109,9 @@ export function selectModelYear(vehicleModel) {
 }
 
 export function toggleSearchSort(sort) {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.SEARCH_CHANGE_SORT,
-            sort,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
+    return {
+        type: ActionTypes.SEARCH_REQUEST,
+        sort: sort,
     };
 }
 

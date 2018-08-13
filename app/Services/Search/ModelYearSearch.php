@@ -48,6 +48,36 @@ class ModelYearSearch extends BaseSearch {
                                     ]
                                 ]
                             ],
+                            "cash" => [
+                                "reverse_nested" => (object)[],
+                                "aggs" => [
+                                    "min_cash" => [
+                                        "min" => [
+                                            "field" => "payments.detroit.cash"
+                                        ]
+                                    ]
+                                ]
+                            ],
+                            "finance" => [
+                                "reverse_nested" => (object)[],
+                                "aggs" => [
+                                    "min_finance" => [
+                                        "min" => [
+                                            "field" => "payments.detroit.finance"
+                                        ]
+                                    ]
+                                ]
+                            ],
+                            "lease" => [
+                                "reverse_nested" => (object)[],
+                                "aggs" => [
+                                    "min_lease" => [
+                                        "min" => [
+                                            "field" => "payments.detroit.lease"
+                                        ]
+                                    ]
+                                ]
+                            ],
                             "year" => [
                                 "reverse_nested" => (object)[],
                                 "aggs" => [

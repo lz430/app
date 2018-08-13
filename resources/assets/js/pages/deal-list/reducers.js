@@ -9,10 +9,7 @@ const initialState = {
     page: 1,
     searchQuery: {
         entity: 'model', // deal or model depending on the page we're on.
-        sort: {
-            attribute: 'price',
-            direction: 'asc',
-        },
+        sort: 'price',
         filters: [],
     },
     modelYears: [],
@@ -133,23 +130,13 @@ const reducer = function(state = initialState, action = {}) {
             };
 
         case ActionTypes.SEARCH_CHANGE_SORT:
-            let current = state.searchQuery.sort.direction;
-            let direction = 'asc';
-
-            if (current === 'asc') {
-                direction = 'desc';
-            }
-
             return {
                 ...state,
                 deals: [],
                 page: 1,
                 searchQuery: {
                     ...state.searchQuery,
-                    sort: {
-                        attribute: action.sort,
-                        direction: direction,
-                    },
+                    sort: action.sort,
                 },
             };
 

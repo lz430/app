@@ -66,7 +66,7 @@ abstract class BaseSearch
         return $this;
     }
 
-    public function sort(string $sort)
+    public function sort(string $sort, string $modifier = null)
     {
 
         $direction = 'asc';
@@ -78,7 +78,19 @@ abstract class BaseSearch
 
         switch ($sort) {
             case 'price':
-                $sort = 'pricing.msrp';
+                if (!$modifier || !in_array($modifier, ['msrp', 'employee', 'supplier', 'default'])) {
+                    $sort = 'pricing.msrp';
+                } else {
+                    $sort = 'pricing.' . $modifier;
+                }
+                break;
+
+            case 'payment':
+                if (!$modifier || !in_array($modifier, ['cash', 'finance', 'lease'])) {
+                    $sort = 'payments.detroit.cash';
+                } else {
+                    $sort = 'payments.detroit.' . $modifier;
+                }
                 break;
         }
 
@@ -182,6 +194,27 @@ abstract class BaseSearch
             ]
         ];
 
+
+        $this->query['query']['bool']['must'][] = $filterQuery;
+
+        if (isset($this->query['aggs']['makeandstyle'])) {
+            $this->query['aggs']['makeandstyle']['aggs']['make']['filter']['bool']['must'][] = $filterQuery;
+        }
+
+        return $this;
+    }
+
+    public function filterMustPayment(string $strategy) {
+
+        $filterQuery = [
+            [
+                'range' => [
+                    'payments.detroit.' . $strategy => [
+                      'gte' => 1,
+                    ],
+                ],
+            ]
+        ];
 
         $this->query['query']['bool']['must'][] = $filterQuery;
 

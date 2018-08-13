@@ -13,7 +13,7 @@ import { getIsPageLoading } from 'apps/page/selectors';
 
 import Deals from './components/Deals';
 import ToolbarSelectedFilters from './components/ToolbarSelectedFilters';
-import ToolbarPrice from './components/ToolbarPrice';
+import ToolbarSort from './components/ToolbarSort';
 import ToolbarMobileBottom from './components/ToolbarMobileBottom';
 import FilterPanel from './components/FilterPanel';
 import NoDealsOutOfRange from './components/NoDealsOutOfRange';
@@ -102,8 +102,8 @@ class Container extends React.PureComponent {
 
         return (
             <div className={className}>
-                {/* <ToolbarPrice/> */}
                 <ToolbarSelectedFilters />
+                <ToolbarSort />
                 <Deals />
             </div>
         );

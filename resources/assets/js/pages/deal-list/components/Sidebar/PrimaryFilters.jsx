@@ -54,9 +54,7 @@ class PrimaryFilters extends React.PureComponent {
                         </a>
                     </div>
                 ) : (
-                    <div className="sidebar-filters__instructive-heading">
-                        Refine this search
-                    </div>
+                    ''
                 )}
 
                 <SidebarFilter

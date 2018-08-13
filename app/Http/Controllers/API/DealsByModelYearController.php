@@ -14,6 +14,8 @@ class DealsByModelYearController extends BaseAPIController
         $this->validate($request, [
             'filters' => 'sometimes|required|array',
             'sort' => 'sometimes|required|string',
+            'strategy' => 'sometimes|required|string',
+
             'latitude' => 'sometimes|numeric',
             'longitude' => 'sometimes|numeric',
         ]);
@@ -29,10 +31,18 @@ class DealsByModelYearController extends BaseAPIController
             $query = $query->filterMustLocation(['lat' => $request->get('latitude'), 'lon' => $request->get('longitude')]);
         }
 
+
+        if ($request->get('strategy') && in_array($request->get('strategy'), ['cash', 'finance', 'lease'])) {
+            $query = $query->filterMustPayment($request->get('strategy'));
+        }
+
         $query = $query->genericFilters($request->get('filters', []));
 
-        $results = $query->get();
+        if ($request->get('sort')) {
+            $query = $query->sort($request->get('sort'));
+        }
 
+        $results = $query->get();
         return fractal()
             ->item(['response' => $results,
                 'meta' => [

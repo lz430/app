@@ -62,6 +62,13 @@ function* requestSearch(action) {
         yield put({ type: ActionTypes.SEARCH_INCREMENT_PAGE });
     }
 
+    if (action.sort) {
+        yield put({
+            type: ActionTypes.SEARCH_CHANGE_SORT,
+            sort: action.sort,
+        });
+    }
+
     const source = cancelRequest();
     const state = yield select();
     const searchQuery = getSearchQuery(state);

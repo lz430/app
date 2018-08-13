@@ -50,16 +50,14 @@ class FilterPanel extends React.PureComponent {
                     {/*
                     Purchase Strategy
                     */}
-                    {this.props.searchQuery.entity === 'deal' && (
-                        <div className="purchase-strategy">
-                            <GlobalSelectPurchaseStrategy
-                                afterSetPurchaseStrategy={this.afterSetPurchaseStrategy.bind(
-                                    this
-                                )}
-                                sortbar__button
-                            />
-                        </div>
-                    )}
+                    <div className="purchase-strategy">
+                        <GlobalSelectPurchaseStrategy
+                            afterSetPurchaseStrategy={this.afterSetPurchaseStrategy.bind(
+                                this
+                            )}
+                            sortbar__button
+                        />
+                    </div>
 
                     {/*
                     Primary Filters
@@ -78,14 +76,6 @@ class FilterPanel extends React.PureComponent {
                     <div
                         className={`sidebar-filters__narrow sidebar-filters__narrow--${status}`}
                     >
-                        {this.props.searchQuery.entity === 'deal' ? (
-                            <div className="sidebar-filters__instructive-heading">
-                                Refine this search
-                            </div>
-                        ) : (
-                            ''
-                        )}
-
                         <SecondaryFilters
                             searchQuery={this.props.searchQuery}
                             filters={this.props.filters}
