@@ -15,11 +15,13 @@ export function requestSearch() {
 }
 
 export function receiveSearch(results) {
-    track('search:results:receive', {
-        'Search Results Total': results.meta.total,
-        'Search Results Entity': results.meta.entity,
-        'Search Results Page': results.meta['current_page'],
-    });
+    if (results.meta.total) {
+        track('search:results:receive', {
+            'Search Results Total': results.meta.total,
+            'Search Results Entity': results.meta.entity,
+            'Search Results Page': results.meta['current_page'],
+        });
+    }
 
     return {
         type: ActionTypes.SEARCH_RECEIVE,

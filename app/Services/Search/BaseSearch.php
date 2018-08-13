@@ -77,6 +77,9 @@ abstract class BaseSearch
         $sort = str_replace('-', '', $sort);
 
         switch ($sort) {
+            case 'title':
+                $sort = 'title.keyword';
+                break;
             case 'price':
                 if (!$modifier || !in_array($modifier, ['msrp', 'employee', 'supplier', 'default'])) {
                     $sort = 'pricing.msrp';

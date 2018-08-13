@@ -103,7 +103,6 @@ class Container extends React.PureComponent {
         return (
             <div className={className}>
                 <ToolbarSelectedFilters />
-                <ToolbarSort />
                 <Deals />
             </div>
         );
