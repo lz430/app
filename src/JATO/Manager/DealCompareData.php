@@ -187,9 +187,10 @@ class DealCompareData
                 } elseif (isset($attributes['published curb weight (lbs)'])) {
                     $val = $attributes['published curb weight (lbs)'];
                 }
-
-                $formatted = number_format($val->value);
-                $labels[$equipment->schemaId] = "Weight: {$formatted} (lbs)";
+                if (isset($val)) {
+                    $formatted = number_format($val->value);
+                    $labels[$equipment->schemaId] = "Weight: {$formatted} (lbs)";
+                }
                 break;
             case 'Tires':
                 if (isset($attributes['type'])) {

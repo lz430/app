@@ -183,12 +183,7 @@
                             <div class="row">
                                 @foreach($equipments as $key => $equipment)
                                     <div class="col-md-3">
-                                        @component('components.box', ['collapsible' => true, 'key' => 'se-' . $key . $equipment->schemaId])
-                                            @slot('title')
-                                                {{$equipment->name}}
-                                            @endslot
-                                            <pre>{{ json_encode($equipment, JSON_PRETTY_PRINT) }}</pre>
-                                        @endcomponent
+                                        @include('admin.shared.jatoequipment', ['equipment' => $equipment, 'prefix' => 'se'.$key])
                                     </div>
                                 @endforeach
                             </div>
@@ -214,12 +209,7 @@
                             <div class="row">
                                 @foreach($package['equipment'] as $key => $equipment)
                                     <div class="col-md-3">
-                                        @component('components.box', ['collapsible' => true, 'key' => 'pe-' . $key])
-                                            @slot('title')
-                                                {{$equipment->name}}
-                                            @endslot
-                                            <pre>{{ json_encode($equipment, JSON_PRETTY_PRINT) }}</pre>
-                                        @endcomponent
+                                        @include('admin.shared.jatoequipment', ['equipment' => $equipment, 'prefix' => 'pe'.$key])
                                     </div>
                                 @endforeach
                             </div>
@@ -246,12 +236,7 @@
                             <div class="row">
                                 @foreach($option['equipment'] as $key => $equipment)
                                     <div class="col-md-3">
-                                        @component('components.box',  ['collapsible' => true, 'key' => 'oe-' . $key])
-                                            @slot('title')
-                                                {{$equipment->name}}
-                                            @endslot
-                                            <pre>{{ json_encode($equipment, JSON_PRETTY_PRINT) }}</pre>
-                                        @endcomponent
+                                        @include('admin.shared.jatoequipment', ['equipment' => $equipment, 'prefix' => 'oe'.$key])
                                     </div>
                                 @endforeach
                             </div>
