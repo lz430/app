@@ -29,10 +29,12 @@ class ToolbarSort extends React.Component {
                     value={this.props.searchQuery.sort}
                     name="sort"
                 >
-                    <option value="price">MSRP, low to high</option>
-                    <option value="-price">MSRP, high to low</option>
-                    <option value="payment">Payment, low to high</option>
-                    <option value="-price">Payment, high to low</option>
+                    <option value="title">Name: A -&gt; Z</option>
+                    <option value="-title">Name: Z -&gt; A</option>
+                    <option value="price">MSRP: Low -&gt; High</option>
+                    <option value="-price">MSRP: High -&gt; Low</option>
+                    <option value="payment">Payment: Low -&gt; High</option>
+                    <option value="-payment">Payment: High -&gt; Low</option>
                 </select>
             </div>
         );

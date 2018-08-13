@@ -39,7 +39,7 @@ class DealsByModelYearController extends BaseAPIController
         $query = $query->genericFilters($request->get('filters', []));
 
         if ($request->get('sort')) {
-            $query = $query->sort($request->get('sort'));
+            $query = $query->sort($request->get('sort'), $request->get('strategy'));
         }
 
         $results = $query->get();

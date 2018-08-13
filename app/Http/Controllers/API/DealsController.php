@@ -42,8 +42,9 @@ class DealsController extends BaseAPIController
         $query = $query->genericFilters($request->get('filters', []));
 
         if ($request->get('sort')) {
-            $query = $query->sort($request->get('sort'));
+            $query = $query->sort($request->get('sort'), $request->get('strategy'));
         }
+
 
         $page = ($request->get('page') ? $request->get('page') - 1 : 0);
 

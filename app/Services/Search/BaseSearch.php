@@ -66,7 +66,7 @@ abstract class BaseSearch
         return $this;
     }
 
-    public function sort(string $sort, string $modifier = null)
+    public function getSort(string $sort, string $modifier = null)
     {
 
         $direction = 'asc';
@@ -94,13 +94,7 @@ abstract class BaseSearch
                 break;
         }
 
-        $this->query['sort'] = [
-            [
-                $sort => $direction,
-            ],
-        ];
-
-        return $this;
+        return [$sort, $direction];
     }
 
     public function filterMustGenericRules()
