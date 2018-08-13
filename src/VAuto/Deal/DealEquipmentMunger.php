@@ -778,7 +778,6 @@ class DealEquipmentMunger
      */
     private function syncSeatingConfiguration($equipment): ?Feature
     {
-        $this->syncMildHybridEngineType();
         if ($equipment->schemaId !== 701) {
             return null;
         }
