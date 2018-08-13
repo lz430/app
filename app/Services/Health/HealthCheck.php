@@ -9,6 +9,7 @@ use App\Services\Health\Checks\TestCheck;
 use App\Services\Health\Checks\DatabaseCheck;
 use App\Services\Health\Checks\RedisCheck;
 use App\Services\Health\Checks\CarletonCheck;
+use App\Services\Health\Checks\ElasticCheck;
 
 class HealthCheck
 {
@@ -20,6 +21,7 @@ class HealthCheck
        $database = new DatabaseCheck();
        $redis = new RedisCheck();
        $carleton = new CarletonCheck();
+       $elastic = new ElasticCheck();
 
        $checks = [
            'DataDeliveryApi' => $datadelivery->run(),
@@ -28,6 +30,7 @@ class HealthCheck
            'CarletonApi' => $carleton->run(),
            'Database' => $database->run(),
            'Redis' => $redis->run(),
+           'ElasticSearch' => $elastic->run()
        ];
 
        return $checks;

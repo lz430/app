@@ -36,7 +36,6 @@ class DealDataController extends Controller
     }
 
     private function potentialVersionEquipment() {
-
         try {
             return $this->client->equipment->get($this->version->jato_vehicle_id)->results;
         } catch (ServerException | ClientException $e) {
@@ -162,9 +161,15 @@ class DealDataController extends Controller
             'title' => 'Version',
             'model' => $this->version->toArray(),
         ];
+        
+        $compare =  (new DealCompareData($client, $deal))->build();
+        
+        foreach($compare as &$labels) {
+            sort($labels);
+        }
         $data = [
             'deal' => $deal,
-            'compare' => (new DealCompareData($client, $deal))->build(),
+            'compare' => $compare,
             'standardEquipment' => $this->buildStandardEquipment(),
             'options' => $this->buildOptions(),
             'versions' => $this->buildJatoVersionOptions(),

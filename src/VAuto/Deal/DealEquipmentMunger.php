@@ -678,7 +678,11 @@ class DealEquipmentMunger
                 if (str_contains(strtolower($value), ['diesel', 'biodiesel'])) {
                     return 'fuel_type_diesel';
                 } elseif (str_contains(strtolower($value), ['hybrid', 'electric'])) {
-                    return 'fuel_type_hybrid_electric';
+                    if($this->syncMildHybridEngineType() == "mild hybrid"){
+                        return 'fuel_type_gas';
+                    } else {
+                        return 'fuel_type_hybrid_electric';
+                    }
                 } elseif (str_contains(strtolower($value), ['unleaded', 'unleaded premium', 'premium', 'e85'])) {
                     return 'fuel_type_gas';
                 }
@@ -882,5 +886,32 @@ class DealEquipmentMunger
             ->first();
 
         return $vehicleSize;
+    }
+
+    /**
+     * looks at the engine type and checks jato to look into the engine hybrid type and if available checks to see
+     * if hybrid type == mild hybrid and used when assigning engine types above to make for now gasoline
+     * @return string
+     */
+    private function syncMildHybridEngineType()
+    {
+        $engine = $this->equipment
+            ->filter(function ($equipment) {
+                return $equipment->schemaId == 51801;
+            })
+            ->first();
+
+        if($engine && $engine->availability !== "not available"){
+            if ($engine && isset($engine->attributes)) {
+                $engineType = collect($engine->attributes);
+
+                return $engineType
+                    ->filter(function($attribute){
+                        return $attribute->name == "hybrid type";
+                    })
+                    ->pluck('value')
+                    ->first();
+            }
+        }
     }
 }
