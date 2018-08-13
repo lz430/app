@@ -102,8 +102,10 @@
             {{-- OptinMonster --}}
             <script type="text/javascript">
                 document.addEventListener('om.Optin.init.submit', function(event) {
-                    var email = event.detail.Optin.data.fields.email;
-                    window.axios.post('/set-email', {email: email}, {headers: {'X-CSRF-TOKEN': "{{csrf_token()}}"}});
+                    if (event.detail.Optin.data &&  event.detail.Optin.data.fields.email) {
+                        var email = event.detail.Optin.data.fields.email;
+                        window.axios.post('/set-email', {email: email}, {headers: {'X-CSRF-TOKEN': "{{csrf_token()}}"}});
+                    }
                 } );
             </script>
         @endif
