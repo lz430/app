@@ -2,8 +2,7 @@
 
 namespace App\Console\Commands;
 
-use DeliverMyRide\Fuel\FuelClient;
-use DeliverMyRide\Fuel\Manager\VersionToFuel;
+use DeliverMyRide\RIS\RISClient;
 use App\Models\JATO\Version;
 
 use Illuminate\Console\Command;
@@ -25,16 +24,16 @@ class VersionGenerateQuotes extends Command
      */
     protected $description = 'Fill Missing Photos';
 
-    /* @var FuelClient */
+    /* @var RISClient */
     private $client;
 
     /**
      * Create a new command instance.
 
-     * @param FuelClient $client
+     * @param RISClient $client
      * @return void
      */
-    public function __construct(FuelClient $client)
+    public function __construct(RISClient $client)
     {
         parent::__construct();
 
@@ -46,26 +45,10 @@ class VersionGenerateQuotes extends Command
      */
     public function handle()
     {
-        $versions = Version::doesntHave('photos')->has('deals')->orderBy('year', 'desc')->get();
+        $versions = Version::has('deals')->orderBy('year', 'desc')->get();
         $client = $this->client;
-        $versions->map(function ($item) use ($client) {
-            $manager = new VersionToFuel($item, $client);
-            //$vehicle = $manager->matchFuelVehicleToVersion();
-            $assets = $manager->assets();
-            if ($assets && count($assets)) {
-                $this->info($item->id);
-                $item->photos()->delete();
+        $versions->map(function ($version) use ($client) {
 
-                foreach ($assets as $asset) {
-                    $item->photos()->create([
-                        'url' => $asset->url,
-                        'shot_code' => $asset->shotCode->code,
-                        'color' => 'default',
-                    ]);
-                }
-            }
-
-            return $item;
         });
 
     }
