@@ -93,6 +93,7 @@ class DealQuoteController extends BaseAPIController
             'zipcode' => 'required|string',
             'roles' => 'required|array|in:default,employee,supplier,college,military,conquest,loyal,responder,gmcompetitive,gmlease,cadillaclease,gmloyalty',
         ]);
+
         $paymentType = request('payment_type');
         $zip = request('zipcode');
 
