@@ -120,6 +120,9 @@ abstract class BaseSearch
                 ['terms' => [
                     'version.description' => self::VERSION_DESCRIPTION_BLACKLIST,
                 ]],
+                ['term' => [
+                    'seating_capacity' => 0,
+                ]],
             ],
         ];
 
