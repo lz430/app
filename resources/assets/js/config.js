@@ -44,5 +44,6 @@ export default {
         gmcompetitive: 'gmcomp',
         gmlease: 'gmlease',
         cadillaclease: 'cadlease',
+        gmloyalty: 'gmloyalty',
     },
 };
