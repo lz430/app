@@ -8,7 +8,7 @@ use DeliverMyRide\Common\ApiClient;
  * Class RISClient
  * @package DeliverMyRide\Cox
 
- * @see https://incentives.homenetiol.com/v2.4/metadata
+ * @see https://incentives.homenetiol.com/v2.5/metadata
  *  For information about endpoints
  */
 class RISClient extends ApiClient
@@ -40,7 +40,7 @@ class RISClient extends ApiClient
 
         // Configure
         $this->apiKey = $apiKey;
-        $this->baseUrl = "https://incentives.homenetiol.com/v2.4/json/reply";
+        $this->baseUrl = "https://incentives.homenetiol.com/v2.5/json/reply";
     }
 
     protected function getRequestHeaders() {

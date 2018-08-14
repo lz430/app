@@ -11,7 +11,7 @@ class HashcodeService extends BaseService {
 
     /**
      * Get the master hashcode
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=GetMasterHashcode
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=GetMasterHashcode
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -21,7 +21,7 @@ class HashcodeService extends BaseService {
 
     /**
      * Get the master hashcode
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=GetHashcodeTree
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=GetHashcodeTree
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      *
@@ -33,7 +33,7 @@ class HashcodeService extends BaseService {
 
     /**
      * makes (include hashcodes)
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=GetMakes
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=GetMakes
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -42,7 +42,7 @@ class HashcodeService extends BaseService {
     }
 
     /**
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=GetPostalcodesHashcode
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=GetPostalcodesHashcode
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
