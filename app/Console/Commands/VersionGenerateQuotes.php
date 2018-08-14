@@ -8,6 +8,7 @@ use App\Models\JATO\Version;
 
 use Illuminate\Console\Command;
 
+
 class VersionGenerateQuotes extends Command
 {
     /**
