@@ -12,6 +12,10 @@ use DeliverMyRide\Carleton\Manager\DealLeasePaymentsManager;
 use DeliverMyRide\DataDelivery\Map;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * Calculate the price for a given vehicle accurately using specific information
+ * provided by the end user.
+ */
 class DealQuote {
     private $dataDeliveryClient;
     private $carletonClient;

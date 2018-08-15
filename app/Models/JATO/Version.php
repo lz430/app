@@ -28,6 +28,7 @@ class Version extends Model
     {
         return $this->belongsTo(VehicleModel::class, 'model_id');
     }
+
     /**
      * @return HasMany
      */
@@ -36,6 +37,17 @@ class Version extends Model
         return $this->hasMany(VersionPhoto::class);
     }
 
+    /**
+     * @return HasMany
+     */
+    public function quotes(): HasMany
+    {
+        return $this->hasMany(VersionQuote::class);
+    }
+
+    /**
+     * @return HasMany
+     */
     public function deals()
     {
         return $this->hasMany(Deal::class);

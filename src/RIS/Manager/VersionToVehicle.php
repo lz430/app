@@ -54,7 +54,11 @@ class VersionToVehicle
 
 
     /* @var \Illuminate\Support\Collection */
+    private $makes;
+
+    /* @var \Illuminate\Support\Collection */
     private $vehicles;
+
 
 
     private $selected = [
@@ -98,12 +102,13 @@ class VersionToVehicle
         return $data;
     }
 
-    private function reKeyObjectAttribute(\stdClass $object, string $attr, string $key) {
-        foreach($object as $a => $v) {
+    private function reKeyObjectAttribute(\stdClass $object, string $attr, string $key)
+    {
+        foreach ($object as $a => $v) {
             if ($a == $attr && is_array($v)) {
                 $data = [];
-                foreach($v as $item){
-                    $data[$item->{$key}] =  $item;
+                foreach ($v as $item) {
+                    $data[$item->{$key}] = $item;
                 }
                 $object->{$a} = $data;
             }
@@ -198,12 +203,33 @@ class VersionToVehicle
         return $params;
     }
 
+    private function fetchMakeHashcodes() {
+        $results = Cache::remember('ris-makes', 1440, function () {
+            try {
+                $response = $this->client->hashcode->makes();
+                $results = [];
+                foreach($response->response as $make) {
+                    $results[strtolower($make->makeName)] = $make;
+                }
+            } catch (ClientException $exception) {
+                $results = [];
+            }
+
+            return $results;
+        });
+
+        if ($results) {
+            $results = collect($results);
+        }
+        $this->makes = $results;
+    }
+
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     *
      */
     private function fetchVehicles()
     {
-        $results = $value = Cache::remember('ris-make-' . $this->version->model->make->name . $this->zipcode, 1440, function () {
+        $results = Cache::remember('ris-make-' . $this->version->model->make->name . $this->zipcode, 1440, function () {
             try {
                 $results = $this->client->vehicle->findByMakeAndPostalcode(
                     $this->version->model->make->name,
@@ -254,7 +280,7 @@ class VersionToVehicle
             ->map(function ($vehicle) {
                 $data = new \stdClass();
                 $data->filters = $this->parseHints($vehicle->vehicleHints);
-                if (isset($vehicle->modelYear)){
+                if (isset($vehicle->modelYear)) {
                     $data->filters->YEAR = [
                         $vehicle->modelYear
                     ];
@@ -350,25 +376,25 @@ class VersionToVehicle
             }
 
             // Build Scenarios
-            foreach(
+            foreach (
                 [
                     'cashDealScenarios',
                     'programDealScenarios',
                 ] as $group) {
 
                 if (isset($vehicle->{$group})) {
-                    foreach($vehicle->{$group} as $scenario) {
+                    foreach ($vehicle->{$group} as $scenario) {
                         $data->scenarios[$scenario->dealScenarioTypeName] = $scenario;
                     }
                 }
             }
 
             // Rekey efforts
-            foreach($data->scenarios as $name => $scenario) {
+            foreach ($data->scenarios as $name => $scenario) {
                 if (isset($scenario->programs)) {
-                    foreach($scenario->programs as $program) {
+                    foreach ($scenario->programs as $program) {
                         if (isset($program->tiers)) {
-                            foreach($program->tiers as $tier) {
+                            foreach ($program->tiers as $tier) {
                                 $this->reKeyObjectAttribute($tier, 'aprTerms', 'length');
                                 $this->reKeyObjectAttribute($tier, 'leaseTerms', 'length');
                             }
@@ -376,8 +402,8 @@ class VersionToVehicle
 
                         if (isset($program->residuals)) {
                             $this->reKeyObjectAttribute($program, 'residuals', 'miles');
-                            foreach($program->residuals as $residual) {
-                                foreach($residual->vehicles as $vehicle) {
+                            foreach ($program->residuals as $residual) {
+                                foreach ($residual->vehicles as $vehicle) {
                                     $this->reKeyObjectAttribute($vehicle, 'termValues', 'termLength');
                                 }
                             }
@@ -392,18 +418,19 @@ class VersionToVehicle
 
     }
 
-    public function reduceResiduals() {
+    public function reduceResiduals()
+    {
         if (!$this->selected['lease']) {
             return;
         }
 
         $data = $this->selected['lease'];
 
-        foreach($data->scenarios as $name => $scenario) {
+        foreach ($data->scenarios as $name => $scenario) {
             if (isset($scenario->programs)) {
-                foreach($scenario->programs as $program) {
+                foreach ($scenario->programs as $program) {
                     if (isset($program->residuals)) {
-                        foreach($program->residuals as $residual) {
+                        foreach ($program->residuals as $residual) {
                             $vehicles = $this->parseVehicles(collect($residual->vehicles));
                             $vehicles = $this->reduceVehicles($vehicles);
                             unset($residual->vehicles);
@@ -415,19 +442,35 @@ class VersionToVehicle
         }
     }
 
+    private function selectRates() {
+        foreach($this->selected as $strategy => $vehicle) {
+            if (!$vehicle) {
+                continue;
+            }
+
+            $data = new \stdClass();
+            $data->hashcode = $vehicle->hashcode;
+            $data->makeHashcode = $this->makes[strtolower($this->version->model->make->name)]->hashcode;
+
+            $data->data = $vehicle;
+            $this->selected['strategy'] = $data;
+
+            dd($vehicle);
+        }
+    }
+
     public function get()
     {
         $results = null;
-
+        $this->fetchMakeHashcodes();
         $this->fetchVehicles();
         $this->vehicles = $this->parseVehicles($this->vehicles);
         $this->vehicles = $this->reduceVehicles($this->vehicles);
         $this->selectVehicles();
         $this->transformSelectedVehicles();
         $this->reduceResiduals();
-
+        $this->selectRates();
         return $this->selected;
-
     }
 
 }
