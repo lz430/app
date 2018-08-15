@@ -90,7 +90,7 @@ class ModelYearSearch extends BaseSearch
                                 "aggs" => [
                                     "min_finance" => [
                                         "min" => [
-                                            "field" => "payments.detroit.finance"
+                                            "field" => "payments.detroit.finance.payment"
                                         ]
                                     ]
                                 ]
@@ -100,7 +100,7 @@ class ModelYearSearch extends BaseSearch
                                 "aggs" => [
                                     "min_lease" => [
                                         "min" => [
-                                            "field" => "payments.detroit.lease"
+                                            "field" => "payments.detroit.lease.payment"
                                         ]
                                     ]
                                 ]

@@ -90,13 +90,12 @@ abstract class BaseSearch
 
             case 'payment':
                 if (!$modifier || !in_array($modifier, ['cash', 'finance', 'lease'])) {
-                    $sort = 'payments.detroit.cash';
+                    $sort = 'payments.detroit.cash.payment';
                 } else {
-                    $sort = 'payments.detroit.' . $modifier;
+                    $sort = 'payments.detroit.' . $modifier . '.payment';
                 }
                 break;
         }
-
         return [$sort, $direction];
     }
 
@@ -206,7 +205,7 @@ abstract class BaseSearch
         $filterQuery = [
             [
                 'range' => [
-                    'payments.detroit.' . $strategy => [
+                    'payments.detroit.' . $strategy . '.payment' => [
                       'gte' => 1,
                     ],
                 ],
