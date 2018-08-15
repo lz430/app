@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\JATO\VersionQuote;
 use DeliverMyRide\RIS\Manager\VersionToVehicle;
 use DeliverMyRide\RIS\RISClient;
 use App\Models\JATO\Version;
@@ -30,7 +31,6 @@ class VersionGenerateQuotes extends Command
 
     /**
      * Create a new command instance.
-
      * @param RISClient $client
      * @return void
      */
@@ -46,21 +46,32 @@ class VersionGenerateQuotes extends Command
      */
     public function handle()
     {
-        $versions = Version::has('deals')->orderBy('year', 'desc')->get();
+        $versions = Version::has('deals')->doesntHave('quotes')->orderBy('year', 'desc')->get();
         $client = $this->client;
         $versions->map(function ($version) use ($client) {
-            $vehicle = (new VersionToVehicle($version, '48116', $client))->get();
+            $datas = (new VersionToVehicle($version, '48116', $client))->get();
             $this->info($version->title());
 
-            /*
-            if (isset($vehicle->vehicle->cashDealScenarios)) {
-                foreach($vehicle->vehicle->cashDealScenarios as $cash) {
-                    $this->info("  -- " . $cash->dealScenarioTypeName . " : $" . $cash->consumerCash->totalConsumerCash);
+            foreach ($datas as $strategy => $data) {
+                if (!$data) {
+                    continue;
                 }
 
+                $versionQuote = VersionQuote::updateOrCreate([
+                    'strategy' => $strategy,
+                    'version_id' => $version->id,
+                ], [
+                    'hashcode' => $data->hashcode,
+                    'make_hashcode' => $data->makeHashcode,
+                    'rate' => $data->rate,
+                    'term' => $data->term,
+                    'rebate' => $data->rebates,
+                    'residual' => $data->residual,
+                    'miles' => $data->miles,
+                    'rate_type' => $data->rateType,
+                    'data' => $data->data,
+                ]);
             }
-            */
         });
-
     }
 }

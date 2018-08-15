@@ -26,6 +26,11 @@ class CreateVersionQuotesTable extends Migration
             $table->integer('rebate');
             $table->decimal('rate');
 
+            // Lease only stuff
+            $table->integer('residual')->nullable();
+            $table->integer('miles')->nullable();
+            $table->string('rate_type')->nullable();
+
             $table->json('data');
             $table->timestamps();
 

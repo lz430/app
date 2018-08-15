@@ -102,6 +102,11 @@ class VersionToVehicle
         return $data;
     }
 
+    /**
+     * @param \stdClass $object
+     * @param string $attr
+     * @param string $key
+     */
     private function reKeyObjectAttribute(\stdClass $object, string $attr, string $key)
     {
         foreach ($object as $a => $v) {
@@ -113,6 +118,21 @@ class VersionToVehicle
                 $object->{$a} = $data;
             }
         }
+    }
+
+    /**
+     * @param array $arr
+     * @param $search
+     * @return mixed|null
+     */
+    private function getClosetNumber(array $arr, $search) {
+        $closest = null;
+        foreach ($arr as $item) {
+            if ($closest === null || abs($search - $closest) > abs($item - $search)) {
+                $closest = $item;
+            }
+        }
+        return $closest;
     }
 
     private function translateTrimName(): string
@@ -449,13 +469,73 @@ class VersionToVehicle
             }
 
             $data = new \stdClass();
-            $data->hashcode = $vehicle->hashcode;
+            $data->hashcode = $vehicle->meta->hashcode;
             $data->makeHashcode = $this->makes[strtolower($this->version->model->make->name)]->hashcode;
+            $data->residual = null;
+            $data->miles = null;
+            $data->rateType = null;
 
+
+            switch ($strategy) {
+                case 'cash':
+                    $data->rate = 0;
+                    $data->term = 0;
+                    if (isset($vehicle->scenarios['Cash - Bank APR'])) {
+                        $data->rebates = $vehicle->scenarios['Cash - Bank APR']->consumerCash->totalConsumerCash;
+                    } else {
+                        $data->rebates = 0;
+                    }
+                    break;
+
+                //
+                // TODO: include special financing rates?
+                case 'finance':
+                    $data->rate = 4;
+                    $data->term = 60;
+
+                    if (isset($vehicle->scenarios['Cash - Bank APR'])) {
+                        $data->rebates = $vehicle->scenarios['Cash - Bank APR']->consumerCash->totalConsumerCash;
+                    } else {
+                        $data->rebates = 0;
+                    }
+                    break;
+                case 'lease':
+                    //
+                    // Only tracking lease specials right now...
+                    if (!isset($vehicle->scenarios['Manufacturer - Lease Special']) || !isset($vehicle->scenarios['Manufacturer - Lease Special']->programs[0])) {
+                        $data->rate = 0;
+                        $data->term = 0;
+                        $data->rebates = 0;
+
+                    } else {
+                        $scenario = $vehicle->scenarios['Manufacturer - Lease Special'];
+                        if (isset($scenario->consumerCash)) {
+                            $data->rebates = $scenario->consumerCash->totalConsumerCash;
+                        } else {
+                            $data->rebates = 0;
+                        }
+
+                        $data->rateType = $scenario->programs[0]->rateType;
+                        $data->term = $this->getClosetNumber(array_keys($scenario->programs[0]->tiers[0]->leaseTerms), 36);
+                        $data->rate = $scenario->programs[0]->tiers[0]->leaseTerms[$data->term]->adjRate;
+                        $data->miles = $this->getClosetNumber(array_keys($scenario->programs[0]->residuals), 10000);
+
+                        if (isset($scenario->programs[0]->residuals[$data->miles]->termValues[$data->term])){
+                            $data->residual = $scenario->programs[0]->residuals[$data->miles]->termValues[$data->term]->percentage;
+                        } else {
+                            $data->rate = 0;
+                            $data->term = 0;
+                            $data->rebates = 0;
+                            $data->residual = null;
+                            $data->miles = null;
+                            $data->rateType;
+                        }
+                    }
+                    break;
+            }
             $data->data = $vehicle;
-            $this->selected['strategy'] = $data;
 
-            dd($vehicle);
+            $this->selected[$strategy] = $data;
         }
     }
 
