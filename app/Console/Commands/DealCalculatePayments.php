@@ -7,6 +7,7 @@ use App\Services\Quote\DealQuote;
 
 use DeliverMyRide\Carleton\Client;
 
+use DeliverMyRide\Carleton\Manager\DealLeasePaymentsManager;
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
 use Illuminate\Console\Command;
 use App\Models\Deal;
@@ -44,26 +45,64 @@ class DealCalculatePayments extends Command
             $payments = new \stdClass();
             $payments->detroit = new \stdClass();
 
-            foreach (['cash', 'finance', 'lease'] as $paymentType) {
-                $quote = (new DealQuote($this->dataDeliveryClient, $this->carletonClient))
-                    ->get(
-                        $deal,
-                        '48116',
-                        $paymentType,
-                        ['default']
-                    );
+            foreach (['cash', 'finance', 'lease'] as $strategy) {
+                $quote = $deal->version->quotes->where('strategy', $strategy)->get(0);
+                if (!$quote) {
+                    continue;
+                }
 
-                //$payments->detroit->{$paymentType} = new \stdClass();
-                //$payments->detroit->{$paymentType}->quote = $quote;
+                switch ($strategy){
+                    case 'cash':
+                        $payment = $deal->prices()->default;
+                        $payment += $deal->dealer->doc_fee;
+                        $payment += $deal->dealer->cvr_fee;
+                        $payment += $payment * 0.06;
+                        $payment -= $quote->rebates;
+                        $payments->detroit->cash->term = $quote->term;
+                        $payments->detroit->cash->rate = $quote->rate;
+                        $payments->detroit->cash->down = 0;
+                        $payments->detroit->cash->payment = round($payment, 2);
+                        break;
+                    case 'finance':
+                        $price = $deal->prices()->default;
+                        $price += $deal->dealer->doc_fee;
+                        $price += $deal->dealer->cvr_fee;
+                        $price += $price * 0.06;
+                        $price -= $quote->rebates;
 
-                if ($paymentType == 'lease') {
+                        $down = $price * 0.1;
+                        $term = $quote->term;
+
+                        $annualInterestRate = $quote->rate / 1200;
+
+                        $payment = ($price - $down) *
+                            ((($annualInterestRate) *
+                                    pow(1 + $annualInterestRate, $term)) /
+                                (pow(1 + $annualInterestRate, $term) - 1));
+
+                        $payments->detroit->finance->term = $quote->term;
+                        $payments->detroit->finance->rate = $quote->rate;
+                        $payments->detroit->finance->down = $down;
+                        $payments->detroit->finance->payment = round($payment, 2);
+                        break;
+                    case 'lease':
+                        $rates = [
+
+                        ];
+                        $manager = new DealLeasePaymentsManager($deal, $this->carletonClient);
+                        return $manager->get($data['rates'], $quote->rebates, [0], 'default');
+                        break;
+                }
+
+
+                if ($strategy == 'lease') {
                     if (isset( $quote['payments'][0]['monthly_payment'])) {
                         $payments->detroit->{$paymentType} = (float) round($quote['payments'][0]['monthly_payment'], 2);
                     }
-                } elseif ($paymentType == 'finance') {
-                    $payments->detroit->{$paymentType} = (float) round($deal->prices()->default / 60, 2);
+                } elseif ($strategy == 'finance') {
+                    $payments->detroit->{$strategy} = (float) round($deal->prices()->default / 60, 2);
                 } else {
-                    $payments->detroit->{$paymentType} = (float) $deal->prices()->default - $quote['rebates']['everyone']['total'];
+                    $payments->detroit->{$strategy} = (float) $deal->prices()->default - $quote['rebates']['everyone']['total'];
                 }
             }
 

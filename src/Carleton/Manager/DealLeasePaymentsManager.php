@@ -20,6 +20,7 @@ class DealLeasePaymentsManager
     }
 
     private function mungeTerms($terms) {
+        dd($terms);
         $rates = [];
         foreach($terms as $rate) {
             $rateData = $rate;
