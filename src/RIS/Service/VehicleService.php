@@ -145,7 +145,6 @@ class VehicleService extends BaseService
         if (count($dealScenarios)) {
             $data['dealScenarios'] = $dealScenarios;
         }
-
         return $this->client->post("findvehiclegroupsbylistofvehicleandregionid", $data);
     }
 
@@ -163,10 +162,10 @@ class VehicleService extends BaseService
                                           array $dealScenarios = [])
     {
 
-
         $data = [
             'regionID' => $regionId,
             'makeName' => $make,
+
         ];
 
         if (count($dealScenarios)){
@@ -197,6 +196,7 @@ class VehicleService extends BaseService
         if (count($dealScenarios)){
             $data['dealScenarios'] = $dealScenarios;
         }
+
 
         return $this->client->post("findvehiclegroupsbymakeandpostalcode", $data);
     }

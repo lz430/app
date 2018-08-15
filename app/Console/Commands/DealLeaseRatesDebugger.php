@@ -6,7 +6,6 @@ use DeliverMyRide\DataDelivery\DataDeliveryClient;
 use DeliverMyRide\DataDelivery\Manager\DealRatesAndRebatesManager;
 use Illuminate\Console\Command;
 use App\Models\Deal;
-use Illuminate\Support\Facades\Log;
 
 class DealLeaseRatesDebugger extends Command
 {

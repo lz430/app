@@ -56,7 +56,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $version_id
  * @property Version $version
  * @property Purchase[] $purchases
- * @property DealOption[] $options
  * @property DealPhoto[] $photos
  * @property jatoFeature[] $jatoFeatures
  * @property Feature[] $features
@@ -169,14 +168,6 @@ class Deal extends Model
     public function purchases(): HasMany
     {
         return $this->hasMany(Purchase::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function options(): HasMany
-    {
-        return $this->hasMany(DealOption::class);
     }
 
     /**

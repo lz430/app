@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         Commands\LoadDealsFromVauto::class,
         Commands\TestCoxAPI::class,
         Commands\VersionFillMissingPhotos::class,
+        Commands\VersionGenerateQuotes::class,
         Commands\DealFeatureDebugger::class,
         Commands\ImportVautoMapData::class,
         Commands\DealProgramDebugger::class,

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use DeliverMyRide\RIS\Manager\VersionToVehicle;
 use DeliverMyRide\RIS\RISClient;
 use App\Models\JATO\Version;
 
@@ -48,7 +49,17 @@ class VersionGenerateQuotes extends Command
         $versions = Version::has('deals')->orderBy('year', 'desc')->get();
         $client = $this->client;
         $versions->map(function ($version) use ($client) {
+            $vehicle = (new VersionToVehicle($version, '48116', $client))->get();
+            $this->info($version->title());
 
+            /*
+            if (isset($vehicle->vehicle->cashDealScenarios)) {
+                foreach($vehicle->vehicle->cashDealScenarios as $cash) {
+                    $this->info("  -- " . $cash->dealScenarioTypeName . " : $" . $cash->consumerCash->totalConsumerCash);
+                }
+
+            }
+            */
         });
 
     }

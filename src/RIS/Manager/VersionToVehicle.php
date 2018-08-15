@@ -1,0 +1,433 @@
+<?php
+
+namespace DeliverMyRide\RIS\Manager;
+
+use App\Models\JATO\Version;
+use DeliverMyRide\RIS\RISClient;
+use GuzzleHttp\Exception\ClientException;
+
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
+
+/**
+ *
+ */
+class VersionToVehicle
+{
+    private const MODEL_MAP = [
+        'Ram 1500 Pickup' => '1500',
+    ];
+
+    private const TRIM_MAP = [
+        'BY_MODEL' => [
+
+        ],
+        'BY_TRIM' => [
+            'Momentum' => 'T6 Momentum',
+            '230i' => '230',
+            '330i' => 'i330',
+            '430i' => '430',
+            '530i' => '530',
+            'M550i' => 'M550',
+            '340i' => '340',
+            'Big Horn' => 'Big Horn/Lone Star',
+        ],
+    ];
+
+    private const BODY_STYLE_MAP = [
+        'Sport Utility Vehicle' => "Sport Utility",
+        'Pickup' => 'Regular Cab',
+        'Minivan' => 'Passenger Van',
+    ];
+
+    private const CAB_MAP = [
+        'Crew' => "crew cab",
+    ];
+
+
+    /* @var RISClient */
+    private $client;
+
+    /* @var Version */
+    private $version;
+    private $zipcode;
+
+
+    /* @var \Illuminate\Support\Collection */
+    private $vehicles;
+
+
+    private $selected = [
+        'cash' => null,
+        'finance' => null,
+        'lease' => null,
+    ];
+
+    /**
+     * @param Version $version
+     * @param string $zipcode
+     * @param RISClient $client
+     */
+    public function __construct(Version $version, string $zipcode, RISClient $client)
+    {
+        $this->version = $version;
+        $this->zipcode = $zipcode;
+        $this->client = $client;
+    }
+
+    /**
+     * @param array $data
+     * @param $attribute
+     * @param $value
+     * @return array
+     */
+    private function filterUnlessNone(array $data, string $parentAttribute, string $attribute, $value): array
+    {
+        $filtered = array_filter($data, function ($record) use ($parentAttribute, $attribute, $value) {
+            if (isset($record->{$parentAttribute}->{$attribute}) && in_array($value, $record->{$parentAttribute}->{$attribute})) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        if (count($filtered)) {
+            return $filtered;
+        }
+
+        return $data;
+    }
+
+    private function reKeyObjectAttribute(\stdClass $object, string $attr, string $key) {
+        foreach($object as $a => $v) {
+            if ($a == $attr && is_array($v)) {
+                $data = [];
+                foreach($v as $item){
+                    $data[$item->{$key}] =  $item;
+                }
+                $object->{$a} = $data;
+            }
+        }
+    }
+
+    private function translateTrimName(): string
+    {
+        $trim = $this->version->trim_name;
+        $model = $this->version->model->name;
+
+        if (isset(self::TRIM_MAP['BY_MODEL'][$model])) {
+            return self::TRIM_MAP['BY_MODEL'][$model];
+        }
+
+        if (isset(self::TRIM_MAP['BY_TRIM'][$trim])) {
+            return self::TRIM_MAP['BY_TRIM'][$trim];
+        }
+
+        return $trim;
+    }
+
+    private function translateModel(): string
+    {
+        $model = $this->version->model->name;
+
+        if (isset(self::MODEL_MAP[$model])) {
+            return self::MODEL_MAP[$model];
+        } else {
+            return $model;
+        }
+    }
+
+    private function translateBodyStyle(): string
+    {
+        $body = $this->version->body_style;
+
+        if (isset(self::BODY_STYLE_MAP[$body])) {
+            return self::BODY_STYLE_MAP[$body];
+        } else {
+            return $body;
+        }
+    }
+
+    private function translateCab(): string
+    {
+        $value = $this->version->cab;
+        if (isset(self::CAB_MAP[$value])) {
+            return self::CAB_MAP[$value];
+        } else {
+            return $value;
+        }
+    }
+
+    private function translateNumberDoors()
+    {
+        $doors = $this->version->doors;
+
+        if (in_array($this->version->body_style, [
+            'Sport Utility Vehicle'
+        ])) {
+            $doors = $doors - 1;
+        }
+
+        return $doors;
+    }
+
+    /**
+     * @return array
+     */
+    private function getSearchParams(): array
+    {
+        $params = [
+            'year' => $this->version->year,
+            'model' => $this->translateModel(),
+            'model_code' => [$this->version->manufacturer_code],
+            'trim' => $this->translateTrimName(),
+            'doors' => $this->translateNumberDoors(),
+            'body' => $this->translateBodyStyle(),
+            'driven_wheels' => $this->version->driven_wheels,
+            'cab' => $this->version->cab ? $this->translateCab() : null,
+        ];
+
+        if (str_contains($this->version->manufacturer_code, ["/"])) {
+            $codes = explode("/", $this->version->manufacturer_code);
+            $params['model_code'] = array_merge($params['model_code'], $codes);
+        } else if (str_contains($this->version->manufacturer_code, [" - "])) {
+            $codes = explode(" - ", $this->version->manufacturer_code);
+            $params['model_code'] = array_merge($params['model_code'], $codes);
+        }
+
+        return $params;
+    }
+
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function fetchVehicles()
+    {
+        $results = $value = Cache::remember('ris-make-' . $this->version->model->make->name . $this->zipcode, 1440, function () {
+            try {
+                $results = $this->client->vehicle->findByMakeAndPostalcode(
+                    $this->version->model->make->name,
+                    $this->zipcode
+                );
+            } catch (ClientException $exception) {
+                $results = [];
+            }
+
+            return $results;
+        });
+
+        if ($results) {
+            $results = collect($results->response);
+        }
+        $this->vehicles = $results;
+    }
+
+    private function parseHints(string $hints): \stdClass
+    {
+        $results = [];
+
+        $hints = str_replace(['{', '}'], '', $hints);
+        $hints = explode(",", $hints);
+
+        foreach ($hints as $hint) {
+            $hint = explode(":", $hint);
+
+            if (count($hint) !== 2) {
+                continue;
+            }
+
+            if (!isset($results[$hint[0]])) {
+                $results[$hint[0]] = [];
+            }
+
+            $results[$hint[0]][] = strtolower($hint[1]);
+
+
+        }
+
+        return (object)$results;
+    }
+
+    private function parseVehicles(Collection $vehicles)
+    {
+        return $vehicles
+            ->map(function ($vehicle) {
+                $data = new \stdClass();
+                $data->filters = $this->parseHints($vehicle->vehicleHints);
+                if (isset($vehicle->modelYear)){
+                    $data->filters->YEAR = [
+                        $vehicle->modelYear
+                    ];
+                }
+
+                $data->exclude = $this->parseHints($vehicle->vehicleHintsForExclusion);
+                $data->vehicle = $vehicle;
+                return $data;
+            });
+    }
+
+    private function reduceVehicles(Collection $vehicles)
+    {
+        $params = $this->getSearchParams();
+        $params = array_map(function ($item) {
+            if (is_array($item)) {
+                $item = array_map('strtolower', $item);
+            } else {
+                $item = strtolower($item);
+            }
+            return $item;
+        }, $params);
+
+        $vehicles = $vehicles->toArray();
+
+        // Filter by inclusion
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL', $params['model']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'YEAR', $params['year']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['trim']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRIM', $params['trim']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL', $params['trim']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'DRIVE_TYPE_CODE', $params['driven_wheels']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'BODY_TYPE', $params['cab']);
+
+
+        foreach ($params['model_code'] as $code) {
+            if (!$code) {
+                continue;
+            }
+            $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $code);
+        }
+
+        return collect($vehicles)->map(function ($item) {
+            return $item->vehicle;
+        });
+    }
+
+    private function selectVehicles()
+    {
+        foreach ($this->vehicles as $vehicle) {
+            foreach ($vehicle->cashDealScenarios as $scenario) {
+                if ($scenario->dealScenarioTypeName == 'Cash - Bank APR') {
+                    $this->selected['cash'] = $vehicle;
+                    $this->selected['finance'] = $vehicle;
+                    break;
+                } elseif ($scenario->dealScenarioTypeName == 'Bank Lease') {
+                    $this->selected['lease'] = $vehicle;
+                    break;
+                }
+            }
+        }
+
+    }
+
+    public function transformSelectedVehicles()
+    {
+        foreach ($this->selected as $strategy => $vehicle) {
+            if (!$vehicle) {
+                continue;
+            }
+
+            $data = new \stdClass();
+            $data->meta = new \stdClass();
+            $data->scenarios = [];
+
+            //
+            // Build Meta
+            foreach (
+                [
+                    'aisVehicleGroupID',
+                    'vehicleGroupID',
+                    'hashcode',
+                    'modelYear',
+                    'marketingYear',
+                    'vehicleGroupName',
+                    'regionID',
+                    'vehicleHints',
+                    'vehicleHintsForExclusion',
+                ] as $attr) {
+                if (isset($vehicle->{$attr})) {
+                    $data->meta->{$attr} = $vehicle->{$attr};
+                }
+            }
+
+            // Build Scenarios
+            foreach(
+                [
+                    'cashDealScenarios',
+                    'programDealScenarios',
+                ] as $group) {
+
+                if (isset($vehicle->{$group})) {
+                    foreach($vehicle->{$group} as $scenario) {
+                        $data->scenarios[$scenario->dealScenarioTypeName] = $scenario;
+                    }
+                }
+            }
+
+            // Rekey efforts
+            foreach($data->scenarios as $name => $scenario) {
+                if (isset($scenario->programs)) {
+                    foreach($scenario->programs as $program) {
+                        if (isset($program->tiers)) {
+                            foreach($program->tiers as $tier) {
+                                $this->reKeyObjectAttribute($tier, 'aprTerms', 'length');
+                                $this->reKeyObjectAttribute($tier, 'leaseTerms', 'length');
+                            }
+                        }
+
+                        if (isset($program->residuals)) {
+                            $this->reKeyObjectAttribute($program, 'residuals', 'miles');
+                            foreach($program->residuals as $residual) {
+                                foreach($residual->vehicles as $vehicle) {
+                                    $this->reKeyObjectAttribute($vehicle, 'termValues', 'termLength');
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            $this->selected[$strategy] = $data;
+        }
+
+
+    }
+
+    public function reduceResiduals() {
+        if (!$this->selected['lease']) {
+            return;
+        }
+
+        $data = $this->selected['lease'];
+
+        foreach($data->scenarios as $name => $scenario) {
+            if (isset($scenario->programs)) {
+                foreach($scenario->programs as $program) {
+                    if (isset($program->residuals)) {
+                        foreach($program->residuals as $residual) {
+                            $vehicles = $this->parseVehicles(collect($residual->vehicles));
+                            $vehicles = $this->reduceVehicles($vehicles);
+                            unset($residual->vehicles);
+                            $residual->termValues = $vehicles->last()->termValues;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public function get()
+    {
+        $results = null;
+
+        $this->fetchVehicles();
+        $this->vehicles = $this->parseVehicles($this->vehicles);
+        $this->vehicles = $this->reduceVehicles($this->vehicles);
+        $this->selectVehicles();
+        $this->transformSelectedVehicles();
+        $this->reduceResiduals();
+
+        return $this->selected;
+
+    }
+
+}
