@@ -4,7 +4,7 @@ namespace DeliverMyRide\Fuel\Manager;
 
 use App\Models\JATO\Version;
 use DeliverMyRide\Fuel\FuelClient;
-
+use DeliverMyRide\Fuel\Map;
 use GuzzleHttp\Exception\ClientException;
 
 /**
@@ -12,118 +12,6 @@ use GuzzleHttp\Exception\ClientException;
  */
 class VersionToFuel
 {
-
-    private const MODEL_MAP = [
-        'A3 Sedan' => 'A3',
-        'A3 Cabriolet' => 'A3',
-        'A5 Coupe' => 'A5',
-        'A8' => 'A8 L',
-        'allroad' => 'A4 allroad',
-        '6 Series Gran Turismo' => '6-series',
-        'M2 Coupe' => '2-series',
-        'M3 Sedan' => '3-series',
-        'AMG® GT Roadster' => 'AMG GT',
-        'ATS Sedan' => 'ATS',
-        'ATS-V Sedan' => 'ATS-V',
-        'CTS Sedan' => 'CTS',
-        'ATS Coupe' => 'ATS',
-        'CTS-V Sedan' => 'CTS-V',
-        'Corvette' => 'Corvette Grandsport',
-        'Express Cargo' => 'Express 2500 Cargo',
-        'Wrangler JK' => 'Wrangler',
-        'Wrangler JK Unlimited' => 'Wrangler Unlimited',
-        'All-New Wrangler' => 'Wrangler',
-        'All-New Wrangler Unlimited' => 'Wrangler Unlimited',
-        'Silverado 2500HD' => 'Silverado 2500HD',
-        'Ram 1500 Pickup' => '1500',
-        'Ram 2500 Pickup' => '2500',
-        'Ram 3500 Pickup' => '3500',
-        'C-Max' => 'C-Max Hybrid',
-        'Transit Van ' => 'Transit Van 150',
-        'F-250 Super Duty' => 'F-250 SD',
-        'F-350 Super Duty' => 'F-350 SD DRW',
-        'Transit Connect' => 'Transit Connect Van',
-        'Sierra 1500 Denali' => 'Sierra 1500',
-        'Sierra 2500 Denali HD' => 'Sierra 2500 HD',
-        'Clarity' => 'Clarity Plug-In Hybrid',
-        'Ioniq' => 'Ioniq Hybrid',
-        'Q60 Coupe' => 'Q60',
-        'All-New Compass' => 'Compass',
-        'AMG GT Coupe' => 'AMG GT',
-        'C-Class Coupe' => 'C-Class',
-        'C-Class Sedan' => 'C-Class',
-        'CLA' => 'CLA-Class',
-        'E-Class' => 'E-Class',
-        'SL Roadster' => 'SL-Class',
-        'NV200' => 'NV200 Compact Cargo',
-        'NV Cargo' => 'NV200 Compact Cargo',
-        'NV Passenger' => 'NV Passenger',
-        'NV 3500 Passenger' => 'NV Passenger',
-        'Rogue Sport' => 'Rogue',
-        'Versa Sedan' => 'Versa',
-        '718' => '718 Boxster',
-        '719' => '719 Boxster',
-        'Prius Prime' => 'Prius',
-        'Yaris iA' => 'Yaris iA',
-        'Tiguan Limited' => 'Tiguan',
-        'Golf' => 'Golf GTI',
-        'ProMaster Cargo Van' => 'ProMaster 2500',
-    ];
-
-    private const TRIM_MAP = [
-        'BY_MODEL' => [
-            'Sierra 1500 Denali' => 'Denali',
-            'M2 Coupe' => 'M2',
-            'M3 Sedan' => 'M3',
-        ],
-        'BY_TRIM' => [
-            'Sport S' => 'Sport',
-        ],
-    ];
-
-    private const COLOR_MAP = [
-        'Blue' => 'Blue',
-        'Chief Clearcoat' => 'Blue',
-        'Black' => 'Black',
-        'White' => 'White',
-        'Anvil' => 'White',
-        'Champagne Pearlcoat' => 'White',
-        'Ivory' => 'White',
-        'Red' => 'Red',
-        'Cherry' => 'Red',
-        'Ruby Flare Pearl' => 'Red',
-        'Velvet' => 'Red',
-        'Silver' => 'Silver',
-        'Billet Clearcoat' => 'Silver',
-        'Billet Metallic' => 'Silver',
-        'Orange' => 'Orange',
-        'Purple' => 'Purple',
-        'Green' => 'Green',
-        'Hypergreen Clearcoat' => 'Green',
-        'Gray' => 'Gray',
-        'Dark Cordovan Pearl' => 'Gray',
-        'Cordovan' => 'Gray',
-        'Granite' => 'Gray',
-        'Grante Crys Met' => 'Gray',
-        'Crystal Metallic' => 'Gray',
-        'Glacier Metallic' => 'Gray',
-        'Smokestone Metallic' => 'Gray',
-        'Tungsten Metallic' => 'Gray',
-        'Light Graystone Pearlcoat' => 'Gray',
-        'Steel Metallic' => 'Gray',
-        'Rhino Clearcoat' => 'Gray',
-        'Yellow' => 'Yellow',
-        'Brown' => 'Brown',
-        'Brown Metallic' => 'Brown',
-        'Gobi Clearcoat' => 'Brown',
-        'Light Brownstone Pearlcoat' => 'Brown',
-        'Mocha Steel Metallic' => 'Brown',
-    ];
-
-    private const BODY_STYLE_MAP = [
-        'sport utility vehicle' => "SUV",
-    ];
-
     private $client;
     private $version;
 
@@ -164,8 +52,8 @@ class VersionToFuel
     private function translateModelName(): string
     {
         $model = $this->version->model->name;
-        if (isset(self::MODEL_MAP[$model])) {
-            return self::MODEL_MAP[$model];
+        if (isset(Map::MODEL_MAP[$model])) {
+            return Map::MODEL_MAP[$model];
         } else {
             return $model;
         }
@@ -176,12 +64,12 @@ class VersionToFuel
         $trim = $this->version->trim_name;
         $model = $this->version->model->name;
 
-        if (isset(self::TRIM_MAP['BY_MODEL'][$model])) {
-            return self::TRIM_MAP['BY_MODEL'][$model];
+        if (isset(Map::TRIM_MAP['BY_MODEL'][$model])) {
+            return Map::TRIM_MAP['BY_MODEL'][$model];
         }
 
-        if (isset(self::TRIM_MAP['BY_TRIM'][$trim])) {
-            return self::TRIM_MAP['BY_TRIM'][$trim];
+        if (isset(Map::TRIM_MAP['BY_TRIM'][$trim])) {
+            return Map::TRIM_MAP['BY_TRIM'][$trim];
         }
 
         return $trim;
@@ -194,8 +82,8 @@ class VersionToFuel
     {
         $body = strtolower($this->version->body_style);
 
-        if (isset(self::BODY_STYLE_MAP[$body])) {
-            return self::BODY_STYLE_MAP[$body];
+        if (isset(Map::BODY_STYLE_MAP[$body])) {
+            return Map::BODY_STYLE_MAP[$body];
         } else {
             return $body;
         }
@@ -203,7 +91,7 @@ class VersionToFuel
 
     public function translateColorName($color): string
     {
-        foreach (self::COLOR_MAP as $needle => $value) {
+        foreach (Map::COLOR_MAP as $needle => $value) {
             if (str_contains($color, $needle)) {
                 return $value;
             }
