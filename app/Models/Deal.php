@@ -516,12 +516,12 @@ class Deal extends Model
         $record['pricing'] = $pricing;
         $record['payments'] = $this->payments;
 
-        //
-        // Backwards compatibility with existing frontend stuff
+
         $version = $this->version;
         if ($version) {
             $version = $version->toArray();
             unset($version['model']);
+            unset($version['quotes']);
             $record['version'] = $version;
         } else {
             $record['version'] = null;

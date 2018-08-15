@@ -39,76 +39,111 @@ class DealCalculatePayments extends Command
      */
     public function handle()
     {
-        $deals = Deal::all();
+        \DB::connection()->disableQueryLog();
 
-        foreach ($deals as $deal) {
-            $payments = new \stdClass();
-            $payments->detroit = new \stdClass();
+        Deal::chunk(500, function ($deals) {
+            foreach ($deals as $deal) {
+                $payments = new \stdClass();
+                $payments->detroit = new \stdClass();
+                $quotes = [];
 
-            foreach (['cash', 'finance', 'lease'] as $strategy) {
-                $quote = $deal->version->quotes->where('strategy', $strategy)->get(0);
-                if (!$quote) {
+                if (!$deal->dealer){
                     continue;
                 }
 
-                switch ($strategy){
-                    case 'cash':
-                        $payment = $deal->prices()->default;
-                        $payment += $deal->dealer->doc_fee;
-                        $payment += $deal->dealer->cvr_fee;
-                        $payment += $payment * 0.06;
-                        $payment -= $quote->rebates;
-                        $payments->detroit->cash->term = $quote->term;
-                        $payments->detroit->cash->rate = $quote->rate;
-                        $payments->detroit->cash->down = 0;
-                        $payments->detroit->cash->payment = round($payment, 2);
-                        break;
-                    case 'finance':
-                        $price = $deal->prices()->default;
-                        $price += $deal->dealer->doc_fee;
-                        $price += $deal->dealer->cvr_fee;
-                        $price += $price * 0.06;
-                        $price -= $quote->rebates;
-
-                        $down = $price * 0.1;
-                        $term = $quote->term;
-
-                        $annualInterestRate = $quote->rate / 1200;
-
-                        $payment = ($price - $down) *
-                            ((($annualInterestRate) *
-                                    pow(1 + $annualInterestRate, $term)) /
-                                (pow(1 + $annualInterestRate, $term) - 1));
-
-                        $payments->detroit->finance->term = $quote->term;
-                        $payments->detroit->finance->rate = $quote->rate;
-                        $payments->detroit->finance->down = $down;
-                        $payments->detroit->finance->payment = round($payment, 2);
-                        break;
-                    case 'lease':
-                        $rates = [
-
-                        ];
-                        $manager = new DealLeasePaymentsManager($deal, $this->carletonClient);
-                        return $manager->get($data['rates'], $quote->rebates, [0], 'default');
-                        break;
+                foreach ($deal->version->quotes()->get() as $quote) {
+                    $quotes[$quote->strategy] = $quote;
                 }
 
-
-                if ($strategy == 'lease') {
-                    if (isset( $quote['payments'][0]['monthly_payment'])) {
-                        $payments->detroit->{$paymentType} = (float) round($quote['payments'][0]['monthly_payment'], 2);
+                foreach (['cash', 'finance', 'lease'] as $strategy) {
+                    if (!isset($quotes[$strategy])) {
+                        continue;
                     }
-                } elseif ($strategy == 'finance') {
-                    $payments->detroit->{$strategy} = (float) round($deal->prices()->default / 60, 2);
-                } else {
-                    $payments->detroit->{$strategy} = (float) $deal->prices()->default - $quote['rebates']['everyone']['total'];
+
+                    $quote = $quotes[$strategy];
+
+                    if ($strategy === 'lease' && !$quote->term) {
+                        continue;
+                    }
+
+
+                    switch ($strategy) {
+                        case 'cash':
+                            $payment = $deal->prices()->default;
+                            $payment += $deal->dealer->doc_fee;
+                            $payment += $deal->dealer->cvr_fee;
+                            $payment += $payment * 0.06;
+                            $payment -= $quote->rebates;
+                            $payments->detroit->cash = new \stdClass();
+                            $payments->detroit->cash->term = $quote->term;
+                            $payments->detroit->cash->rate = $quote->rate;
+                            $payments->detroit->cash->rebates = $quote->rebates;
+                            $payments->detroit->cash->down = 0;
+                            $payments->detroit->cash->payment = round($payment, 2);
+                            break;
+                        case 'finance':
+                            $price = $deal->prices()->default;
+                            $price += $deal->dealer->doc_fee;
+                            $price += $deal->dealer->cvr_fee;
+                            $price += $price * 0.06;
+                            $price -= $quote->rebates;
+
+                            $down = $price * 0.1;
+                            $term = $quote->term;
+
+                            $annualInterestRate = $quote->rate / 1200;
+
+                            $payment = ($price - $down) *
+                                ((($annualInterestRate) *
+                                        pow(1 + $annualInterestRate, $term)) /
+                                    (pow(1 + $annualInterestRate, $term) - 1));
+                            $payments->detroit->finance = new \stdClass();
+                            $payments->detroit->finance->term = $quote->term;
+                            $payments->detroit->finance->rate = $quote->rate;
+                            $payments->detroit->finance->rebates = $quote->rebates;
+
+                            $payments->detroit->finance->down = $down;
+                            $payments->detroit->finance->payment = round($payment, 2);
+                            break;
+                        case 'lease':
+                            $rates = [
+                                'termLength' => (int)$quote->term,
+                                'residuals' => [
+                                    [
+                                        'annualMileage' => (int)$quote->miles,
+                                        'residualPercent' => (int)$quote->residual,
+                                    ]
+                                ],
+                            ];
+
+                            if ($quote->rate_type != 'Factor') {
+                                $rates['moneyFactor'] = (float)$quote->rate / 2400;
+                                $rates['type'] = 'factor';
+                            } else {
+                                $rates['moneyFactor'] = (float)$quote->rate;
+                                $rates['type'] = 'factor';
+                            }
+
+                            $manager = new DealLeasePaymentsManager($deal, $this->carletonClient);
+                            $payment = $manager->get([$rates], $quote->rebates, [0], 'default');
+                            if (count($payment)) {
+                                $payments->detroit->lease = new \stdClass();
+                                $payments->detroit->lease->term = $quote->term;
+                                $payments->detroit->lease->rate = $quote->rate;
+                                $payments->detroit->lease->rebates = $quote->rebates;
+                                $payments->detroit->lease->down = $payment[0]['total_amount_at_drive_off'];
+                                $payments->detroit->lease->payment = round($payment[0]['monthly_payment'], 2);
+                            }
+                            break;
+                    }
                 }
+
+                $deal->payments = $payments;
+                $deal->save();
+                $this->info($deal->title());
             }
 
-            $deal->payments = $payments;
-            $deal->save();
-            $this->info($deal->title());
-        }
+        });
+
     }
 }
