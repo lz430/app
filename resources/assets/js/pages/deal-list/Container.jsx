@@ -13,8 +13,8 @@ import { getIsPageLoading } from 'apps/page/selectors';
 
 import Deals from './components/Deals';
 import ToolbarSelectedFilters from './components/ToolbarSelectedFilters';
-import ToolbarSort from './components/ToolbarSort';
-import ToolbarMobileBottom from './components/ToolbarMobileBottom';
+import ToolbarMobileBottom from './components/ToolbarMobile/ToolbarMobileBottom';
+
 import FilterPanel from './components/FilterPanel';
 import NoDealsOutOfRange from './components/NoDealsOutOfRange';
 import ModalMakeSelector from './components/ModalMakeSelector';

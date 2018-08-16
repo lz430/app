@@ -85,19 +85,46 @@
     right: 0;
     position: fixed;
     background: #fff;
-    border-top: 2px solid $primary;
     text-align: center;
     box-shadow: 0 -0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     z-index: 50;
     display: flex;
-    > span {
+    flex-direction: column;
+}
+.toolbar-mobile-bottom > .tray {
+    display: none;
+    flex: 1;
+
+    &.show {
+        display: flex;
+        border-top: 2px solid $primary;
+    }
+}
+.toolbar-mobile-bottom > .menu {
+    display: flex;
+    flex: 1;
+    > div {
+        border-top: 2px solid $primary;
         display: inline-flex;
         justify-content: center;
         align-items: center;
         flex: 1;
         cursor: pointer;
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 0.25rem;
         border-right: 2px solid $primary;
+        background: #fbfbfb;
+        &.active {
+            border-top: 0;
+            background: #fff;
+        }
+        &.dropdown {
+            padding: 0;
+            > span {
+                padding: 0.5rem 0.25rem;
+                display: block;
+                width: 100%;
+            }
+        }
         &:last-child {
             border-right: 0;
         }
@@ -105,6 +132,22 @@
             position: relative;
             top: -2px;
             margin-right: 0.25rem;
+        }
+    }
+}
+
+.tray-select {
+    flex: 1;
+
+    .tray-select-button {
+        cursor: pointer;
+        padding: 6px;
+        border-bottom: 1px solid #eee;
+        &.active {
+            font-weight: bold;
+        }
+        &:last-child {
+            border-bottom: 0;
         }
     }
 }
