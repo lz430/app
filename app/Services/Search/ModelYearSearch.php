@@ -15,10 +15,10 @@ class ModelYearSearch extends BaseSearch
         list($sort, $direction) = $this->getSort($sort, $modifier);
 
         $map = [
-            'pricing.msrp' => 'msrp.min_msrp',
-            'payments.detroit.cash' => 'cash.min_cash',
-            'payments.detroit.finance' => 'finance.min_finance',
-            'payments.detroit.lease' => 'lease.min_lease',
+            'pricing.msrp' => 'msrp.min',
+            'payments.detroit.cash' => 'cash.payment',
+            'payments.detroit.finance' => 'finance.payment',
+            'payments.detroit.lease' => 'lease.payment',
         ];
 
         if (isset($map[$sort])) {
