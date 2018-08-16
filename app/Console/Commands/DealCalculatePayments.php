@@ -21,7 +21,6 @@ class DealCalculatePayments extends Command
      */
     protected $signature = 'dmr:dealpayments {deal?}';
 
-
     private $dataDeliveryClient;
     private $carletonClient;
 
@@ -32,7 +31,8 @@ class DealCalculatePayments extends Command
         $this->carletonClient = $client;
     }
 
-    private function defaultQuote($strategy) {
+    private function defaultQuote($strategy)
+    {
         $quote = new \stdClass();
         $quote->term = 0;
         $quote->rate = 0;
@@ -46,12 +46,13 @@ class DealCalculatePayments extends Command
         return $quote;
     }
 
-    private function calculatePayments(Deal $deal) {
+    private function calculatePayments(Deal $deal)
+    {
         $payments = new \stdClass();
         $payments->detroit = new \stdClass();
         $quotes = [];
 
-        if (!$deal->dealer){
+        if (!$deal->dealer) {
             return false;
         }
 
@@ -75,9 +76,9 @@ class DealCalculatePayments extends Command
                     $payment = $deal->prices()->default;
                     $payment -= $quote->rebates;
                     $payments->detroit->cash = new \stdClass();
-                    $payments->detroit->cash->term = (int) $quote->term;
-                    $payments->detroit->cash->rate = (float) $quote->rate;
-                    $payments->detroit->cash->rebates = (int) $quote->rebates;
+                    $payments->detroit->cash->term = (int)$quote->term;
+                    $payments->detroit->cash->rate = (float)$quote->rate;
+                    $payments->detroit->cash->rebates = (int)$quote->rebates;
                     $payments->detroit->cash->down = 0;
                     $payments->detroit->cash->payment = round($payment, 2);
                     break;
@@ -90,18 +91,15 @@ class DealCalculatePayments extends Command
 
                     $down = $price * 0.1;
                     $term = $quote->term;
-
                     $annualInterestRate = $quote->rate / 1200;
-
-                    $payment = ($price - $down) *
-                        ((($annualInterestRate) *
-                                pow(1 + $annualInterestRate, $term)) /
-                            (pow(1 + $annualInterestRate, $term) - 1));
+                    $payment = $price - $down;
+                    $top = pow(  1 + $annualInterestRate, $term);
+                    $bottom = $top - 1;
+                    $payment = $payment * $annualInterestRate * ($top / $bottom);
                     $payments->detroit->finance = new \stdClass();
-                    $payments->detroit->finance->term = (int) $quote->term;
-                    $payments->detroit->finance->rate = (float) $quote->rate;
-                    $payments->detroit->finance->rebates = (int) $quote->rebates;
-
+                    $payments->detroit->finance->term = (int)$quote->term;
+                    $payments->detroit->finance->rate = (float)$quote->rate;
+                    $payments->detroit->finance->rebates = (int)$quote->rebates;
                     $payments->detroit->finance->down = $down;
                     $payments->detroit->finance->payment = round($payment, 2);
                     break;
@@ -128,9 +126,9 @@ class DealCalculatePayments extends Command
                     $payment = $manager->get([$rates], $quote->rebates, [0], 'default');
                     if (count($payment)) {
                         $payments->detroit->lease = new \stdClass();
-                        $payments->detroit->lease->term = (int) $quote->term;
-                        $payments->detroit->lease->rate = (float) $quote->rate;
-                        $payments->detroit->lease->rebates = (int) $quote->rebates;
+                        $payments->detroit->lease->term = (int)$quote->term;
+                        $payments->detroit->lease->rate = (float)$quote->rate;
+                        $payments->detroit->lease->rebates = (int)$quote->rebates;
                         $payments->detroit->lease->down = round($payment[0]['total_amount_at_drive_off'], 2);
                         $payments->detroit->lease->payment = round($payment[0]['monthly_payment'], 2);
                     }

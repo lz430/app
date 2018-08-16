@@ -544,7 +544,7 @@ export default class DealPricing {
             case 'finance':
                 return Math.round(
                     formulas.calculateFinancedMonthlyPayments(
-                        this.discountedPriceValue() - this.bestOfferValue(),
+                        this.sellingPriceValue() - this.bestOfferValue(),
                         this.financeDownPaymentValue(),
                         this.financeTermValue()
                     )
