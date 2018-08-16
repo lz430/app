@@ -16,11 +16,10 @@ class ModelYearSearch extends BaseSearch
 
         $map = [
             'pricing.msrp' => 'msrp.min',
-            'payments.detroit.cash' => 'cash.payment',
-            'payments.detroit.finance' => 'finance.payment',
-            'payments.detroit.lease' => 'lease.payment',
+            'payments.detroit.cash.payment' => 'sort_cash.min',
+            'payments.detroit.finance.payment' => 'sort_finance.min',
+            'payments.detroit.lease.payment' => 'sort_lease.min',
         ];
-
         if (isset($map[$sort])) {
             $this->query['aggs']['category']['aggs']['model']['aggs']['category_sort'] = [
                 'bucket_sort' => [
@@ -61,6 +60,39 @@ class ModelYearSearch extends BaseSearch
                             'id' => [
                                 'terms' => [
                                     'field' => 'category.id'
+                                ]
+                            ],
+                            /**
+                             * TODO: Why can't we sort on the existing aggs?
+                             */
+                            'sort_cash' => [
+                                'reverse_nested' => (object)[],
+                                'aggs' => [
+                                    'min' => [
+                                        'min' => [
+                                            'field' => 'payments.detroit.cash.payment',
+                                        ],
+                                    ],
+                                ]
+                            ],
+                            'sort_finance' => [
+                                'reverse_nested' => (object)[],
+                                'aggs' => [
+                                    'min' => [
+                                        'min' => [
+                                            'field' => 'payments.detroit.finance.payment',
+                                        ],
+                                    ],
+                                ]
+                            ],
+                            'sort_lease' => [
+                                'reverse_nested' => (object)[],
+                                'aggs' => [
+                                    'min' => [
+                                        'min' => [
+                                            'field' => 'payments.detroit.lease.payment',
+                                        ],
+                                    ],
                                 ]
                             ],
                             'cash' => [
