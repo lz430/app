@@ -5,6 +5,8 @@ import classNames from 'classnames';
 
 import Tuning from 'icons/zondicons/Tuning';
 import CheveronLeft from 'icons/zondicons/CheveronLeft';
+import CurrencyDollar from 'icons/zondicons/CurrencyDollar';
+import CheveronUp from 'icons/zondicons/CheveronUp';
 
 import {
     clearModelYear,
@@ -12,12 +14,16 @@ import {
     toggleSearchSort,
     toggleSmallFiltersShown,
 } from '../../actions';
-import { getSearchQuery } from '../../selectors';
+import { getSearchQuery, getSelectedFiltersByCategory } from '../../selectors';
 
 import SortWidget from './SortWidget';
 import PaymentWidget from './PaymentWidget';
-import { getUserPurchaseStrategy } from '../../../../apps/user/selectors';
-import { setPurchaseStrategy } from '../../../../apps/user/actions';
+import ModelWidget from './ModelWidget';
+
+import { getUserPurchaseStrategy } from 'apps/user/selectors';
+import { setPurchaseStrategy } from 'apps/user/actions';
+import Coupe from '../../../../icons/body-styles/Coupe';
+import TravelCar from '../../../../icons/zondicons/TravelCar';
 
 /**
  *
@@ -25,21 +31,19 @@ import { setPurchaseStrategy } from '../../../../apps/user/actions';
 class ToolbarMobileBottom extends React.Component {
     static propTypes = {
         searchQuery: PropTypes.object.isRequired,
+        selectedFiltersByCategory: PropTypes.object.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
 
         onToggleSmallFiltersShown: PropTypes.func.isRequired,
         onClearModelYear: PropTypes.func.isRequired,
         onToggleSearchSort: PropTypes.func.isRequired,
         onSetPurchaseStrategy: PropTypes.func.isRequired,
+        onRequestSearch: PropTypes.func.isRequired,
     };
 
     state = {
         activeTab: null,
     };
-
-    setSort(sort) {
-        this.props.onToggleSearchSort(sort);
-    }
 
     setActiveTab(tab) {
         if (this.state.activeTab === 'filter' && tab !== 'filter') {
@@ -65,7 +69,7 @@ class ToolbarMobileBottom extends React.Component {
                 })}
                 onClick={() => this.setActiveTab('model')}
             >
-                <CheveronLeft
+                <TravelCar
                     height="16px"
                     className="sortbar__filter-toggle-icon"
                 />{' '}
@@ -90,6 +94,18 @@ class ToolbarMobileBottom extends React.Component {
                     purchaseStrategy={this.props.purchaseStrategy}
                     onSetPurchaseStrategy={this.props.onSetPurchaseStrategy}
                     onRequestSearch={this.props.onRequestSearch}
+                />
+            );
+        }
+
+        if (this.state.activeTab === 'model') {
+            return (
+                <ModelWidget
+                    selectedFiltersByCategory={
+                        this.props.selectedFiltersByCategory
+                    }
+                    onClearModelYear={this.props.onClearModelYear}
+                    setActiveTab={this.setActiveTab.bind(this)}
                 />
             );
         }
@@ -126,7 +142,7 @@ class ToolbarMobileBottom extends React.Component {
                         })}
                         onClick={() => this.setActiveTab('sort')}
                     >
-                        <Tuning
+                        <CheveronUp
                             height="16px"
                             className="sortbar__filter-toggle-icon"
                         />
@@ -138,7 +154,7 @@ class ToolbarMobileBottom extends React.Component {
                         })}
                         onClick={() => this.setActiveTab('payment')}
                     >
-                        <Tuning
+                        <CurrencyDollar
                             height="16px"
                             className="sortbar__filter-toggle-icon"
                         />
@@ -155,6 +171,7 @@ class ToolbarMobileBottom extends React.Component {
 const mapStateToProps = state => {
     return {
         searchQuery: getSearchQuery(state),
+        selectedFiltersByCategory: getSelectedFiltersByCategory(state),
         purchaseStrategy: getUserPurchaseStrategy(state),
     };
 };

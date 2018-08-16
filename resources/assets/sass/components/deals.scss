@@ -145,9 +145,37 @@
         border-bottom: 1px solid #eee;
         &.active {
             font-weight: bold;
+            box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
         }
         &:last-child {
             border-bottom: 0;
         }
+    }
+}
+
+.tray-widget {
+    flex: 1;
+    text-align: left;
+    .bubble {
+        display: inline-flex;
+        margin: 5px;
+        padding: 6px 10px;
+        border: 1px solid $primary;
+        border-radius: $border-radius;
+        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
+    }
+    .tray-widget-content {
+        padding: 4px 4px 0 4px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+    .tray-widget-action {
+        text-align: center;
+        font-size: 0.85rem;
+        padding: 4px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        cursor: pointer;
     }
 }

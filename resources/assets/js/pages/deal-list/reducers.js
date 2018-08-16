@@ -125,6 +125,7 @@ const reducer = function(state = initialState, action = {}) {
                     filters: [
                         ...state.searchQuery.filters,
                         'model:' + action.data.model,
+                        'make:' + action.data.make,
                     ],
                 },
             };

@@ -16,6 +16,8 @@ import {
 } from '../selectors';
 import { requestSearch } from '../actions';
 
+import { MediumAndUp } from 'components/Responsive';
+
 class FilterPanel extends React.PureComponent {
     static propTypes = {
         filters: PropTypes.object.isRequired,
@@ -50,14 +52,16 @@ class FilterPanel extends React.PureComponent {
                     {/*
                     Purchase Strategy
                     */}
-                    <div className="purchase-strategy">
-                        <GlobalSelectPurchaseStrategy
-                            afterSetPurchaseStrategy={this.afterSetPurchaseStrategy.bind(
-                                this
-                            )}
-                            sortbar__button
-                        />
-                    </div>
+                    <MediumAndUp>
+                        <div className="purchase-strategy">
+                            <GlobalSelectPurchaseStrategy
+                                afterSetPurchaseStrategy={this.afterSetPurchaseStrategy.bind(
+                                    this
+                                )}
+                                sortbar__button
+                            />
+                        </div>
+                    </MediumAndUp>
 
                     {/*
                     Primary Filters

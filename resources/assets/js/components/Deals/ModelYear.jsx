@@ -8,7 +8,7 @@ import { Card, CardBody, CardHeader, CardFooter } from 'reactstrap';
 
 class ModelYear extends React.Component {
     static propTypes = {
-        modelYear: PropTypes.object.isRequired,
+        modelYear: modelYearType.isRequired,
         onSelectModelYear: PropTypes.func.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
     };
