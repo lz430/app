@@ -8,12 +8,16 @@ import CheveronLeft from 'icons/zondicons/CheveronLeft';
 
 import {
     clearModelYear,
+    requestSearch,
     toggleSearchSort,
     toggleSmallFiltersShown,
 } from '../../actions';
 import { getSearchQuery } from '../../selectors';
 
 import SortWidget from './SortWidget';
+import PaymentWidget from './PaymentWidget';
+import { getUserPurchaseStrategy } from '../../../../apps/user/selectors';
+import { setPurchaseStrategy } from '../../../../apps/user/actions';
 
 /**
  *
@@ -21,9 +25,12 @@ import SortWidget from './SortWidget';
 class ToolbarMobileBottom extends React.Component {
     static propTypes = {
         searchQuery: PropTypes.object.isRequired,
+        purchaseStrategy: PropTypes.string.isRequired,
+
         onToggleSmallFiltersShown: PropTypes.func.isRequired,
         onClearModelYear: PropTypes.func.isRequired,
         onToggleSearchSort: PropTypes.func.isRequired,
+        onSetPurchaseStrategy: PropTypes.func.isRequired,
     };
 
     state = {
@@ -35,10 +42,18 @@ class ToolbarMobileBottom extends React.Component {
     }
 
     setActiveTab(tab) {
+        if (this.state.activeTab === 'filter' && tab !== 'filter') {
+            this.props.onToggleSmallFiltersShown();
+        }
+
         if (this.state.activeTab === tab) {
             this.setState({ activeTab: null });
         } else {
             this.setState({ activeTab: tab });
+        }
+
+        if (tab === 'filter') {
+            this.props.onToggleSmallFiltersShown();
         }
     }
 
@@ -69,6 +84,16 @@ class ToolbarMobileBottom extends React.Component {
             );
         }
 
+        if (this.state.activeTab === 'payment') {
+            return (
+                <PaymentWidget
+                    purchaseStrategy={this.props.purchaseStrategy}
+                    onSetPurchaseStrategy={this.props.onSetPurchaseStrategy}
+                    onRequestSearch={this.props.onRequestSearch}
+                />
+            );
+        }
+
         return false;
     }
 
@@ -87,7 +112,7 @@ class ToolbarMobileBottom extends React.Component {
                         className={classNames('toolbar-item', {
                             active: this.state.activeTab === 'filter',
                         })}
-                        onClick={this.props.onToggleSmallFiltersShown}
+                        onClick={() => this.setActiveTab('filter')}
                     >
                         <Tuning
                             height="16px"
@@ -130,6 +155,7 @@ class ToolbarMobileBottom extends React.Component {
 const mapStateToProps = state => {
     return {
         searchQuery: getSearchQuery(state),
+        purchaseStrategy: getUserPurchaseStrategy(state),
     };
 };
 
@@ -143,6 +169,12 @@ const mapDispatchToProps = dispatch => {
         },
         onToggleSearchSort: sort => {
             return dispatch(toggleSearchSort(sort));
+        },
+        onSetPurchaseStrategy: strategy => {
+            return dispatch(setPurchaseStrategy(strategy));
+        },
+        onRequestSearch: () => {
+            return dispatch(requestSearch());
         },
     };
 };

@@ -42,6 +42,7 @@ class SortWidget extends React.PureComponent {
     renderSortButton(item) {
         return (
             <div
+                key={item.key}
                 onClick={() => this.props.onToggleSearchSort(item.key)}
                 className={classNames('tray-select-button', {
                     active: this.props.searchQuery.sort === item.key,
