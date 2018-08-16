@@ -24,7 +24,7 @@ class CreateVersionQuotesTable extends Migration
 
             $table->integer('term');
             $table->integer('rebate');
-            $table->decimal('rate');
+            $table->decimal('rate', 7, 6);
 
             // Lease only stuff
             $table->integer('residual')->nullable();

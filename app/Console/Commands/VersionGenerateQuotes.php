@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Deal;
 use App\Models\JATO\VersionQuote;
 use DeliverMyRide\RIS\Manager\VersionToVehicle;
 use DeliverMyRide\RIS\RISClient;
@@ -17,7 +18,7 @@ class VersionGenerateQuotes extends Command
      *
      * @var string
      */
-    protected $signature = 'dmr:version:quote';
+    protected $signature = 'dmr:version:quote {deal?}';
 
     /**
      * The console command description.
@@ -37,7 +38,6 @@ class VersionGenerateQuotes extends Command
     public function __construct(RISClient $client)
     {
         parent::__construct();
-
         $this->client = $client;
     }
 
@@ -46,8 +46,15 @@ class VersionGenerateQuotes extends Command
      */
     public function handle()
     {
-        $versions = Version::has('deals')->doesntHave('quotes')->orderBy('year', 'desc')->get();
         $client = $this->client;
+        $dealId = $this->argument('deal');
+        if ($dealId) {
+            $deal = Deal::where('id', $dealId)->get()->first();
+            $versions = collect([$deal->version]);
+        } else {
+            $versions = Version::has('deals')->doesntHave('quotes')->orderBy('year', 'desc')->get();
+        }
+
         $versions->map(function ($version) use ($client) {
             $datas = (new VersionToVehicle($version, '48116', $client))->get();
             $this->info($version->title());
@@ -57,17 +64,17 @@ class VersionGenerateQuotes extends Command
                     continue;
                 }
 
-                $versionQuote = VersionQuote::updateOrCreate([
+                VersionQuote::updateOrCreate([
                     'strategy' => $strategy,
                     'version_id' => $version->id,
                 ], [
                     'hashcode' => $data->hashcode,
                     'make_hashcode' => $data->makeHashcode,
-                    'rate' => $data->rate,
-                    'term' => $data->term,
-                    'rebate' => $data->rebates,
-                    'residual' => $data->residual,
-                    'miles' => $data->miles,
+                    'rate' => (float) $data->rate,
+                    'term' => (int) $data->term,
+                    'rebate' => (int) $data->rebates,
+                    'residual' => (int) $data->residual,
+                    'miles' => (int) $data->miles,
                     'rate_type' => $data->rateType,
                     'data' => $data->data,
                 ]);
