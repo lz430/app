@@ -4,8 +4,6 @@ namespace App\Services\Search;
 
 class ModelYearSearch extends BaseSearch
 {
-
-
     public function __construct()
     {
         parent::__construct();
@@ -43,97 +41,195 @@ class ModelYearSearch extends BaseSearch
     {
         $this->query['size'] = 0;
         $this->query['aggs'] = [
-            "category" => [
-                "nested" => [
-                    "path" => "category"
+            'category' => [
+                'nested' => [
+                    'path' => 'category'
                 ],
-                "aggs" => [
-                    "model" => [
-                        "terms" => [
-                            "size" => 50000,
-                            "field" => "category.title.keyword",
+                'aggs' => [
+                    'model' => [
+                        'terms' => [
+                            'size' => 50000,
+                            'field' => 'category.title.keyword',
                         ],
 
-                        "aggs" => [
-                            "thumbnail" => [
-                                "terms" => [
-                                    "field" => "category.thumbnail.keyword"
+                        'aggs' => [
+                            'thumbnail' => [
+                                'terms' => [
+                                    'field' => 'category.thumbnail.keyword'
                                 ]
                             ],
-                            "id" => [
-                                "terms" => [
-                                    "field" => "category.id"
+                            'id' => [
+                                'terms' => [
+                                    'field' => 'category.id'
                                 ]
                             ],
-                            "msrp" => [
-                                "reverse_nested" => (object)[],
-                                "aggs" => [
-                                    "min_msrp" => [
-                                        "min" => [
-                                            "field" => "pricing.msrp"
+                            'cash' => [
+                                'reverse_nested' => (object)[],
+                                'aggs' => [
+                                    'payment' => [
+                                        'terms' => [
+                                            'field' => 'id',
+                                            'size' => 1,
+                                            'order' => [
+                                                'payment' => 'asc',
+                                            ],
+                                        ],
+                                        'aggs' => [
+                                            'payment' => [
+                                                'min' => [
+                                                    'field' => 'payments.detroit.cash.payment',
+                                                ],
+                                            ],
+                                            'down' => [
+                                                'terms' => [
+                                                    'field' => 'payments.detroit.cash.down'
+                                                ]
+                                            ],
+                                            'rebates' => [
+                                                'terms' => [
+                                                    'field' => 'payments.detroit.cash.rebates'
+                                                ]
+                                            ],
+                                            'term' => [
+                                                'terms' => [
+                                                    'field' => 'payments.detroit.cash.term'
+                                                ]
+                                            ],
+                                            'rate' => [
+                                                'terms' => [
+                                                    'field' => 'payments.detroit.cash.rate'
+                                                ]
+                                            ],
                                         ]
-                                    ]
-                                ]
+                                    ],
+                                ],
                             ],
-                            "cash" => [
-                                "reverse_nested" => (object)[],
-                                "aggs" => [
-                                    "min_cash" => [
-                                        "min" => [
-                                            "field" => "payments.detroit.cash"
+
+                            'finance' => [
+                                'reverse_nested' => (object)[],
+                                'aggs' => [
+                                    'payment' => [
+                                        'terms' => [
+                                            'field' => 'id',
+                                            'size' => 1,
+                                            'order' => [
+                                                'payment' => 'asc',
+                                            ],
+                                        ],
+                                        'aggs' => [
+                                            'payment' => [
+                                                'min' => [
+                                                    'field' => 'payments.detroit.finance.payment',
+                                                ],
+                                            ],
+                                            'down' => [
+                                                'terms' => [
+                                                    'field' => 'payments.detroit.finance.down'
+                                                ]
+                                            ],
+                                            'rebates' => [
+                                                'terms' => [
+                                                    'field' => 'payments.detroit.finance.rebates'
+                                                ]
+                                            ],
+                                            'term' => [
+                                                'terms' => [
+                                                    'field' => 'payments.detroit.finance.term'
+                                                ]
+                                            ],
+                                            'rate' => [
+                                                'terms' => [
+                                                    'field' => 'payments.detroit.finance.rate'
+                                                ]
+                                            ],
                                         ]
-                                    ]
-                                ]
+                                    ],
+                                ],
                             ],
-                            "finance" => [
-                                "reverse_nested" => (object)[],
-                                "aggs" => [
-                                    "min_finance" => [
-                                        "min" => [
-                                            "field" => "payments.detroit.finance.payment"
+
+                            'lease' => [
+                                'reverse_nested' => (object)[],
+                                'aggs' => [
+                                    'payment' => [
+                                        'terms' => [
+                                            'field' => 'id',
+                                            'size' => 1,
+                                            'order' => [
+                                                'payment' => 'asc',
+                                            ],
+                                        ],
+                                        'aggs' => [
+                                            'payment' => [
+                                                'min' => [
+                                                    'field' => 'payments.detroit.lease.payment',
+                                                ],
+                                            ],
+                                            'down' => [
+                                                'terms' => [
+                                                    'field' => 'payments.detroit.lease.down'
+                                                ]
+                                            ],
+                                            'rebates' => [
+                                                'terms' => [
+                                                    'field' => 'payments.detroit.lease.rebates'
+                                                ]
+                                            ],
+                                            'term' => [
+                                                'terms' => [
+                                                    'field' => 'payments.detroit.lease.term'
+                                                ]
+                                            ],
+                                            'rate' => [
+                                                'terms' => [
+                                                    'field' => 'payments.detroit.lease.rate'
+                                                ]
+                                            ],
                                         ]
-                                    ]
-                                ]
+                                    ],
+                                ],
                             ],
-                            "lease" => [
-                                "reverse_nested" => (object)[],
-                                "aggs" => [
-                                    "min_lease" => [
-                                        "min" => [
-                                            "field" => "payments.detroit.lease.payment"
+
+                            'msrp' => [
+                                'reverse_nested' => (object)[],
+                                'aggs' => [
+                                    'min' => [
+                                        'min' => [
+                                            'field' => 'pricing.msrp'
                                         ]
-                                    ]
+                                    ],
                                 ]
                             ],
-                            "year" => [
-                                "reverse_nested" => (object)[],
-                                "aggs" => [
-                                    "year" => [
-                                        "terms" => [
-                                            "field" => "year.keyword",
-                                            "order" => [
-                                                "_key" => 'asc',
+
+
+                            'year' => [
+                                'reverse_nested' => (object)[],
+                                'aggs' => [
+                                    'year' => [
+                                        'terms' => [
+                                            'field' => 'year.keyword',
+                                            'order' => [
+                                                '_key' => 'asc',
                                             ],
                                         ],
                                     ]
                                 ]
                             ],
-                            "make" => [
-                                "reverse_nested" => (object)[],
-                                "aggs" => [
-                                    "make" => [
-                                        "terms" => [
-                                            "field" => "make.keyword"
+                            'make' => [
+                                'reverse_nested' => (object)[],
+                                'aggs' => [
+                                    'make' => [
+                                        'terms' => [
+                                            'field' => 'make.keyword'
                                         ]
                                     ]
                                 ]
                             ],
-                            "model" => [
-                                "reverse_nested" => (object)[],
-                                "aggs" => [
-                                    "model" => [
-                                        "terms" => [
-                                            "field" => "model.keyword"
+                            'model' => [
+                                'reverse_nested' => (object)[],
+                                'aggs' => [
+                                    'model' => [
+                                        'terms' => [
+                                            'field' => 'model.keyword'
                                         ]
                                     ]
                                 ]

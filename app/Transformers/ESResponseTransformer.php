@@ -126,7 +126,6 @@ class ESResponseTransformer extends TransformerAbstract
     public function modelRecords()
     {
         $results = [];
-
         foreach ($this->response['aggregations']['category']['model']['buckets'] as $data) {
             if (count($data['year']['year']['buckets']) > 1) {
                 $year = $data['year']['year']['buckets'][0]['key'];
@@ -135,21 +134,33 @@ class ESResponseTransformer extends TransformerAbstract
             } else {
                 $year = $data['year']['year']['buckets'][0]['key'];
             }
+
             $element = [
+                'year' => $year,
                 'make' => $data['make']['make']['buckets'][0]['key'],
                 'model' => $data['model']['model']['buckets'][0]['key'],
-                'year' => $year,
-                'thumbnail' => (object)[
-                    'url' => (isset($data['thumbnail']['buckets'][0]['key']) ? $data['thumbnail']['buckets'][0]['key'] : null)
-                ],
-                'deals' => (object)[
-                    'count' => $data['doc_count'],
-                ],
-                'msrp' => round($data['msrp']['min_msrp']['value'], 2),
-                'cash' => round($data['cash']['min_cash']['value'], 2),
-                'lease' => round($data['lease']['min_lease']['value'], 2),
-                'finance' => round($data['finance']['min_finance']['value'], 2),
+                'thumbnail' => (isset($data['thumbnail']['buckets'][0]['key']) ? $data['thumbnail']['buckets'][0]['key'] : null),
+                'deals' => $data['doc_count'],
+                'msrp' => round($data['msrp']['min']['value'], 2),
+                'payments' => [],
             ];
+
+            foreach(['lease', 'finance', 'cash' ] as $strategy) {
+                if (isset($data[$strategy]['payment']['buckets'][0]['payment']['value']) &&
+                    $data[$strategy]['payment']['buckets'][0]['payment']['value']) {
+
+                    $element['payments'][$strategy] = [
+                        'payment' => round($data[$strategy]['payment']['buckets'][0]['payment']['value'], 2),
+                        'down' => round($data[$strategy]['payment']['buckets'][0]['term']['buckets'][0]['key'], 2),
+                        'term' => $data[$strategy]['payment']['buckets'][0]['term']['buckets'][0]['key'],
+                        'rebates' => $data[$strategy]['payment']['buckets'][0]['rebates']['buckets'][0]['key'],
+                        'rate' => $data[$strategy]['payment']['buckets'][0]['rate']['buckets'][0]['key'],
+                    ];
+
+                } else {
+                    $element['payments'][$strategy] = null;
+                }
+            }
 
             $results[] = $element;
         }

@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { modelYearType } from 'types';
+
 import util from 'src/util';
 import ModelYearImage from 'components/Deals/ModelYearImage';
 import { Card, CardBody, CardHeader, CardFooter } from 'reactstrap';
@@ -47,26 +49,32 @@ class ModelYear extends React.Component {
 
         if (
             this.props.purchaseStrategy === 'lease' &&
-            this.props.modelYear['lease']
+            this.props.modelYear.payments.lease
         ) {
             label = 'Payments starting at';
-            value = util.moneyFormat(this.props.modelYear['lease']);
+            value = util.moneyFormat(
+                this.props.modelYear.payments.lease.payment
+            );
         }
 
         if (
             this.props.purchaseStrategy === 'finance' &&
-            this.props.modelYear['finance']
+            this.props.modelYear.payments.finance
         ) {
             label = 'Payments starting at';
-            value = util.moneyFormat(this.props.modelYear['finance']);
+            value = util.moneyFormat(
+                this.props.modelYear.payments.finance.payment
+            );
         }
 
         if (
             this.props.purchaseStrategy === 'cash' &&
-            this.props.modelYear['cash']
+            this.props.modelYear.payments.cash
         ) {
             label = 'Price starting at';
-            value = util.moneyFormat(this.props.modelYear['cash']);
+            value = util.moneyFormat(
+                this.props.modelYear.payments.cash.payment
+            );
         }
 
         return (
@@ -109,7 +117,7 @@ class ModelYear extends React.Component {
                     />
                     <div className="modelyear__details">
                         <div className="modelyear__count">
-                            {modelYear.deals.count} in stock.
+                            {modelYear.deals} in stock.
                         </div>
 
                         {this.renderPrice()}
