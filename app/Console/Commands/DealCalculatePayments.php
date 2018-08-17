@@ -123,12 +123,12 @@ class DealCalculatePayments extends Command
                     }
 
                     $manager = new DealLeasePaymentsManager($deal, $this->carletonClient);
-                    $payment = $manager->get([$rates], $quote->rebates, [0], 'default');
+                    $payment = $manager->get([$rates], $quote->rebate, [0], 'default');
                     if (count($payment)) {
                         $payments->detroit->lease = new \stdClass();
                         $payments->detroit->lease->term = (int)$quote->term;
                         $payments->detroit->lease->rate = (float)$quote->rate;
-                        $payments->detroit->lease->rebates = (int)$quote->rebates;
+                        $payments->detroit->lease->rebates = (int)$quote->rebate;
                         $payments->detroit->lease->residual = (int)$quote->residual;
                         $payments->detroit->lease->miles = (int)$quote->miles;
                         $payments->detroit->lease->down = round($payment[0]['total_amount_at_drive_off'], 2);

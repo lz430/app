@@ -63,7 +63,6 @@ class VersionGenerateQuotes extends Command
                 if (!$data) {
                     continue;
                 }
-
                 VersionQuote::updateOrCreate([
                     'strategy' => $strategy,
                     'version_id' => $version->id,

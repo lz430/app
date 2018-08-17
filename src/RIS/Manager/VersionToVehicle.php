@@ -518,6 +518,11 @@ class VersionToVehicle
                         $data->rateType = $scenario->programs[0]->rateType;
                         $data->term = $this->getClosetNumber(array_keys($scenario->programs[0]->tiers[0]->leaseTerms), 36);
                         $data->rate = $scenario->programs[0]->tiers[0]->leaseTerms[$data->term]->adjRate;
+
+                        if (isset($scenario->programs[0]->tiers[0]->leaseTerms[$data->term]->ccrCash)) {
+                            $data->rebates += $scenario->programs[0]->tiers[0]->leaseTerms[$data->term]->ccrCash->totalCCR;
+                        }
+
                         $data->miles = $this->getClosetNumber(array_keys($scenario->programs[0]->residuals), 10000);
 
                         if (isset($scenario->programs[0]->residuals[$data->miles]->termValues[$data->term])){
