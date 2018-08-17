@@ -123,6 +123,9 @@ class ESResponseTransformer extends TransformerAbstract
         return $results;
     }
 
+    /**
+     * @return array
+     */
     public function modelRecords()
     {
         $results = [];
