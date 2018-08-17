@@ -200,8 +200,8 @@ abstract class BaseSearch
         return $this;
     }
 
-    public function filterMustPayment(string $strategy) {
-
+    public function filterMustPayment(string $strategy)
+    {
         $filterQuery = [
             [
                 'range' => [
@@ -212,6 +212,7 @@ abstract class BaseSearch
             ]
         ];
 
+        dd($filterQuery);
         $this->query['query']['bool']['must'][] = $filterQuery;
 
         if (isset($this->query['aggs']['makeandstyle'])) {

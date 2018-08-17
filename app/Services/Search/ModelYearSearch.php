@@ -117,9 +117,9 @@ class ModelYearSearch extends BaseSearch
                                                     'field' => 'payments.detroit.cash.down'
                                                 ]
                                             ],
-                                            'rebates' => [
+                                            'rebate' => [
                                                 'terms' => [
-                                                    'field' => 'payments.detroit.cash.rebates'
+                                                    'field' => 'payments.detroit.cash.rebate'
                                                 ]
                                             ],
                                             'term' => [
@@ -159,9 +159,9 @@ class ModelYearSearch extends BaseSearch
                                                     'field' => 'payments.detroit.finance.down'
                                                 ]
                                             ],
-                                            'rebates' => [
+                                            'rebate' => [
                                                 'terms' => [
-                                                    'field' => 'payments.detroit.finance.rebates'
+                                                    'field' => 'payments.detroit.finance.rebate'
                                                 ]
                                             ],
                                             'term' => [
@@ -201,9 +201,9 @@ class ModelYearSearch extends BaseSearch
                                                     'field' => 'payments.detroit.lease.down'
                                                 ]
                                             ],
-                                            'rebates' => [
+                                            'rebate' => [
                                                 'terms' => [
-                                                    'field' => 'payments.detroit.lease.rebates'
+                                                    'field' => 'payments.detroit.lease.rebate'
                                                 ]
                                             ],
                                             'term' => [

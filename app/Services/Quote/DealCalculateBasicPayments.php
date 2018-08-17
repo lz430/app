@@ -143,7 +143,7 @@ class DealCalculateBasicPayments {
                     $payments->detroit->cash = $this->buildCashPayment($quote, $deal);
                     break;
                 case 'finance':
-                    $payments->detroit->fiance = $this->buildFinancePayment($quote, $deal);
+                    $payments->detroit->finance = $this->buildFinancePayment($quote, $deal);
                     break;
                 case 'lease':
                     $payments->detroit->lease = $this->buildLeasePayment($quote, $deal);
