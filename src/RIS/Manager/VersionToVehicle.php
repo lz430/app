@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Cache;
  */
 class VersionToVehicle
 {
+    private const REGIONS = [
+      'detroit' => '48116',
+    ];
+
     private const MODEL_MAP = [
         'Ram 1500 Pickup' => '1500',
     ];
@@ -50,7 +54,6 @@ class VersionToVehicle
 
     /* @var Version */
     private $version;
-    private $zipcode;
 
 
     /* @var \Illuminate\Support\Collection */
@@ -69,18 +72,17 @@ class VersionToVehicle
 
     /**
      * @param Version $version
-     * @param string $zipcode
      * @param RISClient $client
      */
-    public function __construct(Version $version, string $zipcode, RISClient $client)
+    public function __construct(Version $version, RISClient $client)
     {
         $this->version = $version;
-        $this->zipcode = $zipcode;
         $this->client = $client;
     }
 
     /**
      * @param array $data
+     * @param $parentAttribute
      * @param $attribute
      * @param $value
      * @return array
@@ -249,11 +251,11 @@ class VersionToVehicle
      */
     private function fetchVehicles()
     {
-        $results = Cache::remember('ris-make-' . $this->version->model->make->name . $this->zipcode, 1440, function () {
+        $results = Cache::remember('ris-make-' . $this->version->model->make->name . self::REGIONS['detroit'], 1440, function () {
             try {
                 $results = $this->client->vehicle->findByMakeAndPostalcode(
                     $this->version->model->make->name,
-                    $this->zipcode
+                    self::REGIONS['detroit']
                 );
             } catch (ClientException $exception) {
                 $results = [];

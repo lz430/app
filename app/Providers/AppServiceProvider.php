@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\JATO\VersionQuote;
 use Barryvdh\Debugbar\ServiceProvider as DebugbarServiceProvider;
 use Illuminate\Contracts\Logging\Log;
 use Illuminate\Support\ServiceProvider;
@@ -15,6 +16,7 @@ use App\Models\Purchase;
 use App\Observers\DealerObserver;
 use App\Observers\FeatureObserver;
 use App\Observers\VersionObserver;
+use App\Observers\VersionQuoteObserver;
 use App\Observers\PurchaseObserver;
 
 class AppServiceProvider extends ServiceProvider
@@ -33,6 +35,8 @@ class AppServiceProvider extends ServiceProvider
             Version::observe(VersionObserver::class);
             Purchase::observe(PurchaseObserver::class);
         }
+
+        VersionQuote::observe(VersionQuoteObserver::class);
         
         Validator::extend('drivers_license_number', function ($attribute, $value, $parameters, $validator) {
             $licenseValidator = new LicenseValidator([

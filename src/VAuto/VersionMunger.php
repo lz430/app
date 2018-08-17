@@ -2,15 +2,21 @@
 
 namespace DeliverMyRide\VAuto;
 
+use GuzzleHttp\Exception\ClientException;
+
 use App\Models\JATO\Make;
 use App\Models\JATO\Manufacturer;
 use App\Models\JATO\VehicleModel;
 use App\Models\JATO\Version;
+use App\Models\JATO\VersionQuote;
+
+use DeliverMyRide\JATO\JatoClient;
+
 use DeliverMyRide\Fuel\FuelClient;
 use DeliverMyRide\Fuel\Manager\VersionToFuel;
-use DeliverMyRide\JATO\JatoClient;
-use GuzzleHttp\Exception\ClientException;
 
+use DeliverMyRide\RIS\RISClient;
+use DeliverMyRide\RIS\Manager\VersionToVehicle;
 
 
 class VersionMunger
@@ -18,6 +24,8 @@ class VersionMunger
 
     private $jatoClient;
     private $fuelClient;
+    private $risClient;
+
     private $row;
     private $decodedVin;
     private $version;
@@ -28,11 +36,17 @@ class VersionMunger
      * @param array $row
      * @param JatoClient $jatoClient
      * @param FuelClient $fuelClient
+     * @param RISClient $risClient
+     *
      */
-    public function __construct(array $row, JatoClient $jatoClient, FuelClient $fuelClient)
+    public function __construct(array $row,
+                                JatoClient $jatoClient,
+                                FuelClient $fuelClient,
+                                RISClient $risClient)
     {
         $this->jatoClient = $jatoClient;
         $this->fuelClient = $fuelClient;
+        $this->risClient = $risClient;
         $this->row = $row;
     }
 
@@ -141,8 +155,6 @@ class VersionMunger
                 $this->debug['name_search_name'] = $matches[0]->versionName;
                 $this->debug['name_search_term'] = $trim;
             }
-
-
         }
 
         if (count($matches) === 0) {
@@ -266,8 +278,6 @@ class VersionMunger
             'is_current' => $data->isCurrent,
         ]);
 
-        $this->photos($version);
-
         return $version;
     }
 
@@ -288,6 +298,35 @@ class VersionMunger
                 'shot_code' => $asset->shotCode->code,
                 'color' => 'default',
             ]);
+        }
+    }
+
+    /**
+     * @param Version $version
+     */
+    private function quotes(Version $version)
+    {
+        $quoteData = (new VersionToVehicle($version, $this->risClient))->get();
+
+        foreach ($quoteData as $strategy => $data) {
+            if (!$data) {
+                $version->quotes()->where('strategy', $strategy)->delete();
+            } else {
+                VersionQuote::updateOrCreate([
+                    'strategy' => $strategy,
+                    'version_id' => $version->id,
+                ], [
+                    'hashcode' => $data->hashcode,
+                    'make_hashcode' => $data->makeHashcode,
+                    'rate' => (float) $data->rate,
+                    'term' => (int) $data->term,
+                    'rebate' => (int) $data->rebates,
+                    'residual' => (int) $data->residual,
+                    'miles' => (int) $data->miles,
+                    'rate_type' => $data->rateType,
+                    'data' => $data->data,
+                ]);
+            }
         }
     }
 
@@ -340,6 +379,9 @@ class VersionMunger
         $version = Version::where('jato_uid', $jatoVersion->uid)->where('year', $this->row['Year'])->first();
         if (!$version) {
             $version = $this->create();
+            $this->photos($version);
+            $this->quotes($version);
+
         }
 
         if (!$version) {

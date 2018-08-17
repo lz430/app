@@ -57,27 +57,30 @@ class VersionGenerateQuotes extends Command
         }
 
         $versions->map(function ($version) use ($client) {
-            $datas = (new VersionToVehicle($version, '48116', $client))->get();
+            /* @var \App\Models\JATO\Version $version */
+
+            $quoteData = (new VersionToVehicle($version, $client))->get();
             $this->info($version->title());
 
-            foreach ($datas as $strategy => $data) {
+            foreach ($quoteData as $strategy => $data) {
                 if (!$data) {
-                    continue;
+                    $version->quotes()->where('strategy', $strategy)->delete();
+                } else {
+                    VersionQuote::updateOrCreate([
+                        'strategy' => $strategy,
+                        'version_id' => $version->id,
+                    ], [
+                        'hashcode' => $data->hashcode,
+                        'make_hashcode' => $data->makeHashcode,
+                        'rate' => (float) $data->rate,
+                        'term' => (int) $data->term,
+                        'rebate' => (int) $data->rebates,
+                        'residual' => (int) $data->residual,
+                        'miles' => (int) $data->miles,
+                        'rate_type' => $data->rateType,
+                        'data' => $data->data,
+                    ]);
                 }
-                VersionQuote::updateOrCreate([
-                    'strategy' => $strategy,
-                    'version_id' => $version->id,
-                ], [
-                    'hashcode' => $data->hashcode,
-                    'make_hashcode' => $data->makeHashcode,
-                    'rate' => (float) $data->rate,
-                    'term' => (int) $data->term,
-                    'rebate' => (int) $data->rebates,
-                    'residual' => (int) $data->residual,
-                    'miles' => (int) $data->miles,
-                    'rate_type' => $data->rateType,
-                    'data' => $data->data,
-                ]);
             }
         });
     }
