@@ -5,6 +5,7 @@ import Decimal from 'decimal.js';
 
 import { dealPricingData } from 'apps/common/selectors';
 import { dealPricingFromCheckoutData } from 'apps/checkout/selectors';
+import { getClosestNumberInRange } from 'src/util';
 
 /**
  * Generate a deal pricing class using data pulled
@@ -188,8 +189,7 @@ export default class DealPricing {
                 return 36;
             }
 
-            // Return the first lease terms available.
-            return leaseTermsAvailable[0];
+            return getClosestNumberInRange(36, leaseTermsAvailable);
         }
 
         return this.data.leaseTerm;
@@ -643,15 +643,15 @@ export default class DealPricing {
     }
 
     isSelectedLeasePaymentForTermAndCashDue(term, cashDue, annualMileage) {
-        if (term != this.leaseTermValue()) {
+        if (term !== this.leaseTermValue()) {
             return false;
         }
 
-        if (cashDue != this.leaseCashDueValue()) {
+        if (cashDue !== this.leaseCashDueValue()) {
             return false;
         }
 
-        if (annualMileage != this.leaseAnnualMileageValue()) {
+        if (annualMileage !== this.leaseAnnualMileageValue()) {
             return false;
         }
 
