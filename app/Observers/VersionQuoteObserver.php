@@ -14,7 +14,10 @@ class VersionQuoteObserver
      */
     public function created(VersionQuote $quote)
     {
-
+        $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
+        foreach($quote->version()->deals() as $deal) {
+            $calculator->calculateBasicPayments($deal);
+        }
     }
 
     /**
@@ -25,7 +28,12 @@ class VersionQuoteObserver
      */
     public function updated(VersionQuote $quote)
     {
-
+        if ($quote->getOriginal()['hashcode'] != $quote->hashcode) {
+            $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
+            foreach($quote->version()->deals() as $deal) {
+                $calculator->calculateBasicPayments($deal);
+            }
+        }
     }
 
     /**
@@ -36,6 +44,9 @@ class VersionQuoteObserver
      */
     public function deleted(VersionQuote $quote)
     {
-        //
+        $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
+        foreach($quote->version()->deals() as $deal) {
+            $calculator->calculateBasicPayments($deal);
+        }
     }
 }

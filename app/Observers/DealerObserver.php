@@ -10,7 +10,7 @@ class DealerObserver
     /**
      * Handle to the dealer "created" event.
      *
-     * @param  \App\Dealer  $dealer
+     * @param Dealer $dealer
      * @return void
      */
     public function created(Dealer $dealer)
@@ -21,22 +21,11 @@ class DealerObserver
     /**
      * Handle the dealer "updated" event.
      *
-     * @param  \App\Dealer  $dealer
+     * @param Dealer $dealer
      * @return void
      */
     public function updated(Dealer $dealer)
     {
         Deal::where('dealer_id', $dealer->dealer_id)->searchable();
-    }
-
-    /**
-     * Handle the dealer "deleted" event.
-     *
-     * @param  \App\Dealer  $dealer
-     * @return void
-     */
-    public function deleted(Dealer $dealer)
-    {
-        //
     }
 }

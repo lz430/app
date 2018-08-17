@@ -293,7 +293,6 @@ class Deal extends Model
     public function prices(): \stdClass
     {
         $source = $this->source_price;
-
         //
         // Migration help
         if (!$source) {

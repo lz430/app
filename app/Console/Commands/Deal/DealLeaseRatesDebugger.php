@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Deal;
 
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
 use DeliverMyRide\DataDelivery\Manager\DealRatesAndRebatesManager;

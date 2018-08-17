@@ -483,9 +483,9 @@ class VersionToVehicle
                     $data->rate = 0;
                     $data->term = 0;
                     if (isset($vehicle->scenarios['Cash - Bank APR'])) {
-                        $data->rebates = $vehicle->scenarios['Cash - Bank APR']->consumerCash->totalConsumerCash;
+                        $data->rebate = $vehicle->scenarios['Cash - Bank APR']->consumerCash->totalConsumerCash;
                     } else {
-                        $data->rebates = 0;
+                        $data->rebate = 0;
                     }
                     break;
 
@@ -496,9 +496,9 @@ class VersionToVehicle
                     $data->term = 60;
 
                     if (isset($vehicle->scenarios['Cash - Bank APR'])) {
-                        $data->rebates = $vehicle->scenarios['Cash - Bank APR']->consumerCash->totalConsumerCash;
+                        $data->rebate = $vehicle->scenarios['Cash - Bank APR']->consumerCash->totalConsumerCash;
                     } else {
-                        $data->rebates = 0;
+                        $data->rebate = 0;
                     }
                     break;
                 case 'lease':
@@ -507,14 +507,14 @@ class VersionToVehicle
                     if (!isset($vehicle->scenarios['Manufacturer - Lease Special']) || !isset($vehicle->scenarios['Manufacturer - Lease Special']->programs[0])) {
                         $data->rate = 0;
                         $data->term = 0;
-                        $data->rebates = 0;
+                        $data->rebate = 0;
 
                     } else {
                         $scenario = $vehicle->scenarios['Manufacturer - Lease Special'];
                         if (isset($scenario->consumerCash)) {
-                            $data->rebates = $scenario->consumerCash->totalConsumerCash;
+                            $data->rebate = $scenario->consumerCash->totalConsumerCash;
                         } else {
-                            $data->rebates = 0;
+                            $data->rebate = 0;
                         }
 
                         $data->rateType = $scenario->programs[0]->rateType;
@@ -522,7 +522,7 @@ class VersionToVehicle
                         $data->rate = $scenario->programs[0]->tiers[0]->leaseTerms[$data->term]->adjRate;
 
                         if (isset($scenario->programs[0]->tiers[0]->leaseTerms[$data->term]->ccrCash)) {
-                            $data->rebates += $scenario->programs[0]->tiers[0]->leaseTerms[$data->term]->ccrCash->totalCCR;
+                            $data->rebate += $scenario->programs[0]->tiers[0]->leaseTerms[$data->term]->ccrCash->totalCCR;
                         }
 
                         $data->miles = $this->getClosetNumber(array_keys($scenario->programs[0]->residuals), 10000);
@@ -532,7 +532,7 @@ class VersionToVehicle
                         } else {
                             $data->rate = 0;
                             $data->term = 0;
-                            $data->rebates = 0;
+                            $data->rebate = 0;
                             $data->residual = null;
                             $data->miles = null;
                             $data->rateType;

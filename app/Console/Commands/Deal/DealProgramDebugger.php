@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Deal;
 
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
 use DeliverMyRide\DataDelivery\Manager\DealRatesAndRebatesManager;
@@ -14,7 +14,7 @@ class DealProgramDebugger extends Command
      *
      * @var string
      */
-    protected $signature = 'dmr:programs {vin}';
+    protected $signature = 'dmr:deal:programs {vin}';
 
     /**
      * The console command description.

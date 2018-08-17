@@ -74,7 +74,7 @@ class VersionGenerateQuotes extends Command
                         'make_hashcode' => $data->makeHashcode,
                         'rate' => (float) $data->rate,
                         'term' => (int) $data->term,
-                        'rebate' => (int) $data->rebates,
+                        'rebate' => (int) $data->rebate,
                         'residual' => (int) $data->residual,
                         'miles' => (int) $data->miles,
                         'rate_type' => $data->rateType,

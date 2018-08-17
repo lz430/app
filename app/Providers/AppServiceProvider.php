@@ -2,17 +2,18 @@
 
 namespace App\Providers;
 
-use App\Models\JATO\VersionQuote;
-use Barryvdh\Debugbar\ServiceProvider as DebugbarServiceProvider;
+
+use App\Observers\DealObserver;
 use Illuminate\Contracts\Logging\Log;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
-use Psr\Log\LoggerInterface;
 use USDLRegex\Validator as LicenseValidator;
+use App\Models\Deal;
 use App\Models\Dealer;
 use App\Models\Feature;
-use App\Models\JATO\Version;
 use App\Models\Purchase;
+use App\Models\JATO\Version;
+use App\Models\JATO\VersionQuote;
 use App\Observers\DealerObserver;
 use App\Observers\FeatureObserver;
 use App\Observers\VersionObserver;
@@ -37,7 +38,8 @@ class AppServiceProvider extends ServiceProvider
         }
 
         VersionQuote::observe(VersionQuoteObserver::class);
-        
+        Deal::observe(DealObserver::class);
+
         Validator::extend('drivers_license_number', function ($attribute, $value, $parameters, $validator) {
             $licenseValidator = new LicenseValidator([
                 'verbose' => false,
