@@ -54,7 +54,6 @@ class DealFeatureDebugger extends Command
             return;
         }
 
-
         $munger = new DealEquipmentMunger($deal, $this->client);
         $debug = $munger->import(true);
 

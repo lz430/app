@@ -18,6 +18,11 @@ class VersionToVehicle
       'detroit' => '48116',
     ];
 
+    private const TRANSMISSION_MAP = [
+        'Automatic' => 'AT',
+        'Manual' => 'MT',
+    ];
+
     private const MODEL_MAP = [
         'Ram 1500 Pickup' => '1500',
     ];
@@ -198,6 +203,15 @@ class VersionToVehicle
         return $doors;
     }
 
+    private function translateTransmission()
+    {
+        $transmission = $this->version->transmission_type;
+
+        if ($transmission) {
+            return self::TRANSMISSION_MAP[$transmission];
+        }
+    }
+
     /**
      * @return array
      */
@@ -212,6 +226,8 @@ class VersionToVehicle
             'body' => $this->translateBodyStyle(),
             'driven_wheels' => $this->version->driven_wheels,
             'cab' => $this->version->cab ? $this->translateCab() : null,
+            'transmission' => $this->translateTransmission(),
+
         ];
 
         if (str_contains($this->version->manufacturer_code, ["/"])) {
@@ -276,10 +292,8 @@ class VersionToVehicle
 
         $hints = str_replace(['{', '}'], '', $hints);
         $hints = explode(",", $hints);
-
         foreach ($hints as $hint) {
             $hint = explode(":", $hint);
-
             if (count($hint) !== 2) {
                 continue;
             }
@@ -307,7 +321,6 @@ class VersionToVehicle
                         $vehicle->modelYear
                     ];
                 }
-
                 $data->exclude = $this->parseHints($vehicle->vehicleHintsForExclusion);
                 $data->vehicle = $vehicle;
                 return $data;
@@ -328,15 +341,17 @@ class VersionToVehicle
 
         $vehicles = $vehicles->toArray();
 
-        // Filter by inclusion
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL', $params['model']);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'YEAR', $params['year']);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['trim']);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRIM', $params['trim']);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL', $params['trim']);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'DRIVE_TYPE_CODE', $params['driven_wheels']);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'BODY_TYPE', $params['cab']);
+        // Require
+        $vehicles = array_filter($vehicles, function($vehicle) use ($params) {
+            if (!isset($vehicle->filters->YEAR)) {
+                return true;
+            }
+            return in_array($params['year'], $vehicle->filters->YEAR);
+        });
 
+        $vehicles = array_filter($vehicles, function($vehicle) use ($params) {
+            return in_array($params['model'], $vehicle->filters->MODEL);
+        });
 
         foreach ($params['model_code'] as $code) {
             if (!$code) {
@@ -344,6 +359,16 @@ class VersionToVehicle
             }
             $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $code);
         }
+
+
+        // Optional
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL', $params['model']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['trim']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRIM', $params['trim']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL', $params['trim']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'DRIVE_TYPE_CODE', $params['driven_wheels']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'BODY_TYPE', $params['cab']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRAN_TYPE', $params['transmission']);
 
         return collect($vehicles)->map(function ($item) {
             return $item->vehicle;

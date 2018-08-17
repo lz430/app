@@ -151,7 +151,6 @@ class DealRatesAndRebatesManager
         foreach ($scenarios as $type) {
 
             $programs = $this->leaseProgramsWithScenario($type);
-
             if (!$programs->count()) {
                 continue;
             } elseif ($programs->count() == 1) {
@@ -165,7 +164,6 @@ class DealRatesAndRebatesManager
                 break;
             }
         }
-
         $this->leaseProgram = $selectedProgram;
         $this->scenario = $selectedType;
     }

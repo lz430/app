@@ -61,7 +61,6 @@ class VersionGenerateQuotes extends Command
 
             $quoteData = (new VersionToVehicle($version, $client))->get();
             $this->info($version->title());
-
             foreach ($quoteData as $strategy => $data) {
                 if (!$data) {
                     $version->quotes()->where('strategy', $strategy)->delete();
