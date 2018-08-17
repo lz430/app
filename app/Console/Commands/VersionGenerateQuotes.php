@@ -25,7 +25,7 @@ class VersionGenerateQuotes extends Command
      *
      * @var string
      */
-    protected $description = 'Fill Missing Photos';
+    protected $description = 'Regenerate all version quotes';
 
     /* @var RISClient */
     private $client;
@@ -48,11 +48,12 @@ class VersionGenerateQuotes extends Command
     {
         $client = $this->client;
         $dealId = $this->argument('deal');
+
         if ($dealId) {
             $deal = Deal::where('id', $dealId)->get()->first();
             $versions = collect([$deal->version]);
         } else {
-            $versions = Version::has('deals')->doesntHave('quotes')->orderBy('year', 'desc')->get();
+            $versions = Version::has('deals')->orderBy('year', 'desc')->get();
         }
 
         $versions->map(function ($version) use ($client) {
