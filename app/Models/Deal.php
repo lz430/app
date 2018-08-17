@@ -522,6 +522,18 @@ class Deal extends Model
             $version = $version->toArray();
             unset($version['model']);
             unset($version['quotes']);
+            unset($version['updated_at']);
+            unset($version['created_at']);
+            unset($version['segment']);
+            unset($version['transmission_type']);
+            unset($version['model_id']);
+            unset($version['msrp']);
+            unset($version['invoice']);
+            unset($version['is_current']);
+            unset($version['jato_model_id']);
+            unset($version['jato_uid']);
+            unset($version['jato_vehicle_id']);
+            unset($version['delivery_price']);
             $record['version'] = $version;
         } else {
             $record['version'] = null;
@@ -532,6 +544,18 @@ class Deal extends Model
         unset($dealer['max_delivery_miles']);
         unset($dealer['longitude']);
         unset($dealer['latitude']);
+        unset($dealer['address']);
+        unset($dealer['city']);
+        unset($dealer['contact_email']);
+        unset($dealer['contact_name']);
+        unset($dealer['contact_title']);
+        unset($dealer['contact_title']);
+        unset($dealer['created_at']);
+        unset($dealer['phone']);
+        unset($dealer['route_one_id']);
+        unset($dealer['state']);
+        unset($dealer['updated_at']);
+        unset($dealer['zip']);
         $record['dealer'] = $dealer;
 
         //

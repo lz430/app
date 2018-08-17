@@ -129,6 +129,8 @@ class DealCalculatePayments extends Command
                         $payments->detroit->lease->term = (int)$quote->term;
                         $payments->detroit->lease->rate = (float)$quote->rate;
                         $payments->detroit->lease->rebates = (int)$quote->rebates;
+                        $payments->detroit->lease->residual = (int)$quote->residual;
+                        $payments->detroit->lease->miles = (int)$quote->miles;
                         $payments->detroit->lease->down = round($payment[0]['total_amount_at_drive_off'], 2);
                         $payments->detroit->lease->payment = round($payment[0]['monthly_payment'], 2);
                     }

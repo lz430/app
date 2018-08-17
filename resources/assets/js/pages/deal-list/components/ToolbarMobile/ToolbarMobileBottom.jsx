@@ -46,18 +46,20 @@ class ToolbarMobileBottom extends React.Component {
     };
 
     setActiveTab(tab) {
-        if (this.state.activeTab === 'filter' && tab !== 'filter') {
+        if (tab === 'filter') {
             this.props.onToggleSmallFiltersShown();
+        } else if (tab !== 'filter' && this.state.activeTab === 'filter') {
+            this.props.onToggleSmallFiltersShown(false);
         }
 
         if (this.state.activeTab === tab) {
+            if (this.state.activeTab === 'filter') {
+                this.props.onToggleSmallFiltersShown(false);
+            }
+
             this.setState({ activeTab: null });
         } else {
             this.setState({ activeTab: tab });
-        }
-
-        if (tab === 'filter') {
-            this.props.onToggleSmallFiltersShown();
         }
     }
 
@@ -178,8 +180,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onToggleSmallFiltersShown: () => {
-            return dispatch(toggleSmallFiltersShown());
+        onToggleSmallFiltersShown: (method = null) => {
+            return dispatch(toggleSmallFiltersShown(method));
         },
         onClearModelYear: () => {
             return dispatch(clearModelYear());

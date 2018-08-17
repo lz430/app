@@ -129,8 +129,18 @@ export function closeMakeSelectorModal() {
     };
 }
 
-export function toggleSmallFiltersShown() {
+/**
+ *
+ * @param open
+ * null: toggle
+ * true: force open
+ * false: force close
+ *
+ * @returns {{type: string}}
+ */
+export function toggleSmallFiltersShown(open = null) {
     return {
         type: ActionTypes.TOGGLE_SMALL_FILTERS_SHOWN,
+        data: open,
     };
 }

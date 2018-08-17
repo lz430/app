@@ -156,8 +156,12 @@ const reducer = function(state = initialState, action = {}) {
         case ActionTypes.TOGGLE_SMALL_FILTERS_SHOWN:
             return {
                 ...state,
-                smallFiltersShown: !state.smallFiltersShown,
+                smallFiltersShown:
+                    action.data === null
+                        ? !state.smallFiltersShown
+                        : action.data,
             };
+
         case ActionTypes.MAKE_SELECTOR_MODAL_OPEN:
             return {
                 ...state,
