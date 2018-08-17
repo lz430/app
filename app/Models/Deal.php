@@ -60,6 +60,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property jatoFeature[] $jatoFeatures
  * @property Feature[] $features
  * @property int $seating_capacity
+ * @property string $vehicle_color
  */
 class Deal extends Model
 {
@@ -130,7 +131,7 @@ class Deal extends Model
             ],
             'seating_capacity' => [
                 'type' => 'integer'
-            ]
+            ],
         ]
     ];
 
@@ -471,6 +472,7 @@ class Deal extends Model
         $record['series'] = $this->series;
         $record['style'] = $this->version->style();
         $record['seating_capacity'] = (int) $this->seating_capacity;
+        $record['vehicle_color'] = $this->vehicle_color;
 
         //
         // Required vehicle attributes

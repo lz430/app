@@ -98,6 +98,7 @@ class DealEquipmentMunger
         //
         // Find information for the deal model
         $this->syncSeatingCapacity();
+        //$this->syncVehicleColor();
 
         //
         // Finally get some features.
@@ -150,7 +151,7 @@ class DealEquipmentMunger
     {
         $featureIds = [];
         foreach ($this->discovered_features as $category => $features) {
-            $featureIds = array_merge($featureIds, array_keys($features));
+            $featureIds = array_merge($featureIds, array_keys($features), $this->syncVehicleColor());
         }
         $this->deal->features()->sync($featureIds);
     }
@@ -913,5 +914,17 @@ class DealEquipmentMunger
                     ->first();
             }
         }
+    }
+
+    private function syncVehicleColor()
+    {
+        $color = null;
+        foreach (\DeliverMyRide\Fuel\Map::COLOR_MAP as $needle => $value) {
+            if($this->deal->color == $needle) {
+                $color = $value;
+            }
+        }
+        $dealFeatureColor = Feature::where('title', $color)->first();
+        return array($dealFeatureColor->id);
     }
 }
