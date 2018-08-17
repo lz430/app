@@ -18,7 +18,6 @@ class DealObserver
         $calculator->calculateBasicPayments($deal);
     }
 
-
     /**
      * Handle the deal "updated" event.
      *
@@ -30,7 +29,8 @@ class DealObserver
         $originalPricing = $deal->getOriginal()['source_price'];
         $pricing = json_encode($deal->source_price);
 
-        if (!$originalPricing != $pricing) {
+        // Only update if is not new, and pricing is different.
+        if (!$originalPricing != $pricing && isset($deal->id) && $deal->id) {
             $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
             $calculator->calculateBasicPayments($deal, false);
         }
