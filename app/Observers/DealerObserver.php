@@ -32,7 +32,7 @@ class DealerObserver
         $pricing = json_encode($dealer->price_rules);
 
         // Only update if is not new, and pricing is different.
-        if (!$originalPricing != $pricing) {
+        if ($originalPricing != $pricing) {
             $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
             foreach($dealer->deals() as $deal) {
                 $calculator->calculateBasicPayments($deal);

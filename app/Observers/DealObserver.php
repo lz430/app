@@ -30,7 +30,7 @@ class DealObserver
         $pricing = json_encode($deal->source_price);
 
         // Only update if is not new, and pricing is different.
-        if (!$originalPricing != $pricing && isset($deal->id) && $deal->id) {
+        if ($originalPricing != $pricing && isset($deal->id) && $deal->id) {
             $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
             $calculator->calculateBasicPayments($deal, false);
         }
