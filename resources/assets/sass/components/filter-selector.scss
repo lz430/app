@@ -1,12 +1,10 @@
 .filter-selector {
+    padding: 0.5rem 0;
     &__selector {
         cursor: pointer;
         display: flex;
         padding: 2px 5px;
-
-        &:first-child {
-            margin-top: 0.5em;
-        }
+        font-size: 0.9rem;
 
         &:last-child {
             border-bottom: 0;

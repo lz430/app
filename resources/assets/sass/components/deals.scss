@@ -143,9 +143,17 @@
         cursor: pointer;
         padding: 6px;
         border-bottom: 1px solid #eee;
+        .explanation {
+            font-size: 0.8rem;
+            color: $gray-600;
+        }
+
         &.active {
-            font-weight: bold;
             box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
+
+            .label {
+                font-weight: bold;
+            }
         }
         &:last-child {
             border-bottom: 0;

@@ -13,14 +13,17 @@ class PaymentWidget extends React.PureComponent {
         {
             key: 'cash',
             label: 'Cash',
+            explanation: 'Based on cost of vehicle excluding taxes and fees.',
         },
         {
             key: 'finance',
             label: 'Finance',
+            explanation: 'Based on 4% interest and 10% down.',
         },
         {
             key: 'lease',
             label: 'Lease',
+            explanation: 'Based on 10,000 miles and 36 months.',
         },
     ];
 
@@ -42,7 +45,10 @@ class PaymentWidget extends React.PureComponent {
                     active: this.props.purchaseStrategy === item.key,
                 })}
             >
-                {item.label}
+                <div className="label">{item.label}</div>
+                {this.props.purchaseStrategy === item.key && (
+                    <div className="explanation">{item.explanation}</div>
+                )}
             </div>
         );
     }

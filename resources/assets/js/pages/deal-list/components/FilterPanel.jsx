@@ -7,8 +7,6 @@ import SecondaryFilters from './Sidebar/SecondaryFilters';
 import MobileFilterClose from './Sidebar/MobileFilterClose';
 import GlobalSelectPurchaseStrategy from 'apps/user/components/GlobalSelectPurchaseStrategy';
 
-import util from 'src/util';
-
 import { toggleSearchFilter, clearModelYear } from 'pages/deal-list/actions';
 import {
     getLoadingSearchResults,
@@ -16,7 +14,7 @@ import {
 } from '../selectors';
 import { requestSearch } from '../actions';
 
-import { MediumAndUp } from 'components/Responsive';
+import { MediumAndUp, SmallAndDown } from 'components/Responsive';
 
 class FilterPanel extends React.PureComponent {
     static propTypes = {
@@ -42,11 +40,9 @@ class FilterPanel extends React.PureComponent {
     render() {
         return (
             <div>
-                {util.windowIsLargerThanSmall(
-                    this.props.window.width
-                ) ? null : (
+                <SmallAndDown>
                     <MobileFilterClose />
-                )}
+                </SmallAndDown>
 
                 <div className="sidebar-filters">
                     {/*
@@ -55,10 +51,10 @@ class FilterPanel extends React.PureComponent {
                     <MediumAndUp>
                         <div className="purchase-strategy">
                             <GlobalSelectPurchaseStrategy
+                                showExplanation={true}
                                 afterSetPurchaseStrategy={this.afterSetPurchaseStrategy.bind(
                                     this
                                 )}
-                                sortbar__button
                             />
                         </div>
                     </MediumAndUp>
@@ -77,9 +73,7 @@ class FilterPanel extends React.PureComponent {
                         onToggleSearchFilter={this.props.onToggleSearchFilter}
                     />
 
-                    <div
-                        className={`sidebar-filters__narrow sidebar-filters__narrow--${status}`}
-                    >
+                    <div className="sidebar-filters__narrow">
                         <SecondaryFilters
                             searchQuery={this.props.searchQuery}
                             filters={this.props.filters}
