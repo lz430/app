@@ -536,8 +536,9 @@ class VersionToVehicle
 
                     } else {
                         $scenario = $vehicle->scenarios['Manufacturer - Lease Special'];
-                        if (isset($scenario->consumerCash)) {
-                            $data->rebate = $scenario->consumerCash->totalConsumerCash;
+
+                        if (isset($scenario->programs[0]->consumerCash)) {
+                            $data->rebate = $scenario->programs[0]->consumerCash->totalConsumerCash;
                         } else {
                             $data->rebate = 0;
                         }

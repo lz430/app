@@ -56,11 +56,26 @@ class VersionGenerateQuotes extends Command
             $versions = Version::has('deals')->orderBy('year', 'desc')->get();
         }
 
-        $versions->map(function ($version) use ($client) {
+        $versions->map(function ($version) use ($dealId, $client) {
             /* @var \App\Models\JATO\Version $version */
 
             $quoteData = (new VersionToVehicle($version, $client))->get();
             $this->info($version->title());
+            if ($dealId) {
+                foreach($quoteData as $strategy => $info) {
+                    $this->info($strategy);
+                    $rows = [];
+                    foreach($info as $key => $value) {
+                        if ($key != 'data') {
+                            $rows[] = [
+                                $key,
+                                $value
+                            ];
+                        }
+                    }
+                    $this->table([], $rows);
+                }
+            }
             foreach ($quoteData as $strategy => $data) {
                 if (!$data) {
                     $version->quotes()->where('strategy', $strategy)->delete();

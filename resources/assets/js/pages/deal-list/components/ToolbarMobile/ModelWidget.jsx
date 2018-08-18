@@ -15,7 +15,6 @@ class ModelWidget extends React.PureComponent {
     }
 
     render() {
-        console.log(this.props.selectedFiltersByCategory);
         return (
             <div className="tray-widget">
                 <div className="tray-widget-content">
