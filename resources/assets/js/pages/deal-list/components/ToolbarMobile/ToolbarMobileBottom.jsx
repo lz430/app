@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import Tuning from 'icons/zondicons/Tuning';
-import CheveronLeft from 'icons/zondicons/CheveronLeft';
 import CurrencyDollar from 'icons/zondicons/CurrencyDollar';
 import CheveronUp from 'icons/zondicons/CheveronUp';
 
@@ -22,8 +21,7 @@ import ModelWidget from './ModelWidget';
 
 import { getUserPurchaseStrategy } from 'apps/user/selectors';
 import { setPurchaseStrategy } from 'apps/user/actions';
-import Coupe from '../../../../icons/body-styles/Coupe';
-import TravelCar from '../../../../icons/zondicons/TravelCar';
+import TravelCar from 'icons/zondicons/TravelCar';
 
 /**
  *
