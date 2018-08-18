@@ -92,18 +92,23 @@ class VersionToVehicle
      * @param $value
      * @return array
      */
-    private function filterUnlessNone(array $data, string $parentAttribute, string $attribute, $value): array
+    private function filterUnlessNone(array $data, string $parentAttribute, string $attribute, array $value): array
     {
-        $filtered = array_filter($data, function ($record) use ($parentAttribute, $attribute, $value) {
-            if (isset($record->{$parentAttribute}->{$attribute}) && in_array($value, $record->{$parentAttribute}->{$attribute})) {
+        $recordsWith = array_filter($data, function ($record) use ($parentAttribute, $attribute, $value) {
+            if (!isset($record->{$parentAttribute}->{$attribute})) {
                 return true;
-            } else {
-                return false;
             }
+
+            if (isset($record->{$parentAttribute}->{$attribute}) && count(array_intersect($value, $record->{$parentAttribute}->{$attribute}))) {
+                return true;
+            }
+
+            return false;
+
         });
 
-        if (count($filtered)) {
-            return $filtered;
+        if (count($recordsWith)) {
+            return $recordsWith;
         }
 
         return $data;
@@ -230,14 +235,10 @@ class VersionToVehicle
 
         ];
 
-        if (str_contains($this->version->manufacturer_code, ["/"])) {
-            $codes = explode("/", $this->version->manufacturer_code);
-            $params['model_code'] = array_merge($params['model_code'], $codes);
-        } else if (str_contains($this->version->manufacturer_code, [" - "])) {
-            $codes = explode(" - ", $this->version->manufacturer_code);
-            $params['model_code'] = array_merge($params['model_code'], $codes);
-        }
-
+        $codes = explode("-", str_replace(['/'], '-', $this->version->manufacturer_code));
+        $codes = array_map('trim', $codes);
+        $codes = array_filter($codes);
+        $params['model_code'] = array_merge($params['model_code'], $codes);
         return $params;
     }
 
@@ -339,6 +340,7 @@ class VersionToVehicle
             return $item;
         }, $params);
 
+
         $vehicles = $vehicles->toArray();
 
         // Require
@@ -353,22 +355,16 @@ class VersionToVehicle
             return in_array($params['model'], $vehicle->filters->MODEL);
         });
 
-        foreach ($params['model_code'] as $code) {
-            if (!$code) {
-                continue;
-            }
-            $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $code);
-        }
 
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
 
         // Optional
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL', $params['model']);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['trim']);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRIM', $params['trim']);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL', $params['trim']);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'DRIVE_TYPE_CODE', $params['driven_wheels']);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'BODY_TYPE', $params['cab']);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRAN_TYPE', $params['transmission']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', [$params['trim']]);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRIM', [$params['trim']]);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL', [$params['trim']]);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'DRIVE_TYPE_CODE', [$params['driven_wheels']]);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'BODY_TYPE', [$params['cab']]);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRAN_TYPE', [$params['transmission']]);
 
         return collect($vehicles)->map(function ($item) {
             return $item->vehicle;

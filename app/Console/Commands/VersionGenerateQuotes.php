@@ -65,15 +65,20 @@ class VersionGenerateQuotes extends Command
                 foreach($quoteData as $strategy => $info) {
                     $this->info($strategy);
                     $rows = [];
-                    foreach($info as $key => $value) {
-                        if ($key != 'data') {
-                            $rows[] = [
-                                $key,
-                                $value
-                            ];
+                    if ($info) {
+                        foreach($info as $key => $value) {
+                            if ($key != 'data') {
+                                $rows[] = [
+                                    $key,
+                                    $value
+                                ];
+                            }
                         }
+                        $this->table([], $rows);
+                    } else {
+                        $this->info(" -- No results");
                     }
-                    $this->table([], $rows);
+
                 }
             }
             foreach ($quoteData as $strategy => $data) {
