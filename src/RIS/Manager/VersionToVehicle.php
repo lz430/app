@@ -79,9 +79,8 @@ class VersionToVehicle
      * @param Version $version
      * @param RISClient $client
      */
-    public function __construct(Version $version, RISClient $client)
+    public function __construct(RISClient $client)
     {
-        $this->version = $version;
         $this->client = $client;
     }
 
@@ -242,25 +241,35 @@ class VersionToVehicle
         return $params;
     }
 
-    private function fetchMakeHashcodes() {
-        $results = Cache::remember('ris-makes', 1440, function () {
-            try {
-                $response = $this->client->hashcode->makes();
-                $results = [];
-                foreach($response->response as $make) {
-                    $results[strtolower($make->makeName)] = $make;
-                }
-            } catch (ClientException $exception) {
-                $results = [];
-            }
+    /**
+     * @param bool $force
+     * @return Collection|mixed
+     */
+    public function fetchMakeHashcodes($force = false)
+    {
+        if (!$force && $data = Cache::tags('ris')->get('ris-makes')) {
+            $this->makes = collect($data);
+            return collect($data);
+        }
 
-            return $results;
-        });
+        try {
+            $response = $this->client->hashcode->makes();
+            $results = [];
+            foreach($response->response as $make) {
+                $results[strtolower($make->makeName)] = $make;
+            }
+        } catch (ClientException $exception) {
+            $results = [];
+        }
+
+        Cache::tags('ris')->put('ris-makes', $results, 1440);
 
         if ($results) {
             $results = collect($results);
         }
+
         $this->makes = $results;
+        return $results;
     }
 
     /**
@@ -568,8 +577,14 @@ class VersionToVehicle
         }
     }
 
-    public function get()
+    /**
+     * @param Version $version
+     * @return array
+     */
+    public function get(Version $version)
     {
+        $this->version = $version;
+
         $results = null;
         $this->fetchMakeHashcodes();
         $this->fetchVehicles();
