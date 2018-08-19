@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @property int $id
  * @property int $jato_vehicle_id
+ * @property string $body_style
  * @property \DateTime $created_at
  * @property \DateTime $updated_at
  */
@@ -27,6 +28,7 @@ class Version extends Model
     {
         return $this->belongsTo(VehicleModel::class, 'model_id');
     }
+
     /**
      * @return HasMany
      */
@@ -35,9 +37,34 @@ class Version extends Model
         return $this->hasMany(VersionPhoto::class);
     }
 
+    /**
+     * @return HasMany
+     */
+    public function quotes(): HasMany
+    {
+        return $this->hasMany(VersionQuote::class);
+    }
+
+    /**
+     * @return HasMany
+     */
     public function deals()
     {
         return $this->hasMany(Deal::class);
+    }
+
+    /**
+     * Human title for vehicle.
+     * @return string
+     */
+    public function title(): string
+    {
+        return implode(" ", [
+            $this->year,
+            $this->model->make->name,
+            $this->model->name,
+            $this->trim_name,
+        ]);
     }
 
     /**

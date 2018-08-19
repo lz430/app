@@ -13,8 +13,8 @@ import { getIsPageLoading } from 'apps/page/selectors';
 
 import Deals from './components/Deals';
 import ToolbarSelectedFilters from './components/ToolbarSelectedFilters';
-import ToolbarPrice from './components/ToolbarPrice';
-import ToolbarMobileBottom from './components/ToolbarMobileBottom';
+import ToolbarMobileBottom from './components/ToolbarMobile/ToolbarMobileBottom';
+
 import FilterPanel from './components/FilterPanel';
 import NoDealsOutOfRange from './components/NoDealsOutOfRange';
 import ModalMakeSelector from './components/ModalMakeSelector';
@@ -102,7 +102,6 @@ class Container extends React.PureComponent {
 
         return (
             <div className={className}>
-                {/* <ToolbarPrice/> */}
                 <ToolbarSelectedFilters />
                 <Deals />
             </div>

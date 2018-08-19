@@ -114,10 +114,7 @@ $icon-size: 20px;
         display: flex;
         justify-content: center;
         left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-        z-index: 10;
+        padding: 12px 0;
         color: rgba(200, 200, 200, 1);
 
         a {
@@ -148,6 +145,8 @@ $icon-size: 20px;
 }
 
 .sidebar-filters .purchase-strategy {
+    border-bottom: 5px solid #fff;
+
     .button-group__button {
         padding: 0.5rem 0.5rem;
         font-size: 1rem;
@@ -159,4 +158,22 @@ $icon-size: 20px;
         align-items: center;
         justify-content: center;
     }
+
+    .purchase-strategy-explanation {
+        text-align: center;
+        padding: 10px;
+        font-size: 0.85rem;
+    }
+}
+
+.button-group__button--selected::after {
+    content: '';
+    position: absolute;
+    top: 34px;
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 20px solid $primary;
+    clear: both;
 }

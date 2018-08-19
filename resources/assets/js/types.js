@@ -24,6 +24,37 @@ export const dealType = shape({
     }),
 });
 
+export const modelYearType = shape({
+    year: string.isRequired,
+    make: string.isRequired,
+    model: string.isRequired,
+    thumbnail: string,
+    deals: number.isRequired,
+    payments: shape({
+        cash: shape({
+            payment: number.isRequired,
+            down: number.isRequired,
+            term: number.isRequired,
+            rebates: number.isRequired,
+            rate: number.isRequired,
+        }),
+        finance: shape({
+            payment: number.isRequired,
+            down: number.isRequired,
+            term: number.isRequired,
+            rebates: number.isRequired,
+            rate: number.isRequired,
+        }),
+        lease: shape({
+            payment: number.isRequired,
+            down: number.isRequired,
+            term: number.isRequired,
+            rebates: number.isRequired,
+            rate: number.isRequired,
+        }),
+    }),
+});
+
 export const filterItemType = shape({
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

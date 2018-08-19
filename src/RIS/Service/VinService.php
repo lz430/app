@@ -7,7 +7,7 @@ class VinService extends BaseService {
 
     /**
      * VIN decoder
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=DecodeVIN
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=DecodeVIN
      * @param string $vin
      * @param array $hints
      * @return mixed

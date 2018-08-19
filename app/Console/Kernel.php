@@ -16,10 +16,13 @@ class Kernel extends ConsoleKernel
         Commands\LoadDealsFromVauto::class,
         Commands\TestCoxAPI::class,
         Commands\VersionFillMissingPhotos::class,
-        Commands\DealFeatureDebugger::class,
+        Commands\VersionGenerateQuotes::class,
         Commands\ImportVautoMapData::class,
-        Commands\DealProgramDebugger::class,
-        Commands\DealLeaseRatesDebugger::class,
+        Commands\Deal\DealFeatureDebugger::class,
+        Commands\Deal\DealProgramDebugger::class,
+        Commands\Deal\DealLeaseRatesDebugger::class,
+        Commands\Deal\DealCalculatePayments::class,
+        Commands\Deal\DealTestPricingChanges::class,
         Commands\Jato\JatoVersionReport::class,
         Commands\Jato\JatoDealDecode::class,
         Commands\Jato\JatoFindMissingVersions::class,
@@ -34,6 +37,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('vauto:load')->daily()->sendOutputTo(storage_path('logs/import.log'));
+        $schedule->command('dmr:version:quote')->twiceDaily(2, 14);
     }
 
     /**

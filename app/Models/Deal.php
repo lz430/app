@@ -46,6 +46,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property array|null $option_codes
  * @property array|null $package_codes
  * @property \stdClass|null $source_price
+ * @property \stdClass|null $payments
  * @property int|null $fuel_econ_city
  * @property int|null $fuel_econ_hwy
  * @property string $dealer_name
@@ -55,7 +56,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $version_id
  * @property Version $version
  * @property Purchase[] $purchases
- * @property DealOption[] $options
  * @property DealPhoto[] $photos
  * @property jatoFeature[] $jatoFeatures
  * @property Feature[] $features
@@ -150,7 +150,8 @@ class Deal extends Model
     protected $casts = [
         'option_codes' => 'array',
         'package_codes' => 'array',
-        'source_price' => 'object'
+        'source_price' => 'object',
+        'payments' => 'object'
     ];
 
     /**
@@ -167,14 +168,6 @@ class Deal extends Model
     public function purchases(): HasMany
     {
         return $this->hasMany(Purchase::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function options(): HasMany
-    {
-        return $this->hasMany(DealOption::class);
     }
 
     /**
@@ -299,10 +292,7 @@ class Deal extends Model
      */
     public function prices(): \stdClass
     {
-
-
         $source = $this->source_price;
-
         //
         // Migration help
         if (!$source) {
@@ -523,13 +513,26 @@ class Deal extends Model
 
         $pricing = $this->prices();
         $record['pricing'] = $pricing;
+        $record['payments'] = $this->payments;
 
-        //
-        // Backwards compatibility with existing frontend stuff
+
         $version = $this->version;
         if ($version) {
             $version = $version->toArray();
             unset($version['model']);
+            unset($version['quotes']);
+            unset($version['updated_at']);
+            unset($version['created_at']);
+            unset($version['segment']);
+            unset($version['transmission_type']);
+            unset($version['model_id']);
+            unset($version['msrp']);
+            unset($version['invoice']);
+            unset($version['is_current']);
+            unset($version['jato_model_id']);
+            unset($version['jato_uid']);
+            unset($version['jato_vehicle_id']);
+            unset($version['delivery_price']);
             $record['version'] = $version;
         } else {
             $record['version'] = null;
@@ -540,6 +543,18 @@ class Deal extends Model
         unset($dealer['max_delivery_miles']);
         unset($dealer['longitude']);
         unset($dealer['latitude']);
+        unset($dealer['address']);
+        unset($dealer['city']);
+        unset($dealer['contact_email']);
+        unset($dealer['contact_name']);
+        unset($dealer['contact_title']);
+        unset($dealer['contact_title']);
+        unset($dealer['created_at']);
+        unset($dealer['phone']);
+        unset($dealer['route_one_id']);
+        unset($dealer['state']);
+        unset($dealer['updated_at']);
+        unset($dealer['zip']);
         $record['dealer'] = $dealer;
 
         //

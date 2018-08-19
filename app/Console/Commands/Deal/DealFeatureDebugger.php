@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Deal;
 
 use App\Models\Feature;
 use App\Models\Deal;
@@ -15,7 +15,7 @@ class DealFeatureDebugger extends Command
      *
      * @var string
      */
-    protected $signature = 'dmr:dealfeature {deal}';
+    protected $signature = 'dmr:deal:feature {deal}';
 
     /**
      * The console command description.
@@ -54,7 +54,6 @@ class DealFeatureDebugger extends Command
             return;
         }
 
-
         $munger = new DealEquipmentMunger($deal, $this->client);
         $debug = $munger->import(true);
 
@@ -65,6 +64,5 @@ class DealFeatureDebugger extends Command
         $this->info(" -- Package Codes: " . implode(", ", $deal->package_codes));
 
         $munger->printDiscoveredFeatures();
-        //print_r($debug['equipment_extracted_codes']);
     }
 }

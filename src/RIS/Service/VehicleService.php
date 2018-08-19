@@ -7,7 +7,7 @@ class VehicleService extends BaseService
 {
 
     /**
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=GetVehicleGroupHashcodes
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=GetVehicleGroupHashcodes
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -17,7 +17,7 @@ class VehicleService extends BaseService
     }
 
     /**
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=GetVehicleHints
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=GetVehicleHints
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -27,7 +27,7 @@ class VehicleService extends BaseService
     }
 
     /**
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=GetVehicleGroupByID
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=GetVehicleGroupByID
      * @param  string $vehicleId
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -38,7 +38,7 @@ class VehicleService extends BaseService
     }
 
     /**
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=FindVehicleGroupsByVehicleAndRegionID
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=FindVehicleGroupsByVehicleAndRegionID
      * @param  string $vin
      * @param  string $regionId
      * @param  array $dealScenarios
@@ -70,7 +70,7 @@ class VehicleService extends BaseService
     }
 
     /**
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=FindVehicleGroupsByVehicleAndPostalcode
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=FindVehicleGroupsByVehicleAndPostalcode
      * @param  string $vin
      * @param  string $postalCode
      * @param  array $dealScenarios
@@ -102,7 +102,7 @@ class VehicleService extends BaseService
     }
 
     /**
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=FindVehicleGroupsByListOfVehicleAndPostalcode
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=FindVehicleGroupsByListOfVehicleAndPostalcode
      * @param  array $list
      * @param  array $dealScenarios
      * @return mixed
@@ -126,7 +126,7 @@ class VehicleService extends BaseService
     }
 
     /**
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=FindVehicleGroupsByListOfVehicleAndRegionID
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=FindVehicleGroupsByListOfVehicleAndRegionID
      * @param  array $list
      * @param  array $dealScenarios
      * @return mixed
@@ -145,13 +145,12 @@ class VehicleService extends BaseService
         if (count($dealScenarios)) {
             $data['dealScenarios'] = $dealScenarios;
         }
-
         return $this->client->post("findvehiclegroupsbylistofvehicleandregionid", $data);
     }
 
 
     /**
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=FindVehicleGroupsByMakeAndRegionID
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=FindVehicleGroupsByMakeAndRegionID
      * @param  string $make
      * @param  string $regionId
      * @param  array $dealScenarios
@@ -163,10 +162,10 @@ class VehicleService extends BaseService
                                           array $dealScenarios = [])
     {
 
-
         $data = [
             'regionID' => $regionId,
             'makeName' => $make,
+
         ];
 
         if (count($dealScenarios)){
@@ -177,7 +176,7 @@ class VehicleService extends BaseService
     }
 
     /**
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=FindVehicleGroupsByMakeAndPostalcode
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=FindVehicleGroupsByMakeAndPostalcode
      * @param  string $make
      * @param  string $postalCode
      * @param  array $dealScenarios
@@ -197,6 +196,7 @@ class VehicleService extends BaseService
         if (count($dealScenarios)){
             $data['dealScenarios'] = $dealScenarios;
         }
+
 
         return $this->client->post("findvehiclegroupsbymakeandpostalcode", $data);
     }

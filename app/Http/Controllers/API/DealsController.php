@@ -19,6 +19,7 @@ class DealsController extends BaseAPIController
         $this->validate($request, [
             'filters' => 'sometimes|required|array',
             'sort' => 'sometimes|required|string',
+            'strategy' => 'sometimes|required|string',
             'latitude' => 'sometimes|numeric',
             'longitude' => 'sometimes|numeric',
         ]);
@@ -34,11 +35,16 @@ class DealsController extends BaseAPIController
             $query = $query->filterMustLocation(['lat' => $request->get('latitude'), 'lon' => $request->get('longitude')]);
         }
 
+        if ($request->get('strategy') && in_array($request->get('strategy'), ['cash', 'finance', 'lease'])) {
+            $query = $query->filterMustPayment($request->get('strategy'));
+        }
+
         $query = $query->genericFilters($request->get('filters', []));
 
         if ($request->get('sort')) {
-            $query = $query->sort($request->get('sort'));
+            $query = $query->sort($request->get('sort'), $request->get('strategy'));
         }
+
 
         $page = ($request->get('page') ? $request->get('page') - 1 : 0);
 
