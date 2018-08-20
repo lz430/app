@@ -29,7 +29,10 @@ class VersionToVehicle
 
     private const TRIM_MAP = [
         'BY_MODEL' => [
-
+            'Elantra GT' => [
+                'GT' => 'Base',
+                'GT Sport' => 'Sport',
+            ],
         ],
         'BY_TRIM' => [
             'Momentum' => 'T6 Momentum',
@@ -76,7 +79,6 @@ class VersionToVehicle
     ];
 
     /**
-     * @param Version $version
      * @param RISClient $client
      */
     public function __construct(RISClient $client)
@@ -93,6 +95,7 @@ class VersionToVehicle
      */
     private function filterUnlessNone(array $data, string $parentAttribute, string $attribute, array $value): array
     {
+
         $recordsWith = array_filter($data, function ($record) use ($parentAttribute, $attribute, $value) {
             if (!isset($record->{$parentAttribute}->{$attribute})) {
                 return true;
@@ -151,8 +154,8 @@ class VersionToVehicle
         $trim = $this->version->trim_name;
         $model = $this->version->model->name;
 
-        if (isset(self::TRIM_MAP['BY_MODEL'][$model])) {
-            return self::TRIM_MAP['BY_MODEL'][$model];
+        if (isset(self::TRIM_MAP['BY_MODEL'][$model]) && isset(self::TRIM_MAP['BY_MODEL'][$model][$trim])) {
+            return self::TRIM_MAP['BY_MODEL'][$model][$trim];
         }
 
         if (isset(self::TRIM_MAP['BY_TRIM'][$trim])) {
@@ -214,6 +217,8 @@ class VersionToVehicle
         if ($transmission) {
             return self::TRANSMISSION_MAP[$transmission];
         }
+
+        return null;
     }
 
     /**
@@ -238,6 +243,7 @@ class VersionToVehicle
         $codes = array_map('trim', $codes);
         $codes = array_filter($codes);
         $params['model_code'] = array_merge($params['model_code'], $codes);
+        $params['model_code'] = array_unique($params['model_code']);
         return $params;
     }
 
@@ -352,6 +358,7 @@ class VersionToVehicle
 
         $vehicles = $vehicles->toArray();
 
+
         // Require
         $vehicles = array_filter($vehicles, function($vehicle) use ($params) {
             if (!isset($vehicle->filters->YEAR)) {
@@ -365,7 +372,14 @@ class VersionToVehicle
         });
 
 
+
+
+
+        //dd($vehicles);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
+
+
 
         // Optional
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', [$params['trim']]);
@@ -374,6 +388,8 @@ class VersionToVehicle
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'DRIVE_TYPE_CODE', [$params['driven_wheels']]);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'BODY_TYPE', [$params['cab']]);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRAN_TYPE', [$params['transmission']]);
+
+
 
         return collect($vehicles)->map(function ($item) {
             return $item->vehicle;
