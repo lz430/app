@@ -36,7 +36,6 @@
                         <li><a href="/admin/jato-logs/">JATO Logs</a></li>
                         <li><a href="/admin/statistics/deals">Deals Statistics</a></li>
                         <li><a href="/admin/vauto-dump/" download>VAuto Dump</a></li>
-                        <li><a href="/admin/deal-feature-debugger/{{ App\Models\Deal::first()->id }}">Deal Feature Debugger</a></li>
                     </ul>
                 </div>
             </div>
