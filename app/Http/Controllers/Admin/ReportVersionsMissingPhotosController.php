@@ -15,8 +15,8 @@ class ReportVersionsMissingPhotosController extends Controller
         $versions = Version::doesntHave('photos')->has('deals')->orderBy('year', 'desc')->get();
 
         $versions->map(function ($item) use ($client) {
-            $manager = new VersionToFuel($item, $client);
-            $vehicle = $manager->matchFuelVehicleToVersion();
+            $manager = new VersionToFuel($client);
+            $vehicle = $manager->matchFuelVehicleToVersion($item);
             if ($vehicle) {
                 $item->lookup_by = $vehicle;
             } else {

@@ -16,9 +16,6 @@ class DealMunger
     private $jatoClient;
     private $fuelClient;
 
-    /** @deprecated */
-    private $features;
-
     /**
      * @param Deal $deal
      * @param JatoClient $jatoClient

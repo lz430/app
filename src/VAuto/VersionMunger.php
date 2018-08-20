@@ -2,6 +2,7 @@
 
 namespace DeliverMyRide\VAuto;
 
+use App\Models\Deal;
 use GuzzleHttp\Exception\ClientException;
 
 use App\Models\JATO\Make;
@@ -12,19 +13,12 @@ use App\Models\JATO\VersionQuote;
 
 use DeliverMyRide\JATO\JatoClient;
 
-use DeliverMyRide\Fuel\FuelClient;
-use DeliverMyRide\Fuel\Manager\VersionToFuel;
-
-use DeliverMyRide\RIS\RISClient;
-use DeliverMyRide\RIS\Manager\VersionToVehicle;
-
 
 class VersionMunger
 {
 
     private $jatoClient;
-    private $fuelClient;
-    private $risClient;
+
 
     private $row;
     private $decodedVin;
@@ -35,18 +29,12 @@ class VersionMunger
     /**
      * @param array $row
      * @param JatoClient $jatoClient
-     * @param FuelClient $fuelClient
-     * @param RISClient $risClient
      *
      */
     public function __construct(array $row,
-                                JatoClient $jatoClient,
-                                FuelClient $fuelClient,
-                                RISClient $risClient)
+                                JatoClient $jatoClient)
     {
         $this->jatoClient = $jatoClient;
-        $this->fuelClient = $fuelClient;
-        $this->risClient = $risClient;
         $this->row = $row;
     }
 
@@ -256,6 +244,7 @@ class VersionMunger
         $make = $this->make($manufacturer);
         $model = $this->model($make);
 
+        /* @var Version $version */
         $version = $model->versions()->create([
             'jato_vehicle_id' => $data->vehicleId,
             'jato_uid' => $data->uid,
@@ -289,7 +278,7 @@ class VersionMunger
      */
     private function photos(Version $version)
     {
-        $assets = (new VersionToFuel($version, $this->fuelClient))->assets('default');
+        $assets = resolve('DeliverMyRide\Fuel\Manager\VersionToFuel')->assets($version,'default');
         $version->photos()->where('color', 'default')->delete();
 
         foreach ($assets as $asset) {
@@ -306,7 +295,7 @@ class VersionMunger
      */
     private function quotes(Version $version)
     {
-        $quoteData = (new VersionToVehicle($version, $this->risClient))->get();
+        $quoteData = resolve('DeliverMyRide\RIS\Manager\VersionToVehicle')->get($version);
 
         foreach ($quoteData as $strategy => $data) {
             if (!$data) {
@@ -348,6 +337,7 @@ class VersionMunger
 
         //
         // Ensure existing deals attached to this version are forced to refresh.
+        /* @var Deal $attachedDeal */
         foreach ($version->fresh()->deals as $attachedDeal) {
             $attachedDeal->features()->sync([]);
             $attachedDeal->jatoFeatures()->sync([]);

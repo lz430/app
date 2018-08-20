@@ -25,9 +25,6 @@ class DealEquipmentMunger
     private $vauto_features;
 
     /* @var \Illuminate\Support\Collection */
-    private $features;
-
-    /* @var \Illuminate\Support\Collection */
     private $equipment;
 
     /* @var \Illuminate\Support\Collection */

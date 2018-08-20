@@ -170,7 +170,9 @@ class DealCompareData
                 $labels[$attributes['overall length (in)']->schemaId] = "External: L: {$attributes['overall length (in)']->value}\" - W: {$attributes['overall width (in)']->value}\" - H: {$attributes['overall height (in)']->value}\"";
                 break;
             case 'Fuel economy':
-                $labels[$attributes['urban (mpg)']->schemaId] = "{$attributes['urban (mpg)']->value} / {$attributes['country/highway (mpg)']->value}";
+                if (isset($attributes['urban (mpg)'])) {
+                    $labels[$attributes['urban (mpg)']->schemaId] = "{$attributes['urban (mpg)']->value} / {$attributes['country/highway (mpg)']->value}";
+                }
                 break;
             case 'Wheels':
                 $labels[$attributes['rim diameter (in)']->schemaId] = $attributes['rim diameter (in)']->value . "\" rims";
