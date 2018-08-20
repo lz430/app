@@ -28,7 +28,6 @@ class Header extends React.PureComponent {
         userLocationModalOpen: false,
         chatShow: false,
         chatAgents: false,
-        compareDropdown: false,
     };
 
     toggleUserLocationModal() {

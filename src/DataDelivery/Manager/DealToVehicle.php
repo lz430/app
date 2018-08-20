@@ -12,6 +12,11 @@ use DeliverMyRide\DataDelivery\FetchProgramDataException;
  */
 class DealToVehicle
 {
+    private const TRANSMISSION_MAP = [
+        'Automatic' => 'AT',
+        'Manual' => 'MT',
+    ];
+
     private const TRIM_MAP = [
         'BY_MODEL' => [
 
@@ -114,6 +119,17 @@ class DealToVehicle
         return $doors;
     }
 
+    private function translateTransmission()
+    {
+        $transmission = $this->deal->features()->whereHas('category', function ($query) {
+            $query->where('title', '=', 'transmission');
+        })->get()->first();
+
+        if ($transmission) {
+            return self::TRANSMISSION_MAP[$transmission->title];
+        }
+    }
+
     /**
      * @return array
      */
@@ -128,8 +144,8 @@ class DealToVehicle
             'trim' => $this->translateTrimName(),
             'doors' => $this->translateNumberDoors(),
             'body' => $this->translateBodyStyle(),
+            'transmission' => $this->translateTransmission(),
         ];
-
         return $params;
     }
 
@@ -167,6 +183,7 @@ class DealToVehicle
         $vehicles = $this->filterUnlessNone($vehicles, 'OptionGroup', $params['option_codes']);
         $vehicles = $this->filterUnlessNone($vehicles, 'OptionGroup', "Base");
         $vehicles = $this->filterUnlessNone($vehicles, 'Package', $params['package_codes']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'Trans', $params['transmission']);
 
         if (count($vehicles)) {
             return end($vehicles)->DescVehicleID;
@@ -191,7 +208,6 @@ class DealToVehicle
         // Try easy search first
         $params = $this->getSearchParams();
         $search = [
-            //'Trim' => $params['trim'],
             'ManufactModelCode' => $params['model_code'],
             'Year' => $params['year'],
             'Body' => $params['body'],

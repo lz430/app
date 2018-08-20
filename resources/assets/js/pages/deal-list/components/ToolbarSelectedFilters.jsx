@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import Close from 'icons/zondicons/Close';
 import Filter from 'icons/zondicons/Filter';
+import ToolbarSort from './ToolbarSort';
 
 import {
     clearAllSecondaryFilters,
@@ -75,14 +76,13 @@ class ToolbarSelectedFilters extends React.PureComponent {
         );
     }
 
-    render() {
+    renderSelectedFilters() {
         const selectedFilters = this.selectedFilters();
         if (!Object.keys(selectedFilters).length) {
             return false;
         }
-
         return (
-            <div className="filterbar">
+            <div className="selected-filters">
                 <Filter
                     height="20px"
                     width="20px"
@@ -100,6 +100,15 @@ class ToolbarSelectedFilters extends React.PureComponent {
                         Clear Options
                     </a>
                 </div>
+            </div>
+        );
+    }
+
+    render() {
+        return (
+            <div className="filterbar">
+                {this.renderSelectedFilters()}
+                <ToolbarSort />
             </div>
         );
     }

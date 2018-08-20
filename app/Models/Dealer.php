@@ -10,6 +10,7 @@ use Backpack\CRUD\CrudTrait;
 
 /**
  * @property int $id
+ * @property string $dealer_id
  * @property boolean $is_active
  * @property  \stdClass $price_rules
  * @property $acquisition_fee
@@ -71,27 +72,5 @@ class Dealer extends Model
             'dealer_id',
             'dealer_id'
         );
-    }
-
-    /**
-     * Mysql spatial function use to find spherical (earth) distance between 2 coordinate pairs
-     * Mysql point : longitude, latitude.
-     * 3857 (SRID) is the Google Maps / Bing Maps Spherical Mercator Projection (values should be comparable)
-     * .000621371192 meters in a mile
-     * 6378137 (google maps uses 6371000) radius of the earth in meters
-     * Google maps coordinate accuracy is to 7 decimal places
-     * Need to use GeomFromText in order to set the SRID
-     */
-    public function scopeServesLocation(Builder $query, $latitude, $longitude) : Builder
-    {
-        return $query->whereRaw("
-               ST_Distance_sphere(
-                    point(longitude, latitude),
-                    point(?, ?)
-                ) * .000621371192 < max_delivery_miles
-            ", [
-            $longitude,
-            $latitude,
-        ]);
     }
 }

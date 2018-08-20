@@ -3,12 +3,12 @@
 namespace DeliverMyRide\VAuto;
 
 use App\Models\Dealer;
-use App\Models\Feature;
 use App\Models\JATO\Version;
 use App\Models\Deal;
 
 use DeliverMyRide\Fuel\FuelClient;
 use DeliverMyRide\JATO\JatoClient;
+use DeliverMyRide\RIS\RISClient;
 use DeliverMyRide\VAuto\Deal\DealMunger;
 
 use Carbon\Carbon;
@@ -80,17 +80,23 @@ class Importer
 
     private $jatoClient;
     private $fuelClient;
+    private $risClient;
 
     private $error;
     private $filesystem;
     private $info;
     private $debug;
 
-    public function __construct(Filesystem $filesystem, JatoClient $jatoClient, FuelClient $fuelClient)
+    public function __construct(Filesystem $filesystem,
+                                JatoClient $jatoClient,
+                                FuelClient $fuelClient,
+                                RISClient $risClient)
     {
         $this->filesystem = $filesystem;
         $this->jatoClient = $jatoClient;
         $this->fuelClient = $fuelClient;
+        $this->risClient = $risClient;
+
 
         $this->debug = [
             'start' => microtime(true),
@@ -203,7 +209,7 @@ class Importer
     private function processRecord(array $row)
     {
         try {
-            list($version, $versionDebugData) = (new VersionMunger($row, $this->jatoClient, $this->fuelClient))->build();
+            list($version, $versionDebugData) = (new VersionMunger($row, $this->jatoClient, $this->fuelClient, $this->risClient))->build();
             $this->info("Deal: {$row['VIN']} - {$row['Stock #']}");
 
             //

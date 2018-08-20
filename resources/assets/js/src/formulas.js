@@ -12,11 +12,11 @@ const formulas = {
      */
     calculateFinancedMonthlyPayments: (price, downPayment, term) => {
         const interestRate = 4;
+        const annualInterestRate = interestRate / 1200;
         return Math.round(
             (price - downPayment) *
-                (((interestRate / 1200) *
-                    Math.pow(1 + interestRate / 1200, term)) /
-                    (Math.pow(1 + interestRate / 1200, term) - 1))
+                ((annualInterestRate * Math.pow(1 + annualInterestRate, term)) /
+                    (Math.pow(1 + annualInterestRate, term) - 1))
         );
     },
 };

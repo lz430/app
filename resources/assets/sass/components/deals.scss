@@ -85,16 +85,105 @@
     right: 0;
     position: fixed;
     background: #fff;
-    border-top: 3px solid $primary;
     text-align: center;
     box-shadow: 0 -0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     z-index: 50;
-    span {
-        display: block;
+    display: flex;
+    flex-direction: column;
+}
+.toolbar-mobile-bottom > .tray {
+    display: none;
+    flex: 1;
+
+    &.show {
+        display: flex;
+        border-top: 2px solid $primary;
+    }
+}
+.toolbar-mobile-bottom > .menu {
+    display: flex;
+    flex: 1;
+    > div {
+        border-top: 2px solid $primary;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
         cursor: pointer;
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 0.25rem;
+        border-right: 2px solid $primary;
+        background: #fbfbfb;
+        &.active {
+            border-top: 0;
+            background: #fff;
+        }
+        &.dropdown {
+            padding: 0;
+            > span {
+                padding: 0.5rem 0.25rem;
+                display: block;
+                width: 100%;
+            }
+        }
+        &:last-child {
+            border-right: 0;
+        }
         svg {
+            position: relative;
+            top: -2px;
             margin-right: 0.25rem;
         }
+    }
+}
+
+.tray-select {
+    flex: 1;
+
+    .tray-select-button {
+        cursor: pointer;
+        padding: 6px;
+        border-bottom: 1px solid #eee;
+        .explanation {
+            font-size: 0.8rem;
+            color: $gray-600;
+        }
+
+        &.active {
+            box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
+
+            .label {
+                font-weight: bold;
+            }
+        }
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+}
+
+.tray-widget {
+    flex: 1;
+    text-align: left;
+    .bubble {
+        display: inline-flex;
+        margin: 5px;
+        padding: 6px 10px;
+        border: 1px solid $primary;
+        border-radius: $border-radius;
+        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
+    }
+    .tray-widget-content {
+        padding: 4px 4px 0 4px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+    .tray-widget-action {
+        text-align: center;
+        font-size: 0.85rem;
+        padding: 4px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        cursor: pointer;
     }
 }

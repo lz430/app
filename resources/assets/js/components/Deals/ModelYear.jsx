@@ -1,16 +1,16 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { modelYearType } from 'types';
+
 import util from 'src/util';
 import ModelYearImage from 'components/Deals/ModelYearImage';
-import { selectModelYear } from 'pages/deal-list/actions';
 import { Card, CardBody, CardHeader, CardFooter } from 'reactstrap';
 
 class ModelYear extends React.Component {
     static propTypes = {
-        modelYear: PropTypes.object.isRequired,
+        modelYear: modelYearType.isRequired,
         onSelectModelYear: PropTypes.func.isRequired,
-        children: PropTypes.node,
+        purchaseStrategy: PropTypes.string.isRequired,
     };
 
     shouldComponentUpdate(nextProps) {
@@ -43,8 +43,50 @@ class ModelYear extends React.Component {
         );
     }
 
+    renderPrice() {
+        let label = 'MSRP starting at';
+        let value = util.moneyFormat(this.props.modelYear['msrp']);
+
+        if (
+            this.props.purchaseStrategy === 'lease' &&
+            this.props.modelYear.payments.lease
+        ) {
+            label = 'Payments starting at';
+            value = util.moneyFormat(
+                this.props.modelYear.payments.lease.payment
+            );
+        }
+
+        if (
+            this.props.purchaseStrategy === 'finance' &&
+            this.props.modelYear.payments.finance
+        ) {
+            label = 'Payments starting at';
+            value = util.moneyFormat(
+                this.props.modelYear.payments.finance.payment
+            );
+        }
+
+        if (
+            this.props.purchaseStrategy === 'cash' &&
+            this.props.modelYear.payments.cash
+        ) {
+            label = 'Price starting at';
+            value = util.moneyFormat(
+                this.props.modelYear.payments.cash.payment
+            );
+        }
+
+        return (
+            <div className="modelyear__price">
+                <span className="modelyear__price-label">{label}</span> {value}
+            </div>
+        );
+    }
+
     render() {
         const modelYear = this.props.modelYear;
+
         return (
             <Card className="inventory-summary">
                 <CardHeader>
@@ -75,15 +117,10 @@ class ModelYear extends React.Component {
                     />
                     <div className="modelyear__details">
                         <div className="modelyear__count">
-                            {modelYear.deals.count} in stock.
+                            {modelYear.deals} in stock.
                         </div>
 
-                        <div className="modelyear__price">
-                            <span className="modelyear__price-label">
-                                MSRP starts at
-                            </span>{' '}
-                            {util.moneyFormat(modelYear['lowest_msrp'])}
-                        </div>
+                        {this.renderPrice()}
                     </div>
                 </CardBody>
                 <CardFooter>
@@ -101,19 +138,4 @@ class ModelYear extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {};
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onSelectModelYear: modelYear => {
-            return dispatch(selectModelYear(modelYear));
-        },
-    };
-};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ModelYear);
+export default ModelYear;
