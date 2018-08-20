@@ -184,7 +184,6 @@ class DealToVehicle
         $vehicles = $this->filterUnlessNone($vehicles, 'OptionGroup', "Base");
         $vehicles = $this->filterUnlessNone($vehicles, 'Package', $params['package_codes']);
         $vehicles = $this->filterUnlessNone($vehicles, 'Trans', $params['transmission']);
-
         if (count($vehicles)) {
             return end($vehicles)->DescVehicleID;
         }

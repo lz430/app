@@ -40,6 +40,22 @@ class DealQuoteTransformer extends TransformerAbstract
                 $months[] = $data;
             }
         }
+
+        //
+        // If we have more than 4... start removing
+        if (count($months) > 4) {
+            foreach($months as $key => $month) {
+                if ($month['termLength'] % 12 !== 0) {
+                    unset($months[$key]);
+                }
+
+                if (count($months) <= 4 ) {
+                    break;
+                }
+            }
+            $months = array_values($months);
+        }
+
         return $months;
     }
 
