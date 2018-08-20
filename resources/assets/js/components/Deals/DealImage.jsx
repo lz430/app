@@ -69,7 +69,7 @@ export default class DealImage extends React.PureComponent {
     render() {
         if (this.props.lazy) {
             return (
-                <LazyLoad height={200} offset={100} overflow={true}>
+                <LazyLoad height={200} offset={100}>
                     {this.renderImage()}
                 </LazyLoad>
             );

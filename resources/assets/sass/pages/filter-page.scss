@@ -1,18 +1,13 @@
 .filter-page {
     background: $color-background-secondary;
     display: flex;
-    height: 100vh;
     overflow: hidden;
     position: relative;
-
-    @media (min-width: $break-medium) {
-        height: calc(100vh - #{$header-height});
-    }
 
     &__deals {
         height: 100%;
         left: 0;
-        position: absolute;
+        margin-left: 300px;
         width: 100%;
         z-index: 20;
 

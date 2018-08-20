@@ -10,6 +10,11 @@ body {
     flex-direction: column;
     .app-content {
         flex: 1;
+        > div {
+            flex: 1;
+            height: 100%;
+            display: flex;
+        }
     }
 }
 

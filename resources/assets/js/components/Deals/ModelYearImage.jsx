@@ -7,6 +7,7 @@ import LazyLoad from 'react-lazyload';
 class ModelYearImage extends React.PureComponent {
     static propTypes = {
         modelYear: modelYearType,
+        selectModelYear: PropTypes.func.isRequired,
     };
 
     state = {
@@ -25,7 +26,7 @@ class ModelYearImage extends React.PureComponent {
         const thumbnail = this.featuredImageUrl();
 
         return (
-            <LazyLoad once={true} height={200} offset={400} overflow={true}>
+            <LazyLoad once={true} height={200} offset={400}>
                 <div className="thumbnail-container thumbnail">
                     {thumbnail && (
                         <img
