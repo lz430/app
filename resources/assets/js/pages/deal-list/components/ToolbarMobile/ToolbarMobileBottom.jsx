@@ -13,7 +13,10 @@ import {
     toggleSearchSort,
     toggleSmallFiltersShown,
 } from '../../actions';
-import { getSearchQuery, getSelectedFiltersByCategory } from '../../selectors';
+import dealPage, {
+    getSearchQuery,
+    getSelectedFiltersByCategory,
+} from '../../selectors';
 
 import SortWidget from './SortWidget';
 import PaymentWidget from './PaymentWidget';
@@ -30,8 +33,8 @@ class ToolbarMobileBottom extends React.Component {
     static propTypes = {
         searchQuery: PropTypes.object.isRequired,
         selectedFiltersByCategory: PropTypes.object.isRequired,
+        selectedMake: PropTypes.string,
         purchaseStrategy: PropTypes.string.isRequired,
-
         onToggleSmallFiltersShown: PropTypes.func.isRequired,
         onClearModelYear: PropTypes.func.isRequired,
         onToggleSearchSort: PropTypes.func.isRequired,
@@ -104,6 +107,7 @@ class ToolbarMobileBottom extends React.Component {
                     selectedFiltersByCategory={
                         this.props.selectedFiltersByCategory
                     }
+                    selectedMake={this.props.selectedMake}
                     onClearModelYear={this.props.onClearModelYear}
                     setActiveTab={this.setActiveTab.bind(this)}
                 />
@@ -172,6 +176,7 @@ const mapStateToProps = state => {
     return {
         searchQuery: getSearchQuery(state),
         selectedFiltersByCategory: getSelectedFiltersByCategory(state),
+        selectedMake: dealPage(state).selectedMake,
         purchaseStrategy: getUserPurchaseStrategy(state),
     };
 };

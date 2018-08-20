@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
 class ModelWidget extends React.PureComponent {
     static propTypes = {
+        selectedMake: PropTypes.string,
         selectedFiltersByCategory: PropTypes.object.isRequired,
         onClearModelYear: PropTypes.func.isRequired,
         setActiveTab: PropTypes.func.isRequired,
@@ -19,8 +19,7 @@ class ModelWidget extends React.PureComponent {
             <div className="tray-widget">
                 <div className="tray-widget-content">
                     <div className="bubble">
-                        <strong>Make:</strong>{' '}
-                        {this.props.selectedFiltersByCategory['make'][0]} <br />
+                        <strong>Make:</strong> {this.props.selectedMake} <br />
                     </div>
                     <div className="bubble">
                         <strong>Model:</strong>{' '}
