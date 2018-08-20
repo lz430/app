@@ -6,6 +6,7 @@ use App\Services\Search\DealSearch;
 use App\Http\Controllers\Controller;
 use Geocoder\Laravel\ProviderAndDumperAggregator as Geocoder;
 use GuzzleHttp;
+use GuzzleHttp\Exception\ConnectException;
 
 class UserLocationController extends Controller
 {
@@ -18,21 +19,39 @@ class UserLocationController extends Controller
      */
     private function getLocationForIp($ip)
     {
-        $client = new GuzzleHttp\Client(['base_uri' => 'http://api.ipstack.com/']);
-        $key = config('services.ipstack.api_key');
-        $response = $client->request('GET', $ip, [
-            'query' => ['access_key' => $key, 'format' => 1]
-        ]);
+        $response = null;
 
-        $response = json_decode($response->getBody());
-        $location = [
-            'city' =>  $response->city,
-            'state' => $response->region_code,
-            'country' => $response->country_code,
-            'zip' => $response->zip,
-            'latitude' => $response->latitude,
-            'longitude' => $response->longitude,
-        ];
+        try {
+            $client = new GuzzleHttp\Client(['base_uri' => 'http://api.ipstack.com/']);
+            $key = config('services.ipstack.api_key');
+            $response = $client->request('GET', $ip, [
+                'connect_timeout' => 3,
+                'query' => ['access_key' => $key, 'format' => 1]
+            ]);
+            $response = json_decode($response->getBody());
+
+        } catch (ConnectException $e) {
+            $response = new \stdClass();
+            $response->city = "Detroit";
+            $response->region_code = "MI";
+            $response->country_code = "US";
+            $response->zip = "48226";
+            $response->latitude = 42.3316;
+            $response->longitude = -83.049;
+        }
+
+        if ($response) {
+            $location = [
+                'city' =>  $response->city,
+                'state' => $response->region_code,
+                'country' => $response->country_code,
+                'zip' => $response->zip,
+                'latitude' => $response->latitude,
+                'longitude' => $response->longitude,
+            ];
+
+        }
+
 
         return $location;
     }
