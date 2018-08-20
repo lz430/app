@@ -123,7 +123,6 @@ class VersionGenerateQuotes extends Command
                     } else {
                         $this->info(" -- No results");
                     }
-
                 }
             }
             foreach ($quoteData as $strategy => $data) {
