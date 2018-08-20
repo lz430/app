@@ -229,6 +229,10 @@ class VersionToFuel
      */
     public function getSearchParams(): array
     {
+        if (!$this->version) {
+            return [];
+        }
+
         $params = [
             'year' => $this->version->year,
             'make' => $this->version->model->make->name,
@@ -249,12 +253,13 @@ class VersionToFuel
     }
 
     /**
+     * @param Version|null $version
      * @return null|\stdClass
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function matchFuelVehicleToVersion(Version $version = null): ?\stdClass
     {
-        if (!$version) {
+        if ($version) {
             $this->version = $version;
         }
 
