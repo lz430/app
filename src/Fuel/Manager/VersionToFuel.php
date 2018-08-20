@@ -15,9 +15,8 @@ class VersionToFuel
     private $client;
     private $version;
 
-    public function __construct(Version $version, FuelClient $client = null)
+    public function __construct(FuelClient $client = null)
     {
-        $this->version = $version;
         $this->client = $client;
     }
 
@@ -118,6 +117,10 @@ class VersionToFuel
      */
     public function getSearchParams(): array
     {
+        if (!$this->version) {
+            return [];
+        }
+
         $params = [
             'year' => $this->version->year,
             'make' => $this->version->model->make->name,
@@ -138,10 +141,16 @@ class VersionToFuel
     }
 
     /**
+     * @param Version|null $version
      * @return null|\stdClass
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function matchFuelVehicleToVersion(): ?\stdClass
+    public function matchFuelVehicleToVersion(Version $version = null): ?\stdClass
     {
+        if ($version) {
+            $this->version = $version;
+        }
+
         $vehicles = [];
 
         $params = $this->getSearchParams();
@@ -167,12 +176,15 @@ class VersionToFuel
     }
 
     /**
+     * @param Version $version
      * @param string $color
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function assets($color = 'default'): array
+    public function assets(Version $version, $color = 'default'): array
     {
+        $this->version = $version;
+
         $product_id = '1';
         $product_format_id = [['18', '1']];
 

@@ -63,7 +63,6 @@ class DealCrudController extends CrudController
             'function_name' => 'title'
         ]);
 
-        $this->crud->addButtonFromView('line', 'open_debugger', 'deal-debugger', null);
         $this->crud->addButtonFromView('line', 'open_in_app', 'deal-app-view', null);
         $this->crud->addButtonFromView('line', 'open_in_admin', 'deal-admin-view', null);
 

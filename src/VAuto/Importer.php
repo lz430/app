@@ -209,7 +209,7 @@ class Importer
     private function processRecord(array $row)
     {
         try {
-            list($version, $versionDebugData) = (new VersionMunger($row, $this->jatoClient, $this->fuelClient, $this->risClient))->build();
+            list($version, $versionDebugData) = (new VersionMunger($row, $this->jatoClient))->build();
             $this->info("Deal: {$row['VIN']} - {$row['Stock #']}");
 
             //
