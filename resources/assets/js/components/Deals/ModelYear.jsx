@@ -117,7 +117,7 @@ class ModelYear extends React.Component {
                     />
                     <div className="modelyear__details">
                         <div className="modelyear__count">
-                            {modelYear.deals} in stock.
+                            {modelYear.deals} in stock
                         </div>
 
                         {this.renderPrice()}
