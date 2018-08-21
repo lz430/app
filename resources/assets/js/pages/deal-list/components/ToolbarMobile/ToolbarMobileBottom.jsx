@@ -26,7 +26,6 @@ import ModelWidget from './ModelWidget';
 import { getUserPurchaseStrategy } from 'apps/user/selectors';
 import { setPurchaseStrategy } from 'apps/user/actions';
 import TravelCar from 'icons/zondicons/TravelCar';
-import Close from '../../../../icons/zondicons/Close';
 
 /**
  *
@@ -48,7 +47,7 @@ class ToolbarMobileBottom extends React.Component {
         activeTab: null,
     };
 
-    componentWillMount() {
+    componentDidMount() {
         document.addEventListener('mousedown', this.handleClick, false);
     }
 

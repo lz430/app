@@ -39,56 +39,48 @@ class FilterPanel extends React.PureComponent {
 
     render() {
         return (
-            <div>
+            <div className="sidebar-filters">
                 <SmallAndDown>
                     <MobileFilterClose />
                 </SmallAndDown>
 
-                <div className="sidebar-filters">
-                    {/*
-                    Purchase Strategy
-                    */}
-                    <MediumAndUp>
-                        <div className="purchase-strategy">
-                            <GlobalSelectPurchaseStrategy
-                                showExplanation={true}
-                                afterSetPurchaseStrategy={this.afterSetPurchaseStrategy.bind(
-                                    this
-                                )}
-                            />
-                        </div>
-                    </MediumAndUp>
-
-                    {/*
-                    Primary Filters
-                    */}
-                    <PrimaryFilters
-                        searchQuery={this.props.searchQuery}
-                        filters={this.props.filters}
-                        loadingSearchResults={this.props.loadingSearchResults}
-                        selectedFiltersByCategory={
-                            this.props.selectedFiltersByCategory
-                        }
-                        onClearModelYear={this.props.onClearModelYear}
-                        onToggleSearchFilter={this.props.onToggleSearchFilter}
-                    />
-
-                    <div className="sidebar-filters__narrow">
-                        <SecondaryFilters
-                            searchQuery={this.props.searchQuery}
-                            filters={this.props.filters}
-                            loadingSearchResults={
-                                this.props.loadingSearchResults
-                            }
-                            selectedFiltersByCategory={
-                                this.props.selectedFiltersByCategory
-                            }
-                            onToggleSearchFilter={
-                                this.props.onToggleSearchFilter
-                            }
+                {/*
+                Purchase Strategy
+                */}
+                <MediumAndUp>
+                    <div className="filter-group filter-group__purchase-strategy">
+                        <GlobalSelectPurchaseStrategy
+                            showExplanation={true}
+                            afterSetPurchaseStrategy={this.afterSetPurchaseStrategy.bind(
+                                this
+                            )}
                         />
                     </div>
-                </div>
+                </MediumAndUp>
+
+                {/*
+                Primary Filters
+                */}
+                <PrimaryFilters
+                    searchQuery={this.props.searchQuery}
+                    filters={this.props.filters}
+                    loadingSearchResults={this.props.loadingSearchResults}
+                    selectedFiltersByCategory={
+                        this.props.selectedFiltersByCategory
+                    }
+                    onClearModelYear={this.props.onClearModelYear}
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
+                />
+
+                <SecondaryFilters
+                    searchQuery={this.props.searchQuery}
+                    filters={this.props.filters}
+                    loadingSearchResults={this.props.loadingSearchResults}
+                    selectedFiltersByCategory={
+                        this.props.selectedFiltersByCategory
+                    }
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
+                />
             </div>
         );
     }

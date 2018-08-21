@@ -40,7 +40,7 @@ class SecondaryFilters extends React.PureComponent {
      */
     render() {
         return (
-            <div>
+            <div className="filter-group filter-group__secondary">
                 <FilterFeature
                     title="Year"
                     key="filterYear"
