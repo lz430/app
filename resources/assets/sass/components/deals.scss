@@ -94,7 +94,6 @@
 .toolbar-mobile-bottom > .tray {
     display: none;
     flex: 1;
-
     &.show {
         display: flex;
         border-top: 2px solid $primary;

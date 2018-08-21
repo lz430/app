@@ -123,7 +123,7 @@ class DealToVehicle
     {
         $transmission = $this->deal->features()->whereHas('category', function ($query) {
             $query->where('title', '=', 'transmission');
-        })->get()->first();
+        })->first();
 
         if ($transmission) {
             return self::TRANSMISSION_MAP[$transmission->title];

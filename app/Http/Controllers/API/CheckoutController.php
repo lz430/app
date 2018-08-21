@@ -41,7 +41,7 @@ class CheckoutController extends BaseAPIController
             'amounts' => 'required',
         ]);
 
-        $deal = Deal::where('id', $request->get('deal_id'))->get()->first();
+        $deal = Deal::where('id', $request->get('deal_id'))->first();
         $amounts = $request->get('amounts');
 
         // TODO validate amounts

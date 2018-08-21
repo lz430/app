@@ -399,7 +399,7 @@ class DealEquipmentMunger
     {
         $features = $this->vauto_features
             ->map(function ($item) {
-                return Feature::withVautoFeature($item)->get()->first();
+                return Feature::withVautoFeature($item)->first();
             })
             ->filter()
             ->unique()
@@ -581,7 +581,7 @@ class DealEquipmentMunger
      */
     private function getFeatureFromJatoSchemaId(\stdClass $equipment): ?Feature
     {
-        return Feature::withJatoSchemaId($equipment->schemaId)->get()->first();
+        return Feature::withJatoSchemaId($equipment->schemaId)->first();
     }
 
     /**

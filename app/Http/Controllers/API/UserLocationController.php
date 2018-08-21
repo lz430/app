@@ -64,7 +64,7 @@ class UserLocationController extends Controller
      */
     private function getLocationForLatLon($geocoder, $lat, $lon)
     {
-        $lookup = $geocoder->reverse($lat, $lon)->get()->first();
+        $lookup = $geocoder->reverse($lat, $lon)->first();
         return $this->formatGeocoderAddress($lookup);
     }
 
@@ -75,7 +75,7 @@ class UserLocationController extends Controller
      */
     private function getLocationForAddress($geocoder, $address)
     {
-        $lookup = $geocoder->geocode($address)->get()->first();
+        $lookup = $geocoder->geocode($address)->first();
         return $this->formatGeocoderAddress($lookup);
     }
 
