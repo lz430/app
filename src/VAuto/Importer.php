@@ -242,7 +242,7 @@ class Importer
             $this->info("    -- Is New: " . ($deal->wasRecentlyCreated ? "Yes" : "No"));
 
             DB::transaction(function () use ($deal, $row) {
-                $debug = (new DealMunger($deal, $this->jatoClient, $this->fuelClient, $row))->import();
+                $debug = (new DealMunger($deal, $this->jatoClient, $row))->import();
 
                 // Equipment
                 $this->info("    -- Equipment: Skipped?: {$debug['equipment_skipped']}");
