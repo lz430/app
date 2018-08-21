@@ -20,25 +20,29 @@ class SidebarFilter extends React.PureComponent {
     };
     renderIcon() {
         if (this.props.open) {
-            return <CheveronUp className="sidebar-filters__icon" />;
+            return <CheveronUp className="icon" />;
         }
 
-        return <CheveronDown className="sidebar-filters__icon" />;
+        return <CheveronDown className="icon" />;
     }
     render() {
         return (
-            <div className="sidebar-filters__filter">
+            <div
+                className={classNames(
+                    'filter',
+                    { open: this.props.open },
+                    { toggleable: this.props.canToggle }
+                )}
+            >
                 <div
-                    className={classNames('sidebar-filters__filter-title', {
-                        'sidebar-filters__filter-title--open': this.props.open,
-                    })}
+                    className="filter__title"
                     onClick={
                         this.props.canToggle ? this.props.toggle : () => {}
                     }
                 >
                     {this.props.canToggle && this.renderIcon()}
                     {this.props.title}
-                    <span className="sidebar-filters__count">
+                    <span className="count">
                         {this.props.selectedItems
                             ? this.props.selectedItems.length
                             : 0}
@@ -46,9 +50,7 @@ class SidebarFilter extends React.PureComponent {
                 </div>
 
                 {this.props.open ? (
-                    <div className="sidebar-filters__filter-body">
-                        {this.props.children}
-                    </div>
+                    <div className="filter__content">{this.props.children}</div>
                 ) : (
                     ''
                 )}

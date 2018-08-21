@@ -34,7 +34,7 @@ class PrimaryFilters extends React.PureComponent {
         if (this.props.searchQuery.entity === 'deal') {
             return (
                 <MediumAndUp>
-                    <div className="sidebar-filters__broad sidebar-filters__broad">
+                    <div className="filter-group filter-group__primary">
                         <div className="sidebar-filters__overlay">
                             <a
                                 onClick={() => {
@@ -55,7 +55,7 @@ class PrimaryFilters extends React.PureComponent {
         }
 
         return (
-            <div className="sidebar-filters__broad sidebar-filters__broad">
+            <div className="filter-group filter-group__primary">
                 <SidebarFilter
                     toggle={() => this.toggleOpenFilter('Vehicle Style')}
                     open={

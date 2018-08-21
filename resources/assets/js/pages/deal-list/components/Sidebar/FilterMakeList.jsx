@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Loading from 'icons/miscicons/Loading';
 
+import classNames from 'classnames';
+
 class FilterMakeList extends React.PureComponent {
     static propTypes = {
         category: PropTypes.string.isRequired,
@@ -32,27 +34,25 @@ class FilterMakeList extends React.PureComponent {
     renderItem(item) {
         let selected = this.isItemSelected(item);
 
-        let className = `filter-make-selector__make ${
-            selected ? 'filter-make-selector__make--selected' : ''
-        }`;
-
         return (
             <div
-                className={className}
+                className={classNames('filter-items__item', {
+                    'filter-items__item--selected': selected,
+                })}
                 key={item.value}
                 onClick={() =>
                     this.props.onToggleSearchFilter(this.props.category, item)
                 }
             >
-                <div className="filter-make-selector__name">{item.label}</div>
+                <div className="filter-items__item__label">{item.label}</div>
             </div>
         );
     }
 
     render() {
         return (
-            <div className="filter-make-selector">
-                <div className="filter-make-selector__makes">
+            <div className="filter-items filter-items__make">
+                <div className="filter-items__make__list">
                     {this.props.items ? (
                         this.props.items.map(this.renderItem)
                     ) : (
