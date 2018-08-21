@@ -47,7 +47,7 @@ class VersionGenerateQuotes extends Command
      */
     private function getSingleVersion($dealId)
     {
-        $deal = Deal::where('id', $dealId)->get()->first();
+        $deal = Deal::where('id', $dealId)->first();
         return collect([$deal->version]);
     }
 

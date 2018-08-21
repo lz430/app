@@ -73,7 +73,7 @@ class ImportVautoMapData extends Command
             $features = array_filter($features);
 
             foreach($features as $feature_name) {
-                $feature = Feature::where('title', $feature_name)->get()->first();
+                $feature = Feature::where('title', $feature_name)->first();
                 if ($feature) {
                     $vautoData = $feature->map_vauto_features;
                     if (!$vautoData) {

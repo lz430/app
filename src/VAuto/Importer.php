@@ -304,7 +304,7 @@ class Importer
             $skip = true;
         }
 
-        $dealer = Dealer::where('dealer_id', $row['DealerId'])->get()->first();
+        $dealer = Dealer::where('dealer_id', $row['DealerId'])->first();
         if (!$dealer) {
             $skip = true;
         }

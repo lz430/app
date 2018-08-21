@@ -53,7 +53,7 @@ class DealCalculatePayments extends Command
         $dealId = $this->argument('deal');
         if ($dealId) {
             $this->details = true;
-            $deal = Deal::where('id', $dealId)->get()->first();
+            $deal = Deal::where('id', $dealId)->first();
             $this->calculatePayments($deal);
 
         } else {
