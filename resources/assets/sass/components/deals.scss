@@ -149,7 +149,7 @@
         }
 
         &.active {
-            box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
+            box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.15);
 
             .label {
                 font-weight: bold;
@@ -170,7 +170,7 @@
         padding: 6px 10px;
         border: 1px solid $primary;
         border-radius: $border-radius;
-        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
+        box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.15);
     }
     .tray-widget-content {
         padding: 4px 4px 0 4px;

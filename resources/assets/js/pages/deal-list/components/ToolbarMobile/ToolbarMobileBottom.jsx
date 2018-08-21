@@ -13,6 +13,7 @@ import {
     toggleSearchSort,
     toggleSmallFiltersShown,
 } from '../../actions';
+
 import dealPage, {
     getSearchQuery,
     getSelectedFiltersByCategory,
@@ -44,6 +45,24 @@ class ToolbarMobileBottom extends React.Component {
 
     state = {
         activeTab: null,
+    };
+
+    componentWillMount() {
+        document.addEventListener('mousedown', this.handleClick, false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClick, false);
+    }
+
+    handleClick = e => {
+        if (this.node.contains(e.target)) {
+            return;
+        }
+
+        if (this.state.activeTab && this.state.activeTab !== 'filter') {
+            this.setState({ activeTab: null });
+        }
     };
 
     setActiveTab(tab) {
@@ -119,7 +138,10 @@ class ToolbarMobileBottom extends React.Component {
 
     render() {
         return (
-            <div className="toolbar-mobile-bottom">
+            <div
+                className="toolbar-mobile-bottom"
+                ref={node => (this.node = node)}
+            >
                 <div
                     className={classNames('tray', {
                         show: this.state.activeTab !== null,
