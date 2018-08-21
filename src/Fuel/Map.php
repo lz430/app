@@ -76,7 +76,7 @@ class Map
         'Black' => '#000000',
         'White' => '#FFFFFF',
         'Gray' => '#A5A5A5',
-        'Silver' => '#F2F2F2',
+        'Silver' => '#D9D9D9',
         'Red' => '#FF0000',
         'Blue' => '#0000FF',
         'Green' => '#009933',

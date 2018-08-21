@@ -6,6 +6,7 @@ use App\Models\JATO\Version;
 use App\DealIndexConfigurator;
 use App\Models\JATO\Make;
 use Backpack\CRUD\CrudTrait;
+use DeliverMyRide\VAuto\Map;
 
 use Carbon\Carbon;
 use ScoutElastic\Searchable;

@@ -146,11 +146,19 @@ class DealEquipmentMunger
      */
     private function updateDealWithDiscoveredFeatures()
     {
+        // Adds the standardized color names to the features table if not already in the table for use to add to deal_features
+        $categoryId = Map::CATEGORY_MAP['vehicle_color']['id'];
+        foreach(\DeliverMyRide\Fuel\Map::HEX_MAP as $needle => $value) {
+            Feature::firstOrCreate(['title' => $needle, 'category_id' => $categoryId]);
+            \App\Models\Category::firstOrCreate(['title' => 'Vehicle Color', 'slug' => 'vehicle_color']);
+        }
         $featureIds = [];
         foreach ($this->discovered_features as $category => $features) {
             $featureIds = array_merge($featureIds, array_keys($features), $this->syncVehicleColor());
         }
-        $this->deal->features()->sync($featureIds);
+        // Merges in the color id into the already found feature ids
+        $mergeInColorIdToFeatureIds = array_merge($featureIds, $this->syncVehicleColor());
+        $this->deal->features()->sync($mergeInColorIdToFeatureIds);
     }
 
     /**

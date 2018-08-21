@@ -73,6 +73,13 @@ class ESResponseTransformer extends TransformerAbstract
                         $transformed[] = $data;
                     }
                     break;
+                case 'vehicle_color':
+                    foreach ($items as $item) {
+                        $data = $item;
+                        $data['icon'] = \DeliverMyRide\Fuel\Map::HEX_MAP[$item['value']];
+                        $transformed[] = $data;
+                    }
+                    break;
 
                 default:
                     $transformed = $items;
