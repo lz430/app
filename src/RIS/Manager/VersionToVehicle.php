@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Cache;
 class VersionToVehicle
 {
     private const REGIONS = [
-      'detroit' => '48116',
+        'detroit' => '48116',
     ];
 
     private const TRANSMISSION_MAP = [
@@ -71,7 +71,6 @@ class VersionToVehicle
     private $vehicles;
 
 
-
     private $selected = [
         'cash' => null,
         'finance' => null,
@@ -95,13 +94,17 @@ class VersionToVehicle
      */
     private function filterUnlessNone(array $data, string $parentAttribute, string $attribute, array $value): array
     {
-
         $recordsWith = array_filter($data, function ($record) use ($parentAttribute, $attribute, $value) {
-            if (!isset($record->{$parentAttribute}->{$attribute})) {
+            if (isset($record->{$parentAttribute}->{$attribute}) && count(array_intersect($record->{$parentAttribute}->{$attribute}, $value))) {
                 return true;
             }
 
-            if (isset($record->{$parentAttribute}->{$attribute}) && count(array_intersect($value, $record->{$parentAttribute}->{$attribute}))) {
+            return false;
+
+        });
+
+        $recordsIgnored = array_filter($data, function ($record) use ($parentAttribute, $attribute, $value) {
+            if (!isset($record->{$parentAttribute}->{$attribute})) {
                 return true;
             }
 
@@ -110,7 +113,7 @@ class VersionToVehicle
         });
 
         if (count($recordsWith)) {
-            return $recordsWith;
+            return array_merge($recordsIgnored, $recordsWith);
         }
 
         return $data;
@@ -139,7 +142,8 @@ class VersionToVehicle
      * @param $search
      * @return mixed|null
      */
-    private function getClosetNumber(array $arr, $search) {
+    private function getClosetNumber(array $arr, $search)
+    {
         $closest = null;
         foreach ($arr as $item) {
             if ($closest === null || abs($search - $closest) > abs($item - $search)) {
@@ -249,7 +253,8 @@ class VersionToVehicle
 
     /**
      * @param bool $force
-     * @return Collection|mixed
+     * @return array|Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function fetchMakeHashcodes($force = false)
     {
@@ -261,7 +266,7 @@ class VersionToVehicle
         try {
             $response = $this->client->hashcode->makes();
             $results = [];
-            foreach($response->response as $make) {
+            foreach ($response->response as $make) {
                 $results[strtolower($make->makeName)] = $make;
             }
         } catch (ClientException $exception) {
@@ -360,26 +365,20 @@ class VersionToVehicle
 
 
         // Require
-        $vehicles = array_filter($vehicles, function($vehicle) use ($params) {
+        $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             if (!isset($vehicle->filters->YEAR)) {
                 return true;
             }
             return in_array($params['year'], $vehicle->filters->YEAR);
         });
 
-        $vehicles = array_filter($vehicles, function($vehicle) use ($params) {
+        $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             return in_array($params['model'], $vehicle->filters->MODEL);
         });
 
 
-
-
-
-        //dd($vehicles);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
-
-
 
         // Optional
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', [$params['trim']]);
@@ -388,8 +387,6 @@ class VersionToVehicle
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'DRIVE_TYPE_CODE', [$params['driven_wheels']]);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'BODY_TYPE', [$params['cab']]);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRAN_TYPE', [$params['transmission']]);
-
-
 
         return collect($vehicles)->map(function ($item) {
             return $item->vehicle;
@@ -510,8 +507,9 @@ class VersionToVehicle
         }
     }
 
-    private function selectRates() {
-        foreach($this->selected as $strategy => $vehicle) {
+    private function selectRates()
+    {
+        foreach ($this->selected as $strategy => $vehicle) {
             if (!$vehicle) {
                 continue;
             }
@@ -574,7 +572,7 @@ class VersionToVehicle
 
                         $data->miles = $this->getClosetNumber(array_keys($scenario->programs[0]->residuals), 10000);
 
-                        if (isset($scenario->programs[0]->residuals[$data->miles]->termValues[$data->term])){
+                        if (isset($scenario->programs[0]->residuals[$data->miles]->termValues[$data->term])) {
                             $data->residual = $scenario->programs[0]->residuals[$data->miles]->termValues[$data->term]->percentage;
                         } else {
                             $data->rate = 0;
