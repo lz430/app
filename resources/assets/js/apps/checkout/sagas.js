@@ -29,10 +29,7 @@ export function* checkoutStart(action) {
 
     if (checkout.strategy === 'finance') {
         amounts['financed_amount'] = dealPricing.amountFinancedValue();
-        amounts[
-            'financed_down_payment'
-        ] = dealPricing.financeDownPaymentValue();
-
+        amounts['down_payment'] = dealPricing.financeDownPaymentValue();
         amounts['term'] = dealPricing.financeTermValue();
         amounts['monthly_payment'] = dealPricing.monthlyPaymentsValue();
     } else if (checkout.strategy === 'lease') {
@@ -42,6 +39,7 @@ export function* checkoutStart(action) {
 
         amounts['term'] = dealPricing.leaseTermValue();
         amounts['monthly_payment'] = dealPricing.monthlyPaymentsValue();
+        amounts['down_payment'] = dealPricing.leaseTotalAmountAtDriveOffValue();
     }
     let results = null;
     try {

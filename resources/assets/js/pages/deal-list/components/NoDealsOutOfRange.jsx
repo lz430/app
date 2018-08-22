@@ -7,7 +7,7 @@ import api from 'src/api';
 import { toggleSmallFiltersShown } from 'pages/deal-list/actions';
 import ZipcodeFinder from 'pages/deal-list/components/Sidebar/ZipcodeFinder';
 
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Input } from 'reactstrap';
 
 class NoDealsOutOfRange extends Component {
     static propTypes = {
