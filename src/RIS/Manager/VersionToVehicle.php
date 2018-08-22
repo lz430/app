@@ -24,7 +24,33 @@ class VersionToVehicle
     ];
 
     private const MODEL_MAP = [
+        // Rams
         'Ram 1500 Pickup' => '1500',
+
+        // Caddys
+        'ATS Sedan' => 'ATS',
+        'ATS Coupe' => 'ATS',
+        'CTS Sedan' => 'CTS',
+        'CTS-V Sedan' => 'CTS-V',
+        'CTS-V Coupe' => 'CTS-V',
+
+        // Benz (Really trims)
+        'C300' => 'C 300',
+        'E300' => 'E 300',
+        'E400' => 'E 400',
+        'GLA250' => 'GLA 250',
+        'CLA250' => 'CLA 250',
+        'GLC300' => 'GLC 300',
+        'GLE350' => 'GLE 350',
+        'AMG® GLE43' => 'AMG GLE 43',
+        'GLS450' => 'GLS 450',
+        'GLS550' => 'GLS 550',
+        'AMG® GLS63' => 'AMG GLS 63',
+    ];
+
+    // lol.
+    private const MAKES_USE_TRIM_FOR_MODEL = [
+      'Mercedes-Benz'
     ];
 
     private const TRIM_MAP = [
@@ -171,7 +197,11 @@ class VersionToVehicle
 
     private function translateModel(): string
     {
-        $model = $this->version->model->name;
+        if (in_array($this->version->model->make->name, self::MAKES_USE_TRIM_FOR_MODEL)) {
+            $model = $this->version->trim_name;
+        } else {
+            $model = $this->version->model->name;
+        }
 
         if (isset(self::MODEL_MAP[$model])) {
             return self::MODEL_MAP[$model];
@@ -364,6 +394,7 @@ class VersionToVehicle
         $vehicles = $vehicles->toArray();
 
 
+
         // Require
         $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             if (!isset($vehicle->filters->YEAR)) {
@@ -377,8 +408,17 @@ class VersionToVehicle
         });
 
 
+
+
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
+        /*
+        foreach($vehicles as $vehicle) {
+            print_r($vehicle->filters);
+        }
+        dd($params);
+        */
+
 
         // Optional
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', [$params['trim']]);
@@ -552,7 +592,6 @@ class VersionToVehicle
                         $data->rate = 0;
                         $data->term = 0;
                         $data->rebate = 0;
-
                     } else {
                         $scenario = $vehicle->scenarios['Manufacturer - Lease Special'];
 
@@ -571,7 +610,6 @@ class VersionToVehicle
                         }
 
                         $data->miles = $this->getClosetNumber(array_keys($scenario->programs[0]->residuals), 10000);
-
                         if (isset($scenario->programs[0]->residuals[$data->miles]->termValues[$data->term])) {
                             $data->residual = $scenario->programs[0]->residuals[$data->miles]->termValues[$data->term]->percentage;
                         } else {
@@ -580,7 +618,7 @@ class VersionToVehicle
                             $data->rebate = 0;
                             $data->residual = null;
                             $data->miles = null;
-                            $data->rateType;
+                            $data->rateType = null;
                         }
                     }
                     break;
