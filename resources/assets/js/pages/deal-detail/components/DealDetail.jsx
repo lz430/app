@@ -1,12 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { dealType } from 'types';
+import { dealType, pricingType } from 'types';
 
 import { Container, Row, Col } from 'reactstrap';
 import ImageGallery from 'react-image-gallery';
-import { dealPricingFactory } from 'src/DealPricing';
 
 import ApiClient from 'store/api';
 
@@ -15,11 +13,12 @@ import AddToCart from './AddToCart';
 import StandardFeaturesModal from './StandardFeaturesModal';
 import AdditionalFeaturesModal from './AdditionalFeaturesModal';
 import DealColors from 'components/Deals/DealColors';
+import { dealPricingFromPricingFactory } from '../../../src/DealPricing';
 
-class DealDetail extends React.PureComponent {
+export default class DealDetail extends React.PureComponent {
     static propTypes = {
         deal: dealType,
-        dealPricing: PropTypes.object,
+        pricing: pricingType.isRequired,
         compareList: PropTypes.array,
 
         purchaseStrategy: PropTypes.string.isRequired,
@@ -93,21 +92,23 @@ class DealDetail extends React.PureComponent {
     }
 
     handleBuyNow() {
-        const dealPricing = this.props.dealPricing;
+        const { pricing } = this.props;
+
+        const checkoutData = pricing.toCheckoutData();
 
         this.props.setCheckoutData(
-            dealPricing.deal(),
-            dealPricing.quote(),
-            dealPricing.paymentStrategy(),
-            dealPricing.discountType(),
-            dealPricing.effectiveTermValue(),
-            dealPricing.financeDownPaymentValue(),
-            dealPricing.leaseAnnualMileageValue(),
-            dealPricing.data.employeeBrand,
-            dealPricing.data.supplierBrand
+            checkoutData.deal,
+            checkoutData.quote,
+            checkoutData.paymentStrategy,
+            checkoutData.discountType,
+            checkoutData.effectiveTerm,
+            checkoutData.financeDownPayment,
+            checkoutData.leaseAnnualMileage,
+            checkoutData.employeeBrand,
+            checkoutData.supplierBrand
         );
 
-        this.props.checkoutStart(dealPricing);
+        this.props.checkoutStart(pricing);
     }
 
     toggleStandardFeaturesModal() {
@@ -238,7 +239,7 @@ class DealDetail extends React.PureComponent {
                             handlePaymentTypeChange={
                                 this.props.handlePaymentTypeChange
                             }
-                            dealPricing={this.props.dealPricing}
+                            pricing={this.props.pricing}
                             handleDiscountChange={
                                 this.props.handleDiscountChange
                             }
@@ -276,11 +277,3 @@ class DealDetail extends React.PureComponent {
         );
     }
 }
-
-const mapStateToProps = (state, props) => {
-    return {
-        dealPricing: dealPricingFactory(state, props),
-    };
-};
-
-export default connect(mapStateToProps)(DealDetail);

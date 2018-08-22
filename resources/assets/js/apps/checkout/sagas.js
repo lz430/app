@@ -12,6 +12,10 @@ import {
 import { checkout as getCheckout } from './selectors';
 import { track } from 'services';
 
+function toDollarsAndCents(input) {
+    return input.toFormat('0.00');
+}
+
 /*******************************************************************
  * Checkout Start
  *******************************************************************/
@@ -19,27 +23,35 @@ export function* checkoutStart(action) {
     yield put(checkoutIsLoading());
 
     const checkout = yield select(getCheckout);
-    const dealPricing = action.dealPricing;
+    const pricing = action.pricing;
 
     let amounts = {
         role: checkout.role,
-        taxes_and_fees: dealPricing.taxesAndFees(),
-        price: dealPricing.discountedPriceValue(),
+        price: toDollarsAndCents(pricing.discountedPrice()),
     };
 
     if (checkout.strategy === 'finance') {
-        amounts['financed_amount'] = dealPricing.amountFinancedValue();
-        amounts['down_payment'] = dealPricing.financeDownPaymentValue();
-        amounts['term'] = dealPricing.financeTermValue();
-        amounts['monthly_payment'] = dealPricing.monthlyPaymentsValue();
-    } else if (checkout.strategy === 'lease') {
-        amounts[
-            'leased_annual_mileage'
-        ] = dealPricing.leaseAnnualMileageValue();
+        amounts['financed_amount'] = toDollarsAndCents(
+            pricing.amountFinanced()
+        );
+        amounts['down_payment'] = toDollarsAndCents(
+            pricing.downPayment()
+        );
 
-        amounts['term'] = dealPricing.leaseTermValue();
-        amounts['monthly_payment'] = dealPricing.monthlyPaymentsValue();
-        amounts['down_payment'] = dealPricing.leaseTotalAmountAtDriveOffValue();
+        amounts['term'] = pricing.term();
+        amounts['monthly_payment'] = toDollarsAndCents(
+            pricing.monthlyPayment()
+        );
+    } else if (checkout.strategy === 'lease') {
+        amounts['leased_annual_mileage'] = pricing.annualMileage();
+
+        amounts['term'] = pricing.term();
+        amounts['monthly_payment'] = toDollarsAndCents(
+            pricing.monthlyPayment()
+        );
+        amounts['down_payment'] = toDollarsAndCents(
+            pricing.totalAmountAtDriveOff()
+        );
     }
     let results = null;
     try {
@@ -59,7 +71,7 @@ export function* checkoutStart(action) {
     });
 
     yield put(checkoutFinishedLoading());
-    window.location = `/confirm/${dealPricing.id()}`;
+    window.location = `/confirm/${pricing.id()}`;
 }
 
 /*******************************************************************
