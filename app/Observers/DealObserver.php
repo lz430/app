@@ -19,7 +19,7 @@ class DealObserver
     }
 
     /**
-     * Handle the deal "updated" event.
+     * Handle the deal "saving" event.
      *
      * @param Deal $deal
      * @return void
@@ -35,5 +35,4 @@ class DealObserver
             $calculator->calculateBasicPayments($deal, false);
         }
     }
-
 }

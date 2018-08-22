@@ -24,7 +24,7 @@ class DealQuote {
     private $ratesAndRebatesData;
     private $potentialConditionalRoles;
 
-    private $cacheLifetime = (24 * 60);
+    private $cacheLifetime = (48 * 60);
 
     public function __construct(DataDeliveryClient $dataDeliveryClient, Client $client)
     {
@@ -96,7 +96,8 @@ class DealQuote {
         $key = "{$deal->id}-{$paymentType}-detroit--{$roleKey}";
 
         $cacheKey = md5('quote.' . $key);
-        if (!$force && $data = Cache::tags('quote')->get($cacheKey)) {
+        $tagKey = 'deal-' . $deal->id;
+        if (!$force && $data = Cache::tags($tagKey)->get($cacheKey)) {
             return $data;
         }
 
@@ -128,7 +129,7 @@ class DealQuote {
             $data['payments'] = $payments;
         }
 
-        Cache::tags('quote')->put($cacheKey, $data, $this->cacheLifetime);
+        Cache::tags($tagKey)->put($cacheKey, $data, $this->cacheLifetime);
         return $data;
     }
 
