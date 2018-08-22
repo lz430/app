@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Deal;
+use Illuminate\Support\Facades\Cache;
 
 class DealObserver
 {
@@ -33,6 +34,23 @@ class DealObserver
         if ($originalPricing !== null && $originalPricing != $pricing && isset($deal->id) && $deal->id) {
             $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
             $calculator->calculateBasicPayments($deal, false);
+        }
+    }
+
+    /**
+     * Handle the deal "saving" event.
+     *
+     * @param Deal $deal
+     * @return void
+     */
+    public function updated(Deal $deal)
+    {
+        $originalPricing = (isset($deal->getOriginal()['payments']) ? $deal->getOriginal()['payments'] : null);
+        $payments = json_encode($deal->payments);
+
+        // Only update if is not new, and payments is different.
+        if ($originalPricing !== null && $originalPricing != $payments && isset($deal->id) && $deal->id) {
+            Cache::tags('deal-' . $deal->id)->flush();
         }
     }
 }
