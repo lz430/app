@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import api from 'src/api';
-import util from 'src/util';
 import { connect } from 'react-redux';
-import { toggleSmallFiltersShown } from 'pages/deal-list/actions';
+
 import PropTypes from 'prop-types';
+
+import api from 'src/api';
+import { toggleSmallFiltersShown } from 'pages/deal-list/actions';
 import ZipcodeFinder from 'pages/deal-list/components/Sidebar/ZipcodeFinder';
+
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 class NoDealsOutOfRange extends Component {
     static propTypes = {
@@ -37,23 +40,20 @@ class NoDealsOutOfRange extends Component {
         }
 
         return (
-            <form onSubmit={e => this.handleSubmit(e)}>
-                <div>
-                    <input
-                        className="deals__input"
-                        placeholder="Enter your email address"
+            <Form inline onSubmit={e => this.handleSubmit(e)}>
+                <FormGroup className="mb-0">
+                    <Input
+                        type="email"
                         onChange={e => {
                             this.setState({ email: e.target.value });
                         }}
                         value={this.state.email}
-                        type="email"
+                        placeholder="Enter your email address"
                         required
                     />
-                    <button className="btn btn-success" type="submit">
-                        Submit Email
-                    </button>
-                </div>
-            </form>
+                </FormGroup>
+                <Button color="success">Submit Email</Button>
+            </Form>
         );
     }
 
@@ -63,7 +63,7 @@ class NoDealsOutOfRange extends Component {
                 <div>
                     <p>
                         Our service is currently available in the Detroit
-                        market. Please update your search location.
+                        market. <br /> Please update your search location.
                     </p>
                 </div>
                 <div className="full-page-user-location">
