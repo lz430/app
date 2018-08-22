@@ -50,7 +50,7 @@ class VersionToVehicle
 
     // lol.
     private const MAKES_USE_TRIM_FOR_MODEL = [
-      'Mercedes-Benz'
+        'Mercedes-Benz'
     ];
 
     private const TRIM_MAP = [
@@ -394,7 +394,6 @@ class VersionToVehicle
         $vehicles = $vehicles->toArray();
 
 
-
         // Require
         $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             if (!isset($vehicle->filters->YEAR)) {
@@ -406,8 +405,6 @@ class VersionToVehicle
         $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             return in_array($params['model'], $vehicle->filters->MODEL);
         });
-
-
 
 
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
@@ -586,15 +583,15 @@ class VersionToVehicle
                     }
                     break;
                 case 'lease':
-                    //
-                    // Only tracking lease specials right now...
-                    if (!isset($vehicle->scenarios['Manufacturer - Lease Special']) || !isset($vehicle->scenarios['Manufacturer - Lease Special']->programs[0])) {
-                        $data->rate = 0;
-                        $data->term = 0;
-                        $data->rebate = 0;
-                    } else {
-                        $scenario = $vehicle->scenarios['Manufacturer - Lease Special'];
+                    $scenario = null;
 
+                    if (isset($vehicle->scenarios['Manufacturer - Lease Special']) && isset($vehicle->scenarios['Manufacturer - Lease Special']->programs[0])) {
+                        $scenario = $vehicle->scenarios['Manufacturer - Lease Special'];
+                    } elseif (isset($vehicle->scenarios['Affiliate - Lease Special']) && isset($vehicle->scenarios['Affiliate - Lease Special']->programs[0])) {
+                        $scenario = $vehicle->scenarios['Affiliate - Lease Special'];
+                    }
+
+                    if ($scenario) {
                         if (isset($scenario->programs[0]->consumerCash)) {
                             $data->rebate = $scenario->programs[0]->consumerCash->totalConsumerCash;
                         } else {
@@ -610,6 +607,7 @@ class VersionToVehicle
                         }
 
                         $data->miles = $this->getClosetNumber(array_keys($scenario->programs[0]->residuals), 10000);
+
                         if (isset($scenario->programs[0]->residuals[$data->miles]->termValues[$data->term])) {
                             $data->residual = $scenario->programs[0]->residuals[$data->miles]->termValues[$data->term]->percentage;
                         } else {
@@ -620,11 +618,14 @@ class VersionToVehicle
                             $data->miles = null;
                             $data->rateType = null;
                         }
+                    } else {
+                        $data->rate = 0;
+                        $data->term = 0;
+                        $data->rebate = 0;
                     }
                     break;
             }
             $data->data = $vehicle;
-
             $this->selected[$strategy] = $data;
         }
     }
@@ -632,6 +633,7 @@ class VersionToVehicle
     /**
      * @param Version $version
      * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function get(Version $version)
     {
