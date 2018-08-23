@@ -30,5 +30,6 @@ export const dealQuoteKey = (
 
     roles.sort();
     roles = roles.join('-');
-    return `${deal.id}-${paymentType}-${zipcode}--${roles}`;
+    return `${deal.id}-${paymentType}-detroit--${roles}`;
+    //return `${deal.id}-${paymentType}-${zipcode}--${roles}`;
 };

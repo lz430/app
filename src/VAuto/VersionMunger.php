@@ -2,22 +2,24 @@
 
 namespace DeliverMyRide\VAuto;
 
+use App\Models\Deal;
+use GuzzleHttp\Exception\ClientException;
+
 use App\Models\JATO\Make;
 use App\Models\JATO\Manufacturer;
 use App\Models\JATO\VehicleModel;
 use App\Models\JATO\Version;
-use DeliverMyRide\Fuel\FuelClient;
-use DeliverMyRide\Fuel\Manager\VersionToFuel;
-use DeliverMyRide\JATO\JatoClient;
-use GuzzleHttp\Exception\ClientException;
+use App\Models\JATO\VersionQuote;
 
+use DeliverMyRide\JATO\JatoClient;
 
 
 class VersionMunger
 {
 
     private $jatoClient;
-    private $fuelClient;
+
+
     private $row;
     private $decodedVin;
     private $version;
@@ -27,12 +29,12 @@ class VersionMunger
     /**
      * @param array $row
      * @param JatoClient $jatoClient
-     * @param FuelClient $fuelClient
+     *
      */
-    public function __construct(array $row, JatoClient $jatoClient, FuelClient $fuelClient)
+    public function __construct(array $row,
+                                JatoClient $jatoClient)
     {
         $this->jatoClient = $jatoClient;
-        $this->fuelClient = $fuelClient;
         $this->row = $row;
     }
 
@@ -141,8 +143,6 @@ class VersionMunger
                 $this->debug['name_search_name'] = $matches[0]->versionName;
                 $this->debug['name_search_term'] = $trim;
             }
-
-
         }
 
         if (count($matches) === 0) {
@@ -244,6 +244,7 @@ class VersionMunger
         $make = $this->make($manufacturer);
         $model = $this->model($make);
 
+        /* @var Version $version */
         $version = $model->versions()->create([
             'jato_vehicle_id' => $data->vehicleId,
             'jato_uid' => $data->uid,
@@ -266,8 +267,6 @@ class VersionMunger
             'is_current' => $data->isCurrent,
         ]);
 
-        $this->photos($version);
-
         return $version;
     }
 
@@ -279,7 +278,7 @@ class VersionMunger
      */
     private function photos(Version $version)
     {
-        $assets = (new VersionToFuel($version, $this->fuelClient))->assets('default');
+        $assets = resolve('DeliverMyRide\Fuel\Manager\VersionToFuel')->assets($version,'default');
         $version->photos()->where('color', 'default')->delete();
 
         foreach ($assets as $asset) {
@@ -288,6 +287,35 @@ class VersionMunger
                 'shot_code' => $asset->shotCode->code,
                 'color' => 'default',
             ]);
+        }
+    }
+
+    /**
+     * @param Version $version
+     */
+    private function quotes(Version $version)
+    {
+        $quoteData = resolve('DeliverMyRide\RIS\Manager\VersionToVehicle')->get($version);
+
+        foreach ($quoteData as $strategy => $data) {
+            if (!$data) {
+                $version->quotes()->where('strategy', $strategy)->delete();
+            } else {
+                VersionQuote::updateOrCreate([
+                    'strategy' => $strategy,
+                    'version_id' => $version->id,
+                ], [
+                    'hashcode' => $data->hashcode,
+                    'make_hashcode' => $data->makeHashcode,
+                    'rate' => (float) $data->rate,
+                    'term' => (int) $data->term,
+                    'rebate' => (int) $data->rebate,
+                    'residual' => (int) $data->residual,
+                    'miles' => (int) $data->miles,
+                    'rate_type' => $data->rateType,
+                    'data' => $data->data,
+                ]);
+            }
         }
     }
 
@@ -309,6 +337,7 @@ class VersionMunger
 
         //
         // Ensure existing deals attached to this version are forced to refresh.
+        /* @var Deal $attachedDeal */
         foreach ($version->fresh()->deals as $attachedDeal) {
             $attachedDeal->features()->sync([]);
             $attachedDeal->jatoFeatures()->sync([]);
@@ -340,6 +369,10 @@ class VersionMunger
         $version = Version::where('jato_uid', $jatoVersion->uid)->where('year', $this->row['Year'])->first();
         if (!$version) {
             $version = $this->create();
+            if ($version) {
+                $this->photos($version);
+                $this->quotes($version);
+            }
         }
 
         if (!$version) {

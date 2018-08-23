@@ -8,7 +8,7 @@
 
 .navbar {
     background-color: #fff;
-    border-bottom: 4px solid $primary;
+    border-bottom: 2px solid $primary;
     padding: 0 0.5rem 0 0.1rem;
     box-shadow: $box-shadow-sm;
     position: relative;
@@ -144,10 +144,11 @@
 .icon {
     .compare-count {
         background: $primary;
-        border-radius: 15px;
-        padding: 7px 9px;
+        border-radius: 27px;
+        padding: 4px 9px;
         font-weight: bold;
         color: #fff;
+        font-size: 0.8rem;
     }
 }
 

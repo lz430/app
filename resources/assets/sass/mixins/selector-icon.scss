@@ -1,5 +1,3 @@
-@import '../variables';
-
 @mixin selector-icon() {
     align-items: center;
     border: 1px solid $color-grey;
@@ -7,7 +5,7 @@
     display: inline-flex;
     fill: $color-text-white;
     height: $selector-icon-size;
-    margin-right: 10px;
+    margin-right: 6px;
     min-width: $selector-icon-size;
     padding: 3px;
     width: $selector-icon-size;

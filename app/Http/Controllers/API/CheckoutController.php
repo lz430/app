@@ -41,7 +41,7 @@ class CheckoutController extends BaseAPIController
             'amounts' => 'required',
         ]);
 
-        $deal = Deal::where('id', $request->get('deal_id'))->get()->first();
+        $deal = Deal::where('id', $request->get('deal_id'))->first();
         $amounts = $request->get('amounts');
 
         // TODO validate amounts
@@ -57,7 +57,7 @@ class CheckoutController extends BaseAPIController
             'dmr_price' => $request->get('amounts')['price'],
             'msrp' => $deal->prices()->msrp,
             'term' => isset($amounts['term']) ? $amounts['term'] : 0,
-            'down_payment' => isset($amounts['financed_down_payment']) ? $amounts['financed_down_payment'] : 0,
+            'down_payment' => isset($amounts['down_payment']) ? $amounts['down_payment'] : 0,
             'monthly_payment' => isset($amounts['monthly_payment']) ? $amounts['monthly_payment'] : 0,
             'amount_financed' => isset($amounts['financed_amount']) ? $amounts['financed_amount'] : 0,
             'lease_mileage' => isset($amounts['leased_annual_mileage']) ? $amounts['leased_annual_mileage'] : null,

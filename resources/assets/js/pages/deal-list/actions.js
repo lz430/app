@@ -15,11 +15,13 @@ export function requestSearch() {
 }
 
 export function receiveSearch(results) {
-    track('search:results:receive', {
-        'Search Results Total': results.meta.total,
-        'Search Results Entity': results.meta.entity,
-        'Search Results Page': results.meta['current_page'],
-    });
+    if (results.meta.total !== null && results.meta.total !== undefined) {
+        track('search:results:receive', {
+            'Search Results Total': results.meta.total,
+            'Search Results Entity': results.meta.entity,
+            'Search Results Page': results.meta['current_page'],
+        });
+    }
 
     return {
         type: ActionTypes.SEARCH_RECEIVE,
@@ -109,15 +111,9 @@ export function selectModelYear(vehicleModel) {
 }
 
 export function toggleSearchSort(sort) {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.SEARCH_CHANGE_SORT,
-            sort,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
+    return {
+        type: ActionTypes.SEARCH_REQUEST,
+        sort: sort,
     };
 }
 
@@ -133,8 +129,18 @@ export function closeMakeSelectorModal() {
     };
 }
 
-export function toggleSmallFiltersShown() {
+/**
+ *
+ * @param open
+ * null: toggle
+ * true: force open
+ * false: force close
+ *
+ * @returns {{type: string}}
+ */
+export function toggleSmallFiltersShown(open = null) {
     return {
         type: ActionTypes.TOGGLE_SMALL_FILTERS_SHOWN,
+        data: open,
     };
 }

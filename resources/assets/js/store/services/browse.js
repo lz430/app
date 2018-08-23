@@ -14,16 +14,13 @@ class BrowseService {
      * @returns {string}
      */
     search(query, cancelToken) {
-        let sort = query.sort.attribute;
-
-        if (query.sort.direction === 'desc') {
-            sort = '-' + sort;
-        }
+        let sort = query.sort;
 
         let params = {
             filters: query.filters,
             latitude: query.location.latitude,
             longitude: query.location.longitude,
+            strategy: query.purchaseStrategy,
             sort: sort,
             page: query.page,
         };

@@ -8,6 +8,8 @@ use DeliverMyRide\JATO\JatoClient;
 use Illuminate\Support\Collection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 
 /**
  *
@@ -74,9 +76,12 @@ class DealFeaturesMunger
      */
     private function fetchVersionFeatures(): Collection
     {
-        return collect($this->client->feature->get($this->version->jato_vehicle_id, '', 1, 400)->results);
+        try {
+            return collect($this->client->feature->get($this->version->jato_vehicle_id, '', 1, 400)->results);
+        } catch (ServerException | ClientException $e) {
+            return collect([]);
+        }
     }
-
 
     private function getCategorizedFeaturesByVehicleId()
     {

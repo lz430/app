@@ -5,6 +5,7 @@ import ArrowOutlineLeft from 'icons/zondicons/ArrowOutlineLeft';
 import SidebarFilter from './SidebarFilter';
 import FilterStyleList from './FilterStyleList';
 import FilterMakeList from './FilterMakeList';
+import { MediumAndUp } from '../../../../components/Responsive';
 
 class PrimaryFilters extends React.PureComponent {
     static propTypes = {
@@ -30,35 +31,31 @@ class PrimaryFilters extends React.PureComponent {
     }
 
     render() {
-        return (
-            <div
-                className={`sidebar-filters__broad sidebar-filters__broad--${
-                    this.props.searchQuery.entity === 'deal'
-                        ? 'narrow'
-                        : 'broad'
-                }`}
-            >
-                {this.props.searchQuery.entity === 'deal' ? (
-                    <div className="sidebar-filters__overlay">
-                        <a
-                            onClick={() => {
-                                this.props.onClearModelYear();
-                            }}
-                        >
-                            <ArrowOutlineLeft
-                                height="20px"
-                                width="20px"
-                                className="sidebar-filters__clear-icon"
-                            />
-                            Return to original search
-                        </a>
+        if (this.props.searchQuery.entity === 'deal') {
+            return (
+                <MediumAndUp>
+                    <div className="filter-group filter-group__primary">
+                        <div className="sidebar-filters__overlay">
+                            <a
+                                onClick={() => {
+                                    this.props.onClearModelYear();
+                                }}
+                            >
+                                <ArrowOutlineLeft
+                                    height="20px"
+                                    width="20px"
+                                    className="sidebar-filters__clear-icon"
+                                />
+                                Return to original search
+                            </a>
+                        </div>
                     </div>
-                ) : (
-                    <div className="sidebar-filters__instructive-heading">
-                        Refine this search
-                    </div>
-                )}
+                </MediumAndUp>
+            );
+        }
 
+        return (
+            <div className="filter-group filter-group__primary">
                 <SidebarFilter
                     toggle={() => this.toggleOpenFilter('Vehicle Style')}
                     open={

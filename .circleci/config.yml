@@ -24,7 +24,7 @@ jobs:
       ##################################################################
       - run:
           name: Install system packages
-          command: sudo apt install -y zlib1g-dev
+          command: sudo apt install -y zlib1g-dev libpng-dev
       - run:
           name: Install PHP extensions
           command: sudo docker-php-ext-install pdo_mysql zip

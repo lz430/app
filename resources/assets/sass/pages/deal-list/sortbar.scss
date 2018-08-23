@@ -1,0 +1,11 @@
+.toolbar-sort {
+    margin-left: auto;
+    select {
+        background: $primary;
+        color: #fff;
+    }
+    option {
+        padding: 8px;
+        border-radius: 0;
+    }
+}

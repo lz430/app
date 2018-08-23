@@ -20,12 +20,12 @@ class FilterFeatureList extends React.PureComponent {
         }
 
         return (
-            <div className="filter-selector">
+            <div className="filter-items filter-items__list">
                 {this.props.items.map((item, index) => {
                     return (
                         <div
                             key={index}
-                            className="filter-selector__selector"
+                            className="filter-items__item"
                             onClick={() =>
                                 this.props.onToggleSearchFilter(
                                     this.props.category,
@@ -41,10 +41,10 @@ class FilterFeatureList extends React.PureComponent {
                                 <Checkmark
                                     width="15px"
                                     height="15px"
-                                    className="filter-selector__checkbox filter-selector__checkbox--selected"
+                                    className="filter-items__item__checkbox filter-items__item--selected"
                                 />
                             ) : (
-                                <div className="filter-selector__checkbox" />
+                                <div className="filter-items__item__checkbox" />
                             )}
                             {item.label}
                         </div>

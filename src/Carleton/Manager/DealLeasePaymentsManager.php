@@ -29,7 +29,6 @@ class DealLeasePaymentsManager
             }
             $rates[$rateData['termLength']] = $rateData;
         }
-
         return $rates;
     }
 

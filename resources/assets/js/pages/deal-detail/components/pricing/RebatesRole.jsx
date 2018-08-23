@@ -72,7 +72,6 @@ class RebatesRole extends React.Component {
                 title: 'Conquest',
                 description: null,
             },
-
             loyal: {
                 title: 'Loyalty',
                 description: null,
@@ -91,6 +90,10 @@ class RebatesRole extends React.Component {
             },
             cadillaclease: {
                 title: 'Cadillac Lease Loyalty',
+                description: null,
+            },
+            gmloyalty: {
+                title: 'Lease Loyalty',
                 description: null,
             },
         };

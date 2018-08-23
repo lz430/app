@@ -12,7 +12,6 @@ class DealQuoteTransformer extends TransformerAbstract
 
     public function getData($params)
     {
-
         $data = collect($params);
         $data = $data['results'];
         return $data;
@@ -25,17 +24,38 @@ class DealQuoteTransformer extends TransformerAbstract
         $months = [];
         foreach ($terms as $term) {
             $data = [
-                'moneyFactor' => isset($term->Factor) ? $term->Factor : $term->Rate / 2400,
                 'rate' => isset($term->Rate) ? $term->Rate : null,
                 'residualPercent' => $this->getInitialResidualPercent($term->QualifyingTermEnd),
                 'termLength' => $term->QualifyingTermEnd,
                 'residuals' => $this->getResiduals($term->QualifyingTermEnd)
             ];
 
-            if ($data['residualPercent']) {
+            if (isset($term->Factor)) {
+                $data['moneyFactor'] = $term->Factor;
+            } elseif (isset($term->Rate) && is_numeric($term->Rate)) {
+                $data['moneyFactor'] = $term->Rate / 2400;
+            }
+
+            if ($data['residualPercent'] && isset($data['moneyFactor'])) {
                 $months[] = $data;
             }
         }
+
+        //
+        // If we have more than 4... start removing
+        if (count($months) > 4) {
+            foreach($months as $key => $month) {
+                if ($month['termLength'] % 12 !== 0) {
+                    unset($months[$key]);
+                }
+
+                if (count($months) <= 4 ) {
+                    break;
+                }
+            }
+            $months = array_values($months);
+        }
+
         return $months;
     }
 

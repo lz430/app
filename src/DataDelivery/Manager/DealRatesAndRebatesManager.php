@@ -5,6 +5,7 @@ namespace DeliverMyRide\DataDelivery\Manager;
 use App\Models\Deal;
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
 use DeliverMyRide\DataDelivery\Map;
+use Illuminate\Support\Collection;
 
 /**
  *
@@ -19,8 +20,12 @@ class DealRatesAndRebatesManager
     private $conditionalRoles;
 
     private $vehicleId;
+
+    /* @var Collection */
     private $programs;
+
     private $leaseProgram;
+
     private $scenario;
 
     private $scenarios;
@@ -146,7 +151,6 @@ class DealRatesAndRebatesManager
         foreach ($scenarios as $type) {
 
             $programs = $this->leaseProgramsWithScenario($type);
-
             if (!$programs->count()) {
                 continue;
             } elseif ($programs->count() == 1) {
@@ -160,7 +164,6 @@ class DealRatesAndRebatesManager
                 break;
             }
         }
-
         $this->leaseProgram = $selectedProgram;
         $this->scenario = $selectedType;
     }

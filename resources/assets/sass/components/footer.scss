@@ -1,5 +1,3 @@
-@import '../variables';
-
 .page-footer {
     background-color: $color-footer-background;
     color: #fff;
@@ -33,7 +31,6 @@
     align-items: center;
     display: flex;
     justify-content: center;
-
     div,
     a,
     input {

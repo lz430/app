@@ -4,10 +4,14 @@ import { connect } from 'react-redux';
 import Loading from 'icons/miscicons/Loading';
 
 import ModelYear from 'components/Deals/ModelYear';
+import { selectModelYear } from '../actions';
+import { getUserPurchaseStrategy } from '../../../apps/user/selectors';
 
 class ViewModels extends React.PureComponent {
     static propTypes = {
         modelYears: PropTypes.array,
+        onSelectModelYear: PropTypes.func.isRequired,
+        purchaseStrategy: PropTypes.string.isRequired,
     };
 
     /**
@@ -26,6 +30,12 @@ class ViewModels extends React.PureComponent {
                         this.props.modelYears.map(model => {
                             return (
                                 <ModelYear
+                                    purchaseStrategy={
+                                        this.props.purchaseStrategy
+                                    }
+                                    onSelectModelYear={
+                                        this.props.onSelectModelYear
+                                    }
                                     modelYear={model}
                                     key={this.buildModelKey(model)}
                                 />
@@ -42,9 +52,20 @@ class ViewModels extends React.PureComponent {
 
 function mapStateToProps(state) {
     return {
-        compareList: state.common.compareList,
         modelYears: state.pages.dealList.modelYears,
+        purchaseStrategy: getUserPurchaseStrategy(state),
     };
 }
 
-export default connect(mapStateToProps)(ViewModels);
+const mapDispatchToProps = dispatch => {
+    return {
+        onSelectModelYear: modelYear => {
+            return dispatch(selectModelYear(modelYear));
+        },
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ViewModels);

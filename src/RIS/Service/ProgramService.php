@@ -6,7 +6,7 @@ namespace DeliverMyRide\RIS\Service;
 class ProgramService extends BaseService {
 
     /**
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=GetPrograms
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=GetPrograms
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -15,7 +15,7 @@ class ProgramService extends BaseService {
     }
 
     /**
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=GetProgramByID
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=GetProgramByID
      * @param  string $programId
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -25,7 +25,7 @@ class ProgramService extends BaseService {
     }
 
     /**
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=GetProgramGroups
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=GetProgramGroups
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -34,7 +34,7 @@ class ProgramService extends BaseService {
     }
 
     /**
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=GetProgramGroupByID
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=GetProgramGroupByID
      * @param string $groupId
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -44,7 +44,7 @@ class ProgramService extends BaseService {
     }
 
     /**
-     * @see https://incentives.homenetiol.com/v2.4/json/metadata?op=GetProgramHashcodes
+     * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=GetProgramHashcodes
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */

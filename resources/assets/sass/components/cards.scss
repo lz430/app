@@ -71,7 +71,11 @@
         max-height: 225px;
         display: flex;
         align-items: center;
-
+        &.full {
+            img {
+                max-width: 100%;
+            }
+        }
         img {
             border-bottom: 0;
             display: block;

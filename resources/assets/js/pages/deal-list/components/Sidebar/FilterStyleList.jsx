@@ -10,6 +10,7 @@ import Sedan from 'icons/body-styles/Sedan';
 import Suv from 'icons/body-styles/Suv';
 import Wagon from 'icons/body-styles/Wagon';
 import Loading from 'icons/miscicons/Loading';
+import classNames from 'classnames';
 
 class FilterStyleList extends React.PureComponent {
     static propTypes = {
@@ -44,54 +45,42 @@ class FilterStyleList extends React.PureComponent {
                 return (
                     <Convertible
                         width="70px"
-                        className="filter-style-selector__icon"
+                        className="filter-items__item__icon"
                     />
                 );
             case 'coupe':
                 return (
-                    <Coupe
-                        width="70px"
-                        className="filter-style-selector__icon"
-                    />
+                    <Coupe width="70px" className="filter-items__item__icon" />
                 );
             case 'hatchback':
                 return (
                     <Hatchback
                         width="70px"
-                        className="filter-style-selector__icon"
+                        className="filter-items__item__icon"
                     />
                 );
             case 'minivan':
                 return (
                     <Minivan
                         width="70px"
-                        className="filter-style-selector__icon"
+                        className="filter-items__item__icon"
                     />
                 );
             case 'pickup':
                 return (
-                    <Pickup
-                        width="70px"
-                        className="filter-style-selector__icon"
-                    />
+                    <Pickup width="70px" className="filter-items__item__icon" />
                 );
             case 'sedan':
                 return (
-                    <Sedan
-                        width="70px"
-                        className="filter-style-selector__icon"
-                    />
+                    <Sedan width="70px" className="filter-items__item__icon" />
                 );
             case 'suv':
                 return (
-                    <Suv width="70px" className="filter-style-selector__icon" />
+                    <Suv width="70px" className="filter-items__item__icon" />
                 );
             case 'wagon':
                 return (
-                    <Wagon
-                        width="70px"
-                        className="filter-style-selector__icon"
-                    />
+                    <Wagon width="70px" className="filter-items__item__icon" />
                 );
         }
 
@@ -101,28 +90,26 @@ class FilterStyleList extends React.PureComponent {
     renderItem(item) {
         let selected = this.isItemSelected(item);
 
-        let className = `filter-style-selector__style ${
-            selected ? 'filter-style-selector__style--selected' : ''
-        }`;
-
         return (
             <div
                 key={item.value}
-                className={className}
+                className={classNames('filter-items__item', {
+                    'filter-items__item--selected': selected,
+                })}
                 onClick={() =>
                     this.props.onToggleSearchFilter(this.props.category, item)
                 }
             >
                 {this.renderIcon(item.icon)}
-                <div className="filter-style-selector__name">{item.label}</div>
+                <div className="filter-items__item__label">{item.label}</div>
             </div>
         );
     }
 
     render() {
         return (
-            <div className="filter-style-selector">
-                <div className="filter-style-selector__styles">
+            <div className="filter-items filter-items__style">
+                <div className="filter-items__style__list">
                     {this.props.items ? (
                         this.props.items.map(this.renderItem)
                     ) : (

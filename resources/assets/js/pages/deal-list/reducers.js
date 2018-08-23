@@ -9,16 +9,14 @@ const initialState = {
     page: 1,
     searchQuery: {
         entity: 'model', // deal or model depending on the page we're on.
-        sort: {
-            attribute: 'price',
-            direction: 'asc',
-        },
+        sort: 'price',
         filters: [],
     },
     modelYears: [],
     deals: [],
     meta: {},
     filters: {},
+    selectedMake: null, // Hacky fix for showing make on deal inventory page.
     showMakeSelectorModal: null, // null = never shown | true = showing | false = has shown
     smallFiltersShown: false,
 };
@@ -122,6 +120,7 @@ const reducer = function(state = initialState, action = {}) {
             return {
                 ...state,
                 page: 1,
+                selectedMake: action.data.make,
                 searchQuery: {
                     ...state.searchQuery,
                     entity: 'deal',
@@ -133,23 +132,13 @@ const reducer = function(state = initialState, action = {}) {
             };
 
         case ActionTypes.SEARCH_CHANGE_SORT:
-            let current = state.searchQuery.sort.direction;
-            let direction = 'asc';
-
-            if (current === 'asc') {
-                direction = 'desc';
-            }
-
             return {
                 ...state,
                 deals: [],
                 page: 1,
                 searchQuery: {
                     ...state.searchQuery,
-                    sort: {
-                        attribute: action.sort,
-                        direction: direction,
-                    },
+                    sort: action.sort,
                 },
             };
 
@@ -168,8 +157,12 @@ const reducer = function(state = initialState, action = {}) {
         case ActionTypes.TOGGLE_SMALL_FILTERS_SHOWN:
             return {
                 ...state,
-                smallFiltersShown: !state.smallFiltersShown,
+                smallFiltersShown:
+                    action.data === null
+                        ? !state.smallFiltersShown
+                        : action.data,
             };
+
         case ActionTypes.MAKE_SELECTOR_MODAL_OPEN:
             return {
                 ...state,
