@@ -34,13 +34,14 @@ class SecondaryFilters extends React.PureComponent {
          Seat Materials
          Seating Configuration
          Seating Capacity
+         Vehicle Color
          Infotainment
          Safety & Driver Assist
          Pickup
      */
     render() {
         return (
-            <div>
+            <div className="filter-group filter-group__secondary">
                 <FilterFeature
                     title="Year"
                     key="filterYear"

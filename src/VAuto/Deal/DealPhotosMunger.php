@@ -3,8 +3,6 @@
 namespace DeliverMyRide\VAuto\Deal;
 
 use App\Models\Deal;
-use DeliverMyRide\Fuel\FuelClient;
-use DeliverMyRide\Fuel\Manager\VersionToFuel;
 
 /**
  *
@@ -19,13 +17,11 @@ class DealPhotosMunger
     /**
      * @param Deal $deal
      * @param array $row
-     * @param FuelClient $fuelClient
      */
-    public function __construct(Deal $deal, array $row, FuelClient $fuelClient)
+    public function __construct(Deal $deal, array $row)
     {
         $this->deal = $deal;
         $this->row = $row;
-        $this->fuelClient = $fuelClient;
 
         $this->debug = [
             'deal_photos' => 0,
@@ -97,7 +93,7 @@ class DealPhotosMunger
 
         $count = 0;
 
-        $assets = (new VersionToFuel($deal->version, $this->fuelClient))->assets($deal->color);
+        $assets = resolve('DeliverMyRide\Fuel\Manager\VersionToFuel')->assets($deal->version, $deal->color);
         foreach ($assets as $asset) {
             $deal->version->photos()->create([
                 'url' => $asset->url,

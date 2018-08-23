@@ -13,12 +13,32 @@ class DealCalculatePayments extends Command
      * @var string
      */
     protected $signature = 'dmr:deal:payments {deal?}';
+    private $details = false;
+
 
     private function calculatePayments(Deal $deal)
     {
         $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
-        $calculator->calculateBasicPayments($deal);
+        $payments = $calculator->calculateBasicPayments($deal);
         $this->info($deal->title());
+
+        if ($this->details) {
+            foreach ($payments->detroit as $strategy => $info) {
+                $this->info($strategy);
+                $rows = [];
+                if ($info) {
+                    foreach ($info as $key => $value) {
+                        $rows[] = [
+                            $key,
+                            $value
+                        ];
+                    }
+                    $this->table([], $rows);
+                } else {
+                    $this->info(" -- No results");
+                }
+            }
+        }
     }
 
     /**
@@ -32,7 +52,8 @@ class DealCalculatePayments extends Command
 
         $dealId = $this->argument('deal');
         if ($dealId) {
-            $deal = Deal::where('id', $dealId)->get()->first();
+            $this->details = true;
+            $deal = Deal::where('id', $dealId)->first();
             $this->calculatePayments($deal);
 
         } else {

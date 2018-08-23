@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Cache;
 class VersionToVehicle
 {
     private const REGIONS = [
-      'detroit' => '48116',
+        'detroit' => '48116',
     ];
 
     private const TRANSMISSION_MAP = [
@@ -24,12 +24,41 @@ class VersionToVehicle
     ];
 
     private const MODEL_MAP = [
+        // Rams
         'Ram 1500 Pickup' => '1500',
+
+        // Caddys
+        'ATS Sedan' => 'ATS',
+        'ATS Coupe' => 'ATS',
+        'CTS Sedan' => 'CTS',
+        'CTS-V Sedan' => 'CTS-V',
+        'CTS-V Coupe' => 'CTS-V',
+
+        // Benz (Really trims)
+        'C300' => 'C 300',
+        'E300' => 'E 300',
+        'E400' => 'E 400',
+        'GLA250' => 'GLA 250',
+        'CLA250' => 'CLA 250',
+        'GLC300' => 'GLC 300',
+        'GLE350' => 'GLE 350',
+        'AMG® GLE43' => 'AMG GLE 43',
+        'GLS450' => 'GLS 450',
+        'GLS550' => 'GLS 550',
+        'AMG® GLS63' => 'AMG GLS 63',
+    ];
+
+    // lol.
+    private const MAKES_USE_TRIM_FOR_MODEL = [
+        'Mercedes-Benz'
     ];
 
     private const TRIM_MAP = [
         'BY_MODEL' => [
-
+            'Elantra GT' => [
+                'GT' => 'Base',
+                'GT Sport' => 'Sport',
+            ],
         ],
         'BY_TRIM' => [
             'Momentum' => 'T6 Momentum',
@@ -68,7 +97,6 @@ class VersionToVehicle
     private $vehicles;
 
 
-
     private $selected = [
         'cash' => null,
         'finance' => null,
@@ -76,7 +104,6 @@ class VersionToVehicle
     ];
 
     /**
-     * @param Version $version
      * @param RISClient $client
      */
     public function __construct(RISClient $client)
@@ -94,11 +121,16 @@ class VersionToVehicle
     private function filterUnlessNone(array $data, string $parentAttribute, string $attribute, array $value): array
     {
         $recordsWith = array_filter($data, function ($record) use ($parentAttribute, $attribute, $value) {
-            if (!isset($record->{$parentAttribute}->{$attribute})) {
+            if (isset($record->{$parentAttribute}->{$attribute}) && count(array_intersect($record->{$parentAttribute}->{$attribute}, $value))) {
                 return true;
             }
 
-            if (isset($record->{$parentAttribute}->{$attribute}) && count(array_intersect($value, $record->{$parentAttribute}->{$attribute}))) {
+            return false;
+
+        });
+
+        $recordsIgnored = array_filter($data, function ($record) use ($parentAttribute, $attribute, $value) {
+            if (!isset($record->{$parentAttribute}->{$attribute})) {
                 return true;
             }
 
@@ -107,7 +139,7 @@ class VersionToVehicle
         });
 
         if (count($recordsWith)) {
-            return $recordsWith;
+            return array_merge($recordsIgnored, $recordsWith);
         }
 
         return $data;
@@ -136,7 +168,8 @@ class VersionToVehicle
      * @param $search
      * @return mixed|null
      */
-    private function getClosetNumber(array $arr, $search) {
+    private function getClosetNumber(array $arr, $search)
+    {
         $closest = null;
         foreach ($arr as $item) {
             if ($closest === null || abs($search - $closest) > abs($item - $search)) {
@@ -151,8 +184,8 @@ class VersionToVehicle
         $trim = $this->version->trim_name;
         $model = $this->version->model->name;
 
-        if (isset(self::TRIM_MAP['BY_MODEL'][$model])) {
-            return self::TRIM_MAP['BY_MODEL'][$model];
+        if (isset(self::TRIM_MAP['BY_MODEL'][$model]) && isset(self::TRIM_MAP['BY_MODEL'][$model][$trim])) {
+            return self::TRIM_MAP['BY_MODEL'][$model][$trim];
         }
 
         if (isset(self::TRIM_MAP['BY_TRIM'][$trim])) {
@@ -164,7 +197,11 @@ class VersionToVehicle
 
     private function translateModel(): string
     {
-        $model = $this->version->model->name;
+        if (in_array($this->version->model->make->name, self::MAKES_USE_TRIM_FOR_MODEL)) {
+            $model = $this->version->trim_name;
+        } else {
+            $model = $this->version->model->name;
+        }
 
         if (isset(self::MODEL_MAP[$model])) {
             return self::MODEL_MAP[$model];
@@ -214,6 +251,8 @@ class VersionToVehicle
         if ($transmission) {
             return self::TRANSMISSION_MAP[$transmission];
         }
+
+        return null;
     }
 
     /**
@@ -238,12 +277,14 @@ class VersionToVehicle
         $codes = array_map('trim', $codes);
         $codes = array_filter($codes);
         $params['model_code'] = array_merge($params['model_code'], $codes);
+        $params['model_code'] = array_unique($params['model_code']);
         return $params;
     }
 
     /**
      * @param bool $force
-     * @return Collection|mixed
+     * @return array|Collection
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function fetchMakeHashcodes($force = false)
     {
@@ -255,7 +296,7 @@ class VersionToVehicle
         try {
             $response = $this->client->hashcode->makes();
             $results = [];
-            foreach($response->response as $make) {
+            foreach ($response->response as $make) {
                 $results[strtolower($make->makeName)] = $make;
             }
         } catch (ClientException $exception) {
@@ -352,20 +393,29 @@ class VersionToVehicle
 
         $vehicles = $vehicles->toArray();
 
+
         // Require
-        $vehicles = array_filter($vehicles, function($vehicle) use ($params) {
+        $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             if (!isset($vehicle->filters->YEAR)) {
                 return true;
             }
             return in_array($params['year'], $vehicle->filters->YEAR);
         });
 
-        $vehicles = array_filter($vehicles, function($vehicle) use ($params) {
+        $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             return in_array($params['model'], $vehicle->filters->MODEL);
         });
 
 
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
+        /*
+        foreach($vehicles as $vehicle) {
+            print_r($vehicle->filters);
+        }
+        dd($params);
+        */
+
 
         // Optional
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', [$params['trim']]);
@@ -494,8 +544,9 @@ class VersionToVehicle
         }
     }
 
-    private function selectRates() {
-        foreach($this->selected as $strategy => $vehicle) {
+    private function selectRates()
+    {
+        foreach ($this->selected as $strategy => $vehicle) {
             if (!$vehicle) {
                 continue;
             }
@@ -532,16 +583,15 @@ class VersionToVehicle
                     }
                     break;
                 case 'lease':
-                    //
-                    // Only tracking lease specials right now...
-                    if (!isset($vehicle->scenarios['Manufacturer - Lease Special']) || !isset($vehicle->scenarios['Manufacturer - Lease Special']->programs[0])) {
-                        $data->rate = 0;
-                        $data->term = 0;
-                        $data->rebate = 0;
+                    $scenario = null;
 
-                    } else {
+                    if (isset($vehicle->scenarios['Manufacturer - Lease Special']) && isset($vehicle->scenarios['Manufacturer - Lease Special']->programs[0])) {
                         $scenario = $vehicle->scenarios['Manufacturer - Lease Special'];
+                    } elseif (isset($vehicle->scenarios['Affiliate - Lease Special']) && isset($vehicle->scenarios['Affiliate - Lease Special']->programs[0])) {
+                        $scenario = $vehicle->scenarios['Affiliate - Lease Special'];
+                    }
 
+                    if ($scenario) {
                         if (isset($scenario->programs[0]->consumerCash)) {
                             $data->rebate = $scenario->programs[0]->consumerCash->totalConsumerCash;
                         } else {
@@ -558,7 +608,7 @@ class VersionToVehicle
 
                         $data->miles = $this->getClosetNumber(array_keys($scenario->programs[0]->residuals), 10000);
 
-                        if (isset($scenario->programs[0]->residuals[$data->miles]->termValues[$data->term])){
+                        if (isset($scenario->programs[0]->residuals[$data->miles]->termValues[$data->term])) {
                             $data->residual = $scenario->programs[0]->residuals[$data->miles]->termValues[$data->term]->percentage;
                         } else {
                             $data->rate = 0;
@@ -566,13 +616,16 @@ class VersionToVehicle
                             $data->rebate = 0;
                             $data->residual = null;
                             $data->miles = null;
-                            $data->rateType;
+                            $data->rateType = null;
                         }
+                    } else {
+                        $data->rate = 0;
+                        $data->term = 0;
+                        $data->rebate = 0;
                     }
                     break;
             }
             $data->data = $vehicle;
-
             $this->selected[$strategy] = $data;
         }
     }
@@ -580,6 +633,7 @@ class VersionToVehicle
     /**
      * @param Version $version
      * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function get(Version $version)
     {

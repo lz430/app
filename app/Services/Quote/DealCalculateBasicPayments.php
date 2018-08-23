@@ -116,7 +116,7 @@ class DealCalculateBasicPayments {
     /**
      * @param Deal $deal
      * @param bool $save
-     * @return bool
+     * @return bool|null|\stdClass
      */
     public function calculateBasicPayments(Deal $deal, bool $save = true) {
         if (!$deal->dealer) {
@@ -155,6 +155,7 @@ class DealCalculateBasicPayments {
         if ($save) {
             $deal->save();
         }
-        return true;
+
+        return $deal->payments;
     }
 }

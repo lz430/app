@@ -123,7 +123,7 @@ class DealToVehicle
     {
         $transmission = $this->deal->features()->whereHas('category', function ($query) {
             $query->where('title', '=', 'transmission');
-        })->get()->first();
+        })->first();
 
         if ($transmission) {
             return self::TRANSMISSION_MAP[$transmission->title];
@@ -184,7 +184,6 @@ class DealToVehicle
         $vehicles = $this->filterUnlessNone($vehicles, 'OptionGroup', "Base");
         $vehicles = $this->filterUnlessNone($vehicles, 'Package', $params['package_codes']);
         $vehicles = $this->filterUnlessNone($vehicles, 'Trans', $params['transmission']);
-
         if (count($vehicles)) {
             return end($vehicles)->DescVehicleID;
         }

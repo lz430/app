@@ -26,6 +26,11 @@ import FinanceDetails from 'components/checkout/FinanceDetails';
 import LeaseDetails from 'components/checkout/LeaseDetails';
 import InvalidCheckoutPage from 'components/checkout/InvalidCheckoutPage';
 import DealColors from '../../components/Deals/DealColors';
+import {
+    MediumAndDown,
+    MediumAndUp,
+    SmallAndDown,
+} from '../../components/Responsive';
 
 class CheckoutConfirmContainer extends React.PureComponent {
     static propTypes = {
@@ -89,10 +94,15 @@ class CheckoutConfirmContainer extends React.PureComponent {
                     </Col>
                 </Row>
                 <Row>
-                    <Col className="image">
-                        <DealImage deal={deal} link={false} />
+                    <Col xs="12" md="4" className="image">
+                        <SmallAndDown>
+                            <DealImage deal={deal} link={false} size="full" />
+                        </SmallAndDown>
+                        <MediumAndUp>
+                            <DealImage deal={deal} link={false} />
+                        </MediumAndUp>
                     </Col>
-                    <Col className="title">
+                    <Col md="4" className="title">
                         <Group>
                             <div className="year-and-make">
                                 {strings.dealYearMake(deal)}
@@ -108,7 +118,7 @@ class CheckoutConfirmContainer extends React.PureComponent {
                             </div>
                         </Group>
                     </Col>
-                    <Col className="summary">
+                    <Col md="4" className="summary">
                         {dealPricing.isCash() && (
                             <CashSummary dealPricing={dealPricing} />
                         )}

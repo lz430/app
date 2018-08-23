@@ -13,7 +13,11 @@ import {
     toggleSearchSort,
     toggleSmallFiltersShown,
 } from '../../actions';
-import { getSearchQuery, getSelectedFiltersByCategory } from '../../selectors';
+
+import dealPage, {
+    getSearchQuery,
+    getSelectedFiltersByCategory,
+} from '../../selectors';
 
 import SortWidget from './SortWidget';
 import PaymentWidget from './PaymentWidget';
@@ -30,8 +34,8 @@ class ToolbarMobileBottom extends React.Component {
     static propTypes = {
         searchQuery: PropTypes.object.isRequired,
         selectedFiltersByCategory: PropTypes.object.isRequired,
+        selectedMake: PropTypes.string,
         purchaseStrategy: PropTypes.string.isRequired,
-
         onToggleSmallFiltersShown: PropTypes.func.isRequired,
         onClearModelYear: PropTypes.func.isRequired,
         onToggleSearchSort: PropTypes.func.isRequired,
@@ -41,6 +45,24 @@ class ToolbarMobileBottom extends React.Component {
 
     state = {
         activeTab: null,
+    };
+
+    componentDidMount() {
+        document.addEventListener('mousedown', this.handleClick, false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClick, false);
+    }
+
+    handleClick = e => {
+        if (this.node.contains(e.target)) {
+            return;
+        }
+
+        if (this.state.activeTab && this.state.activeTab !== 'filter') {
+            this.setState({ activeTab: null });
+        }
     };
 
     setActiveTab(tab) {
@@ -104,6 +126,7 @@ class ToolbarMobileBottom extends React.Component {
                     selectedFiltersByCategory={
                         this.props.selectedFiltersByCategory
                     }
+                    selectedMake={this.props.selectedMake}
                     onClearModelYear={this.props.onClearModelYear}
                     setActiveTab={this.setActiveTab.bind(this)}
                 />
@@ -115,10 +138,15 @@ class ToolbarMobileBottom extends React.Component {
 
     render() {
         return (
-            <div className="toolbar-mobile-bottom">
+            <div
+                className="toolbar-mobile-bottom"
+                ref={node => (this.node = node)}
+            >
                 <div
                     className={classNames('tray', {
-                        show: this.state.activeTab !== null,
+                        show:
+                            this.state.activeTab !== null &&
+                            this.state.activeTab !== 'filter',
                     })}
                 >
                     {this.renderTrayContent()}
@@ -172,6 +200,7 @@ const mapStateToProps = state => {
     return {
         searchQuery: getSearchQuery(state),
         selectedFiltersByCategory: getSelectedFiltersByCategory(state),
+        selectedMake: dealPage(state).selectedMake,
         purchaseStrategy: getUserPurchaseStrategy(state),
     };
 };

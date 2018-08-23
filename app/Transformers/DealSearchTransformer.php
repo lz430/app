@@ -4,6 +4,8 @@ namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
 use DeliverMyRide\Fuel\Map;
+use App\Models\Feature;
+use DB;
 
 class DealSearchTransformer extends TransformerAbstract
 {
@@ -15,9 +17,16 @@ class DealSearchTransformer extends TransformerAbstract
         $version = (object) $deal->version;
         $fields = (isset($document['fields']) ? $document['fields'] : []);
 
+        $data = null;
+        foreach(Map::COLOR_MAP as $needle => $value) {
+            if($deal->color == $needle) {
+                $data = $value;
+            }
+        }
+        $featureColor = Feature::where('title', $data)->first();
         $exteriorColor = null;
-        foreach(Map::HEX_MAP as $color => $value) {
-            if(isset($deal->legacy_features) && $deal->legacy_features[1] == $color) {
+        foreach(Map::HEX_MAP as $color => $value){
+            if($featureColor->title == $color){
                 $exteriorColor = $value;
             }
         }

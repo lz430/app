@@ -62,20 +62,28 @@
 
 .deals__no-matches {
     display: flex;
-    font-size: 1.5em;
+    font-size: 1em;
     justify-content: center;
     flex-flow: column;
     text-align: center;
     max-width: 800px;
     margin: 0.5rem auto;
+    align-items: center;
 
-    @media (min-width: $break-small) {
+    .full-page-user-location {
+        width: 100%;
+        margin: 1rem 0;
+    }
+
+    @include media-breakpoint-up(sm) {
         margin: 1rem auto;
     }
 
-    @media (max-width: $break-medium) {
-        font-size: 1rem;
-        padding: 1rem;
+    @include media-breakpoint-up(md) {
+        p {
+            font-size: 1.5rem;
+            padding: 1rem;
+        }
     }
 }
 
@@ -94,7 +102,6 @@
 .toolbar-mobile-bottom > .tray {
     display: none;
     flex: 1;
-
     &.show {
         display: flex;
         border-top: 2px solid $primary;
@@ -130,7 +137,7 @@
         }
         svg {
             position: relative;
-            top: -2px;
+            top: -1px;
             margin-right: 0.25rem;
         }
     }
@@ -149,7 +156,7 @@
         }
 
         &.active {
-            box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
+            box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.15);
 
             .label {
                 font-weight: bold;
@@ -170,7 +177,8 @@
         padding: 6px 10px;
         border: 1px solid $primary;
         border-radius: $border-radius;
-        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
+        box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.15);
+        font-size: 0.85rem;
     }
     .tray-widget-content {
         padding: 4px 4px 0 4px;

@@ -16,6 +16,7 @@ const initialState = {
     deals: [],
     meta: {},
     filters: {},
+    selectedMake: null, // Hacky fix for showing make on deal inventory page.
     showMakeSelectorModal: null, // null = never shown | true = showing | false = has shown
     smallFiltersShown: false,
 };
@@ -119,13 +120,13 @@ const reducer = function(state = initialState, action = {}) {
             return {
                 ...state,
                 page: 1,
+                selectedMake: action.data.make,
                 searchQuery: {
                     ...state.searchQuery,
                     entity: 'deal',
                     filters: [
                         ...state.searchQuery.filters,
                         'model:' + action.data.model,
-                        'make:' + action.data.make,
                     ],
                 },
             };

@@ -207,7 +207,7 @@ class DealCompareData
                 break;
 
             default:
-                $feature = Feature::withJatoSchemaId($equipment->schemaId)->get()->first();
+                $feature = Feature::withJatoSchemaId($equipment->schemaId)->first();
                 if ($feature) {
                     $labels[$equipment->schemaId] = $feature->title;
                 } else {

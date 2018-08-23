@@ -17,7 +17,7 @@ class DealerRouteoneController extends Controller
     {
 
         /* @var \App\Models\Deal */
-        $deal = $dealer->deals()->get()->first();
+        $deal = $dealer->deals()->first();
 
         if ($deal && $dealer->route_one_id) {
             $pricing = $deal->prices();

@@ -95,7 +95,6 @@ class DealEquipmentMunger
         //
         // Find information for the deal model
         $this->syncSeatingCapacity();
-        //$this->syncVehicleColor();
 
         //
         // Finally get some features.
@@ -146,19 +145,13 @@ class DealEquipmentMunger
      */
     private function updateDealWithDiscoveredFeatures()
     {
-        // Adds the standardized color names to the features table if not already in the table for use to add to deal_features
-        $categoryId = Map::CATEGORY_MAP['vehicle_color']['id'];
-        foreach(\DeliverMyRide\Fuel\Map::HEX_MAP as $needle => $value) {
-            Feature::firstOrCreate(['title' => $needle, 'category_id' => $categoryId]);
-            \App\Models\Category::firstOrCreate(['title' => 'Vehicle Color', 'slug' => 'vehicle_color']);
-        }
         $featureIds = [];
         foreach ($this->discovered_features as $category => $features) {
-            $featureIds = array_merge($featureIds, array_keys($features), $this->syncVehicleColor());
+            $featureIds = array_merge($featureIds, array_keys($features));
         }
-        // Merges in the color id into the already found feature ids
-        $mergeInColorIdToFeatureIds = array_merge($featureIds, $this->syncVehicleColor());
-        $this->deal->features()->sync($mergeInColorIdToFeatureIds);
+        $featureIds = array_merge($featureIds, $this->syncVehicleColor());
+        $collectIds = collect($featureIds);
+        $this->deal->features()->sync($collectIds);
     }
 
     /**
@@ -408,7 +401,7 @@ class DealEquipmentMunger
     {
         $features = $this->vauto_features
             ->map(function ($item) {
-                return Feature::withVautoFeature($item)->get()->first();
+                return Feature::withVautoFeature($item)->first();
             })
             ->filter()
             ->unique()
@@ -590,7 +583,7 @@ class DealEquipmentMunger
      */
     private function getFeatureFromJatoSchemaId(\stdClass $equipment): ?Feature
     {
-        return Feature::withJatoSchemaId($equipment->schemaId)->get()->first();
+        return Feature::withJatoSchemaId($equipment->schemaId)->first();
     }
 
     /**
@@ -924,10 +917,8 @@ class DealEquipmentMunger
     private function syncVehicleColor()
     {
         $color = null;
-        foreach (\DeliverMyRide\Fuel\Map::COLOR_MAP as $needle => $value) {
-            if($this->deal->color == $needle) {
-                $color = $value;
-            }
+        if(isset(\DeliverMyRide\Fuel\Map::COLOR_MAP[$this->deal->color])) {
+            $color = \DeliverMyRide\Fuel\Map::COLOR_MAP[$this->deal->color];
         }
         $dealFeatureColor = Feature::where('title', $color)->first();
         return array($dealFeatureColor->id);

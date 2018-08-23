@@ -72,6 +72,52 @@ class Deal extends Model
 
     const HOLD_HOURS = 48;
 
+    private const CATEGORY_MAP = [
+        'vehicle_size' => [
+            'title' => 'Vehicle Size',
+        ],
+        'fuel_type' => [
+            'title' => 'Fuel Type',
+        ],
+        'transmission' => [
+            'title' => 'Transmission',
+        ],
+        'drive_train' => [
+            'title' => 'Drive Train',
+        ],
+        'comfort_and_convenience' => [
+            'title' => 'Comfort & Convenience',
+        ],
+        'seating' => [
+            'title' => 'Seating',
+        ],
+        'seat_materials' => [
+            'title' => 'Seat Materials',
+        ],
+        'seating_configuration' => [
+            'title' => 'Seating Configuration',
+        ],
+        'infotainment' => [
+            'title' => 'Infotainment',
+        ],
+        'interior' => [
+            'title' => 'Interior',
+        ],
+        'safety_and_driver_assist' => [
+            'title' => 'Safety & Driver Assist',
+        ],
+        'pickup' => [
+            'title' => 'Pickup',
+        ],
+       /* 'seating_capacity' => [
+            'title' => 'Seating Capacity',
+        ],*/
+        'vehicle_color' => [
+            'title' => 'Vehicle Color',
+        ],
+    ];
+
+
     /**
      * @var array
      */
@@ -442,7 +488,7 @@ class Deal extends Model
         $record['is_active'] = true;
 
         // Deal should not be active if it has been purchased
-        $purchase = Purchase::where('deal_id', $this->id)->get()->first();
+        $purchase = Purchase::where('deal_id', $this->id)->first();
 
         if ($purchase) {
             $record['is_active'] = false;
@@ -505,13 +551,21 @@ class Deal extends Model
 
         //
         // Features
-        foreach ($this->features()->where('is_active', '=', 1)->get() as $feature) {
+        foreach(self::CATEGORY_MAP as $slug => $attr) {
+            if (!isset($record[$slug]) || !is_array($record[$slug])) {
+                $record[$slug] = [];
+            }
+
+            $record[$slug][] = $attr['title'];
+        }
+
+        /*foreach ($this->features()->where('is_active', '=', 1)->get() as $feature) {
             if (!isset($record[$feature->category->slug]) || !is_array($record[$feature->category->slug])) {
                 $record[$feature->category->slug] = [];
             }
 
             $record[$feature->category->slug][] = $feature->title;
-        }
+        }*/
 
 
         $pricing = $this->prices();

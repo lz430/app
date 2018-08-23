@@ -57,7 +57,7 @@ export function clearModelYear() {
         dispatch({
             type: ActionTypes.SEARCH_TOGGLE_FILTER,
             operation: 'REMOVE_CATEGORY',
-            category: ['model', 'make'],
+            category: ['model'],
             item: false,
         });
     };
