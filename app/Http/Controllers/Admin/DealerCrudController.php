@@ -198,6 +198,14 @@ class DealerCrudController extends CrudController
             'name' => 'updated_at',
         ]);
 
+
+        $this->crud->addColumn([
+            'label' => 'Is Active',
+            'name' => 'is_active',
+            'type' => 'boolean',
+            'options' => [0 => 'Inactive', 1 => 'Active']
+        ]);
+
         $this->crud->addColumn([
             'label' => 'Route One ID',
             'name' => 'route_one_id',

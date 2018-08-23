@@ -104,11 +104,20 @@
 
 .full-page-user-location {
     .zipcode-finder {
-        background-color: #efefef;
+        background: #fff;
+        border: 1px solid #ccc;
         border-radius: 4px;
+        box-shadow: $box-shadow-sm;
         color: #586368;
         height: auto;
     }
+
+    form {
+        display: flex;
+        position: relative;
+        justify-content: center;
+    }
+
     .zipcode-finder__form {
         color: #586368;
     }
@@ -119,9 +128,16 @@
         margin: 0;
     }
 
+    .zipcode-finder__input {
+        margin-top: 0;
+    }
+
     .zipcode-finder__button {
         color: #fff;
         background: #41b1ac;
+        height: auto;
+        width: 64px;
+        text-align: center;
     }
 }
 

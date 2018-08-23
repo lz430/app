@@ -369,9 +369,10 @@ class VersionMunger
         $version = Version::where('jato_uid', $jatoVersion->uid)->where('year', $this->row['Year'])->first();
         if (!$version) {
             $version = $this->create();
-            $this->photos($version);
-            $this->quotes($version);
-
+            if ($version) {
+                $this->photos($version);
+                $this->quotes($version);
+            }
         }
 
         if (!$version) {

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\JATO\VersionQuote;
+use Illuminate\Support\Facades\Cache;
 
 class VersionQuoteObserver
 {
@@ -17,6 +18,7 @@ class VersionQuoteObserver
         $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
         foreach($quote->version->deals() as $deal) {
             $calculator->calculateBasicPayments($deal);
+            Cache::tags('deal-' . $deal->id)->flush();
         }
     }
 
@@ -32,6 +34,7 @@ class VersionQuoteObserver
             $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
             foreach($quote->version->deals() as $deal) {
                 $calculator->calculateBasicPayments($deal);
+                Cache::tags('deal-' . $deal->id)->flush();
             }
         }
     }

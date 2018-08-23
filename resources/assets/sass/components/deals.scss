@@ -62,20 +62,28 @@
 
 .deals__no-matches {
     display: flex;
-    font-size: 1.5em;
+    font-size: 1em;
     justify-content: center;
     flex-flow: column;
     text-align: center;
     max-width: 800px;
     margin: 0.5rem auto;
+    align-items: center;
 
-    @media (min-width: $break-small) {
+    .full-page-user-location {
+        width: 100%;
+        margin: 1rem 0;
+    }
+
+    @include media-breakpoint-up(sm) {
         margin: 1rem auto;
     }
 
-    @media (max-width: $break-medium) {
-        font-size: 1rem;
-        padding: 1rem;
+    @include media-breakpoint-up(md) {
+        p {
+            font-size: 1.5rem;
+            padding: 1rem;
+        }
     }
 }
 
