@@ -1,21 +1,21 @@
 import React from 'react';
-import { dealPricingType } from '../../types';
+import { pricingType } from '../../types';
 import Group from '../pricing/Group';
 import Header from '../pricing/Header';
 import Line from '../pricing/Line';
 import Label from '../pricing/Label';
 import Value from '../pricing/Value';
 import Separator from '../pricing/Separator';
-import TaxesAndFees from '../pricing/TaxesAndFees';
 import DiscountLabel from '../strings/DiscountLabel';
+import DollarsAndCents from '../money/DollarsAndCents';
 
 export default class LeaseDetails extends React.PureComponent {
     static propTypes = {
-        dealPricing: dealPricingType.isRequired,
+        pricing: pricingType.isRequired,
     };
 
     render() {
-        const { dealPricing } = this.props;
+        const { pricing } = this.props;
 
         return (
             <div>
@@ -24,37 +24,43 @@ export default class LeaseDetails extends React.PureComponent {
                     <Header>Price</Header>
                     <Line>
                         <Label>MSRP</Label>
-                        <Value>{dealPricing.msrp()}</Value>
+                        <Value>
+                            <DollarsAndCents value={pricing.msrp()} />
+                        </Value>
                     </Line>
                     <Line>
                         <Label>
-                            <DiscountLabel dealPricing={dealPricing} />
+                            <DiscountLabel pricing={pricing} />
                         </Label>
                         <Value isNegative={true}>
-                            {dealPricing.discount()}
+                            <DollarsAndCents value={pricing.discount()} />
                         </Value>
                     </Line>
                     <Line isSectionTotal={true}>
                         <Label>Discounted Price</Label>
-                        <Value>{dealPricing.discountedPrice()}</Value>
+                        <Value>
+                            <DollarsAndCents
+                                value={pricing.discountedPrice()}
+                            />
+                        </Value>
                     </Line>
                 </Group>
                 <Separator />
                 <Group>
                     <Header>Rebates</Header>
-                    {dealPricing.hasRebatesApplied() || (
+                    {pricing.hasRebatesApplied() || (
                         <Line>
                             <Label>No rebates available</Label>
                         </Line>
                     )}
-                    {dealPricing.hasRebatesApplied() && (
+                    {pricing.hasRebatesApplied() && (
                         <Line>
                             <Label>Applied</Label>
                             <Value
                                 isNegative={true}
-                                isLoading={dealPricing.dealQuoteIsLoading()}
+                                isLoading={pricing.quoteIsLoading()}
                             >
-                                {dealPricing.bestOffer()}
+                                <DollarsAndCents value={pricing.rebates()} />
                             </Value>
                         </Line>
                     )}
@@ -62,11 +68,40 @@ export default class LeaseDetails extends React.PureComponent {
                 <Separator />
                 <Group>
                     <Header>Due at Delivery</Header>
-                    <TaxesAndFees items={dealPricing.taxesAndFees()} />
+                    <Line>
+                        <Label>First Payment</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.firstPayment()} />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Doc Fee</Label>
+                        <Value>
+                            <DollarsAndCents
+                                value={pricing.docFeeWithTaxes()}
+                            />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Electronic Filing Fee</Label>
+                        <Value>
+                            <DollarsAndCents
+                                value={pricing.cvrFeeWithTaxes()}
+                            />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Tax on Rebates</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.taxOnRebates()} />
+                        </Value>
+                    </Line>
                     <Line isSectionTotal={true} isImportant={true}>
                         <Label>Total Due</Label>
                         <Value>
-                            ${dealPricing.leaseTotalAmountAtDriveOffValue()}
+                            <DollarsAndCents
+                                value={pricing.totalAmountAtDriveOff()}
+                            />
                         </Value>
                     </Line>
                 </Group>

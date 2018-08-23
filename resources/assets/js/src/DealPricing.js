@@ -8,6 +8,26 @@ import { dealPricingFromCheckoutData } from 'apps/checkout/selectors';
 import { getClosestNumberInRange } from 'src/util';
 
 /**
+ * Generate a deal pricing class using an object literal
+ * for data.
+ * @param data
+ * @returns {DealPricing}
+ */
+export const dealPricingFromDataFactory = data => {
+    return new DealPricing(data);
+};
+
+/**
+ * Generate a deal pricing class from an existing
+ * pricing instance.
+ * @param dealPricing
+ * @returns {DealPricing}
+ */
+export const dealPricingFromPricingFactory = pricing => {
+    return dealPricingFromDataFactory(pricing.toData());
+};
+
+/**
  * Generate a deal pricing class using data pulled
  * from a mixture of user profile / deal detail / deal list data.
  * @param state
@@ -16,7 +36,8 @@ import { getClosestNumberInRange } from 'src/util';
  */
 export const dealPricingFactory = (state, props) => {
     const data = dealPricingData(state, props);
-    return new DealPricing(data);
+
+    return dealPricingFromDataFactory(data);
 };
 
 /**
@@ -27,12 +48,17 @@ export const dealPricingFactory = (state, props) => {
  */
 export const dealPricingFromCheckoutFactory = (state, props) => {
     const data = dealPricingFromCheckoutData(state, props);
-    return new DealPricing(data);
+
+    return dealPricingFromDataFactory(data);
 };
 
 export default class DealPricing {
     constructor(data) {
         this.data = data;
+    }
+
+    toData() {
+        return this.data;
     }
 
     quote() {
@@ -133,7 +159,7 @@ export default class DealPricing {
     }
 
     leaseTotalAmountAtDriveOff() {
-        return util.moneyFormat(this.totalAmountAtDriveOffValue());
+        return util.moneyFormat(this.leaseTotalAmountAtDriveOffValue());
     }
 
     financeDownPaymentValue() {

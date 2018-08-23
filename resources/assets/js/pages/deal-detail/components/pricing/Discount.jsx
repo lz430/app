@@ -6,11 +6,12 @@ import config from 'config';
 import Line from 'components/pricing/Line';
 import Label from 'components/pricing/Label';
 import Value from 'components/pricing/Value';
+import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 
 export default class Discount extends React.PureComponent {
     static propTypes = {
-        dealPricing: PropTypes.object,
-        onChange: PropTypes.func.isRequired,
+        pricing: PropTypes.object.isRequired,
+        onChange: PropTypes.func,
     };
 
     static defaultProps = {
@@ -18,7 +19,7 @@ export default class Discount extends React.PureComponent {
     };
 
     handleChange = e => {
-        this.props.onChange(e.target.value, this.props.dealPricing.make());
+        this.props.onChange(e.target.value, this.props.pricing.make());
     };
 
     renderProofOfEligibility = () => {
@@ -36,7 +37,7 @@ export default class Discount extends React.PureComponent {
     };
 
     render() {
-        const { dealPricing } = this.props;
+        const { pricing } = this.props;
 
         return (
             <div>
@@ -54,24 +55,24 @@ export default class Discount extends React.PureComponent {
                                 value="dmr"
                                 type="radio"
                                 className="form-check-input"
-                                checked={dealPricing.isEffectiveDiscountDmr()}
+                                checked={pricing.isEffectiveDiscountDmr()}
                                 onChange={e => this.handleChange(e)}
                             />
                             DMR Customer
                         </Label>
                         <Value
                             isNegative={true}
-                            showIf={dealPricing.isEffectiveDiscountDmr()}
+                            showIf={pricing.isEffectiveDiscountDmr()}
                         >
-                            {dealPricing.dmrDiscount()}
+                            <DollarsAndCents value={pricing.dmrDiscount()} />
                         </Value>
                     </div>
                 </Line>
                 {(config.EMPLOYEE_PRICING_WHITELIST_BRANDS.includes(
-                    dealPricing.deal().make
+                    pricing.make()
                 ) ||
                     config.SUPPLIER_PRICING_WHITELIST_BRANDS.includes(
-                        dealPricing.deal().make
+                        pricing.make()
                     )) && (
                     <div>
                         <div
@@ -83,7 +84,7 @@ export default class Discount extends React.PureComponent {
                             Or select from the following:
                         </div>
                         {config.EMPLOYEE_PRICING_WHITELIST_BRANDS.includes(
-                            dealPricing.deal().make
+                            pricing.make()
                         ) && (
                             <Line style={{ margin: '.125em 0 .125em .25em' }}>
                                 <div className="form-check">
@@ -96,25 +97,27 @@ export default class Discount extends React.PureComponent {
                                             value="employee"
                                             type="radio"
                                             className="form-check-input"
-                                            checked={dealPricing.isEffectiveDiscountEmployee()}
+                                            checked={pricing.isEffectiveDiscountEmployee()}
                                             onChange={e => this.handleChange(e)}
                                         />
                                         Employee / Retiree
                                     </Label>
                                     <Value
                                         isNegative={true}
-                                        showIf={dealPricing.isEffectiveDiscountEmployee()}
+                                        showIf={pricing.isEffectiveDiscountEmployee()}
                                     >
-                                        {dealPricing.employeeDiscount()}
+                                        <DollarsAndCents
+                                            value={pricing.employeeDiscount()}
+                                        />
                                     </Value>
                                 </div>
 
-                                {dealPricing.isEffectiveDiscountEmployee() &&
+                                {pricing.isEffectiveDiscountEmployee() &&
                                     this.renderProofOfEligibility()}
                             </Line>
                         )}
                         {config.SUPPLIER_PRICING_WHITELIST_BRANDS.includes(
-                            dealPricing.deal().make
+                            pricing.make()
                         ) && (
                             <Line style={{ margin: '.125em 0 .125em .25em' }}>
                                 <div className="form-check">
@@ -127,20 +130,22 @@ export default class Discount extends React.PureComponent {
                                             value="supplier"
                                             type="radio"
                                             className="form-check-input"
-                                            checked={dealPricing.isEffectiveDiscountSupplier()}
+                                            checked={pricing.isEffectiveDiscountSupplier()}
                                             onChange={e => this.handleChange(e)}
                                         />
                                         Supplier / Friends &amp; Family
                                     </Label>
                                     <Value
                                         isNegative={true}
-                                        showIf={dealPricing.isEffectiveDiscountSupplier()}
+                                        showIf={pricing.isEffectiveDiscountSupplier()}
                                     >
-                                        {dealPricing.supplierDiscount()}
+                                        <DollarsAndCents
+                                            value={pricing.supplierDiscount()}
+                                        />
                                     </Value>
                                 </div>
 
-                                {dealPricing.isEffectiveDiscountSupplier() &&
+                                {pricing.isEffectiveDiscountSupplier() &&
                                     this.renderProofOfEligibility()}
                             </Line>
                         )}
