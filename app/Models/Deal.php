@@ -110,9 +110,9 @@ class Deal extends Model
         'pickup' => [
             'title' => 'Pickup',
         ],
-       /* 'seating_capacity' => [
+        'seating_capacity' => [
             'title' => 'Seating Capacity',
-        ],*/
+        ],
         'vehicle_color' => [
             'title' => 'Vehicle Color',
         ],
@@ -558,15 +558,7 @@ class Deal extends Model
 
         //
         // Features
-        /*foreach(self::CATEGORY_MAP as $slug => $attr) {
-            if (!isset($record[$slug]) || !is_array($record[$slug])) {
-                $record[$slug] = [];
-            }
-
-            $record[$slug][] = $attr['title'];
-        }*/
-
-        foreach ($this->features()->whereNotIn('features.id', [68,69,70,71,72,73,74,75,76,77,78,79,80])->where('is_active', '=', 1)->get() as $feature) {
+        foreach ($this->features()->where('is_active', '=', 1)->get() as $feature) {
             if (!isset($record[$feature->category->slug]) || !is_array($record[$feature->category->slug])) {
                 $record[$feature->category->slug] = [];
             }
