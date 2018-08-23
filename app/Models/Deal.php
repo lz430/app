@@ -7,6 +7,7 @@ use App\DealIndexConfigurator;
 use App\Models\JATO\Make;
 use Backpack\CRUD\CrudTrait;
 use DeliverMyRide\VAuto\Map;
+use App\Models\Feature;
 
 use Carbon\Carbon;
 use ScoutElastic\Searchable;
@@ -509,7 +510,13 @@ class Deal extends Model
         $record['series'] = $this->series;
         $record['style'] = $this->version->style();
         $record['seating_capacity'] = (int) $this->seating_capacity;
-        $record['vehicle_color'] = $this->vehicle_color;
+
+        $filterColor = null;
+        if(isset(\DeliverMyRide\Fuel\Map::COLOR_MAP[$this->color])) {
+            $filterColor = \DeliverMyRide\Fuel\Map::COLOR_MAP[$this->color];
+        }
+        $dealFeatureColor = Feature::where('title', $filterColor)->first();
+        $record['vehicle_color'] = $dealFeatureColor->title;
 
         //
         // Required vehicle attributes
@@ -551,21 +558,21 @@ class Deal extends Model
 
         //
         // Features
-        foreach(self::CATEGORY_MAP as $slug => $attr) {
+        /*foreach(self::CATEGORY_MAP as $slug => $attr) {
             if (!isset($record[$slug]) || !is_array($record[$slug])) {
                 $record[$slug] = [];
             }
 
             $record[$slug][] = $attr['title'];
-        }
+        }*/
 
-        /*foreach ($this->features()->where('is_active', '=', 1)->get() as $feature) {
+        foreach ($this->features()->whereNotIn('features.id', [68,69,70,71,72,73,74,75,76,77,78,79,80])->where('is_active', '=', 1)->get() as $feature) {
             if (!isset($record[$feature->category->slug]) || !is_array($record[$feature->category->slug])) {
                 $record[$feature->category->slug] = [];
             }
 
             $record[$feature->category->slug][] = $feature->title;
-        }*/
+        }
 
 
         $pricing = $this->prices();
