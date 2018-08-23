@@ -114,6 +114,11 @@ abstract class BaseSearch
                         'lte' => '200000',
                     ]
                 ]],
+                ['range' => [
+                    'pricing.default' => [
+                        'gte' => '10000',
+                    ]
+                ]],
                 ['term' => [
                     'dealer.is_active' => 1,
                 ]],
