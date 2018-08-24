@@ -34,6 +34,7 @@ class SecondaryFilters extends React.PureComponent {
          Seat Materials
          Seating Configuration
          Seating Capacity
+         Vehicle Color
          Infotainment
          Safety & Driver Assist
          Pickup
@@ -64,6 +65,21 @@ class SecondaryFilters extends React.PureComponent {
                     items={this.props.filters['vehicle_size']}
                     selectedItems={
                         this.props.selectedFiltersByCategory['vehicle_size']
+                    }
+                    loadingSearchResults={this.props.loadingSearchResults}
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
+                />
+
+                <FilterFeature
+                    title="Vehicle Color"
+                    key="filterVehicleColor"
+                    open={true}
+                    canToggle={false}
+                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    category="vehicle_color"
+                    items={this.props.filters['vehicle_color']}
+                    selectedItems={
+                        this.props.selectedFiltersByCategory['vehicle_color']
                     }
                     loadingSearchResults={this.props.loadingSearchResults}
                     onToggleSearchFilter={this.props.onToggleSearchFilter}
