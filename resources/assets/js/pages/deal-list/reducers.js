@@ -9,7 +9,7 @@ const initialState = {
     page: 1,
     searchQuery: {
         entity: 'model', // deal or model depending on the page we're on.
-        sort: 'price',
+        sort: 'payment',
         filters: [],
     },
     modelYears: [],
