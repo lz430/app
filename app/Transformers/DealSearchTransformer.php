@@ -17,6 +17,7 @@ class DealSearchTransformer extends TransformerAbstract
         $version = (object) $deal->version;
         $fields = (isset($document['fields']) ? $document['fields'] : []);
 
+        //compares feature id of color attribute to map and gets hex value back for use for swatch
         $data = null;
         foreach(Map::COLOR_MAP as $needle => $value) {
             if($deal->color == $needle) {
@@ -26,7 +27,7 @@ class DealSearchTransformer extends TransformerAbstract
         $featureColor = Feature::where('title', $data)->first();
         $exteriorColor = null;
         foreach(Map::HEX_MAP as $color => $value){
-            if($featureColor->title == $color){
+            if(isset($featureColor) && $featureColor->title == $color){
                 $exteriorColor = $value;
             }
         }
