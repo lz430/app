@@ -31,6 +31,10 @@ import util from 'src/util';
 import { track } from 'services';
 import * as ActionTypes from './consts';
 
+import { push } from 'connected-react-router';
+
+import { buildSearchQueryUrl } from './helpers';
+
 /*******************************************************************
  * Request Search
  ********************************************************************/
@@ -104,6 +108,10 @@ function* requestSearch(action) {
     if (!action.incrementPage) {
         yield put({ type: SEARCH_LOADING_FINISHED });
     }
+
+    const urlQuery = buildSearchQueryUrl(searchQuery);
+    const dealListPage = yield select(getDealList);
+    yield put(push('/filter?' + urlQuery, dealListPage));
 }
 
 /**

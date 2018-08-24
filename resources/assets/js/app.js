@@ -1,9 +1,11 @@
+import PropTypes from 'prop-types';
+
 import 'bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import configureStore from 'store';
+import configureStore, { history } from 'store';
 
 import DealList from 'pages/deal-list/Container';
 import DealDetail from 'pages/deal-detail/Container';
@@ -13,20 +15,52 @@ import CheckoutFinancing from 'pages/checkout-financing/Container';
 import CheckoutComplete from 'pages/checkout-complete/Container';
 import App from 'components/App/App';
 
+import { BrowserRouter, Route } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
+
 const { store, persistor } = configureStore();
+
+/*
+ * Legacy App
+ */
+const StandaloneApp = props => (
+    <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+            <App>{props.children}</App>
+        </PersistGate>
+    </Provider>
+);
+
+/*
+ * App w/ React router.
+ */
+const DeliverMyRide = () => (
+    <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+            <App>
+                <ConnectedRouter history={history}>
+                    <Route path="/filter" component={DealList} />
+                </ConnectedRouter>
+            </App>
+        </PersistGate>
+    </Provider>
+);
+
+/**
+ * React App (Router Powered)
+ */
+Array.from(document.getElementsByTagName('ReactApp')).map(element => {
+    ReactDOM.render(<DeliverMyRide />, element);
+});
 
 /**
  * Filter
  */
 Array.from(document.getElementsByTagName('FilterPage')).map(element => {
     ReactDOM.render(
-        <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-                <App>
-                    <DealList />
-                </App>
-            </PersistGate>
-        </Provider>,
+        <StandaloneApp>
+            <DealList />
+        </StandaloneApp>,
         element
     );
 });
@@ -36,13 +70,9 @@ Array.from(document.getElementsByTagName('FilterPage')).map(element => {
  */
 Array.from(document.getElementsByTagName('ComparePage')).map(element => {
     ReactDOM.render(
-        <Provider store={store}>
-            <PersistGate persistor={persistor}>
-                <App>
-                    <ComparePage />
-                </App>
-            </PersistGate>
-        </Provider>,
+        <StandaloneApp>
+            <ComparePage />
+        </StandaloneApp>,
         element
     );
 });
@@ -52,13 +82,9 @@ Array.from(document.getElementsByTagName('ComparePage')).map(element => {
  */
 Array.from(document.getElementsByTagName('DealDetails')).map(element => {
     ReactDOM.render(
-        <Provider store={store}>
-            <PersistGate persistor={persistor}>
-                <App>
-                    <DealDetail />
-                </App>
-            </PersistGate>
-        </Provider>,
+        <StandaloneApp>
+            <DealDetail />
+        </StandaloneApp>,
         element
     );
 });
@@ -68,16 +94,12 @@ Array.from(document.getElementsByTagName('DealDetails')).map(element => {
  */
 Array.from(document.getElementsByTagName('ConfirmDetails')).map(element => {
     ReactDOM.render(
-        <Provider store={store}>
-            <PersistGate persistor={persistor}>
-                <App>
-                    <CheckoutConfirm
-                        deal={JSON.parse(element.getAttribute('deal')).data}
-                        intendedRoute={window.location.pathname}
-                    />
-                </App>
-            </PersistGate>
-        </Provider>,
+        <StandaloneApp>
+            <CheckoutConfirm
+                deal={JSON.parse(element.getAttribute('deal')).data}
+                intendedRoute={window.location.pathname}
+            />
+        </StandaloneApp>,
         element
     );
 });
@@ -87,20 +109,16 @@ Array.from(document.getElementsByTagName('ConfirmDetails')).map(element => {
  */
 Array.from(document.getElementsByTagName('Financing')).map(element => {
     ReactDOM.render(
-        <Provider store={store}>
-            <PersistGate persistor={persistor}>
-                <App>
-                    <CheckoutFinancing
-                        featuredPhoto={JSON.parse(
-                            element.getAttribute('featuredPhoto')
-                        )}
-                        purchase={JSON.parse(element.getAttribute('purchase'))}
-                        user={JSON.parse(element.getAttribute('user'))}
-                        url={JSON.parse(element.getAttribute('url'))}
-                    />
-                </App>
-            </PersistGate>
-        </Provider>,
+        <StandaloneApp>
+            <CheckoutFinancing
+                featuredPhoto={JSON.parse(
+                    element.getAttribute('featuredPhoto')
+                )}
+                purchase={JSON.parse(element.getAttribute('purchase'))}
+                user={JSON.parse(element.getAttribute('user'))}
+                url={JSON.parse(element.getAttribute('url'))}
+            />
+        </StandaloneApp>,
         element
     );
 });
@@ -110,17 +128,14 @@ Array.from(document.getElementsByTagName('Financing')).map(element => {
  */
 Array.from(document.getElementsByTagName('ThankYouPage')).map(element => {
     ReactDOM.render(
-        <Provider store={store}>
-            <PersistGate persistor={persistor}>
-                <App>
-                    <CheckoutComplete
-                        purchase={JSON.parse(element.getAttribute('purchase'))}
-                        deal={JSON.parse(element.getAttribute('deal'))}
-                        features={JSON.parse(element.getAttribute('features'))}
-                    />
-                </App>
-            </PersistGate>
-        </Provider>,
+        <StandaloneApp>
+            <CheckoutComplete
+                purchase={JSON.parse(element.getAttribute('purchase'))}
+                deal={JSON.parse(element.getAttribute('deal'))}
+                features={JSON.parse(element.getAttribute('features'))}
+            />
+        </StandaloneApp>,
+
         element
     );
 });

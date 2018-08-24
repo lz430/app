@@ -8,6 +8,13 @@ export function initDealListData() {
     };
 }
 
+export function updateEntirePageState(data) {
+    return {
+        type: ActionTypes.UPDATE_ENTIRE_PAGE_STATE,
+        data: data,
+    };
+}
+
 export function requestSearch() {
     return {
         type: ActionTypes.SEARCH_REQUEST,

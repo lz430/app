@@ -20,14 +20,16 @@ import NoDealsOutOfRange from './components/NoDealsOutOfRange';
 import ModalMakeSelector from './components/ModalMakeSelector';
 
 import { MediumAndDown } from 'components/Responsive';
+import { buildSearchQueryUrl } from './helpers';
 
 import {
     initDealListData,
+    updateEntirePageState,
     closeMakeSelectorModal,
     toggleSearchFilter,
 } from './actions';
 
-import { getSelectedFiltersByCategory } from './selectors';
+import { getSearchQuery, getSelectedFiltersByCategory } from './selectors';
 
 class Container extends React.PureComponent {
     static propTypes = {
@@ -40,12 +42,26 @@ class Container extends React.PureComponent {
         makes: PropTypes.arrayOf(filterItemType),
         fallbackLogoImage: PropTypes.string.isRequired,
         onInit: PropTypes.func.isRequired,
+        onUpdateEntirePageState: PropTypes.func.isRequired,
         onToggleSearchFilter: PropTypes.func.isRequired,
         onCloseMakeSelectorModal: PropTypes.func.isRequired,
     };
 
     componentDidMount() {
         this.props.onInit();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.location.search !== prevProps.location.search) {
+            // Handling user clicking back button here.
+            if (
+                '?' + buildSearchQueryUrl(this.props.searchQuery) !==
+                    this.props.location.search &&
+                this.props.location.state
+            ) {
+                this.props.onUpdateEntirePageState(this.props.location.state);
+            }
+        }
     }
 
     renderPageLoadingIcon() {
@@ -147,7 +163,7 @@ const mapStateToProps = state => {
         window: state.common.window,
         smallFiltersShown: state.pages.dealList.smallFiltersShown,
         makeSelectorModalIsOpen: state.pages.dealList.showMakeSelectorModal,
-        searchQuery: state.pages.dealList.searchQuery,
+        searchQuery: getSearchQuery(state),
         userLocation: getUserLocation(state),
         selectedFiltersByCategory: getSelectedFiltersByCategory(state),
         makes: state.pages.dealList.filters.make,
@@ -160,6 +176,9 @@ const mapDispatchToProps = dispatch => {
     return {
         onInit: () => {
             return dispatch(initDealListData());
+        },
+        onUpdateEntirePageState: data => {
+            return dispatch(updateEntirePageState(data));
         },
         onCloseMakeSelectorModal: () => {
             return dispatch(closeMakeSelectorModal());

@@ -40,6 +40,10 @@ const persistConfig = {
 
 const reducer = function(state = initialState, action = {}) {
     switch (action.type) {
+        case ActionTypes.UPDATE_ENTIRE_PAGE_STATE:
+            return {
+                ...action.data,
+            };
         case ActionTypes.SEARCH_SET_FILTERS:
             return {
                 ...state,
