@@ -51,7 +51,7 @@ class Container extends React.PureComponent {
     };
 
     componentDidMount() {
-        this.props.onInit();
+        this.props.onInit(this.props.location);
     }
 
     componentDidUpdate(prevProps) {
@@ -185,8 +185,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInit: () => {
-            return dispatch(initDealListData());
+        onInit: url => {
+            return dispatch(initDealListData(url));
         },
 
         onUpdateEntirePageState: data => {

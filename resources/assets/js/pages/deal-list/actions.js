@@ -2,9 +2,10 @@ import { track } from 'services';
 
 import * as ActionTypes from './consts';
 
-export function initDealListData() {
+export function initDealListData(url) {
     return {
         type: ActionTypes.INIT,
+        data: url,
     };
 }
 
@@ -70,9 +71,10 @@ export function clearModelYear() {
     };
 }
 
-export function searchReset() {
+export function searchReset(data = false) {
     return {
         type: ActionTypes.SEARCH_RESET,
+        data: data,
     };
 }
 

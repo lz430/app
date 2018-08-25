@@ -108,17 +108,27 @@ const reducer = function(state = initialState, action = {}) {
             };
 
         case ActionTypes.SEARCH_RESET:
-            return {
-                ...state,
-                page: 1,
-                showMakeSelectorModal: true,
-                searchQuery: {
-                    ...state.searchQuery,
-                    entity: 'model',
-                },
-                deals: [],
-                modelYears: [],
-            };
+            if (!action.data) {
+                return {
+                    ...state,
+                    page: 1,
+                    showMakeSelectorModal: true,
+                    searchQuery: {
+                        ...state.searchQuery,
+                        entity: 'model',
+                    },
+                    deals: [],
+                    modelYears: [],
+                };
+            } else {
+                return {
+                    ...state,
+                    page: action.data.page,
+                    searchQuery: action.data.searchQuery,
+                    deals: [],
+                    modelYears: [],
+                };
+            }
 
         case ActionTypes.SELECT_MODEL_YEAR:
             return {
