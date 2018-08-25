@@ -228,15 +228,17 @@ function* init(action) {
         const query = queryString.parse(action.data.search, {
             arrayFormat: 'bracket',
         });
-        yield put(setPurchaseStrategy(query.purchaseStrategy));
+        if (query.purchaseStrategy && query.entity) {
+            yield put(setPurchaseStrategy(query.purchaseStrategy));
 
-        const data = {
-            page: query.page,
-            searchQuery: query,
-        };
+            const data = {
+                page: query.page,
+                searchQuery: query,
+            };
 
-        delete data.searchQuery.page;
-        yield put(DealListActions.searchReset(data));
+            delete data.searchQuery.page;
+            yield put(DealListActions.searchReset(data));
+        }
     }
 
     track('page:search:view');
