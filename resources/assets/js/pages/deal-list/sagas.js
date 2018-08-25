@@ -110,8 +110,15 @@ function* requestSearch(action) {
     }
 
     const urlQuery = buildSearchQueryUrl(searchQuery);
-    const dealListPage = yield select(getDealList);
-    yield put(push('/filter?' + urlQuery, dealListPage));
+    if (urlQuery) {
+        const dealListPage = yield select(getDealList);
+        yield put(
+            push('/filter?' + urlQuery, {
+                query: searchQuery,
+                page: dealListPage,
+            })
+        );
+    }
 }
 
 /**

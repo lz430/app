@@ -8,7 +8,7 @@ import Loading from 'icons/miscicons/Loading';
 import { StickyContainer } from 'react-sticky';
 import util from 'src/util';
 
-import { getUserLocation } from 'apps/user/selectors';
+import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
 import { getIsPageLoading } from 'apps/page/selectors';
 
 import Deals from './components/Deals';
@@ -30,9 +30,11 @@ import {
 } from './actions';
 
 import { getSearchQuery, getSelectedFiltersByCategory } from './selectors';
+import { setPurchaseStrategy } from '../../apps/user/actions';
 
 class Container extends React.PureComponent {
     static propTypes = {
+        purchaseStrategy: PropTypes.string.isRequired,
         searchQuery: PropTypes.object.isRequired,
         makeSelectorModalIsOpen: PropTypes.bool,
         smallFiltersShown: PropTypes.bool,
@@ -43,6 +45,7 @@ class Container extends React.PureComponent {
         fallbackLogoImage: PropTypes.string.isRequired,
         onInit: PropTypes.func.isRequired,
         onUpdateEntirePageState: PropTypes.func.isRequired,
+        onSetPurchaseStrategy: PropTypes.func.isRequired,
         onToggleSearchFilter: PropTypes.func.isRequired,
         onCloseMakeSelectorModal: PropTypes.func.isRequired,
     };
@@ -54,12 +57,19 @@ class Container extends React.PureComponent {
     componentDidUpdate(prevProps) {
         if (this.props.location.search !== prevProps.location.search) {
             // Handling user clicking back button here.
+            const expectedQuery = buildSearchQueryUrl(this.props.searchQuery);
             if (
-                '?' + buildSearchQueryUrl(this.props.searchQuery) !==
-                    this.props.location.search &&
-                this.props.location.state
+                expectedQuery &&
+                '?' + expectedQuery !== this.props.location.search &&
+                this.props.location.state &&
+                this.props.location.state.query
             ) {
-                this.props.onUpdateEntirePageState(this.props.location.state);
+                this.props.onSetPurchaseStrategy(
+                    this.props.location.state.query.purchaseStrategy
+                );
+                this.props.onUpdateEntirePageState(
+                    this.props.location.state.page
+                );
             }
         }
     }
@@ -166,6 +176,7 @@ const mapStateToProps = state => {
         searchQuery: getSearchQuery(state),
         userLocation: getUserLocation(state),
         selectedFiltersByCategory: getSelectedFiltersByCategory(state),
+        purchaseStrategy: getUserPurchaseStrategy(state),
         makes: state.pages.dealList.filters.make,
         fallbackLogoImage: state.common.fallbackLogoImage,
         isLoading: getIsPageLoading(state),
@@ -177,11 +188,15 @@ const mapDispatchToProps = dispatch => {
         onInit: () => {
             return dispatch(initDealListData());
         },
+
         onUpdateEntirePageState: data => {
             return dispatch(updateEntirePageState(data));
         },
         onCloseMakeSelectorModal: () => {
             return dispatch(closeMakeSelectorModal());
+        },
+        onSetPurchaseStrategy: strategy => {
+            return dispatch(setPurchaseStrategy(strategy));
         },
         onToggleSearchFilter: item => {
             return dispatch(toggleSearchFilter('make', item));
