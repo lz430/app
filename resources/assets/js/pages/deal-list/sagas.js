@@ -194,13 +194,6 @@ function* init(action) {
     yield* initPage('deal-list');
 
     let userCurrentLocation = yield select(getUserLocation);
-    const dealListPage = yield select(getDealList);
-    if (
-        dealListPage.showMakeSelectorModal === null &&
-        userCurrentLocation.latitude
-    ) {
-        yield put(DealListActions.openMakeSelectorModal());
-    }
 
     const urlStyle = util.getInitialBodyStyleFromUrl();
     const urlSize = util.getInitialSizeFromUrl();
@@ -239,6 +232,15 @@ function* init(action) {
             delete data.searchQuery.page;
             yield put(DealListActions.searchReset(data));
         }
+    }
+
+    const dealListPage = yield select(getDealList);
+
+    if (
+        dealListPage.showMakeSelectorModal === null &&
+        userCurrentLocation.latitude
+    ) {
+        yield put(DealListActions.openMakeSelectorModal());
     }
 
     track('page:search:view');

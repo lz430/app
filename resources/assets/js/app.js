@@ -15,7 +15,7 @@ import CheckoutFinancing from 'pages/checkout-financing/Container';
 import CheckoutComplete from 'pages/checkout-complete/Container';
 import App from 'components/App/App';
 
-import { BrowserRouter, Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 
 const { store, persistor } = configureStore();
@@ -39,7 +39,10 @@ const DeliverMyRide = () => (
         <PersistGate loading={null} persistor={persistor}>
             <App>
                 <ConnectedRouter history={history}>
-                    <Route path="/filter" component={DealList} />
+                    <Switch>
+                        <Route path="/filter" component={DealList} />
+                        <Route path="/deals/:id" component={DealDetail} />
+                    </Switch>
                 </ConnectedRouter>
             </App>
         </PersistGate>
@@ -54,36 +57,12 @@ Array.from(document.getElementsByTagName('ReactApp')).map(element => {
 });
 
 /**
- * Filter
- */
-Array.from(document.getElementsByTagName('FilterPage')).map(element => {
-    ReactDOM.render(
-        <StandaloneApp>
-            <DealList />
-        </StandaloneApp>,
-        element
-    );
-});
-
-/**
  * ComparePage
  */
 Array.from(document.getElementsByTagName('ComparePage')).map(element => {
     ReactDOM.render(
         <StandaloneApp>
             <ComparePage />
-        </StandaloneApp>,
-        element
-    );
-});
-
-/**
- * DealDetails
- */
-Array.from(document.getElementsByTagName('DealDetails')).map(element => {
-    ReactDOM.render(
-        <StandaloneApp>
-            <DealDetail />
         </StandaloneApp>,
         element
     );

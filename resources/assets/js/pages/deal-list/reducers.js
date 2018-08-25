@@ -130,6 +130,7 @@ const reducer = function(state = initialState, action = {}) {
             } else {
                 return {
                     ...state,
+                    showMakeSelectorModal: false,
                     page: action.data.page,
                     searchQuery: action.data.searchQuery,
                     deals: [],
