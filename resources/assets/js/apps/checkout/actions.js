@@ -13,11 +13,11 @@ export function setCheckoutData(
 ) {
     return {
         type: ActionTypes.SET_CHECKOUT_DATA,
-        deal: deal,
-        quote: quote,
-        strategy: strategy,
-        role: role,
-        term: term,
+        deal,
+        quote,
+        strategy,
+        role,
+        term,
         financeDownPayment,
         leaseAnnualMileage,
         employeeBrand,
@@ -37,10 +37,10 @@ export function checkoutFinishedLoading() {
     };
 }
 
-export function checkoutStart(dealPricing) {
+export function checkoutStart(pricing) {
     return {
         type: ActionTypes.CHECKOUT_START,
-        dealPricing,
+        pricing,
     };
 }
 

@@ -31,6 +31,12 @@ import util from 'src/util';
 import { track } from 'services';
 import * as ActionTypes from './consts';
 
+import { push } from 'connected-react-router';
+
+import { buildSearchQueryUrl } from './helpers';
+import queryString from 'query-string';
+import { setPurchaseStrategy } from '../../apps/user/actions';
+
 /*******************************************************************
  * Request Search
  ********************************************************************/
@@ -104,6 +110,17 @@ function* requestSearch(action) {
     if (!action.incrementPage) {
         yield put({ type: SEARCH_LOADING_FINISHED });
     }
+
+    const urlQuery = buildSearchQueryUrl(searchQuery);
+    if (urlQuery) {
+        const dealListPage = yield select(getDealList);
+        yield put(
+            push('/filter?' + urlQuery, {
+                query: searchQuery,
+                page: dealListPage,
+            })
+        );
+    }
 }
 
 /**
@@ -173,17 +190,10 @@ function* searchToggleFilter(action) {
 /*******************************************************************
  * Init
  ********************************************************************/
-function* init() {
+function* init(action) {
     yield* initPage('deal-list');
 
     let userCurrentLocation = yield select(getUserLocation);
-    const dealListPage = yield select(getDealList);
-    if (
-        dealListPage.showMakeSelectorModal === null &&
-        userCurrentLocation.latitude
-    ) {
-        yield put(DealListActions.openMakeSelectorModal());
-    }
 
     const urlStyle = util.getInitialBodyStyleFromUrl();
     const urlSize = util.getInitialSizeFromUrl();
@@ -204,6 +214,33 @@ function* init() {
         yield put(DealListActions.setSearchFilters(filters));
 
         window.history.replaceState({}, document.title, '/filter');
+    }
+
+    // Fresh
+    if (action.data.state === undefined) {
+        const query = queryString.parse(action.data.search, {
+            arrayFormat: 'bracket',
+        });
+        if (query.purchaseStrategy && query.entity) {
+            yield put(setPurchaseStrategy(query.purchaseStrategy));
+
+            const data = {
+                page: query.page,
+                searchQuery: query,
+            };
+
+            delete data.searchQuery.page;
+            yield put(DealListActions.searchReset(data));
+        }
+    }
+
+    const dealListPage = yield select(getDealList);
+
+    if (
+        dealListPage.showMakeSelectorModal === null &&
+        userCurrentLocation.latitude
+    ) {
+        yield put(DealListActions.openMakeSelectorModal());
     }
 
     track('page:search:view');

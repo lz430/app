@@ -19,6 +19,7 @@ Homestead.yaml
 /.vscode
 .DS_Store
 *.log
+Vagrantfile
 
 .phpstorm.meta.php
 _ide_helper.php

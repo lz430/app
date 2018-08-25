@@ -149,7 +149,9 @@ class DealEquipmentMunger
         foreach ($this->discovered_features as $category => $features) {
             $featureIds = array_merge($featureIds, array_keys($features));
         }
-        $this->deal->features()->sync($featureIds);
+        $featureIds = array_merge($featureIds, $this->syncVehicleColor());
+        $collectIds = collect($featureIds);
+        $this->deal->features()->sync($collectIds);
     }
 
     /**
@@ -910,5 +912,15 @@ class DealEquipmentMunger
                     ->first();
             }
         }
+    }
+
+    private function syncVehicleColor()
+    {
+        $color = null;
+        if(isset(\DeliverMyRide\Fuel\Map::COLOR_MAP[$this->deal->color])) {
+            $color = \DeliverMyRide\Fuel\Map::COLOR_MAP[$this->deal->color];
+        }
+        $dealFeatureColor = Feature::where('title', $color)->first();
+        return array($dealFeatureColor->id);
     }
 }

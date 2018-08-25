@@ -18,6 +18,7 @@ import * as leaseActions from './modules/lease';
 import { initPage, receiveDeal, dealDetailRequestDealQuote } from './actions';
 import { getDeal, getLeaseAnnualMileage, getLeaseTerm } from './selectors';
 import DealDetail from './components/DealDetail';
+import { pricingFromStateFactory } from '../../src/pricing/factory';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -38,7 +39,7 @@ class DealDetailContainer extends React.PureComponent {
     };
 
     componentDidMount() {
-        this.props.initPage();
+        this.props.initPage(this.props.match.params.id);
     }
 
     handlePaymentTypeChange = strategy => {
@@ -142,6 +143,7 @@ class DealDetailContainer extends React.PureComponent {
                 <DealDetail
                     deal={this.props.deal}
                     purchaseStrategy={this.props.purchaseStrategy}
+                    pricing={this.props.pricing}
                     handlePaymentTypeChange={this.handlePaymentTypeChange.bind(
                         this
                     )}
@@ -164,8 +166,11 @@ class DealDetailContainer extends React.PureComponent {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
+    const deal = getDeal(state);
+
     return {
+        deal,
         selectedConditionalRoles:
             state.pages.dealDetails.selectDiscount.conditionalRoles,
         purchaseStrategy: getUserPurchaseStrategy(state),
@@ -176,10 +181,10 @@ const mapStateToProps = state => {
         leaseTerm: getLeaseTerm(state),
         fallbackDealImage: state.common.fallbackDealImage,
         discountType: state.pages.dealDetails.selectDiscount.discountType,
-        deal: getDeal(state),
         window: state.common.window,
         userLocation: getUserLocation(state),
         isLoading: getIsPageLoading(state),
+        pricing: pricingFromStateFactory(state, { ...props, deal }),
     };
 };
 

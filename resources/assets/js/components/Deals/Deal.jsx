@@ -6,6 +6,7 @@ import DealPrice from 'components/Deals/DealPrice';
 import { dealType } from 'types';
 
 import { Card, CardBody, CardHeader, CardFooter } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 class Deal extends React.Component {
     static propTypes = {
@@ -18,8 +19,8 @@ class Deal extends React.Component {
         return (
             <Card className="inventory-summary">
                 <CardHeader className="deal__basic-info">
-                    <div
-                        onClick={() => (window.location = `/deals/${deal.id}`)}
+                    <Link
+                        to={`/deals/${deal.id}`}
                         className="deal__basic-info-year-and-model"
                     >
                         <div className="deal__basic-info-year-and-make">
@@ -35,7 +36,7 @@ class Deal extends React.Component {
                                     {deal.color}, {deal.interior_color}
                                 </div>
                             )}
-                    </div>
+                    </Link>
                 </CardHeader>
                 <CardBody className="deal__content">
                     <DealImage

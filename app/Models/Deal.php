@@ -6,6 +6,8 @@ use App\Models\JATO\Version;
 use App\DealIndexConfigurator;
 use App\Models\JATO\Make;
 use Backpack\CRUD\CrudTrait;
+use DeliverMyRide\VAuto\Map;
+use App\Models\Feature;
 
 use Carbon\Carbon;
 use ScoutElastic\Searchable;
@@ -60,6 +62,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property jatoFeature[] $jatoFeatures
  * @property Feature[] $features
  * @property int $seating_capacity
+ * @property string $vehicle_color
  */
 class Deal extends Model
 {
@@ -69,6 +72,52 @@ class Deal extends Model
     protected $indexConfigurator = DealIndexConfigurator::class;
 
     const HOLD_HOURS = 48;
+
+    private const CATEGORY_MAP = [
+        'vehicle_size' => [
+            'title' => 'Vehicle Size',
+        ],
+        'fuel_type' => [
+            'title' => 'Fuel Type',
+        ],
+        'transmission' => [
+            'title' => 'Transmission',
+        ],
+        'drive_train' => [
+            'title' => 'Drive Train',
+        ],
+        'comfort_and_convenience' => [
+            'title' => 'Comfort & Convenience',
+        ],
+        'seating' => [
+            'title' => 'Seating',
+        ],
+        'seat_materials' => [
+            'title' => 'Seat Materials',
+        ],
+        'seating_configuration' => [
+            'title' => 'Seating Configuration',
+        ],
+        'infotainment' => [
+            'title' => 'Infotainment',
+        ],
+        'interior' => [
+            'title' => 'Interior',
+        ],
+        'safety_and_driver_assist' => [
+            'title' => 'Safety & Driver Assist',
+        ],
+        'pickup' => [
+            'title' => 'Pickup',
+        ],
+        'seating_capacity' => [
+            'title' => 'Seating Capacity',
+        ],
+        'vehicle_color' => [
+            'title' => 'Vehicle Color',
+        ],
+    ];
+
 
     /**
      * @var array
@@ -130,7 +179,7 @@ class Deal extends Model
             ],
             'seating_capacity' => [
                 'type' => 'integer'
-            ]
+            ],
         ]
     ];
 
@@ -461,6 +510,13 @@ class Deal extends Model
         $record['series'] = $this->series;
         $record['style'] = $this->version->style();
         $record['seating_capacity'] = (int) $this->seating_capacity;
+
+        $filterColor = null;
+        if(isset(\DeliverMyRide\Fuel\Map::COLOR_MAP[$this->color])) {
+            $filterColor = \DeliverMyRide\Fuel\Map::COLOR_MAP[$this->color];
+        }
+        $dealFeatureColor = Feature::where('title', $filterColor)->first();
+        $record['vehicle_color'] = $dealFeatureColor->title;
 
         //
         // Required vehicle attributes

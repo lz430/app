@@ -14,14 +14,15 @@ import Separator from 'components/pricing/Separator';
 import LeaseTermsSelect from './LeaseTermsSelect';
 import Rebates from './Rebates';
 import Discount from './Discount';
-import TaxesAndFees from '../../../../components/pricing/TaxesAndFees';
+import DollarsAndCents from '../../../../components/money/DollarsAndCents';
+import { pricingType } from '../../../../types';
 
 export default class LeasePane extends React.PureComponent {
     static propTypes = {
         onDiscountChange: PropTypes.func.isRequired,
         onRebatesChange: PropTypes.func.isRequired,
         onChange: PropTypes.func.isRequired,
-        dealPricing: PropTypes.object.isRequired,
+        pricing: pricingType.isRequired,
     };
 
     state = {
@@ -29,12 +30,12 @@ export default class LeasePane extends React.PureComponent {
     };
 
     render() {
-        const { dealPricing, onDiscountChange, onRebatesChange } = this.props;
+        const { pricing, onDiscountChange, onRebatesChange } = this.props;
 
         if (
-            dealPricing.dealQuoteIsLoaded() &&
-            (!dealPricing.leaseAnnualMileageAvailable() ||
-                !dealPricing.leaseAnnualMileageAvailable().length)
+            pricing.quoteIsLoaded() &&
+            (!pricing.annualMileageAvailable() ||
+                !pricing.annualMileageAvailable().length)
         ) {
             return (
                 <p className="no-lease-rates-error">
@@ -50,21 +51,24 @@ export default class LeasePane extends React.PureComponent {
                     <Header>Price</Header>
                     <Line>
                         <Label>MSRP</Label>
-                        <Value>{dealPricing.msrp()}</Value>
+                        <Value>
+                            <DollarsAndCents value={pricing.msrp()} />
+                        </Value>
                     </Line>
-                    <Discount
-                        {...{ dealPricing }}
-                        onChange={onDiscountChange}
-                    />
+                    <Discount pricing={pricing} onChange={onDiscountChange} />
                     <Line isSectionTotal={true}>
                         <Label>Discounted Price</Label>
-                        <Value>{dealPricing.discountedPrice()}</Value>
+                        <Value>
+                            <DollarsAndCents
+                                value={pricing.discountedPrice()}
+                            />
+                        </Value>
                     </Line>
                 </Group>
                 <Separator />
                 <Group>
                     <Header>Rebates</Header>
-                    <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
+                    <Rebates pricing={pricing} onChange={onRebatesChange} />
                 </Group>
                 <Separator />
                 <Group>
@@ -80,8 +84,8 @@ export default class LeasePane extends React.PureComponent {
                             onClick={() => this.toggleTermsSelect()}
                         />
                     </Header>
-                    {dealPricing.dealQuoteIsLoading() && <Loading />}
-                    {dealPricing.dealQuoteIsLoading() || (
+                    {pricing.quoteIsLoading() && <Loading />}
+                    {pricing.quoteIsLoading() || (
                         <div>
                             <Line>
                                 <table
@@ -129,7 +133,7 @@ export default class LeasePane extends React.PureComponent {
                                                         '1px solid black',
                                                 }}
                                             >
-                                                {dealPricing.leaseAnnualMileage()}
+                                                {pricing.annualMileage()}
                                             </td>
                                             <td
                                                 style={{
@@ -138,7 +142,7 @@ export default class LeasePane extends React.PureComponent {
                                                     padding: '0 1em .25em',
                                                 }}
                                             >
-                                                {dealPricing.leaseTerm()}
+                                                {pricing.term()}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -147,18 +151,26 @@ export default class LeasePane extends React.PureComponent {
                             <Line>
                                 <Label>Pre-Tax Payment</Label>
                                 <Value>
-                                    {dealPricing.leaseMonthlyPreTaxPayment()}
+                                    <DollarsAndCents
+                                        value={pricing.monthlyPreTaxPayment()}
+                                    />
                                 </Value>
                             </Line>
                             <Line>
                                 <Label>Use Tax</Label>
                                 <Value>
-                                    {dealPricing.leaseMonthlyUseTax()}
+                                    <DollarsAndCents
+                                        value={pricing.monthlyUseTax()}
+                                    />
                                 </Value>
                             </Line>
                             <Line isImportant={true}>
                                 <Label>Monthly Payment</Label>
-                                <Value>{dealPricing.monthlyPayments()}</Value>
+                                <Value>
+                                    <DollarsAndCents
+                                        value={pricing.monthlyPayment()}
+                                    />
+                                </Value>
                             </Line>
                         </div>
                     )}
@@ -166,17 +178,46 @@ export default class LeasePane extends React.PureComponent {
                 <Separator />
                 <Group>
                     <Header>Due at Delivery</Header>
-                    <TaxesAndFees items={dealPricing.taxesAndFees()} />
+                    <Line>
+                        <Label>First Payment</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.firstPayment()} />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Doc Fee</Label>
+                        <Value>
+                            <DollarsAndCents
+                                value={pricing.docFeeWithTaxes()}
+                            />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Electronic Filing Fee</Label>
+                        <Value>
+                            <DollarsAndCents
+                                value={pricing.cvrFeeWithTaxes()}
+                            />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Tax on Rebates</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.taxOnRebates()} />
+                        </Value>
+                    </Line>
                     <Line isSectionTotal={true} isImportant={true}>
                         <Label>Total Due</Label>
                         <Value>
-                            ${dealPricing.leaseTotalAmountAtDriveOffValue()}
+                            <DollarsAndCents
+                                value={pricing.totalAmountAtDriveOff()}
+                            />
                         </Value>
                     </Line>
                 </Group>
                 {this.state.leaseTermsSelectOpened && (
                     <LeaseTermsSelect
-                        dealPricing={dealPricing}
+                        pricing={pricing}
                         isOpen={this.state.leaseTermsSelectOpened}
                         toggle={this.toggleTermsSelect.bind(this)}
                         onChange={this.handleLeaseTermsChange.bind(this)}

@@ -1,33 +1,36 @@
 import React from 'react';
-import { dealPricingType } from '../../types';
+import { pricingType } from '../../types';
 import Group from '../pricing/Group';
 import Header from '../pricing/Header';
 import Line from '../pricing/Line';
 import Label from '../pricing/Label';
 import Value from '../pricing/Value';
+import DollarsAndCents from '../money/DollarsAndCents';
 
 export default class LeaseSummary extends React.PureComponent {
     static propTypes = {
-        dealPricing: dealPricingType.isRequired,
+        pricing: pricingType.isRequired,
     };
 
     render() {
-        const { dealPricing } = this.props;
+        const { pricing } = this.props;
 
         return (
             <Group>
                 <Header style={{ fontSize: '1.5em' }}>Lease Summary</Header>
                 <Line>
                     <Label>Annual Miles</Label>
-                    <Value>{dealPricing.leaseAnnualMileage()}</Value>
+                    <Value>{pricing.annualMileage().toLocaleString()}</Value>
                 </Line>
                 <Line>
                     <Label>Term</Label>
-                    <Value>{dealPricing.leaseTerm()} months</Value>
+                    <Value>{pricing.term()} months</Value>
                 </Line>
                 <Line isImportant={true}>
                     <Label>Monthly Payment</Label>
-                    <Value>{dealPricing.monthlyPayments()}</Value>
+                    <Value>
+                        <DollarsAndCents value={pricing.monthlyPayment()} />
+                    </Value>
                 </Line>
             </Group>
         );

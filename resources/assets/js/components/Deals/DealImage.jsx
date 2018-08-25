@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import LazyLoad from 'react-lazyload';
 import { dealType } from 'types';
 import classNames from 'classnames';
+import { Link } from 'react-router-dom';
 
 export default class DealImage extends React.PureComponent {
     static propTypes = {
@@ -49,7 +50,7 @@ export default class DealImage extends React.PureComponent {
         return (
             <div className={classNames('thumbnail-container', this.props.size)}>
                 {this.props.link && (
-                    <a href={`/deals/${this.props.deal.id}`}>
+                    <Link to={`/deals/${this.props.deal.id}`}>
                         {thumbnail && <img {...imageProps} src={thumbnail} />}
                         {!thumbnail && (
                             <img
@@ -57,7 +58,7 @@ export default class DealImage extends React.PureComponent {
                                 src={this.state.fallbackDealImage}
                             />
                         )}
-                    </a>
+                    </Link>
                 )}
                 {!this.props.link && (
                     <img {...imageProps} src={this.featuredImageUrl()} />

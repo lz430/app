@@ -36,7 +36,8 @@ abstract class BaseSearch
         'pickup' => 'pickup.keyword',
         'year' => 'year.keyword',
         'seating_capacity' => 'seating_capacity',
-        'vehicle_size' => 'vehicle_size.keyword'
+        'vehicle_color' => 'vehicle_color.keyword',
+        'vehicle_size' => 'vehicle_size.keyword',
     ];
 
     public $query;
@@ -112,6 +113,11 @@ abstract class BaseSearch
                 ['range' => [
                     'pricing.default' => [
                         'lte' => '200000',
+                    ]
+                ]],
+                ['range' => [
+                    'pricing.default' => [
+                        'gte' => '10000',
                     ]
                 ]],
                 ['term' => [
