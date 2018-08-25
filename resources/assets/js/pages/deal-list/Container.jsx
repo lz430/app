@@ -21,6 +21,7 @@ import ModalMakeSelector from './components/ModalMakeSelector';
 
 import { MediumAndDown } from 'components/Responsive';
 import { buildSearchQueryUrl } from './helpers';
+import { forceCheck } from 'react-lazyload';
 
 import {
     initDealListData,
@@ -30,7 +31,7 @@ import {
 } from './actions';
 
 import { getSearchQuery, getSelectedFiltersByCategory } from './selectors';
-import { setPurchaseStrategy } from '../../apps/user/actions';
+import { setPurchaseStrategy } from 'apps/user/actions';
 
 class Container extends React.PureComponent {
     static propTypes = {
@@ -67,9 +68,12 @@ class Container extends React.PureComponent {
                 this.props.onSetPurchaseStrategy(
                     this.props.location.state.query.purchaseStrategy
                 );
+
                 this.props.onUpdateEntirePageState(
                     this.props.location.state.page
                 );
+
+                forceCheck();
             }
         }
     }
