@@ -42,7 +42,14 @@ const reducer = function(state = initialState, action = {}) {
     switch (action.type) {
         case ActionTypes.UPDATE_ENTIRE_PAGE_STATE:
             return {
-                ...action.data,
+                ...state,
+                page: action.data.page,
+                searchQuery: action.data.searchQuery,
+                modelYears: action.data.modelYears,
+                deals: action.data.deals,
+                meta: action.data.meta,
+                filters: action.data.filters,
+                selectedMake: action.data.selectedMake,
             };
         case ActionTypes.SEARCH_SET_FILTERS:
             return {
