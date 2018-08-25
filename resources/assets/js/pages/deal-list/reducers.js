@@ -9,7 +9,7 @@ const initialState = {
     page: 1,
     searchQuery: {
         entity: 'model', // deal or model depending on the page we're on.
-        sort: 'price',
+        sort: 'payment',
         filters: [],
     },
     modelYears: [],
@@ -40,6 +40,10 @@ const persistConfig = {
 
 const reducer = function(state = initialState, action = {}) {
     switch (action.type) {
+        case ActionTypes.UPDATE_ENTIRE_PAGE_STATE:
+            return {
+                ...action.data,
+            };
         case ActionTypes.SEARCH_SET_FILTERS:
             return {
                 ...state,
@@ -104,17 +108,27 @@ const reducer = function(state = initialState, action = {}) {
             };
 
         case ActionTypes.SEARCH_RESET:
-            return {
-                ...state,
-                page: 1,
-                showMakeSelectorModal: true,
-                searchQuery: {
-                    ...state.searchQuery,
-                    entity: 'model',
-                },
-                deals: [],
-                modelYears: [],
-            };
+            if (!action.data) {
+                return {
+                    ...state,
+                    page: 1,
+                    showMakeSelectorModal: true,
+                    searchQuery: {
+                        ...state.searchQuery,
+                        entity: 'model',
+                    },
+                    deals: [],
+                    modelYears: [],
+                };
+            } else {
+                return {
+                    ...state,
+                    page: action.data.page,
+                    searchQuery: action.data.searchQuery,
+                    deals: [],
+                    modelYears: [],
+                };
+            }
 
         case ActionTypes.SELECT_MODEL_YEAR:
             return {
