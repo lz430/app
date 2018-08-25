@@ -1,8 +1,9 @@
 import * as ActionTypes from './consts';
 
-export function initPage() {
+export function initPage(data) {
     return {
         type: ActionTypes.INIT,
+        data: data,
     };
 }
 

@@ -39,7 +39,7 @@ class DealDetailContainer extends React.PureComponent {
     };
 
     componentDidMount() {
-        this.props.initPage();
+        this.props.initPage(this.props.match.params.id);
     }
 
     handlePaymentTypeChange = strategy => {

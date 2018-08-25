@@ -3,14 +3,16 @@
 use Illuminate\Support\Facades\Route;
 /*
 Route::get('filter', 'FilterController@index')->name('filter');
+Route::get('deals/{deal}', 'DealsController@show')->name('deals.show');
+
 */
 
 Route::get('/', 'WelcomeController@index')->name('home');
 Route::get('filter', 'AppController@index')->name('filter');
+Route::get('deals/{deal}', 'AppController@index')->name('deals.show');
 
 Route::get('compare', 'CompareController@index')->name('compare');
 
-Route::get('deals/{deal}', 'DealsController@show')->name('deals.show');
 Route::get('confirm/{id}', 'ConfirmDetailsController@show')->name('confirm');
 
 Route::group(['middleware' => 'auth'], function () {
