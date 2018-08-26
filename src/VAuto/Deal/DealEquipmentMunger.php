@@ -103,6 +103,7 @@ class DealEquipmentMunger
         $this->buildFeaturesForOptionCodes();
         $this->buildFeaturesForKnownAttributes();
         $this->buildFeaturesForMappedVautoData();
+        $this->buildFeaturesForColors();
 
         //
         // Remove conflicting features
@@ -149,9 +150,7 @@ class DealEquipmentMunger
         foreach ($this->discovered_features as $category => $features) {
             $featureIds = array_merge($featureIds, array_keys($features));
         }
-        $featureIds = array_merge($featureIds, $this->syncVehicleColor());
-        $collectIds = collect($featureIds);
-        $this->deal->features()->sync($collectIds);
+        $this->deal->features()->sync($featureIds);
     }
 
     /**
@@ -502,6 +501,8 @@ class DealEquipmentMunger
         $this->categorizeDiscoveredFeatures($features);
     }
 
+
+
     /**
      * Build from attributes. These are mostly known.
      */
@@ -546,16 +547,24 @@ class DealEquipmentMunger
         $this->categorizeDiscoveredFeatures($features);
     }
 
-    /**
-     * Just a helper
-     */
-    public function equipmentDebugger()
+
+
+    private function buildFeaturesForColors()
     {
-        $this->equipment
-            ->map(function ($equipment) {
-                if ($equipment->schemaId == '1101') {
-                }
-            });
+        $features = [];
+        if(isset(\DeliverMyRide\Fuel\Map::COLOR_MAP[$this->deal->color])) {
+            $color = \DeliverMyRide\Fuel\Map::COLOR_MAP[$this->deal->color];
+            $feature = Feature::where('title', $color)->first();
+            $features[] = (object)[
+                'feature' => $feature,
+                'equipment' => (object)[
+                    'optionId' => 0,
+                    'schemaId' => "CU|" . $feature->title,
+                ],
+            ];
+        }
+
+        $this->categorizeDiscoveredFeatures($features);
     }
 
     /**
@@ -914,13 +923,4 @@ class DealEquipmentMunger
         }
     }
 
-    private function syncVehicleColor()
-    {
-        $color = null;
-        if(isset(\DeliverMyRide\Fuel\Map::COLOR_MAP[$this->deal->color])) {
-            $color = \DeliverMyRide\Fuel\Map::COLOR_MAP[$this->deal->color];
-        }
-        $dealFeatureColor = Feature::where('title', $color)->first();
-        return array($dealFeatureColor->id);
-    }
 }
