@@ -150,9 +150,7 @@ class DealEquipmentMunger
         foreach ($this->discovered_features as $category => $features) {
             $featureIds = array_merge($featureIds, array_keys($features));
         }
-        $featureIds = array_merge($featureIds, $this->syncVehicleColor());
-        $collectIds = collect($featureIds);
-        $this->deal->features()->sync($collectIds);
+        $this->deal->features()->sync($featureIds);
     }
 
     /**
