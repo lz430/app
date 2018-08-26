@@ -515,7 +515,9 @@ class Deal extends Model
         if(isset(\DeliverMyRide\Fuel\Map::COLOR_MAP[$this->color])) {
             $filterColor = \DeliverMyRide\Fuel\Map::COLOR_MAP[$this->color];
             $dealFeatureColor = Feature::where('title', $filterColor)->first();
-            $record['vehicle_color'] = $dealFeatureColor->title;
+            if ($dealFeatureColor) {
+                $record['vehicle_color'] = $dealFeatureColor->title;
+            }
         }
 
         //
