@@ -103,6 +103,7 @@ class DealEquipmentMunger
         $this->buildFeaturesForOptionCodes();
         $this->buildFeaturesForKnownAttributes();
         $this->buildFeaturesForMappedVautoData();
+        $this->buildFeaturesForColors();
 
         //
         // Remove conflicting features
@@ -500,6 +501,8 @@ class DealEquipmentMunger
         $this->categorizeDiscoveredFeatures($features);
     }
 
+
+
     /**
      * Build from attributes. These are mostly known.
      */
@@ -544,16 +547,24 @@ class DealEquipmentMunger
         $this->categorizeDiscoveredFeatures($features);
     }
 
-    /**
-     * Just a helper
-     */
-    public function equipmentDebugger()
+
+
+    private function buildFeaturesForColors()
     {
-        $this->equipment
-            ->map(function ($equipment) {
-                if ($equipment->schemaId == '1101') {
-                }
-            });
+        $features = [];
+        if(isset(\DeliverMyRide\Fuel\Map::COLOR_MAP[$this->deal->color])) {
+            $color = \DeliverMyRide\Fuel\Map::COLOR_MAP[$this->deal->color];
+            $feature = Feature::where('title', $color)->first();
+            $features[] = (object)[
+                'feature' => $feature,
+                'equipment' => (object)[
+                    'optionId' => 0,
+                    'schemaId' => "CU|" . $feature->title,
+                ],
+            ];
+        }
+
+        $this->categorizeDiscoveredFeatures($features);
     }
 
     /**
@@ -911,4 +922,5 @@ class DealEquipmentMunger
             }
         }
     }
+
 }

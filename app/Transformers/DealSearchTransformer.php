@@ -3,6 +3,9 @@
 namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
+use DeliverMyRide\Fuel\Map;
+use App\Models\Feature;
+use DB;
 
 class DealSearchTransformer extends TransformerAbstract
 {
@@ -14,22 +17,20 @@ class DealSearchTransformer extends TransformerAbstract
         $version = (object) $deal->version;
         $fields = (isset($document['fields']) ? $document['fields'] : []);
 
-        unset($version->jato_vehicle_id);
-        unset($version->created_at);
-        unset($version->model_id);
-        unset($version->updated_at);
-        unset($version->jato_model_id);
-        unset($version->delivery_price);
-        unset($version->is_current);
-
-        unset($dealer->contact_email);
-        unset($dealer->address);
-        unset($dealer->city);
-        unset($dealer->phone);
-        unset($dealer->contact_title);
-        unset($dealer->contact_name);
-        unset($dealer->updated_at);
-        unset($dealer->created_at);
+        //compares feature id of color attribute to map and gets hex value back for use for swatch
+        $data = null;
+        foreach(Map::COLOR_MAP as $needle => $value) {
+            if($deal->color == $needle) {
+                $data = $value;
+            }
+        }
+        $featureColor = Feature::where('title', $data)->first();
+        $exteriorColor = null;
+        foreach(Map::HEX_MAP as $color => $value){
+            if(isset($featureColor) && $featureColor->title == $color){
+                $exteriorColor = $value;
+            }
+        }
 
         return [
             'id' => $deal->id,
@@ -60,7 +61,7 @@ class DealSearchTransformer extends TransformerAbstract
             'vauto_features' => (isset($deal->misc) ? $deal->misc : []),
             'dealer' => $dealer,
             'dmr_features' => (isset($deal->legacy_features) ? $deal->legacy_features : []),
-
+            'exterior_color_swatch' => $exteriorColor,
             'pricing' => $deal->pricing,
         ];
     }

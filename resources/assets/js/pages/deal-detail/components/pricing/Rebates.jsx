@@ -6,11 +6,12 @@ import Line from 'components/pricing/Line';
 import Label from 'components/pricing/Label';
 import Value from 'components/pricing/Value';
 import RebatesRole from './RebatesRole';
+import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 
 class Rebates extends React.Component {
     static propTypes = {
-        onChange: PropTypes.func.isRequired,
-        dealPricing: PropTypes.object,
+        onChange: PropTypes.func,
+        pricing: PropTypes.object.isRequired,
         selectedConditionalRoles: PropTypes.array,
     };
 
@@ -35,15 +36,17 @@ class Rebates extends React.Component {
     }
 
     shouldRenderConditionalSelection() {
-        const quote = this.props.dealPricing.quote();
+        const quote = this.props.pricing.quote();
+
         if (!quote || !quote.selections || !quote.selections.conditionalRoles) {
             return false;
         }
+
         return true;
     }
 
     renderConditionalRebates() {
-        const quote = this.props.dealPricing.quote();
+        const quote = this.props.pricing.quote();
 
         return (
             <div>
@@ -75,7 +78,7 @@ class Rebates extends React.Component {
     }
 
     render() {
-        const dealPricing = this.props.dealPricing;
+        const pricing = this.props.pricing;
 
         return (
             <div>
@@ -89,20 +92,20 @@ class Rebates extends React.Component {
                 {/*
                 Total Rebates
                 */}
-                {dealPricing.hasRebatesApplied() || (
+                {pricing.hasRebatesApplied() || (
                     <Line>
                         <Label>No rebates applied</Label>
                     </Line>
                 )}
 
-                {dealPricing.hasRebatesApplied() && (
+                {pricing.hasRebatesApplied() && (
                     <Line>
                         <Label>Applied</Label>
                         <Value
                             isNegative={true}
-                            isLoading={dealPricing.dealQuoteIsLoading()}
+                            isLoading={pricing.quoteIsLoading()}
                         >
-                            {dealPricing.bestOffer()}
+                            <DollarsAndCents value={pricing.rebates()} />
                         </Value>
                     </Line>
                 )}

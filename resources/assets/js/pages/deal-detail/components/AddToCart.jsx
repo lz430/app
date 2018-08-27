@@ -8,11 +8,11 @@ import LeasePricingPane from './pricing/LeasePane';
 import PaymentTypes from './pricing/PaymentTypes';
 import * as R from 'ramda';
 import { dealType } from 'types';
+import { pricingType } from '../../../types';
 
 export default class AddToCart extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,
-        dealPricing: PropTypes.object,
         purchaseStrategy: PropTypes.string.isRequired,
         handlePaymentTypeChange: PropTypes.func.isRequired,
         handleDiscountChange: PropTypes.func.isRequired,
@@ -23,6 +23,7 @@ export default class AddToCart extends React.PureComponent {
         handleBuyNow: PropTypes.func.isRequired,
         onToggleCompare: PropTypes.func.isRequired,
         compareList: PropTypes.array,
+        pricing: pricingType.isRequired,
     };
 
     compareListContainsDeal() {
@@ -42,7 +43,7 @@ export default class AddToCart extends React.PureComponent {
     }
 
     render() {
-        const { purchaseStrategy, dealPricing, deal } = this.props;
+        const { purchaseStrategy, pricing, deal } = this.props;
 
         return (
             <div className="deal-details__pricing">
@@ -55,7 +56,7 @@ export default class AddToCart extends React.PureComponent {
                             />
                             {this.props.purchaseStrategy === 'cash' && (
                                 <CashPricingPane
-                                    {...{ dealPricing }}
+                                    pricing={pricing}
                                     onDiscountChange={
                                         this.props.handleDiscountChange
                                     }
@@ -66,7 +67,7 @@ export default class AddToCart extends React.PureComponent {
                             )}
                             {this.props.purchaseStrategy === 'finance' && (
                                 <FinancePricingPane
-                                    {...{ dealPricing }}
+                                    pricing={pricing}
                                     onDiscountChange={
                                         this.props.handleDiscountChange
                                     }
@@ -84,7 +85,7 @@ export default class AddToCart extends React.PureComponent {
                             )}
                             {this.props.purchaseStrategy === 'lease' && (
                                 <LeasePricingPane
-                                    {...{ dealPricing }}
+                                    pricing={pricing}
                                     onDiscountChange={
                                         this.props.handleDiscountChange
                                     }
@@ -98,9 +99,7 @@ export default class AddToCart extends React.PureComponent {
                                 <button
                                     className={this.compareButtonClass(deal)}
                                     onClick={() =>
-                                        this.props.onToggleCompare(
-                                            this.props.dealPricing.deal()
-                                        )
+                                        this.props.onToggleCompare(deal)
                                     }
                                 >
                                     {this.compareListContainsDeal(deal)
@@ -111,9 +110,7 @@ export default class AddToCart extends React.PureComponent {
                                 <button
                                     className="btn btn-success"
                                     onClick={this.props.handleBuyNow}
-                                    disabled={
-                                        !this.props.dealPricing.canPurchase()
-                                    }
+                                    disabled={!pricing.canPurchase()}
                                 >
                                     Buy Now
                                 </button>

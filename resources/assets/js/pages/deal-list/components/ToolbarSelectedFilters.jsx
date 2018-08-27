@@ -26,7 +26,7 @@ class ToolbarSelectedFilters extends React.PureComponent {
     };
 
     selectedFilters() {
-        const blackListCategories = ['make', 'model'];
+        const blackListCategories = ['make', 'model', 'style'];
         return R.omit(
             blackListCategories,
             this.props.selectedFiltersByCategory
@@ -39,13 +39,12 @@ class ToolbarSelectedFilters extends React.PureComponent {
      */
     renderFilterCategory(category, items) {
         let allItems = this.props.filters[category];
-
         if (!allItems) {
             return null;
         }
 
         allItems = R.reject(item => {
-            return !R.contains(item.value, items);
+            return !R.contains(item.value.toString(), items);
         }, allItems);
 
         const _this = this;

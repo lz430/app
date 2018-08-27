@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import Dinero from 'dinero.js';
 
 const { shape, number, string, arrayOf, object } = PropTypes;
 
@@ -62,7 +63,22 @@ export const filterItemType = shape({
     icon: string,
 });
 
+/**
+ * @deprecated
+ */
 export const dealPricingType = shape({
     // TODO: Maybe be more specific here?
     data: object,
 });
+
+export const pricingType = shape({
+    // TODO: Maybe be more specific here?
+    data: object,
+});
+
+export const moneyValueType = PropTypes.oneOfType([
+    PropTypes.instanceOf(Dinero),
+    PropTypes.object,
+    PropTypes.number,
+    PropTypes.string,
+]);

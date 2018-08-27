@@ -2,6 +2,8 @@ import { createStore, compose, applyMiddleware } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import reduxThunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
+import { createBrowserHistory } from 'history';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
 
 import rootSaga from 'sagas';
 import rootReducer from 'reducers';
@@ -12,6 +14,10 @@ import { windowResize } from 'apps/common/actions';
 
 const initialState = {};
 
+export const history = createBrowserHistory();
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 const config = {
     ...basePersistConfig,
     key: 'root',
@@ -19,15 +25,18 @@ const config = {
 };
 
 export default () => {
-    const composeEnhancers =
-        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
     const sagaMiddleware = createSagaMiddleware();
 
     const store = createStore(
-        persistReducer(config, rootReducer),
+        connectRouter(history)(persistReducer(config, rootReducer)),
         initialState,
-        composeEnhancers(applyMiddleware(sagaMiddleware, reduxThunk))
+        composeEnhancers(
+            applyMiddleware(
+                routerMiddleware(history),
+                sagaMiddleware,
+                reduxThunk
+            )
+        )
     );
 
     const persistor = persistStore(store, null, () => {

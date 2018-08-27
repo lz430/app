@@ -1,22 +1,19 @@
 import React from 'react';
-import { dealPricingType } from '../../types';
+import { pricingType } from '../../types';
 
 export default class DiscountLabel extends React.PureComponent {
     static propTypes = {
-        dealPricing: dealPricingType.isRequired,
+        pricing: pricingType.isRequired,
     };
 
     render() {
-        const { dealPricing } = this.props;
+        const { pricing } = this.props;
 
         return (
             <span>
-                {dealPricing.isEffectiveDiscountDmr() &&
-                    'DMR Customer Discount'}
-                {dealPricing.isEffectiveDiscountSupplier() &&
-                    'Supplier Discount'}
-                {dealPricing.isEffectiveDiscountEmployee() &&
-                    'Employee Discount'}
+                {pricing.isEffectiveDiscountDmr() && 'DMR Customer Discount'}
+                {pricing.isEffectiveDiscountSupplier() && 'Supplier Discount'}
+                {pricing.isEffectiveDiscountEmployee() && 'Employee Discount'}
             </span>
         );
     }

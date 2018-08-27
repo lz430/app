@@ -42,11 +42,10 @@ function* dealDetailRequestDealQuote() {
 /*******************************************************************
  * Init
  ********************************************************************/
-function* init() {
+function* init(action) {
     yield put(pageLoadingStart());
     yield* initPage('deal-detail', false);
 
-    let path = window.location.pathname.split('/');
     const userLocation = yield select(getUserLocation);
 
     let results = null;
@@ -54,7 +53,7 @@ function* init() {
     try {
         results = yield call(
             ApiClient.deal.get,
-            path[2],
+            action.data,
             userLocation.latitude,
             userLocation.longitude
         );

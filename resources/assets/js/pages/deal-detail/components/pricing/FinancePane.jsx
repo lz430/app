@@ -5,13 +5,14 @@ import Loading from 'icons/miscicons/Loading';
 import Line from 'components/pricing/Line';
 import Label from 'components/pricing/Label';
 import Value from 'components/pricing/Value';
-import TaxesAndFees from 'components/pricing/TaxesAndFees';
 import Group from 'components/pricing/Group';
 import Header from 'components/pricing/Header';
 import Separator from 'components/pricing/Separator';
 
 import Discount from './Discount';
 import Rebates from './Rebates';
+import DollarsAndCents from '../../../../components/money/DollarsAndCents';
+import { pricingType } from '../../../../types';
 
 export default class FinancePane extends React.PureComponent {
     static propTypes = {
@@ -19,11 +20,11 @@ export default class FinancePane extends React.PureComponent {
         onRebatesChange: PropTypes.func.isRequired,
         onDownPaymentChange: PropTypes.func.isRequired,
         onTermChange: PropTypes.func.isRequired,
-        dealPricing: PropTypes.object.isRequired,
+        pricing: pricingType.isRequired,
     };
 
     render() {
-        const { dealPricing, onDiscountChange, onRebatesChange } = this.props;
+        const { pricing, onDiscountChange, onRebatesChange } = this.props;
 
         return (
             <div>
@@ -31,42 +32,64 @@ export default class FinancePane extends React.PureComponent {
                     <Header>Price</Header>
                     <Line>
                         <Label>MSRP</Label>
-                        <Value>{dealPricing.msrp()}</Value>
+                        <Value>
+                            <DollarsAndCents value={pricing.msrp()} />
+                        </Value>
                     </Line>
-                    <Discount
-                        {...{ dealPricing }}
-                        onChange={onDiscountChange}
-                    />
+                    <Discount pricing={pricing} onChange={onDiscountChange} />
                     <Line isSectionTotal={true}>
                         <Label>Discounted Price</Label>
-                        <Value>{dealPricing.discountedPrice()}</Value>
+                        <Value>
+                            <DollarsAndCents
+                                value={pricing.discountedPrice()}
+                            />
+                        </Value>
                     </Line>
                 </Group>
                 <Separator />
                 <Group>
                     <Header>Taxes &amp; Fees</Header>
-                    <TaxesAndFees items={dealPricing.taxesAndFees()} />
+                    <Line>
+                        <Label>Doc Fee</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.docFee()} />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Electronic Filing Fee</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.cvrFee()} />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Sales Tax</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.salesTax()} />
+                        </Value>
+                    </Line>
                     <Line isSectionTotal={true}>
                         <Label>Selling Price</Label>
-                        <Value>{dealPricing.sellingPrice()}*</Value>
+                        <Value>
+                            <DollarsAndCents value={pricing.sellingPrice()} />*
+                        </Value>
                     </Line>
                 </Group>
                 <Separator />
                 <Group>
                     <Header>Rebates</Header>
-                    <Rebates {...{ dealPricing }} onChange={onRebatesChange} />
+                    <Rebates pricing={pricing} onChange={onRebatesChange} />
                     <Line isSectionTotal={true}>
                         <Label>Total Selling Price</Label>
-                        <Value isLoading={dealPricing.dealQuoteIsLoading()}>
-                            {dealPricing.yourPrice()}*
+                        <Value isLoading={pricing.quoteIsLoading()}>
+                            <DollarsAndCents value={pricing.yourPrice()} />*
                         </Value>
                     </Line>
                 </Group>
                 <Separator />
-                <Group isLoading={dealPricing.dealQuoteIsLoading()}>
+                <Group isLoading={pricing.quoteIsLoading()}>
                     <Header>Finance Terms</Header>
-                    {dealPricing.dealQuoteIsLoading() && <Loading />}
-                    {dealPricing.dealQuoteIsLoading() || (
+                    {pricing.quoteIsLoading() && <Loading />}
+                    {pricing.quoteIsLoading() || (
                         <div>
                             <Line isSemiImportant={true}>
                                 <Label>Down Payment</Label>
@@ -75,22 +98,26 @@ export default class FinancePane extends React.PureComponent {
                                         className="fancyNumberEntry"
                                         type="text"
                                         name="down-payment"
-                                        value={dealPricing
-                                            .financeDownPaymentValue()
-                                            .toLocaleString()}
+                                        value={pricing
+                                            .downPayment()
+                                            .toFormat('$0,0')}
                                         onChange={this.handleDownPaymentChange}
                                     />
                                 </Value>
                             </Line>
                             <Line>
                                 <Label>Amount Financed</Label>
-                                <Value>{dealPricing.amountFinanced()}*</Value>
+                                <Value>
+                                    <DollarsAndCents
+                                        value={pricing.amountFinanced()}
+                                    />*
+                                </Value>
                             </Line>
                             <Line>
                                 <Label>Term Duration</Label>
                                 <Value>
                                     <select
-                                        value={dealPricing.financeTermValue()}
+                                        value={pricing.term()}
                                         onChange={this.handleTermChange}
                                     >
                                         <option value="84">84</option>
@@ -104,7 +131,11 @@ export default class FinancePane extends React.PureComponent {
                             </Line>
                             <Line isImportant={true}>
                                 <Label>Monthly Payment</Label>
-                                <Value>{dealPricing.monthlyPayments()}</Value>
+                                <Value>
+                                    <DollarsAndCents
+                                        value={pricing.monthlyPayment()}
+                                    />
+                                </Value>
                             </Line>
                         </div>
                     )}
@@ -115,7 +146,7 @@ export default class FinancePane extends React.PureComponent {
 
     handleDownPaymentChange = e => {
         const newDownPayment = Number(
-            Math.round(e.target.value.replace(/\D/g, ''), 0)
+            Math.round(e.target.value.replace(/[\D.]/g, ''), 0)
         );
 
         if (isNaN(newDownPayment)) {
@@ -126,12 +157,10 @@ export default class FinancePane extends React.PureComponent {
             return;
         }
 
-        const maxDownPayment = Math.round(
-            this.props.dealPricing.yourPriceValue() * 0.9
-        );
+        const maxDownPayment = this.props.pricing.maxDownPayment();
 
         if (newDownPayment > maxDownPayment) {
-            this.props.onDownPaymentChange(maxDownPayment);
+            this.props.onDownPaymentChange(maxDownPayment.toFormat('$0,0'));
             return;
         }
 

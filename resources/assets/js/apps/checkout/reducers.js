@@ -37,17 +37,10 @@ const reducer = function(state = initialState, action = {}) {
             };
 
         case ActionTypes.SET_CHECKOUT_DATA:
+            const { type, ...checkoutData } = action;
             return {
                 ...state,
-                deal: action.deal,
-                quote: action.quote,
-                strategy: action.strategy,
-                role: action.role,
-                term: action.term,
-                financeDownPayment: action.financeDownPayment,
-                leaseAnnualMileage: action.leaseAnnualMileage,
-                employeeBrand: action.employeeBrand,
-                supplierBrand: action.supplierBrand,
+                ...checkoutData,
             };
 
         case ActionTypes.SET_CHECKOUT_CONTACT_FORM_ERRORS:

@@ -11,6 +11,7 @@ import Deal from 'components/Deals/Deal';
 import { toggleCompare } from 'apps/common/actions';
 import { requestMoreDeals } from '../actions';
 import { getShouldShowLoading } from '../selectors';
+import { Link } from 'react-router-dom';
 
 class ViewDeals extends React.PureComponent {
     static propTypes = {
@@ -73,9 +74,9 @@ class ViewDeals extends React.PureComponent {
                             ? 'Remove'
                             : 'Compare'}{' '}
                     </button>
-                    <a className="btn btn-success" href={`/deals/${deal.id}`}>
+                    <Link className="btn btn-success" to={`/deals/${deal.id}`}>
                         View
-                    </a>
+                    </Link>
                 </div>
             </Deal>
         );

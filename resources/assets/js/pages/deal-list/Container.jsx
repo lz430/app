@@ -8,7 +8,7 @@ import Loading from 'icons/miscicons/Loading';
 import { StickyContainer } from 'react-sticky';
 import util from 'src/util';
 
-import { getUserLocation } from 'apps/user/selectors';
+import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
 import { getIsPageLoading } from 'apps/page/selectors';
 
 import Deals from './components/Deals';
@@ -20,17 +20,22 @@ import NoDealsOutOfRange from './components/NoDealsOutOfRange';
 import ModalMakeSelector from './components/ModalMakeSelector';
 
 import { MediumAndDown } from 'components/Responsive';
+import { buildSearchQueryUrl } from './helpers';
+import { forceCheck } from 'react-lazyload';
 
 import {
     initDealListData,
+    updateEntirePageState,
     closeMakeSelectorModal,
     toggleSearchFilter,
 } from './actions';
 
-import { getSelectedFiltersByCategory } from './selectors';
+import { getSearchQuery, getSelectedFiltersByCategory } from './selectors';
+import { setPurchaseStrategy } from 'apps/user/actions';
 
 class Container extends React.PureComponent {
     static propTypes = {
+        purchaseStrategy: PropTypes.string.isRequired,
         searchQuery: PropTypes.object.isRequired,
         makeSelectorModalIsOpen: PropTypes.bool,
         smallFiltersShown: PropTypes.bool,
@@ -40,12 +45,37 @@ class Container extends React.PureComponent {
         makes: PropTypes.arrayOf(filterItemType),
         fallbackLogoImage: PropTypes.string.isRequired,
         onInit: PropTypes.func.isRequired,
+        onUpdateEntirePageState: PropTypes.func.isRequired,
+        onSetPurchaseStrategy: PropTypes.func.isRequired,
         onToggleSearchFilter: PropTypes.func.isRequired,
         onCloseMakeSelectorModal: PropTypes.func.isRequired,
     };
 
     componentDidMount() {
-        this.props.onInit();
+        this.props.onInit(this.props.location);
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.location.search !== prevProps.location.search) {
+            // Handling user clicking back button here.
+            const expectedQuery = buildSearchQueryUrl(this.props.searchQuery);
+            if (
+                expectedQuery &&
+                '?' + expectedQuery !== this.props.location.search &&
+                this.props.location.state &&
+                this.props.location.state.query
+            ) {
+                this.props.onSetPurchaseStrategy(
+                    this.props.location.state.query.purchaseStrategy
+                );
+
+                this.props.onUpdateEntirePageState(
+                    this.props.location.state.page
+                );
+
+                forceCheck();
+            }
+        }
     }
 
     renderPageLoadingIcon() {
@@ -147,9 +177,10 @@ const mapStateToProps = state => {
         window: state.common.window,
         smallFiltersShown: state.pages.dealList.smallFiltersShown,
         makeSelectorModalIsOpen: state.pages.dealList.showMakeSelectorModal,
-        searchQuery: state.pages.dealList.searchQuery,
+        searchQuery: getSearchQuery(state),
         userLocation: getUserLocation(state),
         selectedFiltersByCategory: getSelectedFiltersByCategory(state),
+        purchaseStrategy: getUserPurchaseStrategy(state),
         makes: state.pages.dealList.filters.make,
         fallbackLogoImage: state.common.fallbackLogoImage,
         isLoading: getIsPageLoading(state),
@@ -158,11 +189,18 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInit: () => {
-            return dispatch(initDealListData());
+        onInit: url => {
+            return dispatch(initDealListData(url));
+        },
+
+        onUpdateEntirePageState: data => {
+            return dispatch(updateEntirePageState(data));
         },
         onCloseMakeSelectorModal: () => {
             return dispatch(closeMakeSelectorModal());
+        },
+        onSetPurchaseStrategy: strategy => {
+            return dispatch(setPurchaseStrategy(strategy));
         },
         onToggleSearchFilter: item => {
             return dispatch(toggleSearchFilter('make', item));

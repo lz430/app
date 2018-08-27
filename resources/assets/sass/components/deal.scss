@@ -9,6 +9,9 @@
         font-size: 1.1rem;
         line-height: 1.3rem;
         text-decoration: none;
+        &:hover {
+            text-decoration: none;
+        }
     }
 
     &__basic-info-year-and-make {

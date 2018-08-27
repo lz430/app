@@ -27,6 +27,7 @@ class ToolbarPrice extends React.PureComponent {
                 </Breadcrumb>
                 <div className="compare-page__top-row__toolbar compare-page__toolbar__section--tabButtons">
                     <GlobalSelectPurchaseStrategy
+                        showExplanation={false}
                         afterSetPurchaseStrategy={this.afterSetPurchaseStrategy.bind(
                             this
                         )}

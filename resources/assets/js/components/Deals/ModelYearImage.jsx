@@ -7,6 +7,7 @@ import LazyLoad from 'react-lazyload';
 class ModelYearImage extends React.PureComponent {
     static propTypes = {
         modelYear: modelYearType,
+        selectModelYear: PropTypes.func.isRequired,
     };
 
     state = {

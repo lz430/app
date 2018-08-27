@@ -36,10 +36,6 @@ const reducer = function(state = initialState, action = {}) {
             if (action.data === false) {
                 return {
                     ...state,
-                    quotes: {
-                        ...state.quotes,
-                        [action.data.meta.key]: action.data,
-                    },
                 };
             }
 
