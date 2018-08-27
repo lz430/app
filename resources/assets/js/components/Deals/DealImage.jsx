@@ -12,12 +12,14 @@ export default class DealImage extends React.PureComponent {
         lazy: PropTypes.bool.isRequired,
         link: PropTypes.bool.isRequired,
         featureImageClass: PropTypes.string,
+        legacyMode: PropTypes.bool.isRequired,
     };
 
     static defaultProps = {
         size: 'thumbnail',
         link: true,
         lazy: true,
+        legacyMode: false,
     };
 
     state = {
@@ -40,26 +42,53 @@ export default class DealImage extends React.PureComponent {
         return false;
     }
 
-    renderImage() {
+    /**
+     * Remove once everything supports react router
+     */
+    renderLinkedImage() {
         const imageProps = {};
         if (this.props.featureImageClass) {
             imageProps.className = this.props.featureImageClass;
         }
 
         const thumbnail = this.featuredImageUrl();
+
+        if (this.props.legacyMode) {
+            return (
+                <a href={`/deals/${this.props.deal.id}`}>
+                    {thumbnail && <img {...imageProps} src={thumbnail} />}
+                    {!thumbnail && (
+                        <img
+                            className="placeholder"
+                            src={this.state.fallbackDealImage}
+                        />
+                    )}
+                </a>
+            );
+        }
+
+        return (
+            <Link to={`/deals/${this.props.deal.id}`}>
+                {thumbnail && <img {...imageProps} src={thumbnail} />}
+                {!thumbnail && (
+                    <img
+                        className="placeholder"
+                        src={this.state.fallbackDealImage}
+                    />
+                )}
+            </Link>
+        );
+    }
+
+    renderImage() {
+        const imageProps = {};
+        if (this.props.featureImageClass) {
+            imageProps.className = this.props.featureImageClass;
+        }
+
         return (
             <div className={classNames('thumbnail-container', this.props.size)}>
-                {this.props.link && (
-                    <Link to={`/deals/${this.props.deal.id}`}>
-                        {thumbnail && <img {...imageProps} src={thumbnail} />}
-                        {!thumbnail && (
-                            <img
-                                className="placeholder"
-                                src={this.state.fallbackDealImage}
-                            />
-                        )}
-                    </Link>
-                )}
+                {this.props.link && this.renderLinkedImage()}
                 {!this.props.link && (
                     <img {...imageProps} src={this.featuredImageUrl()} />
                 )}
@@ -70,7 +99,7 @@ export default class DealImage extends React.PureComponent {
     render() {
         if (this.props.lazy) {
             return (
-                <LazyLoad height={200} offset={100} overflow={true}>
+                <LazyLoad once={true} height={200} offset={400} overflow={true}>
                     {this.renderImage()}
                 </LazyLoad>
             );

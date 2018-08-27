@@ -50,10 +50,19 @@ class CheckoutCompleteContainer extends React.PureComponent {
                 <Row>
                     <Col xs="12" md="4" className="image">
                         <SmallAndDown>
-                            <DealImage deal={deal} link={false} size="full" />
+                            <DealImage
+                                legacyMode={true}
+                                deal={deal}
+                                link={false}
+                                size="full"
+                            />
                         </SmallAndDown>
                         <MediumAndUp>
-                            <DealImage deal={deal} link={false} />
+                            <DealImage
+                                legacyMode={true}
+                                deal={deal}
+                                link={false}
+                            />
                         </MediumAndUp>
                     </Col>
                     <Col md="4" className="title">
@@ -73,9 +82,7 @@ class CheckoutCompleteContainer extends React.PureComponent {
                         </Group>
                     </Col>
                     <Col md="4" className="summary">
-                        {pricing.isCash() && (
-                            <CashSummary pricing={pricing} />
-                        )}
+                        {pricing.isCash() && <CashSummary pricing={pricing} />}
                         {pricing.isFinance() && (
                             <FinanceSummary pricing={pricing} />
                         )}
