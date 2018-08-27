@@ -78,7 +78,8 @@ class Map
             'military'
         ],
         'conquest' => [
-            'conquest',
+            'conquest lease',
+            'conquest bonus'
         ],
         'loyal' => [
             'returning Lessee',
