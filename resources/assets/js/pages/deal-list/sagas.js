@@ -197,14 +197,13 @@ function* init(action) {
 
     const urlStyle = util.getInitialBodyStyleFromUrl();
     const urlSize = util.getInitialSizeFromUrl();
+
     if (urlStyle || urlSize) {
         let filters = [];
 
-        /*
         if (urlSize) {
             filters.push('size:' + urlSize);
         }
-        */
 
         if (urlStyle) {
             filters.push('style:' + urlStyle);
@@ -216,11 +215,15 @@ function* init(action) {
         window.history.replaceState({}, document.title, '/filter');
     }
 
-    // Fresh
+    // User is coming in fresh without any existing state.
+    // Means the user either clicked a deep link or came from
+    // the brochure site.
     if (action.data.state === undefined) {
         const query = queryString.parse(action.data.search, {
             arrayFormat: 'bracket',
         });
+
+        // Not from the brochure site
         if (query.purchaseStrategy && query.entity) {
             yield put(setPurchaseStrategy(query.purchaseStrategy));
 

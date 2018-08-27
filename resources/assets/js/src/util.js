@@ -6,10 +6,6 @@ const util = {
         // variables.scss; $break-small: 576px;
         return width > 576;
     },
-    windowIsLargerThanMedium: width => {
-        // variables.scss; $break-medium: 768px;
-        return width > 768;
-    },
     moneyFormat: num => {
         // Older browser don't support this.
         if (typeof Intl.NumberFormat === 'function') {
