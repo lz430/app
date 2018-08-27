@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import queryString from 'query-string';
 
 export default state => state.pages.dealList;
 

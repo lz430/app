@@ -24,33 +24,69 @@ class VersionToVehicle
     ];
 
     private const MODEL_MAP = [
-        // Rams
-        'Ram 1500 Pickup' => '1500',
+        'BY_MODEL' => [
+            // Rams
+            'Ram 1500 Pickup' => '1500',
 
-        // Caddys
-        'ATS Sedan' => 'ATS',
-        'ATS Coupe' => 'ATS',
-        'CTS Sedan' => 'CTS',
-        'CTS-V Sedan' => 'CTS-V',
-        'CTS-V Coupe' => 'CTS-V',
+            // Caddys
+            'ATS Sedan' => 'ATS',
+            'ATS Coupe' => 'ATS',
+            'CTS Sedan' => 'CTS',
+            'CTS-V Sedan' => 'CTS-V',
+            'CTS-V Coupe' => 'CTS-V',
 
-        // Benz (Really trims)
-        'C300' => 'C 300',
-        'E300' => 'E 300',
-        'E400' => 'E 400',
-        'GLA250' => 'GLA 250',
-        'CLA250' => 'CLA 250',
-        'GLC300' => 'GLC 300',
-        'GLE350' => 'GLE 350',
-        'AMG® GLE43' => 'AMG GLE 43',
-        'GLS450' => 'GLS 450',
-        'GLS550' => 'GLS 550',
-        'AMG® GLS63' => 'AMG GLS 63',
+            // Benz (Really trims)
+            'C300' => 'C 300',
+            'E300' => 'E 300',
+            'E400' => 'E 400',
+            'GLA250' => 'GLA 250',
+            'CLA250' => 'CLA 250',
+            'GLC300' => 'GLC 300',
+            'GLE350' => 'GLE 350',
+            'AMG® GLE43' => 'AMG GLE 43',
+            'GLS450' => 'GLS 450',
+            'GLS550' => 'GLS 550',
+            'AMG® GLS63' => 'AMG GLS 63',
+        ],
+
+        'BY_MODEL_AND_TRIM' => [
+            '2 Series' => [
+                '230i' => '230',
+                'M240i' => 'M240',
+            ],
+            '3 Series' => [
+                '320i' => '320',
+                '328d' => '328d',
+                '330i' => '330',
+                '330e' => '330e',
+                '340i' => '340',
+            ],
+            '4 Series' => [
+                '430i' => '430',
+                '440i' => '440',
+            ],
+            '5 Series' => [
+                '530e' => '530e',
+                '540e' => '540e',
+                '530i' => '530',
+                '540i' => '540',
+                'M550i' => 'M550',
+            ],
+            '6 Series Gran Turismo' => [
+                '640i' => '640',
+
+            ],
+            '7 Series' => [
+                '740i' => '740',
+                '750i' => '750',
+            ],
+        ],
+
     ];
 
     // lol.
     private const MAKES_USE_TRIM_FOR_MODEL = [
-        'Mercedes-Benz'
+        'Mercedes-Benz',
     ];
 
     private const TRIM_MAP = [
@@ -203,8 +239,10 @@ class VersionToVehicle
             $model = $this->version->model->name;
         }
 
-        if (isset(self::MODEL_MAP[$model])) {
-            return self::MODEL_MAP[$model];
+        if (isset(self::MODEL_MAP['BY_MODEL'][$model])) {
+            return self::MODEL_MAP['BY_MODEL'][$model];
+        } elseif (isset(self::MODEL_MAP['BY_MODEL_AND_TRIM'][$model][$this->version->trim_name])) {
+            return self::MODEL_MAP['BY_MODEL_AND_TRIM'][$model][$this->version->trim_name];
         } else {
             return $model;
         }
@@ -415,7 +453,6 @@ class VersionToVehicle
         }
         dd($params);
         */
-
 
         // Optional
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', [$params['trim']]);
