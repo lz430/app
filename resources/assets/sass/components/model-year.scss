@@ -54,16 +54,15 @@
     }
 
     &__price {
-        font-size: large;
+        font-size: 2rem;
         text-align: center;
-
-        @media (min-width: $break-small) {
-            font-size: x-large;
+        @include media-breakpoint-up(sm) {
+            font-size: 1.5rem;
         }
 
         &-label {
             display: block;
-            font-size: x-small;
+            font-size: 0.9rem;
         }
     }
 }

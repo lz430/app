@@ -102,16 +102,14 @@ class DealPrice extends React.Component {
     render() {
         return (
             <div className="deal-price">
-                <div className="tabs__content">
-                    <div className="deal-price__price">
-                        {this.showWhenPricingIsLoaded()}
-                        <div className="deal-price__hr" />
-                        <div className="deal-price__cash-msrp">
-                            {this.props.dealPricing.msrp()}{' '}
-                            <span className="deal-price__cash-msrp-label">
-                                MSRP
-                            </span>
-                        </div>
+                <div className="deal-price__price">
+                    {this.showWhenPricingIsLoaded()}
+                    <div className="deal-price__hr" />
+                    <div className="deal-price__cash-msrp">
+                        {this.props.dealPricing.msrp()}{' '}
+                        <span className="deal-price__cash-msrp-label">
+                            MSRP
+                        </span>
                     </div>
                 </div>
             </div>

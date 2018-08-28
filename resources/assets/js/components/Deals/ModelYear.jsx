@@ -88,19 +88,21 @@ class ModelYear extends React.Component {
         const modelYear = this.props.modelYear;
 
         return (
-            <Card className="inventory-summary">
-                <CardHeader
-                    className="modelyear__basic-info"
-                    onClick={() => {
-                        this.selectModelYear(modelYear);
-                    }}
-                >
-                    <div className="modelyear__basic-info-year-and-make">
-                        {`${modelYear.year} ${modelYear.make}`}
-                    </div>
+            <Card
+                className="inventory-summary"
+                onClick={() => {
+                    this.selectModelYear(modelYear);
+                }}
+            >
+                <CardHeader className="modelyear__header">
+                    <div className="modelyear__name">
+                        <div className="modelyear__basic-info-year-and-make">
+                            {`${modelYear.year} ${modelYear.make}`}
+                        </div>
 
-                    <div className="modelyear__basic-info-model-and-series">
-                        {`${modelYear.model}`}
+                        <div className="modelyear__basic-info-model-and-series">
+                            {`${modelYear.model}`}
+                        </div>
                     </div>
 
                     <div className="modelyear__count">
@@ -119,13 +121,15 @@ class ModelYear extends React.Component {
                         {this.renderPrice()}
                     </div>
                 </CardBody>
-                <CardFooter
-                    className="card-footer-button"
-                    onClick={() => {
-                        this.selectModelYear(modelYear);
-                    }}
-                >
-                    View Inventory
+                <CardFooter className="text-center">
+                    <button
+                        className="btn btn-outline-primary btn-sm"
+                        onClick={() => {
+                            this.selectModelYear(modelYear);
+                        }}
+                    >
+                        View Inventory
+                    </button>
                 </CardFooter>
             </Card>
         );

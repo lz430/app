@@ -1,8 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { find } from 'ramda';
 
 import { toggleSearchSort } from 'pages/deal-list/actions';
+import {
+    Dropdown,
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem,
+} from 'reactstrap';
+import classNames from 'classnames';
 
 class ToolbarSort extends React.Component {
     static propTypes = {
@@ -10,32 +18,85 @@ class ToolbarSort extends React.Component {
         searchQuery: PropTypes.object.isRequired,
     };
 
-    shouldComponentUpdate(nextProps) {
-        return (
-            this.props.searchQuery.sort !== nextProps.searchQuery.sort ||
-            this.props.searchQuery.entity !== nextProps.searchQuery.entity
-        );
-    }
+    state = {
+        dropdownOpen: false,
+    };
+
+    sorts = [
+        {
+            key: 'title',
+            label: 'Name: A > Z',
+        },
+        {
+            key: '-title',
+            label: 'Name: Z > A',
+        },
+        {
+            key: 'price',
+            label: 'MSRP: Low > High',
+        },
+        {
+            key: '-price',
+            label: 'MSRP: High > Low',
+        },
+        {
+            key: 'payment',
+            label: 'Payment: Low > High',
+        },
+        {
+            key: '-payment',
+            label: 'Payment: High > Low',
+        },
+    ];
 
     change(sort) {
         this.props.onToggleSearchSort(sort);
     }
 
+    toggle() {
+        this.setState(prevState => ({
+            dropdownOpen: !prevState.dropdownOpen,
+        }));
+    }
+
+    findActive() {
+        const current = this.props.searchQuery.sort;
+        return find(function(item) {
+            return current === item.key;
+        })(this.sorts);
+    }
+
+    renderSortButton(item) {
+        return (
+            <DropdownItem
+                key={item.key}
+                onClick={() => this.props.onToggleSearchSort(item.key)}
+                className={classNames('text-sm', {
+                    active: this.props.searchQuery.sort === item.key,
+                })}
+            >
+                {item.label}
+            </DropdownItem>
+        );
+    }
+
     render() {
         return (
             <div className="toolbar-sort">
-                <select
-                    onChange={e => this.change(e.target.value)}
-                    value={this.props.searchQuery.sort}
-                    name="sort"
+                <Dropdown
+                    size="sm"
+                    isOpen={this.state.dropdownOpen}
+                    toggle={this.toggle.bind(this)}
                 >
-                    <option value="title">Name: A -&gt; Z</option>
-                    <option value="-title">Name: Z -&gt; A</option>
-                    <option value="price">MSRP: Low -&gt; High</option>
-                    <option value="-price">MSRP: High -&gt; Low</option>
-                    <option value="payment">Payment: Low -&gt; High</option>
-                    <option value="-payment">Payment: High -&gt; Low</option>
-                </select>
+                    <DropdownToggle caret color="outline-primary">
+                        {this.findActive().label}
+                    </DropdownToggle>
+                    <DropdownMenu>
+                        {this.sorts.map(item => {
+                            return this.renderSortButton(item);
+                        })}
+                    </DropdownMenu>
+                </Dropdown>
             </div>
         );
     }

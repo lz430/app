@@ -57,6 +57,10 @@
         }
     }
 
+    &__price {
+        min-height: 115px;
+    }
+
     &__buttons {
         display: flex;
         justify-content: space-around;
@@ -76,16 +80,5 @@
 .thumbnail-container {
     img {
         max-width: 100%;
-    }
-}
-
-.card-footer-button {
-    text-align: center;
-    cursor: pointer;
-    border-top: 1px solid #ccc !important;
-    margin-top: 0.5rem;
-    padding-top: 0.5rem;
-    &:hover {
-        font-weight: bold;
     }
 }
