@@ -1,10 +1,8 @@
 .page-footer {
-    background-color: $color-footer-background;
+    padding: 2rem 3rem;
+    background-color: #1a1a1a;
     color: #fff;
-    height: $footer-height-mobile;
-    max-height: $footer-height-mobile;
-    padding-top: 0.5rem;
-    text-align: center;
+    font-size: 0.85rem;
 
     a {
         color: #fff;
@@ -14,94 +12,23 @@
             text-decoration: underline;
         }
     }
-
-    @media (min-width: $break-small) {
-        padding-top: 1.5rem;
-    }
-
-    @media (min-width: $break-large) {
-        height: $footer-height;
-        max-height: $footer-height;
-    }
 }
 
-.footer-icons,
-.footer-links,
-.footer-signup {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    div,
-    a,
-    input {
-        align-items: center;
-        display: flex;
-        margin: 0 1.5em;
-    }
+.footer-bottom {
+    font-weight: bold;
+    margin-top: 2rem;
 }
 
-.footer-icons {
-    margin-bottom: 1.5rem;
-
-    div {
-        fill: $color-text-white;
-        height: 34px;
-        margin: 0 3px 5px 0;
-
-        &:hover {
-            opacity: 0.75;
-        }
-    }
-}
-
-.footer-links {
-    margin-bottom: 2.5rem;
-}
-
-.footer-signup {
-    margin-bottom: 2.5rem;
-
-    div,
-    input {
-        height: 2.25rem;
-        margin: 0 1px;
-    }
-
+.footer-box {
     &__title {
-        border: 1px solid #fff;
-        border-radius: 0.3em 0 0 0.3em;
-        padding: 0 1em;
+        font-weight: bold;
     }
-
-    &__email {
-        font-size: 1em;
-        min-width: 20em;
-        padding: 0 0.5em;
-
-        &::placeholder {
-            color: $color-darkergrey;
+    > a {
+        display: block;
+        svg {
+            width: 1rem;
+            fill: #fff;
+            margin-right: 4px;
         }
-    }
-
-    &__submit {
-        background: $color-blue;
-        border: 0;
-        border-radius: 0 0.3em 0.3em 0;
-        color: #fff;
-        font-size: 1em;
-        padding: 0 1em;
-    }
-}
-
-.footer-meta,
-.footer-meta a {
-    color: $color-grey;
-    font-size: 0.9em;
-}
-
-.footer-meta--desktop {
-    display: none;
-    @media (min-width: $break-small) {
-        display: inline;
     }
 }
