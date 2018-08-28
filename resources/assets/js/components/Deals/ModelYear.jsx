@@ -89,22 +89,22 @@ class ModelYear extends React.Component {
 
         return (
             <Card className="inventory-summary">
-                <CardHeader>
-                    <div
-                        className="modelyear__basic-info"
-                        onClick={() => {
-                            this.selectModelYear(modelYear);
-                        }}
-                    >
-                        <div className="modelyear__basic-info-year-and-model">
-                            <div className="modelyear__basic-info-year-and-make">
-                                {`${modelYear.year} ${modelYear.make}`}
-                            </div>
+                <CardHeader
+                    className="modelyear__basic-info"
+                    onClick={() => {
+                        this.selectModelYear(modelYear);
+                    }}
+                >
+                    <div className="modelyear__basic-info-year-and-make">
+                        {`${modelYear.year} ${modelYear.make}`}
+                    </div>
 
-                            <div className="modelyear__basic-info-model-and-series">
-                                {`${modelYear.model}`}
-                            </div>
-                        </div>
+                    <div className="modelyear__basic-info-model-and-series">
+                        {`${modelYear.model}`}
+                    </div>
+
+                    <div className="modelyear__count">
+                        {modelYear.deals} in stock
                     </div>
                 </CardHeader>
                 <CardBody>
@@ -116,22 +116,16 @@ class ModelYear extends React.Component {
                         }}
                     />
                     <div className="modelyear__details">
-                        <div className="modelyear__count">
-                            {modelYear.deals} in stock
-                        </div>
-
                         {this.renderPrice()}
                     </div>
                 </CardBody>
-                <CardFooter>
-                    <button
-                        className="btn btn-success btn-block"
-                        onClick={() => {
-                            this.selectModelYear(modelYear);
-                        }}
-                    >
-                        View Inventory
-                    </button>
+                <CardFooter
+                    className="card-footer-button"
+                    onClick={() => {
+                        this.selectModelYear(modelYear);
+                    }}
+                >
+                    View Inventory
                 </CardFooter>
             </Card>
         );
