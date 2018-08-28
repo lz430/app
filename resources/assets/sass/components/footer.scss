@@ -1,7 +1,7 @@
 .page-footer {
     padding: 2rem 3rem;
     background-color: #1a1a1a;
-    color: #fff;
+    color: #f7f7f7;
     font-size: 0.85rem;
 
     a {
@@ -25,9 +25,10 @@
     }
     > a {
         display: block;
+        color: #f7f7f7;
         svg {
             width: 1rem;
-            fill: #fff;
+            fill: #f7f7f7;
             margin-right: 4px;
         }
     }

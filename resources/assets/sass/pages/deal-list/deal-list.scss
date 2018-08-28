@@ -67,11 +67,14 @@
     }
 
     &__filter-panel {
+        z-index: 49;
+        background: #fff;
         height: 100%;
         width: $sidebar-filters-width;
         overflow-y: scroll;
         border-right: 1px solid #ccc;
         box-shadow: $box-shadow-sm;
+        position: absolute;
 
         &--small-filters-shown {
             left: 0;
@@ -87,6 +90,7 @@
 
         @include media-breakpoint-up(sm) {
             left: 0;
+            position: static;
         }
     }
 
