@@ -1,6 +1,8 @@
 .filter-page {
     background: $color-background-secondary;
     display: flex;
+    flex-direction: row;
+    flex: 1;
     overflow: hidden;
     position: relative;
     &__top-row {

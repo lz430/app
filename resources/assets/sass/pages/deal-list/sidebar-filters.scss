@@ -8,18 +8,18 @@ $icon-size: 20px;
 
     &__overlay {
         align-items: center;
-        background: rgba(180, 180, 180, 0.8);
+        background: $gray-100;
         bottom: 0;
         display: flex;
         justify-content: center;
         left: 0;
         padding: 12px 0;
-        color: rgba(200, 200, 200, 1);
+        color: $gray-800;
 
         a {
-            background: rgba(0, 0, 0, 0.4);
             border-radius: 4px;
-            border: 3px solid;
+            box-shadow: $box-shadow-sm;
+            border: 1px solid $gray-200;
             cursor: pointer;
             padding: 10px 15px;
         }
@@ -28,7 +28,7 @@ $icon-size: 20px;
             margin-right: 5px;
 
             path {
-                fill: rgba(200, 200, 200, 1);
+                fill: $gray-800;
             }
         }
     }
@@ -182,7 +182,6 @@ $icon-size: 20px;
 
     .filter-items__item {
         align-items: center;
-        background: $color-text-white;
         display: flex;
         flex-direction: column;
         flex: 1;
@@ -190,11 +189,11 @@ $icon-size: 20px;
         margin: 3px;
         max-width: calc(33% - 10px);
         min-width: calc(33% - 10px);
-        opacity: 0.5;
         padding: 3px;
         position: relative;
         text-align: center;
         width: calc(33% - 10px);
+        border: 1px solid $gray-200;
 
         &__label {
             color: $text-color;
@@ -203,7 +202,6 @@ $icon-size: 20px;
 
         &--selected {
             border: 1px solid $color-left-filter-selected;
-            opacity: 1;
         }
     }
 }
