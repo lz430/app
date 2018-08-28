@@ -628,6 +628,9 @@ class DealEquipmentMunger
             case 701:
                 $feature = $this->syncSeatingConfiguration($equipment);
                 break;
+            case 5601:
+                $feature = $this->syncBackupCamera();
+                break;
         }
 
         if ($feature) {
@@ -923,4 +926,31 @@ class DealEquipmentMunger
         }
     }
 
+    private function syncBackupCamera()
+    {
+        $parkingSafety = $this->equipment
+            ->filter(function ($equipment) {
+                return $equipment->schemaId == 5601 && $equipment->location == 'rear';
+            })
+            ->first();
+
+        if (!$parkingSafety) {
+            return null;
+        }
+        if($parkingSafety && $parkingSafety->availability !== "not available"){
+            if ($parkingSafety && isset($parkingSafety->attributes)) {
+                $backupCamera = collect($parkingSafety->attributes);
+                $hasParkingSensors = $backupCamera
+                    ->filter(function($attribute){
+                        return $attribute->name == "type";
+                    })
+                    ->pluck('value')
+                    ->first();
+
+                if($hasParkingSensors == 'camera & radar') {
+                    return Feature::where('slug', 'backup_camera')->first();
+                }
+            }
+        }
+    }
 }
