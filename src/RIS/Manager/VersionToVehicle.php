@@ -628,25 +628,36 @@ class VersionToVehicle
                         $scenario = $vehicle->scenarios['Affiliate - Lease Special'];
                     }
 
+
                     if ($scenario) {
-                        if (isset($scenario->programs[0]->consumerCash)) {
-                            $data->rebate = $scenario->programs[0]->consumerCash->totalConsumerCash;
-                        } else {
-                            $data->rebate = 0;
-                        }
+                        if (count($scenario->programs)) {
+                            $program = end($scenario->programs);
+                            if (isset($program->consumerCash)) {
+                                $data->rebate = $program->consumerCash->totalConsumerCash;
+                            } else {
+                                $data->rebate = 0;
+                            }
 
-                        $data->rateType = $scenario->programs[0]->rateType;
-                        $data->term = $this->getClosetNumber(array_keys($scenario->programs[0]->tiers[0]->leaseTerms), 36);
-                        $data->rate = $scenario->programs[0]->tiers[0]->leaseTerms[$data->term]->adjRate;
+                            $data->rateType = $program->rateType;
+                            $data->term = $this->getClosetNumber(array_keys($program->tiers[0]->leaseTerms), 36);
+                            $data->rate = $program->tiers[0]->leaseTerms[$data->term]->adjRate;
 
-                        if (isset($scenario->programs[0]->tiers[0]->leaseTerms[$data->term]->ccrCash)) {
-                            $data->rebate += $scenario->programs[0]->tiers[0]->leaseTerms[$data->term]->ccrCash->totalCCR;
-                        }
+                            if (isset($program->tiers[0]->leaseTerms[$data->term]->ccrCash)) {
+                                $data->rebate += $program->tiers[0]->leaseTerms[$data->term]->ccrCash->totalCCR;
+                            }
 
-                        $data->miles = $this->getClosetNumber(array_keys($scenario->programs[0]->residuals), 10000);
+                            $data->miles = $this->getClosetNumber(array_keys($program->residuals), 10000);
 
-                        if (isset($scenario->programs[0]->residuals[$data->miles]->termValues[$data->term])) {
-                            $data->residual = $scenario->programs[0]->residuals[$data->miles]->termValues[$data->term]->percentage;
+                            if (isset($program->residuals[$data->miles]->termValues[$data->term])) {
+                                $data->residual = $program->residuals[$data->miles]->termValues[$data->term]->percentage;
+                            } else {
+                                $data->rate = 0;
+                                $data->term = 0;
+                                $data->rebate = 0;
+                                $data->residual = null;
+                                $data->miles = null;
+                                $data->rateType = null;
+                            }
                         } else {
                             $data->rate = 0;
                             $data->term = 0;
@@ -655,6 +666,8 @@ class VersionToVehicle
                             $data->miles = null;
                             $data->rateType = null;
                         }
+
+
                     } else {
                         $data->rate = 0;
                         $data->term = 0;
