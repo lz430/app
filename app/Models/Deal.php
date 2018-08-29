@@ -63,6 +63,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Feature[] $features
  * @property int $seating_capacity
  * @property string $vehicle_color
+ * @property string $status
  */
 class Deal extends Model
 {
@@ -510,6 +511,7 @@ class Deal extends Model
         $record['series'] = $this->series;
         $record['style'] = $this->version->style();
         $record['seating_capacity'] = (int) $this->seating_capacity;
+        $record['status'] = $this->status;
 
         $filterColor = null;
         if(isset(\DeliverMyRide\Fuel\Map::COLOR_MAP[$this->color])) {

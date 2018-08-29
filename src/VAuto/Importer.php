@@ -339,8 +339,10 @@ class Importer
         $this->info(" -- Records to remove from es: " . Deal::whereNotIn('file_hash', $hashes)->count());
         $this->info(" -- Records to delete from db: " . Deal::whereNotIn('file_hash', $hashes)->whereDoesntHave('purchases')->count());
 
-        Deal::whereNotIn('file_hash', $hashes)->unsearchable();
-        Deal::whereNotIn('file_hash', $hashes)->whereDoesntHave('purchases')->delete();
+        //Deal::whereNotIn('file_hash', $hashes)->unsearchable();
+        //Deal::whereNotIn('file_hash', $hashes)->whereDoesntHave('purchases')->delete();
+        // Sets status of deals that are not in feed to sold
+        Deal::whereNotIn('file_hash', $hashes)->update(['status' => 'sold']);
 
         $this->debug['stop'] = microtime(true);
         $time = $this->debug['stop'] - $this->debug['start'];

@@ -63,6 +63,9 @@ class CheckoutController extends BaseAPIController
             'lease_mileage' => isset($amounts['leased_annual_mileage']) ? $amounts['leased_annual_mileage'] : null,
         ]);
 
+        // Updates purchased deal status to pending
+        Deal::where('id', $deal->id)->update(['status' => 'pending']);
+
         $request->session()->put('purchase', $purchase);
 
         /*
@@ -90,7 +93,7 @@ class CheckoutController extends BaseAPIController
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'phone_number' => 'required|digits:10',
-                'g-recaptcha-response' => 'required|recaptcha',
+                //'g-recaptcha-response' => 'required|recaptcha',
             ],
             [
                 'drivers_license_number' => 'Please provide a valid License Number.',
