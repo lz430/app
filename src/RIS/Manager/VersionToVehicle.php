@@ -74,14 +74,19 @@ class VersionToVehicle
             ],
             '6 Series Gran Turismo' => [
                 '640i' => '640',
-
             ],
             '7 Series' => [
                 '740i' => '740',
                 '750i' => '750',
             ],
         ],
-
+        'BY_MODEL_AND_TRIM_AND_NAME' => [
+            'S90' => [
+                'Inscription' => [
+                    'T8 Inscription PHEV AWD' => 'S90 Hybrid',
+                ],
+            ],
+        ],
     ];
 
     // lol.
@@ -97,14 +102,33 @@ class VersionToVehicle
             ],
         ],
         'BY_TRIM' => [
-            'Momentum' => 'T6 Momentum',
+            // BMW
             '230i' => '230',
             '330i' => 'i330',
             '430i' => '430',
             '530i' => '530',
             'M550i' => 'M550',
             '340i' => '340',
+
+            // RAM
             'Big Horn' => 'Big Horn/Lone Star',
+
+            // Volvo
+            'T6 AWD Momentum' => 'T6 Momentum',
+            'T5 AWD Momentum' => 'T5 Momentum',
+            'T6 Momentum AWD' => 'T6 Momentum',
+            'T5 Momentum AWD' => 'T5 Momentum',
+            'T6 Inscription AWD' => 'T6 Inscription',
+            'T5 AWD Inscription' => 'T5 Inscription',
+            'T8 Inscription PHEV AWD' => 'T8 Inscription',
+            'T8 Twin Engine Plug-in Inscription' => 'T8 Inscription',
+            'T6 AWD Inscription' => 'T6 Inscription',
+            'T5 Inscription AWD' => 'T5 Inscription',
+            'T6 R-Design AWD' => 'T6 R-Design',
+            'T5 R-Design AWD' => 'T5 R-Design',
+            'T6 AWD R-Design' => 'T6 R-Design',
+            'T5 AWD' => 'T5',
+            'T6 AWD' => 'T6',
         ],
     ];
 
@@ -215,37 +239,58 @@ class VersionToVehicle
         return $closest;
     }
 
-    private function translateTrimName(): string
+    private function translateTrimName(): array
     {
-        $trim = $this->version->trim_name;
+        $trims = [
+            $this->version->trim_name,
+            $this->version->name,
+        ];
+
         $model = $this->version->model->name;
 
-        if (isset(self::TRIM_MAP['BY_MODEL'][$model]) && isset(self::TRIM_MAP['BY_MODEL'][$model][$trim])) {
-            return self::TRIM_MAP['BY_MODEL'][$model][$trim];
+        foreach ($trims as &$trim) {
+            if (isset(self::TRIM_MAP['BY_MODEL'][$model]) && isset(self::TRIM_MAP['BY_MODEL'][$model][$trim])) {
+                $trim = self::TRIM_MAP['BY_MODEL'][$model][$trim];
+            }
+
+            if (isset(self::TRIM_MAP['BY_TRIM'][$trim])) {
+                $trim = self::TRIM_MAP['BY_TRIM'][$trim];
+            }
         }
 
-        if (isset(self::TRIM_MAP['BY_TRIM'][$trim])) {
-            return self::TRIM_MAP['BY_TRIM'][$trim];
-        }
-
-        return $trim;
+        return $trims;
     }
 
     private function translateModel(): string
     {
+
+        //
+        // TODO: Refactor this
         if (in_array($this->version->model->make->name, self::MAKES_USE_TRIM_FOR_MODEL)) {
             $model = $this->version->trim_name;
         } else {
             $model = $this->version->model->name;
         }
 
+        //
+        // Just Model
         if (isset(self::MODEL_MAP['BY_MODEL'][$model])) {
             return self::MODEL_MAP['BY_MODEL'][$model];
+
+        //
+        // Model and trim
         } elseif (isset(self::MODEL_MAP['BY_MODEL_AND_TRIM'][$model][$this->version->trim_name])) {
             return self::MODEL_MAP['BY_MODEL_AND_TRIM'][$model][$this->version->trim_name];
+
+        //
+        // Model and trim and name
+        } elseif (isset(self::MODEL_MAP['BY_MODEL_AND_TRIM_AND_NAME'][$model][$this->version->trim_name][$this->version->name])) {
+            return self::MODEL_MAP['BY_MODEL_AND_TRIM_AND_NAME'][$model][$this->version->trim_name][$this->version->name];
+
         } else {
             return $model;
         }
+
     }
 
     private function translateBodyStyle(): string
@@ -432,6 +477,7 @@ class VersionToVehicle
         $vehicles = $vehicles->toArray();
 
 
+
         // Require
         $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             if (!isset($vehicle->filters->YEAR)) {
@@ -445,6 +491,7 @@ class VersionToVehicle
         });
 
 
+
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
         /*
@@ -455,9 +502,9 @@ class VersionToVehicle
         */
 
         // Optional
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', [$params['trim']]);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRIM', [$params['trim']]);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL', [$params['trim']]);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['trim']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRIM', $params['trim']);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL', $params['trim']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'DRIVE_TYPE_CODE', [$params['driven_wheels']]);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'BODY_TYPE', [$params['cab']]);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRAN_TYPE', [$params['transmission']]);
@@ -595,7 +642,6 @@ class VersionToVehicle
             $data->miles = null;
             $data->rateType = null;
 
-
             switch ($strategy) {
                 case 'cash':
                     $data->rate = 0;
@@ -632,6 +678,7 @@ class VersionToVehicle
                     if ($scenario) {
                         if (count($scenario->programs)) {
                             $program = end($scenario->programs);
+
                             if (isset($program->consumerCash)) {
                                 $data->rebate = $program->consumerCash->totalConsumerCash;
                             } else {
