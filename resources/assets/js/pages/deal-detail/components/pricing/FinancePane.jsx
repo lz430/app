@@ -146,7 +146,7 @@ export default class FinancePane extends React.PureComponent {
 
     handleDownPaymentChange = e => {
         const newDownPayment = Number(
-            Math.round(e.target.value.replace(/[\D.]/g, ''), 0)
+            Math.round(e.target.value.replace(/[\D.]/g, ''))
         );
 
         if (isNaN(newDownPayment)) {
@@ -158,8 +158,7 @@ export default class FinancePane extends React.PureComponent {
         }
 
         const maxDownPayment = this.props.pricing.maxDownPayment();
-
-        if (newDownPayment > maxDownPayment) {
+        if (newDownPayment > maxDownPayment.getAmount() / 100) {
             this.props.onDownPaymentChange(maxDownPayment.toFormat('$0,0'));
             return;
         }
