@@ -59,6 +59,7 @@ class DealTransformer extends TransformerAbstract
             'dealer' => $deal->dealer,
             'dmr_features' => ($deal->features ? $deal->features : []),
             'pricing' => $prices,
+            'status' => $deal->status
         ];
     }
 }
