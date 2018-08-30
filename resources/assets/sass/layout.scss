@@ -40,4 +40,10 @@ body {
     flex: 1;
     display: flex;
     overflow: auto;
+    flex-direction: column;
+}
+
+.deals__show-more {
+    text-align: center;
+    margin-bottom: 3rem;
 }
