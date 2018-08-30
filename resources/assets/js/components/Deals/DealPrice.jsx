@@ -48,7 +48,7 @@ class DealPrice extends React.Component {
 
         if (this.props.dealPricing.cannotPurchase()) {
             return (
-                <p className="no-lease-rates-error">
+                <p className="price-summary__error">
                     Sorry, there are currently no lease rates available for this
                     vehicle.
                 </p>
@@ -57,10 +57,10 @@ class DealPrice extends React.Component {
 
         return (
             <div>
-                <div className="deal-price__finance-lease-label">
+                <div className="price-summary__price__label">
                     {this.getLabel()}
                 </div>
-                <div className="deal-price__finance-lease-price">
+                <div className="price-summary__price__value">
                     {this.props.dealPricing.finalPrice()}{' '}
                     <InformationOutline
                         className="pricing-explanation-open"
@@ -71,7 +71,7 @@ class DealPrice extends React.Component {
                     />
                     {this.renderPriceExplanationModal()}
                 </div>
-                <div className="deal-price__finance-lease-disclaimer">
+                <div className="price-summary__price__disclaimer">
                     {this.getDisclaimer()}
                 </div>
             </div>
@@ -101,18 +101,11 @@ class DealPrice extends React.Component {
 
     render() {
         return (
-            <div className="deal-price">
-                <div className="tabs__content">
-                    <div className="deal-price__price">
-                        {this.showWhenPricingIsLoaded()}
-                        <div className="deal-price__hr" />
-                        <div className="deal-price__cash-msrp">
-                            {this.props.dealPricing.msrp()}{' '}
-                            <span className="deal-price__cash-msrp-label">
-                                MSRP
-                            </span>
-                        </div>
-                    </div>
+            <div className="price-summary">
+                {this.showWhenPricingIsLoaded()}
+                <div className="price-summary__hr" />
+                <div className="price-summary__msrp">
+                    {this.props.dealPricing.msrp()} <span>MSRP</span>
                 </div>
             </div>
         );

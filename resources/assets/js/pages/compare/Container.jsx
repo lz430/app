@@ -13,6 +13,7 @@ import { getEquipmentCategories } from './selectors';
 import { getIsPageLoading } from 'apps/page/selectors';
 
 import Loading from 'icons/miscicons/Loading';
+import PageContent from '../../components/App/PageContent';
 
 class ComparePageContainer extends React.PureComponent {
     static propTypes = {
@@ -78,29 +79,31 @@ class ComparePageContainer extends React.PureComponent {
             maxWidth: this.props.compareList.length * 310 + 'px',
         };
         return (
-            <div className="compare-page">
-                <ToolbarPrice />
-                <div className="compare-page__body-wrapper">
-                    <div className="compare-page__body">
-                        <div style={style}>
-                            {this.renderDealsContainer()}
-                            <div className="compare-page-features">
-                                {this.props.equipmentCategories.map(
-                                    (category, index) => {
-                                        return (
-                                            <EquipmentCategory
-                                                key={index}
-                                                cols={this.props.cols}
-                                                category={category}
-                                            />
-                                        );
-                                    }
-                                )}
+            <PageContent>
+                <div className="compare-page">
+                    <ToolbarPrice />
+                    <div className="compare-page__body-wrapper">
+                        <div className="compare-page__body">
+                            <div style={style}>
+                                {this.renderDealsContainer()}
+                                <div className="compare-page-features">
+                                    {this.props.equipmentCategories.map(
+                                        (category, index) => {
+                                            return (
+                                                <EquipmentCategory
+                                                    key={index}
+                                                    cols={this.props.cols}
+                                                    category={category}
+                                                />
+                                            );
+                                        }
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </PageContent>
         );
     }
 }

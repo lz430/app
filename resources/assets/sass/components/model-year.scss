@@ -3,7 +3,8 @@
 }
 
 .modelyear {
-    &__basic-info {
+    &__header {
+        display: flex;
         margin-bottom: 0.5rem;
 
         &:hover {
@@ -11,12 +12,16 @@
         }
     }
 
+    &__name {
+        flex: 1;
+    }
+
     &__basic-info-year-and-make {
         color: $color-darkergrey;
-        font-size: x-small;
+        font-size: 0.85rem;
 
         @include media-breakpoint-up(sm) {
-            font-size: small;
+            font-size: 0.85rem;
         }
     }
 
@@ -29,12 +34,9 @@
     }
 
     &__count {
+        font-size: 0.85rem;
+        text-align: right;
         color: $color-blue;
-        font-size: large;
-        flex-shrink: true;
-        @media (min-width: $break-small) {
-            font-size: x-large;
-        }
     }
 
     &__buttons {
@@ -44,24 +46,23 @@
     }
 
     &__details {
-        align-items: flex-end;
+        align-items: center;
+        justify-content: center;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        justify-content: space-between;
     }
 
     &__price {
-        font-size: large;
-        text-align: right;
-
-        @media (min-width: $break-small) {
-            font-size: x-large;
+        font-size: 1.5rem;
+        text-align: center;
+        @include media-breakpoint-up(sm) {
+            font-size: 1.5rem;
         }
 
         &-label {
             display: block;
-            font-size: x-small;
+            font-size: 0.9rem;
         }
     }
 }

@@ -8,8 +8,18 @@ body {
     display: flex;
     flex: 1;
     flex-direction: column;
-    .app-content {
+    .app-content-wrapper {
+        display: flex;
         flex: 1;
+        flex-direction: column;
+        @include media-breakpoint-down(sm) {
+            padding-top: 54px;
+        }
+    }
+    .app-content {
+        display: flex;
+        flex: 1 0 auto;
+        flex-direction: column;
     }
 }
 
