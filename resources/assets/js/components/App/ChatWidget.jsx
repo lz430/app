@@ -51,7 +51,7 @@ class ChatWidget extends React.PureComponent {
             >
                 <a onClick={() => chatSettings.onOpenChat()}>
                     <ChatBubbleDots />
-                    <span className="hidden d-md-inline">{label}</span>
+                    <span>{label}</span>
                 </a>
             </span>
         );

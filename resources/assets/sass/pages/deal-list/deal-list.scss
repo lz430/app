@@ -73,7 +73,9 @@
         overflow-y: auto;
         border-right: 1px solid #ccc;
         box-shadow: $box-shadow-sm;
-        position: absolute;
+        position: fixed;
+        top: 0;
+        bottom: 0;
 
         &--small-filters-shown {
             left: 0;

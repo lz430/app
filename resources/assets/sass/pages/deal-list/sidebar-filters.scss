@@ -6,7 +6,7 @@ $icon-size: 20px;
     overflow-y: auto;
     width: 100%;
     padding-bottom: 3rem;
-
+    height: 100vh;
     &__overlay {
         align-items: center;
         background: $gray-100;
@@ -52,7 +52,7 @@ $icon-size: 20px;
             align-items: center;
             justify-content: center;
         }
-
+        /*
         .button-group__button--selected::after {
             content: '';
             position: absolute;
@@ -64,6 +64,7 @@ $icon-size: 20px;
             border-top: 20px solid $primary;
             clear: both;
         }
+        */
 
         .purchase-strategy-explanation {
             text-align: center;

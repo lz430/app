@@ -78,8 +78,9 @@ class ModelYear extends React.Component {
         }
 
         return (
-            <div className="modelyear__price">
-                <span className="modelyear__price-label">{label}</span> {value}
+            <div className="price-summary">
+                <div className="price-summary__price__label">{label}</div>
+                <div className="price-summary__price__value">{value}</div>
             </div>
         );
     }

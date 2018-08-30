@@ -32,7 +32,7 @@ import {
 
 import { getSearchQuery, getSelectedFiltersByCategory } from './selectors';
 import { setPurchaseStrategy } from 'apps/user/actions';
-import PageContent from '../../components/App/PageContent';
+import PageContent from 'components/App/PageContent';
 
 class Container extends React.PureComponent {
     static propTypes = {

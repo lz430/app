@@ -56,7 +56,7 @@ export default class Footer extends React.PureComponent {
                             Privacy Policy
                         </a>
                     </Col>
-                    <Col xs={12} sm={6} className="text-right">
+                    <Col xs={12} sm={6} className="text-md-right">
                         &copy; 2018 Deliver My Ride. All Rights Reserved.
                     </Col>
                 </Row>
