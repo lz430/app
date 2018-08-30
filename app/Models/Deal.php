@@ -490,12 +490,10 @@ class Deal extends Model
         $record['is_active'] = true;
 
         // Deal should not be active if it has been purchased
-        $purchase = Purchase::where('deal_id', $this->id)->first();
-
-        if ($purchase) {
+        if($this->status == 'sold') {
             $record['is_active'] = false;
         }
-
+        
         //
         // Vehicle identification information
         $record['vin'] = $this->vin;
