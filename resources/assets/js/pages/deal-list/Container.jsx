@@ -141,13 +141,13 @@ class Container extends React.PureComponent {
 
     renderFilterPanelAndDeals() {
         return (
-            <div className="filter-page">
+            <StickyContainer className="filter-page">
                 {this.renderFilterPanel()}
                 {this.renderDeals()}
                 <MediumAndDown>
                     <ToolbarMobileBottom />
                 </MediumAndDown>
-            </div>
+            </StickyContainer>
         );
     }
 
@@ -174,10 +174,9 @@ class Container extends React.PureComponent {
 
         return (
             <PageContent desktopOnlyFooter={true}>
-                <StickyContainer>
-                    {this.renderMakeSelectionModal()}
-                    {this.renderFilterPanelAndDeals()}
-                </StickyContainer>
+                {this.renderFilterPanelAndDeals()}
+
+                {this.renderMakeSelectionModal()}
             </PageContent>
         );
     }

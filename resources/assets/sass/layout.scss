@@ -15,12 +15,14 @@ body {
     }
     .app-content {
         flex: 1;
+        /*
         > div {
             flex-direction: column;
             flex: 1;
             height: 100%;
             display: flex;
         }
+        */
     }
 }
 
