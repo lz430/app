@@ -32,7 +32,9 @@
     &__title {
         font-weight: bold;
     }
+    > span,
     > a {
+        cursor: pointer;
         display: block;
         color: #dedede;
         svg {
