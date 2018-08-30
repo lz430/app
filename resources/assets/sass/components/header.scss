@@ -101,7 +101,7 @@
     .modal-body {
         text-align: center;
         padding: 3rem 3rem 1rem 3rem;
-        @include media-breakpoint-up(md) {
+        @include media-breakpoint-up(lg) {
             width: 600px;
         }
     }
