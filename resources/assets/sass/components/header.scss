@@ -18,8 +18,10 @@
         padding: 0 1.5rem 0 1rem;
     }
     .navbar-brand {
-        align-items: center;
-        display: flex;
+        @include media-breakpoint-down(sm) {
+            align-items: center;
+            display: flex;
+        }
 
         img {
             max-width: 140px;
@@ -71,6 +73,7 @@
     }
     .icon {
         width: 20px;
+        height: 20px;
         @include media-breakpoint-up(md) {
             margin-left: 1rem;
         }
@@ -85,6 +88,7 @@
     }
     svg {
         width: 20px;
+        height: 20px;
         fill: #fff;
 
         @include media-breakpoint-up(md) {
@@ -129,6 +133,7 @@
         margin-right: 0.5rem;
         svg {
             width: 60px;
+            height: 60px;
             color: $primary;
         }
     }
