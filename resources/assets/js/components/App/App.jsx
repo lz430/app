@@ -17,8 +17,7 @@ export default class App extends React.PureComponent {
                     <Header />
                     <HeaderToolbar />
                 </div>
-                <div className="app-content">{this.props.children}</div>
-                <Footer />
+                {this.props.children}
             </div>
         );
     }

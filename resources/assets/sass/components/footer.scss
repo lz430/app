@@ -1,7 +1,12 @@
 .page-footer {
-    padding: 2rem 3rem;
+    padding: 0.5rem;
+    text-align: center;
+    @include media-breakpoint-up(sm) {
+        text-align: left;
+        padding: 2rem 3rem;
+    }
     background-color: #1a1a1a;
-    color: #f7f7f7;
+    color: #dedede;
     font-size: 0.85rem;
 
     a {
@@ -20,15 +25,19 @@
 }
 
 .footer-box {
+    margin-bottom: 0.5rem;
+    @include media-breakpoint-up(sm) {
+        margin-bottom: 0;
+    }
     &__title {
         font-weight: bold;
     }
     > a {
         display: block;
-        color: #f7f7f7;
+        color: #dedede;
         svg {
             width: 1rem;
-            fill: #f7f7f7;
+            fill: #dedede;
             margin-right: 4px;
         }
     }

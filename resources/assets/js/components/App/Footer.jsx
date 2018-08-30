@@ -10,7 +10,7 @@ export default class Footer extends React.PureComponent {
         return (
             <Container fluid className="page-footer">
                 <Row>
-                    <Col xs={6} md={2} xl={1} className="footer-box">
+                    <Col xs={12} md={2} xl={1} className="footer-box">
                         <div className="footer-box__title">Deliver My Ride</div>
                         <a href={config.MARKETING_URL + '/terms-of-service'}>
                             About Us
@@ -22,7 +22,7 @@ export default class Footer extends React.PureComponent {
                             Blog
                         </a>
                     </Col>
-                    <Col xs={6} md={2} xl={2} className="footer-box">
+                    <Col xs={12} md={2} xl={2} className="footer-box">
                         <div className="footer-box__title">Contact</div>
 
                         <a href={config.MARKETING_URL + '/terms-of-service'}>
@@ -35,7 +35,12 @@ export default class Footer extends React.PureComponent {
                             <Conversation /> Chat Now
                         </a>
                     </Col>
-                    <Col className="footer-box text-md-right">
+                    <Col
+                        xs={12}
+                        md={8}
+                        xl={9}
+                        className="footer-box text-md-right"
+                    >
                         <div className="footer-box__title">Address</div>
                         35 W Huron Street<br />
                         Suite 1000<br />
@@ -43,7 +48,7 @@ export default class Footer extends React.PureComponent {
                     </Col>
                 </Row>
                 <Row className="footer-bottom">
-                    <Col className="text-left">
+                    <Col xs={12} sm={6}>
                         <a href={config.MARKETING_URL + '/terms-of-service'}>
                             Terms Of Service
                         </a>
@@ -52,7 +57,7 @@ export default class Footer extends React.PureComponent {
                             Privacy Policy
                         </a>
                     </Col>
-                    <Col className="text-right">
+                    <Col xs={12} sm={6} className="text-right">
                         &copy; 2018 Deliver My Ride. All Rights Reserved.
                     </Col>
                 </Row>

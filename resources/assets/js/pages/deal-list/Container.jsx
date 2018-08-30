@@ -32,6 +32,7 @@ import {
 
 import { getSearchQuery, getSelectedFiltersByCategory } from './selectors';
 import { setPurchaseStrategy } from 'apps/user/actions';
+import PageContent from '../../components/App/PageContent';
 
 class Container extends React.PureComponent {
     static propTypes = {
@@ -152,7 +153,11 @@ class Container extends React.PureComponent {
 
     render() {
         if (this.props.isLoading) {
-            return this.renderPageLoadingIcon();
+            return (
+                <PageContent desktopOnlyFooter={true}>
+                    <Loading />
+                </PageContent>
+            );
         }
 
         if (
@@ -160,14 +165,20 @@ class Container extends React.PureComponent {
             (this.props.userLocation.latitude &&
                 !this.props.userLocation.has_results)
         ) {
-            return <NoDealsOutOfRange />;
+            return (
+                <PageContent desktopOnlyFooter={true}>
+                    <NoDealsOutOfRange />
+                </PageContent>
+            );
         }
 
         return (
-            <StickyContainer>
-                {this.renderMakeSelectionModal()}
-                {this.renderFilterPanelAndDeals()}
-            </StickyContainer>
+            <PageContent desktopOnlyFooter={true}>
+                <StickyContainer>
+                    {this.renderMakeSelectionModal()}
+                    {this.renderFilterPanelAndDeals()}
+                </StickyContainer>
+            </PageContent>
         );
     }
 }

@@ -37,14 +37,14 @@ const StandaloneApp = props => (
 const DeliverMyRide = () => (
     <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-            <App>
-                <ConnectedRouter history={history}>
+            <ConnectedRouter history={history}>
+                <App>
                     <Switch>
                         <Route path="/filter" component={DealList} />
                         <Route path="/deals/:id" component={DealDetail} />
                     </Switch>
-                </ConnectedRouter>
-            </App>
+                </App>
+            </ConnectedRouter>
         </PersistGate>
     </Provider>
 );
