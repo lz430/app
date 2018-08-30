@@ -13,6 +13,7 @@ import { requestMoreDeals } from '../actions';
 import { getShouldShowLoading } from '../selectors';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
+
 class ViewDeals extends React.PureComponent {
     static propTypes = {
         deals: PropTypes.arrayOf(dealType),
@@ -83,18 +84,16 @@ class ViewDeals extends React.PureComponent {
     render() {
         return (
             <div className="deals-wrapper">
-                <div className="inventory-summary-deck">
-                    <div className="card-deck  m-0">
-                        {this.props.deals && this.props.deals.length ? (
-                            this.props.deals.map((deal, index) => {
-                                return this.renderDeal(deal, index);
-                            })
-                        ) : (
-                            <Loading />
-                        )}
-                    </div>
-                    {this.renderShowMoreButton()}
+                <div className="inventory-summary-deck card-deck  m-0">
+                    {this.props.deals && this.props.deals.length ? (
+                        this.props.deals.map((deal, index) => {
+                            return this.renderDeal(deal, index);
+                        })
+                    ) : (
+                        <Loading />
+                    )}
                 </div>
+                {this.renderShowMoreButton()}
             </div>
         );
     }

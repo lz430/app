@@ -3,8 +3,7 @@
     background: $color-background-secondary;
     display: flex;
     flex-direction: row;
-    flex: 1;
-    overflow: hidden;
+    flex: 1 1 auto;
     position: relative;
     &__top-row {
         border-bottom: 1px solid $color-section-bottom-border;
@@ -70,7 +69,6 @@
         z-index: 49;
         background: #fff;
         width: $sidebar-filters-width;
-        overflow-y: auto;
         border-right: 1px solid #ccc;
         box-shadow: $box-shadow-sm;
         position: fixed;
