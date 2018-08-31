@@ -12,6 +12,7 @@ import { getCurrentPageIsInCheckout } from 'apps/page/selectors';
 import { toggleCompare } from 'apps/common/actions';
 import ChatWidget from '../ChatWidget';
 import Location from 'icons/zondicons/Location';
+import Phone from '../../../icons/zondicons/Phone';
 
 class Header extends React.PureComponent {
     static propTypes = {
@@ -67,6 +68,20 @@ class Header extends React.PureComponent {
         );
     }
 
+    renderPhoneWidget() {
+        return (
+            <div className="header-widget phone-number hidden d-sm-flex">
+                <div className="header-widget-content hidden d-sm-block">
+                    <div className="label">Give Us A Call</div>
+                    <div className="value">(855) - 675 - 7301</div>
+                </div>
+                <div className="icon">
+                    <Phone />
+                </div>
+            </div>
+        );
+    }
+
     /**
      *
      * @returns {*}
@@ -80,6 +95,7 @@ class Header extends React.PureComponent {
                 <div className="mr-auto" />
                 <div className="navbar-text">
                     <ChatWidget style="header" />
+                    {this.renderPhoneWidget()}
                     <CompareWidget
                         currentPageIsInCheckout={
                             this.props.currentPageIsInCheckout

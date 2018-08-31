@@ -1,10 +1,9 @@
 import React from 'react';
 import config from 'config';
 import { Container, Row, Col } from 'reactstrap';
-import MusicNotes from 'icons/zondicons/MusicNotes';
 import Phone from 'icons/zondicons/Phone';
-import Conversation from 'icons/zondicons/Conversation';
 import ChatWidget from './ChatWidget';
+import Keyboard from 'icons/zondicons/Keyboard';
 
 export default class Footer extends React.PureComponent {
     render() {
@@ -22,8 +21,8 @@ export default class Footer extends React.PureComponent {
                     <Col xs={12} md={2} xl={2} className="footer-box">
                         <div className="footer-box__title">Contact</div>
 
-                        <a href={config.MARKETING_URL + '/terms-of-service'}>
-                            <MusicNotes /> hello@delivermymyride.com
+                        <a href={config.MARKETING_URL + '/contact/'}>
+                            <Keyboard /> Email Us
                         </a>
                         <span>
                             <Phone /> (855) - 675 - 7301
