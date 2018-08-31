@@ -19,10 +19,10 @@ class ModelWidget extends React.PureComponent {
             <div className="tray-widget">
                 <div className="tray-widget-content">
                     <div className="bubble">
-                        <strong>Make:</strong> {this.props.selectedMake} <br />
+                        <strong>Make: </strong> {this.props.selectedMake} <br />
                     </div>
                     <div className="bubble">
-                        <strong>Model:</strong>{' '}
+                        <strong>Model: </strong>
                         {this.props.selectedFiltersByCategory['model'][0]}{' '}
                         <br />
                     </div>

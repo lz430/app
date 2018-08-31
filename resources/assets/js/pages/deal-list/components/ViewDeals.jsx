@@ -12,6 +12,7 @@ import { toggleCompare } from 'apps/common/actions';
 import { requestMoreDeals } from '../actions';
 import { getShouldShowLoading } from '../selectors';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 class ViewDeals extends React.PureComponent {
     static propTypes = {
@@ -29,12 +30,7 @@ class ViewDeals extends React.PureComponent {
     }
 
     compareButtonClass(deal) {
-        return (
-            'btn ' +
-            (this.compareListContainsDeal(deal)
-                ? 'btn-outline-primary'
-                : 'btn-primary')
-        );
+        return classNames('btn', 'btn-outline-primary', 'btn-sm');
     }
 
     renderShowMoreButton() {
@@ -74,7 +70,10 @@ class ViewDeals extends React.PureComponent {
                             ? 'Remove'
                             : 'Compare'}{' '}
                     </button>
-                    <Link className="btn btn-success" to={`/deals/${deal.id}`}>
+                    <Link
+                        className="btn btn-outline-success btn-sm"
+                        to={`/deals/${deal.id}`}
+                    >
                         View
                     </Link>
                 </div>
@@ -85,18 +84,16 @@ class ViewDeals extends React.PureComponent {
     render() {
         return (
             <div className="deals-wrapper">
-                <div className="inventory-summary-deck">
-                    <div className="card-deck  m-0">
-                        {this.props.deals && this.props.deals.length ? (
-                            this.props.deals.map((deal, index) => {
-                                return this.renderDeal(deal, index);
-                            })
-                        ) : (
-                            <Loading />
-                        )}
-                    </div>
-                    {this.renderShowMoreButton()}
+                <div className="inventory-summary-deck card-deck  m-0">
+                    {this.props.deals && this.props.deals.length ? (
+                        this.props.deals.map((deal, index) => {
+                            return this.renderDeal(deal, index);
+                        })
+                    ) : (
+                        <Loading />
+                    )}
                 </div>
+                {this.renderShowMoreButton()}
             </div>
         );
     }

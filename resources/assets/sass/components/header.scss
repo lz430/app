@@ -6,6 +6,16 @@
     margin: 0;
 }
 
+.app-header-wrapper {
+    @include media-breakpoint-down(sm) {
+        position: fixed;
+        z-index: 50;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+}
+
 .navbar {
     background-color: #fff;
     border-bottom: 2px solid $primary;
@@ -18,8 +28,10 @@
         padding: 0 1.5rem 0 1rem;
     }
     .navbar-brand {
-        align-items: center;
-        display: flex;
+        @include media-breakpoint-down(sm) {
+            align-items: center;
+            display: flex;
+        }
 
         img {
             max-width: 140px;
@@ -71,13 +83,14 @@
     }
     .icon {
         width: 20px;
+        height: 20px;
         @include media-breakpoint-up(md) {
             margin-left: 1rem;
         }
     }
 }
 
-.chat-button {
+.header-widget.chat-button {
     .btn {
         color: #fff !important;
         padding: 0.25rem 0.5rem;
@@ -85,6 +98,7 @@
     }
     svg {
         width: 20px;
+        height: 20px;
         fill: #fff;
 
         @include media-breakpoint-up(md) {
@@ -97,7 +111,7 @@
     .modal-body {
         text-align: center;
         padding: 3rem 3rem 1rem 3rem;
-        @include media-breakpoint-up(md) {
+        @include media-breakpoint-up(lg) {
             width: 600px;
         }
     }
@@ -129,6 +143,7 @@
         margin-right: 0.5rem;
         svg {
             width: 60px;
+            height: 60px;
             color: $primary;
         }
     }
@@ -220,4 +235,9 @@
             cursor: pointer;
         }
     }
+}
+
+.header-widget.phone-number {
+    cursor: default;
+    font-weight: bold;
 }

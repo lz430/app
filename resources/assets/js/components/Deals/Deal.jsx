@@ -75,7 +75,7 @@ class Deal extends React.Component {
 
     render() {
         return (
-            <Card className="inventory-summary">
+            <Card className="inventory-summary deal-summary">
                 <CardHeader className="deal__basic-info">
                     {this.renderHeaderContent()}
                 </CardHeader>
@@ -83,15 +83,14 @@ class Deal extends React.Component {
                     <DealImage
                         featureImageClass="deal__image"
                         deal={this.props.deal}
-                        key={this.props.deal.id}
+                        key={'img' + this.props.deal.id}
                         legacyMode={this.props.legacyMode}
                     />
-                    <div className="deal__price">
-                        <DealPrice
-                            deal={this.props.deal}
-                            key={this.props.deal.id}
-                        />
-                    </div>
+
+                    <DealPrice
+                        deal={this.props.deal}
+                        key={'price' + this.props.deal.id}
+                    />
                 </CardBody>
                 <CardFooter>{this.props.children}</CardFooter>
             </Card>

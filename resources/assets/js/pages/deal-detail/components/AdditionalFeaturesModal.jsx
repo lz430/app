@@ -26,12 +26,7 @@ class AdditionalFeaturesModal extends React.Component {
             >
                 <ModalHeader toggle={this.props.toggle}>
                     <div className="modal__titles modal__titles--center">
-                        <div className="modal__subtitle modal__subtitle--center">
-                            {strings.dealYearMake(this.props.deal)}
-                        </div>
-                        <div className="modal__title modal_title--center">
-                            {strings.dealModelTrim(this.props.deal)}
-                        </div>
+                        Additional Options
                     </div>
                 </ModalHeader>
                 <ModalBody className="text-sm">
