@@ -24,9 +24,9 @@ export default class Footer extends React.PureComponent {
                         <a href={config.MARKETING_URL + '/contact/'}>
                             <Keyboard /> Email Us
                         </a>
-                        <span>
-                            <Phone /> (855) - 675 - 7301
-                        </span>
+                        <a href="tel:855-675-7301">
+                            <Phone /> (855) 675-7301
+                        </a>
                         <ChatWidget style="footer" />
                     </Col>
                     <Col

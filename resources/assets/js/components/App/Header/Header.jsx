@@ -73,7 +73,9 @@ class Header extends React.PureComponent {
             <div className="header-widget phone-number hidden d-sm-flex">
                 <div className="header-widget-content hidden d-sm-block">
                     <div className="label">Give Us A Call</div>
-                    <div className="value">(855) - 675 - 7301</div>
+                    <div className="value">
+                        <a href="tel:855-675-7301">(855) 675-7301</a>
+                    </div>
                 </div>
                 <div className="icon">
                     <Phone />
