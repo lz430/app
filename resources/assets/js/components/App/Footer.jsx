@@ -10,7 +10,7 @@ export default class Footer extends React.PureComponent {
         return (
             <Container fluid className="page-footer">
                 <Row>
-                    <Col xs={12} md={2} xl={1} className="footer-box">
+                    <Col xs={12} md={2} xl={2} className="footer-box">
                         <div className="footer-box__title">Deliver My Ride</div>
                         <a href={config.MARKETING_URL + '/about/'}>About Us</a>
                         <a href={config.MARKETING_URL + '/how-it-works/'}>
@@ -32,7 +32,7 @@ export default class Footer extends React.PureComponent {
                     <Col
                         xs={12}
                         md={8}
-                        xl={9}
+                        xl={8}
                         className="footer-box text-md-right"
                     >
                         <div className="footer-box__title">Address</div>
