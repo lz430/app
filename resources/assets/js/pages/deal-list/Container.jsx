@@ -2,11 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { filterItemType } from 'types';
-import classNames from 'classnames';
 import Loading from 'icons/miscicons/Loading';
 
 import { StickyContainer } from 'react-sticky';
-import util from 'src/util';
 
 import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
 import { getIsPageLoading } from 'apps/page/selectors';
@@ -19,7 +17,7 @@ import FilterPanel from './components/FilterPanel';
 import NoDealsOutOfRange from './components/NoDealsOutOfRange';
 import ModalMakeSelector from './components/ModalMakeSelector';
 
-import { LargeAndUp, MediumAndDown, MediumAndUp } from 'components/Responsive';
+import { LargeAndUp, MediumAndDown } from 'components/Responsive';
 import { buildSearchQueryUrl } from './helpers';
 import { forceCheck } from 'react-lazyload';
 

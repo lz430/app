@@ -1,6 +1,4 @@
 import * as ActionTypes from 'apps/common/consts';
-import * as R from 'ramda';
-import util from 'src/util';
 import { basePersistConfig } from 'persist';
 import { persistReducer } from 'redux-persist';
 
@@ -11,7 +9,6 @@ const initialState = {
     vehicleModel: null,
     vehicleYear: null,
     smallFiltersShown: false,
-    window: { width: window.innerWidth },
     dealsIdsWithCustomizedQuotes: [],
 };
 
@@ -23,17 +20,6 @@ const persistConfig = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case ActionTypes.WINDOW_RESIZE:
-            return {
-                ...state,
-                window: action.window,
-                smallFiltersShown: util.windowIsLargerThanSmall(
-                    action.window.width
-                )
-                    ? false
-                    : state.smallFiltersShown,
-            };
-
         case ActionTypes.TOGGLE_COMPARE:
             return {
                 ...state,
