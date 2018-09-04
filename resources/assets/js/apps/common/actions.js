@@ -18,12 +18,3 @@ export function toggleCompare(deal) {
         });
     };
 }
-
-export function windowResize(width) {
-    return {
-        type: ActionTypes.WINDOW_RESIZE,
-        window: {
-            width,
-        },
-    };
-}

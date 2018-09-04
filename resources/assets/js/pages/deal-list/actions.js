@@ -137,19 +137,3 @@ export function closeMakeSelectorModal() {
         type: ActionTypes.MAKE_SELECTOR_MODAL_CLOSE,
     };
 }
-
-/**
- *
- * @param open
- * null: toggle
- * true: force open
- * false: force close
- *
- * @returns {{type: string}}
- */
-export function toggleSmallFiltersShown(open = null) {
-    return {
-        type: ActionTypes.TOGGLE_SMALL_FILTERS_SHOWN,
-        data: open,
-    };
-}

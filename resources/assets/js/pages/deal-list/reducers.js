@@ -175,16 +175,6 @@ const reducer = function(state = initialState, action = {}) {
                     entity: action.entity,
                 },
             };
-
-        case ActionTypes.TOGGLE_SMALL_FILTERS_SHOWN:
-            return {
-                ...state,
-                smallFiltersShown:
-                    action.data === null
-                        ? !state.smallFiltersShown
-                        : action.data,
-            };
-
         case ActionTypes.MAKE_SELECTOR_MODAL_OPEN:
             return {
                 ...state,
