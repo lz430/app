@@ -14,7 +14,7 @@ import {
 } from '../selectors';
 import { requestSearch } from '../actions';
 
-import { MediumAndUp, SmallAndDown } from 'components/Responsive';
+import classNames from 'classnames';
 
 class FilterPanel extends React.PureComponent {
     static propTypes = {
@@ -25,6 +25,14 @@ class FilterPanel extends React.PureComponent {
         onClearModelYear: PropTypes.func.isRequired,
         onToggleSearchFilter: PropTypes.func.isRequired,
         onRequestSearch: PropTypes.func.isRequired,
+        isMobile: PropTypes.bool.isRequired,
+        isOpen: PropTypes.bool.isRequired,
+        onToggleOpen: PropTypes.func,
+    };
+
+    static defaultProps = {
+        isMobile: false,
+        isOpen: false,
     };
 
     state = {
@@ -38,49 +46,70 @@ class FilterPanel extends React.PureComponent {
     }
 
     render() {
+        const className = classNames({
+            'filter-page__filter-panel': true,
+            'filter-page__filter-panel--small': this.props.isMobile,
+            'filter-page__filter-panel--small-filters-shown': this.props.isOpen,
+            'filter-page__filter-panel--small-filters-hidden': !this.props
+                .isOpen,
+        });
+
         return (
-            <div className="sidebar-filters">
-                <SmallAndDown>
-                    <MobileFilterClose />
-                </SmallAndDown>
-
-                {/*
-                Purchase Strategy
-                */}
-                <MediumAndUp>
-                    <div className="filter-group filter-group__purchase-strategy">
-                        <GlobalSelectPurchaseStrategy
-                            showExplanation={true}
-                            afterSetPurchaseStrategy={this.afterSetPurchaseStrategy.bind(
-                                this
-                            )}
+            <div className={className}>
+                <div className="sidebar-filters">
+                    {this.props.isMobile && (
+                        <MobileFilterClose
+                            onToggleOpen={this.props.onToggleOpen}
                         />
-                    </div>
-                </MediumAndUp>
+                    )}
 
-                {/*
-                Primary Filters
-                */}
-                <PrimaryFilters
-                    searchQuery={this.props.searchQuery}
-                    filters={this.props.filters}
-                    loadingSearchResults={this.props.loadingSearchResults}
-                    selectedFiltersByCategory={
-                        this.props.selectedFiltersByCategory
-                    }
-                    onClearModelYear={this.props.onClearModelYear}
-                    onToggleSearchFilter={this.props.onToggleSearchFilter}
-                />
+                    {/*
+                    Purchase Strategy
+                    */}
+                    {!this.props.isMobile && (
+                        <div className="filter-group filter-group__purchase-strategy">
+                            <GlobalSelectPurchaseStrategy
+                                showExplanation={true}
+                                afterSetPurchaseStrategy={this.afterSetPurchaseStrategy.bind(
+                                    this
+                                )}
+                            />
+                        </div>
+                    )}
 
-                <SecondaryFilters
-                    searchQuery={this.props.searchQuery}
-                    filters={this.props.filters}
-                    loadingSearchResults={this.props.loadingSearchResults}
-                    selectedFiltersByCategory={
-                        this.props.selectedFiltersByCategory
-                    }
-                    onToggleSearchFilter={this.props.onToggleSearchFilter}
-                />
+                    {/*
+                    Primary Filters
+                    */}
+                    <PrimaryFilters
+                        searchQuery={this.props.searchQuery}
+                        filters={this.props.filters}
+                        loadingSearchResults={this.props.loadingSearchResults}
+                        selectedFiltersByCategory={
+                            this.props.selectedFiltersByCategory
+                        }
+                        onClearModelYear={this.props.onClearModelYear}
+                        onToggleSearchFilter={this.props.onToggleSearchFilter}
+                    />
+
+                    {/*
+                    Secondary Filters
+                    */}
+                    <SecondaryFilters
+                        searchQuery={this.props.searchQuery}
+                        filters={this.props.filters}
+                        loadingSearchResults={this.props.loadingSearchResults}
+                        selectedFiltersByCategory={
+                            this.props.selectedFiltersByCategory
+                        }
+                        onToggleSearchFilter={this.props.onToggleSearchFilter}
+                    />
+
+                    {this.props.isMobile && (
+                        <MobileFilterClose
+                            onToggleOpen={this.props.onToggleOpen}
+                        />
+                    )}
+                </div>
             </div>
         );
     }
@@ -89,10 +118,8 @@ class FilterPanel extends React.PureComponent {
 const mapStateToProps = state => {
     return {
         filters: state.pages.dealList.filters,
-        window: state.common.window,
         searchQuery: state.pages.dealList.searchQuery,
         selectedFiltersByCategory: getSelectedFiltersByCategory(state),
-        smallFiltersShown: state.common.smallFiltersShown,
         loadingSearchResults: getLoadingSearchResults(state),
     };
 };

@@ -26,6 +26,8 @@ import ModelWidget from './ModelWidget';
 import { getUserPurchaseStrategy } from 'apps/user/selectors';
 import { setPurchaseStrategy } from 'apps/user/actions';
 import TravelCar from 'icons/zondicons/TravelCar';
+import FilterPanel from '../FilterPanel';
+import { LargeAndUp } from '../../../../components/Responsive';
 
 /**
  *
@@ -60,7 +62,7 @@ class ToolbarMobileBottom extends React.Component {
             return;
         }
 
-        if (this.state.activeTab && this.state.activeTab !== 'filter') {
+        if (this.state.activeTab) {
             this.setState({ activeTab: null });
         }
     };
@@ -191,6 +193,11 @@ class ToolbarMobileBottom extends React.Component {
                     {this.props.searchQuery.entity === 'deal' &&
                         this.renderBackButton()}
                 </div>
+                <FilterPanel
+                    isMobile={true}
+                    isOpen={this.state.activeTab === 'filter'}
+                    onToggleOpen={this.setActiveTab.bind(this)}
+                />
             </div>
         );
     }
