@@ -15,6 +15,5 @@ export const SEARCH_RESET = `${namespace}_SEARCH_RESET`;
 export const RECEIVE_MODEL_YEARS = `${namespace}_RECEIVE_MODEL_YEARS`;
 export const SELECT_MODEL_YEAR = `${namespace}_SELECT_MODEL_YEAR`;
 export const RECEIVE_DEALS = `${namespace}_RECEIVE_DEALS`;
-export const TOGGLE_SMALL_FILTERS_SHOWN = `${namespace}_TOGGLE_SMALL_FILTERS_SHOWN`;
 export const MAKE_SELECTOR_MODAL_OPEN = `${namespace}_MAKE_SELECTOR_MODAL_OPEN`;
 export const MAKE_SELECTOR_MODAL_CLOSE = `${namespace}_MAKE_SELECTOR_MODAL_CLOSE`;
