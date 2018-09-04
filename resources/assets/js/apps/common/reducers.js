@@ -6,16 +6,11 @@ const initialState = {
     compareList: [],
     employeeBrand: false,
     fallbackLogoImage: '/images/dmr-logo-small.svg',
-    vehicleModel: null,
-    vehicleYear: null,
-    smallFiltersShown: false,
-    dealsIdsWithCustomizedQuotes: [],
 };
 
 const persistConfig = {
     ...basePersistConfig,
     key: 'common',
-    blacklist: ['window', 'smallFiltersShown'],
 };
 
 const reducer = (state = initialState, action) => {
