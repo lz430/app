@@ -7,12 +7,7 @@ import Tuning from 'icons/zondicons/Tuning';
 import CurrencyDollar from 'icons/zondicons/CurrencyDollar';
 import CheveronUp from 'icons/zondicons/CheveronUp';
 
-import {
-    clearModelYear,
-    requestSearch,
-    toggleSearchSort,
-    toggleSmallFiltersShown,
-} from '../../actions';
+import { clearModelYear, requestSearch, toggleSearchSort } from '../../actions';
 
 import dealPage, {
     getSearchQuery,
@@ -26,6 +21,7 @@ import ModelWidget from './ModelWidget';
 import { getUserPurchaseStrategy } from 'apps/user/selectors';
 import { setPurchaseStrategy } from 'apps/user/actions';
 import TravelCar from 'icons/zondicons/TravelCar';
+import FilterPanel from '../FilterPanel';
 
 /**
  *
@@ -36,7 +32,6 @@ class ToolbarMobileBottom extends React.Component {
         selectedFiltersByCategory: PropTypes.object.isRequired,
         selectedMake: PropTypes.string,
         purchaseStrategy: PropTypes.string.isRequired,
-        onToggleSmallFiltersShown: PropTypes.func.isRequired,
         onClearModelYear: PropTypes.func.isRequired,
         onToggleSearchSort: PropTypes.func.isRequired,
         onSetPurchaseStrategy: PropTypes.func.isRequired,
@@ -60,23 +55,13 @@ class ToolbarMobileBottom extends React.Component {
             return;
         }
 
-        if (this.state.activeTab && this.state.activeTab !== 'filter') {
+        if (this.state.activeTab) {
             this.setState({ activeTab: null });
         }
     };
 
     setActiveTab(tab) {
-        if (tab === 'filter') {
-            this.props.onToggleSmallFiltersShown();
-        } else if (tab !== 'filter' && this.state.activeTab === 'filter') {
-            this.props.onToggleSmallFiltersShown(false);
-        }
-
         if (this.state.activeTab === tab) {
-            if (this.state.activeTab === 'filter') {
-                this.props.onToggleSmallFiltersShown(false);
-            }
-
             this.setState({ activeTab: null });
         } else {
             this.setState({ activeTab: tab });
@@ -191,6 +176,11 @@ class ToolbarMobileBottom extends React.Component {
                     {this.props.searchQuery.entity === 'deal' &&
                         this.renderBackButton()}
                 </div>
+                <FilterPanel
+                    isMobile={true}
+                    isOpen={this.state.activeTab === 'filter'}
+                    onToggleOpen={this.setActiveTab.bind(this)}
+                />
             </div>
         );
     }
@@ -207,9 +197,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onToggleSmallFiltersShown: (method = null) => {
-            return dispatch(toggleSmallFiltersShown(method));
-        },
         onClearModelYear: () => {
             return dispatch(clearModelYear());
         },

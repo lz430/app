@@ -50,6 +50,8 @@
     }
 }
 .toolbar-mobile-bottom > .menu {
+    position: relative;
+    z-index: 50;
     display: flex;
     flex: 1;
     > div {

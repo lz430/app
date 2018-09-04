@@ -5,8 +5,12 @@ $icon-size: 20px;
     overflow-x: hidden;
     overflow-y: auto;
     width: 100%;
-    padding-bottom: 3rem;
     height: 100vh;
+    padding: 3.5rem 0 3rem 0;
+    @include media-breakpoint-up(sm) {
+        padding: 0 0 3rem 0;
+    }
+
     &__overlay {
         align-items: center;
         background: $gray-100;

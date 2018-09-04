@@ -2,11 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { filterItemType } from 'types';
-import classNames from 'classnames';
 import Loading from 'icons/miscicons/Loading';
 
 import { StickyContainer } from 'react-sticky';
-import util from 'src/util';
 
 import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
 import { getIsPageLoading } from 'apps/page/selectors';
@@ -19,7 +17,7 @@ import FilterPanel from './components/FilterPanel';
 import NoDealsOutOfRange from './components/NoDealsOutOfRange';
 import ModalMakeSelector from './components/ModalMakeSelector';
 
-import { MediumAndDown } from 'components/Responsive';
+import { LargeAndUp, MediumAndDown } from 'components/Responsive';
 import { buildSearchQueryUrl } from './helpers';
 import { forceCheck } from 'react-lazyload';
 
@@ -79,10 +77,6 @@ class Container extends React.PureComponent {
         }
     }
 
-    renderPageLoadingIcon() {
-        return <Loading />;
-    }
-
     renderMakeSelectionModal() {
         return (
             <ModalMakeSelector
@@ -96,43 +90,9 @@ class Container extends React.PureComponent {
         );
     }
 
-    renderFilterPanel() {
-        const className = classNames({
-            'filter-page__filter-panel': true,
-            'filter-page__filter-panel--small': !util.windowIsLargerThanSmall(
-                this.props.window.width
-            ),
-            'filter-page__filter-panel--small-filters-shown':
-                !util.windowIsLargerThanSmall(this.props.window.width) &&
-                this.props.smallFiltersShown,
-            'filter-page__filter-panel--small-filters-hidden':
-                !util.windowIsLargerThanSmall(this.props.window.width) &&
-                !this.props.smallFiltersShown,
-        });
-
-        return (
-            <div className={className}>
-                <FilterPanel />
-            </div>
-        );
-    }
-
     renderDeals() {
-        const className = classNames({
-            'filter-page__deals': true,
-            'filter-page__deals--small': !util.windowIsLargerThanSmall(
-                this.props.window.width
-            ),
-            'filter-page__deals--small-filters-shown':
-                !util.windowIsLargerThanSmall(this.props.window.width) &&
-                this.props.smallFiltersShown,
-            'filter-page__deals--small-filters-hidden':
-                !util.windowIsLargerThanSmall(this.props.window.width) &&
-                !this.props.smallFiltersShown,
-        });
-
         return (
-            <div className={className}>
+            <div className="filter-page__deals">
                 <ToolbarSelectedFilters />
                 <Deals />
             </div>
@@ -142,7 +102,9 @@ class Container extends React.PureComponent {
     renderFilterPanelAndDeals() {
         return (
             <StickyContainer className="filter-page">
-                {this.renderFilterPanel()}
+                <LargeAndUp>
+                    <FilterPanel />
+                </LargeAndUp>
                 {this.renderDeals()}
                 <MediumAndDown>
                     <ToolbarMobileBottom />

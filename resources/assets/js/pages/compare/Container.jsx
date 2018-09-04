@@ -113,8 +113,6 @@ const mapStateToProps = state => {
         cols: state.pages.compare.cols,
         equipmentCategories: getEquipmentCategories(state),
         compareList: state.common.compareList,
-        dealsIdsWithCustomizedQuotes: state.common.dealsIdsWithCustomizedQuotes,
-        window: state.common.window,
         isLoading: getIsPageLoading(state),
     };
 };

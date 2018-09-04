@@ -1,22 +1,11 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-
-import PropTypes from 'prop-types';
 
 import api from 'src/api';
-import { toggleSmallFiltersShown } from 'pages/deal-list/actions';
 import ZipcodeFinder from 'pages/deal-list/components/Sidebar/ZipcodeFinder';
 
 import { Button, Form, FormGroup, Input } from 'reactstrap';
 
 class NoDealsOutOfRange extends Component {
-    static propTypes = {
-        window: PropTypes.shape({
-            width: PropTypes.number.isRequired,
-        }).isRequired,
-        onToggleSmallFiltersShown: PropTypes.func.isRequired,
-    };
-
     state = {
         email: '',
         formSubmitted: false,
@@ -83,21 +72,4 @@ class NoDealsOutOfRange extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        window: state.common.window,
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onToggleSmallFiltersShown: () => {
-            return dispatch(toggleSmallFiltersShown());
-        },
-    };
-};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(NoDealsOutOfRange);
+export default NoDealsOutOfRange;
