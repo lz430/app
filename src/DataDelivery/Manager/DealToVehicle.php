@@ -36,6 +36,7 @@ class DealToVehicle
         'Sport Utility Vehicle' => "Sport Utility",
         'Pickup' => 'Regular Cab',
         'Minivan' => 'Passenger Van',
+        'Mini Mpv' => 'Hatchback'
     ];
 
     private $client;
