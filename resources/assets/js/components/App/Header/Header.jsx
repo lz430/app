@@ -51,7 +51,7 @@ class Header extends React.PureComponent {
                 className="header-widget"
                 onClick={() => this.toggleUserLocationModal()}
             >
-                <div className="header-widget-content hidden d-sm-block">
+                <div className="header-widget-content hidden d-lg-block">
                     <div className="label">Your Location:</div>
                     <div className="value">
                         {this.props.userLocation.city
@@ -70,8 +70,8 @@ class Header extends React.PureComponent {
 
     renderPhoneWidget() {
         return (
-            <div className="header-widget phone-number hidden d-sm-flex">
-                <div className="header-widget-content hidden d-sm-block">
+            <div className="header-widget phone-number hidden d-lg-flex">
+                <div className="header-widget-content hidden d-lg-block">
                     <div className="label">Give Us A Call</div>
                     <div className="value">
                         <a href="tel:855-675-7301">(855) 675-7301</a>

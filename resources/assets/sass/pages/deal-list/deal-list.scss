@@ -46,23 +46,6 @@
         left: 0;
         width: 100%;
         z-index: 20;
-
-        &--small-filters-shown {
-            left: $sidebar-filters-width;
-        }
-
-        &--small-filters-hidden {
-            left: 0;
-        }
-
-        &--small {
-            transition: left 1s;
-        }
-
-        @include media-breakpoint-up(sm) {
-            left: $sidebar-filters-width;
-            width: calc(100vw - #{$sidebar-filters-width});
-        }
     }
 
     &__filter-panel {
@@ -87,9 +70,10 @@
             transition: 1s;
         }
 
-        @include media-breakpoint-up(sm) {
+        @include media-breakpoint-up(lg) {
             left: 0;
             position: static;
+            min-width: 300px;
         }
     }
 
