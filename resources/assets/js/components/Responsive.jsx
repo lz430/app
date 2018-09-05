@@ -7,6 +7,6 @@ export const ExtraLargeAndUp = props => (
 export const LargeAndUp = props => <Responsive {...props} minWidth={992} />;
 export const LargeAndDown = props => <Responsive {...props} maxWidth={993} />;
 export const MediumAndUp = props => <Responsive {...props} minWidth={768} />;
-export const MediumAndDown = props => <Responsive {...props} maxWidth={769} />;
+export const MediumAndDown = props => <Responsive {...props} maxWidth={991} />;
 export const SmallAndDown = props => <Responsive {...props} maxWidth={767} />;
 export const SmallAndUp = props => <Responsive {...props} minWidth={576} />;
