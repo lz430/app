@@ -15,14 +15,14 @@
         margin-bottom: 0.5em;
         padding-bottom: 0.5em;
 
-        @media (min-width: $break-small) {
+        @include media-breakpoint-up(sm) {
             flex-direction: row;
         }
     }
 
     &__deal-content-color {
         font-size: 0.9rem;
-        @media (min-width: $break-small) {
+        @include media-breakpoint-up(sm) {
             margin-left: auto;
         }
     }
@@ -98,11 +98,11 @@
         > div {
             width: 100%;
         }
-        @media (min-width: $break-small) {
+        @include media-breakpoint-up(sm) {
             margin-top: 0;
         }
 
-        @media (min-width: $break-large) {
+        @include media-breakpoint-up(lg) {
             flex-direction: row;
         }
 
@@ -110,14 +110,14 @@
             margin: 0;
             max-width: none;
             min-width: 0;
-            @media (min-width: $break-small) {
+            @include media-breakpoint-up(sm) {
                 width: auto;
             }
         }
     }
 
     &__images-and-title {
-        @media (min-width: $break-large) {
+        @include media-breakpoint-up(lg) {
             flex-direction: row;
             width: $break-large * 0.6;
         }
