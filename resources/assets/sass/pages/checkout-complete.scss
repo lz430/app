@@ -1,6 +1,3 @@
-@import '../mixins/button';
-@import '../mixins/selector-icon';
-
 .thank-you {
     display: flex;
     flex-direction: column;
@@ -17,7 +14,7 @@
         float: right;
     }
 
-    @media (min-width: $break-large) {
+    @include media-breakpoint-up(lg) {
         flex-direction: row;
     }
 
@@ -53,7 +50,7 @@
         max-width: $deal-card-width;
         min-width: $deal-card-width;
 
-        @media (min-width: $break-large) {
+        @include media-breakpoint-up(lg) {
             width: $break-large * 0.4;
         }
     }

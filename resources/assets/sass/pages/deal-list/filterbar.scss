@@ -7,7 +7,7 @@
     max-height: $filterbar-height;
     padding: 15px 23px;
 
-    @media (min-width: $break-medium) {
+    @include media-breakpoint-up(md) {
         display: flex;
     }
 

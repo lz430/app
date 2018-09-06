@@ -92,7 +92,7 @@
     &--stretch {
         min-height: calc(100vh - #{$nav-height} - #{$footer-height-mobile});
 
-        @media (min-width: $break-large) {
+        @include media-breakpoint-up(lg) {
             min-height: calc(100vh - #{$nav-height} - #{$footer-height});
         }
     }
