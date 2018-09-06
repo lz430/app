@@ -27,13 +27,13 @@
                         @endforeach
                     </Fees>
                     <UserCode>SS00000000000001</UserCode>
-                    <MoneyFactor>{{$quote['moneyFactor']}}</MoneyFactor>
                     <CashAdvance>{{$quote['cashAdvance']}}</CashAdvance>
                     <ResidualPercentage>{{$quote['residualPercent']}}</ResidualPercentage>
                     <MSRP>{{$quote['msrp']}}</MSRP>
                     <SolveFor>Payment</SolveFor>
                     <Term>{{$quote['term']}}</Term>
-                    <LeaseType>MoneyFactor</LeaseType>
+
+
                     <FinanceTaxes>Yes</FinanceTaxes>
                     <ContractDate>{{$quote['contractDate']}}</ContractDate>
                     <UpfrontPayments>1</UpfrontPayments>
@@ -46,6 +46,15 @@
                     <RoundRent>Low</RoundRent>
                     <CCRProcessingOrder>Rebate_CashDown_Trade</CCRProcessingOrder>
                     <PaymentFrequency>Monthly</PaymentFrequency>
+
+                    @if(isset($quote['moneyFactor']))
+                        <MoneyFactor>{{$quote['moneyFactor']}}</MoneyFactor>
+                        <LeaseType>MoneyFactor</LeaseType>
+                    @elseif(isset($quote['rate']))
+                        <InterestRate>{{$quote['rate']}}</InterestRate>
+                        <LeaseType>SimpleInterest</LeaseType>
+                    @endif
+
                 </QuoteParameters>
                 @endforeach
             </parameters>

@@ -20,20 +20,35 @@ class DealLeasePaymentsManager
     }
 
     private function mungeTerms($terms) {
-        $rates = [];
-        foreach($terms as $rate) {
-            $rateData = $rate;
-            $rateData['annualMileage'] = [];
-            foreach($rate['residuals'] as $residual) {
-                $rateData['annualMileage'][$residual['annualMileage']] = $residual;
+        $situations = [];
+
+        foreach($terms as $term) {
+            foreach ($term['residuals']  as $residual) {
+                $data = [
+                    'length' => (int) $term['termLength'],
+                    'mileage' => (int) $residual['annualMileage'],
+                    'residual' => (int) $residual['residualPercent'],
+                ];
+
+                if (isset($term['rate'])) {
+                    $data['rate'] = (float) $term['rate'];
+                }
+
+                if (isset($term['moneyFactor'])) {
+                    $data['moneyFactor'] = $term['moneyFactor'];
+                }
+
+                if (!$data['residual']) {
+                    continue;
+                }
+
+                $situations[] = $data;
             }
-            $rates[$rateData['termLength']] = $rateData;
         }
-        return $rates;
+        return $situations;
     }
 
     public function get($terms, $rebate = 0, $cash_down = [0], $role = 'default') {
-
         $prices = $this->deal->prices();
         $msrp = $prices->msrp;
         $price = $prices->{$role};

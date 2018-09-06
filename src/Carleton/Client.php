@@ -57,7 +57,7 @@ class Client
 
         $fees = [
             'acquisition' => [
-                'Amount' => $acquisitionFee,
+                'Amount' => (float)$acquisitionFee,
                 'Type' => 'Financed',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
@@ -66,7 +66,7 @@ class Client
                 'RoundToOption' => 'NearestPenny',
             ],
             'doc' => [
-                'Amount' => $docFee,
+                'Amount' => (float)$docFee,
                 'Type' => 'Upfront',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
@@ -85,7 +85,7 @@ class Client
                 'RoundToOption' => 'NearestPenny',
             ],
             'cvr' => [
-                'Amount' => $cvrFee,
+                'Amount' => (float)$cvrFee,
                 'Type' => 'Upfront',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
@@ -95,38 +95,39 @@ class Client
             ],
         ];
 
-        if (is_string($terms)) {
-            $terms = json_decode($terms, true);
-        }
-
         foreach ($cashDueOptions as $cashDueValue) {
             foreach ($terms as $term => $termData) {
-                foreach ($termData['annualMileage'] as $annualMileage => $annualMileageData) {
-                    $quote = [
-                        'taxRate' => $taxRate,
-                        'moneyFactor' => $termData['moneyFactor'],
-                        'residualPercent' => $annualMileageData['residualPercent'],
-                        'term' => $term,
-                        'annualMileage' => $annualMileage,
-                        'contractDate' => $contractDate->format('Y-m-d'),
-                        'msrp' => $msrp,
-                        'cashAdvance' => $cashAdvance,
-                        'fees' => $fees,
-                    ];
+                $quote = [
+                    'taxRate' => $taxRate,
+                    'residualPercent' => $termData['residual'],
+                    'term' => $termData['length'],
+                    'annualMileage' => $termData['mileage'],
+                    'contractDate' => $contractDate->format('Y-m-d'),
+                    'msrp' => $msrp,
+                    'cashAdvance' => $cashAdvance,
+                    'fees' => $fees,
+                ];
 
-                    $quote['fees']['cashDown'] = [
-                        'Amount' => $cashDueValue,
-                        'Type' => 'Financed',
-                        'Base' => 'Fixed',
-                        'DescriptionType' => 'CashDown',
-                        'TaxIndex' => '1',
-                        'FinanceTaxes' => 'No',
-                        'CCRPortionFeeTaxed' => 'Yes',
-                        'RoundToOption' => 'NearestPenny',
-                    ];
-
-                    $data['quotes'][] = $quote;
+                if (isset($termData['rate'])) {
+                    $quote['rate'] = $termData['rate'];
                 }
+
+                if (isset($termData['moneyFactor'])) {
+                    $quote['moneyFactor'] = $termData['moneyFactor'];
+                }
+
+                $quote['fees']['cashDown'] = [
+                    'Amount' => $cashDueValue,
+                    'Type' => 'Financed',
+                    'Base' => 'Fixed',
+                    'DescriptionType' => 'CashDown',
+                    'TaxIndex' => '1',
+                    'FinanceTaxes' => 'No',
+                    'CCRPortionFeeTaxed' => 'Yes',
+                    'RoundToOption' => 'NearestPenny',
+                ];
+
+                $data['quotes'][] = $quote;
             }
         }
         return $data;
@@ -192,7 +193,6 @@ class Client
             $contractDate
         );
         $request = $this->buildRequest($params);
-
         return $this->getLeasePaymentsForQuoteParameters($params, $request);
     }
 
@@ -236,7 +236,6 @@ class Client
         $faults = $xml->xpath('/soap:Envelope/soap:Body/soap:Fault');
         if ($faults) {
             Log::info('Could not find lease calculations (response): ' . (string)$faults[0]->faultstring);
-
             return [];
         }
 
