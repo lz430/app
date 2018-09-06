@@ -119,7 +119,7 @@ export default class AddToCart extends React.PureComponent {
                                 <div
                                     style={{
                                         fontStyle: 'italic',
-                                        fontSize: '.75em',
+                                        fontSize: '1em',
                                         marginLeft: '.25em',
                                     }}
                                 >
