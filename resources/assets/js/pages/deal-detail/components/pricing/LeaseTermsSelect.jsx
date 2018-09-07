@@ -36,29 +36,36 @@ export default class LeaseTermsSelect extends React.PureComponent {
     }
 
     renderTerm(pricing, term, termIndex, annualMileage) {
-        let className = pricing.isSelectedLeasePaymentForTermAndCashDue(
-            term,
-            0,
-            annualMileage
-        )
-            ? 'cash-finance-lease-calculator__lease-table-cell--selected'
-            : 'cash-finance-lease-calculator__lease-table-cell--selectable';
+        const value = pricing.paymentsForTermAndCashDue(term, 0, annualMileage);
 
-        return (
-            <td
-                className={className}
-                key={termIndex}
-                onClick={() => this.props.onChange(annualMileage, term, 0)}
-            >
-                <Dollars
-                    value={pricing.paymentsForTermAndCashDue(
-                        term,
-                        0,
-                        annualMileage
-                    )}
-                />
-            </td>
-        );
+        if (value) {
+            let className = pricing.isSelectedLeasePaymentForTermAndCashDue(
+                term,
+                0,
+                annualMileage
+            )
+                ? 'cash-finance-lease-calculator__lease-table-cell--selected'
+                : 'cash-finance-lease-calculator__lease-table-cell--selectable';
+
+            return (
+                <td
+                    className={className}
+                    key={termIndex}
+                    onClick={() => this.props.onChange(annualMileage, term, 0)}
+                >
+                    <Dollars value={value} />
+                </td>
+            );
+        } else {
+            return (
+                <td
+                    className="cash-finance-lease-calculator__lease-table-cell--disabled"
+                    key={termIndex}
+                >
+                    N/A
+                </td>
+            );
+        }
     }
 
     renderTableBody(pricing) {
