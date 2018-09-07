@@ -63,6 +63,7 @@ class DealSearchTransformer extends TransformerAbstract
             'dmr_features' => (isset($deal->legacy_features) ? $deal->legacy_features : []),
             'exterior_color_swatch' => $exteriorColor,
             'pricing' => $deal->pricing,
+            'status' => $deal->status
         ];
     }
 }
