@@ -36,6 +36,7 @@ class DealToVehicle
         'Sport Utility Vehicle' => "Sport Utility",
         'Pickup' => 'Regular Cab',
         'Minivan' => 'Passenger Van',
+        'Mini Mpv' => 'Hatchback'
     ];
 
     private $client;
@@ -213,7 +214,6 @@ class DealToVehicle
         ];
 
         $results = $this->fetchProgramData($search);
-
         if ($results->status === "2") {
             throw new FetchProgramDataException("Data Delivery API: " . $results->error . " ::: " . json_encode($params));
         }

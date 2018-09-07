@@ -133,6 +133,7 @@ class RebatesRole extends React.Component {
                         paddingLeft: '6px',
                         marginTop: '-10px',
                         width: '20px',
+                        height: '20px',
                     }}
                     fill="grey"
                 />

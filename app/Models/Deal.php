@@ -64,6 +64,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $seating_capacity
  * @property string $vehicle_color
  * @property string $status
+ * @property \Datetime $sold_at
  */
 class Deal extends Model
 {
@@ -129,6 +130,9 @@ class Deal extends Model
                 'type' => 'date',
             ],
             'updated_at' => [
+                'type' => 'date',
+            ],
+            'sold_at' => [
                 'type' => 'date',
             ],
             'inventory_date' => [
@@ -201,7 +205,8 @@ class Deal extends Model
         'option_codes' => 'array',
         'package_codes' => 'array',
         'source_price' => 'object',
-        'payments' => 'object'
+        'payments' => 'object',
+        'sold_at' => 'datetime:Y-m-d'
     ];
 
     /**

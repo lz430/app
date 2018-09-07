@@ -13,7 +13,6 @@ import AddToCart from './AddToCart';
 import StandardFeaturesModal from './StandardFeaturesModal';
 import AdditionalFeaturesModal from './AdditionalFeaturesModal';
 import DealColors from 'components/Deals/DealColors';
-import { dealPricingFromPricingFactory } from '../../../src/DealPricing';
 
 export default class DealDetail extends React.PureComponent {
     static propTypes = {

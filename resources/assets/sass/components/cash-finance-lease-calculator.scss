@@ -2,10 +2,9 @@
     background: $color-text-white;
     padding: 15px;
 
-    @media (min-width: $break-small) {
+    @include media-breakpoint-up(sm) {
         width: 450px;
     }
-
     .rebates {
         h4 {
             margin-bottom: 0;

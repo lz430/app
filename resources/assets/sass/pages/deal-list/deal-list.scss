@@ -1,14 +1,10 @@
 .filter-page {
+    min-height: 100%;
     background: $color-background-secondary;
     display: flex;
-    height: 100vh;
-    overflow: hidden;
+    flex-direction: row;
+    flex: 1 1 auto;
     position: relative;
-
-    @media (min-width: $break-medium) {
-        height: calc(100vh - #{$header-height});
-    }
-
     &__top-row {
         border-bottom: 1px solid $color-section-bottom-border;
         padding: 0 20px 0 20px;
@@ -19,7 +15,7 @@
         align-items: center;
         justify-content: space-between;
 
-        @media (min-width: $break-medium) {
+        @include media-breakpoint-up(md) {
             flex-direction: row;
             padding: 8px 40px 8px 40px;
         }
@@ -28,18 +24,18 @@
             margin: 0.5em;
             width: 100%;
 
-            @media (min-width: $break-small) {
+            @include media-breakpoint-up(sm) {
                 margin-bottom: 1em;
             }
 
-            @media (min-width: $break-medium) {
+            @include media-breakpoint-up(md) {
                 margin-bottom: 0;
                 width: auto;
             }
 
             &--tabButtons {
                 display: none;
-                @media (min-width: $break-small) {
+                @include media-breakpoint-up(sm) {
                     display: block;
                 }
             }
@@ -47,40 +43,20 @@
     }
 
     &__deals {
-        height: 100%;
         left: 0;
-        position: absolute;
         width: 100%;
         z-index: 20;
-
-        &--small-filters-shown {
-            left: $sidebar-filters-width;
-        }
-
-        &--small-filters-hidden {
-            left: 0;
-        }
-
-        &--small {
-            transition: left 1s;
-        }
-
-        @media (min-width: $break-small) {
-            left: $sidebar-filters-width;
-            width: calc(100vw - #{$sidebar-filters-width});
-        }
     }
 
     &__filter-panel {
-        background-color: $color-sidebar-background-primary;
-        height: 100%;
-        position: absolute;
+        z-index: 49;
+        background: #fff;
         width: $sidebar-filters-width;
-        overflow-y: scroll;
-
-        @media (min-width: $break-small) {
-            left: 0;
-        }
+        border-right: 1px solid #ccc;
+        box-shadow: $box-shadow-sm;
+        position: fixed;
+        top: 0;
+        bottom: 0;
 
         &--small-filters-shown {
             left: 0;
@@ -92,6 +68,12 @@
 
         &--small {
             transition: 1s;
+        }
+
+        @include media-breakpoint-up(lg) {
+            left: 0;
+            position: static;
+            min-width: 300px;
         }
     }
 
@@ -143,12 +125,12 @@
 
 .filter-close {
     cursor: pointer;
-    padding: 0.75rem;
+    padding: 0.25rem 0.5rem;
     text-align: right;
 
     &__icon {
         cursor: pointer;
-        fill: $color-text-white;
-        stroke: $color-text-white;
+        fill: $text-color;
+        stroke: $text-color;
     }
 }

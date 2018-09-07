@@ -78,8 +78,9 @@ class ModelYear extends React.Component {
         }
 
         return (
-            <div className="modelyear__price">
-                <span className="modelyear__price-label">{label}</span> {value}
+            <div className="price-summary">
+                <div className="price-summary__price__label">{label}</div>
+                <div className="price-summary__price__value">{value}</div>
             </div>
         );
     }
@@ -88,23 +89,25 @@ class ModelYear extends React.Component {
         const modelYear = this.props.modelYear;
 
         return (
-            <Card className="inventory-summary">
-                <CardHeader>
-                    <div
-                        className="modelyear__basic-info"
-                        onClick={() => {
-                            this.selectModelYear(modelYear);
-                        }}
-                    >
-                        <div className="modelyear__basic-info-year-and-model">
-                            <div className="modelyear__basic-info-year-and-make">
-                                {`${modelYear.year} ${modelYear.make}`}
-                            </div>
-
-                            <div className="modelyear__basic-info-model-and-series">
-                                {`${modelYear.model}`}
-                            </div>
+            <Card
+                className="inventory-summary"
+                onClick={() => {
+                    this.selectModelYear(modelYear);
+                }}
+            >
+                <CardHeader className="modelyear__header">
+                    <div className="modelyear__name">
+                        <div className="modelyear__basic-info-year-and-make">
+                            {`${modelYear.year} ${modelYear.make}`}
                         </div>
+
+                        <div className="modelyear__basic-info-model-and-series">
+                            {`${modelYear.model}`}
+                        </div>
+                    </div>
+
+                    <div className="modelyear__count">
+                        {modelYear.deals} in stock
                     </div>
                 </CardHeader>
                 <CardBody>
@@ -116,16 +119,12 @@ class ModelYear extends React.Component {
                         }}
                     />
                     <div className="modelyear__details">
-                        <div className="modelyear__count">
-                            {modelYear.deals} in stock
-                        </div>
-
                         {this.renderPrice()}
                     </div>
                 </CardBody>
-                <CardFooter>
+                <CardFooter className="text-center">
                     <button
-                        className="btn btn-success btn-block"
+                        className="btn btn-outline-primary btn-sm"
                         onClick={() => {
                             this.selectModelYear(modelYear);
                         }}

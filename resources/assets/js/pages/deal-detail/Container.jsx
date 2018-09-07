@@ -19,6 +19,7 @@ import { initPage, receiveDeal, dealDetailRequestDealQuote } from './actions';
 import { getDeal, getLeaseAnnualMileage, getLeaseTerm } from './selectors';
 import DealDetail from './components/DealDetail';
 import { pricingFromStateFactory } from '../../src/pricing/factory';
+import PageContent from '../../components/App/PageContent';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -131,7 +132,7 @@ class DealDetailContainer extends React.PureComponent {
         }
 
         return (
-            <div>
+            <PageContent>
                 <Container>
                     <Breadcrumb>
                         <BreadcrumbItem>
@@ -161,7 +162,7 @@ class DealDetailContainer extends React.PureComponent {
                     onToggleCompare={this.props.toggleCompare}
                     compareList={this.props.compareList}
                 />
-            </div>
+            </PageContent>
         );
     }
 }

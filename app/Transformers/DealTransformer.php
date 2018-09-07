@@ -3,6 +3,8 @@
 namespace App\Transformers;
 
 use App\Models\Deal;
+use App\Models\Feature;
+use DeliverMyRide\Fuel\Map;
 use League\Fractal\TransformerAbstract;
 
 class DealTransformer extends TransformerAbstract
@@ -26,6 +28,22 @@ class DealTransformer extends TransformerAbstract
 
     public function transform(Deal $deal)
     {
+
+        //compares feature id of color attribute to map and gets hex value back for use for swatch
+        $data = null;
+        foreach(Map::COLOR_MAP as $needle => $value) {
+            if($deal->color == $needle) {
+                $data = $value;
+            }
+        }
+        $featureColor = Feature::where('title', $data)->first();
+        $exteriorColor = null;
+        foreach(Map::HEX_MAP as $color => $value){
+            if(isset($featureColor) && $featureColor->title == $color){
+                $exteriorColor = $value;
+            }
+        }
+
         $photos = $this->photos($deal);
         $prices = $this->prices($deal);
         return [
@@ -59,6 +77,7 @@ class DealTransformer extends TransformerAbstract
             'dealer' => $deal->dealer,
             'dmr_features' => ($deal->features ? $deal->features : []),
             'pricing' => $prices,
+            'exterior_color_swatch' => $exteriorColor,
             'status' => $deal->status
         ];
     }

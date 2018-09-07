@@ -4,11 +4,10 @@
     border-radius: 2px;
     display: inline-flex;
     fill: $color-text-white;
-    height: $selector-icon-size;
+    height: 20px;
+    width: 20px;
     margin-right: 6px;
-    min-width: $selector-icon-size;
     padding: 3px;
-    width: $selector-icon-size;
 
     &--selected {
         border-color: $color-blue;

@@ -1,3 +1,1 @@
 export const TOGGLE_COMPARE = 'TOGGLE_COMPARE';
-
-export const WINDOW_RESIZE = 'WINDOW_RESIZE';

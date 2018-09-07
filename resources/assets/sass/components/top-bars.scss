@@ -5,7 +5,7 @@
     padding-left: 0.5em;
     display: none;
 
-    @media (min-width: $break-small) {
+    @include media-breakpoint-up(sm) {
         display: block;
     }
 
@@ -18,7 +18,7 @@
         font-size: 0.75rem;
         flex: 1;
 
-        @media (min-width: $break-small) {
+        @include media-breakpoint-up(sm) {
             font-size: 1rem;
         }
         cursor: pointer;

@@ -10,8 +10,6 @@ import rootReducer from 'reducers';
 
 import { basePersistConfig } from 'persist';
 
-import { windowResize } from 'apps/common/actions';
-
 const initialState = {};
 
 export const history = createBrowserHistory();
@@ -39,11 +37,7 @@ export default () => {
         )
     );
 
-    const persistor = persistStore(store, null, () => {
-        window.addEventListener('resize', () => {
-            store.dispatch(windowResize(window.innerWidth));
-        });
-    });
+    const persistor = persistStore(store, null, () => {});
 
     sagaMiddleware.run(rootSaga);
     return { store, persistor };

@@ -86,7 +86,11 @@ function* requestSearch(action) {
     }
 
     try {
-        results = yield call(ApiClient.browse.search, searchQuery);
+        results = yield call(
+            ApiClient.browse.search,
+            searchQuery,
+            source.token
+        );
         results = results.data;
     } catch (e) {
         console.log(e);

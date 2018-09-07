@@ -18,7 +18,7 @@ $make-img-size: 90px;
         justify-content: center;
         margin: 10px;
 
-        @media (min-width: $break-medium) {
+        @include media-breakpoint-up(md) {
             border-style: none;
         }
     }
@@ -36,7 +36,7 @@ $make-img-size: 90px;
         text-align: center;
         width: 100%;
 
-        @media (min-width: $break-medium) {
+        @include media-breakpoint-up(md) {
             border-left: 1px solid $color-section-bottom-border;
             border-right: 1px solid $color-section-bottom-border;
             border-top: 1px solid $color-section-bottom-border;
@@ -51,7 +51,7 @@ $make-img-size: 90px;
             width: $make-width-half;
         }
 
-        @media (min-width: $break-large) {
+        @include media-breakpoint-up(lg) {
             font-size: 1em;
             height: $make-height;
             margin: 5px;
@@ -70,14 +70,14 @@ $make-img-size: 90px;
             max-width: 50px;
             width: 50px;
 
-            @media (min-width: $break-medium) {
+            @include media-breakpoint-up(md) {
                 height: $make-img-size-half;
                 max-height: $make-img-size-half;
                 max-width: $make-img-size-half;
                 width: $make-img-size-half;
             }
 
-            @media (min-width: $break-large) {
+            @include media-breakpoint-up(lg) {
                 height: $make-img-size;
                 max-height: $make-img-size;
                 max-width: $make-img-size;
@@ -92,7 +92,7 @@ $make-img-size: 90px;
         text-align: left;
         width: calc(100% - 25px);
 
-        @media (min-width: $break-medium) {
+        @include media-breakpoint-up(md) {
             padding: 0;
             text-align: center;
         }
