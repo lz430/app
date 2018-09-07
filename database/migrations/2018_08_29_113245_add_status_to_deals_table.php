@@ -17,11 +17,6 @@ class AddStatusToDealsTable extends Migration
             $table->enum('status', ['available', 'pending', 'processing', 'sold'])->default('available')->after('seating_capacity');
             $table->timestamp('sold_at')->after('updated_at')->nullable();
         });
-
-        DB::raw('
-            CREATE TRIGGER deals_update_sold_date AFTER INSERT
-        
-        ');
     }
 
     /**
