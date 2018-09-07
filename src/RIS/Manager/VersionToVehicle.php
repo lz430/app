@@ -116,8 +116,7 @@ class VersionToVehicle
                 ],
             ],
         ],
-
-        'BY_MODEL' => [
+        'Hyundai' => [
             'Elantra GT' => [
                 'GT' => 'Base',
                 'GT Sport' => 'Sport',
@@ -304,10 +303,6 @@ class VersionToVehicle
 
             } elseif (isset(self::TRIM_MAP[$make])) {
                 $trim = self::TRIM_MAP[$make];
-            }
-
-            if (isset(self::TRIM_MAP['BY_MODEL'][$model]) && isset(self::TRIM_MAP['BY_MODEL'][$model][$trim])) {
-                $trim = self::TRIM_MAP['BY_MODEL'][$model][$trim];
             }
 
             if (isset(self::TRIM_MAP['BY_TRIM'][$trim])) {
