@@ -33,8 +33,10 @@ class VersionQuoteObserver
         if ($quote->getOriginal()['hashcode'] != $quote->hashcode) {
             $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
             foreach($quote->version->deals() as $deal) {
-                $calculator->calculateBasicPayments($deal);
-                Cache::tags('deal-' . $deal->id)->flush();
+                if($deal->status == 'available') {
+                    $calculator->calculateBasicPayments($deal);
+                    Cache::tags('deal-' . $deal->id)->flush();
+                }
             }
         }
     }

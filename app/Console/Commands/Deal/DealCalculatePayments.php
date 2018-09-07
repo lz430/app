@@ -54,12 +54,16 @@ class DealCalculatePayments extends Command
         if ($dealId) {
             $this->details = true;
             $deal = Deal::where('id', $dealId)->first();
-            $this->calculatePayments($deal);
+            if($deal->status == 'available') {
+                $this->calculatePayments($deal);
+            }
 
         } else {
             Deal::chunk(500, function ($deals) {
                 foreach ($deals as $deal) {
-                    $this->calculatePayments($deal);
+                    if($deal->status == 'available') {
+                        $this->calculatePayments($deal);
+                    }
                 }
             });
         }
