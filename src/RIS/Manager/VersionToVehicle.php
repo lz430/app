@@ -81,6 +81,11 @@ class VersionToVehicle
             ],
         ],
         'BY_MODEL_AND_TRIM_AND_NAME' => [
+            'MDX' => [
+                'Advance Package' => [
+                    'Sport Hybrid SH-AWD w/Advance Package' => 'MDX Sport Hybrid'
+                ],
+            ],
             'S90' => [
                 'Inscription' => [
                     'T8 Inscription PHEV AWD' => 'S90 Hybrid',
@@ -94,7 +99,24 @@ class VersionToVehicle
         'Mercedes-Benz',
     ];
 
+
+    /**
+     *
+     */
     private const TRIM_MAP = [
+        'Acura' => [
+            'MDX' => [
+                'Base' => '3.5L',
+                'Technology Package' => '3.5L w/Technology Pkg',
+                'Technology & Entertainment Package' => '3.5L w/Technology & Entertainment Pkgs',
+                'Advance and Entertainment Package' => '3.5L w/Advance & Entertainment Pkgs',
+                'Advance Package' => [
+                    'Sport Hybrid SH-AWD w/Advance Package' => '3.0L w/Advance Package',
+                    'SH-AWD w/Advance Package' => '3.5L w/Advance Package',
+                ],
+            ],
+        ],
+
         'BY_MODEL' => [
             'Elantra GT' => [
                 'GT' => 'Base',
@@ -247,8 +269,43 @@ class VersionToVehicle
         ];
 
         $model = $this->version->model->name;
-
+        $make = $this->version->model->make->name;
+        $name = $this->version->name;
         foreach ($trims as &$trim) {
+
+            //
+            // Make
+            if (isset(self::TRIM_MAP[$make]) && is_array(self::TRIM_MAP[$make])) {
+
+                //
+                // Model
+                $data = self::TRIM_MAP[$make];
+                if (isset($data[$model]) && is_array($data[$model])) {
+                    $data = $data[$model];
+
+                    //
+                    // Trim
+                    if (isset($data[$trim]) && is_array($data[$trim])) {
+                        $data = $data[$trim];
+
+                        //
+                        // Name
+                        if (isset($data[$name])) {
+                            $trim = $data[$name];
+                        }
+
+                    } elseif (isset($data[$trim])) {
+                        $trim = $data[$trim];
+                    }
+
+                } elseif (isset($data[$model])) {
+                    $trim = $data[$model];
+                }
+
+            } elseif (isset(self::TRIM_MAP[$make])) {
+                $trim = self::TRIM_MAP[$make];
+            }
+
             if (isset(self::TRIM_MAP['BY_MODEL'][$model]) && isset(self::TRIM_MAP['BY_MODEL'][$model][$trim])) {
                 $trim = self::TRIM_MAP['BY_MODEL'][$model][$trim];
             }
@@ -277,13 +334,13 @@ class VersionToVehicle
         if (isset(self::MODEL_MAP['BY_MODEL'][$model])) {
             return self::MODEL_MAP['BY_MODEL'][$model];
 
-        //
-        // Model and trim
+            //
+            // Model and trim
         } elseif (isset(self::MODEL_MAP['BY_MODEL_AND_TRIM'][$model][$this->version->trim_name])) {
             return self::MODEL_MAP['BY_MODEL_AND_TRIM'][$model][$this->version->trim_name];
 
-        //
-        // Model and trim and name
+            //
+            // Model and trim and name
         } elseif (isset(self::MODEL_MAP['BY_MODEL_AND_TRIM_AND_NAME'][$model][$this->version->trim_name][$this->version->name])) {
             return self::MODEL_MAP['BY_MODEL_AND_TRIM_AND_NAME'][$model][$this->version->trim_name][$this->version->name];
 
@@ -477,7 +534,6 @@ class VersionToVehicle
         $vehicles = $vehicles->toArray();
 
 
-
         // Require
         $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             if (!isset($vehicle->filters->YEAR)) {
@@ -486,14 +542,15 @@ class VersionToVehicle
             return in_array($params['year'], $vehicle->filters->YEAR);
         });
 
+
         $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             return in_array($params['model'], $vehicle->filters->MODEL);
         });
 
 
-
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
+
         /*
         foreach($vehicles as $vehicle) {
             print_r($vehicle->filters);
