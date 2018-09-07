@@ -16,7 +16,7 @@ class VersionQuoteObserver
     public function created(VersionQuote $quote)
     {
         $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
-        foreach($quote->version->deals() as $deal) {
+        foreach($quote->version->deals()->get() as $deal) {
             $calculator->calculateBasicPayments($deal);
             Cache::tags('deal-' . $deal->id)->flush();
         }
@@ -32,7 +32,7 @@ class VersionQuoteObserver
     {
         if ($quote->getOriginal()['hashcode'] != $quote->hashcode) {
             $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
-            foreach($quote->version->deals() as $deal) {
+            foreach($quote->version->deals()->get() as $deal) {
                 $calculator->calculateBasicPayments($deal);
                 Cache::tags('deal-' . $deal->id)->flush();
             }
@@ -48,7 +48,7 @@ class VersionQuoteObserver
     public function deleted(VersionQuote $quote)
     {
         $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
-        foreach($quote->version->deals() as $deal) {
+        foreach($quote->version->deals()->get() as $deal) {
             $calculator->calculateBasicPayments($deal);
         }
     }
