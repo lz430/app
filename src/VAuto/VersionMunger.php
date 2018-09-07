@@ -339,8 +339,10 @@ class VersionMunger
         // Ensure existing deals attached to this version are forced to refresh.
         /* @var Deal $attachedDeal */
         foreach ($version->fresh()->deals as $attachedDeal) {
-            $attachedDeal->features()->sync([]);
-            $attachedDeal->jatoFeatures()->sync([]);
+            if($attachedDeal->status == 'available') {
+                $attachedDeal->features()->sync([]);
+                $attachedDeal->jatoFeatures()->sync([]);
+            }
         }
     }
 

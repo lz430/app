@@ -101,7 +101,10 @@ class DealQuote {
             return $data;
         }
 
-        $this->getRatesAndRebates($paymentType, $zip, $primaryRole, $conditionalRoles);
+        if($deal->status == 'available') {
+            $this->getRatesAndRebates($paymentType, $zip, $primaryRole, $conditionalRoles);
+        }
+
         $ratesAndRebates = $this->ratesAndRebatesData;
         $potentialConditionalRoles = $this->potentialConditionalRoles;
 
