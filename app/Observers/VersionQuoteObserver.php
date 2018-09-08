@@ -17,8 +17,10 @@ class VersionQuoteObserver
     {
         $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
         foreach($quote->version->deals()->get() as $deal) {
-            $calculator->calculateBasicPayments($deal);
-            Cache::tags('deal-' . $deal->id)->flush();
+            if($deal->status == 'available') {
+                $calculator->calculateBasicPayments($deal);
+                Cache::tags('deal-' . $deal->id)->flush();
+            }
         }
     }
 
@@ -33,8 +35,10 @@ class VersionQuoteObserver
         if ($quote->getOriginal()['hashcode'] != $quote->hashcode) {
             $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
             foreach($quote->version->deals()->get() as $deal) {
-                $calculator->calculateBasicPayments($deal);
-                Cache::tags('deal-' . $deal->id)->flush();
+                if($deal->status == 'available') {
+                    $calculator->calculateBasicPayments($deal);
+                    Cache::tags('deal-' . $deal->id)->flush();
+                }
             }
         }
     }
@@ -49,7 +53,9 @@ class VersionQuoteObserver
     {
         $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
         foreach($quote->version->deals()->get() as $deal) {
-            $calculator->calculateBasicPayments($deal);
+            if($deal->status == 'available') {
+                $calculator->calculateBasicPayments($deal);
+            }
         }
     }
 }
