@@ -8,9 +8,9 @@ use DeliverMyRide\Carleton\Client;
 use DeliverMyRide\Carleton\Manager\DealLeasePaymentsManager;
 
 /**
-
  */
-class DealCalculateBasicPayments {
+class DealCalculateBasicPayments
+{
 
     private $carletonClient;
 
@@ -34,7 +34,8 @@ class DealCalculateBasicPayments {
         return $quote;
     }
 
-    private function buildCashPayment($quote, Deal $deal) {
+    private function buildCashPayment($quote, Deal $deal)
+    {
         $payload = new \stdClass();
 
         $payment = $deal->prices()->default;
@@ -49,7 +50,8 @@ class DealCalculateBasicPayments {
         return $payload;
     }
 
-    private function buildFinancePayment($quote, Deal $deal) {
+    private function buildFinancePayment($quote, Deal $deal)
+    {
         $payload = new \stdClass();
 
         $price = $deal->prices()->default;
@@ -62,7 +64,7 @@ class DealCalculateBasicPayments {
         $term = $quote->term;
         $annualInterestRate = $quote->rate / 1200;
         $payment = $price - $down;
-        $top = pow(  1 + $annualInterestRate, $term);
+        $top = pow(1 + $annualInterestRate, $term);
         $bottom = $top - 1;
         $payment = $payment * $annualInterestRate * ($top / $bottom);
         $payload->term = (int)$quote->term;
@@ -74,7 +76,8 @@ class DealCalculateBasicPayments {
 
     }
 
-    private function buildLeasePayment($quote, Deal $deal) {
+    private function buildLeasePayment($quote, Deal $deal)
+    {
         if (!$quote->term) {
             return null;
         }
@@ -90,8 +93,8 @@ class DealCalculateBasicPayments {
         ];
 
         if ($quote->rate_type != 'Factor') {
-            $rates['moneyFactor'] = (float)$quote->rate / 2400;
-            $rates['type'] = 'factor';
+            $rates['rate'] = (float)$quote->rate;
+            $rates['type'] = 'rate';
         } else {
             $rates['moneyFactor'] = (float)$quote->rate;
             $rates['type'] = 'factor';
@@ -103,6 +106,7 @@ class DealCalculateBasicPayments {
             $payload = new \stdClass();
             $payload->term = (int)$quote->term;
             $payload->rate = (float)$quote->rate;
+            $payload->rate_type = $quote->rate_type;
             $payload->rebate = (int)$quote->rebate;
             $payload->residual = (int)$quote->residual;
             $payload->miles = (int)$quote->miles;
@@ -118,7 +122,8 @@ class DealCalculateBasicPayments {
      * @param bool $save
      * @return bool|null|\stdClass
      */
-    public function calculateBasicPayments(Deal $deal, bool $save = true) {
+    public function calculateBasicPayments(Deal $deal, bool $save = true)
+    {
         if (!$deal->dealer) {
             return false;
         }

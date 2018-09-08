@@ -33,10 +33,10 @@ class DealQuoteTransformer extends TransformerAbstract
             if (isset($term->Factor)) {
                 $data['moneyFactor'] = $term->Factor;
             } elseif (isset($term->Rate) && is_numeric($term->Rate)) {
-                $data['moneyFactor'] = $term->Rate / 2400;
+                $data['rate'] = $term->Rate;
             }
 
-            if ($data['residualPercent'] && isset($data['moneyFactor'])) {
+            if ($data['residualPercent'] && (isset($data['moneyFactor']) || isset($data['rate']))) {
                 $months[] = $data;
             }
         }
