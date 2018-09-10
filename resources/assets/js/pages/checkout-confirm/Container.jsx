@@ -47,8 +47,6 @@ class CheckoutConfirmContainer extends React.PureComponent {
     }
 
     handleVerifyRecaptchaToken = recaptchaToken => {
-        console.log('SUP');
-        console.log(recaptchaToken);
         this.setState({ recaptchaToken });
     };
 
