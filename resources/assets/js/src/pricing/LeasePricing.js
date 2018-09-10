@@ -50,6 +50,10 @@ export default class LeasePricing extends Pricing {
         return 0;
     };
 
+    canPurchase = () => {
+        return this.quoteIsLoaded() && this.payment();
+    };
+
     termsAvailable = () => {
         const payments = this.payments();
 
