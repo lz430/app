@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ReCaptcha, loadReCaptcha } from 'react-recaptcha-google';
+import ReCAPTCHA from 'react-google-recaptcha';
+
 import { Container, Row, Col } from 'reactstrap';
 
 import config from 'config';
@@ -40,13 +41,16 @@ class CheckoutConfirmContainer extends React.PureComponent {
         isPageValid: true,
     };
 
-    recaptcha = null;
-
     componentDidMount() {
         this.props.init();
-        loadReCaptcha();
         this.props.clearCheckoutContactFormErrors();
     }
+
+    handleVerifyRecaptchaToken = recaptchaToken => {
+        console.log('SUP');
+        console.log(recaptchaToken);
+        this.setState({ recaptchaToken });
+    };
 
     handleConfirmPurchase = e => {
         e.preventDefault();
@@ -68,8 +72,6 @@ class CheckoutConfirmContainer extends React.PureComponent {
             phone_number: extractFieldValue('phone_number'),
             g_recaptcha_response: this.state.recaptchaToken,
         };
-
-        this.recaptcha.reset();
 
         this.props.checkoutContact(fields);
     };
@@ -385,22 +387,15 @@ class CheckoutConfirmContainer extends React.PureComponent {
                                     </div>
 
                                     <div className="request-email__captcha">
-                                        <ReCaptcha
-                                            ref={el => {
-                                                this.recaptcha = el;
-                                            }}
+                                        <ReCAPTCHA
                                             size="normal"
                                             data-theme="dark"
-                                            render="explicit"
                                             sitekey={
                                                 config.RECAPTCHA_PUBLIC_KEY
                                             }
-                                            onloadCallback={
-                                                this.handleResetRecaptchaToken
-                                            }
-                                            verifyCallback={
-                                                this.handleVerifyRecaptchaToken
-                                            }
+                                            onChange={this.handleVerifyRecaptchaToken.bind(
+                                                this
+                                            )}
                                         />
 
                                         {errors['g-recaptcha-response'] && (
@@ -439,14 +434,6 @@ class CheckoutConfirmContainer extends React.PureComponent {
             </PageContent>
         );
     }
-
-    handleResetRecaptchaToken = () => {
-        this.setState({ recaptchaToken: null });
-    };
-
-    handleVerifyRecaptchaToken = recaptchaToken => {
-        this.setState({ recaptchaToken });
-    };
 }
 
 const mapStateToProps = (state, props) => {
