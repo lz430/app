@@ -57,16 +57,18 @@ export default class AddToCart extends React.PureComponent {
                                         fontWeight: 'bold',
                                     }}
                                 >
-                                    We're sorry, this deal is no longer
-                                    available..{' '}
+                                    We're sorry, this vehicle is no longer
+                                    available.{' '}
                                     <span
                                         style={{
                                             fontWeight: 'normal',
                                             fontSize: '.9em',
                                         }}
                                     >
-                                        Try <a href="/filter">searching</a> for
-                                        a different deal.
+                                        <br />
+                                        Start a New <a href="/filter">
+                                            Search
+                                        </a>.
                                     </span>
                                 </div>
                             </div>
