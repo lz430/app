@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Footer from './Footer';
-import { MediumAndUp } from '../Responsive';
+import { LargeAndUp } from '../Responsive';
 
 export default class PageContent extends React.PureComponent {
     static propTypes = {
@@ -17,9 +17,9 @@ export default class PageContent extends React.PureComponent {
     renderFooter() {
         if (this.props.desktopOnlyFooter) {
             return (
-                <MediumAndUp>
+                <LargeAndUp>
                     <Footer />
-                </MediumAndUp>
+                </LargeAndUp>
             );
         }
 
