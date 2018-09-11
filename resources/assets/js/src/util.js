@@ -34,7 +34,10 @@ export const toggleItem = (items, item) => {
  */
 export const moneyFormat = num => {
     // Older browser don't support this.
-    if (Intl && typeof Intl.NumberFormat === 'function') {
+    if (
+        typeof Intl !== 'undefined' &&
+        typeof Intl.NumberFormat === 'function'
+    ) {
         const formatter = new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
