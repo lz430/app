@@ -36,6 +36,7 @@ class DealerRequest extends FormRequest
             'city' => 'required',
             'state' => 'required',
             'zip' => 'required',
+            'doc_fee' => 'required',
         ];
     }
 
