@@ -442,7 +442,7 @@ class Importer
             'fuel_econ_city' => $row['City MPG'] !== '' ? $row['City MPG'] : null,
             'fuel_econ_hwy' => $row['Highway MPG'] !== '' ? $row['Highway MPG'] : null,
             'dealer_name' => $row['Dealer Name'],
-            'days_old' => $row['Age'],
+            'days_old' => (is_numeric($row['Age'])) ? $row['Age'] : 0,
             'version_id' => $version->id,
             'source_price' => $pricing,
         ]);
