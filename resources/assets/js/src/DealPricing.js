@@ -1,5 +1,5 @@
 import formulas from 'src/formulas';
-import util from 'src/util';
+import { moneyFormat } from 'src/util';
 import * as R from 'ramda';
 import Decimal from 'decimal.js';
 
@@ -131,7 +131,7 @@ export default class DealPricing {
     }
 
     leaseMonthlyPreTaxPayment() {
-        return util.moneyFormat(this.leaseMonthlyPreTaxPaymentValue());
+        return moneyFormat(this.leaseMonthlyPreTaxPaymentValue());
     }
 
     leaseMonthlyUseTaxValue() {
@@ -145,7 +145,7 @@ export default class DealPricing {
     }
 
     leaseMonthlyUseTax() {
-        return util.moneyFormat(this.leaseMonthlyUseTaxValue());
+        return moneyFormat(this.leaseMonthlyUseTaxValue());
     }
 
     leaseTotalAmountAtDriveOffValue() {
@@ -159,7 +159,7 @@ export default class DealPricing {
     }
 
     leaseTotalAmountAtDriveOff() {
-        return util.moneyFormat(this.leaseTotalAmountAtDriveOffValue());
+        return moneyFormat(this.leaseTotalAmountAtDriveOffValue());
     }
 
     financeDownPaymentValue() {
@@ -173,7 +173,7 @@ export default class DealPricing {
     }
 
     financeDownPayment() {
-        return util.moneyFormat(this.financeDownPaymentValue());
+        return moneyFormat(this.financeDownPaymentValue());
     }
 
     effectiveTermValue() {
@@ -264,7 +264,7 @@ export default class DealPricing {
     }
 
     msrp() {
-        return util.moneyFormat(this.msrpValue());
+        return moneyFormat(this.msrpValue());
     }
 
     defaultPriceValue() {
@@ -272,7 +272,7 @@ export default class DealPricing {
     }
 
     defaultPrice() {
-        return util.moneyFormat(this.defaultPriceValue());
+        return moneyFormat(this.defaultPriceValue());
     }
 
     employeePriceValue() {
@@ -280,7 +280,7 @@ export default class DealPricing {
     }
 
     employeePrice() {
-        return util.moneyFormat(this.employeePriceValue());
+        return moneyFormat(this.employeePriceValue());
     }
 
     supplierPriceValue() {
@@ -288,7 +288,7 @@ export default class DealPricing {
     }
 
     supplierPrice() {
-        return util.moneyFormat(this.supplierPriceValue());
+        return moneyFormat(this.supplierPriceValue());
     }
 
     docFeeValue() {
@@ -296,7 +296,7 @@ export default class DealPricing {
     }
 
     docFee() {
-        return util.moneyFormat(this.docFeeValue());
+        return moneyFormat(this.docFeeValue());
     }
 
     docFeeWithTaxesValue() {
@@ -304,7 +304,7 @@ export default class DealPricing {
     }
 
     docFeeWithTaxes() {
-        return util.moneyFormat(this.docFeeWithTaxesValue());
+        return moneyFormat(this.docFeeWithTaxesValue());
     }
 
     effCvrFeeValue() {
@@ -312,7 +312,7 @@ export default class DealPricing {
     }
 
     effCvrFee() {
-        return util.moneyFormat(this.effCvrFeeValue());
+        return moneyFormat(this.effCvrFeeValue());
     }
 
     effCvrFeeWithTaxesValue() {
@@ -320,7 +320,7 @@ export default class DealPricing {
     }
 
     effCvrFeeWithTaxes() {
-        return util.moneyFormat(this.effCvrFeeWithTaxesValue());
+        return moneyFormat(this.effCvrFeeWithTaxesValue());
     }
 
     licenseAndRegistrationValue() {
@@ -328,7 +328,7 @@ export default class DealPricing {
     }
 
     licenseAndRegistration() {
-        return util.moneyFormat(this.licenseAndRegistrationValue());
+        return moneyFormat(this.licenseAndRegistrationValue());
     }
 
     applyTax(value) {
@@ -344,7 +344,7 @@ export default class DealPricing {
     }
 
     acquisitionFee() {
-        return util.moneyFormat(this.acquisitionFeeValue());
+        return moneyFormat(this.acquisitionFeeValue());
     }
 
     bestOfferValue() {
@@ -356,7 +356,7 @@ export default class DealPricing {
     }
 
     bestOffer() {
-        return util.moneyFormat(this.bestOfferValue());
+        return moneyFormat(this.bestOfferValue());
     }
 
     bestOfferPrograms() {
@@ -388,7 +388,7 @@ export default class DealPricing {
     }
 
     discountedPrice() {
-        return util.moneyFormat(this.discountedPriceValue());
+        return moneyFormat(this.discountedPriceValue());
     }
 
     discountValue() {
@@ -396,7 +396,7 @@ export default class DealPricing {
     }
 
     discount() {
-        return util.moneyFormat(this.discountValue());
+        return moneyFormat(this.discountValue());
     }
 
     dmrDiscountValue() {
@@ -404,7 +404,7 @@ export default class DealPricing {
     }
 
     dmrDiscount() {
-        return util.moneyFormat(this.dmrDiscountValue());
+        return moneyFormat(this.dmrDiscountValue());
     }
 
     employeeDiscountValue() {
@@ -412,7 +412,7 @@ export default class DealPricing {
     }
 
     employeeDiscount() {
-        return util.moneyFormat(this.employeeDiscountValue());
+        return moneyFormat(this.employeeDiscountValue());
     }
 
     supplierDiscountValue() {
@@ -420,7 +420,7 @@ export default class DealPricing {
     }
 
     supplierDiscount() {
-        return util.moneyFormat(this.supplierDiscountValue());
+        return moneyFormat(this.supplierDiscountValue());
     }
 
     discountType() {
@@ -510,7 +510,7 @@ export default class DealPricing {
     }
 
     sellingPrice() {
-        return util.moneyFormat(this.sellingPriceValue());
+        return moneyFormat(this.sellingPriceValue());
     }
 
     totalPriceValue() {
@@ -532,7 +532,7 @@ export default class DealPricing {
     }
 
     totalPrice() {
-        return util.moneyFormat(this.totalPriceValue());
+        return moneyFormat(this.totalPriceValue());
     }
 
     cashPriceValue() {
@@ -540,7 +540,7 @@ export default class DealPricing {
     }
 
     cashPrice() {
-        return util.moneyFormat(this.cashPriceValue());
+        return moneyFormat(this.cashPriceValue());
     }
 
     yourPriceValue() {
@@ -550,7 +550,7 @@ export default class DealPricing {
     }
 
     yourPrice() {
-        return util.moneyFormat(this.yourPriceValue());
+        return moneyFormat(this.yourPriceValue());
     }
 
     finalPriceValue() {
@@ -566,7 +566,7 @@ export default class DealPricing {
     finalPrice() {
         const price = this.finalPriceValue();
 
-        return price ? util.moneyFormat(price) : null;
+        return price ? moneyFormat(price) : null;
     }
 
     monthlyPaymentsValue() {
@@ -669,7 +669,7 @@ export default class DealPricing {
             annualMileage
         );
 
-        return payment ? util.moneyFormat(payment) : null;
+        return payment ? moneyFormat(payment) : null;
     }
 
     isSelectedLeasePaymentForTermAndCashDue(term, cashDue, annualMileage) {
@@ -691,7 +691,7 @@ export default class DealPricing {
     monthlyPayments() {
         const monthlyPayments = this.monthlyPaymentsValue();
 
-        return monthlyPayments ? util.moneyFormat(monthlyPayments) : null;
+        return monthlyPayments ? moneyFormat(monthlyPayments) : null;
     }
 
     amountFinancedValue() {
@@ -702,7 +702,7 @@ export default class DealPricing {
     }
 
     amountFinanced() {
-        return util.moneyFormat(this.amountFinancedValue());
+        return moneyFormat(this.amountFinancedValue());
     }
 
     isPricingLoading() {
@@ -787,7 +787,7 @@ export default class DealPricing {
     }
 
     taxOnRebates() {
-        return util.moneyFormat(this.taxOnRebatesValue());
+        return moneyFormat(this.taxOnRebatesValue());
     }
 
     taxesAndFeesTotalValue(taxesAndFees) {
@@ -798,7 +798,7 @@ export default class DealPricing {
     }
 
     taxesAndFeesTotal(taxesAndFees) {
-        return util.moneyFormat(this.taxesAndFeesTotalValue(taxesAndFees));
+        return moneyFormat(this.taxesAndFeesTotalValue(taxesAndFees));
     }
 
     hasRebatesApplied() {
@@ -828,7 +828,7 @@ export default class DealPricing {
                     },
                     {
                         label: 'Sales Tax',
-                        value: util.moneyFormat(salesTax),
+                        value: moneyFormat(salesTax),
                         rawValue: salesTax,
                     },
                 ];
