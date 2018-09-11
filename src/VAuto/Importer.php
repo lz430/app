@@ -338,15 +338,16 @@ class Importer
         // Delete all the hashes
         $this->info(" -- Records to remove from es: " . Deal::whereNotIn('file_hash', $hashes)->count());
         $this->info(" -- Records to delete from db: " . Deal::whereNotIn('file_hash', $hashes)->whereDoesntHave('purchases')->count());
-        $this->info(" -- Records to deleted from db older than 6 months that have no purchases: " . Deal::whereRaw('created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)')->whereDoesntHave('purchases')->count());
+        $this->info(" -- Records to deleted from db older than 6 months that have no purchases: " . Deal::whereRaw('created_at <= DATE_SUB(NOW(), INTERVAL 6 MONTH)')->whereDoesntHave('purchases')->count());
 
 
         // Sets status of deals that are not in feed to sold
         Deal::whereNotIn('file_hash', $hashes)->update(['status' => 'sold', 'sold_at' => Carbon::now()]);
         Deal::whereNotIn('file_hash', $hashes)->searchable();
         //Finds and deletes deals with no purchases after 6 months
-        Deal::whereRaw('created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)')->whereDoesntHave('purchases')->unsearchable();
-        Deal::whereRaw('created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)')->whereDoesntHave('purchases')->delete();
+        Deal::whereRaw('created_at <= DATE_SUB(NOW(), INTERVAL 6 MONTH)')->whereDoesntHave('purchases')->unsearchable();
+        Deal::whereRaw('created_at <= DATE_SUB(NOW(), INTERVAL 6 MONTH)')->whereDoesntHave('purchases')->delete();
+
 
         $this->debug['stop'] = microtime(true);
         $time = $this->debug['stop'] - $this->debug['start'];
