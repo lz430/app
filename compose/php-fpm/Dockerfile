@@ -6,15 +6,14 @@ FROM php:7.2-fpm
 ###########################################################################
 RUN apt-get update \
 	&& apt-get install -y \
-		emac \
+		emacs \
 		wget \
 		curl \
 		git \
 		mysql-client \
 		zlib1g-dev \
 		libicu-dev \
-		g++
-
+		g++ \
     && rm -rf /var/lib/apt/lists/*
 
 
@@ -52,5 +51,7 @@ COPY ./conf/app.ini /usr/local/etc/php/conf.d
 
 
 RUN usermod -u 1000 www-data
+
+WORKDIR /app
 
 CMD php-fpm -F
