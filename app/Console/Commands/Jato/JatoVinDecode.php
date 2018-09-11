@@ -8,14 +8,14 @@ use Illuminate\Console\Command;
 use App\Models\Deal;
 
 
-class JatoDealDecode extends Command
+class JatoVinDecode extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'jato:dealdecode {deal}';
+    protected $signature = 'jato:vindecode {vin}';
 
     /**
      * The console command description.
@@ -45,9 +45,8 @@ class JatoDealDecode extends Command
     public function handle()
     {
         //
-        $deal_id = $this->argument('deal');
-        $deal = Deal::where('id', $deal_id)->first();
-        $decoded = $this->client->vin->decode($deal->vin);
+        $vin = $this->argument('vin');
+        $decoded = $this->client->vin->decode($vin);
         print_r($decoded);
 
     }
