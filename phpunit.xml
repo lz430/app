@@ -8,18 +8,40 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false">
-    <testsuites>
-        <testsuite name="API Tests">
-            <directory suffix="Test.php">./tests/API</directory>
-        </testsuite>
 
-        <testsuite name="Feature Tests">
+    <testsuites>
+        <testsuite name="feature">
             <directory suffix="Test.php">./tests/Feature</directory>
         </testsuite>
 
-        <testsuite name="Unit Tests">
+        <testsuite name="feature.api">
+            <directory suffix="Test.php">./tests/Feature/Api</directory>
+        </testsuite>
+
+        <testsuite name="unit">
             <directory suffix="Test.php">./tests/Unit</directory>
         </testsuite>
+
+        <testsuite name="external">
+            <directory suffix="Test.php">./tests/External</directory>
+        </testsuite>
+
+        <testsuite name="external.jato">
+            <directory suffix="Test.php">./tests/External/Jato</directory>
+        </testsuite>
+
+        <testsuite name="external.cox">
+            <directory suffix="Test.php">./tests/External/Cox</directory>
+        </testsuite>
+
+        <testsuite name="external.fuel">
+            <directory suffix="Test.php">./tests/External/Fuel</directory>
+        </testsuite>
+
+        <testsuite name="external.datadelivery">
+            <directory suffix="Test.php">./tests/External/DataDelivery</directory>
+        </testsuite>
+
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">

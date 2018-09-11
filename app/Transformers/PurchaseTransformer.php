@@ -2,7 +2,7 @@
 
 namespace App\Transformers;
 
-use App\Purchase;
+use App\Models\Purchase;
 use League\Fractal\TransformerAbstract;
 
 class PurchaseTransformer extends TransformerAbstract
@@ -12,7 +12,7 @@ class PurchaseTransformer extends TransformerAbstract
         return [
             'id' => $purchase->id,
             'deal_id' => $purchase->deal_id,
-            'rebates' => json_decode($purchase->rebates),
+            'rebates' => $purchase->rebates,
             'down_payment' => $purchase->down_payment,
             'term' => $purchase->term,
             'msrp' => $purchase->msrp,

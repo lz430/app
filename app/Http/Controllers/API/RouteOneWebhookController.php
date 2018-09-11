@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Events\UserDataChanged;
-use App\Purchase;
-use App\User;
+use App\Models\Purchase;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -48,7 +48,7 @@ class RouteOneWebhookController extends BaseAPIController
                 'application_status' => $applicationStatus,
             ]);
 
-            event(UserDataChanged::class, ['email' => $email, 'creditapproval' => $applicationStatus]);
+            event(new UserDataChanged(['email' => $email, 'creditapproval' => $applicationStatus]));
         } catch (ValidationException | ModelNotFoundException $e) {
             if (app()->bound('sentry')) {
                 app('sentry')->captureException($e);

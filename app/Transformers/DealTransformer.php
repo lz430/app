@@ -2,47 +2,69 @@
 
 namespace App\Transformers;
 
-use App\Deal;
-use App\JATO\Make;
+use App\Models\Deal;
+use App\Models\Feature;
+use DeliverMyRide\Fuel\Map;
 use League\Fractal\TransformerAbstract;
 
 class DealTransformer extends TransformerAbstract
 {
+
+    /**
+     * @param Deal $deal
+     * @return object
+     */
+    public function prices(Deal $deal) {
+        return $deal->prices();
+    }
+
+    /**
+     * @param Deal $deal
+     * @return array
+     */
+    public function photos(Deal $deal) {
+        return $deal->marketingPhotos();
+    }
+
     public function transform(Deal $deal)
     {
-        $deal->photos->shift();
+
+        //compares feature id of color attribute to map and gets hex value back for use for swatch
+        $data = null;
+        foreach(Map::COLOR_MAP as $needle => $value) {
+            if($deal->color == $needle) {
+                $data = $value;
+            }
+        }
+        $featureColor = Feature::where('title', $data)->first();
+        $exteriorColor = null;
+        foreach(Map::HEX_MAP as $color => $value){
+            if(isset($featureColor) && $featureColor->title == $color){
+                $exteriorColor = $value;
+            }
+        }
+
+        $photos = $this->photos($deal);
+        $prices = $this->prices($deal);
         return [
             'id' => $deal->id,
-            'file_hash' => $deal->file_hash,
+            'title' => $deal->title(),
             'dealer_id' => $deal->dealer_id,
             'stock_number' => $deal->stock_number,
-            'vin' => $deal->vin,
-            'new' => $deal->new,
             'year' => $deal->year,
             'make' => $deal->make,
             'model' => $deal->model,
-            'model_code' => $deal->model_code,
-            'body' => $deal->body,
             'transmission' => $deal->transmission,
             'series' => $deal->series,
             'series_detail' => $deal->series_detail,
-            'door_count' => $deal->door_count,
-            'odometer' => $deal->odometer,
             'engine' => $deal->engine,
             'fuel' => $deal->fuel,
             'color' => $deal->color,
             'interior_color' => $deal->interior_color,
-            'employee_price' => (float) $deal->price,
-            'supplier_price' =>  (float) (in_array(strtolower($deal->make), Make::DOMESTIC) ? $deal->price * 1.04 : $deal->price),
-            'msrp' => (float) $deal->msrp,
-            'inventory_date' => $deal->inventory_date,
-            'certified' => $deal->certified,
-            'description' => $deal->description,
             'fuel_econ_city' => $deal->fuel_econ_city,
             'fuel_econ_hwy' => $deal->fuel_econ_hwy,
-            'dealer_name' => $deal->dealer_name,
-            'days_old' => $deal->days_old,
-            'photos' => $deal->photos,
+            'photos' => $photos,
+            'thumbnail' => $deal->featuredPhoto(),
             'version' => $deal->version,
             'features' => $deal->jatoFeatures,
             'doc_fee' => (float) $deal->dealer->doc_fee,
@@ -53,7 +75,10 @@ class DealTransformer extends TransformerAbstract
                 return $feature->feature;
             })->toArray())),
             'dealer' => $deal->dealer,
-            'dmr_features' => $deal->features,
+            'dmr_features' => ($deal->features ? $deal->features : []),
+            'pricing' => $prices,
+            'exterior_color_swatch' => $exteriorColor,
+            'status' => $deal->status
         ];
     }
 }

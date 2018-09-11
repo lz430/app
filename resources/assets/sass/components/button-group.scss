@@ -1,32 +1,30 @@
-@import '../variables';
-
 .button-group {
-  display: flex;
+    display: flex;
 
-  &__button {
-    border: 1px solid $color-dark-blue;
-    border-right-width: 0;
-    background: $color-lighter-blue;
-    color: $color-darkergrey;
-    cursor: pointer;
-    flex: 1;
-    font-size: small;
-    line-height: 1.5em;
-    vertical-align: middle;
-    padding: .5em 1.5em .4em;
+    &__button {
+        border: 1px solid $color-dark-blue;
+        border-right-width: 0;
+        background: $color-lighter-blue;
+        color: $color-darkergrey;
+        cursor: pointer;
+        flex: 1;
+        font-size: small;
+        line-height: 1.5em;
+        vertical-align: middle;
+        padding: 0.5em 1.5em 0.4em;
 
-    &--selected {
-      background: $color-blue;
-      color: #fff;
+        &--selected {
+            background: $color-blue;
+            color: #fff;
+        }
+
+        &:first-child {
+            border-radius: 4px 0 0 4px;
+        }
+
+        &:last-child {
+            border-radius: 0 4px 4px 0;
+            border-right-width: 1px;
+        }
     }
-
-    &:first-child {
-      border-radius: 1em 0 0 1em;
-    }
-
-    &:last-child {
-      border-radius: 0 1em 1em 0;
-      border-right-width: 1px;
-    }
-  }
 }

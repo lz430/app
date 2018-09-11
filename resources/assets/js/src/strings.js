@@ -1,8 +1,4 @@
 const strings = {
-    dealFullTitle: deal => {
-        return this.dealYearMake(deal) + ' ' + this.dealModelTrim(deal);
-    },
-
     dealYearMake: deal => {
         return `${deal.year} ${deal.make}`;
     },
@@ -11,10 +7,26 @@ const strings = {
         return `${deal.model} ${deal.series}`;
     },
 
-    toTitleCase: str => {
-        return str.replace(/\w+/g, function(txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    dealColors: deal => {
+        return `${deal.color}, ${deal.interior_color}`;
+    },
+
+    dealUpholsteryType: deal => {
+        if (!deal.dmr_features.length) {
+            return '';
+        }
+
+        const upholsteryType = deal.dmr_features.find(feature => {
+            return (
+                feature.slug && feature.slug.includes('seat_main_upholstery_')
+            );
         });
+
+        if (!upholsteryType) {
+            return '';
+        }
+
+        return upholsteryType['title'];
     },
 };
 

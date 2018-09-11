@@ -1,106 +1,110 @@
 import React from 'react';
-import R from 'ramda';
-import fuelapi from 'src/fuelapi';
-import fuelcolor from 'src/fuel-color-map';
+import PropTypes from 'prop-types';
+import LazyLoad from 'react-lazyload';
+import { dealType } from 'types';
+import classNames from 'classnames';
+import { Link } from 'react-router-dom';
 
-class DealImage extends React.PureComponent {
-    constructor(props) {
-        super(props);
+export default class DealImage extends React.PureComponent {
+    static propTypes = {
+        deal: dealType.isRequired,
+        size: PropTypes.string.isRequired,
+        lazy: PropTypes.bool.isRequired,
+        link: PropTypes.bool.isRequired,
+        featureImageClass: PropTypes.string,
+        legacyMode: PropTypes.bool.isRequired,
+    };
 
-        this.state = {
-            featuredImage: props.deal.photos[0],
-            fallbackDealImage: '/images/dmr-placeholder.jpg',
-        };
-    }
+    static defaultProps = {
+        size: 'thumbnail',
+        link: true,
+        lazy: true,
+        legacyMode: false,
+    };
 
-    componentDidMount() {
-        this._isMounted = true;
-
-        if (this.props.deal.photos.length === 0) {
-            this.requestFuelImages();
-        }
-    }
-
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
+    state = {
+        fallbackDealImage: '/images/deal-missing-thumbnail.jpg',
+    };
 
     featuredImageUrl() {
-        return R.propOr(
-            R.propOr(
-                this.state.fallbackDealImage,
-                'url',
-                this.state.featuredImage
-            ),
-            'url',
-            this.props.deal.photos[0]
-        );
-    }
-
-    extractFuelImages(data) {
-        return (
-            data.data.products.map(product =>
-                product.productFormats.filter(format => {
-                    return format.assets.length > 0;
-                }).map(format => {
-                    return {
-                        id: `fuel_external_${format.id}`,
-                        url: format.assets[0].url,
-                    };
-                })
-            )[0] || []
-        );
-    }
-
-    async requestFuelImages() {
-        const deal = this.props.deal;
-        let vehicleId = null;
-
-        try {
-            vehicleId =
-                (await fuelapi.getVehicleId(
-                    deal.year,
-                    deal.make,
-                    deal.model
-                )).data[0].id || false;
-        } catch (e) {
-            // Cannot return here because Babel
+        if (
+            this.props.size === 'thumbnail' &&
+            this.props.deal.thumbnail &&
+            this.props.deal.thumbnail.url
+        ) {
+            return this.props.deal.thumbnail.url;
         }
 
-        if (!vehicleId) return;
+        if (this.props.deal.photos[0]) {
+            return this.props.deal.photos[0].url;
+        }
 
-        try {
-            const externalImages = this.extractFuelImages(
-                await fuelapi.getExternalImages(
-                    vehicleId,
-                    fuelcolor.convert(deal.color)
-                )
+        return false;
+    }
+
+    /**
+     * Remove once everything supports react router
+     */
+    renderLinkedImage() {
+        const imageProps = {};
+        if (this.props.featureImageClass) {
+            imageProps.className = this.props.featureImageClass;
+        }
+
+        const thumbnail = this.featuredImageUrl();
+
+        if (this.props.legacyMode) {
+            return (
+                <a href={`/deals/${this.props.deal.id}`}>
+                    {thumbnail && <img {...imageProps} src={thumbnail} />}
+                    {!thumbnail && (
+                        <img
+                            className="placeholder"
+                            src={this.state.fallbackDealImage}
+                        />
+                    )}
+                </a>
             );
-
-            if (!this._isMounted) return;
-            this.setState({ featuredImage: externalImages[0] });
-        } catch (e) {
-            try {
-                const externalImages = this.extractFuelImages(
-                    await fuelapi.getExternalImages(vehicleId, 'white')
-                );
-
-                if (!this._isMounted) return;
-                this.setState({ featuredImage: externalImages[0] });
-            } catch (e) {
-                // No Fuel Images Available.
-            }
         }
+
+        return (
+            <Link to={`/deals/${this.props.deal.id}`}>
+                {thumbnail && <img {...imageProps} src={thumbnail} />}
+                {!thumbnail && (
+                    <img
+                        className="placeholder"
+                        src={this.state.fallbackDealImage}
+                    />
+                )}
+            </Link>
+        );
+    }
+
+    renderImage() {
+        const imageProps = {};
+        if (this.props.featureImageClass) {
+            imageProps.className = this.props.featureImageClass;
+        }
+
+        return (
+            <div className={classNames('thumbnail-container', this.props.size)}>
+                {this.props.link && this.renderLinkedImage()}
+                {!this.props.link && (
+                    <img {...imageProps} src={this.featuredImageUrl()} />
+                )}
+            </div>
+        );
     }
 
     render() {
-        return (
-            <img
-                className={this.props.featureImageClass}
-                src={this.featuredImageUrl()}
-            />
-        );
+        if (this.props.lazy) {
+            return (
+                <LazyLoad once={true} height={200} offset={400}>
+                    {this.renderImage()}
+                </LazyLoad>
+            );
+        } else {
+            return this.renderImage();
+        }
     }
 }
-
-export default DealImage;

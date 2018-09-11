@@ -13,12 +13,12 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Category;
-use App\Feature;
-use App\JatoFeature;
+use App\Models\Category;
+use App\Models\Feature;
+use App\Models\JatoFeature;
 use Carbon\Carbon;
 
-$factory->define(App\User::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     return [
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,
@@ -31,7 +31,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\JATO\Manufacturer::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\JATO\Manufacturer::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->unique()->company,
         'url_name' => $faker->unique()->slug,
@@ -39,30 +39,30 @@ $factory->define(App\JATO\Manufacturer::class, function (Faker\Generator $faker)
     ];
 });
 
-$factory->define(App\JATO\Make::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\JATO\Make::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->unique()->company,
         'url_name' => $faker->unique()->slug,
         'is_current' => $faker->boolean(),
-        'manufacturer_id' => factory(App\JATO\Manufacturer::class),
+        'manufacturer_id' => factory(App\Models\JATO\Manufacturer::class),
     ];
 });
 
-$factory->define(App\JATO\VehicleModel::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\JATO\VehicleModel::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->unique()->company,
         'url_name' => $faker->unique()->slug,
         'is_current' => $faker->boolean(),
-        'make_id' => factory(App\JATO\Make::class),
+        'make_id' => factory(App\Models\JATO\Make::class),
     ];
 });
 
-$factory->define(App\JATO\Version::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\JATO\Version::class, function (Faker\Generator $faker) {
     return [
         'jato_vehicle_id' => $faker->randomNumber(),
         'jato_uid' => $faker->randomNumber(),
         'jato_model_id' => $faker->randomNumber(),
-        'model_id' => factory(App\JATO\VehicleModel::class),
+        'model_id' => factory(App\Models\JATO\VehicleModel::class),
         'year' => $faker->year,
         'name' => $faker->name,
         'trim_name' => $faker->name,
@@ -73,11 +73,6 @@ $factory->define(App\JATO\Version::class, function (Faker\Generator $faker) {
         'msrp' => $faker->randomFloat(2, 10000, 100000),
         'invoice' => $faker->randomFloat(2, 9000, 90000),
         'body_style' => $faker->randomElement(['Pickup', 'Convertible', 'Cargo Van']),
-        'photo_path' => $faker->randomElement([
-            '/SSCUSA/RAM/PROMASTER/2017/4BU.JPG',
-            '/SSCUSA/RAM/PROMASTER/2014/2BT.JPG',
-            '/SSCUSA/DODGE/RAM PICKUP/2004/2PU.JPG',
-        ]),
         'fuel_econ_city' => $faker->numberBetween(10, 29),
         'fuel_econ_hwy' => $faker->numberBetween(30, 50),
         'manufacturer_code' => $faker->randomElement(['DR1H61', 'DR1S61', 'VF3L27']),
@@ -86,30 +81,10 @@ $factory->define(App\JATO\Version::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\JATO\VersionTaxAndDiscount::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->unique()->word,
-        'amount' => $faker->randomFloat(2, -5000, 5000),
-    ];
-});
-
-$factory->define(App\JATO\Option::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->colorName,
-        'state' => $faker->randomElement(['Required', 'Available']),
-        'description' => $faker->text(),
-        'jato_option_id' => $faker->unique()->randomNumber(),
-        'option_code' => $faker->text(5),
-        'option_type' => $faker->randomElement(['O', 'C', 'I', 'P', 'B', 'A']),
-        'msrp' => $faker->randomFloat(2, 4000, 6000),
-        'invoice' => $faker->randomFloat(2, 2000, 3900),
-    ];
-});
-
-$factory->define(App\Deal::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\Deal::class, function (Faker\Generator $faker) {
     return [
         'file_hash' => $faker->md5,
-        'dealer_id' => factory(App\Dealer::class)->create()->dealer_id,
+        'dealer_id' => factory(App\Models\Dealer::class)->create()->dealer_id,
         'stock_number' => 'AH2844A',
         'vin' => '3C4NJDBB4HT628358',
         'new' => true,
@@ -139,14 +114,14 @@ $factory->define(App\Deal::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\JatoFeature::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\JatoFeature::class, function (Faker\Generator $faker) {
     return [
         'feature' => $faker->unique()->randomElement(JatoFeature::WHITELIST),
         'group' => $faker->randomElement(JatoFeature::SYNC_GROUPS)['title'],
     ];
 });
 
-$factory->define(App\Dealer::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\Dealer::class, function (Faker\Generator $faker) {
     return [
         'dealer_id' => $faker->unique()->randomNumber(),
         'latitude' => $faker->latitude,
@@ -156,17 +131,18 @@ $factory->define(App\Dealer::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Purchase::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\Purchase::class, function (Faker\Generator $faker) {
     return [
         'type' => 'cash',
-        'deal_id' => factory(App\Deal::class),
-        'user_id' => factory(App\User::class),
+        'deal_id' => factory(App\Models\Deal::class),
+        'user_id' => factory(App\Models\User::class),
         'dmr_price' => 30000,
+        'monthly_payment' => 500,
         'msrp' => 28000,
     ];
 });
 
-$factory->define(Category::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\Category::class, function (Faker\Generator $faker) {
     return [
         'title'                     => $faker->unique()->company,
         'slug'                      => $faker->unique()->slug,

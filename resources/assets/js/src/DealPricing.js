@@ -1,57 +1,202 @@
 import formulas from 'src/formulas';
-import util from 'src/util';
-import R from "ramda";
-import Decimal from "decimal.js";
+import { moneyFormat } from 'src/util';
+import * as R from 'ramda';
+import Decimal from 'decimal.js';
+
+import { dealPricingData } from 'apps/common/selectors';
+import { dealPricingFromCheckoutData } from 'apps/checkout/selectors';
+import { getClosestNumberInRange } from 'src/util';
+
+/**
+ * Generate a deal pricing class using an object literal
+ * for data.
+ * @param data
+ * @returns {DealPricing}
+ */
+export const dealPricingFromDataFactory = data => {
+    return new DealPricing(data);
+};
+
+/**
+ * Generate a deal pricing class from an existing
+ * pricing instance.
+ * @param dealPricing
+ * @returns {DealPricing}
+ */
+export const dealPricingFromPricingFactory = pricing => {
+    return dealPricingFromDataFactory(pricing.toData());
+};
+
+/**
+ * Generate a deal pricing class using data pulled
+ * from a mixture of user profile / deal detail / deal list data.
+ * @param state
+ * @param props
+ * @returns {DealPricing}
+ */
+export const dealPricingFactory = (state, props) => {
+    const data = dealPricingData(state, props);
+
+    return dealPricingFromDataFactory(data);
+};
+
+/**
+ * Generate a deal pricing class using mostly checkout data.
+ * @param state
+ * @param props
+ * @returns {DealPricing}
+ */
+export const dealPricingFromCheckoutFactory = (state, props) => {
+    const data = dealPricingFromCheckoutData(state, props);
+
+    return dealPricingFromDataFactory(data);
+};
 
 export default class DealPricing {
     constructor(data) {
         this.data = data;
     }
 
-    update(data) {
-        this.data = data;
+    toData() {
+        return this.data;
+    }
+
+    quote() {
+        return this.data.dealQuote;
     }
 
     id() {
         return this.data.deal.id;
     }
 
-    jatoVehicleId() {
-        return this.data.deal.version.jato_vehicle_id;
-    }
-
+    /** @deprecated */
     paymentType() {
         return this.data.paymentType;
     }
 
-    allCashDownOptions() {
-        return [0, 500, 1000, 2500, 5000];
+    paymentStrategy() {
+        return this.data.paymentType;
     }
 
-    bestOfferIsLoading() {
-        return this.data.bestOfferIsLoading;
+    make() {
+        return this.data.deal.make;
+    }
+
+    allLeaseCashDueOptions() {
+        return [0];
+    }
+
+    dealQuoteIsLoading() {
+        return this.data.dealQuoteIsLoading;
+    }
+
+    dealQuoteIsLoaded() {
+        return !this.data.dealQuoteIsLoading;
     }
 
     deal() {
         return this.data.deal;
     }
 
-    hasCustomizedQuote() {
-        return this.data.dealHasCustomizedQuote;
+    leasePaymentInfo() {
+        if (!this.leasePayments()) {
+            return null;
+        }
+
+        if (!this.leasePayments()[this.leaseTerm()]) {
+            return null;
+        }
+
+        if (
+            !this.leasePayments()[this.leaseTerm()][0][
+                this.leaseAnnualMileageValue()
+            ]
+        ) {
+            return null;
+        }
+
+        return this.leasePayments()[this.leaseTerm()][0][
+            this.leaseAnnualMileageValue()
+        ];
+    }
+
+    leaseMonthlyPreTaxPaymentValue() {
+        const info = this.leasePaymentInfo();
+
+        if (!info) {
+            return null;
+        }
+
+        return info.monthlyPreTaxPayment;
+    }
+
+    leaseMonthlyPreTaxPayment() {
+        return moneyFormat(this.leaseMonthlyPreTaxPaymentValue());
+    }
+
+    leaseMonthlyUseTaxValue() {
+        const info = this.leasePaymentInfo();
+
+        if (!info) {
+            return null;
+        }
+
+        return info.monthlyUseTax;
+    }
+
+    leaseMonthlyUseTax() {
+        return moneyFormat(this.leaseMonthlyUseTaxValue());
+    }
+
+    leaseTotalAmountAtDriveOffValue() {
+        const info = this.leasePaymentInfo();
+
+        if (!info) {
+            return null;
+        }
+
+        return Math.round(info.totalAmountAtDriveOff);
+    }
+
+    leaseTotalAmountAtDriveOff() {
+        return moneyFormat(this.leaseTotalAmountAtDriveOffValue());
     }
 
     financeDownPaymentValue() {
-        return this.data.financeDownPayment === null ?
-            (new Decimal(this.yourPriceValue() * .10).toFixed(2)) :
-            this.data.financeDownPayment;
+        let value = this.data.financeDownPayment;
+
+        if (value === null || value === undefined) {
+            value = Math.round(this.yourPriceValue() * 0.1);
+        }
+
+        return value;
     }
 
     financeDownPayment() {
-        return util.moneyFormat(this.financeDownPaymentValue());
+        return moneyFormat(this.financeDownPaymentValue());
+    }
+
+    effectiveTermValue() {
+        switch (this.data.paymentType) {
+            case 'cash':
+                return null;
+            case 'finance':
+                return this.financeTermValue();
+            case 'lease':
+                return this.leaseTermValue();
+        }
+    }
+
+    effectiveTerm() {
+        return this.effectiveTermValue();
     }
 
     financeTermValue() {
-        return this.data.financeTerm === null ? 60 : this.data.financeTerm;
+        let value = this.data.financeTerm;
+        if (value === null || value === undefined || value === 0) {
+            value = 60;
+        }
+        return value;
     }
 
     financeTerm() {
@@ -59,10 +204,10 @@ export default class DealPricing {
     }
 
     leaseTermValue() {
-        if (! this.data.leaseTerm) {
+        if (!this.data.leaseTerm) {
             const leaseTermsAvailable = this.leaseTermsAvailable();
 
-            if (! leaseTermsAvailable || leaseTermsAvailable.length === 0) {
+            if (!leaseTermsAvailable || leaseTermsAvailable.length === 0) {
                 return null;
             }
 
@@ -70,8 +215,7 @@ export default class DealPricing {
                 return 36;
             }
 
-            // Return the first lease terms available.
-            return leaseTermsAvailable[0];
+            return getClosestNumberInRange(36, leaseTermsAvailable);
         }
 
         return this.data.leaseTerm;
@@ -81,19 +225,18 @@ export default class DealPricing {
         return this.leaseTermValue();
     }
 
-    leaseCashDownValue() {
-        return this.data.leaseCashDown === null ? 500 : this.data.leaseCashDown;
-    }
-
-    leaseCashDown() {
-        return util.moneyFormat(this.leaseCashDownValue());
+    leaseCashDueValue() {
+        return 0;
     }
 
     leaseAnnualMileageValue() {
-        if (! this.data.leaseAnnualMileage) {
+        if (!this.data.leaseAnnualMileage) {
             const leaseAnnualMileageAvailable = this.leaseAnnualMileageAvailable();
 
-            if (! leaseAnnualMileageAvailable || leaseAnnualMileageAvailable.length === 0) {
+            if (
+                !leaseAnnualMileageAvailable ||
+                leaseAnnualMileageAvailable.length === 0
+            ) {
                 return null;
             }
 
@@ -109,15 +252,43 @@ export default class DealPricing {
     }
 
     leaseAnnualMileage() {
-        return this.leaseAnnualMileageValue();
+        let value = this.leaseAnnualMileageValue();
+        if (value) {
+            return value.toLocaleString();
+        }
+        return null;
     }
 
     msrpValue() {
-        return this.data.deal.msrp;
+        return this.data.deal.pricing.msrp;
     }
 
     msrp() {
-        return util.moneyFormat(this.data.deal.msrp);
+        return moneyFormat(this.msrpValue());
+    }
+
+    defaultPriceValue() {
+        return this.data.deal.pricing.default;
+    }
+
+    defaultPrice() {
+        return moneyFormat(this.defaultPriceValue());
+    }
+
+    employeePriceValue() {
+        return this.data.deal.pricing.employee;
+    }
+
+    employeePrice() {
+        return moneyFormat(this.employeePriceValue());
+    }
+
+    supplierPriceValue() {
+        return this.data.deal.pricing.supplier;
+    }
+
+    supplierPrice() {
+        return moneyFormat(this.supplierPriceValue());
     }
 
     docFeeValue() {
@@ -125,15 +296,43 @@ export default class DealPricing {
     }
 
     docFee() {
-        return util.moneyFormat(this.docFeeValue());
+        return moneyFormat(this.docFeeValue());
+    }
+
+    docFeeWithTaxesValue() {
+        return this.applyTax(this.docFeeValue());
+    }
+
+    docFeeWithTaxes() {
+        return moneyFormat(this.docFeeWithTaxesValue());
     }
 
     effCvrFeeValue() {
         return this.data.deal.cvr_fee;
     }
 
+    effCvrFee() {
+        return moneyFormat(this.effCvrFeeValue());
+    }
+
+    effCvrFeeWithTaxesValue() {
+        return this.applyTax(this.effCvrFeeValue());
+    }
+
+    effCvrFeeWithTaxes() {
+        return moneyFormat(this.effCvrFeeWithTaxesValue());
+    }
+
     licenseAndRegistrationValue() {
         return this.data.deal.registration_fee;
+    }
+
+    licenseAndRegistration() {
+        return moneyFormat(this.licenseAndRegistrationValue());
+    }
+
+    applyTax(value) {
+        return value + value * this.taxRate();
     }
 
     taxRate() {
@@ -144,103 +343,220 @@ export default class DealPricing {
         return this.data.deal.acquisition_fee;
     }
 
+    acquisitionFee() {
+        return moneyFormat(this.acquisitionFeeValue());
+    }
+
     bestOfferValue() {
-        return this.data.bestOffer.totalValue || 0;
+        if (this.data.dealQuote && this.data.dealQuote.rebates) {
+            return this.data.dealQuote.rebates.total;
+        }
+
+        return 0;
     }
 
     bestOffer() {
-        return util.moneyFormat(this.bestOfferValue());
+        return moneyFormat(this.bestOfferValue());
     }
 
     bestOfferPrograms() {
-        return this.data.bestOffer.programs;
+        return this.data.dealQuote.rebates;
     }
 
     employeeBrand() {
         return this.data.employeeBrand;
     }
 
-    baseSellingPriceValue() {
-        return this.data.employeeBrand === this.data.deal.make
-            ? this.data.deal.employee_price
-            : this.data.deal.supplier_price;
+    supplierBrand() {
+        return this.data.supplierBrand;
     }
 
-    baseSellingPrice() {
-        return util.moneyFormat(this.baseSellingPriceValue());
+    discountedPriceValue() {
+        if (this.isEffectiveDiscountEmployee()) {
+            return this.employeePriceValue();
+        }
+
+        if (this.isEffectiveDiscountSupplier()) {
+            return this.supplierPriceValue();
+        }
+
+        if (this.isEffectiveDiscountDmr()) {
+            return this.defaultPriceValue();
+        }
+
+        return this.msrpValue();
+    }
+
+    discountedPrice() {
+        return moneyFormat(this.discountedPriceValue());
+    }
+
+    discountValue() {
+        return this.msrpValue() - this.discountedPriceValue();
+    }
+
+    discount() {
+        return moneyFormat(this.discountValue());
+    }
+
+    dmrDiscountValue() {
+        return this.msrpValue() - this.defaultPriceValue();
+    }
+
+    dmrDiscount() {
+        return moneyFormat(this.dmrDiscountValue());
+    }
+
+    employeeDiscountValue() {
+        return this.msrpValue() - this.employeePriceValue();
+    }
+
+    employeeDiscount() {
+        return moneyFormat(this.employeeDiscountValue());
+    }
+
+    supplierDiscountValue() {
+        return this.msrpValue() - this.supplierPriceValue();
+    }
+
+    supplierDiscount() {
+        return moneyFormat(this.supplierDiscountValue());
+    }
+
+    discountType() {
+        if (this.isEffectiveDiscountDmr()) {
+            return 'dmr';
+        }
+
+        if (this.isEffectiveDiscountEmployee()) {
+            return 'employee';
+        }
+
+        if (this.isEffectiveDiscountSupplier()) {
+            return 'supplier';
+        }
+
+        return 'dmr';
+    }
+
+    isEffectiveDiscountEmployee() {
+        return (
+            this.data.discountType === 'employee' &&
+            this.data.employeeBrand === this.data.deal.make
+        );
+    }
+
+    isEffectiveDiscountSupplier() {
+        return (
+            this.data.discountType === 'supplier' &&
+            this.data.supplierBrand === this.data.deal.make
+        );
+    }
+
+    isEffectiveDiscountDmr() {
+        if (!this.data.discountType || this.data.discountType === 'dmr') {
+            return true;
+        }
+
+        if (
+            this.data.discountType === 'employee' &&
+            this.data.employeeBrand !== this.data.deal.make
+        ) {
+            return true;
+        }
+
+        if (
+            this.data.discountType === 'supplier' &&
+            this.data.supplierBrand !== this.data.deal.make
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    isCash() {
+        return this.data.paymentType === 'cash';
     }
 
     isFinance() {
         return this.data.paymentType === 'finance';
     }
 
-    isNotFinance() {
-        return this.data.paymentType !== 'finance';
-    }
-
     isLease() {
         return this.data.paymentType === 'lease';
-    }
-
-    isNotLease() {
-        return this.data.paymentType !== 'lease';
-    }
-
-    hasNoLeaseTerms() {
-        return ! this.data.dealLeaseRates || this.data.dealLeaseRates.length === 0;
-    }
-
-    hasLeaseTerms() {
-        return ! this.hasNoLeaseTerms();
     }
 
     sellingPriceValue() {
         switch (this.data.paymentType) {
             case 'cash':
             case 'finance':
-                const total = new Decimal(this.baseSellingPriceValue())
+                const total = new Decimal(this.discountedPriceValue())
                     .plus(this.docFeeValue())
                     .plus(this.effCvrFeeValue());
 
-                const totalWithSalesTax = total.plus(total.times(this.taxRate()));
+                const totalWithSalesTax = total.plus(
+                    Math.round(total.times(this.taxRate()))
+                );
 
-                return Number(totalWithSalesTax.plus(this.licenseAndRegistrationValue()));
+                return totalWithSalesTax;
             case 'lease':
-                return new Decimal(this.baseSellingPriceValue())
+                return new Decimal(this.discountedPriceValue())
                     .plus(this.docFeeValue())
-                    .plus(new Decimal(this.docFeeValue()).times(this.taxRate()))
                     .plus(this.effCvrFeeValue())
-                    .plus(new Decimal(this.effCvrFeeValue()).times(this.taxRate()))
-                    .plus(this.licenseAndRegistrationValue())
                     .plus(this.acquisitionFeeValue())
-                    .toFixed(2);
+                    .plus(this.taxOnRebatesValue());
         }
     }
 
     sellingPrice() {
-        return util.moneyFormat(this.sellingPriceValue());
+        return moneyFormat(this.sellingPriceValue());
     }
 
-    yourPriceValue() {
+    totalPriceValue() {
         switch (this.data.paymentType) {
             case 'cash':
             case 'finance':
-                return new Decimal(this.sellingPriceValue())
-                    .minus(this.bestOfferValue());
+                const total = new Decimal(this.discountedPriceValue())
+                    .plus(this.docFeeValue())
+                    .plus(this.effCvrFeeValue());
+
+                const totalWithSalesTax = total.plus(
+                    Math.round(total.times(this.taxRate()))
+                );
+
+                return totalWithSalesTax;
             case 'lease':
-                return new Decimal(this.sellingPriceValue())
-                    .minus(this.bestOfferValue());
+                return Math.round(this.discountedPriceValue());
         }
     }
 
+    totalPrice() {
+        return moneyFormat(this.totalPriceValue());
+    }
+
+    cashPriceValue() {
+        return this.discountedPriceValue() - this.bestOfferValue();
+    }
+
+    cashPrice() {
+        return moneyFormat(this.cashPriceValue());
+    }
+
+    yourPriceValue() {
+        return new Decimal(this.sellingPriceValue()).minus(
+            this.bestOfferValue()
+        );
+    }
+
     yourPrice() {
-        return util.moneyFormat(this.yourPriceValue());
+        return moneyFormat(this.yourPriceValue());
     }
 
     finalPriceValue() {
         switch (this.data.paymentType) {
             case 'cash':
-                return this.yourPriceValue();
+                return this.cashPriceValue();
             case 'finance':
             case 'lease':
                 return this.monthlyPaymentsValue();
@@ -250,7 +566,7 @@ export default class DealPricing {
     finalPrice() {
         const price = this.finalPriceValue();
 
-        return price ? util.moneyFormat(price) : null;
+        return price ? moneyFormat(price) : null;
     }
 
     monthlyPaymentsValue() {
@@ -258,7 +574,7 @@ export default class DealPricing {
             case 'finance':
                 return Math.round(
                     formulas.calculateFinancedMonthlyPayments(
-                        this.baseSellingPriceValue() - this.bestOfferValue(),
+                        this.sellingPriceValue() - this.bestOfferValue(),
                         this.financeDownPaymentValue(),
                         this.financeTermValue()
                     )
@@ -269,64 +585,50 @@ export default class DealPricing {
     }
 
     leaseMonthlyPaymentsValue() {
-        if (! this.data.dealLeasePayments) {
+        if (!this.leasePayments()) {
             return null;
         }
 
-        if (! this.data.dealLeasePayments[this.leaseTerm()]) {
+        if (!this.leasePayments()[this.leaseTerm()]) {
             return null;
         }
 
-        if (! this.data.dealLeasePayments[this.leaseTerm()][this.leaseCashDownValue()]) {
+        if (
+            !this.leasePayments()[this.leaseTerm()][0][
+                this.leaseAnnualMileageValue()
+            ]
+        ) {
             return null;
         }
 
-        if (! this.data.dealLeasePayments[this.leaseTerm()][this.leaseCashDownValue()][this.leaseAnnualMileageValue()]) {
-            return null;
-        }
-
-        return this.data.dealLeasePayments[this.leaseTerm()][this.leaseCashDownValue()][this.leaseAnnualMileageValue()].monthlyPayment;
+        return this.leasePayments()[this.leaseTerm()][0][
+            this.leaseAnnualMileageValue()
+        ].monthlyPayment;
     }
 
     leaseTermsAvailable() {
-        if (! this.data.dealLeasePayments) {
+        if (!this.leasePayments()) {
             return null;
         }
 
-        return Object.keys(this.data.dealLeasePayments).map((item) => parseInt(item, 10)).sort((a, b) => a - b);
-    }
-
-    leaseCashDownAvailable() {
-        if (! this.data.dealLeasePayments) {
-            return null;
-        }
-
-        const cashDownOptions = [];
-
-        for (let term of Object.keys(this.data.dealLeasePayments)) {
-            for (let cashDown of Object.keys(this.data.dealLeasePayments[term])) {
-                if (R.indexOf(cashDown, cashDownOptions) !== -1) {
-                    continue;
-                }
-
-                cashDownOptions.push(cashDown);
-            }
-        }
-
-        return cashDownOptions.map((item) => parseInt(item, 10));
+        return Object.keys(this.leasePayments())
+            .map(item => parseInt(item, 10))
+            .sort((a, b) => a - b)
+            .filter((term, termIndex) => termIndex < 4);
     }
 
     leaseAnnualMileageAvailable() {
-        if (! this.data.dealLeasePayments) {
-            return null;
+        if (!this.leasePayments()) {
+            return [];
         }
 
         const annualMileageOptions = [];
 
-        for (let term of Object.keys(this.data.dealLeasePayments)) {
-            for (let cashDown of Object.keys(this.data.dealLeasePayments[term])) {
-
-                for (let annualMileage of Object.keys(this.data.dealLeasePayments[term][cashDown])) {
+        for (let term of Object.keys(this.leasePayments())) {
+            for (let cashDue of Object.keys(this.leasePayments()[term])) {
+                for (let annualMileage of Object.keys(
+                    this.leasePayments()[term][cashDue]
+                )) {
                     if (R.indexOf(annualMileage, annualMileageOptions) !== -1) {
                         continue;
                     }
@@ -336,73 +638,60 @@ export default class DealPricing {
             }
         }
 
-        return annualMileageOptions.map((item) => parseInt(item, 10)).sort((a, b) => a - b);
+        return annualMileageOptions
+            .map(item => parseInt(item, 10))
+            .sort((a, b) => a - b)
+            .filter(term => term > 7500)
+            .filter((term, termIndex) => termIndex < 4);
     }
 
-    leasePaymentsForTermAndCashDownValue(term, cashDown) {
-        if (! this.data.dealLeasePayments[term]) {
+    leasePaymentsForTermAndCashDueValue(term, cashDue, annualMileage) {
+        if (!this.leasePayments()[term]) {
             return null;
         }
 
-        if (! this.data.dealLeasePayments[term][cashDown]) {
+        if (!this.leasePayments()[term][cashDue]) {
             return null;
         }
 
-        if (! this.data.dealLeasePayments[term][cashDown][this.leaseAnnualMileageValue()]) {
+        if (!this.leasePayments()[term][cashDue][annualMileage]) {
             return null;
         }
 
-        return this.data.dealLeasePayments[term][cashDown][this.leaseAnnualMileageValue()].monthlyPayment;
+        return this.leasePayments()[term][cashDue][annualMileage]
+            .monthlyPayment;
     }
 
-    leasePaymentsForTermAndCashDown(term, cashDown) {
-        const payment = this.leasePaymentsForTermAndCashDownValue(term, cashDown);
+    leasePaymentsForTermAndCashDue(term, cashDue, annualMileage) {
+        const payment = this.leasePaymentsForTermAndCashDueValue(
+            term,
+            cashDue,
+            annualMileage
+        );
 
-        return payment ? util.moneyFormat(payment) : null;
+        return payment ? moneyFormat(payment) : null;
     }
 
-    isSelectedLeasePaymentForTermAndCashDown(term, cashDown) {
-        if (term != this.leaseTermValue()) {
+    isSelectedLeasePaymentForTermAndCashDue(term, cashDue, annualMileage) {
+        if (term !== this.leaseTermValue()) {
             return false;
         }
 
-        if (cashDown != this.leaseCashDownValue()) {
+        if (cashDue !== this.leaseCashDueValue()) {
+            return false;
+        }
+
+        if (annualMileage !== this.leaseAnnualMileageValue()) {
             return false;
         }
 
         return true;
     }
 
-    leaseTotalAmountAtDriveOffValue() {
-        if (! this.data.dealLeasePayments) {
-            return null;
-        }
-
-        if (! this.data.dealLeasePayments[this.leaseTerm()]) {
-            return null;
-        }
-
-        if (! this.data.dealLeasePayments[this.leaseTerm()][this.leaseCashDownValue()]) {
-            return null;
-        }
-
-        if (! this.data.dealLeasePayments[this.leaseTerm()][this.leaseCashDownValue()][this.leaseAnnualMileageValue()]) {
-            return null;
-        }
-
-        return this.data.dealLeasePayments[this.leaseTerm()][this.leaseCashDownValue()][this.leaseAnnualMileageValue()].cashDown;
-    }
-
-    leaseTotalAmountAtDriveOff() {
-        const total = this.leaseTotalAmountAtDriveOffValue();
-
-        return total ? util.moneyFormat(total) : null;
-    }
-
     monthlyPayments() {
         const monthlyPayments = this.monthlyPaymentsValue();
 
-        return monthlyPayments ? util.moneyFormat(monthlyPayments) : null;
+        return monthlyPayments ? moneyFormat(monthlyPayments) : null;
     }
 
     amountFinancedValue() {
@@ -413,37 +702,30 @@ export default class DealPricing {
     }
 
     amountFinanced() {
-        return util.moneyFormat(this.amountFinancedValue());
-    }
-
-    apiTerms() {
-        const terms = {};
-
-        for (let termRaw of this.data.dealLeaseRates) {
-            const termData = {
-                moneyFactor: termRaw.moneyFactor,
-                residualPercent: termRaw.residualPercent,
-                annualMileage: {}
-            };
-
-            for (let residuals of termRaw.residuals) {
-                termData.annualMileage[residuals.annualMileage] = {
-                    residualPercent: residuals.residualPercent
-                };
-            }
-
-            terms[termRaw.termMonths] = termData;
-        }
-
-        return terms;
+        return moneyFormat(this.amountFinancedValue());
     }
 
     isPricingLoading() {
-        return ! this.isPricingAvailable();
+        return !this.isPricingAvailable();
+    }
+
+    leaseRates() {
+        if (this.data.dealQuote && this.data.dealQuote.rates) {
+            return this.data.dealQuote.rates;
+        }
+
+        return null;
+    }
+
+    leasePayments() {
+        if (this.data.dealQuote && this.data.dealQuote.payments) {
+            return this.data.dealQuote.payments;
+        }
+        return null;
     }
 
     isPricingAvailable() {
-        if (this.bestOfferIsLoading()) {
+        if (this.dealQuoteIsLoading()) {
             return false;
         }
 
@@ -452,13 +734,17 @@ export default class DealPricing {
             case 'finance':
                 return true;
             case 'lease':
-                if (this.data.dealLeaseRatesLoaded && this.data.dealLeaseRates.length === 0) {
-                    // If rates are loaded but there are no actual rates, then pricing is "available"
-                    // in that there is no lease pricing ever going to be available.
+                if (this.data.dealQuoteIsLoading) {
+                    return false;
+                }
+
+                if (this.leaseRates() && this.leaseRates().length === 0) {
+                    // If we have deal lease rates loaded but there are no rates available,
+                    // then pricing IS available in the sense that there is no pricing.
                     return true;
                 }
 
-                return this.data.dealLeasePaymentsLoaded;
+                return !this.data.dealQuoteIsLoading;
         }
     }
 
@@ -472,11 +758,104 @@ export default class DealPricing {
         }
     }
 
+    cannotPurchase() {
+        return !this.canPurchase();
+    }
+
     canLease() {
-        if (this.isPricingLoading()) {
+        return this.hasLeaseTerms() && this.hasLeasePayments();
+    }
+
+    hasLeaseTerms() {
+        if (!this.leaseRates()) {
             return false;
         }
 
-        return this.hasLeaseTerms();
+        return Object.keys(this.leaseRates()).length !== 0;
+    }
+
+    hasLeasePayments() {
+        if (!this.leasePayments()) {
+            return false;
+        }
+
+        return Object.keys(this.leasePayments()).length !== 0;
+    }
+
+    taxOnRebatesValue() {
+        return Math.round(this.bestOfferValue() * this.taxRate());
+    }
+
+    taxOnRebates() {
+        return moneyFormat(this.taxOnRebatesValue());
+    }
+
+    taxesAndFeesTotalValue(taxesAndFees) {
+        return (taxesAndFees || this.taxesAndFees()).reduce(
+            (total, item) => total + item.rawValue,
+            0
+        );
+    }
+
+    taxesAndFeesTotal(taxesAndFees) {
+        return moneyFormat(this.taxesAndFeesTotalValue(taxesAndFees));
+    }
+
+    hasRebatesApplied() {
+        return this.bestOfferValue() > 0;
+    }
+
+    taxesAndFees() {
+        switch (this.data.paymentType) {
+            case 'cash':
+            case 'finance':
+                const total = new Decimal(this.discountedPriceValue())
+                    .plus(this.docFeeValue())
+                    .plus(this.effCvrFeeValue());
+
+                const salesTax = Math.round(total.times(this.taxRate()));
+
+                return [
+                    {
+                        label: 'Doc Fee',
+                        value: this.docFee(),
+                        rawValue: this.docFeeValue(),
+                    },
+                    {
+                        label: 'Electronic Filing Fee',
+                        value: this.effCvrFee(),
+                        rawValue: this.effCvrFeeValue(),
+                    },
+                    {
+                        label: 'Sales Tax',
+                        value: moneyFormat(salesTax),
+                        rawValue: salesTax,
+                    },
+                ];
+
+            case 'lease':
+                return [
+                    {
+                        label: 'First Payment',
+                        value: this.monthlyPayments(),
+                        rawValue: this.monthlyPaymentsValue(),
+                    },
+                    {
+                        label: 'Doc Fee',
+                        value: this.docFeeWithTaxes(),
+                        rawValue: this.docFeeWithTaxesValue(),
+                    },
+                    {
+                        label: 'Electronic Filing Fee',
+                        value: this.effCvrFeeWithTaxes(),
+                        rawValue: this.effCvrFeeWithTaxesValue(),
+                    },
+                    {
+                        label: 'Tax on Rebates',
+                        value: this.taxOnRebates(),
+                        rawValue: this.taxOnRebatesValue(),
+                    },
+                ];
+        }
     }
 }

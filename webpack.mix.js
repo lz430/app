@@ -3,9 +3,8 @@ require('dotenv').config();
 const { mix } = require('laravel-mix');
 const path = require('path');
 
-require('./loadIcons');
-
 mix.webpackConfig({
+    devtool: process.env.MIX_ENABLE_SOURCEMAPS ? 'source-map' : false,
     resolve: {
         modules: [
             path.resolve('./resources/assets/js'),
@@ -14,10 +13,12 @@ mix.webpackConfig({
     },
 });
 
-mix.react('resources/assets/js/app.js', 'public/js')
-    .sass('resources/assets/sass/app.scss', 'public/css');
+mix.react('resources/assets/js/app.js', 'public/js').sass(
+    'resources/assets/sass/app.scss',
+    'public/css'
+);
 
-if (mix.config.inProduction) {
+if (mix.inProduction()) {
     mix.version();
 } else {
     mix.browserSync({

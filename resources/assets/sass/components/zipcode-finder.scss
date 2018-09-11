@@ -1,90 +1,92 @@
-@import '../variables';
-@import '../mixins/button';
-@import '../mixins/input';
-
 .zipcode-finder {
-  background-color: $color-sidebar-background-primary;
-  color: $color-text-white;
-  display: flex;
-  height: $sortbar-height + $filterbar-height;
-  padding: 20px 15px;
-
-  &__button {
-    @include button;
-    font-size: 0.5rem;
-    height: 2rem;
-
-    &:first-child {
-      margin-right: 5px;
-    }
-
-    &:last-child {
-      margin-right: 0;
-    }
-
-    &--inactive {
-      $inactive-color: transparentize($color-section-bottom-border, 0.5);
-      border: 1px solid $inactive-color;
-      color: $inactive-color;
-
-      svg {
-        fill: $inactive-color;
-      }
-    }
-  }
-
-  &__buttons {
-    align-items: center;
+    background-color: $color-sidebar-background-primary;
+    color: $color-text-white;
     display: flex;
-    flex: 2;
-    justify-content: flex-end;
-  }
+    height: $sortbar-height + $filterbar-height - #{$filterbar-vertical-padding *
+        2};
+    padding: 0 15px $filterbar-vertical-padding 15px;
 
-  &__count {
-    width: 100%;
-  }
+    @include media-breakpoint-up(sm) {
+        padding: 20px 15px;
+        height: $sortbar-height + $filterbar-height;
+    }
 
-  &__count-number {
-    font-weight: bold;
-    margin-right: 5px;
-  }
+    &__button {
+        @include button;
+        font-size: 0.5rem;
+        height: 2rem;
 
-  &__errors {
-    align-content: center;
-    background-color: white;
-    border: 1px solid;
-    border-color: $color-error;
-    color: $color-error;
-    font-size: 0.9rem;
-    justify-content: space-around;
-    margin: 0.5em;
-    padding: 0.5em;
-  }
+        &:first-child {
+            margin-right: 5px;
+        }
 
-  &__form {
-    align-self: center;
-    color: $color-grey;
-    font-size: small;
-    flex: 1;
-  }
+        &:last-child {
+            margin-right: 0;
+        }
 
-  &__info {
-    align-content: center;
-    display: flex;
-    flex: 1;
-    flex-flow: column nowrap;
-    justify-content: space-between;
-    padding-right: 8px;
-  }
+        &--inactive {
+            $inactive-color: transparentize($color-section-bottom-border, 0.5);
+            border: 1px solid $inactive-color;
+            color: $inactive-color;
 
-  &__input {
-    @include input;
-    margin-right: 5px;
-    width: 60%;
-  }
+            svg {
+                fill: $inactive-color;
+            }
+        }
+    }
 
-  &__zipcode {
-    font-size: 1.4rem;
-    margin-top: -0.5rem;
-  }
+    &__buttons {
+        align-items: center;
+        display: flex;
+        flex: 2;
+        justify-content: flex-end;
+    }
+
+    &__count {
+        width: 100%;
+    }
+
+    &__count-number {
+        font-weight: bold;
+        margin-right: 5px;
+    }
+
+    &__errors {
+        align-content: center;
+        background-color: white;
+        border: 1px solid;
+        border-color: $color-error;
+        color: $color-error;
+        font-size: 0.9rem;
+        justify-content: space-around;
+        margin: 0.5em;
+        padding: 0.5em;
+    }
+
+    &__form {
+        align-self: center;
+        color: $color-grey;
+        font-size: small;
+        flex: 1;
+    }
+
+    &__info {
+        align-content: center;
+        display: flex;
+        flex: 1;
+        flex-flow: column nowrap;
+        justify-content: space-between;
+        padding-right: 8px;
+    }
+
+    &__input {
+        @include input;
+        margin-right: 5px;
+        width: 60%;
+    }
+
+    &__zipcode {
+        font-size: 1.4rem;
+        margin-top: -0.5rem;
+    }
 }

@@ -1,99 +1,101 @@
-@import '../variables';
 @import 'button';
 @import 'input';
 
 @mixin vertical-form {
-  $width: $break-small / 2;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-top: 50px;
-
-  &__form {
+    $width: $break-small / 2;
     align-items: center;
-    background: $color-background-secondary;
-    border: 1px solid $color-section-bottom-border;
-    border-radius: 4px;
     display: flex;
     flex-direction: column;
-    margin: 0 auto;
-    max-width: $width;
-    padding: 15px;
-    width: $width;
-  }
-
-  &__sexy-line {
-    background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 100, from($color-section-bottom-border), to($color-background-secondary));
-    display: block;
-    height: 1px;
-    margin: 10px;
     width: 100%;
-  }
+    margin-top: 50px;
 
-  &__logo {
-    margin-bottom: 15px;
-  }
-
-  &__title {
-    color: $text-color-dark;
-    font-size: 1.2rem;
-    font-weight: bold;
-  }
-
-  // Inputs
-  &__group {
-    margin: 5px 0;
-    width: 100%;
-  }
-
-  &__group-has-error {
-    //
-  }
-
-  &__label {
-    color: $text-color-dark;
-    font-size: 0.9rem;
-    font-weight: bold;
-  }
-
-  &__input-and-error {
-    //
-  }
-
-  &__input {
-    @include input;
-  }
-
-  &__error {
-    color: $color-error;
-    font-size: 0.8rem;
-    max-width: $width;
-  }
-
-  &__message {
-    color: $color-blue;
-    font-size: 0.9rem;
-    margin: 10px 0;
-    max-width: $width;
-
-    &--centered {
-      max-width: 100%;
-      width: 100%;
-      padding: 10px 0;
-      margin: 0;
-      text-align: center;
-      background-color: $color-light-blue;
+    &__form {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+        padding: 15px;
     }
-  }
 
-  &__buttons {
-    margin-top: 10px;
-    width: 100%;
-  }
+    &__sexy-line {
+        background: -webkit-gradient(
+            radial,
+            50% 50%,
+            0,
+            50% 50%,
+            100,
+            from($color-section-bottom-border),
+            to($color-background-secondary)
+        );
+        display: block;
+        height: 1px;
+        margin: 10px;
+        width: 100%;
+    }
 
-  &__button {
-    @include button;
-    width: 100%;
-  }
+    &__logo {
+        margin-bottom: 15px;
+    }
+
+    &__title {
+        color: $text-color-dark;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    // Inputs
+    &__group {
+        margin: 5px 0;
+        width: 100%;
+    }
+
+    &__group-has-error {
+        //
+    }
+
+    &__label {
+        color: $text-color-dark;
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+
+    &__input-and-error {
+        //
+    }
+
+    &__input {
+        @include input;
+    }
+
+    &__error {
+        color: $color-error;
+        font-size: 0.8rem;
+        max-width: $width;
+    }
+
+    &__message {
+        color: $color-blue;
+        font-size: 0.9rem;
+        margin: 10px 0;
+        max-width: $width;
+
+        &--centered {
+            max-width: 100%;
+            width: 100%;
+            padding: 10px 0;
+            margin: 0;
+            text-align: center;
+            background-color: $color-light-blue;
+        }
+    }
+
+    &__buttons {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    &__button {
+        @include button;
+        width: 100%;
+    }
 }

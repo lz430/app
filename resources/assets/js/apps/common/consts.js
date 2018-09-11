@@ -1,0 +1,1 @@
+export const TOGGLE_COMPARE = 'TOGGLE_COMPARE';

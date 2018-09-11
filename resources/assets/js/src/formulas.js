@@ -1,56 +1,4 @@
-import Decimal from 'decimal.js';
-
-const defaultEffCvrFee = 24;
-const defaultLicenseAndRegistration = 23;
-
 const formulas = {
-    calculateTotalCash: (price, docFee, rebatesTotal) => {
-        const total = new Decimal(price).plus(docFee).plus(defaultEffCvrFee);
-        const totalWithSalesTax = total.plus(total.times(0.06));
-
-        return Number(totalWithSalesTax.minus(rebatesTotal).plus(defaultLicenseAndRegistration));
-    },
-    calculateTotalCashFinance: (price, docFee, downPayment, rebatesTotal) => {
-        const total = new Decimal(price).plus(docFee).plus(defaultEffCvrFee);
-        const totalWithSalesTax = total.plus(total.times(0.06));
-
-        return Number(totalWithSalesTax.minus(rebatesTotal).minus(downPayment).plus(defaultLicenseAndRegistration));
-    },
-    calculateTotalLease: (price, docFee, rebatesTotal) => {
-        const total = price + docFee + defaultEffCvrFee;
-        const downPayment = 0;
-        const capCostReduction = new Decimal(rebatesTotal + downPayment);
-
-        const taxOnCapCostReduction = capCostReduction.times(0.06);
-        const taxOnDocFee = new Decimal(docFee).times(0.06);
-        const totalTaxesDueAtSigning = taxOnCapCostReduction.plus(taxOnDocFee);
-
-        return Number(totalTaxesDueAtSigning.plus(total));
-    },
-    calculateSalesTaxCashFinance: (price, docFee) => {
-        const total = new Decimal(price).plus(docFee).plus(defaultEffCvrFee);
-
-        return Number(total.times(0.06));
-    },
-    calculateLeaseTaxesDueAtSigning: (rebates, downPayment, docFee) => {
-        const capCostReduction = new Decimal(rebates).plus(downPayment).plus(defaultEffCvrFee);
-
-        return Number(
-            capCostReduction.times(0.06).plus(new Decimal(docFee).times(0.06))
-        );
-    },
-    /**
-     * Total payment including use tax.
-     */
-    calculateTotalLeaseMonthlyPayment: paymentAmount => {
-        return Math.round(
-            Number(
-                new Decimal(paymentAmount).plus(
-                    new Decimal(paymentAmount).times(0.06)
-                )
-            )
-        );
-    },
     /**
      * Formula: EMI = ( P × r × (1+r)n ) / ((1+r)n − 1)
      * EMI = Equated Monthly Installment
@@ -64,34 +12,11 @@ const formulas = {
      */
     calculateFinancedMonthlyPayments: (price, downPayment, term) => {
         const interestRate = 4;
-
+        const annualInterestRate = interestRate / 1200;
         return Math.round(
             (price - downPayment) *
-                (interestRate /
-                    1200 *
-                    Math.pow(1 + interestRate / 1200, term) /
-                    (Math.pow(1 + interestRate / 1200, term) - 1))
-        );
-    },
-
-    calculateLeasedMonthlyPayments: (
-        price,
-        downPayment,
-        deliveryCost,
-        term,
-        residualPercent
-    ) => {
-        const interestRate = 4;
-        const capitalizedCost = price + deliveryCost - downPayment;
-        const jatoResidualValue = residualPercent * 0.01;
-        const depreciation =
-            (capitalizedCost - capitalizedCost * jatoResidualValue) / term;
-        const interest =
-            (capitalizedCost + capitalizedCost * jatoResidualValue) *
-            (interestRate / 2400);
-
-        return Math.round(
-            formulas.calculateTotalLeaseMonthlyPayment(depreciation + interest)
+                ((annualInterestRate * Math.pow(1 + annualInterestRate, term)) /
+                    (Math.pow(1 + annualInterestRate, term) - 1))
         );
     },
 };

@@ -1,0 +1,136 @@
+.filter-page {
+    min-height: 100%;
+    background: $color-background-secondary;
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+    position: relative;
+    &__top-row {
+        border-bottom: 1px solid $color-section-bottom-border;
+        padding: 0 20px 0 20px;
+        background-color: $color-background-secondary;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+
+        @include media-breakpoint-up(md) {
+            flex-direction: row;
+            padding: 8px 40px 8px 40px;
+        }
+
+        &__section {
+            margin: 0.5em;
+            width: 100%;
+
+            @include media-breakpoint-up(sm) {
+                margin-bottom: 1em;
+            }
+
+            @include media-breakpoint-up(md) {
+                margin-bottom: 0;
+                width: auto;
+            }
+
+            &--tabButtons {
+                display: none;
+                @include media-breakpoint-up(sm) {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    &__deals {
+        left: 0;
+        width: 100%;
+        z-index: 20;
+    }
+
+    &__filter-panel {
+        z-index: 49;
+        background: #fff;
+        width: $sidebar-filters-width;
+        border-right: 1px solid #ccc;
+        box-shadow: $box-shadow-sm;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+
+        &--small-filters-shown {
+            left: 0;
+        }
+
+        &--small-filters-hidden {
+            left: -$sidebar-filters-width;
+        }
+
+        &--small {
+            transition: 1s;
+        }
+
+        @include media-breakpoint-up(lg) {
+            left: 0;
+            position: static;
+            min-width: 300px;
+        }
+    }
+
+    &__no-results {
+        margin: 0 auto;
+        padding: 20px;
+        width: 115px;
+    }
+}
+
+.full-page-user-location {
+    .zipcode-finder {
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: $box-shadow-sm;
+        color: #586368;
+        height: auto;
+    }
+
+    form {
+        display: flex;
+        position: relative;
+        justify-content: center;
+    }
+
+    .zipcode-finder__form {
+        color: #586368;
+    }
+    .zipcode-finder__info {
+        justify-content: center;
+    }
+    .zipcode-finder__zipcode {
+        margin: 0;
+    }
+
+    .zipcode-finder__input {
+        margin-top: 0;
+    }
+
+    .zipcode-finder__button {
+        color: #fff;
+        background: #41b1ac;
+        height: auto;
+        width: 64px;
+        text-align: center;
+    }
+}
+
+.filter-close {
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    text-align: right;
+
+    &__icon {
+        cursor: pointer;
+        fill: $text-color;
+        stroke: $text-color;
+    }
+}

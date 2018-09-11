@@ -1,17 +1,33 @@
 .hidden {
-  display: none;
+    display: none;
 }
 
 .inner {
-  max-width: 75%;
-  margin: 0 auto;
-  width: 100%;
-
-  @media (min-width: $break-large) {
-    max-width: $break-large;
-  }
+    margin: 0 auto;
+    width: 100%;
 }
 
 .link {
     cursor: pointer;
+}
+
+input.fancyNumberEntry {
+    width: 5rem;
+    text-align: right;
+    font-size: inherit;
+    font-weight: inherit;
+}
+input.fancyNumberEntry::-webkit-inner-spin-button,
+input.fancyNumberEntry::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+    -moz-appearance: textfield !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-sm {
+    font-size: 0.85rem;
 }

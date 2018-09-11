@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Deal;
+use App\Models\Deal;
 use App\Transformers\DealTransformer;
 use League\Fractal\Serializer\DataArraySerializer;
 
@@ -12,7 +12,7 @@ class ConfirmDetailsController extends Controller
     {
         $deal = Deal::with('features')->with(['photos' => function ($query) {
             $query->orderBy('id')->limit(7);
-        },])->with('version.equipment')->findOrFail($id);
+        },])->findOrFail($id);
 
         $title = "{$deal->year} {$deal->make} {$deal->model} {$deal->series}";
 
@@ -21,7 +21,7 @@ class ConfirmDetailsController extends Controller
             ->serializeWith(new DataArraySerializer)
             ->toJson();
 
-        return view('confirm', ['id' => $id])
+        return view('checkout-confirm', ['id' => $id])
             ->with('deal', $dealTransformed)
             ->with('title', $title);
     }

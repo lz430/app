@@ -1,22 +1,49 @@
-@import 'variables';
-
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
+body {
+    height: 100vh;
+    display: flex;
+    background-color: #f2f2f2;
 }
 
-body {
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  min-height: 100vh;
+.app {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    .app-content-wrapper {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        @include media-breakpoint-down(sm) {
+            padding-top: 54px;
+        }
+    }
+    .app-content {
+        display: flex;
+        flex: 1 0 auto;
+        flex-direction: column;
+    }
+}
+
+#react-app {
+    display: flex;
+    flex: 1;
 }
 
 .content {
-  flex: 1;
+    display: flex;
+    flex: 1;
 }
 
 .content--grey {
-  background: $color-background-primary;
+    background: $color-background-primary;
+}
+.deals-wrapper {
+    flex: 1;
+    display: flex;
+    overflow: auto;
+    flex-direction: column;
+}
+
+.deals__show-more {
+    text-align: center;
+    margin-bottom: 3rem;
 }

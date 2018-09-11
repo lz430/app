@@ -1,127 +1,135 @@
-@import '../variables';
 @import '../mixins/button';
 
 .info-modal-data {
-  background-color: $color-background-secondary;
-  border: 1px solid $color-grey;
-  height: fit-content;
-  margin: $deal-card-margin;
-  max-width: $deal-card-width;
-  min-width: $deal-card-width;
-  padding: 1.5em;
+    background-color: $color-background-secondary;
+    border: 1px solid $color-grey;
+    height: fit-content;
+    margin: $deal-card-margin;
+    padding: 0.5em;
 
-  &__input {
-    width: 100%;
-  }
-
-  &__basic-info-msrp {
-    color: $text-color-dark;
-    display: block;
-    font-size: 1.15rem;
-  }
-
-  &__bold {
-       font-weight: bold;
-   }
-
-  &__costs {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0.75rem;
-    margin-bottom: 0.3em;
-    width: 100%;
-
-    &--final {
-      line-height: 1.5rem;
-      .info-modal-data__amount--cash {
-          font-size: 1.5rem;
-      }
+    @include media-breakpoint-up(sm) {
+        padding: 1.5em;
+        max-width: $deal-card-width;
+        min-width: $deal-card-width;
     }
 
-    &--final {
-      line-height: 1.5rem;
-      .info-modal-data__amount--cash {
-        font-size: 1.5rem;
-      }
+    &__input {
+        width: 100%;
     }
 
-    &--final-payments {
-      line-height: 1.5rem;
-      .info-modal-data__amount {
-        font-size: 1.5rem;
-      }
-    }
-  }
-
-  &__default-label {
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: -0.1rem;
-    width: 100%;
-  }
-
-  &__default-option {
-    margin-top: -1rem;
-    width: 100%;
-  }
-
-  &__disclaimer {
-    font-size: small;
-    text-align: left;
-  }
-
-  &__final-price {
-    color: $color-pink;
-  }
-
-  &__more-rebates {
-    display: flex;
-    font-size: 0.8em;
-    justify-content: space-between;
-
-    a {
-      color: $color-blue;
-      text-decoration: none;
-      font-weight: bold;
+    &__basic-info-msrp {
+        color: $text-color-dark;
+        display: block;
+        font-size: 1.15rem;
     }
 
-    a:after {
-      content: ' \003E';
+    &__bold {
+        font-weight: bold;
     }
-  }
 
-  &__prices {
-    font-size: 0.9em;
+    &__costs {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.75rem;
+        margin-bottom: 0.3em;
+        width: 100%;
 
-    a {
-      color: $color-blue;
-    }
-  }
+        &--final {
+            line-height: 1.5rem;
+            .info-modal-data__amount--cash {
+                font-size: 1.5rem;
+            }
+        }
 
-  &__pricing-details {
-    font-size: 1.25em;
-    text-decoration: underline;
-  }
+        &--final {
+            line-height: 1.5rem;
+            .info-modal-data__amount--cash {
+                font-size: 1.5rem;
+            }
+        }
 
-  &__rebate-info{
-    &__title {
-      text-align: left;
+        &--final-payments {
+            line-height: 1.5rem;
+            .info-modal-data__amount {
+                font-size: 1.5rem;
+            }
+        }
     }
-  }
 
-  &__final-selection-header {
-    &__you-selected {
-      font-size: .8rem;
+    &__default-label {
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: -0.1rem;
+        width: 100%;
     }
-    &__year-make-model-trim {
-      font-size: 1.2rem;
-      font-weight: bold;
+
+    &__default-option {
+        margin-top: -1rem;
+        width: 100%;
     }
-    &__stock-number {
-      font-size: .8rem;
+
+    &__disclaimer {
+        font-size: small;
+        text-align: left;
     }
-    &__payment-option {
-      font-weight: bold;
+
+    &__final-price {
+        color: $color-pink;
     }
-  }
+
+    &__more-rebates {
+        display: flex;
+        font-size: 0.8em;
+        justify-content: space-between;
+
+        a {
+            color: $color-blue;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:after {
+            content: ' \003E';
+        }
+    }
+
+    &__prices {
+        font-size: 0.9em;
+
+        a {
+            color: $color-blue;
+        }
+    }
+
+    &__pricing-details {
+        font-size: 1.25em;
+        text-decoration: underline;
+        margin: 0.25em;
+
+        @include media-breakpoint-up(sm) {
+            margin: 1em;
+        }
+    }
+
+    &__rebate-info {
+        &__title {
+            text-align: left;
+        }
+    }
+
+    &__final-selection-header {
+        &__you-selected {
+            font-size: 0.8rem;
+        }
+        &__year-make-model-trim {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        &__stock-number {
+            font-size: 0.8rem;
+        }
+        &__payment-option {
+            font-weight: bold;
+        }
+    }
 }

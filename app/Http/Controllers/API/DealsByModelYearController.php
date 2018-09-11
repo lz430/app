@@ -2,61 +2,53 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Deal;
-use App\Http\Controllers\API\Traits\SearchesDeals;
-use App\JATO\VehicleModel;
-use App\Transformers\DealTransformer;
-use App\Zipcode;
-use DeliverMyRide\JATO\Client;
-use DeliverMyRide\JsonApi\Sort;
-use Illuminate\Database\Eloquent\Builder;
+use App\Services\Search\ModelYearSearch;
 use Illuminate\Http\Request;
-use League\Csv\Reader;
-use League\Csv\Statement;
-use League\Fractal\Pagination\IlluminatePaginatorAdapter;
-use League\Fractal\Serializer\DataArraySerializer;
+use App\Transformers\ESResponseTransformer;
+use League\Fractal\Serializer\ArraySerializer;
 
 class DealsByModelYearController extends BaseAPIController
 {
-    use SearchesDeals;
-
-    private const TRANSFORMER = DealTransformer::class;
-    private const RESOURCE_NAME = 'deals';
-
-    public function getDealsByModelYear(Request $request, Client $client)
+    public function getDealsByModelYear(Request $request)
     {
         $this->validate($request, [
-            'make_ids' => 'sometimes|required|array',
-            'body_styles' => 'sometimes|required|array',
-            'fuel_type' => 'sometimes|required|string',
-            'transmission_type' => 'sometimes|required|string|in:automatic,manual',
+            'filters' => 'sometimes|required|array',
             'sort' => 'sometimes|required|string',
-            'zipcode' => 'sometimes|required|string',
+            'strategy' => 'sometimes|required|string',
+
+            'latitude' => 'sometimes|numeric',
+            'longitude' => 'sometimes|numeric',
         ]);
 
-        $deals = $this->buildSearchQuery($request)->get();
+        $query = new ModelYearSearch();
 
-        /* @TODO – This is terrible and insanely memory intensive. Needs badly to be rewritten. Sorry ~DC */
-        $dealsByModelYear = $deals->map(function ($deal) {
-            $deal->model_id = $deal->version->model_id;
-            return $deal;
-        })->groupBy(function ($item, $key) {
-            return $item->model_id . '--' . $item->year;
-        })->map(function ($deals, $modelId) {
-            $model = VehicleModel::find($modelId);
-            return [
-                'id' => str_before($modelId, '--'),
-                'make' => $model->make->name,
-                'model' => $model->name,
-                'year' =>  str_after($modelId, '--'),
-                'deals' => [
-                    'count' => $deals->count(),
-                    'ids' => $deals->pluck('id'),
-                ],
-                'lowest_msrp' => $deals->sortBy('msrp')->first()->msrp,
-            ];
-        })->values();
+        $query = $query
+            ->addFeatureAggs()
+            ->addMakeAndStyleAgg()
+            ->filterMustGenericRules();
 
-        return $dealsByModelYear;
+        if ($request->get('latitude') && $request->get('longitude')) {
+            $query = $query->filterMustLocation(['lat' => $request->get('latitude'), 'lon' => $request->get('longitude')]);
+        }
+
+        if ($request->get('strategy') && in_array($request->get('strategy'), ['cash', 'finance', 'lease'])) {
+            $query = $query->filterMustPayment($request->get('strategy'));
+        }
+
+        $query = $query->genericFilters($request->get('filters', []));
+
+        if ($request->get('sort')) {
+            $query = $query->sort($request->get('sort'), $request->get('strategy'));
+        }
+
+        $results = $query->get();
+        return fractal()
+            ->item(['response' => $results,
+                'meta' => [
+                    'entity' => 'model',
+                ]])
+            ->transformWith(ESResponseTransformer::class)
+            ->serializeWith(new ArraySerializer)
+            ->respond();
     }
 }

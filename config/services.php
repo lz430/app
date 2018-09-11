@@ -1,5 +1,4 @@
 <?php
-
 return [
 
     /*
@@ -30,7 +29,7 @@ return [
     ],
 
     'stripe' => [
-        'model' => App\User::class,
+        'model' => App\Models\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
@@ -38,7 +37,7 @@ return [
     'jato' => [
         'username' => env('JATO_USERNAME'),
         'password' => env('JATO_PASSWORD'),
-        'subscription_key' => 'e37102e58e4f42bf927743e6e92c41c3',
+        'subscription_key' => env('JATO_KEY', 'e37102e58e4f42bf927743e6e92c41c3'),
     ],
 
     'vauto' => [
@@ -57,5 +56,39 @@ return [
         'username' => env('CARLETON_USERNAME'),
         'password' => env('CARLETON_PASSWORD'),
         'url' => env('CARLETON_URL'),
-    ]
+    ],
+
+    'cox' => [
+        'api_key' => env('COX_API_KEY'),
+    ],
+
+    'datadelivery' => [
+        'id' => env('DATADELIVERY_ID'),
+        'api_key' => env('DATADELIVERY_API_KEY'),
+    ],
+
+    'ipstack' => [
+        'api_key' => env('IPSTACK_API_KEY'),
+    ],
+
+    'googleanalytics' => [
+        'ua' =>     env('GOOGLE_ANALYTICS_UA')
+    ],
+
+    'mixpanel' => [
+        'token' =>  env('MIXPANEL_TOKEN'),
+    ],
+
+    'imgix' => [
+      'url' =>  env('IMGIX_SOURCE_URL'),
+      'token' =>  env('IMGIX_TOKEN'),
+    ],
+
+    'routeone' => [
+        'production_url' => 'https://www.routeone.net/XRD/turnKeyOcaStart.do',
+        'test_url' => 'https://itl.routeone.net/XRD/turnKeyOcaStart.do',
+        'test_mode' => env('ROUTEONE_TEST_MODE', false),
+        'id' => 'F00DMR',
+    ],
+
 ];

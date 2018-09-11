@@ -1,64 +1,144 @@
-@import '../variables';
-@import '../mixins/button';
-@import '../mixins/input';
+.filter-page__deals {
+    background: #f2f2f2;
+}
 
-.deals {
-  background: $color-background-primary;
-  display: flex;
-  flex-flow: row wrap;
-  height: calc(100vh - #{$nav-height + $sortbar-height});
-  justify-content: center;
-  overflow-y: scroll;
-  padding: 10px 40px 20px;
-
-  @media (min-width: $break-medium) {
-    height: calc(100vh - #{$header-height + $sortbar-height + $filterbar-height + $compare-bar-height});
-
-    &.no-compare {
-      height: calc(100vh - #{$header-height + $sortbar-height + $filterbar-height});
-    }
-  }
-
-  &__no-matches {
+.deals__no-matches {
     display: flex;
-    font-size: 1.5em;
+    font-size: 1em;
     justify-content: center;
     flex-flow: column;
-    margin: .5rem auto;
     text-align: center;
-    width: 85%;
+    max-width: 800px;
+    margin: 0.5rem auto;
+    align-items: center;
 
-    @media (min-width: $break-small) {
-      margin: 1rem auto;
-      width: 70%;
+    .full-page-user-location {
+        width: 100%;
+        margin: 1rem 0;
     }
-  }
 
-  &__show-more {
-    padding-top: 15px;
-    text-align: center;
-    width: 100%;
-  }
-
-  &__button {
-    @include button;
-
-    &--zip {
-      margin: 1em auto;
-      width: 50%;
+    @include media-breakpoint-up(sm) {
+        margin: 1rem auto;
     }
-  }
 
-  &__input {
-    @include input;
-    font-size: 0.6em;
-    margin-right: 1rem;
-    width: 70%;
-  }
+    @include media-breakpoint-up(md) {
+        p {
+            font-size: 1.5rem;
+            padding: 1rem;
+        }
+    }
+}
 
-  &__title {
+.toolbar-mobile-bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    background: #fff;
     text-align: center;
-    width: 100%;
-  }
+    box-shadow: 0 -0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+}
+.toolbar-mobile-bottom > .tray {
+    display: none;
+    flex: 1;
+    &.show {
+        display: flex;
+        border-top: 2px solid $primary;
+    }
+}
+.toolbar-mobile-bottom > .menu {
+    position: relative;
+    z-index: 50;
+    display: flex;
+    flex: 1;
+    > div {
+        border-top: 2px solid $primary;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+        cursor: pointer;
+        padding: 0.25rem;
+        border-right: 2px solid $primary;
+        background: #fbfbfb;
+        &.active {
+            border-top: 0;
+            background: #fff;
+        }
+        &.dropdown {
+            padding: 0;
+            > span {
+                padding: 0.5rem 0.25rem;
+                display: block;
+                width: 100%;
+            }
+        }
+        &:last-child {
+            border-right: 0;
+        }
+        svg {
+            position: relative;
+            top: -1px;
+            margin-right: 0.25rem;
+        }
+    }
+}
 
+.tray-select {
+    flex: 1;
+
+    .tray-select-button {
+        cursor: pointer;
+        padding: 6px;
+        border-bottom: 1px solid #eee;
+        .explanation {
+            font-size: 0.8rem;
+            color: $gray-600;
+        }
+
+        &.active {
+            box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.15);
+
+            .label {
+                font-weight: bold;
+            }
+        }
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+}
+
+.tray-widget {
+    flex: 1;
+    text-align: left;
+    .bubble {
+        display: inline-flex;
+        margin: 5px;
+        padding: 6px 10px;
+        border: 1px solid $primary;
+        border-radius: $border-radius;
+        box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.15);
+        font-size: 0.85rem;
+        strong {
+            margin-right: 0.25rem;
+        }
+    }
+    .tray-widget-content {
+        padding: 4px 4px 0 4px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+    .tray-widget-action {
+        text-align: center;
+        font-size: 0.85rem;
+        padding: 4px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        cursor: pointer;
+    }
 }

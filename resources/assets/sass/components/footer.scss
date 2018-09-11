@@ -1,94 +1,50 @@
-@import '../variables';
-
 .page-footer {
-  background-color: $color-footer-background;
-  color: #fff;
-  height: $footer-height-mobile;
-  max-height: $footer-height-mobile;
-  padding-top: 1.5rem;
-  text-align: center;
-
-  a {
-    color: #fff;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
+    padding: 0.5rem 15px;
+    text-align: center;
+    @include media-breakpoint-up(sm) {
+        text-align: left;
+        padding: 2rem 3rem;
     }
-  }
+    background-color: #1a1a1a;
+    color: #dedede;
+    font-size: 0.85rem;
 
-  @media (min-width: $break-large) {
-    height: $footer-height;
-    max-height: $footer-height;
-  }
-}
+    a {
+        color: #fff;
+        text-decoration: none;
 
-.footer-icons, .footer-links, .footer-signup {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-
-  div, a, input {
-    align-items: center;
-    display: flex;
-    margin: 0 1.5em;
-  }
-}
-
-.footer-icons {
-  margin-bottom: 1.5rem;
-
-  div {
-    fill: $color-text-white;
-    height: 34px;
-    margin: 0 3px 5px 0;
-
-    &:hover {
-      opacity: 0.75;
+        &:hover {
+            text-decoration: underline;
+        }
     }
-  }
 }
 
-.footer-links {
-  margin-bottom: 2.5rem;
+.footer-bottom {
+    font-weight: bold;
+    margin-top: 2rem;
 }
 
-.footer-signup {
-  margin-bottom: 2.5rem;
-
-  div, input {
-    height: 2.25rem;
-    margin: 0 1px;
-  }
-
-  &__title {
-    border: 1px solid #fff;
-    border-radius: 0.3em 0 0 0.3em;
-    padding: 0 1em;
-
-  }
-
-  &__email {
-    font-size: 1em;
-    min-width: 20em;
-    padding: 0 0.5em;
-
-    &::placeholder {
-      color: $color-darkergrey;
+.footer-box {
+    margin-bottom: 0.5rem;
+    @include media-breakpoint-up(sm) {
+        margin-bottom: 0;
     }
-  }
-
-  &__submit {
-    background: $color-blue;
-    border: 0;
-    border-radius: 0 0.3em 0.3em 0;
-    color: #fff;
-    font-size: 1em;
-    padding: 0 1em;
-  }
-}
-
-.footer-meta, .footer-meta a {
-  color: $color-grey;
-  font-size: 0.9em;
+    &__title {
+        font-weight: bold;
+    }
+    > span,
+    > a {
+        cursor: pointer;
+        display: block;
+        color: #dedede;
+        svg {
+            width: 1rem;
+            height: 1rem;
+            fill: #dedede;
+            margin-right: 4px;
+        }
+    }
+    span:hover {
+        text-decoration: underline;
+    }
 }

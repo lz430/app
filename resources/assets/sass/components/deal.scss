@@ -1,98 +1,80 @@
-@import '../variables';
-@import '../mixins/button';
-
-.deals .deal {
-  border-radius: 0.25rem;
-  padding: 0.5rem;
-}
-
-.compare-page .deal {
-  border: none;
-}
-
 .deal {
-  background-color: $color-background-secondary;
-  border: 1px solid $color-grey;
-  height: fit-content;
-  margin: $deal-card-margin;
-  max-width: $deal-card-width;
-  min-width: $deal-card-width;
-
-  &__basic-info {
-    margin-bottom : 0.5rem;
-  }
-
-  &__basic-info-year-and-model {
-    color: $color-blue;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 1.1rem;
-    line-height: 1.3rem;
-    text-decoration: none;
-  }
-
-  &__basic-info-year-and-make {
-    color: $color-darkergrey;
-    font-size: small;
-    margin-bottom: 2px;
-  }
-
-  &__basic-info-model-and-series {
-    color: $color-darkestgrey;
-    font-size: x-large;
-  }
-
-  &__basic-info-color {
-    color: $color-darkergrey;
-    font-size: small;
-    margin-top: 2px;
-  }
-
-  &__basic-info-msrp {
-    color: $text-color-dark;
-    display: block;
-    font-size: 1.15rem;
-  }
-
-  &__image {
-    border: 1px solid $color-grey;
-    border-bottom: 0;
-    display: block;
-    height: 225px;
-    min-height: 225px;
-    width: 100%;
-
-    &--fallback {
-      padding: 25px;
+    &__basic-info {
+        margin-bottom: 0.5rem;
     }
-  }
 
-  &__buttons {
-    display: flex;
-    justify-content: space-around;
-    margin: 5px 0 0.5rem;
-  }
-
-  &__button {
-    @include button;
-    flex: 1;
-    justify-content: center;
-    margin: 0 5px;
-
-    &--small {
-      font-size: 0.8rem;
-      padding: 10px 15px;
-
-      &--as-link {
-        padding: 0;
-        text-decoration: underline;
-      }
+    &__basic-info-year-and-model {
+        cursor: pointer;
+        display: inline-block;
+        font-size: 1.1rem;
+        line-height: 1.3rem;
+        text-decoration: none;
+        &:hover {
+            text-decoration: none;
+        }
     }
-  }
 
-  &__button[disabled],
-  &__button:disabled {
-    cursor: default;
-    opacity: .25;
-  }
+    &__basic-info-year-and-make {
+        color: $color-darkergrey;
+        font-size: x-small;
+
+        @include media-breakpoint-up(sm) {
+            font-size: small;
+        }
+    }
+
+    &__basic-info-model-and-series {
+        color: $color-darkestgrey;
+        font-size: 1rem;
+        @include media-breakpoint-up(sm) {
+            font-size: 1.25rem;
+        }
+    }
+
+    &__basic-info-color {
+        color: $color-darkergrey;
+        font-size: x-small;
+        margin-top: 2px;
+        @include media-breakpoint-up(sm) {
+            font-size: small;
+        }
+    }
+
+    &__basic-info-msrp {
+        color: $text-color-dark;
+        display: block;
+        font-size: 1.15rem;
+    }
+
+    &__image {
+        border-bottom: 0;
+        display: block;
+        width: 100%;
+        object-fit: cover;
+
+        &--fallback {
+            padding: 25px;
+        }
+    }
+
+    &__buttons {
+        display: flex;
+        justify-content: space-around;
+        margin: 5px 0 0 0;
+        > .btn {
+            flex: 1;
+            &:first-child {
+                margin-right: 5px;
+            }
+            &:last-child {
+                margin-left: 5px;
+            }
+        }
+    }
+}
+
+.thumbnail-container {
+    img {
+        max-width: 100%;
+    }
 }

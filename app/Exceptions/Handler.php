@@ -3,7 +3,6 @@
 namespace App\Exceptions;
 
 use Exception;
-use Facades\App\JATO\Log;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -33,9 +32,6 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
-        if (str_contains($exception->getMessage(), 'jatoflex')) {
-            Log::error($exception->getMessage());
-        }
 
         if (app()->bound('sentry') && $this->shouldReport($exception)) {
             app('sentry')->captureException($exception);

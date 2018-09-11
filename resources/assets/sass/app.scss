@@ -1,93 +1,116 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,700');
+
 // Variables
 @import 'variables';
 
-// Font
-html {
-  font-size: $font-size-base;
+/*
+@font-face {
+    font-family: 'Gotham Narrow Book';
+    font-weight: normal;
+    src: url('/fonts/GothamNarrow-Book.woff') format('opentype');
 }
 
 @font-face {
-  font-family: 'Gotham Narrow Book';
-  font-weight: normal;
-  src: url('/fonts/GothamNarrow-Book.woff') format('opentype');
+    font-family: 'Gotham Narrow Book';
+    font-weight: bold;
+    src: url('/fonts/GothamNarrow-Bold.otf') format('opentype');
 }
+*/
 
-@font-face {
-  font-family: 'Gotham Narrow Book';
-  font-weight: bold;
-  src: url('/fonts/GothamNarrow-Bold.otf') format('opentype');
-}
+@import 'mixins/button';
+@import 'mixins/constrained';
+@import 'mixins/input';
+@import 'mixins/link';
+@import 'mixins/selector-icon';
+@import 'mixins/vertical-form';
 
-body {
-  color: $text-color;
-
-  font-family: "Gotham Narrow Book", serif;
-  line-height: $line-height-base;
-}
+//
+// Libraries
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/root';
+@import '~bootstrap/scss/reboot';
+@import '~bootstrap/scss/type';
+@import '~bootstrap/scss/images';
+//@import "~bootstrap/scss/code";
+@import '~bootstrap/scss/grid';
+@import '~bootstrap/scss/tables';
+@import '~bootstrap/scss/forms';
+@import '~bootstrap/scss/buttons';
+@import '~bootstrap/scss/transitions';
+@import '~bootstrap/scss/dropdown';
+@import '~bootstrap/scss/button-group';
+@import '~bootstrap/scss/input-group';
+@import '~bootstrap/scss/custom-forms';
+@import '~bootstrap/scss/nav';
+@import '~bootstrap/scss/navbar';
+@import '~bootstrap/scss/card';
+@import '~bootstrap/scss/breadcrumb';
+//@import "~bootstrap/scss/pagination";
+//@import "~bootstrap/scss/badge";
+//@import "~bootstrap/scss/jumbotron";
+@import '~bootstrap/scss/alert';
+//@import "~bootstrap/scss/progress";
+//@import "~bootstrap/scss/media";
+@import '~bootstrap/scss/list-group';
+@import '~bootstrap/scss/close';
+@import '~bootstrap/scss/modal';
+//@import "~bootstrap/scss/tooltip";
+//@import "~bootstrap/scss/popover";
+//@import "~bootstrap/scss/carousel";
+@import '~bootstrap/scss/utilities';
+@import '~bootstrap/scss/print';
 
 // Overall layout
 @import 'layout';
 @import 'components/footer';
 
 // Normal Components
+@import 'components/cards';
+@import 'components/alerts';
+
 @import 'components/section';
 @import 'components/top-bars';
-@import 'components/nav';
-@import 'components/triplets';
-@import 'components/welcome-style-selector';
-@import 'components/welcome-steps';
+@import 'components/header';
 @import 'components/make-selector';
 @import 'components/modal';
 @import 'components/infomodal';
 @import 'components/info-modal-data';
-@import 'components/sortbar';
-@import 'components/filterbar';
+@import 'pages/deal-list/sortbar';
+@import 'pages/deal-list/filterbar';
 @import 'components/deals';
 @import 'components/deal';
 @import 'components/model-year';
 @import 'components/apply-or-purchase';
 @import 'components/cash-finance-lease-calculator';
-@import 'components/application-form';
 @import 'components/zipcode-finder';
-@import 'components/sidebar-filters';
-@import 'components/filter-style-selector';
-@import 'components/filter-make-selector';
-@import 'components/filter-selector';
-@import 'components/deal-details';
+@import 'pages/deal-list/sidebar-filters';
 @import 'components/rebates';
-@import 'components/compare-page';
-@import 'components/compare-deal';
-@import 'components/compare-bar';
-@import 'components/compare-bubble';
-@import 'components/compare-page-title-bar';
+@import 'components/rebates-description-modal';
+@import 'pages/compare/compare-deal';
 @import 'components/lease';
 @import 'components/finance';
-@import 'components/compare-page-deals';
-@import 'components/compare-page-table';
+@import 'pages/compare/compare-page-deals';
+@import 'pages/compare/compare-page-table';
 @import 'components/tabs';
-@import 'components/range-slider';
 @import 'components/deal-price';
 @import 'components/loading';
 @import 'components/disclaimer';
-@import 'components/customer-type';
-@import 'components/confirm-deal.scss';
-@import 'components/accupricing-cta.scss';
-@import 'components/accupricing-modal.scss';
-@import 'components/button-group.scss';
-@import 'components/filter-page.scss';
-@import 'components/filter-close.scss';
+@import 'components/confirm-deal';
+@import 'components/button-group';
 
 // Pages
-@import 'pages/welcome';
-@import 'pages/filter-page';
-@import 'pages/financing';
-@import 'pages/compare-page';
-@import 'pages/request-email';
-@import 'pages/view-apply';
-@import 'pages/thank-you';
+@import 'pages/deal-list/deal-list';
+@import 'pages/deal-detail';
+@import 'pages/compare/compare-page';
+@import 'pages/checkout-confirm-page';
+@import 'pages/checkout-financing';
+@import 'pages/checkout-complete';
 
 // Vendor
 @import '~animate.css';
+@import '~react-image-gallery/styles/scss/image-gallery.scss';
 
 // Helpers
 @import 'helpers';
