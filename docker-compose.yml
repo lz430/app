@@ -1,7 +1,8 @@
 version: '2'
 
 volumes:
-  db_data_dev: {}
+  local_mysql_data: {}
+  local_mysql_data_backups: {}
 
 services:
 
@@ -11,7 +12,8 @@ services:
   mysql:
     build: ./compose/mysql
     volumes:
-      - db_data_dev:/var/lib/mysql
+      - local_mysql_data:/var/lib/mysql
+      - local_mysql_data_backups:/backups
     ports:
     - 3306:3306
     environment:
@@ -19,6 +21,7 @@ services:
       - MYSQL_USER=delivermyride
       - MYSQL_PASSWORD=delivermyride
       - MYSQL_ROOT_PASSWORD=delivermyride
+
 
   redis:
     image: redis:latest
