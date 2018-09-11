@@ -439,10 +439,10 @@ class Importer
             'certified' => $row['Certified'] === 'Yes',
             'description' => $row['Description'],
             'option_codes' => array_filter(explode(',', $row['Option Codes'])),
-            'fuel_econ_city' => $row['City MPG'] !== '' ? $row['City MPG'] : null,
-            'fuel_econ_hwy' => $row['Highway MPG'] !== '' ? $row['Highway MPG'] : null,
+            'fuel_econ_city' => (is_numeric($row['City MPG'])) ? $row['City MPG'] : 0,
+            'fuel_econ_hwy' => (is_numeric($row['Highway MPG'])) ? $row['Highway MPG'] : 0,
             'dealer_name' => $row['Dealer Name'],
-            'days_old' => $row['Age'],
+            'days_old' => (is_numeric($row['Age'])) ? $row['Age'] : 0,
             'version_id' => $version->id,
             'source_price' => $pricing,
         ]);
