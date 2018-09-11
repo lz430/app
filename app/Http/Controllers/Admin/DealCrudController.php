@@ -33,6 +33,11 @@ class DealCrudController extends CrudController
 
         //
         // FORM
+        $this->crud->addField([
+            'name'  => 'status',
+            'label' => 'Status',
+            'type' => 'enum',
+        ]);
 
         //
         // LIST
@@ -63,10 +68,15 @@ class DealCrudController extends CrudController
             'function_name' => 'title'
         ]);
 
+        $this->crud->addColumn([
+            'label' => 'Status',
+            'name' => 'status'
+        ]);
+
         $this->crud->addButtonFromView('line', 'open_in_app', 'deal-app-view', null);
         $this->crud->addButtonFromView('line', 'open_in_admin', 'deal-admin-view', null);
 
-        $this->crud->denyAccess(['create', 'update', 'delete']);
+        $this->crud->denyAccess(['create']);
 
 
         $this->crud->enableExportButtons();

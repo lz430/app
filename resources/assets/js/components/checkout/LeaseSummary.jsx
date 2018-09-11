@@ -20,7 +20,11 @@ export default class LeaseSummary extends React.PureComponent {
                 <Header style={{ fontSize: '1.5em' }}>Lease Summary</Header>
                 <Line>
                     <Label>Annual Miles</Label>
-                    <Value>{pricing.annualMileage().toLocaleString()}</Value>
+                    <Value>
+                        {pricing.annualMileage()
+                            ? pricing.annualMileage().toLocaleString()
+                            : 0}
+                    </Value>
                 </Line>
                 <Line>
                     <Label>Term</Label>

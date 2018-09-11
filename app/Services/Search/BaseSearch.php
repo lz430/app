@@ -126,6 +126,9 @@ abstract class BaseSearch
                 ['term' => [
                     'is_active' => true,
                 ]],
+                ['term' => [
+                    'status' => 'available',
+                ]],
             ],
             'must_not' => [
                 ['terms' => [

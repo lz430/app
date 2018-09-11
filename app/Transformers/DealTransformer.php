@@ -78,6 +78,7 @@ class DealTransformer extends TransformerAbstract
             'dmr_features' => ($deal->features ? $deal->features : []),
             'pricing' => $prices,
             'exterior_color_swatch' => $exteriorColor,
+            'status' => $deal->status
         ];
     }
 }

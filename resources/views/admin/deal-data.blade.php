@@ -43,7 +43,11 @@
                 <strong>VIN: </strong> {{$deal->vin}}<br/>
                 <strong>Packages: </strong> {{$deal->package_codes ? implode(", ", $deal->package_codes) : "None"}}
                 <br/>
-                <strong>Options: </strong> {{$deal->option_codes ? implode(", ", $deal->option_codes) : "None"}}
+                <strong>Options: </strong> {{$deal->option_codes ? implode(", ", $deal->option_codes) : "None"}}<br/>
+                <strong>Status: </strong> {{$deal->status}}
+                @slot('footer')
+                    <a href="/admin/deal/{{$deal->id}}/edit">Edit Deal Status</a>
+                @endslot
             @endcomponent
             @component('components.box')
                 @slot('title')

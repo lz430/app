@@ -7,7 +7,7 @@
     margin: $deal-card-margin;
     padding: 0.5em;
 
-    @media (min-width: $break-small) {
+    @include media-breakpoint-up(sm) {
         padding: 1.5em;
         max-width: $deal-card-width;
         min-width: $deal-card-width;
@@ -106,7 +106,7 @@
         text-decoration: underline;
         margin: 0.25em;
 
-        @media (min-width: $break-small) {
+        @include media-breakpoint-up(sm) {
             margin: 1em;
         }
     }

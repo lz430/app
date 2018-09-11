@@ -63,6 +63,9 @@ class CheckoutController extends BaseAPIController
             'lease_mileage' => isset($amounts['leased_annual_mileage']) ? $amounts['leased_annual_mileage'] : null,
         ]);
 
+        // Updates purchased deal status to pending
+        Deal::where('id', $deal->id)->update(['status' => 'pending']);
+
         $request->session()->put('purchase', $purchase);
 
         /*

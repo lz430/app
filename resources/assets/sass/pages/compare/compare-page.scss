@@ -23,7 +23,7 @@
             border-bottom: 0;
         }
 
-        @media (min-width: $break-small) {
+        @include media-breakpoint-up(sm) {
             flex-direction: row;
             padding-bottom: 0.5em;
             border-bottom: 1px solid $color-section-bottom-border;
@@ -33,7 +33,7 @@
             &--tabButtons {
                 margin-left: auto;
                 display: none;
-                @media (min-width: $break-small) {
+                @include media-breakpoint-up(sm) {
                     display: block;
                 }
             }
@@ -46,7 +46,7 @@
     margin-top: 12px;
 
     // compare-page only mobile deal card adjustments
-    @media (max-width: $break-small) {
+    @include media-breakpoint-down(sm) {
         background: $color-background-secondary;
         margin-top: 0;
         .deal {

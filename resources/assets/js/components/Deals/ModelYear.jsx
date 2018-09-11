@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { modelYearType } from 'types';
 
-import util from 'src/util';
+import { moneyFormat } from 'src/util';
 import ModelYearImage from 'components/Deals/ModelYearImage';
 import { Card, CardBody, CardHeader, CardFooter } from 'reactstrap';
 
@@ -45,16 +45,14 @@ class ModelYear extends React.Component {
 
     renderPrice() {
         let label = 'MSRP starting at';
-        let value = util.moneyFormat(this.props.modelYear['msrp']);
+        let value = moneyFormat(this.props.modelYear['msrp']);
 
         if (
             this.props.purchaseStrategy === 'lease' &&
             this.props.modelYear.payments.lease
         ) {
             label = 'Payments starting at';
-            value = util.moneyFormat(
-                this.props.modelYear.payments.lease.payment
-            );
+            value = moneyFormat(this.props.modelYear.payments.lease.payment);
         }
 
         if (
@@ -62,9 +60,7 @@ class ModelYear extends React.Component {
             this.props.modelYear.payments.finance
         ) {
             label = 'Payments starting at';
-            value = util.moneyFormat(
-                this.props.modelYear.payments.finance.payment
-            );
+            value = moneyFormat(this.props.modelYear.payments.finance.payment);
         }
 
         if (
@@ -72,9 +68,7 @@ class ModelYear extends React.Component {
             this.props.modelYear.payments.cash
         ) {
             label = 'Price starting at';
-            value = util.moneyFormat(
-                this.props.modelYear.payments.cash.payment
-            );
+            value = moneyFormat(this.props.modelYear.payments.cash.payment);
         }
 
         return (

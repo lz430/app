@@ -95,7 +95,7 @@
     border-radius: 0;
     cursor: pointer;
 
-    @include media-breakpoint-between(sm, md) {
+    @include media-breakpoint-between(sm, lg) {
         min-width: 30%;
         max-width: 30%;
     }
@@ -104,7 +104,7 @@
         flex: 1;
     }
 
-    @include media-breakpoint-up(lg) {
+    @include media-breakpoint-up(xl) {
         width: auto;
         max-width: 300px;
         min-width: 300px;
@@ -145,32 +145,32 @@
     width: 100%;
 
     &__price__label {
-        font-size: x-small;
+        font-size: 0.75rem;
         @include media-breakpoint-up(sm) {
-            font-size: small;
+            font-size: 0.9rem;
         }
     }
 
     &__price__value {
         display: flex;
-        font-size: x-large;
+        font-size: 1.25rem;
         justify-content: center;
         margin-bottom: 0;
         margin-top: 0;
         line-height: 1.125em;
         @include media-breakpoint-up(sm) {
-            font-size: xx-large;
+            font-size: 1.5rem;
             margin-top: 0;
         }
     }
 
     &__price__disclaimer {
-        font-size: xx-small;
+        font-size: 0.65rem;
         text-transform: uppercase;
         margin-bottom: -1em;
 
         @include media-breakpoint-up(sm) {
-            font-size: small;
+            font-size: 0.75rem;
         }
     }
 
@@ -184,16 +184,16 @@
 
     &__msrp {
         color: $color-darkgrey;
-        font-size: medium;
+        font-size: 1rem;
 
         @include media-breakpoint-up(sm) {
-            font-size: large;
+            font-size: 1.25rem;
         }
 
         > span {
-            font-size: xx-small;
+            font-size: 0.75rem;
             @include media-breakpoint-up(sm) {
-                font-size: x-small;
+                font-size: 0.9rem;
             }
         }
     }

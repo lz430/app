@@ -2,10 +2,9 @@
     background: $color-text-white;
     padding: 15px;
 
-    @media (min-width: $break-small) {
+    @include media-breakpoint-up(sm) {
         width: 450px;
     }
-
     .rebates {
         h4 {
             margin-bottom: 0;
@@ -34,25 +33,28 @@
 
     &__lease-table-cell {
         padding: 5px;
+        border: 1px solid $color-section-bottom-border;
 
         &--dark {
             background: $color-grey;
         }
 
         &--selectable {
-            background: $color-blue;
+            background: $color-text-white;
             border: 1px solid $color-section-bottom-border;
-            border-radius: 3px;
-            color: $color-text-white;
+            color: $color-blue;
             cursor: pointer;
         }
 
         &--selected {
-            background: $color-text-white;
+            background: $color-blue;
+            color: $color-text-white;
             border: 1px solid $color-section-bottom-border;
-            border-radius: 3px;
-            color: $color-blue;
             cursor: pointer;
+        }
+
+        &--disabled {
+            color: $gray-500;
         }
 
         &--darker {

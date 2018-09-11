@@ -26,7 +26,7 @@ class DealRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
+            //
         ];
     }
 
