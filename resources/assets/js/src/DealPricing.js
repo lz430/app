@@ -252,7 +252,11 @@ export default class DealPricing {
     }
 
     leaseAnnualMileage() {
-        return this.leaseAnnualMileageValue().toLocaleString();
+        let value = this.leaseAnnualMileageValue();
+        if (value) {
+            return value.toLocaleString();
+        }
+        return null;
     }
 
     msrpValue() {
