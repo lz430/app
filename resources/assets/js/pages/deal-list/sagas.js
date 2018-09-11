@@ -27,7 +27,8 @@ import getDealList, { getSearchQuery } from './selectors';
 import { getUserLocation } from 'apps/user/selectors';
 import { initPage } from 'apps/page/sagas';
 
-import util from 'src/util';
+import { getInitialBodyStyleFromUrl, getInitialSizeFromUrl } from 'src/util';
+
 import { track } from 'services';
 import * as ActionTypes from './consts';
 
@@ -199,8 +200,8 @@ function* init(action) {
 
     let userCurrentLocation = yield select(getUserLocation);
 
-    const urlStyle = util.getInitialBodyStyleFromUrl();
-    const urlSize = util.getInitialSizeFromUrl();
+    const urlStyle = getInitialBodyStyleFromUrl();
+    const urlSize = getInitialSizeFromUrl();
 
     if (urlStyle || urlSize) {
         let filters = [];

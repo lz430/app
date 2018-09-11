@@ -1,39 +1,50 @@
 import * as R from 'ramda';
 import qs from 'qs';
 
-const util = {
-    windowIsLargerThanSmall: width => {
-        // variables.scss; $break-small: 576px;
-        return width > 576;
-    },
-    moneyFormat: num => {
-        // Older browser don't support this.
-        if (typeof Intl.NumberFormat === 'function') {
-            const formatter = new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 0,
-            });
-            return formatter.format(Math.round(num));
-        } else {
-            return Math.round(num);
-        }
-    },
-    toggleItem: (items, item) => {
-        return R.contains(item, items)
-            ? R.reject(R.equals(item), items)
-            : R.append(item, items);
-    },
-
-    getInitialBodyStyleFromUrl: () => {
-        return R.prop('style', qs.parse(window.location.search.slice(1)));
-    },
-    getInitialSizeFromUrl: () => {
-        return R.prop('size', qs.parse(window.location.search.slice(1)));
-    },
+/**
+ *
+ */
+export const getInitialSizeFromUrl = () => {
+    return R.prop('size', qs.parse(window.location.search.slice(1)));
 };
 
-export default util;
+/**
+ *
+ */
+export const getInitialBodyStyleFromUrl = () => {
+    return R.prop('style', qs.parse(window.location.search.slice(1)));
+};
+
+/**
+ *
+ * @param items
+ * @param item
+ * @returns {*}
+ */
+export const toggleItem = (items, item) => {
+    return R.contains(item, items)
+        ? R.reject(R.equals(item), items)
+        : R.append(item, items);
+};
+
+/**
+ *
+ * @param num
+ * @returns {*}
+ */
+export const moneyFormat = num => {
+    // Older browser don't support this.
+    if (Intl && typeof Intl.NumberFormat === 'function') {
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+        });
+        return formatter.format(Math.round(num));
+    } else {
+        return Math.round(num);
+    }
+};
 
 /**
  *
