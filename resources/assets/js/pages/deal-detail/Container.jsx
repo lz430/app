@@ -122,8 +122,8 @@ class DealDetailContainer extends React.PureComponent {
         return (
             <Container className="mt-2">
                 <Alert className="mb-0 text-sm p-2">
-                    This deal is outside of your delivery range, additional
-                    delivery charges may apply.
+                    This deal is outside of your delivery range, additional fees
+                    may apply.
                 </Alert>
             </Container>
         );
