@@ -27,9 +27,11 @@ class DealsByModelYearController extends BaseAPIController
             ->addMakeAndStyleAgg()
             ->filterMustGenericRules();
 
+        /*
         if ($request->get('latitude') && $request->get('longitude')) {
             $query = $query->filterMustLocation(['lat' => $request->get('latitude'), 'lon' => $request->get('longitude')]);
         }
+        */
 
         if ($request->get('strategy') && in_array($request->get('strategy'), ['cash', 'finance', 'lease'])) {
             $query = $query->filterMustPayment($request->get('strategy'));

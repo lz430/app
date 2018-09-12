@@ -191,7 +191,6 @@ class Map
         'True Blue' => 'Blue',
         'True Blue Pearlcoat' => 'Blue',
         'Utopia Blue Metallic' => 'Blue',
-        'Velvet' => 'Blue',
         'Basalto Brown Metallic' => 'Brown',
         'Blkish Bwn Met' => 'Brown',
         'Brown Metallic' => 'Brown',
