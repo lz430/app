@@ -52,7 +52,6 @@ class UserLocationController extends Controller
 
         }
 
-
         return $location;
     }
 
@@ -134,7 +133,7 @@ class UserLocationController extends Controller
             $has_results = false;
         } elseif ($location) {
             $query = new DealSearch();
-            $query = $query->filterMustLocation(['lat' => $location['latitude'], 'lon' =>  $location['longitude']]);
+            //$query = $query->filterMustLocation(['lat' => $location['latitude'], 'lon' =>  $location['longitude']]);
             $query = $query->filterMustGenericRules();
             $query = $query->size(0);
             $results = $query->get();

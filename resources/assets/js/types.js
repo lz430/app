@@ -1,10 +1,13 @@
 import PropTypes from 'prop-types';
 import Dinero from 'dinero.js';
 
-const { shape, number, string, arrayOf, object } = PropTypes;
+const { shape, number, string, bool, arrayOf, object } = PropTypes;
 
 export const dealType = shape({
     id: number.isRequired,
+    is_active: bool,
+    is_in_range: bool,
+    status: string,
     year: string.isRequired,
     make: string.isRequired,
     model: string.isRequired,
