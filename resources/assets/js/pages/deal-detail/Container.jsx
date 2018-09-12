@@ -142,10 +142,6 @@ class DealDetailContainer extends React.PureComponent {
             );
         }
 
-        if (!this.props.deal['is_in_range']) {
-            console.log('fuck');
-        }
-
         return (
             <PageContent>
                 <Container>
