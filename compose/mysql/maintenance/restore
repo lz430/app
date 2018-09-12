@@ -43,6 +43,6 @@ message_info "Creating a new database..."
 mysql --user=${DB_USERNAME} --password=${DB_PASSWORD} -e "CREATE DATABASE ${DB_DATABASE}";
 
 message_info "Applying the backup to the new database..."
-gunzip -c "${backup_filename}" | mysql --user=${DB_USERNAME} --password=${DB_PASSWORD} ${DB_DATABASE} | gzip > "${BACKUP_DIR_PATH}/${backup_filename}"
+gunzip -c "${backup_filename}" | mysql --user=${DB_USERNAME} --password=${DB_PASSWORD} ${DB_DATABASE}
 
 message_success "The '${DB_DATABASE}' database has been restored from the '${backup_filename}' backup."

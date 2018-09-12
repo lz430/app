@@ -3,6 +3,7 @@ version: '2'
 volumes:
   local_mysql_data: {}
   local_mysql_data_backups: {}
+  local_es_data: {}
 
 services:
 
@@ -35,6 +36,7 @@ services:
       args:
         ELK_VERSION: $ELK_VERSION
     volumes:
+      - local_es_data:/usr/share/elasticsearch/data
       - ./compose/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
     ports:
     - "9200:9200"
@@ -49,6 +51,10 @@ services:
         ELK_VERSION: $ELK_VERSION
     volumes:
       - ./compose/kibana/config/:/usr/share/kibana/config:ro
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     ports:
       - "5601:5601"
     depends_on:
