@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
         Commands\Deal\DealTestPricingChanges::class,
         Commands\Jato\JatoVersionReport::class,
         Commands\Jato\JatoDealDecode::class,
+        Commands\Jato\JatoVinDecode::class,
         Commands\Jato\JatoFindMissingVersions::class,
     ];
 
