@@ -1,5 +1,5 @@
 import React from 'react';
-import { pricingType } from '../../types';
+import { pricingType } from 'types';
 
 export default class DiscountLabel extends React.PureComponent {
     static propTypes = {

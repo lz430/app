@@ -18,7 +18,7 @@ class PaymentWidget extends React.PureComponent {
         {
             key: 'finance',
             label: 'Finance',
-            explanation: 'Based on 4% interest and 10% down.',
+            explanation: 'Based on 4% interest, 10% down and 60 month loan.',
         },
         {
             key: 'lease',

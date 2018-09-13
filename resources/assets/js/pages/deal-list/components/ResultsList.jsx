@@ -8,16 +8,17 @@ import NoDealsOutOfRange from './NoDealsOutOfRange';
 import ViewDeals from './ViewDeals';
 import ViewModels from './ViewModels';
 import Loading from 'icons/miscicons/Loading';
+import { getUserLocation } from 'apps/user/selectors';
 
-class Deals extends React.PureComponent {
+class ResultsList extends React.PureComponent {
     static propTypes = {
+        location: PropTypes.object,
         modelYears: PropTypes.array,
         loadingSearchResults: PropTypes.bool,
         deals: PropTypes.arrayOf(dealType),
         zipInRange: PropTypes.bool,
         searchQuery: PropTypes.object.isRequired,
     };
-
     render() {
         // Requesting something
         if (this.props.loadingSearchResults) {
@@ -25,7 +26,7 @@ class Deals extends React.PureComponent {
         }
 
         // Zip out of range
-        if (!this.props.zipInRange) {
+        if (!this.props.location.has_results) {
             return <NoDealsOutOfRange />;
         }
 
@@ -56,10 +57,10 @@ function mapStateToProps(state) {
     return {
         deals: state.pages.dealList.deals,
         loadingSearchResults: state.pages.dealList.loadingSearchResults,
-        zipInRange: state.user.location.has_results,
+        location: getUserLocation(state),
         modelYears: state.pages.dealList.modelYears,
         searchQuery: state.pages.dealList.searchQuery,
     };
 }
 
-export default connect(mapStateToProps)(Deals);
+export default connect(mapStateToProps)(ResultsList);
