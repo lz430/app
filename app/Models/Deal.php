@@ -196,7 +196,7 @@ class Deal extends Model
     /**
      * @var array
      */
-    protected $dates = ['inventory_date'];
+    protected $dates = ['inventory_date', 'sold_at'];
 
     /**
      * @var array
@@ -206,7 +206,6 @@ class Deal extends Model
         'package_codes' => 'array',
         'source_price' => 'object',
         'payments' => 'object',
-        'sold_at' => 'datetime:Y-m-d'
     ];
 
     /**
@@ -492,6 +491,7 @@ class Deal extends Model
         $record['created_at'] = $this->created_at->format('c');
         $record['updated_at'] = $this->updated_at->format('c');
         $record['inventory_date'] = $this->inventory_date->format('c');
+        $record['sold_at'] = $this->sold_at ? $this->sold_at->format('c') : null;
         $record['is_active'] = true;
 
         // Deal should not be active if it has been purchased
