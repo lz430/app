@@ -134,6 +134,7 @@ class Deal extends Model
             ],
             'sold_at' => [
                 'type' => 'date',
+                'ignore_malformed' => true
             ],
             'inventory_date' => [
                 'type' => 'date',
@@ -206,7 +207,6 @@ class Deal extends Model
         'package_codes' => 'array',
         'source_price' => 'object',
         'payments' => 'object',
-        'sold_at' => 'datetime:Y-m-d'
     ];
 
     /**
@@ -484,6 +484,7 @@ class Deal extends Model
      */
     public function toSearchableArray()
     {
+       //dd($this->sold_at);
         $record = [];
 
         //
@@ -492,6 +493,7 @@ class Deal extends Model
         $record['created_at'] = $this->created_at->format('c');
         $record['updated_at'] = $this->updated_at->format('c');
         $record['inventory_date'] = $this->inventory_date->format('c');
+        $record['sold_at'] = date('Y-m-d H:i:s', strtotime($this->sold_at));
         $record['is_active'] = true;
 
         // Deal should not be active if it has been purchased
