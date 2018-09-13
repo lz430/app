@@ -29,39 +29,29 @@ class ViewModels extends React.PureComponent {
                 <div className="card-deck inventory-summary-deck m-0">
                     {this.props.modelYears ? (
                         this.props.modelYears.map((model, index) => {
+                            const data = [model];
                             if (index === 1) {
-                                return [{ cta: 'call' }, model].map(item => {
-                                    if (item.cta) {
-                                        return <CardCta key={index} />;
-                                    } else {
-                                        return (
-                                            <ModelYear
-                                                purchaseStrategy={
-                                                    this.props.purchaseStrategy
-                                                }
-                                                onSelectModelYear={
-                                                    this.props.onSelectModelYear
-                                                }
-                                                modelYear={model}
-                                                key={this.buildModelKey(model)}
-                                            />
-                                        );
-                                    }
-                                });
+                                data.splice(0, 0, { cta: 'call' });
                             }
 
-                            return (
-                                <ModelYear
-                                    purchaseStrategy={
-                                        this.props.purchaseStrategy
-                                    }
-                                    onSelectModelYear={
-                                        this.props.onSelectModelYear
-                                    }
-                                    modelYear={model}
-                                    key={this.buildModelKey(model)}
-                                />
-                            );
+                            return data.map(item => {
+                                if (item.cta) {
+                                    return <CardCta key={index} />;
+                                } else {
+                                    return (
+                                        <ModelYear
+                                            purchaseStrategy={
+                                                this.props.purchaseStrategy
+                                            }
+                                            onSelectModelYear={
+                                                this.props.onSelectModelYear
+                                            }
+                                            modelYear={model}
+                                            key={this.buildModelKey(model)}
+                                        />
+                                    );
+                                }
+                            });
                         })
                     ) : (
                         <Loading />

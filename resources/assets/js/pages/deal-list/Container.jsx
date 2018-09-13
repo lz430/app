@@ -95,7 +95,7 @@ class Container extends React.PureComponent {
         return (
             <div className="filter-page__deals">
                 <ToolbarSelectedFilters />
-                <ListTopMessaging />
+                {/* <ListTopMessaging /> */}
                 <ResultsList />
             </div>
         );
