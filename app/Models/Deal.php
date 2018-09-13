@@ -134,7 +134,6 @@ class Deal extends Model
             ],
             'sold_at' => [
                 'type' => 'date',
-                'ignore_malformed' => true
             ],
             'inventory_date' => [
                 'type' => 'date',
@@ -197,7 +196,7 @@ class Deal extends Model
     /**
      * @var array
      */
-    protected $dates = ['inventory_date'];
+    protected $dates = ['inventory_date', 'sold_at'];
 
     /**
      * @var array
@@ -492,7 +491,7 @@ class Deal extends Model
         $record['created_at'] = $this->created_at->format('c');
         $record['updated_at'] = $this->updated_at->format('c');
         $record['inventory_date'] = $this->inventory_date->format('c');
-        $record['sold_at'] = date('Y-m-d H:i:s', strtotime($this->sold_at));
+        $record['sold_at'] = $this->sold_at ? $this->sold_at->format('c') : null;
         $record['is_active'] = true;
 
         // Deal should not be active if it has been purchased
