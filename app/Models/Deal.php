@@ -484,7 +484,6 @@ class Deal extends Model
      */
     public function toSearchableArray()
     {
-       //dd($this->sold_at);
         $record = [];
 
         //
