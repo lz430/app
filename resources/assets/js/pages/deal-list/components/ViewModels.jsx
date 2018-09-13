@@ -6,6 +6,7 @@ import Loading from 'icons/miscicons/Loading';
 import ModelYear from 'components/Deals/ModelYear';
 import { selectModelYear } from '../actions';
 import { getUserPurchaseStrategy } from '../../../apps/user/selectors';
+import CardCta from './Cta/CardCta';
 
 class ViewModels extends React.PureComponent {
     static propTypes = {
@@ -27,7 +28,28 @@ class ViewModels extends React.PureComponent {
             <div className="search-results">
                 <div className="card-deck inventory-summary-deck m-0">
                     {this.props.modelYears ? (
-                        this.props.modelYears.map(model => {
+                        this.props.modelYears.map((model, index) => {
+                            if (index === 1) {
+                                return [{ cta: 'call' }, model].map(item => {
+                                    if (item.cta) {
+                                        return <CardCta key={index} />;
+                                    } else {
+                                        return (
+                                            <ModelYear
+                                                purchaseStrategy={
+                                                    this.props.purchaseStrategy
+                                                }
+                                                onSelectModelYear={
+                                                    this.props.onSelectModelYear
+                                                }
+                                                modelYear={model}
+                                                key={this.buildModelKey(model)}
+                                            />
+                                        );
+                                    }
+                                });
+                            }
+
                             return (
                                 <ModelYear
                                     purchaseStrategy={

@@ -107,7 +107,7 @@
     @include media-breakpoint-up(xl) {
         width: auto;
         max-width: 300px;
-        min-width: 300px;
+        min-width: 230px;
         border-radius: 4px;
     }
 
@@ -216,5 +216,89 @@
 .deal-summary {
     .price-summary {
         min-height: 115px;
+    }
+}
+
+.cta-card {
+    justify-content: center;
+    background-image: url('/images/cta-help.jpg');
+    background-position: center;
+    background-size: 600px;
+    box-shadow: inset 0 0 0 1000px #41b1acc4;
+    border: 0;
+    cursor: default;
+    color: #fff;
+    text-align: center;
+    &__icon {
+        margin-bottom: 2rem;
+    }
+    svg {
+        max-width: 3rem;
+        max-height: 3rem;
+        fill: #ffffff;
+    }
+    a {
+        display: inline-block;
+        margin-top: 0.5rem;
+        color: $text-color;
+        background: #fff;
+        border-radius: 2px;
+        padding: 0.25rem 1rem;
+    }
+}
+
+.cta-message {
+    margin-bottom: 0 !important;
+    padding: 0.5rem 1rem;
+    justify-content: center;
+    border: 0;
+    cursor: default;
+    .card-body {
+        display: flex;
+    }
+
+    &__icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 1rem 0 0.5rem;
+        svg {
+            width: 2rem;
+            height: 2rem;
+            fill: $primary;
+        }
+    }
+
+    &__content {
+        h6 {
+            margin-bottom: 0.35rem;
+            padding: 0;
+            color: $primary;
+            font-weight: bold;
+        }
+        p {
+            color: $gray-800;
+            margin: 0;
+            font-size: 0.8rem;
+        }
+    }
+}
+
+.inventory-messaging {
+    padding-bottom: 0;
+}
+
+.cta-message-carousel {
+    .inventory-summary {
+        max-width: none;
+        min-width: 0;
+        width: auto;
+        @include media-breakpoint-up(md) {
+            padding: 2rem;
+        }
+    }
+
+    @include media-breakpoint-up(md) {
+        padding: 2rem 4rem 0 4rem;
     }
 }

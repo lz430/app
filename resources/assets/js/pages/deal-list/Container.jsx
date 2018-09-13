@@ -8,8 +8,9 @@ import { StickyContainer } from 'react-sticky';
 
 import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
 import { getIsPageLoading } from 'apps/page/selectors';
+import PageContent from 'components/App/PageContent';
 
-import Deals from './components/Deals';
+import ResultsList from './components/ResultsList';
 import ToolbarSelectedFilters from './components/ToolbarSelectedFilters';
 import ToolbarMobileBottom from './components/ToolbarMobile/ToolbarMobileBottom';
 
@@ -30,7 +31,7 @@ import {
 
 import { getSearchQuery, getSelectedFiltersByCategory } from './selectors';
 import { setPurchaseStrategy } from 'apps/user/actions';
-import PageContent from 'components/App/PageContent';
+import ListTopMessaging from './components/Cta/ListTopMessaging';
 
 class Container extends React.PureComponent {
     static propTypes = {
@@ -94,7 +95,8 @@ class Container extends React.PureComponent {
         return (
             <div className="filter-page__deals">
                 <ToolbarSelectedFilters />
-                <Deals />
+                <ListTopMessaging />
+                <ResultsList />
             </div>
         );
     }
@@ -137,7 +139,6 @@ class Container extends React.PureComponent {
         return (
             <PageContent desktopOnlyFooter={true}>
                 {this.renderFilterPanelAndDeals()}
-
                 {this.renderMakeSelectionModal()}
             </PageContent>
         );

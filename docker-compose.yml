@@ -80,9 +80,8 @@ services:
     links:
         - app
         - mysql
-    volumes_from:
-        - app
     volumes:
-        - ./logs/nginx/:/var/log/nginx:cached
+      - .:/app
+      - ./logs/nginx/:/var/log/nginx:cached
 
 
