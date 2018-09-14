@@ -13,6 +13,8 @@ import { requestMoreDeals } from '../actions';
 import { getShouldShowLoading } from '../selectors';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
+import CardCta from './Cta/CardCta';
+import ModelYear from '../../../components/Deals/ModelYear';
 
 class ViewDeals extends React.PureComponent {
     static propTypes = {
@@ -87,7 +89,18 @@ class ViewDeals extends React.PureComponent {
                 <div className="inventory-summary-deck card-deck  m-0">
                     {this.props.deals && this.props.deals.length ? (
                         this.props.deals.map((deal, index) => {
-                            return this.renderDeal(deal, index);
+                            const data = [deal];
+
+                            if (index === 3) {
+                                data.splice(0, 0, { cta: 'call' });
+                            }
+                            return data.map(item => {
+                                if (item.cta) {
+                                    return <CardCta key={index} />;
+                                } else {
+                                    return this.renderDeal(deal, index);
+                                }
+                            });
                         })
                     ) : (
                         <Loading />

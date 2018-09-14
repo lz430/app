@@ -71,21 +71,6 @@ class SecondaryFilters extends React.PureComponent {
                 />
 
                 <FilterFeature
-                    title="Vehicle Color"
-                    key="filterVehicleColor"
-                    open={true}
-                    canToggle={false}
-                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
-                    category="vehicle_color"
-                    items={this.props.filters['vehicle_color']}
-                    selectedItems={
-                        this.props.selectedFiltersByCategory['vehicle_color']
-                    }
-                    loadingSearchResults={this.props.loadingSearchResults}
-                    onToggleSearchFilter={this.props.onToggleSearchFilter}
-                />
-
-                <FilterFeature
                     title="Fuel Type"
                     key="filterFuelType"
                     open={true}
@@ -204,6 +189,21 @@ class SecondaryFilters extends React.PureComponent {
                         this.props.selectedFiltersByCategory[
                             'safety_and_driver_assist'
                         ]
+                    }
+                    loadingSearchResults={this.props.loadingSearchResults}
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
+                />
+
+                <FilterFeature
+                    title="Vehicle Color"
+                    key="filterVehicleColor"
+                    open={true}
+                    canToggle={false}
+                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    category="vehicle_color"
+                    items={this.props.filters['vehicle_color']}
+                    selectedItems={
+                        this.props.selectedFiltersByCategory['vehicle_color']
                     }
                     loadingSearchResults={this.props.loadingSearchResults}
                     onToggleSearchFilter={this.props.onToggleSearchFilter}
