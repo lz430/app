@@ -18,8 +18,8 @@ import * as leaseActions from './modules/lease';
 import { initPage, receiveDeal, dealDetailRequestDealQuote } from './actions';
 import { getDeal, getLeaseAnnualMileage, getLeaseTerm } from './selectors';
 import DealDetail from './components/DealDetail';
-import { pricingFromStateFactory } from '../../src/pricing/factory';
-import PageContent from '../../components/App/PageContent';
+import { pricingFromStateFactory } from 'src/pricing/factory';
+import PageContent from 'components/App/PageContent';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {

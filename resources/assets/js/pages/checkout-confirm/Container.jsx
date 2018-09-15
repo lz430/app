@@ -28,7 +28,7 @@ import LeaseDetails from 'components/checkout/LeaseDetails';
 import InvalidCheckoutPage from 'components/checkout/InvalidCheckoutPage';
 import DealColors from 'components/Deals/DealColors';
 import { MediumAndUp, SmallAndDown } from 'components/Responsive';
-import PageContent from '../../components/App/PageContent';
+import PageContent from 'components/App/PageContent';
 
 class CheckoutConfirmContainer extends React.PureComponent {
     static propTypes = {

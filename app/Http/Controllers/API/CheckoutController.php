@@ -20,6 +20,15 @@ use Illuminate\Support\Facades\DB;
  */
 class CheckoutController extends BaseAPIController
 {
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['start','contact']]);
+    }
 
     /**
      * Starting the checkout process basically claims the deal.
@@ -75,13 +84,14 @@ class CheckoutController extends BaseAPIController
             $request->merge(['email' => session()->get('email')]);
         }
 
-        return response()->json(['status' => 'okay', 'purchase' => $purchase->toJson()]);
+        return response()->json(['status' => 'okay', 'purchase' ]);
     }
 
     /**
      * We submit contact information of the user and create a purchase / user.
      * @param Request $request
-     * @return array|bool
+     * @return bool|\Illuminate\Http\JsonResponse
+     * @throws \Throwable
      */
     public function contact(Request $request) {
         $this->validate(
@@ -103,7 +113,9 @@ class CheckoutController extends BaseAPIController
 
         //
         // User
+        // This is not very secure.
         $user = DB::transaction(function () use ($request) {
+
             /**
              * If we already have a user with this email, let's use that account
              * instead of the newly created one.
@@ -121,8 +133,7 @@ class CheckoutController extends BaseAPIController
                     'zip' => session()->get('zip'),
                 ]
             );
-
-            auth()->login($user);
+            //auth()->login($user);
 
             return $user;
         });
@@ -160,6 +171,20 @@ class CheckoutController extends BaseAPIController
 
         return response()->json([
             'destination' => "/apply/{$purchase->id}",
+        ]);
+    }
+
+    /**
+     * Get the token array structure.
+     * @param $token
+     * @return array
+     */
+    protected function buildTokenResponse($token)
+    {
+        return [
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60
         ]);
     }
 }

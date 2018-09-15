@@ -1,4 +1,4 @@
-import { takeEvery, select } from 'redux-saga/effects';
+import { takeEvery, select, put } from 'redux-saga/effects';
 import { initPage } from 'apps/page/sagas';
 import { INIT } from './consts';
 import { track } from 'services';

@@ -25,6 +25,13 @@ export function setCheckoutData(
     };
 }
 
+export function receivePurchase(data) {
+    return {
+        type: ActionTypes.RECEIVE_PURCHASE,
+        data: data,
+    };
+}
+
 export function checkoutIsLoading() {
     return {
         type: ActionTypes.CHECKOUT_IS_LOADING,

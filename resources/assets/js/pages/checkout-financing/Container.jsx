@@ -16,10 +16,7 @@ class CheckoutFinancingContainer extends Component {
     static propTypes = {
         init: PropTypes.func.isRequired,
         checkout: PropTypes.object.isRequired,
-        featuredPhoto: PropTypes.object.isRequired,
         purchase: PropTypes.object.isRequired,
-        user: PropTypes.object.isRequired,
-
         url: PropTypes.string.isRequired,
     };
 
