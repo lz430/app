@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Auth;
 use App\Transformers\PurchaseTransformer;
 use Illuminate\Http\Request;
 
@@ -87,7 +86,11 @@ class CheckoutController extends BaseAPIController
             $request->merge(['email' => session()->get('email')]);
         }
 
-        return response()->json(['status' => 'okay', 'purchase' => $purchase->toArray()]);
+        return response()->json(
+            [
+                'status' => 'okay',
+                'purchase' => (new PurchaseTransformer())->transform($purchase),
+            ]);
     }
 
     /**
@@ -136,8 +139,6 @@ class CheckoutController extends BaseAPIController
                     'zip' => session()->get('zip'),
                 ]
             );
-            //auth()->login($user);
-
             return $user;
         });
 

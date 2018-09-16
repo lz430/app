@@ -57,54 +57,6 @@ class ApplyOrPurchaseController extends Controller
         return redirect()->route('thank-you', ['method' => $purchase->type]);
     }
 
-    public function viewApply($purchaseId)
-    {
-        try {
-            $purchase = Purchase::with('deal', 'deal.dealer', 'buyer')->findOrFail($purchaseId);
-            $deal = $purchase->deal;
-            $dealer = $deal->dealer;
-            $user = $purchase->buyer;
-            $pricing = $deal->prices();
-            $photo = $deal->featuredPhoto();
-            $query = [
-                'rteOneDmsId' => config('services.routeone.id'),
-                'dealerId' => $dealer->route_one_id,
-                'buyOrLease' => ($purchase->type === "finance" ? 1 : 2),
-                'email' => $user->email,
-                'vehicle_vin' => $deal->vin,
-                'vehicleYear' => $deal->year,
-                'vehicleMake' => $deal->version->model->make->name,
-                'vehicleModel' => $deal->version->model->name,
-                'contractTerms_vehiclestyle' => $deal->version->style(),
-                'contractTerms_msrp' => $pricing->msrp,
-                'contractTerms_cash_down' => $purchase->down_payment,
-                'contractTerms_financed_amount' =>  $purchase->amount_financed,
-                'contractTerms_term' => $purchase->term,
-                'vehicle_image_url' => ($photo ? $photo->url : ''),
-                'dealership_name' => $deal->dealer->name,
-            ];
-
-            if (config('services.routeone.test_mode')) {
-               $query['dealerId'] = 'CJ7IW';
-                $url = config('services.routeone.test_url');
-            } else {
-                $url = config('services.routeone.production_url');
-            }
-
-            $url = $url . '?' . http_build_query($query);
-
-            $data = [
-                'purchase' => $purchase,
-                'user' => $purchase->buyer,
-                'url' => $url,
-            ];
-
-            return view('checkout-financing', $data);
-        } catch (ModelNotFoundException $e) {
-            return abort(500);
-        }
-    }
-
     public function apply()
     {
         try {

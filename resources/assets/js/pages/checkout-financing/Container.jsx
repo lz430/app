@@ -15,6 +15,7 @@ import InvalidCheckoutPage from 'components/checkout/InvalidCheckoutPage';
 import PageContent from '../../components/App/PageContent';
 import { getIsPageLoading } from '../../apps/page/selectors';
 import Loading from '../../icons/miscicons/Loading';
+import RouteOneIframe from './components/RouteOneIframe';
 
 class CheckoutFinancingContainer extends Component {
     static propTypes = {
@@ -56,12 +57,7 @@ class CheckoutFinancingContainer extends Component {
 
         return (
             <div className="embed-responsive embed-responsive-financing">
-                <iframe
-                    frameBorder="0"
-                    className="embed-responsive-item"
-                    id="routeOne"
-                    src={this.props.financing.url}
-                />
+                <RouteOneIframe url={this.props.financing.url} />
             </div>
         );
     }
