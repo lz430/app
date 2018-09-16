@@ -11,21 +11,51 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 
 /**
+ * App\Models\User
+ *
  * @property int $id
  * @property string first_name
  * @property string last_name
  * @property string email
  * @property string zip
- *
  * @property string password
  * @property string remember_token
  * @property string api_token
  * @property string phone_number
  * @property string drivers_license_number
  * @property string drivers_license_state
- *
  * @property \DateTime $created_at
  * @property \DateTime $updated_at
+ * @property string|null $first_name
+ * @property string|null $last_name
+ * @property string|null $email
+ * @property string|null $zip
+ * @property string|null $password
+ * @property string|null $remember_token
+ * @property string|null $api_token
+ * @property string|null $phone_number
+ * @property string|null $drivers_license_number
+ * @property string|null $drivers_license_state
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Backpack\PermissionManager\app\Models\Permission[] $permissions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Purchase[] $purchases
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Backpack\PermissionManager\app\Models\Role[] $roles
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User permission($permissions)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User role($roles)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereApiToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereDriversLicenseNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereDriversLicenseState($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereFirstName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User wherePhoneNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereZip($value)
+ * @mixin \Eloquent
  */
 class User extends Authenticatable implements JWTSubject
 {

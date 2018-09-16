@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\API;
-
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
+use App\Transformers\PurchaseTransformer;
 use Illuminate\Http\Request;
 
 use App\Models\Purchase;
@@ -20,6 +22,7 @@ use Illuminate\Support\Facades\DB;
  */
 class CheckoutController extends BaseAPIController
 {
+
     /**
      * Create a new AuthController instance.
      *
@@ -27,7 +30,7 @@ class CheckoutController extends BaseAPIController
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['start','contact']]);
+        $this->middleware('auth:api', ['except' => ['start', 'contact']]);
     }
 
     /**
@@ -84,7 +87,7 @@ class CheckoutController extends BaseAPIController
             $request->merge(['email' => session()->get('email')]);
         }
 
-        return response()->json(['status' => 'okay', 'purchase' ]);
+        return response()->json(['status' => 'okay', 'purchase' => $purchase->toArray()]);
     }
 
     /**
@@ -93,7 +96,8 @@ class CheckoutController extends BaseAPIController
      * @return bool|\Illuminate\Http\JsonResponse
      * @throws \Throwable
      */
-    public function contact(Request $request) {
+    public function contact(Request $request)
+    {
         $this->validate(
             $request,
             [
@@ -110,7 +114,6 @@ class CheckoutController extends BaseAPIController
                 'g-recaptcha-response' => 'The recaptcha is required.',
             ]
         );
-
         //
         // User
         // This is not very secure.
@@ -141,8 +144,8 @@ class CheckoutController extends BaseAPIController
         //
         // If we don't have a purchase stored in session give up
         // TODO: Return an actual error message / http response.
-        if (! session()->has('purchase') || ! is_object(session('purchase'))) {
-            return false;
+        if (!session()->has('purchase') || !is_object(session('purchase'))) {
+            return response()->json(['error' => 'invalid session']);
         }
 
         //
@@ -162,16 +165,67 @@ class CheckoutController extends BaseAPIController
         $purchase->save();
 
         event(new NewPurchaseInitiated($user, $purchase));
+        $token = auth('api')->login($user);
+        $return = [
+            'purchase' => (new PurchaseTransformer())->transform($purchase),
+            'token' => $this->buildTokenResponse($token),
+        ];
 
         if ($purchase->isCash()) {
-            return response()->json([
-                'destination' => '/thank-you?method=cash',
-            ]);
+            $return['destination'] = '/thank-you?method=cash';
+        } else {
+            $return['destination'] = "/apply/{$purchase->id}";
         }
 
-        return response()->json([
-            'destination' => "/apply/{$purchase->id}",
-        ]);
+        return response()->json($return);
+    }
+
+    /**
+     * @param Purchase $purchase
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getFinancing(Purchase $purchase) {
+        try {
+            $deal = $purchase->deal;
+            $dealer = $deal->dealer;
+            $user = $purchase->buyer;
+            $pricing = $deal->prices();
+            $photo = $deal->featuredPhoto();
+            $query = [
+                'rteOneDmsId' => config('services.routeone.id'),
+                'dealerId' => $dealer->route_one_id,
+                'buyOrLease' => ($purchase->type === "finance" ? 1 : 2),
+                'email' => $user->email,
+                'vehicle_vin' => $deal->vin,
+                'vehicleYear' => $deal->year,
+                'vehicleMake' => $deal->version->model->make->name,
+                'vehicleModel' => $deal->version->model->name,
+                'contractTerms_vehiclestyle' => $deal->version->style(),
+                'contractTerms_msrp' => $pricing->msrp,
+                'contractTerms_cash_down' => $purchase->down_payment,
+                'contractTerms_financed_amount' =>  $purchase->amount_financed,
+                'contractTerms_term' => $purchase->term,
+                'vehicle_image_url' => ($photo ? $photo->url : ''),
+                'dealership_name' => $deal->dealer->name,
+            ];
+
+            if (config('services.routeone.test_mode')) {
+                $query['dealerId'] = 'CJ7IW';
+                $url = config('services.routeone.test_url');
+            } else {
+                $url = config('services.routeone.production_url');
+            }
+
+            $url = $url . '?' . http_build_query($query);
+
+            $data = [
+                'url' => $url,
+            ];
+            return response()->json($data);
+
+        } catch (ModelNotFoundException $e) {
+            return abort(404);
+        }
     }
 
     /**
@@ -184,7 +238,8 @@ class CheckoutController extends BaseAPIController
         return [
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
+            'expires_in' => auth('api')->factory()->getTTL() * 60
+        ];
     }
+
 }

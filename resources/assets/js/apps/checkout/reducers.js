@@ -57,7 +57,8 @@ const reducer = function(state = initialState, action = {}) {
         case ActionTypes.RECEIVE_PURCHASE:
             return {
                 ...state,
-                purchase: action.data,
+                purchase: action.data.purchase,
+                token: action.data.token,
             };
 
         default:

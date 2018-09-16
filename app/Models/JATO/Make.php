@@ -5,6 +5,28 @@ namespace App\Models\JATO;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * App\Models\JATO\Make
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $url_name
+ * @property int $is_current
+ * @property int $manufacturer_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\JATO\Manufacturer $manufacturer
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JATO\VehicleModel[] $models
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JATO\Version[] $versions
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Make whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Make whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Make whereIsCurrent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Make whereManufacturerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Make whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Make whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Make whereUrlName($value)
+ * @mixin \Eloquent
+ */
 class Make extends Model
 {
     public const DOMESTIC = [

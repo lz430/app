@@ -94,12 +94,10 @@ class ApplyOrPurchaseController extends Controller
             $url = $url . '?' . http_build_query($query);
 
             $data = [
-                'featuredPhoto' => $purchase->deal->featuredPhoto(),
                 'purchase' => $purchase,
                 'user' => $purchase->buyer,
                 'url' => $url,
             ];
-
 
             return view('checkout-financing', $data);
         } catch (ModelNotFoundException $e) {
@@ -142,27 +140,4 @@ class ApplyOrPurchaseController extends Controller
         }
     }
 
-    public function thankYou()
-    {
-        if (! auth()->user() || ! $lastPurchase = auth()->user()->purchases->last()) {
-            return redirect(route('home'));
-        }
-
-        $lastPurchase->load('deal.photos');
-        $lastPurchase = fractal()->item($lastPurchase)->transformWith(PurchaseTransformer::class)->toJson();
-        $deal = auth()->user()->purchases->last()->deal;
-        $dealData = json_encode((new DealTransformer())->transform($deal));
-
-        $vautoFeatures = collect(
-            array_values(
-                array_diff(
-                    explode('|', $deal->vauto_features),
-                    $deal->jatoFeatures->map(function ($feature) {
-                        return $feature->feature;
-                    })->toArray()
-                )
-            )
-        );
-        return view('checkout-complete')->with('purchase', $lastPurchase)->with('deal', $dealData)->with('features', $vautoFeatures);
-    }
 }

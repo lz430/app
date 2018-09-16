@@ -8,6 +8,7 @@ import {
     checkoutIsLoading,
     checkoutFinishedLoading,
     setCheckoutContactFormErrors,
+    receivePurchase,
 } from './actions';
 import { checkout as getCheckout } from './selectors';
 import { track } from 'services';
@@ -34,9 +35,7 @@ export function* checkoutStart(action) {
         amounts['financed_amount'] = toDollarsAndCents(
             pricing.amountFinanced()
         );
-        amounts['down_payment'] = toDollarsAndCents(
-            pricing.downPayment()
-        );
+        amounts['down_payment'] = toDollarsAndCents(pricing.downPayment());
 
         amounts['term'] = pricing.term();
         amounts['monthly_payment'] = toDollarsAndCents(
@@ -100,6 +99,7 @@ export function* checkoutContact(action) {
     });
 
     if (results) {
+        yield put(receivePurchase(results.data));
         window.location = results.data.destination;
     }
 }

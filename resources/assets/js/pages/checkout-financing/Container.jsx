@@ -7,17 +7,21 @@ import { Container, Row, Col } from 'reactstrap';
 import api from 'src/api';
 
 import { init } from './actions';
+import getFinancing from './selectors';
+
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
 import { checkout } from 'apps/checkout/selectors';
 import InvalidCheckoutPage from 'components/checkout/InvalidCheckoutPage';
 import PageContent from '../../components/App/PageContent';
+import { getIsPageLoading } from '../../apps/page/selectors';
+import Loading from '../../icons/miscicons/Loading';
 
 class CheckoutFinancingContainer extends Component {
     static propTypes = {
         init: PropTypes.func.isRequired,
         checkout: PropTypes.object.isRequired,
-        purchase: PropTypes.object.isRequired,
-        url: PropTypes.string.isRequired,
+        financing: PropTypes.object.isRequired,
+        isLoading: PropTypes.bool,
     };
 
     state = {
@@ -26,7 +30,7 @@ class CheckoutFinancingContainer extends Component {
 
     componentDidMount() {
         this.props.init();
-
+        /*
         document.getElementById('routeOne').XrdNavigationUtils = {
             beforeUnloadIsDisabled: true,
         };
@@ -42,12 +46,40 @@ class CheckoutFinancingContainer extends Component {
                 }
             });
         }, 2000);
+                */
+    }
+
+    renderRouteOneIFrame() {
+        if (!this.props.financing.url) {
+            return false;
+        }
+
+        return (
+            <div className="embed-responsive embed-responsive-financing">
+                <iframe
+                    frameBorder="0"
+                    className="embed-responsive-item"
+                    id="routeOne"
+                    src={this.props.financing.url}
+                />
+            </div>
+        );
+    }
+
+    renderPageLoadingIcon() {
+        return <Loading />;
     }
 
     render() {
-        if (!this.props.checkout.deal.id) {
+        if (!this.props.checkout.deal.id || !this.props.checkout.purchase.id) {
             return <InvalidCheckoutPage />;
         }
+
+        if (this.props.isLoading) {
+            return this.renderPageLoadingIcon();
+        }
+
+        const { purchase } = this.props.checkout;
 
         return (
             <PageContent>
@@ -70,7 +102,7 @@ class CheckoutFinancingContainer extends Component {
                                 <input
                                     type="hidden"
                                     name="purchase_id"
-                                    value={this.props.purchase.id}
+                                    value={purchase.id}
                                 />
                                 <input
                                     type="hidden"
@@ -86,14 +118,7 @@ class CheckoutFinancingContainer extends Component {
                             </form>
                         </Col>
                     </Row>
-                    <div className="embed-responsive embed-responsive-financing">
-                        <iframe
-                            frameBorder="0"
-                            className="embed-responsive-item"
-                            id="routeOne"
-                            src={this.props.url}
-                        />
-                    </div>
+                    {this.renderRouteOneIFrame()}
                 </Container>
             </PageContent>
         );
@@ -103,6 +128,8 @@ class CheckoutFinancingContainer extends Component {
 const mapStateToProps = (state, props) => {
     return {
         checkout: checkout(state, props),
+        isLoading: getIsPageLoading(state),
+        financing: getFinancing(state),
     };
 };
 
