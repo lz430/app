@@ -66,18 +66,13 @@ class CheckoutConfirmContainer extends React.PureComponent {
                         <Col xs="12" md="4" className="image">
                             <SmallAndDown>
                                 <DealImage
-                                    legacyMode={true}
                                     deal={deal}
                                     link={false}
                                     size="full"
                                 />
                             </SmallAndDown>
                             <MediumAndUp>
-                                <DealImage
-                                    legacyMode={true}
-                                    deal={deal}
-                                    link={false}
-                                />
+                                <DealImage deal={deal} link={false} />
                             </MediumAndUp>
                         </Col>
                         <Col md="4" className="title">

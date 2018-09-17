@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Purchase;
 use App\Models\Deal;
 use App\Models\User;
+use Carbon\Carbon;
 
 use App\Events\NewPurchaseInitiated;
 use Illuminate\Support\Facades\DB;
@@ -227,6 +228,21 @@ class CheckoutController extends BaseAPIController
         } catch (ModelNotFoundException $e) {
             return abort(404);
         }
+    }
+
+    /**
+     * @param Purchase $purchase
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function financingComplete(Purchase $purchase) {
+        /**
+         * Disallow changing completed_at
+         */
+        if (!$purchase->completed_at) {
+            $purchase->completed_at = Carbon::now();
+            $purchase->save();
+        }
+        return response()->json(['status' => 'okay']);
     }
 
     /**

@@ -19,17 +19,6 @@ import { ConnectedRouter } from 'connected-react-router';
 const { store, persistor } = configureStore();
 
 /*
- * Legacy App
- */
-const StandaloneApp = props => (
-    <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-            <App>{props.children}</App>
-        </PersistGate>
-    </Provider>
-);
-
-/*
  * App w/ React router.
  */
 const DeliverMyRide = () => (
@@ -49,6 +38,7 @@ const DeliverMyRide = () => (
                             path="/apply/:id"
                             component={CheckoutFinancing}
                         />
+                        <Route path="/thank-you" component={CheckoutComplete} />
                     </App>
                 </Switch>
             </ConnectedRouter>
@@ -61,34 +51,4 @@ const DeliverMyRide = () => (
  */
 Array.from(document.getElementsByTagName('ReactApp')).map(element => {
     ReactDOM.render(<DeliverMyRide />, element);
-});
-
-/**
- * Checkout - Financing
- */
-Array.from(document.getElementsByTagName('Financing')).map(element => {
-    ReactDOM.render(
-        <StandaloneApp>
-            <CheckoutFinancing
-                purchase={JSON.parse(element.getAttribute('purchase'))}
-                url={JSON.parse(element.getAttribute('url'))}
-            />
-        </StandaloneApp>,
-        element
-    );
-});
-
-/**
- * Checkout - Thank you
- */
-Array.from(document.getElementsByTagName('ThankYouPage')).map(element => {
-    ReactDOM.render(
-        <StandaloneApp>
-            <CheckoutComplete
-                purchase={JSON.parse(element.getAttribute('purchase'))}
-            />
-        </StandaloneApp>,
-
-        element
-    );
 });

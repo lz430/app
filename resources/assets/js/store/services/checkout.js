@@ -65,4 +65,20 @@ export default class CheckoutService {
             headers: { Authorization: 'Bearer ' + token['access_token'] },
         });
     }
+
+    /**
+     *
+     * @param purchaseId
+     * @param token
+     * @returns {*}
+     */
+    financingComplete(purchaseId, token) {
+        return httpclient.post(
+            `/api/checkout/${purchaseId}/financing`,
+            {},
+            {
+                headers: { Authorization: 'Bearer ' + token['access_token'] },
+            }
+        );
+    }
 }

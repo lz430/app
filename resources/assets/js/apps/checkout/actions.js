@@ -58,6 +58,13 @@ export function checkoutContact(fields) {
     };
 }
 
+export function checkoutFinancingComplete(fields) {
+    return {
+        type: ActionTypes.CHECKOUT_FINANCING_COMPLETE,
+        fields,
+    };
+}
+
 export function clearCheckoutContactFormErrors() {
     return {
         type: ActionTypes.CLEAR_CHECKOUT_CONTACT_FORM_ERRORS,

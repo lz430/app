@@ -11,11 +11,13 @@ import getFinancing from './selectors';
 
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
 import { checkout } from 'apps/checkout/selectors';
+import { checkoutFinancingComplete } from 'apps/checkout/actions';
 import InvalidCheckoutPage from 'components/checkout/InvalidCheckoutPage';
-import PageContent from '../../components/App/PageContent';
-import { getIsPageLoading } from '../../apps/page/selectors';
-import Loading from '../../icons/miscicons/Loading';
+import PageContent from 'components/App/PageContent';
+import { getIsPageLoading } from 'apps/page/selectors';
+import Loading from 'icons/miscicons/Loading';
 import RouteOneIframe from './components/RouteOneIframe';
+import CompleteFinancingForm from './components/CompleteFinancingForm';
 
 class CheckoutFinancingContainer extends Component {
     static propTypes = {
@@ -23,6 +25,7 @@ class CheckoutFinancingContainer extends Component {
         checkout: PropTypes.object.isRequired,
         financing: PropTypes.object.isRequired,
         isLoading: PropTypes.bool,
+        checkoutFinancingComplete: PropTypes.func.isRequired,
     };
 
     state = {
@@ -85,33 +88,12 @@ class CheckoutFinancingContainer extends Component {
                             <h1>Financing</h1>
                         </Col>
                         <Col className="d-flex justify-content-end align-content-end align-items-center">
-                            <form
-                                name="purchase"
-                                method="post"
-                                action="/purchase"
-                            >
-                                <input
-                                    type="hidden"
-                                    name="_token"
-                                    value={window.Laravel.csrfToken}
-                                />
-                                <input
-                                    type="hidden"
-                                    name="purchase_id"
-                                    value={purchase.id}
-                                />
-                                <input
-                                    type="hidden"
-                                    name="method"
-                                    value={this.state.method}
-                                />
-                                <button
-                                    onClick={() => document.purchase.submit()}
-                                    className="btn btn-success"
-                                >
-                                    No thanks, I'll get my own financing.
-                                </button>
-                            </form>
+                            <CompleteFinancingForm
+                                checkout={this.props.checkout}
+                                onFinancingComplete={
+                                    this.props.checkoutFinancingComplete
+                                }
+                            />
                         </Col>
                     </Row>
                     {this.renderRouteOneIFrame()}
@@ -131,6 +113,7 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = mapAndBindActionCreators({
     init,
+    checkoutFinancingComplete,
 });
 
 export default connect(
