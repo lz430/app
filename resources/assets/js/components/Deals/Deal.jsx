@@ -8,18 +8,10 @@ import { dealType } from 'types';
 import { Card, CardBody, CardHeader, CardFooter } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
-/**
- * legacyMode = if we are supporting react router or not.
- */
 class Deal extends React.Component {
     static propTypes = {
         deal: dealType.isRequired,
         children: PropTypes.node,
-        legacyMode: PropTypes.bool.isRequired,
-    };
-
-    static defaultProps = {
-        legacyMode: false,
     };
 
     /**
@@ -27,29 +19,6 @@ class Deal extends React.Component {
      */
     renderHeaderContent() {
         const deal = this.props.deal;
-
-        if (this.props.legacyMode) {
-            return (
-                <a
-                    href={`/deals/${deal.id}`}
-                    className="deal__basic-info-year-and-model"
-                >
-                    <div className="deal__basic-info-year-and-make">
-                        {`${deal.year} ${deal.make}`}
-                    </div>
-
-                    <div className="deal__basic-info-model-and-series">
-                        {`${deal.model} ${deal.series}`}
-                    </div>
-                    {deal.color &&
-                        deal.interior_color && (
-                            <div className="deal__basic-info-color">
-                                {deal.color}, {deal.interior_color}
-                            </div>
-                        )}
-                </a>
-            );
-        }
 
         return (
             <Link
@@ -84,7 +53,6 @@ class Deal extends React.Component {
                         featureImageClass="deal__image"
                         deal={this.props.deal}
                         key={'img' + this.props.deal.id}
-                        legacyMode={this.props.legacyMode}
                     />
 
                     <DealPrice

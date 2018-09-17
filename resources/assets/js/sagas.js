@@ -24,6 +24,7 @@ export default function* root() {
         fork(AppPricingSagas.watchBatchRequestDealQuote),
         fork(AppCheckoutSagas.watchCheckoutStart),
         fork(AppCheckoutSagas.watchCheckoutContact),
+        fork(AppCheckoutSagas.watchCheckoutFinancingComplete),
         fork(CheckoutConfirm.watchInit),
         fork(CheckoutFinancing.watchInit),
         fork(CheckoutComplete.watchInit),

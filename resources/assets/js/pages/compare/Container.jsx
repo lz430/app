@@ -38,7 +38,7 @@ class ComparePageContainer extends React.PureComponent {
         const deal = col.deal;
 
         return (
-            <Deal legacyMode={true} deal={deal} key={deal.id}>
+            <Deal deal={deal} key={deal.id}>
                 <div className="deal__buttons">
                     <button
                         className="btn btn-success"

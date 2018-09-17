@@ -7,20 +7,25 @@ import { Container, Row, Col } from 'reactstrap';
 import api from 'src/api';
 
 import { init } from './actions';
+import getFinancing from './selectors';
+
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
 import { checkout } from 'apps/checkout/selectors';
+import { checkoutFinancingComplete } from 'apps/checkout/actions';
 import InvalidCheckoutPage from 'components/checkout/InvalidCheckoutPage';
-import PageContent from '../../components/App/PageContent';
+import PageContent from 'components/App/PageContent';
+import { getIsPageLoading } from 'apps/page/selectors';
+import Loading from 'icons/miscicons/Loading';
+import RouteOneIframe from './components/RouteOneIframe';
+import CompleteFinancingForm from './components/CompleteFinancingForm';
 
 class CheckoutFinancingContainer extends Component {
     static propTypes = {
         init: PropTypes.func.isRequired,
         checkout: PropTypes.object.isRequired,
-        featuredPhoto: PropTypes.object.isRequired,
-        purchase: PropTypes.object.isRequired,
-        user: PropTypes.object.isRequired,
-
-        url: PropTypes.string.isRequired,
+        financing: PropTypes.object.isRequired,
+        isLoading: PropTypes.bool,
+        checkoutFinancingComplete: PropTypes.func.isRequired,
     };
 
     state = {
@@ -29,7 +34,7 @@ class CheckoutFinancingContainer extends Component {
 
     componentDidMount() {
         this.props.init();
-
+        /*
         document.getElementById('routeOne').XrdNavigationUtils = {
             beforeUnloadIsDisabled: true,
         };
@@ -45,12 +50,35 @@ class CheckoutFinancingContainer extends Component {
                 }
             });
         }, 2000);
+                */
+    }
+
+    renderRouteOneIFrame() {
+        if (!this.props.financing.url) {
+            return false;
+        }
+
+        return (
+            <div className="embed-responsive embed-responsive-financing">
+                <RouteOneIframe url={this.props.financing.url} />
+            </div>
+        );
+    }
+
+    renderPageLoadingIcon() {
+        return <Loading />;
     }
 
     render() {
-        if (!this.props.checkout.deal.id) {
+        if (!this.props.checkout.deal.id || !this.props.checkout.purchase.id) {
             return <InvalidCheckoutPage />;
         }
+
+        if (this.props.isLoading) {
+            return this.renderPageLoadingIcon();
+        }
+
+        const { purchase } = this.props.checkout;
 
         return (
             <PageContent>
@@ -60,43 +88,15 @@ class CheckoutFinancingContainer extends Component {
                             <h1>Financing</h1>
                         </Col>
                         <Col className="d-flex justify-content-end align-content-end align-items-center">
-                            <form
-                                name="purchase"
-                                method="post"
-                                action="/purchase"
-                            >
-                                <input
-                                    type="hidden"
-                                    name="_token"
-                                    value={window.Laravel.csrfToken}
-                                />
-                                <input
-                                    type="hidden"
-                                    name="purchase_id"
-                                    value={this.props.purchase.id}
-                                />
-                                <input
-                                    type="hidden"
-                                    name="method"
-                                    value={this.state.method}
-                                />
-                                <button
-                                    onClick={() => document.purchase.submit()}
-                                    className="btn btn-success"
-                                >
-                                    No thanks, I'll get my own financing.
-                                </button>
-                            </form>
+                            <CompleteFinancingForm
+                                checkout={this.props.checkout}
+                                onFinancingComplete={
+                                    this.props.checkoutFinancingComplete
+                                }
+                            />
                         </Col>
                     </Row>
-                    <div className="embed-responsive embed-responsive-financing">
-                        <iframe
-                            frameBorder="0"
-                            className="embed-responsive-item"
-                            id="routeOne"
-                            src={this.props.url}
-                        />
-                    </div>
+                    {this.renderRouteOneIFrame()}
                 </Container>
             </PageContent>
         );
@@ -106,11 +106,14 @@ class CheckoutFinancingContainer extends Component {
 const mapStateToProps = (state, props) => {
     return {
         checkout: checkout(state, props),
+        isLoading: getIsPageLoading(state),
+        financing: getFinancing(state),
     };
 };
 
 const mapDispatchToProps = mapAndBindActionCreators({
     init,
+    checkoutFinancingComplete,
 });
 
 export default connect(

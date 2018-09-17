@@ -12,12 +12,27 @@ class FilterFeature extends React.Component {
         loadingSearchResults: PropTypes.bool.isRequired,
         selectedItems: PropTypes.arrayOf(PropTypes.string),
         onToggleSearchFilter: PropTypes.func.isRequired,
-        onToggleOpenFilter: PropTypes.func.isRequired,
         open: PropTypes.bool.isRequired,
         canToggle: PropTypes.bool.isRequired,
     };
 
-    shouldComponentUpdate(nextProps) {
+    state = {
+        isOpen: true,
+    };
+
+    componentDidMount() {
+        this.setState({
+            isOpen: !!(
+                this.props.open ||
+                (this.props.selectedItems && this.props.selectedItems.length)
+            ),
+        });
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.state.isOpen !== nextState.isOpen) {
+            return true;
+        }
         if (this.props.selectedItems !== nextProps.selectedItems) {
             return true;
         }
@@ -39,6 +54,10 @@ class FilterFeature extends React.Component {
         return false;
     }
 
+    toggleOpen() {
+        this.setState({ isOpen: !this.state.isOpen });
+    }
+
     render() {
         // Hide if no items to select
         if (!this.props.items || !this.props.items.length) {
@@ -57,9 +76,9 @@ class FilterFeature extends React.Component {
             <SidebarFilter
                 title={this.props.title}
                 key={this.props.title}
-                open={true}
-                canToggle={false}
-                toggle={() => this.props.onToggleOpenFilter(this.props.title)}
+                open={this.state.isOpen}
+                canToggle={this.props.canToggle}
+                toggle={this.toggleOpen.bind(this)}
                 selectedItems={this.props.selectedItems}
             >
                 <FilterFeatureList

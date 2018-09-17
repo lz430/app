@@ -18,6 +18,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * App\Models\Deal
+ *
  * @property int $id
  * @property string $file_hash
  * @property int $dealer_id
@@ -65,6 +67,49 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $vehicle_color
  * @property string $status
  * @property \Datetime $sold_at
+ * @property \Highlight|null $highlight
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal forSale()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereBody($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereCertified($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereColor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereDaysOld($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereDealerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereDealerName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereDoorCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereEngine($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereFileHash($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereFuel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereFuelEconCity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereFuelEconHwy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereInteriorColor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereInventoryDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereMake($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereModel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereModelCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereMsrp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereNew($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereOdometer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereOptionCodes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal wherePackageCodes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal wherePayments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereSeatingCapacity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereSeries($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereSeriesDetail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereSoldAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereSourcePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereStockNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereTransmission($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereVautoFeatures($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereVersionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereVin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereYear($value)
+ * @mixin \Eloquent
  */
 class Deal extends Model
 {

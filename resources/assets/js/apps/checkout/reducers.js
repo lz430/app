@@ -5,7 +5,7 @@ import * as ActionTypes from './consts';
 
 const initialState = {
     isLoading: false, // Used throughout the checkout process to check state and whatnot.
-
+    purchase: {},
     deal: {},
     quote: {},
     strategy: '', // cash | finance | lease
@@ -53,6 +53,12 @@ const reducer = function(state = initialState, action = {}) {
             return {
                 ...state,
                 contactFormErrors: {},
+            };
+        case ActionTypes.RECEIVE_PURCHASE:
+            return {
+                ...state,
+                purchase: action.data.purchase,
+                token: action.data.token,
             };
 
         default:

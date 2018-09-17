@@ -12,14 +12,12 @@ export default class DealImage extends React.PureComponent {
         lazy: PropTypes.bool.isRequired,
         link: PropTypes.bool.isRequired,
         featureImageClass: PropTypes.string,
-        legacyMode: PropTypes.bool.isRequired,
     };
 
     static defaultProps = {
         size: 'thumbnail',
         link: true,
         lazy: true,
-        legacyMode: false,
     };
 
     state = {
@@ -52,20 +50,6 @@ export default class DealImage extends React.PureComponent {
         }
 
         const thumbnail = this.featuredImageUrl();
-
-        if (this.props.legacyMode) {
-            return (
-                <a href={`/deals/${this.props.deal.id}`}>
-                    {thumbnail && <img {...imageProps} src={thumbnail} />}
-                    {!thumbnail && (
-                        <img
-                            className="placeholder"
-                            src={this.state.fallbackDealImage}
-                        />
-                    )}
-                </a>
-            );
-        }
 
         return (
             <Link to={`/deals/${this.props.deal.id}`}>

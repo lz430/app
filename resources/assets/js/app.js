@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import 'bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -21,30 +19,29 @@ import { ConnectedRouter } from 'connected-react-router';
 const { store, persistor } = configureStore();
 
 /*
- * Legacy App
- */
-const StandaloneApp = props => (
-    <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-            <App>{props.children}</App>
-        </PersistGate>
-    </Provider>
-);
-
-/*
  * App w/ React router.
  */
 const DeliverMyRide = () => (
     <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-            <App>
-                <ConnectedRouter history={history}>
-                    <Switch>
+            <ConnectedRouter history={history}>
+                <Switch>
+                    <App>
                         <Route path="/filter" component={DealList} />
+                        <Route path="/compare" component={ComparePage} />
                         <Route path="/deals/:id" component={DealDetail} />
-                    </Switch>
-                </ConnectedRouter>
-            </App>
+                        <Route
+                            path="/confirm/:id"
+                            component={CheckoutConfirm}
+                        />
+                        <Route
+                            path="/apply/:id"
+                            component={CheckoutFinancing}
+                        />
+                        <Route path="/thank-you" component={CheckoutComplete} />
+                    </App>
+                </Switch>
+            </ConnectedRouter>
         </PersistGate>
     </Provider>
 );
@@ -54,67 +51,4 @@ const DeliverMyRide = () => (
  */
 Array.from(document.getElementsByTagName('ReactApp')).map(element => {
     ReactDOM.render(<DeliverMyRide />, element);
-});
-
-/**
- * ComparePage
- */
-Array.from(document.getElementsByTagName('ComparePage')).map(element => {
-    ReactDOM.render(
-        <StandaloneApp>
-            <ComparePage />
-        </StandaloneApp>,
-        element
-    );
-});
-
-/**
- * Checkout - Confirm
- */
-Array.from(document.getElementsByTagName('ConfirmDetails')).map(element => {
-    ReactDOM.render(
-        <StandaloneApp>
-            <CheckoutConfirm
-                deal={JSON.parse(element.getAttribute('deal')).data}
-                intendedRoute={window.location.pathname}
-            />
-        </StandaloneApp>,
-        element
-    );
-});
-
-/**
- * Checkout - Financing
- */
-Array.from(document.getElementsByTagName('Financing')).map(element => {
-    ReactDOM.render(
-        <StandaloneApp>
-            <CheckoutFinancing
-                featuredPhoto={JSON.parse(
-                    element.getAttribute('featuredPhoto')
-                )}
-                purchase={JSON.parse(element.getAttribute('purchase'))}
-                user={JSON.parse(element.getAttribute('user'))}
-                url={JSON.parse(element.getAttribute('url'))}
-            />
-        </StandaloneApp>,
-        element
-    );
-});
-
-/**
- * Checkout - Thank you
- */
-Array.from(document.getElementsByTagName('ThankYouPage')).map(element => {
-    ReactDOM.render(
-        <StandaloneApp>
-            <CheckoutComplete
-                purchase={JSON.parse(element.getAttribute('purchase'))}
-                deal={JSON.parse(element.getAttribute('deal'))}
-                features={JSON.parse(element.getAttribute('features'))}
-            />
-        </StandaloneApp>,
-
-        element
-    );
 });

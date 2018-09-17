@@ -1,13 +1,18 @@
 import { put, call, select, takeEvery } from 'redux-saga/effects';
-
+import { push } from 'connected-react-router';
 import ApiClient from 'store/api';
 
-import { CHECKOUT_START, CHECKOUT_CONTACT } from './consts';
+import {
+    CHECKOUT_START,
+    CHECKOUT_CONTACT,
+    CHECKOUT_FINANCING_COMPLETE,
+} from './consts';
 
 import {
     checkoutIsLoading,
     checkoutFinishedLoading,
     setCheckoutContactFormErrors,
+    receivePurchase,
 } from './actions';
 import { checkout as getCheckout } from './selectors';
 import { track } from 'services';
@@ -34,9 +39,7 @@ export function* checkoutStart(action) {
         amounts['financed_amount'] = toDollarsAndCents(
             pricing.amountFinanced()
         );
-        amounts['down_payment'] = toDollarsAndCents(
-            pricing.downPayment()
-        );
+        amounts['down_payment'] = toDollarsAndCents(pricing.downPayment());
 
         amounts['term'] = pricing.term();
         amounts['monthly_payment'] = toDollarsAndCents(
@@ -100,7 +103,28 @@ export function* checkoutContact(action) {
     });
 
     if (results) {
-        window.location = results.data.destination;
+        yield put(receivePurchase(results.data));
+        yield put(push(results.data.destination));
+    }
+}
+
+/*******************************************************************
+ * Checkout Financing Compete Form
+ *******************************************************************/
+export function* checkoutFinancingComplete() {
+    const checkout = yield select(getCheckout);
+
+    let results = null;
+    try {
+        results = yield call(
+            ApiClient.checkout.financingComplete,
+            checkout.purchase.id,
+            checkout.token
+        );
+    } catch (e) {}
+
+    if (results) {
+        yield put(push('/thank-you'));
     }
 }
 
@@ -113,4 +137,8 @@ export function* watchCheckoutStart() {
 
 export function* watchCheckoutContact() {
     yield takeEvery(CHECKOUT_CONTACT, checkoutContact);
+}
+
+export function* watchCheckoutFinancingComplete() {
+    yield takeEvery(CHECKOUT_FINANCING_COMPLETE, checkoutFinancingComplete);
 }

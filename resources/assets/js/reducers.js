@@ -12,11 +12,13 @@ import appCheckoutReducer from 'apps/checkout/reducers';
 import dealDetailsReducer from 'pages/deal-detail/reducer';
 import dealListReducer from 'pages/deal-list/reducers';
 import compareReducer from 'pages/compare/reducers';
+import checkoutFinancing from 'pages/checkout-financing/reducer';
 
 const pagesReducer = combineReducers({
     dealDetails: dealDetailsReducer,
     dealList: dealListReducer,
     compare: compareReducer,
+    checkoutFinancing: checkoutFinancing,
 });
 
 const pagesPersistConfig = {

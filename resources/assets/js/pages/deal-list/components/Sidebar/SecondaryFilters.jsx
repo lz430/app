@@ -12,32 +12,19 @@ class SecondaryFilters extends React.PureComponent {
         onToggleSearchFilter: PropTypes.func.isRequired,
     };
 
-    state = {
-        openFilter: null,
-    };
-
-    toggleOpenFilter(openFilter) {
-        this.setState({
-            openFilter:
-                this.state.openFilter && this.state.openFilter === openFilter
-                    ? null
-                    : openFilter,
-        });
-    }
-
     /**
-         Year
-         Fuel Type
-         Drive Train
-         Comfort & Convenience
-         Seating
-         Seat Materials
-         Seating Configuration
-         Seating Capacity
-         Vehicle Color
-         Infotainment
-         Safety & Driver Assist
-         Pickup
+     Year
+     Fuel Type
+     Drive Train
+     Comfort & Convenience
+     Seating
+     Seat Materials
+     Seating Configuration
+     Seating Capacity
+     Vehicle Color
+     Infotainment
+     Safety & Driver Assist
+     Pickup
      */
     render() {
         return (
@@ -45,9 +32,8 @@ class SecondaryFilters extends React.PureComponent {
                 <FilterFeature
                     title="Year"
                     key="filterYear"
-                    open={true}
-                    canToggle={false}
-                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    open={false}
+                    canToggle={true}
                     category="year"
                     items={this.props.filters['year']}
                     selectedItems={this.props.selectedFiltersByCategory['year']}
@@ -58,9 +44,8 @@ class SecondaryFilters extends React.PureComponent {
                 <FilterFeature
                     title="Vehicle Size"
                     key="filterVehicleSize"
-                    open={true}
-                    canToggle={false}
-                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    open={false}
+                    canToggle={true}
                     category="vehicle_size"
                     items={this.props.filters['vehicle_size']}
                     selectedItems={
@@ -73,9 +58,8 @@ class SecondaryFilters extends React.PureComponent {
                 <FilterFeature
                     title="Fuel Type"
                     key="filterFuelType"
-                    open={true}
-                    canToggle={false}
-                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    open={false}
+                    canToggle={true}
                     category="fuel_type"
                     items={this.props.filters['fuel_type']}
                     selectedItems={
@@ -88,9 +72,8 @@ class SecondaryFilters extends React.PureComponent {
                 <FilterFeature
                     title="Drive Train"
                     key="filterDriveTrain"
-                    open={true}
-                    canToggle={false}
-                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    open={false}
+                    canToggle={true}
                     category="drive_train"
                     items={this.props.filters['drive_train']}
                     selectedItems={
@@ -103,9 +86,8 @@ class SecondaryFilters extends React.PureComponent {
                 <FilterFeature
                     title="Comfort & Convenience"
                     key="filterComfort"
-                    open={true}
-                    canToggle={false}
-                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    open={false}
+                    canToggle={true}
                     category="comfort_and_convenience"
                     items={this.props.filters['comfort_and_convenience']}
                     selectedItems={
@@ -120,9 +102,8 @@ class SecondaryFilters extends React.PureComponent {
                 <FilterFeature
                     title="Seating"
                     key="filterSeating"
-                    open={true}
-                    canToggle={false}
-                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    open={false}
+                    canToggle={true}
                     category="seating"
                     items={this.props.filters['seating']}
                     selectedItems={
@@ -135,9 +116,8 @@ class SecondaryFilters extends React.PureComponent {
                 <FilterFeature
                     title="Seating Capacity"
                     key="filterSeatingCapacity"
-                    open={true}
-                    canToggle={false}
-                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    open={false}
+                    canToggle={true}
                     category="seating_capacity"
                     items={this.props.filters['seating_capacity']}
                     selectedItems={
@@ -150,9 +130,8 @@ class SecondaryFilters extends React.PureComponent {
                 <FilterFeature
                     title="Seat Materials"
                     key="filterSeatMaterials"
-                    open={true}
-                    canToggle={false}
-                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    open={false}
+                    canToggle={true}
                     category="seat_materials"
                     items={this.props.filters['seat_materials']}
                     selectedItems={
@@ -165,9 +144,8 @@ class SecondaryFilters extends React.PureComponent {
                 <FilterFeature
                     title="Infotainment"
                     key="filterInfotainment"
-                    open={true}
-                    canToggle={false}
-                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    open={false}
+                    canToggle={true}
                     category="infotainment"
                     items={this.props.filters['infotainment']}
                     selectedItems={
@@ -180,9 +158,8 @@ class SecondaryFilters extends React.PureComponent {
                 <FilterFeature
                     title="Safety & Driver Assist"
                     key="filterSafety"
-                    open={true}
-                    canToggle={false}
-                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    open={false}
+                    canToggle={true}
                     category="safety_and_driver_assist"
                     items={this.props.filters['safety_and_driver_assist']}
                     selectedItems={
@@ -197,9 +174,8 @@ class SecondaryFilters extends React.PureComponent {
                 <FilterFeature
                     title="Vehicle Color"
                     key="filterVehicleColor"
-                    open={true}
-                    canToggle={false}
-                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    open={false}
+                    canToggle={true}
                     category="vehicle_color"
                     items={this.props.filters['vehicle_color']}
                     selectedItems={
@@ -212,9 +188,8 @@ class SecondaryFilters extends React.PureComponent {
                 <FilterFeature
                     title="Pickup"
                     key="filterPickup"
-                    open={true}
-                    canToggle={false}
-                    onToggleOpenFilter={this.toggleOpenFilter.bind(this)}
+                    open={false}
+                    canToggle={true}
                     category="pickup"
                     items={this.props.filters['pickup']}
                     selectedItems={

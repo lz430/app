@@ -7,6 +7,23 @@ use Backpack\CRUD\CrudTrait;
 
 /**
  * Class Category
+ *
+ * @property int $id
+ * @property string|null $title
+ * @property string|null $slug
+ * @property string $has_custom_jato_mapping
+ * @property int $display_order
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Feature[] $features
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereDisplayOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereHasCustomJatoMapping($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Category extends Model
 {

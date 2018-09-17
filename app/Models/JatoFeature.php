@@ -4,6 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\JatoFeature
+ *
+ * @property int $id
+ * @property string $feature
+ * @property string|null $content
+ * @property string|null $group
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Deal[] $deals
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JatoFeature hasGroup()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JatoFeature whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JatoFeature whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JatoFeature whereFeature($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JatoFeature whereGroup($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JatoFeature whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JatoFeature whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class JatoFeature extends Model
 {
     // No longer in use except by seeder

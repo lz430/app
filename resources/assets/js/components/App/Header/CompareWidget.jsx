@@ -9,6 +9,7 @@ import {
 } from 'reactstrap';
 import DealImage from '../../Deals/DealImage';
 import CloseSolid from 'icons/zondicons/CloseSolid';
+import { Link } from 'react-router-dom';
 
 class CompareWidget extends React.PureComponent {
     static propTypes = {
@@ -27,16 +28,14 @@ class CompareWidget extends React.PureComponent {
         });
     }
 
-    redirectToCompare(e) {
-        e.preventDefault();
-        if (this.compareReady()) {
-            window.location =
-                '/compare?' +
-                this.props.compareList.map(
-                    dealAndSelectedFilters =>
-                        `deals[]=${dealAndSelectedFilters.deal.id}`
-                );
-        }
+    redirectToCompare() {
+        return (
+            '/compare?' +
+            this.props.compareList.map(
+                dealAndSelectedFilters =>
+                    `deals[]=${dealAndSelectedFilters.deal.id}`
+            )
+        );
     }
 
     compareReady() {
@@ -104,9 +103,9 @@ class CompareWidget extends React.PureComponent {
                     })}
                     {this.compareReady() && (
                         <DropdownItem className="dropdown-footer-cta">
-                            <a onClick={e => this.redirectToCompare(e)}>
+                            <Link to={this.redirectToCompare()}>
                                 Compare Deals
-                            </a>
+                            </Link>
                         </DropdownItem>
                     )}
                 </DropdownMenu>

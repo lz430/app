@@ -1,14 +1,12 @@
 import { createSelector } from 'reselect';
 
-import { deal } from 'apps/common/selectors';
-
 export const checkout = state => state.checkout;
 
 export const dealPricingFromCheckoutData = createSelector(
-    [deal, checkout],
-    (deal, checkout) => {
+    [checkout],
+    checkout => {
         return {
-            deal,
+            deal: checkout.deal,
             paymentType: checkout.strategy,
             employeeBrand: checkout.employeeBrand,
             supplierBrand: checkout.supplierBrand,
