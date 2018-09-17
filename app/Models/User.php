@@ -14,18 +14,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * App\Models\User
  *
  * @property int $id
- * @property string first_name
- * @property string last_name
- * @property string email
- * @property string zip
- * @property string password
- * @property string remember_token
- * @property string api_token
- * @property string phone_number
- * @property string drivers_license_number
- * @property string drivers_license_state
- * @property \DateTime $created_at
- * @property \DateTime $updated_at
  * @property string|null $first_name
  * @property string|null $last_name
  * @property string|null $email
@@ -36,6 +24,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string|null $phone_number
  * @property string|null $drivers_license_number
  * @property string|null $drivers_license_state
+ * @property \DateTime $created_at
+ * @property \DateTime $updated_at
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read \Illuminate\Database\Eloquent\Collection|\Backpack\PermissionManager\app\Models\Permission[] $permissions
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Purchase[] $purchases

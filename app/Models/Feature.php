@@ -16,16 +16,14 @@ use Backpack\CRUD\CrudTrait;
  * @property int $id
  * @property string $title
  * @property string $slug
- * @property array|null jato_schema_ids
- * @property array|null map_vauto_features
+ * @property array|null $jato_schema_ids
+ * @property array|null $map_vauto_features
  * @property int $display_order
  * @property \DateTime $created_at
  * @property \DateTime $updated_at
  * @property int $category_id
  * @property Category $category
  * @property int $is_active
- * @property array|null $jato_schema_ids
- * @property array|null $map_vauto_features
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Deal[] $deals
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereCategoryId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereCreatedAt($value)

@@ -18,6 +18,7 @@ class SidebarFilter extends React.PureComponent {
     static defaultProps = {
         canToggle: true,
     };
+
     renderIcon() {
         if (this.props.open) {
             return <CheveronUp className="icon" />;
@@ -25,6 +26,7 @@ class SidebarFilter extends React.PureComponent {
 
         return <CheveronDown className="icon" />;
     }
+
     render() {
         return (
             <div

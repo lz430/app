@@ -20,6 +20,7 @@ import { getDeal, getLeaseAnnualMileage, getLeaseTerm } from './selectors';
 import DealDetail from './components/DealDetail';
 import { pricingFromStateFactory } from 'src/pricing/factory';
 import PageContent from 'components/App/PageContent';
+import { Link } from 'react-router-dom';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -147,7 +148,7 @@ class DealDetailContainer extends React.PureComponent {
                 <Container>
                     <Breadcrumb>
                         <BreadcrumbItem>
-                            <a href="/filter">Search Results</a>
+                            <Link to="/filter">Search Results</Link>
                         </BreadcrumbItem>
                         <BreadcrumbItem active>View Deal</BreadcrumbItem>
                     </Breadcrumb>

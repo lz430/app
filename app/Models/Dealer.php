@@ -19,7 +19,6 @@ use Backpack\CRUD\CrudTrait;
  * @property $doc_fee
  * @property $registration_fee
  * @property $cvr_fee
- * @property string route_one_id
  * @property float $latitude
  * @property float $longitude
  * @property string $name
