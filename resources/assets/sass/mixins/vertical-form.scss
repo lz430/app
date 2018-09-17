@@ -1,6 +1,3 @@
-@import 'button';
-@import 'input';
-
 @mixin vertical-form {
     $width: $break-small / 2;
     align-items: center;
