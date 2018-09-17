@@ -10,13 +10,25 @@ class ContactForm extends React.PureComponent {
         checkoutContact: PropTypes.func.isRequired,
     };
 
+    recaptchaRef = React.createRef();
+
     state = {
-        recaptchaToken: null,
+        recaptchaToken: false,
         isPageValid: true,
     };
 
     componentDidMount() {
         this.props.clearCheckoutContactFormErrors();
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (
+            this.props.checkout.contactFormErrors !==
+            prevProps.checkout.contactFormErrors
+        ) {
+            this.setState({ recaptchaToken: false });
+            this.recaptchaRef.current.reset();
+        }
     }
 
     handleVerifyRecaptchaToken = recaptchaToken => {
@@ -263,6 +275,7 @@ class ContactForm extends React.PureComponent {
 
                 <div className="request-email__captcha">
                     <ReCAPTCHA
+                        ref={this.recaptchaRef}
                         size="normal"
                         data-theme="dark"
                         sitekey={config.RECAPTCHA_PUBLIC_KEY}
@@ -277,7 +290,10 @@ class ContactForm extends React.PureComponent {
                 </div>
 
                 <div className="request-email__buttons">
-                    <button className="request-email__button request-email__button--purple request-email__button--small">
+                    <button
+                        disabled={!this.state.recaptchaToken}
+                        className="btn btn-success btn-block"
+                    >
                         Confirm and Submit
                     </button>
                 </div>
