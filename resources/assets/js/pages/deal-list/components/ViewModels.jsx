@@ -36,7 +36,7 @@ class ViewModels extends React.PureComponent {
 
                             return data.map(item => {
                                 if (item.cta) {
-                                    return <CardCta key={index} />;
+                                    return <CardCta key={'cta-' + index} />;
                                 } else {
                                     return (
                                         <ModelYear
