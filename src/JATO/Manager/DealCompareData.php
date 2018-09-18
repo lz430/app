@@ -167,19 +167,29 @@ class DealCompareData
         }
         switch ($equipment->name) {
             case 'External dimensions':
-                $labels[$attributes['overall length (in)']->schemaId] = "External: L: {$attributes['overall length (in)']->value}\" - W: {$attributes['overall width (in)']->value}\" - H: {$attributes['overall height (in)']->value}\"";
+                if (isset($attributes['overall length (in)'])) {
+                    $labels[$attributes['overall length (in)']->schemaId] = "External: L: {$attributes['overall length (in)']->value}\" - W: {$attributes['overall width (in)']->value}\" - H: {$attributes['overall height (in)']->value}\"";
+                }
                 break;
             case 'Fuel economy':
-                $labels[$attributes['urban (mpg)']->schemaId] = "{$attributes['urban (mpg)']->value} / {$attributes['country/highway (mpg)']->value}";
+                if (isset($attributes['urban (mpg)'])) {
+                    $labels[$attributes['urban (mpg)']->schemaId] = "{$attributes['urban (mpg)']->value} / {$attributes['country/highway (mpg)']->value}";
+                }
                 break;
             case 'Wheels':
-                $labels[$attributes['rim diameter (in)']->schemaId] = $attributes['rim diameter (in)']->value . "\" rims";
+                if (isset($attributes['rim diameter (in)'])) {
+                    $labels[$attributes['rim diameter (in)']->schemaId] = $attributes['rim diameter (in)']->value . "\" rims";
+                }
                 break;
             case 'Drive':
-                $labels[$attributes['Driven wheels']->schemaId] = $attributes['Driven wheels']->value;
+                if (isset($attributes['Driven wheels'])) {
+                    $labels[$attributes['Driven wheels']->schemaId] = $attributes['Driven wheels']->value;
+                }
                 break;
             case 'Transmission':
-                $labels[$attributes['Transmission type']->schemaId] = "{$attributes['number of speeds']->value} speed {$attributes['Transmission type']->value}";
+                if (isset($attributes['Transmission type'])) {
+                    $labels[$attributes['Transmission type']->schemaId] = "{$attributes['number of speeds']->value} speed {$attributes['Transmission type']->value}";
+                }
                 break;
             case 'Weights':
                 if (isset($attributes['gross vehicle weight (lbs)'])) {
