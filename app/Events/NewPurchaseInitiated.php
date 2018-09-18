@@ -38,6 +38,7 @@ class NewPurchaseInitiated
             'year_of_vehicle' => $purchase->deal->year,
             'trim' => $purchase->deal->series,
             'interior_color' => $purchase->interior_color,
+            'deal_id' => $purchase->deal_id,
 
             //
             // Dealer Info
