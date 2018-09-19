@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('dealsByModelYear', 'DealsByModelYearController@getDealsByModelYear')->name('dealsByModelYear.index');
+Route::get('search', 'SearchController@index')->name('search.index');
 Route::get('deals', 'DealsController@list')->name('deals.index');
 Route::get('deals/compare', 'DealsCompareController@compare')->name('deals.compare');
 Route::get('deals/{deal}', 'DealsController@detail')->name('deals.detail');

@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Services\Search;
+
+class SuggestSearch extends BaseSearch
+{
+    public function setSuggestQuery($query)
+    {
+        $query = strtolower($query);
+        $this->query = [
+            "size" => 0,
+            "aggs" => [
+                "makes" => [
+                    "filter" => [
+                        "wildcard" => [
+                            "make" => "*" . $query . "*"
+                        ]
+                    ],
+                    "aggs" => [
+                        "data" => [
+                            "terms" => [
+                                "field" => "make.keyword"
+                            ]
+                        ]
+                    ]
+                ],
+                "models" => [
+                    "nested" => [
+                        "path" => "category"
+                    ],
+                    "aggs" => [
+                        "model" => [
+                            "filter" => [
+                                "wildcard" => [
+                                    "category.title" => "*" . $query . "*"
+                                ]
+                            ],
+                            "aggs" => [
+                                "data" => [
+                                    "terms" => [
+                                        "field" => "category.title.keyword"
+                                    ],
+                                    "aggs" => [
+                                        'make' => [
+                                            'reverse_nested' => (object)[],
+                                            'aggs' => [
+                                                'make' => [
+                                                    'terms' => [
+                                                        'field' => 'make.keyword'
+                                                    ]
+                                                ]
+                                            ]
+                                        ],
+                                        'model' => [
+                                            'reverse_nested' => (object)[],
+                                            'aggs' => [
+                                                'model' => [
+                                                    'terms' => [
+                                                        'field' => 'model.keyword'
+                                                    ]
+                                                ]
+                                            ]
+                                        ]
+                                    ],
+                                ],
+
+                            ]
+                        ]
+                    ]
+                ],
+                "styles" => [
+                    "filter" => [
+                        "wildcard" => [
+                            "style" => "*" . $query . "*"
+                        ]
+                    ],
+                    "aggs" => [
+                        "data" => [
+                            "terms" => [
+                                "field" => "style.keyword"
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        return $this;
+    }
+}
