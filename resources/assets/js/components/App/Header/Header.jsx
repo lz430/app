@@ -13,6 +13,8 @@ import { toggleCompare } from 'apps/common/actions';
 import ChatWidget from '../ChatWidget';
 import Location from 'icons/zondicons/Location';
 import Phone from '../../../icons/zondicons/Phone';
+import SearchWidget from './SearchWidget';
+import { headerRequestAutocomplete } from '../../../apps/page/actions';
 
 class Header extends React.PureComponent {
     static propTypes = {
@@ -21,6 +23,8 @@ class Header extends React.PureComponent {
         compareList: PropTypes.array,
         onSearchForLocation: PropTypes.func.isRequired,
         onToggleCompare: PropTypes.func.isRequired,
+        onRequestSearch: PropTypes.func.isRequired,
+        autocompleteResults: PropTypes.object,
     };
 
     state = {
@@ -96,6 +100,9 @@ class Header extends React.PureComponent {
                 </NavbarBrand>
                 <div className="mr-auto" />
                 <div className="navbar-text">
+                    <SearchWidget
+                        onRequestSearch={this.props.onRequestSearch}
+                    />
                     <ChatWidget style="header" />
                     {this.renderPhoneWidget()}
                     <CompareWidget
@@ -124,6 +131,7 @@ const mapStateToProps = state => {
         userLocation: getUserLocation(state),
         currentPageIsInCheckout: getCurrentPageIsInCheckout(state),
         compareList: state.common.compareList,
+        autocompleteResults: state.page.headerAutocompleteResults,
     };
 };
 
@@ -134,6 +142,9 @@ const mapDispatchToProps = dispatch => {
         },
         onToggleCompare: deal => {
             return dispatch(toggleCompare(deal));
+        },
+        onRequestSearch: query => {
+            return dispatch(headerRequestAutocomplete(query));
         },
     };
 };
