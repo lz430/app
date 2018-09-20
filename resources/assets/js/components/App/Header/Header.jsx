@@ -102,6 +102,7 @@ class Header extends React.PureComponent {
                 <div className="navbar-text">
                     <SearchWidget
                         onRequestSearch={this.props.onRequestSearch}
+                        autocompleteResults={this.props.autocompleteResults}
                     />
                     <ChatWidget style="header" />
                     {this.renderPhoneWidget()}

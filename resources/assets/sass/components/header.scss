@@ -244,3 +244,39 @@
     cursor: default;
     font-weight: bold;
 }
+
+.search {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &__input {
+        padding-right: 1rem;
+        input {
+            border-radius: 4px;
+            border: 2px solid $gray-300;
+        }
+    }
+    &__results {
+        width: 250px;
+        position: absolute;
+        top: 50px;
+        left: -25%;
+        background: #fff;
+        padding: 0.25rem;
+        box-shadow: $box-shadow-sm;
+        border: 1px solid $gray-200;
+        font-size: 0.85rem;
+        &__category {
+            &__header {
+                background: #ccc;
+                color: #fff;
+            }
+        }
+        ul {
+            list-style: none;
+            margin-bottom: 0;
+            padding: 0;
+        }
+    }
+}
