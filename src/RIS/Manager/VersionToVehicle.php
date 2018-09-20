@@ -542,7 +542,6 @@ class VersionToVehicle
             return in_array($params['model'], $vehicle->filters->MODEL);
         });
 
-
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
 
@@ -559,6 +558,7 @@ class VersionToVehicle
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL', $params['trim']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'DRIVE_TYPE_CODE', [$params['driven_wheels']]);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'BODY_TYPE', [$params['cab']]);
+        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'BODY_TYPE', [$params['body']]);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRAN_TYPE', [$params['transmission']]);
 
         return collect($vehicles)->map(function ($item) {
