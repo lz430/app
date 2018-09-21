@@ -106,7 +106,7 @@
 
     @include media-breakpoint-up(xl) {
         width: auto;
-        max-width: 300px;
+        max-width: 230px;
         min-width: 230px;
         border-radius: 4px;
     }
@@ -126,7 +126,7 @@
             width: 100%;
             object-fit: cover;
             &.placeholder {
-                max-height: 210px;
+                max-height: 130px;
             }
 
             &:hover {

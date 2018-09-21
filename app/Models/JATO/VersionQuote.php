@@ -18,6 +18,27 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $rate
  * @property \stdClass $data
  * @property Version $version
+ * @property int $version_id
+ * @property int|null $residual
+ * @property int|null $miles
+ * @property string|null $rate_type
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote whereHashcode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote whereMakeHashcode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote whereMiles($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote whereRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote whereRateType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote whereRebate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote whereResidual($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote whereStrategy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote whereTerm($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote whereVersionId($value)
+ * @mixin \Eloquent
  */
 class VersionQuote extends Model
 {

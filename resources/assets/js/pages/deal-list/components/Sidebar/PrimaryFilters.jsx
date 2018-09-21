@@ -18,7 +18,7 @@ class PrimaryFilters extends React.PureComponent {
     };
 
     state = {
-        openFilter: null,
+        openFilter: 'Make',
     };
 
     toggleOpenFilter(openFilter) {

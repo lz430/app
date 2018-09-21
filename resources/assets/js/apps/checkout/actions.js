@@ -25,6 +25,13 @@ export function setCheckoutData(
     };
 }
 
+export function receivePurchase(data) {
+    return {
+        type: ActionTypes.RECEIVE_PURCHASE,
+        data: data,
+    };
+}
+
 export function checkoutIsLoading() {
     return {
         type: ActionTypes.CHECKOUT_IS_LOADING,
@@ -47,6 +54,13 @@ export function checkoutStart(pricing) {
 export function checkoutContact(fields) {
     return {
         type: ActionTypes.CHECKOUT_CONTACT,
+        fields,
+    };
+}
+
+export function checkoutFinancingComplete(fields) {
+    return {
+        type: ActionTypes.CHECKOUT_FINANCING_COMPLETE,
         fields,
     };
 }

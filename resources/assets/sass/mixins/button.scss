@@ -9,54 +9,7 @@
     text-decoration: none;
     text-align: center;
 
-    &--invert {
-        border: 2px solid $color-background-secondary;
-    }
-
-    &--blue {
-        background-color: $color-blue;
-        color: $color-text-white;
-    }
-
-    &--pink {
-        background-color: $color-pink;
-        color: $color-text-white;
-    }
-
-    &--purple {
-        background-color: $color-purple;
-        color: $color-text-white;
-    }
-
-    &--white {
-        background-color: $color-text-white;
-        color: $color-blue;
-    }
-
-    &--small {
-        font-size: 0.9rem;
-        padding: 4px 15px;
-    }
-
-    &--no-border {
-        border: 2px solid transparent;
-    }
-
     &--dark-bg {
-        color: $color-text-white;
-    }
-
-    &--capitalize {
-        text-transform: capitalize;
-    }
-
-    &--facebook-blue {
-        background: $color-facebook-blue;
-        color: $color-text-white;
-    }
-
-    &--twitter-blue {
-        background: $color-twitter-blue;
         color: $color-text-white;
     }
 

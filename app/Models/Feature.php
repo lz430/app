@@ -16,13 +16,28 @@ use Backpack\CRUD\CrudTrait;
  * @property int $id
  * @property string $title
  * @property string $slug
- * @property array|null jato_schema_ids
- * @property array|null map_vauto_features
+ * @property array|null $jato_schema_ids
+ * @property array|null $map_vauto_features
  * @property int $display_order
  * @property \DateTime $created_at
  * @property \DateTime $updated_at
  * @property int $category_id
  * @property Category $category
+ * @property int $is_active
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Deal[] $deals
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereDisplayOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereJatoSchemaIds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereMapVautoFeatures($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature withJatoSchemaId($schemaId)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature withVautoFeature($feature)
+ * @mixin \Eloquent
  */
 class Feature extends Model
 {

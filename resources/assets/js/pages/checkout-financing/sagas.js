@@ -1,18 +1,38 @@
-import { takeEvery, select } from 'redux-saga/effects';
+import { takeEvery, select, put, call } from 'redux-saga/effects';
 
 import { initPage } from 'apps/page/sagas';
 
 import { INIT } from './consts';
 import { checkout as getCheckout } from 'apps/checkout/selectors';
 import { track } from 'services';
+import { pageLoadingFinished, pageLoadingStart } from 'apps/page/actions';
+import ApiClient from 'store/api';
+import { receiveFinancingUrl } from './actions';
 
 /*******************************************************************
  * Init
  ********************************************************************/
 function* init() {
-    yield* initPage('checkout-financing');
-
+    yield put(pageLoadingStart());
+    yield* initPage('checkout-financing', false);
     const checkout = yield select(getCheckout);
+
+    let results = null;
+
+    try {
+        results = yield call(
+            ApiClient.checkout.getFinancing,
+            checkout.purchase.id,
+            checkout.token
+        );
+        results = results.data;
+    } catch (e) {
+        console.log(e);
+    }
+
+    yield put(receiveFinancingUrl(results));
+    yield put(pageLoadingFinished());
+
     if (checkout.deal.id) {
         track('checkout:financing:view', {
             'Deal Make': checkout.deal.make,

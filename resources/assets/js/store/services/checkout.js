@@ -22,6 +22,16 @@ export default class CheckoutService {
         return httpclient.post('/api/checkout/start', payload);
     }
 
+    /**
+     * @param email
+     * @param drivers_license_state
+     * @param drivers_license_number
+     * @param first_name
+     * @param last_name
+     * @param phone_number
+     * @param g_recaptcha_response
+     * @returns {*}
+     */
     contact(
         email,
         drivers_license_state,
@@ -42,5 +52,33 @@ export default class CheckoutService {
         };
 
         return httpclient.post('/api/checkout/contact', payload);
+    }
+
+    /**
+     *
+     * @param purchaseId
+     * @param token
+     * @returns {*}
+     */
+    getFinancing(purchaseId, token) {
+        return httpclient.get(`/api/checkout/${purchaseId}/financing`, {
+            headers: { Authorization: 'Bearer ' + token['access_token'] },
+        });
+    }
+
+    /**
+     *
+     * @param purchaseId
+     * @param token
+     * @returns {*}
+     */
+    financingComplete(purchaseId, token) {
+        return httpclient.post(
+            `/api/checkout/${purchaseId}/financing`,
+            {},
+            {
+                headers: { Authorization: 'Bearer ' + token['access_token'] },
+            }
+        );
     }
 }

@@ -25,7 +25,8 @@
         "predis/predis": "^1.1",
         "sentry/sentry-laravel": "^0.9.0",
         "spatie/laravel-fractal": "^5.0",
-        "toin0u/geocoder-laravel": "^4.0"
+        "toin0u/geocoder-laravel": "^4.0",
+        "tymon/jwt-auth": "^1.0.0-rc.2"
     },
     "require-dev": {
         "backpack/generators": "^1.1",

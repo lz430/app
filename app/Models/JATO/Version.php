@@ -7,11 +7,61 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * App\Models\JATO\Version
+ *
  * @property int $id
  * @property int $jato_vehicle_id
  * @property string $body_style
  * @property \DateTime $created_at
  * @property \DateTime $updated_at
+ * @property int $jato_uid
+ * @property int $jato_model_id
+ * @property string $year
+ * @property string|null $name
+ * @property string $trim_name
+ * @property string $description
+ * @property string|null $driven_wheels
+ * @property int $doors
+ * @property string $transmission_type
+ * @property float|null $msrp
+ * @property float|null $invoice
+ * @property string|null $cab
+ * @property string|null $segment
+ * @property int|null $fuel_econ_city
+ * @property int|null $fuel_econ_hwy
+ * @property string|null $manufacturer_code
+ * @property float|null $delivery_price
+ * @property int $is_current
+ * @property int $model_id
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Deal[] $deals
+ * @property-read \App\Models\JATO\VehicleModel $model
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JATO\VersionPhoto[] $photos
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JATO\VersionQuote[] $quotes
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereBodyStyle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereCab($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereDeliveryPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereDoors($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereDrivenWheels($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereFuelEconCity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereFuelEconHwy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereInvoice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereIsCurrent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereJatoModelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereJatoUid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereJatoVehicleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereManufacturerCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereModelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereMsrp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereSegment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereTransmissionType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereTrimName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereYear($value)
+ * @mixin \Eloquent
  */
 class Version extends Model
 {

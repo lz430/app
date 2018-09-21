@@ -63,6 +63,7 @@ function* init(action) {
     }
 
     yield put(receiveDeal(results));
+    yield put(pageLoadingFinished());
 
     if (results) {
         yield* dealDetailRequestDealQuote();
@@ -76,8 +77,6 @@ function* init(action) {
             'Deal Version Name': deal.version.name,
         });
     }
-
-    yield put(pageLoadingFinished());
 }
 
 /*******************************************************************

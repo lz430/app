@@ -23,8 +23,9 @@ Route::get('deals/{deal}/dimensions', 'DealDimensionsController@getDimensions')-
 
 Route::post('checkout/start', 'CheckoutController@start')->name('checkout.start');
 Route::post('checkout/contact', 'CheckoutController@contact')->name('checkout.contact');
+Route::get('checkout/{purchase}/financing', 'CheckoutController@getFinancing')->name('checkout.financing');
+Route::post('checkout/{purchase}/financing', 'CheckoutController@financingComplete')->name('checkout.financingComplete');
 
-Route::get('targets', 'TargetsController@getTargets')->name('targets.getTargets');
 Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');
 Route::get('location', 'UserLocationController@show')->name('location.show');
 
