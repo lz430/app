@@ -92,9 +92,11 @@ $price_col_options = array_intersect_key($price_col_options, array_flip($source_
                 <td>${{ number_format($deal->prices()->supplier, 2) }}</td>
                 <td>${{ number_format($deal->prices()->employee, 2) }}</td>
                 <td style="font-size:80%;">
-                    @foreach ($deal->source_price as $key => $value)
-                        <span>{{$key}} : ${{ number_format($value, 2) }}</span> <br/>
-                    @endforeach
+                    @isset($deal->source_price)
+                        @foreach ($deal->source_price as $key => $value)
+                            <span>{{$key}} : ${{ number_format($value, 2) }}</span> <br/>
+                        @endforeach
+                    @endisset
                 </td>
             </tr>
         @endforeach
