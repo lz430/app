@@ -74,7 +74,7 @@ export function* checkoutStart(action) {
     });
 
     yield put(checkoutFinishedLoading());
-    window.location = `/confirm/${pricing.id()}`;
+    yield put(push('/checkout/contact'));
 }
 
 /*******************************************************************
@@ -124,7 +124,7 @@ export function* checkoutFinancingComplete() {
     } catch (e) {}
 
     if (results) {
-        yield put(push('/thank-you'));
+        yield put(push('/checkout/complete'));
     }
 }
 

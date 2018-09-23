@@ -174,9 +174,9 @@ class CheckoutController extends BaseAPIController
         ];
 
         if ($purchase->isCash()) {
-            $return['destination'] = '/thank-you?method=cash';
+            $return['destination'] = '/checkout/complete?method=cash';
         } else {
-            $return['destination'] = "/apply/{$purchase->id}";
+            $return['destination'] = "/checkout/financing";
         }
 
         return response()->json($return);
@@ -258,5 +258,4 @@ class CheckoutController extends BaseAPIController
             'expires_in' => auth('api')->factory()->getTTL() * 60
         ];
     }
-
 }
