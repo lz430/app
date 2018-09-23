@@ -30,7 +30,9 @@ class CheckoutController extends BaseAPIController
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['start', 'contact']]);
+        $this
+        ->middleware(['auth:api', 'can:update,purchase'], ['except' => ['start', 'contact']]);
+
     }
 
     /**
