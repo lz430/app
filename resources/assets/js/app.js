@@ -31,14 +31,17 @@ const DeliverMyRide = () => (
                         <Route path="/compare" component={ComparePage} />
                         <Route path="/deals/:id" component={DealDetail} />
                         <Route
-                            path="/confirm/:id"
+                            path="/checkout/contact"
                             component={CheckoutConfirm}
                         />
                         <Route
-                            path="/apply/:id"
+                            path="/checkout/financing"
                             component={CheckoutFinancing}
                         />
-                        <Route path="/thank-you" component={CheckoutComplete} />
+                        <Route
+                            path="/checkout/complete"
+                            component={CheckoutComplete}
+                        />
                     </App>
                 </Switch>
             </ConnectedRouter>

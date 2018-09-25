@@ -214,6 +214,11 @@ class DealToVehicle
         ];
 
         $results = $this->fetchProgramData($search);
+
+        if (!$results) {
+            throw new FetchProgramDataException("Data Delivery API: Invalid XML returned");
+        }
+
         if ($results->status === "2") {
             throw new FetchProgramDataException("Data Delivery API: " . $results->error . " ::: " . json_encode($params));
         }
@@ -226,6 +231,7 @@ class DealToVehicle
             ];
             $results = $this->fetchProgramData($search);
         }
+
         return $results;
     }
 

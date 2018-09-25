@@ -100,14 +100,20 @@ class DataDeliveryClient extends ApiClient
 
     /**
      * @param Response $response
-     * @param bool $async
      * @return mixed
      */
     public function handleResponse(Response $response)
     {
+        libxml_use_internal_errors(true);
+
         $stream = stream_for($response->getBody());
         $data = $stream->getContents();
         $raw_response = simplexml_load_string($data);
+
+        if ($raw_response === false) {
+            throw new FetchProgramDataException("Data Delivery API: Invalid XML returned" . $data);
+        }
+
         return $raw_response;
     }
 

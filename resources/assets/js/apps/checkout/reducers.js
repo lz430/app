@@ -1,5 +1,6 @@
 import { basePersistConfig } from 'persist';
 import { persistReducer } from 'redux-persist';
+import storageSession from 'redux-persist/lib/storage/session';
 
 import * as ActionTypes from './consts';
 
@@ -19,6 +20,7 @@ const initialState = {
 const persistConfig = {
     ...basePersistConfig,
     key: 'checkout',
+    storage: storageSession,
     blacklist: ['isLoading'],
 };
 
