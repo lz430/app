@@ -7,11 +7,7 @@ const initialState = {
     isLoading: false,
     loadingSearchResults: true,
     page: 1,
-    searchQuery: {
-        entity: 'model', // deal or model depending on the page we're on.
-        sort: 'payment',
-        filters: [],
-    },
+    searchQuery: {},
     modelYears: [],
     deals: [],
     meta: {},
@@ -123,6 +119,7 @@ const reducer = function(state = initialState, action = {}) {
                     searchQuery: {
                         ...state.searchQuery,
                         entity: 'model',
+                        filters: [],
                     },
                     deals: [],
                     modelYears: [],

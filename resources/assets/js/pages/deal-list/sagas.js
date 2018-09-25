@@ -234,7 +234,12 @@ function* init(action) {
 
             const data = {
                 page: query.page,
-                searchQuery: query,
+                searchQuery: {
+                    entity: 'model',
+                    sort: 'payment',
+                    filters: [],
+                    ...query,
+                },
             };
 
             delete data.searchQuery.page;
