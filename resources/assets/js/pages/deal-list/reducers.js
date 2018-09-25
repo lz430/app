@@ -7,7 +7,11 @@ const initialState = {
     isLoading: false,
     loadingSearchResults: true,
     page: 1,
-    searchQuery: {},
+    searchQuery: {
+        entity: 'model', // deal or model depending on the page we're on.
+        sort: 'payment',
+        filters: [],
+    },
     modelYears: [],
     deals: [],
     meta: {},
