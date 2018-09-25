@@ -230,7 +230,12 @@ class Client
             return [];
         }
 
-        $xml = new \SimpleXMLElement($data);
+        libxml_use_internal_errors(true);
+        $xml = simplexml_load_string($data);
+        if ($xml === false) {
+            throw new CarletonDataException("Invalid XML" . $data);
+        }
+
         $xml->registerXPathNamespace('lease', 'http://www.carletoninc.com/calcs/lease');
 
         $faults = $xml->xpath('/soap:Envelope/soap:Body/soap:Fault');
