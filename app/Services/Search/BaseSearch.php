@@ -206,7 +206,6 @@ abstract class BaseSearch
         $this->query['query']['bool']['must'][] = $filterQuery;
 
         if (isset($this->query['aggs']['makeandstyle'])) {
-            $this->query['aggs']['makeandstyle']['aggs']['style']['filter']['bool']['must'][] = $filterQuery;
             $this->query['aggs']['makeandstyle']['aggs']['make']['filter']['bool']['must'][] = $filterQuery;
         }
 

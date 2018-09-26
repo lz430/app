@@ -53,6 +53,11 @@ class SuggestSearch extends BaseSearch
                                         "field" => "category.title.keyword"
                                     ],
                                     "aggs" => [
+                                        'thumbnail' => [
+                                            'terms' => [
+                                                'field' => 'category.thumbnail.keyword'
+                                            ]
+                                        ],
                                         'make' => [
                                             'reverse_nested' => (object)[],
                                             'aggs' => [

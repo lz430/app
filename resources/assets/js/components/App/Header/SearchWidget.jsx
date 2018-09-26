@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
-import { Redirect } from 'react-router';
-import { buildSearchQueryUrl } from '../../../pages/deal-list/helpers';
+import { buildSearchQueryUrl } from 'pages/deal-list/helpers';
+import StyleIcon from 'components/Deals/StyleIcon';
 
 class SearchWidget extends React.PureComponent {
     static propTypes = {
@@ -45,7 +45,6 @@ class SearchWidget extends React.PureComponent {
             newSearchQuery.filters = item.query.filters;
         }
         const urlQuery = buildSearchQueryUrl(newSearchQuery);
-        console.log(urlQuery);
         this.props.history.push('/filter?' + urlQuery);
         this.setState({ query: '' });
     }
@@ -58,6 +57,14 @@ class SearchWidget extends React.PureComponent {
         }
     }
 
+    renderResultItemIcon(category, item) {
+        if (category === 'style') {
+            return <StyleIcon style={item.icon} />;
+        }
+
+        return <img src={item.icon} />;
+    }
+
     renderResultItem(category, item) {
         return (
             <li
@@ -65,7 +72,24 @@ class SearchWidget extends React.PureComponent {
                 key={item.label}
                 onClick={() => this.onSelectItem(item)}
             >
-                {item.label}
+                <div className="search__results__item__icon">
+                    {this.renderResultItemIcon(category, item)}
+                </div>
+
+                <div className="search__results__item__title">
+                    <div className="search__results__item__title__label">
+                        {item.label}
+                    </div>
+                    <div className="search__results__item__title__count">
+                        ({item.count})
+                    </div>
+                </div>
+
+                <div className="search__results__item__cta">
+                    <span className="btn btn-sm btn-outline-primary">
+                        Select
+                    </span>
+                </div>
             </li>
         );
     }

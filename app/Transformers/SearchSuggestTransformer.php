@@ -4,6 +4,7 @@ namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
 use App\Models\JATO\Make;
+use DeliverMyRide\JATO\Map;
 
 
 class SearchSuggestTransformer extends TransformerAbstract
@@ -17,8 +18,7 @@ class SearchSuggestTransformer extends TransformerAbstract
             'style' => [],
         ];
 
-
-        foreach($response['aggregations']['makes']['data']['buckets'] as $item) {
+        foreach ($response['aggregations']['makes']['data']['buckets'] as $item) {
             $data = [
                 'label' => $item['key'],
                 'value' => $item['key'],
@@ -34,7 +34,7 @@ class SearchSuggestTransformer extends TransformerAbstract
             $return['make'][] = $data;
         }
 
-        foreach($response['aggregations']['styles']['data']['buckets'] as $item) {
+        foreach ($response['aggregations']['styles']['data']['buckets'] as $item) {
             $data = [
                 'label' => $item['key'],
                 'value' => $item['key'],
@@ -46,12 +46,16 @@ class SearchSuggestTransformer extends TransformerAbstract
                     ],
                 ]
             ];
+            $data = array_merge($item, Map::BODY_STYLES[$data['label']], $data);
+            unset($data['style']);
             $return['style'][] = $data;
         }
-        foreach($response['aggregations']['models']['model']['data']['buckets'] as $item) {
+
+        foreach ($response['aggregations']['models']['model']['data']['buckets'] as $item) {
             $data = [
                 'label' => $item['key'],
                 'count' => $item['doc_count'],
+                'icon' => (isset($item['thumbnail']['buckets'][0]['key']) ? $item['thumbnail']['buckets'][0]['key'] : null),
                 'query' => [
                     'entity' => 'deal',
                     'filters' => [
