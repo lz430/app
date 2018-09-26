@@ -365,7 +365,7 @@ class Importer
         $baseFile = basename($source['path'], '.csv');
         $sourceFile = $source['path'];
         $targetFile = $Path . '/' . $baseFile . '-' . date('m-d-Y') . '.csv';
-        File::move($sourceFile, $targetFile);
+        File::copy($sourceFile, $targetFile);
     }
 
 
