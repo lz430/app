@@ -262,7 +262,7 @@
             border-radius: 4px;
             border: 2px solid $gray-300;
             padding: 0.25rem;
-            width: 150px;
+            width: 70px;
             @include media-breakpoint-up(md) {
                 width: 300px;
             }
@@ -273,7 +273,7 @@
         position: absolute;
         padding: 0;
         top: 40px;
-        right: -7%;
+        right: -114%;
         @include media-breakpoint-up(md) {
             right: auto;
             left: -7%;
