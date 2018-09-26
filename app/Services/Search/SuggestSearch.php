@@ -12,9 +12,15 @@ class SuggestSearch extends BaseSearch
             "aggs" => [
                 "makes" => [
                     "filter" => [
-                        "wildcard" => [
-                            "make" => "*" . $query . "*"
-                        ]
+                        'bool' => [
+                            'must' => [
+                                [
+                                    "wildcard" => [
+                                        "make" => "*" . $query . "*"
+                                    ]
+                                ]
+                            ]
+                        ],
                     ],
                     "aggs" => [
                         "data" => [
@@ -31,9 +37,15 @@ class SuggestSearch extends BaseSearch
                     "aggs" => [
                         "model" => [
                             "filter" => [
-                                "wildcard" => [
-                                    "category.title" => "*" . $query . "*"
-                                ]
+                                'bool' => [
+                                    'must' => [
+                                        [
+                                            "wildcard" => [
+                                                "category.title" => "*" . $query . "*"
+                                            ]
+                                        ]
+                                    ]
+                                ],
                             ],
                             "aggs" => [
                                 "data" => [
@@ -70,9 +82,15 @@ class SuggestSearch extends BaseSearch
                 ],
                 "styles" => [
                     "filter" => [
-                        "wildcard" => [
-                            "style" => "*" . $query . "*"
-                        ]
+                        'bool' => [
+                            'must' => [
+                                [
+                                    "wildcard" => [
+                                        "style" => "*" . $query . "*"
+                                    ]
+                                ]
+                            ]
+                        ],
                     ],
                     "aggs" => [
                         "data" => [

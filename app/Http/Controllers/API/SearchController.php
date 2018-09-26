@@ -17,8 +17,9 @@ class SearchController extends BaseAPIController
         ]);
 
         $query = new SuggestSearch();
-
         $query = $query->setSuggestQuery($request->get('query'));
+        $query = $query->filterMustGenericRules();
+
         $results = $query->get();
         return fractal()
             ->item($results)

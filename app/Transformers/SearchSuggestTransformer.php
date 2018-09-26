@@ -46,7 +46,7 @@ class SearchSuggestTransformer extends TransformerAbstract
                     ],
                 ]
             ];
-            $return['make'][] = $data;
+            $return['style'][] = $data;
         }
         foreach($response['aggregations']['models']['model']['data']['buckets'] as $item) {
             $data = [

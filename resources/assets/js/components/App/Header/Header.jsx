@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import ReactRouterPropTypes from 'react-router-prop-types';
 
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+
+import { withRouter } from 'react-router-dom';
 import { Navbar, NavbarBrand } from 'reactstrap';
 
 import UserLocationModal from './UserLocationModal';
@@ -12,9 +16,10 @@ import { getCurrentPageIsInCheckout } from 'apps/page/selectors';
 import { toggleCompare } from 'apps/common/actions';
 import ChatWidget from '../ChatWidget';
 import Location from 'icons/zondicons/Location';
-import Phone from '../../../icons/zondicons/Phone';
+import Phone from 'icons/zondicons/Phone';
 import SearchWidget from './SearchWidget';
-import { headerRequestAutocomplete } from '../../../apps/page/actions';
+import { headerRequestAutocomplete } from 'apps/page/actions';
+import { getSearchQuery } from 'pages/deal-list/selectors';
 
 class Header extends React.PureComponent {
     static propTypes = {
@@ -25,6 +30,10 @@ class Header extends React.PureComponent {
         onToggleCompare: PropTypes.func.isRequired,
         onRequestSearch: PropTypes.func.isRequired,
         autocompleteResults: PropTypes.object,
+        searchQuery: PropTypes.object,
+        history: ReactRouterPropTypes.history.isRequired,
+        location: ReactRouterPropTypes.location.isRequired,
+        match: ReactRouterPropTypes.match.isRequired,
     };
 
     state = {
@@ -98,12 +107,14 @@ class Header extends React.PureComponent {
                 <NavbarBrand href="/">
                     <img src="/images/dmr-logo.svg" />
                 </NavbarBrand>
-                <div className="mr-auto" />
+                {/* <div className="mr-auto" /> */}
+                <SearchWidget
+                    onRequestSearch={this.props.onRequestSearch}
+                    autocompleteResults={this.props.autocompleteResults}
+                    history={this.props.history}
+                    searchQuery={this.props.searchQuery}
+                />
                 <div className="navbar-text">
-                    <SearchWidget
-                        onRequestSearch={this.props.onRequestSearch}
-                        autocompleteResults={this.props.autocompleteResults}
-                    />
                     <ChatWidget style="header" />
                     {this.renderPhoneWidget()}
                     <CompareWidget
@@ -133,6 +144,7 @@ const mapStateToProps = state => {
         currentPageIsInCheckout: getCurrentPageIsInCheckout(state),
         compareList: state.common.compareList,
         autocompleteResults: state.page.headerAutocompleteResults,
+        searchQuery: getSearchQuery(state),
     };
 };
 
@@ -150,7 +162,10 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+export default compose(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
+    withRouter
 )(Header);
