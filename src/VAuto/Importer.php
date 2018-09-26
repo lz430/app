@@ -20,6 +20,9 @@ use Illuminate\Database\QueryException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+
 use League\Csv\Reader;
 use League\Csv\Statement;
 
@@ -353,6 +356,16 @@ class Importer
         $this->debug['stop'] = microtime(true);
         $time = $this->debug['stop'] - $this->debug['start'];
         $this->info("Execution Time: {$time}");
+
+        //Copies vauto dump file for current day and saves per date for archives
+        $Path = storage_path() . '/app/public/importbackups';
+        if (!file_exists($Path)) {
+            File::makeDirectory($Path);
+        }
+        $baseFile = basename($source['path'], '.csv');
+        $sourceFile = $source['path'];
+        $targetFile = $Path . '/' . $baseFile . '-' . date('m-d-Y') . '.csv';
+        File::move($sourceFile, $targetFile);
     }
 
 
