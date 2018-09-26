@@ -542,7 +542,6 @@ class VersionToVehicle
             return in_array($params['model'], $vehicle->filters->MODEL);
         });
 
-
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
 

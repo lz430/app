@@ -2,10 +2,10 @@ import { track } from 'services';
 
 import * as ActionTypes from './consts';
 
-export function initDealListData(url) {
+export function initDealListData(data) {
     return {
         type: ActionTypes.INIT,
-        data: url,
+        data: data,
     };
 }
 

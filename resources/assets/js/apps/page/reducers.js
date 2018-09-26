@@ -6,12 +6,13 @@ import * as ActionTypes from './consts';
 const initialState = {
     current: null,
     isLoading: false,
+    headerAutocompleteResults: {},
 };
 
 const persistConfig = {
     ...basePersistConfig,
     key: 'page',
-    blacklist: ['current', 'isLoading'],
+    blacklist: ['current', 'isLoading', 'headerAutocompleteResults'],
 };
 
 const reducer = function(state = initialState, action = {}) {
@@ -30,6 +31,11 @@ const reducer = function(state = initialState, action = {}) {
             return {
                 ...state,
                 isLoading: false,
+            };
+        case ActionTypes.RECEIVE_AUTOCOMPLETE:
+            return {
+                ...state,
+                headerAutocompleteResults: action.data,
             };
         default:
             return state;

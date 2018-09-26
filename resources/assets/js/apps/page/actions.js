@@ -18,3 +18,17 @@ export function pageLoadingFinished() {
         type: ActionTypes.PAGE_LOADING_FINISHED,
     };
 }
+
+export function headerRequestAutocomplete(query) {
+    return {
+        type: ActionTypes.REQUEST_AUTOCOMPLETE,
+        data: query,
+    };
+}
+
+export function headerReceiveAutocomplete(data) {
+    return {
+        type: ActionTypes.RECEIVE_AUTOCOMPLETE,
+        data: data,
+    };
+}

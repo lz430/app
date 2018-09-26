@@ -196,35 +196,16 @@ function* searchToggleFilter(action) {
  * Init
  ********************************************************************/
 function* init(action) {
-    yield* initPage('deal-list');
-
-    let userCurrentLocation = yield select(getUserLocation);
-
-    const urlStyle = getInitialBodyStyleFromUrl();
-    const urlSize = getInitialSizeFromUrl();
-
-    if (urlStyle || urlSize) {
-        let filters = [];
-
-        if (urlSize) {
-            filters.push('size:' + urlSize);
-        }
-
-        if (urlStyle) {
-            filters.push('style:' + urlStyle);
-        }
-
-        yield put(DealListActions.searchReset());
-        yield put(DealListActions.setSearchFilters(filters));
-
-        window.history.replaceState({}, document.title, '/filter');
+    const { location, dataOnly } = action.data;
+    if (!dataOnly) {
+        yield* initPage('deal-list');
     }
 
     // User is coming in fresh without any existing state.
     // Means the user either clicked a deep link or came from
     // the brochure site.
-    if (action.data.state === undefined) {
-        const query = queryString.parse(action.data.search, {
+    if (location.state === undefined) {
+        const query = queryString.parse(location.search, {
             arrayFormat: 'bracket',
         });
 
@@ -247,16 +228,19 @@ function* init(action) {
         }
     }
 
-    const dealListPage = yield select(getDealList);
+    if (!dataOnly) {
+        const dealListPage = yield select(getDealList);
+        let userCurrentLocation = yield select(getUserLocation);
 
-    if (
-        dealListPage.showMakeSelectorModal === null &&
-        userCurrentLocation.latitude
-    ) {
-        yield put(DealListActions.openMakeSelectorModal());
+        if (
+            dealListPage.showMakeSelectorModal === null &&
+            userCurrentLocation.latitude
+        ) {
+            yield put(DealListActions.openMakeSelectorModal());
+        }
+
+        track('page:search:view');
     }
-
-    track('page:search:view');
 
     yield put({ type: SEARCH_REQUEST });
 }

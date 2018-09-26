@@ -36,6 +36,22 @@ class BrowseService {
             params: params,
         });
     }
+
+    /**
+     * @param query
+     * @param cancelToken
+     * @returns {*}
+     */
+    autocomplete(query, cancelToken) {
+        let params = {
+            query: query,
+        };
+
+        return httpclient.get('/api/search', {
+            cancelToken: cancelToken,
+            params: params,
+        });
+    }
 }
 
 export default BrowseService;

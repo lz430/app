@@ -244,3 +244,96 @@
     cursor: default;
     font-weight: bold;
 }
+
+.search {
+    margin: 0 0 0 auto;
+
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @include media-breakpoint-up(md) {
+        margin: 0 auto;
+    }
+    &__input {
+        padding-right: 1rem;
+        input {
+            border-radius: 4px;
+            border: 2px solid $gray-300;
+            padding: 0.25rem;
+            width: 150px;
+            @include media-breakpoint-up(md) {
+                width: 300px;
+            }
+        }
+    }
+    &__results {
+        width: 350px;
+        position: absolute;
+        padding: 0;
+        top: 40px;
+        right: -7%;
+
+        @include media-breakpoint-up(md) {
+            right: auto;
+            left: -7%;
+        }
+        background: #fff;
+        box-shadow: $box-shadow-sm;
+        border: 1px solid $primary;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        &__category {
+            &__header {
+                background: $color-lighter-blue;
+                color: $color-darkergrey;
+                padding: 0.25rem;
+                font-weight: bold;
+            }
+        }
+        &__item {
+            display: flex;
+            &__icon {
+                display: flex;
+                min-width: 50px;
+                max-width: 50px;
+                max-height: 50px;
+                align-items: center;
+                align-content: center;
+                img {
+                    max-width: 50px;
+                    max-height: 50px;
+                }
+                svg {
+                    max-width: 50px;
+                    max-height: 50px;
+                }
+            }
+            &__title {
+                flex: 1 1 auto;
+                padding: 0 1rem;
+                margin-bottom: 0.25rem;
+                &__label {
+                    font-weight: bold;
+                }
+                &__count {
+                }
+            }
+            &__cta {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+        ul {
+            list-style: none;
+            margin-bottom: 0;
+            padding: 0.25rem;
+            li {
+                padding: 0.1rem;
+                cursor: pointer;
+            }
+        }
+    }
+}

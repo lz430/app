@@ -540,10 +540,10 @@ class Deal extends Model
         $record['is_active'] = true;
 
         // Deal should not be active if it has been purchased
-        if($this->status == 'sold') {
+        if ($this->status == 'sold') {
             $record['is_active'] = false;
         }
-        
+
         //
         // Vehicle identification information
         $record['vin'] = $this->vin;
@@ -558,11 +558,11 @@ class Deal extends Model
         $record['model_code'] = $this->model_code;
         $record['series'] = $this->series;
         $record['style'] = $this->version->style();
-        $record['seating_capacity'] = (int) $this->seating_capacity;
+        $record['seating_capacity'] = (int)$this->seating_capacity;
         $record['status'] = $this->status;
 
         $filterColor = null;
-        if(isset(\DeliverMyRide\Fuel\Map::COLOR_MAP[$this->color])) {
+        if (isset(\DeliverMyRide\Fuel\Map::COLOR_MAP[$this->color])) {
             $filterColor = \DeliverMyRide\Fuel\Map::COLOR_MAP[$this->color];
             $dealFeatureColor = Feature::where('title', $filterColor)->first();
             if ($dealFeatureColor) {
