@@ -1,4 +1,5 @@
 import React from 'react';
+import { splitEvery } from 'ramda';
 import {
     Carousel,
     CarouselItem,
@@ -7,7 +8,6 @@ import {
     CardBody,
 } from 'reactstrap';
 
-import Phone from 'icons/zondicons/Phone';
 import { ExtraLargeAndUp, LargeAndDown } from 'components/Responsive';
 
 class ListTopMessaging extends React.PureComponent {
@@ -17,24 +17,24 @@ class ListTopMessaging extends React.PureComponent {
 
     items = [
         {
+            title: 'Skip the Dealership',
+            content: 'buy or lease 100% online',
+        },
+        {
+            title: 'All Real Inventory',
+            content: 'from our local dealer partners',
+        },
+        {
+            title: 'Free Delivery',
+            content: 'to your home or office',
+        },
+        {
+            title: '3-Day Return Policy',
+            content: 'on all delivered vehicles',
+        },
+        {
             title: 'Transparent Pricing',
-            content:
-                "Can't find what you're looking for? Questions about trade in?",
-        },
-        {
-            title: 'Free Delivery To You',
-            content:
-                "Can't find what you're looking for? Questions about trade in?",
-        },
-        {
-            title: 'Message A',
-            content:
-                "Can't find what you're looking for? Questions about trade in?",
-        },
-        {
-            title: 'Message B',
-            content:
-                "Can't find what you're looking for? Questions about trade in?",
+            content: 'no hidden taxes or fees',
         },
     ];
 
@@ -47,9 +47,10 @@ class ListTopMessaging extends React.PureComponent {
     }
 
     next() {
+        const count = Math.ceil(this.items.length / 2);
         if (this.animating) return;
         const nextIndex =
-            this.state.activeIndex === this.items.length - 1
+            this.state.activeIndex === count - 1
                 ? 0
                 : this.state.activeIndex + 1;
         this.setState({ activeIndex: nextIndex });
@@ -57,9 +58,11 @@ class ListTopMessaging extends React.PureComponent {
 
     previous() {
         if (this.animating) return;
+        const count = Math.ceil(this.items.length / 2);
+
         const nextIndex =
             this.state.activeIndex === 0
-                ? this.items.length - 1
+                ? count - 1
                 : this.state.activeIndex - 1;
         this.setState({ activeIndex: nextIndex });
     }
@@ -68,9 +71,6 @@ class ListTopMessaging extends React.PureComponent {
         return (
             <Card key={item.title} className="inventory-summary cta-message">
                 <CardBody>
-                    <div className="cta-message__icon">
-                        <Phone />
-                    </div>
                     <div className="cta-message__content">
                         <h6>{item.title}</h6>
                         <p>{item.content}</p>
@@ -81,14 +81,16 @@ class ListTopMessaging extends React.PureComponent {
     }
 
     renderSlides() {
-        return this.items.map(item => {
+        return splitEvery(2, this.items).map((group, index) => {
             return (
                 <CarouselItem
                     onExiting={this.onExiting.bind(this)}
                     onExited={this.onExited.bind(this)}
-                    key={item.title}
+                    key={index}
                 >
-                    {this.renderCta(item, 'carousel')}
+                    {group.map(item => {
+                        return this.renderCta(item, 'carousel');
+                    })}
                 </CarouselItem>
             );
         });
