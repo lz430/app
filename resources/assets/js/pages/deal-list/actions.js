@@ -23,7 +23,11 @@ export function requestSearch() {
 }
 
 export function receiveSearch(results) {
-    if (results.meta.total !== null && results.meta.total !== undefined) {
+    if (
+        results.meta &&
+        results.meta.total !== null &&
+        results.meta.total !== undefined
+    ) {
         track('search:results:receive', {
             'Search Results Total': results.meta.total,
             'Search Results Entity': results.meta.entity,

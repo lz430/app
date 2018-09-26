@@ -1,19 +1,4 @@
 import * as R from 'ramda';
-import qs from 'qs';
-
-/**
- *
- */
-export const getInitialSizeFromUrl = () => {
-    return R.prop('size', qs.parse(window.location.search.slice(1)));
-};
-
-/**
- *
- */
-export const getInitialBodyStyleFromUrl = () => {
-    return R.prop('style', qs.parse(window.location.search.slice(1)));
-};
 
 /**
  *
