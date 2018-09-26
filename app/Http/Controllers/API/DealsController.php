@@ -22,6 +22,7 @@ class DealsController extends BaseAPIController
             'strategy' => 'sometimes|required|string',
             'latitude' => 'sometimes|numeric',
             'longitude' => 'sometimes|numeric',
+            'page' => 'sometimes|integer|min:1|max:100',
         ]);
 
         $query = new DealSearch();
@@ -51,6 +52,10 @@ class DealsController extends BaseAPIController
         $page = ($request->get('page') ? $request->get('page') - 1 : 0);
 
         $per_page = 24;
+
+
+
+
         $query = $query
             ->size($per_page)
             ->from($page * $per_page);

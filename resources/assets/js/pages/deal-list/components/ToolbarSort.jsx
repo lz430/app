@@ -81,6 +81,8 @@ class ToolbarSort extends React.Component {
     }
 
     render() {
+        const active = this.findActive();
+
         return (
             <div className="toolbar-sort">
                 <Dropdown
@@ -89,7 +91,7 @@ class ToolbarSort extends React.Component {
                     toggle={this.toggle.bind(this)}
                 >
                     <DropdownToggle caret color="outline-primary">
-                        {this.findActive().label}
+                        {active && active.label}
                     </DropdownToggle>
                     <DropdownMenu>
                         {this.sorts.map(item => {

@@ -123,6 +123,7 @@ const reducer = function(state = initialState, action = {}) {
                     searchQuery: {
                         ...state.searchQuery,
                         entity: 'model',
+                        filters: [],
                     },
                     deals: [],
                     modelYears: [],

@@ -27,6 +27,7 @@ class Client
             "/contacts/v1/contact/createOrUpdate/email/{$payload['email']}?hapikey=" . config('services.hubspot.api_key'),
             [
                 'json' => ['properties' => $this->generateHubspotPayloadFrom($payload)],
+                'http_errors' => false
             ]
         );
         return json_decode((string) $response->getBody(), true);

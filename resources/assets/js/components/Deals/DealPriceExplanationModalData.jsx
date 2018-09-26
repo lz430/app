@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 import { dealType, dealPricingType } from 'types';
 
 import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
-import Group from '../pricing/Group';
 import Line from '../pricing/Line';
-import Label from '../pricing/Label';
-import Value from '../pricing/Value';
 import CashPriceExplanation from './CashPriceExplanation';
 import FinancePriceExplanation from './FinancePriceExplanation';
 import LeasePriceExplanation from './LeasePriceExplanation';
@@ -92,7 +89,6 @@ class DealPriceExplanationModalData extends React.PureComponent {
                             <CustomizeQuoteOrBuyNowButton
                                 onCustomizeQuote={() => this.selectDeal()}
                                 deal={this.props.dealPricing.deal()}
-                                hasCustomizedQuote={false}
                                 disabled={!this.props.dealPricing.canPurchase()}
                             />
                         </div>

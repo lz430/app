@@ -126,7 +126,7 @@
             width: 100%;
             object-fit: cover;
             &.placeholder {
-                max-height: 210px;
+                max-height: 130px;
             }
 
             &:hover {
@@ -286,6 +286,11 @@
     }
 }
 .top-messaging {
+    .cta-message {
+        @include media-breakpoint-up(lg) {
+            margin-bottom: 10px !important;
+        }
+    }
     @include media-breakpoint-up(md) {
         padding: 2rem 4rem 0 4rem;
     }
@@ -295,11 +300,21 @@
 }
 
 .cta-message-carousel {
+    .carousel-item {
+        background: #fff;
+        &.active {
+            display: flex;
+            position: relative;
+        }
+    }
     .inventory-summary {
         max-width: none;
         min-width: 0;
-        width: auto;
-        @include media-breakpoint-up(md) {
+        width: 50%;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        @include media-breakpoint-up(lg) {
             padding: 2rem;
         }
     }

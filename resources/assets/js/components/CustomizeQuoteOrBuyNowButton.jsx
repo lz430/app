@@ -2,7 +2,7 @@ import React from 'react';
 
 class CustomizeQuoteOrBuyNowButton extends React.PureComponent {
     static defaultProps = {
-        onBuyNow: deal => (window.location = `/confirm/${deal.id}`),
+        onBuyNow: deal => (window.location = `/checkout/confirm`),
         disabled: true,
     };
 
@@ -20,21 +20,8 @@ class CustomizeQuoteOrBuyNowButton extends React.PureComponent {
         );
     }
 
-    renderCustomizeQuote() {
-        return (
-            <button
-                onClick={() => this.props.onCustomizeQuote(this.props.deal)}
-                className="btn btn-success"
-            >
-                Customize This Deal
-            </button>
-        );
-    }
-
     render() {
-        return this.props.hasCustomizedQuote
-            ? this.renderBuyNow()
-            : this.renderCustomizeQuote();
+        return this.renderBuyNow();
     }
 }
 
