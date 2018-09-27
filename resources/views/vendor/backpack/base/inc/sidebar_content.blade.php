@@ -46,11 +46,10 @@
         <span>Version w/ No Photos</span>
     </a>
 </li>
-
-<li class="header">Archived vAuto Dumps</li>
 <li>
     <a href="/admin/archived-dumps">
         <i class="fa fa-file"></i>
         <span>Archived Dumps</span>
     </a>
 </li>
+
