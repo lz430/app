@@ -459,8 +459,10 @@ class Importer
             'days_old' => (is_numeric($row['Age'])) ? $row['Age'] : 0,
             'version_id' => $version->id,
             'source_price' => $pricing,
-            'status' => 'available',
-            'sold_at' => null,
+            // TODO: we should mark things as available if they are in the feed, but only if they weren't sold via DMR somehow.
+            //
+            //'status' => 'available',
+            //'sold_at' => null,
         ]);
 
         return $deal;
