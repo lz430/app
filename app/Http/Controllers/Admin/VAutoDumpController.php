@@ -32,10 +32,14 @@ class VAutoDumpController extends Controller
 
     public function getFiles()
     {
-        $files = File::files(realpath(base_path('storage/app/public/importbackups')));
+        $files = File::isDirectory(realpath(base_path('storage/app/public/importbackups'))) ? File::files(realpath(base_path('storage/app/public/importbackups'))) : null;
         $data = [];
-        foreach($files as $file) {
-            $data[]['filename'] = $file->getFilename();
+        if(isset($files)) {
+            foreach($files as $file) {
+                $data[]['filename'] = $file->getFilename();
+            }
+        } else {
+            $data = null;
         }
         return view('admin.vauto-archives', ['dumps' => $data]);
     }
