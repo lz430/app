@@ -108,6 +108,7 @@ export default class LeaseTermsSelect extends React.PureComponent {
         return (
             <Modal
                 size="content-fit"
+                centered
                 isOpen={this.props.isOpen || false}
                 toggle={this.props.toggle}
             >

@@ -264,6 +264,9 @@
             padding: 0.25rem;
             width: 70px;
             @include media-breakpoint-up(md) {
+                width: 150px;
+            }
+            @include media-breakpoint-up(xl) {
                 width: 300px;
             }
         }
