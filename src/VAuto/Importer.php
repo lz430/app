@@ -459,6 +459,8 @@ class Importer
             'days_old' => (is_numeric($row['Age'])) ? $row['Age'] : 0,
             'version_id' => $version->id,
             'source_price' => $pricing,
+            'status' => 'available',
+            'sold_at' => null,
         ]);
 
         return $deal;
