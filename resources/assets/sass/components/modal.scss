@@ -23,7 +23,9 @@
             font-size: 1.25rem;
         }
     }
+
     .close {
+        z-index: 55;
         padding: 0.625rem;
         position: absolute;
         right: 0;

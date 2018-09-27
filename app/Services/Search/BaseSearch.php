@@ -3,7 +3,6 @@
 namespace App\Services\Search;
 
 use App\Models\Deal;
-use App\Models\JATO\Make;
 use App\Models\JATO\VehicleModel;
 
 

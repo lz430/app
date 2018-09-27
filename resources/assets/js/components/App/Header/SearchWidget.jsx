@@ -4,6 +4,8 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { buildSearchQueryUrl } from 'pages/deal-list/helpers';
 import StyleIcon from 'components/Deals/StyleIcon';
+import Search from '../../../icons/zondicons/Search';
+import ArrowOutlineLeft from '../../../icons/zondicons/ArrowOutlineLeft';
 
 class SearchWidget extends React.PureComponent {
     static propTypes = {
@@ -155,6 +157,7 @@ class SearchWidget extends React.PureComponent {
                         placeholder="Search..."
                         required
                     />
+                    <Search height="20px" width="20px" />
                 </div>
                 {this.state.query && this.renderSearchResults()}
             </div>
