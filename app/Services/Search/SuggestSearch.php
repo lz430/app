@@ -50,6 +50,7 @@ class SuggestSearch extends BaseSearch
                             "aggs" => [
                                 "data" => [
                                     "terms" => [
+                                        'size' => 7,
                                         "field" => "category.title.keyword"
                                     ],
                                     "aggs" => [

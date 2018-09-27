@@ -257,14 +257,27 @@
         margin: 0 auto;
     }
     &__input {
-        padding-right: 1rem;
+        position: absolute;
         input {
-            border-radius: 4px;
-            border: 2px solid $gray-300;
-            padding: 0.25rem;
-            width: 150px;
+            border-radius: 12px;
+            border: 2px solid $primary;
+            padding: 0.25rem 2rem 0.25rem 1rem;
+            width: 70px;
             @include media-breakpoint-up(md) {
+                width: 150px;
+            }
+            @include media-breakpoint-up(xl) {
                 width: 300px;
+            }
+        }
+        svg {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 9px;
+            right: 10px;
+            path {
+                fill: $primary;
             }
         }
     }
@@ -272,11 +285,10 @@
         width: 350px;
         position: absolute;
         padding: 0;
-        top: 40px;
-        right: -7%;
+        top: 23px;
+        right: -114%;
         @include media-breakpoint-up(md) {
             right: auto;
-            left: -7%;
         }
         background: #fff;
         box-shadow: $box-shadow-sm;
@@ -295,18 +307,18 @@
             display: flex;
             &__icon {
                 display: flex;
-                min-width: 50px;
-                max-width: 50px;
-                max-height: 50px;
+                min-width: 40px;
+                max-width: 40px;
+                max-height: 40px;
                 align-items: center;
                 align-content: center;
                 img {
-                    max-width: 50px;
-                    max-height: 50px;
+                    max-width: 40px;
+                    max-height: 40px;
                 }
                 svg {
-                    max-width: 50px;
-                    max-height: 50px;
+                    max-width: 40px;
+                    max-height: 40px;
                 }
             }
             &__title {
@@ -317,6 +329,7 @@
                     font-weight: bold;
                 }
                 &__count {
+                    font-size: 0.75rem;
                 }
             }
             &__cta {
@@ -332,6 +345,9 @@
             li {
                 padding: 0.1rem;
                 cursor: pointer;
+                &:last-child {
+                    padding-bottom: 0;
+                }
             }
         }
     }
