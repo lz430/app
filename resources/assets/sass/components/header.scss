@@ -246,7 +246,7 @@
 }
 
 .search {
-    margin: 0 0 0 auto;
+    margin: 0 1rem 0 auto;
 
     position: relative;
     display: flex;
@@ -257,13 +257,16 @@
         margin: 0 auto;
     }
     &__input {
-        position: absolute;
+        position: relative;
+
         input {
             border-radius: 12px;
-            border: 2px solid $primary;
-            padding: 0.25rem 2rem 0.25rem 1rem;
-            width: 70px;
+            padding: 0.1rem 2rem 0.1rem 1rem;
+            border: 1px solid $primary;
+            width: 125px;
             @include media-breakpoint-up(md) {
+                padding: 0.25rem 2rem 0.25rem 1rem;
+                border: 2px solid $primary;
                 width: 150px;
             }
             @include media-breakpoint-up(xl) {
@@ -274,20 +277,25 @@
             width: 20px;
             height: 20px;
             position: absolute;
-            top: 9px;
+            top: 5px;
             right: 10px;
+
+            @include media-breakpoint-up(md) {
+                top: 9px;
+            }
             path {
                 fill: $primary;
             }
         }
     }
     &__results {
-        width: 350px;
+        width: 280px;
         position: absolute;
         padding: 0;
-        top: 23px;
-        right: -114%;
+        top: 40px;
+        right: -10%;
         @include media-breakpoint-up(md) {
+            width: 350px;
             right: auto;
         }
         background: #fff;
@@ -336,6 +344,9 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                .btn {
+                    font-size: 0.6rem;
+                }
             }
         }
         ul {

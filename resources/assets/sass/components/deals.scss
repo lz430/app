@@ -54,19 +54,20 @@
     z-index: 50;
     display: flex;
     flex: 1;
-    > div {
+    > .toolbar-item {
         border-top: 2px solid $primary;
-        display: inline-flex;
+        display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         flex: 1;
         cursor: pointer;
         padding: 0.25rem;
-        border-right: 2px solid $primary;
         background: #fbfbfb;
         &.active {
             border-top: 0;
             background: #fff;
+            box-shadow: $box-shadow-sm;
         }
         &.dropdown {
             padding: 0;
@@ -79,10 +80,13 @@
         &:last-child {
             border-right: 0;
         }
+        div {
+            font-size: 0.85rem;
+            line-height: 1rem;
+        }
         svg {
             position: relative;
             top: -1px;
-            margin-right: 0.25rem;
         }
     }
 }

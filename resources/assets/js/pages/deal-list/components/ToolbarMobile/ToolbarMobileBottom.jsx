@@ -80,7 +80,7 @@ class ToolbarMobileBottom extends React.Component {
                     height="16px"
                     className="sortbar__filter-toggle-icon"
                 />{' '}
-                Model
+                <div>Model</div>
             </div>
         );
     }
@@ -147,7 +147,7 @@ class ToolbarMobileBottom extends React.Component {
                             height="16px"
                             className="sortbar__filter-toggle-icon"
                         />
-                        Filter
+                        <div>Filter</div>
                     </div>
                     <div
                         className={classNames('toolbar-item', {
@@ -159,7 +159,7 @@ class ToolbarMobileBottom extends React.Component {
                             height="16px"
                             className="sortbar__filter-toggle-icon"
                         />
-                        Sort
+                        <div>Sort</div>
                     </div>
                     <div
                         className={classNames('toolbar-item', {
@@ -171,7 +171,7 @@ class ToolbarMobileBottom extends React.Component {
                             height="16px"
                             className="sortbar__filter-toggle-icon"
                         />
-                        Payment
+                        <div>Payment</div>
                     </div>
                     {this.props.searchQuery.entity === 'deal' &&
                         this.renderBackButton()}
