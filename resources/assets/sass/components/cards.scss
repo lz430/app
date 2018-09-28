@@ -277,11 +277,18 @@
             padding: 0;
             color: $primary;
             font-weight: bold;
+            font-size: 0.9rem;
+            @include media-breakpoint-up(sm) {
+                font-size: 1rem;
+            }
         }
         p {
             color: $gray-800;
             margin: 0;
-            font-size: 0.85rem;
+            font-size: 0.65rem;
+            @include media-breakpoint-up(sm) {
+                font-size: 0.85rem;
+            }
         }
     }
 }
