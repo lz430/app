@@ -246,7 +246,7 @@
 }
 
 .search {
-    margin: 0 1rem 0 auto;
+    margin: 0 0.5rem 0 auto;
 
     position: relative;
     display: flex;
@@ -293,10 +293,10 @@
         position: absolute;
         padding: 0;
         top: 40px;
-        right: -10%;
+        left: -90%;
         @include media-breakpoint-up(md) {
             width: 350px;
-            right: auto;
+            left: auto;
         }
         background: #fff;
         box-shadow: $box-shadow-sm;
