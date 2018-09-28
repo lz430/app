@@ -46,8 +46,8 @@ class DealQuote {
         $manager->setConsumerRole($primaryRole, $conditionalRoles);
         $manager->searchForVehicleAndPrograms();
         $manager->setScenario();
-        $this->potentialConditionalRoles = $manager->getPotentialConditionals();
         $this->ratesAndRebatesData = $manager->getData();
+        $this->potentialConditionalRoles = $manager->getPotentialConditionals();
     }
 
     /**
