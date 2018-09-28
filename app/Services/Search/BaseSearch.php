@@ -310,8 +310,9 @@ abstract class BaseSearch
         $byCategory = [];
 
         foreach ($filters as $filter) {
-            $filter = explode(":", $filter);
-            if (!count($filter) == 2) {
+            $findAndReplace = str_replace("%3A", ":", $filter);
+            $filter = explode(":", $findAndReplace);
+            if (count($filter) == 2) {
                 continue;
             }
 
