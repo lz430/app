@@ -107,6 +107,21 @@ class RebatesRole extends React.Component {
         if (!labels) {
             return false;
         }
+
+        let canUserHaveRebatePerAffinity;
+        if (
+            this.props.role.isSelected === true &&
+            this.props.role.isApplied === false
+        ) {
+            canUserHaveRebatePerAffinity = (
+                <span style={{ textDecorationLine: 'line-through' }}>
+                    {labels.title}
+                </span>
+            );
+        } else {
+            canUserHaveRebatePerAffinity = labels.title;
+        }
+
         return (
             <Line style={{ margin: '.125em 0 .125em .25em' }}>
                 <Label
@@ -123,7 +138,7 @@ class RebatesRole extends React.Component {
                         checked={this.props.isRoleChecked}
                         onChange={e => this.props.onChange(role)}
                     />
-                    {labels.title}
+                    {canUserHaveRebatePerAffinity}
                 </Label>
 
                 <InformationOutline
