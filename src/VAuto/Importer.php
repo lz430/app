@@ -464,9 +464,8 @@ class Importer
             'version_id' => $version->id,
             'source_price' => $pricing,
             // TODO: we should mark things as available if they are in the feed, but only if they weren't sold via DMR somehow.
-            //
-            //'status' => 'available',
-            //'sold_at' => null,
+            'status' => 'available',
+            'sold_at' => null,
         ]);
 
         return $deal;
