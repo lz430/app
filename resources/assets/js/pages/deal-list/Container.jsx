@@ -175,7 +175,6 @@ const mapDispatchToProps = dispatch => {
         onInit: url => {
             return dispatch(initDealListData(url));
         },
-
         onUpdateEntirePageState: data => {
             return dispatch(updateEntirePageState(data));
         },
