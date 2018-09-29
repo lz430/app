@@ -128,7 +128,6 @@ class Container extends React.Component {
 
     render() {
         if (this.props.isLoading) {
-            console.log('SUP');
             return (
                 <PageContent desktopOnlyFooter={true}>
                     <Loading />
