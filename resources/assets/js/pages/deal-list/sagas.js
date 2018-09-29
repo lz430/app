@@ -52,7 +52,7 @@ const takeSearch = (patternOrChannel, saga, ...args) =>
         while (true) {
             const action = yield take(patternOrChannel);
             const state = yield select(getDealList);
-            if (lastTask && state.page === 1) {
+            if (lastTask && (state.page === 1 || !state.page)) {
                 yield cancel(lastTask); // cancel is no-op if the task has already terminated
             }
             lastTask = yield fork(saga, ...args.concat(action));
@@ -80,9 +80,9 @@ function* requestSearch(action) {
 
     let results = [];
 
-    if (!action.incrementPage) {
-        yield put({ type: SEARCH_LOADING_START });
-    }
+    //    if (!action.incrementPage) {
+    yield put({ type: SEARCH_LOADING_START });
+    //    }
 
     try {
         results = yield call(
@@ -110,9 +110,9 @@ function* requestSearch(action) {
         }
     }
 
-    if (!action.incrementPage) {
-        yield put({ type: SEARCH_LOADING_FINISHED });
-    }
+    //if (!action.incrementPage) {
+    yield put({ type: SEARCH_LOADING_FINISHED });
+    //}
 
     const urlQuery = buildSearchQueryUrl(searchQuery);
     if (urlQuery) {

@@ -9,6 +9,7 @@ import ViewDeals from './ViewDeals';
 import ViewModels from './ViewModels';
 import Loading from 'icons/miscicons/Loading';
 import { getUserLocation } from 'apps/user/selectors';
+import { getSearchPage } from '../selectors';
 
 class ResultsList extends React.PureComponent {
     static propTypes = {
@@ -18,10 +19,26 @@ class ResultsList extends React.PureComponent {
         deals: PropTypes.arrayOf(dealType),
         zipInRange: PropTypes.bool,
         searchQuery: PropTypes.object.isRequired,
+        currentSearchPage: PropTypes.number,
     };
     render() {
-        // Requesting something
-        if (this.props.loadingSearchResults) {
+        // No pagination for models so we just return loading here anytime we
+        // are loading results
+        if (
+            this.props.searchQuery.entity === 'model' &&
+            this.props.loadingSearchResults
+        ) {
+            return <Loading />;
+        }
+
+        //
+        // We only want to show loading here for deals if we're on the first page.
+        if (
+            this.props.searchQuery.entity === 'deal' &&
+            this.props.loadingSearchResults &&
+            (this.props.currentSearchPage === 1 ||
+                !this.props.currentSearchPage)
+        ) {
             return <Loading />;
         }
 
@@ -56,6 +73,7 @@ class ResultsList extends React.PureComponent {
 function mapStateToProps(state) {
     return {
         deals: state.pages.dealList.deals,
+        currentSearchPage: getSearchPage(state),
         loadingSearchResults: state.pages.dealList.loadingSearchResults,
         location: getUserLocation(state),
         modelYears: state.pages.dealList.modelYears,

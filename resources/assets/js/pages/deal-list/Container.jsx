@@ -128,6 +128,7 @@ class Container extends React.Component {
 
     render() {
         if (this.props.isLoading) {
+            console.log('SUP');
             return (
                 <PageContent desktopOnlyFooter={true}>
                     <Loading />
@@ -175,7 +176,6 @@ const mapDispatchToProps = dispatch => {
         onInit: url => {
             return dispatch(initDealListData(url));
         },
-
         onUpdateEntirePageState: data => {
             return dispatch(updateEntirePageState(data));
         },
