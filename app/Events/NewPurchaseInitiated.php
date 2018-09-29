@@ -39,6 +39,7 @@ class NewPurchaseInitiated
             'trim' => $purchase->deal->series,
             'interior_color' => $purchase->interior_color,
             'deal_id' => $purchase->deal_id,
+            'dealer_r1_id' => $purchase->deal->dealer->route_one_id,
 
             //
             // Dealer Info

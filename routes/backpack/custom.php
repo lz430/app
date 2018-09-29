@@ -36,10 +36,13 @@ Route::group([
     // Reports
     Route::get('reports/versions-missing-images', 'ReportVersionsMissingPhotosController@index');
 
+    // Archived vAuto Dumps
+    Route::get('archived-dumps', 'VAutoDumpController@getFiles');
+    Route::get('archived-dumps/download/{filename}', 'VAutoDumpController@downloadFile');
+
     //
     // Custom Debug tools
     Route::get('jato-logs/{date}', 'JatoLogController@showDay');
     Route::get('jato-logs', 'JatoLogController@index');
-    Route::get('vauto-dump', 'VAutoDumpController');
     Route::get('statistics/deals', 'StatisticsController@deals');
 });

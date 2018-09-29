@@ -3,7 +3,6 @@
 namespace App\Services\Search;
 
 use App\Models\Deal;
-use App\Models\JATO\Make;
 use App\Models\JATO\VehicleModel;
 
 
@@ -40,6 +39,47 @@ abstract class BaseSearch
         'vehicle_size' => 'vehicle_size.keyword',
     ];
 
+    protected const REQUIRED_RULES = [
+        'must' => [
+            [['script' => [
+                "script" => [
+                    "lang" => "painless",
+                    "source" => "doc['pricing.msrp'].value >= doc['pricing.default'].value",
+                ]
+            ]]],
+            ['range' => [
+                'pricing.default' => [
+                    'lte' => '200000',
+                ]
+            ]],
+            ['range' => [
+                'pricing.default' => [
+                    'gte' => '10000',
+                ]
+            ]],
+            ['term' => [
+                'dealer.is_active' => 1,
+            ]],
+            ['term' => [
+                'is_active' => true,
+            ]],
+            ['term' => [
+                'status' => 'available',
+            ]],
+        ],
+        'must_not' => [
+            ['terms' => [
+                'model.keyword' => self::MODEL_BLACKLIST,
+            ]],
+            ['terms' => [
+                'version.description' => self::VERSION_DESCRIPTION_BLACKLIST,
+            ]],
+            ['term' => [
+                'seating_capacity' => 0,
+            ]],
+        ],
+    ];
+
     public $query;
     public $searchers_location;
 
@@ -69,7 +109,6 @@ abstract class BaseSearch
 
     public function getSort(string $sort, string $modifier = null)
     {
-
         $direction = 'asc';
         if (substr($sort, 0, 1) === "-") {
             $direction = 'desc';
@@ -102,48 +141,8 @@ abstract class BaseSearch
 
     public function filterMustGenericRules()
     {
-        $groups = [
-            'must' => [
-                [['script' => [
-                    "script" => [
-                        "lang" => "painless",
-                        "source" => "doc['pricing.msrp'].value >= doc['pricing.default'].value",
-                    ]
-                ]]],
-                ['range' => [
-                    'pricing.default' => [
-                        'lte' => '200000',
-                    ]
-                ]],
-                ['range' => [
-                    'pricing.default' => [
-                        'gte' => '10000',
-                    ]
-                ]],
-                ['term' => [
-                    'dealer.is_active' => 1,
-                ]],
-                ['term' => [
-                    'is_active' => true,
-                ]],
-                ['term' => [
-                    'status' => 'available',
-                ]],
-            ],
-            'must_not' => [
-                ['terms' => [
-                    'model.keyword' => self::MODEL_BLACKLIST,
-                ]],
-                ['terms' => [
-                    'version.description' => self::VERSION_DESCRIPTION_BLACKLIST,
-                ]],
-                ['term' => [
-                    'seating_capacity' => 0,
-                ]],
-            ],
-        ];
 
-        foreach ($groups as $group => $rules) {
+        foreach (self::REQUIRED_RULES as $group => $rules) {
             foreach ($rules as $rule) {
                 $this->query['query']['bool'][$group][] = $rule;
 
@@ -225,6 +224,7 @@ abstract class BaseSearch
         ];
         $this->query['query']['bool']['must'][] = $filterQuery;
         if (isset($this->query['aggs']['makeandstyle'])) {
+            $this->query['aggs']['makeandstyle']['aggs']['style']['filter']['bool']['must'][] = $filterQuery;
             $this->query['aggs']['makeandstyle']['aggs']['make']['filter']['bool']['must'][] = $filterQuery;
         }
 
@@ -310,8 +310,9 @@ abstract class BaseSearch
         $byCategory = [];
 
         foreach ($filters as $filter) {
-            $filter = explode(":", $filter);
-            if (!count($filter) == 2) {
+            $findAndReplace = str_replace("%3A", ":", $filter);
+            $filter = explode(":", $findAndReplace);
+            if (count($filter) == 2) {
                 continue;
             }
 

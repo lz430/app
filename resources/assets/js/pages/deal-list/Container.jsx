@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactRouterPropTypes from 'react-router-prop-types';
+
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { filterItemType } from 'types';
@@ -33,7 +35,7 @@ import { getSearchQuery, getSelectedFiltersByCategory } from './selectors';
 import { setPurchaseStrategy } from 'apps/user/actions';
 import ListTopMessaging from './components/Cta/ListTopMessaging';
 
-class Container extends React.PureComponent {
+class Container extends React.Component {
     static propTypes = {
         purchaseStrategy: PropTypes.string.isRequired,
         searchQuery: PropTypes.object.isRequired,
@@ -49,10 +51,14 @@ class Container extends React.PureComponent {
         onSetPurchaseStrategy: PropTypes.func.isRequired,
         onToggleSearchFilter: PropTypes.func.isRequired,
         onCloseMakeSelectorModal: PropTypes.func.isRequired,
+
+        history: ReactRouterPropTypes.history.isRequired,
+        location: ReactRouterPropTypes.location.isRequired,
+        match: ReactRouterPropTypes.match.isRequired,
     };
 
     componentDidMount() {
-        this.props.onInit(this.props.location);
+        this.props.onInit({ location: this.props.location });
     }
 
     componentDidUpdate(prevProps) {
@@ -74,6 +80,11 @@ class Container extends React.PureComponent {
                 );
 
                 forceCheck();
+            } else {
+                this.props.onInit({
+                    location: this.props.location,
+                    dataOnly: true,
+                });
             }
         }
     }
@@ -95,7 +106,7 @@ class Container extends React.PureComponent {
         return (
             <div className="filter-page__deals">
                 <ToolbarSelectedFilters />
-                {/* <ListTopMessaging /> */}
+                <ListTopMessaging />
                 <ResultsList />
             </div>
         );
@@ -147,7 +158,6 @@ class Container extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
-        window: state.common.window,
         smallFiltersShown: state.pages.dealList.smallFiltersShown,
         makeSelectorModalIsOpen: state.pages.dealList.showMakeSelectorModal,
         searchQuery: getSearchQuery(state),
@@ -165,7 +175,6 @@ const mapDispatchToProps = dispatch => {
         onInit: url => {
             return dispatch(initDealListData(url));
         },
-
         onUpdateEntirePageState: data => {
             return dispatch(updateEntirePageState(data));
         },

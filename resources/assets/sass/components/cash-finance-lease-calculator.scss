@@ -20,7 +20,6 @@
 
     &__lease-table-container {
         overflow: scroll;
-        padding: 20px;
     }
 
     &__lease-table {
@@ -28,12 +27,13 @@
 
         td {
             padding: 5px;
+            text-align: center;
+            border: 1px solid $color-section-bottom-border;
         }
     }
 
     &__lease-table-cell {
         padding: 5px;
-        border: 1px solid $color-section-bottom-border;
 
         &--dark {
             background: $color-grey;
@@ -41,7 +41,6 @@
 
         &--selectable {
             background: $color-text-white;
-            border: 1px solid $color-section-bottom-border;
             color: $color-blue;
             cursor: pointer;
         }
@@ -49,7 +48,6 @@
         &--selected {
             background: $color-blue;
             color: $color-text-white;
-            border: 1px solid $color-section-bottom-border;
             cursor: pointer;
         }
 

@@ -35,7 +35,6 @@
                     <ul>
                         <li><a href="/admin/jato-logs/">JATO Logs</a></li>
                         <li><a href="/admin/statistics/deals">Deals Statistics</a></li>
-                        <li><a href="/admin/vauto-dump/" download>VAuto Dump</a></li>
                     </ul>
                 </div>
             </div>

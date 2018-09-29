@@ -20,6 +20,9 @@ use Illuminate\Database\QueryException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+
 use League\Csv\Reader;
 use League\Csv\Statement;
 
@@ -268,6 +271,8 @@ class Importer
             Log::channel('jato')->error('Importer error for vin [' . $row['VIN'] . ']: ' . $e->getMessage());
             $this->error('Error: ' . $e->getMessage());
             app('sentry')->captureException($e);
+            $querySetErrorStatus = Deal::where('vin', $row['vin']);
+            $querySetErrorStatus->update(['status' => 'error']);
             if ($e->getCode() === 401) {
                 $this->error('401 error connecting to JATO; cancelling the rest of the calls.');
                 throw $e;
@@ -276,6 +281,8 @@ class Importer
             Log::channel('jato')->error('Importer error for vin [' . $row['VIN'] . ']: ' . $e->getMessage());
             $this->error('Error: ' . $e->getMessage());
             app('sentry')->captureException($e);
+            $querySetErrorStatus = Deal::where('vin', $row['vin']);
+            $querySetErrorStatus->update(['status' => 'error']);
         }
     }
 
@@ -353,6 +360,16 @@ class Importer
         $this->debug['stop'] = microtime(true);
         $time = $this->debug['stop'] - $this->debug['start'];
         $this->info("Execution Time: {$time}");
+
+        //Copies vauto dump file for current day and saves per date for archives
+        $Path = storage_path() . '/app/public/importbackups';
+        if (!file_exists($Path)) {
+            File::makeDirectory($Path);
+        }
+        $baseFile = basename($source['path'], '.csv');
+        $sourceFile = $source['path'];
+        $targetFile = $Path . '/' . $baseFile . '-' . date('m-d-Y') . '.csv';
+        File::copy($sourceFile, $targetFile);
     }
 
 
@@ -446,6 +463,7 @@ class Importer
             'days_old' => (is_numeric($row['Age'])) ? $row['Age'] : 0,
             'version_id' => $version->id,
             'source_price' => $pricing,
+            // TODO: we should mark things as available if they are in the feed, but only if they weren't sold via DMR somehow.
             'status' => 'available',
             'sold_at' => null,
         ]);

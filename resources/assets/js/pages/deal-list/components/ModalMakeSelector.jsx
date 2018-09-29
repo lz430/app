@@ -13,7 +13,6 @@ class ModalMakeSelector extends React.PureComponent {
     static propTypes = {
         toggle: PropTypes.func.isRequired,
         isOpen: PropTypes.bool,
-
         makes: PropTypes.arrayOf(filterItemType),
         selectedFiltersByCategory: PropTypes.object.isRequired,
         fallbackLogoImage: PropTypes.string.isRequired,

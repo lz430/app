@@ -244,3 +244,118 @@
     cursor: default;
     font-weight: bold;
 }
+
+.search {
+    margin: 0 0.5rem 0 auto;
+
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &__input {
+        position: relative;
+
+        input {
+            border-radius: 12px;
+            padding: 0.1rem 2rem 0.1rem 1rem;
+            border: 1px solid $primary;
+            width: 125px;
+            @include media-breakpoint-up(md) {
+                padding: 0.25rem 2rem 0.25rem 1rem;
+                border: 2px solid $primary;
+                width: 150px;
+            }
+            @include media-breakpoint-up(xl) {
+                width: 300px;
+            }
+        }
+        svg {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 5px;
+            right: 10px;
+
+            @include media-breakpoint-up(md) {
+                top: 9px;
+            }
+            path {
+                fill: $primary;
+            }
+        }
+    }
+    &__results {
+        width: 280px;
+        position: absolute;
+        padding: 0;
+        top: 40px;
+        left: -90%;
+        @include media-breakpoint-up(md) {
+            width: 350px;
+            left: auto;
+        }
+        background: #fff;
+        box-shadow: $box-shadow-sm;
+        border: 1px solid $primary;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        &__category {
+            &__header {
+                background: $color-lighter-blue;
+                color: $color-darkergrey;
+                padding: 0.25rem;
+                font-weight: bold;
+            }
+        }
+        &__item {
+            display: flex;
+            &__icon {
+                display: flex;
+                min-width: 40px;
+                max-width: 40px;
+                max-height: 40px;
+                align-items: center;
+                align-content: center;
+                img {
+                    max-width: 40px;
+                    max-height: 40px;
+                }
+                svg {
+                    max-width: 40px;
+                    max-height: 40px;
+                }
+            }
+            &__title {
+                flex: 1 1 auto;
+                padding: 0 1rem;
+                margin-bottom: 0.25rem;
+                &__label {
+                    font-weight: bold;
+                }
+                &__count {
+                    font-size: 0.75rem;
+                }
+            }
+            &__cta {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .btn {
+                    font-size: 0.6rem;
+                }
+            }
+        }
+        ul {
+            list-style: none;
+            margin-bottom: 0;
+            padding: 0.25rem;
+            li {
+                padding: 0.1rem;
+                cursor: pointer;
+                &:last-child {
+                    padding-bottom: 0;
+                }
+            }
+        }
+    }
+}

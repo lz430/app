@@ -9,6 +9,7 @@ import * as CheckoutComplete from 'pages/checkout-complete/sagas';
 import * as AppUserSagas from 'apps/user/sagas';
 import * as AppPricingSagas from 'apps/pricing/sagas';
 import * as AppCheckoutSagas from 'apps/checkout/sagas';
+import * as AppPageSagas from 'apps/page/sagas';
 
 export default function* root() {
     yield all([
@@ -18,6 +19,9 @@ export default function* root() {
         fork(DealDetailSagas.watchInit),
         fork(DealDetailSagas.watchRequestDealQuote),
         fork(CompareSagas.watchInit),
+        fork(CheckoutConfirm.watchInit),
+        fork(CheckoutFinancing.watchInit),
+        fork(CheckoutComplete.watchInit),
         fork(AppUserSagas.watchIPRequestLocationInfo),
         fork(AppUserSagas.watchRequestLocation),
         fork(AppPricingSagas.watchRequestDealQuote),
@@ -25,8 +29,6 @@ export default function* root() {
         fork(AppCheckoutSagas.watchCheckoutStart),
         fork(AppCheckoutSagas.watchCheckoutContact),
         fork(AppCheckoutSagas.watchCheckoutFinancingComplete),
-        fork(CheckoutConfirm.watchInit),
-        fork(CheckoutFinancing.watchInit),
-        fork(CheckoutComplete.watchInit),
+        fork(AppPageSagas.watchRequestAutocomplete),
     ]);
 }

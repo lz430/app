@@ -10,11 +10,10 @@ import Deal from 'components/Deals/Deal';
 
 import { toggleCompare } from 'apps/common/actions';
 import { requestMoreDeals } from '../actions';
-import { getShouldShowLoading } from '../selectors';
+import { getLoadingSearchResults } from '../selectors';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import CardCta from './Cta/CardCta';
-import ModelYear from '../../../components/Deals/ModelYear';
 
 class ViewDeals extends React.PureComponent {
     static propTypes = {
@@ -31,7 +30,7 @@ class ViewDeals extends React.PureComponent {
         return R.contains(deal, R.map(R.prop('deal'), this.props.compareList));
     }
 
-    compareButtonClass(deal) {
+    compareButtonClass() {
         return classNames('btn', 'btn-outline-primary', 'btn-sm');
     }
 
@@ -65,7 +64,7 @@ class ViewDeals extends React.PureComponent {
             <Deal deal={deal} key={index}>
                 <div className="deal__buttons">
                     <button
-                        className={this.compareButtonClass(deal)}
+                        className={this.compareButtonClass()}
                         onClick={this.props.onToggleCompare.bind(null, deal)}
                     >
                         {this.compareListContainsDeal(deal)
@@ -84,27 +83,27 @@ class ViewDeals extends React.PureComponent {
     }
 
     render() {
+        if (!this.props.deals || !this.props.deals.length) {
+            return <Loading />;
+        }
+
         return (
             <div className="deals-wrapper">
                 <div className="inventory-summary-deck card-deck  m-0">
-                    {this.props.deals && this.props.deals.length ? (
-                        this.props.deals.map((deal, index) => {
-                            const data = [deal];
+                    {this.props.deals.map((deal, index) => {
+                        const data = [deal];
 
-                            if (index === 3) {
-                                data.splice(0, 0, { cta: 'call' });
+                        if (index === 3) {
+                            data.splice(0, 0, { cta: 'call' });
+                        }
+                        return data.map(item => {
+                            if (item.cta) {
+                                return <CardCta key={'cta-' + index} />;
+                            } else {
+                                return this.renderDeal(deal, index);
                             }
-                            return data.map(item => {
-                                if (item.cta) {
-                                    return <CardCta key={'cta-' + index} />;
-                                } else {
-                                    return this.renderDeal(deal, index);
-                                }
-                            });
-                        })
-                    ) : (
-                        <Loading />
-                    )}
+                        });
+                    })}
                 </div>
                 {this.renderShowMoreButton()}
             </div>
@@ -116,7 +115,7 @@ const mapStateToProps = state => {
     return {
         compareList: state.common.compareList,
         meta: state.pages.dealList.meta,
-        shouldShowLoading: getShouldShowLoading(state),
+        shouldShowLoading: getLoadingSearchResults(state),
         deals: state.pages.dealList.deals,
         dealsByMakeModelYear: state.pages.dealList.dealsByMakeModelYear,
     };

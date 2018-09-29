@@ -46,11 +46,10 @@
         <span>Version w/ No Photos</span>
     </a>
 </li>
-
-<li class="header">Debug Tools</li>
 <li>
-    <a href="/admin/zip-tester/48116">
-        <i class="fa fa-circle-o"></i>
-        <span>Zip Tester</span>
+    <a href="/admin/archived-dumps">
+        <i class="fa fa-file"></i>
+        <span>Archived Dumps</span>
     </a>
 </li>
+

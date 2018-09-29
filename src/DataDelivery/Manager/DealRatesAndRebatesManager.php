@@ -569,6 +569,7 @@ class DealRatesAndRebatesManager
                     if (str_contains(strtolower($program->ProgramDescription), $strings)) {
                         $value = $program->dealscenarios[$this->scenario]->Cash;
                         $programDescription = preg_replace("/\.[^i.e.,]/", ".<br />", $program->ProgramContent);
+                        $isApplied = (isset($this->selectedPrograms['conditional'])) ? array_keys($this->selectedPrograms['conditional']) : [];
                         $data = [
                             'id' =>  $program->ProgramID,
                             'role' =>  $role,
@@ -576,6 +577,8 @@ class DealRatesAndRebatesManager
                             'startDate' =>  $program->ProgramStartDate,
                             'stopDate' =>  $program->ProgramStopDate,
                             'value' => (float) $value,
+                            'isApplied' => (in_array($program->ProgramID, $isApplied)),
+                            'isSelected' => (in_array($role, $this->conditionalRoles))
                         ];
                     }
                 }

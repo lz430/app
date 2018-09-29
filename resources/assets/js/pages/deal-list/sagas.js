@@ -27,8 +27,6 @@ import getDealList, { getSearchQuery } from './selectors';
 import { getUserLocation } from 'apps/user/selectors';
 import { initPage } from 'apps/page/sagas';
 
-import { getInitialBodyStyleFromUrl, getInitialSizeFromUrl } from 'src/util';
-
 import { track } from 'services';
 import * as ActionTypes from './consts';
 
@@ -54,7 +52,7 @@ const takeSearch = (patternOrChannel, saga, ...args) =>
         while (true) {
             const action = yield take(patternOrChannel);
             const state = yield select(getDealList);
-            if (lastTask && state.page === 1) {
+            if (lastTask && (state.page === 1 || !state.page)) {
                 yield cancel(lastTask); // cancel is no-op if the task has already terminated
             }
             lastTask = yield fork(saga, ...args.concat(action));
@@ -82,9 +80,9 @@ function* requestSearch(action) {
 
     let results = [];
 
-    if (!action.incrementPage) {
-        yield put({ type: SEARCH_LOADING_START });
-    }
+    //    if (!action.incrementPage) {
+    yield put({ type: SEARCH_LOADING_START });
+    //    }
 
     try {
         results = yield call(
@@ -112,9 +110,9 @@ function* requestSearch(action) {
         }
     }
 
-    if (!action.incrementPage) {
-        yield put({ type: SEARCH_LOADING_FINISHED });
-    }
+    //if (!action.incrementPage) {
+    yield put({ type: SEARCH_LOADING_FINISHED });
+    //}
 
     const urlQuery = buildSearchQueryUrl(searchQuery);
     if (urlQuery) {
@@ -196,35 +194,16 @@ function* searchToggleFilter(action) {
  * Init
  ********************************************************************/
 function* init(action) {
-    yield* initPage('deal-list');
-
-    let userCurrentLocation = yield select(getUserLocation);
-
-    const urlStyle = getInitialBodyStyleFromUrl();
-    const urlSize = getInitialSizeFromUrl();
-
-    if (urlStyle || urlSize) {
-        let filters = [];
-
-        if (urlSize) {
-            filters.push('size:' + urlSize);
-        }
-
-        if (urlStyle) {
-            filters.push('style:' + urlStyle);
-        }
-
-        yield put(DealListActions.searchReset());
-        yield put(DealListActions.setSearchFilters(filters));
-
-        window.history.replaceState({}, document.title, '/filter');
+    const { location, dataOnly } = action.data;
+    if (!dataOnly) {
+        yield* initPage('deal-list');
     }
 
     // User is coming in fresh without any existing state.
     // Means the user either clicked a deep link or came from
     // the brochure site.
-    if (action.data.state === undefined) {
-        const query = queryString.parse(action.data.search, {
+    if (location.state === undefined) {
+        const query = queryString.parse(location.search, {
             arrayFormat: 'bracket',
         });
 
@@ -247,16 +226,19 @@ function* init(action) {
         }
     }
 
-    const dealListPage = yield select(getDealList);
+    if (!dataOnly) {
+        const dealListPage = yield select(getDealList);
+        let userCurrentLocation = yield select(getUserLocation);
 
-    if (
-        dealListPage.showMakeSelectorModal === null &&
-        userCurrentLocation.latitude
-    ) {
-        yield put(DealListActions.openMakeSelectorModal());
+        if (
+            dealListPage.showMakeSelectorModal === null &&
+            userCurrentLocation.latitude
+        ) {
+            yield put(DealListActions.openMakeSelectorModal());
+        }
+
+        track('page:search:view');
     }
-
-    track('page:search:view');
 
     yield put({ type: SEARCH_REQUEST });
 }

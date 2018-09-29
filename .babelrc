@@ -1,5 +1,17 @@
 {
-  "presets": ["es2015", "react", "stage-2"],
+  "presets": [
+    ["env", {
+      "targets": {
+        "browsers": [
+          ">0.25%",
+          "not op_mini all"
+        ]
+      }
+    }],
+    "es2015",
+    "react",
+    "stage-2"
+  ],
   "plugins": ["transform-object-rest-spread", "transform-class-properties"],
   "env": {
     "production": {
