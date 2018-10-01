@@ -1,26 +1,28 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { dealType } from 'types';
-import { track } from 'services';
+import React from 'react'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { dealType } from 'types'
+import { track } from 'services'
 
-import { Alert, Container, Breadcrumb, BreadcrumbItem } from 'reactstrap';
-import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
-import Loading from 'icons/miscicons/Loading';
-import { toggleCompare } from 'apps/common/actions';
-import { getIsPageLoading } from 'apps/page/selectors';
-import { setPurchaseStrategy } from 'apps/user/actions';
-import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
-import { setCheckoutData, checkoutStart } from 'apps/checkout/actions';
-import * as selectDiscountActions from './modules/selectDiscount';
-import * as financeActions from './modules/finance';
-import * as leaseActions from './modules/lease';
-import { initPage, receiveDeal, dealDetailRequestDealQuote } from './actions';
-import { getDeal, getLeaseAnnualMileage, getLeaseTerm } from './selectors';
-import DealDetail from './components/DealDetail';
-import { pricingFromStateFactory } from 'src/pricing/factory';
-import PageContent from 'components/App/PageContent';
-import { Link } from 'react-router-dom';
+import { Alert, Container, Breadcrumb, BreadcrumbItem } from 'reactstrap'
+import mapAndBindActionCreators from 'util/mapAndBindActionCreators'
+import Loading from 'icons/miscicons/Loading'
+import { toggleCompare } from 'apps/common/actions'
+import { getIsPageLoading } from 'apps/page/selectors'
+import { setPurchaseStrategy } from 'apps/user/actions'
+import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors'
+import { setCheckoutData, checkoutStart } from 'apps/checkout/actions'
+import * as selectDiscountActions from './modules/selectDiscount'
+import * as financeActions from './modules/finance'
+import * as leaseActions from './modules/lease'
+import { initPage, receiveDeal, dealDetailRequestDealQuote } from './actions'
+import { getDeal, getLeaseAnnualMileage, getLeaseTerm } from './selectors'
+import DealDetail from './components/DealDetail'
+import { pricingFromStateFactory } from 'src/pricing/factory'
+import PageContent from 'components/App/PageContent'
+import { Link } from 'react-router-dom'
+import { compose } from 'redux'
+import withTracker from '../../components/withTracker'
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -38,41 +40,41 @@ class DealDetailContainer extends React.PureComponent {
         setCheckoutData: PropTypes.func.isRequired,
         checkoutStart: PropTypes.func.isRequired,
         toggleCompare: PropTypes.func.isRequired,
-    };
+    }
 
     componentDidMount() {
-        this.props.initPage(this.props.match.params.id);
+        this.props.initPage(this.props.match.params.id)
     }
 
     handlePaymentTypeChange = strategy => {
-        this.props.setPurchaseStrategy(strategy);
+        this.props.setPurchaseStrategy(strategy)
         this.props.dealDetailRequestDealQuote(
             this.props.deal,
             this.props.userLocation.zipcode,
             strategy,
             this.props.discountType
-        );
+        )
 
         // This is here because purchase strategy is a global thing
         track('deal-detail:quote-form:changed', {
             'Form Property': 'Purchase Strategy',
             'Form Value': strategy,
-        });
-    };
+        })
+    }
 
     handleDiscountChange = (discountType, make) => {
         switch (discountType) {
             case 'dmr':
-                this.props.selectDiscountActions.selectDmrDiscount();
-                break;
+                this.props.selectDiscountActions.selectDmrDiscount()
+                break
 
             case 'employee':
-                this.props.selectDiscountActions.selectEmployeeDiscount(make);
-                break;
+                this.props.selectDiscountActions.selectEmployeeDiscount(make)
+                break
 
             case 'supplier':
-                this.props.selectDiscountActions.selectSupplierDiscount(make);
-                break;
+                this.props.selectDiscountActions.selectSupplierDiscount(make)
+                break
         }
 
         this.props.dealDetailRequestDealQuote(
@@ -80,19 +82,19 @@ class DealDetailContainer extends React.PureComponent {
             this.props.userLocation.zipcode,
             this.props.purchaseStrategy,
             discountType
-        );
-    };
+        )
+    }
 
     handleRebatesChange = role => {
-        let selectedRoles = this.props.selectedConditionalRoles;
-        let index = selectedRoles.indexOf(role);
+        let selectedRoles = this.props.selectedConditionalRoles
+        let index = selectedRoles.indexOf(role)
         if (index !== -1) {
-            selectedRoles.splice(index, 1);
+            selectedRoles.splice(index, 1)
         } else {
-            selectedRoles.push(role);
+            selectedRoles.push(role)
         }
 
-        this.props.selectDiscountActions.selectConditionalRoles(selectedRoles);
+        this.props.selectDiscountActions.selectConditionalRoles(selectedRoles)
 
         this.props.dealDetailRequestDealQuote(
             this.props.deal,
@@ -100,23 +102,23 @@ class DealDetailContainer extends React.PureComponent {
             this.props.purchaseStrategy,
             this.props.discountType,
             selectedRoles
-        );
-    };
+        )
+    }
 
     handleFinanceDownPaymentChange = downPayment => {
-        this.props.financeActions.updateDownPayment(downPayment);
-    };
+        this.props.financeActions.updateDownPayment(downPayment)
+    }
 
     handleFinanceTermChange = term => {
-        this.props.financeActions.updateTerm(term);
-    };
+        this.props.financeActions.updateTerm(term)
+    }
 
     handleLeaseChange = (annualMileage, term, cashDue) => {
-        this.props.leaseActions.update(annualMileage, term, cashDue);
-    };
+        this.props.leaseActions.update(annualMileage, term, cashDue)
+    }
 
     renderPageLoadingIcon() {
-        return <Loading />;
+        return <Loading />
     }
 
     renderDealOutOfRange() {
@@ -127,12 +129,12 @@ class DealDetailContainer extends React.PureComponent {
                     may apply.
                 </Alert>
             </Container>
-        );
+        )
     }
 
     render() {
         if (this.props.isLoading) {
-            return this.renderPageLoadingIcon();
+            return this.renderPageLoadingIcon()
         }
 
         if (!this.props.deal) {
@@ -140,7 +142,7 @@ class DealDetailContainer extends React.PureComponent {
                 <Container>
                     <Alert color="danger">Unable to load deal.</Alert>
                 </Container>
-            );
+            )
         }
 
         return (
@@ -177,12 +179,12 @@ class DealDetailContainer extends React.PureComponent {
                     compareList={this.props.compareList}
                 />
             </PageContent>
-        );
+        )
     }
 }
 
 const mapStateToProps = (state, props) => {
-    const deal = getDeal(state);
+    const deal = getDeal(state)
 
     return {
         deal,
@@ -200,8 +202,8 @@ const mapStateToProps = (state, props) => {
         userLocation: getUserLocation(state),
         isLoading: getIsPageLoading(state),
         pricing: pricingFromStateFactory(state, { ...props, deal }),
-    };
-};
+    }
+}
 
 const mapDispatchToProps = mapAndBindActionCreators({
     financeActions,
@@ -214,9 +216,12 @@ const mapDispatchToProps = mapAndBindActionCreators({
     dealDetailRequestDealQuote,
     setCheckoutData,
     checkoutStart,
-});
+})
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(DealDetailContainer);
+export default compose(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
+    withTracker
+)(DealDetailContainer)

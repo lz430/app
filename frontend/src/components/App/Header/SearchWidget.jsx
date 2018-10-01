@@ -1,10 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
+import ReactRouterPropTypes from 'react-router-prop-types'
 
-import { buildSearchQueryUrl } from 'pages/deal-list/helpers';
-import StyleIcon from 'components/Deals/StyleIcon';
-import Search from 'icons/zondicons/Search';
+import { buildSearchQueryUrl } from 'pages/deal-list/helpers'
+import StyleIcon from 'components/Deals/StyleIcon'
+import Search from 'icons/zondicons/Search'
 
 class SearchWidget extends React.PureComponent {
     static propTypes = {
@@ -13,57 +13,57 @@ class SearchWidget extends React.PureComponent {
         autocompleteResults: PropTypes.object,
         history: ReactRouterPropTypes.history.isRequired,
         searchQuery: PropTypes.object,
-    };
+    }
 
     state = {
         query: '',
         selectedItem: null,
-    };
+    }
 
     componentDidMount() {
-        document.addEventListener('mousedown', this.handleClick, false);
+        document.addEventListener('mousedown', this.handleClick, false)
     }
 
     componentWillUnmount() {
-        document.removeEventListener('mousedown', this.handleClick, false);
+        document.removeEventListener('mousedown', this.handleClick, false)
     }
 
     handleClick = e => {
         if (this.node.contains(e.target)) {
-            return;
+            return
         }
 
-        this.setState({ query: '' });
-    };
+        this.setState({ query: '' })
+    }
 
     onSelectItem(item) {
-        let newSearchQuery = { ...this.props.searchQuery };
+        let newSearchQuery = { ...this.props.searchQuery }
         if (item.query.entity) {
-            newSearchQuery.entity = item.query.entity;
+            newSearchQuery.entity = item.query.entity
         }
 
         if (item.query.filters) {
-            newSearchQuery.filters = item.query.filters;
+            newSearchQuery.filters = item.query.filters
         }
-        const urlQuery = buildSearchQueryUrl(newSearchQuery);
-        this.props.history.push('/filter?' + urlQuery);
-        this.setState({ query: '' });
+        const urlQuery = buildSearchQueryUrl(newSearchQuery)
+        this.props.history.push('/filter?' + urlQuery)
+        this.setState({ query: '' })
     }
 
     handleSearchRequest(query) {
-        this.setState({ query: query });
+        this.setState({ query: query })
 
         if (query) {
-            this.props.onRequestSearch(query);
+            this.props.onRequestSearch(query)
         }
     }
 
     renderResultItemIcon(category, item) {
         if (category === 'style') {
-            return <StyleIcon style={item.icon} />;
+            return <StyleIcon style={item.icon} />
         }
 
-        return <img alt={item.label} src={item.icon} />;
+        return <img alt={item.label} src={item.icon} />
     }
 
     renderResultItem(category, item) {
@@ -73,7 +73,7 @@ class SearchWidget extends React.PureComponent {
                 key={item.label}
                 onClick={() => this.onSelectItem(item)}
             >
-                <div className="search__results__item__iconDealImage">
+                <div className="search__results__item__icon">
                     {this.renderResultItemIcon(category, item)}
                 </div>
 
@@ -92,18 +92,18 @@ class SearchWidget extends React.PureComponent {
                     </span>
                 </div>
             </li>
-        );
+        )
     }
 
     renderSearchResultCategory(category, items) {
         if (!items.length) {
-            return false;
+            return false
         }
         const headers = {
             model: 'Model',
             make: 'Brand',
             style: 'Style',
-        };
+        }
 
         return (
             <div className="search__results__category" key={category}>
@@ -114,13 +114,13 @@ class SearchWidget extends React.PureComponent {
                     {items.map(item => this.renderResultItem(category, item))}
                 </ul>
             </div>
-        );
+        )
     }
 
     renderSearchResults() {
-        const results = this.props.autocompleteResults;
+        const results = this.props.autocompleteResults
         if (results && !Object.keys(results).length) {
-            return false;
+            return false
         }
         if (
             results &&
@@ -134,14 +134,14 @@ class SearchWidget extends React.PureComponent {
                         this.renderSearchResultCategory(key, results[key])
                     )}
                 </div>
-            );
+            )
         }
-        return false;
+        return false
     }
 
     render() {
         if (this.props.currentPageIsInCheckout) {
-            return false;
+            return false
         }
 
         return (
@@ -150,7 +150,7 @@ class SearchWidget extends React.PureComponent {
                     <input
                         type="text"
                         onChange={e => {
-                            this.handleSearchRequest(e.target.value);
+                            this.handleSearchRequest(e.target.value)
                         }}
                         value={this.state.query}
                         placeholder="Search..."
@@ -160,8 +160,8 @@ class SearchWidget extends React.PureComponent {
                 </div>
                 {this.state.query && this.renderSearchResults()}
             </div>
-        );
+        )
     }
 }
 
-export default SearchWidget;
+export default SearchWidget

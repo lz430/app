@@ -1,19 +1,21 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import React from 'react'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
-import Deal from 'components/Deals/Deal';
+import Deal from 'components/Deals/Deal'
 
-import { initPage } from './actions';
-import ToolbarPrice from './components/ToolbarPrice';
-import EquipmentCategory from './components/EquipmentCategory';
-import ErrorNoDealsToCompare from './components/ErrorNoDealsToCompare';
+import { initPage } from './actions'
+import ToolbarPrice from './components/ToolbarPrice'
+import EquipmentCategory from './components/EquipmentCategory'
+import ErrorNoDealsToCompare from './components/ErrorNoDealsToCompare'
 
-import { getEquipmentCategories } from './selectors';
-import { getIsPageLoading } from 'apps/page/selectors';
+import { getEquipmentCategories } from './selectors'
+import { getIsPageLoading } from 'apps/page/selectors'
 
-import Loading from 'icons/miscicons/Loading';
-import PageContent from '../../components/App/PageContent';
+import Loading from 'icons/miscicons/Loading'
+import PageContent from '../../components/App/PageContent'
+import { compose } from 'redux'
+import withTracker from '../../components/withTracker'
 
 class ComparePageContainer extends React.PureComponent {
     static propTypes = {
@@ -22,20 +24,20 @@ class ComparePageContainer extends React.PureComponent {
         equipmentCategories: PropTypes.array.isRequired,
         onPageInit: PropTypes.func.isRequired,
         isLoading: PropTypes.bool,
-    };
+    }
 
     componentDidMount() {
-        this.props.onPageInit();
+        this.props.onPageInit()
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.compareList.length !== prevProps.compareList.length) {
-            this.props.onPageInit();
+            this.props.onPageInit()
         }
     }
 
     renderColDeal(col) {
-        const deal = col.deal;
+        const deal = col.deal
 
         return (
             <Deal deal={deal} key={deal.id}>
@@ -48,7 +50,7 @@ class ComparePageContainer extends React.PureComponent {
                     </button>
                 </div>
             </Deal>
-        );
+        )
     }
 
     renderDeals(style) {
@@ -56,28 +58,28 @@ class ComparePageContainer extends React.PureComponent {
             <div className="compare-page-deals" style={style}>
                 {this.props.cols.map(this.renderColDeal)}
             </div>
-        );
+        )
     }
 
     renderDealsContainer() {
-        return this.renderDeals();
+        return this.renderDeals()
     }
 
     renderPageLoadingIcon() {
-        return <Loading />;
+        return <Loading />
     }
 
     render() {
         if (!this.props.compareList || !this.props.compareList.length) {
-            return <ErrorNoDealsToCompare />;
+            return <ErrorNoDealsToCompare />
         }
         if (this.props.isLoading) {
-            return this.renderPageLoadingIcon();
+            return this.renderPageLoadingIcon()
         }
 
         let style = {
             maxWidth: this.props.compareList.length * 310 + 'px',
-        };
+        }
         return (
             <PageContent>
                 <div className="compare-page">
@@ -95,7 +97,7 @@ class ComparePageContainer extends React.PureComponent {
                                                     cols={this.props.cols}
                                                     category={category}
                                                 />
-                                            );
+                                            )
                                         }
                                     )}
                                 </div>
@@ -104,7 +106,7 @@ class ComparePageContainer extends React.PureComponent {
                     </div>
                 </div>
             </PageContent>
-        );
+        )
     }
 }
 
@@ -114,18 +116,21 @@ const mapStateToProps = state => {
         equipmentCategories: getEquipmentCategories(state),
         compareList: state.common.compareList,
         isLoading: getIsPageLoading(state),
-    };
-};
+    }
+}
 
 const mapDispatchToProps = dispatch => {
     return {
         onPageInit: () => {
-            return dispatch(initPage());
+            return dispatch(initPage())
         },
-    };
-};
+    }
+}
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ComparePageContainer);
+export default compose(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
+    withTracker
+)(ComparePageContainer)
