@@ -1,16 +1,16 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import StyleIcon from 'components/Deals/StyleIcon'
-import Convertible from 'icons/body-styles/Convertible'
-import Coupe from 'icons/body-styles/Coupe'
-import Hatchback from 'icons/body-styles/Hatchback'
-import Minivan from 'icons/body-styles/Minivan'
-import Pickup from 'icons/body-styles/Pickup'
-import Sedan from 'icons/body-styles/Sedan'
-import Suv from 'icons/body-styles/Suv'
-import Wagon from 'icons/body-styles/Wagon'
-import Loading from 'icons/miscicons/Loading'
-import classNames from 'classnames'
+import React from 'react';
+import PropTypes from 'prop-types';
+import StyleIcon from 'components/Deals/StyleIcon';
+import Convertible from 'icons/body-styles/Convertible';
+import Coupe from 'icons/body-styles/Coupe';
+import Hatchback from 'icons/body-styles/Hatchback';
+import Minivan from 'icons/body-styles/Minivan';
+import Pickup from 'icons/body-styles/Pickup';
+import Sedan from 'icons/body-styles/Sedan';
+import Suv from 'icons/body-styles/Suv';
+import Wagon from 'icons/body-styles/Wagon';
+import Loading from 'icons/miscicons/Loading';
+import classNames from 'classnames';
 
 class FilterStyleList extends React.PureComponent {
     static propTypes = {
@@ -25,18 +25,18 @@ class FilterStyleList extends React.PureComponent {
         ),
         selectedItems: PropTypes.arrayOf(PropTypes.string),
         onToggleSearchFilter: PropTypes.func.isRequired,
-    }
+    };
 
     constructor() {
-        super()
-        this.renderItem = this.renderItem.bind(this)
+        super();
+        this.renderItem = this.renderItem.bind(this);
     }
 
     isItemSelected(item) {
         return (
             this.props.selectedItems &&
             this.props.selectedItems.includes(item.value)
-        )
+        );
     }
 
     renderIcon(icon) {
@@ -47,46 +47,48 @@ class FilterStyleList extends React.PureComponent {
                         width="70px"
                         className="filter-items__item__icon"
                     />
-                )
+                );
             case 'coupe':
                 return (
                     <Coupe width="70px" className="filter-items__item__icon" />
-                )
+                );
             case 'hatchback':
                 return (
                     <Hatchback
                         width="70px"
                         className="filter-items__item__icon"
                     />
-                )
+                );
             case 'minivan':
                 return (
                     <Minivan
                         width="70px"
                         className="filter-items__item__icon"
                     />
-                )
+                );
             case 'pickup':
                 return (
                     <Pickup width="70px" className="filter-items__item__icon" />
-                )
+                );
             case 'sedan':
                 return (
                     <Sedan width="70px" className="filter-items__item__icon" />
-                )
+                );
             case 'suv':
-                return <Suv width="70px" className="filter-items__item__icon" />
+                return (
+                    <Suv width="70px" className="filter-items__item__icon" />
+                );
             case 'wagon':
                 return (
                     <Wagon width="70px" className="filter-items__item__icon" />
-                )
+                );
             default:
-                return false
+                return false;
         }
     }
 
     renderItem(item) {
-        let selected = this.isItemSelected(item)
+        let selected = this.isItemSelected(item);
 
         return (
             <div
@@ -101,7 +103,7 @@ class FilterStyleList extends React.PureComponent {
                 <StyleIcon key={item.icon} style={item.icon} />
                 <div className="filter-items__item__label">{item.label}</div>
             </div>
-        )
+        );
     }
 
     render() {
@@ -115,8 +117,8 @@ class FilterStyleList extends React.PureComponent {
                     )}
                 </div>
             </div>
-        )
+        );
     }
 }
 
-export default FilterStyleList
+export default FilterStyleList;
