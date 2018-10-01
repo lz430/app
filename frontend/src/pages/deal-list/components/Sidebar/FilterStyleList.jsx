@@ -82,9 +82,9 @@ class FilterStyleList extends React.PureComponent {
                 return (
                     <Wagon width="70px" className="filter-items__item__icon" />
                 );
+            default:
+                return false;
         }
-
-        return false;
     }
 
     renderItem(item) {

@@ -14,6 +14,8 @@ import { getIsPageLoading } from 'apps/page/selectors';
 
 import Loading from 'icons/miscicons/Loading';
 import PageContent from '../../components/App/PageContent';
+import { compose } from 'redux';
+import withTracker from '../../components/withTracker';
 
 class ComparePageContainer extends React.PureComponent {
     static propTypes = {
@@ -125,7 +127,10 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+export default compose(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
+    withTracker
 )(ComparePageContainer);

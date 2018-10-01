@@ -21,6 +21,8 @@ import DealDetail from './components/DealDetail';
 import { pricingFromStateFactory } from 'src/pricing/factory';
 import PageContent from 'components/App/PageContent';
 import { Link } from 'react-router-dom';
+import { compose } from 'redux';
+import withTracker from '../../components/withTracker';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -216,7 +218,10 @@ const mapDispatchToProps = mapAndBindActionCreators({
     checkoutStart,
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+export default compose(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
+    withTracker
 )(DealDetailContainer);

@@ -22,6 +22,8 @@ import InvalidCheckoutPage from 'components/checkout/InvalidCheckoutPage';
 import DealColors from 'components/Deals/DealColors';
 import { MediumAndUp, SmallAndDown } from 'components/Responsive';
 import PageContent from '../../components/App/PageContent';
+import { compose } from 'redux';
+import withTracker from '../../components/withTracker';
 
 class CheckoutCompleteContainer extends React.PureComponent {
     static propTypes = {
@@ -162,7 +164,10 @@ const mapDispatchToProps = mapAndBindActionCreators({
     init,
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+export default compose(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
+    withTracker
 )(CheckoutCompleteContainer);

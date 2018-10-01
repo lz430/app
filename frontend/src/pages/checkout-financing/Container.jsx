@@ -16,6 +16,8 @@ import { getIsPageLoading } from 'apps/page/selectors';
 import Loading from 'icons/miscicons/Loading';
 import RouteOneIframe from './components/RouteOneIframe';
 import CompleteFinancingForm from './components/CompleteFinancingForm';
+import { compose } from 'redux';
+import withTracker from '../../components/withTracker';
 
 class CheckoutFinancingContainer extends Component {
     static propTypes = {
@@ -95,7 +97,10 @@ const mapDispatchToProps = mapAndBindActionCreators({
     checkoutFinancingComplete,
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+export default compose(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
+    withTracker
 )(CheckoutFinancingContainer);

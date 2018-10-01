@@ -1,7 +1,8 @@
 import React from 'react';
-import ReactRouterPropTypes from 'react-router-prop-types';
-
+import { compose } from 'redux';
 import { connect } from 'react-redux';
+
+import ReactRouterPropTypes from 'react-router-prop-types';
 import PropTypes from 'prop-types';
 import { filterItemType } from 'types';
 import Loading from 'icons/miscicons/Loading';
@@ -34,6 +35,7 @@ import {
 import { getSearchQuery, getSelectedFiltersByCategory } from './selectors';
 import { setPurchaseStrategy } from 'apps/user/actions';
 import ListTopMessaging from './components/Cta/ListTopMessaging';
+import withTracker from 'components/withTracker';
 
 class Container extends React.Component {
     static propTypes = {
@@ -190,7 +192,10 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+export default compose(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
+    withTracker
 )(Container);

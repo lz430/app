@@ -28,6 +28,8 @@ import DealColors from 'components/Deals/DealColors';
 import { MediumAndUp, SmallAndDown } from 'components/Responsive';
 import PageContent from 'components/App/PageContent';
 import ContactForm from './components/ContactForm';
+import { compose } from 'redux';
+import withTracker from '../../components/withTracker';
 
 class CheckoutConfirmContainer extends React.PureComponent {
     static propTypes = {
@@ -160,7 +162,10 @@ const mapDispatchToProps = mapAndBindActionCreators({
     clearCheckoutContactFormErrors,
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+export default compose(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
+    withTracker
 )(CheckoutConfirmContainer);

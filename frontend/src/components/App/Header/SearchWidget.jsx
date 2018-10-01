@@ -73,7 +73,7 @@ class SearchWidget extends React.PureComponent {
                 key={item.label}
                 onClick={() => this.onSelectItem(item)}
             >
-                <div className="search__results__item__iconDealImage">
+                <div className="search__results__item__icon">
                     {this.renderResultItemIcon(category, item)}
                 </div>
 
