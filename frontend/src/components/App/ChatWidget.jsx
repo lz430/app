@@ -32,13 +32,13 @@ class ChatWidget extends React.PureComponent {
                         hidden: !chatSettings.chatShow,
                     })}
                 >
-                    <a
+                    <span
                         className="btn btn-primary"
                         onClick={() => chatSettings.onOpenChat()}
                     >
                         <span className="hidden d-md-inline">{label}</span>
                         <ChatBubbleDots />
-                    </a>
+                    </span>
                 </div>
             );
         }
@@ -49,10 +49,10 @@ class ChatWidget extends React.PureComponent {
                     hidden: !chatSettings.chatShow,
                 })}
             >
-                <a onClick={() => chatSettings.onOpenChat()}>
+                <span onClick={() => chatSettings.onOpenChat()}>
                     <ChatBubbleDots />
                     <span>{label}</span>
-                </a>
+                </span>
             </span>
         );
     }
