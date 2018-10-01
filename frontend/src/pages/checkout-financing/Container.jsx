@@ -1,23 +1,23 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import { Container, Row, Col } from 'reactstrap'
+import { Container, Row, Col } from 'reactstrap';
 
-import { init } from './actions'
-import getFinancing from './selectors'
+import { init } from './actions';
+import getFinancing from './selectors';
 
-import mapAndBindActionCreators from 'util/mapAndBindActionCreators'
-import { checkout } from 'apps/checkout/selectors'
-import { checkoutFinancingComplete } from 'apps/checkout/actions'
-import InvalidCheckoutPage from 'components/checkout/InvalidCheckoutPage'
-import PageContent from 'components/App/PageContent'
-import { getIsPageLoading } from 'apps/page/selectors'
-import Loading from 'icons/miscicons/Loading'
-import RouteOneIframe from './components/RouteOneIframe'
-import CompleteFinancingForm from './components/CompleteFinancingForm'
-import { compose } from 'redux'
-import withTracker from '../../components/withTracker'
+import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
+import { checkout } from 'apps/checkout/selectors';
+import { checkoutFinancingComplete } from 'apps/checkout/actions';
+import InvalidCheckoutPage from 'components/checkout/InvalidCheckoutPage';
+import PageContent from 'components/App/PageContent';
+import { getIsPageLoading } from 'apps/page/selectors';
+import Loading from 'icons/miscicons/Loading';
+import RouteOneIframe from './components/RouteOneIframe';
+import CompleteFinancingForm from './components/CompleteFinancingForm';
+import { compose } from 'redux';
+import withTracker from '../../components/withTracker';
 
 class CheckoutFinancingContainer extends Component {
     static propTypes = {
@@ -26,39 +26,39 @@ class CheckoutFinancingContainer extends Component {
         financing: PropTypes.object.isRequired,
         isLoading: PropTypes.bool,
         checkoutFinancingComplete: PropTypes.func.isRequired,
-    }
+    };
 
     state = {
         method: 'cash',
-    }
+    };
 
     componentDidMount() {
-        this.props.init()
+        this.props.init();
     }
 
     renderRouteOneIFrame() {
         if (!this.props.financing.url) {
-            return false
+            return false;
         }
 
         return (
             <div className="embed-responsive embed-responsive-financing">
                 <RouteOneIframe url={this.props.financing.url} />
             </div>
-        )
+        );
     }
 
     renderPageLoadingIcon() {
-        return <Loading />
+        return <Loading />;
     }
 
     render() {
         if (!this.props.checkout.deal.id || !this.props.checkout.purchase.id) {
-            return <InvalidCheckoutPage />
+            return <InvalidCheckoutPage />;
         }
 
         if (this.props.isLoading) {
-            return this.renderPageLoadingIcon()
+            return this.renderPageLoadingIcon();
         }
 
         return (
@@ -80,7 +80,7 @@ class CheckoutFinancingContainer extends Component {
                     {this.renderRouteOneIFrame()}
                 </Container>
             </PageContent>
-        )
+        );
     }
 }
 
@@ -89,13 +89,13 @@ const mapStateToProps = (state, props) => {
         checkout: checkout(state, props),
         isLoading: getIsPageLoading(state),
         financing: getFinancing(state),
-    }
-}
+    };
+};
 
 const mapDispatchToProps = mapAndBindActionCreators({
     init,
     checkoutFinancingComplete,
-})
+});
 
 export default compose(
     connect(
@@ -103,4 +103,4 @@ export default compose(
         mapDispatchToProps
     ),
     withTracker
-)(CheckoutFinancingContainer)
+)(CheckoutFinancingContainer);
