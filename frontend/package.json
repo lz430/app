@@ -60,6 +60,11 @@
     "reselect": "^3.0.1",
     "titlecase": "^1.1.2"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
     "*.{js,jsx,json,css,scss}": [
       "prettier --write",

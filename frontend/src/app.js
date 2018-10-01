@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import configureStore, { history } from 'store';
 
-import DealList from 'pages/deal-list/Container';
+import DealList from "pages/deal-list/Container";
 import DealDetail from 'pages/deal-detail/Container';
 import ComparePage from 'pages/compare/Container';
 import CheckoutConfirm from 'pages/checkout-confirm/Container';
