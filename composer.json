@@ -13,6 +13,7 @@
         "babenkoivan/scout-elasticsearch-driver": "^3.8",
         "backpack/crud": "^3.4",
         "backpack/permissionmanager": "^3.12",
+        "barryvdh/laravel-cors": "^0.11.2",
         "doctrine/dbal": "^2.5",
         "greggilbert/recaptcha": "^2.2",
         "guzzlehttp/guzzle": "^6.2",
