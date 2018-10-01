@@ -76,7 +76,7 @@ services:
   nginx:
     build: ./compose/nginx
     ports:
-        - "80:80"
+        - "5000:80"
     links:
         - app
         - mysql
