@@ -8,11 +8,11 @@ import { ChatContext } from 'contexts';
 
 class ChatWidget extends React.PureComponent {
     static propTypes = {
-        style: PropTypes.string.isRequired,
+        presentation: PropTypes.string.isRequired,
     };
 
     static defaultProps = {
-        style: 'header',
+        presentation: 'header',
     };
 
     renderChat(chatSettings) {
@@ -25,7 +25,7 @@ class ChatWidget extends React.PureComponent {
             label = 'Get Help';
         }
 
-        if (this.props.style === 'header') {
+        if (this.props.presentation === 'header') {
             return (
                 <div
                     className={classNames('header-widget', 'chat-button', {

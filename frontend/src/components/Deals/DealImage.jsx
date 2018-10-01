@@ -53,10 +53,11 @@ export default class DealImage extends React.PureComponent {
 
         return (
             <Link to={`/deals/${this.props.deal.id}`}>
-                {thumbnail && <img {...imageProps} src={thumbnail} />}
+                {thumbnail && <img alt="" {...imageProps} src={thumbnail} />}
                 {!thumbnail && (
                     <img
-                        className="placeholder"
+                      alt=""
+                      className="placeholder"
                         src={this.state.fallbackDealImage}
                     />
                 )}
@@ -74,7 +75,7 @@ export default class DealImage extends React.PureComponent {
             <div className={classNames('thumbnail-container', this.props.size)}>
                 {this.props.link && this.renderLinkedImage()}
                 {!this.props.link && (
-                    <img {...imageProps} src={this.featuredImageUrl()} />
+                    <img {...imageProps} alt="" src={this.featuredImageUrl()} />
                 )}
             </div>
         );

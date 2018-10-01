@@ -18,6 +18,8 @@ export const pricingFromDataFactory = data => {
             return new CashPricing(data);
         case 'finance':
             return new FinancePricing(data);
+      default:
+          return false;
     }
 };
 

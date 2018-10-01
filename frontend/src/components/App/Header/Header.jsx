@@ -105,7 +105,7 @@ class Header extends React.PureComponent {
         return (
             <Navbar expand="md">
                 <NavbarBrand href="/">
-                    <img src="/images/dmr-logo.svg" />
+                    <img alt="Deliver My Ride" src="/images/dmr-logo.svg" />
                 </NavbarBrand>
                 {/* <div className="mr-auto" /> */}
                 <SearchWidget
@@ -115,7 +115,7 @@ class Header extends React.PureComponent {
                     searchQuery={this.props.searchQuery}
                 />
                 <div className="navbar-text">
-                    <ChatWidget style="header" />
+                    <ChatWidget presentation="header" />
                     {this.renderPhoneWidget()}
                     <CompareWidget
                         currentPageIsInCheckout={

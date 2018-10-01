@@ -153,15 +153,15 @@ export default class LeasePricing extends Pricing {
     };
 
     isSelectedLeasePaymentForTermAndCashDue(term, cashDue, annualMileage) {
-        if (term != this.term()) {
+        if (term !== this.term()) {
             return false;
         }
 
-        if (cashDue != this.cashDue()) {
+        if (cashDue !== this.cashDue()) {
             return false;
         }
 
-        if (annualMileage != this.annualMileage()) {
+        if (annualMileage !== this.annualMileage()) {
             return false;
         }
 

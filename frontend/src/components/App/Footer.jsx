@@ -27,7 +27,7 @@ export default class Footer extends React.PureComponent {
                         <a href="tel:855-675-7301">
                             <Phone /> (855) 675-7301
                         </a>
-                        <ChatWidget style="footer" />
+                        <ChatWidget presentation="footer" />
                     </Col>
                     <Col
                         xs={12}

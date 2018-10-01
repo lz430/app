@@ -49,7 +49,7 @@ class ModalMakeSelector extends React.PureComponent {
                 onClick={() => this.props.onToggleSearchFilter(make)}
                 key={make.value}
             >
-                <img src={this.getLogoFor(make)} />
+                <img alt={make.value} src={this.getLogoFor(make)} />
                 <div className="make-selector__make-name">{make.label}</div>
             </div>
         );

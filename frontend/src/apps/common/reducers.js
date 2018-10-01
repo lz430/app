@@ -20,9 +20,9 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 compareList: action.compareList,
             };
+        default:
+            return state;
     }
-
-    return state;
 };
 
 export default persistReducer(persistConfig, reducer);

@@ -86,6 +86,8 @@ class DealPrice extends React.Component {
                 return 'Monthly Finance Payment';
             case 'lease':
                 return 'Monthly Lease Payment';
+            default:
+                return 'Price'
         }
     }
 
@@ -96,6 +98,8 @@ class DealPrice extends React.Component {
             case 'finance':
             case 'lease':
                 return 'Includes All Taxes and Fees';
+            default:
+                return 'Your price'
         }
     }
 

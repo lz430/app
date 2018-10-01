@@ -4,8 +4,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { buildSearchQueryUrl } from 'pages/deal-list/helpers';
 import StyleIcon from 'components/Deals/StyleIcon';
-import Search from '../../../icons/zondicons/Search';
-import ArrowOutlineLeft from '../../../icons/zondicons/ArrowOutlineLeft';
+import Search from 'icons/zondicons/Search';
 
 class SearchWidget extends React.PureComponent {
     static propTypes = {
@@ -64,7 +63,7 @@ class SearchWidget extends React.PureComponent {
             return <StyleIcon style={item.icon} />;
         }
 
-        return <img src={item.icon} />;
+        return <img alt={item.label} src={item.icon} />;
     }
 
     renderResultItem(category, item) {
@@ -74,7 +73,7 @@ class SearchWidget extends React.PureComponent {
                 key={item.label}
                 onClick={() => this.onSelectItem(item)}
             >
-                <div className="search__results__item__icon">
+                <div className="search__results__item__iconDealImage">
                     {this.renderResultItemIcon(category, item)}
                 </div>
 

@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 
 import { Container, Row, Col } from 'reactstrap';
 
-import api from 'src/api';
-
 import { init } from './actions';
 import getFinancing from './selectors';
 
@@ -34,23 +32,6 @@ class CheckoutFinancingContainer extends Component {
 
     componentDidMount() {
         this.props.init();
-        /*
-        document.getElementById('routeOne').XrdNavigationUtils = {
-            beforeUnloadIsDisabled: true,
-        };
-
-        window.setInterval(() => {
-            api.getApplicationStatus(this.props.purchase.id).then(response => {
-                if (response.data) {
-                    this.setState({
-                        method: 'finance',
-                    });
-
-                    document.purchase.submit();
-                }
-            });
-        }, 2000);
-                */
     }
 
     renderRouteOneIFrame() {
@@ -77,8 +58,6 @@ class CheckoutFinancingContainer extends Component {
         if (this.props.isLoading) {
             return this.renderPageLoadingIcon();
         }
-
-        const { purchase } = this.props.checkout;
 
         return (
             <PageContent>

@@ -95,9 +95,9 @@ class ToolbarSelectedFilters extends React.PureComponent {
                 </div>
 
                 <div className="filterbar__clear">
-                    <a onClick={this.props.onClearAllSecondaryFilters}>
+                    <span onClick={this.props.onClearAllSecondaryFilters}>
                         Clear Options
-                    </a>
+                    </span>
                 </div>
             </div>
         );

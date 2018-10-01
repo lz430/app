@@ -76,7 +76,7 @@ class HeaderToolbar extends React.PureComponent {
             return false;
         }
         if (this.props.style === 'link') {
-            return <a onClick={e => this.handleBackButton(e)}>&lt; BACK</a>;
+            return <span onClick={e => this.handleBackButton(e)}>&lt; BACK</span>;
         }
         if (this.props.style === 'button') {
             return (

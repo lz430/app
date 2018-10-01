@@ -9,7 +9,7 @@ export const zero = new Dinero({ amount: 0 });
  * the input is in format where cents are not
  * included. (example: 3 or 10,000)
  *
- * @param dollarsAndCents
+ * @param wholeDollars
  * @returns Dinero
  */
 export function fromWholeDollars(wholeDollars) {
@@ -78,7 +78,7 @@ export function fromUnknownInput(moneyValue, multiplier = 1) {
     }
 
     if (typeof moneyValue === 'string') {
-        const numberfied = moneyValue.replace(/[\$,]/g, '');
+        const numberfied = moneyValue.replace(/[,]/g, '');
 
         if (numberfied.indexOf('.') === -1) {
             return Dinero({ amount: parseInt(numberfied) * multiplier });

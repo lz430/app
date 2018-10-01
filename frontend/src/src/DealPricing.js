@@ -488,25 +488,21 @@ export default class DealPricing {
     }
 
     sellingPriceValue() {
-        switch (this.data.paymentType) {
-            case 'cash':
-            case 'finance':
-                const total = new Decimal(this.discountedPriceValue())
-                    .plus(this.docFeeValue())
-                    .plus(this.effCvrFeeValue());
-
-                const totalWithSalesTax = total.plus(
-                    Math.round(total.times(this.taxRate()))
-                );
-
-                return totalWithSalesTax;
-            case 'lease':
-                return new Decimal(this.discountedPriceValue())
-                    .plus(this.docFeeValue())
-                    .plus(this.effCvrFeeValue())
-                    .plus(this.acquisitionFeeValue())
-                    .plus(this.taxOnRebatesValue());
+        if (this.data.paymentType === 'lease') {
+            return new Decimal(this.discountedPriceValue())
+                .plus(this.docFeeValue())
+                .plus(this.effCvrFeeValue())
+                .plus(this.acquisitionFeeValue())
+                .plus(this.taxOnRebatesValue());
         }
+
+        const total = new Decimal(this.discountedPriceValue())
+            .plus(this.docFeeValue())
+            .plus(this.effCvrFeeValue());
+
+        return total.plus(
+            Math.round(total.times(this.taxRate()))
+        );
     }
 
     sellingPrice() {
@@ -514,21 +510,17 @@ export default class DealPricing {
     }
 
     totalPriceValue() {
-        switch (this.data.paymentType) {
-            case 'cash':
-            case 'finance':
-                const total = new Decimal(this.discountedPriceValue())
-                    .plus(this.docFeeValue())
-                    .plus(this.effCvrFeeValue());
-
-                const totalWithSalesTax = total.plus(
-                    Math.round(total.times(this.taxRate()))
-                );
-
-                return totalWithSalesTax;
-            case 'lease':
-                return Math.round(this.discountedPriceValue());
+        if (this.data.paymentType === 'lease') {
+            return  Math.round(this.discountedPriceValue());
         }
+
+        const total = new Decimal(this.discountedPriceValue())
+            .plus(this.docFeeValue())
+            .plus(this.effCvrFeeValue());
+
+        return total.plus(
+            Math.round(total.times(this.taxRate()))
+        );
     }
 
     totalPrice() {
@@ -554,13 +546,11 @@ export default class DealPricing {
     }
 
     finalPriceValue() {
-        switch (this.data.paymentType) {
-            case 'cash':
-                return this.cashPriceValue();
-            case 'finance':
-            case 'lease':
-                return this.monthlyPaymentsValue();
+        if (this.data.paymentType === 'cash') {
+            return this.cashPriceValue();
         }
+
+        return this.monthlyPaymentsValue();
     }
 
     finalPrice() {
@@ -745,6 +735,8 @@ export default class DealPricing {
                 }
 
                 return !this.data.dealQuoteIsLoading;
+            default:
+                return false;
         }
     }
 
@@ -856,6 +848,8 @@ export default class DealPricing {
                         rawValue: this.taxOnRebatesValue(),
                     },
                 ];
+            default:
+                return [];
         }
     }
 }

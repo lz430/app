@@ -1,3 +1,5 @@
+/* global mixpanel */
+
 import config from 'config';
 
 /**
