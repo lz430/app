@@ -1,41 +1,41 @@
-import React from 'react'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
+import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 
-import ReactRouterPropTypes from 'react-router-prop-types'
-import PropTypes from 'prop-types'
-import { filterItemType } from 'types'
-import Loading from 'icons/miscicons/Loading'
+import ReactRouterPropTypes from 'react-router-prop-types';
+import PropTypes from 'prop-types';
+import { filterItemType } from 'types';
+import Loading from 'icons/miscicons/Loading';
 
-import { StickyContainer } from 'react-sticky'
+import { StickyContainer } from 'react-sticky';
 
-import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors'
-import { getIsPageLoading } from 'apps/page/selectors'
-import PageContent from 'components/App/PageContent'
+import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
+import { getIsPageLoading } from 'apps/page/selectors';
+import PageContent from 'components/App/PageContent';
 
-import ResultsList from './components/ResultsList'
-import ToolbarSelectedFilters from './components/ToolbarSelectedFilters'
-import ToolbarMobileBottom from './components/ToolbarMobile/ToolbarMobileBottom'
+import ResultsList from './components/ResultsList';
+import ToolbarSelectedFilters from './components/ToolbarSelectedFilters';
+import ToolbarMobileBottom from './components/ToolbarMobile/ToolbarMobileBottom';
 
-import FilterPanel from './components/FilterPanel'
-import NoDealsOutOfRange from './components/NoDealsOutOfRange'
-import ModalMakeSelector from './components/ModalMakeSelector'
+import FilterPanel from './components/FilterPanel';
+import NoDealsOutOfRange from './components/NoDealsOutOfRange';
+import ModalMakeSelector from './components/ModalMakeSelector';
 
-import { LargeAndUp, MediumAndDown } from 'components/Responsive'
-import { buildSearchQueryUrl } from './helpers'
-import { forceCheck } from 'react-lazyload'
+import { LargeAndUp, MediumAndDown } from 'components/Responsive';
+import { buildSearchQueryUrl } from './helpers';
+import { forceCheck } from 'react-lazyload';
 
 import {
     initDealListData,
     updateEntirePageState,
     closeMakeSelectorModal,
     toggleSearchFilter,
-} from './actions'
+} from './actions';
 
-import { getSearchQuery, getSelectedFiltersByCategory } from './selectors'
-import { setPurchaseStrategy } from 'apps/user/actions'
-import ListTopMessaging from './components/Cta/ListTopMessaging'
-import withTracker from 'components/withTracker'
+import { getSearchQuery, getSelectedFiltersByCategory } from './selectors';
+import { setPurchaseStrategy } from 'apps/user/actions';
+import ListTopMessaging from './components/Cta/ListTopMessaging';
+import withTracker from 'components/withTracker';
 
 class Container extends React.Component {
     static propTypes = {
@@ -57,16 +57,16 @@ class Container extends React.Component {
         history: ReactRouterPropTypes.history.isRequired,
         location: ReactRouterPropTypes.location.isRequired,
         match: ReactRouterPropTypes.match.isRequired,
-    }
+    };
 
     componentDidMount() {
-        this.props.onInit({ location: this.props.location })
+        this.props.onInit({ location: this.props.location });
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.location.search !== prevProps.location.search) {
             // Handling user clicking back button here.
-            const expectedQuery = buildSearchQueryUrl(this.props.searchQuery)
+            const expectedQuery = buildSearchQueryUrl(this.props.searchQuery);
             if (
                 expectedQuery &&
                 '?' + expectedQuery !== this.props.location.search &&
@@ -75,18 +75,18 @@ class Container extends React.Component {
             ) {
                 this.props.onSetPurchaseStrategy(
                     this.props.location.state.query.purchaseStrategy
-                )
+                );
 
                 this.props.onUpdateEntirePageState(
                     this.props.location.state.page
-                )
+                );
 
-                forceCheck()
+                forceCheck();
             } else {
                 this.props.onInit({
                     location: this.props.location,
                     dataOnly: true,
-                })
+                });
             }
         }
     }
@@ -101,7 +101,7 @@ class Container extends React.Component {
                 onToggleSearchFilter={this.props.onToggleSearchFilter}
                 fallbackLogoImage={this.props.fallbackLogoImage}
             />
-        )
+        );
     }
 
     renderDeals() {
@@ -111,7 +111,7 @@ class Container extends React.Component {
                 <ListTopMessaging />
                 <ResultsList />
             </div>
-        )
+        );
     }
 
     renderFilterPanelAndDeals() {
@@ -125,7 +125,7 @@ class Container extends React.Component {
                     <ToolbarMobileBottom />
                 </MediumAndDown>
             </StickyContainer>
-        )
+        );
     }
 
     render() {
@@ -134,7 +134,7 @@ class Container extends React.Component {
                 <PageContent desktopOnlyFooter={true}>
                     <Loading />
                 </PageContent>
-            )
+            );
         }
 
         if (
@@ -146,7 +146,7 @@ class Container extends React.Component {
                 <PageContent desktopOnlyFooter={true}>
                     <NoDealsOutOfRange />
                 </PageContent>
-            )
+            );
         }
 
         return (
@@ -154,7 +154,7 @@ class Container extends React.Component {
                 {this.renderFilterPanelAndDeals()}
                 {this.renderMakeSelectionModal()}
             </PageContent>
-        )
+        );
     }
 }
 
@@ -169,28 +169,28 @@ const mapStateToProps = state => {
         makes: state.pages.dealList.filters.make,
         fallbackLogoImage: state.common.fallbackLogoImage,
         isLoading: getIsPageLoading(state),
-    }
-}
+    };
+};
 
 const mapDispatchToProps = dispatch => {
     return {
         onInit: url => {
-            return dispatch(initDealListData(url))
+            return dispatch(initDealListData(url));
         },
         onUpdateEntirePageState: data => {
-            return dispatch(updateEntirePageState(data))
+            return dispatch(updateEntirePageState(data));
         },
         onCloseMakeSelectorModal: () => {
-            return dispatch(closeMakeSelectorModal())
+            return dispatch(closeMakeSelectorModal());
         },
         onSetPurchaseStrategy: strategy => {
-            return dispatch(setPurchaseStrategy(strategy))
+            return dispatch(setPurchaseStrategy(strategy));
         },
         onToggleSearchFilter: item => {
-            return dispatch(toggleSearchFilter('make', item))
+            return dispatch(toggleSearchFilter('make', item));
         },
-    }
-}
+    };
+};
 
 export default compose(
     connect(
@@ -198,4 +198,4 @@ export default compose(
         mapDispatchToProps
     ),
     withTracker
-)(Container)
+)(Container);
