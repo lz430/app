@@ -9,6 +9,7 @@ RUN apt-get update \
 		emacs \
 		wget \
 		curl \
+		unzip \
 		git \
 		mysql-client \
 		zlib1g-dev \
