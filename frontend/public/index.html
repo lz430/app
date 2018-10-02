@@ -23,7 +23,8 @@
     <title>Deliver My Ride</title>
       <!-- Facebook Pixel Code -->
       <script>
-        if ("%REACT_APP_ENVIRONMENT%" === "production" || "%REACT_APP_ENVIRONMENT%" === "staging") {
+          var env = "%REACT_APP_ENVIRONMENT%";
+          if (env === "production" || env === "staging") {
           !function(f, b, e, v, n, t, s) {
             if (f.fbq) return;
             n = f.fbq = function() {
@@ -54,7 +55,8 @@
 
       <!-- Fullstory -->
       <script>
-        if ("%REACT_APP_ENVIRONMENT%" === "production") {
+          var env = "%REACT_APP_ENVIRONMENT%";
+          if (env === "production") {
             window['_fs_debug'] = false;
             window['_fs_host'] = 'fullstory.com';
             window['_fs_org'] = 'BDWF3';
@@ -104,7 +106,9 @@
 
     <script src="https://browser.sentry-cdn.com/4.0.5/bundle.min.js" crossorigin="anonymous"></script>
     <script>
-      if ("%REACT_APP_ENVIRONMENT%" === "production" || "%REACT_APP_ENVIRONMENT%" === "staging") {
+        var env = "%REACT_APP_ENVIRONMENT%";
+
+        if (env === "production" || env === "staging") {
         Raven.config('https://4e802d8f79514015b7b3c05a9a8487dc@sentry.io/1200027').install();
       }
     </script>
@@ -117,13 +121,14 @@
       document.addEventListener('om.Optin.init.submit', function(event) {
         if (event.detail.Optin && event.detail.Optin.data &&  event.detail.Optin.data.fields.email) {
           var email = event.detail.Optin.data.fields.email;
-          window.axios.post('/set-email', {email: email}, {headers: {'X-CSRF-TOKEN': "{{csrf_token()}}"}});
+          window.axios.post('%REACT_APP_API_URL%/set-email', {email: email});
         }
       } );
     </script>
 
     <script type="text/javascript">
-      if ("%REACT_APP_ENVIRONMENT%" === "staging") {
+        var env = "%REACT_APP_ENVIRONMENT%";
+        if (env == "staging") {
         (function() {
           var s = document.createElement("script");
           s.type = "text/javascript";
