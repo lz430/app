@@ -271,7 +271,7 @@ class Importer
             Log::channel('jato')->error('Importer error for vin [' . $row['VIN'] . ']: ' . $e->getMessage());
             $this->error('Error: ' . $e->getMessage());
             app('sentry')->captureException($e);
-            $querySetErrorStatus = Deal::where('vin', $row['vin']);
+            $querySetErrorStatus = Deal::where('vin', $row['VIN']);
             $querySetErrorStatus->update(['status' => 'error']);
             if ($e->getCode() === 401) {
                 $this->error('401 error connecting to JATO; cancelling the rest of the calls.');
@@ -281,7 +281,7 @@ class Importer
             Log::channel('jato')->error('Importer error for vin [' . $row['VIN'] . ']: ' . $e->getMessage());
             $this->error('Error: ' . $e->getMessage());
             app('sentry')->captureException($e);
-            $querySetErrorStatus = Deal::where('vin', $row['vin']);
+            $querySetErrorStatus = Deal::where('vin', $row['VIN']);
             $querySetErrorStatus->update(['status' => 'error']);
         }
     }
