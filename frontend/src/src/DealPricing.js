@@ -178,12 +178,12 @@ export default class DealPricing {
 
     effectiveTermValue() {
         switch (this.data.paymentType) {
-            case 'cash':
-                return null;
             case 'finance':
                 return this.financeTermValue();
             case 'lease':
                 return this.leaseTermValue();
+            default:
+                return null;
         }
     }
 
@@ -500,9 +500,7 @@ export default class DealPricing {
             .plus(this.docFeeValue())
             .plus(this.effCvrFeeValue());
 
-        return total.plus(
-            Math.round(total.times(this.taxRate()))
-        );
+        return total.plus(Math.round(total.times(this.taxRate())));
     }
 
     sellingPrice() {
@@ -511,16 +509,14 @@ export default class DealPricing {
 
     totalPriceValue() {
         if (this.data.paymentType === 'lease') {
-            return  Math.round(this.discountedPriceValue());
+            return Math.round(this.discountedPriceValue());
         }
 
         const total = new Decimal(this.discountedPriceValue())
             .plus(this.docFeeValue())
             .plus(this.effCvrFeeValue());
 
-        return total.plus(
-            Math.round(total.times(this.taxRate()))
-        );
+        return total.plus(Math.round(total.times(this.taxRate())));
     }
 
     totalPrice() {
@@ -560,18 +556,17 @@ export default class DealPricing {
     }
 
     monthlyPaymentsValue() {
-        switch (this.data.paymentType) {
-            case 'finance':
-                return Math.round(
-                    formulas.calculateFinancedMonthlyPayments(
-                        this.sellingPriceValue() - this.bestOfferValue(),
-                        this.financeDownPaymentValue(),
-                        this.financeTermValue()
-                    )
-                );
-            case 'lease':
-                return this.leaseMonthlyPaymentsValue();
+        if (this.data.paymentType === 'lease') {
+            return this.leaseMonthlyPaymentsValue();
         }
+
+        return Math.round(
+            formulas.calculateFinancedMonthlyPayments(
+                this.sellingPriceValue() - this.bestOfferValue(),
+                this.financeDownPaymentValue(),
+                this.financeTermValue()
+            )
+        );
     }
 
     leaseMonthlyPaymentsValue() {
@@ -685,10 +680,10 @@ export default class DealPricing {
     }
 
     amountFinancedValue() {
-        switch (this.data.paymentType) {
-            case 'finance':
-                return this.yourPriceValue() - this.financeDownPaymentValue();
+        if (this.data.paymentType === 'finance') {
+            return this.yourPriceValue() - this.financeDownPaymentValue();
         }
+        return 0;
     }
 
     amountFinanced() {
@@ -719,35 +714,31 @@ export default class DealPricing {
             return false;
         }
 
-        switch (this.data.paymentType) {
-            case 'cash':
-            case 'finance':
-                return true;
-            case 'lease':
-                if (this.data.dealQuoteIsLoading) {
-                    return false;
-                }
-
-                if (this.leaseRates() && this.leaseRates().length === 0) {
-                    // If we have deal lease rates loaded but there are no rates available,
-                    // then pricing IS available in the sense that there is no pricing.
-                    return true;
-                }
-
-                return !this.data.dealQuoteIsLoading;
-            default:
-                return false;
+        if (
+            this.data.paymentType === 'cash' ||
+            this.data.paymentType === 'finance'
+        ) {
+            return true;
         }
+
+        if (this.data.dealQuoteIsLoading) {
+            return false;
+        }
+
+        if (this.leaseRates() && this.leaseRates().length === 0) {
+            // If we have deal lease rates loaded but there are no rates available,
+            // then pricing IS available in the sense that there is no pricing.
+            return true;
+        }
+
+        return !this.data.dealQuoteIsLoading;
     }
 
     canPurchase() {
-        switch (this.data.paymentType) {
-            case 'cash':
-            case 'finance':
-                return this.isPricingAvailable();
-            case 'lease':
-                return this.canLease();
+        if (this.data.paymentType === 'lease') {
+            return this.canLease();
         }
+        return this.isPricingAvailable();
     }
 
     cannotPurchase() {

@@ -30,6 +30,7 @@ class ModelYearImage extends React.PureComponent {
                 <div className="thumbnail-container thumbnail">
                     {thumbnail && (
                         <img
+                            alt={this.props.modelYear.make}
                             src={thumbnail}
                             onClick={() => {
                                 this.props.selectModelYear();
@@ -38,6 +39,7 @@ class ModelYearImage extends React.PureComponent {
                     )}
                     {!thumbnail && (
                         <img
+                            alt={this.props.modelYear.make}
                             className="placeholder"
                             src={this.state.fallbackDealImage}
                             onClick={() => {

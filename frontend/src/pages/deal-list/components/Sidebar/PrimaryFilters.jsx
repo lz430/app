@@ -36,7 +36,7 @@ class PrimaryFilters extends React.PureComponent {
                 <MediumAndUp>
                     <div className="filter-group filter-group__primary">
                         <div className="sidebar-filters__overlay">
-                            <a
+                            <span
                                 onClick={() => {
                                     this.props.onClearModelYear();
                                 }}
@@ -47,7 +47,7 @@ class PrimaryFilters extends React.PureComponent {
                                     className="sidebar-filters__clear-icon"
                                 />
                                 Return to original search
-                            </a>
+                            </span>
                         </div>
                     </div>
                 </MediumAndUp>
