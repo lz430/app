@@ -25,9 +25,9 @@ class App extends Component {
             <Provider store={store}>
                 <PersistGate loading={null} persistor={persistor}>
                     <ConnectedRouter history={history}>
-                        <Switch>
-                            <DeliverMyRide>
-                                {/*<Redirect from="/" to="/filter" exact/> */}
+                        <DeliverMyRide>
+                            <Switch>
+                                <Redirect from="/" to="/filter" exact />
                                 <Route
                                     path="/filter"
                                     exact
@@ -40,7 +40,7 @@ class App extends Component {
                                 />
                                 <Route
                                     exact
-                                    path="/deals/:id"
+                                    path="/deals/:id(\d+)"
                                     component={DealDetail}
                                 />
                                 <Route
@@ -58,9 +58,9 @@ class App extends Component {
                                     path="/checkout/complete"
                                     component={CheckoutComplete}
                                 />
-                                {/* <Route component={PageNotFound}/> */}
-                            </DeliverMyRide>
-                        </Switch>
+                                <Route component={PageNotFound} />
+                            </Switch>
+                        </DeliverMyRide>
                     </ConnectedRouter>
                 </PersistGate>
             </Provider>
