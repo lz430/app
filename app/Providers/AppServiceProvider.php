@@ -5,6 +5,7 @@ namespace App\Providers;
 
 use App\Observers\DealObserver;
 use Illuminate\Contracts\Logging\Log;
+use  Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use USDLRegex\Validator as LicenseValidator;
@@ -51,6 +52,10 @@ class AppServiceProvider extends ServiceProvider
                 $value
             );
         });
+
+        if(in_array(config('app.env'), ['staging', 'production'])) {
+            URL::forceScheme('https');
+        }
     }
 
     /**
