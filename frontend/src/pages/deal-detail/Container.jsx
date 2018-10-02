@@ -75,6 +75,8 @@ class DealDetailContainer extends React.PureComponent {
             case 'supplier':
                 this.props.selectDiscountActions.selectSupplierDiscount(make);
                 break;
+            default:
+                break;
         }
 
         this.props.dealDetailRequestDealQuote(
