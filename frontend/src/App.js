@@ -27,29 +27,38 @@ class App extends Component {
                     <ConnectedRouter history={history}>
                         <Switch>
                             <DeliverMyRide>
-                                <Redirect from="/" to="/filter" />
-                                <Route path="/filter" component={DealList} />
+                                {/*<Redirect from="/" to="/filter" exact/> */}
                                 <Route
+                                    path="/filter"
+                                    exact
+                                    component={DealList}
+                                />
+                                <Route
+                                    exact
                                     path="/compare"
                                     component={ComparePage}
                                 />
                                 <Route
+                                    exact
                                     path="/deals/:id"
                                     component={DealDetail}
                                 />
                                 <Route
+                                    exact
                                     path="/checkout/contact"
                                     component={CheckoutConfirm}
                                 />
                                 <Route
+                                    exact
                                     path="/checkout/financing"
                                     component={CheckoutFinancing}
                                 />
                                 <Route
+                                    exact
                                     path="/checkout/complete"
                                     component={CheckoutComplete}
                                 />
-                                <Route component={PageNotFound} />
+                                {/* <Route component={PageNotFound}/> */}
                             </DeliverMyRide>
                         </Switch>
                     </ConnectedRouter>
