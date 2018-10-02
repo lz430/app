@@ -23,7 +23,6 @@ import PageContent from 'components/App/PageContent';
 import { Link } from 'react-router-dom';
 import { compose } from 'redux';
 import withTracker from 'components/withTracker';
-import { withRouter } from 'react-router-dom';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -222,7 +221,6 @@ const mapDispatchToProps = mapAndBindActionCreators({
 });
 
 export default compose(
-    withRouter,
     connect(
         mapStateToProps,
         mapDispatchToProps

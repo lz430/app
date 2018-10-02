@@ -8,7 +8,7 @@ import config from 'config';
 
 import { ChatContext } from 'contexts';
 
-export default class App extends React.PureComponent {
+export default class App extends React.Component {
     static propTypes = {
         children: PropTypes.node.isRequired,
     };
