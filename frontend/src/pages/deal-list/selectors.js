@@ -19,6 +19,14 @@ export const getLoadingSearchResults = state => {
     return state.pages.dealList.loadingSearchResults;
 };
 
+export const getAllMakes = state => {
+    if (!state.pages.dealList || !state.pages.dealList.filters) {
+        return [];
+    }
+
+    return state.pages.dealList.filters.make;
+};
+
 export const getShouldShowLoading = createSelector(
     [getSearchPage, getLoadingSearchResults],
     (searchPage, loadingSearchResults) => {
