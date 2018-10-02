@@ -32,7 +32,11 @@ import {
     toggleSearchFilter,
 } from './actions';
 
-import { getSearchQuery, getSelectedFiltersByCategory } from './selectors';
+import {
+    getAllMakes,
+    getSearchQuery,
+    getSelectedFiltersByCategory,
+} from './selectors';
 import { setPurchaseStrategy } from 'apps/user/actions';
 import ListTopMessaging from './components/Cta/ListTopMessaging';
 import withTracker from 'components/withTracker';
@@ -166,7 +170,7 @@ const mapStateToProps = state => {
         userLocation: getUserLocation(state),
         selectedFiltersByCategory: getSelectedFiltersByCategory(state),
         purchaseStrategy: getUserPurchaseStrategy(state),
-        makes: state.pages.dealList.filters.make,
+        makes: getAllMakes(state),
         fallbackLogoImage: state.common.fallbackLogoImage,
         isLoading: getIsPageLoading(state),
     };
