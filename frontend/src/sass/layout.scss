@@ -41,6 +41,9 @@ body {
     display: flex;
     overflow: auto;
     flex-direction: column;
+    @include media-breakpoint-down(md) {
+        margin-top: 1rem;
+    }
 }
 
 .deals__show-more {

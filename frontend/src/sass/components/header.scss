@@ -295,7 +295,8 @@
             left: auto;
         }
         background: #fff;
-        box-shadow: $box-shadow-sm;
+        // box-shadow: $box-shadow-sm;
+        box-shadow: #555 1px 2px 5px;
         border: 1px solid $primary;
         border-radius: 4px;
         font-size: 0.85rem;
