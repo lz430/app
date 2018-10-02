@@ -7,6 +7,12 @@
 }
 
 .app-header-wrapper {
+    @include media-breakpoint-up(md) {
+        position: fixed;
+        z-index: 100;
+        top: 0;
+        width: 100%;
+    }
     @include media-breakpoint-down(sm) {
         position: fixed;
         z-index: 100;

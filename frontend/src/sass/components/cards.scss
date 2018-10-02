@@ -42,7 +42,7 @@
     flex-flow: row wrap;
     width: 100%;
 
-    @include media-breakpoint-up(sm) {
+    @include media-breakpoint-down(sm) {
         justify-content: flex-start;
     }
 

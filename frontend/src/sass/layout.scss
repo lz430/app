@@ -12,8 +12,9 @@ body {
         display: flex;
         flex: 1;
         flex-direction: column;
-        @include media-breakpoint-down(sm) {
-            padding-top: 54px;
+        margin-top: 67px;
+        @include media-breakpoint-down(xs) {
+            padding-top: 0;
         }
     }
     .app-content {
