@@ -11,9 +11,10 @@ import ComparePage from 'pages/compare/Container';
 import CheckoutConfirm from 'pages/checkout-confirm/Container';
 import CheckoutFinancing from 'pages/checkout-financing/Container';
 import CheckoutComplete from 'pages/checkout-complete/Container';
+import PageNotFound from 'pages/404/Container';
 import DeliverMyRide from 'components/App/App';
 
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 
 const { store, persistor } = configureStore();
@@ -26,6 +27,7 @@ class App extends Component {
                     <ConnectedRouter history={history}>
                         <Switch>
                             <DeliverMyRide>
+                                <Redirect from="/" to="/filter" />
                                 <Route path="/filter" component={DealList} />
                                 <Route
                                     path="/compare"
@@ -47,6 +49,7 @@ class App extends Component {
                                     path="/checkout/complete"
                                     component={CheckoutComplete}
                                 />
+                                <Route component={PageNotFound} />
                             </DeliverMyRide>
                         </Switch>
                     </ConnectedRouter>
