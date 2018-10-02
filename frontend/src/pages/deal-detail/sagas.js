@@ -70,6 +70,8 @@ function* init(action) {
 
         const deal = yield select(getDeal);
         track('page:deal-detail:view', {
+            'Deal In Range': deal.is_in_range,
+            'Deal Status': deal.status,
             'Deal Make': deal.make,
             'Deal Model': deal.model,
             'Deal Year': deal.year,
