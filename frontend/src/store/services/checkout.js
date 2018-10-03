@@ -23,6 +23,9 @@ export default class CheckoutService {
     }
 
     /**
+     *
+     * @param purchaseId
+     * @param token
      * @param email
      * @param drivers_license_state
      * @param drivers_license_number
@@ -33,6 +36,8 @@ export default class CheckoutService {
      * @returns {*}
      */
     contact(
+        purchaseId,
+        token,
         email,
         drivers_license_state,
         drivers_license_number,
@@ -42,6 +47,7 @@ export default class CheckoutService {
         g_recaptcha_response
     ) {
         let payload = {
+            order_token: token,
             email,
             drivers_license_state,
             drivers_license_number,
@@ -51,7 +57,7 @@ export default class CheckoutService {
             'g-recaptcha-response': g_recaptcha_response,
         };
 
-        return httpclient.post('/api/checkout/contact', payload);
+        return httpclient.post(`/api/checkout/${purchaseId}/contact`, payload);
     }
 
     /**

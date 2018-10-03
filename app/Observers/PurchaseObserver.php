@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Models\Purchase;
+use App\Models\Order\Purchase;
 use App\Models\Deal;
 use App\Policies\PurchasePolicy;
 
@@ -71,7 +71,7 @@ class PurchaseObserver
     /**
      * Handle to the purchase "created" event.
      *
-     * @param \App\Models\Purchase $purchase
+     * @param \App\Models\Order\Purchase $purchase
      * @return void
      */
     public function created(Purchase $purchase)

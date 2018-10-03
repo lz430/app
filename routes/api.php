@@ -23,7 +23,7 @@ Route::get('deals/{deal}/warranties', 'DealWarrantiesController@getWarranties')-
 Route::get('deals/{deal}/dimensions', 'DealDimensionsController@getDimensions')->name('dimensions.getDimensions');
 
 Route::post('checkout/start', 'CheckoutController@start')->name('checkout.start');
-Route::post('checkout/contact', 'CheckoutController@contact')->name('checkout.contact');
+Route::post('checkout/{purchase}/contact', 'CheckoutController@contact')->name('checkout.contact');
 Route::get('checkout/{purchase}/financing', 'CheckoutController@getFinancing')->name('checkout.financing');
 Route::post('checkout/{purchase}/financing', 'CheckoutController@financingComplete')->name('checkout.financingComplete');
 

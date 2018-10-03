@@ -20,16 +20,16 @@
         "guzzlehttp/guzzle": "^6.2",
         "imgix/imgix-php": "^2.1",
         "laracasts/utilities": "^2.1",
-        "laravel/framework": "5.6.*",
+        "laravel/framework": "5.7.*",
         "laravel/tinker": "~1.0",
         "league/csv": "^9.0",
         "pda/pheanstalk": "^3.1",
         "predis/predis": "^1.1",
         "ryanwinchester/hubspot-php": "~1.0",
-        "sentry/sentry-laravel": "^0.9.0",
+        "sentry/sentry-laravel": "^0.10.0",
         "spatie/laravel-fractal": "^5.0",
         "toin0u/geocoder-laravel": "^4.0",
-        "tymon/jwt-auth": "^1.0.0-rc.2"
+        "tymon/jwt-auth": "^1.0.0-rc.3"
     },
     "require-dev": {
         "backpack/generators": "^1.1",
@@ -37,7 +37,6 @@
         "barryvdh/laravel-ide-helper": "^2.4",
         "fzaninotto/faker": "~1.4",
         "laracasts/generators": "dev-master",
-        "laravel/homestead": "^7.3",
         "mockery/mockery": "0.9.*",
         "nunomaduro/collision": "^1.1",
         "phpunit/phpunit": "~7.0"

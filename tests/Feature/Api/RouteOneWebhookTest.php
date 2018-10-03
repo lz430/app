@@ -3,7 +3,7 @@
 namespace Tests\Feature\Api;
 
 use App\Events\UserDataChanged;
-use App\Models\Purchase;
+use App\Models\Order\Purchase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;

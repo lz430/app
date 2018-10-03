@@ -73,8 +73,11 @@ export function* checkoutStart(action) {
         'Form Submission Success': results ? 'success' : 'fail',
     });
 
-    yield put(checkoutFinishedLoading());
-    yield put(push('/checkout/contact'));
+    if (results) {
+        yield put(receivePurchase(results.data));
+        yield put(checkoutFinishedLoading());
+        yield put(push('/checkout/contact'));
+    }
 }
 
 /*******************************************************************
@@ -82,10 +85,14 @@ export function* checkoutStart(action) {
  *******************************************************************/
 export function* checkoutContact(action) {
     const fields = action.fields;
+    const checkout = yield select(getCheckout);
+
     let results = null;
     try {
         results = yield call(
             ApiClient.checkout.contact,
+            checkout.purchase.id,
+            checkout.orderToken,
             fields.email,
             fields.drivers_license_state,
             fields.drivers_license_number,
@@ -119,7 +126,7 @@ export function* checkoutFinancingComplete() {
         results = yield call(
             ApiClient.checkout.financingComplete,
             checkout.purchase.id,
-            checkout.token
+            checkout.userToken
         );
     } catch (e) {}
 

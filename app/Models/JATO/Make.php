@@ -60,6 +60,7 @@ class Make extends Model
         'Honda' => self::BASE_PATH . 'honda.jpg',
         'Hyundai' => self::BASE_PATH . 'hyundai.jpg',
         'Infiniti' => self::BASE_PATH . 'infiniti.jpg',
+        'INFINITI' => self::BASE_PATH . 'infiniti.jpg',
         'Jaguar' => self::BASE_PATH . 'jaguar.jpg',
         'Jeep' => self::BASE_PATH . 'jeep.jpg',
         'Kia' => self::BASE_PATH . 'kia.jpg',

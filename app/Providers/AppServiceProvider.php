@@ -12,7 +12,7 @@ use USDLRegex\Validator as LicenseValidator;
 use App\Models\Deal;
 use App\Models\Dealer;
 use App\Models\Feature;
-use App\Models\Purchase;
+use App\Models\Order\Purchase;
 use App\Models\JATO\Version;
 use App\Models\JATO\VersionQuote;
 use App\Observers\DealerObserver;
