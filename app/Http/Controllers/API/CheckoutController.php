@@ -64,6 +64,7 @@ class CheckoutController extends BaseAPIController
          * the user's email and query the user, so store in session for now
          */
         $purchase = new Purchase([
+            'status' => 'cart',
             'deal_id' => $deal->id,
             'completed_at' => null,
             'type' => $request->get('strategy'),
@@ -77,17 +78,19 @@ class CheckoutController extends BaseAPIController
             'lease_mileage' => isset($amounts['leased_annual_mileage']) ? $amounts['leased_annual_mileage'] : null,
         ]);
 
+        $purchase->save();
+
+        /*
         // Updates purchased deal status to pending
         Deal::where('id', $deal->id)->update(['status' => 'pending']);
 
         $request->session()->put('purchase', $purchase);
 
-        /*
-         * If email saved to session, put in request and send to receiveEmail.
-         */
+        // If email saved to session, put in request and send to receiveEmail.
         if (session()->has('email')) {
             $request->merge(['email' => session()->get('email')]);
         }
+        */
 
         return response()->json(
             [
@@ -102,8 +105,11 @@ class CheckoutController extends BaseAPIController
      * @return bool|\Illuminate\Http\JsonResponse
      * @throws \Throwable
      */
-    public function contact(Request $request)
+    public function contact(Request $request, Purchase $purchase)
     {
+        $this->authorize('update', $purchase);
+        dd($purchase);
+
         $this->validate(
             $request,
             [
@@ -113,16 +119,17 @@ class CheckoutController extends BaseAPIController
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'phone_number' => 'required|digits:10',
-                'g-recaptcha-response' => 'required|recaptcha',
+                //'g-recaptcha-response' => 'required|recaptcha',
             ],
             [
                 'drivers_license_number' => 'Please provide a valid License Number.',
-                'g-recaptcha-response' => 'The recaptcha is required.',
+                //'g-recaptcha-response' => 'The recaptcha is required.',
             ]
         );
         //
         // User
         // This is not very secure.
+
         $user = DB::transaction(function () use ($request) {
 
             /**
