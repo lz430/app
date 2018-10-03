@@ -7,6 +7,7 @@ use App\Models\User;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 
 /**
@@ -49,7 +50,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereUserId($value)
  * @mixin \Eloquent
  */
-class Purchase extends Model
+class Purchase extends Model implements JWTSubject
 {
     use CrudTrait;
 
@@ -136,5 +137,25 @@ class Purchase extends Model
     public function isLease() : bool
     {
         return $this->type === self::LEASE;
+    }
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

@@ -48,6 +48,18 @@ class PurchasePolicy
         }
 
         if ($token) {
+            $jwt = resolve('Tymon\JWTAuth\JWT');
+            $jwt->setToken($token);
+            $valid = $jwt->check();
+            if (!$valid) {
+                return false;
+            }
+
+            $payload = $jwt->getPayload();
+            $purchaseId = $payload->getClaims()->toArray()['sub']['sub'];
+            if ($purchaseId != $purchase->id) {
+                return false;
+            }
             return true;
         }
 

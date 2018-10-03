@@ -79,7 +79,17 @@ class CheckoutController extends BaseAPIController
         ]);
 
         $purchase->save();
+        $jwt = resolve('Tymon\JWTAuth\JWT');
+        $token = $jwt->fromSubject($purchase);
+        /*
+        $jwt->setToken($token);
+        $valid = $jwt->check();
+        dd($valid);
+        $payload = $jwt->getPayload();
 
+
+        dd($payload->getClaims()->toArray()['sub']['sub']);
+        */
         /*
         // Updates purchased deal status to pending
         Deal::where('id', $deal->id)->update(['status' => 'pending']);
@@ -95,6 +105,7 @@ class CheckoutController extends BaseAPIController
         return response()->json(
             [
                 'status' => 'okay',
+                'orderToken' => $token,
                 'purchase' => (new PurchaseTransformer())->transform($purchase),
             ]);
     }
@@ -107,12 +118,10 @@ class CheckoutController extends BaseAPIController
      */
     public function contact(Request $request, Purchase $purchase)
     {
-        $this->authorize('update', [$purchase, "asdfas"]);
-        dd($purchase);
-
         $this->validate(
             $request,
             [
+                'order_token' => 'required|string',
                 'email' => 'required|email',
                 'drivers_license_state' => 'required|string', // This is out of alphabetical order but is required to exist for the driversLicense validator
                 'drivers_license_number' => 'required|drivers_license_number',
@@ -126,10 +135,11 @@ class CheckoutController extends BaseAPIController
                 //'g-recaptcha-response' => 'The recaptcha is required.',
             ]
         );
+        $this->authorize('update', [$purchase, $request->order_token]);
+
         //
         // User
         // This is not very secure.
-
         $user = DB::transaction(function () use ($request) {
 
             /**
@@ -151,35 +161,15 @@ class CheckoutController extends BaseAPIController
             );
             return $user;
         });
-
-        //
-        // If we don't have a purchase stored in session give up
-        // TODO: Return an actual error message / http response.
-        if (!session()->has('purchase') || !is_object(session('purchase'))) {
-            return response()->json(['error' => 'invalid session']);
-        }
-
-        //
-        // Retrieve and store purchase
-        $purchase = session('purchase');
         $purchase->user_id = $user->id;
-
-        $existing_purchase = Purchase::where('user_id', $user->id)
-            ->where('deal_id', $purchase->deal_id)
-            ->whereNull('completed_at')
-            ->first();
-
-        if ($existing_purchase) {
-            $purchase = $existing_purchase;
-        }
-
+        $purchase->status = "contact";
         $purchase->save();
 
         event(new NewPurchaseInitiated($user, $purchase));
         $token = auth('api')->login($user);
         $return = [
             'purchase' => (new PurchaseTransformer())->transform($purchase),
-            'token' => $this->buildTokenResponse($token),
+            'userToken' => $this->buildTokenResponse($token),
         ];
 
         if ($purchase->isCash()) {
