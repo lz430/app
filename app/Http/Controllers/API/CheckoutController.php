@@ -103,11 +103,11 @@ class CheckoutController extends BaseAPIController
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'phone_number' => 'required|digits:10',
-                //'g-recaptcha-response' => 'required|recaptcha',
+                'g-recaptcha-response' => 'required|recaptcha',
             ],
             [
                 'drivers_license_number' => 'Please provide a valid License Number.',
-                //'g-recaptcha-response' => 'The recaptcha is required.',
+                'g-recaptcha-response' => 'The recaptcha is required.',
             ]
         );
         $this->authorize('update', [$purchase, $request->order_token]);
