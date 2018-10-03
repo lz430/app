@@ -38,12 +38,20 @@ class PurchasePolicy
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Order\Purchase  $purchase
+     * @param  string $token
      * @return mixed
      */
-    public function update(User $user, Purchase $purchase)
+    public function update(?User $user, Purchase $purchase, string $token = "")
     {
-        return true;
-        return $purchase->buyer->id === $user->id;
+        if ($user) {
+            return $purchase->buyer && $purchase->buyer->id === $user->id;
+        }
+
+        if ($token) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

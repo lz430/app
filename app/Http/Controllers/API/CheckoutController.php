@@ -107,7 +107,7 @@ class CheckoutController extends BaseAPIController
      */
     public function contact(Request $request, Purchase $purchase)
     {
-        $this->authorize('update', $purchase);
+        $this->authorize('update', [$purchase, "asdfas"]);
         dd($purchase);
 
         $this->validate(
