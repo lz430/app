@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Transformers\PurchaseTransformer;
 use Illuminate\Http\Request;
 
-use App\Models\Purchase;
+use App\Models\Order\Purchase;
 use App\Models\Deal;
 use App\Models\User;
 use Carbon\Carbon;
@@ -58,12 +58,8 @@ class CheckoutController extends BaseAPIController
         $deal = Deal::where('id', $request->get('deal_id'))->first();
         $amounts = $request->get('amounts');
 
-        // TODO validate amounts
-        /*
-         * We don't want to save the purchase to the DB until we collect
-         * the user's email and query the user, so store in session for now
-         */
         $purchase = new Purchase([
+            'status' => 'cart',
             'deal_id' => $deal->id,
             'completed_at' => null,
             'type' => $request->get('strategy'),
@@ -77,21 +73,14 @@ class CheckoutController extends BaseAPIController
             'lease_mileage' => isset($amounts['leased_annual_mileage']) ? $amounts['leased_annual_mileage'] : null,
         ]);
 
-        // Updates purchased deal status to pending
-        Deal::where('id', $deal->id)->update(['status' => 'pending']);
-
-        $request->session()->put('purchase', $purchase);
-
-        /*
-         * If email saved to session, put in request and send to receiveEmail.
-         */
-        if (session()->has('email')) {
-            $request->merge(['email' => session()->get('email')]);
-        }
+        $purchase->save();
+        $jwt = resolve('Tymon\JWTAuth\JWT');
+        $token = $jwt->fromSubject($purchase);
 
         return response()->json(
             [
                 'status' => 'okay',
+                'orderToken' => $token,
                 'purchase' => (new PurchaseTransformer())->transform($purchase),
             ]);
     }
@@ -102,11 +91,12 @@ class CheckoutController extends BaseAPIController
      * @return bool|\Illuminate\Http\JsonResponse
      * @throws \Throwable
      */
-    public function contact(Request $request)
+    public function contact(Request $request, Purchase $purchase)
     {
         $this->validate(
             $request,
             [
+                'order_token' => 'required|string',
                 'email' => 'required|email',
                 'drivers_license_state' => 'required|string', // This is out of alphabetical order but is required to exist for the driversLicense validator
                 'drivers_license_number' => 'required|drivers_license_number',
@@ -120,6 +110,8 @@ class CheckoutController extends BaseAPIController
                 'g-recaptcha-response' => 'The recaptcha is required.',
             ]
         );
+        $this->authorize('update', [$purchase, $request->order_token]);
+
         //
         // User
         // This is not very secure.
@@ -144,35 +136,15 @@ class CheckoutController extends BaseAPIController
             );
             return $user;
         });
-
-        //
-        // If we don't have a purchase stored in session give up
-        // TODO: Return an actual error message / http response.
-        if (!session()->has('purchase') || !is_object(session('purchase'))) {
-            return response()->json(['error' => 'invalid session']);
-        }
-
-        //
-        // Retrieve and store purchase
-        $purchase = session('purchase');
         $purchase->user_id = $user->id;
-
-        $existing_purchase = Purchase::where('user_id', $user->id)
-            ->where('deal_id', $purchase->deal_id)
-            ->whereNull('completed_at')
-            ->first();
-
-        if ($existing_purchase) {
-            $purchase = $existing_purchase;
-        }
-
+        $purchase->status = "contact";
         $purchase->save();
 
         event(new NewPurchaseInitiated($user, $purchase));
         $token = auth('api')->login($user);
         $return = [
             'purchase' => (new PurchaseTransformer())->transform($purchase),
-            'token' => $this->buildTokenResponse($token),
+            'userToken' => $this->buildTokenResponse($token),
         ];
 
         if ($purchase->isCash()) {

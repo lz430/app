@@ -5,10 +5,8 @@ namespace App\Models;
 use App\Models\JATO\Version;
 use App\DealIndexConfigurator;
 use App\Models\JATO\Make;
+use App\Models\Order\Purchase;
 use Backpack\CRUD\CrudTrait;
-use DeliverMyRide\VAuto\Map;
-use App\Models\Feature;
-
 use Carbon\Carbon;
 use ScoutElastic\Searchable;
 use Illuminate\Database\Eloquent\Builder;

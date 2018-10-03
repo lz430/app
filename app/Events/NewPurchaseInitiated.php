@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Purchase;
+use App\Models\Order\Purchase;
 use App\Models\User;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;

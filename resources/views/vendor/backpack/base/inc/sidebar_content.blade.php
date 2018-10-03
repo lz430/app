@@ -5,6 +5,14 @@
     </a>
 </li>
 
+<li class="header">Orders</li>
+<li>
+    <a href="/admin/purchase">
+        <i class="fa fa-money"></i>
+        <span>Orders</span>
+    </a>
+</li>
+
 <li class="header">Data</li>
 <li>
     <a href="/admin/feature">
