@@ -6,7 +6,6 @@ use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Log;
 
 use DeliverMyRide\HubSpot\Client;
-use Exception;
 
 class UpdateHubspotContact
 {

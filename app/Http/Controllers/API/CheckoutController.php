@@ -168,7 +168,8 @@ class CheckoutController extends BaseAPIController
 
         $purchase->save();
 
-        event(new NewPurchaseInitiated($user, $purchase));
+        //event(new NewPurchaseInitiated($user, $purchase));
+
         $token = auth('api')->login($user);
         $return = [
             'purchase' => (new PurchaseTransformer())->transform($purchase),

@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
         Commands\Jato\JatoDealDecode::class,
         Commands\Jato\JatoVinDecode::class,
         Commands\Jato\JatoFindMissingVersions::class,
+        Commands\TestHubSpotAPI::class,
     ];
 
     /**

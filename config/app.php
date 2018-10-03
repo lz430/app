@@ -170,7 +170,8 @@ return [
         App\Providers\JATOServiceProvider::class,
         Spatie\Fractal\FractalServiceProvider::class,
         Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
-        App\Providers\ScoutElasticServiceProvider::class
+        App\Providers\ScoutElasticServiceProvider::class,
+        App\Providers\HubSpotServiceProvider::class
     ],
 
     /*
