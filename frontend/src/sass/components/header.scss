@@ -274,6 +274,13 @@
             @include media-breakpoint-up(xl) {
                 width: 300px;
             }
+
+            &:focus {
+                border: 0 none;
+                border-bottom: 1px solid #41b1ac;
+                border-radius: 0;
+                outline: none;
+            }
         }
         svg {
             width: 20px;
@@ -294,18 +301,23 @@
         width: 280px;
         position: absolute;
         padding: 0;
-        top: 40px;
-        left: -90%;
-        @include media-breakpoint-up(md) {
-            width: 350px;
-            left: auto;
-        }
+        top: 52px;
+        left: 0;
         background: #fff;
         // box-shadow: $box-shadow-sm;
         box-shadow: #555 1px 2px 5px;
         border: 1px solid $primary;
         border-radius: 4px;
         font-size: 0.85rem;
+        @include media-breakpoint-down(md) {
+            left: -94%;
+            width: 350px;
+        }
+        @include media-breakpoint-down(sm) {
+            top: 42px;
+            left: -10px;
+            margin-left: -175px;
+        }
         &__category {
             &__header {
                 background: $color-lighter-blue;
