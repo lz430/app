@@ -57,10 +57,25 @@ const reducer = function(state = initialState, action = {}) {
                 contactFormErrors: {},
             };
         case ActionTypes.RECEIVE_PURCHASE:
+            if (action.data.orderToken) {
+                return {
+                    ...state,
+                    purchase: action.data.purchase,
+                    orderToken: action.data.orderToken,
+                };
+            }
+
+            if (action.data.userToken) {
+                return {
+                    ...state,
+                    purchase: action.data.purchase,
+                    userToken: action.data.userToken,
+                };
+            }
+
             return {
                 ...state,
                 purchase: action.data.purchase,
-                token: action.data.token,
             };
 
         default:

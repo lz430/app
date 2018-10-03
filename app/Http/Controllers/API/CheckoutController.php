@@ -58,11 +58,6 @@ class CheckoutController extends BaseAPIController
         $deal = Deal::where('id', $request->get('deal_id'))->first();
         $amounts = $request->get('amounts');
 
-        // TODO validate amounts
-        /*
-         * We don't want to save the purchase to the DB until we collect
-         * the user's email and query the user, so store in session for now
-         */
         $purchase = new Purchase([
             'status' => 'cart',
             'deal_id' => $deal->id,
@@ -81,26 +76,6 @@ class CheckoutController extends BaseAPIController
         $purchase->save();
         $jwt = resolve('Tymon\JWTAuth\JWT');
         $token = $jwt->fromSubject($purchase);
-        /*
-        $jwt->setToken($token);
-        $valid = $jwt->check();
-        dd($valid);
-        $payload = $jwt->getPayload();
-
-
-        dd($payload->getClaims()->toArray()['sub']['sub']);
-        */
-        /*
-        // Updates purchased deal status to pending
-        Deal::where('id', $deal->id)->update(['status' => 'pending']);
-
-        $request->session()->put('purchase', $purchase);
-
-        // If email saved to session, put in request and send to receiveEmail.
-        if (session()->has('email')) {
-            $request->merge(['email' => session()->get('email')]);
-        }
-        */
 
         return response()->json(
             [
