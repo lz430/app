@@ -123,49 +123,53 @@ class RebatesRole extends React.Component {
         }
 
         return (
-            <Line style={{ margin: '.125em 0 .125em .25em' }}>
-                <Label
-                    className="form-check-label"
-                    key={role['role']}
-                    style={{ fontSize: '.9em' }}
-                >
-                    <input
+            <div className="form-check">
+                <Line>
+                    <Label
+                        className="form-check-label"
+                        for={role['role']}
                         key={role['role']}
-                        name="discountType"
-                        value={role['role']}
-                        type="checkbox"
-                        className="form-check-input"
-                        checked={this.props.isRoleChecked}
-                        onChange={e => this.props.onChange(role)}
-                    />
-                    {canUserHaveRebatePerAffinity}
-                </Label>
+                        style={{ fontSize: '.9em' }}
+                    >
+                        <input
+                            key={role['role']}
+                            name="discountType"
+                            value={role['role']}
+                            type="checkbox"
+                            className="form-check-input"
+                            checked={this.props.isRoleChecked}
+                            onChange={e => this.props.onChange(role)}
+                            id={role['role']}
+                        />
+                        {canUserHaveRebatePerAffinity}
+                    </Label>
 
-                <InformationOutline
-                    onClick={() => this.toggleProgramDescriptionModal()}
-                    className="link infomodal__button"
-                    style={{
-                        paddingLeft: '6px',
-                        marginTop: '-10px',
-                        width: '20px',
-                        height: '20px',
-                    }}
-                    fill="grey"
-                />
-                {this.renderProgramExplanationModal(labels)}
-                {this.props.isRoleChecked &&
-                    labels.description && (
-                        <div
-                            style={{
-                                fontStyle: 'italic',
-                                fontSize: '.75em',
-                                marginLeft: '.25em',
-                            }}
-                        >
-                            {labels.description}
-                        </div>
-                    )}
-            </Line>
+                    <InformationOutline
+                        onClick={() => this.toggleProgramDescriptionModal()}
+                        className="link infomodal__button"
+                        style={{
+                            paddingLeft: '6px',
+                            marginTop: '-10px',
+                            width: '20px',
+                            height: '20px',
+                        }}
+                        fill="grey"
+                    />
+                    {this.renderProgramExplanationModal(labels)}
+                    {this.props.isRoleChecked &&
+                        labels.description && (
+                            <div
+                                style={{
+                                    fontStyle: 'italic',
+                                    fontSize: '.75em',
+                                    marginLeft: '.25em',
+                                }}
+                            >
+                                {labels.description}
+                            </div>
+                        )}
+                </Line>
+            </div>
         );
     }
 }
