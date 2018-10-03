@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Mail\DealPurchasedDMR;
-use App\Models\Purchase;
+use App\Models\Order\Purchase;
 use App\Models\User;
 use App\Models\Deal;
 use Illuminate\Foundation\Testing\RefreshDatabase;

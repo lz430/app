@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Models\JATO\Version;
 use App\Mail\ApplicationSubmittedDMR;
 use App\Mail\ApplicationSubmittedUser;
-use App\Models\Purchase;
+use App\Models\Order\Purchase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;

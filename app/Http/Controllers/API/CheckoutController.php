@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Transformers\PurchaseTransformer;
 use Illuminate\Http\Request;
 
-use App\Models\Purchase;
+use App\Models\Order\Purchase;
 use App\Models\Deal;
 use App\Models\User;
 use Carbon\Carbon;

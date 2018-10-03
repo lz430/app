@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order;
 
+use App\Models\Deal;
+use App\Models\User;
+use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -27,26 +30,28 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \DateTime $updated_at
  * @property \DateTime $completed_at
  * @property float|null $msrp
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Purchase whereAmountFinanced($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Purchase whereApplicationStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Purchase whereCompletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Purchase whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Purchase whereDealId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Purchase whereDmrPrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Purchase whereDownPayment($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Purchase whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Purchase whereLeaseMileage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Purchase whereMonthlyPayment($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Purchase whereMsrp($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Purchase whereRebates($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Purchase whereTerm($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Purchase whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Purchase whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Purchase whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereAmountFinanced($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereApplicationStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereCompletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereDealId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereDmrPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereDownPayment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereLeaseMileage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereMonthlyPayment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereMsrp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereRebates($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereTerm($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereUserId($value)
  * @mixin \Eloquent
  */
 class Purchase extends Model
 {
+    use CrudTrait;
+
     public const CASH = 'cash';
     public const FINANCE = 'finance';
     public const LEASE = 'lease';
@@ -70,7 +75,7 @@ class Purchase extends Model
      */
     public function deal() : BelongsTo
     {
-        return $this->belongsTo(Deal::class);
+        return $this->belongsTo(Deal::class, 'deal_id');
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Deal;
-use App\Models\Purchase;
+use App\Models\Order\Purchase;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

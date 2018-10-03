@@ -21,6 +21,7 @@ Route::group([
     CRUD::resource('dealer', 'DealerCrudController');
     CRUD::resource('feature', 'FeatureCrudController');
     CRUD::resource('category', 'CategoryCrudController');
+    CRUD::resource('purchase', 'OrderCrudController');
 
     //
     // Deal tools

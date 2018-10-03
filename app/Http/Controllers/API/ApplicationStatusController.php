@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Purchase;
+use App\Models\Order\Purchase;
 
 class ApplicationStatusController extends Controller
 {
