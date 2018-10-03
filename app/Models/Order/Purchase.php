@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property int $id
  * @property int $user_id
+ * @property string $status
  * @property User $buyer
  * @property int $deal_id
  * @property Deal $deal
