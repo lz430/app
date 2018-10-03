@@ -51,17 +51,11 @@ class Rebates extends React.Component {
         return (
             <div>
                 {this.isAnyRoleChecked() && (
-                    <div
-                        style={{
-                            fontStyle: 'italic',
-                            fontSize: '.75em',
-                            marginLeft: '.25em',
-                        }}
-                    >
+                    <div class="eligibility">
                         Proof of eligibility required.
                     </div>
                 )}
-                <div className="form-group form-check">
+                <div>
                     {Object.keys(quote.selections.conditionalRoles).map(key => (
                         <RebatesRole
                             key={key}
