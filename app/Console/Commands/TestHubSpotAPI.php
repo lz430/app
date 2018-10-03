@@ -30,7 +30,7 @@ class TestHubSpotAPI extends Command
 
     /**
      * Create a new command instance.
- * @param RISClient $client
+     * @param RISClient $client
      * @return void
      */
     public function __construct(HubspotClient $client)
@@ -61,6 +61,8 @@ class TestHubSpotAPI extends Command
             // Vehicle Info
             'stock' => $purchase->deal->stock_number,
             'vin' => $purchase->deal->vin,
+            'deal_id' => $purchase->deal_id,
+
             'bodystyle1' => $purchase->deal->version->body_style,
             'brand' => $purchase->deal->make,
             'model1' => $purchase->deal->model,
@@ -68,7 +70,7 @@ class TestHubSpotAPI extends Command
             'year_of_vehicle' => $purchase->deal->year,
             'trim' => $purchase->deal->series,
             //'interior_color' => $purchase->deal->interior_color,
-            'deal_id' => $purchase->deal_id,
+
             'dealer_r1_id' => $purchase->deal->dealer->route_one_id,
 
             //
@@ -110,10 +112,14 @@ class TestHubSpotAPI extends Command
             'properties' => $this->client->mungePayloadData([
                 'pipeline' => 'default',
                 'dealname' => $purchase->deal->title(),
-                'dealstage' => 'b7ff253e-1dc8-4a51-b799-be3778bfc8c9',
+                'dealstage' => 'b8ace084-d202-47df-bca7-3973eb53120a',
+                'amount' => '500',
+
+                'vehicle_stock' => $purchase->deal->stock_number,
+                'vehicle_vin' => $purchase->deal->vin,
+                'vehicle_id' => $purchase->deal_id,
             ], 'name'),
         ];
         $deal = $client->deals()->create($dealPayload);
-
     }
 }
