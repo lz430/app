@@ -61,7 +61,7 @@ class Rebates extends React.Component {
                         Proof of eligibility required.
                     </div>
                 )}
-                <div className="form-group form-check">
+                <div className="form-group">
                     {Object.keys(quote.selections.conditionalRoles).map(key => (
                         <RebatesRole
                             key={key}

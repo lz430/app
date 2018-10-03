@@ -44,12 +44,9 @@ export default class Discount extends React.PureComponent {
                 <Line>
                     <Label>Discount</Label>
                 </Line>
-                <Line style={{ margin: '.125em 0 .125em .25em' }}>
+                <Line className="">
                     <div className="form-check">
-                        <Label
-                            className="form-check-input"
-                            style={{ fontSize: '.9em' }}
-                        >
+                        <Label className="form-check-input" for="dmr">
                             <input
                                 name="discountType"
                                 value="dmr"
@@ -57,15 +54,20 @@ export default class Discount extends React.PureComponent {
                                 className="form-check-input"
                                 checked={pricing.isEffectiveDiscountDmr()}
                                 onChange={e => this.handleChange(e)}
+                                id={'dmr'}
                             />
                             DMR Customer
                         </Label>
-                        <Value
-                            isNegative={true}
-                            showIf={pricing.isEffectiveDiscountDmr()}
-                        >
-                            <DollarsAndCents value={pricing.dmrDiscount()} />
-                        </Value>
+                        <div className="savings">
+                            <Value
+                                isNegative={true}
+                                showIf={pricing.isEffectiveDiscountDmr()}
+                            >
+                                <DollarsAndCents
+                                    value={pricing.dmrDiscount()}
+                                />
+                            </Value>
+                        </div>
                     </div>
                 </Line>
                 {(config.EMPLOYEE_PRICING_WHITELIST_BRANDS.includes(
@@ -86,11 +88,11 @@ export default class Discount extends React.PureComponent {
                         {config.EMPLOYEE_PRICING_WHITELIST_BRANDS.includes(
                             pricing.make()
                         ) && (
-                            <Line style={{ margin: '.125em 0 .125em .25em' }}>
+                            <Line>
                                 <div className="form-check">
                                     <Label
                                         className="form-check-input"
-                                        style={{ fontSize: '.9em' }}
+                                        for="employee"
                                     >
                                         <input
                                             name="discountType"
@@ -99,17 +101,20 @@ export default class Discount extends React.PureComponent {
                                             className="form-check-input"
                                             checked={pricing.isEffectiveDiscountEmployee()}
                                             onChange={e => this.handleChange(e)}
+                                            id={'employee'}
                                         />
                                         Employee / Retiree
                                     </Label>
-                                    <Value
-                                        isNegative={true}
-                                        showIf={pricing.isEffectiveDiscountEmployee()}
-                                    >
-                                        <DollarsAndCents
-                                            value={pricing.employeeDiscount()}
-                                        />
-                                    </Value>
+                                    <div className="savings">
+                                        <Value
+                                            isNegative={true}
+                                            showIf={pricing.isEffectiveDiscountEmployee()}
+                                        >
+                                            <DollarsAndCents
+                                                value={pricing.employeeDiscount()}
+                                            />
+                                        </Value>
+                                    </div>
                                 </div>
 
                                 {pricing.isEffectiveDiscountEmployee() &&
@@ -119,11 +124,11 @@ export default class Discount extends React.PureComponent {
                         {config.SUPPLIER_PRICING_WHITELIST_BRANDS.includes(
                             pricing.make()
                         ) && (
-                            <Line style={{ margin: '.125em 0 .125em .25em' }}>
+                            <Line>
                                 <div className="form-check">
                                     <Label
                                         className="form-check-input"
-                                        style={{ fontSize: '.9em' }}
+                                        for="supplier"
                                     >
                                         <input
                                             name="discountType"
@@ -132,17 +137,20 @@ export default class Discount extends React.PureComponent {
                                             className="form-check-input"
                                             checked={pricing.isEffectiveDiscountSupplier()}
                                             onChange={e => this.handleChange(e)}
+                                            id="supplier"
                                         />
                                         Supplier / Friends &amp; Family
                                     </Label>
-                                    <Value
-                                        isNegative={true}
-                                        showIf={pricing.isEffectiveDiscountSupplier()}
-                                    >
-                                        <DollarsAndCents
-                                            value={pricing.supplierDiscount()}
-                                        />
-                                    </Value>
+                                    <div className="savings">
+                                        <Value
+                                            isNegative={true}
+                                            showIf={pricing.isEffectiveDiscountSupplier()}
+                                        >
+                                            <DollarsAndCents
+                                                value={pricing.supplierDiscount()}
+                                            />
+                                        </Value>
+                                    </div>
                                 </div>
 
                                 {pricing.isEffectiveDiscountSupplier() &&
