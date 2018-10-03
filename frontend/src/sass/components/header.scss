@@ -328,6 +328,10 @@
         }
         &__item {
             display: flex;
+            &:hover {
+                background: $color-background-primary;
+                transition: background $transition-standard;
+            }
             &__icon {
                 display: flex;
                 min-width: 40px;
