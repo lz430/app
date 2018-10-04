@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\File;
 use League\Csv\Reader;
 use League\Csv\Statement;
 
-use App\Models\Notify;
+use Illuminate\Support\Facades\Notification;
 use App\Notifications\NotifyToSlackChannel;
 
 
@@ -349,13 +349,13 @@ class Importer
     {
         // Variables and logic for sending import slack notifications of import start
         $importStart = date('m/d/Y g:ia');
-        $startSlackNotify = [
-            'content' => "vAuto Importer",
-            'title' => "Import Started - {$importStart}",
-            'environment' => config('app.env'),
+        $data = [
+            'title' => 'vAuto Importer',
+            'message' => "Import Started - {$importStart}",
+            'fields' => ['Environment' => config('app.env')]
         ];
-        $deal = new Deal;
-        $deal->notify(new NotifyToSlackChannel($startSlackNotify));
+        Notification::route('slack', config('services.slack.webhook'))
+            ->notify(new NotifyToSlackChannel($data));
 
         $sources = $this->buildSourceData();
         $hashes = [];
@@ -392,19 +392,21 @@ class Importer
 
         // Variables and logic for sending import slack notifications of import start
         $importEnd = date('m/d/Y g:ia');
-        $endSlackNotify = [
-            'content' => "vAuto Importer",
-            'title' => "Import Finished - {$importEnd}",
-            'environment' => config('app.env'),
-            'date' => date('m/d/Y'),
-            'totaltime' => $this->formatPeriod($this->debug['stop'], $this->debug['start']),
-            'updated' => $this->debug['updated'],
-            'skipped' => $this->debug['skipped'],
-            'novins' => $this->debug['erroredVins'],
-            'miscerrors' => $this->debug['erroredMisc'],
+        $data = [
+            'title' => 'vAuto Importer',
+            'message' => "Import Finished - {$importEnd}",
+            'fields' => [
+                'Environment' => config('app.env'),
+                'Updated' => $this->debug['updated'],
+                'Skipped' => $this->debug['skipped'],
+                'Deal Errors No VINS' => $this->debug['erroredVins'],
+                'Misc Errors' => $this->debug['erroredMisc'],
+                'Total Execution Time' => $this->formatTimePeriod($this->debug['stop'], $this->debug['start']),
+            ]
         ];
-        //(new Notify())->notify(new NotifyToSlackChannel($endSlackNotify));
-        $deal->notify(new NotifyToSlackChannel($endSlackNotify));
+        Notification::route('slack', config('services.slack.webhook'))
+            ->notify(new NotifyToSlackChannel($data));
+
         //Copies vauto dump file for current day and saves per date for archives
         $Path = storage_path() . '/app/public/importbackups';
         if (!file_exists($Path)) {
@@ -421,17 +423,12 @@ class Importer
      * @param $starttime
      * @return string
      */
-    private function formatPeriod($endtime, $starttime)
+    private function formatTimePeriod($endtime, $starttime)
     {
-
         $duration = $endtime - $starttime;
-
         $hours = (int) ($duration / 60 / 60);
-
         $minutes = (int) ($duration / 60) - $hours * 60;
-
         $seconds = (int) $duration - $hours * 60 * 60 - $minutes * 60;
-
         return ($hours == 0 ? "00":$hours) . " Hours " . ($minutes == 0 ? "00":($minutes < 10? "0".$minutes:$minutes)) . " Minutes " . ($seconds == 0 ? "00":($seconds < 10? "0".$seconds:$seconds)) . " Seconds ";
     }
 

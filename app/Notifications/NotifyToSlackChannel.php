@@ -43,17 +43,10 @@ class NotifyToSlackChannel extends Notification
         $stats = $this->data;
 
         return (new SlackMessage)
-            ->content($stats['content'])
+            ->content($stats['title'])
             ->attachment(function($attachment) use ($stats){
-                $attachment->title("{$stats['title']}")
-                   ->fields([
-                       "Environment" => $stats['environment'],
-                       "Updated Deals" => isset($stats['updated']) ? $stats['updated'] : 0,
-                       "Skipped Deals" => isset($stats['skipped']) ? $stats['skipped'] : 0,
-                       "No Matching VIN Deals" => isset($stats['novins']) ? $stats['novins'] : 0,
-                       "Misc. Deal Errors" => isset($stats['miscerrors']) ? $stats['miscerrors'] : 0,
-                       "Total Execution Time" => isset($stats['totaltime']) ? $stats['totaltime'] : 0
-                   ]);
+                $attachment->title($stats['message'])
+                   ->fields($stats['fields']);
             });
     }
 
