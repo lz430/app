@@ -354,7 +354,8 @@ class Importer
             'title' => "Import Started - {$importStart}",
             'environment' => config('app.env'),
         ];
-        (new Notify())->notify(new NotifyToSlackChannel($startSlackNotify));
+        $deal = new Deal;
+        $deal->notify(new NotifyToSlackChannel($startSlackNotify));
 
         $sources = $this->buildSourceData();
         $hashes = [];
@@ -397,14 +398,13 @@ class Importer
             'environment' => config('app.env'),
             'date' => date('m/d/Y'),
             'totaltime' => $this->formatPeriod($this->debug['stop'], $this->debug['start']),
-            'created' => $this->debug['created'],
             'updated' => $this->debug['updated'],
             'skipped' => $this->debug['skipped'],
             'novins' => $this->debug['erroredVins'],
             'miscerrors' => $this->debug['erroredMisc'],
         ];
-        (new Notify())->notify(new NotifyToSlackChannel($endSlackNotify));
-
+        //(new Notify())->notify(new NotifyToSlackChannel($endSlackNotify));
+        $deal->notify(new NotifyToSlackChannel($endSlackNotify));
         //Copies vauto dump file for current day and saves per date for archives
         $Path = storage_path() . '/app/public/importbackups';
         if (!file_exists($Path)) {

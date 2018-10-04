@@ -46,17 +46,15 @@ class NotifyToSlackChannel extends Notification
             ->content($stats['content'])
             ->attachment(function($attachment) use ($stats){
                 $attachment->title("{$stats['title']}")
-                    ->fields([
-                        "Environment" => $stats['environment'],
-                        "Created Deals" => isset($stats['created']) ? $stats['created'] : 0,
-                        "Updated Deals" => isset($stats['updated']) ? $stats['updated'] : 0,
-                        "Skipped Deals" => isset($stats['skipped']) ? $stats['skipped'] : 0,
-                        "No Matching VIN Deals" => isset($stats['novins']) ? $stats['novins'] : 0,
-                        "Misc. Deal Errors" => isset($stats['miscerrors']) ? $stats['miscerrors'] : 0,
-                        "Total Execution Time" => isset($stats['totaltime']) ? $stats['totaltime'] : 0,
-                    ]);
+                   ->fields([
+                       "Environment" => $stats['environment'],
+                       "Updated Deals" => isset($stats['updated']) ? $stats['updated'] : 0,
+                       "Skipped Deals" => isset($stats['skipped']) ? $stats['skipped'] : 0,
+                       "No Matching VIN Deals" => isset($stats['novins']) ? $stats['novins'] : 0,
+                       "Misc. Deal Errors" => isset($stats['miscerrors']) ? $stats['miscerrors'] : 0,
+                       "Total Execution Time" => isset($stats['totaltime']) ? $stats['totaltime'] : 0
+                   ]);
             });
-
     }
 
     /**

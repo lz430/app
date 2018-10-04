@@ -8,6 +8,7 @@ use App\Models\JATO\Make;
 use App\Models\Order\Purchase;
 use Backpack\CRUD\CrudTrait;
 use Carbon\Carbon;
+use Illuminate\Notifications\Notifiable;
 use ScoutElastic\Searchable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -113,6 +114,7 @@ class Deal extends Model
 {
     use Searchable;
     use CrudTrait;
+    use Notifiable;
 
     protected $indexConfigurator = DealIndexConfigurator::class;
 
@@ -250,6 +252,11 @@ class Deal extends Model
         'source_price' => 'object',
         'payments' => 'object',
     ];
+
+    public function routeNotificationForSlack()
+    {
+        return slack()->getWebhookUrl();
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
