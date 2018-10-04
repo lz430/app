@@ -217,8 +217,6 @@ class Importer
     private function processRecord(array $row)
     {
         try {
-            $erroredVins = false;
-            $erroredMisc = false;
             list($version, $versionDebugData) = (new VersionMunger($row, $this->jatoClient))->build();
             $this->info("Deal: {$row['VIN']} - {$row['Stock #']}");
 
@@ -228,10 +226,7 @@ class Importer
                 Log::channel('jato')->error('Could not find exact match for VIN -> JATO Version', [
                     'VAuto Row' => $row,
                 ]);
-                $erroredVins = true;
-                if($erroredVins) {
-                    $this->debug['erroredVins']++;
-                }
+                $this->debug['erroredVins']++;
                 $this->info("    -- Error: Could not find match for vin");
                 return;
             }
@@ -284,10 +279,7 @@ class Importer
             app('sentry')->captureException($e);
             $querySetErrorStatus = Deal::where('vin', $row['VIN']);
             $querySetErrorStatus->update(['status' => 'error']);
-            $erroredMisc = true;
-            if($erroredMisc) {
-                $this->debug['erroredMisc']++;
-            }
+            $this->debug['erroredMisc']++;
             if ($e->getCode() === 401) {
                 $this->error('401 error connecting to JATO; cancelling the rest of the calls.');
                 throw $e;
@@ -298,10 +290,7 @@ class Importer
             app('sentry')->captureException($e);
             $querySetErrorStatus = Deal::where('vin', $row['VIN']);
             $querySetErrorStatus->update(['status' => 'error']);
-            $erroredMisc = true;
-            if($erroredMisc) {
-                $this->debug['erroredMisc']++;
-            }
+            $this->debug['erroredMisc']++;
         }
     }
 
