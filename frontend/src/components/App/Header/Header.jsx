@@ -9,14 +9,18 @@ import { withRouter } from 'react-router-dom';
 import { Navbar, NavbarBrand } from 'reactstrap';
 
 import UserLocationModal from './UserLocationModal';
+import UserContactModal from './UserContactModal';
 import CompareWidget from './CompareWidget';
 import { getUserLocation } from 'apps/user/selectors';
 import { requestLocation } from 'apps/user/actions';
 import { getCurrentPageIsInCheckout } from 'apps/page/selectors';
 import { toggleCompare } from 'apps/common/actions';
-import ChatWidget from '../ChatWidget';
+// import ChatWidget from '../ChatWidget';
+
 import Location from 'icons/zondicons/Location';
 import Phone from 'icons/zondicons/Phone';
+import Help from 'icons/zondicons/Question';
+
 import SearchWidget from './SearchWidget';
 import { headerRequestAutocomplete } from 'apps/page/actions';
 import { getSearchQuery } from 'pages/deal-list/selectors';
@@ -38,11 +42,18 @@ class Header extends React.PureComponent {
 
     state = {
         userLocationModalOpen: false,
+        userContactModalOpen: false,
     };
 
     toggleUserLocationModal() {
         this.setState({
             userLocationModalOpen: !this.state.userLocationModalOpen,
+        });
+    }
+
+    toggleUserContactModal() {
+        this.setState({
+            userContactModalOpen: !this.state.userContactModalOpen,
         });
     }
 
@@ -83,15 +94,21 @@ class Header extends React.PureComponent {
 
     renderPhoneWidget() {
         return (
-            <div className="header-widget phone-number hidden d-lg-flex">
-                <div className="header-widget-content hidden d-lg-block">
-                    <div className="label">Give Us A Call</div>
-                    <div className="value">
-                        <a href="tel:855-675-7301">(855) 675-7301</a>
+            <div className="header-widget phone-number d-lg-flex">
+                <div className="header-widget-content d-lg-block">
+                    <UserContactModal
+                        isOpen={this.state.userContactModalOpen}
+                        toggle={this.toggleUserContactModal.bind(this)}
+                    />
+                    <div
+                        className="label"
+                        onClick={() => this.toggleUserContactModal()}
+                    >
+                        Need Help?
+                        <div className="icon text-center">
+                            <Help />
+                        </div>
                     </div>
-                </div>
-                <div className="icon">
-                    <Phone />
                 </div>
             </div>
         );
@@ -115,7 +132,7 @@ class Header extends React.PureComponent {
                     searchQuery={this.props.searchQuery}
                 />
                 <div className="navbar-text">
-                    <ChatWidget presentation="header" />
+                    {/*<ChatWidget presentation="header" />*/}
                     {this.renderPhoneWidget()}
                     <CompareWidget
                         currentPageIsInCheckout={

@@ -94,6 +94,11 @@
             margin-left: 1rem;
         }
     }
+    &.phone-number {
+        .icon {
+            margin: 0 auto;
+        }
+    }
 }
 
 .header-widget.chat-button {
@@ -131,6 +136,45 @@
         @include media-breakpoint-down(md) {
             display: block;
             width: 100%;
+        }
+    }
+}
+.user-contact-modal {
+    .modal-body {
+        @include media-breakpoint-up(sm) {
+            width: 600px;
+        }
+
+        svg {
+            color: #fff;
+            fill: currentColor;
+            display: block;
+            margin: 0 auto;
+            max-width: 35%;
+        }
+        .col {
+            &:nth-of-type(1) {
+                @include media-breakpoint-down(sm) {
+                    margin-bottom: 15px;
+                }
+            }
+            &:nth-of-type(2) {
+                border-left: 1px solid #ccc;
+                @media screen and (max-width: $break-extra-small) {
+                    border-left: 0 none;
+                }
+            }
+        }
+    }
+}
+.modal-widget {
+    &.chat-button {
+        text-align: center;
+
+        .btn {
+            @media screen and (max-width: $break-extra-small) {
+                max-width: 127px;
+            }
         }
     }
 }
