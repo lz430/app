@@ -35,9 +35,9 @@ class AppServiceProvider extends ServiceProvider
             Dealer::observe(DealerObserver::class);
             Feature::observe(FeatureObserver::class);
             Version::observe(VersionObserver::class);
-            Purchase::observe(PurchaseObserver::class);
         }
 
+        Purchase::observe(PurchaseObserver::class);
         VersionQuote::observe(VersionQuoteObserver::class);
         Deal::observe(DealObserver::class);
 

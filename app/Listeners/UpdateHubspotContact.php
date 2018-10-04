@@ -2,17 +2,15 @@
 
 namespace App\Listeners;
 
+use DeliverMyRide\HubSpot\HubspotClient;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Log;
-
-use DeliverMyRide\HubSpot\Client;
-use Exception;
 
 class UpdateHubspotContact
 {
     private $client;
     
-    public function __construct(Client $client)
+    public function __construct(HubspotClient $client)
     {
         $this->client = $client;
     }
@@ -29,11 +27,9 @@ class UpdateHubspotContact
                 unset($event->payload['from']);
             }
 
-            $this->client->createOrUpdateContact($event->payload);
 
-            if (isset($event->payload['phone'])) {
-                $this->client->submitBuyNowContactInfoForm($event->payload);
-            }
+
+            $this->client->contacts()->createOrUpdate($event->payload['email'], $event->payload);
             return;
         } catch (ClientException $e) {
             Log::info($e->getMessage());
