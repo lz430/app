@@ -114,7 +114,6 @@ class Deal extends Model
 {
     use Searchable;
     use CrudTrait;
-    use Notifiable;
 
     protected $indexConfigurator = DealIndexConfigurator::class;
 
@@ -252,11 +251,6 @@ class Deal extends Model
         'source_price' => 'object',
         'payments' => 'object',
     ];
-
-    public function routeNotificationForSlack()
-    {
-        return slack()->getWebhookUrl();
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
