@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { dealType, dealPricingType } from 'types';
 
-import CustomizeQuoteOrBuyNowButton from 'components/CustomizeQuoteOrBuyNowButton';
 import Line from '../pricing/Line';
 import CashPriceExplanation from './CashPriceExplanation';
 import FinancePriceExplanation from './FinancePriceExplanation';
 import LeasePriceExplanation from './LeasePriceExplanation';
+import { Link } from 'react-router-dom';
 
 class DealPriceExplanationModalData extends React.PureComponent {
     static propTypes = {
@@ -86,11 +86,14 @@ class DealPriceExplanationModalData extends React.PureComponent {
                         )}
 
                         <div className="deal__buttons">
-                            <CustomizeQuoteOrBuyNowButton
-                                onCustomizeQuote={() => this.selectDeal()}
-                                deal={this.props.dealPricing.deal()}
-                                disabled={!this.props.dealPricing.canPurchase()}
-                            />
+                            <Link
+                                className="btn btn-primary btn-block"
+                                to={
+                                    '/deals/' + this.props.dealPricing.deal().id
+                                }
+                            >
+                                View Details
+                            </Link>
                         </div>
                     </div>
                     {this.props.children}
