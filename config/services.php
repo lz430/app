@@ -91,4 +91,8 @@ return [
         'id' => 'F00DMR',
     ],
 
+    'slack' => [
+        'webhook' => 'https://hooks.slack.com/services/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',
+    ],
+
 ];

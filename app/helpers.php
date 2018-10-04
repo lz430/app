@@ -35,3 +35,10 @@ if (! function_exists('generate_asset_url')) {
         return $builder->createURL($url, $params);
     }
 }
+
+if (!function_exists('slack')) {
+    function slack($webhook_url = null)
+    {
+        return \App\Services\Slack::make($webhook_url);
+    }
+}
