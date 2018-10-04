@@ -8,7 +8,6 @@ use App\Models\JATO\Make;
 use App\Models\Order\Purchase;
 use Backpack\CRUD\CrudTrait;
 use Carbon\Carbon;
-use Illuminate\Notifications\Notifiable;
 use ScoutElastic\Searchable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
