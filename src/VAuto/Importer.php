@@ -397,6 +397,7 @@ class Importer
             'message' => "Import Finished - {$importEnd}",
             'fields' => [
                 'Environment' => config('app.env'),
+                'Created' => $this->debug['created'],
                 'Updated' => $this->debug['updated'],
                 'Skipped' => $this->debug['skipped'],
                 'Deal Errors No VINS' => $this->debug['erroredVins'],
