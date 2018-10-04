@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Models\Order\Purchase;
 use App\Models\Deal;
-use App\Policies\PurchasePolicy;
 
 class PurchaseObserver
 {
@@ -13,26 +12,9 @@ class PurchaseObserver
      */
     private function onCreatedSyncWithHubspot(Purchase $purchase)
     {
-        $client = resolve('DeliverMyRide\HubSpot\HubspotClient');
-
-        dd($contact);
-    }
-
-    /**
-     * Handle to the purchase "created" event.
-     *
-     * @param \App\Models\Order\Purchase $purchase
-     * @return void
-     */
-    public function created(Purchase $purchase)
-    {
-        //
-        // Remove deal from index
-        Deal::where('id', $purchase->deal_id)->searchable();
-
-        //
-        // Sync with hubspot
-        $this->onCreatedSyncWithHubspot($purchase);
+        $hubSpotManager = resolve('DeliverMyRide\HubSpot\Manager\SyncPurchaseWithHubspot');
+        $hubSpotManager->createContactAndDeal($purchase);
+        $hubSpotManager->submitPurchaseForm($purchase);
     }
 
     /**
@@ -49,11 +31,10 @@ class PurchaseObserver
             //
             // Sync with hubspot
             $this->onCreatedSyncWithHubspot($purchase);
+
+            //
+            // Remove deal from index
+            Deal::where('id', $purchase->deal_id)->searchable();
         }
-
-
-        //
-        // Remove deal from index
-        Deal::where('id', $purchase->deal_id)->searchable();
     }
 }

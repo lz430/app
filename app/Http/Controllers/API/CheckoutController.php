@@ -10,7 +10,6 @@ use App\Models\Deal;
 use App\Models\User;
 use Carbon\Carbon;
 
-use App\Events\NewPurchaseInitiated;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -139,8 +138,6 @@ class CheckoutController extends BaseAPIController
         $purchase->user_id = $user->id;
         $purchase->status = "contact";
         $purchase->save();
-
-        //event(new NewPurchaseInitiated($user, $purchase));
 
         $token = auth('api')->login($user);
         $return = [
