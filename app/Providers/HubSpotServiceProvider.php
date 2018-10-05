@@ -18,7 +18,11 @@ class HubSpotServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(HubspotClient::class, function ($app) {
-            return HubspotClient::create(config('services.hubspot.api_key'));
+            $token = config('services.hubspot.api_key');
+            if (!$token) {
+                $token = 'no-hubspot-token';
+            }
+            return HubspotClient::create($token);
         });
     }
 

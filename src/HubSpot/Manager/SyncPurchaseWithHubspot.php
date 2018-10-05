@@ -9,15 +9,25 @@ use DeliverMyRide\HubSpot\HubspotClient;
 /**
  *
  */
-class SyncPurchaseWithHubspot {
+class SyncPurchaseWithHubspot
+{
     private $client;
+
     public function __construct(HubspotClient $client)
     {
         $this->client = $client;
     }
 
+    /**
+     * @param Purchase $purchase
+     * @return bool
+     */
     public function submitPurchaseForm(Purchase $purchase)
     {
+        if (!hubspot_enabled()) {
+            return false;
+        }
+
         $this->client->forms()->submit('3388780', '9cac9eed-3b2c-4d2f-9bc6-38b0c7b04c2f', [
             [
                 'firstname' => $purchase->buyer->first_name,
@@ -26,9 +36,21 @@ class SyncPurchaseWithHubspot {
                 'phone' => $purchase->buyer->phone_number,
             ]
         ]);
+
+        return true;
     }
 
-    public function createContactAndDeal(Purchase $purchase) {
+    /**
+     * @param Purchase $purchase
+     * @return bool
+     * @throws \SevenShores\Hubspot\Exceptions\HubspotException
+     */
+    public function createContactAndDeal(Purchase $purchase)
+    {
+        if (!hubspot_enabled()) {
+            return false;
+        }
+
         $client = $this->client;
 
         $contactData = [
@@ -102,5 +124,7 @@ class SyncPurchaseWithHubspot {
             ], 'name'),
         ];
         $deal = $client->deals()->create($dealPayload);
+
+        return true;
     }
 }
