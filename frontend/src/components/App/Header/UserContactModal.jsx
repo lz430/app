@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Modal, ModalHeader, ModalBody, Alert, Button } from 'reactstrap';
-import Bolt from 'icons/zondicons/Bolt';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import Phone from 'icons/zondicons/Phone';
-import ChatIcon from 'icons/zondicons/ChatBubbleDots';
 import ChatWidget from '../ChatWidget';
 
 class UserContactModal extends React.PureComponent {
