@@ -18,7 +18,6 @@ import { toggleCompare } from 'apps/common/actions';
 // import ChatWidget from '../ChatWidget';
 
 import Location from 'icons/zondicons/Location';
-import Phone from 'icons/zondicons/Phone';
 import Help from 'icons/zondicons/Question';
 
 import SearchWidget from './SearchWidget';
