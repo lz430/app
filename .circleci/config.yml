@@ -66,16 +66,16 @@ jobs:
           name: Build frontend assets
           command: cd frontend && yarn build
 
-      - run:
-          name: Migrate database
-          command:  php artisan migrate --env=testing --force
+      #- run:
+      #    name: Migrate database
+      #    command:  php artisan migrate --env=testing --force
 
       ##################################################################
       # Tests
       ##################################################################
-      - run:
-          name: Run PHPunit tests
-          command:  vendor/bin/phpunit
+      #- run:
+      #    name: Run PHPunit tests
+      #    command:  vendor/bin/phpunit
 
       - run:
           name: Run Javascript tests
