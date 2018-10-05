@@ -96,7 +96,15 @@ const reducer = function(state = initialState, action = {}) {
             };
 
         case ActionTypes.RECEIVE_DEALS:
+            if (action.data === false) {
+                return {
+                    ...state,
+                    deals: action.data,
+                };
+            }
+
             let deals = [];
+
             if (state.page !== 1) {
                 deals.push(...state.deals);
             }
@@ -109,6 +117,13 @@ const reducer = function(state = initialState, action = {}) {
             };
 
         case ActionTypes.RECEIVE_MODEL_YEARS:
+            if (action.data === false) {
+                return {
+                    ...state,
+                    modelYears: action.data,
+                };
+            }
+
             return {
                 ...state,
                 modelYears: action.data.results,

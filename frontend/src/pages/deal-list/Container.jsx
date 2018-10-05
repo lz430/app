@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import ReactRouterPropTypes from 'react-router-prop-types';
 import PropTypes from 'prop-types';
-import { filterItemType } from 'types';
+import { dealType, filterItemType } from 'types';
 import Loading from 'icons/miscicons/Loading';
 
 import { StickyContainer } from 'react-sticky';
@@ -45,6 +45,8 @@ class Container extends React.Component {
     static propTypes = {
         purchaseStrategy: PropTypes.string.isRequired,
         searchQuery: PropTypes.object.isRequired,
+        modelYears: PropTypes.array,
+        deals: PropTypes.arrayOf(dealType),
         makeSelectorModalIsOpen: PropTypes.bool,
         smallFiltersShown: PropTypes.bool,
         selectedFiltersByCategory: PropTypes.object,
@@ -141,6 +143,16 @@ class Container extends React.Component {
             );
         }
 
+        if (this.props.modelYears === false || this.props.deals === false) {
+            return (
+                <PageContent desktopOnlyFooter={true}>
+                    <h1 className="mb-5 mt-5 text-center">
+                        Unable to fetch results.
+                    </h1>
+                </PageContent>
+            );
+        }
+
         if (
             !this.props.userLocation ||
             (this.props.userLocation.latitude &&
@@ -167,6 +179,8 @@ const mapStateToProps = state => {
         smallFiltersShown: state.pages.dealList.smallFiltersShown,
         makeSelectorModalIsOpen: state.pages.dealList.showMakeSelectorModal,
         searchQuery: getSearchQuery(state),
+        deals: state.pages.dealList.deals,
+        modelYears: state.pages.dealList.modelYears,
         userLocation: getUserLocation(state),
         selectedFiltersByCategory: getSelectedFiltersByCategory(state),
         purchaseStrategy: getUserPurchaseStrategy(state),
