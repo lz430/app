@@ -37,8 +37,8 @@ class PurchaseObserver
             //
             // Notify Slack
             $data = [
-                'title' => 'Purchase Data',
-                'message' => "New Purchase Submission",
+                'title' => 'New Purchase Submission',
+                'message' => "Purchase Data",
                 'fields' => [
                     'Environment' => config('app.env'),
                     'Stock Number' => $purchase->deal->stock_number,
