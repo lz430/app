@@ -28,8 +28,9 @@ class UpdateHubspotContact
             }
 
 
-
-            $this->client->contacts()->createOrUpdate($event->payload['email'], $event->payload);
+            if (hubspot_enabled()) {
+                $this->client->contacts()->createOrUpdate($event->payload['email'], $event->payload);
+            }
             return;
         } catch (ClientException $e) {
             Log::info($e->getMessage());
