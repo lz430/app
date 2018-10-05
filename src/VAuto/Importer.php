@@ -336,15 +336,6 @@ class Importer
      */
     public function import()
     {
-        // Variables and logic for sending import slack notifications of import start
-        $importStart = date('m/d/Y g:ia');
-        $data = [
-            'title' => 'vAuto Importer',
-            'message' => "Import Started - {$importStart}",
-            'fields' => ['Environment' => config('app.env')]
-        ];
-        Notification::route('slack', config('services.slack.webhook'))
-            ->notify(new NotifyToSlackChannel($data));
 
         $sources = $this->buildSourceData();
         $hashes = [];
@@ -353,6 +344,19 @@ class Importer
             $hashes[] = $source['hash'];
         }
 
+        // Variables and logic for sending import slack notifications of import start
+        $importStart = date('m/d/Y g:ia');
+        $data = [
+            'title' => 'vAuto Importer',
+            'message' => "Import Started - {$importStart}",
+            'fields' => [
+                'Environment' => config('app.env'),
+                'Import File Created' => date("F d Y g:ia", filemtime($source['path']))
+            ]
+        ];
+        Notification::route('slack', config('services.slack.webhook'))
+            ->notify(new NotifyToSlackChannel($data));
+        
         $this->info("RESULTS ::::");
 
         $this->info(" -- Created Deals: " . $this->debug['created']);
@@ -399,6 +403,7 @@ class Importer
 
         //Copies vauto dump file for current day and saves per date for archives
         $Path = storage_path() . '/app/public/importbackups';
+
         if (!file_exists($Path)) {
             File::makeDirectory($Path);
         }
