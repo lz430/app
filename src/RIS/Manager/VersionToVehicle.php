@@ -453,7 +453,7 @@ class VersionToVehicle
      */
     private function fetchVehicles()
     {
-        $results = Cache::remember('ris-make-' . $this->version->model->make->name . self::REGIONS['detroit'], 1440, function () {
+        $results = Cache::remember('ris-make-' . $this->version->model->make->name . self::REGIONS['detroit'], 240, function () {
             try {
                 $results = $this->client->vehicle->findByMakeAndPostalcode(
                     $this->version->model->make->name,
@@ -465,7 +465,6 @@ class VersionToVehicle
 
             return $results;
         });
-
         if ($results) {
             $results = collect($results->response);
         }
