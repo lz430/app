@@ -52,11 +52,11 @@ jobs:
           keys:
             - node-v1-{{ checksum "package.json" }}
             - node-v1-
-      - run: yarn install
+      - run: cd frontend && yarn install
       - save_cache:
           key: node-v1-{{ checksum "package.json" }}
           paths:
-            - node_modules
+            - frontend/node_modules
 
 
       ##################################################################
@@ -64,7 +64,7 @@ jobs:
       ##################################################################
       - run:
           name: Build frontend assets
-          command: yarn production
+          command: cd frontend && yarn production
 
       - run:
           name: Migrate database
@@ -79,4 +79,4 @@ jobs:
 
       - run:
           name: Run Javascript tests
-          command:  yarn run test
+          command: cd frontend && yarn run test
