@@ -13,27 +13,9 @@ class HeaderToolbar extends React.PureComponent {
 
     steps() {
         let steps = {
-            'deal-list': {
-                step: 1,
-                label: 'Search',
-                active: false,
-                url: '',
-                canNav: false,
-                showBreadcrumb: false,
-                showBar: false,
-            },
             'deal-detail': {
-                step: 2,
-                label: 'Details',
-                active: false,
-                url: '',
-                canNav: false,
-                showBreadcrumb: true,
-                showBar: false,
-            },
-            compare: {
-                step: 3,
-                label: 'Compare',
+                step: 1,
+                label: 'Select Deal',
                 active: false,
                 url: '',
                 canNav: false,
@@ -41,8 +23,17 @@ class HeaderToolbar extends React.PureComponent {
                 showBar: false,
             },
             'checkout-confirm': {
-                step: 4,
-                label: 'Confirm',
+                step: 2,
+                label: 'Contact',
+                active: false,
+                url: '',
+                canNav: false,
+                showBreadcrumb: false,
+                showBar: true,
+            },
+            'checkout-financing': {
+                step: 3,
+                label: 'Financing',
                 active: false,
                 url: '',
                 canNav: false,
@@ -50,7 +41,7 @@ class HeaderToolbar extends React.PureComponent {
                 showBar: true,
             },
             'checkout-complete': {
-                step: 5,
+                step: 4,
                 label: 'Summary',
                 active: false,
                 url: '',
