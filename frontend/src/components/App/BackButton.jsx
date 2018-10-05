@@ -8,9 +8,6 @@ import {
 } from 'apps/page/selectors';
 import { checkout } from 'apps/checkout/selectors';
 
-import { clearModelYear } from 'pages/deal-list/actions';
-import CheveronLeft from 'icons/zondicons/CheveronLeft';
-
 class BackButton extends React.PureComponent {
     static propTypes = {
         currentPage: PropTypes.string,
