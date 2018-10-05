@@ -80,9 +80,7 @@ function* requestSearch(action) {
 
     let results = [];
 
-    //    if (!action.incrementPage) {
     yield put({ type: SEARCH_LOADING_START });
-    //    }
 
     try {
         results = yield call(
@@ -93,6 +91,7 @@ function* requestSearch(action) {
         results = results.data;
     } catch (e) {
         console.log(e);
+        results = false;
     } finally {
         if (yield cancelled()) {
             source.cancel();
@@ -101,18 +100,17 @@ function* requestSearch(action) {
 
     yield put(DealListActions.receiveSearch(results));
 
-    if (results) {
-        if (searchQuery.entity === 'deal') {
-            yield put(DealListActions.receiveDeals(results));
-            yield fork(batchRequestDealQuotes, results.results);
-        } else {
-            yield put(DealListActions.receiveModelYears(results));
-        }
+    if (searchQuery.entity === 'deal') {
+        yield put(DealListActions.receiveDeals(results));
+    } else {
+        yield put(DealListActions.receiveModelYears(results));
     }
 
-    //if (!action.incrementPage) {
+    if (results && searchQuery.entity === 'deal') {
+        yield fork(batchRequestDealQuotes, results.results);
+    }
+
     yield put({ type: SEARCH_LOADING_FINISHED });
-    //}
 
     const urlQuery = buildSearchQueryUrl(searchQuery);
     if (urlQuery) {

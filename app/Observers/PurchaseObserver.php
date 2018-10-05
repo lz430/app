@@ -4,6 +4,8 @@ namespace App\Observers;
 
 use App\Models\Order\Purchase;
 use App\Models\Deal;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\NotifyToSlackChannel;
 
 class PurchaseObserver
 {
@@ -31,6 +33,22 @@ class PurchaseObserver
             //
             // Sync with hubspot
             $this->onCreatedSyncWithHubspot($purchase);
+
+            //
+            // Notify Slack
+            $data = [
+                'title' => 'Purchase Data',
+                'message' => "New Purchase Submission",
+                'fields' => [
+                    'Environment' => config('app.env'),
+                    'Stock Number' => $purchase->deal->stock_number,
+                    'VIN' => $purchase->deal->vin,
+                    'Deal ID' => $purchase->deal_id,
+                ]
+            ];
+
+            Notification::route('slack', config('services.slack.webhook'))
+                ->notify(new NotifyToSlackChannel($data));
 
             //
             // Remove deal from index
