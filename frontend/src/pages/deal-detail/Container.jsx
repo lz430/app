@@ -134,6 +134,19 @@ class DealDetailContainer extends React.PureComponent {
         );
     }
 
+    renderBreadcrumb() {
+        return (
+            <Container>
+                <Breadcrumb>
+                    <BreadcrumbItem>
+                        <Link to="/filter">Search Results</Link>
+                    </BreadcrumbItem>
+                    <BreadcrumbItem active>View Deal</BreadcrumbItem>
+                </Breadcrumb>
+            </Container>
+        );
+    }
+
     render() {
         if (this.props.isLoading) {
             return this.renderPageLoadingIcon();
@@ -149,16 +162,10 @@ class DealDetailContainer extends React.PureComponent {
 
         return (
             <PageContent>
-                <Container>
-                    <Breadcrumb>
-                        <BreadcrumbItem>
-                            <Link to="/filter">Search Results</Link>
-                        </BreadcrumbItem>
-                        <BreadcrumbItem active>View Deal</BreadcrumbItem>
-                    </Breadcrumb>
-                </Container>
+                {this.renderBreadcrumb()}
 
                 {!this.props.deal['is_in_range'] && this.renderDealOutOfRange()}
+
                 <DealDetail
                     deal={this.props.deal}
                     purchaseStrategy={this.props.purchaseStrategy}
@@ -179,6 +186,7 @@ class DealDetailContainer extends React.PureComponent {
                     checkoutStart={this.props.checkoutStart}
                     onToggleCompare={this.props.toggleCompare}
                     compareList={this.props.compareList}
+                    userLocation={this.props.userLocation}
                 />
             </PageContent>
         );

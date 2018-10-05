@@ -19,7 +19,7 @@ export default class DealDetail extends React.PureComponent {
         deal: dealType,
         pricing: pricingType.isRequired,
         compareList: PropTypes.array,
-
+        userLocation: PropTypes.object.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
         handlePaymentTypeChange: PropTypes.func.isRequired,
         handleDiscountChange: PropTypes.func.isRequired,
@@ -253,6 +253,7 @@ export default class DealDetail extends React.PureComponent {
                             handleBuyNow={this.handleBuyNow.bind(this)}
                             onToggleCompare={this.props.onToggleCompare}
                             compareList={this.props.compareList}
+                            userLocation={this.props.userLocation}
                         />
                     </Col>
                 </Row>
