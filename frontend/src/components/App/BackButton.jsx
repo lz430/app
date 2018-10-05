@@ -11,16 +11,10 @@ import { checkout } from 'apps/checkout/selectors';
 import { clearModelYear } from 'pages/deal-list/actions';
 import CheveronLeft from 'icons/zondicons/CheveronLeft';
 
-class HeaderToolbar extends React.PureComponent {
+class BackButton extends React.PureComponent {
     static propTypes = {
-        style: PropTypes.string.isRequired,
         currentPage: PropTypes.string,
         isCurrentPageInCheckout: PropTypes.bool,
-        onClearModelYear: PropTypes.func.isRequired,
-    };
-
-    static defaultProps = {
-        style: 'link',
     };
 
     /**
@@ -37,30 +31,12 @@ class HeaderToolbar extends React.PureComponent {
      *
      */
     handleBackButton() {
-        if (
-            this.props.currentPage === 'deal-list' &&
-            this.props.searchQuery.entity === 'deal'
-        ) {
-            this.props.onClearModelYear();
-        } else if (this.props.currentPage === 'deal-detail') {
-            window.location = `/filter`;
-        } else if (this.props.currentPage === 'compare') {
-            window.history.back();
-        } else if (this.props.currentPage === 'checkout-confirm') {
+        if (this.props.currentPage === 'checkout-confirm') {
             window.location = `/deals/${this.props.checkout.deal.id}`;
         }
     }
 
     render() {
-        //
-        // Don't show if we're on the very first step
-        if (
-            this.props.currentPage === 'deal-list' &&
-            this.props.searchQuery.entity === 'model'
-        ) {
-            return false;
-        }
-
         //
         // Don't show if in checkout and no checkout.
         if (
@@ -75,25 +51,8 @@ class HeaderToolbar extends React.PureComponent {
         if (this.props.currentPage === 'checkout-complete') {
             return false;
         }
-        if (this.props.style === 'link') {
-            return <span onClick={e => this.handleBackButton(e)}>&lt; BACK</span>;
-        }
-        if (this.props.style === 'button') {
-            return (
-                <button
-                    className="sortbar__button sortbar__button--with-icon"
-                    onClick={e => this.handleBackButton(e)}
-                >
-                    <CheveronLeft
-                        height="20px"
-                        width="20px"
-                        className="sortbar__back-icon"
-                    />
-                </button>
-            );
-        }
 
-        return false;
+        return <span onClick={e => this.handleBackButton(e)}>&lt; BACK</span>;
     }
 }
 
@@ -106,15 +65,4 @@ function mapStateToProps(state) {
     };
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onClearModelYear: () => {
-            return dispatch(clearModelYear());
-        },
-    };
-};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(HeaderToolbar);
+export default connect(mapStateToProps)(BackButton);

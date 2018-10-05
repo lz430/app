@@ -23,9 +23,6 @@ class CompleteFinancingForm extends Component {
             <form onSubmit={this.handleFormSubmit.bind(this)}>
                 <input type="hidden" name="purchase_id" value={purchase.id} />
                 <input type="hidden" name="method" value={this.state.method} />
-                <button className="btn btn-success">
-                    No thanks, I'll get my own financing.
-                </button>
             </form>
         );
     }
