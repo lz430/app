@@ -45,6 +45,12 @@ class BackButton extends React.PureComponent {
 
         //
         // Don't show on checkout complete
+        if (this.props.currentPage === 'checkout-financing') {
+            return false;
+        }
+
+        //
+        // Don't show on checkout complete
         if (this.props.currentPage === 'checkout-complete') {
             return false;
         }
