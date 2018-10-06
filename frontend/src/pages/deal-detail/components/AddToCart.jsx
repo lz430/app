@@ -6,7 +6,6 @@ import CashPricingPane from './pricing/CashPane';
 import FinancePricingPane from './pricing/FinancePane';
 import LeasePricingPane from './pricing/LeasePane';
 import PaymentTypes from './pricing/PaymentTypes';
-import * as R from 'ramda';
 import { dealType } from 'types';
 import { pricingType } from '../../../types';
 import { Link } from 'react-router-dom';
