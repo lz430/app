@@ -13,6 +13,7 @@ import AddToCart from './AddToCart';
 import StandardFeaturesModal from './StandardFeaturesModal';
 import AdditionalFeaturesModal from './AdditionalFeaturesModal';
 import DealColors from 'components/Deals/DealColors';
+import * as R from 'ramda';
 
 export default class DealDetail extends React.PureComponent {
     static propTypes = {
@@ -133,6 +134,22 @@ export default class DealDetail extends React.PureComponent {
         });
     }
 
+    compareButtonClass() {
+        return (
+            'btn ' +
+            (this.compareListContainsDeal()
+                ? 'btn-outline-primary'
+                : 'btn-primary')
+        );
+    }
+
+    compareListContainsDeal() {
+        return R.contains(
+            this.props.deal,
+            R.map(R.prop('deal'), this.props.compareList)
+        );
+    }
+
     renderFeaturesAndOptions(deal) {
         return (
             <div className="deal-details__deal-content">
@@ -230,6 +247,16 @@ export default class DealDetail extends React.PureComponent {
                             />
                         </div>
                         {this.renderFeaturesAndOptions(this.props.deal)}
+                        <button
+                            className={this.compareButtonClass(this.props.deal)}
+                            onClick={() =>
+                                this.props.onToggleCompare(this.props.deal)
+                            }
+                        >
+                            {this.compareListContainsDeal(this.props.deal)
+                                ? 'Remove from compare'
+                                : 'Add to compare'}
+                        </button>
                     </Col>
                     <Col md="6" lg="4">
                         <AddToCart
