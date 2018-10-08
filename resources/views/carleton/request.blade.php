@@ -48,7 +48,7 @@
                     <PaymentFrequency>Monthly</PaymentFrequency>
 
                     @if(isset($quote['moneyFactor']))
-                        <MoneyFactor>{{$quote['moneyFactor']}}</MoneyFactor>
+                        <MoneyFactor>{{number_format($quote['moneyFactor'], 6)}}</MoneyFactor>
                         <LeaseType>MoneyFactor</LeaseType>
                     @elseif(isset($quote['rate']))
                         <InterestRate>{{$quote['rate']}}</InterestRate>

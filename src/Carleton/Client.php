@@ -200,6 +200,7 @@ class Client
      * @param $params
      * @param $request
      * @return array
+     * @throws CarletonDataException
      */
     public function getLeasePaymentsForQuoteParameters($params, $request)
     {
