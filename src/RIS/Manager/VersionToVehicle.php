@@ -244,22 +244,6 @@ class VersionToVehicle
         }
     }
 
-    /**
-     * @param array $arr
-     * @param $search
-     * @return mixed|null
-     */
-    private function getClosetNumber(array $arr, $search)
-    {
-        $closest = null;
-        foreach ($arr as $item) {
-            if ($closest === null || abs($search - $closest) > abs($item - $search)) {
-                $closest = $item;
-            }
-        }
-        return $closest;
-    }
-
     private function translateTrimName(): array
     {
         $trims = [
@@ -737,14 +721,14 @@ class VersionToVehicle
                             }
 
                             $data->rateType = $program->rateType;
-                            $data->term = $this->getClosetNumber(array_keys($program->tiers[0]->leaseTerms), 36);
+                            $data->term = get_closet_number(array_keys($program->tiers[0]->leaseTerms), 36);
                             $data->rate = $program->tiers[0]->leaseTerms[$data->term]->adjRate;
 
                             if (isset($program->tiers[0]->leaseTerms[$data->term]->ccrCash)) {
                                 $data->rebate += $program->tiers[0]->leaseTerms[$data->term]->ccrCash->totalCCR;
                             }
 
-                            $data->miles = $this->getClosetNumber(array_keys($program->residuals), 10000);
+                            $data->miles = get_closet_number(array_keys($program->residuals), 10000);
 
                             if (isset($program->residuals[$data->miles]->termValues[$data->term])) {
                                 $data->residual = $program->residuals[$data->miles]->termValues[$data->term]->percentage;

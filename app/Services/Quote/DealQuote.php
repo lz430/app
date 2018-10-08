@@ -26,6 +26,10 @@ class DealQuote {
 
     private $cacheLifetime = (48 * 60);
 
+    /**
+     * @param DataDeliveryClient $dataDeliveryClient
+     * @param Client $client
+     */
     public function __construct(DataDeliveryClient $dataDeliveryClient, Client $client)
     {
         $this->dataDeliveryClient = $dataDeliveryClient;
@@ -60,7 +64,11 @@ class DealQuote {
         return $manager->get($data['rates'], $data['rebates']['total'], [0], $data['meta']['primaryRole']);
     }
 
-    private function extractRoles($role)
+    /**
+     * @param string $role
+     * @return array
+     */
+    private function extractRoles(string $role) : array
     {
         $roles = explode("-", $role);
         $roles = array_map(function($role) {
@@ -74,7 +82,11 @@ class DealQuote {
         return [$primaryRole, $conditionalRoles];
     }
 
-    private function buildRoleKey($roles)
+    /**
+     * @param array $roles
+     * @return string
+     */
+    private function buildRoleKey(array $roles) : string
     {
         $short_map = array_flip(Map::SHORT_CONDITIONS_TO_CONDITIONALS);
         $shorts =  array_map(function($role) use ($short_map) {
@@ -85,8 +97,16 @@ class DealQuote {
         return implode("-", $shorts);
     }
 
-
-    public function get(Deal $deal, $zip, $paymentType, $roles, $force = false) {
+    /**
+     * @param Deal $deal
+     * @param string $zip
+     * @param string $paymentType
+     * @param array $roles
+     * @param bool $force
+     * @return array|bool|mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function get(Deal $deal, string $zip, string $paymentType, array $roles, bool $force = false) {
         $this->deal = $deal;
 
         $roleKey = $this->buildRoleKey($roles);
