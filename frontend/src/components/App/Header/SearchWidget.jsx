@@ -156,7 +156,6 @@ class SearchWidget extends React.PureComponent {
         if (this.props.currentPageIsInCheckout) {
             return false;
         }
-        const searchVis = this.state.showMenu ? 'show' : 'hide';
 
         return (
             <div className="search " ref={node => (this.node = node)}>
