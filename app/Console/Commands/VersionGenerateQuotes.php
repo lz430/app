@@ -18,7 +18,7 @@ class VersionGenerateQuotes extends Command
      *
      * @var string
      */
-    protected $signature = 'dmr:version:quote {deal?}  {--all}';
+    protected $signature = 'dmr:version:quote {deal?} {--all}';
 
     /**
      * The console command description.

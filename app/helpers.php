@@ -1,10 +1,11 @@
 <?php
+
 use Imgix\UrlBuilder;
 
-if (! function_exists('marketing_url')) {
+if (!function_exists('marketing_url')) {
     function marketing_url($path = '')
     {
-        if (! starts_with($path, '/')) {
+        if (!starts_with($path, '/')) {
             $path = '/' . $path;
         }
 
@@ -12,7 +13,7 @@ if (! function_exists('marketing_url')) {
     }
 }
 
-if (! function_exists('generate_asset_url')) {
+if (!function_exists('generate_asset_url')) {
     function generate_asset_url($url, $size = 'thumbnail')
     {
         $imgixUrl = config('services.imgix.url');
@@ -36,9 +37,22 @@ if (! function_exists('generate_asset_url')) {
     }
 }
 
-if (! function_exists('hubspot_enabled')) {
+if (!function_exists('hubspot_enabled')) {
     function hubspot_enabled()
     {
         return config('services.hubspot.api_key') ? true : false;
+    }
+}
+
+if (!function_exists('get_closet_number')) {
+    function get_closet_number(array $arr, $search)
+    {
+        $closest = null;
+        foreach ($arr as $item) {
+            if ($closest === null || abs($search - $closest) > abs($item - $search)) {
+                $closest = $item;
+            }
+        }
+        return $closest;
     }
 }

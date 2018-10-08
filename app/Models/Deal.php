@@ -422,9 +422,18 @@ class Deal extends Model
             foreach ($dealer->price_rules as $attr => $field) {
                 // If for whatever reason the selected base price for the field doesn't exist or it's false, we fall out
                 // so the default role price is used.
-                if (!isset($source->{$field->base_field}) || !$source->{$field->base_field}) {
+                if ((!isset($field->base_field) || !$field->base_field) || (!isset($source->{$field->base_field}) || !$source->{$field->base_field})) {
                     if (app()->bound('sentry')) {
-                        app('sentry')->captureMessage("Unable to find correct source field for deal, defaulting to msrp", [], [
+
+                        if (!isset($source->{$field->base_field})) {
+                            $message = "Price Calculations: Base field not found in source pricing";
+                        } elseif (!isset($field->base_field) || !$field->base_field) {
+                            $message = "Price Calculations: No base field set";
+                        } else {
+                            $message = "Price Calculations: Unable to calculate price";
+                        }
+
+                        app('sentry')->captureMessage($message, [], [
                             'extra' => [
                                 'Deal ID' => $this->id,
                                 'Dealer ID' => $dealer->id,
@@ -440,18 +449,23 @@ class Deal extends Model
 
                 if ($field->rules) {
                     foreach ($field->rules as $rule) {
+
                         //
                         // Conditions
                         if (isset($rule->conditions)) {
-                            if ($rule->conditions->vin && $rule->conditions->vin != $this->vin) {
+                            if (isset($rule->conditions->vin) &&  $rule->conditions->vin && $rule->conditions->vin != $this->vin) {
                                 continue;
                             }
 
-                            if ($rule->conditions->make && $rule->conditions->make != $this->make) {
+                            if (isset($rule->conditions->make) && $rule->conditions->make && $rule->conditions->make != $this->make) {
                                 continue;
                             }
 
-                            if ($rule->conditions->model && $rule->conditions->model != $this->model) {
+                            if (isset($rule->conditions->model) && $rule->conditions->model && $rule->conditions->model != $this->model) {
+                                continue;
+                            }
+
+                            if (isset($rule->conditions->year) && $rule->conditions->year && $rule->conditions->year != $this->year) {
                                 continue;
                             }
                         }
@@ -629,7 +643,6 @@ class Deal extends Model
         $pricing = $this->prices();
         $record['pricing'] = $pricing;
         $record['payments'] = $this->payments;
-
 
         $version = $this->version;
         if ($version) {
