@@ -13,7 +13,7 @@ class AuditDealPayments extends Command
      *
      * @var string
      */
-    protected $signature = 'dmr:audit:payments';
+    protected $signature = 'dmr:audit:payments {filter?  : option filter. deal:5 or make:Ford}';
 
     /**
      * The console command description.
@@ -119,7 +119,7 @@ class AuditDealPayments extends Command
                         $quoteData['rate'] = (float)$rate['rate'];
                         $quoteData['rate_type'] = 'Rate';
                     } elseif (isset($rate['moneyFactor'])) {
-                        $quoteData['rate'] = (float) $rate['moneyFactor'];
+                        $quoteData['rate'] = (float)$rate['moneyFactor'];
                         $quoteData['rate_type'] = 'Factor';
                     }
                     $quoteData['term'] = (int)$rate['termLength'];
@@ -176,7 +176,31 @@ class AuditDealPayments extends Command
             'residual',
             'rate_type',
         ];
-        Deal::chunk(500, function ($deals) use ($attrs) {
+
+        $filter = $this->argument('filter');
+        $query = Deal::query()->where('status', '=', 'available');
+        if ($filter) {
+            $filter = explode(":", $filter);
+            if (count($filter) === 2 && in_array($filter[0], ['deal', 'make'])) {
+                switch ($filter[0]) {
+                    case 'deal':
+                        $query = $query->where('id', '=', $filter[1]);
+                        break;
+                    case 'make':
+                        $query = $query->whereHas('version', function ($query) use ($filter) {
+                            $query->whereHas('model', function($query) use ($filter) {
+                                $query->whereHas('make', function($query) use ($filter) {
+                                    $query->where('name', '=', $filter[1]);
+                                });
+                            });
+                        });
+                        break;
+                }
+            }
+        }
+
+
+        $query->chunk(500, function ($deals) use ($attrs) {
             foreach ($deals as $deal) {
                 if ($deal->status != 'available') {
                     continue;
@@ -189,7 +213,7 @@ class AuditDealPayments extends Command
                     'cash' => $data['cash']['calculated'] == $data['cash']['quote'],
                 ];
 
-                foreach($results as $key => $result) {
+                foreach ($results as $key => $result) {
                     if ($result) {
                         $this->debug[$key]['correct']++;
                     } else {
