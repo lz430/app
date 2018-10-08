@@ -49,12 +49,12 @@ class ChatWidget extends React.PureComponent {
                         hidden: !chatSettings.chatShow,
                     })}
                 >
+                    <ChatBubbleDots />
                     <span
                         className="btn btn-primary"
                         onClick={() => chatSettings.onOpenChat()}
                     >
                         <span className="d-md-inline">{label}</span>
-                        <ChatBubbleDots />
                     </span>
                 </div>
             );
