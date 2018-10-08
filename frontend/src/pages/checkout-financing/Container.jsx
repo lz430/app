@@ -18,6 +18,7 @@ import RouteOneIframe from './components/RouteOneIframe';
 import CompleteFinancingForm from './components/CompleteFinancingForm';
 import { compose } from 'redux';
 import withTracker from '../../components/withTracker';
+import HeaderToolbar from '../../components/App/Header/HeaderToolbar';
 
 class CheckoutFinancingContainer extends Component {
     static propTypes = {
@@ -63,6 +64,7 @@ class CheckoutFinancingContainer extends Component {
 
         return (
             <PageContent>
+                <HeaderToolbar />
                 <Container className="checkout-financing mb-4">
                     <Row className="checkout-financing__header mt-4">
                         <Col>

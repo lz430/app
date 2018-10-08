@@ -6,10 +6,10 @@ import CashPricingPane from './pricing/CashPane';
 import FinancePricingPane from './pricing/FinancePane';
 import LeasePricingPane from './pricing/LeasePane';
 import PaymentTypes from './pricing/PaymentTypes';
-import * as R from 'ramda';
 import { dealType } from 'types';
 import { pricingType } from '../../../types';
 import { Link } from 'react-router-dom';
+import Loading from '../../../icons/miscicons/Loading';
 
 export default class AddToCart extends React.PureComponent {
     static propTypes = {
@@ -28,19 +28,32 @@ export default class AddToCart extends React.PureComponent {
         pricing: pricingType.isRequired,
     };
 
-    compareListContainsDeal() {
-        return R.contains(
-            this.props.deal,
-            R.map(R.prop('deal'), this.props.compareList)
-        );
+    state = {
+        submitted: false,
+    };
+
+    handleSubmit() {
+        this.setState({ submitted: true });
+        this.props.handleBuyNow();
     }
 
-    compareButtonClass() {
+    renderCta() {
+        if (this.state.submitted) {
+            return (
+                <button className="btn btn-success" disabled={true}>
+                    <Loading /> Loading, please wait.
+                </button>
+            );
+        }
+
         return (
-            'btn ' +
-            (this.compareListContainsDeal()
-                ? 'btn-outline-primary'
-                : 'btn-primary')
+            <button
+                className="btn btn-success"
+                onClick={() => this.handleSubmit()}
+                disabled={!this.props.pricing.canPurchase()}
+            >
+                Select Deal
+            </button>
         );
     }
 
@@ -158,24 +171,7 @@ export default class AddToCart extends React.PureComponent {
                                 />
                             )}
                             <div className="deal__buttons">
-                                <button
-                                    className={this.compareButtonClass(deal)}
-                                    onClick={() =>
-                                        this.props.onToggleCompare(deal)
-                                    }
-                                >
-                                    {this.compareListContainsDeal(deal)
-                                        ? 'Remove'
-                                        : 'Compare'}
-                                </button>
-
-                                <button
-                                    className="btn btn-success"
-                                    onClick={this.props.handleBuyNow}
-                                    disabled={!pricing.canPurchase()}
-                                >
-                                    Buy Now
-                                </button>
+                                {this.renderCta()}
                             </div>
                             <Line>
                                 <div
