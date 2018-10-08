@@ -560,7 +560,7 @@ class Deal extends Model
         //
         // Vehicle type
         $record['year'] = $this->year;
-        $record['make'] = $this->version->model->make->name;
+        $record['make'] = ($this->version->model->make->name == 'Infiniti') ? 'INFINITI' : $this->version->model->make->name;
         $record['model'] = $this->version->model->name;
         $record['model_code'] = $this->model_code;
         $record['series'] = $this->series;
