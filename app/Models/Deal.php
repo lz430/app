@@ -452,19 +452,19 @@ class Deal extends Model
                         //
                         // Conditions
                         if (isset($rule->conditions)) {
-                            if ($rule->conditions->vin && $rule->conditions->vin != $this->vin) {
+                            if (isset($rule->conditions->vin) &&  $rule->conditions->vin && $rule->conditions->vin != $this->vin) {
                                 continue;
                             }
 
-                            if ($rule->conditions->make && $rule->conditions->make != $this->make) {
+                            if (isset($rule->conditions->make) && $rule->conditions->make && $rule->conditions->make != $this->make) {
                                 continue;
                             }
 
-                            if ($rule->conditions->model && $rule->conditions->model != $this->model) {
+                            if (isset($rule->conditions->model) && $rule->conditions->model && $rule->conditions->model != $this->model) {
                                 continue;
                             }
 
-                            if ($rule->conditions->year && $rule->conditions->year != $this->year) {
+                            if (isset($rule->conditions->year) && $rule->conditions->year && $rule->conditions->year != $this->year) {
                                 continue;
                             }
                         }
