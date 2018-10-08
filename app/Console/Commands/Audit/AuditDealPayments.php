@@ -188,8 +188,8 @@ class AuditDealPayments extends Command
                         break;
                     case 'make':
                         $query = $query->whereHas('version', function ($query) use ($filter) {
-                            $query->whereHas('model', function($query) use ($filter) {
-                                $query->whereHas('make', function($query) use ($filter) {
+                            $query->whereHas('model', function ($query) use ($filter) {
+                                $query->whereHas('make', function ($query) use ($filter) {
                                     $query->where('name', '=', $filter[1]);
                                 });
                             });
@@ -202,9 +202,7 @@ class AuditDealPayments extends Command
 
         $query->chunk(500, function ($deals) use ($attrs) {
             foreach ($deals as $deal) {
-                if ($deal->status != 'available') {
-                    continue;
-                }
+                $this->info('[' . $deal->id . ']' . $deal->title());
 
                 $data = $this->collectPaymentData($deal);
                 $results = [
@@ -221,7 +219,6 @@ class AuditDealPayments extends Command
                     }
                 }
 
-                $this->info($deal->title());
                 $headers = [
                     'Attribute',
                     'Lease / Calculated',
