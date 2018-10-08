@@ -449,6 +449,7 @@ class Deal extends Model
 
                 if ($field->rules) {
                     foreach ($field->rules as $rule) {
+
                         //
                         // Conditions
                         if (isset($rule->conditions)) {
