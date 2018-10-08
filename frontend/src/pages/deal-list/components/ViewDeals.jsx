@@ -19,7 +19,6 @@ class ViewDeals extends React.PureComponent {
     static propTypes = {
         deals: PropTypes.arrayOf(dealType),
         compareList: PropTypes.array,
-        dealsByMakeModelYear: PropTypes.array,
         meta: PropTypes.object.isRequired,
         shouldShowLoading: PropTypes.bool,
         onRequestMoreDeals: PropTypes.func.isRequired,
@@ -117,7 +116,6 @@ const mapStateToProps = state => {
         meta: state.pages.dealList.meta,
         shouldShowLoading: getLoadingSearchResults(state),
         deals: state.pages.dealList.deals,
-        dealsByMakeModelYear: state.pages.dealList.dealsByMakeModelYear,
     };
 };
 

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Header from './Header/Header';
-import HeaderToolbar from './Header/HeaderToolbar';
 import LiveChat from 'react-livechat';
 import config from 'config';
 
@@ -47,10 +46,7 @@ export default class App extends React.Component {
                         onOpenChat: this.onOpenChat.bind(this),
                     }}
                 >
-                    <div className="app-header-wrapper">
-                        <Header />
-                        <HeaderToolbar />
-                    </div>
+                    <Header />
                     {this.props.children}
                 </ChatContext.Provider>
                 {config.LIVECHAT_LICENSE && (

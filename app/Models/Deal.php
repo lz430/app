@@ -410,9 +410,9 @@ class Deal extends Model
         // The defaults when no rules exist.
         $prices = [
             'msrp' => $source->msrp,
-            'default' => $source->price !== '' ? $source->price : null,
-            'employee' => $source->price !== '' ? $source->price : null,
-            'supplier' => (in_array(strtolower($this->make), Make::DOMESTIC) ? $source->price * 1.04 : $source->price)
+            'default' => $source->msrp !== '' ? $source->msrp : null,
+            'employee' => $source->msrp !== '' ? $source->msrp : null,
+            'supplier' => $source->msrp !== '' ? $source->msrp : null,
         ];
 
         $dealer = $this->dealer;
@@ -420,10 +420,19 @@ class Deal extends Model
         // Dealer has some special rules
         if ($dealer && $dealer->price_rules) {
             foreach ($dealer->price_rules as $attr => $field) {
-
                 // If for whatever reason the selected base price for the field doesn't exist or it's false, we fall out
                 // so the default role price is used.
                 if (!isset($source->{$field->base_field}) || !$source->{$field->base_field}) {
+                    if (app()->bound('sentry')) {
+                        app('sentry')->captureMessage("Unable to find correct source field for deal, defaulting to msrp", [], [
+                            'extra' => [
+                                'Deal ID' => $this->id,
+                                'Dealer ID' => $dealer->id,
+                                'Role' => $attr,
+                                'Missing Field' => $field->base_field,
+                            ],
+                        ]);
+                    }
                     continue;
                 }
 
@@ -551,7 +560,7 @@ class Deal extends Model
         //
         // Vehicle type
         $record['year'] = $this->year;
-        $record['make'] = $this->version->model->make->name;
+        $record['make'] = ($this->version->model->make->name == 'Infiniti') ? 'INFINITI' : $this->version->model->make->name;
         $record['model'] = $this->version->model->name;
         $record['model_code'] = $this->model_code;
         $record['series'] = $this->series;

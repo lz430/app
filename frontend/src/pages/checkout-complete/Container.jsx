@@ -24,6 +24,7 @@ import { MediumAndUp, SmallAndDown } from 'components/Responsive';
 import PageContent from '../../components/App/PageContent';
 import { compose } from 'redux';
 import withTracker from '../../components/withTracker';
+import HeaderToolbar from '../../components/App/Header/HeaderToolbar';
 
 class CheckoutCompleteContainer extends React.PureComponent {
     static propTypes = {
@@ -45,6 +46,7 @@ class CheckoutCompleteContainer extends React.PureComponent {
 
         return (
             <PageContent>
+                <HeaderToolbar />
                 <Container className="checkout-confirm">
                     <Row className="checkout-confirm__header">
                         <Col>

@@ -35,3 +35,10 @@ if (! function_exists('generate_asset_url')) {
         return $builder->createURL($url, $params);
     }
 }
+
+if (! function_exists('hubspot_enabled')) {
+    function hubspot_enabled()
+    {
+        return config('services.hubspot.api_key') ? true : false;
+    }
+}

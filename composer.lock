@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cf72de306c8f8291b36f052e75b331b0",
+    "content-hash": "3f3e53baee63815634b298325e6285cb",
     "packages": [
         {
             "name": "adambullmer/usdl-regex",
@@ -4060,6 +4060,56 @@
                 "promises"
             ],
             "time": "2018-06-13T15:59:06+00:00"
+        },
+        {
+            "name": "ryanwinchester/hubspot-php",
+            "version": "v1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ryanwinchester/hubspot-php.git",
+                "reference": "6b1eefe59a0db5824b2d8e6d391ad317f2c793b8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ryanwinchester/hubspot-php/zipball/6b1eefe59a0db5824b2d8e6d391ad317f2c793b8",
+                "reference": "6b1eefe59a0db5824b2d8e6d391ad317f2c793b8",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~6.0",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "codeclimate/php-test-reporter": " dev-master@dev",
+                "phpspec/phpspec": "~2.0",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SevenShores\\Hubspot\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Ryan Winchester",
+                    "email": "fungku@gmail.com",
+                    "homepage": "http://ryanwinchester.ca"
+                }
+            ],
+            "description": "HubSpot PHP API client",
+            "keywords": [
+                "api",
+                "hubspot"
+            ],
+            "time": "2018-01-17T20:33:43+00:00"
         },
         {
             "name": "sentry/sentry",

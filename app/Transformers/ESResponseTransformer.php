@@ -68,6 +68,12 @@ class ESResponseTransformer extends TransformerAbstract
                     break;
                 case 'make':
                     foreach ($items as $item) {
+                        if ($item['value'] == 'Infiniti') {
+                            $item['label'] = 'INFINITI';
+                        }
+                        if ($item['value'] == 'Mercedes-Benz') {
+                            $item['label'] = 'Mercedes';
+                        }
                         $data = $item;
                         $data['icon'] = Make::LOGOS[$item['value']];
                         $transformed[] = $data;

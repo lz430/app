@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReCAPTCHA from 'react-google-recaptcha';
 import config from 'config';
+import Loading from '../../../icons/miscicons/Loading';
 
 class ContactForm extends React.PureComponent {
     static propTypes = {
@@ -13,6 +14,7 @@ class ContactForm extends React.PureComponent {
     recaptchaRef = React.createRef();
 
     state = {
+        submitted: false,
         recaptchaToken: false,
         isPageValid: true,
     };
@@ -27,6 +29,7 @@ class ContactForm extends React.PureComponent {
             prevProps.checkout.contactFormErrors
         ) {
             this.setState({ recaptchaToken: false });
+            this.setState({ submitted: false });
             this.recaptchaRef.current.reset();
         }
     }
@@ -37,6 +40,8 @@ class ContactForm extends React.PureComponent {
 
     handleConfirmPurchase = e => {
         e.preventDefault();
+
+        this.setState({ submitted: true });
 
         const elements = e.target.elements;
 
@@ -58,6 +63,25 @@ class ContactForm extends React.PureComponent {
 
         this.props.checkoutContact(fields);
     };
+
+    renderCta() {
+        if (this.state.submitted) {
+            return (
+                <button className="btn btn-success btn-block" disabled={true}>
+                    <Loading /> Loading, please wait.
+                </button>
+            );
+        }
+
+        return (
+            <button
+                disabled={!this.state.recaptchaToken}
+                className="btn btn-success btn-block"
+            >
+                Confirm and Submit
+            </button>
+        );
+    }
 
     render() {
         const errors = this.props.checkout.contactFormErrors || {};
@@ -289,14 +313,7 @@ class ContactForm extends React.PureComponent {
                     )}
                 </div>
 
-                <div className="request-email__buttons">
-                    <button
-                        disabled={!this.state.recaptchaToken}
-                        className="btn btn-success btn-block"
-                    >
-                        Confirm and Submit
-                    </button>
-                </div>
+                <div className="request-email__buttons">{this.renderCta()}</div>
             </form>
         );
     }
