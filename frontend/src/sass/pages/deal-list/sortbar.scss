@@ -8,4 +8,16 @@
         padding: 8px;
         border-radius: 0;
     }
+    .dropdown {
+        width: 150px;
+
+        button {
+            float: right;
+        }
+        .dropdown-menu {
+            &.show {
+                transform: translate3d(-30px, 34px, 0px) !important;
+            }
+        }
+    }
 }

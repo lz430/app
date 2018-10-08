@@ -31,3 +31,9 @@ input.fancyNumberEntry::-webkit-outer-spin-button {
 .text-sm {
     font-size: 0.85rem;
 }
+.icon {
+    &__help {
+        border-radius: 50px;
+        border: 3px solid $black;
+    }
+}

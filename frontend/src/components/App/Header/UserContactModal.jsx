@@ -25,7 +25,17 @@ class UserContactModal extends React.PureComponent {
             >
                 <ModalHeader toggle={this.props.toggle} />
                 <ModalBody>
-                    <h3 className="text-center">Contact Us: </h3>
+                    <div className="container">
+                        <div className="row">
+                            <h2 className="icon__help text-center">?</h2>
+                            <p className="text-center">
+                                Lorem ipsum dolor sit amet, consectetur
+                                adipiscing elit. Aliquam at porttitor sem.
+                                Aliquam erat volutpat. Donec placerat nisl
+                                magna, et faucibus arcu condimentum sed
+                            </p>
+                        </div>
+                    </div>
                     <div className="container">
                         <div className="row">
                             <div className="col">
@@ -33,11 +43,11 @@ class UserContactModal extends React.PureComponent {
                                     href="tel:855-675-7301"
                                     className="d-block text-center"
                                 >
+                                    <Phone />
                                     <span className="btn btn-primary">
                                         <span className="d-md-inline">
-                                            Give Us A Call
+                                            855-675-7301
                                         </span>
-                                        <Phone />
                                     </span>
                                     {/*<span className="hidden d-md-inline">(855) 675-7301</span>*/}
                                 </a>
