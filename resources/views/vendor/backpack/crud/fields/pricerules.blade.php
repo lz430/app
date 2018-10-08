@@ -41,9 +41,7 @@ $default_rules = new \stdClass();
 foreach ($price_fields as $key => $price_field) {
     $default_rules->{$key} = new \stdClass();
     $default_rules->{$key}->base_field = 'msrp';
-    $default_rules->{$key}->rules = [
-
-    ];
+    $default_rules->{$key}->rules = [];
 }
 
 $default_rules = json_encode($default_rules);
@@ -52,6 +50,7 @@ if (isset($entry)) {
     $deals = $entry->deals()->take(5)->get();
     $makes = $entry->deals()->pluck('make')->unique()->values()->all();
     $models = $entry->deals()->pluck('model')->unique()->values()->all();
+    $years = $entry->deals()->pluck('year')->unique()->values()->all();
 
     $source_price_keys = $entry->deals()->pluck('source_price')
         ->flatMap(function ($values) {
@@ -63,9 +62,11 @@ if (isset($entry)) {
     $deals = [];
     $makes = [];
     $models = [];
+    $years = [];
     $source_price_keys = ['msrp', 'price'];
 }
 $price_col_options = array_intersect_key($price_col_options, array_flip($source_price_keys));
+
 ?>
 
 <div class="preview col-xs-12">
@@ -106,7 +107,7 @@ $price_col_options = array_intersect_key($price_col_options, array_flip($source_
 
 </div>
 
-<div id="rules-editor" @include('crud::inc.field_wrapper_attributes') data-makes="{{json_encode($makes)}}" data-models="{{json_encode($models)}}">
+<div id="rules-editor" @include('crud::inc.field_wrapper_attributes') data-makes="{{json_encode($makes)}}" data-models="{{json_encode($models)}}" data-years="{{json_encode($years)}}">
     <h3>Rules</h3>
     <input type="hidden"
            value="{{ old($field['name']) ? old($field['name']) : (isset($field['value']) ? $field['value'] : (isset($default_rules) ? $default_rules : '' )) }}"
@@ -195,14 +196,16 @@ $price_col_options = array_intersect_key($price_col_options, array_flip($source_
             var $form = $editor.parents("form");
             var makes = $editor.data('makes') ? $editor.data('makes') : [""];
             var models = $editor.data('models') ?  $editor.data('models') : [""];
+            var years = $editor.data('years') ?  $editor.data('years') : [""];
 
+            years.unshift("");
             makes.unshift("");
             models.unshift("");
 
             /**
              * returns a jquery object representing a new rule that can be inserted.
              */
-            function rule_factory(modifier = 'percent', value = '100', conditions = {'vin': '', 'make': '', 'model': ''}) {
+            function rule_factory(modifier = 'percent', value = '100', conditions = {'vin': '', 'make': '', 'model': '', 'year': '',}) {
 
                 //
                 // Build HTML
@@ -210,7 +213,11 @@ $price_col_options = array_intersect_key($price_col_options, array_flip($source_
                 html += '<div class="rule">';
                 html += '<div class="rule-conditions">';
                 html += '<span>Conditions: </span>';
-                html += '<input placeholder="VIN" type="text" class="rule-condition rule-condition-vin form-control" />';
+                html += '<select class="rule-condition rule-condition-year form-control">';
+                years.forEach(val => {
+                    html += '<option value="'+val+'">' + (val ? val : "Any") + '</option>';
+                });
+                html += '</select>';
                 html += '<select class="rule-condition rule-condition-make form-control">';
                 makes.forEach(val => {
                     html += '<option value="'+val+'">' + (val ? val : "Any") + '</option>';
@@ -221,6 +228,7 @@ $price_col_options = array_intersect_key($price_col_options, array_flip($source_
                     html += '<option value="'+val+'">' + (val ? val : "Any") + '</option>';
                 });
                 html += '</select>';
+                html += '<input placeholder="VIN" type="text" class="rule-condition rule-condition-vin form-control" />';
                 html += '</div>';
 
 
@@ -248,8 +256,8 @@ $price_col_options = array_intersect_key($price_col_options, array_flip($source_
                 $('.rule-value', $html).val(value);
                 $('.rule-condition-vin', $html).val(conditions.vin);
                 $('.rule-condition-model  option[value="' + conditions.model + '"]', $html).attr("selected", "selected");
-                $('.rule-condition-make  option[value="' + modifier.make + '"]', $html).attr("selected", "selected");
-
+                $('.rule-condition-make  option[value="' + conditions.make + '"]', $html).attr("selected", "selected");
+                $('.rule-condition-year  option[value="' + conditions.year + '"]', $html).attr("selected", "selected");
 
                 return $html;
             }
@@ -277,6 +285,7 @@ $price_col_options = array_intersect_key($price_col_options, array_flip($source_
              * On init we just rebuild the form.
              */
             var data = JSON.parse($value.val());
+            console.log(data);
             $.each(data, function (key, value) {
                 var $field = $('fieldset[data-field="' + key + '"]');
                 if (value['base_field']) {
@@ -313,6 +322,7 @@ $price_col_options = array_intersect_key($price_col_options, array_flip($source_
                                 vin: $(".rule-condition-vin", $(this)).val().trim(),
                                 make: $(".rule-condition-make", $(this)).val(),
                                 model: $(".rule-condition-model", $(this)).val(),
+                                year: $(".rule-condition-year", $(this)).val(),
                             },
                         };
 

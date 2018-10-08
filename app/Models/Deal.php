@@ -422,13 +422,15 @@ class Deal extends Model
             foreach ($dealer->price_rules as $attr => $field) {
                 // If for whatever reason the selected base price for the field doesn't exist or it's false, we fall out
                 // so the default role price is used.
-                if (!isset($source->{$field->base_field}) || !$source->{$field->base_field}) {
+                if ((!isset($field->base_field) || !$field->base_field) || (!isset($source->{$field->base_field}) || !$source->{$field->base_field})) {
                     if (app()->bound('sentry')) {
 
-                        if (isset($source->{$field->base_field})) {
+                        if (!isset($source->{$field->base_field})) {
                             $message = "Price Calculations: Base field not found in source pricing";
-                        } else {
+                        } elseif (!isset($field->base_field) || !$field->base_field) {
                             $message = "Price Calculations: No base field set";
+                        } else {
+                            $message = "Price Calculations: Unable to calculate price";
                         }
 
                         app('sentry')->captureMessage($message, [], [
@@ -459,6 +461,10 @@ class Deal extends Model
                             }
 
                             if ($rule->conditions->model && $rule->conditions->model != $this->model) {
+                                continue;
+                            }
+
+                            if ($rule->conditions->year && $rule->conditions->year != $this->year) {
                                 continue;
                             }
                         }
