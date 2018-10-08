@@ -424,7 +424,14 @@ class Deal extends Model
                 // so the default role price is used.
                 if (!isset($source->{$field->base_field}) || !$source->{$field->base_field}) {
                     if (app()->bound('sentry')) {
-                        app('sentry')->captureMessage("Unable to find correct source field for deal, defaulting to msrp", [], [
+
+                        if (isset($source->{$field->base_field})) {
+                            $message = "Price Calculations: Base field not found in source pricing";
+                        } else {
+                            $message = "Price Calculations: No base field set";
+                        }
+
+                        app('sentry')->captureMessage($message, [], [
                             'extra' => [
                                 'Deal ID' => $this->id,
                                 'Dealer ID' => $dealer->id,
