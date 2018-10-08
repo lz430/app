@@ -16,7 +16,7 @@ class DealObserver
      */
     public function created(Deal $deal)
     {
-        $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
+        $calculator = resolve('App\Services\Quote\DealBuildBasicPayments');
         $calculator->calculateBasicPayments($deal);
     }
 
@@ -33,7 +33,7 @@ class DealObserver
 
         // Only update if is not new, and pricing is different.
         if ($originalPricing !== null && $originalPricing != $pricing && isset($deal->id) && $deal->id) {
-            $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
+            $calculator = resolve('App\Services\Quote\DealBuildBasicPayments');
             $calculator->calculateBasicPayments($deal, false);
         }
 

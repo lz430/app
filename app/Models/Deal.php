@@ -630,7 +630,6 @@ class Deal extends Model
         $record['pricing'] = $pricing;
         $record['payments'] = $this->payments;
 
-
         $version = $this->version;
         if ($version) {
             $version = $version->toArray();

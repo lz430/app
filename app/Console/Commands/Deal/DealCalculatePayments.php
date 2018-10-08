@@ -18,7 +18,7 @@ class DealCalculatePayments extends Command
 
     private function calculatePayments(Deal $deal)
     {
-        $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
+        $calculator = resolve('App\Services\Quote\DealBuildBasicPayments');
         $payments = $calculator->calculateBasicPayments($deal);
         $this->info($deal->title());
 
