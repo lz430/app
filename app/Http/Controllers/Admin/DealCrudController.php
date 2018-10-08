@@ -62,10 +62,18 @@ class DealCrudController extends CrudController
         ]);
 
         $this->crud->addColumn([
-            'label' => 'Title',
-            'type' => "model_function",
-            'name' => 'title',
-            'function_name' => 'title'
+            'label' => 'Year',
+            'name' => 'year',
+        ]);
+
+        $this->crud->addColumn([
+            'label' => 'Make',
+            'name' => 'make',
+        ]);
+
+        $this->crud->addColumn([
+            'label' => 'Model',
+            'name' => 'model',
         ]);
 
         $this->crud->addColumn([
