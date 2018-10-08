@@ -211,7 +211,11 @@
         }
     }
 }
-
+.top-messaging {
+    @include media-breakpoint-up(sm) {
+        margin-bottom: 10px;
+    }
+}
 .cta-message-carousel {
     .carousel-item {
         background: #fff;

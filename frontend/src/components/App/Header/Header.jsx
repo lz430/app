@@ -57,6 +57,12 @@ class Header extends React.PureComponent {
         });
     }
 
+    toggleSearchModal() {
+        this.setState({
+            SearchModalOpen: !this.state.SearchModalOpen,
+        });
+    }
+
     handleSetNewLocation(search) {
         this.props.onSearchForLocation(search);
         this.toggleUserLocationModal();
@@ -104,7 +110,7 @@ class Header extends React.PureComponent {
                         className="label"
                         onClick={() => this.toggleUserContactModal()}
                     >
-                        Need Help?
+                        <span>Need Help?</span>
                         <div className="icon text-center">
                             <Help />
                         </div>

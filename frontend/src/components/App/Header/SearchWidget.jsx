@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
+import { MediumAndUp, SmallAndDown } from 'components/Responsive';
+import classNames from 'classnames';
 
 import { buildSearchQueryUrl } from 'pages/deal-list/helpers';
 import StyleIcon from 'components/Deals/StyleIcon';
 import Search from 'icons/zondicons/Search';
+import Close from 'icons/zondicons/Close';
 
 class SearchWidget extends React.PureComponent {
     static propTypes = {
@@ -18,8 +21,18 @@ class SearchWidget extends React.PureComponent {
     state = {
         query: '',
         selectedItem: null,
+        SearchMobile: false,
     };
 
+    toggleSearchMobile() {
+        this.setState({
+            SearchMobile: !this.state.SearchMobile,
+        });
+    }
+    toggleClass() {
+        const currentState = this.state.active;
+        this.setState({ active: !currentState });
+    }
     componentDidMount() {
         document.addEventListener('mousedown', this.handleClick, false);
     }
@@ -143,22 +156,74 @@ class SearchWidget extends React.PureComponent {
         if (this.props.currentPageIsInCheckout) {
             return false;
         }
+        const searchVis = this.state.showMenu ? 'show' : 'hide';
 
         return (
-            <div className="search" ref={node => (this.node = node)}>
-                <div className="search__input">
-                    <input
-                        type="text"
-                        onChange={e => {
-                            this.handleSearchRequest(e.target.value);
-                        }}
-                        value={this.state.query}
-                        placeholder="Search..."
-                        required
-                    />
-                    <Search height="20px" width="20px" />
-                </div>
-                {this.state.query && this.renderSearchResults()}
+            <div className="search " ref={node => (this.node = node)}>
+                <MediumAndUp>
+                    <div className="search__input">
+                        <input
+                            type="text"
+                            onChange={e => {
+                                this.handleSearchRequest(e.target.value);
+                            }}
+                            value={this.state.query}
+                            placeholder="Search..."
+                            required
+                        />
+                        <Search height="20px" width="20px" />
+                    </div>
+                    {this.state.query && this.renderSearchResults()}
+                </MediumAndUp>
+                <SmallAndDown>
+                    <div className="search__mobile">
+                        <Search
+                            height="20px"
+                            width="20px"
+                            className={classNames({
+                                active: !this.state.SearchMobile,
+                                hidden: this.state.SearchMobile,
+                            })}
+                            onClick={e => {
+                                this.toggleSearchMobile();
+                            }}
+                        />
+                        <Close
+                            height="20px"
+                            width="20px"
+                            className={classNames({
+                                active: this.state.SearchMobile,
+                                hidden: !this.state.SearchMobile,
+                            })}
+                            onClick={e => {
+                                this.toggleSearchMobile();
+                            }}
+                        />
+                    </div>
+                </SmallAndDown>
+                <SmallAndDown>
+                    {this.state.SearchMobile && (
+                        <div className="search__container-fluid">
+                            <div className="row">
+                                <input
+                                    type="text"
+                                    onChange={e => {
+                                        this.handleSearchRequest(
+                                            e.target.value
+                                        );
+                                    }}
+                                    value={this.state.query}
+                                    placeholder="Search..."
+                                    required
+                                />
+                            </div>
+                            <div className="ghost h-100">
+                                <h3>Start typing to see results </h3>
+                            </div>
+                            {this.state.query && this.renderSearchResults()}
+                        </div>
+                    )}
+                </SmallAndDown>
             </div>
         );
     }
