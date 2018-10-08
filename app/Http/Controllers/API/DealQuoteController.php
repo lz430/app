@@ -22,7 +22,7 @@ class DealQuoteController extends BaseAPIController
                 request('zipcode'),
                 request('payment_type'),
                 request('roles'),
-                request('force')
+                request('force', false)
             );
     }
 

@@ -33,7 +33,7 @@ class DealerObserver
 
         // Only update if is not new, and pricing is different.
         if ($originalPricing != $pricing) {
-            $calculator = resolve('App\Services\Quote\DealCalculateBasicPayments');
+            $calculator = resolve('App\Services\Quote\DealBuildBasicPayments');
             foreach($dealer->deals()->get() as $deal) {
                 $calculator->calculateBasicPayments($deal);
             }

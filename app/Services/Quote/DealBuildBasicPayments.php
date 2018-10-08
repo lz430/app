@@ -6,10 +6,11 @@ use App\Models\Deal;
 
 use DeliverMyRide\Carleton\Client;
 use DeliverMyRide\Carleton\Manager\DealLeasePaymentsManager;
+use App\Services\Quote\DealCalculatePayments;
 
 /**
  */
-class DealCalculateBasicPayments
+class DealBuildBasicPayments
 {
 
     private $carletonClient;
@@ -24,7 +25,7 @@ class DealCalculateBasicPayments
         $quote = new \stdClass();
         $quote->term = 0;
         $quote->rate = 0;
-        $quote->rebate = 0;
+        $quote->rebate = (float) 0;
 
         if ($strategy === 'finance') {
             $quote->rate = 4;
@@ -38,14 +39,13 @@ class DealCalculateBasicPayments
     {
         $payload = new \stdClass();
 
-        $payment = $deal->prices()->default;
-        $payment -= $quote->rebate;
-
         $payload->term = (int)$quote->term;
         $payload->rate = (float)$quote->rate;
-        $payload->rebate = (int)$quote->rebate;
-        $payload->down = 0;
-        $payload->payment = round($payment, 2);
+        $payload->rebate = (float)$quote->rebate;
+
+        $payment = DealCalculatePayments::cash($deal, 'default', $quote->rebate);
+        $payload->down = $payment->down;
+        $payload->payment = $payment->payment;
 
         return $payload;
     }
@@ -54,24 +54,19 @@ class DealCalculateBasicPayments
     {
         $payload = new \stdClass();
 
-        $price = $deal->prices()->default;
-        $price += $deal->dealer->doc_fee;
-        $price += $deal->dealer->cvr_fee;
-        $price += $price * 0.06;
-        $price -= $quote->rebate;
-
-        $down = $price * 0.1;
-        $term = $quote->term;
-        $annualInterestRate = $quote->rate / 1200;
-        $payment = $price - $down;
-        $top = pow(1 + $annualInterestRate, $term);
-        $bottom = $top - 1;
-        $payment = $payment * $annualInterestRate * ($top / $bottom);
         $payload->term = (int)$quote->term;
         $payload->rate = (float)$quote->rate;
-        $payload->rebate = (int)$quote->rebate;
-        $payload->down = $down;
-        $payload->payment = round($payment, 2);
+        $payload->rebate = (float)$quote->rebate;
+
+        $payment = DealCalculatePayments::finance($deal,
+            'default',
+            $quote->term,
+            $quote->rate,
+            $quote->rebate);
+
+        $payload->down = $payment->down;
+        $payload->payment = $payment->payment;
+
         return $payload;
 
     }
@@ -107,9 +102,9 @@ class DealCalculateBasicPayments
             $payload->term = (int)$quote->term;
             $payload->rate = (float)$quote->rate;
             $payload->rate_type = $quote->rate_type;
-            $payload->rebate = (int)$quote->rebate;
+            $payload->rebate = (float) $quote->rebate;
             $payload->residual = (int)$quote->residual;
-            $payload->miles = (int)$quote->miles;
+            $payload->miles = (int) $quote->miles;
             $payload->down = round($payment[0]['total_amount_at_drive_off'], 2);
             $payload->payment = round($payment[0]['monthly_payment'], 2);
             return $payload;

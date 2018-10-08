@@ -22,11 +22,11 @@ class Kernel extends ConsoleKernel
         Commands\Deal\DealProgramDebugger::class,
         Commands\Deal\DealLeaseRatesDebugger::class,
         Commands\Deal\DealCalculatePayments::class,
-        Commands\Deal\DealTestPricingChanges::class,
         Commands\Jato\JatoVersionReport::class,
         Commands\Jato\JatoDealDecode::class,
         Commands\Jato\JatoVinDecode::class,
         Commands\Jato\JatoFindMissingVersions::class,
+        Commands\Audit\AuditDealPayments::class,
     ];
 
     /**
