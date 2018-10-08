@@ -43,7 +43,7 @@
     width: 100%;
 
     @include media-breakpoint-down(sm) {
-        justify-content: flex-start;
+        justify-content: center;
     }
 
     @include media-breakpoint-up(md) {
