@@ -12,3 +12,14 @@
     height: 1em;
     width: auto;
 }
+
+.btn {
+    .loading {
+        display: inline;
+        margin-right: 1rem;
+        svg path,
+        svg rect {
+            fill: #fff;
+        }
+    }
+}

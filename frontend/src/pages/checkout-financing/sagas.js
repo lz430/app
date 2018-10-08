@@ -23,7 +23,7 @@ function* init() {
         results = yield call(
             ApiClient.checkout.getFinancing,
             checkout.purchase.id,
-            checkout.token
+            checkout.userToken
         );
         results = results.data;
     } catch (e) {

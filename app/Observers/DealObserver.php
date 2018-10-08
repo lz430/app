@@ -38,7 +38,7 @@ class DealObserver
         }
 
         // if deal status is set to sold then adds sold date to deal table
-        if($deal->status == 'sold') {
+        if ($deal->status == 'sold') {
             $deal->sold_at = Carbon::now();
         }
     }

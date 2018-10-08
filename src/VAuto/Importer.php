@@ -26,6 +26,9 @@ use Illuminate\Support\Facades\File;
 use League\Csv\Reader;
 use League\Csv\Statement;
 
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\NotifyToSlackChannel;
+
 
 /**
  *
@@ -106,6 +109,8 @@ class Importer
             'created' => 0,
             'updated' => 0,
             'skipped' => 0,
+            'erroredVins' => 0,
+            'erroredMisc' => 0,
         ];
     }
 
@@ -221,6 +226,7 @@ class Importer
                 Log::channel('jato')->error('Could not find exact match for VIN -> JATO Version', [
                     'VAuto Row' => $row,
                 ]);
+                $this->debug['erroredVins']++;
                 $this->info("    -- Error: Could not find match for vin");
                 return;
             }
@@ -273,6 +279,7 @@ class Importer
             app('sentry')->captureException($e);
             $querySetErrorStatus = Deal::where('vin', $row['VIN']);
             $querySetErrorStatus->update(['status' => 'error']);
+            $this->debug['erroredMisc']++;
             if ($e->getCode() === 401) {
                 $this->error('401 error connecting to JATO; cancelling the rest of the calls.');
                 throw $e;
@@ -283,6 +290,7 @@ class Importer
             app('sentry')->captureException($e);
             $querySetErrorStatus = Deal::where('vin', $row['VIN']);
             $querySetErrorStatus->update(['status' => 'error']);
+            $this->debug['erroredMisc']++;
         }
     }
 
@@ -328,6 +336,7 @@ class Importer
      */
     public function import()
     {
+
         $sources = $this->buildSourceData();
         $hashes = [];
         foreach ($sources as $source) {
@@ -335,6 +344,19 @@ class Importer
             $hashes[] = $source['hash'];
         }
 
+        // Variables and logic for sending import slack notifications of import start
+        $importStart = date('m/d/Y g:ia');
+        $data = [
+            'title' => 'vAuto Importer',
+            'message' => "Import Started - {$importStart}",
+            'fields' => [
+                'Environment' => config('app.env'),
+                'Import File Created' => date("F d Y g:ia", filemtime($source['path']))
+            ]
+        ];
+        Notification::route('slack', config('services.slack.webhook'))
+            ->notify(new NotifyToSlackChannel($data));
+        
         $this->info("RESULTS ::::");
 
         $this->info(" -- Created Deals: " . $this->debug['created']);
@@ -361,8 +383,27 @@ class Importer
         $time = $this->debug['stop'] - $this->debug['start'];
         $this->info("Execution Time: {$time}");
 
+        // Variables and logic for sending import slack notifications of import start
+        $importEnd = date('m/d/Y g:ia');
+        $data = [
+            'title' => 'vAuto Importer',
+            'message' => "Import Finished - {$importEnd}",
+            'fields' => [
+                'Environment' => config('app.env'),
+                'Created' => $this->debug['created'],
+                'Updated' => $this->debug['updated'],
+                'Skipped' => $this->debug['skipped'],
+                'Deal Errors No VINS' => $this->debug['erroredVins'],
+                'Misc Errors' => $this->debug['erroredMisc'],
+                'Total Execution Time' => $this->formatTimePeriod($this->debug['stop'], $this->debug['start']),
+            ]
+        ];
+        Notification::route('slack', config('services.slack.webhook'))
+            ->notify(new NotifyToSlackChannel($data));
+
         //Copies vauto dump file for current day and saves per date for archives
         $Path = storage_path() . '/app/public/importbackups';
+
         if (!file_exists($Path)) {
             File::makeDirectory($Path);
         }
@@ -372,6 +413,19 @@ class Importer
         File::copy($sourceFile, $targetFile);
     }
 
+    /**
+     * @param $endtime
+     * @param $starttime
+     * @return string
+     */
+    private function formatTimePeriod($endtime, $starttime)
+    {
+        $duration = $endtime - $starttime;
+        $hours = (int) ($duration / 60 / 60);
+        $minutes = (int) ($duration / 60) - $hours * 60;
+        $seconds = (int) $duration - $hours * 60 * 60 - $minutes * 60;
+        return ($hours == 0 ? "00":$hours) . " Hours " . ($minutes == 0 ? "00":($minutes < 10? "0".$minutes:$minutes)) . " Minutes " . ($seconds == 0 ? "00":($seconds < 10? "0".$seconds:$seconds)) . " Seconds ";
+    }
 
     /**
      * @param array $row

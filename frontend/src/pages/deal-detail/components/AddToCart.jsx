@@ -6,9 +6,10 @@ import CashPricingPane from './pricing/CashPane';
 import FinancePricingPane from './pricing/FinancePane';
 import LeasePricingPane from './pricing/LeasePane';
 import PaymentTypes from './pricing/PaymentTypes';
-import * as R from 'ramda';
 import { dealType } from 'types';
 import { pricingType } from '../../../types';
+import { Link } from 'react-router-dom';
+import Loading from '../../../icons/miscicons/Loading';
 
 export default class AddToCart extends React.PureComponent {
     static propTypes = {
@@ -23,22 +24,36 @@ export default class AddToCart extends React.PureComponent {
         handleBuyNow: PropTypes.func.isRequired,
         onToggleCompare: PropTypes.func.isRequired,
         compareList: PropTypes.array,
+        userLocation: PropTypes.object.isRequired,
         pricing: pricingType.isRequired,
     };
 
-    compareListContainsDeal() {
-        return R.contains(
-            this.props.deal,
-            R.map(R.prop('deal'), this.props.compareList)
-        );
+    state = {
+        submitted: false,
+    };
+
+    handleSubmit() {
+        this.setState({ submitted: true });
+        this.props.handleBuyNow();
     }
 
-    compareButtonClass() {
+    renderCta() {
+        if (this.state.submitted) {
+            return (
+                <button className="btn btn-success" disabled={true}>
+                    <Loading /> Loading, please wait.
+                </button>
+            );
+        }
+
         return (
-            'btn ' +
-            (this.compareListContainsDeal()
-                ? 'btn-outline-primary'
-                : 'btn-primary')
+            <button
+                className="btn btn-success"
+                onClick={() => this.handleSubmit()}
+                disabled={!this.props.pricing.canPurchase()}
+            >
+                Select Deal
+            </button>
         );
     }
 
@@ -48,125 +63,131 @@ export default class AddToCart extends React.PureComponent {
         if (deal.status === 'sold') {
             return (
                 <div className="deal-details__pricing">
-                    <div>
-                        <div className="info-modal-data">
-                            <div className="info-modal-data__price">
-                                <div
-                                    style={{
-                                        fontSize: '1.25em',
-                                        fontWeight: 'bold',
-                                    }}
-                                >
-                                    We're sorry, this vehicle is no longer
-                                    available.{' '}
-                                    <span
-                                        style={{
-                                            fontWeight: 'normal',
-                                            fontSize: '.9em',
-                                        }}
-                                    >
-                                        <br />
-                                        Start a New <a href="/filter">
-                                            Search
-                                        </a>.
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-        } else {
-            return (
-                <div className="deal-details__pricing">
-                    <div>
-                        <div className="info-modal-data">
-                            <div className="info-modal-data__price">
-                                <PaymentTypes
-                                    {...{ purchaseStrategy }}
-                                    onChange={
-                                        this.props.handlePaymentTypeChange
-                                    }
-                                />
-                                {this.props.purchaseStrategy === 'cash' && (
-                                    <CashPricingPane
-                                        pricing={pricing}
-                                        onDiscountChange={
-                                            this.props.handleDiscountChange
-                                        }
-                                        onRebatesChange={
-                                            this.props.handleRebatesChange
-                                        }
-                                    />
-                                )}
-                                {this.props.purchaseStrategy === 'finance' && (
-                                    <FinancePricingPane
-                                        pricing={pricing}
-                                        onDiscountChange={
-                                            this.props.handleDiscountChange
-                                        }
-                                        onRebatesChange={
-                                            this.props.handleRebatesChange
-                                        }
-                                        onDownPaymentChange={
-                                            this.props
-                                                .handleFinanceDownPaymentChange
-                                        }
-                                        onTermChange={
-                                            this.props.handleFinanceTermChange
-                                        }
-                                    />
-                                )}
-                                {this.props.purchaseStrategy === 'lease' && (
-                                    <LeasePricingPane
-                                        pricing={pricing}
-                                        onDiscountChange={
-                                            this.props.handleDiscountChange
-                                        }
-                                        onRebatesChange={
-                                            this.props.handleRebatesChange
-                                        }
-                                        onChange={this.props.handleLeaseChange}
-                                    />
-                                )}
-                                <div className="deal__buttons">
-                                    <button
-                                        className={this.compareButtonClass(
-                                            deal
-                                        )}
-                                        onClick={() =>
-                                            this.props.onToggleCompare(deal)
-                                        }
-                                    >
-                                        {this.compareListContainsDeal(deal)
-                                            ? 'Remove'
-                                            : 'Compare'}
-                                    </button>
-
-                                    <button
-                                        className="btn btn-success"
-                                        onClick={this.props.handleBuyNow}
-                                        disabled={!pricing.canPurchase()}
-                                    >
-                                        Buy Now
-                                    </button>
-                                </div>
-                                <Line>
-                                    <div
-                                        style={{
-                                            fontStyle: 'italic',
-                                            fontSize: '1em',
-                                            marginLeft: '.25em',
-                                        }}
-                                    >
-                                        * includes all taxes and dealer fees
-                                    </div>
-                                </Line>
-                            </div>
+                    <div className="info-modal-data">
+                        <div
+                            style={{
+                                fontSize: '1.25em',
+                                fontWeight: 'bold',
+                            }}
+                        >
+                            We're sorry, this vehicle is no longer available.{' '}
+                            <span
+                                style={{
+                                    fontWeight: 'normal',
+                                    fontSize: '.9em',
+                                }}
+                            >
+                                <br />
+                                Start a New <Link to="/filter">Search</Link>.
+                            </span>
                         </div>
                     </div>
                 </div>
             );
         }
+
+        if (
+            this.props.userLocation.state !== 'MI' &&
+            this.props.userLocation.state !== 'OH'
+        ) {
+            return (
+                <div className="deal-details__pricing">
+                    <div className="info-modal-data">
+                        <div
+                            style={{
+                                fontSize: '1.25em',
+                                fontWeight: 'bold',
+                            }}
+                        >
+                            We're sorry, this vehicle is not available in your
+                            area{' '}
+                            <span
+                                style={{
+                                    fontWeight: 'normal',
+                                    fontSize: '.9em',
+                                }}
+                            >
+                                <br />
+                                Please contact us at{' '}
+                                <a href="tel:855-675-7301">
+                                    (855) 675-7301
+                                </a>{' '}
+                                for more information.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        return (
+            <div className="deal-details__pricing">
+                <div>
+                    <div className="info-modal-data">
+                        <div className="info-modal-data__price">
+                            <PaymentTypes
+                                {...{ purchaseStrategy }}
+                                onChange={this.props.handlePaymentTypeChange}
+                            />
+                            {this.props.purchaseStrategy === 'cash' && (
+                                <CashPricingPane
+                                    pricing={pricing}
+                                    onDiscountChange={
+                                        this.props.handleDiscountChange
+                                    }
+                                    onRebatesChange={
+                                        this.props.handleRebatesChange
+                                    }
+                                />
+                            )}
+                            {this.props.purchaseStrategy === 'finance' && (
+                                <FinancePricingPane
+                                    pricing={pricing}
+                                    onDiscountChange={
+                                        this.props.handleDiscountChange
+                                    }
+                                    onRebatesChange={
+                                        this.props.handleRebatesChange
+                                    }
+                                    onDownPaymentChange={
+                                        this.props
+                                            .handleFinanceDownPaymentChange
+                                    }
+                                    onTermChange={
+                                        this.props.handleFinanceTermChange
+                                    }
+                                />
+                            )}
+                            {this.props.purchaseStrategy === 'lease' && (
+                                <LeasePricingPane
+                                    pricing={pricing}
+                                    onDiscountChange={
+                                        this.props.handleDiscountChange
+                                    }
+                                    onRebatesChange={
+                                        this.props.handleRebatesChange
+                                    }
+                                    onChange={this.props.handleLeaseChange}
+                                />
+                            )}
+                            <div className="deal__buttons">
+                                {this.renderCta()}
+                            </div>
+                            <Line>
+                                <div
+                                    style={{
+                                        fontStyle: 'italic',
+                                        fontSize: '1em',
+                                        marginLeft: '.25em',
+                                    }}
+                                >
+                                    * includes all taxes and dealer fees
+                                </div>
+                            </Line>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 }

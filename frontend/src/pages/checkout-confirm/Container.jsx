@@ -30,6 +30,7 @@ import PageContent from 'components/App/PageContent';
 import ContactForm from './components/ContactForm';
 import { compose } from 'redux';
 import withTracker from '../../components/withTracker';
+import HeaderToolbar from '../../components/App/Header/HeaderToolbar';
 
 class CheckoutConfirmContainer extends React.PureComponent {
     static propTypes = {
@@ -58,6 +59,7 @@ class CheckoutConfirmContainer extends React.PureComponent {
 
         return (
             <PageContent>
+                <HeaderToolbar />
                 <Container className="checkout-confirm">
                     <Row className="checkout-confirm__header">
                         <Col>

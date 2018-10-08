@@ -91,4 +91,8 @@ return [
         'id' => 'F00DMR',
     ],
 
+    'slack' => [
+        'webhook' => env('SLACK_NOTIFY_URL'),
+    ],
+
 ];
