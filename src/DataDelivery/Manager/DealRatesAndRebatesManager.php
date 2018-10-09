@@ -55,7 +55,6 @@ class DealRatesAndRebatesManager
     private function extractProgramData($response)
     {
         $programs = [];
-
         if (!isset($response->vehicles[0]->programs)) {
             $this->programs = collect($programs);
         }
@@ -541,10 +540,14 @@ class DealRatesAndRebatesManager
 
     /**
      * @param null $scenario
-     * TODO: Support Lease + passed in scenario.
+     * @return bool
      */
     public function setScenario($scenario = null)
     {
+        if (!$this->vehicleId) {
+            return false;
+        }
+
         if (!$scenario) {
             if ($this->isLease) {
                 $this->bestLeaseProgram();
@@ -552,6 +555,8 @@ class DealRatesAndRebatesManager
                 $this->scenario = 'Cash - Bank APR';
             }
         }
+
+        return true;
     }
 
     /**
@@ -599,13 +604,13 @@ class DealRatesAndRebatesManager
     public function searchForVehicleAndPrograms(): bool
     {
         $results = (new DealToVehicle($this->deal, $this->zipcode, $this->client))->get();
-
         if (!$results || !isset($results->vehicles[0]->DescVehicleID)) {
+            $this->programs = collect([]);
             return false;
         }
+
         $this->extractProgramData($results);
         $this->vehicleId = $results->vehicles[0]->DescVehicleID;
-
         return true;
     }
 

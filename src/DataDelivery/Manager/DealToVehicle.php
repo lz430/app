@@ -213,21 +213,19 @@ class DealToVehicle
         ];
 
         $results = $this->fetchProgramData($search);
-
         if (!$results) {
             app('sentry')->captureMessage('Data Delivery API: Invalid XML returned', [], [
                 'extra' => $params
             ]);
-            return false;
+            return [];
         }
 
         if ($results->status === "2") {
             app('sentry')->captureMessage("Data Delivery API: " . $results->error, [], [
                 'extra' => $params
             ]);
-            return false;
+            return [];
         }
-
         // We have to narrow down the results.
         if (count($results->vehicles) > 1) {
             $vehicleId = $this->narrowDownVehicles($results->vehicles, $params);

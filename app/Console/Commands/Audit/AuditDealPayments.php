@@ -107,48 +107,57 @@ class AuditDealPayments extends Command
             );
 
             $quoteData = [];
-            if (isset($quote['rebates']['everyone']['total'])) {
-                $quoteData['rebate'] = (float)$quote['rebates']['everyone']['total'];
-            }
-
-            if (isset($quote['rates'])) {
-                $rate = $this->selectRate($quote['rates']);
-
-                if ($rate) {
-                    if (isset($rate['rate'])) {
-                        $quoteData['rate'] = (float)$rate['rate'];
-                        $quoteData['rate_type'] = 'Rate';
-                    } elseif (isset($rate['moneyFactor'])) {
-                        $quoteData['rate'] = (float)$rate['moneyFactor'];
-                        $quoteData['rate_type'] = 'Factor';
+            if (!$quote['meta']['error'] && $strategy === 'lease') {
+                if (isset($quote['rates'])) {
+                    if (isset($quote['rebates']['total'])) {
+                        $quoteData['rebate'] = (float)$quote['rebates']['total'];
                     }
-                    $quoteData['term'] = (int)$rate['termLength'];
+
+                    if (isset($quote['rates']) && $quote['rates']) {
+                        $rate = $this->selectRate($quote['rates']);
+                        if (isset($rate['rate'])) {
+                            $quoteData['rate'] = (float)$rate['rate'];
+                            $quoteData['rate_type'] = 'Rate';
+                        } elseif (isset($rate['moneyFactor'])) {
+                            $quoteData['rate'] = (float)$rate['moneyFactor'];
+                            $quoteData['rate_type'] = 'Factor';
+                        }
+                        $quoteData['term'] = (int)$rate['termLength'];
+
+                        if ($rate && $rate['residuals']) {
+                            $residuals = $this->selectResiduals($rate['residuals']);
+                            if ($residuals) {
+                                $quoteData['residual'] = (int)$residuals['residualPercent'];
+                                $quoteData['miles'] = (int)$residuals['annualMileage'];
+                            }
+                        }
+                    }
+
                 }
-                if ($rate && $rate['residuals']) {
-                    $residuals = $this->selectResiduals($rate['residuals']);
-                    if ($residuals) {
-                        $quoteData['residual'] = (int)$residuals['residualPercent'];
-                        $quoteData['miles'] = (int)$residuals['annualMileage'];
+
+                if (isset($quote['payments']) && isset($quoteData['miles']) && isset($quoteData['term'])) {
+                    foreach ($quote['payments'] as $payment) {
+                        if ($payment['term'] === $quoteData['term'] && $payment['annual_mileage'] == $quoteData['miles']) {
+                            $quoteData['payment'] = $payment['monthly_payment'];
+                            $quoteData['down'] = $payment['total_amount_at_drive_off'];
+                        }
                     }
                 }
-            }
-
-            if (isset($quote['payments']) && isset($quoteData['miles']) && isset($quoteData['term'])) {
-                foreach ($quote['payments'] as $payment) {
-                    if ($payment['term'] === $quoteData['term'] && $payment['annual_mileage'] == $quoteData['miles']) {
-                        $quoteData['payment'] = $payment['monthly_payment'];
-                        $quoteData['down'] = $payment['total_amount_at_drive_off'];
-                    }
+            } else if (!$quote['meta']['error'] && $strategy === 'cash') {
+                if (isset($quote['rebates']['everyone']['total'])) {
+                    $quoteData['rebate'] = (float)$quote['rebates']['everyone']['total'];
                 }
-            }
 
-            if ($strategy === 'cash') {
                 $payments = DealCalculatePayments::cash($deal, 'default', $quoteData['rebate'] ? $quoteData['rebate'] : 0);
                 $quoteData['payment'] = $payments->payment;
                 $quoteData['down'] = $payments->down;
                 $quoteData['rate'] = 0;
                 $quoteData['term'] = 0;
-            } else if ($strategy === 'finance') {
+            } else if (!$quote['meta']['error'] && $strategy === 'finance') {
+                if (isset($quote['rebates']['everyone']['total'])) {
+                    $quoteData['rebate'] = (float)$quote['rebates']['everyone']['total'];
+                }
+
                 $payments = DealCalculatePayments::finance($deal, 'default', 60, 4, $quoteData['rebate'] ? $quoteData['rebate'] : 0);
                 $quoteData['payment'] = $payments->payment;
                 $quoteData['down'] = $payments->down;
@@ -202,7 +211,7 @@ class AuditDealPayments extends Command
 
         $query->chunk(500, function ($deals) use ($attrs) {
             foreach ($deals as $deal) {
-                $this->info('[' . $deal->id . ']' . $deal->title());
+                $this->info('[' . $deal->id . '] ' . $deal->title());
 
                 $data = $this->collectPaymentData($deal);
                 $results = [
