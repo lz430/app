@@ -28,7 +28,7 @@ class DealBuildBasicPayments
         $quote->rebate = (float) 0;
 
         if ($strategy === 'finance') {
-            $quote->rate = 4;
+            $quote->rate = 5;
             $quote->term = 60;
         }
 

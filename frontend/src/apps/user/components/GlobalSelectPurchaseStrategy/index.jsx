@@ -41,7 +41,7 @@ class GlobalSelectPurchaseStrategy extends React.Component {
 
         if (this.props.purchaseStrategy === 'finance') {
             return (
-                <span>Based on 4% interest, 10% down and 60 month loan.</span>
+                <span>Based on 5% interest, 10% down and 60 month loan.</span>
             );
         }
 

@@ -160,7 +160,7 @@ class AuditDealPayments extends Command
                 $payments = DealCalculatePayments::finance($deal, 'default', 60, 4, $quoteData['rebate'] ? $quoteData['rebate'] : 0);
                 $quoteData['payment'] = $payments->payment;
                 $quoteData['down'] = $payments->down;
-                $quoteData['rate'] = 4;
+                $quoteData['rate'] = 5;
                 $quoteData['term'] = 60;
             }
 
