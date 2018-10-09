@@ -136,18 +136,18 @@ class DealQuoteTransformer extends TransformerAbstract
     /**
      * @param $ratesAndRebates
      * @param $meta
-     * @return array|bool|mixed
+     * @param array $potentialConditionalRoles
+     * @return array
      */
     public function transform($ratesAndRebates, $meta, $potentialConditionalRoles = [])
     {
         $this->ratesAndRebates = $ratesAndRebates;
-
         $this->meta = $meta;
 
         $data = [];
         $data['meta'] = (array)$this->meta;
-        $data['rebates'] = $ratesAndRebates->rebates;
-        $data['rates'] = $this->rates();
+        $data['rebates'] = $ratesAndRebates ? $ratesAndRebates->rebates : false;
+        $data['rates'] = $ratesAndRebates ? $this->rates() : false;
         $data['selections'] = [
             'conditionalRoles' => $potentialConditionalRoles
         ];
