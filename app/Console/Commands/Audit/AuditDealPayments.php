@@ -37,7 +37,6 @@ class AuditDealPayments extends Command
         ],
     ];
 
-
     /**
      * @param $rates
      * @return mixed|null
