@@ -5,25 +5,17 @@
     </a>
 </li>
 
-<li class="header">Orders</li>
-<li>
-    <a href="/admin/purchase">
-        <i class="fa fa-money"></i>
-        <span>Orders</span>
-    </a>
-</li>
-
 <li class="header">Data</li>
-<li>
-    <a href="/admin/feature">
-        <i class="fa fa-rocket"></i>
-        <span>Features</span>
-    </a>
-</li>
 <li>
     <a href="/admin/category">
         <i class="fa fa-object-group"></i>
         <span>Categories</span>
+    </a>
+</li>
+<li>
+    <a href="/admin/dealer">
+        <i class="fa fa-map"></i>
+        <span>Dealers</span>
     </a>
 </li>
 <li>
@@ -33,9 +25,9 @@
     </a>
 </li>
 <li>
-    <a href="/admin/dealer">
-        <i class="fa fa-map"></i>
-        <span>Dealers</span>
+    <a href="/admin/feature">
+        <i class="fa fa-rocket"></i>
+        <span>Features</span>
     </a>
 </li>
 <li class="treeview">
@@ -47,13 +39,15 @@
     </ul>
 </li>
 
-<li class="header">Reports</li>
+<li class="header">Orders</li>
 <li>
-    <a href="/admin/reports/versions-missing-images">
-        <i class="fa fa-image"></i>
-        <span>Version w/ No Photos</span>
+    <a href="/admin/purchase">
+        <i class="fa fa-money"></i>
+        <span>Orders</span>
     </a>
 </li>
+
+<li class="header">Reports</li>
 <li>
     <a href="/admin/reports/deals-without-rules">
         <i class="fa fa-image"></i>
@@ -66,4 +60,15 @@
         <span>Archived Dumps</span>
     </a>
 </li>
-
+<li>
+    <a href="/admin/reports/dealer-price-rules">
+        <i class="fa fa-file-text"></i>
+        <span>Dealer Price Rules</span>
+    </a>
+</li>
+<li>
+    <a href="/admin/reports/versions-missing-images">
+        <i class="fa fa-image"></i>
+        <span>Version w/ No Photos</span>
+    </a>
+</li>

@@ -37,6 +37,8 @@ Route::group([
     // Reports
     Route::get('reports/versions-missing-images', 'ReportVersionsMissingPhotosController@index');
     Route::get('reports/deals-without-rules', 'ReportDealsWithoutRulesController@index');
+    Route::get('reports/dealer-price-rules', 'ReportDealerPriceRulesController@index');
+    Route::get('reports/dealer-price-rules/export', 'ReportDealerPriceRulesController@export');
 
     // Archived vAuto Dumps
     Route::get('archived-dumps', 'VAutoDumpController@getFiles');
