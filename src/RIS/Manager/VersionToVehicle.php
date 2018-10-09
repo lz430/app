@@ -50,6 +50,9 @@ class VersionToVehicle
 
             // GMC
             'Sierra 1500 Denali' => 'Sierra 1500',
+
+            // Jeep
+            'All-New Wrangler Unlimited' => 'Wrangler Unlimited',
         ],
 
         'BY_MODEL_AND_TRIM' => [
@@ -180,6 +183,7 @@ class VersionToVehicle
     private const DRIVEN_WHEELS_MAP = [
         'BY_VERSION_NAME' => [
             'SEL 4WD' => '4WD',
+            'Trailhawk 4x4' => '4WD',
         ],
     ];
 
@@ -567,12 +571,15 @@ class VersionToVehicle
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
 
+
+
         /*
         foreach($vehicles as $vehicle) {
             print_r($vehicle->filters);
         }
         dd($params);
         */
+
 
         // Optional
         // Two vehicles means we've found a lease and a non lease option.

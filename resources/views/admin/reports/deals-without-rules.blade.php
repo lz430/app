@@ -18,7 +18,8 @@
             @foreach($data as $item)
                 @component('components.box')
                     @slot('title')
-                        <a href="/admin/dealer/{{$item['dealer']->id}}">{{$item['dealer']->id}} - {{$item['dealer']->name}}</a>
+                        <a href="/admin/dealer/{{$item['dealer']->id}}/edit">{{$item['dealer']->id}}
+                            - {{$item['dealer']->name}}</a>
                     @endslot
                     <div>
                         <div>
@@ -31,26 +32,26 @@
                     </div>
                     <table class="table">
                         <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Title</th>
-                                <th>Source Price Fields</th>
-                            </tr>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Source Price Fields</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            @foreach($item['deals']->forPage(1, 10) as $deal)
-                                <tr>
-                                    <td>
-                                        {{$deal->id}}
-                                    </td>
-                                    <td>
-                                        {{$deal->title()}}
-                                    </td>
-                                    <td>
-                                        {{implode(", ", array_keys((array) get_object_vars($deal->source_price)))}}
-                                    </td>
-                                </tr>
-                            @endforeach
+                        @foreach($item['deals']->forPage(1, 10) as $deal)
+                            <tr>
+                                <td>
+                                    {{$deal->id}}
+                                </td>
+                                <td>
+                                    {{$deal->title()}}
+                                </td>
+                                <td>
+                                    {{implode(", ", array_keys((array) get_object_vars($deal->source_price)))}}
+                                </td>
+                            </tr>
+                        @endforeach
                         </tbody>
 
                     </table>
