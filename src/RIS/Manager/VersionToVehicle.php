@@ -27,6 +27,7 @@ class VersionToVehicle
         'BY_MODEL' => [
             // Rams
             'Ram 1500 Pickup' => '1500',
+            'Ram 1500 Classic' => '1500',
 
             // Caddys
             'ATS Sedan' => 'ATS',
@@ -570,7 +571,6 @@ class VersionToVehicle
 
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
-
 
 
         /*

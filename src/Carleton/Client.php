@@ -234,7 +234,12 @@ class Client
         libxml_use_internal_errors(true);
         $xml = simplexml_load_string($data);
         if ($xml === false) {
-            throw new CarletonDataException("Invalid XML" . $data);
+            app('sentry')->captureMessage('Invalid XML', [], [
+                'extra' => [
+                    'xml' => $data
+                ]
+            ]);
+            return [];
         }
 
         $xml->registerXPathNamespace('lease', 'http://www.carletoninc.com/calcs/lease');
