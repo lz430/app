@@ -423,25 +423,6 @@ class Deal extends Model
                 // If for whatever reason the selected base price for the field doesn't exist or it's false, we fall out
                 // so the default role price is used.
                 if ((!isset($field->base_field) || !$field->base_field) || (!isset($source->{$field->base_field}) || !$source->{$field->base_field})) {
-                    if (app()->bound('sentry')) {
-
-                        if (!isset($source->{$field->base_field})) {
-                            $message = "Price Calculations: Base field not found in source pricing";
-                        } elseif (!isset($field->base_field) || !$field->base_field) {
-                            $message = "Price Calculations: No base field set";
-                        } else {
-                            $message = "Price Calculations: Unable to calculate price";
-                        }
-
-                        app('sentry')->captureMessage($message, [], [
-                            'extra' => [
-                                'Deal ID' => $this->id,
-                                'Dealer ID' => $dealer->id,
-                                'Role' => $attr,
-                                'Missing Field' => $field->base_field,
-                            ],
-                        ]);
-                    }
                     continue;
                 }
 

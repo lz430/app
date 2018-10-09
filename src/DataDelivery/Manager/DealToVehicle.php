@@ -193,8 +193,7 @@ class DealToVehicle
     }
 
     /**
-     * @return mixed|null
-     * @throws FetchProgramDataException
+     * @return bool|mixed|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function get()
@@ -214,15 +213,19 @@ class DealToVehicle
         ];
 
         $results = $this->fetchProgramData($search);
-
         if (!$results) {
-            throw new FetchProgramDataException("Data Delivery API: Invalid XML returned");
+            app('sentry')->captureMessage('Data Delivery API: Invalid XML returned', [], [
+                'extra' => $params
+            ]);
+            return [];
         }
 
         if ($results->status === "2") {
-            throw new FetchProgramDataException("Data Delivery API: " . $results->error . " ::: " . json_encode($params));
+            app('sentry')->captureMessage("Data Delivery API: " . $results->error, [], [
+                'extra' => $params
+            ]);
+            return [];
         }
-
         // We have to narrow down the results.
         if (count($results->vehicles) > 1) {
             $vehicleId = $this->narrowDownVehicles($results->vehicles, $params);

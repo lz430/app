@@ -47,6 +47,9 @@ class VersionToVehicle
             'GLS450' => 'GLS 450',
             'GLS550' => 'GLS 550',
             'AMG® GLS63' => 'AMG GLS 63',
+
+            // GMC
+            'Sierra 1500 Denali' => 'Sierra 1500',
         ],
 
         'BY_MODEL_AND_TRIM' => [
@@ -79,6 +82,7 @@ class VersionToVehicle
                 '740i' => '740',
                 '750i' => '750',
             ],
+
         ],
         'BY_MODEL_AND_TRIM_AND_NAME' => [
             'MDX' => [
@@ -91,6 +95,11 @@ class VersionToVehicle
                     'T8 Inscription PHEV AWD' => 'S90 Hybrid',
                 ],
             ],
+            '718' => [
+                'S' => [
+                    'Cayman S' => '718 Cayman'
+                ]
+            ],
         ],
     ];
 
@@ -101,7 +110,7 @@ class VersionToVehicle
 
 
     /**
-     *
+     *  <Make> -> <Model> -> <Trim> -> <Name>
      */
     private const TRIM_MAP = [
         'Acura' => [
@@ -122,14 +131,29 @@ class VersionToVehicle
                 'GT Sport' => 'Sport',
             ],
         ],
+        'BMW' => [
+            '2 Series' => [
+                '230i' => [
+                    '230i Sedan' => 'i',
+                    '230i xDrive Sedan' => 'i xDrive',
+                ],
+            ],
+            '3 Series' => [
+                '340i' => [
+                    '340i Sedan' => 'i',
+                    '340i xDrive Sedan' => 'i xDrive',
+                ],
+                '320i' => [
+                    '320i Sedan' => 'i',
+                    '320i xDrive Sedan' => 'i xDrive',
+                ],
+                '330i' => [
+                    '330i Sedan' => 'i',
+                    '330i xDrive Sedan' => 'i xDrive',
+                ],
+            ],
+        ],
         'BY_TRIM' => [
-            // BMW
-            '230i' => '230',
-            '330i' => 'i330',
-            '430i' => '430',
-            '530i' => '530',
-            'M550i' => 'M550',
-            '340i' => '340',
 
             // RAM
             'Big Horn' => 'Big Horn/Lone Star',
@@ -153,6 +177,18 @@ class VersionToVehicle
         ],
     ];
 
+    private const DRIVEN_WHEELS_MAP = [
+        'BY_VERSION_NAME' => [
+            'SEL 4WD' => '4WD',
+        ],
+    ];
+
+    private const DISPLACEMENT_MAP = [
+        'BY_VERSION_NAME' => [
+            'SEL 4WD' => '1.5',
+        ],
+    ];
+
     private const BODY_STYLE_MAP = [
         'Sport Utility Vehicle' => "Sport Utility",
         'Pickup' => 'Regular Cab',
@@ -160,7 +196,7 @@ class VersionToVehicle
     ];
 
     private const CAB_MAP = [
-        'Crew' => "crew cab",
+        'Crew' => 'crew cab',
     ];
 
 
@@ -244,6 +280,10 @@ class VersionToVehicle
         }
     }
 
+    /**
+     * <Make> -> <Model> -> <Trim> -> <Name>
+     * @return array
+     */
     private function translateTrimName(): array
     {
         $trims = [
@@ -251,44 +291,21 @@ class VersionToVehicle
             $this->version->name,
         ];
 
-        $model = $this->version->model->name;
         $make = $this->version->model->make->name;
+        $model = $this->version->model->name;
         $name = $this->version->name;
         foreach ($trims as &$trim) {
-
-            //
-            // Make
-            if (isset(self::TRIM_MAP[$make]) && is_array(self::TRIM_MAP[$make])) {
-
-                //
-                // Model
-                $data = self::TRIM_MAP[$make];
-                if (isset($data[$model]) && is_array($data[$model])) {
-                    $data = $data[$model];
-
-                    //
-                    // Trim
-                    if (isset($data[$trim]) && is_array($data[$trim])) {
-                        $data = $data[$trim];
-
-                        //
-                        // Name
-                        if (isset($data[$name])) {
-                            $trim = $data[$name];
-                        }
-
-                    } elseif (isset($data[$trim])) {
-                        $trim = $data[$trim];
-                    }
-
-                } elseif (isset($data[$model])) {
-                    $trim = $data[$model];
-                }
-
-            } elseif (isset(self::TRIM_MAP[$make])) {
+            if (isset(self::TRIM_MAP[$make][$model][$trim][$name]) && !is_array(self::TRIM_MAP[$make][$model][$trim][$name])) {
+                $trim = self::TRIM_MAP[$make][$model][$trim][$name];
+            } elseif (isset(self::TRIM_MAP[$make][$model][$trim]) && !is_array(self::TRIM_MAP[$make][$model][$trim])) {
+                $trim = self::TRIM_MAP[$make][$model][$trim];
+            } elseif (isset(self::TRIM_MAP[$make][$model]) && !is_array(self::TRIM_MAP[$make][$model])) {
+                $trim = self::TRIM_MAP[$make][$model];
+            } elseif (isset(self::TRIM_MAP[$make]) && !is_array(self::TRIM_MAP[$make])) {
                 $trim = self::TRIM_MAP[$make];
             }
 
+            // Legacy Mapping Strategy
             if (isset(self::TRIM_MAP['BY_TRIM'][$trim])) {
                 $trim = self::TRIM_MAP['BY_TRIM'][$trim];
             }
@@ -374,6 +391,28 @@ class VersionToVehicle
         return null;
     }
 
+    private function translateDrivenWheels()
+    {
+        $value = $this->version->driven_wheels;
+
+        if (isset(self::DRIVEN_WHEELS_MAP['BY_VERSION_NAME'][$this->version->name])) {
+            return self::DRIVEN_WHEELS_MAP['BY_VERSION_NAME'][$this->version->name];
+        } else {
+            return $value;
+        }
+    }
+
+    private function translateDisplacement()
+    {
+
+        if (isset(self::DISPLACEMENT_MAP['BY_VERSION_NAME'][$this->version->name])) {
+            return self::DISPLACEMENT_MAP['BY_VERSION_NAME'][$this->version->name];
+        }
+
+        return null;
+    }
+
+
     /**
      * @return array
      */
@@ -386,9 +425,10 @@ class VersionToVehicle
             'trim' => $this->translateTrimName(),
             'doors' => $this->translateNumberDoors(),
             'body' => $this->translateBodyStyle(),
-            'driven_wheels' => $this->version->driven_wheels,
+            'driven_wheels' => $this->translateDrivenWheels(),
             'cab' => $this->version->cab ? $this->translateCab() : null,
             'transmission' => $this->translateTransmission(),
+            'displacement' => $this->translateDisplacement(),
 
         ];
 
@@ -511,7 +551,6 @@ class VersionToVehicle
 
         $vehicles = $vehicles->toArray();
 
-
         // Require
         $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             if (!isset($vehicle->filters->YEAR)) {
@@ -520,10 +559,10 @@ class VersionToVehicle
             return in_array($params['year'], $vehicle->filters->YEAR);
         });
 
-
         $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             return in_array($params['model'], $vehicle->filters->MODEL);
         });
+
 
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
@@ -536,13 +575,17 @@ class VersionToVehicle
         */
 
         // Optional
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['trim']);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRIM', $params['trim']);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL', $params['trim']);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'DRIVE_TYPE_CODE', [$params['driven_wheels']]);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'BODY_TYPE', [$params['cab']]);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'BODY_TYPE', [$params['body']]);
-        $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRAN_TYPE', [$params['transmission']]);
+        // Two vehicles means we've found a lease and a non lease option.
+        if (count($vehicles) > 2) {
+            $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['trim']);
+            $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRIM', $params['trim']);
+            $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL', $params['trim']);
+            $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'DRIVE_TYPE_CODE', [$params['driven_wheels']]);
+            $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'BODY_TYPE', [$params['cab']]);
+            $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'BODY_TYPE', [$params['body']]);
+            $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRAN_TYPE', [$params['transmission']]);
+            $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'DISPLACEMENT', [$params['displacement']]);
+        }
 
         return collect($vehicles)->map(function ($item) {
             return $item->vehicle;
@@ -635,8 +678,6 @@ class VersionToVehicle
 
             $this->selected[$strategy] = $data;
         }
-
-
     }
 
     public function reduceResiduals()
@@ -770,7 +811,6 @@ class VersionToVehicle
     public function get(Version $version)
     {
         $this->version = $version;
-
         $results = null;
         $this->fetchMakeHashcodes();
         $this->fetchVehicles();
@@ -782,5 +822,4 @@ class VersionToVehicle
         $this->selectRates();
         return $this->selected;
     }
-
 }

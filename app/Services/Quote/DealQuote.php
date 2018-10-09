@@ -40,7 +40,8 @@ class DealQuote {
      * @param $paymentType
      * @param $zip
      * @param $primaryRole
-     * @param $conditionalRoles
+     * @param array $conditionalRoles
+     * @return bool
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function getRatesAndRebates($paymentType, $zip, $primaryRole, $conditionalRoles = [])
@@ -48,10 +49,12 @@ class DealQuote {
         $manager = new DealRatesAndRebatesManager($this->deal, $zip, $primaryRole, $this->dataDeliveryClient);
         $manager->setFinanceStrategy($paymentType);
         $manager->setConsumerRole($primaryRole, $conditionalRoles);
-        $manager->searchForVehicleAndPrograms();
-        $manager->setScenario();
-        $this->ratesAndRebatesData = $manager->getData();
-        $this->potentialConditionalRoles = $manager->getPotentialConditionals();
+        $found = $manager->searchForVehicleAndPrograms();
+        if ($found) {
+            $manager->setScenario();
+            $this->ratesAndRebatesData = $manager->getData();
+            $this->potentialConditionalRoles = $manager->getPotentialConditionals();
+        }
     }
 
     /**
@@ -124,7 +127,6 @@ class DealQuote {
         $this->getRatesAndRebates($paymentType, $zip, $primaryRole, $conditionalRoles);
         $ratesAndRebates = $this->ratesAndRebatesData;
         $potentialConditionalRoles = $this->potentialConditionalRoles;
-
         $meta = (object)[
             'paymentType' => $paymentType,
             'zipcode' => $zip,
@@ -133,11 +135,13 @@ class DealQuote {
             'primaryRole' => $primaryRole,
             'conditionalRoles' => $conditionalRoles,
             'key' => $key,
+            'error' => $ratesAndRebates  === null
         ];
 
         //
         // This is a little iffy... We should come up with a better way to organize this.
         // We need the data from the transformation to correctly get lease payments =(
+
         $data = (new DealQuoteTransformer())->transform(
             $ratesAndRebates,
             $meta,
