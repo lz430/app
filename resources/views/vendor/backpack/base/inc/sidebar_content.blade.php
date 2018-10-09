@@ -55,6 +55,12 @@
     </a>
 </li>
 <li>
+    <a href="/admin/reports/deals-without-rules">
+        <i class="fa fa-image"></i>
+        <span>Deals Missing Source Price</span>
+    </a>
+</li>
+<li>
     <a href="/admin/archived-dumps">
         <i class="fa fa-file"></i>
         <span>Archived Dumps</span>

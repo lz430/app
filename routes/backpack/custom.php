@@ -36,6 +36,7 @@ Route::group([
     //
     // Reports
     Route::get('reports/versions-missing-images', 'ReportVersionsMissingPhotosController@index');
+    Route::get('reports/deals-without-rules', 'ReportDealsWithoutRulesController@index');
 
     // Archived vAuto Dumps
     Route::get('archived-dumps', 'VAutoDumpController@getFiles');

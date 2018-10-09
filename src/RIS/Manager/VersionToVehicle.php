@@ -811,7 +811,6 @@ class VersionToVehicle
     public function get(Version $version)
     {
         $this->version = $version;
-
         $results = null;
         $this->fetchMakeHashcodes();
         $this->fetchVehicles();
@@ -823,5 +822,4 @@ class VersionToVehicle
         $this->selectRates();
         return $this->selected;
     }
-
 }
