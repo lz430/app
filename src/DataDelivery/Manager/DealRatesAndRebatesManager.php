@@ -592,6 +592,7 @@ class DealRatesAndRebatesManager
             ->unique()
             ->filter()
             ->all();
+
     }
 
     /**

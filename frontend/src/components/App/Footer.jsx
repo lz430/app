@@ -20,7 +20,6 @@ export default class Footer extends React.PureComponent {
                     </Col>
                     <Col xs={12} md={3} lg={2} xl={2} className="footer-box">
                         <div className="footer-box__title">Contact</div>
-
                         <a href={config.MARKETING_URL + '/contact/'}>
                             <Keyboard /> Email Us
                         </a>
@@ -37,8 +36,10 @@ export default class Footer extends React.PureComponent {
                         className="footer-box text-md-right"
                     >
                         <div className="footer-box__title">Address</div>
-                        35 W Huron Street<br />
-                        Suite 1000<br />
+                        35 W Huron Street
+                        <br />
+                        Suite 1000
+                        <br />
                         Pontiac, MI 48342
                     </Col>
                 </Row>

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, Row, Container, Col } from 'reactstrap';
 import Phone from 'icons/zondicons/Phone';
 import ChatWidget from '../ChatWidget';
+import ChatBubbleDots from '../../../icons/zondicons/ChatBubbleDots';
 
 class UserContactModal extends React.PureComponent {
     static propTypes = {
@@ -25,38 +26,38 @@ class UserContactModal extends React.PureComponent {
             >
                 <ModalHeader toggle={this.props.toggle} />
                 <ModalBody>
-                    <div className="container">
-                        <div className="row">
-                            <h2 className="icon__help text-center">?</h2>
-                            <p className="text-center">
-                                Have any questions? Can't find what you're
-                                looking for? Have a trade-in or lease turn-in?
-                                Our car professionals are here to help.
-                            </p>
-                        </div>
-                    </div>
-                    <div className="container">
-                        <div className="row">
-                            <div className="col">
+                    <Container>
+                        <Row>
+                            <Col>
+                                <h2 className="icon__help text-center">?</h2>
+                                <p className="text-center">
+                                    Have any questions? Can't find what you're
+                                    looking for? Have a trade-in or lease
+                                    turn-in? Our car professionals are here to
+                                    help.
+                                </p>
+                            </Col>
+                        </Row>
+                        <Row className="mt-3 border-top">
+                            <Col className="p-3 border-right">
                                 <a
                                     href="tel:855-675-7301"
                                     className="d-block text-center"
                                 >
-                                    <Phone />
+                                    <Phone width="30px" height="30px" />
                                     <span className="btn btn-primary">
                                         <span className="d-md-inline">
                                             855-675-7301
                                         </span>
                                     </span>
-                                    {/*<span className="hidden d-md-inline">(855) 675-7301</span>*/}
                                 </a>
-                            </div>
-
-                            <div className="col">
+                            </Col>
+                            <Col className="p-3">
+                                <ChatBubbleDots />
                                 <ChatWidget presentation="modal" />
-                            </div>
-                        </div>
-                    </div>
+                            </Col>
+                        </Row>
+                    </Container>
                 </ModalBody>
             </Modal>
         );

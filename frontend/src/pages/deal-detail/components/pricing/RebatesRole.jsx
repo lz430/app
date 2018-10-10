@@ -24,7 +24,7 @@ class RebatesRole extends React.Component {
         });
     }
 
-    renderProgramExplanationModal(labels) {
+    renderProgramExplanationModal() {
         if (!this.state.conditionalProgramsOpened) {
             return false;
         }
@@ -43,7 +43,7 @@ class RebatesRole extends React.Component {
                 </ModalHeader>
                 <ModalBody>
                     <div>
-                        <h4>{labels.title}</h4>
+                        <h4>{this.props.role.title}</h4>
                         <p style={{ color: 'red' }}>
                             Rebate Expires: {this.props.role.stopDate}
                         </p>
@@ -58,56 +58,8 @@ class RebatesRole extends React.Component {
         );
     }
 
-    roleLabels() {
-        const map = {
-            college: {
-                title: 'College Student/Recent Grad',
-                description: null,
-            },
-            military: {
-                title: 'Active Military/Veteran',
-                description: 'Thank you for your service.',
-            },
-            conquest: {
-                title: 'Conquest',
-                description: null,
-            },
-            loyal: {
-                title: 'Loyalty',
-                description: null,
-            },
-            responder: {
-                title: 'First Responder',
-                description: null,
-            },
-            gmcompetitive: {
-                title: 'GM Competitive Lease',
-                description: null,
-            },
-            gmlease: {
-                title: 'GM Lease Loyalty',
-                description: null,
-            },
-            cadillaclease: {
-                title: 'Cadillac Lease Loyalty',
-                description: null,
-            },
-            gmloyalty: {
-                title: 'Lease Loyalty',
-                description: null,
-            },
-        };
-
-        return map[this.props.role['role']];
-    }
-
     render() {
-        const labels = this.roleLabels();
         const role = this.props.role;
-        if (!labels) {
-            return false;
-        }
-
         let canUserHaveRebatePerAffinity;
         if (
             this.props.role.isSelected === true &&
@@ -115,11 +67,11 @@ class RebatesRole extends React.Component {
         ) {
             canUserHaveRebatePerAffinity = (
                 <span style={{ textDecorationLine: 'line-through' }}>
-                    {labels.title}
+                    {role.title}
                 </span>
             );
         } else {
-            canUserHaveRebatePerAffinity = labels.title;
+            canUserHaveRebatePerAffinity = role.title;
         }
 
         return (
@@ -155,9 +107,9 @@ class RebatesRole extends React.Component {
                         }}
                         fill="grey"
                     />
-                    {this.renderProgramExplanationModal(labels)}
+                    {this.renderProgramExplanationModal()}
                     {this.props.isRoleChecked &&
-                        labels.description && (
+                        role.help && (
                             <div
                                 style={{
                                     fontStyle: 'italic',
@@ -165,7 +117,7 @@ class RebatesRole extends React.Component {
                                     marginLeft: '.25em',
                                 }}
                             >
-                                {labels.description}
+                                {role.help}
                             </div>
                         )}
                 </Line>
