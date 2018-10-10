@@ -60,7 +60,6 @@ class RebatesRole extends React.Component {
 
     render() {
         const role = this.props.role;
-        console.log(role);
         let canUserHaveRebatePerAffinity;
         if (
             this.props.role.isSelected === true &&
