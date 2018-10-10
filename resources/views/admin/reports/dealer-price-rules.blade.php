@@ -33,28 +33,32 @@
                             <tr>
                                 <td colspan="2">
                                     @foreach($rule->price_rules as $key => $value)
+                                        @if(array_filter($value->rules))
                                         <table class="table table-condensed">
+                                            @empty(!$value->rules)
                                             <tr>
-                                                <th>{{$key}}</th>
-                                                <th>Base Field</th>
-                                                <th>Modifier</th>
-                                                <th>Conditions: VIN</th>
-                                                <th>Conditions: Make</th>
-                                                <th>Conditions: Model</th>
+                                                <th style="width: 15%;">{{$key}}</th>
+                                                <th style="width: 15%;">Base Field</th>
+                                                <th style="width: 15%;">Modifier</th>
+                                                <th style="width: 15%;">Conditions: VIN</th>
+                                                <th style="width: 15%;">Conditions: Make</th>
+                                                <th style="width: 15%;">Conditions: Model</th>
                                             </tr>
+                                            @endempty
                                             <tbody>
                                             @foreach($value->rules as $k)
                                                 <tr>
-                                                    <td>{{$k->value}}</td>
-                                                    <td>{{$value->base_field}}</td>
-                                                    <td>{{$k->modifier}}</td>
-                                                    <td>{{$k->conditions->vin}}</td>
-                                                    <td>{{$k->conditions->make}}</td>
-                                                    <td>{{$k->conditions->model}}</td>
+                                                    <td style="width: 15%;">{{$k->value}}</td>
+                                                    <td style="width: 15%;">{{$value->base_field}}</td>
+                                                    <td style="width: 15%;">{{$k->modifier}}</td>
+                                                    <td style="width: 15%;">{{$k->conditions->vin}}</td>
+                                                    <td style="width: 15%;">{{$k->conditions->make}}</td>
+                                                    <td style="width: 15%;">{{$k->conditions->model}}</td>
                                                 </tr>
                                             @endforeach
                                             </tbody>
                                         </table>
+                                        @endif
                                     @endforeach
                                 </td>
                             </tr>
