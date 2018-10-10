@@ -9,7 +9,7 @@ class ReportDealerPriceRulesController extends Controller
 {
     public function index()
     {
-        $rules = Dealer::select('dealer_id', 'name', 'price_rules')->orderBy('name', 'asc')->get();
+        $rules = Dealer::select('dealer_id', 'name', 'price_rules')->whereNotNull('price_rules')->orderBy('name', 'asc')->get();
         return view('admin.reports.dealer-price-rules', ['rules' => $rules]);
     }
 
