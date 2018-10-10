@@ -90,26 +90,9 @@
             margin-left: 1rem;
         }
     }
-    &.phone-number {
+    &.contact-us {
         .icon {
             margin: 0 auto;
-        }
-    }
-}
-
-.header-widget.chat-button {
-    .btn {
-        color: #fff !important;
-        padding: 0.25rem 0.5rem;
-        font-size: 0.85rem;
-    }
-    svg {
-        width: 20px;
-        height: 20px;
-        fill: #fff;
-
-        @include media-breakpoint-up(lg) {
-            margin-left: 0.5rem;
         }
     }
 }
@@ -137,7 +120,7 @@
 }
 .user-contact-modal {
     .modal-body {
-        padding: 0;
+        padding: 80px 20px 0 20px;
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
@@ -148,21 +131,28 @@
             flex-wrap: wrap;
             align-items: center;
             align-content: space-between;
-            min-height: 450px;
             width: 500px;
         }
+        p {
+            padding: 0 10%;
+        }
+
         h2.icon__help {
+            color: $text-color-dark;
             font-size: 3em;
             padding: 19px 38px;
             margin: 0 auto 15px;
             width: 100px;
         }
         svg {
-            color: $black;
-            fill: currentColor;
+            fill: $text-color-dark;
             display: block;
             margin: 0 auto 20px;
-            max-width: 15%;
+            width: 40px;
+            height: 40px;
+        }
+        .btn {
+            font-weight: bold;
         }
         .col {
             &:nth-of-type(1) {
@@ -170,39 +160,12 @@
                     margin-bottom: 15px;
                 }
             }
-            &:nth-of-type(2) {
-                border-left: 1px solid #ccc;
-            }
-        }
-        .container:nth-of-type(1) {
-            margin-top: 13%;
-
-            p {
-                padding: 0 10%;
-            }
-        }
-        .container:nth-of-type(2) {
-            background: #fcfcfc;
-            border-top: 1px solid #ccc;
-            align-content: flex-end;
-            align-self: center;
-
-            .col {
-                padding: 20px 0;
-            }
         }
     }
 }
 .modal-widget {
     &.chat-button {
         text-align: center;
-
-        .btn {
-            width: 50%;
-            @media screen and (max-width: $break-extra-small) {
-                max-width: 127px;
-            }
-        }
     }
 }
 
@@ -317,8 +280,7 @@
     }
 }
 
-.header-widget.phone-number {
-    cursor: default;
+.header-widget.contact-us {
     font-weight: bold;
 }
 

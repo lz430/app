@@ -96,9 +96,9 @@ class Header extends React.PureComponent {
         );
     }
 
-    renderPhoneWidget() {
+    renderContactUsWidget() {
         return (
-            <div className="header-widget phone-number d-lg-flex">
+            <div className="header-widget contact-us d-lg-flex">
                 <div className="header-widget-content d-lg-block">
                     <UserContactModal
                         isOpen={this.state.userContactModalOpen}
@@ -136,8 +136,7 @@ class Header extends React.PureComponent {
                     searchQuery={this.props.searchQuery}
                 />
                 <div className="navbar-text">
-                    {/*<ChatWidget presentation="header" />*/}
-                    {this.renderPhoneWidget()}
+                    {this.renderContactUsWidget()}
                     <CompareWidget
                         currentPageIsInCheckout={
                             this.props.currentPageIsInCheckout

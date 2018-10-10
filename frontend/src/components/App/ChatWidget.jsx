@@ -5,6 +5,7 @@ import ChatBubbleDots from 'icons/zondicons/ChatBubbleDots';
 import classNames from 'classnames';
 
 import { ChatContext } from 'contexts';
+import config from 'config';
 
 class ChatWidget extends React.PureComponent {
     static propTypes = {
@@ -12,52 +13,43 @@ class ChatWidget extends React.PureComponent {
     };
 
     static defaultProps = {
-        presentation: 'header',
+        presentation: 'modal',
     };
 
     renderChat(chatSettings) {
-        if (!chatSettings.chatShow) {
-            return false;
-        }
-
-        let label = 'Chat Live Now!';
-        if (!chatSettings.chatAgents) {
+        let label = 'Contact Us';
+        if (chatSettings.chatShow && chatSettings.chatAgents) {
+            label = 'Chat With Us';
+        } else if (chatSettings.chatShow) {
             label = 'Get Help';
         }
 
-        if (this.props.presentation === 'header') {
+        if (this.props.presentation === 'modal') {
             return (
-                <div
-                    className={classNames('header-widget', 'chat-button', {
-                        hidden: !chatSettings.chatShow,
-                    })}
-                >
-                    <span
-                        className="btn btn-primary"
-                        onClick={() => chatSettings.onOpenChat()}
-                    >
-                        <span className="hidden d-md-inline">{label}</span>
-                        <ChatBubbleDots />
-                    </span>
+                <div className={classNames('modal-widget', 'chat-button')}>
+                    {!chatSettings.chatShow && (
+                        <a
+                            className="btn btn-primary"
+                            href={config.MARKETING_URL + '/contact/'}
+                        >
+                            {label}
+                        </a>
+                    )}
+
+                    {chatSettings.chatShow && (
+                        <span
+                            className="btn btn-primary"
+                            onClick={() => chatSettings.onOpenChat()}
+                        >
+                            <span className="d-md-inline">{label}</span>
+                        </span>
+                    )}
                 </div>
             );
         }
-        if (this.props.presentation === 'modal') {
-            return (
-                <div
-                    className={classNames('modal-widget', 'chat-button', {
-                        hidden: !chatSettings.chatShow,
-                    })}
-                >
-                    <ChatBubbleDots />
-                    <span
-                        className="btn btn-primary"
-                        onClick={() => chatSettings.onOpenChat()}
-                    >
-                        <span className="d-md-inline">{label}</span>
-                    </span>
-                </div>
-            );
+
+        if (!chatSettings.chatShow) {
+            return false;
         }
 
         return (
