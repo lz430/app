@@ -15,7 +15,6 @@ import { getUserLocation } from 'apps/user/selectors';
 import { requestLocation } from 'apps/user/actions';
 import { getCurrentPageIsInCheckout } from 'apps/page/selectors';
 import { toggleCompare } from 'apps/common/actions';
-// import ChatWidget from '../ChatWidget';
 
 import Location from 'icons/zondicons/Location';
 import Help from 'icons/zondicons/Question';

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 import Header from './Header/Header';
 import LiveChat from 'react-livechat';
@@ -7,7 +8,7 @@ import config from 'config';
 
 import { ChatContext } from 'contexts';
 
-export default class App extends React.Component {
+class App extends React.Component {
     static propTypes = {
         children: PropTypes.node.isRequired,
     };
@@ -16,6 +17,12 @@ export default class App extends React.Component {
         chatShow: false,
         chatAgents: false,
     };
+
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location) {
+            window.scrollTo(0, 0);
+        }
+    }
 
     onOpenChat() {
         if (this.livechat) {
@@ -59,3 +66,5 @@ export default class App extends React.Component {
         );
     }
 }
+
+export default withRouter(App);

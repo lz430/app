@@ -12,13 +12,9 @@
     border-bottom: 0;
     background-color: #f5f5f5;
 
-    @include media-breakpoint-up(sm) {
-        justify-content: center;
-        display: flex;
-    }
-
     .modal-title {
         font-size: 1rem;
+        text-align: center;
         @include media-breakpoint-up(sm) {
             font-size: 1.25rem;
         }
