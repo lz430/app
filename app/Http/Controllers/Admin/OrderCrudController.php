@@ -4,15 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 
-// VALIDATION: change the requests to match your own file names if you need form validation
-use App\Http\Requests\DealerRequest as StoreRequest;
-use App\Http\Requests\DealerRequest as UpdateRequest;
-
 class OrderCrudController extends CrudController
 {
     public function setup()
     {
-
         /*
         |--------------------------------------------------------------------------
         | BASIC CRUD INFORMATION
@@ -131,23 +126,5 @@ class OrderCrudController extends CrudController
         // $this->crud->orderBy();
         // $this->crud->groupBy();
         // $this->crud->limit();
-    }
-
-    public function store(StoreRequest $request)
-    {
-        // your additional operations before save here
-        $redirect_location = parent::storeCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
-    }
-
-    public function update(UpdateRequest $request)
-    {
-        // your additional operations before save here
-        $redirect_location = parent::updateCrud($request);
-        // your additional operations after save here
-        // use $this->data['entry'] or $this->crud->entry
-        return $redirect_location;
     }
 }
