@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
-import api from 'src/api';
+import ApiClient from 'store/api';
+
 import ZipcodeFinder from 'pages/deal-list/components/Sidebar/ZipcodeFinder';
 
 import { Button, Form, FormGroup, Input } from 'reactstrap';
@@ -14,7 +15,7 @@ class NoDealsOutOfRange extends Component {
     handleSubmit(e) {
         e.preventDefault();
 
-        api.postNotifyWhenInRange(this.state.email).then(() => {
+        ApiClient.user.postNotifyWhenInRange(this.state.email).then(() => {
             this.setState({ formSubmitted: true });
         });
     }

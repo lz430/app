@@ -28,6 +28,15 @@ class UserService {
             params: params,
         });
     }
+
+    /**
+     *
+     * @param email
+     * @returns {*}
+     */
+    postNotifyWhenInRange(email) {
+        return httpclient.post('/api/hubspot/not-in-area', { email });
+    }
 }
 
 export default UserService;
