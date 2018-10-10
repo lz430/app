@@ -29,10 +29,9 @@ class UserContactModal extends React.PureComponent {
                         <div className="row">
                             <h2 className="icon__help text-center">?</h2>
                             <p className="text-center">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit. Aliquam at porttitor sem.
-                                Aliquam erat volutpat. Donec placerat nisl
-                                magna, et faucibus arcu condimentum sed
+                                Have any questions? Can't find what you're
+                                looking for? Have a trade-in or lease turn-in?
+                                Our car professionals are here to help.
                             </p>
                         </div>
                     </div>
