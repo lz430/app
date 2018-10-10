@@ -22,6 +22,7 @@ class SearchWidget extends React.PureComponent {
         query: '',
         selectedItem: null,
         SearchMobile: false,
+        SearchMessage: true,
     };
 
     toggleSearchMobile() {
@@ -32,6 +33,15 @@ class SearchWidget extends React.PureComponent {
     toggleClass() {
         const currentState = this.state.active;
         this.setState({ active: !currentState });
+    }
+    renderSearchMessage() {
+        if (this.state.SearchMessage === true) {
+            return (
+                <div className="ghost h-100">
+                    <h3>Start typing to see results </h3>
+                </div>
+            );
+        }
     }
     componentDidMount() {
         document.addEventListener('mousedown', this.handleClick, false);
@@ -61,6 +71,8 @@ class SearchWidget extends React.PureComponent {
         const urlQuery = buildSearchQueryUrl(newSearchQuery);
         this.props.history.push('/filter?' + urlQuery);
         this.setState({ query: '' });
+        this.setState({ SearchMessage: false });
+        this.toggleSearchMobile();
     }
 
     handleSearchRequest(query) {
@@ -216,9 +228,7 @@ class SearchWidget extends React.PureComponent {
                                     required
                                 />
                             </div>
-                            <div className="ghost h-100">
-                                <h3>Start typing to see results </h3>
-                            </div>
+                            {this.renderSearchMessage()}
                             {this.state.query && this.renderSearchResults()}
                         </div>
                     )}
