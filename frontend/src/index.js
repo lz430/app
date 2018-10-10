@@ -1,4 +1,5 @@
 import 'react-app-polyfill/ie11';
+import 'polyfills';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
