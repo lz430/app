@@ -588,10 +588,11 @@ class DealRatesAndRebatesManager
                     }
                 }
                 return $data;
-            })
+            })->sortBy('role')
             ->unique()
             ->filter()
             ->all();
+
     }
 
     /**

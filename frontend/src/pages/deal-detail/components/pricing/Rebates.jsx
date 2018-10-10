@@ -7,12 +7,52 @@ import Label from 'components/pricing/Label';
 import Value from 'components/pricing/Value';
 import RebatesRole from './RebatesRole';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
+import { sortBy, prop, map } from 'ramda';
 
 class Rebates extends React.Component {
     static propTypes = {
         onChange: PropTypes.func,
         pricing: PropTypes.object.isRequired,
         selectedConditionalRoles: PropTypes.array,
+    };
+
+    roleLabels = {
+        college: {
+            title: 'College Student/Recent Grad',
+            description: null,
+        },
+        military: {
+            title: 'Active Military/Veteran',
+            description: 'Thank you for your service.',
+        },
+        conquest: {
+            title: 'Conquest',
+            description: null,
+        },
+        loyal: {
+            title: 'Loyalty',
+            description: null,
+        },
+        responder: {
+            title: 'First Responder',
+            description: null,
+        },
+        gmcompetitive: {
+            title: 'GM Competitive Lease',
+            description: null,
+        },
+        gmlease: {
+            title: 'GM Lease Loyalty',
+            description: null,
+        },
+        cadillaclease: {
+            title: 'Cadillac Lease Loyalty',
+            description: null,
+        },
+        gmloyalty: {
+            title: 'Lease Loyalty',
+            description: null,
+        },
     };
 
     static defaultProps = {
@@ -35,6 +75,16 @@ class Rebates extends React.Component {
         return this.props.selectedConditionalRoles.length || false;
     }
 
+    getRoles(roles) {
+        const arrayRoles = map(item => {
+            let label = this.roleLabels[item.role];
+            item.title = label.title;
+            item.help = label.description;
+            return item;
+        }, Object.values(roles));
+        return sortBy(prop('title'), arrayRoles);
+    }
+
     shouldRenderConditionalSelection() {
         const quote = this.props.pricing.quote();
 
@@ -47,7 +97,7 @@ class Rebates extends React.Component {
 
     renderConditionalRebates() {
         const quote = this.props.pricing.quote();
-
+        const roles = this.getRoles(quote.selections.conditionalRoles);
         return (
             <div>
                 {this.isAnyRoleChecked() && (
@@ -56,13 +106,11 @@ class Rebates extends React.Component {
                     </div>
                 )}
                 <div>
-                    {Object.keys(quote.selections.conditionalRoles).map(key => (
+                    {roles.map(role => (
                         <RebatesRole
-                            key={key}
-                            isRoleChecked={this.isRoleChecked(
-                                quote.selections.conditionalRoles[key]
-                            )}
-                            role={quote.selections.conditionalRoles[key]}
+                            key={role.id}
+                            isRoleChecked={this.isRoleChecked(role)}
+                            role={role}
                             onChange={this.handleChange.bind(this)}
                         />
                     ))}
@@ -115,11 +163,4 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {};
-};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Rebates);
+export default connect(mapStateToProps)(Rebates);
