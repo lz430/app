@@ -2,7 +2,7 @@ import * as ActionTypes from './consts';
 import { track } from 'services';
 
 export function receiveLocation(data) {
-    if (data['location']) {
+    if (data && data['location']) {
         track('user:preference:location', {
             'Preference City': data['location']['city'],
             'Preference State': data['location']['state'],

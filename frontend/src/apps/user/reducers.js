@@ -36,7 +36,7 @@ const reducer = function(state = initialState, action = {}) {
             };
 
         case ActionTypes.RECEIVE_LOCATION:
-            if (action.data.location) {
+            if (action.data && action.data.location) {
                 return {
                     ...state,
                     location: {
