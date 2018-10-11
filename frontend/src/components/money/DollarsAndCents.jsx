@@ -24,6 +24,7 @@ export default class DollarsAndCents extends React.Component {
 
             return <span>{dinero.toFormat(DollarsAndCents.format)}</span>;
         } catch (err) {
+            console.log(err);
             return <span>N/A</span>;
         }
     }
