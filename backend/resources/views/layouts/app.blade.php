@@ -9,8 +9,6 @@
 
     <title>@yield('title')</title>
 
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-
     <script>
         window.Laravel = {!! json_encode([
                 'csrfToken' => csrf_token(),
@@ -78,7 +76,6 @@
     </script>
 @endif
 
-<script src="{{ mix('js/app.js') }}"></script>
 @stack('scripts')
 @if (config('services.googleanalytics.ua'))
     <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/3388780.js"></script>
