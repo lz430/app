@@ -5,8 +5,13 @@
         border: none;
         background: none;
         padding: 0;
-        flex: 1 1 auto;
         width: 100%;
+        @include media-breakpoint-up(sm) {
+            flex: 1 1 auto;
+        }
+        @include media-breakpoint-down(sm) {
+            flex-wrap: wrap;
+        }
     }
 
     .card-body {
