@@ -197,6 +197,7 @@ class SearchWidget extends React.PureComponent {
                             })}
                             onClick={e => {
                                 this.toggleSearchMobile();
+                                this.setState({ SearchMessage: true });
                             }}
                         />
                         <Close
