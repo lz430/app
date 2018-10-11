@@ -225,6 +225,7 @@ class ContactForm extends React.PureComponent {
                             className="request-dl__state"
                             id="drivers_license_state"
                             name="drivers_license_state"
+                            defaultValue="MI"
                         >
                             <option value="AL">AL</option>
                             <option value="AK">AK</option>
