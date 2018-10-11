@@ -165,6 +165,7 @@ class SearchWidget extends React.PureComponent {
     }
 
     render() {
+        this.setState({ SearchMessage: true });
         if (this.props.currentPageIsInCheckout) {
             return false;
         }
