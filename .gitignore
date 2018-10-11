@@ -1,28 +1,19 @@
 /node_modules
-/resources/assets/js/body-styles.js
-/resources/assets/js/zondicons.js
-/resources/assets/js/miscicons.js
-/public/storage
-/public/hot
-/public/css/
-/public/js/
-/public/mix-manifest.json
-/storage/*.key
-/storage/vauto
-/vendor
+/backend/public/storage
+/backend/public/css/
+/backend/public/js/
+/backend/storage/*.key
+/backend/storage/vauto
+/backend/vendor
 /.idea
 /.vagrant
-Homestead.json
-Homestead.yaml
 .env
-/storage/debugbar
+/backend/storage/debugbar
 /.vscode
 .DS_Store
 *.log
-Vagrantfile
 
 .phpstorm.meta.php
 _ide_helper.php
 
 !.gitkeep
-public/mix-manifest.json
