@@ -165,7 +165,6 @@ class SearchWidget extends React.PureComponent {
     }
 
     render() {
-        this.setState({ SearchMessage: true });
         if (this.props.currentPageIsInCheckout) {
             return false;
         }
@@ -198,6 +197,7 @@ class SearchWidget extends React.PureComponent {
                             })}
                             onClick={e => {
                                 this.toggleSearchMobile();
+                                this.setState({ SearchMessage: true });
                             }}
                         />
                         <Close
