@@ -343,19 +343,6 @@ class Importer
             $this->parseSourceData($source);
             $hashes[] = $source['hash'];
         }
-
-        // Variables and logic for sending import slack notifications of import start
-        $importStart = date('m/d/Y g:ia');
-        $data = [
-            'title' => 'vAuto Importer',
-            'message' => "Import Started - {$importStart}",
-            'fields' => [
-                'Environment' => config('app.env'),
-                'Import File Created' => date("F d Y g:ia", filemtime($source['path']))
-            ]
-        ];
-        Notification::route('slack', config('services.slack.webhook'))
-            ->notify(new NotifyToSlackChannel($data));
         
         $this->info("RESULTS ::::");
 
@@ -389,6 +376,7 @@ class Importer
             'title' => 'vAuto Importer',
             'message' => "Import Finished - {$importEnd}",
             'fields' => [
+                'Import File Created' => date("F d Y g:ia", filemtime($source['path'])),
                 'Environment' => config('app.env'),
                 'Created' => $this->debug['created'],
                 'Updated' => $this->debug['updated'],
