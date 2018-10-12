@@ -37,24 +37,24 @@ jobs:
       ##################################################################
       - restore_cache:
           keys:
-            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-v1-{{ checksum "backend/composer.lock" }}
             - composer-v1-
-      - run: composer install -n --prefer-dist
+      - run: cd backend && composer install -n --prefer-dist
       - save_cache:
-          key: composer-v1-{{ checksum "composer.lock" }}
+          key: composer-v1-{{ checksum "backend/composer.lock" }}
           paths:
-            - vendor
+            - backend/vendor
 
       ##################################################################
       # NPM
       ##################################################################
       - restore_cache:
           keys:
-            - node-v1-{{ checksum "package.json" }}
+            - node-v1-{{ checksum "frontend/package.json" }}
             - node-v1-
       - run: cd frontend && yarn install
       - save_cache:
-          key: node-v1-{{ checksum "package.json" }}
+          key: node-v1-{{ checksum "frontend/package.json" }}
           paths:
             - frontend/node_modules
 
