@@ -54,7 +54,7 @@ class DealerCrudController extends CrudController
             'tab'   => 'General',
         ]);
 
-        $this->crud->addField([
+        /*$this->crud->addField([
             'name'  => 'phone',
             'label' => 'Phone',
             'type'  => 'text',
@@ -80,7 +80,7 @@ class DealerCrudController extends CrudController
             'label' => 'Contact Title',
             'type'  => 'text',
             'tab'   => 'General',
-        ]);
+        ]);*/
 
         $this->crud->addField([
             'name'  => 'route_one_id',
@@ -179,6 +179,13 @@ class DealerCrudController extends CrudController
             'label' => 'Price Rules',
             'type'  => 'pricerules',
             'tab'   => 'Price Rules',
+        ]);
+
+        $this->crud->addField([
+            'name'  => 'contacts',
+            'label' => 'Contacts',
+            'type'  => 'dealercontacts',
+            'tab'   => 'Contacts',
         ]);
 
         //
