@@ -33,6 +33,11 @@ Route::group([
     // Dealer tools
     Route::get('dealer/{dealer}/routeone', 'DealerRouteoneController@show');
 
+    // Dealer Contact tools
+    Route::get('dealercontact/{id}/create', 'DealerContactsController@create');
+    Route::get('dealercontact/{contact}/edit', 'DealerContactsController@show');
+    Route::post('dealercontact/save', 'DealerContactsController@save');
+
     //
     // Reports
     Route::get('reports/versions-missing-images', 'ReportVersionsMissingPhotosController@index');
